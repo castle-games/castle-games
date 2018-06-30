@@ -1,0 +1,5 @@
+/*
+!.gitignore
+!include/
+!lib/
+!build-ios-macos.sh
