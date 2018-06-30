@@ -1,4 +1,4 @@
--- `require` but also over the network
+-- `require` but also over HTTP(S)
 
 -- Useful reference implementation of default `require` at:
 -- https://github.com/hoelzro/lua-procure/blob/5abd3d30987bf3f0984d1e452cdb7db5e0b50a1c/procure/init.lua
