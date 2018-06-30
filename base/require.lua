@@ -18,10 +18,11 @@ local function require(path)
             error("error fetching '" .. path .. "': " .. httpCode)
         end
 
-        print("fetched '" .. path .. "'")
-        print('\theaders:')
+        print('require:')
+        print("\tfetched '" .. path .. "':")
+        print('\t\theaders:')
         for k, v in pairs(headers) do
-            print('\t\t' .. k, v)
+            print('\t\t\t' .. k, v)
         end
 
         local chunk, err = load(response, path)
