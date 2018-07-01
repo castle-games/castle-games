@@ -18,23 +18,19 @@ local function require(path, opts)
     if found ~= nil then return found end
 
     if path:match('^https?') then
+        -- Fetch
         local response, httpCode, headers, status = http.request(path)
-        if response == nil then
-            error("error fetching '" .. path .. "': " .. httpCode)
+        if response == nil or httpCode ~= 200 then
+            error("error fetching '" .. path .. "': " .. status)
         end
 
-        print('require:')
-        print("\tfetched '" .. path .. "':")
-        print('\t\theaders:')
-        for k, v in pairs(headers) do
-            print('\t\t\t' .. k, v)
-        end
-
+        -- Parse
         local chunk, err = load(response, path, 'bt', opts.env or _G)
         if chunk == nil then
             error("error parsing '" .. path .. "': " .. err)
         end
 
+        -- Run and save
         local result = chunk(path)
         if result ~= nil then
             package.loaded[path] = result
