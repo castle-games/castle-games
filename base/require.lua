@@ -11,6 +11,8 @@ local defaultRequire = require
 local http = require 'copas.http'
 
 local function require(path, opts)
+    opts = opts or {}
+
     -- Cached?
     local found = package.loaded[path]
     if found ~= nil then return found end
