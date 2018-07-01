@@ -1,6 +1,7 @@
 -- Bootstrap
 
 require = require 'require'
+portal = require 'portal'
 
 
 -- Main events
@@ -14,6 +15,4 @@ end
 
 -- Start!
 
-copas.addthread(function()
-    require 'http://0.0.0.0:8000/main.lua'
-end)
+portal.enter 'http://0.0.0.0:8000/main.lua'
