@@ -15,5 +15,5 @@ end
 -- Start!
 
 copas.addthread(function()
-    require 'http://0.0.0.0:8000/hello.lua'
+    require 'http://0.0.0.0:8000/main.lua'
 end)
