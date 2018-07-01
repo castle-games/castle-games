@@ -15,4 +15,13 @@ end
 
 -- Start!
 
-portal.enter 'http://0.0.0.0:8000/main.lua'
+portal.enter('http://0.0.0.0:8000/main.lua', {
+    x = 20,
+    y = 20,
+    quitKey = 'a',
+})
+portal.enter('http://0.0.0.0:8000/main.lua', {
+    x = 20,
+    y = 40,
+    quitKey = 'b',
+})

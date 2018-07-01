@@ -61,12 +61,23 @@ for cb in pairs(loveCallbacks) do
     end
 end
 
+-- To identify entries
+local nextEntryId = 0
+local function newEntryId()
+    local id = nextEntryId
+    nextEntryId = nextEntryId + 1
+    return id
+end
+
 -- Enter the portal at the given `require`-able `path`
-function portal.enter(path)
+function portal.enter(path, args)
+    local id = newEntryId()
+
     -- Make a copy of the `portal` table that scopes functions
     local newPortal = setmetatable({}, { __index = portal })
+    newPortal.args = args
     function newPortal.exit()
-        entries[path] = nil
+        entries[id] = nil
     end
 
     -- Make a copy of the `love` table that skips the callbacks and some other stuff and scopes some
@@ -89,7 +100,7 @@ function portal.enter(path)
     end)
 
     -- Add a `entries` entry
-    entries[path] = {
+    entries[id] = {
         globals = newGlobals,
     }
 end
