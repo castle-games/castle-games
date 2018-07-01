@@ -1,4 +1,4 @@
-# Ghost
+# Ghost (name TBD)
 
 Hello traveler! I'm Ghost. Don't worry, I'm not the scary kind of ghost, just a spirit that likes to
 explore, probably like yourself. Anyways... You probably want to just try this thing out. So let's
