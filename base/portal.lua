@@ -79,7 +79,7 @@ local function setupLove(newPortal)
 
     function newLove.filesystem.load(path)
         return function()
-            return newPortal.globals.require(path, nil, nil, nil, false)
+            return newPortal.globals.require(path, { saveCache = false })
         end
     end
 
@@ -154,7 +154,11 @@ function portalMeta.newChild(self, path, args)
     setupLove(child)
 
     -- `require` it!
-    self.globals.require(path, self.globals, child.globals, nil, false)
+    self.globals.require(path, {
+        parentEnv = self.globals,
+        childEnv = child.globals,
+        saveCache = false, -- Always reload portals
+    })
 
     -- Call `love.load` callback and set as loaded
     if child.globals.love.load then

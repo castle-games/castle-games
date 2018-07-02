@@ -9,18 +9,10 @@ love.window.setMode(defaultW, defaultH, {
 })
 
 
--- Load built-in libraries
+-- Built-ins
 
 network = require 'network'
-
-
--- Bootstrap remote-`require` based on `_G`, then load the `portal` library
-
-local explicitRequire = require 'require'
-require = function(path, p, ...)
-    return explicitRequire(path, p or _G, ...)
-end
-
+require = require 'require'
 portal = require 'portal'
 
 

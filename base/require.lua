@@ -17,11 +17,15 @@ local function exists(path)
     return httpCode == 200
 end
 
-local function envWrap(delta, baseEnv)
-    return setmetatable(delta, { __index = baseEnv, __newindex = baseEnv })
+-- New table based on `a` with `b` providing defaults
+local function defaultOpts(a, b)
+    local o = {}
+    if type(b) == 'table' then for k, v in pairs(b) do o[k] = v end end
+    if type(a) == 'table' then for k, v in pairs(a) do o[k] = v end end
+    return o
 end
 
-local function explicitRequire(path, parentEnv, childEnv, basePath, saveCache)
+local function explicitRequire(path, opts)
     -- Built-in?
     if path ~= 'main' then
         local builtin = _G.package.loaded[path]
@@ -30,8 +34,11 @@ local function explicitRequire(path, parentEnv, childEnv, basePath, saveCache)
         if builtin then return builtin end
     end
 
-    -- By default use a new `parentEnv` inheriting from `_G`
-    assert(parentEnv, '`explicitRequire` needs `parentEnv`')
+    local opts = opts or {}
+    local basePath = opts.basePath
+    local parentEnv = assert(opts.parentEnv, '`explicitRequire` needs `parentEnv`')
+    local childEnv = opts.childEnv
+    local saveCache = opts.saveCache
 
     -- Make sure we use `package` from `parentEnv` to handle `package.loaded` correctly
     local package = parentEnv.package
@@ -45,8 +52,10 @@ local function explicitRequire(path, parentEnv, childEnv, basePath, saveCache)
     childEnv = childEnv or parentEnv
     if childEnv ~= parentEnv then
         local oldChildRequire = childEnv.require
-        childEnv.require = function(path, newParentEnv, ...)
-            return oldChildRequire(path, childEnv or newParentEnv, ...)
+        childEnv.require = function(path, opts)
+            return oldChildRequire(path, defaultOpts(opts, {
+                parentEnv = childEnv,
+            }))
         end
     end
 
@@ -82,8 +91,10 @@ local function explicitRequire(path, parentEnv, childEnv, basePath, saveCache)
         local oldChildEnv = childEnv
         local oldChildRequire = childEnv.require
         childEnv = setmetatable({
-            require = function(path, p, c, override, ...)
-                return oldChildRequire(path, p, c, override or newBasePath, ...)
+            require = function(path, opts)
+                return oldChildRequire(path, defaultOpts(opts, {
+                    basePath = newBasePath,
+                }))
             end,
         }, { __index = oldChildEnv, __newIndex = oldChildEnv })
 
@@ -100,7 +111,7 @@ local function explicitRequire(path, parentEnv, childEnv, basePath, saveCache)
     end
 
     -- Parse
-    local chunk, err = load(response, url, 'bt', childEnv)
+    local chunk, err = load(response, path:gsub('(.*)/(.*)', '%2'), 'bt', childEnv)
     if chunk == nil then
         error("error parsing '" .. url .. "': " .. err)
     end
@@ -133,4 +144,10 @@ local function explicitRequire(path, parentEnv, childEnv, basePath, saveCache)
     return result == nil and true or result
 end
 
-return explicitRequire
+local function require(path, opts)
+    return explicitRequire(path, defaultOpts(opts, {
+        parentEnv = _G,
+    }))
+end
+
+return require
