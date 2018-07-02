@@ -34,7 +34,7 @@ end
 -- Start!
 
 --local homeUrl = 'https://raw.githubusercontent.com/nikki93/ghost-home/master/main.lua'
-local homeUrl = 'https://7859de82.ngrok.io/main.lua'
+local homeUrl = 'https://ecdd2004.ngrok.io/main.lua'
 
 local home = portal:newChild(homeUrl, {
     x = 20,
