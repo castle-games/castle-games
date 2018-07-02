@@ -50,6 +50,8 @@ local function explicitRequire(path, parentEnv, childEnv, basePath, saveCache)
         end
     end
 
+    path = path:gsub('%.lua$', '')
+
     local isAbsolute = false
     local absolute
 
@@ -65,7 +67,6 @@ local function explicitRequire(path, parentEnv, childEnv, basePath, saveCache)
 
     -- Deal with '.lua' or '/init.lua' appending
     local url
-    absolute = absolute:gsub('%.lua$', '')
     if exists(absolute .. '.lua') then
         url = absolute .. '.lua'
     elseif exists(absolute .. '/init.lua') then
