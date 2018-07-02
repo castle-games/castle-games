@@ -74,14 +74,14 @@ function portalMeta.newChild(self, path, args)
     end
     child.globals.love.event = nil
 
-    -- Make sure we're in a network coroutine for the rest of this cuz we're gonna `require`
-    network.async(function()
-        self.globals.require(path, self.globals, child.globals, nil, false)
-        if child.globals.love.load then
-            child.globals.love.load() -- Call `load` callback if set
-        end
-        child.loaded = true
-    end)
+    -- `require` it!
+    self.globals.require(path, self.globals, child.globals, nil, false)
+
+    -- Call `love.load` callback and set as loaded
+    if child.globals.love.load then
+        child.globals.love.load()
+    end
+    child.loaded = true
 
     return child
 end

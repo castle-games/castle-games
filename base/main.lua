@@ -38,12 +38,15 @@ end
 
 local homeUrl = 'https://raw.githubusercontent.com/nikki93/ghost-home/master/main.lua'
 --local homeUrl = 'https://ecdd2004.ngrok.io/main.lua'
+--local homeUrl = 'http://0.0.0.0:8000/main.lua'
 
-home = portal:newChild(homeUrl, {
-    x = 20,
-    y = 20,
-    spawnChildren = true,
-})
+network.async(function()
+    home = portal:newChild(homeUrl, {
+        x = 20,
+        y = 20,
+        spawnChildren = true,
+    })
+end)
 
 function love.draw()
     if home then home:draw() end
