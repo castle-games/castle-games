@@ -1,2 +1,3 @@
 print('sub', _G)
-return {}
+require 'dir.indir'
+return { 'sub' }

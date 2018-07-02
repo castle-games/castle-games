@@ -77,8 +77,7 @@ function portalMeta.newChild(self, path, args)
 
     -- The `require` is async so do it in a new coroutine
     copas.addthread(function()
-        self.globals.require(path, self.globals, child.globals)
-        self.globals.package.loaded[path] = nil -- Force loading a new instance next time
+        self.globals.require(path, self.globals, child.globals, nil, false)
         if child.globals.love.load then
             child.globals.love.load() -- Call `load` callback if set
         end

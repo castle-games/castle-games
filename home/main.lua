@@ -1,5 +1,7 @@
-print('main', _G)
-local t = require 'https://7859de82.ngrok.io/sub.lua'
+--print('main', _G)
+local t = require 'sub'
+
+local fun = require 'https://raw.githubusercontent.com/luafun/luafun/master/fun.lua'
 
 local x = portal.args.x
 local y = portal.args.y
