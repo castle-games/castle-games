@@ -54,7 +54,7 @@ local function setupLove(newPortal)
     for k, v in pairs(love) do
         if type(v) == 'table' then
             newLove[k] = setmetatable({}, { __index = love[k] })
-        else
+        elseif not loveCallbacks[k] then
             newLove[k] = v
         end
     end
