@@ -26,8 +26,11 @@ portal = require 'portal'
 
 -- Top-level Love callbacks
 
+local home
+
 function love.update(dt)
     network.update(dt)
+    if home then home:update(dt) end
 end
 
 
@@ -36,7 +39,7 @@ end
 local homeUrl = 'https://raw.githubusercontent.com/nikki93/ghost-home/master/main.lua'
 --local homeUrl = 'https://ecdd2004.ngrok.io/main.lua'
 
-local home = portal:newChild(homeUrl, {
+home = portal:newChild(homeUrl, {
     x = 20,
     y = 20,
     spawnChildren = true,
