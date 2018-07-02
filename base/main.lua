@@ -47,6 +47,19 @@ home = portal:newChild(homeUrl, {
 
 function love.draw()
     if home then home:draw() end
+
+    do -- Overlay showing ongoing network requests
+        local fontH = love.graphics.getFont():getHeight()
+        local yStep = 1.2 * fontH
+        local y = love.graphics.getHeight()
+        for _, req in ipairs(network.requests) do
+            y = y - yStep
+            local ms = math.floor(1000 * req.time)
+            love.graphics.print(
+                req.url .. '    ' .. req.method .. '     ' .. tostring(ms),
+                yStep - fontH + 4, y)
+        end
+    end
 end
 
 function love.mousepressed(...)
