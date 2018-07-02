@@ -6,7 +6,6 @@ local copas = require 'copas'
 local loveCallbacks = {
     directorydropped = true,
     draw = true,
-    -- TODO(nikki): Figure out what to do for these
     -- Skip these and just use the default error handler everywhere
     --    errhand = true,
     --    errorhandler = true,
