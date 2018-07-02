@@ -8,32 +8,9 @@
 
 local defaultRequire = require
 
-local http = require 'copas.http'
-
--- Our `http.request` wrapper -- currently `print`s time taken + method + url
-local function request(firstArg, ...)
-    local url, method
-    if type(firstArg) == 'table' then
-        url = firstArg.url
-        method = firstArg.method or 'GET'
-    else
-        url = firstArg
-        method = select('#', ...) == 0 and 'GET' or 'POST'
-    end
-
-    local startTime = love.timer.getTime()
-    local function done(...)
-        local ms = math.floor(1000 * (love.timer.getTime() - startTime))
-        print(ms .. 'ms', method, url)
-        return ...
-    end
-
-    return done(http.request(firstArg, ...))
-end
-
--- Quick utility to check if given path writtens a '200 ok' response
+-- Quick utility to check if given path returns a '200 ok' response
 local function exists(path)
-    local r, httpCode, headers, status = request {
+    local r, httpCode, headers, status = network.request {
         url = path,
         method = 'HEAD',
     }
@@ -108,13 +85,14 @@ local function explicitRequire(path, parentEnv, childEnv, basePath, saveCache)
             end,
         }, { __index = oldChildEnv, __newIndex = oldChildEnv })
 
+        -- TODO(nikki): In process of using below to fix `portal.newPortal` with relative paths
         if parentEnv ~= oldChildEnv then
             oldChildEnv.require = childEnv.require
         end
     end
 
     -- Fetch
-    local response, httpCode, headers, status = request(url)
+    local response, httpCode, headers, status = network.request(url)
     if response == nil or httpCode ~= 200 then
         error("error fetching '" .. url .. "': " .. status)
     end

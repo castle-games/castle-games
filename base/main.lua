@@ -9,31 +9,34 @@ love.window.setMode(defaultW, defaultH, {
 })
 
 
--- Bootstrap with a `require` based on `_G`
+-- Load built-in libraries
+
+network = require 'network'
+
+
+-- Bootstrap remote-`require` based on `_G`, then load the `portal` library
 
 local explicitRequire = require 'require'
 require = function(path, p, ...)
     return explicitRequire(path, p or _G, ...)
 end
 
-
--- Base globals
-
 portal = require 'portal'
 
 
--- Main events
-
-local copas = require 'copas'
+-- Top-level Love callbacks
 
 function love.update(dt)
-    copas.step(0)
+    network.update(dt)
 end
 
 
 -- Start!
 
-local home = portal:newChild('https://7859de82.ngrok.io/main.lua', {
+--local homeUrl = 'https://raw.githubusercontent.com/nikki93/ghost-home/master/main.lua'
+local homeUrl = 'https://7859de82.ngrok.io/main.lua'
+
+local home = portal:newChild(homeUrl, {
     x = 20,
     y = 20,
     spawnChildren = true,

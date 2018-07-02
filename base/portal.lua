@@ -1,7 +1,5 @@
 -- Manage loading, lifetime management and event forwarding for entries
 
-local copas = require 'copas'
-
 -- Listing of Love callbacks. Keep in sync with https://love2d.org/wiki/love#Callbacks.
 local loveCallbacks = {
     directorydropped = true,
@@ -55,6 +53,7 @@ function portalMeta.newChild(self, path, args)
     -- Create the portal instance
     local child = createInstance()
     child.args = args or {}
+    child.path = path
 
     -- Create a new globals table `__index`ing to the base one
     child.globals = setmetatable({}, { __index = baseGlobals })
@@ -75,8 +74,8 @@ function portalMeta.newChild(self, path, args)
     end
     child.globals.love.event = nil
 
-    -- The `require` is async so do it in a new coroutine
-    copas.addthread(function()
+    -- Make sure we're in a network coroutine for the rest of this cuz we're gonna `require`
+    network.async(function()
         self.globals.require(path, self.globals, child.globals, nil, false)
         if child.globals.love.load then
             child.globals.love.load() -- Call `load` callback if set
