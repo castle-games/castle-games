@@ -77,9 +77,11 @@ function portalMeta.newChild(self, path, args)
 
     -- The `require` is async so do it in a new coroutine
     copas.addthread(function()
-        require(path, { env = child.globals })
-        package.loaded[path] = nil -- Force loading a new instance next time
-        if child.globals.love.load then child.globals.love.load() end -- Call `load` callback if set
+        self.globals.require(path, self.globals, child.globals)
+        self.globals.package.loaded[path] = nil -- Force loading a new instance next time
+        if child.globals.love.load then
+            child.globals.love.load() -- Call `load` callback if set
+        end
         child.loaded = true
     end)
 
@@ -95,4 +97,7 @@ for cbName in pairs(loveCallbacks) do
 end
 
 -- Return a root portal instance
-return createInstance()
+local root = createInstance()
+root.globals = setmetatable({}, { __index = baseGlobals })
+root.loaded = true
+return root

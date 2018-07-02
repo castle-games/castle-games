@@ -10,19 +10,23 @@ local defaultRequire = require
 
 local http = require 'copas.http'
 
-local function require(path, opts, package)
-    opts = opts or {}
-    package = package or _G.package
+local function explicitRequire(path, parentEnv, childEnv)
+    -- By default use a new `parentEnv` inheriting from `_G`
+    assert(parentEnv, '`explicitRequire` needs `parentEnv`')
+
+    -- Make sure we use `package` from `parentEnv` to handle `package.loaded` correctly
+    local package = parentEnv.package
 
     -- Cached?
     local found = package.loaded[path]
     if found ~= nil then return found end
 
-    -- The sub-require function
-    if opts.env and opts.env.package then
-        local subPackage = opts.env.package
-        opts.env.require = function(path, opts, package)
-            return require(path, opts, package or subPackage)
+    -- Use the `parentEnv` by default for the new module, but if a new `childEnv` is given, make
+    -- that the `parentEnv` for sub-`require`s by default
+    childEnv = childEnv or parentEnv
+    if childEnv ~= parentEnv then
+        childEnv.require = function(path, newParentEnv, ...)
+            return explicitRequire(path, childEnv or newParentEnv, ...)
         end
     end
 
@@ -34,7 +38,7 @@ local function require(path, opts, package)
         end
 
         -- Parse
-        local chunk, err = load(response, path, 'bt', opts.env or _G)
+        local chunk, err = load(response, path, 'bt', childEnv)
         if chunk == nil then
             error("error parsing '" .. path .. "': " .. err)
         end
@@ -52,4 +56,4 @@ local function require(path, opts, package)
     end
 end
 
-return require
+return explicitRequire
