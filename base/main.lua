@@ -33,20 +33,34 @@ function love.update(dt)
     if home then home:update(dt) end
 end
 
-
--- Start!
-
-local homeUrl = 'https://raw.githubusercontent.com/nikki93/ghost-home/master/main.lua'
---local homeUrl = 'https://ecdd2004.ngrok.io/main.lua'
---local homeUrl = 'http://0.0.0.0:8000/main.lua'
-
-network.async(function()
-    home = portal:newChild(homeUrl, {
-        x = 20,
-        y = 20,
-        spawnChildren = true,
-    })
-end)
+for k in pairs({
+    keypressed = true,
+    keyreleased = true,
+    mousefocus = true,
+    mousemoved = true,
+    mousepressed = true,
+    mousereleased = true,
+    resize = true,
+    textedited = true,
+    textinput = true,
+    touchmoved = true,
+    touchpressed = true,
+    touchreleased = true,
+    wheelmoved = true,
+    gamepadaxis = true,
+    gamepadpressed = true,
+    gamepadreleased = true,
+    joystickadded = true,
+    joystickaxis = true,
+    joystickhat = true,
+    joystickpressed = true,
+    joystickreleased = true,
+    joystickremoved = true,
+}) do
+    love[k] = function(...)
+        if home then home[k](home, ...) end
+    end
+end
 
 function love.draw()
     if home then home:draw() end
@@ -65,6 +79,19 @@ function love.draw()
     end
 end
 
-function love.mousepressed(...)
-    if home then home:mousepressed(...) end
-end
+
+-- Start!
+
+--local homeUrl = 'https://raw.githubusercontent.com/nikki93/ghost-home/master/main.lua'
+--local homeUrl = 'https://ecdd2004.ngrok.io/main.lua'
+--local homeUrl = 'http://0.0.0.0:8000/main.lua'
+local homeUrl = 'https://raw.githubusercontent.com/EvanBacon/love-game/master/main.lua'
+
+network.async(function()
+    home = portal:newChild(homeUrl, {
+        x = 20,
+        y = 20,
+        spawnChildren = true,
+    })
+end)
+
