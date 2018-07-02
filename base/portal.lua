@@ -42,13 +42,22 @@ local loveCallbacks = {
     joystickremoved = true,
 }
 
--- Wrap Love functions to load resources from the network given a base path
-local function wrapLoveFunctions(newPortal, basePath)
+-- Set up `love` global for a portal. Currently performs the following:
+--     - Wraps Love functions to load resources from the network given a base path
+local function setupLove(newPortal)
+    local basePath = newPortal.basePath
+
+    local newLove = {}
+    newPortal.globals.love = newLove
+
     -- Make all sub-libraries new tables that inherit from the originals
-    local newLove = newPortal.globals.love
-    for k, v in pairs(newLove) do
+    for k, v in pairs(love) do
         if type(v) == 'table' then
-            newLove[k] = setmetatable({}, { __index = love[k] })
+            if k ~= 'event' then -- Libraries that we skip
+                newLove[k] = setmetatable({}, { __index = love[k] })
+            end
+        else
+            newLove[k] = v
         end
     end
 
@@ -99,6 +108,14 @@ local function wrapLoveFunctions(newPortal, basePath)
             return love.image.newImageData(path, ...)
         end
     end
+
+    function newLove.audio.newSource(path, ...)
+        if type(path) == 'string' then
+            return love.audio.newSource(fetchFileData(path), ...)
+        else
+            return love.audio.newSource(path, ...)
+        end
+    end
 end
 
 -- Metatable of portal instances
@@ -132,16 +149,8 @@ function portalMeta.newChild(self, path, args)
     child.globals.package = setmetatable({}, { __index = package })
     child.globals.package.loaded = {}
 
-    -- Make a copy of the `love` table that skips the callbacks and some other stuff and scopes some
-    -- functions
-    child.globals.love = {}
-    for k, v in pairs(love) do
-        if loveCallbacks[k] == nil then
-            child.globals.love[k] = v
-        end
-    end
-    wrapLoveFunctions(child, child.basePath)
-    child.globals.love.event = nil
+    -- Set up the `love` global
+    setupLove(child)
 
     -- `require` it!
     self.globals.require(path, self.globals, child.globals, nil, false)
