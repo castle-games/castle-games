@@ -4,14 +4,6 @@ Hello traveler! I'm Ghost. Don't worry, I'm not the scary kind of ghost, just a 
 explore, probably like yourself. Anyways... You probably want to just try this thing out. So let's
 do that!
 
-## Serve a portal
-
-Ghost can enter portals to show you things.
-
-By default ghost enters the portal at 'http://0.0.0.0:8000/main.lua'. There's an example portal at
-'./home' -- just go in there and run `python -m SimpleHTTPServer` to serve it. You can serve portals
-however you want, it's just HTTP(S).
-
 ## Run Ghost
 
 ### macOS
@@ -24,3 +16,9 @@ with Xcode and run the 'love-macosx' target.
 
 Open './love/platform/xcode/love.xcodeproj' with Xcode and run the 'love-ios' target.
 
+## Portals
+
+By default Ghost opens a portal to
+'https://raw.githubusercontent.com/nikki93/ghost-home/master/main.lua' -- which is 'main.lua' under
+the submodule linked by './home'. Edit 'base/main.lua' to point at a different URL to open a
+portal to somewhere else instead.
