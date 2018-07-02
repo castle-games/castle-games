@@ -82,16 +82,18 @@ end
 
 -- Start!
 
---local homeUrl = 'https://raw.githubusercontent.com/nikki93/ghost-home/master/main.lua'
---local homeUrl = 'https://ecdd2004.ngrok.io/main.lua'
---local homeUrl = 'http://0.0.0.0:8000/main.lua'
-local homeUrl = 'https://raw.githubusercontent.com/EvanBacon/love-game/master/main.lua'
+function love.load(arg)
+    --local homeUrl = 'https://raw.githubusercontent.com/nikki93/ghost-home/master/main.lua'
+    --local homeUrl = 'https://ecdd2004.ngrok.io/main.lua'
+    --local homeUrl = 'http://0.0.0.0:8000/main.lua'
+    local homeUrl = arg[1] or 'https://raw.githubusercontent.com/EvanBacon/love-game/master/main.lua'
 
-network.async(function()
-    home = portal:newChild(homeUrl, {
-        x = 20,
-        y = 20,
-        spawnChildren = true,
-    })
-end)
+    network.async(function()
+        home = portal:newChild(homeUrl, {
+            x = 20,
+            y = 20,
+            spawnChildren = true,
+        })
+    end)
+end
 
