@@ -10,12 +10,21 @@ local defaultRequire = require
 
 local http = require 'copas.http'
 
-local function require(path, opts)
+local function require(path, opts, package)
     opts = opts or {}
+    package = package or _G.package
 
     -- Cached?
     local found = package.loaded[path]
     if found ~= nil then return found end
+
+    -- The sub-require function
+    if opts.env and opts.env.package then
+        local subPackage = opts.env.package
+        opts.env.require = function(path, opts, package)
+            return require(path, opts, package or subPackage)
+        end
+    end
 
     if path:match('^https?') then
         -- Fetch
