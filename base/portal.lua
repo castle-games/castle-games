@@ -53,13 +53,14 @@ local function setupLove(newPortal)
     -- Make all sub-libraries new tables that inherit from the originals
     for k, v in pairs(love) do
         if type(v) == 'table' then
-            if k ~= 'event' then -- Libraries that we skip
-                newLove[k] = setmetatable({}, { __index = love[k] })
-            end
+            newLove[k] = setmetatable({}, { __index = love[k] })
         else
             newLove[k] = v
         end
     end
+
+    -- Libraries to remove
+    newLove.event = nil
 
     -- Fetch as string
     local function fetch(path)
