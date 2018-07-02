@@ -1,5 +1,8 @@
 -- Manage loading, lifetime management and event forwarding for entries
 
+-- The root `_G`
+local GG = _G
+
 -- Listing of Love callbacks. Keep in sync with https://love2d.org/wiki/love#Callbacks.
 local loveCallbacks = {
     directorydropped = true,
@@ -39,6 +42,65 @@ local loveCallbacks = {
     joystickremoved = true,
 }
 
+-- Wrap Love functions to load resources from the network given a base path
+local function wrapLoveFunctions(newPortal, basePath)
+    -- Make all sub-libraries new tables that inherit from the originals
+    local newLove = newPortal.globals.love
+    for k, v in pairs(newLove) do
+        if type(v) == 'table' then
+            newLove[k] = setmetatable({}, { __index = love[k] })
+        end
+    end
+
+    -- Fetch as string
+    local function fetch(path)
+        local url = newPortal.basePath .. '/' .. path
+        local response, httpCode, headers, status = network.request(url)
+        if httpCode ~= 200 then
+            error("error fetching '" .. url .. "': " .. status)
+        end
+        return response
+    end
+
+    -- Fetch as `FileData`
+    local function fetchFileData(path)
+        return love.filesystem.newFileData(fetch(path), path)
+    end
+
+    function newLove.filesystem.load(path)
+        return function()
+            return newPortal.globals.require(path)
+        end
+    end
+
+    function newLove.graphics.newFont(...)
+        local nArgs = select('#', ...)
+        if nArgs == 0 then return love.graphics.newFont() end
+        local path = select(1, ...)
+        if type(path) == 'string' then
+            return love.graphics.newFont(love.font.newRasterizer(fetchFileData(path)), ...)
+        else
+            return love.graphics.newFont(path, ...)
+        end
+    end
+
+    function newLove.graphics.newImage(path, ...)
+        if type(path) == 'string' then
+            return love.graphics.newImage(love.image.newImageData(fetchFileData(path)))
+        else
+            return love.graphics.newImage(path, ...)
+        end
+    end
+
+    function newLove.image.newImageData(path, ...)
+        if type(path) == 'string' then
+            return love.image.newImageData(fetchFileData(path))
+        else
+            return love.image.newImageData(path, ...)
+        end
+    end
+end
+
 -- Metatable of portal instances
 local portalMeta = {}
 
@@ -48,30 +110,37 @@ local function createInstance()
 end
 
 -- Load a portal to given `require`-able `path`
-local baseGlobals = _G
 function portalMeta.newChild(self, path, args)
     -- Create the portal instance
     local child = createInstance()
     child.args = args or {}
     child.path = path
 
+    -- Figure out base path
+    if path:match('^https?://') then
+        child.basePath = path:gsub('(.*)/(.*)', '%1')
+    else
+        child.basePath = self.basePath
+    end
+
     -- Create a new globals table `__index`ing to the base one
-    child.globals = setmetatable({}, { __index = baseGlobals })
+    child.globals = setmetatable({}, { __index = GG })
     child.globals._G = child.globals
     child.globals.portal = child
 
     -- Make a copy of the `package` table that resets the loaded modules
-    child.globals.package = setmetatable({}, { __index = baseGlobals.package })
+    child.globals.package = setmetatable({}, { __index = package })
     child.globals.package.loaded = {}
 
     -- Make a copy of the `love` table that skips the callbacks and some other stuff and scopes some
     -- functions
     child.globals.love = {}
-    for k, v in pairs(baseGlobals.love) do
+    for k, v in pairs(love) do
         if loveCallbacks[k] == nil then
             child.globals.love[k] = v
         end
     end
+    wrapLoveFunctions(child, child.basePath)
     child.globals.love.event = nil
 
     -- `require` it!
@@ -96,6 +165,6 @@ end
 
 -- Return a root portal instance
 local root = createInstance()
-root.globals = setmetatable({}, { __index = baseGlobals })
+root.globals = setmetatable({}, { __index = GG })
 root.loaded = true
 return root
