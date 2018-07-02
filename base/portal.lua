@@ -2,22 +2,18 @@
 
 local copas = require 'copas'
 
-local entries = {}
-
-local portal = {}
-
 -- Listing of Love callbacks. Keep in sync with https://love2d.org/wiki/love#Callbacks.
 local loveCallbacks = {
     directorydropped = true,
     draw = true,
     -- TODO(nikki): Figure out what to do for these
+    -- Skip these and just use the default error handler everywhere
     --    errhand = true,
     --    errorhandler = true,
     filedropped = true,
     focus = true,
     keypressed = true,
     keyreleased = true,
-    load = true,
     lowmemory = true,
     mousefocus = true,
     mousemoved = true,
@@ -46,63 +42,58 @@ local loveCallbacks = {
     joystickremoved = true,
 }
 
--- Forward a Love callback event from the system to relevant entries
-local function forwardLoveCallback(cb, ...)
-    for name, entry in pairs(entries) do
-        local found = entry.globals.love[cb]
+-- Metatable of portal instances
+local portalMeta = {}
+
+-- Create a basic unpopulated portal instance
+local function createInstance()
+    return setmetatable({}, { __index = portalMeta })
+end
+
+-- Load a portal to given `require`-able `path`
+local baseGlobals = _G
+function portalMeta.newChild(self, path, args)
+    -- Create the portal instance
+    local child = createInstance()
+    child.args = args or {}
+
+    -- Create a new globals table `__index`ing to the base one
+    child.globals = setmetatable({}, { __index = baseGlobals })
+    child.globals._G = child.globals
+    child.globals.portal = child
+
+    -- Make a copy of the `package` table that resets the loaded modules
+    child.globals.package = setmetatable({}, { __index = baseGlobals.package })
+    child.globals.package.loaded = {}
+
+    -- Make a copy of the `love` table that skips the callbacks and some other stuff and scopes some
+    -- functions
+    child.globals.love = {}
+    for k, v in pairs(baseGlobals.love) do
+        if loveCallbacks[k] == nil then
+            child.globals.love[k] = v
+        end
+    end
+    child.globals.love.event = nil
+
+    -- The `require` is async so do it in a new coroutine
+    copas.addthread(function()
+        require(path, { env = child.globals })
+        package.loaded[path] = nil -- Force loading a new instance next time
+        if child.globals.love.load then child.globals.love.load() end -- Call `load` callback if set
+        child.loaded = true
+    end)
+
+    return child
+end
+
+-- Add all of the callbacks as methods
+for cbName in pairs(loveCallbacks) do
+    portalMeta[cbName] = function(self, ...)
+        local found = self.globals.love[cbName]
         if found then found(...) end
     end
 end
 
--- Override Love callbacks to forward them.
-for cb in pairs(loveCallbacks) do
-    love[cb] = function(...)
-        forwardLoveCallback(cb, ...)
-    end
-end
-
--- To identify entries
-local nextEntryId = 0
-local function newEntryId()
-    local id = nextEntryId
-    nextEntryId = nextEntryId + 1
-    return id
-end
-
--- Enter the portal at the given `require`-able `path`
-function portal.enter(path, args)
-    local id = newEntryId()
-
-    -- Make a copy of the `portal` table that scopes functions
-    local newPortal = setmetatable({}, { __index = portal })
-    newPortal.args = args
-    function newPortal.exit()
-        entries[id] = nil
-    end
-
-    -- Make a copy of the `love` table that skips the callbacks and some other stuff and scopes some
-    -- functions
-    local newLove = {}
-    for k, v in pairs(love) do
-        if loveCallbacks[k] == nil then
-            newLove[k] = v
-        end
-    end
-    newLove.event = nil
-
-    -- Require it, with a new globals table that inherits from our root one
-    local newGlobals = setmetatable({
-        portal = newPortal,
-        love = newLove,
-    }, { __index = _G })
-    copas.addthread(function()
-        require(path, { env = newGlobals })
-    end)
-
-    -- Add a `entries` entry
-    entries[id] = {
-        globals = newGlobals,
-    }
-end
-
-return portal
+-- Return a root portal instance
+return createInstance()
