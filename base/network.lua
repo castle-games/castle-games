@@ -14,7 +14,13 @@ network.requests = {}
 -- requests inside it will appear to 'block' inside that coroutine, while code outside the
 -- coroutine still runs.
 function network.async(foo)
-    copas.addthread(foo)
+    copas.addthread(function()
+        copas.setErrorHandler(function(msg, co, skt)
+            print(msg, co, skt)
+            print(debug.traceback(co))
+        end)
+        foo()
+    end)
 end
 
 -- Same interface as http://w3.impa.br/~diego/software/luasocket/http.html#request
