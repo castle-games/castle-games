@@ -57,6 +57,7 @@ local function explicitRequire(path, parentEnv, childEnv, basePath, saveCache)
         isAbsolute = true
         absolute = path
     elseif basePath then
+        path = path:gsub('^%.*', ''):gsub('%.*$', '') -- Remove leading or trailing '.'s
         absolute = basePath .. '/' .. path:gsub('%.', '/')
     else
         error("'" .. path .. "' is not absolute but no base path is known")
@@ -106,15 +107,15 @@ local function explicitRequire(path, parentEnv, childEnv, basePath, saveCache)
     -- Figure out the short alias if absolute
     local alias = path
     if isAbsolute then
-        alias = path:gsub('(.*)/(.*)', '%2'):gsub('%.lua$', ''):gsub('/init%.lua$', '')
+        alias = path:gsub('(.*)/(.*)', '%2') -- Remove everything till last '/'
     end
+    alias = alias:gsub('/?init%.lua$', ''):gsub('%.lua$', '')
 
     -- Run
     local result = chunk(alias)
 
     -- Save to cache
     if saveCache ~= false then
-        print(path)
         if result ~= nil then
             assert(not package.loaded[alias],
                 "alias '" .. alias .. "' for path '" .. path .. "' will cause a collision")
