@@ -79,7 +79,7 @@ local function setupLove(newPortal)
 
     function newLove.filesystem.load(path)
         return function()
-            return newPortal.globals.require(path)
+            return newPortal.globals.require(path, nil, nil, nil, false)
         end
     end
 
