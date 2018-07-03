@@ -49,12 +49,15 @@ local function setupLove(newPortal)
     local newLove = {}
     newPortal.globals.love = newLove
 
+    -- Whitelisted top-level functions
+    newLove.getVersion = love.getVersion
+    newLove.hasDeprecationOutput = love.hasDeprecationOutput
+    newLove.setDeprecationOutput = love.setDeprecationOutput
+
     -- Make all sub-libraries new tables that inherit from the originals
     for k, v in pairs(love) do
         if type(v) == 'table' then
             newLove[k] = setmetatable({}, { __index = love[k] })
-        elseif not loveCallbacks[k] then
-            newLove[k] = v
         end
     end
 
