@@ -153,7 +153,6 @@ function portalMeta.newChild(self, path, args)
 
     -- Create a new globals table `__index`ing to the base one
     child.globals = setmetatable({}, { __index = GG })
-    child.globals._G = child.globals
     child.globals.portal = child
 
     -- Make a copy of the `package` table that resets the loaded modules

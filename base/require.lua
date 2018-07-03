@@ -162,6 +162,7 @@ local function explicitRequire(path, opts)
     if opts.noEval then return end
 
     -- Parse
+    childEnv._G = childEnv -- `_G` is never updated by Lua, we do it ourselves
     local chunk, err = load(response, path:gsub('(.*)/(.*)', '%2'), 'bt', childEnv)
     if chunk == nil then
         error("error parsing '" .. url .. "': " .. err)
