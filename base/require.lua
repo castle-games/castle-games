@@ -56,6 +56,7 @@ local function explicitRequire(path, opts)
         end
     end
 
+    local origPath = path
     path = path:gsub('%.lua$', '')
 
     local isAbsolute = false
@@ -68,7 +69,7 @@ local function explicitRequire(path, opts)
         path = path:gsub('^%.*', ''):gsub('%.*$', '') -- Remove leading or trailing '.'s
         absolute = basePath .. '/' .. path:gsub('%.', '/')
     else
-        error("'" .. path .. "' is not absolute but no base path is known")
+        error("'" .. origPath .. "' is not absolute but no base path is known")
     end
 
     -- Deal with '.lua' or '/init.lua' appending
@@ -78,7 +79,7 @@ local function explicitRequire(path, opts)
     elseif exists(absolute .. '/init.lua') then
         url = absolute .. '/init.lua'
     else
-        error("no `url` found for '" .. path .. "'")
+        error("no `url` found for '" .. origPath .. "'")
     end
 
     -- Update `basePath` for sub-`require`s -- do it here after we've figured out `url` with
@@ -111,11 +112,11 @@ local function explicitRequire(path, opts)
     end
 
     -- Figure out the short alias if absolute
-    local alias = path
+    local alias = origPath
     if isAbsolute then
-        alias = path:gsub('(.*)/(.*)', '%2') -- Remove everything till last '/'
+        alias = origPath:gsub('(.*)/(.*)', '%2') -- Remove everything till last '/'
     end
-    alias = alias:gsub('/?init%.lua$', ''):gsub('%.lua$', '')
+    alias = alias:gsub('/?init%.lua$', ''):gsub('%.lua$', ''):gsub('^%.*', ''):gsub('%.*$', '')
 
     -- Run
     local result = chunk(alias)
@@ -124,13 +125,13 @@ local function explicitRequire(path, opts)
     if saveCache ~= false then
         if result ~= nil then
             assert(not package.loaded[alias],
-                "alias '" .. alias .. "' for path '" .. path .. "' will cause a collision")
-            package.loaded[path] = result
+                "alias '" .. alias .. "' for path '" .. origPath .. "' will cause a collision")
+            package.loaded[origPath] = result
             package.loaded[alias] = result
-        elseif package.loaded[path] == nil then
+        elseif package.loaded[origPath] == nil then
             assert(not package.loaded[alias],
-                "alias '" .. alias .. "' for path '" .. path .. "' will cause a collision")
-            package.loaded[path] = true
+                "alias '" .. alias .. "' for path '" .. origPath .. "' will cause a collision")
+            package.loaded[origPath] = true
             package.loaded[alias] = true
         end
     end
