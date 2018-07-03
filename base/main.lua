@@ -19,11 +19,11 @@ portal = require 'portal'
 -- Top-level Love callbacks
 
 local defaultAppUrl = 'https://raw.githubusercontent.com/EvanBacon/love-game/master/main.lua'
-local app
+local app = {}
 
 function love.update(dt)
     network.update(dt)
-    if app then app:update(dt) end
+    if app[1] then app[1]:update(dt) end
 end
 
 for k in pairs({
@@ -54,27 +54,27 @@ for k in pairs({
         if k == 'keypressed' then
             local key = ...
             if key == '0' then
-                app = nil
+                table.remove(app, 1)
             elseif key == '1' then
                 network.async(function()
-                    app = portal:newChild(defaultAppUrl)
+                    table.insert(app, 1, portal:newChild(defaultAppUrl))
                 end)
             elseif key == '2' then
                 network.async(function()
-                    app = portal:newChild('https://raw.githubusercontent.com/ccheever/tetris-ghost/master/main.lua')
+                    table.insert(app, 1, portal:newChild('https://raw.githubusercontent.com/ccheever/tetris-ghost/master/main.lua'))
                 end)
             elseif key == '3' then
                 network.async(function()
-                    app = portal:newChild('https://raw.githubusercontent.com/M-Mabrouk/Breakout/master/main.lua')
+                    table.insert(app, 1, portal:newChild('https://raw.githubusercontent.com/M-Mabrouk/Breakout/master/main.lua'))
                 end)
             end
         end
-        if app then app[k](app, ...) end
+        if app[1] then app[1][k](app[1], ...) end
     end
 end
 
 function love.draw()
-    if app then app:draw() end
+    if app[1] then app[1]:draw() end
 
     do -- Overlay showing ongoing network requests
         local fontH = love.graphics.getFont():getHeight()
