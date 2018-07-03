@@ -30,6 +30,7 @@ local resourceFuncs = {
     ['love.graphics.newImage'] = true,
     ['love.image.newImageData'] = true,
     ['love.audio.newSource'] = true,
+    ['love.graphics.newShader'] = true,
 }
 local function parseResources(code)
     local result = {}
@@ -148,7 +149,9 @@ local function explicitRequire(path, opts)
                     if resource.type == 'lua' then
                         childEnv.require(resource.path, { noEval = true })
                     elseif resource.type == 'asset' then
-                        network.fetch(childEnv.portal.basePath .. '/' .. resource.path)
+                        pcall(function() -- Allow failure as this could be any kind of string...
+                            network.fetch(childEnv.portal.basePath .. '/' .. resource.path)
+                        end)
                     end
                 end)
             end

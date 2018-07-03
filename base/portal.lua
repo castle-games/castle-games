@@ -81,6 +81,10 @@ local function setupLove(newPortal)
         end
     end
 
+    function newLove.filesystem.lines(path)
+        return fetchAsset(path):gmatch("[^\r\n]+")
+    end
+
     function newLove.graphics.newFont(...)
         local nArgs = select('#', ...)
         if nArgs == 0 then return love.graphics.newFont() end
@@ -113,6 +117,14 @@ local function setupLove(newPortal)
             return love.audio.newSource(fetchFileData(path), ...)
         else
             return love.audio.newSource(path, ...)
+        end
+    end
+
+    function newLove.graphics.newShader(path, ...)
+        if type(path) == 'string' and not path:match('\n') then
+            return love.graphics.newShader(fetchFileData(path), ...)
+        else
+            return love.graphics.newShader(path, ...)
         end
     end
 end
