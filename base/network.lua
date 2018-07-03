@@ -66,28 +66,44 @@ function network.request(firstArg, ...)
 end
 
 -- Fetch a resource with default caching semantics
-local fetchCache = { GET = {}, HEAD = {} }
+local fetchEntries = { GET = {}, HEAD = {} }
 function network.fetch(url, method)
     method = (method or 'GET'):upper()
     assert(method == 'GET' or method == 'HEAD', "`network.fetch` only supports 'GET' or 'HEAD'")
 
-    do -- Cached?
-        local found = fetchCache[method][url]
-        if found then return unpack(found) end
-    end
+    -- Find or create entry
+    local entry = fetchEntries[method][url]
+    if not entry then -- No entry yet
+        -- Store a pending entry that will collect others waiting on this
+        entry = { waiters = {} }
+        fetchEntries[method][url] = entry
 
-    local response, httpCode, headers, status
-    if method == 'GET' then
-        response, httpCode, headers, status = network.request(url)
-        if httpCode ~= 200 then
-            error("error fetching '" .. url .. "': " .. status)
+        -- Actually perform the request, blocks coroutine till done
+        local response, httpCode, headers, status
+        if method == 'GET' then
+            response, httpCode, headers, status = network.request(url)
+            if httpCode ~= 200 then
+                error("error fetching '" .. url .. "': " .. status)
+            end
+        else
+            response, httpCode, headers, status = network.request { url = url, method = method }
         end
-    else
-        response, httpCode, headers, status = network.request { url = url, method = method }
-    end
 
-    fetchCache[method][url] = { response, httpCode, headers, status }
-    return unpack(fetchCache[method][url])
+        -- Save result, wake waiters
+        entry.result = { response, httpCode, headers, status }
+        for _, waiter in ipairs(entry.waiters) do
+            copas.wakeup(waiter)
+        end
+        entry.waiters = nil
+        return unpack(entry.result)
+    elseif entry.result then -- Already have an entry with `result`, just return it
+        return unpack(entry.result)
+    else -- Entry with no `result` yet -- need to await it
+        table.insert(entry.waiters, coroutine.running())
+        copas.sleep(-1) -- Sleep till explicitly woken
+        return assert(unpack(entry.result),
+            "error fetching '" .. url .. "': coroutine awoken without `result` set")
+    end
 end
 
 -- Perform any updates the network system has to do -- this is run by base automatically and you
