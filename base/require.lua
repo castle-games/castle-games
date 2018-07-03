@@ -10,10 +10,7 @@ local defaultRequire = require
 
 -- Quick utility to check if given path returns a '200 ok' response
 local function exists(path)
-    local r, httpCode, headers, status = network.request {
-        url = path,
-        method = 'HEAD',
-    }
+    local r, httpCode = network.fetch(path, 'HEAD')
     return httpCode == 200
 end
 
@@ -105,10 +102,7 @@ local function explicitRequire(path, opts)
     end
 
     -- Fetch
-    local response, httpCode, headers, status = network.request(url)
-    if response == nil or httpCode ~= 200 then
-        error("error fetching '" .. url .. "': " .. status)
-    end
+    local response = network.fetch(url)
 
     -- Parse
     local chunk, err = load(response, path:gsub('(.*)/(.*)', '%2'), 'bt', childEnv)

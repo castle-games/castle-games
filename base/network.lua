@@ -23,7 +23,8 @@ function network.async(foo)
     end)
 end
 
--- Same interface as http://w3.impa.br/~diego/software/luasocket/http.html#request
+-- Same interface as http://w3.impa.br/~diego/software/luasocket/http.html#request -- but is
+-- async, tracks ongoing requests for debugging, and logs requests
 function network.request(firstArg, ...)
     -- Figure out URL and method
     local url, method
@@ -60,7 +61,33 @@ function network.request(firstArg, ...)
 
         return ...
     end
+
     return after(http.request(firstArg, ...))
+end
+
+-- Fetch a resource with default caching semantics
+local fetchCache = { GET = {}, HEAD = {} }
+function network.fetch(url, method)
+    method = (method or 'GET'):upper()
+    assert(method == 'GET' or method == 'HEAD', "`network.fetch` only supports 'GET' or 'HEAD'")
+
+    do -- Cached?
+        local found = fetchCache[method][url]
+        if found then return unpack(found) end
+    end
+
+    local response, httpCode, headers, status
+    if method == 'GET' then
+        response, httpCode, headers, status = network.request(url)
+        if httpCode ~= 200 then
+            error("error fetching '" .. url .. "': " .. status)
+        end
+    else
+        response, httpCode, headers, status = network.request { url = url, method = method }
+    end
+
+    fetchCache[method][url] = { response, httpCode, headers, status }
+    return unpack(fetchCache[method][url])
 end
 
 -- Perform any updates the network system has to do -- this is run by base automatically and you

@@ -42,8 +42,7 @@ local loveCallbacks = {
     joystickremoved = true,
 }
 
--- Set up `love` global for a portal. Currently performs the following:
---     - Wraps Love functions to load resources from the network given a base path
+-- Set up `love` global for a portal. Various scoping and network fixes.
 local function setupLove(newPortal)
     local basePath = newPortal.basePath
 
@@ -62,19 +61,15 @@ local function setupLove(newPortal)
     -- Libraries to remove
     newLove.event = nil
 
-    -- Fetch as string
-    local function fetch(path)
-        local url = newPortal.basePath .. '/' .. path
-        local response, httpCode, headers, status = network.request(url)
-        if httpCode ~= 200 then
-            error("error fetching '" .. url .. "': " .. status)
-        end
+    -- Fetch asset contents as string, given relative path under portal's `basePath`
+    local function fetchAsset(path)
+        local response = network.fetch(newPortal.basePath .. '/' .. path)
         return response
     end
 
     -- Fetch as `FileData`
     local function fetchFileData(path)
-        return love.filesystem.newFileData(fetch(path), path)
+        return love.filesystem.newFileData(fetchAsset(path), path)
     end
 
     function newLove.filesystem.load(path)
