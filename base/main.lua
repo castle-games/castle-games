@@ -18,11 +18,12 @@ portal = require 'portal'
 
 -- Top-level Love callbacks
 
-local home
+local defaultAppUrl = 'https://raw.githubusercontent.com/EvanBacon/love-game/master/main.lua'
+local app
 
 function love.update(dt)
     network.update(dt)
-    if home then home:update(dt) end
+    if app then app:update(dt) end
 end
 
 for k in pairs({
@@ -50,12 +51,30 @@ for k in pairs({
     joystickremoved = true,
 }) do
     love[k] = function(...)
-        if home then home[k](home, ...) end
+        if k == 'keypressed' then
+            local key = ...
+            if key == '0' then
+                app = nil
+            elseif key == '1' then
+                network.async(function()
+                    app = portal:newChild(defaultAppUrl)
+                end)
+            elseif key == '2' then
+                network.async(function()
+                    app = portal:newChild('https://raw.githubusercontent.com/ccheever/tetris-ghost/master/main.lua')
+                end)
+            elseif key == '3' then
+                network.async(function()
+                    app = portal:newChild('https://raw.githubusercontent.com/M-Mabrouk/Breakout/master/main.lua')
+                end)
+            end
+        end
+        if app then app[k](app, ...) end
     end
 end
 
 function love.draw()
-    if home then home:draw() end
+    if app then app:draw() end
 
     do -- Overlay showing ongoing network requests
         local fontH = love.graphics.getFont():getHeight()
@@ -75,17 +94,6 @@ end
 -- Start!
 
 function love.load(arg)
-    --local homeUrl = 'https://raw.githubusercontent.com/nikki93/ghost-home/master/main.lua'
-    --local homeUrl = 'https://ecdd2004.ngrok.io/main.lua'
-    --local homeUrl = 'http://0.0.0.0:8000/main.lua'
-    local homeUrl = arg[1] or 'https://raw.githubusercontent.com/EvanBacon/love-game/master/main.lua'
-
-    network.async(function()
-        home = portal:newChild(homeUrl, {
-            x = 20,
-            y = 20,
-            spawnChildren = true,
-        })
-    end)
+    defaultAppUrl = arg[1]
 end
 
