@@ -171,7 +171,7 @@ function portalMeta.newChild(self, path, args)
 
     -- Call `love.load` callback and set as loaded
     if child.globals.love.load then
-        child.globals.love.load()
+        child.globals.love.load({ child.basePath })
     end
     child.loaded = true
 
