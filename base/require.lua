@@ -8,6 +8,8 @@
 
 local defaultRequire = require
 
+local parseLua = require 'parseLua'
+
 -- Quick utility to check if given path returns a '200 ok' response
 local function exists(path)
     local r, httpCode = network.fetch(path, 'HEAD')
@@ -21,6 +23,36 @@ local function defaultOpts(a, b)
     if type(a) == 'table' then for k, v in pairs(a) do o[k] = v end end
     return o
 end
+
+-- Find potential resources to fetch in Lua code
+local resourceFuncs = {
+    ['love.graphics.newFont'] = true,
+    ['love.graphics.newImage'] = true,
+    ['love.image.newImageData'] = true,
+    ['love.audio.newSource'] = true,
+}
+local function parseResources(code)
+    local result = {}
+    local t = parseLua(code)
+    for i = 1, #t do
+        local a, b, c, d, e = t[i], t[i + 1], t[i + 2], t[i + 3], t[i + 4]
+        if a[1] == 'identifier' and a[2] == 'require' and
+                b and (b[1] == 'whitespace' or (b[1] == 'operator' and b[2] == '(')) and
+                c and c[1] == 'string' then
+            -- `require '...'` or `require('...'`
+            table.insert(result, { type = 'lua', path = load('return ' .. c[2])() })
+        elseif a[1] == 'identifier' and resourceFuncs[a[2]] and
+                b and b[1] == 'operator' and b[2] == '(' and
+                c and c[1] == 'string' and
+                d and (d[1] == 'operator' and (d[2] == ')' or d[2] == ',')) then
+            -- `<func>('...')` or `<func>('...',` with a `resourceFuncs` above
+            table.insert(result, { type = 'asset', path = load('return ' .. c[2])() })
+        end
+    end
+    return result
+end
+
+local prefetchedResources = {}
 
 local function explicitRequire(path, opts)
     -- Built-in?
@@ -36,6 +68,7 @@ local function explicitRequire(path, opts)
     local parentEnv = assert(opts.parentEnv, '`explicitRequire` needs `parentEnv`')
     local childEnv = opts.childEnv
     local saveCache = opts.saveCache
+    local noEval = opts.noEval
 
     -- Make sure we use `package` from `parentEnv` to handle `package.loaded` correctly
     local package = parentEnv.package
@@ -104,6 +137,26 @@ local function explicitRequire(path, opts)
 
     -- Fetch
     local response = network.fetch(url)
+
+    -- Asynchronously pre-fetch resources parsed out of the body
+    if not prefetchedResources[url] then
+        prefetchedResources[url] = true
+        local resources = parseResources(response)
+        network.async(function()
+            for _, resource in pairs(resources) do
+                network.async(function()
+                    if resource.type == 'lua' then
+                        childEnv.require(resource.path, { noEval = true })
+                    elseif resource.type == 'asset' then
+                        network.fetch(childEnv.portal.basePath .. '/' .. resource.path)
+                    end
+                end)
+            end
+        end)
+    end
+
+    -- No eval?
+    if opts.noEval then return end
 
     -- Parse
     local chunk, err = load(response, path:gsub('(.*)/(.*)', '%2'), 'bt', childEnv)

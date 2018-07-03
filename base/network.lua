@@ -101,8 +101,10 @@ function network.fetch(url, method)
     else -- Entry with no `result` yet -- need to await it
         table.insert(entry.waiters, coroutine.running())
         copas.sleep(-1) -- Sleep till explicitly woken
-        return assert(unpack(entry.result),
-            "error fetching '" .. url .. "': coroutine awoken without `result` set")
+        if not entry.result then
+            error("error fetching '" .. url .. "': coroutine awoken without `result` set")
+        end
+        return unpack(entry.result)
     end
 end
 
