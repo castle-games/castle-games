@@ -174,7 +174,7 @@ function portalMeta.newChild(self, path, args)
         -- The associated `love.conf(...)` is ignored, but 'conf.lua' may have some other side
         -- effects that matter (eg., setting some global variables).
         preamble = [[
-            pcall(function() require 'conf' end)
+            pcall(require, 'conf')
         ]]
     })
 
