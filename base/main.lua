@@ -101,6 +101,6 @@ end
 -- Start!
 
 function love.load(arg)
---    defaultAppUrl = arg[1]
+    defaultAppUrl = arg[1]
 end
 
