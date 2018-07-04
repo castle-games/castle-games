@@ -70,6 +70,7 @@ local function explicitRequire(path, opts)
     local childEnv = opts.childEnv
     local saveCache = opts.saveCache
     local noEval = opts.noEval
+    local preamble = opts.preamble
 
     -- Make sure we use `package` from `parentEnv` to handle `package.loaded` correctly
     local package = parentEnv.package
@@ -138,6 +139,7 @@ local function explicitRequire(path, opts)
 
     -- Fetch
     local response = network.fetch(url)
+    if preamble then response = preamble .. response end
 
     -- Asynchronously pre-fetch resources parsed out of the body
     if not prefetchedResources[url] then
