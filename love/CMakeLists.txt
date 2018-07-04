@@ -249,6 +249,46 @@ endfunction()
 #
 
 set(LOVE_SRC_COMMON
+
+	../lpeg/lptypes.h
+	../lpeg/lpcap.c
+	../lpeg/lpcap.h
+	../lpeg/lpcode.c
+	../lpeg/lpcode.h
+	../lpeg/lptree.h
+	../lpeg/lpvm.c
+	../lpeg/lpvm.h
+	../lpeg/lpprint.c
+	../lpeg/lpprint.h
+	../lpeg/lptree.c
+	../lpeg/lptree.h
+
+	../../luacrypto/src/lcrypto.c
+	../../luacrypto/src/lcrypto.h
+
+	../../luasec/src/compat.h
+	../../luasec/src/context.h
+	../../luasec/src/options.h
+	../../luasec/src/ssl.h
+	../../luasec/src/x509.h
+	../../luasec/src/config.c
+	../../luasec/src/ec.c
+	../../luasec/src/context.c
+	../../luasec/src/ec.h
+	../../luasec/src/ssl.c
+	../../luasec/src/x509.c 
+
+	../../lua-cjson/fpconv.c
+	../../lua-cjson/strbuf.c
+	../../lua-cjson/lua_cjson.c
+	../../lua-cjson/strbuf.h
+
+	../../lua-marshal/lmarshal.c
+
+	../../lsqlite3/lsqlite3.c
+	../../lsqlite3/sqlite3.c
+	../../lsqlite3/sqlite3.h
+
 	src/common/b64.cpp
 	src/common/b64.h
 	src/common/Color.h
@@ -1722,6 +1762,9 @@ endif()
 
 add_library(${LOVE_LIB_NAME} SHARED ${LOVE_LIB_SRC} ${LOVE_RC})
 target_link_libraries(${LOVE_LIB_NAME} ${LOVE_LINK_LIBRARIES} ${LOVE_3P})
+find_package(OpenSSL REQUIRED)
+target_link_libraries(${LOVE_LIB_NAME} OpenSSL::SSL)
+
 
 if(LOVE_EXTRA_DEPENDECIES)
 	add_dependencies(${LOVE_LIB_NAME} ${LOVE_EXTRA_DEPENDECIES})
