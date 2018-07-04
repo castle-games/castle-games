@@ -74,7 +74,14 @@ for k in pairs({
 end
 
 function love.draw()
-    if app[1] then app[1]:draw() end
+    if app[1] then
+        app[1]:draw()
+    else
+        love.graphics.print([[
+hi! press 1, 2 or 3 to open different games. you can change the games launched
+by these buttons by editing the URIs in 'base/main.lua'.
+        ]], 20, 20)
+    end
 
     do -- Overlay showing ongoing network requests
         local fontH = love.graphics.getFont():getHeight()
@@ -94,6 +101,6 @@ end
 -- Start!
 
 function love.load(arg)
-    defaultAppUrl = arg[1]
+--    defaultAppUrl = arg[1]
 end
 
