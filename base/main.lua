@@ -11,8 +11,7 @@ love.window.setMode(defaultW, defaultH, {
 
 -- Built-ins
 
-local tui = require 'tui'
-
+tui = require 'tui'
 network = require 'network'
 require = require 'require'
 portal = require 'portal'
@@ -33,21 +32,20 @@ function love.update(dt)
 
     if app then app:update(dt) end
 
+    local uris = {
+        ["localhost"] = 'http://0.0.0.0:8000/main.lua',
+        ["evan's"] = 'https://raw.githubusercontent.com/EvanBacon/love-game/master/main.lua',
+        ["ccheever's"] = 'https://raw.githubusercontent.com/ccheever/tetris-ghost/master/main.lua',
+        ["nikki's"] = 'https://raw.githubusercontent.com/nikki93/ghost-home/master/main.lua',
+    }
+
     tui.inWindow('welcome to ghost!', function()
-        if tui.button("evan's game") then
-            network.async(function()
-                app = portal:newChild('https://raw.githubusercontent.com/EvanBacon/love-game/master/main.lua')
-            end)
-        end
-        if tui.button("charlie's game") then
-            network.async(function()
-                app = portal:newChild('https://raw.githubusercontent.com/ccheever/tetris-ghost/master/main.lua')
-            end)
-        end
-        if tui.button("nikki's game") then
-            network.async(function()
-                app = portal:newChild('https://raw.githubusercontent.com/nikki93/ghost-home/master/main.lua')
-            end)
+        for name, uri in pairs(uris) do
+            if tui.button(name) then
+                network.async(function()
+                    app = portal:newChild(uri)
+                end)
+            end
         end
     end)
 
@@ -67,8 +65,7 @@ function love.draw()
         for _, req in ipairs(network.requests) do
             y = y - yStep
             local ms = math.floor(1000 * req.time)
-            love.graphics.print(
-                req.url .. '    ' .. req.method .. '     ' .. tostring(ms),
+            love.graphics.print(req.url .. '    ' .. req.method .. '     ' .. tostring(ms),
                 yStep - fontH + 4, y)
         end
     end
