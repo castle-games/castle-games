@@ -11,6 +11,8 @@ love.window.setMode(defaultW, defaultH, {
 
 -- Built-ins
 
+local tui = require 'tui'
+
 network = require 'network'
 require = require 'require'
 portal = require 'portal'
@@ -21,24 +23,40 @@ portal = require 'portal'
 local app -- Save our app portal here when loaded
 
 function love.load(arg)
-    local url = arg[1] or 'https://raw.githubusercontent.com/nikki93/ghost-home/master/main.lua'
-    network.async(function()
-        app = portal:newChild(url)
-    end)
+    tui.love.load()
 end
 
 function love.update(dt)
     network.update(dt)
+
+    tui.love.preupdate(dt)
+
     if app then app:update(dt) end
+
+    tui.inWindow('welcome to ghost!', function()
+        if tui.button("evan's game") then
+            network.async(function()
+                app = portal:newChild('https://raw.githubusercontent.com/EvanBacon/love-game/master/main.lua')
+            end)
+        end
+        if tui.button("charlie's game") then
+            network.async(function()
+                app = portal:newChild('https://raw.githubusercontent.com/ccheever/tetris-ghost/master/main.lua')
+            end)
+        end
+        if tui.button("nikki's game") then
+            network.async(function()
+                app = portal:newChild('https://raw.githubusercontent.com/nikki93/ghost-home/master/main.lua')
+            end)
+        end
+    end)
+
+    tui.love.postupdate()
 end
 
 function love.draw()
     if app then
         app:draw()
-    else
-        love.graphics.print([[
-loading home...
-        ]], 20, 20)
     end
 
     -- Overlay showing ongoing network requests
@@ -54,6 +72,8 @@ loading home...
                 yStep - fontH + 4, y)
         end
     end
+
+    tui.love.draw()
 end
 
 -- Forward the rest of the callbacks directly
@@ -82,6 +102,10 @@ for k in pairs({
     joystickremoved = true,
 }) do
     love[k] = function(...)
+        if tui.love[k] then
+            tui.love[k](...)
+        end
+
         if app then app[k](app, ...) end
     end
 end
