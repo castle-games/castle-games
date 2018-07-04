@@ -169,6 +169,13 @@ function portalMeta.newChild(self, path, args)
         parentEnv = self.globals,
         childEnv = child.globals,
         saveCache = false, -- Always reload portals
+        -- Add a preamble that loads 'conf.lua' often present alongside 'main.lua':
+        -- https://love2d.org/wiki/Config_Files
+        -- The associated `love.conf(...)` is ignored, but 'conf.lua' may have some other side
+        -- effects that matter (eg., setting some global variables).
+        preamble = [[
+            pcall(function() require 'conf' end)
+        ]]
     })
 
     -- Call `love.load` callback and set as loaded
