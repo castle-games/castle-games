@@ -120,7 +120,7 @@ local function explicitRequire(path, opts)
     -- Update `basePath` for sub-`require`s -- do it here after we've figured out `url` with
     -- potential '/init.lua' on the end etc.
     if isAbsolute then
-        local newBasePath = url:gsub('(.*)/(.*)', '%1')
+        local newBasePath = url:gsub('/?init%.lua$', ''):gsub('(.*)/(.*)', '%1')
         local oldChildEnv = childEnv
         local oldChildRequire = childEnv.require
         childEnv = setmetatable({
@@ -173,9 +173,9 @@ local function explicitRequire(path, opts)
     -- Figure out the short alias if absolute
     local alias = origPath
     if isAbsolute then
-        alias = origPath:gsub('(.*)/(.*)', '%2') -- Remove everything till last '/'
+        alias = origPath:gsub('/?init%.lua$', ''):gsub('(.*)/(.*)', '%2')
     end
-    alias = alias:gsub('/?init%.lua$', ''):gsub('%.lua$', ''):gsub('^%.*', ''):gsub('%.*$', '')
+    alias = alias:gsub('%.lua$', ''):gsub('^%.*', ''):gsub('%.*$', '')
 
     -- Run
     local result = chunk(alias)
