@@ -1,3 +1,7 @@
+-- From 'Lua Lexer' at http://lua-users.org/wiki/LpegRecipes.
+-- With long string matcher from http://www.inf.puc-rio.br/~roberto/lpeg/ because
+-- the original one caused an LPeg zero-length loop error.
+
 local lpeg = require 'lpeg'
 local P, R, S, C, Cc, Ct = lpeg.P, lpeg.R, lpeg.S, lpeg.C, lpeg.Cc, lpeg.Ct
 
