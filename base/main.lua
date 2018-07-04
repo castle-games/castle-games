@@ -1,6 +1,6 @@
 -- Love settings
 
-local defaultW, defaultH = love.graphics.getDimensions()
+local defaultW, defaultH = 736, 414
 love.window.setMode(defaultW, defaultH, {
     msaa = 4,
     resizable = true,
@@ -18,14 +18,45 @@ portal = require 'portal'
 
 -- Top-level Love callbacks
 
-local defaultAppUrl = 'https://raw.githubusercontent.com/EvanBacon/love-game/master/main.lua'
-local app = {}
+local app -- Save our app portal here when loaded
+
+function love.load(arg)
+    local url = arg[1] or 'https://raw.githubusercontent.com/nikki93/ghost-home/master/main.lua'
+    network.async(function()
+        app = portal:newChild(url)
+    end)
+end
 
 function love.update(dt)
     network.update(dt)
-    if app[1] then app[1]:update(dt) end
+    if app then app:update(dt) end
 end
 
+function love.draw()
+    if app then
+        app:draw()
+    else
+        love.graphics.print([[
+loading home...
+        ]], 20, 20)
+    end
+
+    -- Overlay showing ongoing network requests
+    do
+        local fontH = love.graphics.getFont():getHeight()
+        local yStep = 1.2 * fontH
+        local y = love.graphics.getHeight()
+        for _, req in ipairs(network.requests) do
+            y = y - yStep
+            local ms = math.floor(1000 * req.time)
+            love.graphics.print(
+                req.url .. '    ' .. req.method .. '     ' .. tostring(ms),
+                yStep - fontH + 4, y)
+        end
+    end
+end
+
+-- Forward the rest of the callbacks directly
 for k in pairs({
     keypressed = true,
     keyreleased = true,
@@ -51,56 +82,7 @@ for k in pairs({
     joystickremoved = true,
 }) do
     love[k] = function(...)
-        if k == 'keypressed' then
-            local key = ...
-            if key == '0' then
-                table.remove(app, 1)
-            elseif key == '1' then
-                network.async(function()
-                    table.insert(app, 1, portal:newChild(defaultAppUrl))
-                end)
-            elseif key == '2' then
-                network.async(function()
-                    table.insert(app, 1, portal:newChild('https://raw.githubusercontent.com/ccheever/tetris-ghost/master/main.lua'))
-                end)
-            elseif key == '3' then
-                network.async(function()
-                    table.insert(app, 1, portal:newChild('https://raw.githubusercontent.com/M-Mabrouk/Breakout/master/main.lua'))
-                end)
-            end
-        end
-        if app[1] then app[1][k](app[1], ...) end
+        if app then app[k](app, ...) end
     end
-end
-
-function love.draw()
-    if app[1] then
-        app[1]:draw()
-    else
-        love.graphics.print([[
-hi! press 1, 2 or 3 to open different games. you can change the games launched
-by these buttons by editing the URIs in 'base/main.lua'.
-        ]], 20, 20)
-    end
-
-    do -- Overlay showing ongoing network requests
-        local fontH = love.graphics.getFont():getHeight()
-        local yStep = 1.2 * fontH
-        local y = love.graphics.getHeight()
-        for _, req in ipairs(network.requests) do
-            y = y - yStep
-            local ms = math.floor(1000 * req.time)
-            love.graphics.print(
-                req.url .. '    ' .. req.method .. '     ' .. tostring(ms),
-                yStep - fontH + 4, y)
-        end
-    end
-end
-
-
--- Start!
-
-function love.load(arg)
-    defaultAppUrl = arg[1]
 end
 
