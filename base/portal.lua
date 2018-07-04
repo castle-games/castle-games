@@ -75,6 +75,8 @@ local function setupLove(newPortal)
         return love.filesystem.newFileData(fetchAsset(path), path)
     end
 
+    function newLove.window.setMode() end
+
     function newLove.filesystem.load(path)
         return function()
             return newPortal.globals.require(path, { saveCache = false })
