@@ -47,6 +47,7 @@ function love.update(dt)
                 end)
             end
         end
+        tui.text('fps: ' .. tostring(love.timer.getFPS()))
     end)
 
     tui.love.postupdate()
@@ -57,8 +58,10 @@ function love.draw()
         app:draw()
     end
 
-    -- Overlay showing ongoing network requests
-    do
+    do -- Debug overlay
+        love.graphics.push('all')
+        love.graphics.setColor(0.8, 0.5, 0.1)
+        -- Ongoing network requests on bottom of screen
         local fontH = love.graphics.getFont():getHeight()
         local yStep = 1.2 * fontH
         local y = love.graphics.getHeight()
@@ -68,6 +71,7 @@ function love.draw()
             love.graphics.print(req.url .. '    ' .. req.method .. '     ' .. tostring(ms),
                 yStep - fontH + 4, y)
         end
+        love.graphics.pop('all')
     end
 
     tui.love.draw()
