@@ -1,3 +1,6 @@
+math.randomseed(10000 * require('socket').gettime())
+
+
 -- Love settings
 
 local defaultW, defaultH = 736, 414
