@@ -32,11 +32,13 @@ function love.update(dt)
 
     if app then app:update(dt) end
 
+    local clipboard = love.system.getClipboardText()
     local uris = {
         ["localhost"] = 'http://0.0.0.0:8000/main.lua',
+        ["clipboard (" .. clipboard .. ")"] = clipboard,
         ["evan's"] = 'https://raw.githubusercontent.com/EvanBacon/love-game/master/main.lua',
         ["ccheever's"] = 'https://raw.githubusercontent.com/ccheever/tetris-ghost/master/main.lua',
-        ["nikki's"] = 'https://raw.githubusercontent.com/nikki93/ghost-home/master/main.lua',
+        ["nikki's"] = 'https://raw.githubusercontent.com/nikki93/ghost-home/ee1950fbfb2266f17719b7cf50f36ffe3bcb7f40/main.lua',
     }
 
     tui.inWindow('welcome to ghost!', function()
