@@ -79,18 +79,6 @@ local function explicitRequire(path, opts)
     local found = package.loaded[path]
     if found ~= nil then return found end
 
-    -- Use the `parentEnv` by default for the new module, but if a new `childEnv` is given, make
-    -- that the `parentEnv` for sub-`require`s by default
-    childEnv = childEnv or parentEnv
-    if childEnv ~= parentEnv then
-        local oldChildRequire = childEnv.require
-        childEnv.require = function(path, opts)
-            return oldChildRequire(path, defaultOpts(opts, {
-                parentEnv = childEnv,
-            }))
-        end
-    end
-
     local origPath = path
     path = path:gsub('%.lua$', '')
 
@@ -117,19 +105,34 @@ local function explicitRequire(path, opts)
         error("no `url` found for '" .. origPath .. "'")
     end
 
+    -- Already `require`d from final `url`?
+    if package.loaded[url] then return package.loaded[url] end
+
+    -- Use the `parentEnv` by default for the new module, but if a new `childEnv` is given, make
+    -- that the `parentEnv` for sub-`require`s by default
+    childEnv = childEnv or parentEnv
+    if childEnv ~= parentEnv then
+        local oldChildRequire = childEnv.require
+        childEnv.require = function(path, opts)
+            return oldChildRequire(path, defaultOpts(opts, {
+                parentEnv = childEnv,
+            }))
+        end
+    end
+
     -- Update `basePath` for sub-`require`s -- do it here after we've figured out `url` with
     -- potential '/init.lua' on the end etc.
     if isAbsolute then
         local newBasePath = url:gsub('/?init%.lua$', ''):gsub('(.*)/(.*)', '%1')
         local oldChildEnv = childEnv
         local oldChildRequire = childEnv.require
-        childEnv = setmetatable({
-            require = function(path, opts)
-                return oldChildRequire(path, defaultOpts(opts, {
-                    basePath = newBasePath,
-                }))
-            end,
-        }, { __index = oldChildEnv, __newIndex = oldChildEnv })
+        childEnv = setmetatable({}, { __index = oldChildEnv, __newIndex = oldChildEnv })
+        childEnv.require = function(path, opts)
+            return oldChildRequire(path, defaultOpts(opts, {
+                basePath = newBasePath,
+                childEnv = childEnv,
+            }))
+        end
 
         -- TODO(nikki): In process of using below to fix `portal.newPortal` with relative paths
         if parentEnv ~= oldChildEnv then
@@ -175,7 +178,7 @@ local function explicitRequire(path, opts)
     if isAbsolute then
         alias = origPath:gsub('/?init%.lua$', ''):gsub('(.*)/(.*)', '%2')
     end
-    alias = alias:gsub('%.lua$', ''):gsub('^%.*', ''):gsub('%.*$', '')
+    alias = alias:gsub('%.lua$', ''):gsub('%.*$', ''):gsub('^', '.')
 
     -- Run
     local result = chunk(alias)
@@ -183,15 +186,9 @@ local function explicitRequire(path, opts)
     -- Save to cache
     if saveCache ~= false then
         if result ~= nil then
-            assert(not package.loaded[alias],
-                "alias '" .. alias .. "' for path '" .. origPath .. "' will cause a collision")
-            package.loaded[origPath] = result
-            package.loaded[alias] = result
-        elseif package.loaded[origPath] == nil then
-            assert(not package.loaded[alias],
-                "alias '" .. alias .. "' for path '" .. origPath .. "' will cause a collision")
-            package.loaded[origPath] = true
-            package.loaded[alias] = true
+            package.loaded[url] = result
+        elseif package.loaded[url] == nil then
+            package.loaded[url] = true
         end
     end
 
