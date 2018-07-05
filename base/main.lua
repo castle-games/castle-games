@@ -14,7 +14,6 @@ love.window.setMode(defaultW, defaultH, {
 tui = require 'tui'
 network = require 'network'
 require = require 'require'
-entity = require 'entity'
 portal = require 'portal'
 
 
