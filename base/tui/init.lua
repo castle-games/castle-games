@@ -104,7 +104,7 @@ function ui.style.black()
     --style.Colors[C.ImGuiCol_ColumnActive] = { 0.56, 0.56, 0.58, 1.00 }
 end
 
-ui.style.black()
+ui.style.dark()
 
 
 -- Fonts -- load a regular font and an icon font
