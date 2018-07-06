@@ -3,7 +3,8 @@ math.randomseed(10000 * require('socket').gettime())
 
 -- Love settings
 
-local defaultW, defaultH = 736, 414
+--local defaultW, defaultH = 736, 414 -- iPhone 6s Plus
+local defaultW, defaultH = 1112, 834 -- iPad Pro 10.2"
 love.window.setMode(defaultW, defaultH, {
     msaa = 4,
     resizable = true,
