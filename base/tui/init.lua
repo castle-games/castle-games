@@ -43,7 +43,68 @@ function ui.style.light()
     love.graphics.setBackgroundColor(1, 1, 1)
 end
 
-ui.style.dark()
+function ui.style.black()
+    local style = ui.getStyle()
+    style.WindowPadding = { 15, 15 }
+    style.WindowRounding = 5
+    style.FramePadding = { 5, 5 }
+    style.FrameRounding = 4
+    style.ItemSpacing = { 12, 8 }
+    style.ItemInnerSpacing = { 8, 6 }
+    style.IndentSpacing = 25
+    style.ScrollbarSize = 15
+    style.ScrollbarRounding = 9
+    style.GrabMinSize = 5
+    style.GrabRounding = 3
+
+    style.Colors[C.ImGuiCol_Text] = { 0.80, 0.80, 0.83, 1.00 }
+    style.Colors[C.ImGuiCol_TextDisabled] = { 0.24, 0.23, 0.29, 1.00 }
+    style.Colors[C.ImGuiCol_WindowBg] = { 0.06, 0.05, 0.07, 1.00 }
+    style.Colors[C.ImGuiCol_ChildBg] = { 0.07, 0.07, 0.09, 1.00 }
+    style.Colors[C.ImGuiCol_PopupBg] = { 0.07, 0.07, 0.09, 1.00 }
+    style.Colors[C.ImGuiCol_Border] = { 0.80, 0.80, 0.83, 0.88 }
+    style.Colors[C.ImGuiCol_BorderShadow] = { 0.92, 0.91, 0.88, 0.00 }
+    style.Colors[C.ImGuiCol_FrameBg] = { 0.10, 0.09, 0.12, 1.00 }
+    style.Colors[C.ImGuiCol_FrameBgHovered] = { 0.24, 0.23, 0.29, 1.00 }
+    style.Colors[C.ImGuiCol_FrameBgActive] = { 0.56, 0.56, 0.58, 1.00 }
+    style.Colors[C.ImGuiCol_TitleBg] = { 0.10, 0.09, 0.12, 1.00 }
+    style.Colors[C.ImGuiCol_TitleBgCollapsed] = { 1.00, 0.98, 0.95, 0.75 }
+    style.Colors[C.ImGuiCol_TitleBgActive] = { 0.07, 0.07, 0.09, 1.00 }
+    style.Colors[C.ImGuiCol_MenuBarBg] = { 0.10, 0.09, 0.12, 1.00 }
+    style.Colors[C.ImGuiCol_ScrollbarBg] = { 0.10, 0.09, 0.12, 1.00 }
+    style.Colors[C.ImGuiCol_ScrollbarGrab] = { 0.80, 0.80, 0.83, 0.31 }
+    style.Colors[C.ImGuiCol_ScrollbarGrabHovered] = { 0.56, 0.56, 0.58, 1.00 }
+    style.Colors[C.ImGuiCol_ScrollbarGrabActive] = { 0.06, 0.05, 0.07, 1.00 }
+    style.Colors[C.ImGuiCol_CheckMark] = { 0.80, 0.80, 0.83, 0.31 }
+    style.Colors[C.ImGuiCol_SliderGrab] = { 0.80, 0.80, 0.83, 0.31 }
+    style.Colors[C.ImGuiCol_SliderGrabActive] = { 0.06, 0.05, 0.07, 1.00 }
+    style.Colors[C.ImGuiCol_Button] = { 0.10, 0.09, 0.12, 1.00 }
+    style.Colors[C.ImGuiCol_ButtonHovered] = { 0.24, 0.23, 0.29, 1.00 }
+    style.Colors[C.ImGuiCol_ButtonActive] = { 0.56, 0.56, 0.58, 1.00 }
+    style.Colors[C.ImGuiCol_Header] = { 0.10, 0.09, 0.12, 1.00 }
+    style.Colors[C.ImGuiCol_HeaderHovered] = { 0.56, 0.56, 0.58, 1.00 }
+    style.Colors[C.ImGuiCol_HeaderActive] = { 0.06, 0.05, 0.07, 1.00 }
+    style.Colors[C.ImGuiCol_ResizeGrip] = { 0.00, 0.00, 0.00, 0.00 }
+    style.Colors[C.ImGuiCol_ResizeGripHovered] = { 0.56, 0.56, 0.58, 1.00 }
+    style.Colors[C.ImGuiCol_ResizeGripActive] = { 0.06, 0.05, 0.07, 1.00 }
+    style.Colors[C.ImGuiCol_CloseButton] = { 0.40, 0.39, 0.38, 0.16 }
+    style.Colors[C.ImGuiCol_CloseButtonHovered] = { 0.40, 0.39, 0.38, 0.39 }
+    style.Colors[C.ImGuiCol_CloseButtonActive] = { 0.40, 0.39, 0.38, 1.00 }
+    style.Colors[C.ImGuiCol_PlotLines] = { 0.40, 0.39, 0.38, 0.63 }
+    style.Colors[C.ImGuiCol_PlotLinesHovered] = { 0.25, 1.00, 0.00, 1.00 }
+    style.Colors[C.ImGuiCol_PlotHistogram] = { 0.40, 0.39, 0.38, 0.63 }
+    style.Colors[C.ImGuiCol_PlotHistogramHovered] = { 0.25, 1.00, 0.00, 1.00 }
+    style.Colors[C.ImGuiCol_TextSelectedBg] = { 0.25, 1.00, 0.00, 0.43 }
+    style.Colors[C.ImGuiCol_ModalWindowDarkening] = { 1.00, 0.98, 0.95, 0.73 }
+
+    -- Deprecated
+    --style.Colors[C.ImGuiCol_ComboBg] = { 0.19, 0.18, 0.21, 1.00 }
+    --style.Colors[C.ImGuiCol_Column] = { 0.56, 0.56, 0.58, 1.00 }
+    --style.Colors[C.ImGuiCol_ColumnHovered] = { 0.24, 0.23, 0.29, 1.00 }
+    --style.Colors[C.ImGuiCol_ColumnActive] = { 0.56, 0.56, 0.58, 1.00 }
+end
+
+ui.style.black()
 
 
 -- Fonts -- load a regular font and an icon font
