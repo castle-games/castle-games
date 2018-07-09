@@ -5,3 +5,5 @@ love/platform/xcode/DerivedData/
 love/platform/xcode/.idea
 
 imgui.ini
+
+megasource/build
