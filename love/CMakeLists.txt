@@ -263,31 +263,31 @@ set(LOVE_SRC_COMMON
 	../lpeg/lptree.c
 	../lpeg/lptree.h
 
-	../../luacrypto/src/lcrypto.c
-	../../luacrypto/src/lcrypto.h
+	../luacrypto/src/lcrypto.c
+	../luacrypto/src/lcrypto.h
 
-	../../luasec/src/compat.h
-	../../luasec/src/context.h
-	../../luasec/src/options.h
-	../../luasec/src/ssl.h
-	../../luasec/src/x509.h
-	../../luasec/src/config.c
-	../../luasec/src/ec.c
-	../../luasec/src/context.c
-	../../luasec/src/ec.h
-	../../luasec/src/ssl.c
-	../../luasec/src/x509.c 
+	../luasec/src/compat.h
+	../luasec/src/context.h
+	../luasec/src/options.h
+	../luasec/src/ssl.h
+	../luasec/src/x509.h
+	../luasec/src/config.c
+	../luasec/src/ec.c
+	../luasec/src/context.c
+	../luasec/src/ec.h
+	../luasec/src/ssl.c
+	../luasec/src/x509.c
 
-	../../lua-cjson/fpconv.c
-	../../lua-cjson/strbuf.c
-	../../lua-cjson/lua_cjson.c
-	../../lua-cjson/strbuf.h
+	../lua-cjson/fpconv.c
+	../lua-cjson/strbuf.c
+	../lua-cjson/lua_cjson.c
+	../lua-cjson/strbuf.h
 
-	../../lua-marshal/lmarshal.c
+	../lua-marshal/lmarshal.c
 
-	../../lsqlite3/lsqlite3.c
-	../../lsqlite3/sqlite3.c
-	../../lsqlite3/sqlite3.h
+	../lsqlite3/lsqlite3.c
+	../lsqlite3/sqlite3.c
+	../lsqlite3/sqlite3.h
 
 	src/common/b64.cpp
 	src/common/b64.h
