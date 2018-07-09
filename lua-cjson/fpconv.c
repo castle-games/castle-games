@@ -35,6 +35,12 @@
 
 #include "fpconv.h"
 
+#ifdef _MSC_VER
+#define inline __inline
+#define snprintf _snprintf
+#define strncasecmp _strnicmp
+#endif
+
 /* Lua CJSON assumes the locale is the same for all threads within a
  * process and doesn't change after initialisation.
  *
