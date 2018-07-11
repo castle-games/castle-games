@@ -24,7 +24,6 @@ portal = require 'portal'
 -- Top-level Love callbacks
 
 local app -- Save our app portal here when loaded
-local appUrl -- Save the URL of the app here
 
 function love.load(arg)
     tui.love.load()
@@ -50,7 +49,6 @@ function love.update(dt)
         for name, url in pairs(urls) do
             if tui.button(name) then
                 network.async(function()
-                    appUrl = url
                     app = portal:newChild(url)
                 end)
             end
@@ -116,7 +114,7 @@ for k in pairs({
             network.flush(function(url)
                 return url:match('^' .. app.basePath)
             end)
-            app = portal:newChild(appUrl)
+            app = portal:newChild(app.path)
             return
         end
 
