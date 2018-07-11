@@ -65,8 +65,10 @@ function network.request(firstArg, ...)
     return after(http.request(firstArg, ...))
 end
 
--- Fetch a resource with default caching semantics
+-- The cache of `network.fetch` responses
 local fetchEntries = { GET = {}, HEAD = {} }
+
+-- Fetch a resource with default caching semantics
 function network.fetch(url, method)
     method = (method or 'GET'):upper()
     assert(method == 'GET' or method == 'HEAD', "`network.fetch` only supports 'GET' or 'HEAD'")
@@ -105,6 +107,17 @@ function network.fetch(url, method)
             error("error fetching '" .. url .. "': coroutine awoken without `result` set")
         end
         return unpack(entry.result)
+    end
+end
+
+-- Flush the `network.fetch` cache for all URLs matching a given filter function
+function network.flush(filter)
+    for _, entries in pairs(fetchEntries) do
+        for url in pairs(entries) do
+            if filter(url) then
+                entries[url] = nil
+            end
+        end
     end
 end
 

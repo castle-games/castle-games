@@ -24,6 +24,7 @@ portal = require 'portal'
 -- Top-level Love callbacks
 
 local app -- Save our app portal here when loaded
+local appUrl -- Save the URL of the app here
 
 function love.load(arg)
     tui.love.load()
@@ -37,7 +38,7 @@ function love.update(dt)
     if app then app:update(dt) end
 
     local clipboard = love.system.getClipboardText()
-    local uris = {
+    local urls = {
         ["localhost"] = 'http://0.0.0.0:8000/main.lua',
         ["clipboard (" .. clipboard .. ")"] = clipboard,
         ["evan's"] = 'https://raw.githubusercontent.com/EvanBacon/love-game/master/main.lua',
@@ -46,10 +47,11 @@ function love.update(dt)
     }
 
     tui.inWindow('welcome to ghost!', function()
-        for name, uri in pairs(uris) do
+        for name, url in pairs(urls) do
             if tui.button(name) then
                 network.async(function()
-                    app = portal:newChild(uri)
+                    appUrl = url
+                    app = portal:newChild(url)
                 end)
             end
         end
@@ -109,6 +111,15 @@ for k in pairs({
     joystickremoved = true,
 }) do
     love[k] = function(...)
+        if k == 'keypressed' and select(1, ...) == 'r' and love.keyboard.isDown('lgui') then
+            -- Reload!
+            network.flush(function(url)
+                return url:match('^' .. app.basePath)
+            end)
+            app = portal:newChild(appUrl)
+            return
+        end
+
         if tui.love[k] then
             tui.love[k](...)
         end
