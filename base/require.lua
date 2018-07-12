@@ -13,7 +13,7 @@ local parseLua = require 'parseLua'
 -- Quick utility to check if given path returns a '200 ok' response
 local function exists(path)
     local r, httpCode = network.fetch(path, 'HEAD')
-    return httpCode == 200 or httpCode == 'closed'
+    return httpCode == 200
 end
 
 -- New table based on `a` with `b` providing defaults

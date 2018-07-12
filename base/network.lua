@@ -5,16 +5,19 @@
 
 local copas = require 'copas'
 local http = require 'copas.http'
+local limit = require 'copas.limit'
 
 local network = {}
 
 network.requests = {}
 
+local tasks = limit.new(10)
+
 -- Run this function asynchronously with the caller. Runs it as a coroutine, so that network
 -- requests inside it will appear to 'block' inside that coroutine, while code outside the
 -- coroutine still runs.
 function network.async(foo)
-    copas.addthread(function()
+    tasks:addthread(function()
         copas.setErrorHandler(function(msg, co, skt)
             print(msg, co, skt)
             print(debug.traceback(co))
