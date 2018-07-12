@@ -112,10 +112,10 @@ for k in pairs({
     love[k] = function(...)
         if k == 'keypressed' and select(1, ...) == 'r' and love.keyboard.isDown('lgui') then
             -- Reload!
-            network.flush(function(url)
-                return url:match('^' .. app.basePath)
-            end)
+            network.flush(function() return true end) -- Flush entire `network.fetch` cache
             app = portal:newChild(app.path)
+
+            -- GC and print memory usage
             collectgarbage()
             print(math.floor(collectgarbage('count')) .. 'KB', 'mem usage')
             return
