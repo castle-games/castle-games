@@ -115,6 +115,8 @@ for k in pairs({
                 return url:match('^' .. app.basePath)
             end)
             app = portal:newChild(app.path)
+            collectgarbage()
+            print(math.floor(collectgarbage('count')) .. 'KB', 'mem usage')
             return
         end
 
