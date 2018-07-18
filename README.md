@@ -63,8 +63,3 @@ sub-portals work. 'base/main.lua' has an example of creating portals and control
     them. This made it possible to wrap the `require` call in Lua to add network fetching, which lies
     at the core of Ghost.
   - There's a lot more...
-- We use Lua's [coroutines](http://leafo.net/posts/itchio-and-coroutines.html) for asynchronous I/O.
-  This makes it so when you do a network call from somewhere in the main loop, for example, you want
-  to write `network.async(function() ... end)`, sort of like `dispatch_async(...)` in iOS. There's
-  no need to explicitly write `async` or `await` anywhere like in JavaScript. This is also what
-  makes `require 'http://...'` work for code that assumes synchronous `require`.
