@@ -6,15 +6,29 @@ do that!
 
 ## Run Ghost
 
+### iOS
+
+Open './love/platform/xcode/love.xcodeproj' with Xcode and run the 'love-ios' target.
+
 ### macOS
 
 Copy the '.framework' files in https://love2d.org/sdk/love-osx-frameworks-0.10.zip to
 '/Library/Frameworks' if you haven't done that before. Open './love/platform/xcode/love.xcodeproj'
 with Xcode and run the 'love-macosx' target.
 
-### iOS
+### Windows
 
-Open './love/platform/xcode/love.xcodeproj' with Xcode and run the 'love-ios' target.
+- Install CMake.
+- Install Visual Studio 2013. Versions later than 2013 have a certain bug in the C++ standard
+  library that is rarely hit, but happens to be hit for the Love 2D build.
+- In 'megasource/', run 'sh ./run_cmake.sh' (I've done this with the 'Git BASH' utility that comes
+  with 'Git for Windows', but you could also just run the one command inside this file from the
+  Windows command line).
+- Open and build the '.sln' file you will find deep inside 'megasource/build/'.
+
+### Linux
+
+You should be able to use CMake to build under 'love/'.
 
 ## Portals
 
@@ -35,6 +49,20 @@ sub-portals work. 'base/main.lua' has an example of creating portals and control
 - We use LuaJIT for Lua, which is exactly [Lua 5.1](https://www.lua.org/manual/5.1/) with some
   [additions](http://luajit.org/extensions.html).
 - Lua is mostly sort of like JavaScript and hopefully should be easy to pick up!
+- There are a lot of good benefits from using Lua, and also of course tradeoffs, vs. other languages
+  (JavaScript probably being the main other one). Here are some of the many benefits:
+  - Quite small and easy to pick up for people new to programming (subjective I guess).
+  - LuaJIT makes Lua extremely fast. The JIT runs on macOS, Windows and Linux. On iOS and Android,
+    only the interpreter runs, but LuaJIT's interpreter is still much faster than the original Lua
+    one.
+  - The Love game engine is available. It's open source, has breaking changes to its interface only
+    approximately once every 3 years, and the code is small and neat enough for it to be
+    well-understood by the whole team. It's well-documented. It's API is the same across all
+    the desktop and mobile platforms Ghost supports.
+  - Coroutines make non-blocking asynchronous calls possible without having to explicitly `await `
+    them. This made it possible to wrap the `require` call in Lua to add network fetching, which lies
+    at the core of Ghost.
+  - There's a lot more...
 - We use Lua's [coroutines](http://leafo.net/posts/itchio-and-coroutines.html) for asynchronous I/O.
   This makes it so when you do a network call from somewhere in the main loop, for example, you want
   to write `network.async(function() ... end)`, sort of like `dispatch_async(...)` in iOS. There's
