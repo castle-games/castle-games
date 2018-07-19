@@ -69,7 +69,7 @@ function network.request(firstArg, ...)
 end
 
 -- The cache of `network.fetch` responses
-local fetchEntries = { GET = {}, HEAD = {} }
+network.fetchEntries = { GET = {}, HEAD = {} }
 
 -- Fetch a resource with default caching semantics
 function network.fetch(url, method)
@@ -77,11 +77,11 @@ function network.fetch(url, method)
     assert(method == 'GET' or method == 'HEAD', "`network.fetch` only supports 'GET' or 'HEAD'")
 
     -- Find or create entry
-    local entry = fetchEntries[method][url]
+    local entry = network.fetchEntries[method][url]
     if not entry then -- No entry yet
         -- Store a pending entry that will collect others waiting on this
         entry = { waiters = {} }
-        fetchEntries[method][url] = entry
+        network.fetchEntries[method][url] = entry
 
         -- Actually perform the request, blocks coroutine till done
         local response, httpCode, headers, status
@@ -115,7 +115,7 @@ end
 
 -- Flush the `network.fetch` cache for all URLs matching a given filter function
 function network.flush(filter)
-    for _, entries in pairs(fetchEntries) do
+    for _, entries in pairs(network.fetchEntries) do
         for url in pairs(entries) do
             if filter(url) then
                 entries[url] = nil

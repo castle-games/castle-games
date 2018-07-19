@@ -53,8 +53,6 @@ local function parseResources(code)
     return result
 end
 
-local prefetchedResources = {}
-
 local function explicitRequire(path, opts)
     -- Built-in?
     if path ~= 'main' then
@@ -102,7 +100,8 @@ local function explicitRequire(path, opts)
     elseif exists(absolute .. '/init.lua') then
         url = absolute .. '/init.lua'
     else
-        error("no `url` found for '" .. origPath .. "'")
+        error("no working `url` found for '" .. origPath .. "' -- please check the `require` "
+                .. "`path` or the network connection")
     end
 
     -- Already `require`d from final `url`?
@@ -141,26 +140,23 @@ local function explicitRequire(path, opts)
     end
 
     -- Fetch
+    local firstFetch = network.fetchEntries.GET[url] == nil -- Fetch wasn't cached?
     local response = network.fetch(url)
     if preamble then response = preamble .. response end
 
-    -- Asynchronously pre-fetch resources parsed out of the body
-    if not prefetchedResources[url] then
-        prefetchedResources[url] = true
-        local resources = parseResources(response)
-        network.async(function()
-            for _, resource in pairs(resources) do
-                network.async(function()
-                    if resource.type == 'lua' then
-                        childEnv.require(resource.path, { noEval = true })
-                    elseif resource.type == 'asset' then
-                        pcall(function() -- Allow failure as this could be any kind of string...
-                            network.fetch(childEnv.portal.basePath .. '/' .. resource.path)
-                        end)
-                    end
-                end)
-            end
-        end)
+    -- If this is the first fetch of the body, asynchronously pre-fetch resources it references
+    if firstFetch then
+        for _, resource in pairs(parseResources(response)) do
+            network.async(function()
+                if resource.type == 'lua' then
+                    childEnv.require(resource.path, { noEval = true })
+                elseif resource.type == 'asset' then
+                    pcall(function() -- Allow failure as this could be any kind of string...
+                        network.fetch(childEnv.portal.basePath .. '/' .. resource.path)
+                    end)
+                end
+            end)
+        end
     end
 
     -- No eval?
