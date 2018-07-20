@@ -8,13 +8,21 @@ do that!
 
 ### iOS
 
-Open './love/platform/xcode/love.xcodeproj' with Xcode and run the 'love-ios' target.
+*If you're thinking to run Ghost in iOS Simulator to try it on macOS, prefer directly running on
+macOS (see below) since Simulator can cause performance degradation. Prefer testing Ghost for iOS
+on actual iOS hardware (iPhone or iPad).*
+
+- Open './love/platform/xcode/love.xcodeproj' with Xcode.
+- Run the 'love-ios' target:
+![Run Ghost on iOS](run-ios.png)
 
 ### macOS
 
-Copy the '.framework' files in https://love2d.org/sdk/love-osx-frameworks-0.10.zip to
-'/Library/Frameworks' if you haven't done that before. Open './love/platform/xcode/love.xcodeproj'
-with Xcode and run the 'love-macosx' target.
+- Copy the '.framework' files in https://love2d.org/sdk/love-osx-frameworks-0.10.zip to
+'/Library/Frameworks' if you haven't done that before.
+- Open './love/platform/xcode/love.xcodeproj' with Xcode.
+- Run the 'love-macosx' target:
+![Run Ghost on macOS](run-mac.png)
 
 ### Windows
 
@@ -63,3 +71,16 @@ sub-portals work. 'base/main.lua' has an example of creating portals and control
     them. This made it possible to wrap the `require` call in Lua to add network fetching, which lies
     at the core of Ghost.
   - There's a lot more...
+  
+### Style
+
+I let IntelliJ's auto-format handle styling, we're not using an auto-indentation utility yet and
+just hoping authors will use sane formatting. A few notes:
+
+- Error messages should be lowercase, short, surround user-given strings in ' and code in `.
+  Example:
+  ```
+        error("no working `url` found for '" .. origPath .. "' -- please check the `require` "
+                .. "`path` or the network connection")
+  ```
+- Use ' to delimit strings rather than ".
