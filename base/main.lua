@@ -40,7 +40,7 @@ function love.update(dt)
     local urls = {
         ["localhost"] = 'http://0.0.0.0:8000/main.lua',
         ["clipboard (" .. clipboard .. ")"] = clipboard,
-        ["@wwwjim's"] = 'https://raw.githubusercontent.com/jimmylee/lua-examples/master/basic-3/main.lua',
+        ["@wwwjim's"] = 'https://raw.githubusercontent.com/jimmylee/lua-examples/master/basic-4/main.lua',
         ["evan's"] = 'https://raw.githubusercontent.com/EvanBacon/love-game/master/main.lua',
         ["ccheever's"] = 'https://raw.githubusercontent.com/ccheever/tetris-ghost/master/main.lua',
         ["nikki's"] = 'https://raw.githubusercontent.com/nikki93/ghost-home/ee1950fbfb2266f17719b7cf50f36ffe3bcb7f40/main.lua',
