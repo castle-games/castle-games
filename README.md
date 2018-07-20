@@ -19,7 +19,7 @@ on actual iOS hardware (iPhone or iPad).*
 ### macOS
 
 - Copy the '.framework' files in https://love2d.org/sdk/love-osx-frameworks-0.10.zip to
-'/Library/Frameworks' if you haven't done that before.
+'/Library/Frameworks' (at the root of your file system) if you haven't done that before.
 - Open './love/platform/xcode/love.xcodeproj' with Xcode.
 - Run the 'love-macosx' target:
 ![Run Ghost on macOS](run-mac.png)
@@ -27,8 +27,7 @@ on actual iOS hardware (iPhone or iPad).*
 ### Windows
 
 - Install CMake.
-- Install Visual Studio 2013. Versions later than 2013 have a certain bug in the C++ standard
-  library that is rarely hit, but happens to be hit for the Love 2D build.
+- Install Visual Studio 2013 (later versions have had issues).
 - In 'megasource/', run 'sh ./run_cmake.sh' (I've done this with the 'Git BASH' utility that comes
   with 'Git for Windows', but you could also just run the one command inside this file from the
   Windows command line).
@@ -74,8 +73,8 @@ sub-portals work. 'base/main.lua' has an example of creating portals and control
   
 ### Style
 
-I let IntelliJ's auto-format handle styling, we're not using an auto-indentation utility yet and
-just hoping authors will use sane formatting. A few notes:
+I let IntelliJ's auto-format handle styling personally. We're not using an auto-formatter like
+'prettier' for JavaScript yet and just hoping authors will use sane formatting. A few notes:
 
 - Error messages should be lowercase, short, surround user-given strings in ' and code in `.
   Example:
@@ -84,3 +83,5 @@ just hoping authors will use sane formatting. A few notes:
                 .. "`path` or the network connection")
   ```
 - Use ' to delimit strings rather than ".
+- Note that `assert(val, msg)` will evaluate to `msg` if it's truthy, else raise an error mentioning
+  `msg`. This is useful to do things like `local thing = foo(assert(arg, "didn't get the arg!"))`.
