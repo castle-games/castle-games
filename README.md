@@ -55,7 +55,7 @@ sub-portals work. 'base/main.lua' has an example of creating portals and control
 
 - We use LuaJIT for Lua, which is exactly [Lua 5.1](https://www.lua.org/manual/5.1/) with some
   [additions](http://luajit.org/extensions.html).
-- Lua is mostly sort of like JavaScript and hopefully should be easy to pick up!
+- Lua is mostly sort of like JavaScript and hopefully should be easy to pick up! Here's [a good introduction](http://lua-users.org/wiki/TutorialDirectory) to the language.
 - There are a lot of good benefits from using Lua, and also of course tradeoffs, vs. other languages
   (JavaScript probably being the main other one). Here are some of the many benefits:
   - Quite small and easy to pick up for people new to programming (subjective I guess).
