@@ -30,6 +30,7 @@ local errorMessage
 function portal.onError(err, descendant)
     errorMessage = "portal to '" .. descendant.path .. "' was closed due to error:\n" .. err
     app = nil
+    network.flush(function() return true end) -- Flush entire `network.fetch` cache
 end
 
 function love.load(arg)
