@@ -21,9 +21,16 @@ require = require 'require'
 portal = require 'portal'
 
 
--- Top-level Love callbacks
+-- Top-level callbacks
 
 local app -- Save our app portal here when loaded
+
+local errorMessage
+
+function portal.onError(err, descendant)
+    errorMessage = "portal to '" .. descendant.path .. "' was closed due to error:\n" .. err
+    app = nil
+end
 
 function love.load(arg)
     tui.love.load()
@@ -57,6 +64,16 @@ function love.update(dt)
         end
         tui.text('fps: ' .. tostring(love.timer.getFPS()))
     end)
+
+    if errorMessage ~= nil then
+        tui.inWindow('error', true, function(open)
+            if not open then
+                errorMessage = nil
+                return
+            end
+            tui.textWrapped(errorMessage)
+        end)
+    end
 
     tui.love.postupdate()
 end

@@ -136,17 +136,46 @@ end
 -- Metatable of portal instances
 local portalMeta = {}
 
+-- Call `foo` in protected mode, calling `self.onError` if an error occurs, cascading to parents
+-- if that doesn't exist or raises an error itself
+function portalMeta:safeCall(foo, ...)
+    local function handle(succeeded, ...)
+        if not succeeded then
+            local err = select(1, ...)
+            local boundary = self
+
+            -- Cascade errors upward
+            repeat
+                -- Find closest ancestor (possibly `self`) with `.onError`
+                while boundary and not boundary.onError do
+                    boundary = boundary.parent
+                end
+                if not boundary then error(err, 0) end
+
+                -- Protect call to error handler, move upward if it failed
+                succeeded, err = pcall(boundary.onError, err, self)
+                if not succeeded then boundary = boundary.parent end
+            until succeeded
+        end
+        return succeeded, ...
+    end
+
+    return handle(pcall(foo, ...))
+end
+
 -- Create a basic unpopulated portal instance
 local function createInstance()
     return setmetatable({}, { __index = portalMeta })
 end
 
 -- Load a portal to given `require`-able `path`
-function portalMeta.newChild(self, path, args)
+function portalMeta:newChild(path, args)
     -- Create the portal instance
     local child = createInstance()
+    child.parent = self
     child.args = args or {}
     child.path = path
+    child.onError = child.args.onError
 
     -- Figure out base path
     if path:match('^https?://') then
@@ -167,18 +196,21 @@ function portalMeta.newChild(self, path, args)
     setupLove(child)
 
     -- `require` it!
-    self.globals.require(path, {
-        parentEnv = self.globals,
-        childEnv = child.globals,
-        saveCache = false, -- Always reload portals
-        -- Add a preamble that loads 'conf.lua' often present alongside 'main.lua':
-        -- https://love2d.org/wiki/Config_Files
-        -- The associated `love.conf(...)` is ignored, but 'conf.lua' may have some other side
-        -- effects that matter (eg., setting some global variables).
-        preamble = [[
-            pcall(require, 'conf')
-        ]]
-    })
+    local succeeded, err = child:safeCall(function()
+        self.globals.require(path, {
+            parentEnv = self.globals,
+            childEnv = child.globals,
+            saveCache = false, -- Always reload portals
+            -- Add a preamble that loads 'conf.lua' often present alongside 'main.lua':
+            -- https://love2d.org/wiki/Config_Files
+            -- The associated `love.conf(...)` is ignored, but 'conf.lua' may have some other side
+            -- effects that matter (eg., setting some global variables).
+            preamble = [[
+                pcall(require, 'conf')
+            ]],
+        })
+    end)
+    if not succeeded then return nil, err end
 
     -- Call `love.load` callback and set as loaded
     if child.globals.love.load then
@@ -193,7 +225,7 @@ end
 for cbName in pairs(loveCallbacks) do
     portalMeta[cbName] = function(self, ...)
         local found = self.globals.love[cbName]
-        if found then found(...) end
+        if found then self:safeCall(found, ...) end
     end
 end
 
@@ -201,7 +233,7 @@ end
 function portalMeta:draw()
     love.graphics.push('all')
     if self.globals.love.draw then
-        self.globals.love.draw()
+        self:safeCall(self.globals.love.draw)
     end
     love.graphics.pop()
 end
@@ -210,4 +242,5 @@ end
 local root = createInstance()
 root.globals = setmetatable({}, { __index = GG })
 root.loaded = true
+root.path = 'root'
 return root
