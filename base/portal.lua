@@ -197,6 +197,15 @@ for cbName in pairs(loveCallbacks) do
     end
 end
 
+-- Override the `draw` method to scope graphics state changes to the portal
+function portalMeta:draw()
+    love.graphics.push('all')
+    if self.globals.love.draw then
+        self.globals.love.draw()
+    end
+    love.graphics.pop()
+end
+
 -- Return a root portal instance
 local root = createInstance()
 root.globals = setmetatable({}, { __index = GG })
