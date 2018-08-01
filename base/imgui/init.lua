@@ -1653,6 +1653,13 @@ function ig.love.load()
     end
 
     wrapTextureFunctions()
+
+    igIO.GetClipboardTextFn = function(data)
+        return love.system.getClipboardText()
+    end
+    igIO.SetClipboardTextFn = function(data, text)
+        love.system.setClipboardText(ffi.string(text))
+    end
 end
 
 function ig.love.mousemoved(x, y)
