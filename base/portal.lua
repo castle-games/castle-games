@@ -46,9 +46,10 @@ local loveCallbacks = {
 local portalMeta = {}
 
 -- Set up `love` global for a portal. Various scoping and network fixes.
-function portalMeta:setupLove(self)
+function portalMeta:setupLove()
     local basePath = self.basePath
 
+    local love = love
     local newLove = {}
     self.globals.love = newLove
 
@@ -78,7 +79,9 @@ function portalMeta:setupLove(self)
         return love.filesystem.newFileData(fetchAsset(path), path)
     end
 
-    function newLove.window.setMode() end
+    if newLove.window then -- Unavailable in non-main thread
+        function newLove.window.setMode() end
+    end
 
     function newLove.filesystem.load(path)
         return function()
@@ -90,24 +93,42 @@ function portalMeta:setupLove(self)
         return fetchAsset(path):gmatch("[^\r\n]+")
     end
 
-    function newLove.graphics.newFont(...)
-        local nArgs = select('#', ...)
-        if nArgs == 0 then return love.graphics.newFont() end
-        local path = select(1, ...)
-        if type(path) == 'string' then
-            return love.graphics.newFont(love.font.newRasterizer(fetchFileData(path)))
-        elseif nArgs == 1 then -- Need to do it this way for some reason...
-            return love.graphics.newFont(path)
-        else
-            return love.graphics.newFont(path, ...)
+    if newLove.graphics then -- Unavailable in non-main thread
+        function newLove.graphics.newFont(...)
+            local nArgs = select('#', ...)
+            if nArgs == 0 then return love.graphics.newFont() end
+            local path = select(1, ...)
+            if type(path) == 'string' then
+                return love.graphics.newFont(love.font.newRasterizer(fetchFileData(path)))
+            elseif nArgs == 1 then -- Need to do it this way for some reason...
+                return love.graphics.newFont(path)
+            else
+                return love.graphics.newFont(path, ...)
+            end
         end
-    end
 
-    function newLove.graphics.newImage(path, ...)
-        if type(path) == 'string' then
-            return love.graphics.newImage(love.image.newImageData(fetchFileData(path)))
-        else
-            return love.graphics.newImage(path, ...)
+        function newLove.graphics.newImage(path, ...)
+            if type(path) == 'string' then
+                return love.graphics.newImage(love.image.newImageData(fetchFileData(path)))
+            else
+                return love.graphics.newImage(path, ...)
+            end
+        end
+
+        function newLove.graphics.newImageFont(path, ...)
+            if type(path) == 'string' then
+                return love.graphics.newImageFont(love.image.newImageData(fetchFileData(path)), ...)
+            else
+                return love.graphics.newImageFont(path, ...)
+            end
+        end
+
+        function newLove.graphics.newShader(path, ...)
+            if type(path) == 'string' and not path:match('\n') then
+                return love.graphics.newShader(fetchFileData(path), ...)
+            else
+                return love.graphics.newShader(path, ...)
+            end
         end
     end
 
@@ -127,29 +148,27 @@ function portalMeta:setupLove(self)
         end
     end
 
-    function newLove.graphics.newShader(path, ...)
-        if type(path) == 'string' and not path:match('\n') then
-            return love.graphics.newShader(fetchFileData(path), ...)
-        else
-            return love.graphics.newShader(path, ...)
-        end
-    end
-
     function newLove.thread.newThread(s)
         if #s >= 1024 or s:find('\n') then
             return love.thread.newThread(s)
         else
             local code = fetchAsset(s)
-            local pathLit = ("%q"):format(self.basePath):gsub("\010","n"):gsub("\026","\\026")
+            local pathLit = ('%q'):format(self.basePath):gsub('\010', 'n'):gsub('\026', '\\026')
             code = [[
+                require 'love.audio'
+                require 'love.filesystem'
+                require 'love.image'
+                require 'love.timer'
+
                 network = require 'network'
                 REQUIRE_BASE_PATH = ]] .. pathLit .. [[
                 require = require 'require'
+
                 portal = require 'portal'
                 portal.basePath = REQUIRE_BASE_PATH
                 portal:setupLove()
-            ]] .. code
-            code = [[
+                love = portal.globals.love
+
                 copas = require 'copas'
                 copas.addthread(function(...) ]] .. code .. [[ end, ...)
                 copas.loop()
@@ -216,7 +235,7 @@ function portalMeta:newChild(path, args)
     child.globals.package.loaded = {}
 
     -- Set up the `love` global
-    self:setupLove(child)
+    child:setupLove()
 
     -- `require` it!
     local succeeded, err = child:safeCall(function()
