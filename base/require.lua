@@ -63,7 +63,7 @@ local function explicitRequire(path, opts)
     end
 
     local opts = opts or {}
-    local basePath = opts.basePath
+    local basePath = opts.basePath or REQUIRE_BASE_PATH
     local parentEnv = assert(opts.parentEnv, '`explicitRequire` needs `parentEnv`')
     local childEnv = opts.childEnv
     local saveCache = opts.saveCache

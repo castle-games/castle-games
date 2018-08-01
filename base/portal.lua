@@ -42,12 +42,15 @@ local loveCallbacks = {
     joystickremoved = true,
 }
 
+-- Metatable of portal instances
+local portalMeta = {}
+
 -- Set up `love` global for a portal. Various scoping and network fixes.
-local function setupLove(newPortal)
-    local basePath = newPortal.basePath
+function portalMeta:setupLove(self)
+    local basePath = self.basePath
 
     local newLove = {}
-    newPortal.globals.love = newLove
+    self.globals.love = newLove
 
     -- Whitelisted top-level functions
     newLove.getVersion = love.getVersion
@@ -66,7 +69,7 @@ local function setupLove(newPortal)
 
     -- Fetch asset contents as string, given relative path under portal's `basePath`
     local function fetchAsset(path)
-        local response = network.fetch(newPortal.basePath .. '/' .. path)
+        local response = network.fetch(self.basePath .. '/' .. path)
         return response
     end
 
@@ -79,7 +82,7 @@ local function setupLove(newPortal)
 
     function newLove.filesystem.load(path)
         return function()
-            return newPortal.globals.require(path, { saveCache = false })
+            return self.globals.require(path, { saveCache = false })
         end
     end
 
@@ -131,10 +134,30 @@ local function setupLove(newPortal)
             return love.graphics.newShader(path, ...)
         end
     end
-end
 
--- Metatable of portal instances
-local portalMeta = {}
+    function newLove.thread.newThread(s)
+        if #s >= 1024 or s:find('\n') then
+            return love.thread.newThread(s)
+        else
+            local code = fetchAsset(s)
+            local pathLit = ("%q"):format(self.basePath):gsub("\010","n"):gsub("\026","\\026")
+            code = [[
+                network = require 'network'
+                REQUIRE_BASE_PATH = ]] .. pathLit .. [[
+                require = require 'require'
+                portal = require 'portal'
+                portal.basePath = REQUIRE_BASE_PATH
+                portal:setupLove()
+            ]] .. code
+            code = [[
+                copas = require 'copas'
+                copas.addthread(function(...) ]] .. code .. [[ end, ...)
+                copas.loop()
+            ]]
+            return love.thread.newThread(code)
+        end
+    end
+end
 
 -- Call `foo` in protected mode, calling `self.onError` if an error occurs, cascading to parents
 -- if that doesn't exist or raises an error itself
@@ -193,7 +216,7 @@ function portalMeta:newChild(path, args)
     child.globals.package.loaded = {}
 
     -- Set up the `love` global
-    setupLove(child)
+    self:setupLove(child)
 
     -- `require` it!
     local succeeded, err = child:safeCall(function()
