@@ -1654,11 +1654,13 @@ function ig.love.load()
 
     wrapTextureFunctions()
 
-    igIO.GetClipboardTextFn = function(data)
-        return love.system.getClipboardText()
-    end
-    igIO.SetClipboardTextFn = function(data, text)
-        love.system.setClipboardText(ffi.string(text))
+    if love.system.getOS() ~= 'iOS' then
+        igIO.GetClipboardTextFn = function(data)
+            return love.system.getClipboardText()
+        end
+        igIO.SetClipboardTextFn = function(data, text)
+            love.system.setClipboardText(ffi.string(text))
+        end
     end
 end
 
