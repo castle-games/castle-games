@@ -53,6 +53,7 @@ function love.update(dt)
         ["ccheever's"] = 'https://raw.githubusercontent.com/ccheever/tetris-ghost/master/main.lua',
         ["nikki's"] = 'https://raw.githubusercontent.com/nikki93/ghost-home/ee1950fbfb2266f17719b7cf50f36ffe3bcb7f40/main.lua',
         ["jason's"] = 'https://raw.githubusercontent.com/schazers/ghost-playground/master/main.lua',
+        ["CIRCLOID"] = 'https://raw.githubusercontent.com/terribleben/circloid/release/main.lua',
     }
 
     tui.inWindow('welcome to ghost!', function()
