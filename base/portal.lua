@@ -149,32 +149,37 @@ function portalMeta:setupLove()
     end
 
     function newLove.thread.newThread(s)
+        -- See https://github.com/love2d-community/love-api/blob/ca6cae9b4fa21a450f28f52e18dd949693b20862/modules/thread/Thread.lua#L90
+        local code
         if #s >= 1024 or s:find('\n') then
-            return love.thread.newThread(s)
+            code = s
         else
-            local code = fetchAsset(s)
-            local pathLit = ('%q'):format(self.basePath):gsub('\010', 'n'):gsub('\026', '\\026')
-            code = [[
-                require 'love.audio'
-                require 'love.filesystem'
-                require 'love.image'
-                require 'love.timer'
-
-                network = require 'network'
-                REQUIRE_BASE_PATH = ]] .. pathLit .. [[
-                require = require 'require'
-
-                portal = require 'portal'
-                portal.basePath = REQUIRE_BASE_PATH
-                portal:setupLove()
-                love = portal.globals.love
-
-                copas = require 'copas'
-                copas.addthread(function(...) ]] .. code .. [[ end, ...)
-                copas.loop()
-            ]]
-            return love.thread.newThread(code)
+            code = fetchAsset(s)
         end
+
+        -- Wrap with our bootstrapping, also explicitly load `love.` modules we wrap since those
+        -- aren't automatically loaded in a new thread
+        local pathLit = ('%q'):format(self.basePath):gsub('\010', 'n'):gsub('\026', '\\026')
+        code = [[
+            require 'love.audio'
+            require 'love.filesystem'
+            require 'love.image'
+            require 'love.timer'
+
+            network = require 'network'
+            REQUIRE_BASE_PATH = ]] .. pathLit .. [[
+            require = require 'require'
+
+            portal = require 'portal'
+            portal.basePath = REQUIRE_BASE_PATH
+            portal:setupLove()
+            love = portal.globals.love
+
+            copas = require 'copas'
+            copas.addthread(function(...) ]] .. code .. [[ end, ...)
+            copas.loop()
+        ]]
+        return love.thread.newThread(code)
     end
 end
 
