@@ -131,17 +131,20 @@ for k in pairs({
     joystickremoved = true,
 }) do
     love[k] = function(...)
-        if k == 'keypressed' and select(1, ...) == 'r' and love.keyboard.isDown('lgui') then
-            network.async(function()
-                -- Reload!
-                network.flush(function() return true end) -- Flush entire `network.fetch` cache
-                app = portal:newChild(app.path)
+        if k == 'keypressed' then
+            local key = select(1, ...)
+            if key == 'f5' or (love.keyboard.isDown('lgui') and key == 'r') then
+                network.async(function()
+                        -- Reload!
+                        network.flush(function() return true end) -- Flush entire `network.fetch` cache
+                        app = portal:newChild(app.path)
 
-                -- GC and print memory usage
-                collectgarbage()
-                print(math.floor(collectgarbage('count')) .. 'KB', 'mem usage')
-            end)
-            return
+                        -- GC and print memory usage
+                        collectgarbage()
+                        print(math.floor(collectgarbage('count')) .. 'KB', 'mem usage')
+                end)
+                return
+            end
         end
 
         if tui.love[k] then
