@@ -173,7 +173,9 @@ Please see http://bitbucket.org/rude/megasource
 	find_package(OpenGL REQUIRED)
 	find_package(SDL2 REQUIRED)
 	find_package(Theora REQUIRED)
+	find_package(Ogg REQUIRED)
 	find_package(Vorbis REQUIRED)
+	find_package(ZLIB REQUIRED)
 
 	# required for enet
 	add_definitions(-D HAS_SOCKLEN_T)
@@ -192,7 +194,9 @@ Please see http://bitbucket.org/rude/megasource
 		${MODPLUG_LIBRARY}
 		${THEORA_LIBRARY}
 		${THEORADEC_LIBRARY}
+		${OGG_LIBRARY}
 		${VORBISFILE_LIBRARY}
+    ${ZLIB_LIBRARIES}
 		${LOVE_LUA_LIBRARY}
 	)
 	
