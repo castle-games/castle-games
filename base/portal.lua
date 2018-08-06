@@ -98,8 +98,9 @@ function portalMeta:setupLove()
             local nArgs = select('#', ...)
             if nArgs == 0 then return love.graphics.newFont() end
             local path = select(1, ...)
+            local size = select(2, ...)
             if type(path) == 'string' then
-                return love.graphics.newFont(love.font.newRasterizer(fetchFileData(path)))
+                return love.graphics.newFont(love.font.newRasterizer(fetchFileData(path), size))
             elseif nArgs == 1 then -- Need to do it this way for some reason...
                 return love.graphics.newFont(path)
             else
