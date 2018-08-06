@@ -4,6 +4,9 @@ xcuserdata/
 love/platform/xcode/DerivedData/
 love/platform/xcode/.idea
 
+love/build/
+love/compile_commands.json
+
 imgui.ini
 
 megasource/build
