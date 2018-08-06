@@ -184,31 +184,38 @@ function portalMeta:setupLove()
     end
 end
 
--- Call `foo` in protected mode, calling `self.onError` if an error occurs, cascading to parents
--- if that doesn't exist or raises an error itself
+-- Call `foo` in protected mode, calling `self:handleError` on an error if one
+-- occurs. If the call to `foo` succeeded, returns `true` followed by its return
+-- values. If an error occured, returns `false` and the error message.
 function portalMeta:safeCall(foo, ...)
     local function handle(succeeded, ...)
         if not succeeded then
             local err = select(1, ...)
-            local boundary = self
-
-            -- Cascade errors upward
-            repeat
-                -- Find closest ancestor (possibly `self`) with `.onError`
-                while boundary and not boundary.onError do
-                    boundary = boundary.parent
-                end
-                if not boundary then error(err, 0) end
-
-                -- Protect call to error handler, move upward if it failed
-                succeeded, err = pcall(boundary.onError, err, self)
-                if not succeeded then boundary = boundary.parent end
-            until succeeded
+            self:handleError(err)
         end
         return succeeded, ...
     end
 
     return handle(pcall(foo, ...))
+end
+
+-- Handle an error `err` occurring in the context of this portal. Calls
+-- `self.onError`, cascading to parents if that doesn't exist or raises an error
+-- itself
+function portalMeta:handleError(err)
+    local boundary = self
+    local succeeded
+    repeat
+        -- Find closest ancestor (possibly `self`) with `.onError`
+        while boundary and not boundary.onError do
+            boundary = boundary.parent
+        end
+        if not boundary then error(err, 0) end
+
+        -- Protect call to error handler, move upward if it failed
+        succeeded, err = pcall(boundary.onError, err, self)
+        if not succeeded then boundary = boundary.parent end
+    until succeeded
 end
 
 -- Create a basic unpopulated portal instance

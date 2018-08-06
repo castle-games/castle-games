@@ -19,8 +19,11 @@ local tasks = limit.new(10)
 function network.async(foo)
     tasks:addthread(function()
         copas.setErrorHandler(function(msg, co, skt)
-            print(msg, co, skt)
-            print(debug.traceback(co))
+            if portal then
+                portal:handleError(msg)
+            else
+                error(msg, co, skt, debug.traceback(co))
+            end
         end)
         foo()
     end)
