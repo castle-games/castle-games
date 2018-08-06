@@ -68,6 +68,7 @@ function love.update(dt)
     end)
 
     if errorMessage ~= nil then
+        tui.setNextWindowSize(480, 120)
         tui.inWindow('error', true, function(open)
             if not open then
                 errorMessage = nil
