@@ -21,14 +21,20 @@ require = require 'require'
 portal = require 'portal'
 
 
+-- Forward declaratoins
+
+local app, errors
+
+
 -- App management
 
-local app = {}
+app = {}
 
 function app.load(url)
     app.lastUrl = url
     network.async(function()
         app.portal = portal:newChild(url)
+        errors.clear()
     end)
 end
 
@@ -52,7 +58,7 @@ end
 
 -- Error management
 
-local errors = {}
+errors = {}
 
 function portal.onError(err, descendant)
     app.close()
@@ -61,12 +67,16 @@ function portal.onError(err, descendant)
     network.flush(function() return true end) -- Flush entire `network.fetch` cache
 end
 
+function errors.clear()
+    errors.lastError = nil
+end
+
 function errors.update()
     if errors.lastError ~= nil then
         tui.setNextWindowSize(480, 120)
         tui.inWindow('error', true, function(open)
             if not open then
-                errors.lastError = nil
+                errors.clear()
                 return
             end
             tui.textWrapped(errors.lastError)
