@@ -61,7 +61,7 @@ function portal.onError(err, descendant)
     network.flush(function() return true end) -- Flush entire `network.fetch` cache
 end
 
-function errors.showWindow()
+function errors.update()
     if errors.lastError ~= nil then
         tui.setNextWindowSize(480, 120)
         tui.inWindow('error', true, function(open)
@@ -75,11 +75,11 @@ function errors.showWindow()
 end
 
 
--- Launcher screen
+-- Launcher window
 
 local launcher = {}
 
-function launcher.showWindow()
+function launcher.update()
     local clipboard = love.system.getClipboardText()
     local urls = {
         ["localhost"] = 'http://0.0.0.0:8000/main.lua',
@@ -103,7 +103,28 @@ function launcher.showWindow()
 end
 
 
--- Top-level callbacks
+-- Development window
+
+local development = {}
+
+development.visible = false
+
+function development.toggle()
+    development.visible = not development.visible
+end
+
+function development.update()
+    if not development.visible then
+        return
+    end
+
+    tui.inWindow('development', function()
+        tui.text('development!')
+    end)
+end
+
+
+-- Top-level Love callbacks
 
 local callbacks = {}
 
@@ -118,9 +139,9 @@ function callbacks.update(dt)
 
     app.forwardEvent('update', dt)
 
-    launcher.showWindow()
-
-    errors.showWindow()
+    launcher.update()
+    errors.update()
+    development.update()
 
     tui.love.postupdate()
 end
@@ -148,6 +169,7 @@ function callbacks.draw()
 end
 
 function callbacks.keypressed(key, ...)
+    -- F5 or cmd + r: reload
     if key == 'f5' or (love.keyboard.isDown('lgui') and key == 'r') then
         network.async(function()
             -- Reload!
@@ -157,6 +179,12 @@ function callbacks.keypressed(key, ...)
             collectgarbage()
             print(math.floor(collectgarbage('count')) .. 'KB', 'mem usage')
         end)
+        return
+    end
+
+    -- F4 or cmd + d: development
+    if key == 'f4' or (love.keyboard.isDown('lgui') and key == 'd') then
+        development.toggle()
         return
     end
 
