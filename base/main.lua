@@ -35,7 +35,7 @@ end
 function app.reload(url)
     if app.lastUrl then
         network.flush(function() return true end) -- Flush entire `network.fetch` cache
-        app.load(lastUrl)
+        app.load(app.lastUrl)
     end
 end
 
@@ -44,7 +44,7 @@ function app.close()
 end
 
 function app.forwardEvent(eventName, ...)
-    if app.portal then
+    if app.portal and app.portal[eventName] then
         app.portal[eventName](app.portal, ...)
     end
 end
@@ -57,6 +57,7 @@ local errors = {}
 function portal.onError(err, descendant)
     app.close()
     errors.lastError = "portal to '" .. descendant.path .. "' was closed due to error:\n" .. err
+    print('error: ' .. errors.lastError)
     network.flush(function() return true end) -- Flush entire `network.fetch` cache
 end
 
@@ -104,11 +105,13 @@ end
 
 -- Top-level callbacks
 
-function love.load(arg)
+local callbacks = {}
+
+function callbacks.load(arg)
     tui.love.load()
 end
 
-function love.update(dt)
+function callbacks.update(dt)
     network.update(dt)
 
     tui.love.preupdate(dt)
@@ -122,7 +125,7 @@ function love.update(dt)
     tui.love.postupdate()
 end
 
-function love.draw()
+function callbacks.draw()
     app.forwardEvent('draw')
 
     do -- Debug overlay
@@ -144,8 +147,28 @@ function love.draw()
     tui.love.draw()
 end
 
--- Forward the rest of the callbacks directly
+function callbacks.keypressed(key, ...)
+    if key == 'f5' or (love.keyboard.isDown('lgui') and key == 'r') then
+        network.async(function()
+            -- Reload!
+            app.reload()
+
+            -- GC and print memory usage
+            collectgarbage()
+            print(math.floor(collectgarbage('count')) .. 'KB', 'mem usage')
+        end)
+        return
+    end
+
+    tui.love.keypressed(key, ...)
+
+    app.forwardEvent('keypressed', key, ...)
+end
+
 for k in pairs({
+    load = true,
+    update = true,
+    draw = true,
     keypressed = true,
     keyreleased = true,
     mousefocus = true,
@@ -170,26 +193,15 @@ for k in pairs({
     joystickremoved = true,
 }) do
     love[k] = function(...)
-        if k == 'keypressed' then
-            local key = select(1, ...)
-            if key == 'f5' or (love.keyboard.isDown('lgui') and key == 'r') then
-                network.async(function()
-                    -- Reload!
-                    app.reload()
-
-                    -- GC and print memory usage
-                    collectgarbage()
-                    print(math.floor(collectgarbage('count')) .. 'KB', 'mem usage')
-                end)
-                return
+        if callbacks[k] then
+            callbacks[k](...)
+        else -- Default behavior if we didn't define it above
+            if tui.love[k] then
+                tui.love[k](...)
             end
-        end
 
-        if tui.love[k] then
-            tui.love[k](...)
+            app.forwardEvent(k, ...)
         end
-
-        app.forwardEvent(k, ...)
     end
 end
 
