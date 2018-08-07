@@ -71,6 +71,52 @@
 		A93E6EED10420BA8007D418B /* love.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A93E6A3410420AC0007D418B /* love.cpp */; };
 		A9F169AC109E825000FC83D1 /* mpg123.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = A9F169A6109E824900FC83D1 /* mpg123.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		A9F169AD109E825000FC83D1 /* libmodplug.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = A9F16926109E7BAD00FC83D1 /* libmodplug.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		B5256F43211A555500891B27 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA5D249A1A96CF4300C6FC8F /* Images.xcassets */; };
+		B5256F44211A555500891B27 /* license.txt in Resources */ = {isa = PBXBuildFile; fileRef = FAC1A448196F5DC600125284 /* license.txt */; };
+		B5256F47211A555500891B27 /* ssl.c in Sources */ = {isa = PBXBuildFile; fileRef = A1400BE420E8422200B1EE89 /* ssl.c */; };
+		B5256F48211A555500891B27 /* love.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A93E6A3410420AC0007D418B /* love.cpp */; };
+		B5256F49211A555500891B27 /* lsqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = A19C706420E0825B0001B86F /* lsqlite3.c */; };
+		B5256F4A211A555500891B27 /* cimgui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1E795242072155E00731DD3 /* cimgui.cpp */; };
+		B5256F4B211A555500891B27 /* imgui_demo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1E795282072155E00731DD3 /* imgui_demo.cpp */; };
+		B5256F4C211A555500891B27 /* drawList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1E795202072155E00731DD3 /* drawList.cpp */; };
+		B5256F4D211A555500891B27 /* ui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1A1AD6F207315E9004667A1 /* ui.cpp */; };
+		B5256F4E211A555500891B27 /* fpconv.c in Sources */ = {isa = PBXBuildFile; fileRef = A19C705220D9D0230001B86F /* fpconv.c */; };
+		B5256F4F211A555500891B27 /* config.c in Sources */ = {isa = PBXBuildFile; fileRef = A1400BE020E8422200B1EE89 /* config.c */; };
+		B5256F50211A555500891B27 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = A19C706320E0825B0001B86F /* sqlite3.c */; };
+		B5256F51211A555500891B27 /* lua_cjson.c in Sources */ = {isa = PBXBuildFile; fileRef = A19C705320D9D0230001B86F /* lua_cjson.c */; };
+		B5256F52211A555500891B27 /* listClipper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1E795292072155E00731DD3 /* listClipper.cpp */; };
+		B5256F53211A555500891B27 /* fontAtlas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1E795262072155E00731DD3 /* fontAtlas.cpp */; };
+		B5256F54211A555500891B27 /* ec.c in Sources */ = {isa = PBXBuildFile; fileRef = A1400BDE20E8422200B1EE89 /* ec.c */; };
+		B5256F55211A555500891B27 /* lmarshal.c in Sources */ = {isa = PBXBuildFile; fileRef = A1F2BC8B20E4DDA100740D4F /* lmarshal.c */; };
+		B5256F56211A555500891B27 /* x509.c in Sources */ = {isa = PBXBuildFile; fileRef = A1400BE620E8422200B1EE89 /* x509.c */; };
+		B5256F57211A555500891B27 /* lpprint.c in Sources */ = {isa = PBXBuildFile; fileRef = A19C701720D8FB730001B86F /* lpprint.c */; };
+		B5256F58211A555500891B27 /* context.c in Sources */ = {isa = PBXBuildFile; fileRef = A1400BE720E8422200B1EE89 /* context.c */; };
+		B5256F59211A555500891B27 /* imgui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1E795222072155E00731DD3 /* imgui.cpp */; };
+		B5256F5A211A555500891B27 /* lpcode.c in Sources */ = {isa = PBXBuildFile; fileRef = A19C701420D8FB730001B86F /* lpcode.c */; };
+		B5256F5B211A555500891B27 /* lptree.c in Sources */ = {isa = PBXBuildFile; fileRef = A19C701820D8FB730001B86F /* lptree.c */; };
+		B5256F5C211A555500891B27 /* lpcap.c in Sources */ = {isa = PBXBuildFile; fileRef = A19C701520D8FB730001B86F /* lpcap.c */; };
+		B5256F5D211A555500891B27 /* strbuf.c in Sources */ = {isa = PBXBuildFile; fileRef = A19C705520D9D0230001B86F /* strbuf.c */; };
+		B5256F5E211A555500891B27 /* lpvm.c in Sources */ = {isa = PBXBuildFile; fileRef = A19C701E20D8FB730001B86F /* lpvm.c */; };
+		B5256F5F211A555500891B27 /* imgui_draw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A1E7952B2072155E00731DD3 /* imgui_draw.cpp */; };
+		B5256F60211A555500891B27 /* lcrypto.c in Sources */ = {isa = PBXBuildFile; fileRef = A1400BD820E8418000B1EE89 /* lcrypto.c */; };
+		B5256F62211A555500891B27 /* love.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = FA08F69116C765A200F007B5 /* love.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		B5256F63211A555500891B27 /* SDL2.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = FA9B4A0916E1579F00074F42 /* SDL2.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		B5256F64211A555500891B27 /* theora.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = FA27B3CA1B498696008A9DCE /* theora.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		B5256F65211A555500891B27 /* OpenAL-Soft.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = FAAFF04616CB120000CCDE45 /* OpenAL-Soft.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		B5256F66211A555500891B27 /* freetype.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = FAD43ECF1FF3133700831BB8 /* freetype.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B5256F67211A555500891B27 /* mpg123.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = A9F169A6109E824900FC83D1 /* mpg123.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		B5256F68211A555500891B27 /* libmodplug.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = A9F16926109E7BAD00FC83D1 /* libmodplug.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		B5256F69211A555500891B27 /* ogg.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = A9255F51104324D700BA1496 /* ogg.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		B5256F6A211A555500891B27 /* vorbis.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = A9255E021043195A00BA1496 /* vorbis.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		B5256F6B211A555500891B27 /* Lua.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = A93E6E5310420B57007D418B /* Lua.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		B5256F6D211A555500891B27 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A19C704020D8FF920001B86F /* libcrypto.a */; };
+		B5256F6E211A555500891B27 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A19C703F20D8FF920001B86F /* libssl.a */; };
+		B5256F6F211A555500891B27 /* love.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA08F69116C765A200F007B5 /* love.framework */; };
+		B5256F70211A555500891B27 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		B5256F71211A555500891B27 /* Lua.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A93E6E5310420B57007D418B /* Lua.framework */; };
+		B5256F72211A555500891B27 /* theora.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA27B3CA1B498696008A9DCE /* theora.framework */; };
+		B5256F73211A555500891B27 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA9B4A0916E1579F00074F42 /* SDL2.framework */; };
+		B5256F7D211A56EE00891B27 /* package.love in Resources */ = {isa = PBXBuildFile; fileRef = A1E7953C20721BC800731DD3 /* package.love */; };
 		CE73F8001EEB64150052DAB3 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE73F7FF1EEB64150052DAB3 /* AVFoundation.framework */; };
 		FA0797991BF480A200034B7C /* GameController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA0797981BF480A200034B7C /* GameController.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		FA08F69616C766E000F007B5 /* love.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA08F69116C765A200F007B5 /* love.framework */; };
@@ -101,6 +147,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		B5256F40211A555500891B27 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FA577A9316C7217800860150 /* liblove.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = FA577AAE16C7507900860150;
+			remoteInfo = "liblove-macosx";
+		};
 		FA0B78D71A958301000E1D17 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FA577A9316C7217800860150 /* liblove.xcodeproj */;
@@ -148,6 +201,26 @@
 				A9255F58104324E100BA1496 /* ogg.framework in Copy Frameworks */,
 				A9255E031043195A00BA1496 /* vorbis.framework in Copy Frameworks */,
 				A9255DD31043183600BA1496 /* Lua.framework in Copy Frameworks */,
+			);
+			name = "Copy Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B5256F61211A555500891B27 /* Copy Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				B5256F62211A555500891B27 /* love.framework in Copy Frameworks */,
+				B5256F63211A555500891B27 /* SDL2.framework in Copy Frameworks */,
+				B5256F64211A555500891B27 /* theora.framework in Copy Frameworks */,
+				B5256F65211A555500891B27 /* OpenAL-Soft.framework in Copy Frameworks */,
+				B5256F66211A555500891B27 /* freetype.framework in Copy Frameworks */,
+				B5256F67211A555500891B27 /* mpg123.framework in Copy Frameworks */,
+				B5256F68211A555500891B27 /* libmodplug.framework in Copy Frameworks */,
+				B5256F69211A555500891B27 /* ogg.framework in Copy Frameworks */,
+				B5256F6A211A555500891B27 /* vorbis.framework in Copy Frameworks */,
+				B5256F6B211A555500891B27 /* Lua.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -219,6 +292,8 @@
 		A97E3842132A9EDE00198A2F /* love-macosx.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "love-macosx.plist"; path = "macosx/love-macosx.plist"; sourceTree = "<group>"; };
 		A9F16926109E7BAD00FC83D1 /* libmodplug.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libmodplug.framework; path = /Library/Frameworks/libmodplug.framework; sourceTree = "<absolute>"; };
 		A9F169A6109E824900FC83D1 /* mpg123.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = mpg123.framework; path = /Library/Frameworks/mpg123.framework; sourceTree = "<absolute>"; };
+		B5256F3A211A4FC000891B27 /* ghost-macosx.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "ghost-macosx.plist"; path = "macosx/ghost-macosx.plist"; sourceTree = "<group>"; };
+		B5256F78211A555500891B27 /* ghost-macosx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ghost-macosx.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE73F7FF1EEB64150052DAB3 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
 		FA0797981BF480A200034B7C /* GameController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameController.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.1.sdk/System/Library/Frameworks/GameController.framework; sourceTree = DEVELOPER_DIR; };
 		FA08F69116C765A200F007B5 /* love.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = love.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -257,6 +332,20 @@
 				A93E6E5510420B57007D418B /* Lua.framework in Frameworks */,
 				FA27B3CB1B498696008A9DCE /* theora.framework in Frameworks */,
 				FA9B4A0A16E1579F00074F42 /* SDL2.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B5256F6C211A555500891B27 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B5256F6D211A555500891B27 /* libcrypto.a in Frameworks */,
+				B5256F6E211A555500891B27 /* libssl.a in Frameworks */,
+				B5256F6F211A555500891B27 /* love.framework in Frameworks */,
+				B5256F70211A555500891B27 /* Cocoa.framework in Frameworks */,
+				B5256F71211A555500891B27 /* Lua.framework in Frameworks */,
+				B5256F72211A555500891B27 /* theora.framework in Frameworks */,
+				B5256F73211A555500891B27 /* SDL2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -307,6 +396,7 @@
 			children = (
 				8D1107320486CEB800E47090 /* love.app */,
 				FA0B7F061A95AAF3000E1D17 /* ghost.app */,
+				B5256F78211A555500891B27 /* ghost-macosx.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -515,6 +605,7 @@
 				FA7C63691A9C49570000FD29 /* Launch Screen.xib */,
 				FA5D24971A96CE1E00C6FC8F /* love-ios.plist */,
 				A97E3842132A9EDE00198A2F /* love-macosx.plist */,
+				B5256F3A211A4FC000891B27 /* ghost-macosx.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -542,6 +633,28 @@
 			productInstallPath = "$(HOME)/Applications";
 			productName = love;
 			productReference = 8D1107320486CEB800E47090 /* love.app */;
+			productType = "com.apple.product-type.application";
+		};
+		B5256F3E211A555500891B27 /* ghost-macosx */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B5256F74211A555500891B27 /* Build configuration list for PBXNativeTarget "ghost-macosx" */;
+			buildPhases = (
+				B5256F41211A555500891B27 /* Create Temporary '.love' Package */,
+				B5256F42211A555500891B27 /* Resources */,
+				B5256F45211A555500891B27 /* Delete Temporary '.love' Package */,
+				B5256F46211A555500891B27 /* Sources */,
+				B5256F61211A555500891B27 /* Copy Frameworks */,
+				B5256F6C211A555500891B27 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B5256F3F211A555500891B27 /* PBXTargetDependency */,
+			);
+			name = "ghost-macosx";
+			productInstallPath = "$(HOME)/Applications";
+			productName = love;
+			productReference = B5256F78211A555500891B27 /* ghost-macosx.app */;
 			productType = "com.apple.product-type.application";
 		};
 		FA0B7F051A95AAF3000E1D17 /* love-ios */ = {
@@ -601,6 +714,7 @@
 			targets = (
 				8D1107260486CEB800E47090 /* love-macosx */,
 				FA0B7F051A95AAF3000E1D17 /* love-ios */,
+				B5256F3E211A555500891B27 /* ghost-macosx */,
 			);
 		};
 /* End PBXProject section */
@@ -629,6 +743,16 @@
 			files = (
 				FA5933751C6D625B000EC779 /* Images.xcassets in Resources */,
 				FAC1A449196F5DC600125284 /* license.txt in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B5256F42211A555500891B27 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B5256F7D211A56EE00891B27 /* package.love in Resources */,
+				B5256F43211A555500891B27 /* Images.xcassets in Resources */,
+				B5256F44211A555500891B27 /* license.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -701,6 +825,34 @@
 			shellPath = /bin/sh;
 			shellScript = "rm \"${SRCROOT}\"/../../../package.love";
 		};
+		B5256F41211A555500891B27 /* Create Temporary '.love' Package */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Create Temporary '.love' Package";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd \"${SRCROOT}\"/../../../base\nzip -r package.love .\nmv package.love ..";
+		};
+		B5256F45211A555500891B27 /* Delete Temporary '.love' Package */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Delete Temporary '.love' Package";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "rm \"${SRCROOT}\"/../../../package.love";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -734,6 +886,39 @@
 				A19C702720D8FB730001B86F /* lpvm.c in Sources */,
 				A1E795382072155E00731DD3 /* imgui_draw.cpp in Sources */,
 				A1400BDA20E8418000B1EE89 /* lcrypto.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B5256F46211A555500891B27 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B5256F47211A555500891B27 /* ssl.c in Sources */,
+				B5256F48211A555500891B27 /* love.cpp in Sources */,
+				B5256F49211A555500891B27 /* lsqlite3.c in Sources */,
+				B5256F4A211A555500891B27 /* cimgui.cpp in Sources */,
+				B5256F4B211A555500891B27 /* imgui_demo.cpp in Sources */,
+				B5256F4C211A555500891B27 /* drawList.cpp in Sources */,
+				B5256F4D211A555500891B27 /* ui.cpp in Sources */,
+				B5256F4E211A555500891B27 /* fpconv.c in Sources */,
+				B5256F4F211A555500891B27 /* config.c in Sources */,
+				B5256F50211A555500891B27 /* sqlite3.c in Sources */,
+				B5256F51211A555500891B27 /* lua_cjson.c in Sources */,
+				B5256F52211A555500891B27 /* listClipper.cpp in Sources */,
+				B5256F53211A555500891B27 /* fontAtlas.cpp in Sources */,
+				B5256F54211A555500891B27 /* ec.c in Sources */,
+				B5256F55211A555500891B27 /* lmarshal.c in Sources */,
+				B5256F56211A555500891B27 /* x509.c in Sources */,
+				B5256F57211A555500891B27 /* lpprint.c in Sources */,
+				B5256F58211A555500891B27 /* context.c in Sources */,
+				B5256F59211A555500891B27 /* imgui.cpp in Sources */,
+				B5256F5A211A555500891B27 /* lpcode.c in Sources */,
+				B5256F5B211A555500891B27 /* lptree.c in Sources */,
+				B5256F5C211A555500891B27 /* lpcap.c in Sources */,
+				B5256F5D211A555500891B27 /* strbuf.c in Sources */,
+				B5256F5E211A555500891B27 /* lpvm.c in Sources */,
+				B5256F5F211A555500891B27 /* imgui_draw.cpp in Sources */,
+				B5256F60211A555500891B27 /* lcrypto.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -774,6 +959,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		B5256F3F211A555500891B27 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "liblove-macosx";
+			targetProxy = B5256F40211A555500891B27 /* PBXContainerItemProxy */;
+		};
 		FA5D24BB1A96D6FC00C6FC8F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "liblove-ios";
@@ -787,6 +977,102 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		B5256F75211A555500891B27 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "Ghost-OSX-AppIcon";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/macosx/Frameworks",
+					/Library/Frameworks,
+					"\"$(SRCROOT)/build/Release\"",
+					"\"$(SRCROOT)/build/Debug\"",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/macosx/Frameworks/Lua.framework/Headers",
+					"$(PROJECT_DIR)/macosx/Frameworks/SDL2.framework/Headers",
+					/Library/Frameworks/Lua.framework/Headers,
+					/Library/Frameworks/SDL2.framework/Headers,
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/macosx/ghost-macosx.plist";
+				INSTALL_PATH = /Applications;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/../../../openssl/lib/Mac\"";
+				PRODUCT_BUNDLE_IDENTIFIER = builders.game.ghost;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		B5256F76211A555500891B27 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "Ghost-OSX-AppIcon";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/macosx/Frameworks",
+					/Library/Frameworks,
+					"\"$(SRCROOT)/build/Release\"",
+					"\"$(SRCROOT)/build/Debug\"",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/macosx/Frameworks/Lua.framework/Headers",
+					"$(PROJECT_DIR)/macosx/Frameworks/SDL2.framework/Headers",
+					/Library/Frameworks/Lua.framework/Headers,
+					/Library/Frameworks/SDL2.framework/Headers,
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/macosx/ghost-macosx.plist";
+				INSTALL_PATH = /Applications;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/../../../openssl/lib/Mac\"";
+				LLVM_LTO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = builders.game.ghost;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		B5256F77211A555500891B27 /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "Ghost-OSX-AppIcon";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/macosx/Frameworks",
+					/Library/Frameworks,
+					"\"$(SRCROOT)/build/Release\"",
+					"\"$(SRCROOT)/build/Debug\"",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/macosx/Frameworks/Lua.framework/Headers",
+					"$(PROJECT_DIR)/macosx/Frameworks/SDL2.framework/Headers",
+					/Library/Frameworks/Lua.framework/Headers,
+					/Library/Frameworks/SDL2.framework/Headers,
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/macosx/ghost-macosx.plist";
+				INSTALL_PATH = /Applications;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/../../../openssl/lib/Mac\"";
+				LLVM_LTO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = builders.game.ghost;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Distribution;
+		};
 		C01FCF4B08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -814,7 +1100,7 @@
 				INSTALL_PATH = /Applications;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/../../../openssl/lib/Mac\"";
-				PRODUCT_BUNDLE_IDENTIFIER = org.love2d.love;
+				PRODUCT_BUNDLE_IDENTIFIER = builders.game.ghost;
 				PRODUCT_NAME = love;
 			};
 			name = Debug;
@@ -846,7 +1132,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/../../../openssl/lib/Mac\"";
 				LLVM_LTO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = org.love2d.love;
+				PRODUCT_BUNDLE_IDENTIFIER = builders.game.ghost;
 				PRODUCT_NAME = love;
 			};
 			name = Release;
@@ -1286,7 +1572,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/../../../openssl/lib/Mac\"";
 				LLVM_LTO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = org.love2d.love;
+				PRODUCT_BUNDLE_IDENTIFIER = builders.game.ghost;
 				PRODUCT_NAME = love;
 			};
 			name = Distribution;
@@ -1294,6 +1580,16 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		B5256F74211A555500891B27 /* Build configuration list for PBXNativeTarget "ghost-macosx" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B5256F75211A555500891B27 /* Debug */,
+				B5256F76211A555500891B27 /* Release */,
+				B5256F77211A555500891B27 /* Distribution */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "love-macosx" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

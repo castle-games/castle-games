@@ -21,7 +21,7 @@ on actual iOS hardware (iPhone or iPad).*
 - Copy the '.framework' files in https://love2d.org/sdk/love-osx-frameworks-0.10.zip to
 '/Library/Frameworks' (at the root of your file system) if you haven't done that before.
 - Open './love/platform/xcode/love.xcodeproj' with Xcode.
-- Run the 'love-macosx' target:
+- Run the 'ghost-macosx' target:
 ![Run Ghost on macOS](run-mac.png)
 
 ### Windows
