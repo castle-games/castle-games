@@ -32,7 +32,7 @@ function app.load(url)
     end)
 end
 
-function app.reload(url)
+function app.reload()
     if app.lastUrl then
         network.flush(function() return true end) -- Flush entire `network.fetch` cache
         app.load(app.lastUrl)
@@ -109,6 +109,7 @@ local development = {}
 
 development.visible = false
 development.consoleMessages = {}
+development.scrollToBottom = true
 
 function development.toggle()
     development.visible = not development.visible
@@ -120,9 +121,21 @@ function development.update()
     end
 
     tui.inWindow('development', function()
+        if tui.button('reload portal') then
+            app.reload()
+        end
+        tui.sameLine()
+        if tui.button('clear console') then
+            development.consoleMessages = {}
+        end
+
         tui.inChild('console', function()
             for _, message in ipairs(development.consoleMessages) do
                 tui.textWrapped(message)
+            end
+            if development.scrollToBottom then
+                tui.setScrollHere()
+                development.scrollToBottom = false
             end
         end)
     end)
@@ -134,6 +147,7 @@ function development.print(...)
         message = message .. '    ' .. select(i, ...)
     end
     table.insert(development.consoleMessages, message)
+    development.scrollToBottom = true
 end
 
 local oldPrint = print
