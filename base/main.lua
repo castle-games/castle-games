@@ -21,17 +21,53 @@ require = require 'require'
 portal = require 'portal'
 
 
--- Top-level callbacks
+-- App management
 
-local app -- Save our app portal here when loaded
+local lastUrl
+local currentApp
 
-local errorMessage
+local function loadApp(url)
+    lastUrl = url
+    network.async(function()
+        currentApp = portal:newChild(url)
+    end)
+end
+
+local function reloadApp()
+    loadApp(lastUrl)
+end
+
+local function forwardAppEvent(eventName, ...)
+    if currentApp then
+        currentApp[eventName](currentApp, ...)
+    end
+end
+
+
+-- Error management
+
+local currentError
 
 function portal.onError(err, descendant)
-    errorMessage = "portal to '" .. descendant.path .. "' was closed due to error:\n" .. err
-    app = nil
+    currentError = "portal to '" .. descendant.path .. "' was closed due to error:\n" .. err
     network.flush(function() return true end) -- Flush entire `network.fetch` cache
 end
+
+local function showErrorWindow()
+    if currentError ~= nil then
+        tui.setNextWindowSize(480, 120)
+        tui.inWindow('error', true, function(open)
+            if not open then
+                currentError = nil
+                return
+            end
+            tui.textWrapped(currentError)
+        end)
+    end
+end
+
+
+-- Top-level callbacks
 
 function love.load(arg)
     tui.love.load()
@@ -42,7 +78,7 @@ function love.update(dt)
 
     tui.love.preupdate(dt)
 
-    if app then app:update(dt) end
+    forwardAppEvent('update', dt)
 
     local clipboard = love.system.getClipboardText()
     local urls = {
@@ -59,32 +95,19 @@ function love.update(dt)
     tui.inWindow('welcome to ghost!', function()
         for name, url in pairs(urls) do
             if tui.button(name) then
-                network.async(function()
-                    app = portal:newChild(url)
-                end)
+                loadApp(url)
             end
         end
         tui.text('fps: ' .. tostring(love.timer.getFPS()))
     end)
 
-    if errorMessage ~= nil then
-        tui.setNextWindowSize(480, 120)
-        tui.inWindow('error', true, function(open)
-            if not open then
-                errorMessage = nil
-                return
-            end
-            tui.textWrapped(errorMessage)
-        end)
-    end
+    showErrorWindow()
 
     tui.love.postupdate()
 end
 
 function love.draw()
-    if app then
-        app:draw()
-    end
+    forwardAppEvent('draw')
 
     do -- Debug overlay
         love.graphics.push('all')
@@ -135,13 +158,13 @@ for k in pairs({
             local key = select(1, ...)
             if key == 'f5' or (love.keyboard.isDown('lgui') and key == 'r') then
                 network.async(function()
-                        -- Reload!
-                        network.flush(function() return true end) -- Flush entire `network.fetch` cache
-                        app = portal:newChild(app.path)
+                    -- Reload!
+                    network.flush(function() return true end) -- Flush entire `network.fetch` cache
+                    reloadApp()
 
-                        -- GC and print memory usage
-                        collectgarbage()
-                        print(math.floor(collectgarbage('count')) .. 'KB', 'mem usage')
+                    -- GC and print memory usage
+                    collectgarbage()
+                    print(math.floor(collectgarbage('count')) .. 'KB', 'mem usage')
                 end)
                 return
             end
@@ -151,7 +174,7 @@ for k in pairs({
             tui.love[k](...)
         end
 
-        if app then app[k](app, ...) end
+        forwardAppEvent(k, ...)
     end
 end
 
