@@ -23,45 +23,52 @@ portal = require 'portal'
 
 -- App management
 
-local lastUrl
-local currentApp
+local app = {}
 
-local function loadApp(url)
-    lastUrl = url
+function app.load(url)
+    app.lastUrl = url
     network.async(function()
-        currentApp = portal:newChild(url)
+        app.portal = portal:newChild(url)
     end)
 end
 
-local function reloadApp()
-    loadApp(lastUrl)
+function app.reload(url)
+    if app.lastUrl then
+        network.flush(function() return true end) -- Flush entire `network.fetch` cache
+        app.load(lastUrl)
+    end
 end
 
-local function forwardAppEvent(eventName, ...)
-    if currentApp then
-        currentApp[eventName](currentApp, ...)
+function app.close()
+    app.portal = nil
+end
+
+function app.forwardEvent(eventName, ...)
+    if app.portal then
+        app.portal[eventName](app.portal, ...)
     end
 end
 
 
 -- Error management
 
-local currentError
+local errors = {}
 
 function portal.onError(err, descendant)
-    currentError = "portal to '" .. descendant.path .. "' was closed due to error:\n" .. err
+    app.close()
+    errors.lastError = "portal to '" .. descendant.path .. "' was closed due to error:\n" .. err
     network.flush(function() return true end) -- Flush entire `network.fetch` cache
 end
 
-local function showErrorWindow()
-    if currentError ~= nil then
+function errors.showWindow()
+    if errors.lastError ~= nil then
         tui.setNextWindowSize(480, 120)
         tui.inWindow('error', true, function(open)
             if not open then
-                currentError = nil
+                errors.lastError = nil
                 return
             end
-            tui.textWrapped(currentError)
+            tui.textWrapped(errors.lastError)
         end)
     end
 end
@@ -78,7 +85,7 @@ function love.update(dt)
 
     tui.love.preupdate(dt)
 
-    forwardAppEvent('update', dt)
+    app.forwardEvent('update', dt)
 
     local clipboard = love.system.getClipboardText()
     local urls = {
@@ -95,19 +102,19 @@ function love.update(dt)
     tui.inWindow('welcome to ghost!', function()
         for name, url in pairs(urls) do
             if tui.button(name) then
-                loadApp(url)
+                app.load(url)
             end
         end
         tui.text('fps: ' .. tostring(love.timer.getFPS()))
     end)
 
-    showErrorWindow()
+    errors.showWindow()
 
     tui.love.postupdate()
 end
 
 function love.draw()
-    forwardAppEvent('draw')
+    app.forwardEvent('draw')
 
     do -- Debug overlay
         love.graphics.push('all')
@@ -159,8 +166,7 @@ for k in pairs({
             if key == 'f5' or (love.keyboard.isDown('lgui') and key == 'r') then
                 network.async(function()
                     -- Reload!
-                    network.flush(function() return true end) -- Flush entire `network.fetch` cache
-                    reloadApp()
+                    app.reload()
 
                     -- GC and print memory usage
                     collectgarbage()
@@ -174,7 +180,7 @@ for k in pairs({
             tui.love[k](...)
         end
 
-        forwardAppEvent(k, ...)
+        app.forwardEvent(k, ...)
     end
 end
 
