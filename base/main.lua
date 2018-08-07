@@ -108,6 +108,7 @@ end
 local development = {}
 
 development.visible = false
+development.consoleMessages = {}
 
 function development.toggle()
     development.visible = not development.visible
@@ -119,8 +120,26 @@ function development.update()
     end
 
     tui.inWindow('development', function()
-        tui.text('development!')
+        tui.inChild('console', function()
+            for _, message in ipairs(development.consoleMessages) do
+                tui.textWrapped(message)
+            end
+        end)
     end)
+end
+
+function development.print(...)
+    local message = select(1, ...)
+    for i = 2, select('#', ...) do
+        message = message .. '    ' .. select(i, ...)
+    end
+    table.insert(development.consoleMessages, message)
+end
+
+local oldPrint = print
+function print(...) -- Replace global `print`, but stil call original
+    oldPrint(...)
+    development.print(...)
 end
 
 
