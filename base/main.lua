@@ -74,19 +74,11 @@ function errors.showWindow()
 end
 
 
--- Top-level callbacks
+-- Launcher screen
 
-function love.load(arg)
-    tui.love.load()
-end
+local launcher = {}
 
-function love.update(dt)
-    network.update(dt)
-
-    tui.love.preupdate(dt)
-
-    app.forwardEvent('update', dt)
-
+function launcher.showWindow()
     local clipboard = love.system.getClipboardText()
     local urls = {
         ["localhost"] = 'http://0.0.0.0:8000/main.lua',
@@ -107,6 +99,23 @@ function love.update(dt)
         end
         tui.text('fps: ' .. tostring(love.timer.getFPS()))
     end)
+end
+
+
+-- Top-level callbacks
+
+function love.load(arg)
+    tui.love.load()
+end
+
+function love.update(dt)
+    network.update(dt)
+
+    tui.love.preupdate(dt)
+
+    app.forwardEvent('update', dt)
+
+    launcher.showWindow()
 
     errors.showWindow()
 
