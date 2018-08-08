@@ -83,9 +83,20 @@ function errors.update()
                 errors.clear()
                 return
             end
+
             if tui.button('reload') then
                 app.reload()
             end
+            tui.sameLine()
+            if love.system.getClipboardText() ~= errors.lastError then
+                if tui.button('copy message') then
+                    love.system.setClipboardText(errors.lastError)
+                end
+            else
+                tui.alignTextToFramePadding()
+                tui.text('message copied!')
+            end
+
             tui.inChild('error message', function()
                 tui.textWrapped(errors.lastError)
             end)
