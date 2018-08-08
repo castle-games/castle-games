@@ -13,16 +13,21 @@ network.requests = {}
 
 local tasks = limit.new(10)
 
--- Run this function asynchronously with the caller. Runs it as a coroutine, so that network
--- requests inside it will appear to 'block' inside that coroutine, while code outside the
--- coroutine still runs.
-function network.async(foo)
+-- Run `foo` asynchronously with the caller. Runs it as a coroutine, so that
+-- network requests inside it will appear to 'block' inside that coroutine,
+-- while code outside the coroutine still runs. If `onError` is given, calls it
+-- with the error as the only argument when an error occurs during the
+-- asynchronous call.
+function network.async(foo, onError)
+    local outerPortal = getfenv(2).portal
     tasks:addthread(function()
         copas.setErrorHandler(function(msg, co, skt)
-            if portal then
-                portal:handleError(msg)
+            if onError then
+                onError(msg)
+            elseif outerPortal then
+                outerPortal:handleError(msg)
             else
-                error(msg, co, skt, debug.traceback(co))
+                print('uncaught async error:', msg, co, skt, debug.traceback(co))
             end
         end)
         foo()
