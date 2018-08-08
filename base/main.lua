@@ -73,13 +73,22 @@ end
 
 function errors.update()
     if errors.lastError ~= nil then
-        tui.setNextWindowSize(480, 120)
+        tui.setNextWindowPos(
+            0.5 * love.graphics.getWidth(), 0.5 * love.graphics.getHeight(),
+            'FirstUseEver',
+            0.5, 0.5)
+        tui.setNextWindowSize(480, 120, 'FirstUseEver')
         tui.inWindow('error', true, function(open)
             if not open then
                 errors.clear()
                 return
             end
-            tui.textWrapped(errors.lastError)
+            if tui.button('reload') then
+                app.reload()
+            end
+            tui.inChild('error message', function()
+                tui.textWrapped(errors.lastError)
+            end)
         end)
     end
 end
@@ -102,6 +111,8 @@ function launcher.update()
         ["CIRCLOID"] = 'https://raw.githubusercontent.com/terribleben/circloid/release/main.lua',
     }
 
+    tui.setNextWindowPos(40, 40, 'FirstUseEver')
+    tui.setNextWindowSize(480, 320, 'FirstUseEver')
     tui.inWindow('welcome to ghost!', function()
         for name, url in pairs(urls) do
             if tui.button(name) then
@@ -130,6 +141,8 @@ function development.update()
         return
     end
 
+    tui.setNextWindowPos(40, love.graphics.getHeight() - 240 - 40, 'FirstUseEver')
+    tui.setNextWindowSize(480, 240, 'FirstUseEver')
     tui.inWindow('development', function()
         if tui.button('reload portal') then
             app.reload()
