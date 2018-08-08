@@ -43,7 +43,7 @@ function main.load(arg)
         else
             homeUrl = remoteUrl
         end
-        home = root:newChild(homeUrl)
+        home = root:newChild(homeUrl, { noConf = true })
     end)
 end
 
