@@ -10,12 +10,6 @@ local defaultRequire = require
 
 local parseLua = require 'parseLua'
 
--- Quick utility to check if given path returns a '200 ok' response
-local function exists(path)
-    local r, httpCode = network.fetch(path, 'HEAD')
-    return httpCode == 200
-end
-
 -- New table based on `a` with `b` providing defaults
 local function defaultOpts(a, b)
     local o = {}
@@ -95,9 +89,9 @@ local function explicitRequire(path, opts)
 
     -- Deal with '.lua' or '/init.lua' appending
     local url
-    if exists(absolute .. '.lua') then
+    if network.exists(absolute .. '.lua') then
         url = absolute .. '.lua'
-    elseif exists(absolute .. '/init.lua') then
+    elseif network.exists(absolute .. '/init.lua') then
         url = absolute .. '/init.lua'
     else
         error("no working `url` found for '" .. origPath .. "' -- please check the `require` "

@@ -162,6 +162,12 @@ function network.isAbsolute(url)
     return url:match('^https?://') or url:match('^file://')
 end
 
+-- Whether a given URL points to something that exists
+function network.exists(url)
+    local _, httpCode = network.fetch(url, 'HEAD')
+    return httpCode == 200
+end
+
 -- Perform any updates the network system has to do -- this is run by base automatically and you
 -- shouldn't have to call it...
 function network.update(dt)

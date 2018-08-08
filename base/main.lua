@@ -37,8 +37,7 @@ function main.load(arg)
         local remoteUrl = 'https://raw.githubusercontent.com/nikki93/ghost-home2/' .. homeVersion .. '/main.lua'
 
         -- If local version is being served, use that, else use remote
-        local _, localHttpCode = network.fetch(localUrl, 'HEAD')
-        if localHttpCode == 200 then
+        if network.exists(localUrl) then
             homeUrl = localUrl
         else
             homeUrl = remoteUrl
