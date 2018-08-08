@@ -83,7 +83,7 @@ local function explicitRequire(path, opts)
     local isAbsolute = false
     local absolute
 
-    if path:match('^https?://') then -- Already absolute?
+    if network.isAbsolute(path) then -- Already absolute?
         isAbsolute = true
         absolute = path
     elseif basePath then

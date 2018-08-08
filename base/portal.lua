@@ -233,7 +233,7 @@ function portalMeta:newChild(path, args)
     child.onError = child.args.onError
 
     -- Figure out base path
-    if path:match('^https?://') then
+    if network.isAbsolute(path) then
         child.basePath = path:gsub('(.*)/(.*)', '%1')
     else
         child.basePath = self.basePath

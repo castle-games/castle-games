@@ -127,6 +127,11 @@ function network.flush(filter)
     end
 end
 
+-- Whether a given string represents an absolute URL
+function network.isAbsolute(url)
+    return url:match('^https?://') or url:match('^file://')
+end
+
 -- Perform any updates the network system has to do -- this is run by base automatically and you
 -- shouldn't have to call it...
 function network.update(dt)
