@@ -25,6 +25,7 @@ root = require 'portal'
 
 local homeVersion = 'master' -- Git branch, tag or commit hash of home experience to show
 local home -- Portal to the home experience
+local homeUrl
 
 local main = {}
 
@@ -38,10 +39,11 @@ function main.load(arg)
         -- If local version is being served, use that, else use remote
         local _, localHttpCode = network.fetch(localUrl, 'HEAD')
         if localHttpCode == 200 then
-            home = root:newChild(localUrl)
+            homeUrl = localUrl
         else
-            home = root:newChild(remoteUrl)
+            homeUrl = remoteUrl
         end
+        home = root:newChild(homeUrl)
     end)
 end
 
@@ -79,6 +81,21 @@ function main.draw()
     end
 
     tui.love.draw()
+end
+
+function main.keypressed(key, ...)
+    -- F12: reload home
+    if key == 'f12' then
+        if homeUrl then
+            network.flush()
+            home = root:newChild(homeUrl)
+        end
+        return
+    end
+
+    if home then
+        home:keypressed(key, ...)
+    end
 end
 
 for k in pairs({
