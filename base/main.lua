@@ -34,6 +34,8 @@ function app.load(url)
     app.lastUrl = url
     network.async(function()
         app.portal = portal:newChild(url)
+        app.loadTime = love.timer.getTime()
+        print("loaded '" .. url .. "'")
         errors.clear()
     end)
 end
@@ -52,6 +54,19 @@ end
 function app.forwardEvent(eventName, ...)
     if app.portal and app.portal[eventName] then
         app.portal[eventName](app.portal, ...)
+    end
+end
+
+function app.drawLoadedIndicator()
+    if app.portal and love.timer.getTime() - app.loadTime < 2 then
+        love.graphics.push('all')
+        love.graphics.setColor(0.8, 0.5, 0.1)
+        local fontH = love.graphics.getFont():getHeight()
+        local yStep = 1.2 * fontH
+        love.graphics.print("loaded '" .. app.lastUrl .. "'",
+                            yStep - fontH + 4,
+                            love.graphics.getHeight() - yStep)
+        love.graphics.pop('all')
     end
 end
 
@@ -193,13 +208,13 @@ end
 
 -- Top-level Love callbacks
 
-local callbacks = {}
+local main = {}
 
-function callbacks.load(arg)
+function main.load(arg)
     tui.love.load()
 end
 
-function callbacks.update(dt)
+function main.update(dt)
     network.update(dt)
 
     tui.love.preupdate(dt)
@@ -213,8 +228,10 @@ function callbacks.update(dt)
     tui.love.postupdate()
 end
 
-function callbacks.draw()
+function main.draw()
     app.forwardEvent('draw')
+
+    app.drawLoadedIndicator()
 
     do -- Debug overlay
         love.graphics.push('all')
@@ -235,11 +252,10 @@ function callbacks.draw()
     tui.love.draw()
 end
 
-function callbacks.keypressed(key, ...)
+function main.keypressed(key, ...)
     -- F5 or cmd + r: reload
     if key == 'f5' or (love.keyboard.isDown('lgui') and key == 'r') then
         network.async(function()
-            -- Reload!
             app.reload()
 
             -- GC and print memory usage
@@ -288,9 +304,9 @@ for k in pairs({
     joystickremoved = true,
 }) do
     love[k] = function(...)
-        if callbacks[k] then
-            callbacks[k](...)
-        else -- Default behavior if we didn't define it above
+        if main[k] then
+            main[k](...)
+        else -- Default behavior if we didn't define it in `main`
             if tui.love[k] then
                 tui.love[k](...)
             end
