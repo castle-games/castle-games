@@ -6,11 +6,13 @@ do that!
 
 ## Run Ghost
 
-### iOS
+### iOS (temporarily broken - will fix after LD24)
 
 *If you're thinking to run Ghost in iOS Simulator to try it on macOS, prefer directly running on
 macOS (see below) since Simulator can cause performance degradation. Prefer testing Ghost for iOS
 on actual iOS hardware (iPhone or iPad).*
+
+** The love-ios target is broken right now while we get ready for LD24. https://github.com/expo/ghost/issues/4 **
 
 - Open './love/platform/xcode/love.xcodeproj' with Xcode.
 - Run the 'love-ios' target:
