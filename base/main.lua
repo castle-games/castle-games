@@ -88,8 +88,10 @@ function main.keypressed(key, ...)
     -- F12: reload home
     if key == 'f12' then
         if homeUrl then
-            network.flush()
-            home = root:newChild(home.path)
+            network.async(function()
+                network.flush()
+                home = root:newChild(home.path)
+            end)
         end
         return
     end
