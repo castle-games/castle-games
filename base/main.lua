@@ -23,8 +23,6 @@ portal = require 'portal'
 
 -- Top-level Love callbacks
 
-local homeUrl = 'http://0.0.0.0:8000/main.lua' -- Where is home?
-
 local home -- Portal to the home experience
 
 local main = {}
@@ -33,7 +31,16 @@ function main.load(arg)
     tui.love.load()
 
     network.async(function()
-        home = portal:newChild(homeUrl)
+        local localUrl = 'http://0.0.0.0:8032/main.lua'
+        local remoteUrl = 'https://raw.githubusercontent.com/nikki93/ghost-home2/master/main.lua'
+
+        -- If local version is being served, use that, else use remote
+        local _, localHttpCode = network.fetch(localUrl, 'HEAD')
+        if localHttpCode == 200 then
+            home = portal:newChild(localUrl)
+        else
+            home = portal:newChild(remoteUrl)
+        end
     end)
 end
 
