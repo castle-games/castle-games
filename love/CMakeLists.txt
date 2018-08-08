@@ -254,44 +254,44 @@ endfunction()
 
 set(LOVE_SRC_COMMON
 
-	../lpeg/lptypes.h
-	../lpeg/lpcap.c
-	../lpeg/lpcap.h
-	../lpeg/lpcode.c
-	../lpeg/lpcode.h
-	../lpeg/lptree.h
-	../lpeg/lpvm.c
-	../lpeg/lpvm.h
-	../lpeg/lpprint.c
-	../lpeg/lpprint.h
-	../lpeg/lptree.c
-	../lpeg/lptree.h
+	../ghost-extensions/lpeg/lptypes.h
+	../ghost-extensions/lpeg/lpcap.c
+	../ghost-extensions/lpeg/lpcap.h
+	../ghost-extensions/lpeg/lpcode.c
+	../ghost-extensions/lpeg/lpcode.h
+	../ghost-extensions/lpeg/lptree.h
+	../ghost-extensions/lpeg/lpvm.c
+	../ghost-extensions/lpeg/lpvm.h
+	../ghost-extensions/lpeg/lpprint.c
+	../ghost-extensions/lpeg/lpprint.h
+	../ghost-extensions/lpeg/lptree.c
+	../ghost-extensions/lpeg/lptree.h
 
-	../luacrypto/src/lcrypto.c
-	../luacrypto/src/lcrypto.h
+	../ghost-extensions/luacrypto/src/lcrypto.c
+	../ghost-extensions/luacrypto/src/lcrypto.h
 
-	../luasec/src/compat.h
-	../luasec/src/context.h
-	../luasec/src/options.h
-	../luasec/src/ssl.h
-	../luasec/src/x509.h
-	../luasec/src/config.c
-	../luasec/src/ec.c
-	../luasec/src/context.c
-	../luasec/src/ec.h
-	../luasec/src/ssl.c
-	../luasec/src/x509.c
+	../ghost-extensions/luasec/src/compat.h
+	../ghost-extensions/luasec/src/context.h
+	../ghost-extensions/luasec/src/options.h
+	../ghost-extensions/luasec/src/ssl.h
+	../ghost-extensions/luasec/src/x509.h
+	../ghost-extensions/luasec/src/config.c
+	../ghost-extensions/luasec/src/ec.c
+	../ghost-extensions/luasec/src/context.c
+	../ghost-extensions/luasec/src/ec.h
+	../ghost-extensions/luasec/src/ssl.c
+	../ghost-extensions/luasec/src/x509.c
 
-	../lua-cjson/fpconv.c
-	../lua-cjson/strbuf.c
-	../lua-cjson/lua_cjson.c
-	../lua-cjson/strbuf.h
+	../ghost-extensions/lua-cjson/fpconv.c
+	../ghost-extensions/lua-cjson/strbuf.c
+	../ghost-extensions/lua-cjson/lua_cjson.c
+	../ghost-extensions/lua-cjson/strbuf.h
 
-	../lua-marshal/lmarshal.c
+	../ghost-extensions/lua-marshal/lmarshal.c
 
-	../lsqlite3/lsqlite3.c
-	../lsqlite3/sqlite3.c
-	../lsqlite3/sqlite3.h
+	../ghost-extensions/lsqlite3/lsqlite3.c
+	../ghost-extensions/lsqlite3/sqlite3.c
+	../ghost-extensions/lsqlite3/sqlite3.h
 
 	src/common/b64.cpp
 	src/common/b64.h
@@ -1785,25 +1785,25 @@ endif()
 add_executable(${LOVE_EXE_NAME} WIN32 
 	src/love.cpp
 
-	../common/ui.cpp
+	../ghost-extensions/common/ui.cpp
 
-	../cimgui/cimgui/cimgui.cpp
-	../cimgui/cimgui/cimgui.h
-	../cimgui/cimgui/drawList.cpp
-	../cimgui/cimgui/fontAtlas.cpp
-	../cimgui/cimgui/listClipper.cpp
-	../cimgui/imgui/imconfig.h
-	../cimgui/imgui/imgui.cpp
-	../cimgui/imgui/imgui.h
-	../cimgui/imgui/imgui_demo.cpp
-	../cimgui/imgui/imgui_draw.cpp
-	../cimgui/imgui/imgui_internal.h
-	../cimgui/imgui/stb_rect_pack.h
-	../cimgui/imgui/stb_textedit.h
-	../cimgui/imgui/stb_truetype.h
+	../ghost-extensions/cimgui/cimgui/cimgui.cpp
+	../ghost-extensions/cimgui/cimgui/cimgui.h
+	../ghost-extensions/cimgui/cimgui/drawList.cpp
+	../ghost-extensions/cimgui/cimgui/fontAtlas.cpp
+	../ghost-extensions/cimgui/cimgui/listClipper.cpp
+	../ghost-extensions/cimgui/imgui/imconfig.h
+	../ghost-extensions/cimgui/imgui/imgui.cpp
+	../ghost-extensions/cimgui/imgui/imgui.h
+	../ghost-extensions/cimgui/imgui/imgui_demo.cpp
+	../ghost-extensions/cimgui/imgui/imgui_draw.cpp
+	../ghost-extensions/cimgui/imgui/imgui_internal.h
+	../ghost-extensions/cimgui/imgui/stb_rect_pack.h
+	../ghost-extensions/cimgui/imgui/stb_textedit.h
+	../ghost-extensions/cimgui/imgui/stb_truetype.h
 
 	${LOVE_RC})
-include_directories(../cimgui/imgui)
+include_directories(../ghost-extensions/cimgui/imgui)
 target_link_libraries(${LOVE_EXE_NAME} ${LOVE_LIB_NAME})
 
 if(MSVC)
