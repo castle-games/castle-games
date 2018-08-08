@@ -59,6 +59,8 @@ function main.update(dt)
     tui.love.postupdate()
 end
 
+local debugFont = love.graphics.newFont()
+
 function main.draw()
     if home then
         home:draw()
@@ -66,6 +68,7 @@ function main.draw()
 
     do -- Debug overlay
         love.graphics.push('all')
+        love.graphics.setFont(debugFont)
         love.graphics.setColor(0.8, 0.5, 0.1)
         -- Ongoing network requests on bottom of screen
         local fontH = love.graphics.getFont():getHeight()
