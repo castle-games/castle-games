@@ -64,8 +64,8 @@ function app.drawLoadedIndicator()
         local fontH = love.graphics.getFont():getHeight()
         local yStep = 1.2 * fontH
         love.graphics.print("loaded '" .. app.lastUrl .. "'",
-                            yStep - fontH + 4,
-                            love.graphics.getHeight() - yStep)
+            yStep - fontH + 4,
+            love.graphics.getHeight() - yStep)
         love.graphics.pop('all')
     end
 end
