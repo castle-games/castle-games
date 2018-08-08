@@ -11,6 +11,7 @@ love.window.setMode(defaultW, defaultH, {
     borderless = love.system.getOS() == 'iOS',
     highdpi = true,
 })
+love.window.setTitle('ghost-player')
 
 
 -- Built-ins
