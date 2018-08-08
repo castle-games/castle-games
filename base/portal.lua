@@ -260,7 +260,7 @@ function portalMeta:newChild(path, args)
             -- https://love2d.org/wiki/Config_Files
             -- The associated `love.conf(...)` is ignored, but 'conf.lua' may have some other side
             -- effects that matter (eg., setting some global variables).
-            preamble = args.noConf and '' or [[
+            preamble = child.args.noConf and '' or [[
                 pcall(require, 'conf')
             ]],
         })
