@@ -25,7 +25,6 @@ root = require 'portal'
 
 local homeVersion = 'master' -- Git branch, tag or commit hash of home experience to show
 local home -- Portal to the home experience
-local homeUrl
 
 local main = {}
 
@@ -90,7 +89,7 @@ function main.keypressed(key, ...)
     if key == 'f12' then
         if homeUrl then
             network.flush()
-            home = root:newChild(homeUrl)
+            home = root:newChild(home.path)
         end
         return
     end
