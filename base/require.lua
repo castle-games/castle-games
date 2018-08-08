@@ -148,13 +148,13 @@ local function explicitRequire(path, opts)
     if firstFetch then
         for _, resource in pairs(parseResources(response)) do
             network.async(function()
-                if resource.type == 'lua' then
-                    childEnv.require(resource.path, { noEval = true })
-                elseif resource.type == 'asset' then
-                    pcall(function() -- Allow failure as this could be any kind of string...
+                pcall(function() -- Allow failure as we want the error to be hit on synchronous use
+                    if resource.type == 'lua' then
+                        childEnv.require(resource.path, { noEval = true })
+                    elseif resource.type == 'asset' then
                         network.fetch(childEnv.portal.basePath .. '/' .. resource.path)
-                    end)
-                end
+                    end
+                end)
             end)
         end
     end
