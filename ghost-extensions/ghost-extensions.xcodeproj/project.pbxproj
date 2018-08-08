@@ -1,0 +1,910 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		B5E9F8A1211B669D0068BEB9 /* ghost_extensions.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9F89F211B669D0068BEB9 /* ghost_extensions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B5E9FA75211B67100068BEB9 /* imgui.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9F8AA211B670F0068BEB9 /* imgui.h */; };
+		B5E9FA76211B67100068BEB9 /* imconfig.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9F8AB211B670F0068BEB9 /* imconfig.h */; };
+		B5E9FA78211B67100068BEB9 /* stb_rect_pack.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9F8AD211B670F0068BEB9 /* stb_rect_pack.h */; };
+		B5E9FA82211B67100068BEB9 /* stb_truetype.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9F8B8211B670F0068BEB9 /* stb_truetype.h */; };
+		B5E9FA83211B67100068BEB9 /* imgui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F8B9211B670F0068BEB9 /* imgui.cpp */; };
+		B5E9FAE4211B67100068BEB9 /* imgui_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9F937211B670F0068BEB9 /* imgui_internal.h */; };
+		B5E9FAE5211B67100068BEB9 /* stb_textedit.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9F938211B670F0068BEB9 /* stb_textedit.h */; };
+		B5E9FAE8211B67100068BEB9 /* imgui_demo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F93B211B670F0068BEB9 /* imgui_demo.cpp */; };
+		B5E9FAE9211B67100068BEB9 /* imgui_draw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F93C211B670F0068BEB9 /* imgui_draw.cpp */; };
+		B5E9FAEC211B67100068BEB9 /* drawList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F940211B670F0068BEB9 /* drawList.cpp */; };
+		B5E9FAEE211B67100068BEB9 /* listClipper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F942211B670F0068BEB9 /* listClipper.cpp */; };
+		B5E9FAF0211B67100068BEB9 /* fontAtlas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F944211B670F0068BEB9 /* fontAtlas.cpp */; };
+		B5E9FAF2211B67100068BEB9 /* cimgui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F946211B670F0068BEB9 /* cimgui.cpp */; };
+		B5E9FAF6211B67100068BEB9 /* cimgui.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9F94B211B670F0068BEB9 /* cimgui.h */; };
+		B5E9FAFB211B67100068BEB9 /* ui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F957211B670F0068BEB9 /* ui.cpp */; };
+		B5E9FAFC211B67100068BEB9 /* UITextField+Love.mm in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F958211B670F0068BEB9 /* UITextField+Love.mm */; };
+		B5E9FB34211B67100068BEB9 /* lcrypto.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9F998211B670F0068BEB9 /* lcrypto.h */; };
+		B5E9FB36211B67100068BEB9 /* lcrypto.c in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F99A211B670F0068BEB9 /* lcrypto.c */; };
+		B5E9FB3B211B67100068BEB9 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F9A1211B67100068BEB9 /* sqlite3.c */; };
+		B5E9FB4A211B67100068BEB9 /* sqlite3.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9F9B1211B67100068BEB9 /* sqlite3.h */; };
+		B5E9FB4C211B67100068BEB9 /* lsqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F9B4211B67100068BEB9 /* lsqlite3.c */; };
+		B5E9FB51211B67100068BEB9 /* lmarshal.c in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F9BB211B67100068BEB9 /* lmarshal.c */; };
+		B5E9FB54211B67100068BEB9 /* strbuf.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9F9BF211B67100068BEB9 /* strbuf.h */; };
+		B5E9FB57211B67100068BEB9 /* fpconv.c in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F9C2211B67100068BEB9 /* fpconv.c */; };
+		B5E9FB72211B67110068BEB9 /* fpconv.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9F9E0211B67100068BEB9 /* fpconv.h */; };
+		B5E9FB74211B67110068BEB9 /* strbuf.c in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F9E2211B67100068BEB9 /* strbuf.c */; };
+		B5E9FB78211B67110068BEB9 /* lua_cjson.c in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F9E6211B67100068BEB9 /* lua_cjson.c */; };
+		B5E9FB7A211B67110068BEB9 /* lpprint.c in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F9E9211B67100068BEB9 /* lpprint.c */; };
+		B5E9FB7C211B67110068BEB9 /* lpvm.c in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F9EB211B67100068BEB9 /* lpvm.c */; };
+		B5E9FB7D211B67110068BEB9 /* lptypes.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9F9EC211B67100068BEB9 /* lptypes.h */; };
+		B5E9FB7E211B67110068BEB9 /* lpcap.c in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F9ED211B67100068BEB9 /* lpcap.c */; };
+		B5E9FB81211B67110068BEB9 /* lptree.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9F9F0211B67100068BEB9 /* lptree.h */; };
+		B5E9FB82211B67110068BEB9 /* lpcode.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9F9F1211B67100068BEB9 /* lpcode.h */; };
+		B5E9FB85211B67110068BEB9 /* lpcap.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9F9F4211B67100068BEB9 /* lpcap.h */; };
+		B5E9FB86211B67110068BEB9 /* lpvm.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9F9F5211B67100068BEB9 /* lpvm.h */; };
+		B5E9FB88211B67110068BEB9 /* lpprint.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9F9F7211B67100068BEB9 /* lpprint.h */; };
+		B5E9FB89211B67110068BEB9 /* lptree.c in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F9F8211B67100068BEB9 /* lptree.c */; };
+		B5E9FB8A211B67110068BEB9 /* lpcode.c in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F9F9211B67100068BEB9 /* lpcode.c */; };
+		B5E9FBD0211B67110068BEB9 /* ssl.c in Sources */ = {isa = PBXBuildFile; fileRef = B5E9FA57211B67100068BEB9 /* ssl.c */; };
+		B5E9FBD1211B67110068BEB9 /* x509.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9FA58211B67100068BEB9 /* x509.h */; };
+		B5E9FBD2211B67110068BEB9 /* ec.c in Sources */ = {isa = PBXBuildFile; fileRef = B5E9FA59211B67100068BEB9 /* ec.c */; };
+		B5E9FBD4211B67110068BEB9 /* context.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9FA5B211B67100068BEB9 /* context.h */; };
+		B5E9FBD5211B67110068BEB9 /* options.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9FA5C211B67100068BEB9 /* options.h */; };
+		B5E9FBD7211B67110068BEB9 /* ssl.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9FA5E211B67100068BEB9 /* ssl.h */; };
+		B5E9FBD9211B67110068BEB9 /* config.c in Sources */ = {isa = PBXBuildFile; fileRef = B5E9FA60211B67100068BEB9 /* config.c */; };
+		B5E9FBDA211B67110068BEB9 /* ec.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9FA61211B67100068BEB9 /* ec.h */; };
+		B5E9FBDB211B67110068BEB9 /* compat.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9FA62211B67100068BEB9 /* compat.h */; };
+		B5E9FBEA211B67110068BEB9 /* x509.c in Sources */ = {isa = PBXBuildFile; fileRef = B5E9FA72211B67100068BEB9 /* x509.c */; };
+		B5E9FBEB211B67110068BEB9 /* context.c in Sources */ = {isa = PBXBuildFile; fileRef = B5E9FA73211B67100068BEB9 /* context.c */; };
+		B5E9FBF4211B68110068BEB9 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B5E9FBF2211B68110068BEB9 /* libssl.a */; };
+		B5E9FBF5211B68110068BEB9 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B5E9FBF3211B68110068BEB9 /* libcrypto.a */; };
+		B5E9FBF7211B691A0068BEB9 /* Lua.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5E9FBF6211B69190068BEB9 /* Lua.framework */; };
+		B5E9FC01211B69E00068BEB9 /* ghost_extensions_macos.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9FBFF211B69E00068BEB9 /* ghost_extensions_macos.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B5E9FC05211B69FE0068BEB9 /* imgui.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9F8AA211B670F0068BEB9 /* imgui.h */; };
+		B5E9FC06211B6A020068BEB9 /* imconfig.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9F8AB211B670F0068BEB9 /* imconfig.h */; };
+		B5E9FC07211B6A040068BEB9 /* stb_rect_pack.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9F8AD211B670F0068BEB9 /* stb_rect_pack.h */; };
+		B5E9FC08211B6A060068BEB9 /* stb_truetype.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9F8B8211B670F0068BEB9 /* stb_truetype.h */; };
+		B5E9FC09211B6A080068BEB9 /* imgui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F8B9211B670F0068BEB9 /* imgui.cpp */; };
+		B5E9FC0A211B6A0A0068BEB9 /* imgui_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9F937211B670F0068BEB9 /* imgui_internal.h */; };
+		B5E9FC0B211B6A0D0068BEB9 /* imgui_demo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F93B211B670F0068BEB9 /* imgui_demo.cpp */; };
+		B5E9FC0C211B6A0F0068BEB9 /* stb_textedit.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9F938211B670F0068BEB9 /* stb_textedit.h */; };
+		B5E9FC0D211B6A110068BEB9 /* imgui_draw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F93C211B670F0068BEB9 /* imgui_draw.cpp */; };
+		B5E9FC0E211B6A150068BEB9 /* drawList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F940211B670F0068BEB9 /* drawList.cpp */; };
+		B5E9FC0F211B6A170068BEB9 /* listClipper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F942211B670F0068BEB9 /* listClipper.cpp */; };
+		B5E9FC10211B6A190068BEB9 /* fontAtlas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F944211B670F0068BEB9 /* fontAtlas.cpp */; };
+		B5E9FC11211B6A1C0068BEB9 /* cimgui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F946211B670F0068BEB9 /* cimgui.cpp */; };
+		B5E9FC12211B6A1E0068BEB9 /* cimgui.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9F94B211B670F0068BEB9 /* cimgui.h */; };
+		B5E9FC14211B6A250068BEB9 /* ui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F957211B670F0068BEB9 /* ui.cpp */; };
+		B5E9FC15211B6A2C0068BEB9 /* lpprint.c in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F9E9211B67100068BEB9 /* lpprint.c */; };
+		B5E9FC16211B6A2E0068BEB9 /* lpvm.c in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F9EB211B67100068BEB9 /* lpvm.c */; };
+		B5E9FC17211B6A300068BEB9 /* lptypes.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9F9EC211B67100068BEB9 /* lptypes.h */; };
+		B5E9FC18211B6A320068BEB9 /* lpcap.c in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F9ED211B67100068BEB9 /* lpcap.c */; };
+		B5E9FC19211B6A340068BEB9 /* lptree.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9F9F0211B67100068BEB9 /* lptree.h */; };
+		B5E9FC1A211B6A360068BEB9 /* lpcode.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9F9F1211B67100068BEB9 /* lpcode.h */; };
+		B5E9FC1B211B6A380068BEB9 /* lpcap.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9F9F4211B67100068BEB9 /* lpcap.h */; };
+		B5E9FC1C211B6A3B0068BEB9 /* lpvm.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9F9F5211B67100068BEB9 /* lpvm.h */; };
+		B5E9FC1D211B6A3D0068BEB9 /* lpprint.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9F9F7211B67100068BEB9 /* lpprint.h */; };
+		B5E9FC1E211B6A3F0068BEB9 /* lptree.c in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F9F8211B67100068BEB9 /* lptree.c */; };
+		B5E9FC1F211B6A420068BEB9 /* lpcode.c in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F9F9211B67100068BEB9 /* lpcode.c */; };
+		B5E9FC20211B6A460068BEB9 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F9A1211B67100068BEB9 /* sqlite3.c */; };
+		B5E9FC21211B6A490068BEB9 /* sqlite3.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9F9B1211B67100068BEB9 /* sqlite3.h */; };
+		B5E9FC22211B6A4C0068BEB9 /* lsqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F9B4211B67100068BEB9 /* lsqlite3.c */; };
+		B5E9FC23211B6A550068BEB9 /* strbuf.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9F9BF211B67100068BEB9 /* strbuf.h */; };
+		B5E9FC24211B6A580068BEB9 /* fpconv.c in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F9C2211B67100068BEB9 /* fpconv.c */; };
+		B5E9FC25211B6A5A0068BEB9 /* fpconv.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9F9E0211B67100068BEB9 /* fpconv.h */; };
+		B5E9FC26211B6A5C0068BEB9 /* strbuf.c in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F9E2211B67100068BEB9 /* strbuf.c */; };
+		B5E9FC27211B6A5E0068BEB9 /* lua_cjson.c in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F9E6211B67100068BEB9 /* lua_cjson.c */; };
+		B5E9FC28211B6A620068BEB9 /* lmarshal.c in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F9BB211B67100068BEB9 /* lmarshal.c */; };
+		B5E9FC29211B6A670068BEB9 /* lcrypto.c in Sources */ = {isa = PBXBuildFile; fileRef = B5E9F99A211B670F0068BEB9 /* lcrypto.c */; };
+		B5E9FC2A211B6A690068BEB9 /* lcrypto.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9F998211B670F0068BEB9 /* lcrypto.h */; };
+		B5E9FC2B211B6A720068BEB9 /* ssl.c in Sources */ = {isa = PBXBuildFile; fileRef = B5E9FA57211B67100068BEB9 /* ssl.c */; };
+		B5E9FC2C211B6A750068BEB9 /* x509.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9FA58211B67100068BEB9 /* x509.h */; };
+		B5E9FC2D211B6A770068BEB9 /* ec.c in Sources */ = {isa = PBXBuildFile; fileRef = B5E9FA59211B67100068BEB9 /* ec.c */; };
+		B5E9FC2E211B6A790068BEB9 /* options.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9FA5C211B67100068BEB9 /* options.h */; };
+		B5E9FC2F211B6A7B0068BEB9 /* context.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9FA5B211B67100068BEB9 /* context.h */; };
+		B5E9FC30211B6A7D0068BEB9 /* ssl.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9FA5E211B67100068BEB9 /* ssl.h */; };
+		B5E9FC31211B6A7F0068BEB9 /* config.c in Sources */ = {isa = PBXBuildFile; fileRef = B5E9FA60211B67100068BEB9 /* config.c */; };
+		B5E9FC32211B6A810068BEB9 /* compat.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9FA62211B67100068BEB9 /* compat.h */; };
+		B5E9FC33211B6A830068BEB9 /* ec.h in Headers */ = {isa = PBXBuildFile; fileRef = B5E9FA61211B67100068BEB9 /* ec.h */; };
+		B5E9FC34211B6A850068BEB9 /* x509.c in Sources */ = {isa = PBXBuildFile; fileRef = B5E9FA72211B67100068BEB9 /* x509.c */; };
+		B5E9FC35211B6A870068BEB9 /* context.c in Sources */ = {isa = PBXBuildFile; fileRef = B5E9FA73211B67100068BEB9 /* context.c */; };
+		B5E9FC38211B6AB60068BEB9 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B5E9FC36211B6AB50068BEB9 /* libcrypto.a */; };
+		B5E9FC39211B6AB60068BEB9 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B5E9FC37211B6AB50068BEB9 /* libssl.a */; };
+		B5E9FC3A211B6AF40068BEB9 /* Lua.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5E9FBF6211B69190068BEB9 /* Lua.framework */; };
+		B5E9FC47211B6C040068BEB9 /* love.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5E9FC46211B6C040068BEB9 /* love.framework */; };
+		B5E9FC4A211B6C630068BEB9 /* love.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5E9FC49211B6C630068BEB9 /* love.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		B5E9F89C211B669D0068BEB9 /* ghost_extensions.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ghost_extensions.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B5E9F89F211B669D0068BEB9 /* ghost_extensions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ghost_extensions.h; sourceTree = "<group>"; };
+		B5E9F8A0211B669D0068BEB9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B5E9F8AA211B670F0068BEB9 /* imgui.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imgui.h; sourceTree = "<group>"; };
+		B5E9F8AB211B670F0068BEB9 /* imconfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imconfig.h; sourceTree = "<group>"; };
+		B5E9F8AD211B670F0068BEB9 /* stb_rect_pack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_rect_pack.h; sourceTree = "<group>"; };
+		B5E9F8B8211B670F0068BEB9 /* stb_truetype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_truetype.h; sourceTree = "<group>"; };
+		B5E9F8B9211B670F0068BEB9 /* imgui.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imgui.cpp; sourceTree = "<group>"; };
+		B5E9F937211B670F0068BEB9 /* imgui_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imgui_internal.h; sourceTree = "<group>"; };
+		B5E9F938211B670F0068BEB9 /* stb_textedit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_textedit.h; sourceTree = "<group>"; };
+		B5E9F93B211B670F0068BEB9 /* imgui_demo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_demo.cpp; sourceTree = "<group>"; };
+		B5E9F93C211B670F0068BEB9 /* imgui_draw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_draw.cpp; sourceTree = "<group>"; };
+		B5E9F940211B670F0068BEB9 /* drawList.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = drawList.cpp; sourceTree = "<group>"; };
+		B5E9F942211B670F0068BEB9 /* listClipper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = listClipper.cpp; sourceTree = "<group>"; };
+		B5E9F944211B670F0068BEB9 /* fontAtlas.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fontAtlas.cpp; sourceTree = "<group>"; };
+		B5E9F946211B670F0068BEB9 /* cimgui.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cimgui.cpp; sourceTree = "<group>"; };
+		B5E9F94B211B670F0068BEB9 /* cimgui.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cimgui.h; sourceTree = "<group>"; };
+		B5E9F957211B670F0068BEB9 /* ui.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ui.cpp; sourceTree = "<group>"; };
+		B5E9F958211B670F0068BEB9 /* UITextField+Love.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "UITextField+Love.mm"; sourceTree = "<group>"; };
+		B5E9F998211B670F0068BEB9 /* lcrypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lcrypto.h; sourceTree = "<group>"; };
+		B5E9F99A211B670F0068BEB9 /* lcrypto.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lcrypto.c; sourceTree = "<group>"; };
+		B5E9F9A1211B67100068BEB9 /* sqlite3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sqlite3.c; sourceTree = "<group>"; };
+		B5E9F9B1211B67100068BEB9 /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite3.h; sourceTree = "<group>"; };
+		B5E9F9B4211B67100068BEB9 /* lsqlite3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lsqlite3.c; sourceTree = "<group>"; };
+		B5E9F9BB211B67100068BEB9 /* lmarshal.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lmarshal.c; sourceTree = "<group>"; };
+		B5E9F9BF211B67100068BEB9 /* strbuf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = strbuf.h; sourceTree = "<group>"; };
+		B5E9F9C2211B67100068BEB9 /* fpconv.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fpconv.c; sourceTree = "<group>"; };
+		B5E9F9E0211B67100068BEB9 /* fpconv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fpconv.h; sourceTree = "<group>"; };
+		B5E9F9E2211B67100068BEB9 /* strbuf.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = strbuf.c; sourceTree = "<group>"; };
+		B5E9F9E6211B67100068BEB9 /* lua_cjson.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lua_cjson.c; sourceTree = "<group>"; };
+		B5E9F9E9211B67100068BEB9 /* lpprint.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lpprint.c; sourceTree = "<group>"; };
+		B5E9F9EB211B67100068BEB9 /* lpvm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lpvm.c; sourceTree = "<group>"; };
+		B5E9F9EC211B67100068BEB9 /* lptypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lptypes.h; sourceTree = "<group>"; };
+		B5E9F9ED211B67100068BEB9 /* lpcap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lpcap.c; sourceTree = "<group>"; };
+		B5E9F9F0211B67100068BEB9 /* lptree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lptree.h; sourceTree = "<group>"; };
+		B5E9F9F1211B67100068BEB9 /* lpcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lpcode.h; sourceTree = "<group>"; };
+		B5E9F9F4211B67100068BEB9 /* lpcap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lpcap.h; sourceTree = "<group>"; };
+		B5E9F9F5211B67100068BEB9 /* lpvm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lpvm.h; sourceTree = "<group>"; };
+		B5E9F9F7211B67100068BEB9 /* lpprint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lpprint.h; sourceTree = "<group>"; };
+		B5E9F9F8211B67100068BEB9 /* lptree.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lptree.c; sourceTree = "<group>"; };
+		B5E9F9F9211B67100068BEB9 /* lpcode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = lpcode.c; sourceTree = "<group>"; };
+		B5E9FA57211B67100068BEB9 /* ssl.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ssl.c; sourceTree = "<group>"; };
+		B5E9FA58211B67100068BEB9 /* x509.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = x509.h; sourceTree = "<group>"; };
+		B5E9FA59211B67100068BEB9 /* ec.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ec.c; sourceTree = "<group>"; };
+		B5E9FA5B211B67100068BEB9 /* context.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = context.h; sourceTree = "<group>"; };
+		B5E9FA5C211B67100068BEB9 /* options.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = options.h; sourceTree = "<group>"; };
+		B5E9FA5E211B67100068BEB9 /* ssl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ssl.h; sourceTree = "<group>"; };
+		B5E9FA60211B67100068BEB9 /* config.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = config.c; sourceTree = "<group>"; };
+		B5E9FA61211B67100068BEB9 /* ec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ec.h; sourceTree = "<group>"; };
+		B5E9FA62211B67100068BEB9 /* compat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = compat.h; sourceTree = "<group>"; };
+		B5E9FA72211B67100068BEB9 /* x509.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = x509.c; sourceTree = "<group>"; };
+		B5E9FA73211B67100068BEB9 /* context.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = context.c; sourceTree = "<group>"; };
+		B5E9FBF2211B68110068BEB9 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = ../openssl/lib/iOS/libssl.a; sourceTree = "<group>"; };
+		B5E9FBF3211B68110068BEB9 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = ../openssl/lib/iOS/libcrypto.a; sourceTree = "<group>"; };
+		B5E9FBF6211B69190068BEB9 /* Lua.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Lua.framework; path = ../../../../../../../Library/Frameworks/Lua.framework; sourceTree = "<group>"; };
+		B5E9FBFD211B69E00068BEB9 /* ghost_extensions_macos.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ghost_extensions_macos.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B5E9FBFF211B69E00068BEB9 /* ghost_extensions_macos.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ghost_extensions_macos.h; sourceTree = "<group>"; };
+		B5E9FC00211B69E00068BEB9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B5E9FC36211B6AB50068BEB9 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = ../openssl/lib/Mac/libcrypto.a; sourceTree = "<group>"; };
+		B5E9FC37211B6AB50068BEB9 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = ../openssl/lib/Mac/libssl.a; sourceTree = "<group>"; };
+		B5E9FC46211B6C040068BEB9 /* love.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = love.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B5E9FC49211B6C630068BEB9 /* love.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = love.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		B5E9F898211B669D0068BEB9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B5E9FC47211B6C040068BEB9 /* love.framework in Frameworks */,
+				B5E9FBF7211B691A0068BEB9 /* Lua.framework in Frameworks */,
+				B5E9FBF4211B68110068BEB9 /* libssl.a in Frameworks */,
+				B5E9FBF5211B68110068BEB9 /* libcrypto.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B5E9FBF9211B69E00068BEB9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B5E9FC4A211B6C630068BEB9 /* love.framework in Frameworks */,
+				B5E9FC3A211B6AF40068BEB9 /* Lua.framework in Frameworks */,
+				B5E9FC38211B6AB60068BEB9 /* libcrypto.a in Frameworks */,
+				B5E9FC39211B6AB60068BEB9 /* libssl.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		B5E9F892211B669D0068BEB9 = {
+			isa = PBXGroup;
+			children = (
+				B5E9F8A7211B670F0068BEB9 /* cimgui */,
+				B5E9F956211B670F0068BEB9 /* common */,
+				B5E9F9E7211B67100068BEB9 /* lpeg */,
+				B5E9F99C211B67100068BEB9 /* lsqlite3 */,
+				B5E9F9BE211B67100068BEB9 /* lua-cjson */,
+				B5E9F9B9211B67100068BEB9 /* lua-marshal */,
+				B5E9F959211B670F0068BEB9 /* luacrypto */,
+				B5E9F9FA211B67100068BEB9 /* luasec */,
+				B5E9F89E211B669D0068BEB9 /* ghost-extensions */,
+				B5E9FBFE211B69E00068BEB9 /* ghost-extensions-macos */,
+				B5E9F89D211B669D0068BEB9 /* Products */,
+				B5E9FBED211B67D50068BEB9 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		B5E9F89D211B669D0068BEB9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B5E9F89C211B669D0068BEB9 /* ghost_extensions.framework */,
+				B5E9FBFD211B69E00068BEB9 /* ghost_extensions_macos.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B5E9F89E211B669D0068BEB9 /* ghost-extensions */ = {
+			isa = PBXGroup;
+			children = (
+				B5E9F89F211B669D0068BEB9 /* ghost_extensions.h */,
+				B5E9F8A0211B669D0068BEB9 /* Info.plist */,
+			);
+			path = "ghost-extensions";
+			sourceTree = "<group>";
+		};
+		B5E9F8A7211B670F0068BEB9 /* cimgui */ = {
+			isa = PBXGroup;
+			children = (
+				B5E9F8A9211B670F0068BEB9 /* imgui */,
+				B5E9F93F211B670F0068BEB9 /* cimgui */,
+			);
+			path = cimgui;
+			sourceTree = "<group>";
+		};
+		B5E9F8A9211B670F0068BEB9 /* imgui */ = {
+			isa = PBXGroup;
+			children = (
+				B5E9F8AA211B670F0068BEB9 /* imgui.h */,
+				B5E9F8AB211B670F0068BEB9 /* imconfig.h */,
+				B5E9F8AD211B670F0068BEB9 /* stb_rect_pack.h */,
+				B5E9F8B8211B670F0068BEB9 /* stb_truetype.h */,
+				B5E9F8B9211B670F0068BEB9 /* imgui.cpp */,
+				B5E9F937211B670F0068BEB9 /* imgui_internal.h */,
+				B5E9F938211B670F0068BEB9 /* stb_textedit.h */,
+				B5E9F93B211B670F0068BEB9 /* imgui_demo.cpp */,
+				B5E9F93C211B670F0068BEB9 /* imgui_draw.cpp */,
+			);
+			path = imgui;
+			sourceTree = "<group>";
+		};
+		B5E9F93F211B670F0068BEB9 /* cimgui */ = {
+			isa = PBXGroup;
+			children = (
+				B5E9F940211B670F0068BEB9 /* drawList.cpp */,
+				B5E9F942211B670F0068BEB9 /* listClipper.cpp */,
+				B5E9F944211B670F0068BEB9 /* fontAtlas.cpp */,
+				B5E9F946211B670F0068BEB9 /* cimgui.cpp */,
+				B5E9F94B211B670F0068BEB9 /* cimgui.h */,
+			);
+			path = cimgui;
+			sourceTree = "<group>";
+		};
+		B5E9F956211B670F0068BEB9 /* common */ = {
+			isa = PBXGroup;
+			children = (
+				B5E9F957211B670F0068BEB9 /* ui.cpp */,
+				B5E9F958211B670F0068BEB9 /* UITextField+Love.mm */,
+			);
+			path = common;
+			sourceTree = "<group>";
+		};
+		B5E9F959211B670F0068BEB9 /* luacrypto */ = {
+			isa = PBXGroup;
+			children = (
+				B5E9F997211B670F0068BEB9 /* src */,
+			);
+			path = luacrypto;
+			sourceTree = "<group>";
+		};
+		B5E9F997211B670F0068BEB9 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				B5E9F998211B670F0068BEB9 /* lcrypto.h */,
+				B5E9F99A211B670F0068BEB9 /* lcrypto.c */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		B5E9F99C211B67100068BEB9 /* lsqlite3 */ = {
+			isa = PBXGroup;
+			children = (
+				B5E9F9A1211B67100068BEB9 /* sqlite3.c */,
+				B5E9F9B1211B67100068BEB9 /* sqlite3.h */,
+				B5E9F9B4211B67100068BEB9 /* lsqlite3.c */,
+			);
+			path = lsqlite3;
+			sourceTree = "<group>";
+		};
+		B5E9F9B9211B67100068BEB9 /* lua-marshal */ = {
+			isa = PBXGroup;
+			children = (
+				B5E9F9BB211B67100068BEB9 /* lmarshal.c */,
+			);
+			path = "lua-marshal";
+			sourceTree = "<group>";
+		};
+		B5E9F9BE211B67100068BEB9 /* lua-cjson */ = {
+			isa = PBXGroup;
+			children = (
+				B5E9F9BF211B67100068BEB9 /* strbuf.h */,
+				B5E9F9C2211B67100068BEB9 /* fpconv.c */,
+				B5E9F9E0211B67100068BEB9 /* fpconv.h */,
+				B5E9F9E2211B67100068BEB9 /* strbuf.c */,
+				B5E9F9E6211B67100068BEB9 /* lua_cjson.c */,
+			);
+			path = "lua-cjson";
+			sourceTree = "<group>";
+		};
+		B5E9F9E7211B67100068BEB9 /* lpeg */ = {
+			isa = PBXGroup;
+			children = (
+				B5E9F9E9211B67100068BEB9 /* lpprint.c */,
+				B5E9F9EB211B67100068BEB9 /* lpvm.c */,
+				B5E9F9EC211B67100068BEB9 /* lptypes.h */,
+				B5E9F9ED211B67100068BEB9 /* lpcap.c */,
+				B5E9F9F0211B67100068BEB9 /* lptree.h */,
+				B5E9F9F1211B67100068BEB9 /* lpcode.h */,
+				B5E9F9F4211B67100068BEB9 /* lpcap.h */,
+				B5E9F9F5211B67100068BEB9 /* lpvm.h */,
+				B5E9F9F7211B67100068BEB9 /* lpprint.h */,
+				B5E9F9F8211B67100068BEB9 /* lptree.c */,
+				B5E9F9F9211B67100068BEB9 /* lpcode.c */,
+			);
+			path = lpeg;
+			sourceTree = "<group>";
+		};
+		B5E9F9FA211B67100068BEB9 /* luasec */ = {
+			isa = PBXGroup;
+			children = (
+				B5E9FA56211B67100068BEB9 /* src */,
+			);
+			path = luasec;
+			sourceTree = "<group>";
+		};
+		B5E9FA56211B67100068BEB9 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				B5E9FA57211B67100068BEB9 /* ssl.c */,
+				B5E9FA58211B67100068BEB9 /* x509.h */,
+				B5E9FA59211B67100068BEB9 /* ec.c */,
+				B5E9FA5B211B67100068BEB9 /* context.h */,
+				B5E9FA5C211B67100068BEB9 /* options.h */,
+				B5E9FA5E211B67100068BEB9 /* ssl.h */,
+				B5E9FA60211B67100068BEB9 /* config.c */,
+				B5E9FA61211B67100068BEB9 /* ec.h */,
+				B5E9FA62211B67100068BEB9 /* compat.h */,
+				B5E9FA72211B67100068BEB9 /* x509.c */,
+				B5E9FA73211B67100068BEB9 /* context.c */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		B5E9FBED211B67D50068BEB9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B5E9FC49211B6C630068BEB9 /* love.framework */,
+				B5E9FC46211B6C040068BEB9 /* love.framework */,
+				B5E9FC36211B6AB50068BEB9 /* libcrypto.a */,
+				B5E9FC37211B6AB50068BEB9 /* libssl.a */,
+				B5E9FBF6211B69190068BEB9 /* Lua.framework */,
+				B5E9FBF3211B68110068BEB9 /* libcrypto.a */,
+				B5E9FBF2211B68110068BEB9 /* libssl.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		B5E9FBFE211B69E00068BEB9 /* ghost-extensions-macos */ = {
+			isa = PBXGroup;
+			children = (
+				B5E9FBFF211B69E00068BEB9 /* ghost_extensions_macos.h */,
+				B5E9FC00211B69E00068BEB9 /* Info.plist */,
+			);
+			path = "ghost-extensions-macos";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		B5E9F899211B669D0068BEB9 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B5E9FBD4211B67110068BEB9 /* context.h in Headers */,
+				B5E9FAF6211B67100068BEB9 /* cimgui.h in Headers */,
+				B5E9FB4A211B67100068BEB9 /* sqlite3.h in Headers */,
+				B5E9FBD5211B67110068BEB9 /* options.h in Headers */,
+				B5E9FA82211B67100068BEB9 /* stb_truetype.h in Headers */,
+				B5E9FB54211B67100068BEB9 /* strbuf.h in Headers */,
+				B5E9FBD1211B67110068BEB9 /* x509.h in Headers */,
+				B5E9FA75211B67100068BEB9 /* imgui.h in Headers */,
+				B5E9FB88211B67110068BEB9 /* lpprint.h in Headers */,
+				B5E9FBDB211B67110068BEB9 /* compat.h in Headers */,
+				B5E9FB72211B67110068BEB9 /* fpconv.h in Headers */,
+				B5E9FB34211B67100068BEB9 /* lcrypto.h in Headers */,
+				B5E9FAE5211B67100068BEB9 /* stb_textedit.h in Headers */,
+				B5E9FA78211B67100068BEB9 /* stb_rect_pack.h in Headers */,
+				B5E9FA76211B67100068BEB9 /* imconfig.h in Headers */,
+				B5E9FBDA211B67110068BEB9 /* ec.h in Headers */,
+				B5E9FB85211B67110068BEB9 /* lpcap.h in Headers */,
+				B5E9FB7D211B67110068BEB9 /* lptypes.h in Headers */,
+				B5E9F8A1211B669D0068BEB9 /* ghost_extensions.h in Headers */,
+				B5E9FB86211B67110068BEB9 /* lpvm.h in Headers */,
+				B5E9FB82211B67110068BEB9 /* lpcode.h in Headers */,
+				B5E9FB81211B67110068BEB9 /* lptree.h in Headers */,
+				B5E9FBD7211B67110068BEB9 /* ssl.h in Headers */,
+				B5E9FAE4211B67100068BEB9 /* imgui_internal.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B5E9FBFA211B69E00068BEB9 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B5E9FC2F211B6A7B0068BEB9 /* context.h in Headers */,
+				B5E9FC1C211B6A3B0068BEB9 /* lpvm.h in Headers */,
+				B5E9FC08211B6A060068BEB9 /* stb_truetype.h in Headers */,
+				B5E9FC2A211B6A690068BEB9 /* lcrypto.h in Headers */,
+				B5E9FC05211B69FE0068BEB9 /* imgui.h in Headers */,
+				B5E9FC1A211B6A360068BEB9 /* lpcode.h in Headers */,
+				B5E9FC23211B6A550068BEB9 /* strbuf.h in Headers */,
+				B5E9FC21211B6A490068BEB9 /* sqlite3.h in Headers */,
+				B5E9FC07211B6A040068BEB9 /* stb_rect_pack.h in Headers */,
+				B5E9FC0C211B6A0F0068BEB9 /* stb_textedit.h in Headers */,
+				B5E9FC33211B6A830068BEB9 /* ec.h in Headers */,
+				B5E9FC2C211B6A750068BEB9 /* x509.h in Headers */,
+				B5E9FC30211B6A7D0068BEB9 /* ssl.h in Headers */,
+				B5E9FC19211B6A340068BEB9 /* lptree.h in Headers */,
+				B5E9FC2E211B6A790068BEB9 /* options.h in Headers */,
+				B5E9FC17211B6A300068BEB9 /* lptypes.h in Headers */,
+				B5E9FC12211B6A1E0068BEB9 /* cimgui.h in Headers */,
+				B5E9FC25211B6A5A0068BEB9 /* fpconv.h in Headers */,
+				B5E9FC06211B6A020068BEB9 /* imconfig.h in Headers */,
+				B5E9FC1D211B6A3D0068BEB9 /* lpprint.h in Headers */,
+				B5E9FC1B211B6A380068BEB9 /* lpcap.h in Headers */,
+				B5E9FC01211B69E00068BEB9 /* ghost_extensions_macos.h in Headers */,
+				B5E9FC32211B6A810068BEB9 /* compat.h in Headers */,
+				B5E9FC0A211B6A0A0068BEB9 /* imgui_internal.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		B5E9F89B211B669D0068BEB9 /* ghost-extensions */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B5E9F8A4211B669D0068BEB9 /* Build configuration list for PBXNativeTarget "ghost-extensions" */;
+			buildPhases = (
+				B5E9F897211B669D0068BEB9 /* Sources */,
+				B5E9F898211B669D0068BEB9 /* Frameworks */,
+				B5E9F899211B669D0068BEB9 /* Headers */,
+				B5E9F89A211B669D0068BEB9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "ghost-extensions";
+			productName = "ghost-extensions";
+			productReference = B5E9F89C211B669D0068BEB9 /* ghost_extensions.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		B5E9FBFC211B69E00068BEB9 /* ghost-extensions-macos */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B5E9FC02211B69E00068BEB9 /* Build configuration list for PBXNativeTarget "ghost-extensions-macos" */;
+			buildPhases = (
+				B5E9FBF8211B69E00068BEB9 /* Sources */,
+				B5E9FBF9211B69E00068BEB9 /* Frameworks */,
+				B5E9FBFA211B69E00068BEB9 /* Headers */,
+				B5E9FBFB211B69E00068BEB9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "ghost-extensions-macos";
+			productName = "ghost-extensions-macos";
+			productReference = B5E9FBFD211B69E00068BEB9 /* ghost_extensions_macos.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B5E9F893211B669D0068BEB9 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0940;
+				TargetAttributes = {
+					B5E9F89B211B669D0068BEB9 = {
+						CreatedOnToolsVersion = 9.4;
+					};
+					B5E9FBFC211B69E00068BEB9 = {
+						CreatedOnToolsVersion = 9.4;
+					};
+				};
+			};
+			buildConfigurationList = B5E9F896211B669D0068BEB9 /* Build configuration list for PBXProject "ghost-extensions" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = B5E9F892211B669D0068BEB9;
+			productRefGroup = B5E9F89D211B669D0068BEB9 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B5E9F89B211B669D0068BEB9 /* ghost-extensions */,
+				B5E9FBFC211B69E00068BEB9 /* ghost-extensions-macos */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		B5E9F89A211B669D0068BEB9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B5E9FBFB211B69E00068BEB9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B5E9F897211B669D0068BEB9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B5E9FAEE211B67100068BEB9 /* listClipper.cpp in Sources */,
+				B5E9FB7C211B67110068BEB9 /* lpvm.c in Sources */,
+				B5E9FBD0211B67110068BEB9 /* ssl.c in Sources */,
+				B5E9FBD9211B67110068BEB9 /* config.c in Sources */,
+				B5E9FB8A211B67110068BEB9 /* lpcode.c in Sources */,
+				B5E9FBD2211B67110068BEB9 /* ec.c in Sources */,
+				B5E9FB74211B67110068BEB9 /* strbuf.c in Sources */,
+				B5E9FBEA211B67110068BEB9 /* x509.c in Sources */,
+				B5E9FB7E211B67110068BEB9 /* lpcap.c in Sources */,
+				B5E9FB7A211B67110068BEB9 /* lpprint.c in Sources */,
+				B5E9FA83211B67100068BEB9 /* imgui.cpp in Sources */,
+				B5E9FAFB211B67100068BEB9 /* ui.cpp in Sources */,
+				B5E9FB78211B67110068BEB9 /* lua_cjson.c in Sources */,
+				B5E9FAEC211B67100068BEB9 /* drawList.cpp in Sources */,
+				B5E9FB57211B67100068BEB9 /* fpconv.c in Sources */,
+				B5E9FAE9211B67100068BEB9 /* imgui_draw.cpp in Sources */,
+				B5E9FB89211B67110068BEB9 /* lptree.c in Sources */,
+				B5E9FB4C211B67100068BEB9 /* lsqlite3.c in Sources */,
+				B5E9FAE8211B67100068BEB9 /* imgui_demo.cpp in Sources */,
+				B5E9FAF0211B67100068BEB9 /* fontAtlas.cpp in Sources */,
+				B5E9FAF2211B67100068BEB9 /* cimgui.cpp in Sources */,
+				B5E9FB36211B67100068BEB9 /* lcrypto.c in Sources */,
+				B5E9FB3B211B67100068BEB9 /* sqlite3.c in Sources */,
+				B5E9FBEB211B67110068BEB9 /* context.c in Sources */,
+				B5E9FB51211B67100068BEB9 /* lmarshal.c in Sources */,
+				B5E9FAFC211B67100068BEB9 /* UITextField+Love.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B5E9FBF8211B69E00068BEB9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B5E9FC2B211B6A720068BEB9 /* ssl.c in Sources */,
+				B5E9FC1F211B6A420068BEB9 /* lpcode.c in Sources */,
+				B5E9FC22211B6A4C0068BEB9 /* lsqlite3.c in Sources */,
+				B5E9FC16211B6A2E0068BEB9 /* lpvm.c in Sources */,
+				B5E9FC10211B6A190068BEB9 /* fontAtlas.cpp in Sources */,
+				B5E9FC34211B6A850068BEB9 /* x509.c in Sources */,
+				B5E9FC35211B6A870068BEB9 /* context.c in Sources */,
+				B5E9FC27211B6A5E0068BEB9 /* lua_cjson.c in Sources */,
+				B5E9FC0D211B6A110068BEB9 /* imgui_draw.cpp in Sources */,
+				B5E9FC31211B6A7F0068BEB9 /* config.c in Sources */,
+				B5E9FC24211B6A580068BEB9 /* fpconv.c in Sources */,
+				B5E9FC0B211B6A0D0068BEB9 /* imgui_demo.cpp in Sources */,
+				B5E9FC20211B6A460068BEB9 /* sqlite3.c in Sources */,
+				B5E9FC14211B6A250068BEB9 /* ui.cpp in Sources */,
+				B5E9FC2D211B6A770068BEB9 /* ec.c in Sources */,
+				B5E9FC1E211B6A3F0068BEB9 /* lptree.c in Sources */,
+				B5E9FC15211B6A2C0068BEB9 /* lpprint.c in Sources */,
+				B5E9FC09211B6A080068BEB9 /* imgui.cpp in Sources */,
+				B5E9FC0F211B6A170068BEB9 /* listClipper.cpp in Sources */,
+				B5E9FC28211B6A620068BEB9 /* lmarshal.c in Sources */,
+				B5E9FC29211B6A670068BEB9 /* lcrypto.c in Sources */,
+				B5E9FC11211B6A1C0068BEB9 /* cimgui.cpp in Sources */,
+				B5E9FC18211B6A320068BEB9 /* lpcap.c in Sources */,
+				B5E9FC26211B6A5C0068BEB9 /* strbuf.c in Sources */,
+				B5E9FC0E211B6A150068BEB9 /* drawList.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		B5E9F8A2211B669D0068BEB9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../openssl/include\"",
+					/Library/Frameworks/Lua.framework/Headers,
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		B5E9F8A3211B669D0068BEB9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../openssl/include\"",
+					/Library/Frameworks/Lua.framework/Headers,
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		B5E9F8A5211B669D0068BEB9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = C8D8QTF339;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
+				INFOPLIST_FILE = "ghost-extensions/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/../openssl/lib/iOS\"";
+				PRODUCT_BUNDLE_IDENTIFIER = "builders.game.ghost-extensions";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B5E9F8A6211B669D0068BEB9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = C8D8QTF339;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
+				INFOPLIST_FILE = "ghost-extensions/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/../openssl/lib/iOS\"";
+				PRODUCT_BUNDLE_IDENTIFIER = "builders.game.ghost-extensions";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		B5E9FC03211B69E00068BEB9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = C8D8QTF339;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = "ghost-extensions-macos/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/../openssl/lib/Mac\"";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				PRODUCT_BUNDLE_IDENTIFIER = "builders.game.ghost-extensions-macos";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		B5E9FC04211B69E00068BEB9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = C8D8QTF339;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = "ghost-extensions-macos/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
+				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/../openssl/lib/Mac\"";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				PRODUCT_BUNDLE_IDENTIFIER = "builders.game.ghost-extensions-macos";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		B5E9F896211B669D0068BEB9 /* Build configuration list for PBXProject "ghost-extensions" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B5E9F8A2211B669D0068BEB9 /* Debug */,
+				B5E9F8A3211B669D0068BEB9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B5E9F8A4211B669D0068BEB9 /* Build configuration list for PBXNativeTarget "ghost-extensions" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B5E9F8A5211B669D0068BEB9 /* Debug */,
+				B5E9F8A6211B669D0068BEB9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B5E9FC02211B69E00068BEB9 /* Build configuration list for PBXNativeTarget "ghost-extensions-macos" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B5E9FC03211B69E00068BEB9 /* Debug */,
+				B5E9FC04211B69E00068BEB9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = B5E9F893211B669D0068BEB9 /* Project object */;
+}
