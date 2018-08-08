@@ -144,10 +144,14 @@ end
 
 -- Flush the `network.fetch` cache for all URLs matching a given filter function
 function network.flush(filter)
-    for _, entries in pairs(network.fetchEntries) do
-        for url in pairs(entries) do
-            if filter(url) then
-                entries[url] = nil
+    for method, entries in pairs(network.fetchEntries) do
+        if not filter then
+            network.fetchEntries[method] = {}
+        else
+            for url in pairs(entries) do
+                if filter(url) then
+                    entries[url] = nil
+                end
             end
         end
     end
