@@ -18,7 +18,7 @@ love.window.setMode(defaultW, defaultH, {
 tui = require 'tui'
 network = require 'network'
 require = require 'require'
-portal = require 'portal'
+root = require 'portal'
 
 
 -- Top-level Love callbacks
@@ -38,9 +38,9 @@ function main.load(arg)
         -- If local version is being served, use that, else use remote
         local _, localHttpCode = network.fetch(localUrl, 'HEAD')
         if localHttpCode == 200 then
-            home = portal:newChild(localUrl)
+            home = root:newChild(localUrl)
         else
-            home = portal:newChild(remoteUrl)
+            home = root:newChild(remoteUrl)
         end
     end)
 end
