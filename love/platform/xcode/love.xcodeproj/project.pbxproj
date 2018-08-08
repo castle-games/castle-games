@@ -8,10 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
-		A19C704320D9000D0001B86F /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A19C704020D8FF920001B86F /* libcrypto.a */; };
-		A19C704420D9000D0001B86F /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A19C703F20D8FF920001B86F /* libssl.a */; };
-		A19C704E20D9A8220001B86F /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A19C704A20D9A7F10001B86F /* libcrypto.a */; };
-		A19C704F20D9A8220001B86F /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A19C704B20D9A7F10001B86F /* libssl.a */; };
 		A1E7953D20721BC800731DD3 /* package.love in Resources */ = {isa = PBXBuildFile; fileRef = A1E7953C20721BC800731DD3 /* package.love */; };
 		A9255DD31043183600BA1496 /* Lua.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = A93E6E5310420B57007D418B /* Lua.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		A9255E031043195A00BA1496 /* vorbis.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = A9255E021043195A00BA1496 /* vorbis.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -33,8 +29,6 @@
 		B5256F69211A555500891B27 /* ogg.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = A9255F51104324D700BA1496 /* ogg.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		B5256F6A211A555500891B27 /* vorbis.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = A9255E021043195A00BA1496 /* vorbis.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		B5256F6B211A555500891B27 /* Lua.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = A93E6E5310420B57007D418B /* Lua.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		B5256F6D211A555500891B27 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A19C704020D8FF920001B86F /* libcrypto.a */; };
-		B5256F6E211A555500891B27 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A19C703F20D8FF920001B86F /* libssl.a */; };
 		B5256F6F211A555500891B27 /* love.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA08F69116C765A200F007B5 /* love.framework */; };
 		B5256F70211A555500891B27 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		B5256F71211A555500891B27 /* Lua.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A93E6E5310420B57007D418B /* Lua.framework */; };
@@ -171,10 +165,6 @@
 /* Begin PBXFileReference section */
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		8D1107320486CEB800E47090 /* love.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = love.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		A19C703F20D8FF920001B86F /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = ../../../openssl/lib/Mac/libssl.a; sourceTree = "<group>"; };
-		A19C704020D8FF920001B86F /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = ../../../openssl/lib/Mac/libcrypto.a; sourceTree = "<group>"; };
-		A19C704A20D9A7F10001B86F /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = ../../../openssl/lib/iOS/libcrypto.a; sourceTree = "<group>"; };
-		A19C704B20D9A7F10001B86F /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = ../../../openssl/lib/iOS/libssl.a; sourceTree = "<group>"; };
 		A1E7953C20721BC800731DD3 /* package.love */ = {isa = PBXFileReference; lastKnownFileType = file; name = package.love; path = ../../../package.love; sourceTree = "<group>"; };
 		A9255E021043195A00BA1496 /* vorbis.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = vorbis.framework; path = /Library/Frameworks/vorbis.framework; sourceTree = "<absolute>"; };
 		A9255F51104324D700BA1496 /* ogg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ogg.framework; path = /Library/Frameworks/ogg.framework; sourceTree = "<absolute>"; };
@@ -218,8 +208,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A19C704320D9000D0001B86F /* libcrypto.a in Frameworks */,
-				A19C704420D9000D0001B86F /* libssl.a in Frameworks */,
 				FA08F69616C766E000F007B5 /* love.framework in Frameworks */,
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
 				A93E6E5510420B57007D418B /* Lua.framework in Frameworks */,
@@ -233,8 +221,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				B5E9FC48211B6C190068BEB9 /* ghost_extensions_macos.framework in Frameworks */,
-				B5256F6D211A555500891B27 /* libcrypto.a in Frameworks */,
-				B5256F6E211A555500891B27 /* libssl.a in Frameworks */,
 				B5256F6F211A555500891B27 /* love.framework in Frameworks */,
 				B5256F70211A555500891B27 /* Cocoa.framework in Frameworks */,
 				B5256F71211A555500891B27 /* Lua.framework in Frameworks */,
@@ -247,8 +233,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A19C704E20D9A8220001B86F /* libcrypto.a in Frameworks */,
-				A19C704F20D9A8220001B86F /* libssl.a in Frameworks */,
 				FAE64A9D2072738600BC7981 /* Metal.framework in Frameworks */,
 				FA15DFB41F9B8D9E0042AB22 /* libbz2.tbd in Frameworks */,
 				CE73F8001EEB64150052DAB3 /* AVFoundation.framework in Frameworks */,
@@ -272,10 +256,6 @@
 		1058C7A0FEA54F0111CA2CBB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				A19C704020D8FF920001B86F /* libcrypto.a */,
-				A19C703F20D8FF920001B86F /* libssl.a */,
-				A19C704A20D9A7F10001B86F /* libcrypto.a */,
-				A19C704B20D9A7F10001B86F /* libssl.a */,
 				FAE64A9C2072738600BC7981 /* Metal.framework */,
 				FA15DFB31F9B8D9E0042AB22 /* libbz2.tbd */,
 				CE73F7FF1EEB64150052DAB3 /* AVFoundation.framework */,
@@ -728,7 +708,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/macosx/ghost-macosx.plist";
 				INSTALL_PATH = /Applications;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/../../../openssl/lib/Mac\"";
+				LIBRARY_SEARCH_PATHS = "";
 				LLVM_LTO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = builders.game.ghost;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -760,7 +740,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/macosx/ghost-macosx.plist";
 				INSTALL_PATH = /Applications;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/../../../openssl/lib/Mac\"";
+				LIBRARY_SEARCH_PATHS = "";
 				LLVM_LTO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = builders.game.ghost;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -792,7 +772,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/macosx/ghost-macosx.plist";
 				INSTALL_PATH = /Applications;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/../../../openssl/lib/Mac\"";
+				LIBRARY_SEARCH_PATHS = "";
 				LLVM_LTO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = builders.game.ghost;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -919,7 +899,6 @@
 					"\"$(SRCROOT)/../../src\"",
 					"\"$(SRCROOT)/../../src/libraries\"",
 					"\"$(SRCROOT)/../../src/modules\"",
-					"\"$(SRCROOT)/../../../openssl/include\"",
 					"\"$(SRCROOT)/../../../redis/deps/hiredis\"",
 				);
 				INFOPLIST_FILE = "love-Info.plist";
@@ -1003,7 +982,6 @@
 					"\"$(SRCROOT)/../../src\"",
 					"\"$(SRCROOT)/../../src/libraries\"",
 					"\"$(SRCROOT)/../../src/modules\"",
-					"\"$(SRCROOT)/../../../openssl/include\"",
 					"\"$(SRCROOT)/../../../redis/deps/hiredis\"",
 				);
 				INFOPLIST_FILE = "love-Info.plist";
@@ -1074,7 +1052,7 @@
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/ios/love-ios.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/../../../openssl/lib/iOS\"";
+				LIBRARY_SEARCH_PATHS = "";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = info.nikhilesh.ghost;
 				PRODUCT_NAME = ghost;
@@ -1124,7 +1102,7 @@
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/ios/love-ios.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/../../../openssl/lib/iOS\"";
+				LIBRARY_SEARCH_PATHS = "";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = info.nikhilesh.ghost;
 				PRODUCT_NAME = ghost;
@@ -1175,7 +1153,7 @@
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/ios/love-ios.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/../../../openssl/lib/iOS\"";
+				LIBRARY_SEARCH_PATHS = "";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = info.nikhilesh.ghost;
 				PRODUCT_NAME = ghost;
@@ -1244,7 +1222,6 @@
 					"\"$(SRCROOT)/../../src\"",
 					"\"$(SRCROOT)/../../src/libraries\"",
 					"\"$(SRCROOT)/../../src/modules\"",
-					"\"$(SRCROOT)/../../../openssl/include\"",
 					"\"$(SRCROOT)/../../../redis/deps/hiredis\"",
 				);
 				INFOPLIST_FILE = "love-Info.plist";
