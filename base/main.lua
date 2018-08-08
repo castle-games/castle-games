@@ -23,6 +23,7 @@ portal = require 'portal'
 
 -- Top-level Love callbacks
 
+local homeVersion = 'master' -- Git branch, tag or commit hash of home experience to show
 local home -- Portal to the home experience
 
 local main = {}
@@ -32,7 +33,7 @@ function main.load(arg)
 
     network.async(function()
         local localUrl = 'http://0.0.0.0:8032/main.lua'
-        local remoteUrl = 'https://raw.githubusercontent.com/nikki93/ghost-home2/master/main.lua'
+        local remoteUrl = 'https://raw.githubusercontent.com/nikki93/ghost-home2/' .. homeVersion .. '/main.lua'
 
         -- If local version is being served, use that, else use remote
         local _, localHttpCode = network.fetch(localUrl, 'HEAD')
