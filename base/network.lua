@@ -88,13 +88,34 @@ function network.fetch(url, method)
 
         -- Actually perform the request, blocks coroutine till done
         local response, httpCode, headers, status
-        if method == 'GET' then
-            response, httpCode, headers, status = network.request(url)
-            if httpCode ~= 200 then
-                error("error fetching '" .. url .. "': " .. status)
+        if url:match('^https?://') then
+            if method == 'GET' then
+                response, httpCode, headers, status = network.request(url)
+                if httpCode ~= 200 then
+                    error("error fetching '" .. url .. "': " .. status)
+                end
+            else
+                response, httpCode, headers, status = network.request { url = url, method = method }
             end
-        else
-            response, httpCode, headers, status = network.request { url = url, method = method }
+        elseif url:match('^file://') then
+            local filePath = url:gsub('^file://', '')
+            local file = io.open(filePath, 'r')
+            if file ~= nil then
+                if method == 'GET' then
+                    response = file:read('*all')
+                else
+                    response = 1
+                end
+                httpCode = 200
+                headers = {}
+                status = '200 ok'
+            else
+                response = nil
+                httpCode = 404
+                headers = {}
+                status = '404 not found'
+            end
+            file:close()
         end
 
         -- Save result, wake waiters
