@@ -37,7 +37,17 @@ on actual iOS hardware (iPhone or iPad).*
 
 ### Linux
 
-You should be able to use CMake to build under 'love/'.
+- You will need the following library dependencies, however they are distributed
+  in your distribution of Linux: SDL2, libGLU, openal, luajit, libdevil,
+  freetype, physfs, libmodplug, mpg123, libogg, libvorbis, libtheora, openssl.
+- You will also need CMake and the usual gcc commands.
+- In the 'love/' directory, run `cmake -H. -Bbuild`.
+- Then go into the 'build/' directory that created, and run `make` (tip: add
+  `-j5` as an argument to use more CPU and less time).
+- This results in a 'love' binary in that directory.
+- Now from the 'base/' directory at the root of your checkout of this
+  repository, run `../love/build/love .`.
+
 
 ## Portals
 
