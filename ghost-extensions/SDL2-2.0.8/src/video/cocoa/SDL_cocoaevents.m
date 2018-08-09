@@ -83,21 +83,13 @@ static void Cocoa_DispatchEvent(NSEvent *theEvent)
 // Dispatch events here so that we can handle events caught by
 // nextEventMatchingMask in SDL, as well as events caught by other
 // processes (such as CEF) that are passed down to NSApp.
-//- (void)sendEvent:(NSEvent *)theEvent
-//{
-//    if (s_bShouldHandleEventsInSDLApplication) {
-//        Cocoa_DispatchEvent(theEvent);
-//    }
-//
-//    [super sendEvent:theEvent];
-//}
-
-- (NSEvent *)nextEventMatchingMask:(NSEventMask)mask untilDate:(NSDate *)expiration inMode:(NSRunLoopMode)mode dequeue:(BOOL)deqFlag
+- (void)sendEvent:(NSEvent *)theEvent
 {
-    NSEvent *event = [super nextEventMatchingMask:mask untilDate:expiration inMode:mode dequeue:deqFlag];
-    [self stop:nil];
-    Cocoa_DispatchEvent(event);
-    return event;
+    if (s_bShouldHandleEventsInSDLApplication) {
+        Cocoa_DispatchEvent(theEvent);
+    }
+
+    [super sendEvent:theEvent];
 }
 
 + (void)registerUserDefaults
@@ -236,13 +228,6 @@ static void Cocoa_DispatchEvent(NSEvent *theEvent)
 - (BOOL)application:(NSApplication *)theApplication openFile:(NSString *)filename
 {
     return (BOOL)SDL_SendDropFile(NULL, [filename UTF8String]) && SDL_SendDropComplete(NULL);
-}
-
-- (void)application:(NSApplication *)sender openFiles:(NSArray<NSString *> *)filenames
-{
-    for (NSString *filename in filenames) {
-        NSLog(@"got filename: %@\n", filename);
-    }
 }
 
 - (void)application:(NSApplication *)application openURLs:(NSArray<NSURL *> *)urls
@@ -457,18 +442,17 @@ Cocoa_PumpEvents(_THIS)
 #endif
 
     for ( ; ; ) {
-        [NSApp run];
-//        NSEvent *event = [NSApp nextEventMatchingMask:NSEventMaskAny untilDate:[NSDate distantPast] inMode:NSDefaultRunLoopMode dequeue:YES ];
-//        if ( event == nil ) {
-//            break;
-//        }
-//
-//        if (!s_bShouldHandleEventsInSDLApplication) {
-//            Cocoa_DispatchEvent(event);
-//        }
-//
-//        // Pass events down to SDLApplication to be handled in sendEvent:
-//        [NSApp sendEvent:event];
+        NSEvent *event = [NSApp nextEventMatchingMask:NSEventMaskAny untilDate:[NSDate distantPast] inMode:NSDefaultRunLoopMode dequeue:YES ];
+        if ( event == nil ) {
+            break;
+        }
+
+        if (!s_bShouldHandleEventsInSDLApplication) {
+            Cocoa_DispatchEvent(event);
+        }
+
+        // Pass events down to SDLApplication to be handled in sendEvent:
+        [NSApp sendEvent:event];
     }
 }}
 
