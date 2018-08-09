@@ -67,6 +67,34 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		A194C6C3211CD1D50093B328 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A194C6BA211CD1D50093B328 /* SDL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BECDF66C0761BA81005FE872;
+			remoteInfo = Framework;
+		};
+		A194C6C5211CD1D50093B328 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A194C6BA211CD1D50093B328 /* SDL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BECDF6B30761BA81005FE872;
+			remoteInfo = "Static Library";
+		};
+		A194C6C7211CD1D50093B328 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A194C6BA211CD1D50093B328 /* SDL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DB31407717554B71006C0E22;
+			remoteInfo = "Shared Library";
+		};
+		A194C6C9211CD1D50093B328 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A194C6BA211CD1D50093B328 /* SDL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BECDF6BE0761BA81005FE872;
+			remoteInfo = "Standard DMG";
+		};
 		B5256F40211A555500891B27 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = FA577A9316C7217800860150 /* liblove.xcodeproj */;
@@ -165,6 +193,7 @@
 /* Begin PBXFileReference section */
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		8D1107320486CEB800E47090 /* love.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = love.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A194C6BA211CD1D50093B328 /* SDL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL.xcodeproj; path = "../../../ghost-extensions/SDL2-2.0.8/Xcode/SDL/SDL.xcodeproj"; sourceTree = "<group>"; };
 		A1E7953C20721BC800731DD3 /* package.love */ = {isa = PBXFileReference; lastKnownFileType = file; name = package.love; path = ../../../package.love; sourceTree = "<group>"; };
 		A9255E021043195A00BA1496 /* vorbis.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = vorbis.framework; path = /Library/Frameworks/vorbis.framework; sourceTree = "<absolute>"; };
 		A9255F51104324D700BA1496 /* ogg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ogg.framework; path = /Library/Frameworks/ogg.framework; sourceTree = "<absolute>"; };
@@ -278,6 +307,7 @@
 		29B97314FDCFA39411CA2CEA /* love */ = {
 			isa = PBXGroup;
 			children = (
+				A194C6BA211CD1D50093B328 /* SDL.xcodeproj */,
 				A1E7953C20721BC800731DD3 /* package.love */,
 				FA5D249A1A96CF4300C6FC8F /* Images.xcassets */,
 				FA577A9D16C7262E00860150 /* Source */,
@@ -298,6 +328,17 @@
 				FAC1A448196F5DC600125284 /* license.txt */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		A194C6BB211CD1D50093B328 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A194C6C4211CD1D50093B328 /* SDL2.framework */,
+				A194C6C6211CD1D50093B328 /* libSDL2.a */,
+				A194C6C8211CD1D50093B328 /* libSDL2.dylib */,
+				A194C6CA211CD1D50093B328 /* Standard DMG */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		B5E9FC3C211B6B9F0068BEB9 /* Products */ = {
@@ -476,6 +517,10 @@
 					ProductGroup = FA0B78D41A958301000E1D17 /* Products */;
 					ProjectRef = FA577A9316C7217800860150 /* liblove.xcodeproj */;
 				},
+				{
+					ProductGroup = A194C6BB211CD1D50093B328 /* Products */;
+					ProjectRef = A194C6BA211CD1D50093B328 /* SDL.xcodeproj */;
+				},
 			);
 			projectRoot = "";
 			targets = (
@@ -487,6 +532,34 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		A194C6C4211CD1D50093B328 /* SDL2.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = SDL2.framework;
+			remoteRef = A194C6C3211CD1D50093B328 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A194C6C6211CD1D50093B328 /* libSDL2.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libSDL2.a;
+			remoteRef = A194C6C5211CD1D50093B328 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A194C6C8211CD1D50093B328 /* libSDL2.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libSDL2.dylib;
+			remoteRef = A194C6C7211CD1D50093B328 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A194C6CA211CD1D50093B328 /* Standard DMG */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = "Standard DMG";
+			remoteRef = A194C6C9211CD1D50093B328 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		B5E9FC41211B6BA00068BEB9 /* ghost_extensions.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
