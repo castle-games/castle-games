@@ -230,6 +230,13 @@ static void Cocoa_DispatchEvent(NSEvent *theEvent)
     return (BOOL)SDL_SendDropFile(NULL, [filename UTF8String]) && SDL_SendDropComplete(NULL);
 }
 
+- (void)application:(NSApplication *)application openURLs:(NSArray<NSURL *> *)urls
+{
+    for (NSURL *url in urls) {
+        NSLog(@"got url: %@\n", url);
+    }
+}
+
 - (void)applicationDidFinishLaunching:(NSNotification *)notification
 {
     /* The menu bar of SDL apps which don't have the typical .app bundle
