@@ -97,6 +97,8 @@ function main.keypressed(key, ...)
         return
     end
 
+    tui.love.keypressed(key)
+
     if home then
         home:keypressed(key, ...)
     end
