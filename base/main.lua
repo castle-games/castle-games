@@ -130,6 +130,9 @@ for k in pairs({
     joystickpressed = true,
     joystickreleased = true,
     joystickremoved = true,
+    focus = true,
+    filedropped = true,
+    visible = true,
 }) do
     love[k] = function(...)
         if main[k] then
