@@ -20,7 +20,7 @@ tui = require 'tui'
 network = require 'network'
 require = require 'require'
 root = require 'portal'
-
+splash = require 'splash'
 
 -- Top-level Love callbacks
 
@@ -54,6 +54,8 @@ function main.update(dt)
 
     if home then
         home:update(dt)
+    else
+        splash:update(dt)
     end
 
     tui.love.postupdate()
@@ -64,6 +66,8 @@ local debugFont = love.graphics.newFont()
 function main.draw()
     if home then
         home:draw()
+    else
+        splash:draw()
     end
 
     do -- Debug overlay
