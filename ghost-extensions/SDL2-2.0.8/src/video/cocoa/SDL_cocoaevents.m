@@ -80,6 +80,11 @@ static void Cocoa_DispatchEvent(NSEvent *theEvent)
     }
 }
 
+// XXX(Ghost): When this is set, `[NSApp run]` is run once with an immediate `[NSApp stop:nil]`
+//             so that it can do its initialization stuff. Needed for `application:openURLs`
+//             etc. to work...
+static SDL_bool s_bDummyRun = SDL_TRUE;
+
 // Dispatch events here so that we can handle events caught by
 // nextEventMatchingMask in SDL, as well as events caught by other
 // processes (such as CEF) that are passed down to NSApp.
@@ -90,6 +95,11 @@ static void Cocoa_DispatchEvent(NSEvent *theEvent)
     }
 
     [super sendEvent:theEvent];
+    
+    if (s_bDummyRun) {
+        [NSApp stop:nil];
+        s_bDummyRun = SDL_FALSE;
+    }
 }
 
 + (void)registerUserDefaults
@@ -233,7 +243,8 @@ static void Cocoa_DispatchEvent(NSEvent *theEvent)
 - (void)application:(NSApplication *)application openURLs:(NSArray<NSURL *> *)urls
 {
     for (NSURL *url in urls) {
-        NSLog(@"got url: %@\n", url);
+        SDL_SendDropFile(NULL, [url.absoluteString UTF8String]);
+        SDL_SendDropComplete(NULL);
     }
 }
 
@@ -441,6 +452,10 @@ Cocoa_PumpEvents(_THIS)
     }
 #endif
 
+    if (s_bDummyRun) {
+        [NSApp run];
+    }
+    
     for ( ; ; ) {
         NSEvent *event = [NSApp nextEventMatchingMask:NSEventMaskAny untilDate:[NSDate distantPast] inMode:NSDefaultRunLoopMode dequeue:YES ];
         if ( event == nil ) {
