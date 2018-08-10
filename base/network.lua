@@ -93,6 +93,9 @@ function network.fetch(url, method)
 
         -- Actually perform the request, blocks coroutine till done
         local response, httpCode, headers, status
+        if url:match('^ghost://') then
+            url = url:gsub('^ghost://', 'https://')
+        end
         if url:match('^https?://') then
             if method == 'GET' then
                 response, httpCode, headers, status = network.request(url)
@@ -159,7 +162,7 @@ end
 
 -- Whether a given string represents an absolute URL
 function network.isAbsolute(url)
-    return url:match('^https?://') or url:match('^file://')
+    return url:match('^ghost://') or url:match('^https?://') or url:match('^file://')
 end
 
 -- Whether a given URL points to something that exists
