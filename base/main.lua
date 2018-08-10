@@ -26,6 +26,7 @@ splash = require 'splash'
 
 local initialFileDropped -- In case a `love.filedropped` before home experience is loaded
 local tryLocalHome = false
+local homeUrl
 local homeVersion = 'master' -- Git branch, tag or commit hash of home experience to show
 local home -- Portal to the home experience
 
@@ -39,7 +40,6 @@ function main.load(arg)
         local remoteUrl = 'https://raw.githubusercontent.com/nikki93/ghost-home2/' .. homeVersion .. '/main.lua'
 
         -- If local version is being served, use that, else use remote
-        local homeUrl
         if tryLocalHome and network.exists(localUrl) then
             homeUrl = localUrl
         else
