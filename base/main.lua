@@ -24,6 +24,7 @@ root = require 'portal'
 
 -- Top-level Love callbacks
 
+local tryLocalHome = false
 local homeVersion = 'master' -- Git branch, tag or commit hash of home experience to show
 local home -- Portal to the home experience
 
@@ -37,7 +38,7 @@ function main.load(arg)
         local remoteUrl = 'https://raw.githubusercontent.com/nikki93/ghost-home2/' .. homeVersion .. '/main.lua'
 
         -- If local version is being served, use that, else use remote
-        if network.exists(localUrl) then
+        if tryLocalHome and network.exists(localUrl) then
             homeUrl = localUrl
         else
             homeUrl = remoteUrl
