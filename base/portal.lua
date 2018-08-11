@@ -250,6 +250,13 @@ function portalMeta:newChild(path, args)
     -- Set up the `love` global
     child:setupLove()
 
+    -- Copy in `extraGlobals` if given
+    if child.args.extraGlobals then
+        for k, v in pairs(child.args.extraGlobals) do
+            child.globals[k] = v
+        end
+    end
+
     -- `require` it!
     local succeeded, err = child:safeCall(function()
         self.globals.require(path, {
