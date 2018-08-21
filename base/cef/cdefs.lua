@@ -361,28 +361,19 @@ typedef struct _cef_main_args_t {
   int argc;
   char** argv;
 } cef_main_args_t;
-// typedef struct _cef_main_args_t { HINSTANCE instance; } cef_main_args_t;
 
-
-
-
-typedef unsigned long       DWORD;
-struct HWND__{int unused;}; typedef struct HWND__ *HWND;
-struct HMENU__{int unused;}; typedef struct HMENU__ *HMENU;
-///
-// Structure representing window information.
+// Class representing window information.
 ///
 typedef struct _cef_window_info_t {
-  // Standard parameters required by CreateWindowEx()
-  DWORD ex_style;
-  cef_string_t window_name;
-  DWORD style;
-  int x;
-  int y;
-  int width;
-  int height;
-  HWND parent_window;
-  HMENU menu;
+  unsigned int x;
+  unsigned int y;
+  unsigned int width;
+  unsigned int height;
+
+  ///
+  // Pointer for the parent window.
+  ///
+  unsigned long parent_window;
 
   ///
   // Set to true (1) to create the browser using windowless (off-screen)
@@ -399,9 +390,9 @@ typedef struct _cef_window_info_t {
   int windowless_rendering_enabled;
 
   ///
-  // Handle for the new browser window. Only used with windowed rendering.
+  // Pointer for the new browser window. Only used with windowed rendering.
   ///
-  HWND window;
+  unsigned long window;
 } cef_window_info_t;
 
 
