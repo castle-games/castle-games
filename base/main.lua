@@ -16,22 +16,16 @@ love.window.setTitle('ghost-player')
 
 -- Built-ins
 
-cef = require 'cef'
 tui = require 'tui'
 network = require 'network'
 require = require 'require'
 root = require 'portal'
 splash = require 'splash'
 
-
-local ffi = require 'ffi'
-local C = ffi.C
-
-
 -- Top-level Love callbacks
 
 local initialFileDropped -- In case a `love.filedropped` before home experience is loaded
-local tryLocalHome = true
+local tryLocalHome = false
 local homeUrl
 local homeVersion = '3f0ba667c89299a879c41e73808b8c1fe008d842' -- Git branch, tag or commit hash of home experience to show
 local home -- Portal to the home experience
@@ -57,33 +51,6 @@ function main.load(arg)
             initialFileDropped = nil
         end
     end)
-
-    do
-        local app = ffi.new('cef_app_t[1]')
-        app[0].base.size = ffi.sizeof(app)
-        app[0].base.add_ref = function() end
-        app[0].base.release = function() return 1 end
-        app[0].base.has_one_ref = function() return 1 end
-        app[0].on_before_command_line_processing = function() end
-        app[0].on_register_custom_schemes = function() end
-        app[0].get_resource_bundle_handler = function() end
-        app[0].get_browser_process_handler = function() end
-        app[0].get_render_process_handler = function() end
-
-        local main_args = ffi.new('cef_main_args_t[1]')
-        main_args[0].argc = 0
-
-        -- local ret = C.cef_execute_process(main_args, app, nil)
-
-        local settings = ffi.new('cef_settings_t[1]')
-        settings[0].size = ffi.sizeof(settings)
-        settings[0].windowless_rendering_enabled = true
-        settings[0].log_severity = C.LOGSEVERITY_VERBOSE
-
-        C.cef_initialize(main_args, settings, app, nil)
-
-        local client = ffi.new('cef_client_t[1]')
-    end
 end
 
 function main.update(dt)

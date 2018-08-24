@@ -22,8 +22,6 @@
 #include "modules/love/love.h"
 #include <SDL.h>
 
-#include "include/capi/cef_app_capi.h"
-
 #ifdef LOVE_BUILD_EXE
 
 // Lua
@@ -245,19 +243,7 @@ static DoneAction runlove(int argc, char **argv, int &retval)
 
 int main(int argc, char **argv)
 {
-  // Let CEF take care of its subprocesses
-  {
-    cef_main_args_t cef_main_args = {};
-    cef_main_args.argc = argc;
-    cef_main_args.argv = argv;
-
-    int code = cef_execute_process(&cef_main_args, NULL, NULL);
-    if (code >= 0) {
-      return code;
-    }
-  }
-
-  if (strcmp(LOVE_VERSION_STRING, love_version()) != 0)
+	if (strcmp(LOVE_VERSION_STRING, love_version()) != 0)
 	{
 		printf("Version mismatch detected!\nLOVE binary is version %s\n"
 			   "LOVE library is version %s\n", LOVE_VERSION_STRING, love_version());

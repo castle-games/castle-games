@@ -176,7 +176,6 @@ Please see http://bitbucket.org/rude/megasource
 	find_package(Ogg REQUIRED)
 	find_package(Vorbis REQUIRED)
 	find_package(ZLIB REQUIRED)
-	find_package(CEF REQUIRED)
 
 	# required for enet
 	add_definitions(-D HAS_SOCKLEN_T)
@@ -185,7 +184,6 @@ Please see http://bitbucket.org/rude/megasource
 		${SDL2_INCLUDE_DIR}
 		${FREETYPE_INCLUDE_DIRS}
 		${VORBIS_INCLUDE_DIR}
-		${CEF_INCLUDE_DIR}
 	)
 
 	set(LOVE_LINK_LIBRARIES
@@ -200,7 +198,6 @@ Please see http://bitbucket.org/rude/megasource
 		${VORBISFILE_LIBRARY}
     ${ZLIB_LIBRARIES}
 		${LOVE_LUA_LIBRARY}
-		${CEF_LIBRARY}
 	)
 	
 	if(LOVE_MPG123)
