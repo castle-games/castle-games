@@ -25,7 +25,6 @@ splash = require 'splash'
 -- Top-level Love callbacks
 
 local initialFileDropped -- In case a `love.filedropped` before home experience is loaded
-local tryLocalHome = false
 local homeUrl
 local homeVersion = '3f0ba667c89299a879c41e73808b8c1fe008d842' -- Git branch, tag or commit hash of home experience to show
 local home -- Portal to the home experience
@@ -39,11 +38,13 @@ function main.load(arg)
         local localUrl = 'http://0.0.0.0:8032/main.lua'
         local remoteUrl = 'https://raw.githubusercontent.com/nikki93/ghost-home2/' .. homeVersion .. '/main.lua'
 
-        -- If local version is being served, use that, else use remote
-        if tryLocalHome and network.exists(localUrl) then
-            homeUrl = localUrl
-        else
-            homeUrl = remoteUrl
+        if love.system.getOS() ~= 'Windows' then -- Failed 'http://0.0.0.0' requests hang indefinitely on Windows...
+            -- If local version is being served, use that, else use remote
+            if network.exists(localUrl) then
+                homeUrl = localUrl
+            else
+                homeUrl = remoteUrl
+            end
         end
         home = root:newChild(homeUrl, { noConf = true })
         if initialFileDropped then
