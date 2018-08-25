@@ -26,7 +26,7 @@ splash = require 'splash'
 
 local initialFileDropped -- In case a `love.filedropped` before home experience is loaded
 local homeUrl
-local homeVersion = '3f0ba667c89299a879c41e73808b8c1fe008d842' -- Git branch, tag or commit hash of home experience to show
+local homeVersion = 'e0909a90e9d04a895531cd1013bdb39c9b18cdc4' -- Git branch, tag or commit hash of home experience to show
 local home -- Portal to the home experience
 
 local main = {}
