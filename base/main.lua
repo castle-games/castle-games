@@ -3,9 +3,9 @@ math.randomseed(10000 * require('socket').gettime())
 
 -- Built-in libraries
 
---if not love.system.getOS() ~= 'iOS' then
---    tui = require 'tui'
---end
+if love.system.getOS() ~= 'iOS' then
+    tui = require 'tui'
+end
 network = require 'network'
 require = require 'require'
 root = require 'portal'
