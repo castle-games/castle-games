@@ -902,7 +902,6 @@
 		FA59A2D81C0649C200328DBA /* libtheora.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA59A2D61C0649BB00328DBA /* libtheora.a */; };
 		FA5D24B31A96D2EC00C6FC8F /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA5D24AB1A96D2EC00C6FC8F /* libogg.a */; };
 		FA5D24B51A96D2EC00C6FC8F /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA5D24AF1A96D2EC00C6FC8F /* libvorbis.a */; };
-		FA5D24CF1A96E68300C6FC8F /* libSDL2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA5D24CD1A96E63D00C6FC8F /* libSDL2.a */; };
 		FA620A321AA2F8DB005DB4C2 /* wrap_Quad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA620A2E1AA2F8DB005DB4C2 /* wrap_Quad.cpp */; };
 		FA620A331AA2F8DB005DB4C2 /* wrap_Quad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FA620A2E1AA2F8DB005DB4C2 /* wrap_Quad.cpp */; };
 		FA620A341AA2F8DB005DB4C2 /* wrap_Quad.h in Headers */ = {isa = PBXBuildFile; fileRef = FA620A2F1AA2F8DB005DB4C2 /* wrap_Quad.h */; };
@@ -1844,7 +1843,6 @@
 		FA59A2D61C0649BB00328DBA /* libtheora.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libtheora.a; sourceTree = "<group>"; };
 		FA5D24AB1A96D2EC00C6FC8F /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libogg.a; sourceTree = "<group>"; };
 		FA5D24AF1A96D2EC00C6FC8F /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libvorbis.a; sourceTree = "<group>"; };
-		FA5D24CD1A96E63D00C6FC8F /* libSDL2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libSDL2.a; sourceTree = "<group>"; };
 		FA620A2E1AA2F8DB005DB4C2 /* wrap_Quad.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wrap_Quad.cpp; sourceTree = "<group>"; };
 		FA620A2F1AA2F8DB005DB4C2 /* wrap_Quad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wrap_Quad.h; sourceTree = "<group>"; };
 		FA620A301AA2F8DB005DB4C2 /* wrap_Texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wrap_Texture.cpp; sourceTree = "<group>"; };
@@ -2064,7 +2062,6 @@
 				FA59A2D81C0649C200328DBA /* libtheora.a in Frameworks */,
 				FA56D9BC1C208A0200D8D3C7 /* libmodplug.a in Frameworks */,
 				FA7550A81AEBE276003E311E /* libluajit.a in Frameworks */,
-				FA5D24CF1A96E68300C6FC8F /* libSDL2.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3425,7 +3422,6 @@
 		FA5D24CC1A96E63D00C6FC8F /* SDL2 */ = {
 			isa = PBXGroup;
 			children = (
-				FA5D24CD1A96E63D00C6FC8F /* libSDL2.a */,
 			);
 			name = SDL2;
 			path = ios/libraries/SDL2;
