@@ -1,26 +1,14 @@
 math.randomseed(10000 * require('socket').gettime())
 
 
--- Love settings
-
---local defaultW, defaultH = 736, 414 -- iPhone 6s Plus
-local defaultW, defaultH = 1112, 834 -- iPad Pro 10.2"
-love.window.setMode(defaultW, defaultH, {
-    msaa = 4,
-    resizable = true,
-    borderless = love.system.getOS() == 'iOS',
-    highdpi = true,
-})
-love.window.setTitle('ghost-player')
-
-
--- Built-ins
+-- Built-in libraries
 
 tui = require 'tui'
 network = require 'network'
 require = require 'require'
 root = require 'portal'
 splash = require 'splash'
+
 
 -- Top-level Love callbacks
 
