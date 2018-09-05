@@ -3,7 +3,9 @@ math.randomseed(10000 * require('socket').gettime())
 
 -- Built-in libraries
 
-tui = require 'tui'
+--if not love.system.getOS() ~= 'iOS' then
+--    tui = require 'tui'
+--end
 network = require 'network'
 require = require 'require'
 root = require 'portal'
@@ -20,7 +22,9 @@ local home -- Portal to the home experience
 local main = {}
 
 function main.load(arg)
-    tui.love.load()
+    if tui then
+        tui.love.load()
+    end
 
     network.async(function()
         local localUrl = 'http://0.0.0.0:8032/main.lua'
@@ -45,7 +49,9 @@ end
 function main.update(dt)
     network.update(dt)
 
-    tui.love.preupdate(dt)
+    if tui then
+        tui.love.preupdate(dt)
+    end
 
     if home then
         home:update(dt)
@@ -53,7 +59,9 @@ function main.update(dt)
         splash:update(dt)
     end
 
-    tui.love.postupdate()
+    if tui then
+        tui.love.postupdate()
+    end
 end
 
 local debugFont = love.graphics.newFont()
@@ -82,7 +90,9 @@ function main.draw()
         love.graphics.pop('all')
     end
 
-    tui.love.draw()
+    if tui then
+        tui.love.draw()
+    end
 end
 
 function main.keypressed(key, ...)
@@ -97,7 +107,9 @@ function main.keypressed(key, ...)
         return
     end
 
-    tui.love.keypressed(key)
+    if tui then
+        tui.love.keypressed(key)
+    end
 
     if home then
         home:keypressed(key, ...)
@@ -146,7 +158,7 @@ for k in pairs({
         if main[k] then
             main[k](...)
         else -- Default behavior if we didn't define it in `main`
-            if tui.love[k] then
+            if tui and tui.love[k] then
                 tui.love[k](...)
             end
 
