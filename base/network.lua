@@ -106,7 +106,7 @@ function network.fetch(url, method)
                 response, httpCode, headers, status = network.request { url = url, method = method }
             end
         elseif url:match('^file://') then
-            local filePath = url:gsub('^file://', '')
+            local filePath = url:gsub('^file://', ''):gsub('%%25', '%%')
             local file = io.open(filePath, 'r')
             if file ~= nil then
                 if method == 'GET' then
@@ -117,13 +117,15 @@ function network.fetch(url, method)
                 httpCode = 200
                 headers = {}
                 status = '200 ok'
+                file:close()
+            elseif method == 'GET' then
+                error("error opening '" .. url .. "'")
             else
                 response = nil
                 httpCode = 404
                 headers = {}
                 status = '404 not found'
             end
-            file:close()
         end
 
         -- Save result, wake waiters
