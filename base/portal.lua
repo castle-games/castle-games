@@ -68,9 +68,10 @@ function portalMeta:setupLove()
     -- Libraries to remove
     newLove.event = nil
 
-    -- Fetch asset contents as string, given relative path under portal's `basePath`
+    -- Fetch asset contents as string
     local function fetchAsset(path)
-        local response = network.fetch(self.basePath .. '/' .. path)
+        local absolute = network.isAbsolute(path) and path or (self.basePath .. '/' .. path)
+        local response = network.fetch(absolute)
         return response
     end
 
