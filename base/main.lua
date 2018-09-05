@@ -30,8 +30,8 @@ function main.load(arg)
     end
 
     network.async(function()
-        if GHOST_VIEW_URI then -- Global `GHOST_VIEW_URI` set by native code? Just use that.
-            homeUrl = GHOST_VIEW_URI
+        if GHOST_ROOT_URI then -- Global `GHOST_ROOT_URI` set by native code? Just use that.
+            homeUrl = GHOST_ROOT_URI
         else -- Default to remote URI based on `remoteHomeVersion`, using local version if served
             homeUrl = 'https://raw.githubusercontent.com/nikki93/ghost-home2/'
                     .. remoteHomeVersion .. '/main.lua'
