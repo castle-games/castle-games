@@ -210,12 +210,14 @@ UIKit_CreateWindow(_THIS, SDL_Window *window)
 
         /* ignore the size user requested, and make a fullscreen window */
         /* !!! FIXME: can we have a smaller view? */
-        UIWindow *uiwindow = [[SDL_uikitwindow alloc] initWithFrame:data.uiscreen.bounds];
-
-        /* put the window on an external display if appropriate. */
-        if (data.uiscreen != [UIScreen mainScreen]) {
-            [uiwindow setScreen:data.uiscreen];
-        }
+        // XXX(Ghost): Simply use existing `UIWindow`
+//        UIWindow *uiwindow = [[SDL_uikitwindow alloc] initWithFrame:data.uiscreen.bounds];
+//
+//        /* put the window on an external display if appropriate. */
+//        if (data.uiscreen != [UIScreen mainScreen]) {
+//            [uiwindow setScreen:data.uiscreen];
+//        }
+        UIWindow *uiwindow = [[UIApplication sharedApplication] keyWindow];
 
         if (SetupWindowData(_this, window, uiwindow, SDL_TRUE) < 0) {
             return -1;
@@ -239,7 +241,12 @@ UIKit_ShowWindow(_THIS, SDL_Window * window)
 {
     @autoreleasepool {
         SDL_WindowData *data = (__bridge SDL_WindowData *) window->driverdata;
-        [data.uiwindow makeKeyAndVisible];
+        // XXX(Ghost): Don't mess with existing `UIWindow`, post notification instead
+//        [data.uiwindow makeKeyAndVisible];
+        [[NSNotificationCenter defaultCenter]
+            postNotificationName:@"sdl_view_show" object:nil userInfo:@{
+            @"viewController": data.viewcontroller,
+        }];
     }
 }
 
@@ -248,7 +255,12 @@ UIKit_HideWindow(_THIS, SDL_Window * window)
 {
     @autoreleasepool {
         SDL_WindowData *data = (__bridge SDL_WindowData *) window->driverdata;
-        data.uiwindow.hidden = YES;
+        // XXX(Ghost): Don't mess with existing `UIWindow`, post notification instead
+//        data.uiwindow.hidden = YES;
+        [[NSNotificationCenter defaultCenter]
+            postNotificationName:@"sdl_view_hide" object:nil userInfo:@{
+            @"viewController": data.viewcontroller,
+        }];
     }
 }
 
@@ -333,8 +345,9 @@ UIKit_DestroyWindow(_THIS, SDL_Window * window)
              * We want to make sure the SDL view controller isn't accessed in
              * that case, because it would contain an invalid pointer to the old
              * SDL window. */
-            data.uiwindow.rootViewController = nil;
-            data.uiwindow.hidden = YES;
+            // XXX(Ghost): Don't mess with existing `UiWindow`
+//            data.uiwindow.rootViewController = nil;
+//            data.uiwindow.hidden = YES;
         }
     }
     window->driverdata = NULL;

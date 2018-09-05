@@ -356,6 +356,9 @@ SDL_HideHomeIndicatorHintChanged(void *userdata, const char *name, const char *o
 
 - (void)updateKeyboard
 {
+    // XXX(Ghost): Don't change `self.view.frame`
+    return;
+  
     CGAffineTransform t = self.view.transform;
     CGPoint offset = CGPointMake(0.0, 0.0);
     CGRect frame = UIKit_ComputeViewFrame(window, self.view.window.screen);

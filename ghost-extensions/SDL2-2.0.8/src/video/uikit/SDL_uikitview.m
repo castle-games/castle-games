@@ -96,15 +96,20 @@ extern int SDL_AppleTVRemoteOpenedAsJoystick;
 
         [self removeFromSuperview];
 
-        /* Restore the next-oldest view in the old window. */
-        view = data.views.lastObject;
-
-        data.viewcontroller.view = view;
-
-        data.uiwindow.rootViewController = nil;
-        data.uiwindow.rootViewController = data.viewcontroller;
-
-        [data.uiwindow layoutIfNeeded];
+        // XXX(Ghost): Post notification instead
+//        /* Restore the next-oldest view in the old window. */
+//        view = data.views.lastObject;
+//
+//        data.viewcontroller.view = view;
+//
+//        data.uiwindow.rootViewController = nil;
+//        data.uiwindow.rootViewController = data.viewcontroller;
+//
+//        [data.uiwindow layoutIfNeeded];
+        [[NSNotificationCenter defaultCenter]
+            postNotificationName:@"sdl_view_remove" object:nil userInfo:@{
+            @"viewController": data.viewcontroller,
+        }];
     }
 
     /* Add ourself to the new window. */
@@ -118,18 +123,23 @@ extern int SDL_AppleTVRemoteOpenedAsJoystick;
         [data.viewcontroller.view removeFromSuperview];
         data.viewcontroller.view = self;
 
-        /* The root view controller handles rotation and the status bar.
-         * Assigning it also adds the controller's view to the window. We
-         * explicitly re-set it to make sure the view is properly attached to
-         * the window. Just adding the sub-view if the root view controller is
-         * already correct causes orientation issues on iOS 7 and below. */
-        data.uiwindow.rootViewController = nil;
-        data.uiwindow.rootViewController = data.viewcontroller;
-
-        /* The view's bounds may not be correct until the next event cycle. That
-         * might happen after the current dimensions are queried, so we force a
-         * layout now to immediately update the bounds. */
-        [data.uiwindow layoutIfNeeded];
+        // XXX(Ghost): Post notification instead
+//        /* The root view controller handles rotation and the status bar.
+//         * Assigning it also adds the controller's view to the window. We
+//         * explicitly re-set it to make sure the view is properly attached to
+//         * the window. Just adding the sub-view if the root view controller is
+//         * already correct causes orientation issues on iOS 7 and below. */
+//        data.uiwindow.rootViewController = nil;
+//        data.uiwindow.rootViewController = data.viewcontroller;
+//
+//        /* The view's bounds may not be correct until the next event cycle. That
+//         * might happen after the current dimensions are queried, so we force a
+//         * layout now to immediately update the bounds. */
+//        [data.uiwindow layoutIfNeeded];
+        [[NSNotificationCenter defaultCenter]
+            postNotificationName:@"sdl_view_add" object:nil userInfo:@{
+            @"viewController": data.viewcontroller,
+        }];
     }
 
     sdlwindow = window;
