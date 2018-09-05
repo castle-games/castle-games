@@ -14,9 +14,12 @@ splash = require 'splash'
 
 -- Top-level Love callbacks
 
-local initialFileDropped -- In case a `love.filedropped` before home experience is loaded
-local homeUrl
-local homeVersion = 'e0909a90e9d04a895531cd1013bdb39c9b18cdc4' -- Git branch, tag or commit hash of home experience to show
+local initialFileDropped -- In case a `love.filedropped` occurred before home experience is loaded
+
+local homeUrl -- Populated later with the final home experience URL
+local remoteHomeVersion = 'e0909a90e9d04a895531cd1013bdb39c9b18cdc4' -- Git specifier of remote home
+local localHomeUrl = 'http://0.0.0.0:8032/main.lua' -- URL to local home to attempt
+
 local home -- Portal to the home experience
 
 local main = {}
@@ -27,17 +30,17 @@ function main.load(arg)
     end
 
     network.async(function()
-        local localUrl = 'http://0.0.0.0:8032/main.lua'
-        local remoteUrl = 'https://raw.githubusercontent.com/nikki93/ghost-home2/' .. homeVersion .. '/main.lua'
-
-        if love.system.getOS() ~= 'Windows' then -- Failed 'http://0.0.0.0' requests hang indefinitely on Windows...
-            -- If local version is being served, use that, else use remote
-            if network.exists(localUrl) then
-                homeUrl = localUrl
-            else
-                homeUrl = remoteUrl
+        if GHOST_VIEW_URI then -- Global `GHOST_VIEW_URI` set by native code? Just use that.
+            homeUrl = GHOST_VIEW_URI
+        else -- Default to remote URI based on `remoteHomeVersion`, using local version if served
+            homeUrl = 'https://raw.githubusercontent.com/nikki93/ghost-home2/'
+                    .. remoteHomeVersion .. '/main.lua'
+            if love.system.getOS() ~= 'Windows' -- Failed `0.0.0.0` requests hang on Windows...
+                    and network.exists(localHomeUrl) then
+                homeUrl = localHomeUrl
             end
         end
+
         home = root:newChild(homeUrl, { noConf = true })
         if initialFileDropped then
             home:filedropped(initialFileDropped)
