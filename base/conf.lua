@@ -8,10 +8,6 @@ function love.conf(t)
     t.window.msaa = 4
     t.window.highdpi = true
 
-    if mobile then
-        t.window.borderless = true
-    end
-
     if not mobile then
         t.window.width = 1112
         t.window.height = 834
