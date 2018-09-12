@@ -108,7 +108,7 @@
 @end
 
 // Entry point function for the browser process.
-int mainUNUSED(int argc, char* argv[]) {
+int main(int argc, char* argv[]) {
   // Provide CEF with command-line arguments.
   CefMainArgs main_args(argc, argv);
 
@@ -124,7 +124,17 @@ int mainUNUSED(int argc, char* argv[]) {
   // SimpleApp implements application-level callbacks for the browser process.
   // It will create the first browser instance in OnContextInitialized() after
   // CEF has initialized.
-  CefRefPtr<SimpleApp> app(new SimpleApp);
+	
+	// use embedded index.html if it exists.
+	NSString *indexPath = [[NSBundle mainBundle] pathForResource:@"index" ofType:@"html"];
+	std::string initialUrl;
+	if (indexPath && indexPath.length) {
+		indexPath = [NSString stringWithFormat:@"file://%@", indexPath];
+		initialUrl = std::string([indexPath UTF8String]);
+	} else {
+		initialUrl = "http://www.google.com";
+	}
+	CefRefPtr<SimpleApp> app(new SimpleApp(initialUrl));
 
   // Initialize CEF for the browser process.
   CefInitialize(main_args, settings, app.get(), NULL);

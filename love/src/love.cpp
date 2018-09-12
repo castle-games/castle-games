@@ -241,7 +241,7 @@ static DoneAction runlove(int argc, char **argv, int &retval)
 	return done;
 }
 
-int main(int argc, char **argv)
+int mainUNUSED(int argc, char **argv)
 {
 	if (strcmp(LOVE_VERSION_STRING, love_version()) != 0)
 	{

@@ -4,8 +4,6 @@
 
 #include "simple_app.h"
 
-#include <string>
-
 #include "include/cef_browser.h"
 #include "include/cef_command_line.h"
 #include "include/views/cef_browser_view.h"
@@ -52,7 +50,9 @@ class SimpleWindowDelegate : public CefWindowDelegate {
 
 }  // namespace
 
-SimpleApp::SimpleApp() {}
+SimpleApp::SimpleApp(std::string initialUrl) {
+  this->_initialUrl = initialUrl;
+}
 
 void SimpleApp::OnContextInitialized() {
   CEF_REQUIRE_UI_THREAD();
@@ -81,8 +81,9 @@ void SimpleApp::OnContextInitialized() {
   // Check if a "--url=" value was provided via the command-line. If so, use
   // that instead of the default URL.
   url = command_line->GetSwitchValue("url");
-  if (url.empty())
-    url = "http://www.google.com";
+  if (url.empty()) {
+	url = this->_initialUrl;
+  }
 
   if (use_views) {
     // Create the BrowserView.

@@ -7,10 +7,12 @@
 
 #include "include/cef_app.h"
 
+#include <string>
+
 // Implement application-level callbacks for the browser process.
 class SimpleApp : public CefApp, public CefBrowserProcessHandler {
  public:
-  SimpleApp();
+ SimpleApp(std::string initialUrl);
 
   // CefApp methods:
   virtual CefRefPtr<CefBrowserProcessHandler> GetBrowserProcessHandler()
@@ -22,6 +24,7 @@ class SimpleApp : public CefApp, public CefBrowserProcessHandler {
   virtual void OnContextInitialized() OVERRIDE;
 
  private:
+  std::string _initialUrl;
   // Include the default reference counting implementation.
   IMPLEMENT_REFCOUNTING(SimpleApp);
 };

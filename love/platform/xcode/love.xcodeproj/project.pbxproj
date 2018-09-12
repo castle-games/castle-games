@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
-		91CF4339214841CC002024DA /* liblibcef_dll_wrapper.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 91FDEBD521475159008FFB60 /* liblibcef_dll_wrapper.dylib */; };
+		91CF4339214841CC002024DA /* liblibcef_dll_wrapper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 91FDEBD521475159008FFB60 /* liblibcef_dll_wrapper.a */; };
 		91CF43402148438D002024DA /* simple_handler.h in Headers */ = {isa = PBXBuildFile; fileRef = 91CF433A2148438C002024DA /* simple_handler.h */; };
 		91CF43412148438D002024DA /* cefsimple_mac.mm in Sources */ = {isa = PBXBuildFile; fileRef = 91CF433B2148438C002024DA /* cefsimple_mac.mm */; };
 		91CF43422148438D002024DA /* simple_app.cc in Sources */ = {isa = PBXBuildFile; fileRef = 91CF433C2148438C002024DA /* simple_app.cc */; };
@@ -16,10 +16,10 @@
 		91CF43442148438D002024DA /* simple_handler_mac.mm in Sources */ = {isa = PBXBuildFile; fileRef = 91CF433E2148438D002024DA /* simple_handler_mac.mm */; };
 		91CF43452148438D002024DA /* simple_handler.cc in Sources */ = {isa = PBXBuildFile; fileRef = 91CF433F2148438D002024DA /* simple_handler.cc */; };
 		91CF439B21484812002024DA /* process_helper_mac.cc in Sources */ = {isa = PBXBuildFile; fileRef = 91CF439A21484812002024DA /* process_helper_mac.cc */; };
-		91CF43A721484947002024DA /* liblibcef_dll_wrapper.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 91FDEBD521475159008FFB60 /* liblibcef_dll_wrapper.dylib */; };
+		91CF43A721484947002024DA /* liblibcef_dll_wrapper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 91FDEBD521475159008FFB60 /* liblibcef_dll_wrapper.a */; };
 		91CF43B721484A3A002024DA /* Chromium Embedded Framework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5A0404221483BA5007A6CC1 /* Chromium Embedded Framework.framework */; };
-		91CF43B921485687002024DA /* liblibcef_dll_wrapper.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 91FDEBD521475159008FFB60 /* liblibcef_dll_wrapper.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		91CF43BD21485694002024DA /* liblibcef_dll_wrapper.dylib in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 91FDEBD521475159008FFB60 /* liblibcef_dll_wrapper.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		91CF43B921485687002024DA /* liblibcef_dll_wrapper.a in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 91FDEBD521475159008FFB60 /* liblibcef_dll_wrapper.a */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		91CF43BD21485694002024DA /* liblibcef_dll_wrapper.a in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 91FDEBD521475159008FFB60 /* liblibcef_dll_wrapper.a */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		A1E7953D20721BC800731DD3 /* package.love in Resources */ = {isa = PBXBuildFile; fileRef = A1E7953C20721BC800731DD3 /* package.love */; };
 		A1ED98E9211DFA0700CBC701 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A194C6C4211CD1D50093B328 /* SDL2.framework */; };
 		A1ED98EA211DFA0700CBC701 /* SDL2.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = A194C6C4211CD1D50093B328 /* SDL2.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -47,6 +47,7 @@
 		B5256F71211A555500891B27 /* Lua.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A93E6E5310420B57007D418B /* Lua.framework */; };
 		B5256F72211A555500891B27 /* theora.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA27B3CA1B498696008A9DCE /* theora.framework */; };
 		B5256F7D211A56EE00891B27 /* package.love in Resources */ = {isa = PBXBuildFile; fileRef = A1E7953C20721BC800731DD3 /* package.love */; };
+		B59617512149BF7100BE403F /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = B59617502149BF7100BE403F /* index.html */; };
 		B5A0404321483BA5007A6CC1 /* Chromium Embedded Framework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5A0404221483BA5007A6CC1 /* Chromium Embedded Framework.framework */; };
 		B5A0404521483D2C007A6CC1 /* Chromium Embedded Framework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5A0404221483BA5007A6CC1 /* Chromium Embedded Framework.framework */; };
 		B5A0404621483D2C007A6CC1 /* Chromium Embedded Framework.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = B5A0404221483BA5007A6CC1 /* Chromium Embedded Framework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -217,7 +218,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				91CF43B921485687002024DA /* liblibcef_dll_wrapper.dylib in Embed Libraries */,
+				91CF43B921485687002024DA /* liblibcef_dll_wrapper.a in Embed Libraries */,
 			);
 			name = "Embed Libraries";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -254,7 +255,7 @@
 				B5256F65211A555500891B27 /* OpenAL-Soft.framework in Copy Frameworks */,
 				A1ED98EA211DFA0700CBC701 /* SDL2.framework in Copy Frameworks */,
 				B5256F66211A555500891B27 /* freetype.framework in Copy Frameworks */,
-				91CF43BD21485694002024DA /* liblibcef_dll_wrapper.dylib in Copy Frameworks */,
+				91CF43BD21485694002024DA /* liblibcef_dll_wrapper.a in Copy Frameworks */,
 				B5256F67211A555500891B27 /* mpg123.framework in Copy Frameworks */,
 				B5256F68211A555500891B27 /* libmodplug.framework in Copy Frameworks */,
 				B5256F69211A555500891B27 /* ogg.framework in Copy Frameworks */,
@@ -299,6 +300,7 @@
 		A9F169A6109E824900FC83D1 /* mpg123.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = mpg123.framework; path = /Library/Frameworks/mpg123.framework; sourceTree = "<absolute>"; };
 		B5256F3A211A4FC000891B27 /* ghost-macosx.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "ghost-macosx.plist"; path = "macosx/ghost-macosx.plist"; sourceTree = "<group>"; };
 		B5256F78211A555500891B27 /* ghost-macosx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ghost-macosx.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B59617502149BF7100BE403F /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		B5A0404221483BA5007A6CC1 /* Chromium Embedded Framework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "Chromium Embedded Framework.framework"; path = "/Library/Frameworks/Chromium Embedded Framework.framework"; sourceTree = "<group>"; };
 		B5E9FC3B211B6B9F0068BEB9 /* ghost-extensions.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "ghost-extensions.xcodeproj"; path = "../../../ghost-extensions/ghost-extensions.xcodeproj"; sourceTree = "<group>"; };
 		CE73F7FF1EEB64150052DAB3 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
@@ -345,7 +347,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				91CF43B721484A3A002024DA /* Chromium Embedded Framework.framework in Frameworks */,
-				91CF43A721484947002024DA /* liblibcef_dll_wrapper.dylib in Frameworks */,
+				91CF43A721484947002024DA /* liblibcef_dll_wrapper.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -353,7 +355,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				91CF4339214841CC002024DA /* liblibcef_dll_wrapper.dylib in Frameworks */,
+				91CF4339214841CC002024DA /* liblibcef_dll_wrapper.a in Frameworks */,
 				B5A0404321483BA5007A6CC1 /* Chromium Embedded Framework.framework in Frameworks */,
 				B5E9FC48211B6C190068BEB9 /* ghost_extensions_macos.framework in Frameworks */,
 				B5256F6F211A555500891B27 /* love.framework in Frameworks */,
@@ -416,8 +418,7 @@
 		29B97314FDCFA39411CA2CEA /* love */ = {
 			isa = PBXGroup;
 			children = (
-				91C98F9D21432C39006E745C /* cef.xcodeproj */,
-				A194C6BA211CD1D50093B328 /* SDL.xcodeproj */,
+				B596174F2149BF7100BE403F /* web */,
 				A1E7953C20721BC800731DD3 /* package.love */,
 				FA5D249A1A96CF4300C6FC8F /* Images.xcassets */,
 				FA577A9D16C7262E00860150 /* Source */,
@@ -426,6 +427,8 @@
 				1058C7A0FEA54F0111CA2CBB /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
+				91C98F9D21432C39006E745C /* cef.xcodeproj */,
+				A194C6BA211CD1D50093B328 /* SDL.xcodeproj */,
 				FA577A9316C7217800860150 /* liblove.xcodeproj */,
 				B5E9FC3B211B6B9F0068BEB9 /* ghost-extensions.xcodeproj */,
 			);
@@ -444,7 +447,7 @@
 		91C98F9E21432C39006E745C /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				91FDEBD521475159008FFB60 /* liblibcef_dll_wrapper.dylib */,
+				91FDEBD521475159008FFB60 /* liblibcef_dll_wrapper.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -500,6 +503,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		B596174F2149BF7100BE403F /* web */ = {
+			isa = PBXGroup;
+			children = (
+				B59617502149BF7100BE403F /* index.html */,
+			);
+			name = web;
+			path = ../../../web;
+			sourceTree = "<group>";
+		};
 		B5E9FC3C211B6B9F0068BEB9 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -542,12 +554,12 @@
 			isa = PBXGroup;
 			children = (
 				A93E6A3410420AC0007D418B /* love.cpp */,
-				91CF433B2148438C002024DA /* cefsimple_mac.mm */,
-				91CF433C2148438C002024DA /* simple_app.cc */,
 				91CF433D2148438D002024DA /* simple_app.h */,
-				91CF433E2148438D002024DA /* simple_handler_mac.mm */,
-				91CF433F2148438D002024DA /* simple_handler.cc */,
+				91CF433C2148438C002024DA /* simple_app.cc */,
 				91CF433A2148438C002024DA /* simple_handler.h */,
+				91CF433F2148438D002024DA /* simple_handler.cc */,
+				91CF433B2148438C002024DA /* cefsimple_mac.mm */,
+				91CF433E2148438D002024DA /* simple_handler_mac.mm */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -753,10 +765,10 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		91FDEBD521475159008FFB60 /* liblibcef_dll_wrapper.dylib */ = {
+		91FDEBD521475159008FFB60 /* liblibcef_dll_wrapper.a */ = {
 			isa = PBXReferenceProxy;
-			fileType = "compiled.mach-o.dylib";
-			path = liblibcef_dll_wrapper.dylib;
+			fileType = archive.ar;
+			path = liblibcef_dll_wrapper.a;
 			remoteRef = 91FDEBD421475159008FFB60 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -840,6 +852,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B5256F7D211A56EE00891B27 /* package.love in Resources */,
+				B59617512149BF7100BE403F /* index.html in Resources */,
 				B5256F43211A555500891B27 /* Images.xcassets in Resources */,
 				B5256F44211A555500891B27 /* license.txt in Resources */,
 			);
