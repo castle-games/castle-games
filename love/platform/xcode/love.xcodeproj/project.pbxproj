@@ -86,7 +86,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 91C98F9D21432C39006E745C /* cef.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 91FDE94321475039008FFB60;
+			remoteGlobalIDString = 914F1D742149B33000C27A53;
 			remoteInfo = libcef_dll_wrapper;
 		};
 		91CF43A12148490E002024DA /* PBXContainerItemProxy */ = {
@@ -100,21 +100,21 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 91C98F9D21432C39006E745C /* cef.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 91FDE94321475039008FFB60;
+			remoteGlobalIDString = 914F1D742149B33000C27A53;
 			remoteInfo = libcef_dll_wrapper;
 		};
 		91CF43BE21485694002024DA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 91C98F9D21432C39006E745C /* cef.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 91FDE94321475039008FFB60;
+			remoteGlobalIDString = 914F1D742149B33000C27A53;
 			remoteInfo = libcef_dll_wrapper;
 		};
 		91FDEBD121475158008FFB60 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 91C98F9D21432C39006E745C /* cef.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 91FDE94321475039008FFB60;
+			remoteGlobalIDString = 914F1D742149B33000C27A53;
 			remoteInfo = libcef_dll_wrapper;
 		};
 		91FDEBD421475159008FFB60 /* PBXContainerItemProxy */ = {
@@ -279,7 +279,6 @@
 		91CF433F2148438D002024DA /* simple_handler.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = simple_handler.cc; path = ../../src/simple_handler.cc; sourceTree = "<group>"; };
 		91CF438321484742002024DA /* ghost-macosx Helper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ghost-macosx Helper.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		91CF438D21484743002024DA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		91CF439021484743002024DA /* ghost_macosx_Helper.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ghost_macosx_Helper.entitlements; sourceTree = "<group>"; };
 		91CF439A21484812002024DA /* process_helper_mac.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = process_helper_mac.cc; sourceTree = "<group>"; };
 		91CF43AE21484A26002024DA /* .localized */ = {isa = PBXFileReference; lastKnownFileType = text; path = .localized; sourceTree = "<group>"; };
 		91CF43AF21484A26002024DA /* flattenlist.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = flattenlist.html; sourceTree = "<group>"; };
@@ -455,7 +454,6 @@
 			children = (
 				91CF439A21484812002024DA /* process_helper_mac.cc */,
 				91CF438D21484743002024DA /* Info.plist */,
-				91CF439021484743002024DA /* ghost_macosx_Helper.entitlements */,
 			);
 			path = "ghost-macosx_Helper";
 			sourceTree = "<group>";
@@ -1060,7 +1058,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = "ghost-macosx_Helper/ghost_macosx_Helper.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1108,7 +1106,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = "ghost-macosx_Helper/ghost_macosx_Helper.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -1152,7 +1150,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = "ghost-macosx_Helper/ghost_macosx_Helper.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
