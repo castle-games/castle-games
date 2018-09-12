@@ -871,7 +871,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "echo $BUILT_PRODUCTS_DIR\nrm -rf $BUILT_PRODUCTS_DIR/ghost-macosx.app/Contents/Frameworks/ghost-macosx\\ Helper.app\ncp -r $BUILT_PRODUCTS_DIR/ghost-macosx\\ Helper.app $BUILT_PRODUCTS_DIR/ghost-macosx.app/Contents/Frameworks/ghost-macosx\\ Helper.app";
+			shellScript = "echo $BUILT_PRODUCTS_DIR\nrm -rf $BUILT_PRODUCTS_DIR/ghost-macosx.app/Contents/Frameworks/ghost-macosx\\ Helper.app\ncp -r $BUILT_PRODUCTS_DIR/ghost-macosx\\ Helper.app $BUILT_PRODUCTS_DIR/ghost-macosx.app/Contents/Frameworks/ghost-macosx\\ Helper.app\ninstall_name_tool -change \"@rpath/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework\" \"@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework\" $BUILT_PRODUCTS_DIR/ghost-macosx.app/Contents/MacOS/ghost-macosx\ninstall_name_tool -change \"@rpath/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework\" \"@executable_path/../../../Chromium Embedded Framework.framework/Chromium Embedded Framework\" $BUILT_PRODUCTS_DIR/ghost-macosx.app/Contents/Frameworks/ghost-macosx\\ Helper.app/Contents/MacOS/ghost-macosx\\ Helper ";
 		};
 		A1A91ED9205F8F34002CFB78 /* Create Temporary '.love' Package */ = {
 			isa = PBXShellScriptBuildPhase;
