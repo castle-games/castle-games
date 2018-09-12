@@ -1090,7 +1090,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "builders.game.ghost-macosx-Helper";
+				PRODUCT_BUNDLE_IDENTIFIER = builders.game.ghost.helper;
 				PRODUCT_NAME = "ghost-macosx Helper";
 			};
 			name = Debug;
@@ -1134,7 +1134,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = "builders.game.ghost-macosx-Helper";
+				PRODUCT_BUNDLE_IDENTIFIER = builders.game.ghost.helper;
 				PRODUCT_NAME = "ghost-macosx Helper";
 			};
 			name = Release;
@@ -1178,7 +1178,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = "builders.game.ghost-macosx-Helper";
+				PRODUCT_BUNDLE_IDENTIFIER = builders.game.ghost.helper;
 				PRODUCT_NAME = "ghost-macosx Helper";
 			};
 			name = Distribution;
