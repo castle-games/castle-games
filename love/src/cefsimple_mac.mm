@@ -108,7 +108,7 @@
 @end
 
 // Entry point function for the browser process.
-int main(int argc, char* argv[]) {
+int mainUNUSED(int argc, char* argv[]) {
   // Provide CEF with command-line arguments.
   CefMainArgs main_args(argc, argv);
 
@@ -120,15 +120,7 @@ int main(int argc, char* argv[]) {
 
   // Specify CEF global settings here.
   CefSettings settings;
-	settings.log_severity = LOGSEVERITY_VERBOSE;
 	
-	NSString* resultTemp = @"/Users/jesseruder/Downloads/cef_binary_3.3440.1806.g65046b7_macosx64/Release";
-	NSData* data = [resultTemp dataUsingEncoding:NSUTF16StringEncoding];
-	NSString* result = [[NSString alloc] initWithData:data encoding:NSUTF16StringEncoding];
-	
-  /*cef_string_set((char16 *) data.bytes, result.length,
-				   &settings.framework_dir_path, true);
-*/
   // SimpleApp implements application-level callbacks for the browser process.
   // It will create the first browser instance in OnContextInitialized() after
   // CEF has initialized.
