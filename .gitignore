@@ -3,6 +3,7 @@
 
 xcuserdata/
 love/platform/xcode/DerivedData/
+love/platform/xcode/DerivedData-beta/
 love/platform/xcode/.idea
 
 love/build/
