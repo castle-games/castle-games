@@ -1,5 +1,18 @@
-import React from 'react';
+import * as React from 'react';
 
-const App = () => <div>HELLO CHARLIE, NIKKI, JESSE, BEN AND JASON I AM HERE NOW</div>;
+import CoreApp from '~/core-components/CoreApp';
 
-export default App;
+export default () => {
+  const state = {
+    url: '',
+    viewer: null,
+    isMediaFavorited: false,
+    isMediaExpanded: true,
+    isOverlayActive: true,
+    isMediaInfoVisible: false,
+    isDashboardVisible: false,
+    isScoreVisible: false,
+  };
+
+  return <CoreApp state={state} />;
+};
