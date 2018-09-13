@@ -34,6 +34,7 @@ module.exports = {
   },
   plugins: [
     new HTMLWebpackPlugin({
+      template: 'public/index.html',
       inlineSource: '.(js|css)$',
     }),
     new HTMLWebpackInlineSourcePlugin(),
