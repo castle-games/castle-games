@@ -456,7 +456,8 @@
 				91CF439A21484812002024DA /* process_helper_mac.cc */,
 				91CF438D21484743002024DA /* Info.plist */,
 			);
-			path = "ghost-macosx_Helper";
+			name = "ghost-macosx_Helper";
+			path = "../../../macosx/ghost-macosx_Helper";
 			sourceTree = "<group>";
 		};
 		91CF43AD21484A26002024DA /* Documents */ = {
@@ -1095,7 +1096,7 @@
 					"\"$(SRCROOT)/../../../redis/deps/hiredis\"",
 					"$(PROJECT_DIR)/../../../cef",
 				);
-				INFOPLIST_FILE = "ghost-macosx_Helper/Info.plist";
+				INFOPLIST_FILE = "../../../macosx/ghost-macosx_Helper/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = YES;
