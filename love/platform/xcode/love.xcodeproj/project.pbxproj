@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		91CF4339214841CC002024DA /* liblibcef_dll_wrapper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 91FDEBD521475159008FFB60 /* liblibcef_dll_wrapper.a */; };
 		91CF43A721484947002024DA /* liblibcef_dll_wrapper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 91FDEBD521475159008FFB60 /* liblibcef_dll_wrapper.a */; };
 		91CF43B721484A3A002024DA /* Chromium Embedded Framework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5A0404221483BA5007A6CC1 /* Chromium Embedded Framework.framework */; };
@@ -16,13 +15,6 @@
 		A1E7953D20721BC800731DD3 /* package.love in Resources */ = {isa = PBXBuildFile; fileRef = A1E7953C20721BC800731DD3 /* package.love */; };
 		A1ED98E9211DFA0700CBC701 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A194C6C4211CD1D50093B328 /* SDL2.framework */; };
 		A1ED98EA211DFA0700CBC701 /* SDL2.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = A194C6C4211CD1D50093B328 /* SDL2.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		A9255DD31043183600BA1496 /* Lua.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = A93E6E5310420B57007D418B /* Lua.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		A9255E031043195A00BA1496 /* vorbis.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = A9255E021043195A00BA1496 /* vorbis.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		A9255F58104324E100BA1496 /* ogg.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = A9255F51104324D700BA1496 /* ogg.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		A93E6E5510420B57007D418B /* Lua.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A93E6E5310420B57007D418B /* Lua.framework */; };
-		A93E6EED10420BA8007D418B /* love.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A93E6A3410420AC0007D418B /* love.cpp */; };
-		A9F169AC109E825000FC83D1 /* mpg123.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = A9F169A6109E824900FC83D1 /* mpg123.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		A9F169AD109E825000FC83D1 /* libmodplug.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = A9F16926109E7BAD00FC83D1 /* libmodplug.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		B51ECE2A214AE7EF000F7348 /* simple_handler.cc in Sources */ = {isa = PBXBuildFile; fileRef = B51ECE21214AE7EF000F7348 /* simple_handler.cc */; };
 		B51ECE2B214AE7EF000F7348 /* simple_handler.h in Headers */ = {isa = PBXBuildFile; fileRef = B51ECE22214AE7EF000F7348 /* simple_handler.h */; };
 		B51ECE2D214AE7EF000F7348 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B51ECE25214AE7EF000F7348 /* Info.plist */; };
@@ -55,12 +47,8 @@
 		B5E9FC4B211B6E610068BEB9 /* ghost_extensions_macos.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = B5E9FC43211B6BA00068BEB9 /* ghost_extensions_macos.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		CE73F8001EEB64150052DAB3 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE73F7FF1EEB64150052DAB3 /* AVFoundation.framework */; };
 		FA0797991BF480A200034B7C /* GameController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA0797981BF480A200034B7C /* GameController.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		FA08F69616C766E000F007B5 /* love.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA08F69116C765A200F007B5 /* love.framework */; };
-		FA08F69716C766E700F007B5 /* love.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = FA08F69116C765A200F007B5 /* love.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		FA0B7F301A95AC7D000E1D17 /* love.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A93E6A3410420AC0007D418B /* love.cpp */; };
 		FA15DFB41F9B8D9E0042AB22 /* libbz2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = FA15DFB31F9B8D9E0042AB22 /* libbz2.tbd */; };
-		FA27B3CB1B498696008A9DCE /* theora.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA27B3CA1B498696008A9DCE /* theora.framework */; };
-		FA5933751C6D625B000EC779 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA5D249A1A96CF4300C6FC8F /* Images.xcassets */; };
 		FA5D24821A96CA1800C6FC8F /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA5D24811A96CA1800C6FC8F /* OpenAL.framework */; };
 		FA5D24841A96CA2700C6FC8F /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA5D24831A96CA2700C6FC8F /* OpenGLES.framework */; };
 		FA5D24881A96CA8A00C6FC8F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA5D24871A96CA8A00C6FC8F /* UIKit.framework */; };
@@ -73,12 +61,6 @@
 		FA5D24C21A96D78000C6FC8F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA5D24C11A96D78000C6FC8F /* Foundation.framework */; };
 		FA5D24D11A96E73300C6FC8F /* liblove.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA0B7EEF1A95924A000E1D17 /* liblove.a */; };
 		FA7C636A1A9C49570000FD29 /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA7C63691A9C49570000FD29 /* Launch Screen.xib */; };
-		FA9B4A0A16E1579F00074F42 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA9B4A0916E1579F00074F42 /* SDL2.framework */; };
-		FA9B4A0B16E157B500074F42 /* SDL2.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = FA9B4A0916E1579F00074F42 /* SDL2.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		FAAFF04716CB120000CCDE45 /* OpenAL-Soft.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = FAAFF04616CB120000CCDE45 /* OpenAL-Soft.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		FAC1A449196F5DC600125284 /* license.txt in Resources */ = {isa = PBXBuildFile; fileRef = FAC1A448196F5DC600125284 /* license.txt */; };
-		FAD43ED01FF3136500831BB8 /* freetype.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = FAD43ECF1FF3133700831BB8 /* freetype.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		FAD4B1731C1F50A3004CF150 /* theora.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = FA27B3CA1B498696008A9DCE /* theora.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		FAE64A9D2072738600BC7981 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FAE64A9C2072738600BC7981 /* Metal.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
@@ -202,13 +184,6 @@
 			remoteGlobalIDString = FA0B78DC1A958B90000E1D17;
 			remoteInfo = "liblove-ios";
 		};
-		FAA287711B0ABF1400B82827 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = FA577A9316C7217800860150 /* liblove.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = FA577AAE16C7507900860150;
-			remoteInfo = "liblove-macosx";
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -221,26 +196,6 @@
 				91CF43B921485687002024DA /* liblibcef_dll_wrapper.a in Embed Libraries */,
 			);
 			name = "Embed Libraries";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A9255DDE1043185300BA1496 /* Copy Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				FA08F69716C766E700F007B5 /* love.framework in Copy Frameworks */,
-				FA9B4A0B16E157B500074F42 /* SDL2.framework in Copy Frameworks */,
-				FAD4B1731C1F50A3004CF150 /* theora.framework in Copy Frameworks */,
-				FAAFF04716CB120000CCDE45 /* OpenAL-Soft.framework in Copy Frameworks */,
-				FAD43ED01FF3136500831BB8 /* freetype.framework in Copy Frameworks */,
-				A9F169AC109E825000FC83D1 /* mpg123.framework in Copy Frameworks */,
-				A9F169AD109E825000FC83D1 /* libmodplug.framework in Copy Frameworks */,
-				A9255F58104324E100BA1496 /* ogg.framework in Copy Frameworks */,
-				A9255E031043195A00BA1496 /* vorbis.framework in Copy Frameworks */,
-				A9255DD31043183600BA1496 /* Lua.framework in Copy Frameworks */,
-			);
-			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		B5256F61211A555500891B27 /* Copy Frameworks */ = {
@@ -270,7 +225,6 @@
 
 /* Begin PBXFileReference section */
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
-		8D1107320486CEB800E47090 /* love.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = love.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		91C98F9D21432C39006E745C /* cef.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cef.xcodeproj; path = ../../../cef/cef.xcodeproj; sourceTree = "<group>"; };
 		91CF438321484742002024DA /* ghost-macosx Helper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ghost-macosx Helper.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		91CF43AE21484A26002024DA /* .localized */ = {isa = PBXFileReference; lastKnownFileType = text; path = .localized; sourceTree = "<group>"; };
@@ -330,18 +284,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		8D11072E0486CEB800E47090 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				FA08F69616C766E000F007B5 /* love.framework in Frameworks */,
-				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
-				A93E6E5510420B57007D418B /* Lua.framework in Frameworks */,
-				FA27B3CB1B498696008A9DCE /* theora.framework in Frameworks */,
-				FA9B4A0A16E1579F00074F42 /* SDL2.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		91CF438021484742002024DA /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -406,7 +348,6 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8D1107320486CEB800E47090 /* love.app */,
 				FA0B7F061A95AAF3000E1D17 /* ghost.app */,
 				B5256F78211A555500891B27 /* ghost-macosx.app */,
 				91CF438321484742002024DA /* ghost-macosx Helper.app */,
@@ -622,28 +563,6 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		8D1107260486CEB800E47090 /* love-macosx */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "love-macosx" */;
-			buildPhases = (
-				A1A91EE7205FAE61002CFB78 /* Create Temporary '.love' Package */,
-				8D1107290486CEB800E47090 /* Resources */,
-				A1A91EED205FAEE8002CFB78 /* Delete Temporary '.love' Package */,
-				8D11072C0486CEB800E47090 /* Sources */,
-				A9255DDE1043185300BA1496 /* Copy Frameworks */,
-				8D11072E0486CEB800E47090 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				FAA287721B0ABF1400B82827 /* PBXTargetDependency */,
-			);
-			name = "love-macosx";
-			productInstallPath = "$(HOME)/Applications";
-			productName = love;
-			productReference = 8D1107320486CEB800E47090 /* love.app */;
-			productType = "com.apple.product-type.application";
-		};
 		91CF438221484742002024DA /* ghost-macosx_Helper */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 91CF439921484743002024DA /* Build configuration list for PBXNativeTarget "ghost-macosx_Helper" */;
@@ -764,7 +683,6 @@
 			);
 			projectRoot = "";
 			targets = (
-				8D1107260486CEB800E47090 /* love-macosx */,
 				FA0B7F051A95AAF3000E1D17 /* love-ios */,
 				B5256F3E211A555500891B27 /* ghost-macosx */,
 				91CF438221484742002024DA /* ghost-macosx_Helper */,
@@ -839,15 +757,6 @@
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
-		8D1107290486CEB800E47090 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				FA5933751C6D625B000EC779 /* Images.xcassets in Resources */,
-				FAC1A449196F5DC600125284 /* license.txt in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		91CF438121484742002024DA /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -921,34 +830,6 @@
 			shellPath = /bin/sh;
 			shellScript = "rm \"${SRCROOT}\"/../../../package.love";
 		};
-		A1A91EE7205FAE61002CFB78 /* Create Temporary '.love' Package */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Create Temporary '.love' Package";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "cd \"${SRCROOT}\"/../../../base\nzip -r package.love .\nmv package.love ..";
-		};
-		A1A91EED205FAEE8002CFB78 /* Delete Temporary '.love' Package */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Delete Temporary '.love' Package";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "rm \"${SRCROOT}\"/../../../package.love";
-		};
 		B5256F41211A555500891B27 /* Create Temporary '.love' Package */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -980,14 +861,6 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		8D11072C0486CEB800E47090 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A93E6EED10420BA8007D418B /* love.cpp in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		91CF437F21484742002024DA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1058,11 +931,6 @@
 			isa = PBXTargetDependency;
 			name = "liblove-ios";
 			targetProxy = FA5D24BA1A96D6FC00C6FC8F /* PBXContainerItemProxy */;
-		};
-		FAA287721B0ABF1400B82827 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = "liblove-macosx";
-			targetProxy = FAA287711B0ABF1400B82827 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1293,70 +1161,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Distribution;
-		};
-		C01FCF4B08A954540054247B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "OS X AppIcon";
-				COMBINE_HIDPI_IMAGES = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/macosx/Frameworks",
-					/Library/Frameworks,
-					"\"$(SRCROOT)/build/Release\"",
-					"\"$(SRCROOT)/build/Debug\"",
-					"$(LOCAL_LIBRARY_DIR)/Frameworks",
-				);
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/macosx/Frameworks/Lua.framework/Headers",
-					"$(PROJECT_DIR)/macosx/Frameworks/SDL2.framework/Headers",
-					/Library/Frameworks/Lua.framework/Headers,
-					/Library/Frameworks/SDL2.framework/Headers,
-				);
-				INFOPLIST_FILE = "macosx/love-macosx.plist";
-				INSTALL_PATH = /Applications;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/../../../openssl/lib/Mac\"";
-				PRODUCT_BUNDLE_IDENTIFIER = builders.game.ghost;
-				PRODUCT_NAME = love;
-			};
-			name = Debug;
-		};
-		C01FCF4C08A954540054247B /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "OS X AppIcon";
-				COMBINE_HIDPI_IMAGES = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/macosx/Frameworks",
-					/Library/Frameworks,
-					"\"$(SRCROOT)/build/Release\"",
-					"\"$(SRCROOT)/build/Debug\"",
-					"$(LOCAL_LIBRARY_DIR)/Frameworks",
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/macosx/Frameworks/Lua.framework/Headers",
-					"$(PROJECT_DIR)/macosx/Frameworks/SDL2.framework/Headers",
-					/Library/Frameworks/Lua.framework/Headers,
-					/Library/Frameworks/SDL2.framework/Headers,
-				);
-				INFOPLIST_FILE = "macosx/love-macosx.plist";
-				INSTALL_PATH = /Applications;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/../../../openssl/lib/Mac\"";
-				LLVM_LTO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = builders.game.ghost;
-				PRODUCT_NAME = love;
-			};
-			name = Release;
 		};
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -1769,38 +1573,6 @@
 			};
 			name = Distribution;
 		};
-		FA5326C718971A0900F7BBF4 /* Distribution */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "OS X AppIcon";
-				COMBINE_HIDPI_IMAGES = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/macosx/Frameworks",
-					/Library/Frameworks,
-					"\"$(SRCROOT)/build/Release\"",
-					"\"$(SRCROOT)/build/Debug\"",
-					"$(LOCAL_LIBRARY_DIR)/Frameworks",
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/macosx/Frameworks/Lua.framework/Headers",
-					"$(PROJECT_DIR)/macosx/Frameworks/SDL2.framework/Headers",
-					/Library/Frameworks/Lua.framework/Headers,
-					/Library/Frameworks/SDL2.framework/Headers,
-				);
-				INFOPLIST_FILE = "macosx/love-macosx.plist";
-				INSTALL_PATH = /Applications;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				LIBRARY_SEARCH_PATHS = "\"$(SRCROOT)/../../../openssl/lib/Mac\"";
-				LLVM_LTO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = builders.game.ghost;
-				PRODUCT_NAME = love;
-			};
-			name = Distribution;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1820,16 +1592,6 @@
 				B5256F75211A555500891B27 /* Debug */,
 				B5256F76211A555500891B27 /* Release */,
 				B5256F77211A555500891B27 /* Distribution */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "love-macosx" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				C01FCF4B08A954540054247B /* Debug */,
-				C01FCF4C08A954540054247B /* Release */,
-				FA5326C718971A0900F7BBF4 /* Distribution */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
