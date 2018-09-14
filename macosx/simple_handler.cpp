@@ -17,6 +17,8 @@
 #include "json.hpp"
 using nlohmann::json;
 
+#include "ghost.h"
+
 namespace {
 
 SimpleHandler *g_instance = NULL;
@@ -57,10 +59,6 @@ bool SimpleHandler::OnProcessMessageReceived(CefRefPtr<CefBrowser> browser,
   return message_router_->OnProcessMessageReceived(browser, source_process, message);
 }
 
-extern "C" {
-void ghostSetChildWindowFrame(float left, float top, float width, float height);
-}
-
 void SimpleHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
   CEF_REQUIRE_UI_THREAD();
 
@@ -77,13 +75,19 @@ void SimpleHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
       const std::string &strRequest = request;
       auto parsed = json::parse(strRequest);
 
-      if (parsed["type"] == "CHILD_WINDOW_FRAME") {
-        float left = parsed["body"]["left"];
-        float top = parsed["body"]["top"];
-        float width = parsed["body"]["width"];
-        float height = parsed["body"]["height"];
+      std::string type = parsed["type"];
+      auto body = parsed["body"];
+      if (type == "OPEN_URI") {
+        std::string uri = body["uri"];
+        ghostOpenUri(uri.c_str());
 
-        printf("%f %f %f %f\n", left, top, width, height);
+        callback->Success("success");
+        return true;
+      } else if (type == "SET_CHILD_WINDOW_FRAME") {
+        float left = body["left"];
+        float top = body["top"];
+        float width = body["width"];
+        float height = body["height"];
 
         ghostSetChildWindowFrame(left, top, width, height);
 

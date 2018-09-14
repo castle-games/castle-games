@@ -45,7 +45,7 @@ export default class CoreApp extends React.Component {
     try {
       window.cefQuery({
         request: JSON.stringify({
-          type: 'CHILD_WINDOW_FRAME',
+          type: 'SET_CHILD_WINDOW_FRAME',
           body: {
             left: rect.left,
             top: rect.top,
@@ -74,7 +74,21 @@ export default class CoreApp extends React.Component {
 
   _handleURLChange = e => this.setState({ [e.target.name]: e.target.value });
 
-  _handleURLSubmit = e => window.alert(this.state.url);
+  _handleURLSubmit = () => {
+    try {
+      window.cefQuery({
+        request: JSON.stringify({
+          type: 'OPEN_URI',
+          body: {
+            uri: this.state.url,
+          },
+        }),
+      });
+    } catch (e) {
+      alert('`cefQuery`: ' + e.message);
+    }
+  };
+
   _handleToggleSearch = () => window.alert('search');
   _handleToggleProfile = () => window.alert('profile');
   _handleNextMedia = () => window.alert('next');

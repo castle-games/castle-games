@@ -21,6 +21,8 @@ extern "C" {
 
 #include "modules/love/love.h"
 
+#include "ghost.h"
+
 // Receives notifications from the application.
 @interface SimpleAppDelegate : NSObject <NSApplicationDelegate>
 
@@ -180,7 +182,47 @@ void Cocoa_DispatchEvent(NSEvent *theEvent);
   }
 }
 
-extern "C" void ghostSetChildWindowFrame(float left, float top, float width, float height) {
+static float childLeft = 0, childTop = 0, childWidth = 200, childHeight = 200;
+
+- (void)stepLove {
+  if (self.luaState) {
+    // Call the coroutine at the top of the stack
+    lua_State *L = self.luaState;
+    if (lua_resume(L, 0) == LUA_YIELD) {
+      lua_pop(L, lua_gettop(L) - self.loveBootStackPos);
+    } else {
+      [self closeLua];
+    }
+  }
+
+  ghostSetChildWindowFrame(childLeft, childTop, childWidth, childHeight);
+}
+
+- (void)closeLua {
+  if (self.luaState) {
+    lua_close(self.luaState);
+    self.luaState = nil;
+  }
+}
+
+- (void)tryToTerminateApplication:(NSApplication *)app {
+  [self closeLua];
+
+  SimpleHandler *handler = SimpleHandler::GetInstance();
+  if (handler && !handler->IsClosing())
+    handler->CloseAllBrowsers(false);
+}
+
+@end
+
+// macOS implementation of 'ghost.h'
+
+void ghostSetChildWindowFrame(float left, float top, float width, float height) {
+  childLeft = left;
+  childTop = top;
+  childWidth = width;
+  childHeight = height;
+
   NSWindow *window = [[NSApplication sharedApplication] mainWindow];
   if (window) {
     CGRect frame;
@@ -195,39 +237,16 @@ extern "C" void ghostSetChildWindowFrame(float left, float top, float width, flo
   }
 }
 
-- (void)stepLove {
-  NSWindow *window = [[NSApplication sharedApplication] mainWindow];
-  if (window) {
-    if (!self.luaState) {
-      [self bootLoveWithUri:nil];
-    }
-  }
-
-  if (self.luaState) {
-    // Call the coroutine at the top of the stack
-    lua_State *L = self.luaState;
-    if (lua_resume(L, 0) == LUA_YIELD) {
-      lua_pop(L, lua_gettop(L) - self.loveBootStackPos);
-    } else {
-      [self closeLua];
-    }
-  }
+void ghostOpenUri(const char *uri) {
+  SimpleAppDelegate *delegate = [NSApplication sharedApplication].delegate;
+  [delegate closeLua];
+  [delegate bootLoveWithUri:[NSString stringWithCString:uri encoding:NSUTF8StringEncoding]];
 }
 
-- (void)closeLua {
-  if (self.luaState) {
-    lua_close(self.luaState);
-    self.luaState = nil;
-  }
+void ghostClose() {
+  SimpleAppDelegate *delegate = [NSApplication sharedApplication].delegate;
+  [delegate closeLua];
 }
-
-- (void)tryToTerminateApplication:(NSApplication *)app {
-  SimpleHandler *handler = SimpleHandler::GetInstance();
-  if (handler && !handler->IsClosing())
-    handler->CloseAllBrowsers(false);
-}
-
-@end
 
 // Entry point function for the browser process.
 int main(int argc, char *argv[]) {

@@ -16,6 +16,7 @@
 		91CF43BD21485694002024DA /* liblibcef_dll_wrapper.a in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 91FDEBD521475159008FFB60 /* liblibcef_dll_wrapper.a */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		A1B31042214C4F1200CEBE9B /* json.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1B3103C214C4F1200CEBE9B /* json.hpp */; };
 		A1B31043214C4F1200CEBE9B /* json.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1B3103C214C4F1200CEBE9B /* json.hpp */; };
+		A1B3105A214C67FD00CEBE9B /* ghost.h in Headers */ = {isa = PBXBuildFile; fileRef = A1B31054214C67FC00CEBE9B /* ghost.h */; };
 		A1E7953D20721BC800731DD3 /* package.love in Resources */ = {isa = PBXBuildFile; fileRef = A1E7953C20721BC800731DD3 /* package.love */; };
 		A1ED98E9211DFA0700CBC701 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A194C6C4211CD1D50093B328 /* SDL2.framework */; };
 		A1ED98EA211DFA0700CBC701 /* SDL2.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = A194C6C4211CD1D50093B328 /* SDL2.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -243,6 +244,7 @@
 		91CF43B621484A26002024DA /* full extreme tenor solo.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "full extreme tenor solo.m4a"; sourceTree = "<group>"; };
 		A194C6BA211CD1D50093B328 /* SDL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL.xcodeproj; path = "../../../ghost-extensions/SDL2-2.0.8/Xcode/SDL/SDL.xcodeproj"; sourceTree = "<group>"; };
 		A1B3103C214C4F1200CEBE9B /* json.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = json.hpp; sourceTree = "<group>"; };
+		A1B31054214C67FC00CEBE9B /* ghost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ghost.h; sourceTree = "<group>"; };
 		A1E7953C20721BC800731DD3 /* package.love */ = {isa = PBXFileReference; lastKnownFileType = file; name = package.love; path = ../../../package.love; sourceTree = "<group>"; };
 		A9255E021043195A00BA1496 /* vorbis.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = vorbis.framework; path = /Library/Frameworks/vorbis.framework; sourceTree = "<absolute>"; };
 		A9255F51104324D700BA1496 /* ogg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ogg.framework; path = /Library/Frameworks/ogg.framework; sourceTree = "<absolute>"; };
@@ -447,6 +449,7 @@
 		B51ECE20214AE7EF000F7348 /* macosx */ = {
 			isa = PBXGroup;
 			children = (
+				A1B31054214C67FC00CEBE9B /* ghost.h */,
 				A1B3103C214C4F1200CEBE9B /* json.hpp */,
 				B51ECE23214AE7EF000F7348 /* ghost-macosx_Helper */,
 				B51ECE29214AE7EF000F7348 /* simple_app.h */,
@@ -564,6 +567,7 @@
 			files = (
 				A1B31042214C4F1200CEBE9B /* json.hpp in Headers */,
 				B51ECE31214AE7EF000F7348 /* simple_app.h in Headers */,
+				A1B3105A214C67FD00CEBE9B /* ghost.h in Headers */,
 				B51ECE2B214AE7EF000F7348 /* simple_handler.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
