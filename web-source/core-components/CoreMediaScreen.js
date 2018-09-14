@@ -2,7 +2,7 @@ import * as React from 'react';
 import { css } from 'react-emotion';
 
 const STYLES_CONTAINER = css`
-  background-image: url('/static/screenshot.gif');
+  background-image: url('static/screenshot.gif');
   background-size: cover;
   background-position: 50% 50%;
   height: 100%;

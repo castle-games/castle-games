@@ -6,7 +6,7 @@
 export const User = {
   id: 'd3df05e0-2286-45ed-b434-12c587e9c840',
   username: 'jesse',
-  avatarUrl: `/static/avatar-jesse.jpg`,
+  avatarUrl: `static/avatar-jesse.jpg`,
   email: 'jesse@expo.io',
   social: null,
   settings: null,

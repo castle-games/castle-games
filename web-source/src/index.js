@@ -10,17 +10,17 @@ import { injectGlobal } from 'react-emotion';
 const injectGlobalStyles = () => injectGlobal`
   @font-face {
     font-family: 'heading';
-    src: url('/static/RGO-SemiBold.woff');
+    src: url('static/RGO-SemiBold.woff');
   }
 
   @font-face {
     font-family: 'sub-heading';
-    src: url('/static/RGO-Regular.woff');
+    src: url('static/RGO-Regular.woff');
   }
 
   @font-face {
     font-family: 'silkscreen-regular';
-    src: url('/static/Mono-Regular.woff');
+    src: url('static/Mono-Regular.woff');
   }
 
   html, body, div, span, applet, object, iframe,

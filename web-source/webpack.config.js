@@ -34,10 +34,9 @@ module.exports = {
   },
   plugins: [
     new HTMLWebpackPlugin({
-      template: 'public/index.html',
-      inlineSource: '.(js|css)$',
+      template: './public/index.html',
+      filename: './index.html',
     }),
-    new HTMLWebpackInlineSourcePlugin(),
     new MiniCSSExtractPlugin({
       filename: '[name].css',
       chunkFilename: '[id].css',

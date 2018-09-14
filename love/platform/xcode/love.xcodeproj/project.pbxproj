@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		38F81F9B214B4A8E00E6E242 /* main.js in Resources */ = {isa = PBXBuildFile; fileRef = 38F81F9A214B4A8E00E6E242 /* main.js */; };
+		38F81FA0214B4B0F00E6E242 /* static in Resources */ = {isa = PBXBuildFile; fileRef = 38F81F9F214B4B0F00E6E242 /* static */; };
 		91CF4339214841CC002024DA /* liblibcef_dll_wrapper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 91FDEBD521475159008FFB60 /* liblibcef_dll_wrapper.a */; };
 		91CF43A721484947002024DA /* liblibcef_dll_wrapper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 91FDEBD521475159008FFB60 /* liblibcef_dll_wrapper.a */; };
 		91CF43B721484A3A002024DA /* Chromium Embedded Framework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5A0404221483BA5007A6CC1 /* Chromium Embedded Framework.framework */; };
@@ -225,6 +227,9 @@
 
 /* Begin PBXFileReference section */
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		38F81F9A214B4A8E00E6E242 /* main.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = main.js; sourceTree = "<group>"; };
+		38F81F9C214B4A9200E6E242 /* main.js.map */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = main.js.map; sourceTree = "<group>"; };
+		38F81F9F214B4B0F00E6E242 /* static */ = {isa = PBXFileReference; lastKnownFileType = folder; name = static; path = "../web-source/static"; sourceTree = "<group>"; };
 		91C98F9D21432C39006E745C /* cef.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cef.xcodeproj; path = ../../../cef/cef.xcodeproj; sourceTree = "<group>"; };
 		91CF438321484742002024DA /* ghost-macosx Helper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ghost-macosx Helper.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		91CF43AE21484A26002024DA /* .localized */ = {isa = PBXFileReference; lastKnownFileType = text; path = .localized; sourceTree = "<group>"; };
@@ -461,6 +466,9 @@
 		B596174F2149BF7100BE403F /* web */ = {
 			isa = PBXGroup;
 			children = (
+				38F81F9F214B4B0F00E6E242 /* static */,
+				38F81F9A214B4A8E00E6E242 /* main.js */,
+				38F81F9C214B4A9200E6E242 /* main.js.map */,
 				B59617502149BF7100BE403F /* index.html */,
 			);
 			name = web;
@@ -770,7 +778,9 @@
 			files = (
 				B5256F7D211A56EE00891B27 /* package.love in Resources */,
 				B59617512149BF7100BE403F /* index.html in Resources */,
+				38F81FA0214B4B0F00E6E242 /* static in Resources */,
 				B5256F43211A555500891B27 /* Images.xcassets in Resources */,
+				38F81F9B214B4A8E00E6E242 /* main.js in Resources */,
 				B51ECE2D214AE7EF000F7348 /* Info.plist in Resources */,
 				B5256F44211A555500891B27 /* license.txt in Resources */,
 			);
