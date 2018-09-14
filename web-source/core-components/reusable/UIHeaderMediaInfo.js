@@ -16,7 +16,7 @@ const STYLES_CONTAINER = css`
   border-bottom: 1px solid ${Constants.colors.white10};
 `;
 
-export default class CoreHeaderShare extends React.Component {
+export default class UIHeaderMediaInfo extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTAINER}>

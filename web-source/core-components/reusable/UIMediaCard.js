@@ -56,7 +56,7 @@ const STYLES_SECTION_PARAGRAPH = css`
   margin-bottom: 16px;
 `;
 
-export default class CoreGameInfo extends React.Component {
+export default class UIMediaCard extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTAINER}>

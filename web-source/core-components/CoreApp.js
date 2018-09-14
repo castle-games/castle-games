@@ -86,6 +86,16 @@ export default class CoreApp extends React.Component {
       isDashboardVisible: false,
     });
 
+  _handleDismissMediaInfo = () => {
+    this.setState({ isMediaInfoVisible: false });
+  };
+
+  _handleDismissDashboard = () => {
+    this.setState({ isDashboardVisible: false });
+  };
+
+  _handleDismissScore = () => this.setState({ isScoreVisible: false });
+
   _handleNextMedia = () => window.alert('next');
 
   _handlePreviousMedia = () => window.alert('previous');
@@ -153,13 +163,19 @@ export default class CoreApp extends React.Component {
 
     let maybeRightSidebarNode;
     if (state.isOverlayActive && state.isScoreVisible) {
-      maybeRightSidebarNode = <CoreScoreInfo onShareScores={this._handleShareScores} />;
+      maybeRightSidebarNode = (
+        <CoreScoreInfo
+          onDismiss={this._handleDismissScore}
+          onShareScores={this._handleShareScores}
+        />
+      );
     }
 
     let maybeRightNode;
     if (state.isOverlayActive && state.isMediaInfoVisible) {
       maybeRightNode = (
         <CoreGameInfo
+          onDismiss={this._handleDismissMediaInfo}
           onRegisterMedia={this._handleRegisterGame}
           onNextMedia={this._handleNextMedia}
           onRandomMedia={this._handleRandomMedia}
@@ -171,6 +187,7 @@ export default class CoreApp extends React.Component {
     if (state.isOverlayActive && state.isDashboardVisible) {
       maybeRightNode = (
         <CoreUserDashboard
+          onDismiss={this._handleDismissDashboard}
           onNextMedia={this._handleNextMedia}
           onRandomMedia={this._handleRandomMedia}
           onPreviousMedia={this._handlePreviousMedia}

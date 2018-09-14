@@ -3,7 +3,7 @@ import * as Constants from '~/common/constants';
 
 import { css } from 'react-emotion';
 
-import UIHeaderMediaInfo from '~/core-components/reusable/UIHeaderMediaInfo';
+import UIHeaderDismiss from '~/core-components/reusable/UIHeaderDismiss';
 import UIEmptyState from '~/core-components/reusable/UIEmptyState';
 import UILink from '~/core-components/reusable/UILink';
 
@@ -50,11 +50,7 @@ export default class CoreUserDashboard extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTAINER}>
-        <UIHeaderMediaInfo
-          onNextMedia={this.props.onNextMedia}
-          onPreviousMedia={this.props.onPreviousMedia}
-          onRandomMedia={this.props.onRandomMedia}
-        />
+        <UIHeaderDismiss onDismiss={this.props.onDismiss} />
         <UIEmptyState title="History">
           As you play different Media using the ghost-player, the last 10 links you successfully
           visited will appear here.

@@ -3,7 +3,7 @@ import * as Constants from '~/common/constants';
 
 import { css } from 'react-emotion';
 
-import UIHeaderMediaInfo from '~/core-components/reusable/UIHeaderMediaInfo';
+import UIHeaderDismiss from '~/core-components/reusable/UIHeaderDismiss';
 import UIEmptyState from '~/core-components/reusable/UIEmptyState';
 import UIMediaCard from '~/core-components/reusable/UIMediaCard';
 
@@ -50,11 +50,7 @@ export default class CoreGameInfo extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTAINER}>
-        <UIHeaderMediaInfo
-          onNextMedia={this.props.onNextMedia}
-          onPreviousMedia={this.props.onPreviousMedia}
-          onRandomMedia={this.props.onRandomMedia}
-        />
+        <UIHeaderDismiss onDismiss={this.props.onDismiss} />
 
         <UIMediaCard onRegisterMedia={this.props.onRegisterMedia} />
 

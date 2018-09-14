@@ -5,7 +5,7 @@ import { css } from 'react-emotion';
 
 import UIEmptyState from '~/core-components/reusable/UIEmptyState';
 import UILink from '~/core-components/reusable/UILink';
-import UIHeaderShare from '~/core-components/reusable/UIHeaderShare';
+import UIHeaderDismiss from '~/core-components/reusable/UIHeaderDismiss';
 
 const STYLES_CONTAINER = css`
   @keyframes score-animation {
@@ -50,7 +50,7 @@ export default class CoreScoreInfo extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTAINER}>
-        <UIHeaderShare onShareClick={this.props.onShareClick} />
+        <UIHeaderDismiss onDismiss={this.props.onDismiss} />
 
         <UIEmptyState title="No scores yet">
           In the future you will be able to add webhooks to your games and let players submit scores
