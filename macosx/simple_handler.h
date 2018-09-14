@@ -6,13 +6,15 @@
 #define CEF_TESTS_CEFSIMPLE_SIMPLE_HANDLER_H_
 
 #include "include/cef_client.h"
+#include "include/wrapper/cef_message_router.h"
 
 #include <list>
 
 class SimpleHandler : public CefClient,
                       public CefDisplayHandler,
                       public CefLifeSpanHandler,
-                      public CefLoadHandler {
+                      public CefLoadHandler,
+                      public CefRequestHandler {
 public:
   explicit SimpleHandler(bool use_views);
   ~SimpleHandler();
@@ -28,6 +30,12 @@ public:
     return this;
   }
   virtual CefRefPtr<CefLoadHandler> GetLoadHandler() OVERRIDE { return this; }
+  virtual CefRefPtr<CefRequestHandler> GetRequestHandler() OVERRIDE {
+    return this;
+  }
+  bool OnProcessMessageReceived(CefRefPtr<CefBrowser> browser,
+                                CefProcessId source_process,
+                                CefRefPtr<CefProcessMessage> message) OVERRIDE;
 
   // CefDisplayHandler methods:
   virtual void OnTitleChange(CefRefPtr<CefBrowser> browser,
@@ -43,6 +51,13 @@ public:
                            CefRefPtr<CefFrame> frame, ErrorCode errorCode,
                            const CefString &errorText,
                            const CefString &failedUrl) OVERRIDE;
+
+  // CefRequestHandler methods:
+  bool OnBeforeBrowse(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame,
+                      CefRefPtr<CefRequest> request, bool user_gesture,
+                      bool is_redirect) OVERRIDE;
+  void OnRenderProcessTerminated(CefRefPtr<CefBrowser> browser,
+                                 TerminationStatus status) OVERRIDE;
 
   // Request that all existing browser windows close.
   void CloseAllBrowsers(bool force_close);
@@ -62,6 +77,9 @@ private:
   BrowserList browser_list_;
 
   bool is_closing_;
+
+  CefRefPtr<CefMessageRouterBrowserSide> message_router_;
+  scoped_ptr<CefMessageRouterBrowserSide::Handler> message_handler_;
 
   // Include the default reference counting implementation.
   IMPLEMENT_REFCOUNTING(SimpleHandler);

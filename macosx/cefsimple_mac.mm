@@ -241,13 +241,13 @@ int main(int argc, char *argv[]) {
     // use embedded index.html if it exists.
     NSString *indexPath =
         [[NSBundle mainBundle] pathForResource:@"index" ofType:@"html"];
-    std::string initialUrl;
-    if (indexPath && indexPath.length) {
-      indexPath = [NSString stringWithFormat:@"file://%@", indexPath];
-      initialUrl = std::string([indexPath UTF8String]);
-    } else {
-      initialUrl = "http://www.google.com";
-    }
+    std::string initialUrl = "http://localhost:3000";
+//    if (indexPath && indexPath.length) {
+//      indexPath = [NSString stringWithFormat:@"file://%@", indexPath];
+//      initialUrl = std::string([indexPath UTF8String]);
+//    } else {
+//      initialUrl = "http://www.google.com";
+//    }
     CefRefPtr<SimpleApp> app(new SimpleApp(initialUrl));
 
     // Initialize CEF for the browser process.

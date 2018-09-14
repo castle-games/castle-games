@@ -50,7 +50,14 @@ export default class CoreApp extends React.Component {
     };
 
     // TODO(nikki): Need a way to send this over.
-    alert(nativeFoo());
+    try {
+      const initial = (new Date()).getTime();
+      window.cefQuery({
+        request: 'request1'
+      });
+    } catch (e) {
+      alert('tried ' + e.message);
+    }
   };
 
   _handleKeyDown = e => {

@@ -4,8 +4,9 @@
 
 #include "include/cef_app.h"
 
-class HelperApp : public CefApp,
-                  public CefRenderProcessHandler {
+#include "include/wrapper/cef_message_router.h"
+
+class HelperApp : public CefApp, public CefRenderProcessHandler {
 public:
   virtual CefRefPtr<CefRenderProcessHandler>
   GetRenderProcessHandler() OVERRIDE {
@@ -13,34 +14,34 @@ public:
   }
 
   // CefRenderProcessHandler methods:
-  virtual void OnContextCreated(CefRefPtr<CefBrowser> browser,
-                                CefRefPtr<CefFrame> frame,
-																CefRefPtr<CefV8Context> context) OVERRIDE {
-    struct NativeCallHandler : public CefV8Handler {
-      virtual bool Execute(const CefString &name, CefRefPtr<CefV8Value> object,
-                           const CefV8ValueList &arguments,
-                           CefRefPtr<CefV8Value> &retval,
-                           CefString &exception) OVERRIDE {
-        if (name == "foo") {
-          retval = CefV8Value::CreateString("bar");
-          return true;
-        }
-        
-        return false;
-      }
-      
-      IMPLEMENT_REFCOUNTING(NativeCallHandler);
-    };
-    
-    CefRefPtr<CefV8Value> globals = context->GetGlobal();
-    CefRefPtr<CefV8Handler> nativeCallHandler = new NativeCallHandler();
-    CefRefPtr<CefV8Value> jsNativeCallHandler =
-    CefV8Value::CreateFunction("foo", nativeCallHandler);
-    context->GetGlobal()->SetValue("nativeFoo", jsNativeCallHandler,
-                                   V8_PROPERTY_ATTRIBUTE_NONE);
-	};
+  void OnWebKitInitialized() OVERRIDE {
+    // Create the renderer-side router for query handling.
+    CefMessageRouterConfig config;
+    message_router_ = CefMessageRouterRendererSide::Create(config);
+  }
+  
+  void OnContextCreated(CefRefPtr<CefBrowser> browser,
+                        CefRefPtr<CefFrame> frame,
+                        CefRefPtr<CefV8Context> context) OVERRIDE {
+    message_router_->OnContextCreated(browser, frame, context);
+  }
+  
+  void OnContextReleased(CefRefPtr<CefBrowser> browser,
+                         CefRefPtr<CefFrame> frame,
+                         CefRefPtr<CefV8Context> context) OVERRIDE {
+    message_router_->OnContextReleased(browser, frame, context);
+  }
+  
+  bool OnProcessMessageReceived(CefRefPtr<CefBrowser> browser,
+                                CefProcessId source_process,
+                                CefRefPtr<CefProcessMessage> message) OVERRIDE {
+    return message_router_->OnProcessMessageReceived(browser, source_process,
+                                                     message);
+  }
 
 private:
+  CefRefPtr<CefMessageRouterRendererSide> message_router_;
+
   // Include the default reference counting implementation.
   IMPLEMENT_REFCOUNTING(HelperApp);
 };
@@ -49,9 +50,9 @@ private:
 int main(int argc, char *argv[]) {
   // Provide CEF with command-line arguments.
   CefMainArgs main_args(argc, argv);
-	
-	CefRefPtr<HelperApp> app(new HelperApp());
-	
+
+  CefRefPtr<HelperApp> app(new HelperApp());
+
   // Execute the sub-process.
-	return CefExecuteProcess(main_args, app, NULL);
+  return CefExecuteProcess(main_args, app, NULL);
 }
