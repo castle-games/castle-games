@@ -4,4 +4,4 @@
 !lib/
 !build-ios-macos.sh
 
-!openssl-1.0.2l-vs2013/
+!openssl-1.0.2l-vs2017/

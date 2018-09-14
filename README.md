@@ -97,3 +97,10 @@ I let IntelliJ's auto-format handle styling personally. We're not using an auto-
 - Use ' to delimit strings rather than ".
 - Note that `assert(val, msg)` will evaluate to `msg` if it's truthy, else raise an error mentioning
   `msg`. This is useful to do things like `local thing = foo(assert(arg, "didn't get the arg!"))`.
+
+### OpenSSL
+
+From here: https://www.npcglib.org/~stathis/blog/precompiled-openssl/
+luacrypto requires openssl 1.0.2. Using 1.1.0 results in this error:
+`ghost-extensions\luacrypto\src\lcrypto.c(1299): error C2027: use of undefined type 'evp_cipher_ctx_st'`
+See https://github.com/openssl/openssl/issues/962

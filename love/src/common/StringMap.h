@@ -29,8 +29,10 @@
 // As StringMap instantiates std::vector<std::string> for instances that use
 // getNames(), we end up with multiple copies in the object files. This
 // declaration means we only emit it once (in StringMap.cpp).
-extern template class std::vector<std::string>;
-extern template decltype(std::vector<std::string>().emplace_back("")) std::vector<std::string>::emplace_back<const char *const&>(const char *const&);
+
+// Commented out based on this post https://love2d.org/forums/viewtopic.php?t=85550
+// extern template class std::vector<std::string>;
+// extern template decltype(std::vector<std::string>().emplace_back("")) std::vector<std::string>::emplace_back<const char *const&>(const char *const&);
 
 namespace love
 {

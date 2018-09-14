@@ -22,4 +22,6 @@
 
 // See the header
 template class std::vector<std::string>;
-template decltype(std::vector<std::string>().emplace_back("")) std::vector<std::string>::emplace_back<const char *const&>(const char *const&);
+
+// Commented out based on this post https://love2d.org/forums/viewtopic.php?t=85550
+// template decltype(std::vector<std::string>().emplace_back("")) std::vector<std::string>::emplace_back<const char *const&>(const char *const&);

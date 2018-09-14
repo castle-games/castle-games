@@ -241,7 +241,11 @@ static DoneAction runlove(int argc, char **argv, int &retval)
 	return done;
 }
 
+#ifdef LOVE_MACOSX
 int mainUNUSED(int argc, char **argv)
+#else
+int main(int argc, char **argv)
+#endif
 {
 	if (strcmp(LOVE_VERSION_STRING, love_version()) != 0)
 	{
