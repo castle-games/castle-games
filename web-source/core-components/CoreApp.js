@@ -79,27 +79,36 @@ export default class CoreApp extends React.Component {
     this._handleSetGameWindowSize();
   };
 
-  _handleToggleDashboard = () =>
+  _handleToggleDashboard = () => {
     this.setState({
       isMediaInfoVisible: false,
       isDashboardVisible: !this.state.isDashboardVisible,
     });
+    this._handleSetGameWindowSize();
+  };
 
-  _handleToggleMediaInfo = () =>
+  _handleToggleMediaInfo = () => {
     this.setState({
       isMediaInfoVisible: !this.state.isMediaInfoVisible,
       isDashboardVisible: false,
     });
+    this._handleSetGameWindowSize();
+  };
 
   _handleDismissMediaInfo = () => {
     this.setState({ isMediaInfoVisible: false });
+    this._handleSetGameWindowSize();
   };
 
   _handleDismissDashboard = () => {
     this.setState({ isDashboardVisible: false });
+    this._handleSetGameWindowSize();
   };
 
-  _handleDismissScore = () => this.setState({ isScoreVisible: false });
+  _handleDismissScore = () => {
+    this.setState({ isScoreVisible: false });
+    this._handleSetGameWindowSize();
+  };
 
   _handleNextMedia = () => window.alert('next');
 
@@ -111,12 +120,19 @@ export default class CoreApp extends React.Component {
 
   _handleFavoriteMedia = () => window.alert('favorite');
 
-  _handleHideOverlay = () => this.setState({ isOverlayActive: false });
+  _handleHideOverlay = () => {
+    this.setState({ isOverlayActive: false });
+    this._handleSetGameWindowSize();
+  };
 
-  _handleToggleOverlay = () => this.setState({ isOverlayActive: !this.state.isOverlayActive });
-
-  _handleToggleMediaExpanded = () =>
+  _handleToggleOverlay = () => {
+    this.setState({ isOverlayActive: !this.state.isOverlayActive });
+    this._handleSetGameWindowSize();
+  };
+  _handleToggleMediaExpanded = () => {
     this.setState({ isMediaExpanded: !this.state.isMediaExpanded });
+    this._handleSetGameWindowSize();
+  };
 
   _handleShareScores = () => window.alert('score share');
 
