@@ -59,6 +59,7 @@ bool SimpleHandler::OnProcessMessageReceived(CefRefPtr<CefBrowser> browser,
 
 extern "C" {
 void ghostSetChildWindowFrame(float left, float top, float width, float height);
+void ghostBootLoveWithUri(std::string uri);
 }
 
 void SimpleHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
@@ -89,6 +90,9 @@ void SimpleHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
 
         callback->Success("success");
         return true;
+      } else if (parsed["type"] == "URL_SUBMIT") {
+        std::string uri = parsed["body"]["url"];
+        ghostBootLoveWithUri(uri);
       }
 
       return false;
