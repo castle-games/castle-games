@@ -48,8 +48,14 @@ extern "C" {
   handlingSendEvent_ = handlingSendEvent;
 }
 
+// XXX(Ghost): Make this available for external use...
+extern "C" {
+void Cocoa_DispatchEvent(NSEvent *theEvent);
+}
+
 - (void)sendEvent:(NSEvent *)event {
   CefScopedSendingEvent sendingEventScoper;
+	Cocoa_DispatchEvent(event);
   [super sendEvent:event];
 }
 
