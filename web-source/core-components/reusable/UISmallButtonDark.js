@@ -8,11 +8,11 @@ const STYLES_CONTROL = css`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #666;
-  border-left: 1px solid #666;
-  border-top: 1px solid #666;
-  border-bottom: 1px solid #666;
-  background: #222;
+  color: ${Constants.colors.white40};
+  border-left: 1px solid ${Constants.colors.white10};
+  border-top: 1px solid ${Constants.colors.white10};
+  border-bottom: 1px solid ${Constants.colors.white10};
+  background: ${Constants.colors.black20};
   height: 32px;
   width: 32px;
   transition: 200ms ease opacity;
@@ -24,7 +24,7 @@ const STYLES_CONTROL = css`
   }
 
   :last-child {
-    border-right: 1px solid #666;
+    border-right: 1px solid ${Constants.colors.white10};
   }
 `;
 

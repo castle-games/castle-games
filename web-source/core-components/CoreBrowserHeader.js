@@ -65,10 +65,10 @@ export default class CoreBrowserHeader extends React.Component {
           <UIControl style={{ marginRight: 24 }} onClick={this.props.onToggleDashboard}>
             Dashboard
           </UIControl>
-          <UIControl style={{ marginRight: 24 }} onClick={this.props.onToggleScores}>
-            Scores
+          <UIControl style={{ marginRight: 24 }} onClick={this.props.onToggleMediaInfo}>
+            Info
           </UIControl>
-          <UIControl onClick={this.props.onToggleMediaInfo}>Info</UIControl>
+          <UIControl onClick={this.props.onToggleScores}>Scores</UIControl>
         </div>
       </div>
     );
