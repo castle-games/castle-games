@@ -105,3 +105,29 @@ void SimpleApp::OnContextInitialized() {
                                   NULL);
   }
 }
+
+void SimpleApp::OnContextCreated(CefRefPtr<CefBrowser> browser,
+                                 CefRefPtr<CefFrame> frame,
+                                 CefRefPtr<CefV8Context> context) {
+	struct NativeCallHandler : public CefV8Handler {
+		virtual bool Execute(const CefString& name,
+												 CefRefPtr<CefV8Value> object,
+												 const CefV8ValueList& arguments,
+												 CefRefPtr<CefV8Value>& retval,
+												 CefString& exception) OVERRIDE {
+			if (name == "foo") {
+				retval = CefV8Value::CreateString("bar");
+				return true;
+			}
+			
+			return false;
+		}
+		
+		IMPLEMENT_REFCOUNTING(NativeCallHandler);
+	};
+	
+	CefRefPtr<CefV8Value> globals = context->GetGlobal();
+	CefRefPtr<CefV8Handler> nativeCallHandler = new NativeCallHandler();
+	CefRefPtr<CefV8Value> jsNativeCallHandler = CefV8Value::CreateFunction("foo", nativeCallHandler);
+	context->GetGlobal()->SetValue("nativeFoo", jsNativeCallHandler, V8_PROPERTY_ATTRIBUTE_NONE);
+}

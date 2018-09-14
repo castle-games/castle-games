@@ -56,7 +56,7 @@ void Cocoa_DispatchEvent(NSEvent *theEvent);
 
 - (void)sendEvent:(NSEvent *)event {
   CefScopedSendingEvent sendingEventScoper;
-	Cocoa_DispatchEvent(event);
+  Cocoa_DispatchEvent(event);
   [super sendEvent:event];
 }
 
@@ -82,7 +82,7 @@ void Cocoa_DispatchEvent(NSEvent *theEvent);
 
   // Love test
   self.luaState = nil;
-//  [self bootLoveWithUri:nil];
+  //  [self bootLoveWithUri:nil];
   self.mainLoopTimer = [NSTimer timerWithTimeInterval:1.0f / 60.0f
                                                target:self
                                              selector:@selector(stepLove)
@@ -167,13 +167,13 @@ void Cocoa_DispatchEvent(NSEvent *theEvent);
 }
 
 - (void)stepLove {
-	NSWindow *window = [[NSApplication sharedApplication] mainWindow];
-	if (window) {
-		if (!self.luaState) {
-			[self bootLoveWithUri:nil];
-		}
-	}
-	
+  NSWindow *window = [[NSApplication sharedApplication] mainWindow];
+  if (window) {
+    if (!self.luaState) {
+      [self bootLoveWithUri:nil];
+    }
+  }
+
   if (self.luaState) {
     // Call the coroutine at the top of the stack
     lua_State *L = self.luaState;
@@ -182,12 +182,12 @@ void Cocoa_DispatchEvent(NSEvent *theEvent);
     } else {
       [self closeLua];
     }
-		
-		for (NSWindow *childWindow in window.childWindows) {
-			CGPoint origin = window.frame.origin;
-			origin.y += 48;
-			[childWindow setFrameOrigin:origin];
-		}
+
+    for (NSWindow *childWindow in window.childWindows) {
+      CGPoint origin = window.frame.origin;
+      origin.y += 48;
+      [childWindow setFrameOrigin:origin];
+    }
   }
 }
 
