@@ -200,8 +200,9 @@ static float childLeft = 0, childTop = 0, childWidth = 200, childHeight = 200;
 
 - (void)closeLua {
   if (self.luaState) {
-    lua_close(self.luaState);
+    lua_State *L = self.luaState;
     self.luaState = nil;
+    lua_close(L);
   }
 }
 
@@ -238,14 +239,19 @@ void ghostSetChildWindowFrame(float left, float top, float width, float height) 
 }
 
 void ghostOpenUri(const char *uri) {
-  SimpleAppDelegate *delegate = [NSApplication sharedApplication].delegate;
-  [delegate closeLua];
-  [delegate bootLoveWithUri:[NSString stringWithCString:uri encoding:NSUTF8StringEncoding]];
+  NSString *uriStr = [NSString stringWithCString:uri encoding:NSUTF8StringEncoding];
+  dispatch_async(dispatch_get_main_queue(), ^{
+    SimpleAppDelegate *delegate = [NSApplication sharedApplication].delegate;
+    [delegate closeLua];
+    [delegate bootLoveWithUri:uriStr];
+  });
 }
 
 void ghostClose() {
-  SimpleAppDelegate *delegate = [NSApplication sharedApplication].delegate;
-  [delegate closeLua];
+  dispatch_async(dispatch_get_main_queue(), ^{
+    SimpleAppDelegate *delegate = [NSApplication sharedApplication].delegate;
+    [delegate closeLua];
+  });
 }
 
 // Entry point function for the browser process.
