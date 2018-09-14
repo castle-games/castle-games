@@ -10,9 +10,7 @@
 #include <string>
 
 // Implement application-level callbacks for the browser process.
-class SimpleApp : public CefApp,
-                  public CefBrowserProcessHandler,
-                  public CefRenderProcessHandler {
+class SimpleApp : public CefApp, public CefBrowserProcessHandler {
 public:
   SimpleApp(std::string initialUrl);
 
@@ -22,18 +20,8 @@ public:
     return this;
   }
 
-  virtual CefRefPtr<CefRenderProcessHandler>
-  GetRenderProcessHandler() OVERRIDE {
-    return this;
-  }
-
   // CefBrowserProcessHandler methods:
   virtual void OnContextInitialized() OVERRIDE;
-
-  // CefRenderProcessHandler methods:
-  virtual void OnContextCreated(CefRefPtr<CefBrowser> browser,
-                                CefRefPtr<CefFrame> frame,
-                                CefRefPtr<CefV8Context> context) OVERRIDE;
 
 private:
   std::string _initialUrl;

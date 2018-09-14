@@ -50,7 +50,7 @@ export default class CoreApp extends React.Component {
     };
 
     // TODO(nikki): Need a way to send this over.
-    // alert(nativeFoo());
+    alert(nativeFoo());
   };
 
   _handleKeyDown = e => {
