@@ -59,8 +59,10 @@ export default class CoreApp extends React.Component {
     }
   };
 
-  _handleToggleAuthentication = () =>
+  _handleToggleAuthentication = () => {
     this.setState({ viewer: this.state.viewer ? null : Fixtures.User });
+    this._handleSetGameWindowSize();
+  };
 
   _handleToggleEntityFavorite = () => {};
 
@@ -72,7 +74,10 @@ export default class CoreApp extends React.Component {
 
   _handleToggleProfile = () => window.alert('profile');
 
-  _handleToggleScore = () => this.setState({ isScoreVisible: !this.state.isScoreVisible });
+  _handleToggleScore = () => {
+    this.setState({ isScoreVisible: !this.state.isScoreVisible });
+    this._handleSetGameWindowSize();
+  };
 
   _handleToggleDashboard = () =>
     this.setState({

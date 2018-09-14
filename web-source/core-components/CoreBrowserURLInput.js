@@ -103,6 +103,9 @@ export default class CoreBrowserURLInput extends React.Component {
             onChange={this.props.onURLChange}
           />
         </div>
+        <div className={STYLES_CONTAINER_RIGHT}>
+          <UISmallButtonDark icon={<UISVG.Play height="12px" />} onClick={this.props.onURLSubmit} />
+        </div>
         <div className={STYLES_CONTAINER_TOOLBAR}>
           <UISmallButtonDark
             icon={<UISVG.Favorite height="16px" />}
@@ -119,6 +122,10 @@ export default class CoreBrowserURLInput extends React.Component {
               onClick={this.props.onToggleMediaExpanded}
             />
           )}
+          <UISmallButtonDark
+            icon={<UISVG.CloseOverlay height="16px" />}
+            onClick={this.props.onHideOverlay}
+          />
         </div>
       </div>
     );
