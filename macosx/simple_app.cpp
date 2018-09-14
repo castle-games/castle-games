@@ -50,7 +50,11 @@ private:
 
 } // namespace
 
-SimpleApp::SimpleApp(std::string initialUrl) { this->_initialUrl = initialUrl; }
+SimpleApp::SimpleApp(std::string initialUrl, int initialWindowWidth, int initialWindowHeight) {
+  this->_initialUrl = initialUrl;
+  this->_initialWindowWidth = initialWindowWidth;
+  this->_initialWindowHeight = initialWindowHeight;
+}
 
 void SimpleApp::OnContextInitialized() {
   CEF_REQUIRE_UI_THREAD();
@@ -93,6 +97,12 @@ void SimpleApp::OnContextInitialized() {
   } else {
     // Information used when creating the native window.
     CefWindowInfo window_info;
+    if (this->_initialWindowWidth) {
+      window_info.width = this->_initialWindowWidth;
+    }
+    if (this->_initialWindowHeight) {
+      window_info.height = this->_initialWindowHeight;
+    }
 
 #if defined(OS_WIN)
     // On Windows we need to specify certain flags that will be passed to

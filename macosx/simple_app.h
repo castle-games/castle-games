@@ -12,7 +12,7 @@
 // Implement application-level callbacks for the browser process.
 class SimpleApp : public CefApp, public CefBrowserProcessHandler {
 public:
-  SimpleApp(std::string initialUrl);
+  SimpleApp(std::string initialUrl, int initialWindowWidth, int initialWindowHeight);
 
   // CefApp methods:
   virtual CefRefPtr<CefBrowserProcessHandler>
@@ -25,6 +25,8 @@ public:
 
 private:
   std::string _initialUrl;
+  int _initialWindowWidth, _initialWindowHeight;
+
   // Include the default reference counting implementation.
   IMPLEMENT_REFCOUNTING(SimpleApp);
 };

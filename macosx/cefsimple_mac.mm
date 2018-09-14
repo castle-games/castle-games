@@ -88,6 +88,10 @@ void Cocoa_DispatchEvent(NSEvent *theEvent);
   return mainMenu;
 }
 
+- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
+  return YES;
+}
+
 // Create the application on the UI thread.
 - (void)createApplication:(id)object {
   [NSApplication sharedApplication];
@@ -257,7 +261,8 @@ int main(int argc, char *argv[]) {
 //    } else {
 //      initialUrl = "http://www.google.com";
 //    }
-    CefRefPtr<SimpleApp> app(new SimpleApp(initialUrl));
+    NSSize screenSize = [NSScreen mainScreen].visibleFrame.size;
+    CefRefPtr<SimpleApp> app(new SimpleApp(initialUrl, screenSize.width, screenSize.height));
 
     // Initialize CEF for the browser process.
     CefInitialize(main_args, settings, app.get(), NULL);
