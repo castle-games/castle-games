@@ -42,21 +42,21 @@ export default class CoreApp extends React.Component {
     const element = this._layout.getMediaContainerRef();
     const rect = element.getBoundingClientRect();
 
-    const gameWindow = {
-      left: rect.left,
-      top: rect.top,
-      width: rect.width,
-      height: rect.height,
-    };
-
     // TODO(nikki): Need a way to send this over.
     try {
-      const initial = (new Date()).getTime();
       window.cefQuery({
-        request: 'request1'
+        request: JSON.stringify({
+          type: 'CHILD_WINDOW_FRAME',
+          body: {
+            left: rect.left,
+            top: rect.top,
+            width: rect.width,
+            height: rect.height,
+          },
+        }),
       });
     } catch (e) {
-      alert('tried ' + e.message);
+      alert('`cefQuery`: ' + e.message);
     }
   };
 

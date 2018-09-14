@@ -14,6 +14,9 @@
 #include "include/wrapper/cef_closure_task.h"
 #include "include/wrapper/cef_helpers.h"
 
+#include "json.hpp"
+using nlohmann::json;
+
 namespace {
 
 SimpleHandler *g_instance = NULL;
@@ -58,6 +61,10 @@ bool SimpleHandler::OnProcessMessageReceived(
                                                    message);
 }
 
+extern "C" {
+  void ghostSetChildWindowFrame(float left, float top, float width, float height);
+}
+
 void SimpleHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
   CEF_REQUIRE_UI_THREAD();
 
@@ -72,8 +79,24 @@ void SimpleHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
     bool OnQuery(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame,
                  int64 query_id, const CefString &request, bool persistent,
                  CefRefPtr<Callback> callback) OVERRIDE {
-      callback->Success("hello, world");
-      return true;
+      const std::string &strRequest = request;
+      auto parsed = json::parse(strRequest);
+      
+      if (parsed["type"] == "CHILD_WINDOW_FRAME") {
+        float left = parsed["body"]["left"];
+        float top = parsed["body"]["top"];
+        float width = parsed["body"]["width"];
+        float height = parsed["body"]["height"];
+        
+        printf("%f %f %f %f\n", left, top, width, height);
+        
+        ghostSetChildWindowFrame(left, top, width, height);
+        
+        callback->Success("success");
+        return true;
+      }
+      
+      return false;
     }
 
   private:

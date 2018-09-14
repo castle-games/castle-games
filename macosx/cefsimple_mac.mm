@@ -182,6 +182,21 @@ void Cocoa_DispatchEvent(NSEvent *theEvent);
   }
 }
 
+extern "C" void ghostSetChildWindowFrame(float left, float top, float width, float height) {
+  NSWindow *window = [[NSApplication sharedApplication] mainWindow];
+  if (window) {
+    CGRect frame;
+    frame.origin.x = window.frame.origin.x + left;
+    frame.origin.y = window.frame.origin.y + window.contentLayoutRect.size.height - top - height;
+    frame.size.width = width;
+    frame.size.height = height;
+
+    for (NSWindow *childWindow in window.childWindows) {
+      [childWindow setFrame:frame display:YES];
+    }
+  }
+}
+
 - (void)stepLove {
   NSWindow *window = [[NSApplication sharedApplication] mainWindow];
   if (window) {
@@ -197,12 +212,6 @@ void Cocoa_DispatchEvent(NSEvent *theEvent);
       lua_pop(L, lua_gettop(L) - self.loveBootStackPos);
     } else {
       [self closeLua];
-    }
-
-    for (NSWindow *childWindow in window.childWindows) {
-      CGPoint origin = window.frame.origin;
-      origin.y += 48;
-      [childWindow setFrameOrigin:origin];
     }
   }
 }
