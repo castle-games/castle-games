@@ -52,7 +52,8 @@
 
 static SDL_bool s_bShouldHandleEventsInSDLApplication = SDL_FALSE;
 
-static void Cocoa_DispatchEvent(NSEvent *theEvent)
+// XXX(Ghost): Make this available for external use...
+void Cocoa_DispatchEvent(NSEvent *theEvent)
 {
     SDL_VideoDevice *_this = SDL_GetVideoDevice();
 
@@ -83,7 +84,7 @@ static void Cocoa_DispatchEvent(NSEvent *theEvent)
 // XXX(Ghost): When this is set, `[NSApp run]` is run once with an immediate `[NSApp stop:nil]`
 //             so that it can do its initialization stuff. Needed for `application:openURLs`
 //             etc. to work...
-static SDL_bool s_bDummyRun = SDL_TRUE;
+static SDL_bool s_bDummyRun = SDL_FALSE;
 
 // Dispatch events here so that we can handle events caught by
 // nextEventMatchingMask in SDL, as well as events caught by other

@@ -9,8 +9,9 @@ function love.conf(t)
     t.window.highdpi = true
 
     if not mobile then
-        t.window.width = 1112
-        t.window.height = 834
-        t.window.resizable = true
+        t.window.borderless = true
+        t.window.width = 640
+        t.window.height = 480
+        t.window.resizable = false
     end
 end

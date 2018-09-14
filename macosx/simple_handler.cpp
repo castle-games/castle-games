@@ -14,6 +14,9 @@
 #include "include/wrapper/cef_closure_task.h"
 #include "include/wrapper/cef_helpers.h"
 
+#include "json.hpp"
+using nlohmann::json;
+
 namespace {
 
 SimpleHandler *g_instance = NULL;
@@ -50,11 +53,63 @@ void SimpleHandler::OnTitleChange(CefRefPtr<CefBrowser> browser,
   }
 }
 
+bool SimpleHandler::OnProcessMessageReceived(
+    CefRefPtr<CefBrowser> browser, CefProcessId source_process,
+    CefRefPtr<CefProcessMessage> message) {
+  CEF_REQUIRE_UI_THREAD();
+  return message_router_->OnProcessMessageReceived(browser, source_process,
+                                                   message);
+}
+
+extern "C" {
+  void ghostSetChildWindowFrame(float left, float top, float width, float height);
+}
+
 void SimpleHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
   CEF_REQUIRE_UI_THREAD();
 
   // Add to the list of existing browsers.
   browser_list_.push_back(browser);
+
+  class MessageHandler : public CefMessageRouterBrowserSide::Handler {
+  public:
+    MessageHandler() {}
+
+    // Called due to cefQuery execution in message_router.html.
+    bool OnQuery(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame,
+                 int64 query_id, const CefString &request, bool persistent,
+                 CefRefPtr<Callback> callback) OVERRIDE {
+      const std::string &strRequest = request;
+      auto parsed = json::parse(strRequest);
+      
+      if (parsed["type"] == "CHILD_WINDOW_FRAME") {
+        float left = parsed["body"]["left"];
+        float top = parsed["body"]["top"];
+        float width = parsed["body"]["width"];
+        float height = parsed["body"]["height"];
+        
+        printf("%f %f %f %f\n", left, top, width, height);
+        
+        ghostSetChildWindowFrame(left, top, width, height);
+        
+        callback->Success("success");
+        return true;
+      }
+      
+      return false;
+    }
+
+  private:
+    DISALLOW_COPY_AND_ASSIGN(MessageHandler);
+  };
+
+  if (!message_router_) {
+    CefMessageRouterConfig config;
+    message_router_ = CefMessageRouterBrowserSide::Create(config);
+
+    message_handler_.reset(new MessageHandler());
+    message_router_->AddHandler(message_handler_.get(), false);
+  }
 }
 
 bool SimpleHandler::DoClose(CefRefPtr<CefBrowser> browser) {
@@ -88,6 +143,11 @@ void SimpleHandler::OnBeforeClose(CefRefPtr<CefBrowser> browser) {
   if (browser_list_.empty()) {
     // All browser windows have closed. Quit the application message loop.
     CefQuitMessageLoop();
+
+    message_router_->OnBeforeClose(browser);
+    message_router_->RemoveHandler(message_handler_.get());
+    message_handler_.reset();
+    message_router_ = NULL;
   }
 }
 
@@ -124,4 +184,21 @@ void SimpleHandler::CloseAllBrowsers(bool force_close) {
   BrowserList::const_iterator it = browser_list_.begin();
   for (; it != browser_list_.end(); ++it)
     (*it)->GetHost()->CloseBrowser(force_close);
+}
+
+bool SimpleHandler::OnBeforeBrowse(CefRefPtr<CefBrowser> browser,
+                                   CefRefPtr<CefFrame> frame,
+                                   CefRefPtr<CefRequest> request,
+                                   bool user_gesture, bool is_redirect) {
+  CEF_REQUIRE_UI_THREAD();
+
+  message_router_->OnBeforeBrowse(browser, frame);
+  return false;
+}
+
+void SimpleHandler::OnRenderProcessTerminated(CefRefPtr<CefBrowser> browser,
+                                              TerminationStatus status) {
+  CEF_REQUIRE_UI_THREAD();
+
+  message_router_->OnRenderProcessTerminated(browser);
 }

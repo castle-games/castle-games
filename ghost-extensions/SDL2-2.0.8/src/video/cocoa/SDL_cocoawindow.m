@@ -93,12 +93,14 @@
 
 - (BOOL)canBecomeKeyWindow
 {
-    return YES;
+    /// XXX(Ghost): We're just gonna be a child of the main window, don't allow 'key'
+    return NO;
 }
 
 - (BOOL)canBecomeMainWindow
 {
-    return YES;
+    /// XXX(Ghost): We're just gonna be a child of the main window, don't allow 'main'
+    return NO;
 }
 
 - (void)sendEvent:(NSEvent *)event
@@ -1318,6 +1320,8 @@ Cocoa_CreateWindow(_THIS, SDL_Window * window)
 
     @try {
         nswindow = [[SDLWindow alloc] initWithContentRect:rect styleMask:style backing:NSBackingStoreBuffered defer:NO screen:screen];
+        /// XXX(Ghost): Add as child of main window
+        [[[NSApplication sharedApplication] mainWindow] addChildWindow:nswindow ordered:NSWindowAbove];
     }
     @catch (NSException *e) {
         return SDL_SetError("%s", [[e reason] UTF8String]);

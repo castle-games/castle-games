@@ -5,13 +5,30 @@
 
 #import <Cocoa/Cocoa.h>
 
+extern "C" {
+#include <lauxlib.h>
+#include <lua.h>
+#include <lualib.h>
+}
+
+#include <SDL.h>
+#include <SDL_syswm.h>
+
 #include "include/cef_application_mac.h"
 #include "include/wrapper/cef_helpers.h"
 #include "simple_app.h"
 #include "simple_handler.h"
 
+#include "modules/love/love.h"
+
 // Receives notifications from the application.
 @interface SimpleAppDelegate : NSObject <NSApplicationDelegate>
+
+@property(nonatomic, assign) lua_State *luaState;
+@property(nonatomic, assign) int loveBootStackPos;
+
+@property(nonatomic, strong) NSTimer *mainLoopTimer;
+
 - (void)createApplication:(id)object;
 - (void)tryToTerminateApplication:(NSApplication *)app;
 @end
@@ -32,48 +49,17 @@
   handlingSendEvent_ = handlingSendEvent;
 }
 
+// XXX(Ghost): Make this available for external use...
+extern "C" {
+void Cocoa_DispatchEvent(NSEvent *theEvent);
+}
+
 - (void)sendEvent:(NSEvent *)event {
   CefScopedSendingEvent sendingEventScoper;
+  Cocoa_DispatchEvent(event);
   [super sendEvent:event];
 }
 
-// |-terminate:| is the entry point for orderly "quit" operations in Cocoa. This
-// includes the application menu's quit menu item and keyboard equivalent, the
-// application's dock icon menu's quit menu item, "quit" (not "force quit") in
-// the Activity Monitor, and quits triggered by user logout and system restart
-// and shutdown.
-//
-// The default |-terminate:| implementation ends the process by calling exit(),
-// and thus never leaves the main run loop. This is unsuitable for Chromium
-// since Chromium depends on leaving the main run loop to perform an orderly
-// shutdown. We support the normal |-terminate:| interface by overriding the
-// default implementation. Our implementation, which is very specific to the
-// needs of Chromium, works by asking the application delegate to terminate
-// using its |-tryToTerminateApplication:| method.
-//
-// |-tryToTerminateApplication:| differs from the standard
-// |-applicationShouldTerminate:| in that no special event loop is run in the
-// case that immediate termination is not possible (e.g., if dialog boxes
-// allowing the user to cancel have to be shown). Instead, this method tries to
-// close all browsers by calling CloseBrowser(false) via
-// ClientHandler::CloseAllBrowsers. Calling CloseBrowser will result in a call
-// to ClientHandler::DoClose and execution of |-performClose:| on the NSWindow.
-// DoClose sets a flag that is used to differentiate between new close events
-// (e.g., user clicked the window close button) and in-progress close events
-// (e.g., user approved the close window dialog). The NSWindowDelegate
-// |-windowShouldClose:| method checks this flag and either calls
-// CloseBrowser(false) in the case of a new close event or destructs the
-// NSWindow in the case of an in-progress close event.
-// ClientHandler::OnBeforeClose will be called after the CEF NSView hosted in
-// the NSWindow is dealloc'ed.
-//
-// After the final browser window has closed ClientHandler::OnBeforeClose will
-// begin actual tear-down of the application by calling CefQuitMessageLoop.
-// This ends the NSApplication event loop and execution then returns to the
-// main() function for cleanup before application termination.
-//
-// The standard |-applicationShouldTerminate:| is not supported, and code paths
-// leading to it must be redirected.
 - (void)terminate:(id)sender {
   SimpleAppDelegate *delegate =
       static_cast<SimpleAppDelegate *>([NSApp delegate]);
@@ -84,15 +70,161 @@
 
 @implementation SimpleAppDelegate
 
++ (NSMenu *)makeMainMenu {
+  NSMenu *mainMenu = [[NSMenu alloc] init];
+  NSMenuItem *mainMenuItem = [[NSMenuItem alloc] initWithTitle:@"Application"
+                                                        action:nil
+                                                 keyEquivalent:@""];
+  [mainMenu addItem:mainMenuItem];
+
+  NSMenu *appMenu = [[NSMenu alloc] init];
+  mainMenuItem.submenu = appMenu;
+
+  NSMenuItem *quitItem = [[NSMenuItem alloc] initWithTitle:@"Quit"
+                                                    action:@selector(terminate:)
+                                             keyEquivalent:@"q"];
+  quitItem.target = [NSApplication sharedApplication];
+  [appMenu addItem:quitItem];
+  return mainMenu;
+}
+
+- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
+  return YES;
+}
+
 // Create the application on the UI thread.
 - (void)createApplication:(id)object {
   [NSApplication sharedApplication];
-  [[NSBundle mainBundle] loadNibNamed:@"MainMenu"
-                                owner:NSApp
-                      topLevelObjects:nil];
+  [NSApplication sharedApplication].mainMenu = [[self class] makeMainMenu];
 
   // Set the delegate for application events.
   [[NSApplication sharedApplication] setDelegate:self];
+
+  // Love test
+  self.luaState = nil;
+  //  [self bootLoveWithUri:nil];
+  self.mainLoopTimer = [NSTimer timerWithTimeInterval:1.0f / 60.0f
+                                               target:self
+                                             selector:@selector(stepLove)
+                                             userInfo:nil
+                                              repeats:YES];
+  [[NSRunLoop mainRunLoop] addTimer:self.mainLoopTimer
+                            forMode:NSRunLoopCommonModes];
+}
+
+- (NSApplicationTerminateReply)applicationShouldTerminate:
+    (NSApplication *)sender {
+  return NSTerminateNow;
+}
+
+- (void)bootLoveWithUri:(NSString *)uri {
+  // Create the virtual machine.
+  lua_State *L = luaL_newstate();
+  luaL_openlibs(L);
+
+  // Add love to package.preload for easy requiring.
+  lua_getglobal(L, "package");
+  lua_getfield(L, -1, "preload");
+  lua_pushcfunction(L, luaopen_love);
+  lua_setfield(L, -2, "love");
+  lua_pop(L, 2);
+
+  // Add command line arguments to global arg (like stand-alone Lua).
+  {
+    lua_newtable(L);
+
+    lua_pushstring(L, "love");
+    lua_rawseti(L, -2, -2);
+
+    lua_pushstring(L, "embedded boot.lua");
+    lua_rawseti(L, -2, -1);
+
+    NSArray *bundlepaths =
+        [[NSBundle mainBundle] pathsForResourcesOfType:@"love" inDirectory:nil];
+    if (bundlepaths.count > 0) {
+      lua_pushstring(L, [bundlepaths[0] UTF8String]);
+      lua_rawseti(L, -2, 0);
+      lua_pushstring(L, "--fused");
+      lua_rawseti(L, -2, 1);
+    }
+
+    lua_setglobal(L, "arg");
+  }
+
+  // require "love"
+  lua_getglobal(L, "require");
+  lua_pushstring(L, "love");
+  lua_call(L, 1, 1); // leave the returned table on the stack.
+
+  // Add love._exe = true.
+  // This indicates that we're running the standalone version of love, and not
+  // the library version.
+  {
+    lua_pushboolean(L, 1);
+    lua_setfield(L, -2, "_exe");
+  }
+
+  // Pop the love table returned by require "love".
+  lua_pop(L, 1);
+
+  // require "love.boot" (preloaded when love was required.)
+  lua_getglobal(L, "require");
+  lua_pushstring(L, "love.boot");
+  lua_call(L, 1, 1);
+
+  // Turn the returned boot function into a coroutine and leave it at the top of
+  // the stack
+  lua_newthread(L);
+  lua_pushvalue(L, -2);
+  self.loveBootStackPos = lua_gettop(L);
+  self.luaState = L;
+
+  // If `uri` is given, set it as the global variable `GHOST_ROOT_URI`
+  if (uri) {
+    lua_pushstring(L, uri.UTF8String);
+    lua_setglobal(L, "GHOST_ROOT_URI");
+  }
+}
+
+extern "C" void ghostSetChildWindowFrame(float left, float top, float width, float height) {
+  NSWindow *window = [[NSApplication sharedApplication] mainWindow];
+  if (window) {
+    CGRect frame;
+    frame.origin.x = window.frame.origin.x + left;
+    frame.origin.y = window.frame.origin.y + window.contentLayoutRect.size.height - top - height;
+    frame.size.width = width;
+    frame.size.height = height;
+
+    for (NSWindow *childWindow in window.childWindows) {
+      [childWindow setFrame:frame display:YES];
+    }
+  }
+}
+
+- (void)stepLove {
+  NSWindow *window = [[NSApplication sharedApplication] mainWindow];
+  if (window) {
+    if (!self.luaState) {
+      [self bootLoveWithUri:nil];
+    }
+  }
+
+  if (self.luaState) {
+    // Call the coroutine at the top of the stack
+    lua_State *L = self.luaState;
+    if (lua_resume(L, 0) == LUA_YIELD) {
+      lua_pop(L, lua_gettop(L) - self.loveBootStackPos);
+    } else {
+      [self closeLua];
+    }
+  }
+}
+
+- (void)closeLua {
+  if (self.luaState) {
+    lua_close(self.luaState);
+    self.luaState = nil;
+  }
 }
 
 - (void)tryToTerminateApplication:(NSApplication *)app {
@@ -101,10 +233,6 @@
     handler->CloseAllBrowsers(false);
 }
 
-- (NSApplicationTerminateReply)applicationShouldTerminate:
-    (NSApplication *)sender {
-  return NSTerminateNow;
-}
 @end
 
 // Entry point function for the browser process.
@@ -112,52 +240,46 @@ int main(int argc, char *argv[]) {
   // Provide CEF with command-line arguments.
   CefMainArgs main_args(argc, argv);
 
-  // Initialize the AutoRelease pool.
-  // NSAutoreleasePool* autopool = [[NSAutoreleasePool alloc] init];
+  @autoreleasepool {
+    // Initialize the SimpleApplication instance.
+    [SimpleApplication sharedApplication];
 
-  // Initialize the SimpleApplication instance.
-  [SimpleApplication sharedApplication];
+    // Specify CEF global settings here.
+    CefSettings settings;
 
-  // Specify CEF global settings here.
-  CefSettings settings;
+    // SimpleApp implements application-level callbacks for the browser process.
+    // It will create the first browser instance in OnContextInitialized() after
+    // CEF has initialized.
 
-  // SimpleApp implements application-level callbacks for the browser process.
-  // It will create the first browser instance in OnContextInitialized() after
-  // CEF has initialized.
+    // use embedded index.html if it exists.
+    NSString *indexPath =
+        [[NSBundle mainBundle] pathForResource:@"index" ofType:@"html"];
+    std::string initialUrl = "http://localhost:3000";
+    if (indexPath && indexPath.length) {
+      indexPath = [NSString stringWithFormat:@"file://%@", indexPath];
+      initialUrl = std::string([indexPath UTF8String]);
+    } else {
+      initialUrl = "http://www.google.com";
+    }
+    NSSize screenSize = [NSScreen mainScreen].visibleFrame.size;
+    CefRefPtr<SimpleApp> app(new SimpleApp(initialUrl, screenSize.width, screenSize.height));
 
-  // use embedded index.html if it exists.
-  NSString *indexPath =
-      [[NSBundle mainBundle] pathForResource:@"index" ofType:@"html"];
-  std::string initialUrl;
-  if (indexPath && indexPath.length) {
-    indexPath = [NSString stringWithFormat:@"file://%@", indexPath];
-    initialUrl = std::string([indexPath UTF8String]);
-  } else {
-    initialUrl = "http://www.google.com";
+    // Initialize CEF for the browser process.
+    CefInitialize(main_args, settings, app.get(), NULL);
+
+    // Create the application delegate.
+    NSObject *delegate = [[SimpleAppDelegate alloc] init];
+    [delegate performSelectorOnMainThread:@selector(createApplication:)
+                               withObject:nil
+                            waitUntilDone:NO];
+
+    // Run the CEF message loop. This will block until CefQuitMessageLoop() is
+    // called.
+    CefRunMessageLoop();
+
+    // Shut down CEF.
+    CefShutdown();
   }
-  CefRefPtr<SimpleApp> app(new SimpleApp(initialUrl));
-
-  // Initialize CEF for the browser process.
-  CefInitialize(main_args, settings, app.get(), NULL);
-
-  // Create the application delegate.
-  NSObject *delegate = [[SimpleAppDelegate alloc] init];
-  [delegate performSelectorOnMainThread:@selector(createApplication:)
-                             withObject:nil
-                          waitUntilDone:NO];
-
-  // Run the CEF message loop. This will block until CefQuitMessageLoop() is
-  // called.
-  CefRunMessageLoop();
-
-  // Shut down CEF.
-  CefShutdown();
-
-  // Release the delegate.
-  //[delegate release];
-
-  // Release the AutoRelease pool.
-  //[autopool release];
 
   return 0;
 }

@@ -42,15 +42,21 @@ export default class CoreApp extends React.Component {
     const element = this._layout.getMediaContainerRef();
     const rect = element.getBoundingClientRect();
 
-    const gameWindow = {
-      left: rect.left,
-      top: rect.top,
-      width: rect.width,
-      height: rect.height,
-    };
-
-    // TODO(nikki): Need a way to send this over.
-    console.log(gameWindow);
+    try {
+      window.cefQuery({
+        request: JSON.stringify({
+          type: 'CHILD_WINDOW_FRAME',
+          body: {
+            left: rect.left,
+            top: rect.top,
+            width: rect.width,
+            height: rect.height,
+          },
+        }),
+      });
+    } catch (e) {
+      alert('`cefQuery`: ' + e.message);
+    }
   };
 
   _handleKeyDown = e => {
@@ -60,8 +66,10 @@ export default class CoreApp extends React.Component {
   };
 
   _handleToggleAuthentication = () => {
-    this.setState({ viewer: this.state.viewer ? null : Fixtures.User });
-    this._handleSetGameWindowSize();
+    this.setState(
+      { viewer: this.state.viewer ? null : Fixtures.User },
+      this._handleSetGameWindowSize
+    );
   };
 
   _handleURLChange = e => this.setState({ [e.target.name]: e.target.value });
@@ -77,53 +85,50 @@ export default class CoreApp extends React.Component {
   _handleShareScores = () => window.alert('score share');
 
   _handleToggleScore = () => {
-    this.setState({ isScoreVisible: !this.state.isScoreVisible });
-    this._handleSetGameWindowSize();
+    this.setState({ isScoreVisible: !this.state.isScoreVisible }, this._handleSetGameWindowSize);
   };
 
   _handleToggleDashboard = () => {
-    this.setState({
-      isMediaInfoVisible: false,
-      isDashboardVisible: !this.state.isDashboardVisible,
-    });
-    this._handleSetGameWindowSize();
+    this.setState(
+      {
+        isMediaInfoVisible: false,
+        isDashboardVisible: !this.state.isDashboardVisible,
+      },
+      this._handleSetGameWindowSize
+    );
   };
 
   _handleToggleMediaInfo = () => {
-    this.setState({
-      isMediaInfoVisible: !this.state.isMediaInfoVisible,
-      isDashboardVisible: false,
-    });
-    this._handleSetGameWindowSize();
+    this.setState(
+      {
+        isMediaInfoVisible: !this.state.isMediaInfoVisible,
+        isDashboardVisible: false,
+      },
+      this._handleSetGameWindowSize
+    );
   };
 
   _handleDismissMediaInfo = () => {
-    this.setState({ isMediaInfoVisible: false });
-    this._handleSetGameWindowSize();
+    this.setState({ isMediaInfoVisible: false }, this._handleSetGameWindowSize);
   };
 
   _handleDismissDashboard = () => {
-    this.setState({ isDashboardVisible: false });
-    this._handleSetGameWindowSize();
+    this.setState({ isDashboardVisible: false }, this._handleSetGameWindowSize);
   };
 
   _handleDismissScore = () => {
-    this.setState({ isScoreVisible: false });
-    this._handleSetGameWindowSize();
+    this.setState({ isScoreVisible: false }, this._handleSetGameWindowSize);
   };
 
   _handleHideOverlay = () => {
-    this.setState({ isOverlayActive: false });
-    this._handleSetGameWindowSize();
+    this.setState({ isOverlayActive: false }, this._handleSetGameWindowSize);
   };
 
   _handleToggleOverlay = () => {
-    this.setState({ isOverlayActive: !this.state.isOverlayActive });
-    this._handleSetGameWindowSize();
+    this.setState({ isOverlayActive: !this.state.isOverlayActive }, this._handleSetGameWindowSize);
   };
   _handleToggleMediaExpanded = () => {
-    this.setState({ isMediaExpanded: !this.state.isMediaExpanded });
-    this._handleSetGameWindowSize();
+    this.setState({ isMediaExpanded: !this.state.isMediaExpanded }, this._handleSetGameWindowSize);
   };
 
   render() {
