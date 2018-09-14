@@ -70,12 +70,28 @@ void Cocoa_DispatchEvent(NSEvent *theEvent);
 
 @implementation SimpleAppDelegate
 
++ (NSMenu *)makeMainMenu {
+  NSMenu *mainMenu = [[NSMenu alloc] init];
+  NSMenuItem *mainMenuItem = [[NSMenuItem alloc] initWithTitle:@"Application"
+                                                        action:nil
+                                                 keyEquivalent:@""];
+  [mainMenu addItem:mainMenuItem];
+
+  NSMenu *appMenu = [[NSMenu alloc] init];
+  mainMenuItem.submenu = appMenu;
+
+  NSMenuItem *quitItem = [[NSMenuItem alloc] initWithTitle:@"Quit"
+                                                    action:@selector(terminate:)
+                                             keyEquivalent:@"q"];
+  quitItem.target = [NSApplication sharedApplication];
+  [appMenu addItem:quitItem];
+  return mainMenu;
+}
+
 // Create the application on the UI thread.
 - (void)createApplication:(id)object {
   [NSApplication sharedApplication];
-  [[NSBundle mainBundle] loadNibNamed:@"MainMenu"
-                                owner:NSApp
-                      topLevelObjects:nil];
+  [NSApplication sharedApplication].mainMenu = [[self class] makeMainMenu];
 
   // Set the delegate for application events.
   [[NSApplication sharedApplication] setDelegate:self];
