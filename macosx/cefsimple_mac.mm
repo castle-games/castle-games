@@ -233,7 +233,7 @@ void ghostSetChildWindowFrame(float left, float top, float width, float height) 
     frame.size.height = height;
 
     for (NSWindow *childWindow in window.childWindows) {
-      [childWindow setFrame:frame display:YES];
+      [childWindow setFrame:frame display:NO];
     }
   }
 }
