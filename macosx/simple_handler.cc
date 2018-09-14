@@ -16,9 +16,9 @@
 
 namespace {
 
-SimpleHandler* g_instance = NULL;
+SimpleHandler *g_instance = NULL;
 
-}  // namespace
+} // namespace
 
 SimpleHandler::SimpleHandler(bool use_views)
     : use_views_(use_views), is_closing_(false) {
@@ -26,17 +26,13 @@ SimpleHandler::SimpleHandler(bool use_views)
   g_instance = this;
 }
 
-SimpleHandler::~SimpleHandler() {
-  g_instance = NULL;
-}
+SimpleHandler::~SimpleHandler() { g_instance = NULL; }
 
 // static
-SimpleHandler* SimpleHandler::GetInstance() {
-  return g_instance;
-}
+SimpleHandler *SimpleHandler::GetInstance() { return g_instance; }
 
 void SimpleHandler::OnTitleChange(CefRefPtr<CefBrowser> browser,
-                                  const CefString& title) {
+                                  const CefString &title) {
   CEF_REQUIRE_UI_THREAD();
 
   if (use_views_) {
@@ -96,10 +92,9 @@ void SimpleHandler::OnBeforeClose(CefRefPtr<CefBrowser> browser) {
 }
 
 void SimpleHandler::OnLoadError(CefRefPtr<CefBrowser> browser,
-                                CefRefPtr<CefFrame> frame,
-                                ErrorCode errorCode,
-                                const CefString& errorText,
-                                const CefString& failedUrl) {
+                                CefRefPtr<CefFrame> frame, ErrorCode errorCode,
+                                const CefString &errorText,
+                                const CefString &failedUrl) {
   CEF_REQUIRE_UI_THREAD();
 
   // Don't display an error for downloaded files.

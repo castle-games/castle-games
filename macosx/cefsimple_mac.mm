@@ -11,14 +11,14 @@
 #include "simple_handler.h"
 
 // Receives notifications from the application.
-@interface SimpleAppDelegate : NSObject<NSApplicationDelegate>
+@interface SimpleAppDelegate : NSObject <NSApplicationDelegate>
 - (void)createApplication:(id)object;
-- (void)tryToTerminateApplication:(NSApplication*)app;
+- (void)tryToTerminateApplication:(NSApplication *)app;
 @end
 
 // Provide the CefAppProtocol implementation required by CEF.
-@interface SimpleApplication : NSApplication<CefAppProtocol> {
- @private
+@interface SimpleApplication : NSApplication <CefAppProtocol> {
+@private
   BOOL handlingSendEvent_;
 }
 @end
@@ -32,7 +32,7 @@
   handlingSendEvent_ = handlingSendEvent;
 }
 
-- (void)sendEvent:(NSEvent*)event {
+- (void)sendEvent:(NSEvent *)event {
   CefScopedSendingEvent sendingEventScoper;
   [super sendEvent:event];
 }
@@ -75,8 +75,8 @@
 // The standard |-applicationShouldTerminate:| is not supported, and code paths
 // leading to it must be redirected.
 - (void)terminate:(id)sender {
-  SimpleAppDelegate* delegate =
-      static_cast<SimpleAppDelegate*>([NSApp delegate]);
+  SimpleAppDelegate *delegate =
+      static_cast<SimpleAppDelegate *>([NSApp delegate]);
   [delegate tryToTerminateApplication:self];
   // Return, don't exit. The application is responsible for exiting on its own.
 }
@@ -95,52 +95,53 @@
   [[NSApplication sharedApplication] setDelegate:self];
 }
 
-- (void)tryToTerminateApplication:(NSApplication*)app {
-  SimpleHandler* handler = SimpleHandler::GetInstance();
+- (void)tryToTerminateApplication:(NSApplication *)app {
+  SimpleHandler *handler = SimpleHandler::GetInstance();
   if (handler && !handler->IsClosing())
     handler->CloseAllBrowsers(false);
 }
 
 - (NSApplicationTerminateReply)applicationShouldTerminate:
-    (NSApplication*)sender {
+    (NSApplication *)sender {
   return NSTerminateNow;
 }
 @end
 
 // Entry point function for the browser process.
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
   // Provide CEF with command-line arguments.
   CefMainArgs main_args(argc, argv);
 
   // Initialize the AutoRelease pool.
-  //NSAutoreleasePool* autopool = [[NSAutoreleasePool alloc] init];
+  // NSAutoreleasePool* autopool = [[NSAutoreleasePool alloc] init];
 
   // Initialize the SimpleApplication instance.
   [SimpleApplication sharedApplication];
 
   // Specify CEF global settings here.
   CefSettings settings;
-	
+
   // SimpleApp implements application-level callbacks for the browser process.
   // It will create the first browser instance in OnContextInitialized() after
   // CEF has initialized.
-	
-	// use embedded index.html if it exists.
-	NSString *indexPath = [[NSBundle mainBundle] pathForResource:@"index" ofType:@"html"];
-	std::string initialUrl;
-	if (indexPath && indexPath.length) {
-		indexPath = [NSString stringWithFormat:@"file://%@", indexPath];
-		initialUrl = std::string([indexPath UTF8String]);
-	} else {
-		initialUrl = "http://www.google.com";
-	}
-	CefRefPtr<SimpleApp> app(new SimpleApp(initialUrl));
+
+  // use embedded index.html if it exists.
+  NSString *indexPath =
+      [[NSBundle mainBundle] pathForResource:@"index" ofType:@"html"];
+  std::string initialUrl;
+  if (indexPath && indexPath.length) {
+    indexPath = [NSString stringWithFormat:@"file://%@", indexPath];
+    initialUrl = std::string([indexPath UTF8String]);
+  } else {
+    initialUrl = "http://www.google.com";
+  }
+  CefRefPtr<SimpleApp> app(new SimpleApp(initialUrl));
 
   // Initialize CEF for the browser process.
   CefInitialize(main_args, settings, app.get(), NULL);
 
   // Create the application delegate.
-  NSObject* delegate = [[SimpleAppDelegate alloc] init];
+  NSObject *delegate = [[SimpleAppDelegate alloc] init];
   [delegate performSelectorOnMainThread:@selector(createApplication:)
                              withObject:nil
                           waitUntilDone:NO];

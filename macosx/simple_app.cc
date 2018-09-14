@@ -16,7 +16,7 @@ namespace {
 // When using the Views framework this object provides the delegate
 // implementation for the CefWindow that hosts the Views-based browser.
 class SimpleWindowDelegate : public CefWindowDelegate {
- public:
+public:
   explicit SimpleWindowDelegate(CefRefPtr<CefBrowserView> browser_view)
       : browser_view_(browser_view) {}
 
@@ -41,18 +41,16 @@ class SimpleWindowDelegate : public CefWindowDelegate {
     return true;
   }
 
- private:
+private:
   CefRefPtr<CefBrowserView> browser_view_;
 
   IMPLEMENT_REFCOUNTING(SimpleWindowDelegate);
   DISALLOW_COPY_AND_ASSIGN(SimpleWindowDelegate);
 };
 
-}  // namespace
+} // namespace
 
-SimpleApp::SimpleApp(std::string initialUrl) {
-  this->_initialUrl = initialUrl;
-}
+SimpleApp::SimpleApp(std::string initialUrl) { this->_initialUrl = initialUrl; }
 
 void SimpleApp::OnContextInitialized() {
   CEF_REQUIRE_UI_THREAD();
@@ -82,7 +80,7 @@ void SimpleApp::OnContextInitialized() {
   // that instead of the default URL.
   url = command_line->GetSwitchValue("url");
   if (url.empty()) {
-	url = this->_initialUrl;
+    url = this->_initialUrl;
   }
 
   if (use_views) {
