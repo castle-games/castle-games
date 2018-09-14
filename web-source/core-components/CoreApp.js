@@ -74,21 +74,7 @@ export default class CoreApp extends React.Component {
 
   _handleURLChange = e => this.setState({ [e.target.name]: e.target.value });
 
-  _handleURLSubmit = () => {
-    try {
-      window.cefQuery({
-        request: JSON.stringify({
-          type: 'URL_SUBMIT',
-          body: {
-            url: this.state.url,
-          },
-        }),
-      });
-    } catch (e) {
-      alert('`cefQuery`: ' + e.message);
-    }
-  }
-
+  _handleURLSubmit = e => window.alert(this.state.url);
   _handleToggleSearch = () => window.alert('search');
   _handleToggleProfile = () => window.alert('profile');
   _handleNextMedia = () => window.alert('next');

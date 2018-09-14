@@ -195,14 +195,6 @@ extern "C" void ghostSetChildWindowFrame(float left, float top, float width, flo
   }
 }
 
-extern "C" void ghostBootLoveWithUri(std::string uri) {
-  SimpleAppDelegate *delegate = [NSApplication sharedApplication].delegate;
-  NSString *nsUri = [NSString stringWithCString:uri.c_str() encoding:[NSString defaultCStringEncoding]];
-  if (nsUri) {
-    // TODO: nikki: [delegate bootLoveWithUri:nsUri];
-  }
-}
-
 - (void)stepLove {
   NSWindow *window = [[NSApplication sharedApplication] mainWindow];
   if (window) {
