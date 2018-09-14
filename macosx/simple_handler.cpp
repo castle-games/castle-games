@@ -23,8 +23,7 @@ SimpleHandler *g_instance = NULL;
 
 } // namespace
 
-SimpleHandler::SimpleHandler(bool use_views)
-    : use_views_(use_views), is_closing_(false) {
+SimpleHandler::SimpleHandler(bool use_views) : use_views_(use_views), is_closing_(false) {
   DCHECK(!g_instance);
   g_instance = this;
 }
@@ -34,14 +33,12 @@ SimpleHandler::~SimpleHandler() { g_instance = NULL; }
 // static
 SimpleHandler *SimpleHandler::GetInstance() { return g_instance; }
 
-void SimpleHandler::OnTitleChange(CefRefPtr<CefBrowser> browser,
-                                  const CefString &title) {
+void SimpleHandler::OnTitleChange(CefRefPtr<CefBrowser> browser, const CefString &title) {
   CEF_REQUIRE_UI_THREAD();
 
   if (use_views_) {
     // Set the title of the window using the Views framework.
-    CefRefPtr<CefBrowserView> browser_view =
-        CefBrowserView::GetForBrowser(browser);
+    CefRefPtr<CefBrowserView> browser_view = CefBrowserView::GetForBrowser(browser);
     if (browser_view) {
       CefRefPtr<CefWindow> window = browser_view->GetWindow();
       if (window)
@@ -53,16 +50,15 @@ void SimpleHandler::OnTitleChange(CefRefPtr<CefBrowser> browser,
   }
 }
 
-bool SimpleHandler::OnProcessMessageReceived(
-    CefRefPtr<CefBrowser> browser, CefProcessId source_process,
-    CefRefPtr<CefProcessMessage> message) {
+bool SimpleHandler::OnProcessMessageReceived(CefRefPtr<CefBrowser> browser,
+                                             CefProcessId source_process,
+                                             CefRefPtr<CefProcessMessage> message) {
   CEF_REQUIRE_UI_THREAD();
-  return message_router_->OnProcessMessageReceived(browser, source_process,
-                                                   message);
+  return message_router_->OnProcessMessageReceived(browser, source_process, message);
 }
 
 extern "C" {
-  void ghostSetChildWindowFrame(float left, float top, float width, float height);
+void ghostSetChildWindowFrame(float left, float top, float width, float height);
 }
 
 void SimpleHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
@@ -76,26 +72,25 @@ void SimpleHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
     MessageHandler() {}
 
     // Called due to cefQuery execution in message_router.html.
-    bool OnQuery(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame,
-                 int64 query_id, const CefString &request, bool persistent,
-                 CefRefPtr<Callback> callback) OVERRIDE {
+    bool OnQuery(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, int64 query_id,
+                 const CefString &request, bool persistent, CefRefPtr<Callback> callback) OVERRIDE {
       const std::string &strRequest = request;
       auto parsed = json::parse(strRequest);
-      
+
       if (parsed["type"] == "CHILD_WINDOW_FRAME") {
         float left = parsed["body"]["left"];
         float top = parsed["body"]["top"];
         float width = parsed["body"]["width"];
         float height = parsed["body"]["height"];
-        
+
         printf("%f %f %f %f\n", left, top, width, height);
-        
+
         ghostSetChildWindowFrame(left, top, width, height);
-        
+
         callback->Success("success");
         return true;
       }
-      
+
       return false;
     }
 
@@ -151,9 +146,8 @@ void SimpleHandler::OnBeforeClose(CefRefPtr<CefBrowser> browser) {
   }
 }
 
-void SimpleHandler::OnLoadError(CefRefPtr<CefBrowser> browser,
-                                CefRefPtr<CefFrame> frame, ErrorCode errorCode,
-                                const CefString &errorText,
+void SimpleHandler::OnLoadError(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame,
+                                ErrorCode errorCode, const CefString &errorText,
                                 const CefString &failedUrl) {
   CEF_REQUIRE_UI_THREAD();
 
@@ -165,16 +159,15 @@ void SimpleHandler::OnLoadError(CefRefPtr<CefBrowser> browser,
   std::stringstream ss;
   ss << "<html><body bgcolor=\"white\">"
         "<h2>Failed to load URL "
-     << std::string(failedUrl) << " with error " << std::string(errorText)
-     << " (" << errorCode << ").</h2></body></html>";
+     << std::string(failedUrl) << " with error " << std::string(errorText) << " (" << errorCode
+     << ").</h2></body></html>";
   frame->LoadString(ss.str(), failedUrl);
 }
 
 void SimpleHandler::CloseAllBrowsers(bool force_close) {
   if (!CefCurrentlyOn(TID_UI)) {
     // Execute on the UI thread.
-    CefPostTask(TID_UI, base::Bind(&SimpleHandler::CloseAllBrowsers, this,
-                                   force_close));
+    CefPostTask(TID_UI, base::Bind(&SimpleHandler::CloseAllBrowsers, this, force_close));
     return;
   }
 
@@ -186,10 +179,9 @@ void SimpleHandler::CloseAllBrowsers(bool force_close) {
     (*it)->GetHost()->CloseBrowser(force_close);
 }
 
-bool SimpleHandler::OnBeforeBrowse(CefRefPtr<CefBrowser> browser,
-                                   CefRefPtr<CefFrame> frame,
-                                   CefRefPtr<CefRequest> request,
-                                   bool user_gesture, bool is_redirect) {
+bool SimpleHandler::OnBeforeBrowse(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame,
+                                   CefRefPtr<CefRequest> request, bool user_gesture,
+                                   bool is_redirect) {
   CEF_REQUIRE_UI_THREAD();
 
   message_router_->OnBeforeBrowse(browser, frame);

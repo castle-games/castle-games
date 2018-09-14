@@ -29,9 +29,7 @@ public:
     browser_view_->RequestFocus();
   }
 
-  void OnWindowDestroyed(CefRefPtr<CefWindow> window) OVERRIDE {
-    browser_view_ = NULL;
-  }
+  void OnWindowDestroyed(CefRefPtr<CefWindow> window) OVERRIDE { browser_view_ = NULL; }
 
   bool CanClose(CefRefPtr<CefWindow> window) OVERRIDE {
     // Allow the window to close if the browser says it's OK.
@@ -59,8 +57,7 @@ SimpleApp::SimpleApp(std::string initialUrl, int initialWindowWidth, int initial
 void SimpleApp::OnContextInitialized() {
   CEF_REQUIRE_UI_THREAD();
 
-  CefRefPtr<CefCommandLine> command_line =
-      CefCommandLine::GetGlobalCommandLine();
+  CefRefPtr<CefCommandLine> command_line = CefCommandLine::GetGlobalCommandLine();
 
 #if defined(OS_WIN) || defined(OS_LINUX)
   // Create the browser using the Views framework if "--use-views" is specified
@@ -89,8 +86,8 @@ void SimpleApp::OnContextInitialized() {
 
   if (use_views) {
     // Create the BrowserView.
-    CefRefPtr<CefBrowserView> browser_view = CefBrowserView::CreateBrowserView(
-        handler, url, browser_settings, NULL, NULL);
+    CefRefPtr<CefBrowserView> browser_view =
+        CefBrowserView::CreateBrowserView(handler, url, browser_settings, NULL, NULL);
 
     // Create the Window. It will show itself after creation.
     CefWindow::CreateTopLevelWindow(new SimpleWindowDelegate(browser_view));
@@ -111,7 +108,6 @@ void SimpleApp::OnContextInitialized() {
 #endif
 
     // Create the first browser window.
-    CefBrowserHost::CreateBrowser(window_info, handler, url, browser_settings,
-                                  NULL);
+    CefBrowserHost::CreateBrowser(window_info, handler, url, browser_settings, NULL);
   }
 }

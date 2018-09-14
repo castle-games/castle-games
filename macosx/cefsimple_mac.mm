@@ -61,8 +61,7 @@ void Cocoa_DispatchEvent(NSEvent *theEvent);
 }
 
 - (void)terminate:(id)sender {
-  SimpleAppDelegate *delegate =
-      static_cast<SimpleAppDelegate *>([NSApp delegate]);
+  SimpleAppDelegate *delegate = static_cast<SimpleAppDelegate *>([NSApp delegate]);
   [delegate tryToTerminateApplication:self];
   // Return, don't exit. The application is responsible for exiting on its own.
 }
@@ -72,17 +71,15 @@ void Cocoa_DispatchEvent(NSEvent *theEvent);
 
 + (NSMenu *)makeMainMenu {
   NSMenu *mainMenu = [[NSMenu alloc] init];
-  NSMenuItem *mainMenuItem = [[NSMenuItem alloc] initWithTitle:@"Application"
-                                                        action:nil
-                                                 keyEquivalent:@""];
+  NSMenuItem *mainMenuItem =
+      [[NSMenuItem alloc] initWithTitle:@"Application" action:nil keyEquivalent:@""];
   [mainMenu addItem:mainMenuItem];
 
   NSMenu *appMenu = [[NSMenu alloc] init];
   mainMenuItem.submenu = appMenu;
 
-  NSMenuItem *quitItem = [[NSMenuItem alloc] initWithTitle:@"Quit"
-                                                    action:@selector(terminate:)
-                                             keyEquivalent:@"q"];
+  NSMenuItem *quitItem =
+      [[NSMenuItem alloc] initWithTitle:@"Quit" action:@selector(terminate:) keyEquivalent:@"q"];
   quitItem.target = [NSApplication sharedApplication];
   [appMenu addItem:quitItem];
   return mainMenu;
@@ -108,12 +105,10 @@ void Cocoa_DispatchEvent(NSEvent *theEvent);
                                              selector:@selector(stepLove)
                                              userInfo:nil
                                               repeats:YES];
-  [[NSRunLoop mainRunLoop] addTimer:self.mainLoopTimer
-                            forMode:NSRunLoopCommonModes];
+  [[NSRunLoop mainRunLoop] addTimer:self.mainLoopTimer forMode:NSRunLoopCommonModes];
 }
 
-- (NSApplicationTerminateReply)applicationShouldTerminate:
-    (NSApplication *)sender {
+- (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender {
   return NSTerminateNow;
 }
 
@@ -139,8 +134,7 @@ void Cocoa_DispatchEvent(NSEvent *theEvent);
     lua_pushstring(L, "embedded boot.lua");
     lua_rawseti(L, -2, -1);
 
-    NSArray *bundlepaths =
-        [[NSBundle mainBundle] pathsForResourcesOfType:@"love" inDirectory:nil];
+    NSArray *bundlepaths = [[NSBundle mainBundle] pathsForResourcesOfType:@"love" inDirectory:nil];
     if (bundlepaths.count > 0) {
       lua_pushstring(L, [bundlepaths[0] UTF8String]);
       lua_rawseti(L, -2, 0);
@@ -252,8 +246,7 @@ int main(int argc, char *argv[]) {
     // CEF has initialized.
 
     // use embedded index.html if it exists.
-    NSString *indexPath =
-        [[NSBundle mainBundle] pathForResource:@"index" ofType:@"html"];
+    NSString *indexPath = [[NSBundle mainBundle] pathForResource:@"index" ofType:@"html"];
     std::string initialUrl = "http://localhost:3000";
     if (indexPath && indexPath.length) {
       indexPath = [NSString stringWithFormat:@"file://%@", indexPath];

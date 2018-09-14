@@ -15,10 +15,7 @@ public:
   SimpleApp(std::string initialUrl, int initialWindowWidth, int initialWindowHeight);
 
   // CefApp methods:
-  virtual CefRefPtr<CefBrowserProcessHandler>
-  GetBrowserProcessHandler() OVERRIDE {
-    return this;
-  }
+  virtual CefRefPtr<CefBrowserProcessHandler> GetBrowserProcessHandler() OVERRIDE { return this; }
 
   // CefBrowserProcessHandler methods:
   virtual void OnContextInitialized() OVERRIDE;
