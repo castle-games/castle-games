@@ -255,12 +255,12 @@ int main(int argc, char *argv[]) {
     NSString *indexPath =
         [[NSBundle mainBundle] pathForResource:@"index" ofType:@"html"];
     std::string initialUrl = "http://localhost:3000";
-//    if (indexPath && indexPath.length) {
-//      indexPath = [NSString stringWithFormat:@"file://%@", indexPath];
-//      initialUrl = std::string([indexPath UTF8String]);
-//    } else {
-//      initialUrl = "http://www.google.com";
-//    }
+    if (indexPath && indexPath.length) {
+      indexPath = [NSString stringWithFormat:@"file://%@", indexPath];
+      initialUrl = std::string([indexPath UTF8String]);
+    } else {
+      initialUrl = "http://www.google.com";
+    }
     NSSize screenSize = [NSScreen mainScreen].visibleFrame.size;
     CefRefPtr<SimpleApp> app(new SimpleApp(initialUrl, screenSize.width, screenSize.height));
 

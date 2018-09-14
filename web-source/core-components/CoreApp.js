@@ -42,7 +42,6 @@ export default class CoreApp extends React.Component {
     const element = this._layout.getMediaContainerRef();
     const rect = element.getBoundingClientRect();
 
-    // TODO(nikki): Need a way to send this over.
     try {
       window.cefQuery({
         request: JSON.stringify({
