@@ -1,9 +1,11 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
+import * as UISVG from '~/core-components/reusable/UISVG';
 
 import { css } from 'react-emotion';
 
 import ControlledInput from '~/core-components/primitives/ControlledInput';
+import UISmallButtonDark from '~/core-components/reusable/UISmallButtonDark';
 import UIControl from '~/core-components/reusable/UIControl';
 
 const STYLES_CONTAINER = css`
@@ -72,6 +74,11 @@ const STYLES_INPUT = css`
   }
 `;
 
+const STYLES_CONTAINER_TOOLBAR = css`
+  padding-left: 16px;
+  flex-shrink: 0;
+`;
+
 export default class CoreBrowserURLInput extends React.Component {
   _input;
 
@@ -98,6 +105,23 @@ export default class CoreBrowserURLInput extends React.Component {
         </div>
         <div className={STYLES_CONTAINER_RIGHT}>
           <UIControl onClick={this.props.onToggleDashboard}>Dashboard</UIControl>
+        </div>
+        <div className={STYLES_CONTAINER_TOOLBAR}>
+          <UISmallButtonDark
+            icon={<UISVG.Favorite height="16px" />}
+            onClick={this.props.onFavoriteMedia}
+          />
+          {!this.props.expanded ? (
+            <UISmallButtonDark
+              icon={<UISVG.Expand height="16px" />}
+              onClick={this.props.onToggleMediaExpanded}
+            />
+          ) : (
+            <UISmallButtonDark
+              icon={<UISVG.Collapse height="16px" />}
+              onClick={this.props.onToggleMediaExpanded}
+            />
+          )}
         </div>
       </div>
     );

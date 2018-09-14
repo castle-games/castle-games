@@ -1,7 +1,5 @@
-// NOTE(jim):
-// - I would like to be able to HTTP request for this user with all of the entities.
-// - upon calling add/remove/update methods, I would just destroy the old user object
-//   in memory and replace the memory address with a new user object.
+// Charlie's different fields
+// https://github.com/expo/ghost-server/blob/master/server/schema.sql
 
 export const User = {
   id: 'd3df05e0-2286-45ed-b434-12c587e9c840',
@@ -30,7 +28,6 @@ export const Scores = [
 ];
 
 // NOTE(jim):
-// Here are the shapes of all the schema I'm expecting in Postgres.
 
 /*
 

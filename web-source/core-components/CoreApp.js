@@ -116,10 +116,14 @@ export default class CoreApp extends React.Component {
           name="url"
           value={state.url}
           viewer={state.viewer}
+          expanded={state.isMediaExpanded}
           onURLChange={this._handleURLChange}
           onURLSubmit={this._handleURLSubmit}
           onToggleDashboard={this._handleToggleDashboard}
           onToggleEntityFavorite={this._handleToggleEntityFavorite}
+          onToggleMediaExpanded={this._handleToggleMediaExpanded}
+          onHideOverlay={this._handleHideOverlay}
+          onFavoriteMedia={this._handleFavoriteMedia}
         />
       );
     }
@@ -174,18 +178,6 @@ export default class CoreApp extends React.Component {
       );
     }
 
-    let maybeToolbarNode;
-    if (state.isOverlayActive) {
-      maybeToolbarNode = (
-        <CoreToolbar
-          expanded={state.isMediaExpanded}
-          onToggleMediaExpanded={this._handleToggleMediaExpanded}
-          onHideOverlay={this._handleHideOverlay}
-          onFavoriteMedia={this._handleFavoriteMedia}
-        />
-      );
-    }
-
     if (state.isOverlayLayout) {
       return (
         <CoreLayoutOverlay
@@ -207,7 +199,6 @@ export default class CoreApp extends React.Component {
         }}
         topNode={maybeTopNode}
         bottomNode={maybeBottomNode}
-        toolbarNode={maybeToolbarNode}
         leftSidebarNode={maybeLeftSidebarNode}
         rightSidebarNode={maybeRightSidebarNode}
         rightNode={maybeRightNode}>
