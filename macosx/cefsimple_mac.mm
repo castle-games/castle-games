@@ -211,52 +211,45 @@ int main(int argc, char *argv[]) {
   // Provide CEF with command-line arguments.
   CefMainArgs main_args(argc, argv);
 
-  // Initialize the AutoRelease pool.
-  // NSAutoreleasePool* autopool = [[NSAutoreleasePool alloc] init];
+  @autoreleasepool {
+    // Initialize the SimpleApplication instance.
+    [SimpleApplication sharedApplication];
 
-  // Initialize the SimpleApplication instance.
-  [SimpleApplication sharedApplication];
+    // Specify CEF global settings here.
+    CefSettings settings;
 
-  // Specify CEF global settings here.
-  CefSettings settings;
+    // SimpleApp implements application-level callbacks for the browser process.
+    // It will create the first browser instance in OnContextInitialized() after
+    // CEF has initialized.
 
-  // SimpleApp implements application-level callbacks for the browser process.
-  // It will create the first browser instance in OnContextInitialized() after
-  // CEF has initialized.
+    // use embedded index.html if it exists.
+    NSString *indexPath =
+        [[NSBundle mainBundle] pathForResource:@"index" ofType:@"html"];
+    std::string initialUrl;
+    if (indexPath && indexPath.length) {
+      indexPath = [NSString stringWithFormat:@"file://%@", indexPath];
+      initialUrl = std::string([indexPath UTF8String]);
+    } else {
+      initialUrl = "http://www.google.com";
+    }
+    CefRefPtr<SimpleApp> app(new SimpleApp(initialUrl));
 
-  // use embedded index.html if it exists.
-  NSString *indexPath =
-      [[NSBundle mainBundle] pathForResource:@"index" ofType:@"html"];
-  std::string initialUrl;
-  if (indexPath && indexPath.length) {
-    indexPath = [NSString stringWithFormat:@"file://%@", indexPath];
-    initialUrl = std::string([indexPath UTF8String]);
-  } else {
-    initialUrl = "http://www.google.com";
+    // Initialize CEF for the browser process.
+    CefInitialize(main_args, settings, app.get(), NULL);
+
+    // Create the application delegate.
+    NSObject *delegate = [[SimpleAppDelegate alloc] init];
+    [delegate performSelectorOnMainThread:@selector(createApplication:)
+                               withObject:nil
+                            waitUntilDone:NO];
+
+    // Run the CEF message loop. This will block until CefQuitMessageLoop() is
+    // called.
+    CefRunMessageLoop();
+
+    // Shut down CEF.
+    CefShutdown();
   }
-  CefRefPtr<SimpleApp> app(new SimpleApp(initialUrl));
-
-  // Initialize CEF for the browser process.
-  CefInitialize(main_args, settings, app.get(), NULL);
-
-  // Create the application delegate.
-  NSObject *delegate = [[SimpleAppDelegate alloc] init];
-  [delegate performSelectorOnMainThread:@selector(createApplication:)
-                             withObject:nil
-                          waitUntilDone:NO];
-
-  // Run the CEF message loop. This will block until CefQuitMessageLoop() is
-  // called.
-  CefRunMessageLoop();
-
-  // Shut down CEF.
-  CefShutdown();
-
-  // Release the delegate.
-  //[delegate release];
-
-  // Release the AutoRelease pool.
-  //[autopool release];
 
   return 0;
 }

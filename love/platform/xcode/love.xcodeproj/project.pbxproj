@@ -377,9 +377,11 @@
 				FA577A9316C7217800860150 /* liblove.xcodeproj */,
 				B5E9FC3B211B6B9F0068BEB9 /* ghost-extensions.xcodeproj */,
 			);
+			indentWidth = 2;
 			name = love;
 			sourceTree = "<group>";
-			usesTabs = 1;
+			tabWidth = 2;
+			usesTabs = 0;
 		};
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
