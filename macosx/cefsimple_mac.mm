@@ -255,6 +255,8 @@ int main(int argc, char *argv[]) {
       initialUrl = "http://www.google.com";
     }
     NSSize screenSize = [NSScreen mainScreen].visibleFrame.size;
+    screenSize.width = MIN(screenSize.width, 1440);
+    screenSize.height = MIN(screenSize.height, 877);
     CefRefPtr<SimpleApp> app(new SimpleApp(initialUrl, screenSize.width, screenSize.height));
 
     // Initialize CEF for the browser process.
