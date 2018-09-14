@@ -29,12 +29,11 @@ on actual iOS hardware (iPhone or iPad).*
 
 ### Windows
 
-- Install CMake.
-- Install Visual Studio 2013 (later versions have had issues).
-- In 'megasource/', run 'sh ./run_cmake.sh' (I've done this with the 'Git BASH' utility that comes
-  with 'Git for Windows', but you could also just run the one command inside this file from the
-  Windows command line).
-- Open and build the '.sln' file you will find deep inside 'megasource/build/'.
+- Install CMake. https://cmake.org/download/. Make sure to check the "add to PATH for current user" option.
+- Install Visual Studio 2013 (later versions have had issues). https://visualstudio.microsoft.com/vs/older-downloads/. Choose '2013 Express for Desktop'.
+- Install https://gitforwindows.org/. In 'megasource/', run 'sh ./run_cmake.sh' with the Git Bash utility that comes with Git for Windows.
+- Open and build the 'ALL_BUILD.sln' file you will find deep inside 'megasource/build/'.
+- To run, run the generated love.exe with one argument -- the path to base/ under the ghost repo -- so eg. cd into ghost/base then do ../megasource/build/love/Release/love.exe .
 
 ### Linux
 
