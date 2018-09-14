@@ -1,11 +1,11 @@
 import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import * as Fixtures from '~/common/fixtures';
 
 import { css } from 'react-emotion';
 import { isKeyHotkey } from 'is-hotkey';
 
 import CoreLayout from '~/core-components/layouts/CoreLayout';
-import CoreLayoutOverlay from '~/core-components/layouts/CoreLayoutOverlay';
 import CoreMediaScreen from '~/core-components/CoreMediaScreen';
 import CoreBrowserHeader from '~/core-components/CoreBrowserHeader';
 import CoreBrowserURLInput from '~/core-components/CoreBrowserURLInput';
@@ -18,6 +18,8 @@ import CoreToolbar from '~/core-components/CoreToolbar';
 const isOverlayHotkey = isKeyHotkey('mod+e');
 
 export default class CoreApp extends React.Component {
+  _layout;
+
   constructor(props) {
     super();
 
@@ -26,11 +28,30 @@ export default class CoreApp extends React.Component {
 
   componentDidMount() {
     window.addEventListener('keydown', this._handleKeyDown);
+    window.addEventListener('resize', this._handleSetGameWindowSize);
+
+    this._handleSetGameWindowSize();
   }
 
   componentWillUnmount() {
     window.removeEventListener('keydown', this._handleKeyDown);
+    window.removeEventListener('resize'.this._handleSetGameWindowSize);
   }
+
+  _handleSetGameWindowSize = () => {
+    const element = this._layout.getMediaContainerRef();
+    const rect = element.getBoundingClientRect();
+
+    const gameWindow = {
+      left: rect.left,
+      top: rect.top,
+      width: rect.width,
+      height: rect.height,
+    };
+
+    // TODO(nikki): Need a way to send this over.
+    console.log(gameWindow);
+  };
 
   _handleKeyDown = e => {
     if (isOverlayHotkey(e)) {
@@ -181,6 +202,9 @@ export default class CoreApp extends React.Component {
 
     return (
       <CoreLayout
+        ref={reference => {
+          this._layout = reference;
+        }}
         topNode={maybeTopNode}
         bottomNode={maybeBottomNode}
         toolbarNode={maybeToolbarNode}

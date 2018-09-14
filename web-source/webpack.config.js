@@ -1,5 +1,4 @@
 const HTMLWebpackPlugin = require('html-webpack-plugin');
-const HTMLWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
 const MiniCSSExtractPlugin = require('mini-css-extract-plugin');
 const path = require('path');
 

@@ -66,13 +66,25 @@ const STYLES_RIGHT_CONTENT = css`
 `;
 
 export default class CoreLayout extends React.Component {
+  _media;
+
+  getMediaContainerRef = () => {
+    return this._media;
+  };
+
   render() {
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_LEFT}>{this.props.leftSidebarNode}</div>
         <div className={STYLES_MIDDLE}>
           <div className={STYLES_MIDDLE_TOP}>{this.props.topNode}</div>
-          <div className={STYLES_CHILDREN}>{this.props.children}</div>
+          <div
+            className={STYLES_CHILDREN}
+            ref={reference => {
+              this._media = reference;
+            }}>
+            {this.props.children}
+          </div>
           <div className={STYLES_MIDDLE_TOOLBAR}>{this.props.toolbarNode}</div>
           <div className={STYLES_MIDDLE_BOTTOM}>{this.props.bottomNode}</div>
         </div>
