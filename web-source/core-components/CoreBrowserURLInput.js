@@ -103,9 +103,6 @@ export default class CoreBrowserURLInput extends React.Component {
             onChange={this.props.onURLChange}
           />
         </div>
-        <div className={STYLES_CONTAINER_RIGHT}>
-          <UIControl onClick={this.props.onToggleDashboard}>Dashboard</UIControl>
-        </div>
         <div className={STYLES_CONTAINER_TOOLBAR}>
           <UISmallButtonDark
             icon={<UISVG.Favorite height="16px" />}

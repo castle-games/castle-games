@@ -129,7 +129,6 @@ export default class CoreApp extends React.Component {
           expanded={state.isMediaExpanded}
           onURLChange={this._handleURLChange}
           onURLSubmit={this._handleURLSubmit}
-          onToggleDashboard={this._handleToggleDashboard}
           onToggleEntityFavorite={this._handleToggleEntityFavorite}
           onToggleMediaExpanded={this._handleToggleMediaExpanded}
           onHideOverlay={this._handleHideOverlay}
@@ -143,6 +142,7 @@ export default class CoreApp extends React.Component {
       maybeTopNode = (
         <CoreBrowserHeader
           viewer={state.viewer}
+          onToggleDashboard={this._handleToggleDashboard}
           onToggleAuthentication={this._handleToggleAuthentication}
           onToggleMediaInfo={this._handleToggleMediaInfo}
           onToggleScores={this._handleToggleScore}
