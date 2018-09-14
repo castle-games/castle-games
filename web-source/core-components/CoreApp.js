@@ -64,15 +64,17 @@ export default class CoreApp extends React.Component {
     this._handleSetGameWindowSize();
   };
 
-  _handleToggleEntityFavorite = () => {};
-
   _handleURLChange = e => this.setState({ [e.target.name]: e.target.value });
 
   _handleURLSubmit = e => window.alert(this.state.url);
-
   _handleToggleSearch = () => window.alert('search');
-
   _handleToggleProfile = () => window.alert('profile');
+  _handleNextMedia = () => window.alert('next');
+  _handlePreviousMedia = () => window.alert('previous');
+  _handleRandomMedia = () => window.alert('random');
+  _handleRegisterGame = () => window.alert('register');
+  _handleFavoriteMedia = () => window.alert('favorite');
+  _handleShareScores = () => window.alert('score share');
 
   _handleToggleScore = () => {
     this.setState({ isScoreVisible: !this.state.isScoreVisible });
@@ -110,16 +112,6 @@ export default class CoreApp extends React.Component {
     this._handleSetGameWindowSize();
   };
 
-  _handleNextMedia = () => window.alert('next');
-
-  _handlePreviousMedia = () => window.alert('previous');
-
-  _handleRandomMedia = () => window.alert('random');
-
-  _handleRegisterGame = () => window.alert('register');
-
-  _handleFavoriteMedia = () => window.alert('favorite');
-
   _handleHideOverlay = () => {
     this.setState({ isOverlayActive: false });
     this._handleSetGameWindowSize();
@@ -133,8 +125,6 @@ export default class CoreApp extends React.Component {
     this.setState({ isMediaExpanded: !this.state.isMediaExpanded });
     this._handleSetGameWindowSize();
   };
-
-  _handleShareScores = () => window.alert('score share');
 
   render() {
     // NOTE(jim): For example purposes, state can be stubbed out from anywhere.
@@ -150,7 +140,6 @@ export default class CoreApp extends React.Component {
           expanded={state.isMediaExpanded}
           onURLChange={this._handleURLChange}
           onURLSubmit={this._handleURLSubmit}
-          onToggleEntityFavorite={this._handleToggleEntityFavorite}
           onToggleMediaExpanded={this._handleToggleMediaExpanded}
           onHideOverlay={this._handleHideOverlay}
           onFavoriteMedia={this._handleFavoriteMedia}
