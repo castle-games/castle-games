@@ -24,6 +24,9 @@ import CoreBrowsePlaylistResults from '~/core-components/CoreBrowsePlaylistResul
 import CoreBrowseMediaResults from '~/core-components/CoreBrowseMediaResults';
 import CoreBrowseSearchInput from '~/core-components/CoreBrowseSearchInput';
 
+// NOTE(jim): Profile Page
+import CoreProfile from '~/core-components/CoreProfile';
+
 const isOverlayHotkey = isKeyHotkey('mod+e');
 
 export default class CoreApp extends React.Component {
@@ -100,7 +103,7 @@ export default class CoreApp extends React.Component {
     }
   };
 
-  _handleToggleSearch = () => {
+  _handleToggleBrowse = () => {
     this.setState({ pageMode: this.state.pageMode === 'browse' ? null : 'browse' });
   };
 
@@ -166,7 +169,7 @@ export default class CoreApp extends React.Component {
         <CoreRootAuthenticatedSidebar
           viewer={state.viewer}
           onToggleProfile={this._handleToggleProfile}
-          onToggleSearch={this._handleToggleSearch}
+          onToggleBrowse={this._handleToggleBrowse}
         />
       );
     }
@@ -177,7 +180,7 @@ export default class CoreApp extends React.Component {
       return (
         <CoreLayout
           topNode={<CoreBrowseSearchInput />}
-          rightSidebarNode={<CoreBrowsePlaylistResults />}
+          rightSidebarNode={<CoreBrowsePlaylistResults onDismiss={this._handleToggleBrowse} />}
           leftSidebarNode={maybeLeftSidebarNode}>
           <CoreBrowseMediaResults />
         </CoreLayout>
@@ -187,17 +190,17 @@ export default class CoreApp extends React.Component {
     // NOTE(jim): Playlist Page.
     // TODO(jim): Reusable Components.
     if (state.pageMode === 'playlist') {
-      return (
-        <CoreLayout leftSidebarNode={maybeLeftSidebarNode} rightSidebarNode={<div>Hello</div>}>
-          Playlist
-        </CoreLayout>
-      );
+      return <CoreLayout leftSidebarNode={maybeLeftSidebarNode}>Playlist</CoreLayout>;
     }
 
     // NOTE(jim): Profile Page
     // TDOO(jim): Reusable Components
     if (state.pageMode === 'profile') {
-      return <CoreLayout leftSidebarNode={maybeLeftSidebarNode}>Profile</CoreLayout>;
+      return (
+        <CoreLayout leftSidebarNode={maybeLeftSidebarNode}>
+          <CoreProfile onDismiss={this._handleToggleProfile} />
+        </CoreLayout>
+      );
     }
 
     // NOTE(jim): Media Page

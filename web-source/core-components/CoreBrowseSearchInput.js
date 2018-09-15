@@ -24,7 +24,7 @@ const STYLES_CONTAINER = css`
   justify-content: space-between;
   height: 48px;
   width: 100%;
-  background: ${Constants.colors.black40};
+  background: ${Constants.colors.black60};
   color: ${Constants.colors.white};
   padding: 0 16px 0 16px;
   border-bottom: 1px solid ${Constants.colors.white10};

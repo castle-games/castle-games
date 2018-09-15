@@ -36,7 +36,7 @@ export default class CoreRootAuthenticatedSidebar extends React.Component {
           onClick={this.props.onToggleProfile}>
           {this.props.viewer.username}
         </UIIconButton>
-        <UIIconButton icon={<UISVG.Search height="24px" />} onClick={this.props.onToggleSearch}>
+        <UIIconButton icon={<UISVG.Search height="24px" />} onClick={this.props.onToggleBrowse}>
           Search
         </UIIconButton>
       </div>

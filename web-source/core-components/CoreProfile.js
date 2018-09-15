@@ -19,11 +19,11 @@ const STYLES_CONTAINER = css`
 
   animation: info-animation 280ms ease;
 
-  width: 420px;
+  width: 100%;
+  min-width: 25%;
   height: 100%;
   overflow-y: scroll;
   background ${Constants.colors.black};
-  border-left: 1px solid ${Constants.colors.white10};
 
   ::-webkit-scrollbar {
     width: 1px;
@@ -50,13 +50,7 @@ export default class CoreBrowsePlaylistResults extends React.Component {
     return (
       <div className={STYLES_CONTAINER}>
         <UIHeaderDismiss onDismiss={this.props.onDismiss} />
-        <UIEmptyState title="Playlist results">
-          As you search, playlist search results will appear here.
-        </UIEmptyState>
-
-        <UIEmptyState title="Recommended playlists">
-          There are no recommended playlists.
-        </UIEmptyState>
+        <UIEmptyState title="Profile here">I need to make everything...</UIEmptyState>
       </div>
     );
   }
