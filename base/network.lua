@@ -16,6 +16,7 @@ network.requests = {}
 local tasks = limit.new(10)
 
 -- Database for persistent storage.
+love.filesystem.write('dummy', '') -- Create a dummy file to make sure the save directory exists
 local db = sqlite3.open(love.filesystem.getSaveDirectory() .. '/ghost_network.db')
 
 -- Run `foo` asynchronously with the caller. Runs it as a coroutine, so that
