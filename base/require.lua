@@ -146,7 +146,8 @@ local function explicitRequire(path, opts)
                     if resource.type == 'lua' then
                         childEnv.require(resource.path, { noEval = true })
                     elseif resource.type == 'asset' then
-                        network.fetch(childEnv.portal.basePath .. '/' .. resource.path)
+                        network.fetch(network.isAbsolute(resource.path) and resource.path or
+                                (childEnv.portal.basePath .. '/' .. resource.path))
                     end
                 end)
             end)
