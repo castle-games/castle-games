@@ -6,12 +6,17 @@
 local copas = require 'copas'
 local http = require 'copas.http'
 local limit = require 'copas.limit'
+local sqlite3 = require 'lsqlite3'
+local serpent = require 'serpent'
 
 local network = {}
 
 network.requests = {}
 
 local tasks = limit.new(10)
+
+-- Database for persistent storage.
+local db = sqlite3.open(love.filesystem.getSaveDirectory() .. '/ghost_network.db')
 
 -- Run `foo` asynchronously with the caller. Runs it as a coroutine, so that
 -- network requests inside it will appear to 'block' inside that coroutine,
@@ -76,6 +81,55 @@ function network.request(firstArg, ...)
     return after(http.request(firstArg, ...))
 end
 
+-- Create persistent fetch cache
+db:exec[[
+    create table if not exists fetch_cache (
+        timestamp datetime default current_timestamp,
+        url, method,
+        response, httpCode, headers, status,
+        primary key (url, method)
+    );
+]]
+
+-- Save an result to persistent fetch cache
+local persistFetchResult
+do
+    local stmt = db:prepare[[
+        insert into fetch_cache (url, method, response, httpCode, headers, status)
+            values (?, ?, ?, ?, ?, ?)
+            on conflict (url, method) do nothing;
+    ]]
+    persistFetchResult = function(url, method, result)
+        -- Make sure it's on 'https://raw.githubusercontent.com/...' with a SHA-like for now
+        local sha = url:match('^https://raw.githubusercontent.com/[^/]*/[^/]*/([a-f0-9]*)/')
+        if sha == nil or #sha ~= 40 then return end
+
+        local response, httpCode, headers, status = unpack(result)
+        stmt:bind_values(
+            url, method, response, httpCode, serpent.dump(headers), status)
+        stmt:step()
+        stmt:reset()
+    end
+end
+
+-- Save an result to persistent fetch cache
+local findPersistedFetchResult
+do
+    local stmt = db:prepare[[
+        select response, httpCode, headers, status from fetch_cache
+            where url = ? and method = ?;
+    ]]
+    findPersistedFetchResult = function(url, method)
+        local result
+        stmt:bind_values(url, method)
+        for response, httpCode, headers, status in stmt:urows() do
+            result = { response, httpCode, load(headers)(), status }
+        end
+        stmt:reset()
+        return result
+    end
+end
+
 -- The cache of `network.fetch` responses
 local fetchEntries = { GET = {}, HEAD = {} }
 
@@ -91,45 +145,56 @@ function network.fetch(url, method)
         entry = { waiters = {} }
         fetchEntries[method][url] = entry
 
-        -- Actually perform the request, blocks coroutine till done
-        local response, httpCode, headers, status
+        -- 'ghost://' is just 'https://'
         if url:match('^ghost://') then
             url = url:gsub('^ghost://', 'https://')
         end
-        if url:match('^https?://') then
-            if method == 'GET' then
-                response, httpCode, headers, status = network.request(url)
-                if httpCode ~= 200 then
-                    error("error fetching '" .. url .. "': " .. status)
-                end
-            else
-                response, httpCode, headers, status = network.request { url = url, method = method }
-            end
-        elseif url:match('^file://') then
-            local filePath = url:gsub('^file://', ''):gsub('%%25', '%%')
-            local file = io.open(filePath, 'r')
-            if file ~= nil then
+
+        -- Use persisted result if found
+        local persistedResult = findPersistedFetchResult(url, method)
+        if persistedResult then
+            entry.result = persistedResult
+        else -- Else actually fetch then persist it
+            local response, httpCode, headers, status
+            if url:match('^https?://') then
                 if method == 'GET' then
-                    response = file:read('*all')
+                    response, httpCode, headers, status = network.request(url)
+                    if httpCode ~= 200 then
+                        error("error fetching '" .. url .. "': " .. status)
+                    end
                 else
-                    response = 1
+                    response, httpCode, headers, status = network.request {
+                        url = url,
+                        method = method,
+                    }
                 end
-                httpCode = 200
-                headers = {}
-                status = '200 ok'
-                file:close()
-            elseif method == 'GET' then
-                error("error opening '" .. url .. "'")
-            else
-                response = nil
-                httpCode = 404
-                headers = {}
-                status = '404 not found'
+            elseif url:match('^file://') then
+                local filePath = url:gsub('^file://', ''):gsub('%%25', '%%')
+                local file = io.open(filePath, 'r')
+                if file ~= nil then
+                    if method == 'GET' then
+                        response = file:read('*all')
+                    else
+                        response = 1
+                    end
+                    httpCode = 200
+                    headers = {}
+                    status = '200 ok'
+                    file:close()
+                elseif method == 'GET' then
+                    error("error opening '" .. url .. "'")
+                else
+                    response = nil
+                    httpCode = 404
+                    headers = {}
+                    status = '404 not found'
+                end
             end
+            entry.result = { response, httpCode, headers, status }
+            persistFetchResult(url, method, entry.result)
         end
 
-        -- Save result, wake waiters
-        entry.result = { response, httpCode, headers, status }
+        -- Wake waiters
         for _, waiter in ipairs(entry.waiters) do
             copas.wakeup(waiter)
         end
