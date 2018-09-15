@@ -6,6 +6,8 @@ import { css } from 'react-emotion';
 import { isKeyHotkey } from 'is-hotkey';
 
 import CoreLayout from '~/core-components/layouts/CoreLayout';
+
+// NOTE(jim): Media Page
 import CoreMediaScreen from '~/core-components/CoreMediaScreen';
 import CoreBrowserHeader from '~/core-components/CoreBrowserHeader';
 import CoreBrowserURLInput from '~/core-components/CoreBrowserURLInput';
@@ -14,6 +16,11 @@ import CoreGameInfo from '~/core-components/CoreGameInfo';
 import CoreUserDashboard from '~/core-components/CoreUserDashboard';
 import CoreScoreInfo from '~/core-components/CoreScoreInfo';
 import CoreToolbar from '~/core-components/CoreToolbar';
+
+// NOTE(jim): Browse Page
+import CoreBrowsePlaylistResults from '~/core-components/CoreBrowsePlaylistResults';
+import CoreBrowseMediaResults from '~/core-components/CoreBrowseMediaResults';
+import CoreBrowseSearchInput from '~/core-components/CoreBrowseSearchInput';
 
 const isOverlayHotkey = isKeyHotkey('mod+e');
 
@@ -165,13 +172,24 @@ export default class CoreApp extends React.Component {
     // NOTE(jim): Browse/Search Page
     // TODO(jim): Reusable Components
     if (state.pageMode === 'browse') {
-      return <CoreLayout leftSidebarNode={maybeLeftSidebarNode}>Browse</CoreLayout>;
+      return (
+        <CoreLayout
+          topNode={<CoreBrowseSearchInput />}
+          rightSidebarNode={<CoreBrowsePlaylistResults />}
+          leftSidebarNode={maybeLeftSidebarNode}>
+          <CoreBrowseMediaResults />
+        </CoreLayout>
+      );
     }
 
     // NOTE(jim): Playlist Page.
     // TODO(jim): Reusable Components.
     if (state.pageMode === 'playlist') {
-      return <CoreLayout leftSidebarNode={maybeLeftSidebarNode}>Playlist</CoreLayout>;
+      return (
+        <CoreLayout leftSidebarNode={maybeLeftSidebarNode} rightSidebarNode={<div>Hello</div>}>
+          Playlist
+        </CoreLayout>
+      );
     }
 
     // NOTE(jim): Profile Page
@@ -189,8 +207,8 @@ export default class CoreApp extends React.Component {
           value={state.url}
           viewer={state.viewer}
           expanded={state.isMediaExpanded}
-          onURLChange={this._handleURLChange}
-          onURLSubmit={this._handleURLSubmit}
+          onChange={this._handleURLChange}
+          onSubmit={this._handleURLSubmit}
           onToggleMediaExpanded={this._handleToggleMediaExpanded}
           onHideOverlay={this._handleHideOverlay}
           onFavoriteMedia={this._handleFavoriteMedia}

@@ -5,8 +5,6 @@ import * as UISVG from '~/core-components/reusable/UISVG';
 import { css } from 'react-emotion';
 
 import ControlledInput from '~/core-components/primitives/ControlledInput';
-import UISmallButtonDark from '~/core-components/reusable/UISmallButtonDark';
-import UIControl from '~/core-components/reusable/UIControl';
 
 const STYLES_CONTAINER = css`
   @keyframes url-animation {
@@ -29,7 +27,7 @@ const STYLES_CONTAINER = css`
   background: ${Constants.colors.black40};
   color: ${Constants.colors.white};
   padding: 0 16px 0 16px;
-  border-top: 1px solid ${Constants.colors.white10};
+  border-bottom: 1px solid ${Constants.colors.white10};
 `;
 
 const STYLES_CONTAINER_LEFT = css`
@@ -45,13 +43,6 @@ const STYLES_CONTAINER_MIDDLE = css`
   min-width: 25%;
   width: 100%;
   padding-right: 16px;
-  display: flex;
-  align-items: center;
-`;
-
-const STYLES_CONTAINER_RIGHT = css`
-  flex-shrink: 0;
-  padding-left: 16px;
   display: flex;
   align-items: center;
 `;
@@ -74,11 +65,6 @@ const STYLES_INPUT = css`
   }
 `;
 
-const STYLES_CONTAINER_TOOLBAR = css`
-  padding-left: 16px;
-  flex-shrink: 0;
-`;
-
 export default class CoreBrowserURLInput extends React.Component {
   _input;
 
@@ -87,9 +73,7 @@ export default class CoreBrowserURLInput extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTAINER}>
-        <div className={STYLES_CONTAINER_LEFT} onClick={this._handleFocusInput}>
-          ghost://
-        </div>
+        <div className={STYLES_CONTAINER_LEFT} onClick={this._handleFocusInput} />
         <div className={STYLES_CONTAINER_MIDDLE}>
           <ControlledInput
             ref={c => {
@@ -98,33 +82,9 @@ export default class CoreBrowserURLInput extends React.Component {
             className={STYLES_INPUT}
             value={this.props.value}
             name={this.props.name}
-            placeholder={this.props.placeholder}
+            placeholder="Search for games, media and playlists..."
             onSubmit={this.props.onSubmit}
             onChange={this.props.onChange}
-          />
-        </div>
-        <div className={STYLES_CONTAINER_RIGHT}>
-          <UISmallButtonDark icon={<UISVG.Play height="12px" />} onClick={this.props.onSubmit} />
-        </div>
-        <div className={STYLES_CONTAINER_TOOLBAR}>
-          <UISmallButtonDark
-            icon={<UISVG.Favorite height="16px" />}
-            onClick={this.props.onFavoriteMedia}
-          />
-          {!this.props.expanded ? (
-            <UISmallButtonDark
-              icon={<UISVG.Expand height="16px" />}
-              onClick={this.props.onToggleMediaExpanded}
-            />
-          ) : (
-            <UISmallButtonDark
-              icon={<UISVG.Collapse height="16px" />}
-              onClick={this.props.onToggleMediaExpanded}
-            />
-          )}
-          <UISmallButtonDark
-            icon={<UISVG.CloseOverlay height="16px" />}
-            onClick={this.props.onHideOverlay}
           />
         </div>
       </div>
