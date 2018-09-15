@@ -134,7 +134,7 @@ local function explicitRequire(path, opts)
     end
 
     -- Fetch
-    local firstFetch = network.fetchEntries.GET[url] == nil -- Fetch wasn't cached?
+    local firstFetch = network.status(url) == 'none'
     local response = network.fetch(url)
     if preamble then response = preamble .. response end
 

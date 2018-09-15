@@ -77,7 +77,7 @@ function network.request(firstArg, ...)
 end
 
 -- The cache of `network.fetch` responses
-network.fetchEntries = { GET = {}, HEAD = {} }
+local fetchEntries = { GET = {}, HEAD = {} }
 
 -- Fetch a resource with default caching semantics
 function network.fetch(url, method)
@@ -85,11 +85,11 @@ function network.fetch(url, method)
     assert(method == 'GET' or method == 'HEAD', "`network.fetch` only supports 'GET' or 'HEAD'")
 
     -- Find or create entry
-    local entry = network.fetchEntries[method][url]
+    local entry = fetchEntries[method][url]
     if not entry then -- No entry yet
         -- Store a pending entry that will collect others waiting on this
         entry = { waiters = {} }
-        network.fetchEntries[method][url] = entry
+        fetchEntries[method][url] = entry
 
         -- Actually perform the request, blocks coroutine till done
         local response, httpCode, headers, status
@@ -149,9 +149,9 @@ end
 
 -- Flush the `network.fetch` cache for all URLs matching a given filter function
 function network.flush(filter)
-    for method, entries in pairs(network.fetchEntries) do
+    for method, entries in pairs(fetchEntries) do
         if not filter then
-            network.fetchEntries[method] = {}
+            fetchEntries[method] = {}
         else
             for url in pairs(entries) do
                 if filter(url) then
@@ -171,6 +171,26 @@ end
 function network.exists(url)
     local _, httpCode = network.fetch(url, 'HEAD')
     return httpCode == 200
+end
+
+-- Return the `network.fetch` status for a given `url` and `method` combination. `method` defaults
+-- to `'GET'` if not given. Returns `'none'` if not cached (either never fetched or flushed from
+-- cache), `'fetching'` if currently being fetched (poasynchronously), or `'fetched'` if fetched
+-- and cached.
+function network.status(url, method)
+    method = (method or 'GET'):upper()
+    assert(method == 'GET' or method == 'HEAD', "`network.fetch` only supports 'GET' or 'HEAD'")
+
+    local entry = fetchEntries[method][url]
+    if entry ~= nil then
+        if entry.result then
+            return 'fetched'
+        else
+            return 'fetching'
+        end
+    else
+        return 'none'
+    end
 end
 
 -- Perform any updates the network system has to do -- this is run by base automatically and you
