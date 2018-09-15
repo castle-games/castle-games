@@ -6,11 +6,11 @@ export default () => {
   const state = {
     url: '',
     viewer: null,
+    sidebarMode: null, // dashboard | media-info | null
+    pageMode: null, // browse | playlist | profile | null
     isMediaFavorited: false,
     isMediaExpanded: true,
     isOverlayActive: true,
-    isMediaInfoVisible: false,
-    isDashboardVisible: false,
     isScoreVisible: false,
   };
 

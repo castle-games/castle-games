@@ -91,24 +91,21 @@ export default class CoreApp extends React.Component {
     }
   };
 
-  _handleToggleSearch = () => window.alert('search');
-  _handleToggleProfile = () => window.alert('profile');
-  _handleNextMedia = () => window.alert('next');
-  _handlePreviousMedia = () => window.alert('previous');
-  _handleRandomMedia = () => window.alert('random');
+  _handleToggleSearch = () => {
+    this.setState({ pageMode: this.state.pageMode === 'browse' ? null : 'browse' });
+  };
+
+  _handleToggleProfile = () => {
+    this.setState({ pageMode: this.state.pageMode === 'profile' ? null : 'profile' });
+  };
+
   _handleRegisterGame = () => window.alert('register');
   _handleFavoriteMedia = () => window.alert('favorite');
-  _handleShareScores = () => window.alert('score share');
-
-  _handleToggleScore = () => {
-    this.setState({ isScoreVisible: !this.state.isScoreVisible }, this._handleSetGameWindowSize);
-  };
 
   _handleToggleDashboard = () => {
     this.setState(
       {
-        isMediaInfoVisible: false,
-        isDashboardVisible: !this.state.isDashboardVisible,
+        sidebarMode: 'dashboard',
       },
       this._handleSetGameWindowSize
     );
@@ -117,19 +114,22 @@ export default class CoreApp extends React.Component {
   _handleToggleMediaInfo = () => {
     this.setState(
       {
-        isMediaInfoVisible: !this.state.isMediaInfoVisible,
-        isDashboardVisible: false,
+        sidebarMode: 'media-info',
       },
       this._handleSetGameWindowSize
     );
   };
 
   _handleDismissMediaInfo = () => {
-    this.setState({ isMediaInfoVisible: false }, this._handleSetGameWindowSize);
+    this.setState({ sidebarMode: null }, this._handleSetGameWindowSize);
   };
 
   _handleDismissDashboard = () => {
-    this.setState({ isDashboardVisible: false }, this._handleSetGameWindowSize);
+    this.setState({ sidebarMode: null }, this._handleSetGameWindowSize);
+  };
+
+  _handleToggleScore = () => {
+    this.setState({ isScoreVisible: !this.state.isScoreVisible }, this._handleSetGameWindowSize);
   };
 
   _handleDismissScore = () => {
@@ -143,14 +143,44 @@ export default class CoreApp extends React.Component {
   _handleToggleOverlay = () => {
     this.setState({ isOverlayActive: !this.state.isOverlayActive }, this._handleSetGameWindowSize);
   };
+
   _handleToggleMediaExpanded = () => {
     this.setState({ isMediaExpanded: !this.state.isMediaExpanded }, this._handleSetGameWindowSize);
   };
 
   render() {
-    // NOTE(jim): For example purposes, state can be stubbed out from anywhere.
     const { state } = this;
 
+    let maybeLeftSidebarNode;
+    if (state.isOverlayActive && state.viewer) {
+      maybeLeftSidebarNode = (
+        <CoreNavigationSidebar
+          viewer={state.viewer}
+          onToggleProfile={this._handleToggleProfile}
+          onToggleSearch={this._handleToggleSearch}
+        />
+      );
+    }
+
+    // NOTE(jim): Browse/Search Page
+    // TODO(jim): Reusable Components
+    if (state.pageMode === 'browse') {
+      return <CoreLayout leftSidebarNode={maybeLeftSidebarNode}>Browse</CoreLayout>;
+    }
+
+    // NOTE(jim): Playlist Page.
+    // TODO(jim): Reusable Components.
+    if (state.pageMode === 'playlist') {
+      return <CoreLayout leftSidebarNode={maybeLeftSidebarNode}>Playlist</CoreLayout>;
+    }
+
+    // NOTE(jim): Profile Page
+    // TDOO(jim): Reusable Components
+    if (state.pageMode === 'profile') {
+      return <CoreLayout leftSidebarNode={maybeLeftSidebarNode}>Profile</CoreLayout>;
+    }
+
+    // NOTE(jim): Media Page
     let maybeBottomNode;
     if (state.isOverlayActive) {
       maybeBottomNode = (
@@ -181,49 +211,23 @@ export default class CoreApp extends React.Component {
       );
     }
 
-    let maybeLeftSidebarNode;
-    if (state.isOverlayActive && state.viewer) {
-      maybeLeftSidebarNode = (
-        <CoreNavigationSidebar
-          viewer={state.viewer}
-          onToggleProfile={this._handleToggleProfile}
-          onToggleSearch={this._handleToggleSearch}
-        />
-      );
-    }
-
     let maybeRightSidebarNode;
     if (state.isOverlayActive && state.isScoreVisible) {
-      maybeRightSidebarNode = (
-        <CoreScoreInfo
-          onDismiss={this._handleDismissScore}
-          onShareScores={this._handleShareScores}
-        />
-      );
+      maybeRightSidebarNode = <CoreScoreInfo onDismiss={this._handleDismissScore} />;
     }
 
     let maybeRightNode;
-    if (state.isOverlayActive && state.isMediaInfoVisible) {
+    if (state.isOverlayActive && state.sidebarMode === 'media-info') {
       maybeRightNode = (
         <CoreGameInfo
           onDismiss={this._handleDismissMediaInfo}
           onRegisterMedia={this._handleRegisterGame}
-          onNextMedia={this._handleNextMedia}
-          onRandomMedia={this._handleRandomMedia}
-          onPreviousMedia={this._handlePreviousMedia}
         />
       );
     }
 
-    if (state.isOverlayActive && state.isDashboardVisible) {
-      maybeRightNode = (
-        <CoreUserDashboard
-          onDismiss={this._handleDismissDashboard}
-          onNextMedia={this._handleNextMedia}
-          onRandomMedia={this._handleRandomMedia}
-          onPreviousMedia={this._handlePreviousMedia}
-        />
-      );
+    if (state.isOverlayActive && state.sidebarMode === 'dashboard') {
+      maybeRightNode = <CoreUserDashboard onDismiss={this._handleDismissDashboard} />;
     }
 
     if (state.isOverlayLayout) {
