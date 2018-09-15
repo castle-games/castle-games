@@ -7,15 +7,17 @@ import { isKeyHotkey } from 'is-hotkey';
 
 import CoreLayout from '~/core-components/layouts/CoreLayout';
 
+// NOTE(jim): Root Components
+import CoreRootHeader from '~/core-components/CoreRootHeader';
+import CoreRootURLInput from '~/core-components/CoreRootURLInput';
+import CoreRootAuthenticatedSidebar from '~/core-components/CoreRootAuthenticatedSidebar';
+import CoreRootDashboard from '~/core-components/CoreRootDashboard';
+import CoreRootToolbar from '~/core-components/CoreRootToolbar';
+
 // NOTE(jim): Media Page
 import CoreMediaScreen from '~/core-components/CoreMediaScreen';
-import CoreBrowserHeader from '~/core-components/CoreBrowserHeader';
-import CoreBrowserURLInput from '~/core-components/CoreBrowserURLInput';
-import CoreNavigationSidebar from '~/core-components/CoreNavigationSidebar';
-import CoreGameInfo from '~/core-components/CoreGameInfo';
-import CoreUserDashboard from '~/core-components/CoreUserDashboard';
-import CoreScoreInfo from '~/core-components/CoreScoreInfo';
-import CoreToolbar from '~/core-components/CoreToolbar';
+import CoreMediaInformation from '~/core-components/CoreMediaInformation';
+import CoreMediaScoreInformation from '~/core-components/CoreMediaScoreInformation';
 
 // NOTE(jim): Browse Page
 import CoreBrowsePlaylistResults from '~/core-components/CoreBrowsePlaylistResults';
@@ -161,7 +163,7 @@ export default class CoreApp extends React.Component {
     let maybeLeftSidebarNode;
     if (state.isOverlayActive && state.viewer) {
       maybeLeftSidebarNode = (
-        <CoreNavigationSidebar
+        <CoreRootAuthenticatedSidebar
           viewer={state.viewer}
           onToggleProfile={this._handleToggleProfile}
           onToggleSearch={this._handleToggleSearch}
@@ -202,7 +204,7 @@ export default class CoreApp extends React.Component {
     let maybeBottomNode;
     if (state.isOverlayActive) {
       maybeBottomNode = (
-        <CoreBrowserURLInput
+        <CoreRootURLInput
           name="url"
           value={state.url}
           viewer={state.viewer}
@@ -219,7 +221,7 @@ export default class CoreApp extends React.Component {
     let maybeTopNode;
     if (state.isOverlayActive) {
       maybeTopNode = (
-        <CoreBrowserHeader
+        <CoreRootHeader
           viewer={state.viewer}
           onToggleDashboard={this._handleToggleDashboard}
           onToggleAuthentication={this._handleToggleAuthentication}
@@ -231,13 +233,13 @@ export default class CoreApp extends React.Component {
 
     let maybeRightSidebarNode;
     if (state.isOverlayActive && state.isScoreVisible) {
-      maybeRightSidebarNode = <CoreScoreInfo onDismiss={this._handleDismissScore} />;
+      maybeRightSidebarNode = <CoreMediaScoreInformation onDismiss={this._handleDismissScore} />;
     }
 
     let maybeRightNode;
     if (state.isOverlayActive && state.sidebarMode === 'media-info') {
       maybeRightNode = (
-        <CoreGameInfo
+        <CoreMediaInformation
           onDismiss={this._handleDismissMediaInfo}
           onRegisterMedia={this._handleRegisterGame}
         />
@@ -245,7 +247,7 @@ export default class CoreApp extends React.Component {
     }
 
     if (state.isOverlayActive && state.sidebarMode === 'dashboard') {
-      maybeRightNode = <CoreUserDashboard onDismiss={this._handleDismissDashboard} />;
+      maybeRightNode = <CoreRootDashboard onDismiss={this._handleDismissDashboard} />;
     }
 
     if (state.isOverlayLayout) {

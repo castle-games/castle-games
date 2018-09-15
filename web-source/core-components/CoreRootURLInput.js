@@ -79,7 +79,7 @@ const STYLES_CONTAINER_TOOLBAR = css`
   flex-shrink: 0;
 `;
 
-export default class CoreBrowserURLInput extends React.Component {
+export default class CoreRootURLInput extends React.Component {
   _input;
 
   _handleFocusInput = () => this._input.focus();

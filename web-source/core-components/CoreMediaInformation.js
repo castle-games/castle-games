@@ -46,7 +46,7 @@ const STYLES_CONTAINER = css`
   }
 `;
 
-export default class CoreGameInfo extends React.Component {
+export default class CoreMediaInformation extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTAINER}>

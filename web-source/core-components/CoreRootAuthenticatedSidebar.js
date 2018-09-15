@@ -26,7 +26,7 @@ const STYLES_NAVIGATION = css`
   border-right: 1px solid ${Constants.colors.white10};
 `;
 
-export default class CoreNavigationSidebar extends React.Component {
+export default class CoreRootAuthenticatedSidebar extends React.Component {
   render() {
     return (
       <div className={STYLES_NAVIGATION}>

@@ -65,7 +65,7 @@ const STYLES_INPUT = css`
   }
 `;
 
-export default class CoreBrowserURLInput extends React.Component {
+export default class CoreBrowseSearchInput extends React.Component {
   _input;
 
   _handleFocusInput = () => this._input.focus();

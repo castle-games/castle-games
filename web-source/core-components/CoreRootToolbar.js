@@ -30,7 +30,7 @@ const STYLES_CONTAINER = css`
   animation: toolbar-animation 200ms ease;
 `;
 
-export default class CoreToolbar extends React.Component {
+export default class CoreRootToolbar extends React.Component {
   static defaultProps = {
     expanded: true,
   };
@@ -41,21 +41,6 @@ export default class CoreToolbar extends React.Component {
         <UINotice onClick={this.props.onHideOverlay}>
           <strong style={{ marginRight: 8 }}>⌘ + E</strong> to return to the game.
         </UINotice>
-        <UISmallButtonLight
-          icon={<UISVG.Favorite height="16px" />}
-          onClick={this.props.onFavoriteMedia}
-        />
-        {!this.props.expanded ? (
-          <UISmallButtonLight
-            icon={<UISVG.Expand height="16px" />}
-            onClick={this.props.onToggleMediaExpanded}
-          />
-        ) : (
-          <UISmallButtonLight
-            icon={<UISVG.Collapse height="16px" />}
-            onClick={this.props.onToggleMediaExpanded}
-          />
-        )}
       </div>
     );
   }
