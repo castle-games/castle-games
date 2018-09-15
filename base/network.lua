@@ -91,7 +91,7 @@ db:exec[[
     );
 ]]
 
--- Save an result to persistent fetch cache
+-- Save a result to the persistent fetch cache
 local persistFetchResult
 do
     local stmt = db:prepare[[
@@ -112,7 +112,7 @@ do
     end
 end
 
--- Save an result to persistent fetch cache
+-- Find a result in the persistent fetch cache, `nil` if not found
 local findPersistedFetchResult
 do
     local stmt = db:prepare[[
