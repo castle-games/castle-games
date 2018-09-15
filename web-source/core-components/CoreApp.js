@@ -28,14 +28,16 @@ export default class CoreApp extends React.Component {
 
   componentDidMount() {
     window.addEventListener('keydown', this._handleKeyDown);
-    window.addEventListener('resize', this._handleSetGameWindowSize);
+    // NOTE(nikki): We directly handle resizes in native to prevent late redraw
+    //window.addEventListener('resize', this._handleSetGameWindowSize);
 
     this._handleSetGameWindowSize();
   }
 
   componentWillUnmount() {
     window.removeEventListener('keydown', this._handleKeyDown);
-    window.removeEventListener('resize'.this._handleSetGameWindowSize);
+    // NOTE(nikki): We directly handle resizes in native to prevent late redraw
+    //window.removeEventListener('resize'.this._handleSetGameWindowSize);
   }
 
   _handleSetGameWindowSize = () => {

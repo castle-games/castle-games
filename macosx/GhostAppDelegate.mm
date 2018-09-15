@@ -17,6 +17,9 @@ extern "C" {
 
 @property(nonatomic, strong) NSTimer *mainLoopTimer;
 
+@property(nonatomic, assign) BOOL resizeSubscribed;
+@property(nonatomic, assign) CGRect prevWindowFrame;
+
 @end
 
 @implementation GhostAppDelegate
@@ -49,15 +52,16 @@ extern "C" {
   // Set the delegate for application events.
   [[NSApplication sharedApplication] setDelegate:self];
 
-  // Love test
   self.luaState = nil;
-  //  [self bootLoveWithUri:nil];
+  
   self.mainLoopTimer = [NSTimer timerWithTimeInterval:1.0f / 60.0f
                                                target:self
                                              selector:@selector(stepLove)
                                              userInfo:nil
                                               repeats:YES];
   [[NSRunLoop mainRunLoop] addTimer:self.mainLoopTimer forMode:NSRunLoopCommonModes];
+  
+  self.resizeSubscribed = NO;
 }
 
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender {
@@ -142,7 +146,19 @@ extern "C" {
       [self closeLua];
     }
   }
-
+  
+  if (!self.resizeSubscribed) {
+    NSWindow *window = [[NSApplication sharedApplication] mainWindow];
+    if (window) {
+      [[NSNotificationCenter defaultCenter] addObserver:self
+                                               selector:@selector(windowResized:)
+                                                   name:NSWindowDidResizeNotification
+                                                 object:window];
+      self.prevWindowFrame = window.frame;
+      self.resizeSubscribed = YES;
+    }
+  }
+  
   ghostUpdateChildWindowFrame();
 }
 
@@ -160,6 +176,14 @@ extern "C" {
   SimpleHandler *handler = SimpleHandler::GetInstance();
   if (handler && !handler->IsClosing())
     handler->CloseAllBrowsers(false);
+}
+
+- (void)windowResized:(NSNotification *)notification {
+  NSWindow *window = [[NSApplication sharedApplication] mainWindow];
+  float dw = window.frame.size.width - self.prevWindowFrame.size.width;
+  float dh = window.frame.size.height - self.prevWindowFrame.size.height;
+  ghostResizeChildWindow(dw, dh);
+  self.prevWindowFrame = window.frame;
 }
 
 @end

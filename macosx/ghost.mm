@@ -26,6 +26,10 @@ void ghostSetChildWindowFrame(float left, float top, float width, float height) 
   }
 }
 
+void ghostResizeChildWindow(float dw, float dh) {
+  ghostSetChildWindowFrame(childLeft, childTop, childWidth + dw, childHeight + dh);
+}
+
 void ghostUpdateChildWindowFrame() {
   ghostSetChildWindowFrame(childLeft, childTop, childWidth, childHeight);
 }

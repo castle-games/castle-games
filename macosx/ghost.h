@@ -8,6 +8,7 @@ extern "C" {
 void ghostOpenUri(const char *uri);
 void ghostClose();
 void ghostUpdateChildWindowFrame();
+void ghostResizeChildWindow(float dw, float dh);
 void ghostSetChildWindowFrame(float left, float top, float width, float height);
 
 #ifdef __cplusplus
