@@ -62,6 +62,9 @@ export default class CoreRootHeader extends React.Component {
           ) : null}
         </div>
         <div className={STYLES_CONTAINER_RIGHT}>
+          <UIControl style={{ marginRight: 24 }} onClick={this.props.onToggleCurrentPlaylist}>
+            Current Playlist
+          </UIControl>
           <UIControl style={{ marginRight: 24 }} onClick={this.props.onToggleDashboard}>
             Dashboard
           </UIControl>

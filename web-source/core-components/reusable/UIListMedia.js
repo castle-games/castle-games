@@ -24,6 +24,11 @@ const STYLES_ROW = css`
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
+  border-bottom: 1px solid ${Constants.colors.white10};
+
+  :last-child {
+    border-bottom: 0;
+  }
 `;
 
 const STYLES_COLUMN = css`
@@ -61,7 +66,9 @@ export default class UIListMedia extends React.Component {
         {this.props.media.map((m, i) => {
           return (
             <div className={STYLES_ROW} key={`list-item-${i}`}>
-              <div className={STYLES_COLUMN}>Name</div>
+              <div className={STYLES_COLUMN} style={{ fontWeight: 600 }}>
+                Name
+              </div>
               <div className={STYLES_FLUID_COLUMN}>
                 The purpose of design is to search for an essential quality in things. The subject
                 of art is "I". The subject of design is "We".
