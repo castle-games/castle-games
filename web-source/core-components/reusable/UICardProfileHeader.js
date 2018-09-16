@@ -80,11 +80,11 @@ export default class UICardProfileHeader extends React.Component {
               <div className={STYLES_ROW}>
                 <UIButtonIconHorizontal
                   style={{ marginRight: 16 }}
-                  onClick={() => this.props.onPlayCreatorMedia(this.props.creator.userId)}>
+                  onClick={() => this.props.onPlayCreatorMedia(this.props.creator)}>
                   Play {this.props.creator.username}'s media
                 </UIButtonIconHorizontal>
                 <UIButtonIconHorizontal
-                  onClick={() => this.props.onSubscribeToCreator(this.props.creator.userId)}>
+                  onClick={() => this.props.onSubscribeToCreator(this.props.creator)}>
                   Subscribe to {this.props.creator.username}
                 </UIButtonIconHorizontal>
               </div>

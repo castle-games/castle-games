@@ -112,7 +112,28 @@ export default class CoreApp extends React.Component {
   };
 
   _handleRegisterGame = () => window.alert('register');
+
   _handleFavoriteMedia = () => window.alert('favorite');
+
+  _handlePlayCreatorMedia = creator => {
+    console.log({ creator });
+  };
+
+  _handleSubscribeToCreator = creator => {
+    console.log({ creator });
+  };
+
+  _handleClickCreatorAvatar = creator => {
+    console.log({ creator });
+  };
+
+  _handleClickCreatorCreations = creator => {
+    console.log({ creator });
+  };
+
+  _handleClickCreatorPlaylists = creator => {
+    console.log({ creator });
+  };
 
   _handleToggleDashboard = () => {
     this.setState(
@@ -202,6 +223,11 @@ export default class CoreApp extends React.Component {
             creator={state.viewer}
             onSignOut={this._handleToggleAuthentication}
             onDismiss={this._handleToggleProfile}
+            onPlayCreatorMedia={this._handlePlayCreatorMedia}
+            onSubscribeToCreator={this._handleSubscribeToCreator}
+            onClickCreatorAvatar={this._handleClickCreatorAvatar}
+            onClickCreatorCreations={this._handleClickCreatorCreations}
+            onClickCreatorPlaylists={this._handleClickCreatorPlaylists}
           />
         </CoreLayout>
       );
