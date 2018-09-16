@@ -110,7 +110,12 @@ do
         if sha == nil or #sha ~= 40 then return end
 
         local response, httpCode, headers, status = unpack(result)
-        stmt:bind_values(url, method, response, httpCode, serpent.dump(headers), status)
+        stmt:bind(1, url)
+        stmt:bind(2, method)
+        stmt:bind_blob(3, response)
+        stmt:bind(4, httpCode)
+        stmt:bind(5, serpent.dump(headers))
+        stmt:bind(6, status)
         stmt:step()
         stmt:reset()
     end
