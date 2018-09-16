@@ -81,7 +81,7 @@ export default class CoreApp extends React.Component {
 
   _handleToggleAuthentication = () => {
     this.setState(
-      { viewer: this.state.viewer ? null : Fixtures.User },
+      { viewer: this.state.viewer ? null : Fixtures.User, pageMode: null },
       this._handleSetGameWindowSize
     );
   };
@@ -198,7 +198,10 @@ export default class CoreApp extends React.Component {
     if (state.pageMode === 'profile') {
       return (
         <CoreLayout leftSidebarNode={maybeLeftSidebarNode}>
-          <CoreProfile onDismiss={this._handleToggleProfile} />
+          <CoreProfile
+            onSignOut={this._handleToggleAuthentication}
+            onDismiss={this._handleToggleProfile}
+          />
         </CoreLayout>
       );
     }

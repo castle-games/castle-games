@@ -28,7 +28,7 @@ const STYLES_CONTROL = css`
   }
 `;
 
-export default class UISmallButtonDark extends React.Component {
+export default class UIButtonDarkSmall extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTROL} style={this.props.style} onClick={this.props.onClick}>

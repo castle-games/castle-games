@@ -9,11 +9,11 @@ const STYLES_CONTROL = css`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: ${Constants.colors.white};
-  border-radius: 4px;
-  color: ${Constants.colors.black};
+  color: #666;
+  border: 1px solid #666;
   height: 32px;
   width: 32px;
+  background: #222;
   transition: 200ms ease opacity;
   opacity: 1;
   cursor: pointer;
@@ -23,7 +23,7 @@ const STYLES_CONTROL = css`
   }
 `;
 
-export default class UISmallButtonLight extends React.Component {
+export default class UIButtonSmall extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTROL} style={this.props.style} onClick={this.props.onClick}>

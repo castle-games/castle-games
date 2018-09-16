@@ -5,7 +5,7 @@ import * as UISVG from '~/core-components/reusable/UISVG';
 import { css } from 'react-emotion';
 
 import ControlledInput from '~/core-components/primitives/ControlledInput';
-import UISmallButtonDark from '~/core-components/reusable/UISmallButtonDark';
+import UIButtonDarkSmall from '~/core-components/reusable/UIButtonDarkSmall';
 import UIControl from '~/core-components/reusable/UIControl';
 
 const STYLES_CONTAINER = css`
@@ -104,25 +104,25 @@ export default class CoreRootURLInput extends React.Component {
           />
         </div>
         <div className={STYLES_CONTAINER_RIGHT}>
-          <UISmallButtonDark icon={<UISVG.Play height="12px" />} onClick={this.props.onSubmit} />
+          <UIButtonDarkSmall icon={<UISVG.Play height="12px" />} onClick={this.props.onSubmit} />
         </div>
         <div className={STYLES_CONTAINER_TOOLBAR}>
-          <UISmallButtonDark
+          <UIButtonDarkSmall
             icon={<UISVG.Favorite height="16px" />}
             onClick={this.props.onFavoriteMedia}
           />
           {!this.props.expanded ? (
-            <UISmallButtonDark
+            <UIButtonDarkSmall
               icon={<UISVG.Expand height="16px" />}
               onClick={this.props.onToggleMediaExpanded}
             />
           ) : (
-            <UISmallButtonDark
+            <UIButtonDarkSmall
               icon={<UISVG.Collapse height="16px" />}
               onClick={this.props.onToggleMediaExpanded}
             />
           )}
-          <UISmallButtonDark
+          <UIButtonDarkSmall
             icon={<UISVG.CloseOverlay height="16px" />}
             onClick={this.props.onHideOverlay}
           />

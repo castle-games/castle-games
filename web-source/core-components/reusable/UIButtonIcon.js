@@ -46,7 +46,7 @@ const STYLES_TEXT = css`
   align-items: center;
 `;
 
-export default class UIIconButton extends React.Component {
+export default class UIButtonIcon extends React.Component {
   render() {
     return (
       <span className={STYLES_CONTROL} onClick={this.props.onClick}>

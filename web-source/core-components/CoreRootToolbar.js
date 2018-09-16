@@ -5,8 +5,6 @@ import * as UISVG from '~/core-components/reusable/UISVG';
 import { css } from 'react-emotion';
 
 import UINotice from '~/core-components/reusable/UINotice';
-import UISmallButton from '~/core-components/reusable/UISmallButton';
-import UISmallButtonLight from '~/core-components/reusable/UISmallButtonLight';
 
 const STYLES_CONTAINER = css`
   @keyframes toolbar-animation {

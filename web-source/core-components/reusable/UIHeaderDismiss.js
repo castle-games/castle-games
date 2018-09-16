@@ -4,8 +4,6 @@ import * as UISVG from '~/core-components/reusable/UISVG';
 
 import { css } from 'react-emotion';
 
-import UIControl from '~/core-components/reusable/UIControl';
-
 const STYLES_CONTAINER = css`
   height: 48px;
   background: ${Constants.colors.black30};

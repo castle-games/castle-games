@@ -4,7 +4,7 @@ import * as UISVG from '~/core-components/reusable/UISVG';
 
 import { css } from 'react-emotion';
 
-import UIIconButton from '~/core-components/reusable/UIIconButton';
+import UIButtonIcon from '~/core-components/reusable/UIButtonIcon';
 
 const STYLES_NAVIGATION = css`
   @keyframes navigation-animation {
@@ -30,15 +30,15 @@ export default class CoreRootAuthenticatedSidebar extends React.Component {
   render() {
     return (
       <div className={STYLES_NAVIGATION}>
-        <UIIconButton
+        <UIButtonIcon
           icon={false}
           src={this.props.viewer.avatarUrl}
           onClick={this.props.onToggleProfile}>
           {this.props.viewer.username}
-        </UIIconButton>
-        <UIIconButton icon={<UISVG.Search height="24px" />} onClick={this.props.onToggleBrowse}>
+        </UIButtonIcon>
+        <UIButtonIcon icon={<UISVG.Search height="24px" />} onClick={this.props.onToggleBrowse}>
           Search
-        </UIIconButton>
+        </UIButtonIcon>
       </div>
     );
   }

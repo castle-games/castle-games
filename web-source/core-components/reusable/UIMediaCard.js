@@ -4,7 +4,7 @@ import * as UISVG from '~/core-components/reusable/UISVG';
 
 import { css } from 'react-emotion';
 
-import UIIconButtonHorizontal from '~/core-components/reusable/UIIconButtonHorizontal';
+import UIButtonIconHorizontal from '~/core-components/reusable/UIButtonIconHorizontal';
 
 const STYLES_CONTAINER = css`
   padding: 16px;
@@ -73,12 +73,12 @@ export default class UIMediaCard extends React.Component {
             add this game to their playlists.
           </div>
 
-          <UIIconButtonHorizontal
+          <UIButtonIconHorizontal
             onClick={this.props.onRegisterMedia}
             style={{ marginTop: 24 }}
             icon={<UISVG.Add height="16px" />}>
             Register game
-          </UIIconButtonHorizontal>
+          </UIButtonIconHorizontal>
         </div>
       </div>
     );
