@@ -98,7 +98,11 @@ do
     local stmt = db:prepare[[
         insert into fetch_cache (url, method, response, httpCode, headers, status)
             values (?, ?, ?, ?, ?, ?)
-            on conflict (url, method) do nothing;
+            on conflict (url, method) do update set
+                response = excluded.response,
+                httpCode = excluded.httpCode,
+                headers = excluded.headers,
+                status = excluded.status;
     ]]
     persistFetchResult = function(url, method, result)
         -- Make sure it's on 'https://raw.githubusercontent.com/...' with a SHA-like for now
@@ -106,8 +110,7 @@ do
         if sha == nil or #sha ~= 40 then return end
 
         local response, httpCode, headers, status = unpack(result)
-        stmt:bind_values(
-            url, method, response, httpCode, serpent.dump(headers), status)
+        stmt:bind_values(url, method, response, httpCode, serpent.dump(headers), status)
         stmt:step()
         stmt:reset()
     end
@@ -134,13 +137,14 @@ end
 -- The cache of `network.fetch` responses
 local fetchEntries = { GET = {}, HEAD = {} }
 
--- Fetch a resource with default caching semantics
-function network.fetch(url, method)
+-- Fetch a resource with default caching semantics. If `skipCache` is true, skip looking in the
+-- persistent cache (still saves it to the cache after).
+function network.fetch(url, method, skipCache)
     method = (method or 'GET'):upper()
     assert(method == 'GET' or method == 'HEAD', "`network.fetch` only supports 'GET' or 'HEAD'")
 
     -- Find or create entry
-    local entry = fetchEntries[method][url]
+    local entry = (not skipCache) and fetchEntries[method][url]
     if not entry then -- No entry yet
         -- Store a pending entry that will collect others waiting on this
         entry = { waiters = {} }
@@ -152,7 +156,7 @@ function network.fetch(url, method)
         end
 
         -- Use persisted result if found
-        local persistedResult = findPersistedFetchResult(url, method)
+        local persistedResult = (not skipCache) and findPersistedFetchResult(url, method)
         if persistedResult then
             entry.result = persistedResult
         else -- Else actually fetch then persist it
@@ -233,9 +237,10 @@ function network.isAbsolute(url)
     return url:match('^ghost://') or url:match('^https?://') or url:match('^file://')
 end
 
--- Whether a given URL points to something that exists
-function network.exists(url)
-    local _, httpCode = network.fetch(url, 'HEAD')
+-- Whether a given URL points to something that exists. If `skipCache` is true, skip looking in the
+-- persistent cache (still saves it to the cache after).
+function network.exists(url, skipCache)
+    local _, httpCode = network.fetch(url, 'HEAD', skipCache)
     return httpCode == 200
 end
 

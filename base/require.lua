@@ -87,11 +87,15 @@ local function explicitRequire(path, opts)
         error("'" .. origPath .. "' is not absolute but no base path is known")
     end
 
-    -- Deal with '.lua' or '/init.lua' appending
+    -- Deal with '.lua' or '/init.lua' appending. If both fail, try with `skipCache`.
     local url
     if network.exists(absolute .. '.lua') then
         url = absolute .. '.lua'
     elseif network.exists(absolute .. '/init.lua') then
+        url = absolute .. '/init.lua'
+    elseif network.exists(absolute .. '.lua', true) then
+        url = absolute .. '.lua'
+    elseif network.exists(absolute .. '/init.lua', true) then
         url = absolute .. '/init.lua'
     else
         error("no working `url` found for '" .. origPath .. "' -- please check the `require` "
