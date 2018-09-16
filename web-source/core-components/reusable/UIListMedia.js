@@ -3,10 +3,90 @@ import * as Constants from '~/common/constants';
 
 import { css } from 'react-emotion';
 
+import UIEmptyState from '~/core-components/reusable/UIEmptyState';
+
 const STYLES_CONTAINER = css``;
+
+const STYLES_ROW_TITLE = css`
+  font-weight: 400;
+  font-size: 12px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  background: ${Constants.colors.white10};
+`;
+
+const STYLES_ROW = css`
+  font-weight: 400;
+  font-size: 12px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+`;
+
+const STYLES_COLUMN = css`
+  flex-shrink: 0;
+  width: 180px;
+  padding: 8px 16px 8px 16px;
+`;
+
+const STYLES_FLUID_COLUMN = css`
+  min-width: 25%;
+  width: 100%;
+  padding: 8px 16px 8px 16px;
+`;
 
 export default class UIListMedia extends React.Component {
   render() {
-    return <div className={STYLES_CONTAINER}>Hello World</div>;
+    if (!this.props.media.length) {
+      return (
+        <UIEmptyState title="Nothing here, yet">
+          When this user uploads media you will be able to see it here.
+        </UIEmptyState>
+      );
+    }
+
+    return (
+      <div className={STYLES_CONTAINER}>
+        <div className={STYLES_ROW_TITLE}>
+          <div className={STYLES_COLUMN}>Lorem Ipsum #1</div>
+          <div className={STYLES_FLUID_COLUMN}>Lorem Ipsum #2</div>
+          <div className={STYLES_COLUMN}>Lorem Ipsum #3</div>
+          <div className={STYLES_COLUMN}>Lorem Ipsum #4</div>
+          <div className={STYLES_COLUMN}>Lorem Ipsum #5</div>
+          <div className={STYLES_COLUMN}>Lorem Ipsum #6</div>
+        </div>
+        {this.props.media.map((m, i) => {
+          return (
+            <div className={STYLES_ROW} key={`list-item-${i}`}>
+              <div className={STYLES_COLUMN}>
+                The purpose of design is to search for an essential quality in things. The subject
+                of art is "I". The subject of design is "We".
+              </div>
+              <div className={STYLES_FLUID_COLUMN}>
+                The purpose of design is to search for an essential quality in things. The subject
+                of art is "I". The subject of design is "We".
+              </div>
+              <div className={STYLES_COLUMN}>
+                The purpose of design is to search for an essential quality in things. The subject
+                of art is "I". The subject of design is "We".
+              </div>
+              <div className={STYLES_COLUMN}>
+                The purpose of design is to search for an essential quality in things. The subject
+                of art is "I". The subject of design is "We".
+              </div>
+              <div className={STYLES_COLUMN}>
+                The purpose of design is to search for an essential quality in things. The subject
+                of art is "I". The subject of design is "We".
+              </div>
+              <div className={STYLES_COLUMN}>
+                The purpose of design is to search for an essential quality in things. The subject
+                of art is "I". The subject of design is "We".
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    );
   }
 }

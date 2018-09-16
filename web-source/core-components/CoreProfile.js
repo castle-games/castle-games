@@ -26,6 +26,7 @@ const STYLES_CONTAINER = css`
   height: 100%;
   overflow-y: scroll;
   background ${Constants.colors.black};
+  color: ${Constants.colors.white};
 
   ::-webkit-scrollbar {
     width: 1px;
@@ -62,7 +63,7 @@ export default class CoreProfile extends React.Component {
           onClickCreatorCreations={this.props.onClickCreatorCreations}
           onClickCreatorPlaylists={this.props.onClickCreatorPlaylists}
         />
-        <UIListMedia />
+        <UIListMedia media={this.props.creator.media} />
       </div>
     );
   }

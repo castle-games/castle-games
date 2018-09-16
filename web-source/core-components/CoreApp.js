@@ -69,7 +69,7 @@ export default class CoreApp extends React.Component {
         }),
       });
     } catch (e) {
-      alert('`cefQuery`: ' + e.message);
+      //alert('`cefQuery`: ' + e.message);
     }
   };
 

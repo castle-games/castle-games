@@ -3,6 +3,8 @@ import * as Constants from '~/common/constants';
 // Charlie's different fields
 // https://github.com/expo/ghost-server/blob/master/server/schema.sql
 
+export const SearchResults = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}];
+
 export const User = {
   // NOTE(jim): No entities will just have a id field. Charlie's design will
   // have specifically a named id field. You must know what that is at query time.
@@ -23,7 +25,8 @@ export const User = {
   mediaCount: 5,
   playListCount: 1,
   playlists: [],
-  media: [],
+  // TODO(jim): Enough to stub out placeholder
+  media: [{}, {}, {}, {}, {}, {}, {}],
   theme: {
     background: `#D20014`,
   },
