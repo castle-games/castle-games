@@ -9,7 +9,7 @@ import UIStat from '~/core-components/reusable/UIStat';
 import UIButtonIconHorizontal from '~/core-components/reusable/UIButtonIconHorizontal';
 
 const STYLES_CONTAINER = css`
-  padding: 16px;
+  padding: 16px 16px 0 16px;
 `;
 
 const STYLES_BODY = css`
@@ -46,10 +46,21 @@ const STYLES_META = css`
 `;
 
 const STYLES_DESCRIPTION = css`
-  margin: 16px 0 16px 0;
+  margin: 16px 0 48px 0;
   line-height: 1.5;
   font-size: 16px;
   font-weight: 300;
+`;
+
+const STYLES_NAVIGATION_ITEM = css`
+  background: #222;
+  padding: 8px 16px 8px 16px;
+  border-radius: 4px 4px 0 0;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 `;
 
 // TODO(jim): Plop in a rich text editor rendering component
@@ -90,22 +101,17 @@ export default class UICardProfileHeader extends React.Component {
               </div>
             </div>
             <div className={STYLES_DESCRIPTION}>{this.props.creator.description}</div>
-            <div className={STYLES_ROW}>
-              {this.props.creator.mediaCount ? (
-                <UIStat
-                  value={this.props.creator.mediaCount}
-                  onClick={() => this.props.onClickCreatorCreations(this.props.creator)}>
-                  {Strings.pluralize('Creation', this.props.creator.mediaCount)}
-                </UIStat>
-              ) : null}
-              {this.props.playlistCount > 0 ? (
-                <UIStat
-                  value={this.props.creator.playlistCount}
-                  onClick={() => this.props.onClickCreatorPlaylists(this.props.creator)}>
-                  {Strings.pluralize('Playlist', this.props.creator.playlistCount)}
-                </UIStat>
-              ) : null}
-            </div>
+          </div>
+        </div>
+        <div className={STYLES_ROW}>
+          <div className={STYLES_NAVIGATION_ITEM} style={{ marginRight: 16 }}>
+            Media
+          </div>
+
+          <div
+            className={STYLES_NAVIGATION_ITEM}
+            style={{ background: this.props.creator.theme.background }}>
+            Playlists
           </div>
         </div>
       </div>
