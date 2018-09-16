@@ -1,21 +1,32 @@
+import * as Constants from '~/common/constants';
+
 // Charlie's different fields
 // https://github.com/expo/ghost-server/blob/master/server/schema.sql
 
 export const User = {
+  // NOTE(jim): No entities will just have a id field. Charlie's design will
+  // have specifically a named id field. You must know what that is at query time.
   id: 'd3df05e0-2286-45ed-b434-12c587e9c840',
+  userId: 'd3df05e0-2286-45ed-b434-12c587e9c840',
   username: 'jesse',
   avatarUrl: `static/avatar-jesse.jpg`,
   email: 'jesse@expo.io',
   social: null,
   settings: null,
-  description: null,
+  description: `A member of the castle-player team. I love creating next level experiences.`,
   profileViews: 0,
   profileViewScore: 0,
-  updatedAt: new Date(),
-  createdAt: new Date(),
+  updatedTime: new Date(),
+  createdTime: new Date(),
   favorites: [],
   history: [],
+  mediaCount: 5,
+  playListCount: 1,
   playlists: [],
+  media: [],
+  theme: {
+    background: `#D20014`,
+  },
 };
 
 export const Scores = [

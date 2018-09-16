@@ -199,6 +199,7 @@ export default class CoreApp extends React.Component {
       return (
         <CoreLayout leftSidebarNode={maybeLeftSidebarNode}>
           <CoreProfile
+            creator={state.viewer}
             onSignOut={this._handleToggleAuthentication}
             onDismiss={this._handleToggleProfile}
           />

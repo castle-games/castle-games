@@ -32,7 +32,6 @@ const STYLES_ICON_BUTTON_RIGHT = css`
   height: 36px;
   border-radius: 0 4px 4px 0;
   background: rgba(0, 0, 0, 0.7);
-  width: 200px;
   text-transform: uppercase;
   letter-spacing: 1px;
 `;

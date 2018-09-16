@@ -5,7 +5,7 @@ import { css } from 'react-emotion';
 
 import UIHeaderDismiss from '~/core-components/reusable/UIHeaderDismiss';
 import UIEmptyState from '~/core-components/reusable/UIEmptyState';
-import UIMediaCard from '~/core-components/reusable/UIMediaCard';
+import UICardMedia from '~/core-components/reusable/UICardMedia';
 
 const STYLES_CONTAINER = css`
   @keyframes info-animation {
@@ -52,7 +52,7 @@ export default class CoreMediaInformation extends React.Component {
       <div className={STYLES_CONTAINER}>
         <UIHeaderDismiss onDismiss={this.props.onDismiss} />
 
-        <UIMediaCard onRegisterMedia={this.props.onRegisterMedia} />
+        <UICardMedia onRegisterMedia={this.props.onRegisterMedia} />
 
         <UIEmptyState title="Recommended media">
           Once this game has been added to our servers we will be able to recommend other games
