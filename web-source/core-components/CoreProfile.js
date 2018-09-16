@@ -5,6 +5,7 @@ import { css } from 'react-emotion';
 
 import UIEmptyState from '~/core-components/reusable/UIEmptyState';
 import UIHeaderDismiss from '~/core-components/reusable/UIHeaderDismiss';
+import UIControl from '~/core-components/reusable/UIControl';
 
 const STYLES_CONTAINER = css`
   @keyframes info-animation {
@@ -49,7 +50,9 @@ export default class CoreBrowsePlaylistResults extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTAINER}>
-        <UIHeaderDismiss onDismiss={this.props.onDismiss} />
+        <UIHeaderDismiss onDismiss={this.props.onDismiss}>
+          <UIControl onClick={this.props.onSignOut}>Sign out</UIControl>
+        </UIHeaderDismiss>
         <UIEmptyState title="Profile here">I need to make everything...</UIEmptyState>
       </div>
     );
