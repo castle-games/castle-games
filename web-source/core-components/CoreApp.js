@@ -38,6 +38,35 @@ import CoreDevelopmentLogs from '~/core-components/CoreDevelopmentLogs';
 const isOverlayHotkey = isKeyHotkey('mod+e');
 const isDevelopmentLogHotkey = isKeyHotkey('mod+j');
 
+const processChannels = () => {
+  window.cefQuery({
+    request: JSON.stringify({
+      type: 'READ_CHANNELS',
+      body: { channelNames: ['PRINT', 'ERROR'] },
+    }),
+    onSuccess: json => {
+      const channels = JSON.parse(json);
+
+      channels.PRINT.map(json => {
+        const params = JSON.parse(json);
+        console.log(`PRINT: ${params.join(' ')}`);
+
+        // TODO(jim): Display above in UI
+      });
+
+      channels.ERROR.map(json => {
+        const error = JSON.parse(json).error;
+        console.log(`ERROR: ${error}`);
+
+        // TODO(jim): Display above in UI
+      });
+
+      setTimeout(processChannels);
+    },
+  });
+};
+setTimeout(processChannels);
+
 export default class CoreApp extends React.Component {
   _layout;
 

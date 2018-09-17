@@ -14,6 +14,8 @@
 #include "include/wrapper/cef_closure_task.h"
 #include "include/wrapper/cef_helpers.h"
 
+#include "modules/thread/Channel.h"
+
 #include "json.hpp"
 using nlohmann::json;
 
@@ -25,12 +27,16 @@ SimpleHandler *g_instance = NULL;
 
 } // namespace
 
-SimpleHandler::SimpleHandler(bool use_views) : use_views_(use_views), is_closing_(false) {
+SimpleHandler::SimpleHandler(bool use_views)
+    : use_views_(use_views), is_closing_(false), conversion_lua_state_(luaL_newstate()) {
   DCHECK(!g_instance);
   g_instance = this;
 }
 
-SimpleHandler::~SimpleHandler() { g_instance = NULL; }
+SimpleHandler::~SimpleHandler() {
+  g_instance = NULL;
+  lua_close(conversion_lua_state_);
+}
 
 // static
 SimpleHandler *SimpleHandler::GetInstance() { return g_instance; }
@@ -67,7 +73,7 @@ void SimpleHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
 
   class MessageHandler : public CefMessageRouterBrowserSide::Handler {
   public:
-    MessageHandler() {}
+    MessageHandler(lua_State *conversion_lua_state) : conversion_lua_state_(conversion_lua_state) {}
 
     // Called due to cefQuery execution in message_router.html.
     bool OnQuery(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, int64 query_id,
@@ -93,12 +99,30 @@ void SimpleHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
 
         callback->Success("success");
         return true;
+      } else if (type == "READ_CHANNELS") {
+        auto response = json::object();
+
+        for (const std::string &channelName : body["channelNames"]) {
+          response[channelName] = json::array();
+          auto channel = love::thread::Channel::getChannel(channelName);
+          love::Variant var;
+          while (channel->pop(&var)) {
+            assert(var.getType() == love::Variant::STRING ||
+                   var.getType() == love::Variant::SMALLSTRING);
+            var.toLua(conversion_lua_state_);
+            response[channelName].push_back(luaL_checkstring(conversion_lua_state_, -1));
+          }
+        }
+
+        callback->Success(response.dump());
+        return true;
       }
 
       return false;
     }
 
   private:
+    lua_State *conversion_lua_state_;
     DISALLOW_COPY_AND_ASSIGN(MessageHandler);
   };
 
@@ -106,7 +130,7 @@ void SimpleHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
     CefMessageRouterConfig config;
     message_router_ = CefMessageRouterBrowserSide::Create(config);
 
-    message_handler_.reset(new MessageHandler());
+    message_handler_.reset(new MessageHandler(conversion_lua_state_));
     message_router_->AddHandler(message_handler_.get(), false);
   }
 }

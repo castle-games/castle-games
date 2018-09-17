@@ -3,13 +3,28 @@ math.randomseed(10000 * require('socket').gettime())
 
 -- Built-in libraries
 
-if false then
-    tui = require 'tui'
-end
 network = require 'network'
 require = require 'require'
 root = require 'portal'
 splash = require 'splash'
+
+
+-- Forward `print` and errors to JS
+
+local cjson = require 'cjson'
+
+do
+    local oldPrint = print
+    function print(...)
+        oldPrint(...)
+        love.thread.getChannel('PRINT'):push(cjson.encode({ ... }))
+    end
+end
+
+-- Override `root.onError` to tee to JS
+function root.onError(err)
+    love.thread.getChannel('ERROR'):push(cjson.encode({ error = err }))
+end
 
 
 -- Top-level Love callbacks
@@ -25,10 +40,6 @@ local home -- Portal to the home experience
 local main = {}
 
 function main.load(arg)
-    if tui then
-        tui.love.load()
-    end
-
     network.async(function()
         if GHOST_ROOT_URI then -- Global `GHOST_ROOT_URI` set by native code? Just use that.
             homeUrl = GHOST_ROOT_URI
@@ -52,18 +63,10 @@ end
 function main.update(dt)
     network.update(dt)
 
-    if tui then
-        tui.love.preupdate(dt)
-    end
-
     if home then
         home:update(dt)
     else
         splash:update(dt)
-    end
-
-    if tui then
-        tui.love.postupdate()
     end
 end
 
@@ -92,10 +95,6 @@ function main.draw()
         end
         love.graphics.pop('all')
     end
-
-    if tui then
-        tui.love.draw()
-    end
 end
 
 function main.keypressed(key, ...)
@@ -108,10 +107,6 @@ function main.keypressed(key, ...)
             end)
         end
         return
-    end
-
-    if tui then
-        tui.love.keypressed(key)
     end
 
     if home then
@@ -161,10 +156,6 @@ for k in pairs({
         if main[k] then
             main[k](...)
         else -- Default behavior if we didn't define it in `main`
-            if tui and tui.love[k] then
-                tui.love[k](...)
-            end
-
             if home and home[k] then
                 home[k](home, ...)
             end
