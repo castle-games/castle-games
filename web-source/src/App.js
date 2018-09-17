@@ -7,9 +7,10 @@ export default () => {
   const state = {
     url: '',
     viewer: null,
-    searchResultsMedia: Fixtures.SearchResults,
-    searchResultsPlaylists: Fixtures.SearchResults,
-    sidebarMode: null, // dashboard | media-info | null
+    searchQuery: '',
+    searchResultsMedia: null,
+    searchResultsPlaylists: null,
+    sidebarMode: null, // current-playlists | dashboard | media-info | null
     pageMode: null, // browse | playlist | profile | null
     isMediaFavorited: false,
     isMediaExpanded: true,

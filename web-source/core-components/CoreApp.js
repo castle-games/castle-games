@@ -87,6 +87,18 @@ export default class CoreApp extends React.Component {
     );
   };
 
+  _handleSearchSubmit = () => {
+    this.setState({
+      searchResultsMedia: Fixtures.SearchResults,
+    });
+  };
+
+  _handleSearchChange = e => {
+    this.setState({
+      searchQuery: e.target.value,
+    });
+  };
+
   _handleURLChange = e => this.setState({ [e.target.name]: e.target.value });
 
   _handleURLSubmit = () => {
@@ -215,7 +227,13 @@ export default class CoreApp extends React.Component {
     if (state.pageMode === 'browse') {
       return (
         <CoreLayout
-          topNode={<CoreBrowseSearchInput />}
+          topNode={
+            <CoreBrowseSearchInput
+              searchQuery={state.searchQuery}
+              onChange={this._handleSearchChange}
+              onSubmit={this._handleSearchSubmit}
+            />
+          }
           rightSidebarNode={<CoreBrowsePlaylistResults onDismiss={this._handleToggleBrowse} />}
           leftSidebarNode={maybeLeftSidebarNode}>
           <CoreBrowseMediaResults media={state.searchResultsMedia} />
