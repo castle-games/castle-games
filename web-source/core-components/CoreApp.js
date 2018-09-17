@@ -32,7 +32,11 @@ import CoreProfile from '~/core-components/CoreProfile';
 // NOTE(jim): Playlist Scene
 import CorePlaylist from '~/core-components/CorePlaylist';
 
+// NOTE(jim): Development Logs Scene
+import CoreDevelopmentLogs from '~/core-components/CoreDevelopmentLogs';
+
 const isOverlayHotkey = isKeyHotkey('mod+e');
+const isDevelopmentLogHotkey = isKeyHotkey('mod+j');
 
 export default class CoreApp extends React.Component {
   _layout;
@@ -45,16 +49,11 @@ export default class CoreApp extends React.Component {
 
   componentDidMount() {
     window.addEventListener('keydown', this._handleKeyDown);
-    // NOTE(nikki): We directly handle resizes in native to prevent late redraw
-    //window.addEventListener('resize', this._handleSetGameWindowSize);
-
     this._handleSetGameWindowSize();
   }
 
   componentWillUnmount() {
     window.removeEventListener('keydown', this._handleKeyDown);
-    // NOTE(nikki): We directly handle resizes in native to prevent late redraw
-    //window.removeEventListener('resize'.this._handleSetGameWindowSize);
   }
 
   _handleSetGameWindowSize = () => {
@@ -81,6 +80,10 @@ export default class CoreApp extends React.Component {
   _handleKeyDown = e => {
     if (isOverlayHotkey(e)) {
       return this._handleToggleOverlay();
+    }
+
+    if (isDevelopmentLogHotkey(e)) {
+      return this._handleToggleDevelopmentLogs();
     }
   };
 
@@ -169,7 +172,7 @@ export default class CoreApp extends React.Component {
   _handleToggleCurrentPlaylist = () => {
     this.setState(
       {
-        sidebarMode: 'current-playlist',
+        sidebarMode: this.state.sidebarMode === 'current-playlist' ? null : 'current-playlist',
       },
       this._handleSetGameWindowSize
     );
@@ -178,7 +181,7 @@ export default class CoreApp extends React.Component {
   _handleToggleDashboard = () => {
     this.setState(
       {
-        sidebarMode: 'dashboard',
+        sidebarMode: this.state.sidebarMode === 'dashboard' ? null : 'dashboard',
       },
       this._handleSetGameWindowSize
     );
@@ -194,10 +197,19 @@ export default class CoreApp extends React.Component {
     );
   };
 
+  _handleToggleDevelopmentLogs = () => {
+    this.setState(
+      {
+        sidebarMode: this.state.sidebarMode === 'development' ? null : 'development',
+      },
+      this._handleSetGameWindowSize
+    );
+  };
+
   _handleToggleMediaInfo = () => {
     this.setState(
       {
-        sidebarMode: 'media-info',
+        sidebarMode: this.state.sidebarMode === 'media-info' ? null : 'media-info',
       },
       this._handleSetGameWindowSize
     );
@@ -347,6 +359,10 @@ export default class CoreApp extends React.Component {
           onRegisterMedia={this._handleRegisterGame}
         />
       );
+    }
+
+    if (state.isOverlayActive && state.sidebarMode === 'development') {
+      maybeRightNode = <CoreDevelopmentLogs onDismiss={this._handleDismissSidebar} />;
     }
 
     if (state.isOverlayActive && state.sidebarMode === 'authentication') {
