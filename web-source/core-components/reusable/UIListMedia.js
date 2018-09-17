@@ -33,7 +33,7 @@ const STYLES_ROW = css`
 
 const STYLES_COLUMN = css`
   flex-shrink: 0;
-  width: 180px;
+  width: 15%;
   padding: 12px 16px 12px 16px;
 `;
 

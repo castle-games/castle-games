@@ -3,6 +3,7 @@ import * as Constants from '~/common/constants';
 
 import { css } from 'react-emotion';
 
+import UIListMedia from '~/core-components/reusable/UIListMedia';
 import UIEmptyState from '~/core-components/reusable/UIEmptyState';
 
 const STYLES_CONTAINER = css`
@@ -24,6 +25,7 @@ const STYLES_CONTAINER = css`
   overflow-y: scroll;
   background ${Constants.colors.black};
   border-left: 1px solid ${Constants.colors.white10};
+  color: ${Constants.colors.white};
 
   ::-webkit-scrollbar {
     width: 1px;
@@ -45,13 +47,21 @@ const STYLES_CONTAINER = css`
   }
 `;
 
-export default class CoreBrowsePlaylistResults extends React.Component {
+export default class CoreBrowseMediaResults extends React.Component {
   render() {
+    if (!this.props.media || !this.props.media.length) {
+      return (
+        <div className={STYLES_CONTAINER}>
+          <UIEmptyState title="Game results">
+            As you search, game results will appear here.
+          </UIEmptyState>
+        </div>
+      );
+    }
+
     return (
       <div className={STYLES_CONTAINER}>
-        <UIEmptyState title="Game results">
-          As you search, game results will appear here.
-        </UIEmptyState>
+        <UIListMedia media={this.props.media} />
       </div>
     );
   }

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as Fixtures from '~/common/fixtures';
 
 import CoreApp from '~/core-components/CoreApp';
 
@@ -6,6 +7,8 @@ export default () => {
   const state = {
     url: '',
     viewer: null,
+    searchResultsMedia: Fixtures.SearchResults,
+    searchResultsPlaylists: Fixtures.SearchResults,
     sidebarMode: null, // dashboard | media-info | null
     pageMode: null, // browse | playlist | profile | null
     isMediaFavorited: false,

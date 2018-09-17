@@ -144,6 +144,15 @@ export default class CoreApp extends React.Component {
     );
   };
 
+  _handleToggleDashboard = () => {
+    this.setState(
+      {
+        sidebarMode: 'dashboard',
+      },
+      this._handleSetGameWindowSize
+    );
+  };
+
   _handleToggleMediaInfo = () => {
     this.setState(
       {
@@ -203,7 +212,7 @@ export default class CoreApp extends React.Component {
           topNode={<CoreBrowseSearchInput />}
           rightSidebarNode={<CoreBrowsePlaylistResults onDismiss={this._handleToggleBrowse} />}
           leftSidebarNode={maybeLeftSidebarNode}>
-          <CoreBrowseMediaResults />
+          <CoreBrowseMediaResults media={state.searchResultsMedia} />
         </CoreLayout>
       );
     }
