@@ -3,6 +3,8 @@ import * as Fixtures from '~/common/fixtures';
 
 import CoreApp from '~/core-components/CoreApp';
 
+// NOTE(jim): The entire initial state of the application can be represented here.
+// There is only one JavaScript object at the root that represents local state.
 export default () => {
   const state = {
     url: '',

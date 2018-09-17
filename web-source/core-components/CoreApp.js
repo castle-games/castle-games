@@ -13,20 +13,23 @@ import CoreRootURLInput from '~/core-components/CoreRootURLInput';
 import CoreRootAuthenticatedSidebar from '~/core-components/CoreRootAuthenticatedSidebar';
 import CoreRootDashboard from '~/core-components/CoreRootDashboard';
 import CoreRootToolbar from '~/core-components/CoreRootToolbar';
-import CoreRootPlaylist from '~/core-components/CoreRootPlaylist';
+import CoreRootPlaylistSidebar from '~/core-components/CoreRootPlaylistSidebar';
 
-// NOTE(jim): Media Page
+// NOTE(jim): Media Scene
 import CoreMediaScreen from '~/core-components/CoreMediaScreen';
 import CoreMediaInformation from '~/core-components/CoreMediaInformation';
 import CoreMediaScoreInformation from '~/core-components/CoreMediaScoreInformation';
 
-// NOTE(jim): Browse Page
+// NOTE(jim): Browse Scene
 import CoreBrowsePlaylistResults from '~/core-components/CoreBrowsePlaylistResults';
 import CoreBrowseMediaResults from '~/core-components/CoreBrowseMediaResults';
 import CoreBrowseSearchInput from '~/core-components/CoreBrowseSearchInput';
 
-// NOTE(jim): Profile Page
+// NOTE(jim): Profile Scene
 import CoreProfile from '~/core-components/CoreProfile';
+
+// NOTE(jim): Playlist Scene
+import CorePlaylist from '~/core-components/CorePlaylist';
 
 const isOverlayHotkey = isKeyHotkey('mod+e');
 
@@ -70,7 +73,7 @@ export default class CoreApp extends React.Component {
         }),
       });
     } catch (e) {
-      //alert('`cefQuery`: ' + e.message);
+      alert('`cefQuery`: ' + e.message);
     }
   };
 
@@ -146,6 +149,12 @@ export default class CoreApp extends React.Component {
 
   _handleClickCreatorPlaylists = creator => {
     console.log({ creator });
+  };
+
+  _handleToggleCurrentPlaylistDetails = () => {
+    this.setState({
+      pageMode: this.state.pageMode === 'playlist' ? null : 'playlist',
+    });
   };
 
   _handleToggleCurrentPlaylist = () => {
@@ -255,7 +264,11 @@ export default class CoreApp extends React.Component {
     // NOTE(jim): Playlist Scene.
     // TODO(jim): Reusable Components.
     if (state.pageMode === 'playlist') {
-      return <CoreLayout leftSidebarNode={maybeLeftSidebarNode}>Playlist</CoreLayout>;
+      return (
+        <CoreLayout leftSidebarNode={maybeLeftSidebarNode}>
+          <CorePlaylist onDismiss={this._handleToggleCurrentPlaylistDetails} />
+        </CoreLayout>
+      );
     }
 
     // NOTE(jim): Profile Scene
@@ -331,7 +344,13 @@ export default class CoreApp extends React.Component {
     }
 
     if (state.isOverlayActive && state.sidebarMode === 'current-playlist') {
-      maybeRightNode = <CoreRootPlaylist onDismiss={this._handleDismissPlaylist} />;
+      maybeRightNode = (
+        <CoreRootPlaylistSidebar
+          playlist={state.playlist}
+          onViewCurrentPlaylistDetails={this._handleToggleCurrentPlaylistDetails}
+          onDismiss={this._handleDismissPlaylist}
+        />
+      );
     }
 
     if (state.isOverlayLayout) {
