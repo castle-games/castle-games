@@ -21,7 +21,6 @@ do
     end
 end
 
--- Override `root.onError` to tee to JS
 function root.onError(err)
     love.thread.getChannel('ERROR'):push(cjson.encode({ error = err }))
 end
