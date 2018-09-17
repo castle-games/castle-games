@@ -13,6 +13,7 @@ import CoreRootURLInput from '~/core-components/CoreRootURLInput';
 import CoreRootAuthenticatedSidebar from '~/core-components/CoreRootAuthenticatedSidebar';
 import CoreRootDashboard from '~/core-components/CoreRootDashboard';
 import CoreRootToolbar from '~/core-components/CoreRootToolbar';
+import CoreRootPlaylist from '~/core-components/CoreRootPlaylist';
 
 // NOTE(jim): Media Page
 import CoreMediaScreen from '~/core-components/CoreMediaScreen';
@@ -135,10 +136,10 @@ export default class CoreApp extends React.Component {
     console.log({ creator });
   };
 
-  _handleToggleDashboard = () => {
+  _handleToggleCurrentPlaylist = () => {
     this.setState(
       {
-        sidebarMode: 'dashboard',
+        sidebarMode: 'current-playlist',
       },
       this._handleSetGameWindowSize
     );
@@ -160,6 +161,11 @@ export default class CoreApp extends React.Component {
       },
       this._handleSetGameWindowSize
     );
+  };
+
+  // NOTE(jim): I know these are identical. Not fully aware of all edge cases here yet.
+  _handleDismissPlaylist = () => {
+    this.setState({ sidebarMode: null }, this._handleSetGameWindowSize);
   };
 
   _handleDismissMediaInfo = () => {
@@ -269,6 +275,7 @@ export default class CoreApp extends React.Component {
           onToggleAuthentication={this._handleToggleAuthentication}
           onToggleMediaInfo={this._handleToggleMediaInfo}
           onToggleScores={this._handleToggleScore}
+          onToggleCurrentPlaylist={this._handleToggleCurrentPlaylist}
         />
       );
     }
@@ -290,6 +297,10 @@ export default class CoreApp extends React.Component {
 
     if (state.isOverlayActive && state.sidebarMode === 'dashboard') {
       maybeRightNode = <CoreRootDashboard onDismiss={this._handleDismissDashboard} />;
+    }
+
+    if (state.isOverlayActive && state.sidebarMode === 'current-playlist') {
+      maybeRightNode = <CoreRootPlaylist onDismiss={this._handleDismissPlaylist} />;
     }
 
     if (state.isOverlayLayout) {
