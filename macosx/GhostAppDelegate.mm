@@ -53,14 +53,14 @@ extern "C" {
   [[NSApplication sharedApplication] setDelegate:self];
 
   self.luaState = nil;
-  
+
   self.mainLoopTimer = [NSTimer timerWithTimeInterval:1.0f / 60.0f
                                                target:self
                                              selector:@selector(stepLove)
                                              userInfo:nil
                                               repeats:YES];
   [[NSRunLoop mainRunLoop] addTimer:self.mainLoopTimer forMode:NSRunLoopCommonModes];
-  
+
   self.resizeSubscribed = NO;
 }
 
@@ -146,7 +146,7 @@ extern "C" {
       [self closeLua];
     }
   }
-  
+
   if (!self.resizeSubscribed) {
     NSWindow *window = [[NSApplication sharedApplication] mainWindow];
     if (window) {
@@ -158,7 +158,7 @@ extern "C" {
       self.resizeSubscribed = YES;
     }
   }
-  
+
   ghostUpdateChildWindowFrame();
 }
 
