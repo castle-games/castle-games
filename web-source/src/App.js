@@ -9,10 +9,11 @@ export default () => {
   const state = {
     url: '',
     viewer: null,
+    local: null,
     searchQuery: '',
     searchResultsMedia: null,
     searchResultsPlaylists: null,
-    sidebarMode: null, // current-playlists | dashboard | media-info | null
+    sidebarMode: null, // current-playlists | dashboard | media-info | authentication | null
     pageMode: null, // browse | playlist | profile | null
     profileMode: null, // media | playlist | null
     isMediaFavorited: false,

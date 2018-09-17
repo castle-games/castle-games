@@ -14,6 +14,7 @@ import CoreRootAuthenticatedSidebar from '~/core-components/CoreRootAuthenticate
 import CoreRootDashboard from '~/core-components/CoreRootDashboard';
 import CoreRootToolbar from '~/core-components/CoreRootToolbar';
 import CoreRootPlaylistSidebar from '~/core-components/CoreRootPlaylistSidebar';
+import CoreRootAuthenticateForm from '~/core-components/CoreRootAuthenticateForm';
 
 // NOTE(jim): Media Scene
 import CoreMediaScreen from '~/core-components/CoreMediaScreen';
@@ -83,11 +84,19 @@ export default class CoreApp extends React.Component {
     }
   };
 
-  _handleToggleAuthentication = () => {
+  _handleSignOut = () => {
+    this.setState({ viewer: null, pageMode: null }, this._handleSetGameWindowSize);
+  };
+
+  _handleSignIn = () => {
     this.setState(
-      { viewer: this.state.viewer ? null : Fixtures.User, pageMode: null },
+      { viewer: Fixtures.User, pageMode: null, sidebarMode: null },
       this._handleSetGameWindowSize
     );
+  };
+
+  _handleAuthChange = e => {
+    this.setState({ local: { ...this.state.local, [e.target.name]: e.target.value } });
   };
 
   _handleSearchSubmit = () => {
@@ -115,7 +124,7 @@ export default class CoreApp extends React.Component {
         }),
       });
     } catch (e) {
-      alert('`cefQuery`: ' + e.message);
+      // alert('`cefQuery`: ' + e.message);
     }
   };
 
@@ -125,6 +134,12 @@ export default class CoreApp extends React.Component {
 
   _handleToggleProfile = () => {
     this.setState({ pageMode: this.state.pageMode === 'profile' ? null : 'profile' });
+  };
+
+  _handleToggleCurrentPlaylistDetails = () => {
+    this.setState({
+      pageMode: this.state.pageMode === 'playlist' ? null : 'playlist',
+    });
   };
 
   _handleRegisterGame = () => window.alert('register');
@@ -151,12 +166,6 @@ export default class CoreApp extends React.Component {
     console.log({ creator });
   };
 
-  _handleToggleCurrentPlaylistDetails = () => {
-    this.setState({
-      pageMode: this.state.pageMode === 'playlist' ? null : 'playlist',
-    });
-  };
-
   _handleToggleCurrentPlaylist = () => {
     this.setState(
       {
@@ -170,6 +179,16 @@ export default class CoreApp extends React.Component {
     this.setState(
       {
         sidebarMode: 'dashboard',
+      },
+      this._handleSetGameWindowSize
+    );
+  };
+
+  _handleToggleAuthentication = () => {
+    this.setState(
+      {
+        viewer: this.state.viewer ? null : this.state.viewer,
+        sidebarMode: this.state.viewer ? null : 'authentication',
       },
       this._handleSetGameWindowSize
     );
@@ -196,16 +215,7 @@ export default class CoreApp extends React.Component {
     });
   };
 
-  // NOTE(jim): I know these are identical. Not fully aware of all edge cases here yet.
-  _handleDismissPlaylist = () => {
-    this.setState({ sidebarMode: null }, this._handleSetGameWindowSize);
-  };
-
-  _handleDismissMediaInfo = () => {
-    this.setState({ sidebarMode: null }, this._handleSetGameWindowSize);
-  };
-
-  _handleDismissDashboard = () => {
+  _handleDismissSidebar = () => {
     this.setState({ sidebarMode: null }, this._handleSetGameWindowSize);
   };
 
@@ -278,7 +288,7 @@ export default class CoreApp extends React.Component {
           <CoreProfile
             creator={state.viewer}
             profileMode={state.profileMode}
-            onSignOut={this._handleToggleAuthentication}
+            onSignOut={this._handleSignOut}
             onDismiss={this._handleToggleProfile}
             onShowProfileMediaList={this._handleShowProfileMediaList}
             onShowProfilePlaylistList={this._handleShowProfilePlaylistList}
@@ -333,14 +343,24 @@ export default class CoreApp extends React.Component {
     if (state.isOverlayActive && state.sidebarMode === 'media-info') {
       maybeRightNode = (
         <CoreMediaInformation
-          onDismiss={this._handleDismissMediaInfo}
+          onDismiss={this._handleDismissSidebar}
           onRegisterMedia={this._handleRegisterGame}
         />
       );
     }
 
+    if (state.isOverlayActive && state.sidebarMode === 'authentication') {
+      maybeRightNode = (
+        <CoreRootAuthenticateForm
+          onDismiss={this._handleDismissSidebar}
+          onChange={this._handleAuthChange}
+          onSubmit={this._handleSignIn}
+        />
+      );
+    }
+
     if (state.isOverlayActive && state.sidebarMode === 'dashboard') {
-      maybeRightNode = <CoreRootDashboard onDismiss={this._handleDismissDashboard} />;
+      maybeRightNode = <CoreRootDashboard onDismiss={this._handleDismissSidebar} />;
     }
 
     if (state.isOverlayActive && state.sidebarMode === 'current-playlist') {
@@ -348,22 +368,8 @@ export default class CoreApp extends React.Component {
         <CoreRootPlaylistSidebar
           playlist={state.playlist}
           onViewCurrentPlaylistDetails={this._handleToggleCurrentPlaylistDetails}
-          onDismiss={this._handleDismissPlaylist}
+          onDismiss={this._handleDismissSidebar}
         />
-      );
-    }
-
-    if (state.isOverlayLayout) {
-      return (
-        <CoreLayoutOverlay
-          topNode={maybeTopNode}
-          bottomNode={maybeBottomNode}
-          toolbarNode={maybeToolbarNode}
-          leftSidebarNode={maybeLeftSidebarNode}
-          rightSidebarNode={maybeRightSidebarNode}
-          rightNode={maybeRightNode}>
-          <CoreMediaScreen expanded={state.isMediaExpanded} />
-        </CoreLayoutOverlay>
       );
     }
 
