@@ -22,7 +22,6 @@
 		A1ED98EA211DFA0700CBC701 /* SDL2.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = A194C6C4211CD1D50093B328 /* SDL2.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B51ECE2A214AE7EF000F7348 /* simple_handler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B51ECE21214AE7EF000F7348 /* simple_handler.cpp */; };
 		B51ECE2B214AE7EF000F7348 /* simple_handler.h in Headers */ = {isa = PBXBuildFile; fileRef = B51ECE22214AE7EF000F7348 /* simple_handler.h */; };
-		B51ECE2D214AE7EF000F7348 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B51ECE25214AE7EF000F7348 /* Info.plist */; };
 		B51ECE2E214AE7EF000F7348 /* simple_app.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B51ECE26214AE7EF000F7348 /* simple_app.cpp */; };
 		B51ECE2F214AE7EF000F7348 /* simple_handler_mac.mm in Sources */ = {isa = PBXBuildFile; fileRef = B51ECE27214AE7EF000F7348 /* simple_handler_mac.mm */; };
 		B51ECE31214AE7EF000F7348 /* simple_app.h in Headers */ = {isa = PBXBuildFile; fileRef = B51ECE29214AE7EF000F7348 /* simple_app.h */; };
@@ -53,6 +52,7 @@
 		B5A0404621483D2C007A6CC1 /* Chromium Embedded Framework.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = B5A0404221483BA5007A6CC1 /* Chromium Embedded Framework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B5E9FC48211B6C190068BEB9 /* ghost_extensions_macos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5E9FC43211B6BA00068BEB9 /* ghost_extensions_macos.framework */; };
 		B5E9FC4B211B6E610068BEB9 /* ghost_extensions_macos.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = B5E9FC43211B6BA00068BEB9 /* ghost_extensions_macos.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B5F3E7BA215071FC00660B13 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B5F3E7B9215071FC00660B13 /* Info.plist */; };
 		CE73F8001EEB64150052DAB3 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE73F7FF1EEB64150052DAB3 /* AVFoundation.framework */; };
 		FA0797991BF480A200034B7C /* GameController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA0797981BF480A200034B7C /* GameController.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		FA0B7F301A95AC7D000E1D17 /* love.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A93E6A3410420AC0007D418B /* love.cpp */; };
@@ -260,7 +260,6 @@
 		B51ECE21214AE7EF000F7348 /* simple_handler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = simple_handler.cpp; sourceTree = "<group>"; };
 		B51ECE22214AE7EF000F7348 /* simple_handler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = simple_handler.h; sourceTree = "<group>"; };
 		B51ECE24214AE7EF000F7348 /* process_helper_mac.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = process_helper_mac.cpp; sourceTree = "<group>"; };
-		B51ECE25214AE7EF000F7348 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B51ECE26214AE7EF000F7348 /* simple_app.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = simple_app.cpp; sourceTree = "<group>"; };
 		B51ECE27214AE7EF000F7348 /* simple_handler_mac.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = simple_handler_mac.mm; sourceTree = "<group>"; };
 		B51ECE29214AE7EF000F7348 /* simple_app.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = simple_app.h; sourceTree = "<group>"; };
@@ -273,6 +272,7 @@
 		B59617502149BF7100BE403F /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		B5A0404221483BA5007A6CC1 /* Chromium Embedded Framework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "Chromium Embedded Framework.framework"; path = "/Library/Frameworks/Chromium Embedded Framework.framework"; sourceTree = "<group>"; };
 		B5E9FC3B211B6B9F0068BEB9 /* ghost-extensions.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "ghost-extensions.xcodeproj"; path = "../../../ghost-extensions/ghost-extensions.xcodeproj"; sourceTree = "<group>"; };
+		B5F3E7B9215071FC00660B13 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CE73F7FF1EEB64150052DAB3 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
 		FA0797981BF480A200034B7C /* GameController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameController.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.1.sdk/System/Library/Frameworks/GameController.framework; sourceTree = DEVELOPER_DIR; };
 		FA08F69116C765A200F007B5 /* love.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = love.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -475,8 +475,8 @@
 		B51ECE23214AE7EF000F7348 /* ghost-macosx_Helper */ = {
 			isa = PBXGroup;
 			children = (
+				B5F3E7B9215071FC00660B13 /* Info.plist */,
 				B51ECE24214AE7EF000F7348 /* process_helper_mac.cpp */,
-				B51ECE25214AE7EF000F7348 /* Info.plist */,
 			);
 			path = "ghost-macosx_Helper";
 			sourceTree = "<group>";
@@ -791,6 +791,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B5F3E7BA215071FC00660B13 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -803,7 +804,6 @@
 				38F81FA0214B4B0F00E6E242 /* static in Resources */,
 				B5256F43211A555500891B27 /* Images.xcassets in Resources */,
 				38F81F9B214B4A8E00E6E242 /* main.js in Resources */,
-				B51ECE2D214AE7EF000F7348 /* Info.plist in Resources */,
 				B5256F44211A555500891B27 /* license.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1052,7 +1052,7 @@
 					"\"$(SRCROOT)/../../../redis/deps/hiredis\"",
 					"$(PROJECT_DIR)/../../../cef",
 				);
-				INFOPLIST_FILE = "ghost-macosx_Helper/Info.plist";
+				INFOPLIST_FILE = "../../../macosx/ghost-macosx_Helper/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = NO;
@@ -1096,7 +1096,7 @@
 					"\"$(SRCROOT)/../../../redis/deps/hiredis\"",
 					"$(PROJECT_DIR)/../../../cef",
 				);
-				INFOPLIST_FILE = "ghost-macosx_Helper/Info.plist";
+				INFOPLIST_FILE = "../../../macosx/ghost-macosx_Helper/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = NO;
