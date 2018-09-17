@@ -6,6 +6,7 @@ import { css } from 'react-emotion';
 import UIHeaderDismiss from '~/core-components/reusable/UIHeaderDismiss';
 import UIEmptyState from '~/core-components/reusable/UIEmptyState';
 import UILink from '~/core-components/reusable/UILink';
+import UIControl from '~/core-components/reusable/UIControl';
 
 const STYLES_CONTAINER = css`
   @keyframes playlist-animation {
@@ -50,7 +51,9 @@ export default class CoreRootPlaylist extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTAINER}>
-        <UIHeaderDismiss onDismiss={this.props.onDismiss} />
+        <UIHeaderDismiss onDismiss={this.props.onDismiss}>
+          <UIControl onClick={this.props.onViewCurrentPlaylistDetails}>View details</UIControl>
+        </UIHeaderDismiss>
         <UIEmptyState title="Current playlist">
           This needs to show the current playlist, or default to the all games playlist.
         </UIEmptyState>

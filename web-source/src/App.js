@@ -12,6 +12,7 @@ export default () => {
     searchResultsPlaylists: null,
     sidebarMode: null, // current-playlists | dashboard | media-info | null
     pageMode: null, // browse | playlist | profile | null
+    profileMode: null, // media | playlist | null
     isMediaFavorited: false,
     isMediaExpanded: true,
     isOverlayActive: true,

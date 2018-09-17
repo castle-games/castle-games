@@ -7,6 +7,7 @@ import UIHeaderDismiss from '~/core-components/reusable/UIHeaderDismiss';
 import UIControl from '~/core-components/reusable/UIControl';
 import UICardProfileHeader from '~/core-components/reusable/UICardProfileHeader';
 import UIListMedia from '~/core-components/reusable/UIListMedia';
+import UIEmptyState from '~/core-components/reusable/UIEmptyState';
 
 const STYLES_CONTAINER = css`
   @keyframes info-animation {
@@ -57,13 +58,21 @@ export default class CoreProfile extends React.Component {
         </UIHeaderDismiss>
         <UICardProfileHeader
           creator={this.props.creator}
+          profileMode={this.props.profileMode}
           onPlayCreatorMedia={this.props.onPlayCreatorMedia}
           onSubscribeToCreator={this.props.onSubscribeToCreator}
           onClickCreatorAvatar={this.props.onClickCreatorAvatar}
           onClickCreatorCreations={this.props.onClickCreatorCreations}
           onClickCreatorPlaylists={this.props.onClickCreatorPlaylists}
+          onShowMediaList={this.props.onShowProfileMediaList}
+          onShowPlaylistList={this.props.onShowProfilePlaylistList}
         />
-        <UIListMedia media={this.props.creator.media} />
+        {this.props.profileMode === 'media' || !this.props.profileMode ? (
+          <UIListMedia media={this.props.creator.media} />
+        ) : null}
+        {this.props.profileMode === 'playlist' ? (
+          <UIEmptyState title="Not Implemented">Harass Jim.</UIEmptyState>
+        ) : null}
       </div>
     );
   }

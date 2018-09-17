@@ -175,6 +175,18 @@ export default class CoreApp extends React.Component {
     );
   };
 
+  _handleShowProfileMediaList = () => {
+    this.setState({
+      profileMode: 'media',
+    });
+  };
+
+  _handleShowProfilePlaylistList = () => {
+    this.setState({
+      profileMode: 'playlists',
+    });
+  };
+
   // NOTE(jim): I know these are identical. Not fully aware of all edge cases here yet.
   _handleDismissPlaylist = () => {
     this.setState({ sidebarMode: null }, this._handleSetGameWindowSize);
@@ -222,8 +234,7 @@ export default class CoreApp extends React.Component {
       );
     }
 
-    // NOTE(jim): Browse/Search Page
-    // TODO(jim): Reusable Components
+    // NOTE(jim): Browse/Search Scene
     if (state.pageMode === 'browse') {
       return (
         <CoreLayout
@@ -241,21 +252,23 @@ export default class CoreApp extends React.Component {
       );
     }
 
-    // NOTE(jim): Playlist Page.
+    // NOTE(jim): Playlist Scene.
     // TODO(jim): Reusable Components.
     if (state.pageMode === 'playlist') {
       return <CoreLayout leftSidebarNode={maybeLeftSidebarNode}>Playlist</CoreLayout>;
     }
 
-    // NOTE(jim): Profile Page
-    // TDOO(jim): Reusable Components
+    // NOTE(jim): Profile Scene
     if (state.pageMode === 'profile') {
       return (
         <CoreLayout leftSidebarNode={maybeLeftSidebarNode}>
           <CoreProfile
             creator={state.viewer}
+            profileMode={state.profileMode}
             onSignOut={this._handleToggleAuthentication}
             onDismiss={this._handleToggleProfile}
+            onShowProfileMediaList={this._handleShowProfileMediaList}
+            onShowProfilePlaylistList={this._handleShowProfilePlaylistList}
             onPlayCreatorMedia={this._handlePlayCreatorMedia}
             onSubscribeToCreator={this._handleSubscribeToCreator}
             onClickCreatorAvatar={this._handleClickCreatorAvatar}

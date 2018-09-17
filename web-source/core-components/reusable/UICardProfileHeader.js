@@ -104,13 +104,26 @@ export default class UICardProfileHeader extends React.Component {
           </div>
         </div>
         <div className={STYLES_ROW}>
-          <div className={STYLES_NAVIGATION_ITEM} style={{ marginRight: 16 }}>
+          <div
+            className={STYLES_NAVIGATION_ITEM}
+            style={{
+              marginRight: 16,
+              background:
+                this.props.profileMode === 'media' || !this.props.profileMode
+                  ? null
+                  : this.props.creator.theme.background,
+            }}
+            onClick={this.props.onShowMediaList}>
             Media
           </div>
 
           <div
             className={STYLES_NAVIGATION_ITEM}
-            style={{ background: this.props.creator.theme.background }}>
+            style={{
+              background:
+                this.props.profileMode === 'playlists' ? null : this.props.creator.theme.background,
+            }}
+            onClick={this.props.onShowPlaylistList}>
             Playlists
           </div>
         </div>
