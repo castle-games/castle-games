@@ -80,7 +80,7 @@ export default class CoreApp extends React.Component {
             const error = JSON.parse(json).error;
             const logs = [...this.state.logs];
 
-            developmentLogs.push({ type: 'error', text: `${error}` });
+            logs.push({ type: 'error', text: `${error}` });
 
             this.setState({ logs });
           });
