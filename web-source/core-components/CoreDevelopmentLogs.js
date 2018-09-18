@@ -6,25 +6,18 @@ import { css } from 'react-emotion';
 import UIHeaderDismiss from '~/core-components/reusable/UIHeaderDismiss';
 import UIEmptyState from '~/core-components/reusable/UIEmptyState';
 
-const STYLES_CONTAINER = css`
-  @keyframes development-scene-animation {
-    from {
-      opacity: 0;
-    }
-
-    to {
-      opacity: 1;
-    }
-  }
-
-  animation: development-scene-animation 280ms ease;
-
+const STYLES_FIXED_CONTAINER = css`
+  position: relative;
   width: 420px;
   height: 100%;
-  position: relative;
+  border-left: 1px solid ${Constants.colors.white25};
+`;
+
+const STYLES_CONTAINER = css`
+  width: 100%;
+  height: 100%;
   overflow-y: scroll;
   padding-top: 48px;
-  border-left: 1px solid ${Constants.colors.white25};
   background ${Constants.colors.black};
   color: ${Constants.colors.white};
 
@@ -70,10 +63,14 @@ const STYLES_LOG_LEFT = css`
 const STYLES_LOG_RIGHT = css`
   min-width: 25%;
   width: 100%;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
 `;
 
 const STYLES_FIXED_HEADER = css`
-  position: fixed;
+  background: ${Constants.colors.black};
+  opacity: 0.8;
+  position: absolute;
   top: 0;
   right: 0;
   left: 0;
@@ -94,25 +91,27 @@ export default class CoreDevelopmentLogs extends React.Component {
 
   render() {
     return (
-      <div className={STYLES_CONTAINER}>
+      <div className={STYLES_FIXED_CONTAINER}>
         <div className={STYLES_FIXED_HEADER}>
           <UIHeaderDismiss onDismiss={this.props.onDismiss} />
         </div>
-        <div className={STYLES_LOGS}>
-          {this.props.logs.map((l, i) => {
-            return (
-              <div className={STYLES_LOG} key={`development-log-${i}`}>
-                <span className={STYLES_LOG_LEFT}>{l.type}</span>
-                <span className={STYLES_LOG_RIGHT}>{l.text}</span>
-              </div>
-            );
-          })}
+        <div className={STYLES_CONTAINER}>
+          <div className={STYLES_LOGS}>
+            {this.props.logs.map((l, i) => {
+              return (
+                <div className={STYLES_LOG} key={`development-log-${i}`}>
+                  <span className={STYLES_LOG_LEFT}>{l.type}</span>
+                  <span className={STYLES_LOG_RIGHT}>{l.text}</span>
+                </div>
+              );
+            })}
+          </div>
+          <div
+            ref={c => {
+              this._logs = c;
+            }}
+          />
         </div>
-        <div
-          ref={c => {
-            this._logs = c;
-          }}
-        />
       </div>
     );
   }
