@@ -95,7 +95,7 @@ export default class CoreRootURLInput extends React.Component {
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_CONTAINER_LEFT} onClick={this._handleFocusInput}>
-          ghost://
+          castle://
         </div>
         <div className={STYLES_CONTAINER_MIDDLE}>
           <ControlledInput
