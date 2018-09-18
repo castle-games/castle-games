@@ -131,7 +131,14 @@ export const CurrentPlaylist = {
   userId: null,
   name: 'Bad Box Game Jam',
   description: null,
-  mediaItems: [PlaylistMedia, PlaylistMedia1, PlaylistMedia2, PlaylistMedia3],
+  mediaItems: [
+    PlaylistMedia,
+    PlaylistMedia1,
+    PlaylistMedia2,
+    PlaylistMedia3,
+    PlaylistMediaLua,
+    PlaylistMediaLua2,
+  ],
   updatedTime: new Date(),
   createdTime: new Date(),
 };
