@@ -59,14 +59,19 @@ const STYLES_SECTION_PARAGRAPH = css`
 
 export default class UICardMedia extends React.Component {
   render() {
+    const name = this.props.media ? this.props.media.name : 'Untitled';
+    const username =
+      this.props.media && this.props.media.user ? this.props.media.user.username : 'Anonymous';
+    const createdTime = this.props.media ? this.props.media.createdTime : new Date();
+
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_CONTAINER_PREVIEW}>
           <div className={STYLES_CONTAINER_PREVIEW_LABEL}>Name</div>
-          <div className={STYLES_CONTAINER_PREVIEW_NAME}>{this.props.media.name}</div>
+          <div className={STYLES_CONTAINER_PREVIEW_NAME}>{name}</div>
         </div>
         <div className={STYLES_BYLINE}>
-          Created by {this.props.media.user.username} — {Strings.toDate(this.props.media.createdTime)}
+          Created by {username} — {Strings.toDate(createdTime)}
         </div>
 
         <div className={STYLES_SECTION}>
