@@ -38,37 +38,9 @@ import CoreDevelopmentLogs from '~/core-components/CoreDevelopmentLogs';
 const isOverlayHotkey = isKeyHotkey('mod+e');
 const isDevelopmentLogHotkey = isKeyHotkey('mod+j');
 
-const processChannels = () => {
-  window.cefQuery({
-    request: JSON.stringify({
-      type: 'READ_CHANNELS',
-      body: { channelNames: ['PRINT', 'ERROR'] },
-    }),
-    onSuccess: json => {
-      const channels = JSON.parse(json);
-
-      channels.PRINT.map(json => {
-        const params = JSON.parse(json);
-        console.log(`PRINT: ${params.join(' ')}`);
-
-        // TODO(jim): Display above in UI
-      });
-
-      channels.ERROR.map(json => {
-        const error = JSON.parse(json).error;
-        console.log(`ERROR: ${error}`);
-
-        // TODO(jim): Display above in UI
-      });
-
-      setTimeout(processChannels);
-    },
-  });
-};
-setTimeout(processChannels);
-
 export default class CoreApp extends React.Component {
   _layout;
+  _devTimeout;
 
   constructor(props) {
     super();
@@ -79,16 +51,58 @@ export default class CoreApp extends React.Component {
   componentDidMount() {
     window.addEventListener('keydown', this._handleKeyDown);
     this._handleSetGameWindowSize();
+
+    // TODO(jim): Move this somewhere else.
+    const processChannels = () => {
+      if (!window.cefQuery) {
+        console.error('window.cefQuery is undefined');
+        return;
+      }
+
+      window.cefQuery({
+        request: JSON.stringify({
+          type: 'READ_CHANNELS',
+          body: { channelNames: ['PRINT', 'ERROR'] },
+        }),
+        onSuccess: json => {
+          const channels = JSON.parse(json);
+
+          channels.PRINT.map(json => {
+            const params = JSON.parse(json);
+            const logs = [...this.state.logs];
+
+            logs.push({ type: 'print', text: `${params.join(' ')}` });
+
+            this.setState({ logs });
+          });
+
+          channels.ERROR.map(json => {
+            const error = JSON.parse(json).error;
+            const logs = [...this.state.logs];
+
+            developmentLogs.push({ type: 'error', text: `${error}` });
+
+            this.setState({ logs });
+          });
+
+          this._devTimeout = setTimeout(processChannels);
+        },
+      });
+    };
+
+    this._devTimeout = setTimeout(processChannels);
   }
 
   componentWillUnmount() {
     window.removeEventListener('keydown', this._handleKeyDown);
+    window.clearTimeout(this._devTimeout);
   }
 
   _handleSetGameWindowSize = () => {
     const element = this._layout.getMediaContainerRef();
     const rect = element.getBoundingClientRect();
 
+    // TODO(jim): Move window calls somewhere else.
     try {
       window.cefQuery({
         request: JSON.stringify({
@@ -102,7 +116,7 @@ export default class CoreApp extends React.Component {
         }),
       });
     } catch (e) {
-      alert('`cefQuery`: ' + e.message);
+      //alert('`cefQuery`: ' + e.message);
     }
   };
 
@@ -146,6 +160,7 @@ export default class CoreApp extends React.Component {
   _handleURLChange = e => this.setState({ [e.target.name]: e.target.value });
 
   _handleURLSubmit = () => {
+    // TODO(jim): Move this somewhere else.
     try {
       window.cefQuery({
         request: JSON.stringify({
@@ -391,7 +406,9 @@ export default class CoreApp extends React.Component {
     }
 
     if (state.isOverlayActive && state.sidebarMode === 'development') {
-      maybeRightNode = <CoreDevelopmentLogs onDismiss={this._handleDismissSidebar} />;
+      maybeRightNode = (
+        <CoreDevelopmentLogs logs={state.logs} onDismiss={this._handleDismissSidebar} />
+      );
     }
 
     if (state.isOverlayActive && state.sidebarMode === 'authentication') {

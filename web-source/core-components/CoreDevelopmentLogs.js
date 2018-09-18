@@ -21,7 +21,9 @@ const STYLES_CONTAINER = css`
 
   width: 420px;
   height: 100%;
+  position: relative;
   overflow-y: scroll;
+  padding-top: 48px;
   background ${Constants.colors.black};
   color: ${Constants.colors.white};
 
@@ -45,12 +47,71 @@ const STYLES_CONTAINER = css`
   }
 `;
 
+const STYLES_LOGS = css`
+  padding: 16px 16px 16px 16px;
+`;
+
+const STYLES_LOG = css`
+  font-family: 'Monaco', mono;
+  font-size: 10px;
+  margin-bottom: 2px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+`;
+
+const STYLES_LOG_LEFT = css`
+  flex-shrink: 0;
+  text-transform: uppercase;
+  padding-right: 24px;
+`;
+
+const STYLES_LOG_RIGHT = css`
+  min-width: 25%;
+  width: 100%;
+`;
+
+const STYLES_FIXED_HEADER = css`
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+`;
+
 export default class CoreDevelopmentLogs extends React.Component {
+  _logs;
+
+  componentWillReceiveProps(nextProps) {
+    if (this._logs) {
+      this._logs.scrollIntoView({});
+    }
+  }
+
+  componentDidMount() {
+    this._logs.scrollIntoView({});
+  }
+
   render() {
     return (
       <div className={STYLES_CONTAINER}>
-        <UIHeaderDismiss onDismiss={this.props.onDismiss} />
-        <UIEmptyState title="Not Implemented">Harass Jim.</UIEmptyState>
+        <div className={STYLES_FIXED_HEADER}>
+          <UIHeaderDismiss onDismiss={this.props.onDismiss} />
+        </div>
+        <div className={STYLES_LOGS}>
+          {this.props.logs.map((l, i) => {
+            return (
+              <div className={STYLES_LOG} key={`development-log-${i}`}>
+                <span className={STYLES_LOG_LEFT}>{l.type}</span>
+                <span className={STYLES_LOG_RIGHT}>{l.text}</span>
+              </div>
+            );
+          })}
+        </div>
+        <div
+          ref={c => {
+            this._logs = c;
+          }}
+        />
       </div>
     );
   }

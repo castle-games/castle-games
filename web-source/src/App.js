@@ -7,6 +7,7 @@ import CoreApp from '~/core-components/CoreApp';
 // There is only one JavaScript object at the root that represents local state.
 export default () => {
   const state = {
+    logs: [],
     url: '',
     viewer: null,
     local: null,
