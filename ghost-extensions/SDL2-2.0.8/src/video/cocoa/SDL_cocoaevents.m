@@ -53,6 +53,7 @@
 static SDL_bool s_bShouldHandleEventsInSDLApplication = SDL_FALSE;
 
 // XXX(Ghost): Make this available for external use...
+__attribute__ ((visibility ("default")))
 void Cocoa_DispatchEvent(NSEvent *theEvent)
 {
     SDL_VideoDevice *_this = SDL_GetVideoDevice();
