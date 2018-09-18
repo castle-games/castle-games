@@ -102,6 +102,11 @@ export default class CoreApp extends React.Component {
     const element = this._layout.getMediaContainerRef();
     const rect = element.getBoundingClientRect();
 
+    console.log({ rect });
+    if (!window.cefQuery) {
+      return;
+    }
+
     // TODO(jim): Move window calls somewhere else.
     try {
       window.cefQuery({
@@ -116,8 +121,32 @@ export default class CoreApp extends React.Component {
         }),
       });
     } catch (e) {
-      //alert('`cefQuery`: ' + e.message);
+      alert('`cefQuery`: ' + e.message);
     }
+  };
+
+  _handleURLChange = e => this.setState({ [e.target.name]: e.target.value });
+
+  _handleURLSubmit = () => {
+    if (!window.cefQuery) {
+      return;
+    }
+
+    // TODO(jim): Move this somewhere else.
+    try {
+      window.cefQuery({
+        request: JSON.stringify({
+          type: 'OPEN_URI',
+          body: {
+            uri: this.state.url,
+          },
+        }),
+      });
+    } catch (e) {
+      alert('`cefQuery`: ' + e.message);
+    }
+
+    // TODO(jim): Needs to load media.
   };
 
   _handleKeyDown = e => {
@@ -155,26 +184,6 @@ export default class CoreApp extends React.Component {
     this.setState({
       searchQuery: e.target.value,
     });
-  };
-
-  _handleURLChange = e => this.setState({ [e.target.name]: e.target.value });
-
-  _handleURLSubmit = () => {
-    // TODO(jim): Move this somewhere else.
-    try {
-      window.cefQuery({
-        request: JSON.stringify({
-          type: 'OPEN_URI',
-          body: {
-            uri: this.state.url,
-          },
-        }),
-      });
-    } catch (e) {
-      // alert('`cefQuery`: ' + e.message);
-    }
-
-    // TODO(jim): Needs to load media.
   };
 
   _handleToggleBrowse = () => {
