@@ -47,6 +47,13 @@ const STYLES_CONTAINER_RIGHT = css`
 
 export default class CoreRootHeader extends React.Component {
   render() {
+    return <div className={STYLES_CONTAINER} />;
+  }
+}
+
+/*
+export default class CoreRootHeader extends React.Component {
+  render() {
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_CONTAINER_LEFT}>
@@ -77,3 +84,4 @@ export default class CoreRootHeader extends React.Component {
     );
   }
 }
+*/

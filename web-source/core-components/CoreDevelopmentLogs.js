@@ -24,6 +24,7 @@ const STYLES_CONTAINER = css`
   position: relative;
   overflow-y: scroll;
   padding-top: 48px;
+  border-left: 1px solid ${Constants.colors.white25};
   background ${Constants.colors.black};
   color: ${Constants.colors.white};
 
