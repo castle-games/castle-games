@@ -49,7 +49,7 @@ const STYLES_CONTAINER = css`
 
 export default class CoreBrowseMediaResults extends React.Component {
   render() {
-    if (!this.props.media || !this.props.media.length) {
+    if (!this.props.mediaItems || !this.props.mediaItems.length) {
       return (
         <div className={STYLES_CONTAINER}>
           <UIEmptyState title="Game results">
@@ -61,7 +61,7 @@ export default class CoreBrowseMediaResults extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
-        <UIListMedia media={this.props.media} />
+        <UIListMedia mediaItems={this.props.mediaItems} />
       </div>
     );
   }

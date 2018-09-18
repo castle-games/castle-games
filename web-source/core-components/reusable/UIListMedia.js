@@ -45,7 +45,7 @@ const STYLES_FLUID_COLUMN = css`
 
 export default class UIListMedia extends React.Component {
   render() {
-    if (!this.props.media.length) {
+    if (!this.props.mediaItems.length) {
       return (
         <UIEmptyState title="Nothing here, yet">
           When this user uploads media you will be able to see it here.
@@ -63,7 +63,7 @@ export default class UIListMedia extends React.Component {
           <div className={STYLES_COLUMN}>Lorem Ipsum #5</div>
           <div className={STYLES_COLUMN}>Lorem Ipsum #6</div>
         </div>
-        {this.props.media.map((m, i) => {
+        {this.props.mediaItems.map((m, i) => {
           return (
             <div className={STYLES_ROW} key={`list-item-${i}`}>
               <div className={STYLES_COLUMN} style={{ fontWeight: 600 }}>

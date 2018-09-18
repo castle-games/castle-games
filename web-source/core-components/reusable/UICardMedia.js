@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as UISVG from '~/core-components/reusable/UISVG';
+import * as Strings from '~/common/strings';
 
 import { css } from 'react-emotion';
 
@@ -62,22 +63,25 @@ export default class UICardMedia extends React.Component {
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_CONTAINER_PREVIEW}>
           <div className={STYLES_CONTAINER_PREVIEW_LABEL}>Name</div>
-          <div className={STYLES_CONTAINER_PREVIEW_NAME}>Untitled</div>
+          <div className={STYLES_CONTAINER_PREVIEW_NAME}>{this.props.media.name}</div>
         </div>
-        <div className={STYLES_BYLINE}>Anonymous — Unknown upload date</div>
+        <div className={STYLES_BYLINE}>
+          Created by {this.props.media.user.username} — {Strings.toDate(this.props.media.createdTime)}
+        </div>
 
         <div className={STYLES_SECTION}>
-          <div className={STYLES_SECTION_TITLE}>Register</div>
+          <div className={STYLES_SECTION_TITLE}>Is this your game?</div>
           <div className={STYLES_SECTION_PARAGRAPH}>
-            By registering this game, you can add a description, instructions, and other users can
-            add this game to their playlists.
+            Please let us know! In the future you will be able to create an account and add this
+            game to your profile. You will be able to add your game's logo and write instructions
+            for how to play.
           </div>
 
           <UIButtonIconHorizontal
             onClick={this.props.onRegisterMedia}
             style={{ marginTop: 24 }}
-            icon={<UISVG.Add height="16px" />}>
-            Register game
+            icon={<UISVG.Mail height="16px" />}>
+            Contact us
           </UIButtonIconHorizontal>
         </div>
       </div>

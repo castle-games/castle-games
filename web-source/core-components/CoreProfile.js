@@ -68,7 +68,7 @@ export default class CoreProfile extends React.Component {
           onShowPlaylistList={this.props.onShowProfilePlaylistList}
         />
         {this.props.profileMode === 'media' || !this.props.profileMode ? (
-          <UIListMedia media={this.props.creator.media} />
+          <UIListMedia media={this.props.creator.mediaItems} />
         ) : null}
         {this.props.profileMode === 'playlist' ? (
           <UIEmptyState title="Not Implemented">Harass Jim.</UIEmptyState>

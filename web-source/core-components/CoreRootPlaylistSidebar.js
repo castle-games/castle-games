@@ -53,6 +53,7 @@ const STYLES_CONTAINER = css`
 
 export default class CoreRootPlaylistSidebar extends React.Component {
   render() {
+    console.log(this.props.playlist);
     return (
       <div className={STYLES_CONTAINER}>
         <UIHeaderDismiss onDismiss={this.props.onDismiss} />

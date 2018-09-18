@@ -173,6 +173,8 @@ export default class CoreApp extends React.Component {
     } catch (e) {
       // alert('`cefQuery`: ' + e.message);
     }
+
+    // TODO(jim): Needs to load media.
   };
 
   _handleToggleBrowse = () => {
@@ -189,7 +191,9 @@ export default class CoreApp extends React.Component {
     });
   };
 
-  _handleRegisterGame = () => window.alert('register');
+  _handleRegisterGame = () => {
+    window.location.href = `mailto:support@expo.io`;
+  };
 
   _handleFavoriteMedia = () => window.alert('favorite');
 
@@ -400,6 +404,7 @@ export default class CoreApp extends React.Component {
     if (state.isOverlayActive && state.sidebarMode === 'media-info') {
       maybeRightNode = (
         <CoreMediaInformation
+          media={state.media}
           onDismiss={this._handleDismissSidebar}
           onRegisterMedia={this._handleRegisterGame}
         />

@@ -46,23 +46,24 @@ const STYLES_CONTAINER = css`
   }
 `;
 
+/*
+<UIEmptyState title="Recommended media">
+  Once this game has been added to our servers we will be able to recommend other games
+  people play that are similar. The author of the game can also recommend other games for
+  you to play.
+</UIEmptyState>
+
+<UIEmptyState title="Recommended playlists">
+  There are no recommended playlists.
+</UIEmptyState>
+*/
+
 export default class CoreMediaInformation extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTAINER}>
         <UIHeaderDismiss onDismiss={this.props.onDismiss} />
-
-        <UICardMedia onRegisterMedia={this.props.onRegisterMedia} />
-
-        <UIEmptyState title="Recommended media">
-          Once this game has been added to our servers we will be able to recommend other games
-          people play that are similar. The author of the game can also recommend other games for
-          you to play.
-        </UIEmptyState>
-
-        <UIEmptyState title="Recommended playlists">
-          There are no recommended playlists.
-        </UIEmptyState>
+        <UICardMedia media={this.props.media} onRegisterMedia={this.props.onRegisterMedia} />
       </div>
     );
   }

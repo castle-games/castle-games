@@ -12,6 +12,7 @@ export default () => {
     url: '',
     // TODO(jim): Do a fetch for the playlist here.
     playlist: Fixtures.CurrentPlaylist,
+    media: Fixtures.CurrentPlaylist.mediaItems[0],
     viewer: null,
     local: null,
     searchQuery: '',

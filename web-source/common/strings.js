@@ -10,8 +10,12 @@ export const elide = (string, length = 140) => {
   return `${string.substring(0, length)}...`;
 };
 
-export const toDate = string => {
-  const date = new Date(string);
+export const toDate = dateString => {
+  let date = dateString;
+  if (typeof dateString !== 'object') {
+    const date = new Date(dateString);
+  }
+
   return `${date.getMonth() + 1}-${date.getDate()}-${date.getFullYear()}`;
 };
 

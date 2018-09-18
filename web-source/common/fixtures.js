@@ -5,16 +5,6 @@ import * as Constants from '~/common/constants';
 
 export const SearchResults = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}];
 
-export const CurrentPlaylist = {
-  playlistId: 'example-playlist-id',
-  userId: null,
-  name: 'Bad Box Game Jam',
-  description: null,
-  mediaItems: [{}, {}, {}, {}, {}, {}, {}],
-  updatedTime: new Date(),
-  createdTime: new Date(),
-};
-
 export const User = {
   // NOTE(jim): No entities will just have a id field. Charlie's design will
   // have specifically a named id field. You must know what that is at query time.
@@ -32,14 +22,43 @@ export const User = {
   createdTime: new Date(),
   favorites: [],
   history: [],
-  mediaCount: 5,
-  playListCount: 1,
-  playlists: [],
+  playlistItem: [],
   // TODO(jim): Enough to stub out placeholder
-  media: [{}, {}, {}, {}, {}, {}, {}],
+  mediaItems: [{}, {}, {}, {}, {}, {}, {}],
   theme: {
     background: `#D20014`,
   },
+};
+
+const PlaylistMedia = {
+  mediaId: 'example',
+  name: 'Eitr Clone',
+  description: null,
+  dimensions: null,
+  instructions: null,
+  createdTime: new Date(),
+  updatedTime: new Date(),
+  userId: 'example-user-id',
+  mediaId: 'example-playlist-id',
+  engineId: 'example-engine-id',
+  user: User,
+};
+
+export const CurrentPlaylist = {
+  playlistId: 'example-playlist-id',
+  userId: null,
+  name: 'Bad Box Game Jam',
+  description: null,
+  mediaItems: [
+    PlaylistMedia,
+    PlaylistMedia,
+    PlaylistMedia,
+    PlaylistMedia,
+    PlaylistMedia,
+    PlaylistMedia,
+  ],
+  updatedTime: new Date(),
+  createdTime: new Date(),
 };
 
 export const Scores = [
