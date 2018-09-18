@@ -79,6 +79,13 @@ const STYLES_CONTAINER_TOOLBAR = css`
   flex-shrink: 0;
 `;
 
+/*
+<UIButtonDarkSmall
+  icon={<UISVG.Favorite height="16px" />}
+  onClick={this.props.onFavoriteMedia}
+/>
+*/
+
 export default class CoreRootURLInput extends React.Component {
   _input;
 
@@ -107,10 +114,6 @@ export default class CoreRootURLInput extends React.Component {
           <UIButtonDarkSmall icon={<UISVG.Play height="12px" />} onClick={this.props.onSubmit} />
         </div>
         <div className={STYLES_CONTAINER_TOOLBAR}>
-          <UIButtonDarkSmall
-            icon={<UISVG.Favorite height="16px" />}
-            onClick={this.props.onFavoriteMedia}
-          />
           {!this.props.expanded ? (
             <UIButtonDarkSmall
               icon={<UISVG.Expand height="16px" />}

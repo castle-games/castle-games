@@ -5,6 +5,16 @@ import * as Constants from '~/common/constants';
 
 export const SearchResults = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}];
 
+export const CurrentPlaylist = {
+  playlistId: 'example-playlist-id',
+  userId: null,
+  name: 'Bad Box Game Jam',
+  description: null,
+  mediaItems: [{}, {}, {}, {}, {}, {}, {}],
+  updatedTime: new Date(),
+  createdTime: new Date(),
+};
+
 export const User = {
   // NOTE(jim): No entities will just have a id field. Charlie's design will
   // have specifically a named id field. You must know what that is at query time.

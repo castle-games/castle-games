@@ -47,13 +47,15 @@ const STYLES_CONTAINER = css`
   }
 `;
 
+/*
+<UIControl onClick={this.props.onViewCurrentPlaylistDetails}>View details</UIControl>
+*/
+
 export default class CoreRootPlaylistSidebar extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTAINER}>
-        <UIHeaderDismiss onDismiss={this.props.onDismiss}>
-          <UIControl onClick={this.props.onViewCurrentPlaylistDetails}>View details</UIControl>
-        </UIHeaderDismiss>
+        <UIHeaderDismiss onDismiss={this.props.onDismiss} />
         <UIEmptyState title="Current playlist">
           This needs to show the current playlist, or default to the all games playlist.
         </UIEmptyState>

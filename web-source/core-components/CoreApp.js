@@ -381,6 +381,7 @@ export default class CoreApp extends React.Component {
       maybeTopNode = (
         <CoreRootHeader
           viewer={state.viewer}
+          playlist={state.playlist}
           onToggleDashboard={this._handleToggleDashboard}
           onToggleAuthentication={this._handleToggleAuthentication}
           onToggleMediaInfo={this._handleToggleMediaInfo}
