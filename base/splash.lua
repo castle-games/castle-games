@@ -16,7 +16,7 @@ function splash:draw()
       else
          love.graphics.setColor(1, 1, 1, 0.5)
       end
-      love.graphics.print('ghost-player is loading...', x, y)
+      love.graphics.print('Loading...', x, y)
       y = y + 32
    end
    love.graphics.pop()
