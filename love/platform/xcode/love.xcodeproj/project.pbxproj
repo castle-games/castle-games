@@ -16,7 +16,6 @@
 		91CF43BD21485694002024DA /* liblibcef_dll_wrapper.a in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 91FDEBD521475159008FFB60 /* liblibcef_dll_wrapper.a */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		A1B31042214C4F1200CEBE9B /* json.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1B3103C214C4F1200CEBE9B /* json.hpp */; };
 		A1B31043214C4F1200CEBE9B /* json.hpp in Headers */ = {isa = PBXBuildFile; fileRef = A1B3103C214C4F1200CEBE9B /* json.hpp */; };
-		A1B3105A214C67FD00CEBE9B /* ghost.h in Headers */ = {isa = PBXBuildFile; fileRef = A1B31054214C67FC00CEBE9B /* ghost.h */; };
 		A1E7953D20721BC800731DD3 /* package.love in Resources */ = {isa = PBXBuildFile; fileRef = A1E7953C20721BC800731DD3 /* package.love */; };
 		A1ED98E9211DFA0700CBC701 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A194C6C4211CD1D50093B328 /* SDL2.framework */; };
 		A1ED98EA211DFA0700CBC701 /* SDL2.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = A194C6C4211CD1D50093B328 /* SDL2.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -50,6 +49,7 @@
 		B5B06A462150751A001C4382 /* simple_handler.h in Headers */ = {isa = PBXBuildFile; fileRef = B5B06A422150751A001C4382 /* simple_handler.h */; };
 		B5B06A472150751A001C4382 /* simple_app.h in Headers */ = {isa = PBXBuildFile; fileRef = B5B06A432150751A001C4382 /* simple_app.h */; };
 		B5B06A482150751A001C4382 /* simple_handler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B5B06A442150751A001C4382 /* simple_handler.cpp */; };
+		B5B06A4A2151A8EB001C4382 /* ghost.h in Headers */ = {isa = PBXBuildFile; fileRef = B5B06A492151A8EB001C4382 /* ghost.h */; };
 		B5E9FC48211B6C190068BEB9 /* ghost_extensions_macos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5E9FC43211B6BA00068BEB9 /* ghost_extensions_macos.framework */; };
 		B5E9FC4B211B6E610068BEB9 /* ghost_extensions_macos.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = B5E9FC43211B6BA00068BEB9 /* ghost_extensions_macos.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B5F3E7BA215071FC00660B13 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B5F3E7B9215071FC00660B13 /* Info.plist */; };
@@ -247,7 +247,6 @@
 		91CF43B621484A26002024DA /* full extreme tenor solo.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "full extreme tenor solo.m4a"; sourceTree = "<group>"; };
 		A194C6BA211CD1D50093B328 /* SDL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL.xcodeproj; path = "../../../ghost-extensions/SDL2-2.0.8/Xcode/SDL/SDL.xcodeproj"; sourceTree = "<group>"; };
 		A1B3103C214C4F1200CEBE9B /* json.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = json.hpp; sourceTree = "<group>"; };
-		A1B31054214C67FC00CEBE9B /* ghost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ghost.h; sourceTree = "<group>"; };
 		A1E7953C20721BC800731DD3 /* package.love */ = {isa = PBXFileReference; lastKnownFileType = file; name = package.love; path = ../../../package.love; sourceTree = "<group>"; };
 		A9255E021043195A00BA1496 /* vorbis.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = vorbis.framework; path = /Library/Frameworks/vorbis.framework; sourceTree = "<absolute>"; };
 		A9255F51104324D700BA1496 /* ogg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ogg.framework; path = /Library/Frameworks/ogg.framework; sourceTree = "<absolute>"; };
@@ -271,6 +270,7 @@
 		B5B06A422150751A001C4382 /* simple_handler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = simple_handler.h; sourceTree = "<group>"; };
 		B5B06A432150751A001C4382 /* simple_app.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = simple_app.h; sourceTree = "<group>"; };
 		B5B06A442150751A001C4382 /* simple_handler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = simple_handler.cpp; sourceTree = "<group>"; };
+		B5B06A492151A8EB001C4382 /* ghost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ghost.h; sourceTree = "<group>"; };
 		B5E9FC3B211B6B9F0068BEB9 /* ghost-extensions.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "ghost-extensions.xcodeproj"; path = "../../../ghost-extensions/ghost-extensions.xcodeproj"; sourceTree = "<group>"; };
 		B5F3E7B9215071FC00660B13 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CE73F7FF1EEB64150052DAB3 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
@@ -456,7 +456,6 @@
 		B51ECE20214AE7EF000F7348 /* macosx */ = {
 			isa = PBXGroup;
 			children = (
-				A1B31054214C67FC00CEBE9B /* ghost.h */,
 				B52F6A48214C7DBC00286294 /* ghost.mm */,
 				A1B3103C214C4F1200CEBE9B /* json.hpp */,
 				B51ECE23214AE7EF000F7348 /* ghost-macosx_Helper */,
@@ -493,6 +492,7 @@
 		B5B06A402150751A001C4382 /* common */ = {
 			isa = PBXGroup;
 			children = (
+				B5B06A492151A8EB001C4382 /* ghost.h */,
 				B5B06A412150751A001C4382 /* simple_app.cpp */,
 				B5B06A422150751A001C4382 /* simple_handler.h */,
 				B5B06A432150751A001C4382 /* simple_app.h */,
@@ -587,7 +587,7 @@
 				B5B06A462150751A001C4382 /* simple_handler.h in Headers */,
 				B5B06A472150751A001C4382 /* simple_app.h in Headers */,
 				B52F6A51214C7E4600286294 /* GhostAppDelegate.h in Headers */,
-				A1B3105A214C67FD00CEBE9B /* ghost.h in Headers */,
+				B5B06A4A2151A8EB001C4382 /* ghost.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
