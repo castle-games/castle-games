@@ -93,7 +93,7 @@ export default class CoreRootURLInput extends React.Component {
 
   render() {
     let dimensionToggleElement;
-    if (this.props.media.dimensions) {
+    if (this.props.media && this.props.media.dimensions) {
       dimensionToggleElement = !this.props.expanded ? (
         <UIButtonDarkSmall
           icon={<UISVG.Expand height="16px" />}

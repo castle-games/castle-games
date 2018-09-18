@@ -481,7 +481,9 @@ export default class CoreApp extends React.Component {
         leftSidebarNode={maybeLeftSidebarNode}
         rightSidebarNode={maybeRightSidebarNode}
         rightNode={maybeRightNode}>
-        <CoreMediaScreen expanded={state.isMediaExpanded} media={state.media} />
+        {state.media ? (
+          <CoreMediaScreen expanded={state.isMediaExpanded} media={state.media} />
+        ) : null}
       </CoreLayout>
     );
   }
