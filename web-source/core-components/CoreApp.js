@@ -132,7 +132,7 @@ export default class CoreApp extends React.Component {
       return;
     }
 
-    this._handleGoToUrl(the.state.url);
+    this._handleGoToUrl(this.state.url);
 
     // TODO(jim): Needs to load media.
   };
