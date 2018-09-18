@@ -159,7 +159,7 @@ export default class CoreApp extends React.Component {
         request: JSON.stringify({
           type: 'OPEN_URI',
           body: {
-            uri: this.state.url,
+            uri: url,
           },
         }),
       });
