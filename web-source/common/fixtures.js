@@ -24,6 +24,7 @@ export const User = {
   history: [],
   playlistItem: [],
   mediaItems: [
+    PlaylistMedia4,
     PlaylistMedia,
     PlaylistMedia1,
     PlaylistMedia2,
@@ -34,6 +35,21 @@ export const User = {
   theme: {
     background: `#D20014`,
   },
+};
+
+const PlaylistMedia4 = {
+  mediaId: 'example',
+  name: '1985',
+  description: null,
+  dimensions: { width: '680px', height: '384px' },
+  instructions: null,
+  createdTime: new Date(),
+  updatedTime: new Date(),
+  url: `//v6p9d9t4.ssl.hwcdn.net/html/402364/index.html`,
+  userId: 'example-user-id-1',
+  mediaId: 'example-playlist-id-0',
+  engineId: 'example-engine-id-0',
+  user: User,
 };
 
 const PlaylistMedia = {
@@ -132,6 +148,7 @@ export const CurrentPlaylist = {
   name: 'Bad Box Game Jam',
   description: null,
   mediaItems: [
+    PlaylistMedia4,
     PlaylistMedia,
     PlaylistMedia1,
     PlaylistMedia2,

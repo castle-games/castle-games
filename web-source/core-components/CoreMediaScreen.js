@@ -22,11 +22,10 @@ export default class CoreMediaScreen extends React.Component {
     return (
       <iframe
         style={style}
-        allow="autoplay; fullscreen; geolocation; microphone; camera; midi"
+        allow="autoplay; camera; midi"
         frameBorder="0"
         src={this.props.media ? this.props.media.url : null}
         scrolling="no"
-        allowFullScreen={true}
         allowTransparency={true}
       />
     );
