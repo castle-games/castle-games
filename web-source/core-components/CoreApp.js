@@ -140,7 +140,16 @@ export default class CoreApp extends React.Component {
     this._handleGoToUrl(this.state.url);
   };
 
-  _handleGoToMedia = media => this.setState({ media });
+  _handleGoToMedia = media => {
+    window.cefQuery({
+      request: JSON.stringify({
+        type: 'CLOSE',
+        body: '',
+      }),
+    });
+
+    this.setState({ media });
+  };
 
   _handleGoToUrl = url => {
     this.setState({ media: null });

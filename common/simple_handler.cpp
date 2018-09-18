@@ -86,6 +86,11 @@ void SimpleHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
       if (type == "OPEN_URI") {
         std::string uri = body["uri"];
         ghostOpenUri(uri.c_str());
+        
+        callback->Success("success");
+        return true;
+      } else if (type == "CLOSE") {
+        ghostClose();
 
         callback->Success("success");
         return true;
@@ -94,9 +99,9 @@ void SimpleHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
         float top = body["top"];
         float width = body["width"];
         float height = body["height"];
-
+        
         ghostSetChildWindowFrame(left, top, width, height);
-
+        
         callback->Success("success");
         return true;
       } else if (type == "READ_CHANNELS") {
