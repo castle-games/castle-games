@@ -23,7 +23,14 @@ export const User = {
   favorites: [],
   history: [],
   playlistItem: [],
-  mediaItems: [PlaylistMedia, PlaylistMedia1, PlaylistMedia2, PlaylistMedia3],
+  mediaItems: [
+    PlaylistMedia,
+    PlaylistMedia1,
+    PlaylistMedia2,
+    PlaylistMedia3,
+    PlaylistMediaLua,
+    PlaylistMediaLua2,
+  ],
   theme: {
     background: `#D20014`,
   },
@@ -86,6 +93,36 @@ const PlaylistMedia3 = {
   userId: 'example-user-id-1',
   mediaId: 'example-playlist-id-4',
   engineId: 'example-engine-id-4',
+  user: User,
+};
+
+const PlaylistMediaLua = {
+  mediaId: 'example',
+  name: 'Ben game',
+  description: null,
+  dimensions: null,
+  instructions: null,
+  createdTime: new Date(),
+  updatedTime: new Date(),
+  url: `https://raw.githubusercontent.com/nikki93/wat-do/499c4e2d8d44c7fbe4f744888717763916759fef/main.lua`,
+  userId: 'example-user-id-1',
+  mediaId: 'example-playlist-id-5',
+  engineId: 'example-engine-id-5',
+  user: User,
+};
+
+const PlaylistMediaLua2 = {
+  mediaId: 'example',
+  name: 'Nikki game',
+  description: null,
+  dimensions: null,
+  instructions: null,
+  createdTime: new Date(),
+  updatedTime: new Date(),
+  url: `https://raw.githubusercontent.com/terribleben/circloid/7e18b444cf9fc5bc10d09c3c3a9baac0783dfa02/main.lua`,
+  userId: 'example-user-id-1',
+  mediaId: 'example-playlist-id-5',
+  engineId: 'example-engine-id-5',
   user: User,
 };
 
