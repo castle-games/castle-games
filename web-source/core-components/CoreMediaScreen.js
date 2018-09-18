@@ -2,17 +2,33 @@ import * as React from 'react';
 import { css } from 'react-emotion';
 
 const STYLES_CONTAINER = css`
-  background-image: url('static/screenshot.gif');
   background-size: cover;
   background-position: 50% 50%;
   height: 100%;
   width: 100%;
+  background: red;
 `;
 
 export default class CoreMediaScreen extends React.Component {
   render() {
-    const style = this.props.expanded ? {} : { width: 992, height: 500 };
+    let style = { width: '100%', height: '100%' };
+    if (!this.props.expanded && this.props.media && this.props.media.dimensions) {
+      style = {
+        width: this.props.media.dimensions.width,
+        height: this.props.media.dimensions.height,
+      };
+    }
 
-    return <div className={STYLES_CONTAINER} style={style} />;
+    return (
+      <iframe
+        style={style}
+        allow="autoplay; fullscreen; geolocation; microphone; camera; midi"
+        frameBorder="0"
+        src={this.props.media ? this.props.media.url : null}
+        scrolling="no"
+        allowFullScreen={true}
+        allowTransparency={true}
+      />
+    );
   }
 }

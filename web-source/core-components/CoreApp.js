@@ -128,17 +128,23 @@ export default class CoreApp extends React.Component {
   _handleURLChange = e => this.setState({ [e.target.name]: e.target.value });
 
   _handleURLSubmit = () => {
+    if (this.state.url.endsWith('index.html')) {
+      this._handleGoToMedia({ url: this.state.url });
+      return;
+    }
+
     if (!window.cefQuery) {
       return;
     }
 
     this._handleGoToUrl(this.state.url);
-
-    // TODO(jim): Needs to load media.
   };
 
+  _handleGoToMedia = media => this.setState({ media });
+
   _handleGoToUrl = url => {
-    // TODO(jim): Move this somewhere else.
+    this.setState({ media: null });
+
     try {
       window.cefQuery({
         request: JSON.stringify({
@@ -211,6 +217,11 @@ export default class CoreApp extends React.Component {
   _handleFavoriteMedia = () => window.alert('favorite');
 
   _handleMediaSelect = media => {
+    if (media.url.endsWith('index.html')) {
+      this._handleGoToMedia(media);
+      return;
+    }
+
     this._handleGoToUrl(media.url);
   };
 
@@ -387,6 +398,7 @@ export default class CoreApp extends React.Component {
           name="url"
           value={state.url}
           viewer={state.viewer}
+          media={state.media}
           expanded={state.isMediaExpanded}
           onChange={this._handleURLChange}
           onSubmit={this._handleURLSubmit}
@@ -469,7 +481,7 @@ export default class CoreApp extends React.Component {
         leftSidebarNode={maybeLeftSidebarNode}
         rightSidebarNode={maybeRightSidebarNode}
         rightNode={maybeRightNode}>
-        <CoreMediaScreen expanded={state.isMediaExpanded} />
+        <CoreMediaScreen expanded={state.isMediaExpanded} media={state.media} />
       </CoreLayout>
     );
   }

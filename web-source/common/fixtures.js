@@ -23,8 +23,7 @@ export const User = {
   favorites: [],
   history: [],
   playlistItem: [],
-  // TODO(jim): Enough to stub out placeholder
-  mediaItems: [{}, {}, {}, {}, {}, {}, {}],
+  mediaItems: [PlaylistMedia, PlaylistMedia1, PlaylistMedia2, PlaylistMedia3],
   theme: {
     background: `#D20014`,
   },
@@ -32,15 +31,61 @@ export const User = {
 
 const PlaylistMedia = {
   mediaId: 'example',
-  name: 'Eitr Clone',
+  name: 'DuckSoup Dungeon',
+  description: null,
+  dimensions: { width: '640px', height: '480px' },
+  instructions: null,
+  createdTime: new Date(),
+  updatedTime: new Date(),
+  url: `//v6p9d9t4.ssl.hwcdn.net/html/655684/index.html`,
+  userId: 'example-user-id-1',
+  mediaId: 'example-playlist-id-0',
+  engineId: 'example-engine-id-0',
+  user: User,
+};
+
+const PlaylistMedia1 = {
+  mediaId: 'example',
+  name: 'Tilt',
   description: null,
   dimensions: null,
   instructions: null,
   createdTime: new Date(),
   updatedTime: new Date(),
-  userId: 'example-user-id',
-  mediaId: 'example-playlist-id',
-  engineId: 'example-engine-id',
+  url: `//v6p9d9t4.ssl.hwcdn.net/html/1052612/index.html`,
+  userId: 'example-user-id-1',
+  mediaId: 'example-playlist-id-1',
+  engineId: 'example-engine-id-1',
+  user: User,
+};
+
+const PlaylistMedia2 = {
+  mediaId: 'example',
+  name: 'Rain',
+  description: null,
+  dimensions: { width: '560px', height: '560px' },
+  instructions: null,
+  createdTime: new Date(),
+  updatedTime: new Date(),
+  url: `//v6p9d9t4.ssl.hwcdn.net/html/539666/index.html`,
+  userId: 'example-user-id-2',
+  mediaId: 'example-playlist-id-2',
+  engineId: 'example-engine-id-2',
+  user: User,
+};
+
+const PlaylistMedia3 = {
+  mediaId: 'example',
+  name: 'Shrubnaut',
+  description: null,
+  dimensions: { width: '1280x', height: '720px' },
+  instructions: null,
+  createdTime: new Date(),
+  updatedTime: new Date(),
+  url: `//v6p9d9t4.ssl.hwcdn.net/html/802829/index.html`,
+  userId: 'example-user-id-1',
+  mediaId: 'example-playlist-id-4',
+  engineId: 'example-engine-id-4',
   user: User,
 };
 
@@ -49,14 +94,7 @@ export const CurrentPlaylist = {
   userId: null,
   name: 'Bad Box Game Jam',
   description: null,
-  mediaItems: [
-    PlaylistMedia,
-    PlaylistMedia,
-    PlaylistMedia,
-    PlaylistMedia,
-    PlaylistMedia,
-    PlaylistMedia,
-  ],
+  mediaItems: [PlaylistMedia, PlaylistMedia1, PlaylistMedia2, PlaylistMedia3],
   updatedTime: new Date(),
   createdTime: new Date(),
 };
@@ -69,71 +107,3 @@ export const Scores = [
     score: 100000,
   },
 ];
-
-// NOTE(jim):
-
-/*
-
-  NOTES
-
-  jsonb                 required for rich text and groups of properties.
-  uuidv4                my preferred uuid.
-  decimal               trending score calculations often end up as decimal values.
-
-*/
-
-/*
-
-  POSTGRES TABLE SPEC
-
-  score {
-    id:                 uuidv4,
-    user:               <User>,
-    createdAt:          date,
-    score:              int
-  }
-
-  playlist {
-    id:                 uuidv4
-    name:               string
-    description:        jsonb
-    url:                string
-    social:             jsonb
-    settings:           jsonb
-    createdAt:          date
-    updatedAt:          date
-    plays:              int
-    plays_score:        decimal
-    completions:        int
-    completions_score:  decimal
-    user:               <User>
-    media:              list <Media>
-  }
-
-  media {
-    id:                 uuidv4
-    name:               string
-    dimensions:         jsonb
-    description:        jsonb
-    instructions:       jsonb
-    createdAt:          date
-    updatedAt:          date
-    plays:              int
-    plays_score:        decimal
-    completions:        int
-    completions_score:  decimal
-    playlists:          int,
-    playlists_score:    decimal
-    user:               <User>
-    engine:             <Engine>
-  }
-
-  engine {
-    id:                 uuidv4
-    name:               string
-    url:                string
-    createdAt:          date
-    updatedAt:          date
-  }
-
-*/

@@ -92,6 +92,21 @@ export default class CoreRootURLInput extends React.Component {
   _handleFocusInput = () => this._input.focus();
 
   render() {
+    let dimensionToggleElement;
+    if (this.props.media.dimensions) {
+      dimensionToggleElement = !this.props.expanded ? (
+        <UIButtonDarkSmall
+          icon={<UISVG.Expand height="16px" />}
+          onClick={this.props.onToggleMediaExpanded}
+        />
+      ) : (
+        <UIButtonDarkSmall
+          icon={<UISVG.Collapse height="16px" />}
+          onClick={this.props.onToggleMediaExpanded}
+        />
+      );
+    }
+
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_CONTAINER_LEFT} onClick={this._handleFocusInput}>
@@ -114,17 +129,7 @@ export default class CoreRootURLInput extends React.Component {
           <UIButtonDarkSmall icon={<UISVG.Play height="12px" />} onClick={this.props.onSubmit} />
         </div>
         <div className={STYLES_CONTAINER_TOOLBAR}>
-          {!this.props.expanded ? (
-            <UIButtonDarkSmall
-              icon={<UISVG.Expand height="16px" />}
-              onClick={this.props.onToggleMediaExpanded}
-            />
-          ) : (
-            <UIButtonDarkSmall
-              icon={<UISVG.Collapse height="16px" />}
-              onClick={this.props.onToggleMediaExpanded}
-            />
-          )}
+          {dimensionToggleElement}
           <UIButtonDarkSmall
             icon={<UISVG.CloseOverlay height="16px" />}
             onClick={this.props.onHideOverlay}
