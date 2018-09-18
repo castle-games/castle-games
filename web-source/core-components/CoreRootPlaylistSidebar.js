@@ -3,6 +3,7 @@ import * as Constants from '~/common/constants';
 
 import { css } from 'react-emotion';
 
+import UIListMediaInPlaylist from '~/core-components/reusable/UIListMediaInPlaylist';
 import UIHeaderDismiss from '~/core-components/reusable/UIHeaderDismiss';
 import UIEmptyState from '~/core-components/reusable/UIEmptyState';
 import UILink from '~/core-components/reusable/UILink';
@@ -54,12 +55,14 @@ const STYLES_CONTAINER = css`
 export default class CoreRootPlaylistSidebar extends React.Component {
   render() {
     console.log(this.props.playlist);
+
     return (
       <div className={STYLES_CONTAINER}>
         <UIHeaderDismiss onDismiss={this.props.onDismiss} />
-        <UIEmptyState title="Current playlist">
-          This needs to show the current playlist, or default to the all games playlist.
-        </UIEmptyState>
+        <UIListMediaInPlaylist
+          onMediaSelect={this.props.onMediaSelect}
+          mediaItems={this.props.playlist.mediaItems}
+        />
       </div>
     );
   }

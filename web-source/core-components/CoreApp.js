@@ -132,6 +132,12 @@ export default class CoreApp extends React.Component {
       return;
     }
 
+    this._handleGoToUrl(the.state.url);
+
+    // TODO(jim): Needs to load media.
+  };
+
+  _handleGoToUrl = url => {
     // TODO(jim): Move this somewhere else.
     try {
       window.cefQuery({
@@ -145,8 +151,6 @@ export default class CoreApp extends React.Component {
     } catch (e) {
       alert('`cefQuery`: ' + e.message);
     }
-
-    // TODO(jim): Needs to load media.
   };
 
   _handleKeyDown = e => {
@@ -205,6 +209,10 @@ export default class CoreApp extends React.Component {
   };
 
   _handleFavoriteMedia = () => window.alert('favorite');
+
+  _handleMediaSelect = media => {
+    this._handleGoToUrl(media.url);
+  };
 
   _handlePlayCreatorMedia = creator => {
     console.log({ creator });
@@ -444,6 +452,7 @@ export default class CoreApp extends React.Component {
       maybeRightNode = (
         <CoreRootPlaylistSidebar
           playlist={state.playlist}
+          onMediaSelect={this._handleMediaSelect}
           onViewCurrentPlaylistDetails={this._handleToggleCurrentPlaylistDetails}
           onDismiss={this._handleDismissSidebar}
         />
