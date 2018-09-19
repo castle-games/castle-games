@@ -1,7 +1,8 @@
 export const font = {
   default: `-apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica,
     ubuntu, roboto, noto, segoe ui, arial, sans-serif`,
-  mono: `'silkscreen-regular', sans-serif`,
+  mono: `-apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica,
+    ubuntu, roboto, noto, segoe ui, arial, sans-serif`,
 };
 
 export const base = {

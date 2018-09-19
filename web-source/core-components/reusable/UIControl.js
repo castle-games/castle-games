@@ -7,7 +7,8 @@ const STYLES_CONTROL = css`
   font-family: ${Constants.font.mono};
   font-size: 10px;
   letter-spacing: 0.2px;
-  font-weight: 400;
+  text-transform: uppercase;
+  font-weight: 600;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
