@@ -45,7 +45,7 @@ const PlaylistMedia4 = {
   instructions: null,
   createdTime: new Date(),
   updatedTime: new Date(),
-  url: `//v6p9d9t4.ssl.hwcdn.net/html/402364/index.html`,
+  url: `http://v6p9d9t4.ssl.hwcdn.net/html/402364/index.html`,
   userId: 'example-user-id-1',
   mediaId: 'example-playlist-id-0',
   engineId: 'example-engine-id-0',

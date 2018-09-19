@@ -36,7 +36,7 @@ const STYLES_CONTAINER_LEFT = css`
   flex-shrink: 0;
   font-size: 16px;
   padding-right: 2px;
-  color: ${Constants.colors.white60};
+  color: ${Constants.colors.white40};
   display: flex;
   align-items: center;
 `;
@@ -110,7 +110,7 @@ export default class CoreRootURLInput extends React.Component {
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_CONTAINER_LEFT} onClick={this._handleFocusInput}>
-          castle://
+          castle:
         </div>
         <div className={STYLES_CONTAINER_MIDDLE}>
           <ControlledInput

@@ -26,7 +26,6 @@ export default class CoreMediaScreen extends React.Component {
         frameBorder="0"
         src={this.props.media ? this.props.media.url : null}
         scrolling="no"
-        allowTransparency={true}
       />
     );
   }

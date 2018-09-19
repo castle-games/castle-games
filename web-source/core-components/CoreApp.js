@@ -102,7 +102,6 @@ export default class CoreApp extends React.Component {
     const element = this._layout.getMediaContainerRef();
     const rect = element.getBoundingClientRect();
 
-    console.log({ rect });
     if (!window.cefQuery) {
       return;
     }
@@ -141,14 +140,16 @@ export default class CoreApp extends React.Component {
   };
 
   _handleGoToMedia = media => {
-    window.cefQuery({
-      request: JSON.stringify({
-        type: 'CLOSE',
-        body: '',
-      }),
-    });
+    if (window.cefQuery) {
+      window.cefQuery({
+        request: JSON.stringify({
+          type: 'CLOSE',
+          body: '',
+        }),
+      });
+    }
 
-    this.setState({ media });
+    this.setState({ media, url: media.url });
   };
 
   _handleGoToUrl = url => {
@@ -166,6 +167,8 @@ export default class CoreApp extends React.Component {
     } catch (e) {
       alert('`cefQuery`: ' + e.message);
     }
+
+    this.setState({ url });
   };
 
   _handleKeyDown = e => {

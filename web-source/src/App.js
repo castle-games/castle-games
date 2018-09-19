@@ -9,8 +9,7 @@ import CoreApp from '~/core-components/CoreApp';
 export default () => {
   const state = {
     logs: [],
-    url: '',
-    // TODO(jim): Do a fetch for the playlist here.
+    url: Fixtures.CurrentPlaylist.mediaItems[0].url,
     playlist: Fixtures.CurrentPlaylist,
     media: Fixtures.CurrentPlaylist.mediaItems[0],
     viewer: null,
