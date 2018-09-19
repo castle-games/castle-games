@@ -7,6 +7,10 @@ import * as Slack from '~/common/slack';
 import { css } from 'react-emotion';
 import { isKeyHotkey } from 'is-hotkey';
 
+import GhostApiClientConstructor from 'ghost-api-client';
+const API = new GhostApiClientConstructor();
+
+// NOTE(jim): Reusable layout component.
 import CoreLayout from '~/core-components/layouts/CoreLayout';
 
 // NOTE(jim): Root Components
@@ -50,7 +54,7 @@ export default class CoreApp extends React.Component {
     this.state = props.state;
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     window.addEventListener('keydown', this._handleKeyDown);
     this._handleSetGameWindowSize();
 
@@ -93,6 +97,16 @@ export default class CoreApp extends React.Component {
     };
 
     this._devTimeout = setTimeout(processChannels);
+
+    const mediaItems = await API.callAsync('getAllMedia');
+    const playlist = {
+      name: 'All media on server test',
+      createdTime: new Date(),
+      updatedTime: new Date(),
+      mediaItems,
+    };
+
+    this.setState({ playlist });
   }
 
   componentWillUnmount() {

@@ -13,7 +13,7 @@ export const elide = (string, length = 140) => {
 export const toDate = dateString => {
   let date = dateString;
   if (typeof dateString !== 'object') {
-    const date = new Date(dateString);
+    date = new Date(dateString);
   }
 
   return `${date.getMonth() + 1}-${date.getDate()}-${date.getFullYear()}`;
