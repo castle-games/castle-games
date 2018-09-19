@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as Strings from '~/common/strings';
 import * as ReactDOM from 'react-dom';
 import * as Fixtures from '~/common/fixtures';
 
@@ -222,8 +223,19 @@ export default class CoreApp extends React.Component {
     });
   };
 
-  _handleRegisterGame = () => {
-    window.location.href = `mailto:support@expo.io`;
+  _handleRegisterGame = ({ email, message }) => {
+    // TODO(jim): Handle this better
+    if (Strings.isEmpty(email)) {
+      return;
+    }
+
+    // TODO(jim): Handle this better
+    if (Strings.isEmpty(message)) {
+      return;
+    }
+
+    // TODO(jim):
+    alert('send', { email, message });
   };
 
   _handleFavoriteMedia = () => window.alert('favorite');

@@ -6,6 +6,7 @@ import * as Strings from '~/common/strings';
 import { css } from 'react-emotion';
 
 import UIButtonIconHorizontal from '~/core-components/reusable/UIButtonIconHorizontal';
+import ControlFeedbackPopover from '~/core-components/controls/ControlFeedbackPopover';
 
 const STYLES_CONTAINER = css`
   padding: 16px;
@@ -82,12 +83,11 @@ export default class UICardMedia extends React.Component {
             for how to play.
           </div>
 
-          <UIButtonIconHorizontal
-            onClick={this.props.onRegisterMedia}
-            style={{ marginTop: 24 }}
-            icon={<UISVG.Mail height="16px" />}>
-            Contact us
-          </UIButtonIconHorizontal>
+          <ControlFeedbackPopover onRegisterMedia={this.props.onRegisterMedia}>
+            <UIButtonIconHorizontal style={{ marginTop: 24 }} icon={<UISVG.Mail height="16px" />}>
+              Contact us
+            </UIButtonIconHorizontal>
+          </ControlFeedbackPopover>
         </div>
       </div>
     );
