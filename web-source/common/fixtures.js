@@ -109,7 +109,7 @@ const PlaylistMedia3 = {
   userId: 'example-user-id-1',
   mediaId: 'example-playlist-id-4',
   engineId: 'example-engine-id-4',
-  user: User,
+  user: null,
 };
 
 const PlaylistMediaLua = {

@@ -73,7 +73,11 @@ export default class UIListMediaInPlaylist extends React.Component {
               <div className={STYLES_COLUMN} style={{ fontWeight: 600 }}>
                 {m.name}
               </div>
-              <div className={STYLES_COLUMN}>{m.user.username}</div>
+              <div
+                className={STYLES_COLUMN}
+                style={{ fontWeight: m.user ? 600 : 400, color: m.user ? null : '#666' }}>
+                {m.user ? m.user.username : `anonymous`}
+              </div>
               <div className={STYLES_COLUMN}>{Strings.toDate(m.createdTime)}</div>
             </div>
           );
