@@ -20,6 +20,7 @@ class SimpleHandler : public CefClient,
                       public CefDisplayHandler,
                       public CefLifeSpanHandler,
                       public CefLoadHandler,
+                      public CefDragHandler,
                       public CefRequestHandler {
 public:
   explicit SimpleHandler(bool use_views);
@@ -33,6 +34,7 @@ public:
   virtual CefRefPtr<CefLifeSpanHandler> GetLifeSpanHandler() OVERRIDE { return this; }
   virtual CefRefPtr<CefLoadHandler> GetLoadHandler() OVERRIDE { return this; }
   virtual CefRefPtr<CefRequestHandler> GetRequestHandler() OVERRIDE { return this; }
+  virtual CefRefPtr<CefDragHandler> GetDragHandler() OVERRIDE { return this; }
   bool OnProcessMessageReceived(CefRefPtr<CefBrowser> browser, CefProcessId source_process,
                                 CefRefPtr<CefProcessMessage> message) OVERRIDE;
 
@@ -53,6 +55,9 @@ public:
   bool OnBeforeBrowse(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame,
                       CefRefPtr<CefRequest> request, bool user_gesture, bool is_redirect) OVERRIDE;
   void OnRenderProcessTerminated(CefRefPtr<CefBrowser> browser, TerminationStatus status) OVERRIDE;
+                        
+  // CefDragHandler
+  bool OnDragEnter(CefRefPtr<CefBrowser> browser, CefRefPtr<CefDragData> dragData, DragOperationsMask mask) OVERRIDE;
 
   // Request that all existing browser windows close.
   void CloseAllBrowsers(bool force_close);
@@ -62,6 +67,10 @@ public:
 private:
   // Platform-specific implementation.
   void PlatformTitleChange(CefRefPtr<CefBrowser> browser, const CefString &title);
+                        
+#ifdef __APPLE__
+  void OnProtocolExecution(CefRefPtr<CefBrowser> browser, const CefString &url, bool &allow_os_execution);
+#endif
 
   // True if the application is using the Views framework.
   const bool use_views_;

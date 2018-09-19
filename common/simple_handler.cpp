@@ -221,6 +221,12 @@ bool SimpleHandler::OnBeforeBrowse(CefRefPtr<CefBrowser> browser, CefRefPtr<CefF
   return false;
 }
 
+bool SimpleHandler::OnDragEnter(CefRefPtr<CefBrowser> browser, CefRefPtr<CefDragData> dragData, DragOperationsMask mask) {
+  // prevents CEF from auto-opening random txt or image files that are dragged into the window.
+  // see: https://code.google.com/archive/p/chromiumembedded/issues/644
+  return true;
+}
+
 void SimpleHandler::OnRenderProcessTerminated(CefRefPtr<CefBrowser> browser,
                                               TerminationStatus status) {
   CEF_REQUIRE_UI_THREAD();

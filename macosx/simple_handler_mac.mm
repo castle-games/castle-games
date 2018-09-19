@@ -15,3 +15,13 @@ void SimpleHandler::PlatformTitleChange(CefRefPtr<CefBrowser> browser, const Cef
   NSString *str = [NSString stringWithUTF8String:titleStr.c_str()];
   [window setTitle:str];
 }
+
+void SimpleHandler::OnProtocolExecution(CefRefPtr<CefBrowser> browser, const CefString &url,
+                                        bool &allow_os_execution) {
+  // possible to use this snippet if we need to handle unknown schemes clicked from within ghost.
+  // recommended to validate url/scheme first.
+
+  /* string urlStr = url;
+   NSString* URL = [NSString stringWithUTF8String:urlStr.c_str()];
+   [[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:URL]]; */
+}
