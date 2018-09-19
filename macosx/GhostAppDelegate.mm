@@ -26,17 +26,43 @@ extern "C" {
 
 + (NSMenu *)makeMainMenu {
   NSMenu *mainMenu = [[NSMenu alloc] init];
-  NSMenuItem *mainMenuItem =
+
+  // application menu
+  NSMenuItem *appMenuItem =
       [[NSMenuItem alloc] initWithTitle:@"Application" action:nil keyEquivalent:@""];
-  [mainMenu addItem:mainMenuItem];
+  [mainMenu addItem:appMenuItem];
 
   NSMenu *appMenu = [[NSMenu alloc] init];
-  mainMenuItem.submenu = appMenu;
+  appMenuItem.submenu = appMenu;
 
   NSMenuItem *quitItem =
       [[NSMenuItem alloc] initWithTitle:@"Quit" action:@selector(terminate:) keyEquivalent:@"q"];
   quitItem.target = [NSApplication sharedApplication];
   [appMenu addItem:quitItem];
+
+  // edit menu
+  NSMenuItem *editMenuItem =
+      [[NSMenuItem alloc] initWithTitle:@"Edit" action:nil keyEquivalent:@""];
+  [mainMenu addItem:editMenuItem];
+
+  NSMenu *editMenu = [[NSMenu alloc] init];
+  editMenu.title = @"Edit";
+  editMenuItem.submenu = editMenu;
+
+  NSMenuItem *cutItem =
+      [[NSMenuItem alloc] initWithTitle:@"Cut" action:@selector(cut:) keyEquivalent:@"x"];
+  [editMenu addItem:cutItem];
+  NSMenuItem *copyItem =
+      [[NSMenuItem alloc] initWithTitle:@"Copy" action:@selector(copy:) keyEquivalent:@"c"];
+  [editMenu addItem:copyItem];
+  NSMenuItem *pasteItem =
+      [[NSMenuItem alloc] initWithTitle:@"Paste" action:@selector(paste:) keyEquivalent:@"v"];
+  [editMenu addItem:pasteItem];
+  NSMenuItem *selectAllItem = [[NSMenuItem alloc] initWithTitle:@"Select All"
+                                                         action:@selector(selectAll:)
+                                                  keyEquivalent:@"a"];
+  [editMenu addItem:selectAllItem];
+
   return mainMenu;
 }
 
@@ -81,7 +107,7 @@ extern "C" {
 
 - (void)application:(NSApplication *)application openURLs:(nonnull NSArray<NSURL *> *)urls {
   for (NSURL *url in urls) {
-      ghostHandleOpenUri([url.absoluteString UTF8String]);
+    ghostHandleOpenUri([url.absoluteString UTF8String]);
   }
 }
 
