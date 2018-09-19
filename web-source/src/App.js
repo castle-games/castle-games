@@ -10,7 +10,7 @@ export default () => {
   const state = {
     logs: [],
     mediaUrl: Fixtures.CurrentPlaylist.mediaItems[0].mediaUrl,
-    playlist: Fixtures.CurrentPlaylist,
+    playlist: null,
     media: Fixtures.CurrentPlaylist.mediaItems[0],
     viewer: null,
     local: null,
