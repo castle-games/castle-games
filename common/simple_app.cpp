@@ -10,6 +10,7 @@
 #include "include/views/cef_window.h"
 #include "include/wrapper/cef_helpers.h"
 #include "simple_handler.h"
+#include "ghost_constants.h"
 
 namespace {
 
@@ -52,6 +53,10 @@ SimpleApp::SimpleApp(std::string initialUrl, int initialWindowWidth, int initial
   this->_initialUrl = initialUrl;
   this->_initialWindowWidth = initialWindowWidth;
   this->_initialWindowHeight = initialWindowHeight;
+}
+
+void SimpleApp::OnRegisterCustomSchemes(CefRawPtr<CefSchemeRegistrar> registrar) {
+  registrar->AddCustomScheme(kGhostUrlScheme, true, false, false, false, false, false);
 }
 
 void SimpleApp::OnContextInitialized() {

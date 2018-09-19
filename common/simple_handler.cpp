@@ -20,6 +20,7 @@
 using nlohmann::json;
 
 #include "ghost.h"
+#include "ghost_constants.h"
 
 namespace {
 
@@ -85,7 +86,7 @@ void SimpleHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
       auto body = parsed["body"];
       if (type == "OPEN_URI") {
         std::string uri = body["uri"];
-        ghostOpenUri(uri.c_str());
+        ghostOpenLoveUri(uri.c_str());
         
         callback->Success("success");
         return true;
@@ -217,7 +218,13 @@ bool SimpleHandler::OnBeforeBrowse(CefRefPtr<CefBrowser> browser, CefRefPtr<CefF
                                    bool is_redirect) {
   CEF_REQUIRE_UI_THREAD();
 
-  message_router_->OnBeforeBrowse(browser, frame);
+  auto url = std::string(request->GetURL());
+  if (url.compare(0, kGhostUrlScheme.length(), kGhostUrlScheme) == 0) {
+    ghostHandleOpenUri(url.c_str());
+    
+    // don't allow the browser to handle these.
+    return true;
+  }
   return false;
 }
 

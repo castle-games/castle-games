@@ -31,6 +31,10 @@ public:
                                 CefRefPtr<CefProcessMessage> message) OVERRIDE {
     return message_router_->OnProcessMessageReceived(browser, source_process, message);
   }
+  
+  void OnRegisterCustomSchemes(CefRawPtr<CefSchemeRegistrar> registrar) OVERRIDE {
+    registrar->AddCustomScheme("castle", true, false, false, false, false, false);
+  }
 
 private:
   CefRefPtr<CefMessageRouterRendererSide> message_router_;

@@ -34,7 +34,11 @@ void ghostUpdateChildWindowFrame() {
   ghostSetChildWindowFrame(childLeft, childTop, childWidth, childHeight);
 }
 
-void ghostOpenUri(const char *uri) {
+void ghostHandleOpenUri(const char *uri) {
+  // TODO
+}
+
+void ghostOpenLoveUri(const char *uri) {
   NSString *uriStr = [NSString stringWithCString:uri encoding:NSUTF8StringEncoding];
   dispatch_async(dispatch_get_main_queue(), ^{
     GhostAppDelegate *delegate = [NSApplication sharedApplication].delegate;

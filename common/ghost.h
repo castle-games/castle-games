@@ -5,7 +5,12 @@
 extern "C" {
 #endif
 
-void ghostOpenUri(const char *uri);
+// handler for when the user opened any ghost url from native code.
+void ghostHandleOpenUri(const char *uri);
+  
+// boot a love instance with the given initial uri.
+void ghostOpenLoveUri(const char *uri);
+
 void ghostClose();
 void ghostUpdateChildWindowFrame();
 void ghostResizeChildWindow(float dw, float dh);
