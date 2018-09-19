@@ -24,6 +24,7 @@ export const User = {
   history: [],
   playlistItem: [],
   mediaItems: [
+    PlaylistMedia5,
     PlaylistMedia4,
     PlaylistMedia,
     PlaylistMedia1,
@@ -37,8 +38,23 @@ export const User = {
   },
 };
 
+const PlaylistMedia5 = {
+  mediaId: 'example-5',
+  name: 'Forgotten',
+  description: null,
+  dimensions: { width: '640px', height: '480px' },
+  instructions: null,
+  createdTime: new Date(),
+  updatedTime: new Date(),
+  url: `http://v6p9d9t4.ssl.hwcdn.net/html/356212-14546/index.html`,
+  userId: 'example-user-id-1',
+  mediaId: 'example-playlist-id-0',
+  engineId: 'example-engine-id-0',
+  user: null,
+};
+
 const PlaylistMedia4 = {
-  mediaId: 'example',
+  mediaId: 'example-4',
   name: '1985',
   description: null,
   dimensions: { width: '680px', height: '384px' },
@@ -68,7 +84,7 @@ const PlaylistMedia = {
 };
 
 const PlaylistMedia1 = {
-  mediaId: 'example',
+  mediaId: 'example-1',
   name: 'Tilt',
   description: null,
   dimensions: null,
@@ -83,7 +99,7 @@ const PlaylistMedia1 = {
 };
 
 const PlaylistMedia2 = {
-  mediaId: 'example',
+  mediaId: 'example-2',
   name: 'Rain',
   description: null,
   dimensions: { width: '560px', height: '560px' },
@@ -98,7 +114,7 @@ const PlaylistMedia2 = {
 };
 
 const PlaylistMedia3 = {
-  mediaId: 'example',
+  mediaId: 'example-3',
   name: 'Shrubnaut',
   description: null,
   dimensions: { width: '1280x', height: '720px' },
@@ -113,7 +129,7 @@ const PlaylistMedia3 = {
 };
 
 const PlaylistMediaLua = {
-  mediaId: 'example',
+  mediaId: 'example-lua',
   name: 'Ben game',
   description: null,
   dimensions: null,
@@ -128,7 +144,7 @@ const PlaylistMediaLua = {
 };
 
 const PlaylistMediaLua2 = {
-  mediaId: 'example',
+  mediaId: 'example-lua-2',
   name: 'Nikki game',
   description: null,
   dimensions: null,
@@ -148,6 +164,7 @@ export const CurrentPlaylist = {
   name: 'Bad Box Game Jam',
   description: null,
   mediaItems: [
+    PlaylistMedia5,
     PlaylistMedia4,
     PlaylistMedia,
     PlaylistMedia1,
