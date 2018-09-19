@@ -24,6 +24,7 @@ export const User = {
   history: [],
   playlistItem: [],
   mediaItems: [
+    PlaylistMedia6,
     PlaylistMedia5,
     PlaylistMedia4,
     PlaylistMedia,
@@ -38,8 +39,21 @@ export const User = {
   },
 };
 
+const PlaylistMedia6 = {
+  name: 'Forgotten',
+  description: null,
+  dimensions: { width: '640px', height: '640px' },
+  instructions: null,
+  createdTime: new Date(),
+  updatedTime: new Date(),
+  url: `http://v6p9d9t4.ssl.hwcdn.net/html/198348/bundle/index.html`,
+  userId: 'example-user-id-1',
+  mediaId: 'example-playlist-id-6',
+  engineId: 'example-engine-id-6',
+  user: null,
+};
+
 const PlaylistMedia5 = {
-  mediaId: 'example-5',
   name: 'Forgotten',
   description: null,
   dimensions: { width: '640px', height: '480px' },
@@ -48,13 +62,12 @@ const PlaylistMedia5 = {
   updatedTime: new Date(),
   url: `http://v6p9d9t4.ssl.hwcdn.net/html/356212-14546/index.html`,
   userId: 'example-user-id-1',
-  mediaId: 'example-playlist-id-0',
-  engineId: 'example-engine-id-0',
+  mediaId: 'example-playlist-id-5',
+  engineId: 'example-engine-id-5',
   user: null,
 };
 
 const PlaylistMedia4 = {
-  mediaId: 'example-4',
   name: '1985',
   description: null,
   dimensions: { width: '680px', height: '384px' },
@@ -63,13 +76,12 @@ const PlaylistMedia4 = {
   updatedTime: new Date(),
   url: `http://v6p9d9t4.ssl.hwcdn.net/html/402364/index.html`,
   userId: 'example-user-id-1',
-  mediaId: 'example-playlist-id-0',
-  engineId: 'example-engine-id-0',
+  mediaId: 'example-playlist-id-4',
+  engineId: 'example-engine-id-4',
   user: User,
 };
 
 const PlaylistMedia = {
-  mediaId: 'example',
   name: 'DuckSoup Dungeon',
   description: null,
   dimensions: { width: '640px', height: '480px' },
@@ -84,7 +96,6 @@ const PlaylistMedia = {
 };
 
 const PlaylistMedia1 = {
-  mediaId: 'example-1',
   name: 'Tilt',
   description: null,
   dimensions: null,
@@ -99,7 +110,6 @@ const PlaylistMedia1 = {
 };
 
 const PlaylistMedia2 = {
-  mediaId: 'example-2',
   name: 'Rain',
   description: null,
   dimensions: { width: '560px', height: '560px' },
@@ -114,7 +124,6 @@ const PlaylistMedia2 = {
 };
 
 const PlaylistMedia3 = {
-  mediaId: 'example-3',
   name: 'Shrubnaut',
   description: null,
   dimensions: { width: '1280x', height: '720px' },
@@ -123,13 +132,12 @@ const PlaylistMedia3 = {
   updatedTime: new Date(),
   url: `http://v6p9d9t4.ssl.hwcdn.net/html/802829/index.html`,
   userId: 'example-user-id-1',
-  mediaId: 'example-playlist-id-4',
-  engineId: 'example-engine-id-4',
+  mediaId: 'example-playlist-id-3',
+  engineId: 'example-engine-id-3',
   user: null,
 };
 
 const PlaylistMediaLua = {
-  mediaId: 'example-lua',
   name: 'Ben game',
   description: null,
   dimensions: null,
@@ -138,13 +146,12 @@ const PlaylistMediaLua = {
   updatedTime: new Date(),
   url: `http://raw.githubusercontent.com/nikki93/wat-do/499c4e2d8d44c7fbe4f744888717763916759fef/main.lua`,
   userId: 'example-user-id-1',
-  mediaId: 'example-playlist-id-5',
-  engineId: 'example-engine-id-5',
+  mediaId: 'example-playlist-id-lua-1',
+  engineId: 'example-engine-id-lua-1',
   user: User,
 };
 
 const PlaylistMediaLua2 = {
-  mediaId: 'example-lua-2',
   name: 'Nikki game',
   description: null,
   dimensions: null,
@@ -153,8 +160,8 @@ const PlaylistMediaLua2 = {
   updatedTime: new Date(),
   url: `http://raw.githubusercontent.com/terribleben/circloid/7e18b444cf9fc5bc10d09c3c3a9baac0783dfa02/main.lua`,
   userId: 'example-user-id-1',
-  mediaId: 'example-playlist-id-5',
-  engineId: 'example-engine-id-5',
+  mediaId: 'example-playlist-id-lua-2',
+  engineId: 'example-engine-id-lua-2',
   user: User,
 };
 
@@ -164,6 +171,7 @@ export const CurrentPlaylist = {
   name: 'Bad Box Game Jam',
   description: null,
   mediaItems: [
+    PlaylistMedia6,
     PlaylistMedia5,
     PlaylistMedia4,
     PlaylistMedia,
