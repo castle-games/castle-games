@@ -14,7 +14,7 @@ const STYLES_POPOVER = css`
   width: 280px;
   padding: 16px;
   border-radius: 4px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
 `;
 
 const STYLES_POPOVER_VISIBLE = css`

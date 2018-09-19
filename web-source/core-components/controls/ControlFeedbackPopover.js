@@ -57,6 +57,8 @@ export default class ControlFeedbackPopover extends React.Component {
 
   _handleSubmit = () => {
     this.props.onRegisterMedia({ email: this.state.email, message: this.state.message });
+
+    this.setState({ email: null, message: null, visible: false });
   };
 
   render() {
@@ -65,7 +67,7 @@ export default class ControlFeedbackPopover extends React.Component {
         className={STYLES_CONTROL}
         onDismiss={this._handleHide}
         captureScroll={false}>
-        <UIPopover style={{ bottom: 56, left: 0 }} active={this.state.visible}>
+        <UIPopover style={{ bottom: 0, left: 0 }} active={this.state.visible}>
           <div style={{ marginBottom: 16 }}>
             <div className={STYLES_LABEL}>Email</div>
             <ControlledInput

@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as Strings from '~/common/strings';
 import * as ReactDOM from 'react-dom';
 import * as Fixtures from '~/common/fixtures';
+import * as Slack from '~/common/slack';
 
 import { css } from 'react-emotion';
 import { isKeyHotkey } from 'is-hotkey';
@@ -234,8 +235,8 @@ export default class CoreApp extends React.Component {
       return;
     }
 
-    // TODO(jim):
-    alert('send', { email, message });
+    const emailUrl = `<mailto:${email}|${email}>`;
+    Slack.sendMessage(`*${emailUrl} who is playing "${this.state.url}" said:*\n ${message}`);
   };
 
   _handleFavoriteMedia = () => window.alert('favorite');
