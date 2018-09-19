@@ -143,8 +143,8 @@ export default class CoreApp extends React.Component {
   _handleURLChange = e => this.setState({ [e.target.name]: e.target.value });
 
   _handleURLSubmit = () => {
-    if (this.state.url.endsWith('index.html')) {
-      this._handleGoToMedia({ url: this.state.url });
+    if (this.state.mediaUrl.endsWith('index.html')) {
+      this._handleGoToMedia({ mediaUrl: this.state.mediaUrl });
       return;
     }
 
@@ -152,7 +152,7 @@ export default class CoreApp extends React.Component {
       return;
     }
 
-    this._handleGoToUrl(this.state.url);
+    this._handleGoToUrl(this.state.mediaUrl);
   };
 
   _handleGoToMedia = media => {
@@ -165,10 +165,10 @@ export default class CoreApp extends React.Component {
       });
     }
 
-    this.setState({ media, url: media.url });
+    this.setState({ media, mediaUrl: media.mediaUrl });
   };
 
-  _handleGoToUrl = url => {
+  _handleGoToUrl = mediaUrl => {
     this.setState({ media: null });
 
     try {
@@ -176,7 +176,7 @@ export default class CoreApp extends React.Component {
         request: JSON.stringify({
           type: 'OPEN_URI',
           body: {
-            uri: url,
+            uri: mediaUrl,
           },
         }),
       });
@@ -184,7 +184,7 @@ export default class CoreApp extends React.Component {
       alert('`cefQuery`: ' + e.message);
     }
 
-    this.setState({ url });
+    this.setState({ mediaUrl });
   };
 
   _handleKeyDown = e => {
@@ -250,18 +250,18 @@ export default class CoreApp extends React.Component {
     }
 
     const emailUrl = `<mailto:${email}|${email}>`;
-    Slack.sendMessage(`*${emailUrl} who is playing "${this.state.url}" said:*\n ${message}`);
+    Slack.sendMessage(`*${emailUrl} who is playing "${this.state.mediaUrl}" said:*\n ${message}`);
   };
 
   _handleFavoriteMedia = () => window.alert('favorite');
 
   _handleMediaSelect = media => {
-    if (media.url.endsWith('index.html')) {
+    if (media.mediaUrl.endsWith('index.html')) {
       this._handleGoToMedia(media);
       return;
     }
 
-    this._handleGoToUrl(media.url);
+    this._handleGoToUrl(media.mediaUrl);
   };
 
   _handlePlayCreatorMedia = creator => {
@@ -434,8 +434,8 @@ export default class CoreApp extends React.Component {
     if (state.isOverlayActive) {
       maybeBottomNode = (
         <CoreRootURLInput
-          name="url"
-          value={state.url}
+          name="mediaUrl"
+          value={state.mediaUrl}
           viewer={state.viewer}
           media={state.media}
           expanded={state.isMediaExpanded}

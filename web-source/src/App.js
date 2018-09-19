@@ -9,7 +9,7 @@ import CoreApp from '~/core-components/CoreApp';
 export default () => {
   const state = {
     logs: [],
-    url: Fixtures.CurrentPlaylist.mediaItems[0].url,
+    mediaUrl: Fixtures.CurrentPlaylist.mediaItems[0].mediaUrl,
     playlist: Fixtures.CurrentPlaylist,
     media: Fixtures.CurrentPlaylist.mediaItems[0],
     viewer: null,
