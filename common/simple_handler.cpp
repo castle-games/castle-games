@@ -218,6 +218,7 @@ bool SimpleHandler::OnBeforeBrowse(CefRefPtr<CefBrowser> browser, CefRefPtr<CefF
                                    bool is_redirect) {
   CEF_REQUIRE_UI_THREAD();
 
+  message_router_->OnBeforeBrowse(browser, frame);
   auto url = std::string(request->GetURL());
   if (url.compare(0, kGhostUrlScheme.length(), kGhostUrlScheme) == 0) {
     ghostHandleOpenUri(url.c_str());
