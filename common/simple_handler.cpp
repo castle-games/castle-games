@@ -87,7 +87,7 @@ void SimpleHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
       if (type == "OPEN_URI") {
         std::string uri = body["uri"];
         ghostOpenLoveUri(uri.c_str());
-        
+
         callback->Success("success");
         return true;
       } else if (type == "CLOSE") {
@@ -100,9 +100,9 @@ void SimpleHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
         float top = body["top"];
         float width = body["width"];
         float height = body["height"];
-        
+
         ghostSetChildWindowFrame(left, top, width, height);
-        
+
         callback->Success("success");
         return true;
       } else if (type == "READ_CHANNELS") {
@@ -222,14 +222,15 @@ bool SimpleHandler::OnBeforeBrowse(CefRefPtr<CefBrowser> browser, CefRefPtr<CefF
   auto url = std::string(request->GetURL());
   if (url.compare(0, kGhostUrlScheme.length(), kGhostUrlScheme) == 0) {
     ghostHandleOpenUri(url.c_str());
-    
+
     // don't allow the browser to handle these.
     return true;
   }
   return false;
 }
 
-bool SimpleHandler::OnDragEnter(CefRefPtr<CefBrowser> browser, CefRefPtr<CefDragData> dragData, DragOperationsMask mask) {
+bool SimpleHandler::OnDragEnter(CefRefPtr<CefBrowser> browser, CefRefPtr<CefDragData> dragData,
+                                DragOperationsMask mask) {
   // prevents CEF from auto-opening random txt or image files that are dragged into the window.
   // see: https://code.google.com/archive/p/chromiumembedded/issues/644
   return true;
@@ -240,4 +241,11 @@ void SimpleHandler::OnRenderProcessTerminated(CefRefPtr<CefBrowser> browser,
   CEF_REQUIRE_UI_THREAD();
 
   message_router_->OnRenderProcessTerminated(browser);
+}
+
+CefRefPtr<CefBrowser> SimpleHandler::GetFirstBrowser() {
+  if (browser_list_.empty()) {
+    return NULL;
+  }
+  return browser_list_.front();
 }

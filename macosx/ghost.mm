@@ -1,6 +1,7 @@
 #import "ghost.h"
 
 #import "GhostAppDelegate.h"
+#import "simple_handler.h"
 
 // macOS implementation of 'ghost.h'
 
@@ -35,7 +36,13 @@ void ghostUpdateChildWindowFrame() {
 }
 
 void ghostHandleOpenUri(const char *uri) {
-  // TODO
+  CefRefPtr<CefBrowser> browser = SimpleHandler::GetInstance()->GetFirstBrowser();
+  CefRefPtr<CefFrame> frame = browser->GetMainFrame();
+  NSString *msg =
+      [NSString stringWithFormat:@"let event = new Event('nativeOpenUrl'); event.params = { url: "
+                                 @"'%s' }; window.dispatchEvent(event);",
+                                 uri];
+  frame->ExecuteJavaScript([msg UTF8String], frame -> GetURL(), 0);
 }
 
 void ghostOpenLoveUri(const char *uri) {

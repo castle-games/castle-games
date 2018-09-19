@@ -55,6 +55,7 @@ export default class CoreApp extends React.Component {
   }
 
   async componentDidMount() {
+    window.addEventListener('nativeOpenUrl', this._handleNativeOpenUrl);
     window.addEventListener('keydown', this._handleKeyDown);
     this._handleSetGameWindowSize();
 
@@ -110,6 +111,7 @@ export default class CoreApp extends React.Component {
   }
 
   componentWillUnmount() {
+    window.removeEventListener('nativeOpenUrl', this._handleNativeOpenUrl);
     window.removeEventListener('keydown', this._handleKeyDown);
     window.clearTimeout(this._devTimeout);
   }
@@ -186,6 +188,14 @@ export default class CoreApp extends React.Component {
 
     this.setState({ mediaUrl });
   };
+
+  _handleNativeOpenUrl = e => {
+    let { params } = e;
+    // TODO: open params.url
+    // which will start with castle:// ,
+    // and which may be either a lua game or a web game,
+    // or might just be trash!
+  }
 
   _handleKeyDown = e => {
     if (isOverlayHotkey(e)) {

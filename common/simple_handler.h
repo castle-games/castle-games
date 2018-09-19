@@ -55,21 +55,25 @@ public:
   bool OnBeforeBrowse(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame,
                       CefRefPtr<CefRequest> request, bool user_gesture, bool is_redirect) OVERRIDE;
   void OnRenderProcessTerminated(CefRefPtr<CefBrowser> browser, TerminationStatus status) OVERRIDE;
-                        
+
   // CefDragHandler
-  bool OnDragEnter(CefRefPtr<CefBrowser> browser, CefRefPtr<CefDragData> dragData, DragOperationsMask mask) OVERRIDE;
+  bool OnDragEnter(CefRefPtr<CefBrowser> browser, CefRefPtr<CefDragData> dragData,
+                   DragOperationsMask mask) OVERRIDE;
 
   // Request that all existing browser windows close.
   void CloseAllBrowsers(bool force_close);
 
   bool IsClosing() const { return is_closing_; }
 
+  CefRefPtr<CefBrowser> GetFirstBrowser();
+
 private:
   // Platform-specific implementation.
   void PlatformTitleChange(CefRefPtr<CefBrowser> browser, const CefString &title);
-                        
+
 #ifdef __APPLE__
-  void OnProtocolExecution(CefRefPtr<CefBrowser> browser, const CefString &url, bool &allow_os_execution);
+  void OnProtocolExecution(CefRefPtr<CefBrowser> browser, const CefString &url,
+                           bool &allow_os_execution);
 #endif
 
   // True if the application is using the Views framework.
