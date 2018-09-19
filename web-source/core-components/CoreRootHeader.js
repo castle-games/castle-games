@@ -51,12 +51,12 @@ export default class CoreRootHeader extends React.Component {
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_CONTAINER_LEFT} />
         <div className={STYLES_CONTAINER_RIGHT}>
-          <UIControl style={{ marginRight: 24 }} onClick={this.props.onToggleMediaInfo}>
-            Media Info
-          </UIControl>
-          <UIControl onClick={this.props.onToggleCurrentPlaylist}>
-            {this.props.playlist.name}
-          </UIControl>
+          <UIControl onClick={this.props.onToggleMediaInfo}>Media Info</UIControl>
+          {this.props.playlist ? (
+            <UIControl style={{ marginLeft: 24 }} onClick={this.props.onToggleCurrentPlaylist}>
+              {this.props.playlist.name}
+            </UIControl>
+          ) : null}
         </div>
       </div>
     );
