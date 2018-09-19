@@ -68,6 +68,23 @@ extern "C" {
   return NSTerminateNow;
 }
 
+- (void)application:(NSApplication *)application
+          openFiles:(nonnull NSArray<NSString *> *)filenames {
+  for (NSString *filename in filenames) {
+    ghostHandleOpenUri(filename.UTF8String);
+  }
+}
+
+- (BOOL)application:(NSApplication *)application openFile:(nonnull NSString *)filename {
+  ghostHandleOpenUri(filename.UTF8String);
+}
+
+- (void)application:(NSApplication *)application openURLs:(nonnull NSArray<NSURL *> *)urls {
+  for (NSURL *url in urls) {
+      ghostHandleOpenUri([url.absoluteString UTF8String]);
+  }
+}
+
 - (void)bootLoveWithUri:(NSString *)uri {
   // Create the virtual machine.
   lua_State *L = luaL_newstate();

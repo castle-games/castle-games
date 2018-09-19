@@ -80,6 +80,7 @@ int main(int argc, char *argv[]) {
     [delegate performSelectorOnMainThread:@selector(createApplication:)
                                withObject:nil
                             waitUntilDone:NO];
+    [SimpleApplication sharedApplication].delegate = delegate;
 
     // Run the CEF message loop. This will block until CefQuitMessageLoop() is
     // called.
