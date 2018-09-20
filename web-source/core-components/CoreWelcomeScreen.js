@@ -21,10 +21,11 @@ const STYLES_CONTENT = css`
 
 const STYLES_TITLE = css`
   font-family: ${Constants.font.mono};
-  color: ${Constants.colors.white60};
+  color: ${Constants.colors.white};
   font-size: 24px;
   font-weight: 400;
-  letter-spacing: 0.2px;
+  display: flex;
+  align-items: center;
 `;
 
 const STYLES_PARAGRAPH = css`
@@ -48,7 +49,8 @@ const STYLES_OPTION = css`
   font-weight: 600;
   padding: 16px 0 16px 0;
   transition: 200ms ease color;
-
+  display: flex;
+  align-items: center;
   :hover {
     cursor: pointer;
     color: ${Constants.colors.white};
@@ -63,18 +65,19 @@ export default class CoreWelcomeScreen extends React.Component {
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_CONTENT}>
-          <h2 className={STYLES_TITLE}>Welcome to Castle</h2>
+          <img height="48px" src="static/castle-wordmark.png" />
           <p className={STYLES_PARAGRAPH}>
-            Get started by exploring games from the latest game jam, or play a random game.
+            Welcome! Get started by exploring games from the latest game jam, or play something completely
+            random.
           </p>
 
           <div className={STYLES_ACTIONS}>
             <div className={STYLES_OPTION} onClick={this.props.onToggleSidebar}>
-              →&nbsp;&nbsp;Explore games.
+              →&nbsp;&nbsp;Explore a list&nbsp;&nbsp;<span style={{ fontSize: 20 }}>🎮</span>
             </div>
 
             <div className={STYLES_OPTION} onClick={this.props.onSelectRandom}>
-              →&nbsp;&nbsp;Play a random game.
+              →&nbsp;&nbsp;Suprise me with something!&nbsp;&nbsp;<span style={{ fontSize: 20 }}>🎁</span>
             </div>
           </div>
         </div>
