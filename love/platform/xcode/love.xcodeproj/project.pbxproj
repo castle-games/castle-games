@@ -241,7 +241,7 @@
 		38F81F9C214B4A9200E6E242 /* main.js.map */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = main.js.map; sourceTree = "<group>"; };
 		38F81F9F214B4B0F00E6E242 /* static */ = {isa = PBXFileReference; lastKnownFileType = folder; name = static; path = "../web-source/static"; sourceTree = "<group>"; };
 		91C98F9D21432C39006E745C /* cef.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cef.xcodeproj; path = ../../../cef/cef.xcodeproj; sourceTree = "<group>"; };
-		91CF438321484742002024DA /* ghost-macosx Helper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ghost-macosx Helper.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		91CF438321484742002024DA /* Castle Helper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Castle Helper.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		91CF43AE21484A26002024DA /* .localized */ = {isa = PBXFileReference; lastKnownFileType = text; path = .localized; sourceTree = "<group>"; };
 		91CF43AF21484A26002024DA /* flattenlist.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = flattenlist.html; sourceTree = "<group>"; };
 		91CF43B121484A26002024DA /* jesse-ruder-paystub-2018-08-31.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "jesse-ruder-paystub-2018-08-31.pdf"; sourceTree = "<group>"; };
@@ -263,7 +263,7 @@
 		B51ECE24214AE7EF000F7348 /* process_helper_mac.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = process_helper_mac.cpp; sourceTree = "<group>"; };
 		B51ECE27214AE7EF000F7348 /* simple_handler_mac.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = simple_handler_mac.mm; sourceTree = "<group>"; };
 		B5256F3A211A4FC000891B27 /* ghost-macosx.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "ghost-macosx.plist"; path = "macosx/ghost-macosx.plist"; sourceTree = "<group>"; };
-		B5256F78211A555500891B27 /* ghost-macosx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ghost-macosx.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B5256F78211A555500891B27 /* Castle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Castle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B52F6A48214C7DBC00286294 /* ghost.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ghost.mm; sourceTree = "<group>"; };
 		B52F6A4F214C7E4600286294 /* GhostAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GhostAppDelegate.h; sourceTree = "<group>"; };
 		B52F6A53214C7F1100286294 /* GhostAppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GhostAppDelegate.mm; sourceTree = "<group>"; };
@@ -373,8 +373,8 @@
 			isa = PBXGroup;
 			children = (
 				FA0B7F061A95AAF3000E1D17 /* ghost.app */,
-				B5256F78211A555500891B27 /* ghost-macosx.app */,
-				91CF438321484742002024DA /* ghost-macosx Helper.app */,
+				B5256F78211A555500891B27 /* Castle.app */,
+				91CF438321484742002024DA /* Castle Helper.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -634,7 +634,7 @@
 			);
 			name = "ghost-macosx_Helper";
 			productName = "ghost-macosx_Helper";
-			productReference = 91CF438321484742002024DA /* ghost-macosx Helper.app */;
+			productReference = 91CF438321484742002024DA /* Castle Helper.app */;
 			productType = "com.apple.product-type.application";
 		};
 		B5256F3E211A555500891B27 /* ghost-macosx */ = {
@@ -662,7 +662,7 @@
 			name = "ghost-macosx";
 			productInstallPath = "$(HOME)/Applications";
 			productName = love;
-			productReference = B5256F78211A555500891B27 /* ghost-macosx.app */;
+			productReference = B5256F78211A555500891B27 /* Castle.app */;
 			productType = "com.apple.product-type.application";
 		};
 		FA0B7F051A95AAF3000E1D17 /* love-ios */ = {
@@ -855,7 +855,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "echo $BUILT_PRODUCTS_DIR\nrm -rf $BUILT_PRODUCTS_DIR/ghost-macosx.app/Contents/Frameworks/ghost-macosx\\ Helper.app\ncp -r $BUILT_PRODUCTS_DIR/ghost-macosx\\ Helper.app $BUILT_PRODUCTS_DIR/ghost-macosx.app/Contents/Frameworks/ghost-macosx\\ Helper.app\ninstall_name_tool -change \"@rpath/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework\" \"@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework\" $BUILT_PRODUCTS_DIR/ghost-macosx.app/Contents/MacOS/ghost-macosx\ninstall_name_tool -change \"@rpath/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework\" \"@executable_path/../../../Chromium Embedded Framework.framework/Chromium Embedded Framework\" $BUILT_PRODUCTS_DIR/ghost-macosx.app/Contents/Frameworks/ghost-macosx\\ Helper.app/Contents/MacOS/ghost-macosx\\ Helper ";
+			shellScript = "echo $BUILT_PRODUCTS_DIR\nrm -rf $BUILT_PRODUCTS_DIR/$PRODUCT_NAME.app/Contents/Frameworks/$PRODUCT_NAME\\ Helper.app\ncp -r $BUILT_PRODUCTS_DIR/$PRODUCT_NAME\\ Helper.app $BUILT_PRODUCTS_DIR/$PRODUCT_NAME.app/Contents/Frameworks/$PRODUCT_NAME\\ Helper.app\ninstall_name_tool -change \"@rpath/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework\" \"@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework\" $BUILT_PRODUCTS_DIR/$PRODUCT_NAME.app/Contents/MacOS/$PRODUCT_NAME\ninstall_name_tool -change \"@rpath/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework\" \"@executable_path/../../../Chromium Embedded Framework.framework/Chromium Embedded Framework\" $BUILT_PRODUCTS_DIR/$PRODUCT_NAME.app/Contents/Frameworks/$PRODUCT_NAME\\ Helper.app/Contents/MacOS/$PRODUCT_NAME\\ Helper";
 		};
 		A1A91ED9205F8F34002CFB78 /* Create Temporary '.love' Package */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1038,7 +1038,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = builders.game.ghost.helper;
-				PRODUCT_NAME = "ghost-macosx Helper";
+				PRODUCT_NAME = "Castle Helper";
 			};
 			name = Debug;
 		};
@@ -1082,7 +1082,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = builders.game.ghost.helper;
-				PRODUCT_NAME = "ghost-macosx Helper";
+				PRODUCT_NAME = "Castle Helper";
 			};
 			name = Release;
 		};
@@ -1126,7 +1126,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = builders.game.ghost.helper;
-				PRODUCT_NAME = "ghost-macosx Helper";
+				PRODUCT_NAME = "Castle Helper";
 			};
 			name = Distribution;
 		};
@@ -1157,7 +1157,7 @@
 				LLVM_LTO = NO;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_IDENTIFIER = builders.game.ghost;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Castle;
 			};
 			name = Debug;
 		};
@@ -1187,7 +1187,7 @@
 				LLVM_LTO = NO;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_IDENTIFIER = builders.game.ghost;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Castle;
 			};
 			name = Release;
 		};
@@ -1217,7 +1217,7 @@
 				LLVM_LTO = NO;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_IDENTIFIER = builders.game.ghost;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Castle;
 			};
 			name = Distribution;
 		};
