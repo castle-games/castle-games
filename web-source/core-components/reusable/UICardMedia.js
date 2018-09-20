@@ -78,9 +78,9 @@ export default class UICardMedia extends React.Component {
         <div className={STYLES_SECTION}>
           <div className={STYLES_SECTION_TITLE}>Is this your game?</div>
           <div className={STYLES_SECTION_PARAGRAPH}>
-            Please let us know! In the future you will be able to create an account and add this
-            game to your profile. You will be able to add your game's logo and write instructions
-            for how to play.
+            Castle lists all the games from a game jam, so people can browse and play them all
+            easily. If you created this game and want to claim it, change the way it is
+            presented, or remove it, please contact the Castle team and let us know.
           </div>
 
           <ControlFeedbackPopover onRegisterMedia={this.props.onRegisterMedia}>
