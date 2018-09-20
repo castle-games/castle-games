@@ -99,14 +99,7 @@ export default class CoreApp extends React.Component {
 
     this._devTimeout = setTimeout(processChannels);
 
-    const mediaItems = await API.callAsync('getAllMedia');
-    const playlist = {
-      name: 'All media on server test',
-      createdTime: new Date(),
-      updatedTime: new Date(),
-      mediaItems,
-    };
-
+    const playlist = await API.callAsync('getCurrentJamPlaylist');
     this.setState({ playlist });
   }
 
@@ -195,7 +188,7 @@ export default class CoreApp extends React.Component {
     // which will start with castle:// ,
     // and which may be either a lua game or a web game,
     // or might just be trash!
-  }
+  };
 
   _handleKeyDown = e => {
     if (isOverlayHotkey(e)) {
