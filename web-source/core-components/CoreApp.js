@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as Strings from '~/common/strings';
+import * as Utilities from '~/common/utilities';
 import * as ReactDOM from 'react-dom';
 import * as Fixtures from '~/common/fixtures';
 import * as Slack from '~/common/slack';
@@ -271,7 +272,15 @@ export default class CoreApp extends React.Component {
   };
 
   _handleSelectRandom = () => {
-    // lol
+    if (!this.state.playlist || !this.state.playlist.mediaItems.length) {
+      return;
+    }
+
+    const max = this.state.playlist.mediaItems.length;
+    const min = 1;
+
+    const index = Utilities.getRandomInt(min, max);
+    this._handleMediaSelect(this.state.playlist.mediaItems[index]);
   };
 
   _handlePlayCreatorMedia = creator => {
