@@ -73,7 +73,7 @@ export default class CoreWelcomeScreen extends React.Component {
 
           <div className={STYLES_ACTIONS}>
             <div className={STYLES_OPTION} onClick={this.props.onToggleSidebar}>
-              →&nbsp;&nbsp;Explore a list&nbsp;&nbsp;<span style={{ fontSize: 20 }}>🎮</span>
+              →&nbsp;&nbsp;Explore games&nbsp;&nbsp;<span style={{ fontSize: 20 }}>🎮</span>
             </div>
 
             <div className={STYLES_OPTION} onClick={this.props.onSelectRandom}>

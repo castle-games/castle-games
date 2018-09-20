@@ -39,12 +39,12 @@ const STYLES_CONTAINER = css`
 
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    background: ${Constants.colors.black};
+    background: ${Constants.colors.yellow};
   }
 
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
-    background: ${Constants.colors.black};
+    background: ${Constants.colors.white};
   }
 `;
 

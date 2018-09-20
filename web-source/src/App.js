@@ -9,7 +9,7 @@ import CoreApp from '~/core-components/CoreApp';
 export default () => {
   const state = {
     logs: [],
-    mediaUrl: null,
+    mediaUrl: '',
     playlist: null,
     media: null,
     viewer: null,

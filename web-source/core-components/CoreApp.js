@@ -270,6 +270,10 @@ export default class CoreApp extends React.Component {
     this._handleGoToUrl(media.mediaUrl);
   };
 
+  _handleSelectRandom = () => {
+    // lol
+  };
+
   _handlePlayCreatorMedia = creator => {
     console.log({ creator });
   };
@@ -459,6 +463,7 @@ export default class CoreApp extends React.Component {
       maybeTopNode = (
         <CoreRootHeader
           viewer={state.viewer}
+          media={state.media}
           playlist={state.playlist}
           onToggleDashboard={this._handleToggleDashboard}
           onToggleAuthentication={this._handleToggleAuthentication}
@@ -532,8 +537,8 @@ export default class CoreApp extends React.Component {
           <CoreMediaScreen expanded={state.isMediaExpanded} media={state.media} />
         ) : (
           <CoreWelcomeScreen
-            onToggleSidebar={((this.state.playlist) ? this._handleToggleCurrentPlaylist : null)}
-            onSelectRandom={null}
+            onToggleSidebar={this.state.playlist ? this._handleToggleCurrentPlaylist : null}
+            onSelectRandom={this.state.playlist ? this._handleSelectRandom : null}
           />
         )}
       </CoreLayout>
