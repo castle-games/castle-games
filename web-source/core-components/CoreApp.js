@@ -505,6 +505,7 @@ export default class CoreApp extends React.Component {
     if (state.isOverlayActive && state.sidebarMode === 'current-playlist') {
       maybeRightNode = (
         <CoreRootPlaylistSidebar
+          media={state.media}
           playlist={state.playlist}
           onMediaSelect={this._handleMediaSelect}
           onViewCurrentPlaylistDetails={this._handleToggleCurrentPlaylistDetails}
