@@ -60,6 +60,7 @@ export default class CoreRootPlaylistSidebar extends React.Component {
       <div className={STYLES_CONTAINER}>
         <UIHeaderDismiss onDismiss={this.props.onDismiss} />
         <UIListMediaInPlaylist
+          media={this.props.media}
           onMediaSelect={this.props.onMediaSelect}
           mediaItems={this.props.playlist.mediaItems}
         />

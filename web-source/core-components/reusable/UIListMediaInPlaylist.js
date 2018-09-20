@@ -35,6 +35,21 @@ const STYLES_ROW = css`
   }
 `;
 
+const STYLES_ROW_SELECTED = css`
+  font-weight: 400;
+  font-size: 12px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  border-bottom: 1px solid ${Constants.colors.white10};
+  cursor: pointer;
+  background: ${Constants.colors.green};
+
+  :last-child {
+    border-bottom: 0;
+  }
+`;
+
 const STYLES_COLUMN = css`
   flex-shrink: 0;
   width: 33.33%;
@@ -67,7 +82,11 @@ export default class UIListMediaInPlaylist extends React.Component {
         {this.props.mediaItems.map((m, i) => {
           return (
             <div
-              className={STYLES_ROW}
+              className={
+                this.props.media && this.props.media.mediaId === m.mediaId
+                  ? STYLES_ROW_SELECTED
+                  : STYLES_ROW
+              }
               key={`playlist-list-item-${i}`}
               onClick={() => this.props.onMediaSelect(m)}>
               <div className={STYLES_COLUMN} style={{ fontWeight: 600 }}>
