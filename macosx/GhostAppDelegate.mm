@@ -1,4 +1,5 @@
 #import "GhostAppDelegate.h"
+#import "GhostMainMenu.h"
 #import "ghost.h"
 
 extern "C" {
@@ -24,56 +25,14 @@ extern "C" {
 
 @implementation GhostAppDelegate
 
-+ (NSMenu *)makeMainMenu {
-  NSMenu *mainMenu = [[NSMenu alloc] init];
-
-  // application menu
-  NSMenuItem *appMenuItem =
-      [[NSMenuItem alloc] initWithTitle:@"Application" action:nil keyEquivalent:@""];
-  [mainMenu addItem:appMenuItem];
-
-  NSMenu *appMenu = [[NSMenu alloc] init];
-  appMenuItem.submenu = appMenu;
-
-  NSMenuItem *quitItem =
-      [[NSMenuItem alloc] initWithTitle:@"Quit" action:@selector(terminate:) keyEquivalent:@"q"];
-  quitItem.target = [NSApplication sharedApplication];
-  [appMenu addItem:quitItem];
-
-  // edit menu
-  NSMenuItem *editMenuItem =
-      [[NSMenuItem alloc] initWithTitle:@"Edit" action:nil keyEquivalent:@""];
-  [mainMenu addItem:editMenuItem];
-
-  NSMenu *editMenu = [[NSMenu alloc] init];
-  editMenu.title = @"Edit";
-  editMenuItem.submenu = editMenu;
-
-  NSMenuItem *cutItem =
-      [[NSMenuItem alloc] initWithTitle:@"Cut" action:@selector(cut:) keyEquivalent:@"x"];
-  [editMenu addItem:cutItem];
-  NSMenuItem *copyItem =
-      [[NSMenuItem alloc] initWithTitle:@"Copy" action:@selector(copy:) keyEquivalent:@"c"];
-  [editMenu addItem:copyItem];
-  NSMenuItem *pasteItem =
-      [[NSMenuItem alloc] initWithTitle:@"Paste" action:@selector(paste:) keyEquivalent:@"v"];
-  [editMenu addItem:pasteItem];
-  NSMenuItem *selectAllItem = [[NSMenuItem alloc] initWithTitle:@"Select All"
-                                                         action:@selector(selectAll:)
-                                                  keyEquivalent:@"a"];
-  [editMenu addItem:selectAllItem];
-
-  return mainMenu;
-}
-
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
-  return YES;
+  return NO;
 }
 
 // Create the application on the UI thread.
 - (void)createApplication:(id)object {
   [NSApplication sharedApplication];
-  [NSApplication sharedApplication].mainMenu = [[self class] makeMainMenu];
+  [NSApplication sharedApplication].mainMenu = [GhostMainMenu makeMainMenu];
 
   // Set the delegate for application events.
   [[NSApplication sharedApplication] setDelegate:self];

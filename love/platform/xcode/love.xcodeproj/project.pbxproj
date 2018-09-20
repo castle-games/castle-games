@@ -44,6 +44,8 @@
 		B52F6A63214C964100286294 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = B52F6A62214C964100286294 /* main.mm */; };
 		B53E72AC2152F8D2003C8616 /* ghost_constants.h in Headers */ = {isa = PBXBuildFile; fileRef = B53E72AA2152F8D2003C8616 /* ghost_constants.h */; };
 		B53E72AD2152F8D2003C8616 /* ghost_constants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B53E72AB2152F8D2003C8616 /* ghost_constants.cpp */; };
+		B53E72B421540FA5003C8616 /* GhostMainMenu.h in Headers */ = {isa = PBXBuildFile; fileRef = B53E72B221540FA5003C8616 /* GhostMainMenu.h */; };
+		B53E72B521540FA5003C8616 /* GhostMainMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = B53E72B321540FA5003C8616 /* GhostMainMenu.m */; };
 		B59617512149BF7100BE403F /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = B59617502149BF7100BE403F /* index.html */; };
 		B5A0404321483BA5007A6CC1 /* Chromium Embedded Framework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5A0404221483BA5007A6CC1 /* Chromium Embedded Framework.framework */; };
 		B5A0404621483D2C007A6CC1 /* Chromium Embedded Framework.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = B5A0404221483BA5007A6CC1 /* Chromium Embedded Framework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -268,6 +270,8 @@
 		B52F6A62214C964100286294 /* main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
 		B53E72AA2152F8D2003C8616 /* ghost_constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ghost_constants.h; sourceTree = "<group>"; };
 		B53E72AB2152F8D2003C8616 /* ghost_constants.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ghost_constants.cpp; sourceTree = "<group>"; };
+		B53E72B221540FA5003C8616 /* GhostMainMenu.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GhostMainMenu.h; sourceTree = "<group>"; };
+		B53E72B321540FA5003C8616 /* GhostMainMenu.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GhostMainMenu.m; sourceTree = "<group>"; };
 		B59617502149BF7100BE403F /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		B5A0404221483BA5007A6CC1 /* Chromium Embedded Framework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "Chromium Embedded Framework.framework"; path = "/Library/Frameworks/Chromium Embedded Framework.framework"; sourceTree = "<group>"; };
 		B5B06A412150751A001C4382 /* simple_app.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = simple_app.cpp; sourceTree = "<group>"; };
@@ -466,6 +470,8 @@
 				B51ECE27214AE7EF000F7348 /* simple_handler_mac.mm */,
 				B52F6A4F214C7E4600286294 /* GhostAppDelegate.h */,
 				B52F6A53214C7F1100286294 /* GhostAppDelegate.mm */,
+				B53E72B221540FA5003C8616 /* GhostMainMenu.h */,
+				B53E72B321540FA5003C8616 /* GhostMainMenu.m */,
 				B52F6A62214C964100286294 /* main.mm */,
 			);
 			name = macosx;
@@ -594,6 +600,7 @@
 				B5B06A472150751A001C4382 /* simple_app.h in Headers */,
 				B52F6A51214C7E4600286294 /* GhostAppDelegate.h in Headers */,
 				B53E72AC2152F8D2003C8616 /* ghost_constants.h in Headers */,
+				B53E72B421540FA5003C8616 /* GhostMainMenu.h in Headers */,
 				B5B06A4A2151A8EB001C4382 /* ghost.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -927,6 +934,7 @@
 				B5B06A452150751A001C4382 /* simple_app.cpp in Sources */,
 				B5256F48211A555500891B27 /* love.cpp in Sources */,
 				B53E72AD2152F8D2003C8616 /* ghost_constants.cpp in Sources */,
+				B53E72B521540FA5003C8616 /* GhostMainMenu.m in Sources */,
 				B52F6A4E214C7DBC00286294 /* ghost.mm in Sources */,
 				B5B06A482150751A001C4382 /* simple_handler.cpp in Sources */,
 			);
