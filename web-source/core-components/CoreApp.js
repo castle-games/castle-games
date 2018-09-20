@@ -41,6 +41,9 @@ import CorePlaylist from '~/core-components/CorePlaylist';
 // NOTE(jim): Development Logs Scene
 import CoreDevelopmentLogs from '~/core-components/CoreDevelopmentLogs';
 
+// NOTE: Welcome Scene
+import CoreWelcomeScreen from '~/core-components/CoreWelcomeScreen';
+
 const isOverlayHotkey = isKeyHotkey('mod+e');
 const isDevelopmentLogHotkey = isKeyHotkey('mod+j');
 
@@ -514,6 +517,7 @@ export default class CoreApp extends React.Component {
       );
     }
 
+    // TODO: wire up CoreWelcomeScreen random action
     return (
       <CoreLayout
         ref={reference => {
@@ -526,7 +530,12 @@ export default class CoreApp extends React.Component {
         rightNode={maybeRightNode}>
         {state.media ? (
           <CoreMediaScreen expanded={state.isMediaExpanded} media={state.media} />
-        ) : null}
+        ) : (
+          <CoreWelcomeScreen
+            onToggleSidebar={((this.state.playlist) ? this._handleToggleCurrentPlaylist : null)}
+            onSelectRandom={null}
+          />
+        )}
       </CoreLayout>
     );
   }
