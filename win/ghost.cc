@@ -100,16 +100,11 @@ static void bootLove(const char *uri) {
     lua_pushstring(L, "embedded boot.lua");
     lua_rawseti(L, -2, -1);
 
-    // TODO(nikki/jesse): Somehow refer to 'base/' stuff in here
-    // NSArray *bundlepaths =
-    //    [[NSBundle mainBundle] pathsForResourcesOfType:@"love" inDirectory:nil];
-    // if (bundlepaths.count > 0) {
-    //  lua_pushstring(L, [bundlepaths[0] UTF8String]);
-    //  lua_rawseti(L, -2, 0);
-    //  lua_pushstring(L, "--fused");
-    //  lua_rawseti(L, -2, 1);
-    //}
-    lua_pushstring(L, "C:\\Users\\nikki-desktop-win\\Development\\ghost\\base");
+    CHAR buffer[MAX_PATH];
+    GetModuleFileNameA(NULL, buffer, MAX_PATH);
+    std::string::size_type pos = std::string(buffer).find_last_of("\\/");
+    std::string path = std::string(buffer).substr(0, pos) + "/base";
+    lua_pushstring(L, path.c_str());
     lua_rawseti(L, -2, 0);
     //  lua_pushstring(L, "--fused");
     //  lua_rawseti(L, -2, 1);
