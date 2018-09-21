@@ -188,10 +188,14 @@ export default class CoreApp extends React.Component {
 
   _handleNativeOpenUrl = e => {
     let { params } = e;
-    // TODO: open params.url
-    // which will start with castle:// ,
-    // and which may be either a lua game or a web game,
-    // or might just be trash!
+    let { url } = params;
+    if (url) {
+      url = url.replace('castle://', 'https://');
+      this.setState({ media: null });
+      this.setState({ mediaUrl: url }, () => {
+        this._handleURLSubmit();
+      });
+    }
   };
 
   _handleKeyDown = e => {
