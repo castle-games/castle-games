@@ -380,7 +380,7 @@ target_link_libraries(${GHOST_TARGET} ${MEGA_3P})
 
 add_move_dll(${GHOST_TARGET} ${MEGA_MPEG123})
 add_move_dll(${GHOST_TARGET} ${MEGA_SDL2})
-add_move_dll(${GHOST_TARGET} ${MEGA_OPENAL}))
+add_move_dll(${GHOST_TARGET} ${MEGA_OPENAL})
 post_step_move_dll(${GHOST_TARGET} ${MEGA_LUAJIT_DLL})
 
 #list(APPEND GHOST_COMPILER_DEFINES
@@ -406,5 +406,6 @@ set(GHOST_WEB_FILES
   main.js.map
 )
 COPY_FILES("${GHOST_TARGET}" "${GHOST_WEB_FILES}" "${CMAKE_CURRENT_SOURCE_DIR}/../web" "${CEF_TARGET_OUT_DIR}/web")
+#COPY_FILES("${GHOST_TARGET}" "${GHOST_WEB_FILES}" "${CMAKE_CURRENT_SOURCE_DIR}/../base" "${CEF_TARGET_OUT_DIR}/base")
 
 #add_subdirectory(../win ${CMAKE_BINARY_DIR}/ghost)
