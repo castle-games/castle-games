@@ -368,7 +368,7 @@ SET_CEF_TARGET_OUT_DIR()
 add_executable(${GHOST_TARGET} WIN32 ${GHOST_SRCS})
 add_dependencies(${GHOST_TARGET} libcef_dll_wrapper)
 SET_EXECUTABLE_TARGET_PROPERTIES(${GHOST_TARGET})
-target_link_libraries(${GHOST_TARGET} libcef_lib libcef_dll_wrapper ${CEF_STANDARD_LIBS} liblove)
+target_link_libraries(${GHOST_TARGET} libcef_lib libcef_dll_wrapper ${CEF_STANDARD_LIBS} liblove ${LOVE_LUA_LIBRARY})
 include_directories(
   ../common
   ../cef
@@ -380,10 +380,8 @@ target_link_libraries(${GHOST_TARGET} ${MEGA_3P})
 
 add_move_dll(${GHOST_TARGET} ${MEGA_MPEG123})
 add_move_dll(${GHOST_TARGET} ${MEGA_SDL2})
-add_move_dll(${GHOST_TARGET} ${MEGA_OPENAL})
-# TODO(jesse/nikki): This copies Lua51, not LuaJIT, need to copy the lua51.dll
-#                    at build/libs/LuaJIT/src/lua51.dll. 
-#add_move_dll(${GHOST_TARGET} ${MEGA_LUA51}) 
+add_move_dll(${GHOST_TARGET} ${MEGA_OPENAL}))
+post_step_move_dll(${GHOST_TARGET} ${MEGA_LUAJIT_DLL})
 
 #list(APPEND GHOST_COMPILER_DEFINES
 #  WIN32 _WIN32 _WINDOWS             # Windows platform
