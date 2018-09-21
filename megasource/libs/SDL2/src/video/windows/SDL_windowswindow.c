@@ -305,6 +305,8 @@ __declspec(dllexport) void ghostWinSetMainWindow(HWND window) {
 	ghostWinMainWindow = window;
 }
 
+__declspec(dllexport) HWND ghostWinGetMainWindow() { return ghostWinMainWindow; }
+
 __declspec(dllexport) HWND ghostWinGetChildWindow() { return ghostWinChildWindow; }
 
 int

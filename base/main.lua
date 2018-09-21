@@ -121,6 +121,13 @@ function main.filedropped(file)
     end
 end
 
+function main.mousemoved(...)
+    love.thread.getChannel('FOCUS_ME'):push('PLEASE')
+    if home then
+        home:mousemoved(...)
+    end
+end
+
 for k in pairs({
     load = true,
     update = true,

@@ -13,6 +13,7 @@ extern "C" {
 }
 
 #include "modules/love/love.h"
+#include "modules/thread/Channel.h"
 
 static float childLeft = 0, childTop = 0, childWidth = 200, childHeight = 200;
 
@@ -77,6 +78,8 @@ void ghostClose() {
 extern "C" {
 void ghostStep();
 }
+
+RECT prevParentRect = {0, 0, 0, 0};
 
 static void bootLove(const char *uri) {
   // Create the virtual machine.
@@ -145,6 +148,10 @@ static void bootLove(const char *uri) {
     lua_pushstring(L, uri);
     lua_setglobal(L, "GHOST_ROOT_URI");
   }
+
+  // Reset the previous window dimensions
+  prevParentRect.right = 0;
+  prevParentRect.left = 0;
 }
 
 void closeLua() {
@@ -168,6 +175,7 @@ void stepLove() {
 }
 
 extern "C" {
+HWND ghostWinGetMainWindow();
 HWND ghostWinGetChildWindow();
 }
 
@@ -211,9 +219,36 @@ void ghostStep() {
   if (luaState) {
     stepLove();
 
-    HWND child = ghostWinGetChildWindow();
+    {
+      RECT currParentRect;
+      auto parent = ghostWinGetMainWindow();
+      if (parent) {
+        GetWindowRect(parent, &currParentRect);
+      }
+      if (prevParentRect.right != prevParentRect.left) {
+        auto dw = (currParentRect.right - currParentRect.left) -
+                  (prevParentRect.right - prevParentRect.left);
+        auto dy = (currParentRect.bottom - currParentRect.top) -
+                  (prevParentRect.bottom - prevParentRect.top);
+        childWidth += dw;
+        childHeight += dy;
+      }
+
+      prevParentRect = currParentRect;
+    }
+
+    auto child = ghostWinGetChildWindow();
     if (child) {
       SetWindowPos(child, NULL, childLeft, childTop, childWidth, childHeight, 0);
+    }
+
+    auto channel = love::thread::Channel::getChannel("FOCUS_ME");
+    if (channel->getCount() > 0) {
+      channel->clear();
+      auto parent = ghostWinGetMainWindow();
+      if (parent && GetForegroundWindow() == parent) {
+        SetFocus(child);
+      }
     }
   } else {
     // If not running Love, sleep for longer per loop
