@@ -80,23 +80,33 @@ export default class UIListMediaInPlaylist extends React.Component {
           <div className={STYLES_COLUMN}>Published</div>
         </div>
         {this.props.mediaItems.map((m, i) => {
+          const isSelected = this.props.media && this.props.media.mediaId === m.mediaId;
+
+          let username = null;
+          if (m.user) {
+            username = m.user.username;
+          }
+
+          if (m.extraData && m.extraData.itch && m.extraData.itch.itchUsername) {
+            username = m.extraData.itch.itchUsername;
+          }
+
+          // TODO(jim): Consolidate this when we properly have usernames
           return (
             <div
-              className={
-                this.props.media && this.props.media.mediaId === m.mediaId
-                  ? STYLES_ROW_SELECTED
-                  : STYLES_ROW
-              }
+              className={isSelected ? STYLES_ROW_SELECTED : STYLES_ROW}
               key={`playlist-list-item-${i}`}
               onClick={() => this.props.onMediaSelect(m)}>
               <div className={STYLES_COLUMN} style={{ fontWeight: 600 }}>
                 {m.name}
               </div>
-              {/* TODO(jim): Consolidate this when we properly have usernames */}
               <div
                 className={STYLES_COLUMN}
-                style={{ fontWeight: (m.user || m.extraData.itch.itchUsername) ? 600 : 400, color: (m.user || m.extraData.itch.itchUsername) ? null : '#666' }}>
-                {m.user ? m.user.username : (m.extraData.itch.itchUsername || '-')}
+                style={{
+                  fontWeight: username ? 600 : 400,
+                  color: username ? null : '#666',
+                }}>
+                {username ? username : '-'}
               </div>
               <div className={STYLES_COLUMN}>{Strings.toDate(m.extraData.itch.ld.published)}</div>
             </div>
