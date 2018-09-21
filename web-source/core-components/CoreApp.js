@@ -56,6 +56,23 @@ export default class CoreApp extends React.Component {
     super();
 
     this.state = props.state;
+
+    const data = props.storage.getItem('history');
+
+    // TODO(jim): Sync this with your profile if you're logged in.
+    if (!data) {
+      console.log('Setting up your local viewing history.');
+      props.storage.setItem('history', JSON.stringify({ history: [] }));
+    }
+
+    // TODO(jim): Move this somewhere else.
+    /*
+    const history = JSON.parse(data).history;
+    if (history) {
+      history.push('lol');
+      props.storage.setItem('history', JSON.stringify({ history }));
+    }
+    */
   }
 
   async componentDidMount() {
@@ -78,23 +95,17 @@ export default class CoreApp extends React.Component {
         onSuccess: json => {
           const channels = JSON.parse(json);
 
+          const logs = [];
           channels.PRINT.map(json => {
             const params = JSON.parse(json);
-            const logs = [...this.state.logs];
-
             logs.push({ type: 'print', text: `${params.join(' ')}` });
-
-            this.setState({ logs });
           });
 
           channels.ERROR.map(json => {
             const error = JSON.parse(json).error;
-            const logs = [...this.state.logs];
-
             logs.push({ type: 'error', text: `${error}` });
-
-            this.setState({ logs });
           });
+          this.setState({ logs });
 
           this._devTimeout = setTimeout(processChannels);
         },
@@ -390,7 +401,9 @@ export default class CoreApp extends React.Component {
   };
 
   render() {
+    const { storage } = this.props;
     const { state } = this;
+    console.log(storage);
 
     let maybeLeftSidebarNode;
     if (state.isOverlayActive && state.viewer) {
