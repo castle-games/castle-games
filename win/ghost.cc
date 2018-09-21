@@ -179,9 +179,17 @@ HWND ghostWinGetChildWindow();
 void ghostStep() {
   // Process messages
   {
-    std::lock_guard<std::mutex> guard(mutex);
-    while (messages.size() > 0) {
-      Message &msg = messages.front();
+    while (true) {
+      Message msg;
+      {
+        std::lock_guard<std::mutex> guard(mutex);
+        if (messages.size() > 0) {
+          msg = messages.front();
+          messages.pop();
+        } else {
+          break;
+        }
+      }
 
       switch (msg.type) {
       case OPEN_LOVE_URI: {
@@ -202,8 +210,6 @@ void ghostStep() {
         closeLua();
       } break;
       }
-
-      messages.pop();
     }
   }
 
