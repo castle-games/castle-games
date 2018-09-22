@@ -118,13 +118,15 @@ export default class CoreApp extends React.Component {
 
     const { history } = JSON.parse(data);
 
-    if (history && history.length > 10) {
-      history.pop();
+    if (!history) {
+      return;
     }
 
-    if (history) {
-      history.unshift(media);
-      this.props.storage.setItem('history', JSON.stringify({ history }));
+    history.unshift(media);
+    this.props.storage.setItem('history', JSON.stringify({ history }));
+
+    if (history.length > 10) {
+      history.pop();
     }
   };
 
@@ -540,7 +542,12 @@ export default class CoreApp extends React.Component {
 
     if (state.isOverlayActive && state.sidebarMode === 'dashboard') {
       maybeRightNode = (
-        <CoreRootDashboard storage={this.props.storage} onDismiss={this._handleDismissSidebar} />
+        <CoreRootDashboard
+          media={state.media}
+          onMediaSelect={this._handleMediaSelect}
+          storage={this.props.storage}
+          onDismiss={this._handleDismissSidebar}
+        />
       );
     }
 

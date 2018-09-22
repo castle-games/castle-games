@@ -3,6 +3,7 @@ import * as Constants from '~/common/constants';
 
 import { css } from 'react-emotion';
 
+import UIListMediaInPlaylist from '~/core-components/reusable/UIListMediaInPlaylist';
 import UIHeaderDismiss from '~/core-components/reusable/UIHeaderDismiss';
 import UIEmptyState from '~/core-components/reusable/UIEmptyState';
 import UILink from '~/core-components/reusable/UILink';
@@ -48,18 +49,30 @@ const STYLES_CONTAINER = css`
 
 export default class CoreRootDashboard extends React.Component {
   render() {
-    console.log(this.props.storage);
+    const data = this.props.storage.getItem('history');
+
+    if (!data) {
+      return (
+        <div className={STYLES_CONTAINER}>
+          <UIHeaderDismiss onDismiss={this.props.onDismiss} />
+          <UIEmptyState title="History">
+            As you play different Media using the ghost-player, the last 10 links you successfully
+            visited will appear here.
+          </UIEmptyState>
+        </div>
+      );
+    }
+
+    const { history } = JSON.parse(data);
+    console.log(history);
     return (
       <div className={STYLES_CONTAINER}>
         <UIHeaderDismiss onDismiss={this.props.onDismiss} />
-        <UIEmptyState title="History">
-          As you play different Media using the ghost-player, the last 10 links you successfully
-          visited will appear here.
-        </UIEmptyState>
-        <UIEmptyState title="Favorites">
-          Games you have favorited will appear here. You can favorite a game play clicking on the
-          icon in the bottom bar.
-        </UIEmptyState>
+        <UIListMediaInPlaylist
+          media={this.props.media}
+          onMediaSelect={this.props.onMediaSelect}
+          mediaItems={history}
+        />
       </div>
     );
   }
