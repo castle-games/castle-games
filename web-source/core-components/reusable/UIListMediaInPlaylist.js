@@ -83,12 +83,18 @@ export default class UIListMediaInPlaylist extends React.Component {
           const isSelected = this.props.media && this.props.media.mediaId === m.mediaId;
 
           let username = null;
+          let date = null;
           if (m.user) {
             username = m.user.username;
+            date = m.createdTime;
           }
 
           if (m.extraData && m.extraData.itch && m.extraData.itch.itchUsername) {
             username = m.extraData.itch.itchUsername;
+
+            if (m.extraData.itch.ld) {
+              date = m.extraData.itch.ld.published;
+            }
           }
 
           // TODO(jim): Consolidate this when we properly have usernames
@@ -108,7 +114,7 @@ export default class UIListMediaInPlaylist extends React.Component {
                 }}>
                 {username ? username : '-'}
               </div>
-              <div className={STYLES_COLUMN}>{Strings.toDate(m.extraData.itch.ld.published)}</div>
+              <div className={STYLES_COLUMN}>{date ? Strings.toDate(date) : 'Unknown'}</div>
             </div>
           );
         })}
