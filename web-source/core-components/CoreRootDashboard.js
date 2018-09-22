@@ -56,7 +56,7 @@ export default class CoreRootDashboard extends React.Component {
         <div className={STYLES_CONTAINER}>
           <UIHeaderDismiss onDismiss={this.props.onDismiss} />
           <UIEmptyState title="History">
-            As you play different Media using the ghost-player, the last 10 links you successfully
+            As you play different Media using Castle, the last 10 links you 
             visited will appear here.
           </UIEmptyState>
         </div>
