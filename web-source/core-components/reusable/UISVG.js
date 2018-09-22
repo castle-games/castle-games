@@ -1,5 +1,15 @@
 import * as React from 'react';
 
+export const History = props => (
+  <svg version="1.1" viewBox="0 0 24 24" {...props}>
+    <path d="M0,0h24v24h-24Z" fill="none" />
+    <path
+      fill="currentColor"
+      d="M13,3c-4.97,0 -9,4.03 -9,9h-3l3.89,3.89l0.07,0.14l4.04,-4.03h-3c0,-3.87 3.13,-7 7,-7c3.87,0 7,3.13 7,7c0,3.87 -3.13,7 -7,7c-1.93,0 -3.68,-0.79 -4.94,-2.06l-1.42,1.42c1.63,1.63 3.87,2.64 6.36,2.64c4.97,0 9,-4.03 9,-9c0,-4.97 -4.03,-9 -9,-9Zm-1,5v5l4.28,2.54l0.72,-1.21l-3.5,-2.08v-4.25h-1.5Z"
+    />
+  </svg>
+);
+
 export const Mail = props => (
   <svg
     {...props}

@@ -56,23 +56,6 @@ export default class CoreApp extends React.Component {
     super();
 
     this.state = props.state;
-
-    const data = props.storage.getItem('history');
-
-    // TODO(jim): Sync this with your profile if you're logged in.
-    if (!data) {
-      console.log('Setting up your local viewing history.');
-      props.storage.setItem('history', JSON.stringify({ history: [] }));
-    }
-
-    // TODO(jim): Move this somewhere else.
-    /*
-    const history = JSON.parse(data).history;
-    if (history) {
-      history.push('lol');
-      props.storage.setItem('history', JSON.stringify({ history }));
-    }
-    */
   }
 
   async componentDidMount() {
@@ -123,6 +106,27 @@ export default class CoreApp extends React.Component {
     window.removeEventListener('keydown', this._handleKeyDown);
     window.clearTimeout(this._devTimeout);
   }
+
+  _handleSetHistory = media => {
+    const data = props.storage.getItem('history');
+
+    // TODO(jim): Sync this with your profile if you're logged in.
+    if (!data) {
+      console.log('Setting up your local viewing history.');
+      props.storage.setItem('history', JSON.stringify({ history: [] }));
+    }
+
+    const { history } = JSON.parse(data);
+
+    if (history && history.length > 10) {
+      history.pop();
+    }
+
+    if (history) {
+      history.unshift(media);
+      props.storage.setItem('history', JSON.stringify({ history }));
+    }
+  };
 
   _handleSetGameWindowSize = () => {
     const element = this._layout.getMediaContainerRef();
@@ -175,6 +179,7 @@ export default class CoreApp extends React.Component {
       });
     }
 
+    this._handleSetHistory(media);
     this.setState({ media, mediaUrl: media.mediaUrl });
   };
 
@@ -194,6 +199,7 @@ export default class CoreApp extends React.Component {
       alert('`cefQuery`: ' + e.message);
     }
 
+    this._handleSetHistory({ mediaUrl });
     this.setState({ mediaUrl });
   };
 
