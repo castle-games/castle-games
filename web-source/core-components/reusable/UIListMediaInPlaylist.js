@@ -73,7 +73,7 @@ export default class UIListMediaInPlaylist extends React.Component {
     }
 
     return (
-      <div className={STYLES_CONTAINER}>
+      <div className={STYLES_CONTAINER} style={this.props.style}>
         <div className={STYLES_ROW_TITLE}>
           <div className={STYLES_COLUMN}>Name</div>
           <div className={STYLES_COLUMN}>Author</div>

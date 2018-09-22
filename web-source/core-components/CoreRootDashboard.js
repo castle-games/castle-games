@@ -68,9 +68,11 @@ export default class CoreRootDashboard extends React.Component {
     return (
       <div className={STYLES_CONTAINER}>
         <UIHeaderDismiss onDismiss={this.props.onDismiss} />
+        <UIEmptyState title="History">Here is a history of the media you have played.</UIEmptyState>
         <UIListMediaInPlaylist
           media={this.props.media}
           onMediaSelect={this.props.onMediaSelect}
+          style={{ borderTop: `1px solid ${Constants.colors.white10}` }}
           mediaItems={history}
         />
       </div>

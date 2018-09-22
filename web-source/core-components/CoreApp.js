@@ -116,11 +116,13 @@ export default class CoreApp extends React.Component {
       this.props.storage.setItem('history', JSON.stringify({ history: [] }));
     }
 
-    const { history } = JSON.parse(data);
+    let { history } = JSON.parse(data);
 
     if (!history) {
       return;
     }
+
+    history = history.filter(h => h.mediaUrl !== media.mediaUrl);
 
     history.unshift(media);
     this.props.storage.setItem('history', JSON.stringify({ history }));
