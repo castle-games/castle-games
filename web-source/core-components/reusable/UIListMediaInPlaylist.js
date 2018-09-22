@@ -50,6 +50,13 @@ const STYLES_ROW_SELECTED = css`
   }
 `;
 
+const STYLES_COLUMN_FULL = css`
+  flex-shrink: 0;
+  width: 100%;
+  padding: 12px 16px 12px 16px;
+  overflow-wrap: break-word;
+`;
+
 const STYLES_COLUMN = css`
   flex-shrink: 0;
   width: 33.33%;
@@ -75,12 +82,12 @@ export default class UIListMediaInPlaylist extends React.Component {
     return (
       <div className={STYLES_CONTAINER} style={this.props.style}>
         <div className={STYLES_ROW_TITLE}>
-          <div className={STYLES_COLUMN}>Name</div>
+          <div className={STYLES_COLUMN}>Name/URL</div>
           <div className={STYLES_COLUMN}>Author</div>
           <div className={STYLES_COLUMN}>Published</div>
         </div>
         {this.props.mediaItems.map((m, i) => {
-          const isSelected = this.props.media && this.props.media.mediaId === m.mediaId;
+          const isSelected = this.props.media && this.props.media.mediaUrl === m.mediaUrl;
 
           let username = null;
           let date = null;
@@ -95,6 +102,18 @@ export default class UIListMediaInPlaylist extends React.Component {
             if (m.extraData.itch.ld) {
               date = m.extraData.itch.ld.published;
             }
+          }
+
+          // Case if there is no username...
+          if (!m.mediaId) {
+            return (
+              <div
+                className={isSelected ? STYLES_ROW_SELECTED : STYLES_ROW}
+                key={`playlist-list-item-${i}`}
+                onClick={() => this.props.onMediaSelect(m)}>
+                <div className={STYLES_COLUMN_FULL}>{m.mediaUrl}</div>
+              </div>
+            );
           }
 
           // TODO(jim): Consolidate this when we properly have usernames

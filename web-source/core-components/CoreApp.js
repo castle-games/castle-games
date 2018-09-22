@@ -204,7 +204,7 @@ export default class CoreApp extends React.Component {
     }
 
     this._handleSetHistory({ mediaUrl });
-    this.setState({ mediaUrl });
+    this.setState({ media: { mediaUrl }, mediaUrl });
   };
 
   _handleNativeOpenUrl = e => {
