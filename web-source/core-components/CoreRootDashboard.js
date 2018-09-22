@@ -48,6 +48,7 @@ const STYLES_CONTAINER = css`
 
 export default class CoreRootDashboard extends React.Component {
   render() {
+    console.log(this.props.storage);
     return (
       <div className={STYLES_CONTAINER}>
         <UIHeaderDismiss onDismiss={this.props.onDismiss} />

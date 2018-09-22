@@ -131,6 +131,10 @@ export default class CoreRootURLInput extends React.Component {
             icon={<UISVG.CloseOverlay height="16px" />}
             onClick={this.props.onHideOverlay}
           />
+          <UIButtonDarkSmall
+            icon={<UISVG.History height="16px" />}
+            onClick={this.props.onToggleDashboard}
+          />
         </div>
       </div>
     );

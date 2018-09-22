@@ -108,12 +108,12 @@ export default class CoreApp extends React.Component {
   }
 
   _handleSetHistory = media => {
-    const data = props.storage.getItem('history');
+    const data = this.props.storage.getItem('history');
 
     // TODO(jim): Sync this with your profile if you're logged in.
     if (!data) {
       console.log('Setting up your local viewing history.');
-      props.storage.setItem('history', JSON.stringify({ history: [] }));
+      this.props.storage.setItem('history', JSON.stringify({ history: [] }));
     }
 
     const { history } = JSON.parse(data);
@@ -124,7 +124,7 @@ export default class CoreApp extends React.Component {
 
     if (history) {
       history.unshift(media);
-      props.storage.setItem('history', JSON.stringify({ history }));
+      this.props.storage.setItem('history', JSON.stringify({ history }));
     }
   };
 
@@ -407,9 +407,7 @@ export default class CoreApp extends React.Component {
   };
 
   render() {
-    const { storage } = this.props;
     const { state } = this;
-    console.log(storage);
 
     let maybeLeftSidebarNode;
     if (state.isOverlayActive && state.viewer) {
@@ -486,6 +484,7 @@ export default class CoreApp extends React.Component {
           onToggleMediaExpanded={this._handleToggleMediaExpanded}
           onHideOverlay={this._handleHideOverlay}
           onFavoriteMedia={this._handleFavoriteMedia}
+          onToggleDashboard={this._handleToggleDashboard}
         />
       );
     }
@@ -540,7 +539,9 @@ export default class CoreApp extends React.Component {
     }
 
     if (state.isOverlayActive && state.sidebarMode === 'dashboard') {
-      maybeRightNode = <CoreRootDashboard onDismiss={this._handleDismissSidebar} />;
+      maybeRightNode = (
+        <CoreRootDashboard storage={this.props.storage} onDismiss={this._handleDismissSidebar} />
+      );
     }
 
     if (state.isOverlayActive && state.sidebarMode === 'current-playlist') {
