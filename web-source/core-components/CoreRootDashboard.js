@@ -64,7 +64,7 @@ export default class CoreRootDashboard extends React.Component {
     }
 
     const { history } = JSON.parse(data);
-    console.log(history);
+
     return (
       <div className={STYLES_CONTAINER}>
         <UIHeaderDismiss onDismiss={this.props.onDismiss} />
