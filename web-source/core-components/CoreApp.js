@@ -49,6 +49,7 @@ const isOverlayHotkey = isKeyHotkey('mod+e');
 const isDevelopmentLogHotkey = isKeyHotkey('mod+j');
 
 let logId = 1;
+const POLL_DELAY = 300;
 
 export default class CoreApp extends React.Component {
   _layout;
@@ -93,16 +94,14 @@ export default class CoreApp extends React.Component {
             logId = logId + 1;
           });
 
-          console.log(logId);
-
           this.setState({ logs: [...this.state.logs, ...logs] });
 
-          this._devTimeout = setTimeout(processChannels, 100);
+          this._devTimeout = setTimeout(processChannels, POLL_DELAY);
         },
       });
     };
 
-    this._devTimeout = setTimeout(processChannels, 100);
+    this._devTimeout = setTimeout(processChannels, POLL_DELAY);
 
     const playlist = await API.callAsync('getCurrentJamPlaylist');
     this.setState({ playlist });

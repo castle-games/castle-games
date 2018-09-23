@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
+import * as Window from '~/common/window';
 
 import { css } from 'react-emotion';
 
@@ -17,7 +18,6 @@ const STYLES_CONTAINER = css`
   width: 100%;
   height: 100%;
   overflow-y: scroll;
-  padding-top: 48px;
   background ${Constants.colors.black};
   color: ${Constants.colors.white};
 
@@ -76,22 +76,34 @@ const STYLES_FIXED_HEADER = css`
   left: 0;
 `;
 
+const STYLES_SPACER = css`
+  height: 48px;
+`;
+
 export default class CoreDevelopmentLogs extends React.Component {
   _logs;
+  _container;
 
   componentWillReceiveProps(nextProps) {
-    // NOTE(jim): Only do this if you're at the bottom.
-    // Only do this if the length is different.
-    /*
-    if (this._logs.length) {
-      this._logs.scrollIntoView({});
+    const isBottom =
+      this._container.scrollHeight - this._container.scrollTop === this._container.clientHeight;
+    const newItems = nextProps.logs.length > this.props.logs.length;
+
+    // NOTE(jim): Only scroll if you're at the bottom with new items.
+    if (isBottom && newItems) {
+      this.scroll();
     }
-    */
   }
 
   componentDidMount() {
-    this._logs.scrollIntoView({});
+    this.scroll();
   }
+
+  scroll = () => {
+    window.setTimeout(() => {
+      this._logs.scrollIntoView(false);
+    });
+  };
 
   render() {
     return (
@@ -99,11 +111,19 @@ export default class CoreDevelopmentLogs extends React.Component {
         <div className={STYLES_FIXED_HEADER}>
           <UIHeaderDismiss onDismiss={this.props.onDismiss} />
         </div>
-        <div className={STYLES_CONTAINER}>
+        <div
+          className={STYLES_CONTAINER}
+          ref={c => {
+            this._container = c;
+          }}>
+          <div className={STYLES_SPACER} />
           <div className={STYLES_LOGS}>
             {this.props.logs.map((l, i) => {
               return (
-                <div className={STYLES_LOG} key={`development-log-${l.id}`}>
+                <div
+                  className={STYLES_LOG}
+                  style={{ color: l.type === 'error' ? Constants.colors.red : null }}
+                  key={`development-log-${l.id}`}>
                   <span className={STYLES_LOG_LEFT}>{l.type}</span>
                   <span className={STYLES_LOG_RIGHT}>{l.text}</span>
                 </div>
@@ -111,6 +131,7 @@ export default class CoreDevelopmentLogs extends React.Component {
             })}
           </div>
           <div
+            className={STYLES_SPACER}
             ref={c => {
               this._logs = c;
             }}
