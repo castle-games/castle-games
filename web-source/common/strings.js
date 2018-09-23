@@ -11,7 +11,6 @@ export const elide = (string, length = 140) => {
 };
 
 export const toDate = dateString => {
-  console.log(typeof dateString);
   let date = dateString;
   if (typeof dateString !== 'object') {
     date = new Date(dateString);

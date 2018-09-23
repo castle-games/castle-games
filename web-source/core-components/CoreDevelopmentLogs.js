@@ -80,9 +80,13 @@ export default class CoreDevelopmentLogs extends React.Component {
   _logs;
 
   componentWillReceiveProps(nextProps) {
-    if (this._logs) {
+    // NOTE(jim): Only do this if you're at the bottom.
+    // Only do this if the length is different.
+    /*
+    if (this._logs.length) {
       this._logs.scrollIntoView({});
     }
+    */
   }
 
   componentDidMount() {
@@ -99,7 +103,7 @@ export default class CoreDevelopmentLogs extends React.Component {
           <div className={STYLES_LOGS}>
             {this.props.logs.map((l, i) => {
               return (
-                <div className={STYLES_LOG} key={`development-log-${i}`}>
+                <div className={STYLES_LOG} key={`development-log-${l.id}`}>
                   <span className={STYLES_LOG_LEFT}>{l.type}</span>
                   <span className={STYLES_LOG_RIGHT}>{l.text}</span>
                 </div>

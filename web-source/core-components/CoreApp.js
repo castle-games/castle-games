@@ -48,6 +48,8 @@ import CoreWelcomeScreen from '~/core-components/CoreWelcomeScreen';
 const isOverlayHotkey = isKeyHotkey('mod+e');
 const isDevelopmentLogHotkey = isKeyHotkey('mod+j');
 
+let logId = 1;
+
 export default class CoreApp extends React.Component {
   _layout;
   _devTimeout;
@@ -81,13 +83,18 @@ export default class CoreApp extends React.Component {
           const logs = [];
           channels.PRINT.map(json => {
             const params = JSON.parse(json);
-            logs.push({ type: 'print', text: `${params.join(' ')}` });
+            logs.push({ id: logId, type: 'print', text: `${params.join(' ')}` });
+            logId = logId + 1;
           });
 
           channels.ERROR.map(json => {
             const error = JSON.parse(json).error;
-            logs.push({ type: 'error', text: `${error}` });
+            logs.push({ id: logId, type: 'error', text: `${error}` });
+            logId = logId + 1;
           });
+
+          console.log(logId);
+
           this.setState({ logs: [...this.state.logs, ...logs] });
 
           this._devTimeout = setTimeout(processChannels, 100);
