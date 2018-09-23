@@ -63,7 +63,7 @@ export default class UICardMedia extends React.Component {
     const name = this.props.media ? this.props.media.name : 'Untitled';
     const username =
       this.props.media && this.props.media.user ? this.props.media.user.username : 'Anonymous';
-    const createdTime = this.props.media ? this.props.media.createdTime : new Date();
+    const createdTime = this.props.media ? this.props.media.published : new Date();
 
     return (
       <div className={STYLES_CONTAINER}>
@@ -79,8 +79,8 @@ export default class UICardMedia extends React.Component {
           <div className={STYLES_SECTION_TITLE}>Is this your game?</div>
           <div className={STYLES_SECTION_PARAGRAPH}>
             Castle lists all the games from a game jam, so people can browse and play them all
-            easily. If you created this game and want to claim it, change the way it is
-            presented, or remove it, please contact the Castle team and let us know.
+            easily. If you created this game and want to claim it, change the way it is presented,
+            or remove it, please contact the Castle team and let us know.
           </div>
 
           <ControlFeedbackPopover onRegisterMedia={this.props.onRegisterMedia}>

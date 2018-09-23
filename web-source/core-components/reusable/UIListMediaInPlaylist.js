@@ -87,6 +87,7 @@ export default class UIListMediaInPlaylist extends React.Component {
           <div className={STYLES_COLUMN}>Published</div>
         </div>
         {this.props.mediaItems.map((m, i) => {
+          console.log(m);
           const isSelected = this.props.media && this.props.media.mediaUrl === m.mediaUrl;
 
           let username = null;
