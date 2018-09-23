@@ -87,9 +87,9 @@ export default class UIListMediaInPlaylist extends React.Component {
           <div className={STYLES_COLUMN}>Published</div>
         </div>
         {this.props.mediaItems.map((m, i) => {
-          console.log(m);
           const isSelected = this.props.media && this.props.media.mediaUrl === m.mediaUrl;
 
+          // NOTE(jim): God help me.
           let username = null;
           let date = null;
           if (m.user) {
@@ -99,10 +99,10 @@ export default class UIListMediaInPlaylist extends React.Component {
 
           if (m.extraData && m.extraData.itch && m.extraData.itch.itchUsername) {
             username = m.extraData.itch.itchUsername;
+          }
 
-            if (m.extraData.itch.ld) {
-              date = m.extraData.itch.ld.published;
-            }
+          if (m.published) {
+            date = m.published;
           }
 
           if (!username) {
