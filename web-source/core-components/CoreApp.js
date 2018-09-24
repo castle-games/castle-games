@@ -294,12 +294,11 @@ export default class CoreApp extends React.Component {
   _handleFavoriteMedia = () => window.alert('favorite');
 
   _handleMediaSelect = media => {
-    if (media.mediaUrl.endsWith('index.html')) {
+    if (media.mediaUrl.endsWith('.lua')) {
+      this._handleGoToUrl(media.mediaUrl);
+    } else {
       this._handleGoToMedia(media);
-      return;
     }
-
-    this._handleGoToUrl(media.mediaUrl);
   };
 
   _handleSelectRandom = () => {

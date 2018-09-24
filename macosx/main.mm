@@ -61,7 +61,7 @@ int main(int argc, char *argv[]) {
     // use embedded index.html if it exists.
     NSString *indexPath = [[NSBundle mainBundle] pathForResource:@"index" ofType:@"html"];
     std::string initialUrl = "http://localhost:3000";
-    if (indexPath && indexPath.length) {
+      if (indexPath && indexPath.length) {
       indexPath = [NSString stringWithFormat:@"file://%@", indexPath];
       initialUrl = std::string([indexPath UTF8String]);
     } else {
