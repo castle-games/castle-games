@@ -114,7 +114,12 @@ export default class CoreApp extends React.Component {
   }
 
   _handleSetHistory = media => {
-    const data = this.props.storage.getItem('history');
+    if (!this.props.storage) {
+      alert('History is not supported at the moment.');
+      return;
+    }
+
+    let data = this.props.storage.getItem('history');
 
     // TODO(jim): Sync this with your profile if you're logged in.
     if (!data) {
@@ -122,8 +127,13 @@ export default class CoreApp extends React.Component {
       this.props.storage.setItem('history', JSON.stringify({ history: [] }));
     }
 
-    let { history } = JSON.parse(data);
+    data = this.props.storage.getItem('history');
+    if (!data) {
+      alert('History is not supported at the moment.');
+      return;
+    }
 
+    let { history } = JSON.parse(data);
     if (!history) {
       return;
     }
@@ -167,7 +177,7 @@ export default class CoreApp extends React.Component {
   _handleURLChange = e => this.setState({ [e.target.name]: e.target.value });
 
   _handleURLSubmit = () => {
-    if (media.mediaUrl.endsWith('.lua')) {
+    if (this.state.mediaUrl.endsWith('.lua')) {
       this._handleGoToUrl(this.state.mediaUrl);
       return;
     }

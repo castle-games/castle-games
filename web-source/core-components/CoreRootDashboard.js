@@ -56,14 +56,22 @@ export default class CoreRootDashboard extends React.Component {
         <div className={STYLES_CONTAINER}>
           <UIHeaderDismiss onDismiss={this.props.onDismiss} />
           <UIEmptyState title="History">
-            As you play different Media using Castle, the last 10 links you 
-            visited will appear here.
+            As you play different Media using Castle, the last 10 links you visited will appear
+            here.
           </UIEmptyState>
         </div>
       );
     }
 
     const { history } = JSON.parse(data);
+    if (!history) {
+      return (
+        <div className={STYLES_CONTAINER}>
+          <UIHeaderDismiss onDismiss={this.props.onDismiss} />
+          <UIEmptyState title="History">We had an issue retrieving your history.</UIEmptyState>
+        </div>
+      );
+    }
 
     return (
       <div className={STYLES_CONTAINER}>
