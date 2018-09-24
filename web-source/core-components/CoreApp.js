@@ -105,6 +105,17 @@ export default class CoreApp extends React.Component {
 
     const playlist = await API.callAsync('getCurrentJamPlaylist');
     this.setState({ playlist });
+
+    try {
+      window.cefQuery({
+        request: JSON.stringify({
+          type: 'BROWSER_READY',
+          body: {},
+        }),
+      });
+    } catch (e) {
+      alert('`cefQuery`: ' + e.message);
+    }
   }
 
   componentWillUnmount() {

@@ -7,7 +7,7 @@
 
 static float childLeft = 0, childTop = 0, childWidth = 200, childHeight = 200;
 
-static BOOL readyToSendNativeEvents = NO;
+static BOOL browserReady = NO;
 static char *initialUri = NULL;
 
 static void ghostSendNativeOpenUrlEvent(const char *uri) {
@@ -25,14 +25,6 @@ void ghostSetChildWindowFrame(float left, float top, float width, float height) 
   childTop = top;
   childWidth = width;
   childHeight = height;
-
-  // We're now ready to send events -- send `initialUri` if set
-  readyToSendNativeEvents = YES;
-  if (initialUri) {
-    ghostSendNativeOpenUrlEvent(initialUri);
-    free(initialUri);
-    initialUri = NULL;
-  }
 
   NSWindow *window = [[NSApplication sharedApplication] mainWindow];
   if (window) {
@@ -57,7 +49,7 @@ void ghostUpdateChildWindowFrame() {
 }
 
 void ghostHandleOpenUri(const char *uri) {
-  if (readyToSendNativeEvents) {
+  if (browserReady) {
     ghostSendNativeOpenUrlEvent(uri);
   } else {
     initialUri = strdup(uri);
@@ -78,4 +70,13 @@ void ghostClose() {
     GhostAppDelegate *delegate = [NSApplication sharedApplication].delegate;
     [delegate closeLua];
   });
+}
+
+void ghostSetBrowserReady() {
+  browserReady = YES;
+  if (initialUri) {
+    ghostSendNativeOpenUrlEvent(initialUri);
+    free(initialUri);
+    initialUri = NULL;
+  }
 }

@@ -122,6 +122,10 @@ void SimpleHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
 
         callback->Success(response.dump());
         return true;
+      } else if (type == "BROWSER_READY") {
+        ghostSetBrowserReady();
+        callback->Success("success");
+        return true;
       }
 
       return false;

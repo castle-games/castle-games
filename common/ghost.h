@@ -15,6 +15,7 @@ void ghostClose();
 void ghostUpdateChildWindowFrame();
 void ghostResizeChildWindow(float dw, float dh);
 void ghostSetChildWindowFrame(float left, float top, float width, float height);
+void ghostSetBrowserReady();
 
 #ifdef __cplusplus
 }
