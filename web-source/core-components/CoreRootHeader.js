@@ -51,8 +51,13 @@ export default class CoreRootHeader extends React.Component {
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_CONTAINER_LEFT} />
         <div className={STYLES_CONTAINER_RIGHT}>
+          <UIControl style={{ marginLeft: 24 }} onClick={this.props.onToggleBrowse}>
+            Browse
+          </UIControl>
           {this.props.playlist ? (
-            <UIControl onClick={this.props.onSelectRandom}>Play random</UIControl>
+            <UIControl style={{ marginLeft: 24 }} onClick={this.props.onSelectRandom}>
+              Play random
+            </UIControl>
           ) : null}
           {this.props.media ? (
             <UIControl style={{ marginLeft: 24 }} onClick={this.props.onToggleMediaInfo}>

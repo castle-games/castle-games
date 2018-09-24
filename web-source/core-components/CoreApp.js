@@ -167,16 +167,12 @@ export default class CoreApp extends React.Component {
   _handleURLChange = e => this.setState({ [e.target.name]: e.target.value });
 
   _handleURLSubmit = () => {
-    if (this.state.mediaUrl.endsWith('index.html')) {
-      this._handleGoToMedia({ mediaUrl: this.state.mediaUrl });
+    if (media.mediaUrl.endsWith('.lua')) {
+      this._handleGoToUrl(this.state.mediaUrl);
       return;
     }
 
-    if (!window.cefQuery) {
-      return;
-    }
-
-    this._handleGoToUrl(this.state.mediaUrl);
+    this._handleGoToMedia({ mediaUrl: this.state.mediaUrl });
   };
 
   _handleGoToMedia = media => {
@@ -195,6 +191,10 @@ export default class CoreApp extends React.Component {
 
   _handleGoToUrl = mediaUrl => {
     this.setState({ media: null });
+
+    if (!window.cefQuery) {
+      return;
+    }
 
     try {
       window.cefQuery({
@@ -252,7 +252,7 @@ export default class CoreApp extends React.Component {
 
   _handleSearchSubmit = () => {
     this.setState({
-      searchResultsMedia: Fixtures.SearchResults,
+      searchResultsMedia: Fixtures.CurrentPlaylist.mediaItems,
     });
   };
 
@@ -296,9 +296,10 @@ export default class CoreApp extends React.Component {
   _handleMediaSelect = media => {
     if (media.mediaUrl.endsWith('.lua')) {
       this._handleGoToUrl(media.mediaUrl);
-    } else {
-      this._handleGoToMedia(media);
+      return;
     }
+
+    this._handleGoToMedia(media);
   };
 
   _handleSelectRandom = () => {
@@ -442,7 +443,7 @@ export default class CoreApp extends React.Component {
           }
           rightSidebarNode={<CoreBrowsePlaylistResults onDismiss={this._handleToggleBrowse} />}
           leftSidebarNode={maybeLeftSidebarNode}>
-          <CoreBrowseMediaResults media={state.searchResultsMedia} />
+          <CoreBrowseMediaResults mediaItems={state.searchResultsMedia} />
         </CoreLayout>
       );
     }
@@ -505,6 +506,7 @@ export default class CoreApp extends React.Component {
           viewer={state.viewer}
           media={state.media}
           playlist={state.playlist}
+          onToggleBrowse={this._handleToggleBrowse}
           onSelectRandom={this._handleSelectRandom}
           onToggleDashboard={this._handleToggleDashboard}
           onToggleAuthentication={this._handleToggleAuthentication}
