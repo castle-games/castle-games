@@ -5,6 +5,8 @@ import { css } from 'react-emotion';
 
 import UIControl from '~/core-components/reusable/UIControl';
 
+const IS_BROWSE_ENABLED = false;
+
 const STYLES_CONTAINER = css`
   @keyframes header-animation {
     from {
@@ -51,9 +53,11 @@ export default class CoreRootHeader extends React.Component {
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_CONTAINER_LEFT} />
         <div className={STYLES_CONTAINER_RIGHT}>
-          <UIControl style={{ marginLeft: 24 }} onClick={this.props.onToggleBrowse}>
-            Browse
-          </UIControl>
+          {IS_BROWSE_ENABLED ? (
+            <UIControl style={{ marginLeft: 24 }} onClick={this.props.onToggleBrowse}>
+              Browse
+            </UIControl>
+          ) : null}
           {this.props.playlist ? (
             <UIControl style={{ marginLeft: 24 }} onClick={this.props.onSelectRandom}>
               Play random
