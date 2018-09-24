@@ -7,11 +7,32 @@
 
 static float childLeft = 0, childTop = 0, childWidth = 200, childHeight = 200;
 
+static BOOL readyToSendNativeEvents = NO;
+static char *initialUri = NULL;
+
+static void ghostSendNativeOpenUrlEvent(const char *uri) {
+  CefRefPtr<CefBrowser> browser = SimpleHandler::GetInstance()->GetFirstBrowser();
+  CefRefPtr<CefFrame> frame = browser->GetMainFrame();
+  NSString *msg =
+      [NSString stringWithFormat:@"let event = new Event('nativeOpenUrl'); event.params = { url: "
+                                 @"'%s' }; window.dispatchEvent(event);",
+                                 uri];
+  frame->ExecuteJavaScript([msg UTF8String], frame -> GetURL(), 0);
+}
+
 void ghostSetChildWindowFrame(float left, float top, float width, float height) {
   childLeft = left;
   childTop = top;
   childWidth = width;
   childHeight = height;
+
+  // We're now ready to send events -- send `initialUri` if set
+  readyToSendNativeEvents = YES;
+  if (initialUri) {
+    ghostSendNativeOpenUrlEvent(initialUri);
+    free(initialUri);
+    initialUri = NULL;
+  }
 
   NSWindow *window = [[NSApplication sharedApplication] mainWindow];
   if (window) {
@@ -36,13 +57,11 @@ void ghostUpdateChildWindowFrame() {
 }
 
 void ghostHandleOpenUri(const char *uri) {
-  CefRefPtr<CefBrowser> browser = SimpleHandler::GetInstance()->GetFirstBrowser();
-  CefRefPtr<CefFrame> frame = browser->GetMainFrame();
-  NSString *msg =
-      [NSString stringWithFormat:@"let event = new Event('nativeOpenUrl'); event.params = { url: "
-                                 @"'%s' }; window.dispatchEvent(event);",
-                                 uri];
-  frame->ExecuteJavaScript([msg UTF8String], frame -> GetURL(), 0);
+  if (readyToSendNativeEvents) {
+    ghostSendNativeOpenUrlEvent(uri);
+  } else {
+    initialUri = strdup(uri);
+  }
 }
 
 void ghostOpenLoveUri(const char *uri) {

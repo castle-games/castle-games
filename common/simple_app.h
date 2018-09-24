@@ -19,7 +19,7 @@ public:
 
   // CefBrowserProcessHandler methods:
   virtual void OnContextInitialized() OVERRIDE;
-  
+
   void OnRegisterCustomSchemes(CefRawPtr<CefSchemeRegistrar> registrar) OVERRIDE;
 
 private:

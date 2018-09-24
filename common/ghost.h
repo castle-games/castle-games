@@ -7,7 +7,7 @@ extern "C" {
 
 // handler for when the user opened any ghost url from native code.
 void ghostHandleOpenUri(const char *uri);
-  
+
 // boot a love instance with the given initial uri.
 void ghostOpenLoveUri(const char *uri);
 
