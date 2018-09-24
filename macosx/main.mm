@@ -1,6 +1,7 @@
 #import <Cocoa/Cocoa.h>
 
 #import "GhostAppDelegate.h"
+#import "GhostFileSystem.h"
 
 #include "include/cef_application_mac.h"
 #include "include/wrapper/cef_helpers.h"
@@ -51,8 +52,12 @@ int main(int argc, char *argv[]) {
     // Initialize the SimpleApplication instance.
     [SimpleApplication sharedApplication];
 
-    // Specify CEF global settings here.
     CefSettings settings;
+    NSString *cachePath = [GhostFileSystem ghostCachesDirectory];
+    if (cachePath) {
+      // allows Local Storage to work
+      CefString(&settings.cache_path).FromASCII([cachePath UTF8String]);
+    }
 
     // SimpleApp implements application-level callbacks for the browser process.
     // It will create the first browser instance in OnContextInitialized() after
