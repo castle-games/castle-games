@@ -17,7 +17,6 @@
 		A1ED98E9211DFA0700CBC701 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A194C6C4211CD1D50093B328 /* SDL2.framework */; };
 		A1ED98EA211DFA0700CBC701 /* SDL2.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = A194C6C4211CD1D50093B328 /* SDL2.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B5256F43211A555500891B27 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA5D249A1A96CF4300C6FC8F /* Images.xcassets */; };
-		B5256F44211A555500891B27 /* license.txt in Resources */ = {isa = PBXBuildFile; fileRef = FAC1A448196F5DC600125284 /* license.txt */; };
 		B5256F62211A555500891B27 /* love.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = FA08F69116C765A200F007B5 /* love.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		B5256F64211A555500891B27 /* theora.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = FA27B3CA1B498696008A9DCE /* theora.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		B5256F65211A555500891B27 /* OpenAL-Soft.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = FAAFF04616CB120000CCDE45 /* OpenAL-Soft.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -54,7 +53,6 @@
 		B5BAE39A215ABA89001354F9 /* GhostMainMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = B5BAE38E215ABA89001354F9 /* GhostMainMenu.m */; };
 		B5BAE39D215ABA9A001354F9 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = B5BAE39C215ABA9A001354F9 /* main.mm */; };
 		B5BAE39E215ABAA2001354F9 /* process_helper_mac.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B5BAE388215ABA89001354F9 /* process_helper_mac.cpp */; };
-		B5BAE39F215ABAA5001354F9 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B5BAE387215ABA89001354F9 /* Info.plist */; };
 		B5E9FC48211B6C190068BEB9 /* ghost_extensions_macos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5E9FC43211B6BA00068BEB9 /* ghost_extensions_macos.framework */; };
 		B5E9FC4B211B6E610068BEB9 /* ghost_extensions_macos.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = B5E9FC43211B6BA00068BEB9 /* ghost_extensions_macos.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -215,7 +213,7 @@
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		38F81F9A214B4A8E00E6E242 /* main.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = main.js; sourceTree = "<group>"; };
 		38F81F9C214B4A9200E6E242 /* main.js.map */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = main.js.map; sourceTree = "<group>"; };
-		38F81F9F214B4B0F00E6E242 /* static */ = {isa = PBXFileReference; lastKnownFileType = folder; name = static; path = "../web-source/static"; sourceTree = "<group>"; };
+		38F81F9F214B4B0F00E6E242 /* static */ = {isa = PBXFileReference; lastKnownFileType = folder; name = static; path = "../web/static"; sourceTree = "<group>"; };
 		91C98F9D21432C39006E745C /* cef.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cef.xcodeproj; path = ../cef/cef.xcodeproj; sourceTree = "<group>"; };
 		91CF438321484742002024DA /* Castle Helper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Castle Helper.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		91CF43AE21484A26002024DA /* .localized */ = {isa = PBXFileReference; lastKnownFileType = text; path = .localized; sourceTree = "<group>"; };
@@ -265,7 +263,6 @@
 		FA5D249A1A96CF4300C6FC8F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		FA9B4A0916E1579F00074F42 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = /Library/Frameworks/SDL2.framework; sourceTree = "<absolute>"; };
 		FAAFF04616CB120000CCDE45 /* OpenAL-Soft.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "OpenAL-Soft.framework"; path = "/Library/Frameworks/OpenAL-Soft.framework"; sourceTree = "<absolute>"; };
-		FAC1A448196F5DC600125284 /* license.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = license.txt; path = ../love/license.txt; sourceTree = "<group>"; };
 		FAD43ECF1FF3133700831BB8 /* freetype.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = freetype.framework; path = /Library/Frameworks/freetype.framework; sourceTree = "<absolute>"; };
 		FAE64A9C2072738600BC7981 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.2.sdk/System/Library/Frameworks/Metal.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
@@ -330,7 +327,6 @@
 				FA5D249A1A96CF4300C6FC8F /* Images.xcassets */,
 				1058C7A0FEA54F0111CA2CBB /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
-				29B97317FDCFA39411CA2CEA /* Resources */,
 				91C98F9D21432C39006E745C /* cef.xcodeproj */,
 				A194C6BA211CD1D50093B328 /* SDL.xcodeproj */,
 				FA577A9316C7217800860150 /* liblove.xcodeproj */,
@@ -341,14 +337,6 @@
 			sourceTree = "<group>";
 			tabWidth = 2;
 			usesTabs = 0;
-		};
-		29B97317FDCFA39411CA2CEA /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				FAC1A448196F5DC600125284 /* license.txt */,
-			);
-			name = Resources;
-			sourceTree = "<group>";
 		};
 		91C98F9E21432C39006E745C /* Products */ = {
 			isa = PBXGroup;
@@ -701,7 +689,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B5BAE39F215ABAA5001354F9 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -714,7 +701,6 @@
 				38F81FA0214B4B0F00E6E242 /* static in Resources */,
 				B5256F43211A555500891B27 /* Images.xcassets in Resources */,
 				38F81F9B214B4A8E00E6E242 /* main.js in Resources */,
-				B5256F44211A555500891B27 /* license.txt in Resources */,
 				B55858F1215AB95400926105 /* ghost-macosx.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
