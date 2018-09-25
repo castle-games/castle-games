@@ -4,12 +4,11 @@ import * as Utilities from '~/common/utilities';
 import * as ReactDOM from 'react-dom';
 import * as Fixtures from '~/common/fixtures';
 import * as Slack from '~/common/slack';
+import * as Actions from '~/common/actions';
 
 import { css } from 'react-emotion';
 import { isKeyHotkey } from 'is-hotkey';
 
-import GhostApiClientConstructor from 'ghost-api-client';
-const API = new GhostApiClientConstructor();
 
 // NOTE(jim): Reusable layout component.
 import CoreLayout from '~/core-components/layouts/CoreLayout';
@@ -103,7 +102,7 @@ export default class CoreApp extends React.Component {
 
     this._devTimeout = setTimeout(processChannels, POLL_DELAY);
 
-    const playlist = await API.callAsync('getCurrentJamPlaylist');
+    const playlist = await Actions.getCurrentJamPlaylist();
     this.setState({ playlist });
 
     try {
