@@ -1,12 +1,11 @@
 #import "GhostEnv.h"
 
-NSString * const kCastleUseCustomWebUrlKey = @"CastleUseCustomWebUrl";
-NSString * const kCastleCustomWebUrlKey = @"CastleCustomWebUrl";
+NSString *const kCastleUseCustomWebUrlKey = @"CastleUseCustomWebUrl";
+NSString *const kCastleCustomWebUrlKey = @"CastleCustomWebUrl";
 
 @implementation GhostEnv
 
-+ (NSString *)initialCastleUrl
-{
++ (NSString *)initialCastleUrl {
   NSString *customIndexPath = [self _indexPathFromEnvPlist];
   if (customIndexPath) {
     return customIndexPath;
@@ -15,18 +14,18 @@ NSString * const kCastleCustomWebUrlKey = @"CastleCustomWebUrl";
   }
 }
 
-+ (NSString *)_indexPathFromBundle
-{
++ (NSString *)_indexPathFromBundle {
   NSString *indexPath = [[NSBundle mainBundle] pathForResource:@"index" ofType:@"html"];
-  NSAssert(indexPath && indexPath.length, @"The NSBundle must contain an embedded index.html to run Castle");
+  NSAssert(indexPath && indexPath.length,
+           @"The NSBundle must contain an embedded index.html to run Castle");
   indexPath = [NSString stringWithFormat:@"file://%@", indexPath];
   return indexPath;
 }
 
-+ (NSString *)_indexPathFromEnvPlist
-{
++ (NSString *)_indexPathFromEnvPlist {
   NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"ghost-env" ofType:@"plist"];
-  NSDictionary *config = (plistPath) ? [NSDictionary dictionaryWithContentsOfFile:plistPath] : [NSDictionary dictionary];
+  NSDictionary *config = (plistPath) ? [NSDictionary dictionaryWithContentsOfFile:plistPath]
+                                     : [NSDictionary dictionary];
   if (config[kCastleUseCustomWebUrlKey] != nil) {
     BOOL useCustomUrl = [config[kCastleUseCustomWebUrlKey] boolValue];
     if (useCustomUrl) {

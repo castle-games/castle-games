@@ -4,7 +4,8 @@
 
 /**
  *  The initial url to load for the castle web UI.
- *  Defaults to embedded `index.html`. Can be overridden by changing the contents of `ghost-env.plist`.
+ *  Defaults to embedded `index.html`. Can be overridden by changing the contents of
+ * `ghost-env.plist`.
  */
 + (NSString *)initialCastleUrl;
 

@@ -68,7 +68,8 @@ int main(int argc, char *argv[]) {
     NSSize screenSize = [NSScreen mainScreen].visibleFrame.size;
     screenSize.width = MIN(screenSize.width, 1440);
     screenSize.height = MIN(screenSize.height, 877);
-    CefRefPtr<SimpleApp> app(new SimpleApp(std::string([initialUrl UTF8String]), screenSize.width, screenSize.height));
+    CefRefPtr<SimpleApp> app(
+        new SimpleApp(std::string([initialUrl UTF8String]), screenSize.width, screenSize.height));
 
     // Initialize CEF for the browser process.
     CefInitialize(main_args, settings, app.get(), NULL);
