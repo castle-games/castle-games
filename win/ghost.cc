@@ -75,6 +75,10 @@ void ghostClose() {
   messages.push(msg);
 }
 
+void ghostSetBrowserReady() {
+
+}
+
 extern "C" {
 void ghostStep();
 }
