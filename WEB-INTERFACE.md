@@ -31,4 +31,6 @@ npm run build
 
 ### Jim how do I see it in ghost
 
-You need to go read README.md to learn how ghost works.
+`npm run build` will write the bundled files that Castle uses by default.
+
+If you want to point Castle at your local webserver without repeatedly building, on macOS you can edit `ghost-env.plist` to use `CastleUseCustomWebUrl`: `YES` and `CastleCustomWebUrl`: `http://localhost:3000`. Don't commit this change.

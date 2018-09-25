@@ -1,6 +1,7 @@
 #import <Cocoa/Cocoa.h>
 
 #import "GhostAppDelegate.h"
+#import "GhostEnv.h"
 #import "GhostFileSystem.h"
 
 #include "include/cef_application_mac.h"
@@ -63,19 +64,11 @@ int main(int argc, char *argv[]) {
     // It will create the first browser instance in OnContextInitialized() after
     // CEF has initialized.
 
-    // use embedded index.html if it exists.
-    NSString *indexPath = [[NSBundle mainBundle] pathForResource:@"index" ofType:@"html"];
-    std::string initialUrl = "http://localhost:3000";
-    if (indexPath && indexPath.length) {
-      indexPath = [NSString stringWithFormat:@"file://%@", indexPath];
-      initialUrl = std::string([indexPath UTF8String]);
-    } else {
-      initialUrl = "http://www.google.com";
-    }
+    NSString *initialUrl = [GhostEnv initialCastleUrl];
     NSSize screenSize = [NSScreen mainScreen].visibleFrame.size;
     screenSize.width = MIN(screenSize.width, 1440);
     screenSize.height = MIN(screenSize.height, 877);
-    CefRefPtr<SimpleApp> app(new SimpleApp(initialUrl, screenSize.width, screenSize.height));
+    CefRefPtr<SimpleApp> app(new SimpleApp(std::string([initialUrl UTF8String]), screenSize.width, screenSize.height));
 
     // Initialize CEF for the browser process.
     CefInitialize(main_args, settings, app.get(), NULL);
