@@ -1,0 +1,1352 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		38F81F9B214B4A8E00E6E242 /* main.js in Resources */ = {isa = PBXBuildFile; fileRef = 38F81F9A214B4A8E00E6E242 /* main.js */; };
+		38F81FA0214B4B0F00E6E242 /* static in Resources */ = {isa = PBXBuildFile; fileRef = 38F81F9F214B4B0F00E6E242 /* static */; };
+		91CF4339214841CC002024DA /* liblibcef_dll_wrapper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 91FDEBD521475159008FFB60 /* liblibcef_dll_wrapper.a */; };
+		91CF43A721484947002024DA /* liblibcef_dll_wrapper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 91FDEBD521475159008FFB60 /* liblibcef_dll_wrapper.a */; };
+		91CF43B721484A3A002024DA /* Chromium Embedded Framework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5A0404221483BA5007A6CC1 /* Chromium Embedded Framework.framework */; };
+		91CF43B921485687002024DA /* liblibcef_dll_wrapper.a in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 91FDEBD521475159008FFB60 /* liblibcef_dll_wrapper.a */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		91CF43BD21485694002024DA /* liblibcef_dll_wrapper.a in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 91FDEBD521475159008FFB60 /* liblibcef_dll_wrapper.a */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		A1ED98E9211DFA0700CBC701 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A194C6C4211CD1D50093B328 /* SDL2.framework */; };
+		A1ED98EA211DFA0700CBC701 /* SDL2.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = A194C6C4211CD1D50093B328 /* SDL2.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B5256F43211A555500891B27 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA5D249A1A96CF4300C6FC8F /* Images.xcassets */; };
+		B5256F44211A555500891B27 /* license.txt in Resources */ = {isa = PBXBuildFile; fileRef = FAC1A448196F5DC600125284 /* license.txt */; };
+		B5256F62211A555500891B27 /* love.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = FA08F69116C765A200F007B5 /* love.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		B5256F64211A555500891B27 /* theora.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = FA27B3CA1B498696008A9DCE /* theora.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		B5256F65211A555500891B27 /* OpenAL-Soft.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = FAAFF04616CB120000CCDE45 /* OpenAL-Soft.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		B5256F66211A555500891B27 /* freetype.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = FAD43ECF1FF3133700831BB8 /* freetype.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B5256F67211A555500891B27 /* mpg123.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = A9F169A6109E824900FC83D1 /* mpg123.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		B5256F68211A555500891B27 /* libmodplug.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = A9F16926109E7BAD00FC83D1 /* libmodplug.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		B5256F69211A555500891B27 /* ogg.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = A9255F51104324D700BA1496 /* ogg.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		B5256F6A211A555500891B27 /* vorbis.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = A9255E021043195A00BA1496 /* vorbis.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		B5256F6B211A555500891B27 /* Lua.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = A93E6E5310420B57007D418B /* Lua.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		B5256F6F211A555500891B27 /* love.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA08F69116C765A200F007B5 /* love.framework */; };
+		B5256F70211A555500891B27 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		B5256F71211A555500891B27 /* Lua.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A93E6E5310420B57007D418B /* Lua.framework */; };
+		B5256F72211A555500891B27 /* theora.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA27B3CA1B498696008A9DCE /* theora.framework */; };
+		B5256F7D211A56EE00891B27 /* package.love in Resources */ = {isa = PBXBuildFile; fileRef = A1E7953C20721BC800731DD3 /* package.love */; };
+		B53E72AC2152F8D2003C8616 /* ghost_constants.h in Headers */ = {isa = PBXBuildFile; fileRef = B53E72AA2152F8D2003C8616 /* ghost_constants.h */; };
+		B53E72AD2152F8D2003C8616 /* ghost_constants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B53E72AB2152F8D2003C8616 /* ghost_constants.cpp */; };
+		B55858F1215AB95400926105 /* ghost-macosx.plist in Resources */ = {isa = PBXBuildFile; fileRef = B55858EE215AB95300926105 /* ghost-macosx.plist */; };
+		B59617512149BF7100BE403F /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = B59617502149BF7100BE403F /* index.html */; };
+		B5A0404321483BA5007A6CC1 /* Chromium Embedded Framework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5A0404221483BA5007A6CC1 /* Chromium Embedded Framework.framework */; };
+		B5A0404621483D2C007A6CC1 /* Chromium Embedded Framework.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = B5A0404221483BA5007A6CC1 /* Chromium Embedded Framework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B5B06A452150751A001C4382 /* simple_app.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B5B06A412150751A001C4382 /* simple_app.cpp */; };
+		B5B06A462150751A001C4382 /* simple_handler.h in Headers */ = {isa = PBXBuildFile; fileRef = B5B06A422150751A001C4382 /* simple_handler.h */; };
+		B5B06A472150751A001C4382 /* simple_app.h in Headers */ = {isa = PBXBuildFile; fileRef = B5B06A432150751A001C4382 /* simple_app.h */; };
+		B5B06A482150751A001C4382 /* simple_handler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B5B06A442150751A001C4382 /* simple_handler.cpp */; };
+		B5B06A4A2151A8EB001C4382 /* ghost.h in Headers */ = {isa = PBXBuildFile; fileRef = B5B06A492151A8EB001C4382 /* ghost.h */; };
+		B5BAE390215ABA89001354F9 /* json.hpp in Headers */ = {isa = PBXBuildFile; fileRef = B5BAE383215ABA89001354F9 /* json.hpp */; };
+		B5BAE391215ABA89001354F9 /* GhostFileSystem.m in Sources */ = {isa = PBXBuildFile; fileRef = B5BAE384215ABA89001354F9 /* GhostFileSystem.m */; };
+		B5BAE392215ABA89001354F9 /* GhostMainMenu.h in Headers */ = {isa = PBXBuildFile; fileRef = B5BAE385215ABA89001354F9 /* GhostMainMenu.h */; };
+		B5BAE395215ABA89001354F9 /* ghost.mm in Sources */ = {isa = PBXBuildFile; fileRef = B5BAE389215ABA89001354F9 /* ghost.mm */; };
+		B5BAE396215ABA89001354F9 /* simple_handler_mac.mm in Sources */ = {isa = PBXBuildFile; fileRef = B5BAE38A215ABA89001354F9 /* simple_handler_mac.mm */; };
+		B5BAE397215ABA89001354F9 /* GhostFileSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = B5BAE38B215ABA89001354F9 /* GhostFileSystem.h */; };
+		B5BAE398215ABA89001354F9 /* GhostAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = B5BAE38C215ABA89001354F9 /* GhostAppDelegate.mm */; };
+		B5BAE399215ABA89001354F9 /* GhostAppDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = B5BAE38D215ABA89001354F9 /* GhostAppDelegate.h */; };
+		B5BAE39A215ABA89001354F9 /* GhostMainMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = B5BAE38E215ABA89001354F9 /* GhostMainMenu.m */; };
+		B5BAE39D215ABA9A001354F9 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = B5BAE39C215ABA9A001354F9 /* main.mm */; };
+		B5BAE39E215ABAA2001354F9 /* process_helper_mac.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B5BAE388215ABA89001354F9 /* process_helper_mac.cpp */; };
+		B5BAE39F215ABAA5001354F9 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B5BAE387215ABA89001354F9 /* Info.plist */; };
+		B5E9FC48211B6C190068BEB9 /* ghost_extensions_macos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5E9FC43211B6BA00068BEB9 /* ghost_extensions_macos.framework */; };
+		B5E9FC4B211B6E610068BEB9 /* ghost_extensions_macos.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = B5E9FC43211B6BA00068BEB9 /* ghost_extensions_macos.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		91CF439F214848EE002024DA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 91C98F9D21432C39006E745C /* cef.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 914F1D742149B33000C27A53;
+			remoteInfo = libcef_dll_wrapper;
+		};
+		91CF43A12148490E002024DA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 91CF438221484742002024DA;
+			remoteInfo = "ghost-macosx_Helper";
+		};
+		91CF43BA21485687002024DA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 91C98F9D21432C39006E745C /* cef.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 914F1D742149B33000C27A53;
+			remoteInfo = libcef_dll_wrapper;
+		};
+		91CF43BE21485694002024DA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 91C98F9D21432C39006E745C /* cef.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 914F1D742149B33000C27A53;
+			remoteInfo = libcef_dll_wrapper;
+		};
+		91FDEBD121475158008FFB60 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 91C98F9D21432C39006E745C /* cef.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 914F1D742149B33000C27A53;
+			remoteInfo = libcef_dll_wrapper;
+		};
+		91FDEBD421475159008FFB60 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 91C98F9D21432C39006E745C /* cef.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 91FDE94421475039008FFB60;
+			remoteInfo = libcef_dll_wrapper;
+		};
+		A194C6C3211CD1D50093B328 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A194C6BA211CD1D50093B328 /* SDL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BECDF66C0761BA81005FE872;
+			remoteInfo = Framework;
+		};
+		A194C6C5211CD1D50093B328 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A194C6BA211CD1D50093B328 /* SDL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BECDF6B30761BA81005FE872;
+			remoteInfo = "Static Library";
+		};
+		A194C6C7211CD1D50093B328 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A194C6BA211CD1D50093B328 /* SDL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DB31407717554B71006C0E22;
+			remoteInfo = "Shared Library";
+		};
+		A194C6C9211CD1D50093B328 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A194C6BA211CD1D50093B328 /* SDL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = BECDF6BE0761BA81005FE872;
+			remoteInfo = "Standard DMG";
+		};
+		A1ED98EB211DFA0700CBC701 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A194C6BA211CD1D50093B328 /* SDL.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = BECDF5FE0761BA81005FE872;
+			remoteInfo = Framework;
+		};
+		B5256F40211A555500891B27 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FA577A9316C7217800860150 /* liblove.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = FA577AAE16C7507900860150;
+			remoteInfo = "liblove-macosx";
+		};
+		B5E9FC40211B6BA00068BEB9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B5E9FC3B211B6B9F0068BEB9 /* ghost-extensions.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B5E9F89C211B669D0068BEB9;
+			remoteInfo = "ghost-extensions";
+		};
+		B5E9FC42211B6BA00068BEB9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B5E9FC3B211B6B9F0068BEB9 /* ghost-extensions.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B5E9FBFD211B69E00068BEB9;
+			remoteInfo = "ghost-extensions-macos";
+		};
+		FA0B78D71A958301000E1D17 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FA577A9316C7217800860150 /* liblove.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FA577AAF16C7507900860150;
+			remoteInfo = Framework;
+		};
+		FA0B7EEE1A95924A000E1D17 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FA577A9316C7217800860150 /* liblove.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FA0B78DD1A958B90000E1D17;
+			remoteInfo = "liblove-ios";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		91CF43BC21485688002024DA /* Embed Libraries */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				91CF43B921485687002024DA /* liblibcef_dll_wrapper.a in Embed Libraries */,
+			);
+			name = "Embed Libraries";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B5256F61211A555500891B27 /* Copy Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				B5256F62211A555500891B27 /* love.framework in Copy Frameworks */,
+				B5E9FC4B211B6E610068BEB9 /* ghost_extensions_macos.framework in Copy Frameworks */,
+				B5256F64211A555500891B27 /* theora.framework in Copy Frameworks */,
+				B5256F65211A555500891B27 /* OpenAL-Soft.framework in Copy Frameworks */,
+				A1ED98EA211DFA0700CBC701 /* SDL2.framework in Copy Frameworks */,
+				B5256F66211A555500891B27 /* freetype.framework in Copy Frameworks */,
+				91CF43BD21485694002024DA /* liblibcef_dll_wrapper.a in Copy Frameworks */,
+				B5256F67211A555500891B27 /* mpg123.framework in Copy Frameworks */,
+				B5256F68211A555500891B27 /* libmodplug.framework in Copy Frameworks */,
+				B5256F69211A555500891B27 /* ogg.framework in Copy Frameworks */,
+				B5A0404621483D2C007A6CC1 /* Chromium Embedded Framework.framework in Copy Frameworks */,
+				B5256F6A211A555500891B27 /* vorbis.framework in Copy Frameworks */,
+				B5256F6B211A555500891B27 /* Lua.framework in Copy Frameworks */,
+			);
+			name = "Copy Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		38F81F9A214B4A8E00E6E242 /* main.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = main.js; sourceTree = "<group>"; };
+		38F81F9C214B4A9200E6E242 /* main.js.map */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = main.js.map; sourceTree = "<group>"; };
+		38F81F9F214B4B0F00E6E242 /* static */ = {isa = PBXFileReference; lastKnownFileType = folder; name = static; path = "../web-source/static"; sourceTree = "<group>"; };
+		91C98F9D21432C39006E745C /* cef.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cef.xcodeproj; path = ../cef/cef.xcodeproj; sourceTree = "<group>"; };
+		91CF438321484742002024DA /* Castle Helper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Castle Helper.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		91CF43AE21484A26002024DA /* .localized */ = {isa = PBXFileReference; lastKnownFileType = text; path = .localized; sourceTree = "<group>"; };
+		91CF43AF21484A26002024DA /* flattenlist.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = flattenlist.html; sourceTree = "<group>"; };
+		91CF43B121484A26002024DA /* jesse-ruder-paystub-2018-08-31.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "jesse-ruder-paystub-2018-08-31.pdf"; sourceTree = "<group>"; };
+		91CF43B221484A26002024DA /* Dc07DoIwAADQ27CRlIEwMRSJQKQ1QNHgpvZjP1Cb1iCcXt8FHpU0H7IhQW0FUDltqIQAkyeAqh3HecVtPWJVX3EJ15A0FqOC2Mb1F3IDwiuY6tOheE_VV6dn5zoPI-pFzuHgFtsRuxcxP74-3ArTS5btQkT6Hz6kMXIRsQ_3wGa2BEljzbYf.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "Dc07DoIwAADQ27CRlIEwMRSJQKQ1QNHgpvZjP1Cb1iCcXt8FHpU0H7IhQW0FUDltqIQAkyeAqh3HecVtPWJVX3EJ15A0FqOC2Mb1F3IDwiuY6tOheE_VV6dn5zoPI-pFzuHgFtsRuxcxP74-3ArTS5btQkT6Hz6kMXIRsQ_3wGa2BEljzbYf.pdf"; sourceTree = "<group>"; };
+		91CF43B321484A26002024DA /* US_W-2_2017.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "US_W-2_2017.pdf"; sourceTree = "<group>"; };
+		91CF43B421484A26002024DA /* move in todos.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "move in todos.txt"; sourceTree = "<group>"; };
+		91CF43B621484A26002024DA /* full extreme tenor solo.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "full extreme tenor solo.m4a"; sourceTree = "<group>"; };
+		A194C6BA211CD1D50093B328 /* SDL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL.xcodeproj; path = "../ghost-extensions/SDL2-2.0.8/Xcode/SDL/SDL.xcodeproj"; sourceTree = "<group>"; };
+		A1E7953C20721BC800731DD3 /* package.love */ = {isa = PBXFileReference; lastKnownFileType = file; name = package.love; path = ../package.love; sourceTree = "<group>"; };
+		A9255E021043195A00BA1496 /* vorbis.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = vorbis.framework; path = /Library/Frameworks/vorbis.framework; sourceTree = "<absolute>"; };
+		A9255F51104324D700BA1496 /* ogg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ogg.framework; path = /Library/Frameworks/ogg.framework; sourceTree = "<absolute>"; };
+		A93E6E4710420B4A007D418B /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
+		A93E6E5310420B57007D418B /* Lua.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Lua.framework; path = /Library/Frameworks/Lua.framework; sourceTree = "<absolute>"; };
+		A9F16926109E7BAD00FC83D1 /* libmodplug.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libmodplug.framework; path = /Library/Frameworks/libmodplug.framework; sourceTree = "<absolute>"; };
+		A9F169A6109E824900FC83D1 /* mpg123.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = mpg123.framework; path = /Library/Frameworks/mpg123.framework; sourceTree = "<absolute>"; };
+		B5256F78211A555500891B27 /* Castle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Castle.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B53E72AA2152F8D2003C8616 /* ghost_constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ghost_constants.h; sourceTree = "<group>"; };
+		B53E72AB2152F8D2003C8616 /* ghost_constants.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ghost_constants.cpp; sourceTree = "<group>"; };
+		B55858EE215AB95300926105 /* ghost-macosx.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ghost-macosx.plist"; sourceTree = "<group>"; };
+		B59617502149BF7100BE403F /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
+		B5A0404221483BA5007A6CC1 /* Chromium Embedded Framework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "Chromium Embedded Framework.framework"; path = "/Library/Frameworks/Chromium Embedded Framework.framework"; sourceTree = "<group>"; };
+		B5B06A412150751A001C4382 /* simple_app.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = simple_app.cpp; sourceTree = "<group>"; };
+		B5B06A422150751A001C4382 /* simple_handler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = simple_handler.h; sourceTree = "<group>"; };
+		B5B06A432150751A001C4382 /* simple_app.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = simple_app.h; sourceTree = "<group>"; };
+		B5B06A442150751A001C4382 /* simple_handler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = simple_handler.cpp; sourceTree = "<group>"; };
+		B5B06A492151A8EB001C4382 /* ghost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ghost.h; sourceTree = "<group>"; };
+		B5BAE383215ABA89001354F9 /* json.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = json.hpp; sourceTree = "<group>"; };
+		B5BAE384215ABA89001354F9 /* GhostFileSystem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GhostFileSystem.m; sourceTree = "<group>"; };
+		B5BAE385215ABA89001354F9 /* GhostMainMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GhostMainMenu.h; sourceTree = "<group>"; };
+		B5BAE387215ABA89001354F9 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B5BAE388215ABA89001354F9 /* process_helper_mac.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = process_helper_mac.cpp; sourceTree = "<group>"; };
+		B5BAE389215ABA89001354F9 /* ghost.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ghost.mm; sourceTree = "<group>"; };
+		B5BAE38A215ABA89001354F9 /* simple_handler_mac.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = simple_handler_mac.mm; sourceTree = "<group>"; };
+		B5BAE38B215ABA89001354F9 /* GhostFileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GhostFileSystem.h; sourceTree = "<group>"; };
+		B5BAE38C215ABA89001354F9 /* GhostAppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GhostAppDelegate.mm; sourceTree = "<group>"; };
+		B5BAE38D215ABA89001354F9 /* GhostAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GhostAppDelegate.h; sourceTree = "<group>"; };
+		B5BAE38E215ABA89001354F9 /* GhostMainMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GhostMainMenu.m; sourceTree = "<group>"; };
+		B5BAE39C215ABA9A001354F9 /* main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
+		B5E9FC3B211B6B9F0068BEB9 /* ghost-extensions.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "ghost-extensions.xcodeproj"; path = "../ghost-extensions/ghost-extensions.xcodeproj"; sourceTree = "<group>"; };
+		CE73F7FF1EEB64150052DAB3 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
+		FA08F69116C765A200F007B5 /* love.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = love.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FA15DFB31F9B8D9E0042AB22 /* libbz2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.tbd; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.0.sdk/usr/lib/libbz2.tbd; sourceTree = DEVELOPER_DIR; };
+		FA27B3CA1B498696008A9DCE /* theora.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = theora.framework; path = /Library/Frameworks/theora.framework; sourceTree = "<absolute>"; };
+		FA577A9316C7217800860150 /* liblove.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = liblove.xcodeproj; path = ../love/platform/xcode/liblove.xcodeproj; sourceTree = "<group>"; };
+		FA5D249A1A96CF4300C6FC8F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		FA9B4A0916E1579F00074F42 /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = /Library/Frameworks/SDL2.framework; sourceTree = "<absolute>"; };
+		FAAFF04616CB120000CCDE45 /* OpenAL-Soft.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "OpenAL-Soft.framework"; path = "/Library/Frameworks/OpenAL-Soft.framework"; sourceTree = "<absolute>"; };
+		FAC1A448196F5DC600125284 /* license.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = license.txt; path = ../love/license.txt; sourceTree = "<group>"; };
+		FAD43ECF1FF3133700831BB8 /* freetype.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = freetype.framework; path = /Library/Frameworks/freetype.framework; sourceTree = "<absolute>"; };
+		FAE64A9C2072738600BC7981 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.2.sdk/System/Library/Frameworks/Metal.framework; sourceTree = DEVELOPER_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		91CF438021484742002024DA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				91CF43B721484A3A002024DA /* Chromium Embedded Framework.framework in Frameworks */,
+				91CF43A721484947002024DA /* liblibcef_dll_wrapper.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B5256F6C211A555500891B27 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				91CF4339214841CC002024DA /* liblibcef_dll_wrapper.a in Frameworks */,
+				B5A0404321483BA5007A6CC1 /* Chromium Embedded Framework.framework in Frameworks */,
+				B5E9FC48211B6C190068BEB9 /* ghost_extensions_macos.framework in Frameworks */,
+				B5256F6F211A555500891B27 /* love.framework in Frameworks */,
+				B5256F70211A555500891B27 /* Cocoa.framework in Frameworks */,
+				A1ED98E9211DFA0700CBC701 /* SDL2.framework in Frameworks */,
+				B5256F71211A555500891B27 /* Lua.framework in Frameworks */,
+				B5256F72211A555500891B27 /* theora.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1058C7A0FEA54F0111CA2CBB /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				91CF43AD21484A26002024DA /* Documents */,
+				FAE64A9C2072738600BC7981 /* Metal.framework */,
+				FA15DFB31F9B8D9E0042AB22 /* libbz2.tbd */,
+				CE73F7FF1EEB64150052DAB3 /* AVFoundation.framework */,
+				FA0B7EEC1A959249000E1D17 /* macosx */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B5256F78211A555500891B27 /* Castle.app */,
+				91CF438321484742002024DA /* Castle Helper.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* love */ = {
+			isa = PBXGroup;
+			children = (
+				B5BAE382215ABA89001354F9 /* src */,
+				B55858EB215AB95300926105 /* Supporting */,
+				B5B06A402150751A001C4382 /* common */,
+				B596174F2149BF7100BE403F /* web */,
+				A1E7953C20721BC800731DD3 /* package.love */,
+				FA5D249A1A96CF4300C6FC8F /* Images.xcassets */,
+				1058C7A0FEA54F0111CA2CBB /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+				29B97317FDCFA39411CA2CEA /* Resources */,
+				91C98F9D21432C39006E745C /* cef.xcodeproj */,
+				A194C6BA211CD1D50093B328 /* SDL.xcodeproj */,
+				FA577A9316C7217800860150 /* liblove.xcodeproj */,
+				B5E9FC3B211B6B9F0068BEB9 /* ghost-extensions.xcodeproj */,
+			);
+			indentWidth = 2;
+			name = love;
+			sourceTree = "<group>";
+			tabWidth = 2;
+			usesTabs = 0;
+		};
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				FAC1A448196F5DC600125284 /* license.txt */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		91C98F9E21432C39006E745C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				91FDEBD521475159008FFB60 /* liblibcef_dll_wrapper.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		91CF43AD21484A26002024DA /* Documents */ = {
+			isa = PBXGroup;
+			children = (
+				91CF43AE21484A26002024DA /* .localized */,
+				91CF43AF21484A26002024DA /* flattenlist.html */,
+				91CF43B021484A26002024DA /* proof of residency */,
+				91CF43B421484A26002024DA /* move in todos.txt */,
+				91CF43B521484A26002024DA /* Zoom */,
+				91CF43B621484A26002024DA /* full extreme tenor solo.m4a */,
+			);
+			name = Documents;
+			path = ../../../../../Documents;
+			sourceTree = "<group>";
+		};
+		91CF43B021484A26002024DA /* proof of residency */ = {
+			isa = PBXGroup;
+			children = (
+				91CF43B121484A26002024DA /* jesse-ruder-paystub-2018-08-31.pdf */,
+				91CF43B221484A26002024DA /* Dc07DoIwAADQ27CRlIEwMRSJQKQ1QNHgpvZjP1Cb1iCcXt8FHpU0H7IhQW0FUDltqIQAkyeAqh3HecVtPWJVX3EJ15A0FqOC2Mb1F3IDwiuY6tOheE_VV6dn5zoPI-pFzuHgFtsRuxcxP74-3ArTS5btQkT6Hz6kMXIRsQ_3wGa2BEljzbYf.pdf */,
+				91CF43B321484A26002024DA /* US_W-2_2017.pdf */,
+			);
+			path = "proof of residency";
+			sourceTree = "<group>";
+		};
+		91CF43B521484A26002024DA /* Zoom */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Zoom;
+			sourceTree = "<group>";
+		};
+		A194C6BB211CD1D50093B328 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A194C6C4211CD1D50093B328 /* SDL2.framework */,
+				A194C6C6211CD1D50093B328 /* libSDL2.a */,
+				A194C6C8211CD1D50093B328 /* libSDL2.dylib */,
+				A194C6CA211CD1D50093B328 /* Standard DMG */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B55858EB215AB95300926105 /* Supporting */ = {
+			isa = PBXGroup;
+			children = (
+				B55858EE215AB95300926105 /* ghost-macosx.plist */,
+			);
+			path = Supporting;
+			sourceTree = "<group>";
+		};
+		B596174F2149BF7100BE403F /* web */ = {
+			isa = PBXGroup;
+			children = (
+				38F81F9F214B4B0F00E6E242 /* static */,
+				38F81F9A214B4A8E00E6E242 /* main.js */,
+				38F81F9C214B4A9200E6E242 /* main.js.map */,
+				B59617502149BF7100BE403F /* index.html */,
+			);
+			name = web;
+			path = ../web;
+			sourceTree = "<group>";
+		};
+		B5B06A402150751A001C4382 /* common */ = {
+			isa = PBXGroup;
+			children = (
+				B5B06A492151A8EB001C4382 /* ghost.h */,
+				B53E72AA2152F8D2003C8616 /* ghost_constants.h */,
+				B53E72AB2152F8D2003C8616 /* ghost_constants.cpp */,
+				B5B06A432150751A001C4382 /* simple_app.h */,
+				B5B06A412150751A001C4382 /* simple_app.cpp */,
+				B5B06A422150751A001C4382 /* simple_handler.h */,
+				B5B06A442150751A001C4382 /* simple_handler.cpp */,
+			);
+			name = common;
+			path = ../common;
+			sourceTree = "<group>";
+		};
+		B5BAE382215ABA89001354F9 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				B5BAE386215ABA89001354F9 /* ghost-macosx_Helper */,
+				B5BAE39C215ABA9A001354F9 /* main.mm */,
+				B5BAE389215ABA89001354F9 /* ghost.mm */,
+				B5BAE383215ABA89001354F9 /* json.hpp */,
+				B5BAE38D215ABA89001354F9 /* GhostAppDelegate.h */,
+				B5BAE38C215ABA89001354F9 /* GhostAppDelegate.mm */,
+				B5BAE38B215ABA89001354F9 /* GhostFileSystem.h */,
+				B5BAE384215ABA89001354F9 /* GhostFileSystem.m */,
+				B5BAE385215ABA89001354F9 /* GhostMainMenu.h */,
+				B5BAE38E215ABA89001354F9 /* GhostMainMenu.m */,
+				B5BAE38A215ABA89001354F9 /* simple_handler_mac.mm */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		B5BAE386215ABA89001354F9 /* ghost-macosx_Helper */ = {
+			isa = PBXGroup;
+			children = (
+				B5BAE387215ABA89001354F9 /* Info.plist */,
+				B5BAE388215ABA89001354F9 /* process_helper_mac.cpp */,
+			);
+			path = "ghost-macosx_Helper";
+			sourceTree = "<group>";
+		};
+		B5E9FC3C211B6B9F0068BEB9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B5E9FC41211B6BA00068BEB9 /* ghost_extensions.framework */,
+				B5E9FC43211B6BA00068BEB9 /* ghost_extensions_macos.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		FA0B78D41A958301000E1D17 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FA0B78D81A958301000E1D17 /* love.framework */,
+				FA0B7EEF1A95924A000E1D17 /* liblove.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		FA0B7EEC1A959249000E1D17 /* macosx */ = {
+			isa = PBXGroup;
+			children = (
+				B5A0404221483BA5007A6CC1 /* Chromium Embedded Framework.framework */,
+				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
+				FAD43ECF1FF3133700831BB8 /* freetype.framework */,
+				A9F16926109E7BAD00FC83D1 /* libmodplug.framework */,
+				FA08F69116C765A200F007B5 /* love.framework */,
+				A93E6E5310420B57007D418B /* Lua.framework */,
+				A9F169A6109E824900FC83D1 /* mpg123.framework */,
+				A9255F51104324D700BA1496 /* ogg.framework */,
+				FAAFF04616CB120000CCDE45 /* OpenAL-Soft.framework */,
+				A93E6E4710420B4A007D418B /* OpenGL.framework */,
+				FA9B4A0916E1579F00074F42 /* SDL2.framework */,
+				FA27B3CA1B498696008A9DCE /* theora.framework */,
+				A9255E021043195A00BA1496 /* vorbis.framework */,
+			);
+			name = macosx;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		91CF43332148405B002024DA /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B5BAE392215ABA89001354F9 /* GhostMainMenu.h in Headers */,
+				B5BAE399215ABA89001354F9 /* GhostAppDelegate.h in Headers */,
+				B5B06A462150751A001C4382 /* simple_handler.h in Headers */,
+				B5B06A472150751A001C4382 /* simple_app.h in Headers */,
+				B53E72AC2152F8D2003C8616 /* ghost_constants.h in Headers */,
+				B5BAE390215ABA89001354F9 /* json.hpp in Headers */,
+				B5BAE397215ABA89001354F9 /* GhostFileSystem.h in Headers */,
+				B5B06A4A2151A8EB001C4382 /* ghost.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		91CF439C21484834002024DA /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		91CF438221484742002024DA /* ghost-macosx_Helper */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 91CF439921484743002024DA /* Build configuration list for PBXNativeTarget "ghost-macosx_Helper" */;
+			buildPhases = (
+				91CF437F21484742002024DA /* Sources */,
+				91CF438021484742002024DA /* Frameworks */,
+				91CF438121484742002024DA /* Resources */,
+				91CF439C21484834002024DA /* Headers */,
+				91CF43BC21485688002024DA /* Embed Libraries */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				91CF43A0214848EE002024DA /* PBXTargetDependency */,
+				91CF43BB21485687002024DA /* PBXTargetDependency */,
+			);
+			name = "ghost-macosx_Helper";
+			productName = "ghost-macosx_Helper";
+			productReference = 91CF438321484742002024DA /* Castle Helper.app */;
+			productType = "com.apple.product-type.application";
+		};
+		B5256F3E211A555500891B27 /* ghost-macosx */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B5256F74211A555500891B27 /* Build configuration list for PBXNativeTarget "ghost-macosx" */;
+			buildPhases = (
+				B5256F41211A555500891B27 /* Create Temporary '.love' Package */,
+				B5256F42211A555500891B27 /* Resources */,
+				B5256F45211A555500891B27 /* Delete Temporary '.love' Package */,
+				B5256F46211A555500891B27 /* Sources */,
+				B5256F61211A555500891B27 /* Copy Frameworks */,
+				B5256F6C211A555500891B27 /* Frameworks */,
+				91CF43332148405B002024DA /* Headers */,
+				91CF43B821484E33002024DA /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				91CF43A22148490E002024DA /* PBXTargetDependency */,
+				91FDEBD221475158008FFB60 /* PBXTargetDependency */,
+				B5256F3F211A555500891B27 /* PBXTargetDependency */,
+				A1ED98EC211DFA0700CBC701 /* PBXTargetDependency */,
+				91CF43BF21485694002024DA /* PBXTargetDependency */,
+			);
+			name = "ghost-macosx";
+			productInstallPath = "$(HOME)/Applications";
+			productName = love;
+			productReference = B5256F78211A555500891B27 /* Castle.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0940;
+				TargetAttributes = {
+					91CF438221484742002024DA = {
+						CreatedOnToolsVersion = 9.4.1;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "love" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+				Base,
+			);
+			mainGroup = 29B97314FDCFA39411CA2CEA /* love */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 91C98F9E21432C39006E745C /* Products */;
+					ProjectRef = 91C98F9D21432C39006E745C /* cef.xcodeproj */;
+				},
+				{
+					ProductGroup = B5E9FC3C211B6B9F0068BEB9 /* Products */;
+					ProjectRef = B5E9FC3B211B6B9F0068BEB9 /* ghost-extensions.xcodeproj */;
+				},
+				{
+					ProductGroup = FA0B78D41A958301000E1D17 /* Products */;
+					ProjectRef = FA577A9316C7217800860150 /* liblove.xcodeproj */;
+				},
+				{
+					ProductGroup = A194C6BB211CD1D50093B328 /* Products */;
+					ProjectRef = A194C6BA211CD1D50093B328 /* SDL.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				B5256F3E211A555500891B27 /* ghost-macosx */,
+				91CF438221484742002024DA /* ghost-macosx_Helper */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		91FDEBD521475159008FFB60 /* liblibcef_dll_wrapper.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = liblibcef_dll_wrapper.a;
+			remoteRef = 91FDEBD421475159008FFB60 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A194C6C4211CD1D50093B328 /* SDL2.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = SDL2.framework;
+			remoteRef = A194C6C3211CD1D50093B328 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A194C6C6211CD1D50093B328 /* libSDL2.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libSDL2.a;
+			remoteRef = A194C6C5211CD1D50093B328 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A194C6C8211CD1D50093B328 /* libSDL2.dylib */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.dylib";
+			path = libSDL2.dylib;
+			remoteRef = A194C6C7211CD1D50093B328 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A194C6CA211CD1D50093B328 /* Standard DMG */ = {
+			isa = PBXReferenceProxy;
+			fileType = "compiled.mach-o.executable";
+			path = "Standard DMG";
+			remoteRef = A194C6C9211CD1D50093B328 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		B5E9FC41211B6BA00068BEB9 /* ghost_extensions.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = ghost_extensions.framework;
+			remoteRef = B5E9FC40211B6BA00068BEB9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		B5E9FC43211B6BA00068BEB9 /* ghost_extensions_macos.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = ghost_extensions_macos.framework;
+			remoteRef = B5E9FC42211B6BA00068BEB9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		FA0B78D81A958301000E1D17 /* love.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = love.framework;
+			remoteRef = FA0B78D71A958301000E1D17 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		FA0B7EEF1A95924A000E1D17 /* liblove.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = liblove.a;
+			remoteRef = FA0B7EEE1A95924A000E1D17 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		91CF438121484742002024DA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B5BAE39F215ABAA5001354F9 /* Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B5256F42211A555500891B27 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B5256F7D211A56EE00891B27 /* package.love in Resources */,
+				B59617512149BF7100BE403F /* index.html in Resources */,
+				38F81FA0214B4B0F00E6E242 /* static in Resources */,
+				B5256F43211A555500891B27 /* Images.xcassets in Resources */,
+				38F81F9B214B4A8E00E6E242 /* main.js in Resources */,
+				B5256F44211A555500891B27 /* license.txt in Resources */,
+				B55858F1215AB95400926105 /* ghost-macosx.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		91CF43B821484E33002024DA /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "echo $BUILT_PRODUCTS_DIR\nrm -rf $BUILT_PRODUCTS_DIR/$PRODUCT_NAME.app/Contents/Frameworks/$PRODUCT_NAME\\ Helper.app\ncp -r $BUILT_PRODUCTS_DIR/$PRODUCT_NAME\\ Helper.app $BUILT_PRODUCTS_DIR/$PRODUCT_NAME.app/Contents/Frameworks/$PRODUCT_NAME\\ Helper.app\ninstall_name_tool -change \"@rpath/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework\" \"@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework\" $BUILT_PRODUCTS_DIR/$PRODUCT_NAME.app/Contents/MacOS/$PRODUCT_NAME\ninstall_name_tool -change \"@rpath/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework\" \"@executable_path/../../../Chromium Embedded Framework.framework/Chromium Embedded Framework\" $BUILT_PRODUCTS_DIR/$PRODUCT_NAME.app/Contents/Frameworks/$PRODUCT_NAME\\ Helper.app/Contents/MacOS/$PRODUCT_NAME\\ Helper";
+		};
+		B5256F41211A555500891B27 /* Create Temporary '.love' Package */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Create Temporary '.love' Package";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd \"${SRCROOT}\"/../base\nzip -r package.love .\nmv package.love ..";
+		};
+		B5256F45211A555500891B27 /* Delete Temporary '.love' Package */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Delete Temporary '.love' Package";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "rm \"${SRCROOT}\"/../package.love";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		91CF437F21484742002024DA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B5BAE39E215ABAA2001354F9 /* process_helper_mac.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B5256F46211A555500891B27 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B5B06A452150751A001C4382 /* simple_app.cpp in Sources */,
+				B5BAE391215ABA89001354F9 /* GhostFileSystem.m in Sources */,
+				B5BAE398215ABA89001354F9 /* GhostAppDelegate.mm in Sources */,
+				B5BAE396215ABA89001354F9 /* simple_handler_mac.mm in Sources */,
+				B5BAE39D215ABA9A001354F9 /* main.mm in Sources */,
+				B53E72AD2152F8D2003C8616 /* ghost_constants.cpp in Sources */,
+				B5BAE395215ABA89001354F9 /* ghost.mm in Sources */,
+				B5B06A482150751A001C4382 /* simple_handler.cpp in Sources */,
+				B5BAE39A215ABA89001354F9 /* GhostMainMenu.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		91CF43A0214848EE002024DA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = libcef_dll_wrapper;
+			targetProxy = 91CF439F214848EE002024DA /* PBXContainerItemProxy */;
+		};
+		91CF43A22148490E002024DA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 91CF438221484742002024DA /* ghost-macosx_Helper */;
+			targetProxy = 91CF43A12148490E002024DA /* PBXContainerItemProxy */;
+		};
+		91CF43BB21485687002024DA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = libcef_dll_wrapper;
+			targetProxy = 91CF43BA21485687002024DA /* PBXContainerItemProxy */;
+		};
+		91CF43BF21485694002024DA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = libcef_dll_wrapper;
+			targetProxy = 91CF43BE21485694002024DA /* PBXContainerItemProxy */;
+		};
+		91FDEBD221475158008FFB60 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = libcef_dll_wrapper;
+			targetProxy = 91FDEBD121475158008FFB60 /* PBXContainerItemProxy */;
+		};
+		A1ED98EC211DFA0700CBC701 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Framework;
+			targetProxy = A1ED98EB211DFA0700CBC701 /* PBXContainerItemProxy */;
+		};
+		B5256F3F211A555500891B27 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "liblove-macosx";
+			targetProxy = B5256F40211A555500891B27 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		91CF439121484743002024DA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../love/src\"",
+					"\"$(SRCROOT)/../love/src/libraries\"",
+					"\"$(SRCROOT)/../love/src/modules\"",
+					"\"$(SRCROOT)/../redis/deps/hiredis\"",
+					"$(PROJECT_DIR)/../cef",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/src/ghost-macosx_Helper/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = builders.game.ghost.helper;
+				PRODUCT_NAME = "Castle Helper";
+			};
+			name = Debug;
+		};
+		91CF439221484743002024DA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../love/src\"",
+					"\"$(SRCROOT)/../love/src/libraries\"",
+					"\"$(SRCROOT)/../love/src/modules\"",
+					"\"$(SRCROOT)/../redis/deps/hiredis\"",
+					"$(PROJECT_DIR)/../cef",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/src/ghost-macosx_Helper/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = builders.game.ghost.helper;
+				PRODUCT_NAME = "Castle Helper";
+			};
+			name = Release;
+		};
+		91CF439321484743002024DA /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../love/src\"",
+					"\"$(SRCROOT)/../love/src/libraries\"",
+					"\"$(SRCROOT)/../love/src/modules\"",
+					"\"$(SRCROOT)/../redis/deps/hiredis\"",
+					"$(PROJECT_DIR)/../cef",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/src/ghost-macosx_Helper/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = builders.game.ghost.helper;
+				PRODUCT_NAME = "Castle Helper";
+			};
+			name = Distribution;
+		};
+		B5256F75211A555500891B27 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "Ghost-OSX-AppIcon";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Library/Frameworks,
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+					"\"$(PROJECT_DIR)/../cef\"",
+				);
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Library/Frameworks/Lua.framework/Headers,
+					/Library/Frameworks/SDL2.framework/Headers,
+					"$(PROJECT_DIR)/../cef",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/Supporting/ghost-macosx.plist";
+				INSTALL_PATH = /Applications;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = "";
+				LLVM_LTO = NO;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = builders.game.ghost;
+				PRODUCT_NAME = Castle;
+			};
+			name = Debug;
+		};
+		B5256F76211A555500891B27 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "Ghost-OSX-AppIcon";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Library/Frameworks,
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+					"\"$(PROJECT_DIR)/../cef\"",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Library/Frameworks/Lua.framework/Headers,
+					/Library/Frameworks/SDL2.framework/Headers,
+					"$(PROJECT_DIR)/../cef",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/Supporting/ghost-macosx.plist";
+				INSTALL_PATH = /Applications;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = "";
+				LLVM_LTO = NO;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = builders.game.ghost;
+				PRODUCT_NAME = Castle;
+			};
+			name = Release;
+		};
+		B5256F77211A555500891B27 /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "Ghost-OSX-AppIcon";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Library/Frameworks,
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+					"\"$(PROJECT_DIR)/../cef\"",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Library/Frameworks/Lua.framework/Headers,
+					/Library/Frameworks/SDL2.framework/Headers,
+					"$(PROJECT_DIR)/../cef",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/Supporting/ghost-macosx.plist";
+				INSTALL_PATH = /Applications;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = "";
+				LLVM_LTO = NO;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				PRODUCT_BUNDLE_IDENTIFIER = builders.game.ghost;
+				PRODUCT_NAME = Castle;
+			};
+			name = Distribution;
+		};
+		C01FCF4F08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = LOVE_APPLE_USE_FRAMEWORKS;
+				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = NO;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = NO;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = NO;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = NO;
+				GCC_WARN_MISSING_PARENTHESES = NO;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = NO;
+				GCC_WARN_PEDANTIC = NO;
+				GCC_WARN_SHADOW = NO;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = NO;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../love/src\"",
+					"\"$(SRCROOT)/../love/src/libraries\"",
+					"\"$(SRCROOT)/../love/src/modules\"",
+					"\"$(SRCROOT)/../redis/deps/hiredis\"",
+				);
+				INFOPLIST_FILE = "love-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = "";
+				LLVM_LTO = "";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "";
+				"OTHER_LDFLAGS[arch=x86_64]" = (
+					"-pagezero_size",
+					10000,
+					"-image_base",
+					100000000,
+				);
+				PRODUCT_NAME = love;
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wall",
+					"-W",
+				);
+			};
+			name = Debug;
+		};
+		C01FCF5008A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_INPUT_FILETYPE = automatic;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = LOVE_APPLE_USE_FRAMEWORKS;
+				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = NO;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = NO;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = NO;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = NO;
+				GCC_WARN_MISSING_PARENTHESES = NO;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = NO;
+				GCC_WARN_PEDANTIC = NO;
+				GCC_WARN_SHADOW = NO;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = NO;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_PARAMETER = NO;
+				GCC_WARN_UNUSED_VALUE = NO;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../love/src\"",
+					"\"$(SRCROOT)/../love/src/libraries\"",
+					"\"$(SRCROOT)/../love/src/modules\"",
+					"\"$(SRCROOT)/../redis/deps/hiredis\"",
+				);
+				INFOPLIST_FILE = "love-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = "";
+				LLVM_LTO = NO;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "";
+				"OTHER_LDFLAGS[arch=x86_64]" = (
+					"-pagezero_size",
+					10000,
+					"-image_base",
+					100000000,
+				);
+				PRODUCT_NAME = love;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wall",
+					"-W",
+				);
+			};
+			name = Release;
+		};
+		FA5326C618971A0900F7BBF4 /* Distribution */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_INPUT_FILETYPE = automatic;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = LOVE_APPLE_USE_FRAMEWORKS;
+				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = NO;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_ABOUT_POINTER_SIGNEDNESS = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = NO;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = NO;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = NO;
+				GCC_WARN_MISSING_PARENTHESES = NO;
+				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = NO;
+				GCC_WARN_PEDANTIC = NO;
+				GCC_WARN_SHADOW = NO;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = NO;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_PARAMETER = NO;
+				GCC_WARN_UNUSED_VALUE = NO;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../love/src\"",
+					"\"$(SRCROOT)/../love/src/libraries\"",
+					"\"$(SRCROOT)/../love/src/modules\"",
+					"\"$(SRCROOT)/../redis/deps/hiredis\"",
+				);
+				INFOPLIST_FILE = "love-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
+				LIBRARY_SEARCH_PATHS = "";
+				LLVM_LTO = NO;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "";
+				"OTHER_LDFLAGS[arch=x86_64]" = (
+					"-pagezero_size",
+					10000,
+					"-image_base",
+					100000000,
+				);
+				PRODUCT_NAME = love;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
+				SDKROOT = macosx;
+				WARNING_CFLAGS = (
+					"-Wall",
+					"-W",
+				);
+			};
+			name = Distribution;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		91CF439921484743002024DA /* Build configuration list for PBXNativeTarget "ghost-macosx_Helper" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				91CF439121484743002024DA /* Debug */,
+				91CF439221484743002024DA /* Release */,
+				91CF439321484743002024DA /* Distribution */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B5256F74211A555500891B27 /* Build configuration list for PBXNativeTarget "ghost-macosx" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B5256F75211A555500891B27 /* Debug */,
+				B5256F76211A555500891B27 /* Release */,
+				B5256F77211A555500891B27 /* Distribution */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "love" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4F08A954540054247B /* Debug */,
+				C01FCF5008A954540054247B /* Release */,
+				FA5326C618971A0900F7BBF4 /* Distribution */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}
