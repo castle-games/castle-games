@@ -319,7 +319,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		29B97314FDCFA39411CA2CEA /* love */ = {
+		29B97314FDCFA39411CA2CEA /* ghost */ = {
 			isa = PBXGroup;
 			children = (
 				B5BAE382215ABA89001354F9 /* src */,
@@ -337,7 +337,7 @@
 				B5E9FC3B211B6B9F0068BEB9 /* ghost-extensions.xcodeproj */,
 			);
 			indentWidth = 2;
-			name = love;
+			name = ghost;
 			sourceTree = "<group>";
 			tabWidth = 2;
 			usesTabs = 0;
@@ -573,7 +573,7 @@
 			);
 			name = "ghost-macosx";
 			productInstallPath = "$(HOME)/Applications";
-			productName = love;
+			productName = ghost;
 			productReference = B5256F78211A555500891B27 /* Castle.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -591,7 +591,7 @@
 					};
 				};
 			};
-			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "love" */;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "ghost" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
@@ -602,7 +602,7 @@
 				German,
 				Base,
 			);
-			mainGroup = 29B97314FDCFA39411CA2CEA /* love */;
+			mainGroup = 29B97314FDCFA39411CA2CEA /* ghost */;
 			projectDirPath = "";
 			projectReferences = (
 				{
@@ -1132,7 +1132,7 @@
 					"-image_base",
 					100000000,
 				);
-				PRODUCT_NAME = love;
+				PRODUCT_NAME = ghost;
 				SDKROOT = macosx;
 				WARNING_CFLAGS = (
 					"-Wall",
@@ -1217,7 +1217,7 @@
 					"-image_base",
 					100000000,
 				);
-				PRODUCT_NAME = love;
+				PRODUCT_NAME = ghost;
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
 				SDKROOT = macosx;
 				WARNING_CFLAGS = (
@@ -1303,7 +1303,7 @@
 					"-image_base",
 					100000000,
 				);
-				PRODUCT_NAME = love;
+				PRODUCT_NAME = ghost;
 				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
 				SDKROOT = macosx;
 				WARNING_CFLAGS = (
@@ -1336,7 +1336,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "love" */ = {
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "ghost" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,

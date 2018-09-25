@@ -17,7 +17,7 @@
                BlueprintIdentifier = "B5256F3E211A555500891B27"
                BuildableName = "Castle.app"
                BlueprintName = "ghost-macosx"
-               ReferencedContainer = "container:love.xcodeproj">
+               ReferencedContainer = "container:ghost.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -35,7 +35,7 @@
             BlueprintIdentifier = "B5256F3E211A555500891B27"
             BuildableName = "Castle.app"
             BlueprintName = "ghost-macosx"
-            ReferencedContainer = "container:love.xcodeproj">
+            ReferencedContainer = "container:ghost.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -58,7 +58,7 @@
             BlueprintIdentifier = "B5256F3E211A555500891B27"
             BuildableName = "Castle.app"
             BlueprintName = "ghost-macosx"
-            ReferencedContainer = "container:love.xcodeproj">
+            ReferencedContainer = "container:ghost.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <CommandLineArguments>
@@ -83,7 +83,7 @@
             BlueprintIdentifier = "B5256F3E211A555500891B27"
             BuildableName = "Castle.app"
             BlueprintName = "ghost-macosx"
-            ReferencedContainer = "container:love.xcodeproj">
+            ReferencedContainer = "container:ghost.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
