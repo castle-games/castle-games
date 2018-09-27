@@ -206,7 +206,10 @@ export default class CoreApp extends React.Component {
     }
 
     this._handleSetHistory(media);
-    this.setState({ media, mediaUrl: media.mediaUrl, pageMode: null });
+    this.setState(
+      { media, mediaUrl: media.mediaUrl, pageMode: null },
+      this._handleSetGameWindowSize
+    );
   };
 
   _handleGoToUrl = mediaUrl => {
@@ -230,7 +233,7 @@ export default class CoreApp extends React.Component {
     }
 
     this._handleSetHistory({ mediaUrl });
-    this.setState({ media: { mediaUrl }, mediaUrl, pageMode: null });
+    this.setState({ media: { mediaUrl }, mediaUrl, pageMode: null }, this._handleSetGameWindowSize);
   };
 
   _handleNativeOpenUrl = e => {
