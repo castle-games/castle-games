@@ -60,7 +60,7 @@ export default class CoreBrowseMediaResults extends React.Component {
       return (
         <div className={STYLES_CONTAINER}>
           <CoreWelcomeScreen
-            onToggleSidebar={this.props.onShowCurrentPlaylist}
+            onToggleSidebar={this.props.onToggleCurrentPlaylist}
             onSelectRandom={this.props.onSelectRandom}
           />
         </div>

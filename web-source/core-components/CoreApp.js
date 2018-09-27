@@ -379,6 +379,7 @@ export default class CoreApp extends React.Component {
   _handleToggleCurrentPlaylist = () => {
     this.setState(
       {
+        pageMode: null,
         sidebarMode: this.state.sidebarMode === 'current-playlist' ? null : 'current-playlist',
       },
       this._handleSetGameWindowSize
@@ -447,7 +448,7 @@ export default class CoreApp extends React.Component {
   };
 
   _handleHideOverlay = () => {
-    this.setState({ isOverlayActive: false }, this._handleSetGameWindowSize);
+    this.setState({ isOverlayActive: false, pageMode: null }, this._handleSetGameWindowSize);
   };
 
   _handleToggleOverlay = () => {
@@ -455,7 +456,10 @@ export default class CoreApp extends React.Component {
   };
 
   _handleToggleMediaExpanded = () => {
-    this.setState({ isMediaExpanded: !this.state.isMediaExpanded }, this._handleSetGameWindowSize);
+    this.setState(
+      { isMediaExpanded: !this.state.isMediaExpanded, pageMode: null },
+      this._handleSetGameWindowSize
+    );
   };
 
   render() {
@@ -512,6 +516,8 @@ export default class CoreApp extends React.Component {
           <CoreBrowseMediaResults
             mediaItems={state.searchResultsMedia}
             onMediaSelect={this._handleMediaSelect}
+            onSelectRandom={this._handleSelectRandom}
+            onToggleCurrentPlaylist={this._handleToggleCurrentPlaylist}
           />
         </CoreLayout>
       );
