@@ -71,7 +71,7 @@ const STYLES_FLUID_COLUMN = css`
 
 export default class UIListMediaInPlaylist extends React.Component {
   render() {
-    if (!this.props.mediaItems.length) {
+    if (!this.props.mediaItems || !this.props.mediaItems.length) {
       return (
         <UIEmptyState title="Nothing here, yet">
           When this user uploads media you will be able to see it here.
