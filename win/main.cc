@@ -111,7 +111,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
 #endif
 
   std::string url = exeDir + "/web/index.html";
-  url = "http://localhost:8000/index.html";
+  //url = "http://localhost:8000/index.html";
 
   int screenSizeWidth = 1440;
   int screenSizeHeight = 877;

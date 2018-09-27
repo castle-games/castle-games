@@ -12,6 +12,8 @@ extern "C" {
 #include <lualib.h>
 }
 
+#include <SDL.h>
+
 #include "modules/love/love.h"
 #include "modules/thread/Channel.h"
 
@@ -179,6 +181,16 @@ void stepLove() {
   }
 }
 
+void stopLove() {
+  if (luaState) {
+    SDL_Event quitEvent;
+    quitEvent.type = SDL_QUIT;
+    SDL_PushEvent(&quitEvent);
+    stepLove();
+    closeLua();
+  }
+}
+
 extern "C" {
 HWND ghostWinGetMainWindow();
 HWND ghostWinGetChildWindow();
@@ -206,7 +218,7 @@ void ghostStep() {
       switch (msg.type) {
         case OPEN_LOVE_URI: {
           char *uri = msg.body.openUri.uri;
-          closeLua();
+          stopLove();
           bootLove(uri);
           free(uri);
         } break;
@@ -219,7 +231,7 @@ void ghostStep() {
         } break;
 
         case CLOSE: {
-          closeLua();
+          stopLove();
         } break;
       }
     }
