@@ -28,9 +28,10 @@ const STYLES_CONTAINER = css`
   border-left: 1px solid ${Constants.colors.white10};
 
   ::-webkit-scrollbar {
+    display: none;
     width: 1px;
   }
-
+  
   /* Track */
   ::-webkit-scrollbar-track {
     background: ${Constants.colors.black20};

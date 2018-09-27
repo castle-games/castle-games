@@ -59,7 +59,7 @@ export default class CoreApp extends React.Component {
   async componentDidMount() {
     window.addEventListener('nativeOpenUrl', this._handleNativeOpenUrl);
     window.addEventListener('keydown', this._handleKeyDown);
-    this._handleSetGameWindowSize();
+    this._handleCEFupdateFrame();
 
     // TODO(jim): Move this somewhere else.
     const processChannels = () => {
@@ -123,6 +123,8 @@ export default class CoreApp extends React.Component {
     window.clearTimeout(this._devTimeout);
   }
 
+  setStateWithCEF = state => this.setState({ ...state }, this._handleCEFupdateFrame);
+
   _handleSetHistory = media => {
     if (!this.props.storage) {
       alert('History is not supported at the moment.');
@@ -158,7 +160,7 @@ export default class CoreApp extends React.Component {
     }
   };
 
-  _handleSetGameWindowSize = () => {
+  _handleCEFupdateFrame = () => {
     if (!window.cefQuery) {
       return;
     }
@@ -206,10 +208,7 @@ export default class CoreApp extends React.Component {
     }
 
     this._handleSetHistory(media);
-    this.setState(
-      { media, mediaUrl: media.mediaUrl, pageMode: null },
-      this._handleSetGameWindowSize
-    );
+    this.setStateWithCEF({ media, mediaUrl: media.mediaUrl, pageMode: null });
   };
 
   _handleGoToUrl = mediaUrl => {
@@ -233,19 +232,21 @@ export default class CoreApp extends React.Component {
     }
 
     this._handleSetHistory({ mediaUrl });
-    this.setState({ media: { mediaUrl }, mediaUrl, pageMode: null }, this._handleSetGameWindowSize);
+    this.setStateWithCEF({ media: { mediaUrl }, mediaUrl, pageMode: null });
   };
 
   _handleNativeOpenUrl = e => {
     let { params } = e;
     let { url } = params;
-    if (url) {
-      url = url.replace('castle://', 'https://');
-      this.setState({ media: null });
-      this.setState({ mediaUrl: url }, () => {
-        this._handleURLSubmit();
-      });
+
+    if (!url) {
+      return;
     }
+
+    url = url.replace('castle://', 'https://');
+    this.setState({ media: null, mediaUrl: url }, () => {
+      this._handleURLSubmit();
+    });
   };
 
   _handleKeyDown = e => {
@@ -259,14 +260,11 @@ export default class CoreApp extends React.Component {
   };
 
   _handleSignOut = () => {
-    this.setState({ viewer: null, pageMode: null }, this._handleSetGameWindowSize);
+    this.setStateWithCEF({ viewer: null, pageMode: null });
   };
 
   _handleSignIn = () => {
-    this.setState(
-      { viewer: Fixtures.User, pageMode: null, sidebarMode: null },
-      this._handleSetGameWindowSize
-    );
+    this.setStateWithCEF({ viewer: Fixtures.User, pageMode: null, sidebarMode: null });
   };
 
   _handleAuthChange = e => {
@@ -274,7 +272,7 @@ export default class CoreApp extends React.Component {
   };
 
   _handleSearchSubmit = async () => {
-    const data = await Actions.search(this.state.searchQuery);
+    const { data = {} } = await Actions.search(this.state.searchQuery);
     const { mediaItems = [], playlistItems = [] } = data;
     this.setState({
       searchResultsMedia: mediaItems,
@@ -289,26 +287,17 @@ export default class CoreApp extends React.Component {
   };
 
   _handleToggleBrowse = () => {
-    this.setState(
-      { pageMode: this.state.pageMode === 'browse' ? null : 'browse' },
-      this._handleSetGameWindowSize
-    );
+    this.setStateWithCEF({ pageMode: this.state.pageMode === 'browse' ? null : 'browse' });
   };
 
   _handleToggleProfile = () => {
-    this.setState(
-      { pageMode: this.state.pageMode === 'profile' ? null : 'profile' },
-      this._handleSetGameWindowSize
-    );
+    this.setStateWithCEF({ pageMode: this.state.pageMode === 'profile' ? null : 'profile' });
   };
 
   _handleToggleCurrentPlaylistDetails = () => {
-    this.setState(
-      {
-        pageMode: this.state.pageMode === 'playlist' ? null : 'playlist',
-      },
-      this._handleSetGameWindowSize
-    );
+    this.setStateWithCEF({
+      pageMode: this.state.pageMode === 'playlist' ? null : 'playlist',
+    });
   };
 
   _handleRegisterGame = ({ email, message }) => {
@@ -340,7 +329,7 @@ export default class CoreApp extends React.Component {
 
     console.log(playlist);
 
-    this.setState({ pageMode: null, playlist, media: null }, this._handleSetGameWindowSize);
+    this.setStateWithCEF({ pageMode: null, playlist, media: null });
   };
 
   _handleMediaSelect = media => {
@@ -357,7 +346,16 @@ export default class CoreApp extends React.Component {
   };
 
   _handleSelectRandom = () => {
-    if (!this.state.playlist || !this.state.playlist.mediaItems.length) {
+    // TODO(jim): Oh man.
+    if (!this.state.playlist) {
+      return;
+    }
+
+    if (!this.state.playlist.mediaItems) {
+      return;
+    }
+
+    if (!this.state.playlist.mediaItems.length) {
       return;
     }
 
@@ -389,98 +387,71 @@ export default class CoreApp extends React.Component {
   };
 
   _handleToggleCurrentPlaylist = () => {
-    this.setState(
-      {
-        pageMode: null,
-        sidebarMode: this.state.sidebarMode === 'current-playlist' ? null : 'current-playlist',
-      },
-      this._handleSetGameWindowSize
-    );
+    this.setStateWithCEF({
+      pageMode: null,
+      sidebarMode: this.state.sidebarMode === 'current-playlist' ? null : 'current-playlist',
+    });
   };
 
   _handleToggleDashboard = () => {
-    this.setState(
-      {
-        sidebarMode: this.state.sidebarMode === 'dashboard' ? null : 'dashboard',
-      },
-      this._handleSetGameWindowSize
-    );
+    this.setStateWithCEF({
+      sidebarMode: this.state.sidebarMode === 'dashboard' ? null : 'dashboard',
+    });
   };
 
   _handleToggleAuthentication = () => {
-    this.setState(
-      {
-        viewer: this.state.viewer ? null : this.state.viewer,
-        sidebarMode: this.state.viewer ? null : 'authentication',
-      },
-      this._handleSetGameWindowSize
-    );
+    this.setStateWithCEF({
+      viewer: this.state.viewer ? null : this.state.viewer,
+      sidebarMode: this.state.viewer ? null : 'authentication',
+    });
   };
 
   _handleToggleDevelopmentLogs = () => {
-    this.setState(
-      {
-        sidebarMode: this.state.sidebarMode === 'development' ? null : 'development',
-      },
-      this._handleSetGameWindowSize
-    );
+    this.setStateWithCEF({
+      sidebarMode: this.state.sidebarMode === 'development' ? null : 'development',
+    });
   };
 
   _handleToggleMediaInfo = () => {
-    this.setState(
-      {
-        sidebarMode: this.state.sidebarMode === 'media-info' ? null : 'media-info',
-      },
-      this._handleSetGameWindowSize
-    );
+    this.setStateWithCEF({
+      sidebarMode: this.state.sidebarMode === 'media-info' ? null : 'media-info',
+    });
   };
 
   _handleShowProfileMediaList = () => {
-    this.setState(
-      {
-        profileMode: 'media',
-      },
-      this._handleSetGameWindowSize
-    );
+    this.setStateWithCEF({
+      profileMode: 'media',
+    });
   };
 
   _handleShowProfilePlaylistList = () => {
-    this.setState(
-      {
-        profileMode: 'playlists',
-      },
-      this._handleSetGameWindowSize
-    );
+    this.setStateWithCEF({
+      profileMode: 'playlists',
+    });
   };
 
   _handleDismissSidebar = () => {
-    this.setState({ sidebarMode: null }, this._handleSetGameWindowSize);
+    this.setStateWithCEF({ sidebarMode: null });
   };
 
   _handleToggleScore = () => {
-    this.setState({ isScoreVisible: !this.state.isScoreVisible }, this._handleSetGameWindowSize);
+    this.setStateWithCEF({ isScoreVisible: !this.state.isScoreVisible });
   };
 
   _handleDismissScore = () => {
-    this.setState({ isScoreVisible: false }, this._handleSetGameWindowSize);
+    this.setStateWithCEF({ isScoreVisible: false });
   };
 
   _handleHideOverlay = () => {
-    this.setState({ isOverlayActive: false, pageMode: null }, this._handleSetGameWindowSize);
+    this.setStateWithCEF({ isOverlayActive: false, pageMode: null });
   };
 
   _handleToggleOverlay = () => {
-    this.setState(
-      { isOverlayActive: !this.state.isOverlayActive, pageMode: null },
-      this._handleSetGameWindowSize
-    );
+    this.setStateWithCEF({ isOverlayActive: !this.state.isOverlayActive, pageMode: null });
   };
 
   _handleToggleMediaExpanded = () => {
-    this.setState(
-      { isMediaExpanded: !this.state.isMediaExpanded, pageMode: null },
-      this._handleSetGameWindowSize
-    );
+    this.setStateWithCEF({ isMediaExpanded: !this.state.isMediaExpanded, pageMode: null });
   };
 
   render() {

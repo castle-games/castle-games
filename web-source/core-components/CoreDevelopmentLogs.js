@@ -22,6 +22,7 @@ const STYLES_CONTAINER = css`
   color: ${Constants.colors.white};
 
   ::-webkit-scrollbar {
+    display: none;
     width: 1px;
   }
 
