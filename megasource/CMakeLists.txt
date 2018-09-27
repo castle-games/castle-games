@@ -316,13 +316,6 @@ else()
 endif()
 
 link_directories(${SDL_LINK_DIR})
-add_executable(megatest src/test.cpp)
-target_link_libraries(megatest ${MEGA_3P})
-
-add_move_dll(megatest ${MEGA_MPEG123})
-add_move_dll(megatest ${MEGA_SDL2})
-add_move_dll(megatest ${MEGA_OPENAL})
-add_move_dll(megatest ${MEGA_LUA51})
 
 # CEF
 
