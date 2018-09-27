@@ -189,6 +189,11 @@ export default class CoreApp extends React.Component {
   _handleURLChange = e => this.setState({ [e.target.name]: e.target.value });
 
   _handleURLSubmit = () => {
+    if (Strings.isEmpty(this.state.mediaUrl)) {
+      alert('You must provide a URL');
+      return;
+    }
+
     if (this.state.mediaUrl.endsWith('.lua')) {
       this._handleGoToUrl(this.state.mediaUrl);
       return;
@@ -272,6 +277,11 @@ export default class CoreApp extends React.Component {
   };
 
   _handleSearchSubmit = async () => {
+    if (Strings.isEmpty(this.state.searchQuery)) {
+      alert('You must provide a search query.');
+      return;
+    }
+
     const data = await Actions.search(this.state.searchQuery);
     const { mediaItems = [], playlistItems = [] } = data;
     this.setState({
@@ -396,6 +406,7 @@ export default class CoreApp extends React.Component {
   _handleToggleDashboard = () => {
     this.setStateWithCEF({
       sidebarMode: this.state.sidebarMode === 'dashboard' ? null : 'dashboard',
+      pageMode: null,
     });
   };
 
@@ -409,12 +420,14 @@ export default class CoreApp extends React.Component {
   _handleToggleDevelopmentLogs = () => {
     this.setStateWithCEF({
       sidebarMode: this.state.sidebarMode === 'development' ? null : 'development',
+      pageMode: null,
     });
   };
 
   _handleToggleMediaInfo = () => {
     this.setStateWithCEF({
       sidebarMode: this.state.sidebarMode === 'media-info' ? null : 'media-info',
+      pageMode: null,
     });
   };
 
