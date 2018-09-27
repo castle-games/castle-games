@@ -286,17 +286,26 @@ export default class CoreApp extends React.Component {
   };
 
   _handleToggleBrowse = () => {
-    this.setState({ pageMode: this.state.pageMode === 'browse' ? null : 'browse' });
+    this.setState(
+      { pageMode: this.state.pageMode === 'browse' ? null : 'browse' },
+      this._handleSetGameWindowSize
+    );
   };
 
   _handleToggleProfile = () => {
-    this.setState({ pageMode: this.state.pageMode === 'profile' ? null : 'profile' });
+    this.setState(
+      { pageMode: this.state.pageMode === 'profile' ? null : 'profile' },
+      this._handleSetGameWindowSize
+    );
   };
 
   _handleToggleCurrentPlaylistDetails = () => {
-    this.setState({
-      pageMode: this.state.pageMode === 'playlist' ? null : 'playlist',
-    });
+    this.setState(
+      {
+        pageMode: this.state.pageMode === 'playlist' ? null : 'playlist',
+      },
+      this._handleSetGameWindowSize
+    );
   };
 
   _handleRegisterGame = ({ email, message }) => {
@@ -328,7 +337,7 @@ export default class CoreApp extends React.Component {
 
     console.log(playlist);
 
-    this.setState({ pageMode: null, playlist, media: null });
+    this.setState({ pageMode: null, playlist, media: null }, this._handleSetGameWindowSize);
   };
 
   _handleMediaSelect = media => {
@@ -424,15 +433,21 @@ export default class CoreApp extends React.Component {
   };
 
   _handleShowProfileMediaList = () => {
-    this.setState({
-      profileMode: 'media',
-    });
+    this.setState(
+      {
+        profileMode: 'media',
+      },
+      this._handleSetGameWindowSize
+    );
   };
 
   _handleShowProfilePlaylistList = () => {
-    this.setState({
-      profileMode: 'playlists',
-    });
+    this.setState(
+      {
+        profileMode: 'playlists',
+      },
+      this._handleSetGameWindowSize
+    );
   };
 
   _handleDismissSidebar = () => {
