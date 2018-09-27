@@ -155,9 +155,9 @@ function network.fetch(url, method, skipCache)
         entry = { waiters = {} }
         fetchEntries[method][url] = entry
 
-        -- 'ghost://' is just 'https://'
-        if url:match('^ghost://') then
-            url = url:gsub('^ghost://', 'https://')
+        -- 'castle://' is just 'https://'
+        if url:match('^castle://') then
+            url = url:gsub('^castle://', 'https://')
         end
 
         -- Use persisted result if found
@@ -239,7 +239,7 @@ end
 
 -- Whether a given string represents an absolute URL
 function network.isAbsolute(url)
-    return url:match('^ghost://') or url:match('^https?://') or url:match('^file://')
+    return url:match('^castle://') or url:match('^https?://') or url:match('^file://')
 end
 
 -- Whether a given URL points to something that exists. If `skipCache` is true, skip looking in the

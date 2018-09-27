@@ -4,7 +4,7 @@ function love.conf(t)
     local theOS = system.getOS()
     local mobile = theOS == 'iOS' or theOS == 'Android'
 
-    t.window.title = 'ghost-player'
+    t.window.title = 'castle-player'
     t.window.msaa = 4
     t.window.highdpi = true
 
