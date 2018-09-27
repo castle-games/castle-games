@@ -272,7 +272,7 @@ export default class CoreApp extends React.Component {
   };
 
   _handleSearchSubmit = async () => {
-    const { data = {} } = await Actions.search(this.state.searchQuery);
+    const data = await Actions.search(this.state.searchQuery);
     const { mediaItems = [], playlistItems = [] } = data;
     this.setState({
       searchResultsMedia: mediaItems,
