@@ -233,7 +233,7 @@ export default class CoreApp extends React.Component {
     }
 
     this._handleSetHistory({ mediaUrl });
-    this.setState({ media: { mediaUrl }, mediaUrl, pageMoe: null });
+    this.setState({ media: { mediaUrl }, mediaUrl, pageMode: null });
   };
 
   _handleNativeOpenUrl = e => {
@@ -273,17 +273,18 @@ export default class CoreApp extends React.Component {
     this.setState({ local: { ...this.state.local, [e.target.name]: e.target.value } });
   };
 
-  _handleSearchSubmit = () => {
-    // TODO(jim): We don't actually need this at the moment.
+  _handleSearchSubmit = async () => {
+    const data = await Actions.search(this.state.searchQuery);
+    const { mediaItems = [], playlistItems = [] } = data;
+    this.setState({
+      searchResultsMedia: mediaItems,
+      searchResultsPlaylist: playlistItems,
+    });
   };
 
-  _handleSearchChange = e => {
-    const { mediaItems = [], playlistItems = [] } = Actions.search(e.target.value);
-
+  _handleSearchChange = async e => {
     this.setState({
       searchQuery: e.target.value,
-      searchResultsMedia: mediaItems,
-      searchResultsPlaylists: playlistItems,
     });
   };
 
@@ -317,6 +318,21 @@ export default class CoreApp extends React.Component {
   };
 
   _handleFavoriteMedia = () => window.alert('favorite');
+
+  _handlePlaylistSelect = playlist => {
+    if (window.cefQuery) {
+      window.cefQuery({
+        request: JSON.stringify({
+          type: 'CLOSE',
+          body: '',
+        }),
+      });
+    }
+
+    console.log(playlist);
+
+    this.setState({ pageMode: null, playlist, media: null });
+  };
 
   _handleMediaSelect = media => {
     if (!media) {
@@ -473,6 +489,7 @@ export default class CoreApp extends React.Component {
           rightSidebarNode={
             <CoreBrowsePlaylistResults
               playlistItems={state.searchResultsPlaylist}
+              onPlaylistSelect={this._handlePlaylistSelect}
               onDismiss={this._handleToggleBrowse}
             />
           }
@@ -492,7 +509,10 @@ export default class CoreApp extends React.Component {
             />
           }
           leftSidebarNode={maybeLeftSidebarNode}>
-          <CoreBrowseMediaResults mediaItems={state.searchResultsMedia} />
+          <CoreBrowseMediaResults
+            mediaItems={state.searchResultsMedia}
+            onMediaSelect={this._handleMediaSelect}
+          />
         </CoreLayout>
       );
     }

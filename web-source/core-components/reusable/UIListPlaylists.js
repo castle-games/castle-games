@@ -69,6 +69,7 @@ const STYLES_FLUID_COLUMN = css`
   padding: 12px 16px 12px 16px;
 `;
 
+// TOOD(jim): Add handler for when a playlist is selected.
 export default class UIListPlaylists extends React.Component {
   render() {
     return (
@@ -79,9 +80,11 @@ export default class UIListPlaylists extends React.Component {
           <div className={STYLES_COLUMN}>-</div>
         </div>
         {this.props.playlistItems.map((p, i) => {
-          // TODO(jim): Consolidate this when we properly have usernames
           return (
-            <div className={STYLES_ROW} key={`playlist-list-item-${i}`} onClick={() => {}}>
+            <div
+              className={STYLES_ROW}
+              key={`playlist-list-item-${p.playlistId}`}
+              onClick={() => this.props.onPlaylistSelect(p)}>
               <div className={STYLES_COLUMN} style={{ fontWeight: 600 }}>
                 {p.name}
               </div>

@@ -112,7 +112,7 @@ export default class UIListMedia extends React.Component {
           return (
             <div
               className={isSelected ? STYLES_ROW_SELECTED : STYLES_ROW}
-              key={`playlist-list-item-${i}`}
+              key={`media-list-item-${m.mediaId}`}
               onClick={() => this.props.onMediaSelect(m)}>
               <div className={STYLES_COLUMN} style={{ fontWeight: 600 }}>
                 {m.name}

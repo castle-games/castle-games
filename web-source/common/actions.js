@@ -60,10 +60,37 @@ export async function search(query) {
             mediaId
             mediaUrl
             name
+            user {
+              userId
+              name
+              username
+            }
           }
           playlistItems {
             playlistId
             name
+            mediaItems {
+              name
+              published
+              instructions
+              description
+              mediaUrl
+              coverImage {
+                url
+                height
+                width
+              }
+              user {
+                userId
+                name
+                username
+                photo {
+                  url
+                  height
+                  width
+                }
+              }
+            }
           }
         }
       }
@@ -76,5 +103,5 @@ export async function search(query) {
     return;
   }
 
-  return result;
+  return result.data.searchMediaAndPlaylists;
 }

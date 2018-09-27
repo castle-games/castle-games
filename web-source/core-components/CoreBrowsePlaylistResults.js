@@ -57,7 +57,10 @@ export default class CoreBrowsePlaylistResults extends React.Component {
       return (
         <div className={STYLES_CONTAINER}>
           <UIHeaderDismiss onDismiss={this.props.onDismiss} />
-          <UIListPlaylists playlistItems={this.props.playlistItems} />
+          <UIListPlaylists
+            onPlaylistSelect={this.props.onPlaylistSelect}
+            playlistItems={this.props.playlistItems}
+          />
         </div>
       );
     }
