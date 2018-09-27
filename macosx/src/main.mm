@@ -59,6 +59,7 @@ int main(int argc, char *argv[]) {
       // allows Local Storage to work
       CefString(&settings.cache_path).FromASCII([cachePath UTF8String]);
     }
+    settings.background_color = CefColorSetARGB(255, 0, 0, 0);
 
     // SimpleApp implements application-level callbacks for the browser process.
     // It will create the first browser instance in OnContextInitialized() after
