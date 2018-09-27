@@ -7,6 +7,10 @@ const STYLES_CONTAINER = css`
   font-family: ${Constants.font.default};
   background: ${Constants.colors.background};
   height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
   display: flex;
 `;
 
