@@ -34,33 +34,18 @@ export async function getCurrentJamPlaylist() {
       }
     }
   `);
+
+  // TOOD(jim): Write a global error handler.
+  if (result.error) {
+    return;
+  }
+
   return result.data.currentPlaylist;
 }
 
 export async function search(query) {
   const result = await API.graphqlAsync({
     query: `
-      fragment searchResultFields on Media {
-        mediaId
-        mediaUrl
-        name
-        coverImage {
-          url
-          height
-          width
-        }
-        user {
-          name
-          userId
-          username
-          photo {
-            url
-            width
-            height
-          }
-        }
-      }
-
       query SearchMediaAndPlaylists(
         $query: String
         $cursorPosition: Int
@@ -72,14 +57,13 @@ export async function search(query) {
           limit: $limit
         ) {
           mediaItems {
-            ...searchResultFields
+            mediaId
+            mediaUrl
+            name
           }
           playlistItems {
             playlistId
             name
-          }
-          recommendedItems {
-            ...searchResultFields
           }
         }
       }

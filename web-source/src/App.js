@@ -21,7 +21,7 @@ export default () => {
     searchResultsMedia: null,
     searchResultsPlaylists: null,
     sidebarMode: null, // current-playlists | dashboard | media-info | authentication | null
-    pageMode: null, // browse | playlist | profile | null
+    pageMode: 'browse', // browse | playlist | profile | null
     profileMode: null, // media | playlist | null
     isMediaFavorited: false,
     isMediaExpanded: true,

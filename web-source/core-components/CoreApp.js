@@ -104,6 +104,10 @@ export default class CoreApp extends React.Component {
     const playlist = await Actions.getCurrentJamPlaylist();
     this.setState({ playlist });
 
+    if (!window.cefQuery) {
+      return;
+    }
+
     try {
       window.cefQuery({
         request: JSON.stringify({
@@ -158,12 +162,12 @@ export default class CoreApp extends React.Component {
   };
 
   _handleSetGameWindowSize = () => {
-    const element = this._layout.getMediaContainerRef();
-    const rect = element.getBoundingClientRect();
-
     if (!window.cefQuery) {
       return;
     }
+
+    const element = this._layout.getMediaContainerRef();
+    const rect = element.getBoundingClientRect();
 
     // TODO(jim): Move window calls somewhere else.
     try {
@@ -205,7 +209,7 @@ export default class CoreApp extends React.Component {
     }
 
     this._handleSetHistory(media);
-    this.setState({ media, mediaUrl: media.mediaUrl });
+    this.setState({ media, mediaUrl: media.mediaUrl, pageMode: null });
   };
 
   _handleGoToUrl = mediaUrl => {
@@ -229,7 +233,7 @@ export default class CoreApp extends React.Component {
     }
 
     this._handleSetHistory({ mediaUrl });
-    this.setState({ media: { mediaUrl }, mediaUrl });
+    this.setState({ media: { mediaUrl }, mediaUrl, pageMoe: null });
   };
 
   _handleNativeOpenUrl = e => {
@@ -470,6 +474,21 @@ export default class CoreApp extends React.Component {
             <CoreBrowsePlaylistResults
               playlistItems={state.searchResultsPlaylist}
               onDismiss={this._handleToggleBrowse}
+            />
+          }
+          bottomNode={
+            <CoreRootURLInput
+              name="mediaUrl"
+              value={state.mediaUrl}
+              viewer={state.viewer}
+              media={state.media}
+              expanded={state.isMediaExpanded}
+              onChange={this._handleURLChange}
+              onSubmit={this._handleURLSubmit}
+              onToggleMediaExpanded={this._handleToggleMediaExpanded}
+              onHideOverlay={this._handleHideOverlay}
+              onFavoriteMedia={this._handleFavoriteMedia}
+              onToggleDashboard={this._handleToggleDashboard}
             />
           }
           leftSidebarNode={maybeLeftSidebarNode}>

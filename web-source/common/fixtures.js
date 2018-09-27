@@ -3,7 +3,17 @@ import * as Constants from '~/common/constants';
 // Charlie's different fields
 // https://github.com/expo/ghost-server/blob/master/server/schema.sql
 
-export const SearchResults = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}];
+export const SearchResults = [
+  PlaylistMedia4,
+  PlaylistMedia6,
+  PlaylistMedia5,
+  PlaylistMedia,
+  PlaylistMedia1,
+  PlaylistMedia2,
+  PlaylistMedia3,
+  PlaylistMediaLua,
+  PlaylistMediaLua2,
+];
 
 export const User = {
   // NOTE(jim): No entities will just have a id field. Charlie's design will

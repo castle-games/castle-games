@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
+import * as Fixtures from '~/common/fixtures';
 
 import { css } from 'react-emotion';
 
@@ -48,9 +49,11 @@ const STYLES_CONTAINER = css`
 `;
 
 export default class CoreBrowseMediaResults extends React.Component {
-  render() {
-    console.log(this.props);
+  static defaultProps = {
+    mediaItems: [],
+  };
 
+  render() {
     if (!this.props.mediaItems || !this.props.mediaItems.length) {
       return (
         <div className={STYLES_CONTAINER}>
