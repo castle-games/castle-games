@@ -176,6 +176,12 @@ void SimpleHandler::OnBeforeClose(CefRefPtr<CefBrowser> browser) {
   if (browser_list_.empty()) {
     // All browser windows have closed. Quit the application message loop.
     ghostQuitMessageLoop();
+    
+    // On Windows CEF automatically handles the message loop on another thread. On macOS it's on the same thread
+    // and we need to quit manually.
+#ifdef __APPLE__
+    CefQuitMessageLoop();
+#endif
 
     message_router_->OnBeforeClose(browser);
     message_router_->RemoveHandler(message_handler_.get());
