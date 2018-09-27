@@ -67,7 +67,7 @@ export default class CoreWelcomeScreen extends React.Component {
         <div className={STYLES_CONTENT}>
           <img height="48px" src="static/castle-wordmark.png" />
           <p className={STYLES_PARAGRAPH}>
-            Welcome! Use the top search bar to search for games, or enter a URL for a Lua/LOVE or web based game you would like to play.
+            Welcome! Use the top search bar to search for games, or enter a URL for a Lua/LÖVE or web based game you want to play.
           </p>
 
           <div className={STYLES_ACTIONS}>

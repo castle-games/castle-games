@@ -452,7 +452,10 @@ export default class CoreApp extends React.Component {
   };
 
   _handleToggleOverlay = () => {
-    this.setState({ isOverlayActive: !this.state.isOverlayActive }, this._handleSetGameWindowSize);
+    this.setState(
+      { isOverlayActive: !this.state.isOverlayActive, pageMode: null },
+      this._handleSetGameWindowSize
+    );
   };
 
   _handleToggleMediaExpanded = () => {
