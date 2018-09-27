@@ -33,6 +33,11 @@ const STYLES_ROW = css`
   :last-child {
     border-bottom: 0;
   }
+
+  transition: 200ms background ease;
+  :hover {
+    background: ${Constants.colors.yellow};
+  }
 `;
 
 const STYLES_ROW_SELECTED = css`
