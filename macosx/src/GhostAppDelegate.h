@@ -2,7 +2,7 @@
 
 @interface GhostAppDelegate : NSObject <NSApplicationDelegate>
 
-- (void)closeLua;
+- (void)stopLove;
 - (void)bootLoveWithUri:(NSString *)uri;
 - (void)tryToTerminateApplication:(NSApplication *)app;
 - (void)createApplication:(id)object;

@@ -8,6 +8,8 @@ extern "C" {
 #include <lualib.h>
 }
 
+#include <SDL.h>
+
 #include "modules/love/love.h"
 #include "simple_handler.h"
 
@@ -164,6 +166,16 @@ extern "C" {
   ghostUpdateChildWindowFrame();
 }
 
+- (void)stopLove {
+  if (self.luaState) {
+    SDL_Event quitEvent;
+    quitEvent.type = SDL_QUIT;
+    SDL_PushEvent(&quitEvent);
+    [self stepLove];
+    [self closeLua];
+  }
+}
+
 - (void)closeLua {
   if (self.luaState) {
     lua_State *L = self.luaState;
@@ -173,7 +185,7 @@ extern "C" {
 }
 
 - (void)tryToTerminateApplication:(NSApplication *)app {
-  [self closeLua];
+  [self stopLove];
 
   SimpleHandler *handler = SimpleHandler::GetInstance();
   if (handler && !handler->IsClosing())

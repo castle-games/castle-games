@@ -60,7 +60,7 @@ void ghostOpenLoveUri(const char *uri) {
   NSString *uriStr = [NSString stringWithCString:uri encoding:NSUTF8StringEncoding];
   dispatch_async(dispatch_get_main_queue(), ^{
     GhostAppDelegate *delegate = [NSApplication sharedApplication].delegate;
-    [delegate closeLua];
+    [delegate stopLove];
     [delegate bootLoveWithUri:uriStr];
   });
 }
@@ -68,7 +68,7 @@ void ghostOpenLoveUri(const char *uri) {
 void ghostClose() {
   dispatch_async(dispatch_get_main_queue(), ^{
     GhostAppDelegate *delegate = [NSApplication sharedApplication].delegate;
-    [delegate closeLua];
+    [delegate stopLove];
   });
 }
 
