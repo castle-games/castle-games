@@ -56,7 +56,7 @@ export default class CoreBrowsePlaylistResults extends React.Component {
     if (this.props.playlistItems && this.props.playlistItems.length) {
       return (
         <div className={STYLES_CONTAINER}>
-          <UIHeaderDismiss onDismiss={this.props.onDismiss} />
+          <UIHeaderDismiss />
           <UIListPlaylists
             onPlaylistSelect={this.props.onPlaylistSelect}
             playlistItems={this.props.playlistItems}
@@ -67,7 +67,7 @@ export default class CoreBrowsePlaylistResults extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
-        <UIHeaderDismiss onDismiss={this.props.onDismiss} />
+        <UIHeaderDismiss />
         <UIEmptyState title="Playlist results">
           As you search, playlist search results will appear here.
         </UIEmptyState>

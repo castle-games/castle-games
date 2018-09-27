@@ -7,6 +7,8 @@ import { css } from 'react-emotion';
 import UIListMedia from '~/core-components/reusable/UIListMedia';
 import UIEmptyState from '~/core-components/reusable/UIEmptyState';
 
+import CoreWelcomeScreen from '~/core-components/CoreWelcomeScreen';
+
 const STYLES_CONTAINER = css`
   @keyframes info-animation {
     from {
@@ -57,9 +59,10 @@ export default class CoreBrowseMediaResults extends React.Component {
     if (!this.props.mediaItems || !this.props.mediaItems.length) {
       return (
         <div className={STYLES_CONTAINER}>
-          <UIEmptyState title="Game results">
-            As you search, game results will appear here.
-          </UIEmptyState>
+          <CoreWelcomeScreen
+            onToggleSidebar={this.props.onShowCurrentPlaylist}
+            onSelectRandom={this.props.onSelectRandom}
+          />
         </div>
       );
     }

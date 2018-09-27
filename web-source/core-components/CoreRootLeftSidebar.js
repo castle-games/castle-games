@@ -7,7 +7,7 @@ import { css } from 'react-emotion';
 import UIButtonIcon from '~/core-components/reusable/UIButtonIcon';
 
 const STYLES_NAVIGATION = css`
-  @keyframes navigation-animation {
+  @keyframes sidebar-animation {
     from {
       opacity: 0;
     }
@@ -17,7 +17,7 @@ const STYLES_NAVIGATION = css`
     }
   }
 
-  animation: navigation-animation 280ms ease;
+  animation: sidebar-animation 280ms ease;
 
   background: ${Constants.colors.black60};
   height: 100%;
@@ -26,18 +26,20 @@ const STYLES_NAVIGATION = css`
   border-right: 1px solid ${Constants.colors.white10};
 `;
 
-export default class CoreRootAuthenticatedSidebar extends React.Component {
+export default class CoreRootLeftSidebar extends React.Component {
   render() {
     return (
       <div className={STYLES_NAVIGATION}>
-        <UIButtonIcon
-          icon={false}
-          src={this.props.viewer.avatarUrl}
-          onClick={this.props.onToggleProfile}>
-          {this.props.viewer.username}
-        </UIButtonIcon>
+        {this.props.viewer ? (
+          <UIButtonIcon
+            icon={false}
+            src={this.props.viewer.avatarUrl}
+            onClick={this.props.onToggleProfile}>
+            {this.props.viewer.username}
+          </UIButtonIcon>
+        ) : null}
         <UIButtonIcon icon={<UISVG.Search height="24px" />} onClick={this.props.onToggleBrowse}>
-          Search
+          Browse
         </UIButtonIcon>
       </div>
     );

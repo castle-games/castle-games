@@ -15,7 +15,7 @@ import CoreLayout from '~/core-components/layouts/CoreLayout';
 // NOTE(jim): Root Components
 import CoreRootHeader from '~/core-components/CoreRootHeader';
 import CoreRootURLInput from '~/core-components/CoreRootURLInput';
-import CoreRootAuthenticatedSidebar from '~/core-components/CoreRootAuthenticatedSidebar';
+import CoreRootLeftSidebar from '~/core-components/CoreRootLeftSidebar';
 import CoreRootDashboard from '~/core-components/CoreRootDashboard';
 import CoreRootToolbar from '~/core-components/CoreRootToolbar';
 import CoreRootPlaylistSidebar from '~/core-components/CoreRootPlaylistSidebar';
@@ -40,14 +40,11 @@ import CorePlaylist from '~/core-components/CorePlaylist';
 // NOTE(jim): Development Logs Scene
 import CoreDevelopmentLogs from '~/core-components/CoreDevelopmentLogs';
 
-// NOTE: Welcome Scene
-import CoreWelcomeScreen from '~/core-components/CoreWelcomeScreen';
-
 const isOverlayHotkey = isKeyHotkey('mod+e');
 const isDevelopmentLogHotkey = isKeyHotkey('mod+j');
+const POLL_DELAY = 300;
 
 let logId = 1;
-const POLL_DELAY = 300;
 
 export default class CoreApp extends React.Component {
   _layout;
@@ -465,9 +462,9 @@ export default class CoreApp extends React.Component {
     const { state } = this;
 
     let maybeLeftSidebarNode;
-    if (state.isOverlayActive && state.viewer) {
+    if (state.isOverlayActive) {
       maybeLeftSidebarNode = (
-        <CoreRootAuthenticatedSidebar
+        <CoreRootLeftSidebar
           viewer={state.viewer}
           onToggleProfile={this._handleToggleProfile}
           onToggleBrowse={this._handleToggleBrowse}
@@ -479,6 +476,9 @@ export default class CoreApp extends React.Component {
     if (state.pageMode === 'browse') {
       return (
         <CoreLayout
+          ref={reference => {
+            this._layout = reference;
+          }}
           topNode={
             <CoreBrowseSearchInput
               searchQuery={state.searchQuery}
@@ -521,7 +521,11 @@ export default class CoreApp extends React.Component {
     // TODO(jim): Reusable Components.
     if (state.pageMode === 'playlist') {
       return (
-        <CoreLayout leftSidebarNode={maybeLeftSidebarNode}>
+        <CoreLayout
+          ref={reference => {
+            this._layout = reference;
+          }}
+          leftSidebarNode={maybeLeftSidebarNode}>
           <CorePlaylist onDismiss={this._handleToggleCurrentPlaylistDetails} />
         </CoreLayout>
       );
@@ -530,7 +534,11 @@ export default class CoreApp extends React.Component {
     // NOTE(jim): Profile Scene
     if (state.pageMode === 'profile') {
       return (
-        <CoreLayout leftSidebarNode={maybeLeftSidebarNode}>
+        <CoreLayout
+          ref={reference => {
+            this._layout = reference;
+          }}
+          leftSidebarNode={maybeLeftSidebarNode}>
           <CoreProfile
             creator={state.viewer}
             profileMode={state.profileMode}
@@ -641,7 +649,6 @@ export default class CoreApp extends React.Component {
       );
     }
 
-    // TODO: wire up CoreWelcomeScreen random action
     return (
       <CoreLayout
         ref={reference => {
@@ -654,12 +661,7 @@ export default class CoreApp extends React.Component {
         rightNode={maybeRightNode}>
         {state.media ? (
           <CoreMediaScreen expanded={state.isMediaExpanded} media={state.media} />
-        ) : (
-          <CoreWelcomeScreen
-            onToggleSidebar={this.state.playlist ? this._handleToggleCurrentPlaylist : null}
-            onSelectRandom={this.state.playlist ? this._handleSelectRandom : null}
-          />
-        )}
+        ) : null}
       </CoreLayout>
     );
   }

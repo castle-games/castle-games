@@ -39,9 +39,11 @@ export default class UIHeaderDismiss extends React.Component {
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_LEFT}>{this.props.children}</div>
-        <span className={STYLES_ICON} onClick={this.props.onDismiss}>
-          <UISVG.Dismiss height="16px" />
-        </span>
+        {this.props.onDismiss ? (
+          <span className={STYLES_ICON} onClick={this.props.onDismiss}>
+            <UISVG.Dismiss height="16px" />
+          </span>
+        ) : null}
       </div>
     );
   }
