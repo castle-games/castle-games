@@ -32,6 +32,8 @@ function network.async(foo, onError)
                 onError(msg)
             elseif outerPortal then
                 outerPortal:handleError(msg)
+            elseif DEFAULT_ERROR_HANDLER then
+                DEFAULT_ERROR_HANDLER(msg)
             else
                 print('uncaught async error:', msg, co, skt, debug.traceback(co))
             end

@@ -5,7 +5,7 @@ math.randomseed(10000 * require('socket').gettime())
 
 network = require 'network'
 require = require 'require'
-root = require 'portal'
+local root = require 'portal'
 splash = require 'splash'
 
 
@@ -21,8 +21,12 @@ do
     end
 end
 
-function root.onError(err)
+function DEFAULT_ERROR_HANDLER(err) -- Referenced in 'network.lua'
     love.thread.getChannel('ERROR'):push(cjson.encode({ error = err }))
+end
+
+function root.onError(err)
+    DEFAULT_ERROR_HANDLER(err)
 end
 
 
