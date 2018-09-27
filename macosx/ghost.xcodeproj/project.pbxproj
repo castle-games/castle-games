@@ -728,7 +728,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "echo $BUILT_PRODUCTS_DIR\nrm -rf $BUILT_PRODUCTS_DIR/$PRODUCT_NAME.app/Contents/Frameworks/$PRODUCT_NAME\\ Helper.app\ncp -r $BUILT_PRODUCTS_DIR/$PRODUCT_NAME\\ Helper.app $BUILT_PRODUCTS_DIR/$PRODUCT_NAME.app/Contents/Frameworks/$PRODUCT_NAME\\ Helper.app\ninstall_name_tool -change \"@rpath/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework\" \"@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework\" $BUILT_PRODUCTS_DIR/$PRODUCT_NAME.app/Contents/MacOS/$PRODUCT_NAME\ninstall_name_tool -change \"@rpath/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework\" \"@executable_path/../../../Chromium Embedded Framework.framework/Chromium Embedded Framework\" $BUILT_PRODUCTS_DIR/$PRODUCT_NAME.app/Contents/Frameworks/$PRODUCT_NAME\\ Helper.app/Contents/MacOS/$PRODUCT_NAME\\ Helper";
+			shellScript = "echo $BUILT_PRODUCTS_DIR\nrm -rf $BUILT_PRODUCTS_DIR/$PRODUCT_NAME.app/Contents/Frameworks/$PRODUCT_NAME\\ Helper.app\ncp -r $BUILT_PRODUCTS_DIR/$PRODUCT_NAME\\ Helper.app $BUILT_PRODUCTS_DIR/$PRODUCT_NAME.app/Contents/Frameworks/$PRODUCT_NAME\\ Helper.app\ninstall_name_tool -change \"@rpath/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework\" \"@executable_path/../Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework\" $BUILT_PRODUCTS_DIR/$PRODUCT_NAME.app/Contents/MacOS/$PRODUCT_NAME\ninstall_name_tool -change \"@rpath/Frameworks/Chromium Embedded Framework.framework/Chromium Embedded Framework\" \"@executable_path/../../../Chromium Embedded Framework.framework/Chromium Embedded Framework\" $BUILT_PRODUCTS_DIR/$PRODUCT_NAME.app/Contents/Frameworks/$PRODUCT_NAME\\ Helper.app/Contents/MacOS/$PRODUCT_NAME\\ Helper\n";
 		};
 		B5256F41211A555500891B27 /* Create Temporary '.love' Package */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -841,7 +841,6 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -888,7 +887,6 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -931,7 +929,6 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = "";
-				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
