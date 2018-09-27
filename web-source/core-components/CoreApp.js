@@ -462,6 +462,7 @@ export default class CoreApp extends React.Component {
       maybeLeftSidebarNode = (
         <CoreRootLeftSidebar
           viewer={state.viewer}
+          isBrowsing={state.pageMode === 'browse'}
           onToggleProfile={this._handleToggleProfile}
           onToggleBrowse={this._handleToggleBrowse}
         />

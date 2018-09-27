@@ -38,7 +38,10 @@ export default class CoreRootLeftSidebar extends React.Component {
             {this.props.viewer.username}
           </UIButtonIcon>
         ) : null}
-        <UIButtonIcon icon={<UISVG.Search height="24px" />} onClick={this.props.onToggleBrowse}>
+        <UIButtonIcon
+          active={this.props.isBrowsing}
+          icon={<UISVG.Search height="24px" />}
+          onClick={this.props.onToggleBrowse}>
           Browse
         </UIButtonIcon>
       </div>

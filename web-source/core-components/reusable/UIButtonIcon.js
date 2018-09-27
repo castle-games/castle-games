@@ -50,7 +50,12 @@ export default class UIButtonIcon extends React.Component {
   render() {
     return (
       <span className={STYLES_CONTROL} onClick={this.props.onClick}>
-        <div className={STYLES_ICON} style={{ backgroundImage: `url('${this.props.src}')` }}>
+        <div
+          className={STYLES_ICON}
+          style={{
+            backgroundImage: `url('${this.props.src}')`,
+            boxShadow: this.props.active ? `0 0 0 3px ${Constants.colors.white}` : null,
+          }}>
           {!this.props.src ? this.props.icon : null}
         </div>
         <div className={STYLES_TEXT}>{this.props.children}</div>
