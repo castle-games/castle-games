@@ -492,6 +492,7 @@ export default class CoreApp extends React.Component {
           bottomNode={
             <CoreRootURLInput
               name="mediaUrl"
+              placeholder="Type in a Lua/LOVE main.lua file URL or HTML URL..."
               value={state.mediaUrl}
               viewer={state.viewer}
               media={state.media}
