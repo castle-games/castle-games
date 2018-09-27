@@ -11,6 +11,7 @@ void ghostHandleOpenUri(const char *uri);
 // boot a love instance with the given initial uri.
 void ghostOpenLoveUri(const char *uri);
 
+void ghostQuitMessageLoop();
 void ghostClose();
 void ghostUpdateChildWindowFrame();
 void ghostResizeChildWindow(float dw, float dh);

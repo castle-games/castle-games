@@ -80,3 +80,7 @@ void ghostSetBrowserReady() {
     initialUri = NULL;
   }
 }
+
+void ghostQuitMessageLoop() {
+
+}

@@ -19,6 +19,7 @@ static float childLeft = 0, childTop = 0, childWidth = 200, childHeight = 200;
 
 static lua_State *luaState = NULL;
 static int loveBootStackPos = 0;
+static bool shouldRunMessageLoop = true;
 
 static std::mutex mutex;
 
@@ -80,7 +81,7 @@ void ghostSetBrowserReady() {
 }
 
 extern "C" {
-void ghostStep();
+void ghostRunMessageLoop();
 }
 
 RECT prevParentRect = {0, 0, 0, 0};
@@ -183,6 +184,10 @@ HWND ghostWinGetMainWindow();
 HWND ghostWinGetChildWindow();
 }
 
+void ghostQuitMessageLoop() {
+  shouldRunMessageLoop = false;
+}
+
 void ghostStep() {
   // Process messages
   {
@@ -199,23 +204,23 @@ void ghostStep() {
       }
 
       switch (msg.type) {
-      case OPEN_LOVE_URI: {
-        char *uri = msg.body.openUri.uri;
-        closeLua();
-        bootLove(uri);
-        free(uri);
-      } break;
+        case OPEN_LOVE_URI: {
+          char *uri = msg.body.openUri.uri;
+          closeLua();
+          bootLove(uri);
+          free(uri);
+        } break;
 
-      case SET_CHILD_WINDOW_FRAME: {
-        childLeft = msg.body.setChildWindowFrame.left;
-        childTop = msg.body.setChildWindowFrame.top;
-        childWidth = msg.body.setChildWindowFrame.width;
-        childHeight = msg.body.setChildWindowFrame.height;
-      } break;
+        case SET_CHILD_WINDOW_FRAME: {
+          childLeft = msg.body.setChildWindowFrame.left;
+          childTop = msg.body.setChildWindowFrame.top;
+          childWidth = msg.body.setChildWindowFrame.width;
+          childHeight = msg.body.setChildWindowFrame.height;
+        } break;
 
-      case CLOSE: {
-        closeLua();
-      } break;
+        case CLOSE: {
+          closeLua();
+        } break;
       }
     }
   }
@@ -257,5 +262,11 @@ void ghostStep() {
   } else {
     // If not running Love, sleep for longer per loop
     Sleep(100);
+  }
+}
+
+void ghostRunMessageLoop() {
+  while (shouldRunMessageLoop) {
+    ghostStep();
   }
 }

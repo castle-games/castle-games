@@ -9,7 +9,7 @@
 #include "simple_handler.h"
 
 extern "C" {
-void ghostStep();
+void ghostRunMessageLoop();
 }
 
 // When generating projects with CMake the CEF_USE_SANDBOX value will be defined
@@ -119,11 +119,9 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
   // Initialize CEF.
   CefInitialize(main_args, settings, app.get(), sandbox_info);
 
-  // Run the CEF message loop. This will block until CefQuitMessageLoop() is
+  // Run the Ghost message loop. This will block until ghostQuitMessageLoop() is
   // called.
-  while (true) {
-    ghostStep();
-  }
+  ghostRunMessageLoop();
 
   // Shut down CEF.
   CefShutdown();
