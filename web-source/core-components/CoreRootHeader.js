@@ -5,7 +5,7 @@ import { css } from 'react-emotion';
 
 import UIControl from '~/core-components/reusable/UIControl';
 
-const IS_BROWSE_ENABLED = false;
+const IS_BROWSE_ENABLED = true;
 
 const STYLES_CONTAINER = css`
   @keyframes header-animation {

@@ -9,7 +9,6 @@ import * as Actions from '~/common/actions';
 import { css } from 'react-emotion';
 import { isKeyHotkey } from 'is-hotkey';
 
-
 // NOTE(jim): Reusable layout component.
 import CoreLayout from '~/core-components/layouts/CoreLayout';
 
@@ -271,14 +270,16 @@ export default class CoreApp extends React.Component {
   };
 
   _handleSearchSubmit = () => {
-    this.setState({
-      searchResultsMedia: Fixtures.CurrentPlaylist.mediaItems,
-    });
+    // TODO(jim): We don't actually need this at the moment.
   };
 
   _handleSearchChange = e => {
+    const { mediaItems = [], playlistItems = [] } = Actions.search(e.target.value);
+
     this.setState({
       searchQuery: e.target.value,
+      searchResultsMedia: mediaItems,
+      searchResultsPlaylists: playlistItems,
     });
   };
 
@@ -314,6 +315,10 @@ export default class CoreApp extends React.Component {
   _handleFavoriteMedia = () => window.alert('favorite');
 
   _handleMediaSelect = media => {
+    if (!media) {
+      return;
+    }
+
     if (media.mediaUrl.endsWith('.lua')) {
       this._handleGoToUrl(media.mediaUrl);
       return;
@@ -461,7 +466,12 @@ export default class CoreApp extends React.Component {
               onSubmit={this._handleSearchSubmit}
             />
           }
-          rightSidebarNode={<CoreBrowsePlaylistResults onDismiss={this._handleToggleBrowse} />}
+          rightSidebarNode={
+            <CoreBrowsePlaylistResults
+              playlistItems={state.searchResultsPlaylist}
+              onDismiss={this._handleToggleBrowse}
+            />
+          }
           leftSidebarNode={maybeLeftSidebarNode}>
           <CoreBrowseMediaResults mediaItems={state.searchResultsMedia} />
         </CoreLayout>
