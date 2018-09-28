@@ -10,8 +10,8 @@ import ControlFeedbackPopover from '~/core-components/controls/ControlFeedbackPo
 
 const STYLES_CONTAINER = css`
   padding: 16px;
-  background: ${Constants.colors.card};
-  color: ${Constants.colors.white};
+  background: ${Constants.colors.yellow};
+  color: ${Constants.colors.black};
 `;
 
 const STYLES_CONTAINER_PREVIEW_LABEL = css`
