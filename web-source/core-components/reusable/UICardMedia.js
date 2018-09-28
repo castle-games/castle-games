@@ -10,17 +10,8 @@ import ControlFeedbackPopover from '~/core-components/controls/ControlFeedbackPo
 
 const STYLES_CONTAINER = css`
   padding: 16px;
-  border-top: 1px solid ${Constants.colors.white10};
-  border-radius: 2px;
   background: ${Constants.colors.card};
   color: ${Constants.colors.white};
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-`;
-
-const STYLES_CONTAINER_PREVIEW = css`
-  padding: 16px;
-  border-radius: 4px;
-  border: 1px solid ${Constants.colors.white10};
 `;
 
 const STYLES_CONTAINER_PREVIEW_LABEL = css`
@@ -69,10 +60,7 @@ export default class UICardMedia extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
-        <div className={STYLES_CONTAINER_PREVIEW}>
-          <div className={STYLES_CONTAINER_PREVIEW_LABEL}>Name</div>
-          <div className={STYLES_CONTAINER_PREVIEW_NAME}>{name}</div>
-        </div>
+        <div className={STYLES_CONTAINER_PREVIEW_NAME}>{name}</div>
         <div className={STYLES_BYLINE}>
           Created by {username} — {createdTime}
         </div>
