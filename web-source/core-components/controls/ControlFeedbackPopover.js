@@ -25,9 +25,9 @@ const STYLES_INPUT = css`
   box-sizing: border-box;
   display: block;
   width: 100%;
-  border: 1px solid ${Constants.colors.white60};
+  border: 1px solid ${Constants.colors.border};
   padding: 0 16px 0 16px;
-  background ${Constants.colors.black};
+  background ${Constants.colors.foreground};
   font-size: 12px;
   color: ${Constants.colors.white};
   height: 40px;

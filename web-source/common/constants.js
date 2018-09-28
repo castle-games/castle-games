@@ -30,9 +30,15 @@ export const colors = {
   black40: `rgba(0, 0, 0, 0.4)`,
   black30: `rgba(0, 0, 0, 0.3)`,
   black20: `rgba(0, 0, 0, 0.2)`,
+  background: `#030405`,
+  foreground: `#03131f`,
+  border: `#001945`,
+  card: `#00155d`,
   white: base.white,
   green: base.green,
   yellow: base.yellow,
   red: base.red,
-  background: '#2a2e2c',
 };
+
+// #040b0e
+// #000587

@@ -11,34 +11,19 @@ const STYLES_FIXED_CONTAINER = css`
   position: relative;
   width: 420px;
   height: 100%;
-  border-left: 1px solid ${Constants.colors.white25};
+  border-left: 1px solid ${Constants.colors.border};
 `;
 
 const STYLES_CONTAINER = css`
   width: 100%;
   height: 100%;
   overflow-y: scroll;
-  background ${Constants.colors.black};
+  background ${Constants.colors.background};
   color: ${Constants.colors.white};
 
   ::-webkit-scrollbar {
     display: none;
     width: 1px;
-  }
-
-  /* Track */
-  ::-webkit-scrollbar-track {
-    background: ${Constants.colors.black20};
-  }
-
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: ${Constants.colors.black};
-  }
-
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: ${Constants.colors.black};
   }
 `;
 
@@ -69,7 +54,7 @@ const STYLES_LOG_RIGHT = css`
 `;
 
 const STYLES_FIXED_HEADER = css`
-  background: ${Constants.colors.black};
+  background: ${Constants.colors.background};
   opacity: 0.8;
   position: absolute;
   top: 0;

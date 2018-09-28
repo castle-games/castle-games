@@ -11,13 +11,12 @@ const STYLES_HEADER = css`
   font-weight: 600;
   font-size: 14px;
   padding-bottom: 8px;
-  color: ${Constants.colors.white80};
-  border-bottom: 1px solid ${Constants.colors.black30};
+  color: ${Constants.colors.white};
   margin-bottom: 8px;
 `;
 
 const STYLES_PARAGRAPH = css`
-  color: ${Constants.colors.white80};
+  color: ${Constants.colors.white};
   font-size: 12px;
   line-height: 1.5;
 `;

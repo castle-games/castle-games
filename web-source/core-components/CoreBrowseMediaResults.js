@@ -26,28 +26,12 @@ const STYLES_CONTAINER = css`
   min-width: 25%;
   height: 100%;
   overflow-y: scroll;
-  background ${Constants.colors.black};
-  border-left: 1px solid ${Constants.colors.white10};
+  background ${Constants.colors.background};
   color: ${Constants.colors.white};
 
   ::-webkit-scrollbar {
     display: none;
     width: 1px;
-  }
-
-  /* Track */
-  ::-webkit-scrollbar-track {
-    background: ${Constants.colors.black20};
-  }
-
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: ${Constants.colors.black};
-  }
-
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: ${Constants.colors.black};
   }
 `;
 

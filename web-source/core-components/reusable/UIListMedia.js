@@ -17,8 +17,7 @@ const STYLES_ROW_TITLE = css`
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  background: #222;
-  border-bottom: 1px solid ${Constants.colors.white10};
+  background: ${Constants.colors.foreground};
 `;
 
 const STYLES_ROW = css`
@@ -27,7 +26,7 @@ const STYLES_ROW = css`
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  border-bottom: 1px solid ${Constants.colors.white10};
+  border-bottom: 1px solid ${Constants.colors.border};
   cursor: pointer;
 
   :last-child {
@@ -46,7 +45,6 @@ const STYLES_ROW_SELECTED = css`
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  border-bottom: 1px solid ${Constants.colors.white10};
   cursor: pointer;
   background: ${Constants.colors.green};
 

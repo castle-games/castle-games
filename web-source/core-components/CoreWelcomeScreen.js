@@ -39,12 +39,12 @@ const STYLES_ACTIONS = css`
   margin-top: 24px;
   font-size: 18px;
   flex-shrink: 0;
-  border-top: 1px solid ${Constants.colors.white25};
+  border-top: 1px solid ${Constants.colors.border};
 `;
 
 const STYLES_OPTION = css`
   color: ${Constants.colors.white60};
-  border-bottom: 1px solid ${Constants.colors.white25};
+  border-bottom: 1px solid ${Constants.colors.border};
   font-size: 12px;
   font-weight: 600;
   padding: 16px 0 16px 0;
@@ -67,7 +67,8 @@ export default class CoreWelcomeScreen extends React.Component {
         <div className={STYLES_CONTENT}>
           <img height="48px" src="static/castle-wordmark.png" />
           <p className={STYLES_PARAGRAPH}>
-            Welcome! Use the top search bar to search for games, or enter a URL for a Lua & LÖVE or web based game you want to play.
+            Welcome! Use the top search bar to search for games, or enter a URL for a Lua & LÖVE or
+            web based game you want to play.
           </p>
 
           <div className={STYLES_ACTIONS}>

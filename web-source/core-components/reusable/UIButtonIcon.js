@@ -25,7 +25,7 @@ const STYLES_CONTROL = css`
 const STYLES_ICON = css`
   height: 48px;
   width: 48px;
-  background: ${Constants.colors.black};
+  background: ${Constants.colors.foreground};
   margin-bottom: 8px;
   border-radius: 4px;
   display: inline-flex;

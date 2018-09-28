@@ -34,7 +34,6 @@ const STYLES_MIDDLE_TOP = css`
 `;
 
 const STYLES_CHILDREN = css`
-  background: ${Constants.colors.black};
   min-height: 25%;
   height: 100%;
   width: 100%;

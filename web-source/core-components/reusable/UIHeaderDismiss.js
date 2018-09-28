@@ -6,13 +6,13 @@ import { css } from 'react-emotion';
 
 const STYLES_CONTAINER = css`
   height: 48px;
-  background: ${Constants.colors.black30};
+  background: ${Constants.colors.background};
   color: ${Constants.colors.white};
   padding: 0 16px 0 16px;
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  border-bottom: 1px solid ${Constants.colors.white10};
+  border-bottom: 1px solid ${Constants.colors.border};
 `;
 
 const STYLES_ICON = css`

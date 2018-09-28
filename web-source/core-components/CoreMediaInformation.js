@@ -23,41 +23,14 @@ const STYLES_CONTAINER = css`
   width: 420px;
   height: 100%;
   overflow-y: scroll;
-  background ${Constants.colors.black20};
-  border-left: 1px solid ${Constants.colors.white10};
+  background ${Constants.colors.background};
+  border-left: 1px solid ${Constants.colors.border};
 
   ::-webkit-scrollbar {
     display: none;
     width: 1px;
   }
-
-  /* Track */
-  ::-webkit-scrollbar-track {
-    background: ${Constants.colors.black20};
-  }
-
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: ${Constants.colors.black};
-  }
-
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: ${Constants.colors.black};
-  }
 `;
-
-/*
-<UIEmptyState title="Recommended media">
-  Once this game has been added to our servers we will be able to recommend other games
-  people play that are similar. The author of the game can also recommend other games for
-  you to play.
-</UIEmptyState>
-
-<UIEmptyState title="Recommended playlists">
-  There are no recommended playlists.
-</UIEmptyState>
-*/
 
 export default class CoreMediaInformation extends React.Component {
   render() {

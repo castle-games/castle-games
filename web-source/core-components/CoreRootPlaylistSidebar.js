@@ -14,13 +14,11 @@ const STYLES_FIXED_CONTAINER = css`
   width: 420px;
   height: 100%;
   padding-top: 48px;
-  border-left: 1px solid ${Constants.colors.white25};
+  border-left: 1px solid ${Constants.colors.border};
 `;
 
 const STYLES_FIXED_HEADER = css`
-  background: ${Constants.colors.black};
-  box-shadow: inset 0 -1px 0 0 #666;
-  opacity: 0.6;
+  background: ${Constants.colors.background};
   position: absolute;
   top: 0;
   right: 0;
@@ -43,27 +41,11 @@ const STYLES_CONTAINER = css`
   width: 420px;
   height: 100%;
   overflow-y: scroll;
-  background ${Constants.colors.black20};
-  border-left: 1px solid ${Constants.colors.white10};
+  background ${Constants.colors.background};
 
   ::-webkit-scrollbar {
     display: none;
     width: 1px;
-  }
-
-  /* Track */
-  ::-webkit-scrollbar-track {
-    background: ${Constants.colors.black20};
-  }
-
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: ${Constants.colors.yellow};
-  }
-
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: ${Constants.colors.white};
   }
 `;
 

@@ -24,27 +24,12 @@ const STYLES_CONTAINER = css`
   width: 420px;
   height: 100%;
   overflow-y: scroll;
-  background ${Constants.colors.black20};
-  border-left: 1px solid ${Constants.colors.white10};
+  background ${Constants.colors.background};
+  border-left: 1px solid ${Constants.colors.border};
 
   ::-webkit-scrollbar {
     display: none;
     width: 1px;
-  }
-  
-  /* Track */
-  ::-webkit-scrollbar-track {
-    background: ${Constants.colors.black20};
-  }
-
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: ${Constants.colors.black};
-  }
-
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: ${Constants.colors.black};
   }
 `;
 
@@ -81,7 +66,6 @@ export default class CoreRootDashboard extends React.Component {
         <UIListMediaInPlaylist
           media={this.props.media}
           onMediaSelect={this.props.onMediaSelect}
-          style={{ borderTop: `1px solid ${Constants.colors.white10}` }}
           mediaItems={history}
         />
       </div>

@@ -18,7 +18,7 @@ const STYLES_CONTAINER = css`
 
   animation: header-animation 280ms ease;
 
-  background: ${Constants.colors.black40};
+  background: ${Constants.colors.background};
   color: ${Constants.colors.white};
   flex-shrink: 0;
   display: flex;
@@ -27,7 +27,7 @@ const STYLES_CONTAINER = css`
   height: 48px;
   width: 100%;
   padding: 0 16px 0 16px;
-  border-bottom: 1px solid ${Constants.colors.white10};
+  border-bottom: 1px solid ${Constants.colors.border};
 `;
 
 const STYLES_CONTAINER_LEFT = css`

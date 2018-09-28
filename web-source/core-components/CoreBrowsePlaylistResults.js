@@ -23,28 +23,13 @@ const STYLES_CONTAINER = css`
   width: 420px;
   height: 100%;
   overflow-y: scroll;
-  background ${Constants.colors.black};
+  background ${Constants.colors.background};
   color: ${Constants.colors.white};
-  border-left: 1px solid ${Constants.colors.white10};
+  border-left: 1px solid ${Constants.colors.border};
 
   ::-webkit-scrollbar {
     display: none;
     width: 1px;
-  }
-
-  /* Track */
-  ::-webkit-scrollbar-track {
-    background: ${Constants.colors.black20};
-  }
-
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: ${Constants.colors.black};
-  }
-
-  /* Handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: ${Constants.colors.black};
   }
 `;
 

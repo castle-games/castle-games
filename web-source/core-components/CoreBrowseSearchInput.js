@@ -24,17 +24,17 @@ const STYLES_CONTAINER = css`
   justify-content: space-between;
   height: 48px;
   width: 100%;
-  background: ${Constants.colors.black60};
+  background: ${Constants.colors.background};
   color: ${Constants.colors.white};
   padding: 0 16px 0 16px;
-  border-bottom: 1px solid ${Constants.colors.white10};
+  border-bottom: 1px solid ${Constants.colors.border};
 `;
 
 const STYLES_CONTAINER_LEFT = css`
   flex-shrink: 0;
   font-size: 16px;
   padding-right: 2px;
-  color: ${Constants.colors.white60};
+  color: ${Constants.colors.white};
   display: flex;
   align-items: center;
 `;
