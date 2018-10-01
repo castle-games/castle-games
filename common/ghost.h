@@ -11,6 +11,9 @@ void ghostHandleOpenUri(const char *uri);
 // boot a love instance with the given initial uri.
 void ghostOpenLoveUri(const char *uri);
 
+// dispatch a JS Event with the given name and params.
+void ghostSendJSEvent(const char *eventName, const char *serializedParams);
+
 void ghostQuitMessageLoop();
 void ghostClose();
 void ghostUpdateChildWindowFrame();

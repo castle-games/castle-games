@@ -49,6 +49,10 @@ void ghostHandleOpenUri(const char *uri) {
   // TODO
 }
 
+void ghostSendJSEvent(const char *eventName, const char *serializedParams) {
+  // TODO
+}
+
 void ghostOpenLoveUri(const char *uri) {
   std::lock_guard<std::mutex> guard(mutex);
   Message msg;

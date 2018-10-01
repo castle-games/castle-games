@@ -176,9 +176,9 @@ void SimpleHandler::OnBeforeClose(CefRefPtr<CefBrowser> browser) {
   if (browser_list_.empty()) {
     // All browser windows have closed. Quit the application message loop.
     ghostQuitMessageLoop();
-    
-    // On Windows CEF automatically handles the message loop on another thread. On macOS it's on the same thread
-    // and we need to quit manually.
+
+    // On Windows CEF automatically handles the message loop on another thread. On macOS it's on the
+    // same thread and we need to quit manually.
 #ifdef __APPLE__
     CefQuitMessageLoop();
 #endif
@@ -190,6 +190,16 @@ void SimpleHandler::OnBeforeClose(CefRefPtr<CefBrowser> browser) {
   }
 }
 
+void SimpleHandler::OnLoadEnd(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame,
+                              int httpStatusCode) {
+  auto url = std::string(frame->GetURL());
+  std::stringstream params;
+  params << "{"
+         << " url: \"" << url << "\", "
+         << "}";
+  ghostSendJSEvent("nativeLoadEnd", params.str().c_str());
+}
+
 void SimpleHandler::OnLoadError(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame,
                                 ErrorCode errorCode, const CefString &errorText,
                                 const CefString &failedUrl) {
@@ -198,6 +208,14 @@ void SimpleHandler::OnLoadError(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFram
   // Don't display an error for downloaded files.
   if (errorCode == ERR_ABORTED)
     return;
+
+  std::stringstream params;
+  params << "{"
+         << " url: \"" << std::string(failedUrl) << "\", "
+         << " errorText: \"" << std::string(errorText) << "\", "
+         << " errorCode: " << errorCode << ", "
+         << "}";
+  ghostSendJSEvent("nativeLoadError", params.str().c_str());
 
   // Display a load error message.
   std::stringstream ss;

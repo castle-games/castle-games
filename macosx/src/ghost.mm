@@ -3,22 +3,32 @@
 #import "GhostAppDelegate.h"
 #import "simple_handler.h"
 
-// macOS implementation of 'ghost.h'
+NSString *const kGhostOpenUrlEventName = @"nativeOpenUrl";
+
+#pragma mark - internal
+
+static void _ghostSendJSEvent(NSString *eventName, NSString *serializedParams) {
+  CefRefPtr<CefBrowser> browser = SimpleHandler::GetInstance()->GetFirstBrowser();
+  CefRefPtr<CefFrame> frame = browser->GetMainFrame();
+  NSString *validatedParams = (serializedParams) ? serializedParams : @"{}";
+  NSString *msg = [NSString
+      stringWithFormat:
+          @"{ let event = new Event('%@'); event.params = %@; window.dispatchEvent(event); }",
+          eventName, validatedParams];
+  frame->ExecuteJavaScript([msg UTF8String], frame -> GetURL(), 0);
+}
+
+static void _ghostSendNativeOpenUrlEvent(const char *uri) {
+  NSString *params = [NSString stringWithFormat:@"{ url: '%s' }", uri];
+  _ghostSendJSEvent(kGhostOpenUrlEventName, params);
+}
+
+#pragma mark - macos implementation of ghost.h
 
 static float childLeft = 0, childTop = 0, childWidth = 200, childHeight = 200;
 
 static BOOL browserReady = NO;
 static char *initialUri = NULL;
-
-static void ghostSendNativeOpenUrlEvent(const char *uri) {
-  CefRefPtr<CefBrowser> browser = SimpleHandler::GetInstance()->GetFirstBrowser();
-  CefRefPtr<CefFrame> frame = browser->GetMainFrame();
-  NSString *msg =
-      [NSString stringWithFormat:@"let event = new Event('nativeOpenUrl'); event.params = { url: "
-                                 @"'%s' }; window.dispatchEvent(event);",
-                                 uri];
-  frame->ExecuteJavaScript([msg UTF8String], frame -> GetURL(), 0);
-}
 
 void ghostSetChildWindowFrame(float left, float top, float width, float height) {
   childLeft = left;
@@ -50,7 +60,7 @@ void ghostUpdateChildWindowFrame() {
 
 void ghostHandleOpenUri(const char *uri) {
   if (browserReady) {
-    ghostSendNativeOpenUrlEvent(uri);
+    _ghostSendNativeOpenUrlEvent(uri);
   } else {
     initialUri = strdup(uri);
   }
@@ -75,12 +85,17 @@ void ghostClose() {
 void ghostSetBrowserReady() {
   browserReady = YES;
   if (initialUri) {
-    ghostSendNativeOpenUrlEvent(initialUri);
+    _ghostSendNativeOpenUrlEvent(initialUri);
     free(initialUri);
     initialUri = NULL;
   }
 }
 
-void ghostQuitMessageLoop() {
+void ghostQuitMessageLoop() {}
 
+void ghostSendJSEvent(const char *eventName, const char *serializedParams) {
+  NSString *eventNameMacOS = [NSString stringWithFormat:@"%s", eventName];
+  NSString *eventParamsMacOS =
+      (serializedParams != NULL) ? [NSString stringWithFormat:@"%s", serializedParams] : nil;
+  _ghostSendJSEvent(eventNameMacOS, eventParamsMacOS);
 }

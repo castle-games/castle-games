@@ -47,6 +47,8 @@ public:
   virtual void OnBeforeClose(CefRefPtr<CefBrowser> browser) OVERRIDE;
 
   // CefLoadHandler methods:
+  virtual void OnLoadEnd(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame,
+                         int httpStatusCode) OVERRIDE;
   virtual void OnLoadError(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame,
                            ErrorCode errorCode, const CefString &errorText,
                            const CefString &failedUrl) OVERRIDE;
