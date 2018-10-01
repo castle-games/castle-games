@@ -46,7 +46,7 @@ export default class CoreRootLeftSidebar extends React.Component {
         </UIButtonIcon>
         <UIButtonIcon
           active={this.props.isSignIn}
-          icon={<UISVG.Search height="24px" />}
+          icon={<UISVG.Login height="24px" />}
           onClick={this.props.onToggleSignIn}>
           Sign in
         </UIButtonIcon>

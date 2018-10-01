@@ -61,8 +61,9 @@ export default class CoreApp extends React.Component {
     this._handleCEFupdateFrame();
 
     // TODO(jim): Move this somewhere else.
-    const processChannels = () => {
-      const logs = CEF.getLogs();
+    const processChannels = async () => {
+      const logs = await CEF.getLogs();
+      console.log(logs);
 
       this.setState({ logs: [...this.state.logs, ...logs] });
       this._devTimeout = window.setTimeout(processChannels, POLL_DELAY);
@@ -81,8 +82,6 @@ export default class CoreApp extends React.Component {
     window.removeEventListener('keydown', this._handleKeyDown);
     window.clearTimeout(this._devTimeout);
   }
-
-  setStateWithCEF = state => this.setState({ ...state }, this._handleCEFupdateFrame);
 
   _handleSetHistory = media => {
     if (!this.props.storage) {
@@ -118,6 +117,8 @@ export default class CoreApp extends React.Component {
       history.pop();
     }
   };
+
+  setStateWithCEF = state => this.setState({ ...state }, this._handleCEFupdateFrame);
 
   _handleCEFupdateFrame = () => {
     const element = this._layout.getMediaContainerRef();

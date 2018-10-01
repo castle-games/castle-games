@@ -3,31 +3,33 @@ let logId = 1;
 export const getLogs = () => {
   if (!window.cefQuery) {
     console.error('getLogs: window.cefQuery is undefined');
-    return;
+    return new Promise(resolve => resolve([]));
   }
 
-  window.cefQuery({
-    request: JSON.stringify({
-      type: 'READ_CHANNELS',
-      body: { channelNames: ['PRINT', 'ERROR'] },
-    }),
-    onSuccess: json => {
-      const channels = JSON.parse(json);
+  return new Promise(resolve => {
+    window.cefQuery({
+      request: JSON.stringify({
+        type: 'READ_CHANNELS',
+        body: { channelNames: ['PRINT', 'ERROR'] },
+      }),
+      onSuccess: json => {
+        const channels = JSON.parse(json);
 
-      const logs = [];
-      channels.PRINT.map(json => {
-        const params = JSON.parse(json);
-        logs.push({ id: logId, type: 'print', text: `${params.join(' ')}` });
-        logId = logId + 1;
-      });
+        const logs = [];
+        channels.PRINT.map(json => {
+          const params = JSON.parse(json);
+          logs.push({ id: logId, type: 'print', text: `${params.join(' ')}` });
+          logId = logId + 1;
+        });
 
-      channels.ERROR.map(json => {
-        const error = JSON.parse(json).error;
-        logs.push({ id: logId, type: 'error', text: `${error}` });
-        logId = logId + 1;
-      });
-      return logs;
-    },
+        channels.ERROR.map(json => {
+          const error = JSON.parse(json).error;
+          logs.push({ id: logId, type: 'error', text: `${error}` });
+          logId = logId + 1;
+        });
+        return resolve(logs);
+      },
+    });
   });
 };
 
@@ -71,7 +73,7 @@ export const openWindowFrame = mediaUrl => {
 
 export const updateWindowFrame = rect => {
   if (!window.cefQuery) {
-    console.error('upateWindowFrame: window.cefQuery is undefined');
+    console.error('updateWindowFrame: window.cefQuery is undefined');
     return;
   }
 
