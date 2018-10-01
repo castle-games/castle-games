@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
-import * as UISVG from '~/core-components/reusable/UISVG';
+import * as SVG from '~/core-components/primitives/svg';
 
 import { css } from 'react-emotion';
 
@@ -40,13 +40,13 @@ export default class CoreRootLeftSidebar extends React.Component {
         ) : null}
         <UIButtonIcon
           active={this.props.isBrowsing}
-          icon={<UISVG.Search height="24px" />}
+          icon={<SVG.Search height="24px" />}
           onClick={this.props.onToggleBrowse}>
           Browse
         </UIButtonIcon>
         <UIButtonIcon
           active={this.props.isSignIn}
-          icon={<UISVG.Login height="24px" />}
+          icon={<SVG.Login height="24px" />}
           onClick={this.props.onToggleSignIn}>
           Sign in
         </UIButtonIcon>

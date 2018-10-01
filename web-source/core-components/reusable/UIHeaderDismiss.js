@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
-import * as UISVG from '~/core-components/reusable/UISVG';
+import * as SVG from '~/core-components/primitives/svg';
 
 import { css } from 'react-emotion';
 
@@ -41,7 +41,7 @@ export default class UIHeaderDismiss extends React.Component {
         <div className={STYLES_LEFT}>{this.props.children}</div>
         {this.props.onDismiss ? (
           <span className={STYLES_ICON} onClick={this.props.onDismiss}>
-            <UISVG.Dismiss height="16px" />
+            <SVG.Dismiss height="16px" />
           </span>
         ) : null}
       </div>

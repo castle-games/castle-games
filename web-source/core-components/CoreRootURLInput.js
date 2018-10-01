@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
-import * as UISVG from '~/core-components/reusable/UISVG';
+import * as SVG from '~/core-components/primitives/svg';
 
 import { css } from 'react-emotion';
 
@@ -79,13 +79,6 @@ const STYLES_CONTAINER_TOOLBAR = css`
   flex-shrink: 0;
 `;
 
-/*
-<UIButtonDarkSmall
-  icon={<UISVG.Favorite height="16px" />}
-  onClick={this.props.onFavoriteMedia}
-/>
-*/
-
 export default class CoreRootURLInput extends React.Component {
   _input;
 
@@ -96,12 +89,12 @@ export default class CoreRootURLInput extends React.Component {
     if (this.props.media && this.props.media.dimensions) {
       dimensionToggleElement = !this.props.expanded ? (
         <UIButtonDarkSmall
-          icon={<UISVG.Expand height="16px" />}
+          icon={<SVG.Expand height="16px" />}
           onClick={this.props.onToggleMediaExpanded}
         />
       ) : (
         <UIButtonDarkSmall
-          icon={<UISVG.Collapse height="16px" />}
+          icon={<SVG.Collapse height="16px" />}
           onClick={this.props.onToggleMediaExpanded}
         />
       );
@@ -123,16 +116,16 @@ export default class CoreRootURLInput extends React.Component {
           />
         </div>
         <div className={STYLES_CONTAINER_RIGHT}>
-          <UIButtonDarkSmall icon={<UISVG.Play height="12px" />} onClick={this.props.onSubmit} />
+          <UIButtonDarkSmall icon={<SVG.Play height="12px" />} onClick={this.props.onSubmit} />
         </div>
         <div className={STYLES_CONTAINER_TOOLBAR}>
           {dimensionToggleElement}
           <UIButtonDarkSmall
-            icon={<UISVG.CloseOverlay height="16px" />}
+            icon={<SVG.CloseOverlay height="16px" />}
             onClick={this.props.onHideOverlay}
           />
           <UIButtonDarkSmall
-            icon={<UISVG.History height="16px" />}
+            icon={<SVG.History height="16px" />}
             onClick={this.props.onToggleDashboard}
           />
         </div>

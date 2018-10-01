@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
-import * as UISVG from '~/core-components/reusable/UISVG';
+import * as SVG from '~/core-components/primitives/svg';
 import * as Strings from '~/common/strings';
 
 import { css } from 'react-emotion';
@@ -74,7 +74,7 @@ export default class UICardMedia extends React.Component {
           </div>
 
           <ControlFeedbackPopover onRegisterMedia={this.props.onRegisterMedia}>
-            <UIButtonIconHorizontal style={{ marginTop: 24 }} icon={<UISVG.Mail height="16px" />}>
+            <UIButtonIconHorizontal style={{ marginTop: 24 }} icon={<SVG.Mail height="16px" />}>
               Contact us
             </UIButtonIconHorizontal>
           </ControlFeedbackPopover>
