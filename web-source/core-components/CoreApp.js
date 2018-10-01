@@ -5,6 +5,7 @@ import * as ReactDOM from 'react-dom';
 import * as Fixtures from '~/common/fixtures';
 import * as Slack from '~/common/slack';
 import * as Actions from '~/common/actions';
+import * as CEF from '~/common/cef';
 
 import { css } from 'react-emotion';
 import { isKeyHotkey } from 'is-hotkey';
@@ -19,7 +20,7 @@ import CoreRootLeftSidebar from '~/core-components/CoreRootLeftSidebar';
 import CoreRootDashboard from '~/core-components/CoreRootDashboard';
 import CoreRootToolbar from '~/core-components/CoreRootToolbar';
 import CoreRootPlaylistSidebar from '~/core-components/CoreRootPlaylistSidebar';
-import CoreRootAuthenticateForm from '~/core-components/CoreRootAuthenticateForm';
+import CoreSignIn from '~/core-components/CoreSignIn';
 
 // NOTE(jim): Media Scene
 import CoreMediaScreen from '~/core-components/CoreMediaScreen';
@@ -44,8 +45,6 @@ const isOverlayHotkey = isKeyHotkey('mod+e');
 const isDevelopmentLogHotkey = isKeyHotkey('mod+j');
 const POLL_DELAY = 300;
 
-let logId = 1;
-
 export default class CoreApp extends React.Component {
   _layout;
   _devTimeout;
@@ -63,58 +62,18 @@ export default class CoreApp extends React.Component {
 
     // TODO(jim): Move this somewhere else.
     const processChannels = () => {
-      if (!window.cefQuery) {
-        console.error('window.cefQuery is undefined');
-        return;
-      }
+      const logs = CEF.getLogs();
 
-      window.cefQuery({
-        request: JSON.stringify({
-          type: 'READ_CHANNELS',
-          body: { channelNames: ['PRINT', 'ERROR'] },
-        }),
-        onSuccess: json => {
-          const channels = JSON.parse(json);
-
-          const logs = [];
-          channels.PRINT.map(json => {
-            const params = JSON.parse(json);
-            logs.push({ id: logId, type: 'print', text: `${params.join(' ')}` });
-            logId = logId + 1;
-          });
-
-          channels.ERROR.map(json => {
-            const error = JSON.parse(json).error;
-            logs.push({ id: logId, type: 'error', text: `${error}` });
-            logId = logId + 1;
-          });
-
-          this.setState({ logs: [...this.state.logs, ...logs] });
-
-          this._devTimeout = setTimeout(processChannels, POLL_DELAY);
-        },
-      });
+      this.setState({ logs: [...this.state.logs, ...logs] });
+      this._devTimeout = window.setTimeout(processChannels, POLL_DELAY);
     };
 
-    this._devTimeout = setTimeout(processChannels, POLL_DELAY);
+    processChannels();
 
     const playlist = await Actions.getCurrentJamPlaylist();
     this.setState({ playlist });
 
-    if (!window.cefQuery) {
-      return;
-    }
-
-    try {
-      window.cefQuery({
-        request: JSON.stringify({
-          type: 'BROWSER_READY',
-          body: {},
-        }),
-      });
-    } catch (e) {
-      alert('`cefQuery`: ' + e.message);
-    }
+    CEF.setBrowserReady();
   }
 
   componentWillUnmount() {
@@ -161,29 +120,9 @@ export default class CoreApp extends React.Component {
   };
 
   _handleCEFupdateFrame = () => {
-    if (!window.cefQuery) {
-      return;
-    }
-
     const element = this._layout.getMediaContainerRef();
     const rect = element.getBoundingClientRect();
-
-    // TODO(jim): Move window calls somewhere else.
-    try {
-      window.cefQuery({
-        request: JSON.stringify({
-          type: 'SET_CHILD_WINDOW_FRAME',
-          body: {
-            left: rect.left,
-            top: rect.top,
-            width: rect.width,
-            height: rect.height,
-          },
-        }),
-      });
-    } catch (e) {
-      alert('`cefQuery`: ' + e.message);
-    }
+    CEF.updateWindowFrame(rect);
   };
 
   _handleURLChange = e => this.setState({ [e.target.name]: e.target.value });
@@ -203,14 +142,7 @@ export default class CoreApp extends React.Component {
   };
 
   _handleGoToMedia = media => {
-    if (window.cefQuery) {
-      window.cefQuery({
-        request: JSON.stringify({
-          type: 'CLOSE',
-          body: '',
-        }),
-      });
-    }
+    CEF.closeWindowFrame();
 
     this._handleSetHistory(media);
     this.setStateWithCEF({ media, mediaUrl: media.mediaUrl, pageMode: null });
@@ -219,22 +151,7 @@ export default class CoreApp extends React.Component {
   _handleGoToUrl = mediaUrl => {
     this.setState({ media: null });
 
-    if (!window.cefQuery) {
-      return;
-    }
-
-    try {
-      window.cefQuery({
-        request: JSON.stringify({
-          type: 'OPEN_URI',
-          body: {
-            uri: mediaUrl,
-          },
-        }),
-      });
-    } catch (e) {
-      alert('`cefQuery`: ' + e.message);
-    }
+    CEF.openWindowFrame(mediaUrl);
 
     this._handleSetHistory({ mediaUrl });
     this.setStateWithCEF({ media: { mediaUrl }, mediaUrl, pageMode: null });
@@ -264,18 +181,6 @@ export default class CoreApp extends React.Component {
     }
   };
 
-  _handleSignOut = () => {
-    this.setStateWithCEF({ viewer: null, pageMode: null });
-  };
-
-  _handleSignIn = () => {
-    this.setStateWithCEF({ viewer: Fixtures.User, pageMode: null, sidebarMode: null });
-  };
-
-  _handleAuthChange = e => {
-    this.setState({ local: { ...this.state.local, [e.target.name]: e.target.value } });
-  };
-
   _handleSearchSubmit = async () => {
     if (Strings.isEmpty(this.state.searchQuery)) {
       alert('You must provide a search query.');
@@ -293,20 +198,6 @@ export default class CoreApp extends React.Component {
   _handleSearchChange = async e => {
     this.setState({
       searchQuery: e.target.value,
-    });
-  };
-
-  _handleToggleBrowse = () => {
-    this.setStateWithCEF({ pageMode: this.state.pageMode === 'browse' ? null : 'browse' });
-  };
-
-  _handleToggleProfile = () => {
-    this.setStateWithCEF({ pageMode: this.state.pageMode === 'profile' ? null : 'profile' });
-  };
-
-  _handleToggleCurrentPlaylistDetails = () => {
-    this.setStateWithCEF({
-      pageMode: this.state.pageMode === 'playlist' ? null : 'playlist',
     });
   };
 
@@ -328,16 +219,7 @@ export default class CoreApp extends React.Component {
   _handleFavoriteMedia = () => window.alert('favorite');
 
   _handlePlaylistSelect = playlist => {
-    if (window.cefQuery) {
-      window.cefQuery({
-        request: JSON.stringify({
-          type: 'CLOSE',
-          body: '',
-        }),
-      });
-    }
-
-    console.log(playlist);
+    CEF.closeWindowFrame();
 
     this.setStateWithCEF({ pageMode: null, playlist, media: null });
   };
@@ -376,60 +258,43 @@ export default class CoreApp extends React.Component {
     this._handleMediaSelect(this.state.playlist.mediaItems[index]);
   };
 
-  _handlePlayCreatorMedia = creator => {
-    console.log({ creator });
-  };
+  _handleToggleBrowse = () =>
+    this.setStateWithCEF({ pageMode: this.state.pageMode === 'browse' ? null : 'browse' });
 
-  _handleSubscribeToCreator = creator => {
-    console.log({ creator });
-  };
+  _handleToggleProfile = () =>
+    this.setStateWithCEF({ pageMode: this.state.pageMode === 'profile' ? null : 'profile' });
 
-  _handleClickCreatorAvatar = creator => {
-    console.log({ creator });
-  };
+  _handleToggleSignIn = () =>
+    this.setStateWithCEF({ pageMode: this.state.pageMode === 'sign-in' ? null : 'sign-in' });
 
-  _handleClickCreatorCreations = creator => {
-    console.log({ creator });
-  };
+  _handleToggleCurrentPlaylistDetails = () =>
+    this.setStateWithCEF({
+      pageMode: this.state.pageMode === 'playlist' ? null : 'playlist',
+    });
 
-  _handleClickCreatorPlaylists = creator => {
-    console.log({ creator });
-  };
-
-  _handleToggleCurrentPlaylist = () => {
+  _handleToggleCurrentPlaylist = () =>
     this.setStateWithCEF({
       pageMode: null,
       sidebarMode: this.state.sidebarMode === 'current-playlist' ? null : 'current-playlist',
     });
-  };
 
-  _handleToggleDashboard = () => {
+  _handleToggleDashboard = () =>
     this.setStateWithCEF({
       sidebarMode: this.state.sidebarMode === 'dashboard' ? null : 'dashboard',
       pageMode: null,
     });
-  };
 
-  _handleToggleAuthentication = () => {
-    this.setStateWithCEF({
-      viewer: this.state.viewer ? null : this.state.viewer,
-      sidebarMode: this.state.viewer ? null : 'authentication',
-    });
-  };
-
-  _handleToggleDevelopmentLogs = () => {
+  _handleToggleDevelopmentLogs = () =>
     this.setStateWithCEF({
       sidebarMode: this.state.sidebarMode === 'development' ? null : 'development',
       pageMode: null,
     });
-  };
 
-  _handleToggleMediaInfo = () => {
+  _handleToggleMediaInfo = () =>
     this.setStateWithCEF({
       sidebarMode: this.state.sidebarMode === 'media-info' ? null : 'media-info',
       pageMode: null,
     });
-  };
 
   _handleShowProfileMediaList = () => {
     this.setStateWithCEF({
@@ -437,34 +302,36 @@ export default class CoreApp extends React.Component {
     });
   };
 
-  _handleShowProfilePlaylistList = () => {
+  _handleShowProfilePlaylistList = () =>
     this.setStateWithCEF({
       profileMode: 'playlists',
     });
-  };
 
-  _handleDismissSidebar = () => {
-    this.setStateWithCEF({ sidebarMode: null });
-  };
+  _handleDismissSidebar = () => this.setStateWithCEF({ sidebarMode: null });
 
-  _handleToggleScore = () => {
-    this.setStateWithCEF({ isScoreVisible: !this.state.isScoreVisible });
-  };
+  _handleToggleScore = () => this.setStateWithCEF({ isScoreVisible: !this.state.isScoreVisible });
 
-  _handleDismissScore = () => {
-    this.setStateWithCEF({ isScoreVisible: false });
-  };
+  _handleDismissScore = () => this.setStateWithCEF({ isScoreVisible: false });
 
-  _handleHideOverlay = () => {
-    this.setStateWithCEF({ isOverlayActive: false, pageMode: null });
-  };
+  _handleHideOverlay = () => this.setStateWithCEF({ isOverlayActive: false, pageMode: null });
 
-  _handleToggleOverlay = () => {
+  _handleToggleOverlay = () =>
     this.setStateWithCEF({ isOverlayActive: !this.state.isOverlayActive, pageMode: null });
+
+  _handleToggleMediaExpanded = () =>
+    this.setStateWithCEF({ isMediaExpanded: !this.state.isMediaExpanded, pageMode: null });
+
+  _handleSignOut = () => this.setStateWithCEF({ viewer: null, pageMode: null });
+
+  _handleAuthChange = e =>
+    this.setState({ local: { ...this.state.local, [e.target.name]: e.target.value } });
+
+  _handleSignInAsync = () => {
+    console.log('testtesttest');
   };
 
-  _handleToggleMediaExpanded = () => {
-    this.setStateWithCEF({ isMediaExpanded: !this.state.isMediaExpanded, pageMode: null });
+  _handleGetReference = reference => {
+    this._layout = reference;
   };
 
   render() {
@@ -476,8 +343,10 @@ export default class CoreApp extends React.Component {
         <CoreRootLeftSidebar
           viewer={state.viewer}
           isBrowsing={state.pageMode === 'browse'}
+          isSignIn={state.pageMode === 'sign-in'}
           onToggleProfile={this._handleToggleProfile}
           onToggleBrowse={this._handleToggleBrowse}
+          onToggleSignIn={this._handleToggleSignIn}
         />
       );
     }
@@ -486,9 +355,7 @@ export default class CoreApp extends React.Component {
     if (state.pageMode === 'browse') {
       return (
         <CoreLayout
-          ref={reference => {
-            this._layout = reference;
-          }}
+          ref={this._handleGetReference}
           topNode={
             <CoreBrowseSearchInput
               searchQuery={state.searchQuery}
@@ -530,6 +397,14 @@ export default class CoreApp extends React.Component {
       );
     }
 
+    if (state.pageMode === 'sign-in') {
+      return (
+        <CoreLayout ref={this._handleGetReference} leftSidebarNode={maybeLeftSidebarNode}>
+          <CoreSignIn />
+        </CoreLayout>
+      );
+    }
+
     // NOTE(jim): Playlist Scene.
     // TODO(jim): Reusable Components.
     if (state.pageMode === 'playlist') {
@@ -547,11 +422,7 @@ export default class CoreApp extends React.Component {
     // NOTE(jim): Profile Scene
     if (state.pageMode === 'profile') {
       return (
-        <CoreLayout
-          ref={reference => {
-            this._layout = reference;
-          }}
-          leftSidebarNode={maybeLeftSidebarNode}>
+        <CoreLayout ref={this._handleGetReference} leftSidebarNode={maybeLeftSidebarNode}>
           <CoreProfile
             creator={state.viewer}
             profileMode={state.profileMode}
@@ -629,16 +500,6 @@ export default class CoreApp extends React.Component {
       );
     }
 
-    if (state.isOverlayActive && state.sidebarMode === 'authentication') {
-      maybeRightNode = (
-        <CoreRootAuthenticateForm
-          onDismiss={this._handleDismissSidebar}
-          onChange={this._handleAuthChange}
-          onSubmit={this._handleSignIn}
-        />
-      );
-    }
-
     if (state.isOverlayActive && state.sidebarMode === 'dashboard') {
       maybeRightNode = (
         <CoreRootDashboard
@@ -664,9 +525,7 @@ export default class CoreApp extends React.Component {
 
     return (
       <CoreLayout
-        ref={reference => {
-          this._layout = reference;
-        }}
+        ref={this._handleGetReference}
         topNode={maybeTopNode}
         bottomNode={maybeBottomNode}
         leftSidebarNode={maybeLeftSidebarNode}

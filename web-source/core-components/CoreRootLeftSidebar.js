@@ -44,6 +44,12 @@ export default class CoreRootLeftSidebar extends React.Component {
           onClick={this.props.onToggleBrowse}>
           Browse
         </UIButtonIcon>
+        <UIButtonIcon
+          active={this.props.isSignIn}
+          icon={<UISVG.Search height="24px" />}
+          onClick={this.props.onToggleSignIn}>
+          Sign in
+        </UIButtonIcon>
       </div>
     );
   }

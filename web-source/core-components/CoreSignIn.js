@@ -1,5 +1,43 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
+import * as UISVG from '~/core-components/reusable/UISVG';
+
+import { css } from 'react-emotion';
+
+const STYLES_CONTAINER = css`
+  @keyframes authentication-animation {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  animation: authentication-animation 280ms ease;
+
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  background ${Constants.colors.background};
+  color: ${Constants.colors.white};
+
+  ::-webkit-scrollbar {
+    display: none;
+    width: 1px;
+  }
+`;
+
+export default class CoreSignIn extends React.Component {
+  render() {
+    return <div className={STYLES_CONTAINER}>Hello World</div>;
+  }
+}
+
+/*
+import * as React from 'react';
+import * as Constants from '~/common/constants';
 
 import { css } from 'react-emotion';
 
@@ -48,3 +86,4 @@ export default class CoreRootAuthenticateForm extends React.Component {
     );
   }
 }
+*/
