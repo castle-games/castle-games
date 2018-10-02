@@ -187,6 +187,14 @@ export default class CoreApp extends React.Component {
     }
 
     const data = await Actions.search(this.state.searchQuery);
+    if (!data) {
+      this.setState({
+        searchResultsMedia: [],
+        searchResultsPlaylist: [],
+      });
+      return;
+    }
+
     const { mediaItems = [], playlistItems = [] } = data;
     this.setState({
       searchResultsMedia: mediaItems,
@@ -201,6 +209,8 @@ export default class CoreApp extends React.Component {
   };
 
   _handleRegisterGame = ({ email, message }) => {
+    console.log(email, message);
+
     // TODO(jim): Handle this better
     if (Strings.isEmpty(email)) {
       return;

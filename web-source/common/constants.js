@@ -15,7 +15,7 @@ export const base = {
 };
 
 export const colors = {
-  black: base.black,
+  black: '#000000',
   white80: `rgba(255, 255, 255, 0.8)`,
   white60: `rgba(255, 255, 255, 0.6)`,
   white40: `rgba(255, 255, 255, 0.4)`,

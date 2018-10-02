@@ -11,6 +11,7 @@ const STYLES_CONTAINER = css`
 
 const STYLES_INPUT = css`
   display: block;
+  box-sizing: border-box;
   padding: 16px 8px 0 8px;
   border-radius: 4px;
   width: 100%;
@@ -20,7 +21,7 @@ const STYLES_INPUT = css`
   box-shadow: 2px 2px 0 ${Constants.brand.foreground};
   color: ${Constants.brand.line};
   font-size: 16px;
-  height: 48px;
+  height: 64px;
   margin: 0 0 24px 0;
   transition: 200ms ease all;
 
@@ -54,16 +55,27 @@ const STYLES_LABEL_WHITE = css`
 `;
 
 export default class UIInput extends React.Component {
+  static defaultProps = {
+    onChange: () => {},
+    onSubmit: () => {},
+    onFocus: () => {},
+    onBlur: () => {},
+  };
+
   state = {
     focus: false,
   };
 
-  _handleFocus = () => {
+  _handleFocus = e => {
     this.setState({ focus: true });
+
+    this.props.onFocus(e);
   };
 
-  _handleBlur = () => {
+  _handleBlur = e => {
     this.setState({ focus: false });
+
+    this.props.onBlur(e);
   };
 
   render() {
@@ -73,11 +85,12 @@ export default class UIInput extends React.Component {
           {this.props.label}
         </label>
         <ControlledInput
-          onChange={this._handleChange}
+          onChange={this.props.onChange}
           onFocus={this._handleFocus}
           onBlur={this._handleBlur}
-          name="username"
-          placeholder="Type a username..."
+          onSubmit={this.props.onSubmit}
+          name={this.props.name}
+          placeholder={this.props.placeholder}
           type={this.props.type}
           value={this.props.username}
           className={STYLES_INPUT}

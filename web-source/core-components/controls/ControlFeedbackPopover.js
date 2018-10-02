@@ -6,37 +6,11 @@ import { css } from 'react-emotion';
 
 import UIPopover from '~/core-components/reusable/UIPopover';
 import DOMRectBoundary from '~/core-components/primitives/DOMRectBoundary';
-import ControlledInput from '~/core-components/primitives/ControlledInput';
+import UIInput from '~/core-components/reusable/UIInput';
 import UIControl from '~/core-components/reusable/UIControl';
 
 const STYLES_CONTROL = css`
   position: relative;
-`;
-
-const STYLES_TRIGGER = css``;
-
-const STYLES_LABEL = css`
-  font-size: 10px;
-  margin-bottom: 4px;
-`;
-
-const STYLES_INPUT = css`
-  box-sizing: border-box;
-  display: block;
-  width: 100%;
-  border: 1px solid ${Constants.colors.border};
-  padding: 0 16px 0 16px;
-  background ${Constants.colors.foreground};
-  font-size: 12px;
-  color: ${Constants.colors.white};
-  height: 40px;
-  border-radius: 4px;
-  outline: 0;
-
-  :focus {
-    border: 1px solid ${Constants.colors.white};
-    outline: 0;
-  }
 `;
 
 export default class ControlFeedbackPopover extends React.Component {
@@ -68,19 +42,16 @@ export default class ControlFeedbackPopover extends React.Component {
         captureScroll={false}>
         <UIPopover style={{ bottom: 0, left: 0 }} active={this.state.visible}>
           <div style={{ marginBottom: 16 }}>
-            <div className={STYLES_LABEL}>Email</div>
-            <ControlledInput
-              className={STYLES_INPUT}
+            <UIInput
               value={this.state.email}
+              label="E-mail"
               name={`email`}
               onChange={this._handleChange}
             />
-          </div>
-          <div>
-            <div className={STYLES_LABEL}>Message</div>
-            <ControlledInput
-              className={STYLES_INPUT}
+
+            <UIInput
               value={this.state.message}
+              label="message"
               name={`message`}
               onChange={this._handleChange}
               onSubmit={this._handleSubmit}
@@ -91,9 +62,7 @@ export default class ControlFeedbackPopover extends React.Component {
             Submit
           </UIControl>
         </UIPopover>
-        <div className={STYLES_TRIGGER} onClick={this._handleToggleShow}>
-          {this.props.children}
-        </div>
+        <div onClick={this._handleToggleShow}>{this.props.children}</div>
       </DOMRectBoundary>
     );
   }

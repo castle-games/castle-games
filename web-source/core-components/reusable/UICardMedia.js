@@ -6,7 +6,7 @@ import * as Strings from '~/common/strings';
 import { css } from 'react-emotion';
 
 import UIButtonIconHorizontal from '~/core-components/reusable/UIButtonIconHorizontal';
-import ControlFeedbackPopover from '~/core-components/controls/ControlFeedbackPopover';
+import UIInput from '~/core-components/reusable/UIInput';
 
 const STYLES_CONTAINER = css`
   padding: 16px;
@@ -49,6 +49,21 @@ const STYLES_SECTION_PARAGRAPH = css`
 `;
 
 export default class UICardMedia extends React.Component {
+  state = {
+    email: '',
+    message: '',
+  };
+
+  _handleChange = e => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
+
+  _handleSubmit = async () => {
+    await this.props.onRegisterMedia({ email: this.state.email, message: this.state.message });
+
+    this.setState({ email: null, message: null });
+  };
+
   render() {
     const name = this.props.media && this.props.media.name ? this.props.media.name : 'Untitled';
     const username =
@@ -73,11 +88,26 @@ export default class UICardMedia extends React.Component {
             or remove it, please contact the Castle team and let us know.
           </div>
 
-          <ControlFeedbackPopover onRegisterMedia={this.props.onRegisterMedia}>
-            <UIButtonIconHorizontal style={{ marginTop: 24 }} icon={<SVG.Mail height="16px" />}>
-              Contact us
-            </UIButtonIconHorizontal>
-          </ControlFeedbackPopover>
+          <div style={{ marginTop: 48 }}>
+            <UIInput
+              value={this.state.email}
+              label="E-mail"
+              name="email"
+              onChange={this._handleChange}
+            />
+
+            <UIInput
+              value={this.state.message}
+              label="message"
+              name="message"
+              onChange={this._handleChange}
+              onSubmit={this._handleSubmit}
+            />
+          </div>
+
+          <UIButtonIconHorizontal onClick={this._handleSubmit} icon={<SVG.Mail height="16px" />}>
+            Contact us
+          </UIButtonIconHorizontal>
         </div>
       </div>
     );
