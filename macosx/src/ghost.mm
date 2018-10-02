@@ -1,9 +1,8 @@
 #import "ghost.h"
+#import "ghost_constants.h"
 
 #import "GhostAppDelegate.h"
 #import "simple_handler.h"
-
-NSString *const kGhostOpenUrlEventName = @"nativeOpenUrl";
 
 #pragma mark - internal
 
@@ -19,8 +18,9 @@ static void _ghostSendJSEvent(NSString *eventName, NSString *serializedParams) {
 }
 
 static void _ghostSendNativeOpenUrlEvent(const char *uri) {
+  NSString *eventName = [NSString stringWithUTF8String:kGhostOpenUrlEventName.c_str()];
   NSString *params = [NSString stringWithFormat:@"{ url: '%s' }", uri];
-  _ghostSendJSEvent(kGhostOpenUrlEventName, params);
+  _ghostSendJSEvent(eventName, params);
 }
 
 #pragma mark - macos implementation of ghost.h

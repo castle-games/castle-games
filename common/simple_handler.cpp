@@ -197,7 +197,7 @@ void SimpleHandler::OnLoadEnd(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame>
   params << "{"
          << " url: \"" << url << "\", "
          << "}";
-  ghostSendJSEvent("nativeLoadEnd", params.str().c_str());
+  ghostSendJSEvent(kGhostLoadEndEventName.c_str(), params.str().c_str());
 }
 
 void SimpleHandler::OnLoadError(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame,
@@ -215,7 +215,7 @@ void SimpleHandler::OnLoadError(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFram
          << " errorText: \"" << std::string(errorText) << "\", "
          << " errorCode: " << errorCode << ", "
          << "}";
-  ghostSendJSEvent("nativeLoadError", params.str().c_str());
+  ghostSendJSEvent(kGhostLoadErrorEventName.c_str(), params.str().c_str());
 
   // Display a load error message.
   std::stringstream ss;
