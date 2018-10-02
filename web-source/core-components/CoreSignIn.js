@@ -3,6 +3,8 @@ import * as Constants from '~/common/constants';
 
 import { css } from 'react-emotion';
 
+import ControlledInput from '~/core-components/primitives/ControlledInput';
+
 const STYLES_CONTAINER = css`
   @keyframes authentication-animation {
     from {
@@ -28,9 +30,63 @@ const STYLES_CONTAINER = css`
   }
 `;
 
+const STYLES_CONTENTS = css`
+  paddidng: 16px;
+`;
+
+const STYLES_INPUT = css`
+  margin: 0;
+  padding: 0 8px 0 8px;
+  width: 100%;
+  border: 4px solid ${Constants.colors.foreground};
+  background: ${Constants.colors.background};
+  color: ${Constants.colors.white};
+  height: 48px;
+
+  :focus {
+    outline: 0;
+  }
+`;
+
+const STYLES_BUTTON = css`
+  paddding: 12px;
+`;
+
 export default class CoreSignIn extends React.Component {
+  state = {
+    username: '',
+    password: '',
+  };
+
+  _handleChange = e => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
+
   render() {
-    return <div className={STYLES_CONTAINER}>Hello World</div>;
+    return (
+      <div className={STYLES_CONTAINER}>
+        <div className={STYLES_CONTENTS}>
+          <h1>Hello World</h1>
+          <p>Hello Worldd</p>
+          <ControlledInput
+            onChange={this._handleChange}
+            name="username"
+            value={this.state.username}
+            className={STYLES_INPUT}
+          />
+          <ControlledInput
+            onChange={this._handleChange}
+            type="password"
+            name="password"
+            value={this.state.password}
+            className={STYLES_INPUT}
+          />
+          <button className={STYLES_BUTTON} onClick={this.props.onToggleBrowse}>
+            Submit
+          </button>
+        </div>
+      </div>
+    );
   }
 }
 

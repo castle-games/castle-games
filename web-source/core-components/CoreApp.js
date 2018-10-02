@@ -25,7 +25,6 @@ import CoreSignIn from '~/core-components/CoreSignIn';
 // NOTE(jim): Media Scene
 import CoreMediaScreen from '~/core-components/CoreMediaScreen';
 import CoreMediaInformation from '~/core-components/CoreMediaInformation';
-import CoreMediaScoreInformation from '~/core-components/CoreMediaScoreInformation';
 
 // NOTE(jim): Browse Scene
 import CoreBrowsePlaylistResults from '~/core-components/CoreBrowsePlaylistResults';
@@ -309,10 +308,6 @@ export default class CoreApp extends React.Component {
 
   _handleDismissSidebar = () => this.setStateWithCEF({ sidebarMode: null });
 
-  _handleToggleScore = () => this.setStateWithCEF({ isScoreVisible: !this.state.isScoreVisible });
-
-  _handleDismissScore = () => this.setStateWithCEF({ isScoreVisible: false });
-
   _handleHideOverlay = () => this.setStateWithCEF({ isOverlayActive: false, pageMode: null });
 
   _handleToggleOverlay = () =>
@@ -320,15 +315,6 @@ export default class CoreApp extends React.Component {
 
   _handleToggleMediaExpanded = () =>
     this.setStateWithCEF({ isMediaExpanded: !this.state.isMediaExpanded, pageMode: null });
-
-  _handleSignOut = () => this.setStateWithCEF({ viewer: null, pageMode: null });
-
-  _handleAuthChange = e =>
-    this.setState({ local: { ...this.state.local, [e.target.name]: e.target.value } });
-
-  _handleSignInAsync = () => {
-    console.log('testtesttest');
-  };
 
   _handleGetReference = reference => {
     this._layout = reference;
@@ -400,13 +386,13 @@ export default class CoreApp extends React.Component {
     if (state.pageMode === 'sign-in') {
       return (
         <CoreLayout ref={this._handleGetReference} leftSidebarNode={maybeLeftSidebarNode}>
-          <CoreSignIn />
+          <CoreSignIn onToggleBrowse={this._handleToggleBrowse} />
         </CoreLayout>
       );
     }
 
     // NOTE(jim): Playlist Scene.
-    // TODO(jim): Reusable Components.
+    // TODO(jim): Unfinishedd.
     if (state.pageMode === 'playlist') {
       return (
         <CoreLayout
@@ -420,13 +406,13 @@ export default class CoreApp extends React.Component {
     }
 
     // NOTE(jim): Profile Scene
+    // TODO(jim): Unfinishe.d
     if (state.pageMode === 'profile') {
       return (
         <CoreLayout ref={this._handleGetReference} leftSidebarNode={maybeLeftSidebarNode}>
           <CoreProfile
             creator={state.viewer}
             profileMode={state.profileMode}
-            onSignOut={this._handleSignOut}
             onDismiss={this._handleToggleProfile}
             onShowProfileMediaList={this._handleShowProfileMediaList}
             onShowProfilePlaylistList={this._handleShowProfilePlaylistList}
@@ -472,15 +458,9 @@ export default class CoreApp extends React.Component {
           onToggleDashboard={this._handleToggleDashboard}
           onToggleAuthentication={this._handleToggleAuthentication}
           onToggleMediaInfo={this._handleToggleMediaInfo}
-          onToggleScores={this._handleToggleScore}
           onToggleCurrentPlaylist={this._handleToggleCurrentPlaylist}
         />
       );
-    }
-
-    let maybeRightSidebarNode;
-    if (state.isOverlayActive && state.isScoreVisible) {
-      maybeRightSidebarNode = <CoreMediaScoreInformation onDismiss={this._handleDismissScore} />;
     }
 
     let maybeRightNode;
@@ -529,7 +509,6 @@ export default class CoreApp extends React.Component {
         topNode={maybeTopNode}
         bottomNode={maybeBottomNode}
         leftSidebarNode={maybeLeftSidebarNode}
-        rightSidebarNode={maybeRightSidebarNode}
         rightNode={maybeRightNode}>
         {state.media ? (
           <CoreMediaScreen expanded={state.isMediaExpanded} media={state.media} />
