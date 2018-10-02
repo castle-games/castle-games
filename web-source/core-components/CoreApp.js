@@ -67,7 +67,9 @@ export default class CoreApp extends React.Component {
       this._devTimeout = window.setTimeout(processChannels, POLL_DELAY);
     };
 
-    processChannels();
+    if (window.cefQuery) {
+      processChannels();
+    }
 
     const playlist = await Actions.getCurrentJamPlaylist();
     this.setState({ playlist });
@@ -209,8 +211,6 @@ export default class CoreApp extends React.Component {
   };
 
   _handleRegisterGame = ({ email, message }) => {
-    console.log(email, message);
-
     // TODO(jim): Handle this better
     if (Strings.isEmpty(email)) {
       return;
