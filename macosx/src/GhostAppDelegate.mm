@@ -11,16 +11,20 @@ extern "C" {
 #include <SDL.h>
 
 #include "modules/love/love.h"
+#include "modules/thread/Channel.h"
+#include "modules/timer/Timer.h"
+
 #include "simple_handler.h"
 
 @interface GhostAppDelegate ()
 
 @property(nonatomic, assign) lua_State *luaState;
 @property(nonatomic, assign) int loveBootStackPos;
+@property(nonatomic, assign) BOOL lovePaused;
 
 @property(nonatomic, strong) NSTimer *mainLoopTimer;
 
-@property(nonatomic, assign) BOOL resizeSubscribed;
+@property(nonatomic, assign) BOOL windowEventsSubscribed;
 @property(nonatomic, assign) CGRect prevWindowFrame;
 
 @end
@@ -43,12 +47,14 @@ extern "C" {
 
   self.mainLoopTimer = [NSTimer timerWithTimeInterval:1.0f / 60.0f
                                                target:self
-                                             selector:@selector(stepLove)
+                                             selector:@selector(stepMainLoop)
                                              userInfo:nil
                                               repeats:YES];
   [[NSRunLoop mainRunLoop] addTimer:self.mainLoopTimer forMode:NSRunLoopCommonModes];
 
-  self.resizeSubscribed = NO;
+  self.lovePaused = NO;
+
+  self.windowEventsSubscribed = NO;
 }
 
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender {
@@ -150,8 +156,14 @@ extern "C" {
       [self closeLua];
     }
   }
+}
 
-  if (!self.resizeSubscribed) {
+- (void)stepMainLoop {
+  if (!self.lovePaused) {
+    [self stepLove];
+  }
+
+  if (!self.windowEventsSubscribed) {
     NSWindow *window = [[NSApplication sharedApplication] mainWindow];
     if (window) {
       [[NSNotificationCenter defaultCenter] addObserver:self
@@ -159,7 +171,17 @@ extern "C" {
                                                    name:NSWindowDidResizeNotification
                                                  object:window];
       self.prevWindowFrame = window.frame;
-      self.resizeSubscribed = YES;
+
+      [[NSNotificationCenter defaultCenter] addObserver:self
+                                               selector:@selector(windowDidBecomeKey:)
+                                                   name:NSWindowDidBecomeKeyNotification
+                                                 object:window];
+      [[NSNotificationCenter defaultCenter] addObserver:self
+                                               selector:@selector(windowDidResignKey:)
+                                                   name:NSWindowDidResignKeyNotification
+                                                 object:window];
+
+      self.windowEventsSubscribed = YES;
     }
   }
 
@@ -198,6 +220,20 @@ extern "C" {
   float dh = window.frame.size.height - self.prevWindowFrame.size.height;
   ghostResizeChildWindow(dw, dh);
   self.prevWindowFrame = window.frame;
+}
+
+- (void)windowDidBecomeKey:(NSNotification *)notification {
+  // Step timer so that next frame's `dt` doesn't include time spent paused
+  auto timer = love::Module::getInstance<love::timer::Timer>(love::Module::M_TIMER);
+  if (timer) {
+    timer->step();
+  }
+
+  self.lovePaused = NO;
+}
+
+- (void)windowDidResignKey:(NSNotification *)notification {
+  self.lovePaused = YES;
 }
 
 @end
