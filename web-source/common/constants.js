@@ -7,7 +7,7 @@ export const font = {
 
 export const base = {
   white: `#ffffff`,
-  black: `#000000`,
+  black: `#39373D`,
   green: `#00c851`,
   yellow: `#ffc107`,
   red: `#CC0000`,
@@ -30,12 +30,18 @@ export const colors = {
   black40: `rgba(0, 0, 0, 0.4)`,
   black30: `rgba(0, 0, 0, 0.3)`,
   black20: `rgba(0, 0, 0, 0.2)`,
-  background: `#000000`,
-  foreground: `#222222`,
-  border: `#444444`,
+  background: base.black,
+  foreground: `#444444`,
+  border: `#454545`,
   card: `#D20014`,
   white: base.white,
   green: base.green,
   yellow: base.yellow,
   red: base.red,
+};
+
+export const brand = {
+  background: '#FFD232',
+  foreground: '#B09436',
+  line: '#39373D',
 };

@@ -3,7 +3,9 @@ import * as Constants from '~/common/constants';
 
 import { css } from 'react-emotion';
 
-import ControlledInput from '~/core-components/primitives/ControlledInput';
+import UIInput from '~/core-components/reusable/UIInput';
+import UIButton from '~/core-components/reusable/UIButton';
+import UIHeadingGroup from '~/core-components/reusable/UIHeadingGroup';
 
 const STYLES_CONTAINER = css`
   @keyframes authentication-animation {
@@ -18,11 +20,14 @@ const STYLES_CONTAINER = css`
 
   animation: authentication-animation 280ms ease;
 
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
   width: 100%;
   height: 100%;
-  overflow-y: scroll;
-  background ${Constants.colors.background};
-  color: ${Constants.colors.white};
+  background ${Constants.brand.background};
+  color: ${Constants.brand.text};
 
   ::-webkit-scrollbar {
     display: none;
@@ -30,26 +35,41 @@ const STYLES_CONTAINER = css`
   }
 `;
 
-const STYLES_CONTENTS = css`
-  paddidng: 16px;
-`;
-
-const STYLES_INPUT = css`
-  margin: 0;
-  padding: 0 8px 0 8px;
+const STYLES_TOP = css`
+  display: flex;
+  min-height: 25%;
+  height: 100%;
   width: 100%;
-  border: 4px solid ${Constants.colors.foreground};
-  background: ${Constants.colors.background};
-  color: ${Constants.colors.white};
-  height: 48px;
-
-  :focus {
-    outline: 0;
-  }
+  align-items: center;
+  justify-content: center;
 `;
 
-const STYLES_BUTTON = css`
-  paddding: 12px;
+const STYLES_BOTTOM = css`
+  border-top: ${Constants.brand.foreground} 1px solid;
+  color: ${Constants.brand.line};
+  display: flex;
+  align-items: center;
+  height: 48px;
+  width: 100%;
+  flex-shrink: 0;
+  padding: 0 24px 0 24px;
+`;
+
+const STYLES_CONTENTS = css`
+  padding: 16px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 320px;
+`;
+
+const STYLES_LINK = css`
+  font-weight: 600;
+  color: ${Constants.brand.line};
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-right: 24px;
+  top: 8px;
 `;
 
 export default class CoreSignIn extends React.Component {
@@ -65,80 +85,35 @@ export default class CoreSignIn extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTAINER}>
-        <div className={STYLES_CONTENTS}>
-          <h1>Hello World</h1>
-          <p>Hello Worldd</p>
-          <ControlledInput
-            onChange={this._handleChange}
-            name="username"
-            value={this.state.username}
-            className={STYLES_INPUT}
-          />
-          <ControlledInput
-            onChange={this._handleChange}
-            type="password"
-            name="password"
-            value={this.state.password}
-            className={STYLES_INPUT}
-          />
-          <button className={STYLES_BUTTON} onClick={this.props.onToggleBrowse}>
-            Submit
-          </button>
+        <div className={STYLES_TOP}>
+          <div className={STYLES_CONTENTS}>
+            <UIHeadingGroup title="Welcome!">
+              Enter your username and password to create a new account or sign into an existing one.
+            </UIHeadingGroup>
+            <UIInput
+              label="username"
+              name="username"
+              placeholder="Type a username..."
+              onChange={this._handleChange}
+              value={this.state.username}
+            />
+            <UIInput
+              label="password"
+              name="password"
+              type="password"
+              placeholder="Type a password..."
+              onChange={this._handleChange}
+              value={this.state.password}
+            />
+            <UIButton>Submit</UIButton>
+          </div>
+        </div>
+
+        <div className={STYLES_BOTTOM}>
+          <span className={STYLES_LINK}>Terms of Service</span>
+          <span className={STYLES_LINK}>Privacy Policy</span>
         </div>
       </div>
     );
   }
 }
-
-/*
-import * as React from 'react';
-import * as Constants from '~/common/constants';
-
-import { css } from 'react-emotion';
-
-import UIHeaderDismiss from '~/core-components/reusable/UIHeaderDismiss';
-import UIEmptyState from '~/core-components/reusable/UIEmptyState';
-import UILink from '~/core-components/reusable/UILink';
-import UIControl from '~/core-components/reusable/UIControl';
-
-const STYLES_CONTAINER = css`
-  @keyframes authentication-animation {
-    from {
-      opacity: 0;
-    }
-
-    to {
-      opacity: 1;
-    }
-  }
-
-  animation: authentication-animation 280ms ease;
-
-  width: 420px;
-  height: 100%;
-  overflow-y: scroll;
-  background ${Constants.colors.background};
-  border-left: 1px solid ${Constants.colors.border};
-
-  ::-webkit-scrollbar {
-    display: none;
-    width: 1px;
-  }
-`;
-
-export default class CoreRootAuthenticateForm extends React.Component {
-  render() {
-    return (
-      <div className={STYLES_CONTAINER}>
-        <UIHeaderDismiss onDismiss={this.props.onDismiss} />
-        <UIEmptyState title="Authenticate">
-          <span onClick={this.props.onSubmit} style={{ fontWeight: 600 }}>
-            Click this
-          </span>{' '}
-          to test authentication example.
-        </UIEmptyState>
-      </div>
-    );
-  }
-}
-*/

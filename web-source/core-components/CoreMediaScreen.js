@@ -13,7 +13,7 @@ export default class CoreMediaScreen extends React.Component {
 
     return (
       <iframe
-        style={{ ...style }}
+        style={{ ...style, background: `#000000` }}
         allow="autoplay; camera; midi"
         frameBorder="0"
         src={this.props.media ? this.props.media.mediaUrl : null}
