@@ -91,6 +91,7 @@ export default class CoreSignIn extends React.Component {
               Enter your username and password to create a new account or sign into an existing one.
             </UIHeadingGroup>
             <UIInput
+              autoFocus
               label="username"
               name="username"
               placeholder="Type a username..."

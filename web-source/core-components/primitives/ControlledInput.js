@@ -18,6 +18,12 @@ export default class ControlledInput extends React.Component {
     onFocus: () => {},
   };
 
+  componentDidMount = () => {
+    if (this.props.autoFocus) {
+      this._input.focus();
+    }
+  };
+
   focus = e => {
     this._input.focus();
     this._handleFocus(e);
@@ -56,6 +62,7 @@ export default class ControlledInput extends React.Component {
         }}
         id={this.props.name ? `${this.props.name}-unique-input` : null}
         autoComplete="off"
+        autoFocus={this.props.autoFocus}
         readOnly={this.props.readOnly}
         className={this.props.className}
         placeholder={this.props.placeholder}

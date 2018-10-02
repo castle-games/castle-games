@@ -85,6 +85,7 @@ export default class UIInput extends React.Component {
           {this.props.label}
         </label>
         <ControlledInput
+          autoFocus={this.props.autoFocus}
           onChange={this.props.onChange}
           onFocus={this._handleFocus}
           onBlur={this._handleBlur}
