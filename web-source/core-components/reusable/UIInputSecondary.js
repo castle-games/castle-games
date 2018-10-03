@@ -18,7 +18,6 @@ const STYLES_INPUT = css`
   font-weight: 600;
   border: 2px solid #333333;
   background: #323232;
-  box-shadow: 2px 2px 0 #232323;
   color: ${Constants.colors.white};
   font-size: 16px;
   height: 64px;
@@ -30,7 +29,6 @@ const STYLES_INPUT = css`
     color: ${Constants.colors.white};
     border: 2px solid ${Constants.colors.white};
     background: ${Constants.colors.foreground};
-    box-shadow: 2px 2px 0 ${Constants.colors.border};
   }
 `;
 
