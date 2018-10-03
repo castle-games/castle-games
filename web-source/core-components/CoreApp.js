@@ -71,10 +71,6 @@ export default class CoreApp extends React.Component {
       processChannels();
     }
 
-    const { currentPlaylist, me } = await Actions.getInitialData();
-    console.log(me);
-    this.setState({ playlist: currentPlaylist, viewer: me });
-
     CEF.setBrowserReady();
   }
 
@@ -126,6 +122,8 @@ export default class CoreApp extends React.Component {
     const rect = element.getBoundingClientRect();
     CEF.updateWindowFrame(rect);
   };
+
+  _handleSetViewer = viewer => this.setState({ viewer, pageMode: viewer ? 'browse' : 'sign-in' });
 
   _handleURLChange = e => this.setState({ [e.target.name]: e.target.value });
 
@@ -361,6 +359,7 @@ export default class CoreApp extends React.Component {
           onToggleProfile={this._handleToggleProfile}
           onToggleBrowse={this._handleToggleBrowse}
           onToggleSignIn={this._handleToggleSignIn}
+          onSignOut={this._handleSignOut}
         />
       );
     }
@@ -402,7 +401,10 @@ export default class CoreApp extends React.Component {
           ref={this._handleGetReference}
           bottomNode={this.renderRootURLInput()}
           leftSidebarNode={maybeLeftSidebarNode}>
-          <CoreSignIn onToggleBrowse={this._handleToggleBrowse} />
+          <CoreSignIn
+            onToggleBrowse={this._handleToggleBrowse}
+            onSetViewer={this._handleSetViewer}
+          />
         </CoreLayout>
       );
     }

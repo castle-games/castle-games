@@ -39,11 +39,13 @@ const STYLES_ICON = css`
 const STYLES_TEXT = css`
   text-transform: uppercase;
   font-family: ${Constants.font.default};
-  font-size: 10px;
+  font-size: 9px;
   letter-spacing: 0.2px;
   font-weight: 400;
   display: inline-flex;
   align-items: center;
+  width: 100%;
+  justify-content: center;
 `;
 
 export default class UIButtonIcon extends React.Component {

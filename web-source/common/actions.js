@@ -130,5 +130,5 @@ export async function authenticate({ username, password }) {
     return;
   }
 
-  return result;
+  return result.data.login;
 }

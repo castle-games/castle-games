@@ -39,9 +39,6 @@ export default class CoreProfile extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTAINER}>
-        <UIHeaderDismiss onDismiss={this.props.onDismiss}>
-          <UIControl onClick={this.props.onSignOut}>Sign out</UIControl>
-        </UIHeaderDismiss>
         <UICardProfileHeader
           creator={this.props.creator}
           profileMode={this.props.profileMode}
@@ -54,7 +51,7 @@ export default class CoreProfile extends React.Component {
           onShowPlaylistList={this.props.onShowProfilePlaylistList}
         />
         {this.props.profileMode === 'media' || !this.props.profileMode ? (
-          <UIListMedia media={this.props.creator.mediaItems} />
+          <UIEmptyState title="Not Implemented">Harass Jim.</UIEmptyState>
         ) : null}
         {this.props.profileMode === 'playlist' ? (
           <UIEmptyState title="Not Implemented">Harass Jim.</UIEmptyState>

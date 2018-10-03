@@ -25,8 +25,7 @@ const STYLES_BODY_LEFT = css`
 const STYLES_BODY_RIGHT = css`
   min-width: 25%;
   width: 100%;
-  padding-left: 24px;
-  color: ${Constants.colors.white};
+  color: ${Constants.brand.line};
 `;
 
 const STYLES_ROW = css`
@@ -53,7 +52,7 @@ const STYLES_DESCRIPTION = css`
 `;
 
 const STYLES_NAVIGATION_ITEM = css`
-  background: #222;
+  background: ${Constants.brand.line};
   padding: 8px 16px 8px 16px;
   border-radius: 4px 4px 0 0;
   cursor: pointer;
@@ -72,32 +71,14 @@ export default class UICardProfileHeader extends React.Component {
         className={STYLES_CONTAINER}
         style={this.props.style}
         onClick={this.props.onClick}
-        style={{ background: this.props.creator.theme.background }}>
+        style={{ background: Constants.brand.background }}>
         <div className={STYLES_BODY}>
-          <div className={STYLES_BODY_LEFT}>
-            <UIAvatar
-              style={{ height: '88px', width: '88px' }}
-              src={this.props.creator.avatarUrl}
-              onClick={() => this.props.onClickCreatorAvatar(this.props.creator)}
-            />
-          </div>
+          <div className={STYLES_BODY_LEFT} />
           <div className={STYLES_BODY_RIGHT}>
             <div className={STYLES_TOP}>
               <div className={STYLES_TITLE}>{this.props.creator.username}</div>
               <div className={STYLES_META}>
                 Joined on {Strings.toDate(this.props.creator.createdTime)}
-              </div>
-
-              <div className={STYLES_ROW}>
-                <UIButtonIconHorizontal
-                  style={{ marginRight: 16 }}
-                  onClick={() => this.props.onPlayCreatorMedia(this.props.creator)}>
-                  Play {this.props.creator.username}'s media
-                </UIButtonIconHorizontal>
-                <UIButtonIconHorizontal
-                  onClick={() => this.props.onSubscribeToCreator(this.props.creator)}>
-                  Subscribe to {this.props.creator.username}
-                </UIButtonIconHorizontal>
               </div>
             </div>
             <div className={STYLES_DESCRIPTION}>{this.props.creator.description}</div>
@@ -111,7 +92,7 @@ export default class UICardProfileHeader extends React.Component {
               background:
                 this.props.profileMode === 'media' || !this.props.profileMode
                   ? null
-                  : this.props.creator.theme.background,
+                  : Constants.brand.background,
             }}
             onClick={this.props.onShowMediaList}>
             Media
@@ -121,7 +102,7 @@ export default class UICardProfileHeader extends React.Component {
             className={STYLES_NAVIGATION_ITEM}
             style={{
               background:
-                this.props.profileMode === 'playlists' ? null : this.props.creator.theme.background,
+                this.props.profileMode === 'playlists' ? null : Constants.brand.background,
             }}
             onClick={this.props.onShowPlaylistList}>
             Playlists

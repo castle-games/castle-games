@@ -64,7 +64,7 @@ const run = async () => {
     searchResultsMedia: null,
     searchResultsPlaylists: null,
     sidebarMode: null, // current-playlists | dashboard | media-info | authentication | null
-    pageMode: 'sign-in', // browse | playlist | profile | sign-in | null
+    pageMode: null, // browse | playlist | profile | sign-in | null
     profileMode: null, // media | playlist | null
     isMediaFavorited: false,
     isMediaExpanded: false,

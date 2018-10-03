@@ -85,14 +85,18 @@ export default class CoreSignIn extends React.Component {
   };
 
   _handleSubmit = async () => {
-    console.log(this.state);
-
     const user = await Actions.authenticate({
       username: this.state.username,
       password: this.state.password,
     });
 
-    console.log(user);
+    // TODO(jim): Error modal.
+    if (!user) {
+      window.alert('We could not sign you in, please try again.');
+      return;
+    }
+
+    this.props.onSetViewer(user);
   };
 
   render() {
@@ -117,6 +121,7 @@ export default class CoreSignIn extends React.Component {
               type="password"
               placeholder="Type a password..."
               onChange={this._handleChange}
+              onSubmit={this._handleSubmit}
               value={this.state.password}
             />
             <UIButton onClick={this._handleSubmit}>Submit</UIButton>

@@ -31,11 +31,8 @@ export default class CoreRootLeftSidebar extends React.Component {
     return (
       <div className={STYLES_NAVIGATION}>
         {this.props.viewer ? (
-          <UIButtonIcon
-            icon={false}
-            src={this.props.viewer.avatarUrl}
-            onClick={this.props.onToggleProfile}>
-            {this.props.viewer.username}
+          <UIButtonIcon icon={<SVG.Rook height="24px" />} onClick={this.props.onToggleProfile}>
+            Profile
           </UIButtonIcon>
         ) : null}
         <UIButtonIcon
@@ -44,12 +41,22 @@ export default class CoreRootLeftSidebar extends React.Component {
           onClick={this.props.onToggleBrowse}>
           Browse
         </UIButtonIcon>
-        <UIButtonIcon
-          active={this.props.isSignIn}
-          icon={<SVG.Login height="24px" />}
-          onClick={this.props.onToggleSignIn}>
-          Sign in
-        </UIButtonIcon>
+        {!this.props.viewer ? (
+          <UIButtonIcon
+            active={this.props.isSignIn}
+            icon={<SVG.Login height="24px" />}
+            onClick={this.props.onToggleSignIn}>
+            Sign in
+          </UIButtonIcon>
+        ) : null}
+        {this.props.viewer ? (
+          <UIButtonIcon
+            active={this.props.isSignIn}
+            icon={<SVG.Logout height="24px" />}
+            onClick={this.props.onSignOut}>
+            Sign out
+          </UIButtonIcon>
+        ) : null}
       </div>
     );
   }
