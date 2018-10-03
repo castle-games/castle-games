@@ -11,6 +11,58 @@ export async function getInitialData() {
         username
         name
         createdTime
+
+        mediaItems {
+          name
+          published
+          instructions
+          description
+          mediaUrl
+          mediaId
+          coverImage {
+            url
+            height
+            width
+          }
+          user {
+            userId
+            name
+            username
+            photo {
+              url
+              height
+              width
+            }
+          }
+        }
+
+        playlists {
+          playlistId
+          name
+          mediaItems {
+            name
+            published
+            instructions
+            description
+            mediaUrl
+            mediaId
+            coverImage {
+              url
+              height
+              width
+            }
+            user {
+              userId
+              name
+              username
+              photo {
+                url
+                height
+                width
+              }
+            }
+          }
+        }
       }
 
       currentPlaylist {
@@ -74,7 +126,7 @@ export async function search(query) {
               username
             }
           }
-          playlistItems {
+          playlists {
             playlistId
             name
             mediaItems {
@@ -123,6 +175,58 @@ export async function authenticate({ username, password }) {
           username
           name
           createdTime
+
+          mediaItems {
+            name
+            published
+            instructions
+            description
+            mediaUrl
+            mediaId
+            coverImage {
+              url
+              height
+              width
+            }
+            user {
+              userId
+              name
+              username
+              photo {
+                url
+                height
+                width
+              }
+            }
+          }
+
+          playlists {
+            playlistId
+            name
+            mediaItems {
+              name
+              published
+              instructions
+              description
+              mediaUrl
+              mediaId
+              coverImage {
+                url
+                height
+                width
+              }
+              user {
+                userId
+                name
+                username
+                photo {
+                  url
+                  height
+                  width
+                }
+              }
+            }
+          }
         }
       }
     `,

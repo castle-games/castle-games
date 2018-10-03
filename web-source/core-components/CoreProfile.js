@@ -37,6 +37,8 @@ const STYLES_CONTAINER = css`
 
 export default class CoreProfile extends React.Component {
   render() {
+    console.log(this.props.creator);
+
     return (
       <div className={STYLES_CONTAINER}>
         <UICardProfileHeader

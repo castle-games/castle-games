@@ -82,7 +82,7 @@ export default class UIListPlaylists extends React.Component {
           <div className={STYLES_COLUMN}>Author</div>
           <div className={STYLES_COLUMN}>-</div>
         </div>
-        {this.props.playlistItems.map((p, i) => {
+        {this.props.playlists.map((p, i) => {
           return (
             <div
               className={STYLES_ROW}

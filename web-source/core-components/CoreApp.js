@@ -197,10 +197,10 @@ export default class CoreApp extends React.Component {
       return;
     }
 
-    const { mediaItems = [], playlistItems = [] } = data;
+    const { mediaItems = [], playlists = [] } = data;
     this.setState({
       searchResultsMedia: mediaItems,
-      searchResultsPlaylist: playlistItems,
+      searchResultsPlaylist: playlists,
     });
   };
 
@@ -397,7 +397,7 @@ export default class CoreApp extends React.Component {
           }
           rightSidebarNode={
             <CoreBrowsePlaylistResults
-              playlistItems={state.searchResultsPlaylist}
+              playlists={state.searchResultsPlaylist}
               onPlaylistSelect={this._handlePlaylistSelect}
               onDismiss={this._handleToggleBrowse}
             />

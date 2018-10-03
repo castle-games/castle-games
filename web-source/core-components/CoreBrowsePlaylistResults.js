@@ -35,17 +35,17 @@ const STYLES_CONTAINER = css`
 
 export default class CoreBrowsePlaylistResults extends React.Component {
   static defaultProps = {
-    playlistItems: [],
+    playlists: [],
   };
 
   render() {
-    if (this.props.playlistItems && this.props.playlistItems.length) {
+    if (this.props.playlists && this.props.playlists.length) {
       return (
         <div className={STYLES_CONTAINER}>
           <UIHeaderDismiss />
           <UIListPlaylists
             onPlaylistSelect={this.props.onPlaylistSelect}
-            playlistItems={this.props.playlistItems}
+            playlists={this.props.playlists}
           />
         </div>
       );
