@@ -317,12 +317,19 @@ export default class CoreApp extends React.Component {
     });
 
   _handleSignOut = () => {
+    const confirm = window.confirm('Are you sure you want to sign out?');
+
+    if (!confirm) {
+      return;
+    }
+
     if (!Actions.logout()) {
       return;
     }
 
     this.setStateWithCEF({
       viewer: null,
+      pageMode: 'browse',
     });
   };
 
@@ -367,6 +374,7 @@ export default class CoreApp extends React.Component {
           viewer={state.viewer}
           isBrowsing={state.pageMode === 'browse'}
           isSignIn={state.pageMode === 'sign-in'}
+          isViewingProfile={state.pageMode === 'profile'}
           onToggleProfile={this._handleToggleProfile}
           onToggleBrowse={this._handleToggleBrowse}
           onToggleSignIn={this._handleToggleSignIn}

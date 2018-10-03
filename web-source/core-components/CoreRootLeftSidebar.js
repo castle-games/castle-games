@@ -31,7 +31,10 @@ export default class CoreRootLeftSidebar extends React.Component {
     return (
       <div className={STYLES_NAVIGATION}>
         {this.props.viewer ? (
-          <UIButtonIcon icon={<SVG.Rook height="24px" />} onClick={this.props.onToggleProfile}>
+          <UIButtonIcon
+            active={this.props.isViewingProfile}
+            icon={<SVG.Rook height="24px" />}
+            onClick={this.props.onToggleProfile}>
             You
           </UIButtonIcon>
         ) : null}
@@ -50,10 +53,7 @@ export default class CoreRootLeftSidebar extends React.Component {
           </UIButtonIcon>
         ) : null}
         {this.props.viewer ? (
-          <UIButtonIcon
-            active={this.props.isSignIn}
-            icon={<SVG.Logout height="24px" />}
-            onClick={this.props.onSignOut}>
+          <UIButtonIcon icon={<SVG.Logout height="24px" />} onClick={this.props.onSignOut}>
             Sign out
           </UIButtonIcon>
         ) : null}
