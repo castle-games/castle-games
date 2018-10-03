@@ -53,7 +53,7 @@ export default class CoreProfile extends React.Component {
         {this.props.profileMode === 'media' || !this.props.profileMode ? (
           <UIEmptyState title="Not Implemented">Harass Jim.</UIEmptyState>
         ) : null}
-        {this.props.profileMode === 'playlist' ? (
+        {this.props.profileMode === 'playlists' ? (
           <UIEmptyState title="Not Implemented">Harass Jim.</UIEmptyState>
         ) : null}
       </div>

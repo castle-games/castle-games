@@ -132,3 +132,19 @@ export async function authenticate({ username, password }) {
 
   return result.data.login;
 }
+
+export async function logout() {
+  const result = await API.graphqlAsync({
+    query: `
+      mutation {
+        logout
+      }
+    `,
+  });
+
+  if (result.error) {
+    return false;
+  }
+
+  return true;
+}

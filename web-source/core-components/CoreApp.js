@@ -315,6 +315,16 @@ export default class CoreApp extends React.Component {
       profileMode: 'playlists',
     });
 
+  _handleSignOut = () => {
+    if (!Actions.logout()) {
+      return;
+    }
+
+    this.setStateWithCEF({
+      viewer: null,
+    });
+  };
+
   _handleDismissSidebar = () => this.setStateWithCEF({ sidebarMode: null });
 
   _handleHideOverlay = () => this.setStateWithCEF({ isOverlayActive: false, pageMode: null });
@@ -437,8 +447,8 @@ export default class CoreApp extends React.Component {
             onPlayCreatorMedia={this._handlePlayCreatorMedia}
             onSubscribeToCreator={this._handleSubscribeToCreator}
             onClickCreatorAvatar={this._handleClickCreatorAvatar}
-            onClickCreatorCreations={this._handleClickCreatorCreations}
-            onClickCreatorPlaylists={this._handleClickCreatorPlaylists}
+            onClickCreatorCreations={() => this.setState({ profileMode: 'media' })}
+            onClickCreatorPlaylists={() => this.setState({ profileMode: 'playlists' })}
           />
         </CoreLayout>
       );
