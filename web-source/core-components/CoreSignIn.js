@@ -52,7 +52,7 @@ const STYLES_BOTTOM = css`
   height: 48px;
   width: 100%;
   flex-shrink: 0;
-  padding: 0 24px 0 24px;
+  padding: 0 18px 0 18px;
 `;
 
 const STYLES_CONTENTS = css`
@@ -69,6 +69,7 @@ const STYLES_LINK = css`
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-right: 24px;
+  cursor: pointer;
   top: 8px;
 `;
 

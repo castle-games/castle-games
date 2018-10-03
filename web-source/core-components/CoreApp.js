@@ -330,6 +330,23 @@ export default class CoreApp extends React.Component {
     this._layout = reference;
   };
 
+  renderRootURLInput = () => (
+    <CoreRootURLInput
+      name="mediaUrl"
+      placeholder="Type in a Lua/LOVE main.lua file URL or HTML URL..."
+      value={this.state.mediaUrl}
+      viewer={this.state.viewer}
+      media={this.state.media}
+      expanded={this.state.isMediaExpanded}
+      onChange={this._handleURLChange}
+      onSubmit={this._handleURLSubmit}
+      onToggleMediaExpanded={this._handleToggleMediaExpanded}
+      onHideOverlay={this._handleHideOverlay}
+      onFavoriteMedia={this._handleFavoriteMedia}
+      onToggleDashboard={this._handleToggleDashboard}
+    />
+  );
+
   render() {
     const { state } = this;
 
@@ -366,22 +383,7 @@ export default class CoreApp extends React.Component {
               onDismiss={this._handleToggleBrowse}
             />
           }
-          bottomNode={
-            <CoreRootURLInput
-              name="mediaUrl"
-              placeholder="Type in a Lua/LOVE main.lua file URL or HTML URL..."
-              value={state.mediaUrl}
-              viewer={state.viewer}
-              media={state.media}
-              expanded={state.isMediaExpanded}
-              onChange={this._handleURLChange}
-              onSubmit={this._handleURLSubmit}
-              onToggleMediaExpanded={this._handleToggleMediaExpanded}
-              onHideOverlay={this._handleHideOverlay}
-              onFavoriteMedia={this._handleFavoriteMedia}
-              onToggleDashboard={this._handleToggleDashboard}
-            />
-          }
+          bottomNode={this.renderRootURLInput()}
           leftSidebarNode={maybeLeftSidebarNode}>
           <CoreBrowseMediaResults
             mediaItems={state.searchResultsMedia}
@@ -395,7 +397,10 @@ export default class CoreApp extends React.Component {
 
     if (state.pageMode === 'sign-in') {
       return (
-        <CoreLayout ref={this._handleGetReference} leftSidebarNode={maybeLeftSidebarNode}>
+        <CoreLayout
+          ref={this._handleGetReference}
+          bottomNode={this.renderRootURLInput()}
+          leftSidebarNode={maybeLeftSidebarNode}>
           <CoreSignIn onToggleBrowse={this._handleToggleBrowse} />
         </CoreLayout>
       );
@@ -436,24 +441,9 @@ export default class CoreApp extends React.Component {
       );
     }
 
-    // NOTE(jim): Media Page
     let maybeBottomNode;
     if (state.isOverlayActive) {
-      maybeBottomNode = (
-        <CoreRootURLInput
-          name="mediaUrl"
-          value={state.mediaUrl}
-          viewer={state.viewer}
-          media={state.media}
-          expanded={state.isMediaExpanded}
-          onChange={this._handleURLChange}
-          onSubmit={this._handleURLSubmit}
-          onToggleMediaExpanded={this._handleToggleMediaExpanded}
-          onHideOverlay={this._handleHideOverlay}
-          onFavoriteMedia={this._handleFavoriteMedia}
-          onToggleDashboard={this._handleToggleDashboard}
-        />
-      );
+      maybeBottomNode = this.renderRootURLInput();
     }
 
     let maybeTopNode;
