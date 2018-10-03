@@ -3,17 +3,17 @@ import * as Constants from '~/common/constants';
 
 import { css } from 'react-emotion';
 
-const STYLES_CONTAINER = css``;
+const STYLES_CONTAINER = css`
+  color: ${Constants.brand.line};
+`;
 
 const STYLES_HEADER = css`
   font-weight: 600;
   font-size: 22px;
   padding-bottom: 8px;
-  color: ${Constants.brand.line};
 `;
 
 const STYLES_PARAGRAPH = css`
-  color: ${Constants.brand.line};
   font-size: 16px;
   line-height: 1.5;
   margin-bottom: 24px;
