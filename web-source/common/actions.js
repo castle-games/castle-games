@@ -10,6 +10,7 @@ export async function getInitialData() {
         userId
         username
         name
+        createdTime
       }
 
       currentPlaylist {
@@ -21,6 +22,7 @@ export async function getInitialData() {
           instructions
           description
           mediaUrl
+          mediaId
           coverImage {
             url
             height
@@ -119,6 +121,8 @@ export async function authenticate({ username, password }) {
         login(who: $username, password: $password) {
           userId
           username
+          name
+          createdTime
         }
       }
     `,
