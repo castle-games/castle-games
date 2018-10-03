@@ -21,6 +21,7 @@ import CoreRootDashboard from '~/core-components/CoreRootDashboard';
 import CoreRootToolbar from '~/core-components/CoreRootToolbar';
 import CoreRootPlaylistSidebar from '~/core-components/CoreRootPlaylistSidebar';
 import CoreSignIn from '~/core-components/CoreSignIn';
+import CoreAddEntitiesObject from '~/core-components/CoreAddEntitiesObject';
 
 // NOTE(jim): Media Scene
 import CoreMediaScreen from '~/core-components/CoreMediaScreen';
@@ -420,7 +421,7 @@ export default class CoreApp extends React.Component {
     }
 
     // NOTE(jim): Playlist Scene.
-    // TODO(jim): Unfinishedd.
+    // TODO(jim): Unfinished.
     if (state.pageMode === 'playlist') {
       return (
         <CoreLayout
@@ -434,10 +435,13 @@ export default class CoreApp extends React.Component {
     }
 
     // NOTE(jim): Profile Scene
-    // TODO(jim): Unfinishe.d
+    // TODO(jim): Unfinished.
     if (state.pageMode === 'profile') {
       return (
-        <CoreLayout ref={this._handleGetReference} leftSidebarNode={maybeLeftSidebarNode}>
+        <CoreLayout
+          ref={this._handleGetReference}
+          leftSidebarNode={maybeLeftSidebarNode}
+          rightNode={<CoreAddEntitiesObject />}>
           <CoreProfile
             creator={state.viewer}
             profileMode={state.profileMode}

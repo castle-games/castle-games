@@ -66,6 +66,9 @@ const STYLES_NAVIGATION_ITEM = css`
 // since description is not a string.
 export default class UICardProfileHeader extends React.Component {
   render() {
+    const isViewingMedia = this.props.profileMode === 'media' || !this.props.profileMode;
+    const isViewingPlaylists = this.props.profileMode === 'playlists';
+
     return (
       <div
         className={STYLES_CONTAINER}
@@ -89,10 +92,8 @@ export default class UICardProfileHeader extends React.Component {
             className={STYLES_NAVIGATION_ITEM}
             style={{
               marginRight: 16,
-              background:
-                this.props.profileMode === 'media' || !this.props.profileMode
-                  ? null
-                  : Constants.brand.background,
+              background: isViewingMedia ? null : Constants.brand.background,
+              color: isViewingMedia ? null : Constants.brand.line,
             }}
             onClick={this.props.onShowMediaList}>
             Media
@@ -101,8 +102,8 @@ export default class UICardProfileHeader extends React.Component {
           <div
             className={STYLES_NAVIGATION_ITEM}
             style={{
-              background:
-                this.props.profileMode === 'playlists' ? null : Constants.brand.background,
+              background: isViewingPlaylists ? null : Constants.brand.background,
+              color: isViewingPlaylists ? null : Constants.brand.line,
             }}
             onClick={this.props.onShowPlaylistList}>
             Playlists

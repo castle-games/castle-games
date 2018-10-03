@@ -32,7 +32,7 @@ export default class CoreRootLeftSidebar extends React.Component {
       <div className={STYLES_NAVIGATION}>
         {this.props.viewer ? (
           <UIButtonIcon icon={<SVG.Rook height="24px" />} onClick={this.props.onToggleProfile}>
-            Profile
+            You
           </UIButtonIcon>
         ) : null}
         <UIButtonIcon
