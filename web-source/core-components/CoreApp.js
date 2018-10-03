@@ -21,7 +21,6 @@ import CoreRootDashboard from '~/core-components/CoreRootDashboard';
 import CoreRootToolbar from '~/core-components/CoreRootToolbar';
 import CoreRootPlaylistSidebar from '~/core-components/CoreRootPlaylistSidebar';
 import CoreSignIn from '~/core-components/CoreSignIn';
-import CoreAddEntitiesObject from '~/core-components/CoreAddEntitiesObject';
 
 // NOTE(jim): Media Scene
 import CoreMediaScreen from '~/core-components/CoreMediaScreen';
@@ -34,6 +33,7 @@ import CoreBrowseSearchInput from '~/core-components/CoreBrowseSearchInput';
 
 // NOTE(jim): Profile Scene
 import CoreProfile from '~/core-components/CoreProfile';
+import CoreProfileSidebar from '~/core-components/CoreProfileSidebar';
 
 // NOTE(jim): Playlist Scene
 import CorePlaylist from '~/core-components/CorePlaylist';
@@ -114,6 +114,22 @@ export default class CoreApp extends React.Component {
     if (history.length > 10) {
       history.pop();
     }
+  };
+
+  _handleAddMedia = data => {
+    console.log(data);
+  };
+
+  _handleRemoveMedia = data => {
+    console.log(data);
+  };
+
+  _handleAddPlaylist = data => {
+    console.log(data);
+  };
+
+  _handleRemovePlaylist = data => {
+    console.log(data);
   };
 
   setStateWithCEF = state => this.setState({ ...state }, this._handleCEFupdateFrame);
@@ -449,7 +465,14 @@ export default class CoreApp extends React.Component {
         <CoreLayout
           ref={this._handleGetReference}
           leftSidebarNode={maybeLeftSidebarNode}
-          rightNode={<CoreAddEntitiesObject />}>
+          rightNode={
+            <CoreProfileSidebar
+              onAddMedia={this._handleAddMedia}
+              onRemoveMedia={this._handleRemoveMedia}
+              onAddPlaylist={this._handleAddPlaylist}
+              onRemovePlaylist={this._handleRemovePlaylist}
+            />
+          }>
           <CoreProfile
             creator={state.viewer}
             profileMode={state.profileMode}

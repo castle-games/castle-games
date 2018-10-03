@@ -36,10 +36,11 @@ const STYLES_SECTION = css`
   padding: 16px;
 `;
 
-export default class CoreAddEntitiesObject extends React.Component {
+export default class CoreProfileSidebar extends React.Component {
   state = {
     media: {
       name: '',
+      url: '',
     },
     playlist: {
       name: '',
@@ -68,6 +69,20 @@ export default class CoreAddEntitiesObject extends React.Component {
             name="name"
             label="Media URL"
             onChange={this._handleChangeMedia}
+          />
+        </div>
+        <div className={STYLES_SECTION}>
+          <UIEmptyState
+            style={{ padding: `0 0 24px 0`, color: Constants.colors.white }}
+            title="Create a new playlist">
+            Playlists are lists of media you can share with other people to play.
+          </UIEmptyState>
+          <UIInputSecondary
+            value={this.state.playlist.name}
+            name="name"
+            label="Media Name"
+            onChange={this._handleChangeMedia}
+            style={{ marginBottom: 8 }}
           />
         </div>
       </div>
