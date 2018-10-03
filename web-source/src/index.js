@@ -2,8 +2,11 @@ import ReactDOM from 'react-dom';
 
 import * as React from 'react';
 import * as Constants from '~/common/constants';
+import * as Actions from '~/common/actions';
 
 import App from './App';
+
+import Storage from '~/common/storage';
 
 import { injectGlobal } from 'react-emotion';
 
@@ -35,6 +38,7 @@ const injectGlobalStyles = () => injectGlobal`
 
   html, body {
     font-family: ${Constants.font.default};
+    background: ${Constants.colors.black};
     font-size: 16px;
 
     @media (max-width: 728px) {
@@ -43,6 +47,32 @@ const injectGlobalStyles = () => injectGlobal`
   }
 `;
 
-injectGlobalStyles();
+const storage = new Storage('castle');
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const run = async () => {
+  injectGlobalStyles();
+  const { currentPlaylist, me } = await Actions.getInitialData();
+
+  const state = {
+    logs: [],
+    mediaUrl: '',
+    playlist: currentPlaylist,
+    media: null,
+    viewer: me,
+    local: null,
+    searchQuery: '',
+    searchResultsMedia: null,
+    searchResultsPlaylists: null,
+    sidebarMode: null, // current-playlists | dashboard | media-info | authentication | null
+    pageMode: 'sign-in', // browse | playlist | profile | sign-in | null
+    profileMode: null, // media | playlist | null
+    isMediaFavorited: false,
+    isMediaExpanded: false,
+    isOverlayActive: true,
+    isScoreVisible: false,
+  };
+
+  ReactDOM.render(<App state={state} storage={storage} />, document.getElementById('root'));
+};
+
+run();

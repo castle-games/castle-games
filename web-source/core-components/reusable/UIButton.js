@@ -24,7 +24,7 @@ const STYLES_BUTTON = css`
 export default class UIButton extends React.Component {
   render() {
     return (
-      <button className={STYLES_BUTTON} onClick={this.props.onToggleBrowse}>
+      <button className={STYLES_BUTTON} onClick={this.props.onClick}>
         {this.props.children}
       </button>
     );

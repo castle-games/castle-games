@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
+import * as Actions from '~/common/actions';
 
 import { css } from 'react-emotion';
 
@@ -83,6 +84,17 @@ export default class CoreSignIn extends React.Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
+  _handleSubmit = async () => {
+    console.log(this.state);
+
+    const user = await Actions.authenticate({
+      username: this.state.username,
+      password: this.state.password,
+    });
+
+    console.log(user);
+  };
+
   render() {
     return (
       <div className={STYLES_CONTAINER}>
@@ -107,7 +119,7 @@ export default class CoreSignIn extends React.Component {
               onChange={this._handleChange}
               value={this.state.password}
             />
-            <UIButton>Submit</UIButton>
+            <UIButton onClick={this._handleSubmit}>Submit</UIButton>
           </div>
         </div>
 

@@ -71,8 +71,9 @@ export default class CoreApp extends React.Component {
       processChannels();
     }
 
-    const playlist = await Actions.getCurrentJamPlaylist();
-    this.setState({ playlist });
+    const { currentPlaylist, me } = await Actions.getInitialData();
+    console.log(me);
+    this.setState({ playlist: currentPlaylist, viewer: me });
 
     CEF.setBrowserReady();
   }
@@ -333,7 +334,7 @@ export default class CoreApp extends React.Component {
   renderRootURLInput = () => (
     <CoreRootURLInput
       name="mediaUrl"
-      placeholder="Type in a Lua/LOVE main.lua file URL or HTML URL..."
+      placeholder="Type in a Lua/LÖVE main.lua file URL or HTML URL..."
       value={this.state.mediaUrl}
       viewer={this.state.viewer}
       media={this.state.media}

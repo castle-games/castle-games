@@ -3,9 +3,15 @@ import GhostApiClientConstructor from 'ghost-api-client';
 // export const API = GhostApiClientConstructor("http://localhost:1380");
 export const API = GhostApiClientConstructor();
 
-export async function getCurrentJamPlaylist() {
+export async function getInitialData() {
   const result = await API(`
     query {
+      me {
+        userId
+        username
+        name
+      }
+
       currentPlaylist {
         playlistId
         name
@@ -40,7 +46,7 @@ export async function getCurrentJamPlaylist() {
     return;
   }
 
-  return result.data.currentPlaylist;
+  return result.data;
 }
 
 export async function search(query) {
@@ -104,4 +110,25 @@ export async function search(query) {
   }
 
   return result.data.searchMediaAndPlaylists;
+}
+
+export async function authenticate({ username, password }) {
+  const result = await API.graphqlAsync({
+    query: `
+      mutation Login($username: String, $password: String!) {
+        login(who: $username, password: $password) {
+          userId
+          username
+        }
+      }
+    `,
+    variables: { username, password },
+  });
+
+  // TOOD(jim): Write a global error handler.
+  if (result.error) {
+    return;
+  }
+
+  return result;
 }
