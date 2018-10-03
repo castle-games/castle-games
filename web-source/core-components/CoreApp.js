@@ -116,16 +116,18 @@ export default class CoreApp extends React.Component {
     }
   };
 
-  _handleAddMedia = data => {
-    console.log(data);
+  _handleAddMedia = async data => {
+    const response = await Actions.addMedia(data);
+    console.log({ response });
   };
 
   _handleRemoveMedia = data => {
     console.log(data);
   };
 
-  _handleAddPlaylist = data => {
-    console.log(data);
+  _handleAddPlaylist = async data => {
+    const response = await Actions.addPlaylist(data);
+    console.log({ response });
   };
 
   _handleRemovePlaylist = data => {

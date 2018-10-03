@@ -256,3 +256,54 @@ export async function logout() {
 
   return true;
 }
+
+export async function addMedia({ name, url }) {
+  const result = await API.graphqlAsync({
+    query: `
+      mutation AddMedia($name: String, $mediaUrl: String) {
+        addMedia(media: {
+          name: $name
+          mediaUrl: $mediaUrl
+        }) {
+          name
+          createdTime
+          mediaUrl
+          mediaId
+        }
+      }
+    `,
+    variables: { name, mediaUrl: url },
+  });
+
+  // TOOD(jim): Write a global error handler.
+  if (result.error) {
+    return;
+  }
+
+  return result.data.addMedia;
+}
+
+export async function addPlaylist({ name }) {
+  const result = await API.graphqlAsync({
+    query: `
+      mutation AddPlaylist($name: String) {
+        addPlaylist(playlist: {
+          name: $name
+        }) {
+          name
+          playlistId
+        }
+      }
+    `,
+    variables: { name },
+  });
+
+  console.log(result);
+
+  // TOOD(jim): Write a global error handler.
+  if (result.error) {
+    return;
+  }
+
+  return result.data.addPlaylist;
+}
