@@ -16,11 +16,14 @@ extern "C" {
 
 #include "modules/love/love.h"
 #include "modules/thread/Channel.h"
+#include "modules/timer/Timer.h"
 
 static float childLeft = 0, childTop = 0, childWidth = 200, childHeight = 200;
 
 static lua_State *luaState = NULL;
 static int loveBootStackPos = 0;
+static bool lovePaused = false;
+
 static bool shouldRunMessageLoop = true;
 
 static std::mutex mutex;
@@ -82,9 +85,7 @@ void ghostClose() {
   messages.push(msg);
 }
 
-void ghostSetBrowserReady() {
-
-}
+void ghostSetBrowserReady() {}
 
 extern "C" {
 void ghostRunMessageLoop();
@@ -200,9 +201,7 @@ HWND ghostWinGetMainWindow();
 HWND ghostWinGetChildWindow();
 }
 
-void ghostQuitMessageLoop() {
-  shouldRunMessageLoop = false;
-}
+void ghostQuitMessageLoop() { shouldRunMessageLoop = false; }
 
 void ghostStep() {
   // Process messages
@@ -220,29 +219,31 @@ void ghostStep() {
       }
 
       switch (msg.type) {
-        case OPEN_LOVE_URI: {
-          char *uri = msg.body.openUri.uri;
-          stopLove();
-          bootLove(uri);
-          free(uri);
-        } break;
+      case OPEN_LOVE_URI: {
+        char *uri = msg.body.openUri.uri;
+        stopLove();
+        bootLove(uri);
+        free(uri);
+      } break;
 
-        case SET_CHILD_WINDOW_FRAME: {
-          childLeft = msg.body.setChildWindowFrame.left;
-          childTop = msg.body.setChildWindowFrame.top;
-          childWidth = msg.body.setChildWindowFrame.width;
-          childHeight = msg.body.setChildWindowFrame.height;
-        } break;
+      case SET_CHILD_WINDOW_FRAME: {
+        childLeft = msg.body.setChildWindowFrame.left;
+        childTop = msg.body.setChildWindowFrame.top;
+        childWidth = msg.body.setChildWindowFrame.width;
+        childHeight = msg.body.setChildWindowFrame.height;
+      } break;
 
-        case CLOSE: {
-          stopLove();
-        } break;
+      case CLOSE: {
+        stopLove();
+      } break;
       }
     }
   }
 
   if (luaState) {
-    stepLove();
+    if (!lovePaused) {
+      stepLove();
+    }
 
     {
       RECT currParentRect;
@@ -265,6 +266,23 @@ void ghostStep() {
     auto child = ghostWinGetChildWindow();
     if (child) {
       SetWindowPos(child, NULL, childLeft, childTop, childWidth, childHeight, 0);
+    }
+
+    // Handle automatic pausing when unfocused
+    if (child) {
+      auto foregroundWindow = GetForegroundWindow();
+      auto focused = foregroundWindow == ghostWinGetMainWindow() || foregroundWindow == child;
+      if (lovePaused && focused) { // Unpause?
+        // Step timer so that next frame's `dt` doesn't include the time spent paused
+        auto timer = love::Module::getInstance<love::timer::Timer>(love::Module::M_TIMER);
+        if (timer) {
+          timer->step();
+        }
+        lovePaused = false;
+      }
+      if (!lovePaused && !focused) { // Pause?
+        lovePaused = true;
+      }
     }
 
     auto channel = love::thread::Channel::getChannel("FOCUS_ME");
