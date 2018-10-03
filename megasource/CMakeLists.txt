@@ -339,11 +339,6 @@ PRINT_CEF_CONFIG()
 set(GHOST_TARGET "castle")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MDd")
-#set(GHOST_SRCS
-#  ../win/main.cpp
-#  ../common/simple_app.cpp
-#  ../common/simple_handler.cpp
-#)
 
 set(GHOST_SRCS
   ../win/main.cc
@@ -376,14 +371,6 @@ add_move_dll(${GHOST_TARGET} ${MEGA_SDL2})
 add_move_dll(${GHOST_TARGET} ${MEGA_OPENAL})
 post_step_move_dll(${GHOST_TARGET} ${MEGA_LUAJIT_DLL})
 
-#list(APPEND GHOST_COMPILER_DEFINES
-#  WIN32 _WIN32 _WINDOWS             # Windows platform
-#  UNICODE _UNICODE                  # Unicode build
-#  WINVER=0x0601 _WIN32_WINNT=0x601  # Targeting Windows 7
-#  NOMINMAX                          # Use the standard's templated min/max
-#  WIN32_LEAN_AND_MEAN               # Exclude less common API declarations
-#  _HAS_EXCEPTIONS=0                 # Disable exceptions
-#)
 target_compile_definitions(${GHOST_TARGET} PRIVATE ${CEF_COMPILER_DEFINES})
 
 # Add the custom manifest files to the executable.
@@ -398,3 +385,39 @@ set(GHOST_FILES
   web
 )
 COPY_FILES("${GHOST_TARGET}" "${GHOST_FILES}" "${CMAKE_CURRENT_SOURCE_DIR}/.." "${CEF_TARGET_OUT_DIR}")
+
+# Installer
+
+install(TARGETS ${GHOST_TARGET} RUNTIME DESTINATION .)
+install(DIRECTORY "${CEF_TARGET_OUT_DIR}/" DESTINATION .)
+
+set(CPACK_GENERATOR "NSIS")
+set(CPACK_PACKAGE_NAME "castle")
+set(CPACK_PACKAGE_VENDOR "castle")
+
+set(CPACK_PACKAGE_VERSION "0.0.1")
+set(CPACK_PACKAGE_VERSION_MAJOR "0")
+set(CPACK_PACKAGE_VERSION_MINOR "0")
+set(CPACK_PACKAGE_VERSION_PATCH "1")
+
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "Castle")
+set(CPACK_PACKAGE_EXECUTABLES "castle;Castle")
+#set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "Castle")
+#set(CPACK_IGNORE_FILES "/\\.git/;/CMakeLists.txt.user;\\.#;/#;\\.tar.gz$;/CMakeFiles/;CMakeCache.txt;/build/;.DS_Store'")
+set(CPACK_SOURCE_GENERATOR "TGZ")
+set(CPACK_SOURCE_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}")
+#set(CPACK_SOURCE_IGNORE_FILES ${CPACK_IGNORE_FILES})
+
+set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
+set(CPACK_NSIS_EXECUTABLES_DIRECTORY .)
+set(CPACK_NSIS_PACKAGE_NAME "Castle")
+set(CPACK_NSIS_DISPLAY_NAME "Castle 0.0.1")
+set(CPACK_NSIS_MODIFY_PATH OFF)
+set(CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES")
+
+#set(CPACK_NSIS_INSTALLED_ICON_NAME "${APP_LOW_NAME}.ico")
+#set(CPACK_NSIS_HELP_LINK ${APP_URL})
+#set(CPACK_NSIS_URL_INFO_ABOUT ${APP_URL})
+#set(CPACK_NSIS_CONTACT ${APP_EMAIL})
+
+include(CPack)

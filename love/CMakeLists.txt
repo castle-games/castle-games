@@ -1838,7 +1838,3 @@ match_version("REV" LOVE_VERSION_REV)
 set(LOVE_VERSION_STR "${LOVE_VERSION_MAJOR}.${LOVE_VERSION_MINOR}.${LOVE_VERSION_REV}")
 
 message(STATUS "Version: ${LOVE_VERSION_STR}")
-
-###################################
-# CPack
-###################################
