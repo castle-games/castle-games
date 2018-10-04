@@ -6,21 +6,10 @@
 
 #pragma mark - internal
 
-static void _ghostSendJSEvent(NSString *eventName, NSString *serializedParams) {
-  CefRefPtr<CefBrowser> browser = SimpleHandler::GetInstance()->GetFirstBrowser();
-  CefRefPtr<CefFrame> frame = browser->GetMainFrame();
-  NSString *validatedParams = (serializedParams) ? serializedParams : @"{}";
-  NSString *msg = [NSString
-      stringWithFormat:
-          @"{ let event = new Event('%@'); event.params = %@; window.dispatchEvent(event); }",
-          eventName, validatedParams];
-  frame->ExecuteJavaScript([msg UTF8String], frame -> GetURL(), 0);
-}
-
 static void _ghostSendNativeOpenUrlEvent(const char *uri) {
-  NSString *eventName = [NSString stringWithUTF8String:kGhostOpenUrlEventName.c_str()];
-  NSString *params = [NSString stringWithFormat:@"{ url: '%s' }", uri];
-  _ghostSendJSEvent(eventName, params);
+  std::stringstream params;
+  params << "{ url: '" << uri << "' }";
+  ghostSendJSEvent(kGhostOpenUrlEventName.c_str(), params.str().c_str());
 }
 
 #pragma mark - macos implementation of ghost.h
@@ -94,8 +83,13 @@ void ghostSetBrowserReady() {
 void ghostQuitMessageLoop() {}
 
 void ghostSendJSEvent(const char *eventName, const char *serializedParams) {
-  NSString *eventNameMacOS = [NSString stringWithFormat:@"%s", eventName];
-  NSString *eventParamsMacOS =
-      (serializedParams != NULL) ? [NSString stringWithFormat:@"%s", serializedParams] : nil;
-  _ghostSendJSEvent(eventNameMacOS, eventParamsMacOS);
+  std::string validatedParams = (serializedParams) ? serializedParams : "{}";
+  std::stringstream msg;
+  msg << @"{ let event = new Event('" << eventName << "'); "
+      << "event.params = " << validatedParams << "; "
+      << "window.dispatchEvent(event); }";
+
+  CefRefPtr<CefBrowser> browser = SimpleHandler::GetInstance()->GetFirstBrowser();
+  CefRefPtr<CefFrame> frame = browser->GetMainFrame();
+  frame->ExecuteJavaScript(msg.str(), frame->GetURL(), 0);
 }
