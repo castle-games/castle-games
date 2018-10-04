@@ -53,7 +53,7 @@ void ghostHandleOpenUri(const char *uri) {
 }
 
 void ghostSendJSEvent(const char *eventName, const char *serializedParams) {
-  // TODO
+  // TODO: use xplat implementation in `ghost.cpp`
 }
 
 void ghostOpenLoveUri(const char *uri) {

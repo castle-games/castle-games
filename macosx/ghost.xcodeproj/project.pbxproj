@@ -36,6 +36,8 @@
 		B5256F7D211A56EE00891B27 /* package.love in Resources */ = {isa = PBXBuildFile; fileRef = A1E7953C20721BC800731DD3 /* package.love */; };
 		B53E72AC2152F8D2003C8616 /* ghost_constants.h in Headers */ = {isa = PBXBuildFile; fileRef = B53E72AA2152F8D2003C8616 /* ghost_constants.h */; };
 		B53E72AD2152F8D2003C8616 /* ghost_constants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B53E72AB2152F8D2003C8616 /* ghost_constants.cpp */; };
+		B57FCFB62166834A00D661B2 /* ghost_mac.mm in Sources */ = {isa = PBXBuildFile; fileRef = B57FCFB52166834A00D661B2 /* ghost_mac.mm */; };
+		B57FCFB82166835B00D661B2 /* ghost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B57FCFB72166835B00D661B2 /* ghost.cpp */; };
 		B59617512149BF7100BE403F /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = B59617502149BF7100BE403F /* index.html */; };
 		B5A0404321483BA5007A6CC1 /* Chromium Embedded Framework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5A0404221483BA5007A6CC1 /* Chromium Embedded Framework.framework */; };
 		B5A0404621483D2C007A6CC1 /* Chromium Embedded Framework.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = B5A0404221483BA5007A6CC1 /* Chromium Embedded Framework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -47,7 +49,6 @@
 		B5BAE390215ABA89001354F9 /* json.hpp in Headers */ = {isa = PBXBuildFile; fileRef = B5BAE383215ABA89001354F9 /* json.hpp */; };
 		B5BAE391215ABA89001354F9 /* GhostFileSystem.m in Sources */ = {isa = PBXBuildFile; fileRef = B5BAE384215ABA89001354F9 /* GhostFileSystem.m */; };
 		B5BAE392215ABA89001354F9 /* GhostMainMenu.h in Headers */ = {isa = PBXBuildFile; fileRef = B5BAE385215ABA89001354F9 /* GhostMainMenu.h */; };
-		B5BAE395215ABA89001354F9 /* ghost.mm in Sources */ = {isa = PBXBuildFile; fileRef = B5BAE389215ABA89001354F9 /* ghost.mm */; };
 		B5BAE396215ABA89001354F9 /* simple_handler_mac.mm in Sources */ = {isa = PBXBuildFile; fileRef = B5BAE38A215ABA89001354F9 /* simple_handler_mac.mm */; };
 		B5BAE397215ABA89001354F9 /* GhostFileSystem.h in Headers */ = {isa = PBXBuildFile; fileRef = B5BAE38B215ABA89001354F9 /* GhostFileSystem.h */; };
 		B5BAE398215ABA89001354F9 /* GhostAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = B5BAE38C215ABA89001354F9 /* GhostAppDelegate.mm */; };
@@ -240,6 +241,8 @@
 		B53E72AA2152F8D2003C8616 /* ghost_constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ghost_constants.h; sourceTree = "<group>"; };
 		B53E72AB2152F8D2003C8616 /* ghost_constants.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ghost_constants.cpp; sourceTree = "<group>"; };
 		B55858EE215AB95300926105 /* ghost-macosx.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ghost-macosx.plist"; sourceTree = "<group>"; };
+		B57FCFB52166834A00D661B2 /* ghost_mac.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ghost_mac.mm; sourceTree = "<group>"; };
+		B57FCFB72166835B00D661B2 /* ghost.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ghost.cpp; sourceTree = "<group>"; };
 		B59617502149BF7100BE403F /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		B5A0404221483BA5007A6CC1 /* Chromium Embedded Framework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "Chromium Embedded Framework.framework"; path = "/Library/Frameworks/Chromium Embedded Framework.framework"; sourceTree = "<group>"; };
 		B5B06A412150751A001C4382 /* simple_app.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = simple_app.cpp; sourceTree = "<group>"; };
@@ -252,7 +255,6 @@
 		B5BAE385215ABA89001354F9 /* GhostMainMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GhostMainMenu.h; sourceTree = "<group>"; };
 		B5BAE387215ABA89001354F9 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B5BAE388215ABA89001354F9 /* process_helper_mac.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = process_helper_mac.cpp; sourceTree = "<group>"; };
-		B5BAE389215ABA89001354F9 /* ghost.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ghost.mm; sourceTree = "<group>"; };
 		B5BAE38A215ABA89001354F9 /* simple_handler_mac.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = simple_handler_mac.mm; sourceTree = "<group>"; };
 		B5BAE38B215ABA89001354F9 /* GhostFileSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GhostFileSystem.h; sourceTree = "<group>"; };
 		B5BAE38C215ABA89001354F9 /* GhostAppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GhostAppDelegate.mm; sourceTree = "<group>"; };
@@ -418,6 +420,7 @@
 			isa = PBXGroup;
 			children = (
 				B5B06A492151A8EB001C4382 /* ghost.h */,
+				B57FCFB72166835B00D661B2 /* ghost.cpp */,
 				B53E72AA2152F8D2003C8616 /* ghost_constants.h */,
 				B53E72AB2152F8D2003C8616 /* ghost_constants.cpp */,
 				B5B06A432150751A001C4382 /* simple_app.h */,
@@ -434,7 +437,7 @@
 			children = (
 				B5BAE386215ABA89001354F9 /* ghost-macosx_Helper */,
 				B5BAE39C215ABA9A001354F9 /* main.mm */,
-				B5BAE389215ABA89001354F9 /* ghost.mm */,
+				B57FCFB52166834A00D661B2 /* ghost_mac.mm */,
 				B5BAE383215ABA89001354F9 /* json.hpp */,
 				B5BAE38D215ABA89001354F9 /* GhostAppDelegate.h */,
 				B5BAE38C215ABA89001354F9 /* GhostAppDelegate.mm */,
@@ -776,11 +779,12 @@
 				B5B06A452150751A001C4382 /* simple_app.cpp in Sources */,
 				B5000234215AEBED00CD2309 /* GhostEnv.m in Sources */,
 				B5BAE391215ABA89001354F9 /* GhostFileSystem.m in Sources */,
+				B57FCFB82166835B00D661B2 /* ghost.cpp in Sources */,
+				B57FCFB62166834A00D661B2 /* ghost_mac.mm in Sources */,
 				B5BAE398215ABA89001354F9 /* GhostAppDelegate.mm in Sources */,
 				B5BAE396215ABA89001354F9 /* simple_handler_mac.mm in Sources */,
 				B5BAE39D215ABA9A001354F9 /* main.mm in Sources */,
 				B53E72AD2152F8D2003C8616 /* ghost_constants.cpp in Sources */,
-				B5BAE395215ABA89001354F9 /* ghost.mm in Sources */,
 				B5B06A482150751A001C4382 /* simple_handler.cpp in Sources */,
 				B5BAE39A215ABA89001354F9 /* GhostMainMenu.m in Sources */,
 			);
