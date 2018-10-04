@@ -7,6 +7,7 @@ import UIHeaderDismiss from '~/core-components/reusable/UIHeaderDismiss';
 import UIControl from '~/core-components/reusable/UIControl';
 import UICardProfileHeader from '~/core-components/reusable/UICardProfileHeader';
 import UIListMedia from '~/core-components/reusable/UIListMedia';
+import UIListPlaylists from '~/core-components/reusable/UIListPlaylists';
 import UIEmptyState from '~/core-components/reusable/UIEmptyState';
 
 const STYLES_CONTAINER = css`
@@ -37,8 +38,6 @@ const STYLES_CONTAINER = css`
 
 export default class CoreProfile extends React.Component {
   render() {
-    console.log(this.props.creator);
-
     return (
       <div className={STYLES_CONTAINER}>
         <UICardProfileHeader
@@ -53,10 +52,10 @@ export default class CoreProfile extends React.Component {
           onShowPlaylistList={this.props.onShowProfilePlaylistList}
         />
         {this.props.profileMode === 'media' || !this.props.profileMode ? (
-          <UIEmptyState title="Not Implemented">Harass Jim.</UIEmptyState>
+          <UIListMedia mediaItems={this.props.creator.mediaItems} />
         ) : null}
         {this.props.profileMode === 'playlists' ? (
-          <UIEmptyState title="Not Implemented">Harass Jim.</UIEmptyState>
+          <UIListPlaylists playlists={this.props.creator.playlists} />
         ) : null}
       </div>
     );
