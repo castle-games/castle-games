@@ -52,10 +52,16 @@ export default class CoreProfile extends React.Component {
           onShowPlaylistList={this.props.onShowProfilePlaylistList}
         />
         {this.props.profileMode === 'media' || !this.props.profileMode ? (
-          <UIListMedia mediaItems={this.props.creator.mediaItems} />
+          <UIListMedia
+            mediaItems={this.props.creator.mediaItems}
+            onMediaSelect={this.props.onMediaSelect}
+          />
         ) : null}
         {this.props.profileMode === 'playlists' ? (
-          <UIListPlaylists playlists={this.props.creator.playlists} />
+          <UIListPlaylists
+            playlists={this.props.creator.playlists}
+            onPlaylistSelect={this.props.onPlaylistSelect}
+          />
         ) : null}
       </div>
     );

@@ -486,6 +486,8 @@ export default class CoreApp extends React.Component {
             onClickCreatorAvatar={this._handleClickCreatorAvatar}
             onClickCreatorCreations={() => this.setState({ profileMode: 'media' })}
             onClickCreatorPlaylists={() => this.setState({ profileMode: 'playlists' })}
+            onMediaSelect={this._handleMediaSelect}
+            onPlaylistSelect={this._handlePlaylistSelect}
           />
         </CoreLayout>
       );
