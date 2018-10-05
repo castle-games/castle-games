@@ -16,3 +16,5 @@ megasource/build
 ._*
 
 macosx/DerivedData-beta
+
+web-source/package-lock.json
