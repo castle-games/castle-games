@@ -1,7 +1,7 @@
-import GhostApiClientConstructor from 'ghost-api-client';
+import CastleApiClient from 'castle-api-client';
 
-// export const API = GhostApiClientConstructor("http://localhost:1380");
-export const API = GhostApiClientConstructor();
+// export const API = CastleApiClient("http://localhost:1380");
+export const API = CastleApiClient();
 
 export async function getInitialData() {
   const result = await API(`
