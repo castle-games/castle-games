@@ -336,7 +336,7 @@ PRINT_CEF_CONFIG()
 
 # Ghost
 
-set(GHOST_TARGET "castle")
+set(GHOST_TARGET "Castle")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MDd")
 
@@ -392,8 +392,8 @@ install(TARGETS ${GHOST_TARGET} RUNTIME DESTINATION .)
 install(DIRECTORY "${CEF_TARGET_OUT_DIR}/" DESTINATION .)
 
 set(CPACK_GENERATOR "NSIS")
-set(CPACK_PACKAGE_NAME "castle")
-set(CPACK_PACKAGE_VENDOR "castle")
+set(CPACK_PACKAGE_NAME "Castle")
+set(CPACK_PACKAGE_VENDOR "Castle")
 
 set(CPACK_PACKAGE_VERSION "0.0.1")
 set(CPACK_PACKAGE_VERSION_MAJOR "0")
@@ -401,7 +401,7 @@ set(CPACK_PACKAGE_VERSION_MINOR "0")
 set(CPACK_PACKAGE_VERSION_PATCH "1")
 
 set(CPACK_PACKAGE_INSTALL_DIRECTORY "Castle")
-set(CPACK_PACKAGE_EXECUTABLES "castle;Castle")
+set(CPACK_PACKAGE_EXECUTABLES "Castle;Castle")
 #set(CPACK_PACKAGE_INSTALL_REGISTRY_KEY "Castle")
 #set(CPACK_IGNORE_FILES "/\\.git/;/CMakeLists.txt.user;\\.#;/#;\\.tar.gz$;/CMakeFiles/;CMakeCache.txt;/build/;.DS_Store'")
 set(CPACK_SOURCE_GENERATOR "TGZ")
@@ -419,5 +419,20 @@ set(CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES")
 #set(CPACK_NSIS_HELP_LINK ${APP_URL})
 #set(CPACK_NSIS_URL_INFO_ABOUT ${APP_URL})
 #set(CPACK_NSIS_CONTACT ${APP_EMAIL})
+
+set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
+	WriteRegStr HKCR \\\"castle\\\" \\\"\\\" \\\"URL:Castle Protocol\\\"
+	WriteRegStr HKCR \\\"castle\\\" \\\"URL Protocol\\\" \\\"\\\"
+	WriteRegStr HKCR \\\"castle\\\\DefaultIcon\\\" \\\"\\\" \\\"$INSTDIR\\\\game.ico\\\"
+	WriteRegStr HKCR \\\"castle\\\\shell\\\" \\\"\\\" \\\"open\\\"
+	WriteRegStr HKCR \\\"castle\\\\shell\\\\open\\\" \\\"\\\" \\\"Open in Castle\\\"
+	WriteRegStr HKCR \\\"castle\\\\shell\\\\open\\\\command\\\" \\\"\\\" \\\"$INSTDIR\\\\Castle.exe $\\\\\\\"%1$\\\\\\\"\\\"
+	System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v  (0x08000000, 0, 0, 0)'
+")
+
+set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "
+	DeleteRegKey HKCR \\\"castle\\\"
+	System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v  (0x08000000, 0, 0, 0)'
+")
 
 include(CPack)

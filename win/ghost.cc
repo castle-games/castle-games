@@ -5,7 +5,6 @@
 #include <mutex>
 #include <queue>
 
-// win implementation of 'ghost.h'
 extern "C" {
 #include <lauxlib.h>
 #include <lua.h>
@@ -18,7 +17,30 @@ extern "C" {
 #include "modules/thread/Channel.h"
 #include "modules/timer/Timer.h"
 
+#include "simple_handler.h"
+#include "ghost_constants.h"
+
+// internal
+
+static void _ghostSendJSEvent(std::string eventName, std::string serializedParams) {
+  CefRefPtr<CefBrowser> browser = SimpleHandler::GetInstance()->GetFirstBrowser();
+  CefRefPtr<CefFrame> frame = browser->GetMainFrame();
+  std::string validatedParams = (!serializedParams.empty()) ? serializedParams : "{}";
+  std::string msg = "{ let event = new Event('" + eventName + "'); event.params = " + validatedParams + "; window.dispatchEvent(event); }";
+  frame->ExecuteJavaScript(msg.c_str(), frame->GetURL(), 0);
+}
+
+static void _ghostSendNativeOpenUrlEvent(std::string uri) {
+  std::string params = "{ url: '" + uri + "' }";
+  _ghostSendJSEvent(kGhostOpenUrlEventName, params);
+}
+
+// win implementation of 'ghost.h'
+
 static float childLeft = 0, childTop = 0, childWidth = 200, childHeight = 200;
+
+static bool browserReady = false;
+static std::string initialUri = "";
 
 static lua_State *luaState = NULL;
 static int loveBootStackPos = 0;
@@ -49,7 +71,17 @@ struct Message {
 std::queue<Message> messages;
 
 void ghostHandleOpenUri(const char *uri) {
-  // TODO
+  // Windows deep links add extra quotes around uri
+  std::string stringUri = std::string(uri);
+  if (stringUri.front() == '"' && stringUri.back() == '"') {
+	stringUri = stringUri.substr(1, stringUri.length() - 2);
+  }
+
+  if (browserReady) {
+	_ghostSendNativeOpenUrlEvent(stringUri);
+  } else {
+    initialUri = stringUri;
+  }
 }
 
 void ghostSendJSEvent(const char *eventName, const char *serializedParams) {
@@ -85,7 +117,13 @@ void ghostClose() {
   messages.push(msg);
 }
 
-void ghostSetBrowserReady() {}
+void ghostSetBrowserReady() {
+  browserReady = true;
+  if (!initialUri.empty()) {
+    _ghostSendNativeOpenUrlEvent(initialUri);
+    initialUri = "";
+  }
+}
 
 extern "C" {
 void ghostRunMessageLoop();

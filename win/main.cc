@@ -8,6 +8,8 @@
 #include "simple_app.h"
 #include "simple_handler.h"
 
+#include "ghost.h"
+
 extern "C" {
 void ghostRunMessageLoop();
 }
@@ -67,7 +69,16 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
                       LPTSTR lpCmdLine,
                       int nCmdShow) {
   UNREFERENCED_PARAMETER(hPrevInstance);
-  UNREFERENCED_PARAMETER(lpCmdLine);
+
+  if (lpCmdLine) {
+	size_t size = wcstombs(NULL, lpCmdLine, 0);
+	if (size > 0) {
+		char* deepLink = new char[size + 1];
+		wcstombs(deepLink, lpCmdLine, size + 1);
+		ghostHandleOpenUri(deepLink);
+	}
+  }
+  //ghostHandleOpenUri("https://raw.githubusercontent.com/schazers/badboxart/master/main.lua");
 
   // Enable High-DPI support on Windows 7 or newer.
   CefEnableHighDPISupport();
