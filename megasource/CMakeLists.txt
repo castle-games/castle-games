@@ -342,9 +342,10 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MDd")
 
 set(GHOST_SRCS
   ../win/main.cc
-  ../win/ghost.cc
+  ../win/ghost_win.cc
   ../win/simple_handler_win.cc
   ../win/json.hpp
+  ../common/ghost.cpp
   ../common/ghost_constants.cpp
   ../common/simple_app.cpp
   ../common/simple_handler.cpp

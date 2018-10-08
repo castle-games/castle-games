@@ -22,17 +22,9 @@ extern "C" {
 
 // internal
 
-static void _ghostSendJSEvent(std::string eventName, std::string serializedParams) {
-  CefRefPtr<CefBrowser> browser = SimpleHandler::GetInstance()->GetFirstBrowser();
-  CefRefPtr<CefFrame> frame = browser->GetMainFrame();
-  std::string validatedParams = (!serializedParams.empty()) ? serializedParams : "{}";
-  std::string msg = "{ let event = new Event('" + eventName + "'); event.params = " + validatedParams + "; window.dispatchEvent(event); }";
-  frame->ExecuteJavaScript(msg.c_str(), frame->GetURL(), 0);
-}
-
 static void _ghostSendNativeOpenUrlEvent(std::string uri) {
   std::string params = "{ url: '" + uri + "' }";
-  _ghostSendJSEvent(kGhostOpenUrlEventName, params);
+  ghostSendJSEvent(kGhostOpenUrlEventName.c_str(), params.c_str());
 }
 
 // win implementation of 'ghost.h'
@@ -82,10 +74,6 @@ void ghostHandleOpenUri(const char *uri) {
   } else {
     initialUri = stringUri;
   }
-}
-
-void ghostSendJSEvent(const char *eventName, const char *serializedParams) {
-  // TODO: use xplat implementation in `ghost.cpp`
 }
 
 void ghostOpenLoveUri(const char *uri) {
