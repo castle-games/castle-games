@@ -180,7 +180,7 @@ export default class CoreApp extends React.Component {
     let { params } = e;
     let { url } = params;
 
-    if (!url) {
+    if (Strings.isEmpty(url)) {
       return;
     }
 
