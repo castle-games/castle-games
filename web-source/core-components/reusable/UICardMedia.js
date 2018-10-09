@@ -8,6 +8,8 @@ import { css } from 'react-emotion';
 import UIButtonIconHorizontal from '~/core-components/reusable/UIButtonIconHorizontal';
 import UIInput from '~/core-components/reusable/UIInput';
 
+import ContentEditor from '~/editor/ContentEditor';
+
 const STYLES_CONTAINER = css`
   padding: 16px;
   background: ${Constants.brand.background};
@@ -71,7 +73,15 @@ export default class UICardMedia extends React.Component {
     const createdTime =
       this.props.media && this.props.media.published
         ? Strings.toDate(this.props.media.published)
-        : 'Unknown publish date';
+        : Strings.toDate(this.props.media.createdTime);
+
+    let rich =
+      this.props.media && this.props.media.description && this.props.media.description.rich;
+    if (rich) {
+      rich = Strings.loadEditor(rich);
+    }
+
+    console.log(rich);
 
     return (
       <div className={STYLES_CONTAINER}>
@@ -81,12 +91,20 @@ export default class UICardMedia extends React.Component {
         </div>
 
         <div className={STYLES_SECTION}>
-          <div className={STYLES_SECTION_TITLE}>Is this your game?</div>
-          <div className={STYLES_SECTION_PARAGRAPH}>
-            Castle lists all the games from a game jam, so people can browse and play them all
-            easily. If you created this game and want to claim it, change the way it is presented,
-            or remove it, please contact the Castle team and let us know.
-          </div>
+          {!rich ? (
+            <div>
+              <div className={STYLES_SECTION_TITLE}>Is this your game?</div>
+              <div className={STYLES_SECTION_PARAGRAPH}>
+                Castle lists all the games from a game jam, so people can browse and play them all
+                easily. If you created this game and want to claim it, change the way it is
+                presented, or remove it, please contact the Castle team and let us know.
+              </div>
+            </div>
+          ) : (
+            <div>
+              <ContentEditor value={rich} readOnly />
+            </div>
+          )}
 
           <div style={{ marginTop: 48 }}>
             <UIInput

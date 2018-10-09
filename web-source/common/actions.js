@@ -15,6 +15,7 @@ export async function getInitialData() {
         mediaItems {
           name
           published
+          createdTime
           instructions
           description
           mediaUrl
@@ -39,9 +40,11 @@ export async function getInitialData() {
         playlists {
           playlistId
           name
+          description
           mediaItems {
             name
             published
+            createdTime
             instructions
             description
             mediaUrl
@@ -68,9 +71,11 @@ export async function getInitialData() {
       currentPlaylist {
         playlistId
         name
+        description
         mediaItems {
           name
           published
+          createdTime
           instructions
           description
           mediaUrl
@@ -129,9 +134,11 @@ export async function search(query) {
           playlists {
             playlistId
             name
+            description
             mediaItems {
               name
               published
+              createdTime
               instructions
               description
               mediaUrl
@@ -203,6 +210,7 @@ export async function authenticate({ username, password }) {
           playlists {
             playlistId
             name
+            description
             mediaItems {
               name
               published
@@ -257,22 +265,28 @@ export async function logout() {
   return true;
 }
 
-export async function addMedia({ name, url }) {
+export async function addMedia({ name, url, description }) {
+  const variables = { name, mediaUrl: url, description: JSON.stringify(description) };
+
   const result = await API.graphqlAsync({
     query: `
-      mutation AddMedia($name: String, $mediaUrl: String) {
+      mutation AddMedia($name: String, $mediaUrl: String, $description: String) {
         addMedia(media: {
           name: $name
           mediaUrl: $mediaUrl
+          description: {
+            rich: $description
+          }
         }) {
           name
           createdTime
           mediaUrl
           mediaId
+          description
         }
       }
     `,
-    variables: { name, mediaUrl: url },
+    variables,
   });
 
   // TOOD(jim): Write a global error handler.
@@ -283,22 +297,26 @@ export async function addMedia({ name, url }) {
   return result.data.addMedia;
 }
 
-export async function addPlaylist({ name }) {
+export async function addPlaylist({ name, description }) {
+  const variables = { name, description: JSON.stringify(description) };
+
   const result = await API.graphqlAsync({
     query: `
-      mutation AddPlaylist($name: String) {
+      mutation AddPlaylist($name: String, $description: String) {
         addPlaylist(playlist: {
           name: $name
+          description: {
+            rich: $description
+          }
         }) {
           name
+          description
           playlistId
         }
       }
     `,
-    variables: { name },
+    variables,
   });
-
-  console.log(result);
 
   // TOOD(jim): Write a global error handler.
   if (result.error) {
