@@ -153,7 +153,7 @@ export default class CoreApp extends React.Component {
     }
 
     if (this.state.mediaUrl.endsWith('.lua')) {
-      this._handleGoToUrl(this.state.mediaUrl);
+      this._handleGoToURL(this.state.mediaUrl);
       return;
     }
 
@@ -167,7 +167,11 @@ export default class CoreApp extends React.Component {
     this.setStateWithCEF({ media, mediaUrl: media.mediaUrl, pageMode: null });
   };
 
-  _handleGoToUrl = mediaUrl => {
+  _handleGoToURL = mediaUrl => {
+    if (Strings.isEmpty(mediaUrl)) {
+      return;
+    }
+
     this.setState({ media: null });
 
     CEF.openWindowFrame(mediaUrl);
@@ -256,8 +260,13 @@ export default class CoreApp extends React.Component {
       return;
     }
 
+    if (Strings.isEmpty(media.mediaUrl)) {
+      console.error('handleMediaSelect: no media url provided on entity');
+      return;
+    }
+
     if (media.mediaUrl.endsWith('.lua')) {
-      this._handleGoToUrl(media.mediaUrl);
+      this._handleGoToURL(media.mediaUrl);
       return;
     }
 
