@@ -5,6 +5,7 @@ import * as Strings from '~/common/strings';
 import { css } from 'react-emotion';
 
 import UIHeaderDismiss from '~/core-components/reusable/UIHeaderDismiss';
+import UIListMedia from '~/core-components/reusable/UIListMedia';
 import UIEmptyState from '~/core-components/reusable/UIEmptyState';
 import ContentEditor from '~/editor/ContentEditor';
 
@@ -64,7 +65,6 @@ export default class CorePlaylist extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
-        <UIHeaderDismiss onDismiss={this.props.onDismiss} />
         <div className={STYLES_PLAYLIST_CARD}>
           <h1 className={STYLES_HEADING}>{this.props.playlist.name}</h1>
           {rich ? (
@@ -73,6 +73,10 @@ export default class CorePlaylist extends React.Component {
             <p className={STYLES_PARAGRAPH}>There is no description for this playlist.</p>
           )}
         </div>
+        <UIListMedia
+          mediaItems={this.props.playlist.mediaItems}
+          onMediaSelect={this.props.onMediaSelect}
+        />
       </div>
     );
   }

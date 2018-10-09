@@ -318,8 +318,6 @@ export async function addPlaylist({ name, description }) {
     variables,
   });
 
-  console.log(result);
-
   // TOOD(jim): Write a global error handler.
   if (result.error) {
     return;

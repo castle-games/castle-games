@@ -466,6 +466,7 @@ export default class CoreApp extends React.Component {
           leftSidebarNode={maybeLeftSidebarNode}>
           <CorePlaylist
             playlist={state.playlist}
+            onMediaSelect={this._handleMediaSelect}
             onDismiss={this._handleToggleCurrentPlaylistDetails}
           />
         </CoreLayout>

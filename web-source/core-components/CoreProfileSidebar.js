@@ -86,7 +86,6 @@ export default class CoreProfileSidebar extends React.Component {
   };
 
   render() {
-    console.log(this.state);
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_SECTION}>
