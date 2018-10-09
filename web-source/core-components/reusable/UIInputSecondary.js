@@ -91,7 +91,7 @@ export default class UIInputSecondary extends React.Component {
           name={this.props.name}
           placeholder={this.props.placeholder}
           type={this.props.type}
-          value={this.props.username}
+          value={this.props.value}
           className={STYLES_INPUT}
         />
       </div>

@@ -252,7 +252,7 @@ export default class CoreApp extends React.Component {
   _handlePlaylistSelect = playlist => {
     CEF.closeWindowFrame();
 
-    this.setStateWithCEF({ pageMode: null, playlist, media: null });
+    this.setStateWithCEF({ pageMode: 'playlist', playlist, media: null });
   };
 
   _handleMediaSelect = media => {
@@ -464,7 +464,10 @@ export default class CoreApp extends React.Component {
             this._layout = reference;
           }}
           leftSidebarNode={maybeLeftSidebarNode}>
-          <CorePlaylist onDismiss={this._handleToggleCurrentPlaylistDetails} />
+          <CorePlaylist
+            playlist={state.playlist}
+            onDismiss={this._handleToggleCurrentPlaylistDetails}
+          />
         </CoreLayout>
       );
     }

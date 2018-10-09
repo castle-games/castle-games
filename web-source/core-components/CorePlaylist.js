@@ -5,6 +5,7 @@ import { css } from 'react-emotion';
 
 import UIHeaderDismiss from '~/core-components/reusable/UIHeaderDismiss';
 import UIEmptyState from '~/core-components/reusable/UIEmptyState';
+import ContentEditor from '~/editor/ContentEditor';
 
 const STYLES_CONTAINER = css`
   @keyframes playlist-scene-animation {
@@ -32,12 +33,20 @@ const STYLES_CONTAINER = css`
   }
 `;
 
+const STYLES_PLAYLIST_CARD = css`
+  padding: 16px;
+  background ${Constants.brand.background};
+`;
+
 export default class CorePlaylist extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTAINER}>
         <UIHeaderDismiss onDismiss={this.props.onDismiss} />
-        <UIEmptyState title="Not Implemented">Harass Jim.</UIEmptyState>
+        <div className={STYLES_PLAYLIST_CARD}>
+          <h1 className={STYLES_HEADING}>Untitled</h1>
+          <ContentEditor readOnly value={this.props.playlist.description} />
+        </div>
       </div>
     );
   }

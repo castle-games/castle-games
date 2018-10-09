@@ -1,11 +1,17 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
 
+import Plain from 'slate-plain-serializer';
+import { Value } from 'slate';
 import { css } from 'react-emotion';
 
 import UIEmptyState from '~/core-components/reusable/UIEmptyState';
 import UIButtonSecondary from '~/core-components/reusable/UIButtonSecondary';
 import UIInputSecondary from '~/core-components/reusable/UIInputSecondary';
+import UITextArea from '~/core-components/reusable/UITextArea';
+
+import ContentEditor from '~/editor/ContentEditor';
+import DefaultState from '~/editor/default.json';
 
 const STYLES_CONTAINER = css`
   @keyframes profile-sidebar-scene-animation {
@@ -47,9 +53,11 @@ export default class CoreProfileSidebar extends React.Component {
     media: {
       name: '',
       url: '',
+      description: Plain.deserialize(''),
     },
     playlist: {
       name: '',
+      description: Plain.deserialize(''),
     },
   };
 
@@ -57,8 +65,16 @@ export default class CoreProfileSidebar extends React.Component {
     this.setState({ media: { ...this.state.media, [e.target.name]: e.target.value } });
   };
 
+  _handleChangeMediaDescription = ({ value }) => {
+    this.setState({ media: { ...this.state.media, description: value } });
+  };
+
   _handleChangePlaylist = e => {
     this.setState({ playlist: { ...this.state.playlist, [e.target.name]: e.target.value } });
+  };
+
+  _handleChangePlaylistDescription = ({ value }) => {
+    this.setState({ playlist: { ...this.state.playlist, description: value } });
   };
 
   _handleAddMedia = () => {
@@ -70,6 +86,7 @@ export default class CoreProfileSidebar extends React.Component {
   };
 
   render() {
+    console.log(this.state);
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_SECTION}>
@@ -91,6 +108,13 @@ export default class CoreProfileSidebar extends React.Component {
             name="url"
             label="Media URL"
             onChange={this._handleChangeMedia}
+            style={{ marginBottom: 8 }}
+          />
+          <UITextArea
+            label="Media description"
+            value={this.state.media.description}
+            onChange={this._handleChangeMediaDescription}
+            placeholder="Type a description..."
             style={{ marginBottom: 32 }}
           />
           <UIButtonSecondary onClick={this._handleAddMedia}>Add Media</UIButtonSecondary>
@@ -106,6 +130,13 @@ export default class CoreProfileSidebar extends React.Component {
             name="name"
             label="Playlist name"
             onChange={this._handleChangePlaylist}
+            style={{ marginBottom: 8 }}
+          />
+          <UITextArea
+            label="Playist description"
+            value={this.state.playlist.description}
+            onChange={this._handleChangePlaylistDescription}
+            placeholder="Type a description..."
             style={{ marginBottom: 32 }}
           />
           <UIButtonSecondary onClick={this._handleAddPlaylist}>Add Playlist</UIButtonSecondary>
