@@ -81,8 +81,6 @@ export default class UICardMedia extends React.Component {
       rich = Strings.loadEditor(rich);
     }
 
-    console.log(rich);
-
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_CONTAINER_PREVIEW_NAME}>{name}</div>
