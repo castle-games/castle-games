@@ -6,18 +6,25 @@ import { css } from 'react-emotion';
 const STYLES_BUTTON = css`
   background: ${Constants.brand.background};
   color: ${Constants.brand.line};
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0);
+  transition: 200ms ease all;
   border-radius: 4px;
+  font-size: 12px;
   font-weight: 600;
-  height: 48px;
+  height: 32px;
   padding: 0 24px 0 24px;
   outline: 0;
   border: 0;
-  font-size: 16px;
   cursor: pointer;
 
   :focus {
     outline: 0;
     border: 0;
+  }
+
+  :hover {
+    background: ${Constants.colors.yellow};
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
   }
 `;
 

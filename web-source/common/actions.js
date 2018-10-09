@@ -312,6 +312,7 @@ export async function addPlaylist({ name, description }) {
           name
           description
           playlistId
+          createdTime
         }
       }
     `,

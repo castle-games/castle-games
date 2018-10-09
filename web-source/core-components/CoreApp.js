@@ -118,7 +118,13 @@ export default class CoreApp extends React.Component {
 
   _handleAddMedia = async data => {
     const response = await Actions.addMedia(data);
-    console.log({ response });
+    if (!response) {
+      return;
+    }
+
+    const mediaItems = [...this.state.viewer.mediaItems];
+    mediaItems.push(response);
+    this.setState({ viewer: { ...this.state.viewer, mediaItems } });
   };
 
   _handleRemoveMedia = data => {
@@ -127,7 +133,13 @@ export default class CoreApp extends React.Component {
 
   _handleAddPlaylist = async data => {
     const response = await Actions.addPlaylist(data);
-    console.log({ response });
+    if (!response) {
+      return;
+    }
+
+    const playlists = [...this.state.viewer.playlists];
+    playlists.push(response);
+    this.setState({ playlists: { ...this.state.viewer, playlists } });
   };
 
   _handleRemovePlaylist = data => {

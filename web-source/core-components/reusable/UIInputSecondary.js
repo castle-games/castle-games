@@ -42,16 +42,6 @@ const STYLES_LABEL = css`
   position: absolute;
 `;
 
-const STYLES_LABEL_WHITE = css`
-  color: ${Constants.colors.white};
-  font-size: 8px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  left: 10px;
-  top: 8px;
-  position: absolute;
-`;
-
 export default class UIInputSecondary extends React.Component {
   static defaultProps = {
     onChange: () => {},
@@ -79,9 +69,7 @@ export default class UIInputSecondary extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTAINER} style={this.props.style}>
-        <label className={!this.state.focus ? STYLES_LABEL : STYLES_LABEL_WHITE}>
-          {this.props.label}
-        </label>
+        <label className={STYLES_LABEL}>{this.props.label}</label>
         <ControlledInput
           autoFocus={this.props.autoFocus}
           onChange={this.props.onChange}

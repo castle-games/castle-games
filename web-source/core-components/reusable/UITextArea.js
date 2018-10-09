@@ -14,6 +14,7 @@ const STYLES_INPUT = css`
   display: block;
   box-sizing: border-box;
   padding: 32px 8px 16px 8px;
+  min-height: 112px;
   border-radius: 4px;
   width: 100%;
   border: 2px solid #333333;
