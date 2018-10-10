@@ -441,6 +441,8 @@ void
 Cocoa_PumpEvents(_THIS)
 { @autoreleasepool
 {
+    // XXX(Ghost): We don't need to pump macOS events here -- CEF pumps them anyways!
+    return;
 #if MAC_OS_X_VERSION_MIN_REQUIRED < 1070
     /* Update activity every 30 seconds to prevent screensaver */
     SDL_VideoData *data = (SDL_VideoData *)_this->driverdata;
