@@ -123,8 +123,7 @@ export default class CoreApp extends React.Component {
     }
 
     const mediaItems = [...this.state.viewer.mediaItems];
-    mediaItems.push(response);
-    console.log(response);
+    mediaItems.unshift(response);
     this.setState({ viewer: { ...this.state.viewer, mediaItems }, profileMode: 'media' });
   };
 
@@ -147,7 +146,7 @@ export default class CoreApp extends React.Component {
     }
 
     const playlists = [...this.state.viewer.playlists];
-    playlists.push(response);
+    playlists.unshift(response);
     this.setState({ viewer: { ...this.state.viewer, playlists }, profileMode: 'playlists' });
   };
 

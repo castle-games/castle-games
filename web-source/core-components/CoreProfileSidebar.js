@@ -77,12 +77,27 @@ export default class CoreProfileSidebar extends React.Component {
     this.setState({ playlist: { ...this.state.playlist, description: value } });
   };
 
-  _handleAddMedia = () => {
-    this.props.onMediaAdd({ ...this.state.media });
+  _handleAddMedia = async () => {
+    await this.props.onMediaAdd({ ...this.state.media });
+
+    this.setState({
+      media: {
+        name: '',
+        url: '',
+        description: Plain.deserialize(''),
+      },
+    });
   };
 
-  _handleAddPlaylist = () => {
-    this.props.onPlaylistAdd({ ...this.state.playlist });
+  _handleAddPlaylist = async () => {
+    await this.props.onPlaylistAdd({ ...this.state.playlist });
+
+    this.setState({
+      playlist: {
+        name: '',
+        description: Plain.deserialize(''),
+      },
+    });
   };
 
   render() {
