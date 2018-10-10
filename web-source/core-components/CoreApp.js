@@ -326,7 +326,10 @@ export default class CoreApp extends React.Component {
     this.setStateWithCEF({ pageMode: this.state.pageMode === 'browse' ? null : 'browse' });
 
   _handleToggleProfile = () =>
-    this.setStateWithCEF({ pageMode: this.state.pageMode === 'profile' ? null : 'profile' });
+    this.setStateWithCEF({
+      pageMode: this.state.pageMode === 'profile' ? null : 'profile',
+      creator: this.state.viewer,
+    });
 
   _handleToggleSignIn = () =>
     this.setStateWithCEF({ pageMode: this.state.pageMode === 'sign-in' ? null : 'sign-in' });
@@ -510,14 +513,16 @@ export default class CoreApp extends React.Component {
           ref={this._handleGetReference}
           leftSidebarNode={maybeLeftSidebarNode}
           rightNode={
-            <CoreProfileSidebar
-              onMediaAdd={this._handleMediaAdd}
-              onPlaylistAdd={this._handlePlaylistAdd}
-            />
+            state.viewer && state.creator && state.viewer.userId === state.creator.userId ? (
+              <CoreProfileSidebar
+                onMediaAdd={this._handleMediaAdd}
+                onPlaylistAdd={this._handlePlaylistAdd}
+              />
+            ) : null
           }>
           <CoreProfile
             viewer={state.viewer}
-            creator={state.viewer}
+            creator={state.creator}
             profileMode={state.profileMode}
             onDismiss={this._handleToggleProfile}
             onShowProfileMediaList={this._handleShowProfileMediaList}
