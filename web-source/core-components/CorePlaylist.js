@@ -36,21 +36,25 @@ const STYLES_CONTAINER = css`
 `;
 
 const STYLES_PLAYLIST_CARD = css`
-  padding: 16px;
+  padding: 16px 16px 48px 16px;
   background ${Constants.brand.background};
   color: ${Constants.colors.black};
 `;
 
 const STYLES_PARAGRAPH = css`
+  line-height: 1.5;
   font-size: 16px;
   font-weight: 300;
-  line-height: 1.5;
 `;
 
 const STYLES_HEADING = css`
-  font-size: 20px;
-  font-weight: 600;
-  margin-bottom: 24px;
+  font-size: 24px;
+  font-weight: 700;
+`;
+
+const STYLES_META = css`
+  margin: 8px 0 24px 0;
+  font-size: 10px;
 `;
 
 export default class CorePlaylist extends React.Component {
@@ -67,19 +71,28 @@ export default class CorePlaylist extends React.Component {
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_PLAYLIST_CARD}>
           <h1 className={STYLES_HEADING}>{this.props.playlist.name}</h1>
+          <div className={STYLES_META}>
+            Created on {Strings.toDate(this.props.playlist.createdTime)}
+          </div>
           {rich ? (
             <ContentEditor readOnly value={rich} />
           ) : (
             <p className={STYLES_PARAGRAPH}>There is no description for this playlist.</p>
           )}
         </div>
-        <UIListMedia
-          viewer={this.props.viewer}
-          creator={this.props.playlist.user}
-          mediaItems={this.props.playlist.mediaItems}
-          onMediaRemove={this.props.onMediaRemove}
-          onMediaSelect={this.props.onMediaSelect}
-        />
+        {this.props.playlist.mediaItems && this.props.playlist.mediaItems.length ? (
+          <UIListMedia
+            viewer={this.props.viewer}
+            creator={this.props.playlist.user}
+            mediaItems={this.props.playlist.mediaItems}
+            onMediaRemove={this.props.onMediaRemove}
+            onMediaSelect={this.props.onMediaSelect}
+          />
+        ) : (
+          <UIEmptyState title="There is nothing here yet">
+            When media is added to the playlist it will appear here.
+          </UIEmptyState>
+        )}
       </div>
     );
   }

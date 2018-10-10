@@ -11,7 +11,6 @@ export async function getInitialData() {
         username
         name
         createdTime
-
         mediaItems {
           name
           published
@@ -41,6 +40,7 @@ export async function getInitialData() {
           playlistId
           name
           description
+          createdTime
           user {
             userId
             name
@@ -82,6 +82,7 @@ export async function getInitialData() {
         playlistId
         name
         description
+        createdTime
         user {
           userId
           name

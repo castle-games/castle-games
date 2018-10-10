@@ -89,64 +89,67 @@ export default class UIListMedia extends React.Component {
           <div className={STYLES_COLUMN_NO_INTERACTION}>Published</div>
           <div className={STYLES_COLUMN_NO_INTERACTION} />
         </div>
-        {this.props.mediaItems.map((m, i) => {
-          const isSelected = this.props.media && this.props.media.mediaUrl === m.mediaUrl;
-          const actionsElement =
-            this.props.viewer &&
-            this.props.creator &&
-            this.props.viewer.userId === this.props.creator.userId ? (
-              <div className={STYLES_COLUMN}>
-                <span className={STYLES_ITEM} onClick={() => this.props.onMediaRemove(m)}>
-                  Delete
-                </span>
-              </div>
-            ) : (
-              <div className={STYLES_COLUMN_NO_INTERACTION} />
-            );
 
-          // NOTE(jim): God help me.
-          let username = null;
-          let date = null;
-          if (m.user) {
-            username = m.user.username;
-            date = m.createdTime;
-          }
+        {this.props.mediaItems
+          ? this.props.mediaItems.map((m, i) => {
+              const isSelected = this.props.media && this.props.media.mediaUrl === m.mediaUrl;
+              const actionsElement =
+                this.props.viewer &&
+                this.props.creator &&
+                this.props.viewer.userId === this.props.creator.userId ? (
+                  <div className={STYLES_COLUMN}>
+                    <span className={STYLES_ITEM} onClick={() => this.props.onMediaRemove(m)}>
+                      Delete
+                    </span>
+                  </div>
+                ) : (
+                  <div className={STYLES_COLUMN_NO_INTERACTION} />
+                );
 
-          if (m.extraData && m.extraData.itch && m.extraData.itch.itchUsername) {
-            username = m.extraData.itch.itchUsername;
-          }
+              // NOTE(jim): God help me.
+              let username = null;
+              let date = null;
+              if (m.user) {
+                username = m.user.username;
+                date = m.createdTime;
+              }
 
-          if (m.published) {
-            date = m.published;
-          }
+              if (m.extraData && m.extraData.itch && m.extraData.itch.itchUsername) {
+                username = m.extraData.itch.itchUsername;
+              }
 
-          if (!username) {
-            return (
-              <div
-                className={STYLES_ROW}
-                key={`playlist-list-item-${i}`}
-                onClick={() => this.props.onMediaSelect(m)}>
-                <div className={STYLES_FLUID_COLUMN}>{m.mediaUrl}</div>
-                {actionsElement}
-              </div>
-            );
-          }
+              if (m.published) {
+                date = m.published;
+              }
 
-          return (
-            <div className={STYLES_ROW} key={`media-list-item-${m.mediaId}-${i}`}>
-              <div className={STYLES_FLUID_COLUMN} onClick={() => this.props.onMediaSelect(m)}>
-                {m.name}
-              </div>
-              <div className={STYLES_COLUMN} style={{ width: '20%' }}>
-                {username ? username : '-'}
-              </div>
-              <div className={STYLES_COLUMN_NO_INTERACTION}>
-                {date ? Strings.toDate(date) : 'Unknown'}
-              </div>
-              {actionsElement}
-            </div>
-          );
-        })}
+              if (!username) {
+                return (
+                  <div
+                    className={STYLES_ROW}
+                    key={`playlist-list-item-${i}`}
+                    onClick={() => this.props.onMediaSelect(m)}>
+                    <div className={STYLES_FLUID_COLUMN}>{m.mediaUrl}</div>
+                    {actionsElement}
+                  </div>
+                );
+              }
+
+              return (
+                <div className={STYLES_ROW} key={`media-list-item-${m.mediaId}-${i}`}>
+                  <div className={STYLES_FLUID_COLUMN} onClick={() => this.props.onMediaSelect(m)}>
+                    {m.name}
+                  </div>
+                  <div className={STYLES_COLUMN} style={{ width: '20%' }}>
+                    {username ? username : '-'}
+                  </div>
+                  <div className={STYLES_COLUMN_NO_INTERACTION}>
+                    {date ? Strings.toDate(date) : 'Unknown'}
+                  </div>
+                  {actionsElement}
+                </div>
+              );
+            })
+          : null}
       </div>
     );
   }
