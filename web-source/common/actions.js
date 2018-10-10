@@ -1,4 +1,4 @@
-import CastleApiClient from 'castle-api-client';
+import CastleApiClient from "castle-api-client";
 
 // export const API = CastleApiClient("http://localhost:1380");
 export const API = CastleApiClient();
@@ -13,6 +13,7 @@ export async function getUser({ userId }) {
         username
         name
         createdTime
+        isReal
         photo {
           url
           height
@@ -28,6 +29,7 @@ export async function getUser({ userId }) {
             name
             username
             createdTime
+            isReal
             photo {
               url
               height
@@ -52,6 +54,7 @@ export async function getUser({ userId }) {
               name
               username
               createdTime
+              isReal
               photo {
                 url
                 height
@@ -73,6 +76,7 @@ export async function getUser({ userId }) {
             name
             username
             createdTime
+            isReal
             photo {
               url
               height
@@ -102,6 +106,7 @@ export async function getInitialData() {
         username
         name
         createdTime
+        isReal
         mediaItems {
           name
           published
@@ -120,6 +125,7 @@ export async function getInitialData() {
             name
             username
             createdTime
+            isReal
             photo {
               url
               height
@@ -138,6 +144,7 @@ export async function getInitialData() {
             name
             username
             createdTime
+            isReal
             photo {
               url
               height
@@ -162,6 +169,7 @@ export async function getInitialData() {
               name
               username
               createdTime
+              isReal
               photo {
                 url
                 height
@@ -182,6 +190,7 @@ export async function getInitialData() {
           name
           username
           createdTime
+          isReal
           photo {
             url
             height
@@ -206,6 +215,7 @@ export async function getInitialData() {
             name
             username
             createdTime
+            isReal
             photo {
               url
               height
@@ -260,6 +270,7 @@ export async function search(query) {
               name
               username
               createdTime
+              isReal
               photo {
                 url
                 height
@@ -283,6 +294,7 @@ export async function search(query) {
                 name
                 username
                 createdTime
+                isReal
                 photo {
                   url
                   height
@@ -294,7 +306,7 @@ export async function search(query) {
         }
       }
     `,
-    variables: { query },
+    variables: { query }
   });
 
   // TOOD(jim): Write a global error handler.
@@ -333,6 +345,7 @@ export async function authenticate({ username, password }) {
               name
               username
               createdTime
+              isReal
               photo {
                 url
                 height
@@ -351,6 +364,7 @@ export async function authenticate({ username, password }) {
               name
               username
               createdTime
+              isReal
               photo {
                 url
                 height
@@ -375,6 +389,7 @@ export async function authenticate({ username, password }) {
                 name
                 username
                 createdTime
+                isReal
                 photo {
                   url
                   height
@@ -386,7 +401,7 @@ export async function authenticate({ username, password }) {
         }
       }
     `,
-    variables: { username, password },
+    variables: { username, password }
   });
 
   // TOOD(jim): Write a global error handler.
@@ -403,7 +418,7 @@ export async function logout() {
       mutation {
         logout
       }
-    `,
+    `
   });
 
   if (result.error) {
@@ -414,7 +429,11 @@ export async function logout() {
 }
 
 export async function addMedia({ name, url, description }) {
-  const variables = { name, mediaUrl: url, description: JSON.stringify(description) };
+  const variables = {
+    name,
+    mediaUrl: url,
+    description: JSON.stringify(description)
+  };
 
   const result = await API.graphqlAsync({
     query: `
@@ -443,6 +462,7 @@ export async function addMedia({ name, url, description }) {
             name
             username
             createdTime
+            isReal
             photo {
               url
               height
@@ -452,7 +472,7 @@ export async function addMedia({ name, url, description }) {
         }
       }
     `,
-    variables,
+    variables
   });
 
   // TOOD(jim): Write a global error handler.
@@ -484,6 +504,7 @@ export async function addPlaylist({ name, description }) {
             name
             username
             createdTime
+            isReal
             photo {
               url
               height
@@ -493,7 +514,7 @@ export async function addPlaylist({ name, description }) {
         }
       }
     `,
-    variables,
+    variables
   });
 
   // TOOD(jim): Write a global error handler.
@@ -513,7 +534,7 @@ export async function removeMedia({ mediaId }) {
         deleteMedia(mediaId: $mediaId)
       }
     `,
-    variables,
+    variables
   });
 
   if (result.error) {
@@ -532,7 +553,7 @@ export async function removePlaylist({ playlistId }) {
         deletePlaylist(playlistId: $playlistId)
       }
     `,
-    variables,
+    variables
   });
 
   if (result.error) {
