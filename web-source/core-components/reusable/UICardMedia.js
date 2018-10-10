@@ -23,7 +23,10 @@ const STYLES_CONTAINER_PREVIEW_LABEL = css`
 `;
 
 const STYLES_CONTAINER_PREVIEW_NAME = css`
+  overflow-wrap: break-word;
+  width: 100%;
   font-size: 48px;
+  line-height: 48px;
   font-weight: 700;
 `;
 
@@ -35,6 +38,8 @@ const STYLES_BYLINE = css`
 
 const STYLES_SECTION = css`
   margin-top: 24px;
+  width: 100%;
+  overflow-wrap: break-word;
 `;
 
 const STYLES_SECTION_TITLE = css`
@@ -42,12 +47,16 @@ const STYLES_SECTION_TITLE = css`
   margin-bottom: 8px;
   font-weight: 600;
   padding-bottom: 8px;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  width: 100%;
 `;
 
 const STYLES_SECTION_PARAGRAPH = css`
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.5;
   margin-bottom: 16px;
+  overflow-wrap: break-word;
 `;
 
 export default class UICardMedia extends React.Component {
@@ -81,6 +90,8 @@ export default class UICardMedia extends React.Component {
       rich = Strings.loadEditor(rich);
     }
 
+    const isGameClaimed = this.props.media.user;
+
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_CONTAINER_PREVIEW_NAME}>{name}</div>
@@ -104,26 +115,31 @@ export default class UICardMedia extends React.Component {
             </div>
           )}
 
-          <div style={{ marginTop: 48 }}>
-            <UIInput
-              value={this.state.email}
-              label="E-mail"
-              name="email"
-              onChange={this._handleChange}
-            />
+          {!rich ? (
+            <div style={{ marginTop: 48 }}>
+              <UIInput
+                value={this.state.email}
+                label="E-mail"
+                name="email"
+                onChange={this._handleChange}
+              />
 
-            <UIInput
-              value={this.state.message}
-              label="message"
-              name="message"
-              onChange={this._handleChange}
-              onSubmit={this._handleSubmit}
-            />
-          </div>
+              <UIInput
+                value={this.state.message}
+                label="message"
+                name="message"
+                onChange={this._handleChange}
+                onSubmit={this._handleSubmit}
+              />
 
-          <UIButtonIconHorizontal onClick={this._handleSubmit} icon={<SVG.Mail height="16px" />}>
-            Contact us
-          </UIButtonIconHorizontal>
+              <UIButtonIconHorizontal
+                onClick={this._handleSubmit}
+                style={{ marginTop: 24 }}
+                icon={<SVG.Mail height="16px" />}>
+                Contact us
+              </UIButtonIconHorizontal>
+            </div>
+          ) : null}
         </div>
       </div>
     );
