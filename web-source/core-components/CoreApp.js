@@ -116,7 +116,7 @@ export default class CoreApp extends React.Component {
     }
   };
 
-  _handleAddMedia = async data => {
+  _handleMediaAdd = async data => {
     const response = await Actions.addMedia(data);
     if (!response) {
       return;
@@ -124,14 +124,23 @@ export default class CoreApp extends React.Component {
 
     const mediaItems = [...this.state.viewer.mediaItems];
     mediaItems.push(response);
-    this.setState({ viewer: { ...this.state.viewer, mediaItems } });
+    console.log(response);
+    this.setState({ viewer: { ...this.state.viewer, mediaItems }, profileMode: 'media' });
   };
 
-  _handleRemoveMedia = data => {
-    console.log(data);
+  _handleMediaRemove = async data => {
+    const response = await Actions.removeMedia(data);
+    if (!response) {
+      return;
+    }
+
+    const mediaItems = this.state.viewer.mediaItems.filter(
+      item => item.mediaId !== response.mediaId
+    );
+    this.setState({ viewer: { ...this.state.viewer, mediaItems }, profileMode: 'media' });
   };
 
-  _handleAddPlaylist = async data => {
+  _handlePlaylistAdd = async data => {
     const response = await Actions.addPlaylist(data);
     if (!response) {
       return;
@@ -139,11 +148,19 @@ export default class CoreApp extends React.Component {
 
     const playlists = [...this.state.viewer.playlists];
     playlists.push(response);
-    this.setState({ playlists: { ...this.state.viewer, playlists } });
+    this.setState({ viewer: { ...this.state.viewer, playlists }, profileMode: 'playlists' });
   };
 
-  _handleRemovePlaylist = data => {
-    console.log(data);
+  _handlePlaylistRemove = async data => {
+    const response = await Actions.removePlaylist(data);
+    if (!response) {
+      return;
+    }
+
+    const playlists = this.state.viewer.playlists.filter(
+      item => item.playlistId !== response.playlistId
+    );
+    this.setState({ viewer: { ...this.state.viewer, playlists }, profileMode: 'playlists' });
   };
 
   setStateWithCEF = state => this.setState({ ...state }, this._handleCEFupdateFrame);
@@ -453,6 +470,7 @@ export default class CoreApp extends React.Component {
       );
     }
 
+    // NOTE(jim): Sign in scene
     if (state.pageMode === 'sign-in') {
       return (
         <CoreLayout
@@ -467,8 +485,7 @@ export default class CoreApp extends React.Component {
       );
     }
 
-    // NOTE(jim): Playlist Scene.
-    // TODO(jim): Unfinished.
+    // NOTE(jim): Playlist Scene
     if (state.pageMode === 'playlist') {
       return (
         <CoreLayout
@@ -479,6 +496,7 @@ export default class CoreApp extends React.Component {
           <CorePlaylist
             playlist={state.playlist}
             onMediaSelect={this._handleMediaSelect}
+            onMediaRemove={this._handleRemoveMedia}
             onDismiss={this._handleToggleCurrentPlaylistDetails}
           />
         </CoreLayout>
@@ -486,7 +504,6 @@ export default class CoreApp extends React.Component {
     }
 
     // NOTE(jim): Profile Scene
-    // TODO(jim): Unfinished.
     if (state.pageMode === 'profile') {
       return (
         <CoreLayout
@@ -494,10 +511,8 @@ export default class CoreApp extends React.Component {
           leftSidebarNode={maybeLeftSidebarNode}
           rightNode={
             <CoreProfileSidebar
-              onAddMedia={this._handleAddMedia}
-              onRemoveMedia={this._handleRemoveMedia}
-              onAddPlaylist={this._handleAddPlaylist}
-              onRemovePlaylist={this._handleRemovePlaylist}
+              onMediaAdd={this._handleMediaAdd}
+              onPlaylistAdd={this._handlePlaylistAdd}
             />
           }>
           <CoreProfile
@@ -512,7 +527,9 @@ export default class CoreApp extends React.Component {
             onClickCreatorCreations={() => this.setState({ profileMode: 'media' })}
             onClickCreatorPlaylists={() => this.setState({ profileMode: 'playlists' })}
             onMediaSelect={this._handleMediaSelect}
+            onMediaRemove={this._handleMediaRemove}
             onPlaylistSelect={this._handlePlaylistSelect}
+            onPlaylistRemove={this._handlePlaylistRemove}
           />
         </CoreLayout>
       );

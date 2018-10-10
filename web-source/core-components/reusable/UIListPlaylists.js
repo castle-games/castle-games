@@ -32,37 +32,20 @@ const STYLES_ROW = css`
   :last-child {
     border-bottom: 0;
   }
-
-  transition: 200ms background ease;
-  :hover {
-    background: ${Constants.colors.yellow};
-  }
-`;
-
-const STYLES_ROW_SELECTED = css`
-  font-weight: 400;
-  font-size: 12px;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  cursor: pointer;
-  background: ${Constants.colors.green};
-
-  :last-child {
-    border-bottom: 0;
-  }
-`;
-
-const STYLES_COLUMN_FULL = css`
-  flex-shrink: 0;
-  width: 100%;
-  padding: 12px 16px 12px 16px;
-  overflow-wrap: break-word;
 `;
 
 const STYLES_COLUMN = css`
   flex-shrink: 0;
-  width: 33.33%;
+  width: 128px;
+  padding: 12px 16px 12px 16px;
+  :hover {
+    color: ${Constants.colors.yellow};
+  }
+`;
+
+const STYLES_COLUMN_NO_INTERACTION = css`
+  flex-shrink: 0;
+  width: 128px;
   padding: 12px 16px 12px 16px;
 `;
 
@@ -70,29 +53,59 @@ const STYLES_FLUID_COLUMN = css`
   min-width: 25%;
   width: 100%;
   padding: 12px 16px 12px 16px;
+  :hover {
+    color: ${Constants.colors.yellow};
+  }
 `;
 
-// TOOD(jim): Add handler for when a playlist is selected.
+const STYLES_FLUID_COLUMN_NO_INTERACTION = css`
+  min-width: 25%;
+  width: 100%;
+  padding: 12px 16px 12px 16px;
+`;
+
+const STYLES_ITEM = css`
+  font-size: 10px;
+  text-transform: uppercase;
+  cursor: pointer;
+`;
+
 export default class UIListPlaylists extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTAINER} style={this.props.style}>
         <div className={STYLES_ROW_TITLE}>
-          <div className={STYLES_COLUMN}>Name/URL</div>
-          <div className={STYLES_COLUMN}>Author</div>
-          <div className={STYLES_COLUMN}>-</div>
+          <div className={STYLES_FLUID_COLUMN}>Name/URL</div>
+          <div className={STYLES_COLUMN_NO_INTERACTION} style={{ width: 88 }}>
+            -
+          </div>
+          <div className={STYLES_COLUMN_NO_INTERACTION} style={{ width: 88 }}>
+            -
+          </div>
+          <div className={STYLES_COLUMN_NO_INTERACTION} />
         </div>
         {this.props.playlists.map((p, i) => {
+          const author = p && p.user && p.user.name ? p.user.name : '-';
+          const actionsElement = (
+            <div className={STYLES_COLUMN}>
+              <span className={STYLES_ITEM} onClick={() => this.props.onPlaylistRemove(p)}>
+                Delete
+              </span>
+            </div>
+          );
+
           return (
-            <div
-              className={STYLES_ROW}
-              key={`playlist-list-item-${p.playlistId}`}
-              onClick={() => this.props.onPlaylistSelect(p)}>
-              <div className={STYLES_COLUMN} style={{ fontWeight: 600 }}>
+            <div className={STYLES_ROW} key={`playlist-list-item-${p.playlistId}`}>
+              <div className={STYLES_FLUID_COLUMN} onClick={() => this.props.onPlaylistSelect(p)}>
                 {p.name}
               </div>
-              <div className={STYLES_COLUMN}>-</div>
-              <div className={STYLES_COLUMN}>-</div>
+              <div className={STYLES_COLUMN_NO_INTERACTION} style={{ width: 88 }}>
+                -
+              </div>
+              <div className={STYLES_COLUMN_NO_INTERACTION} style={{ width: 88 }}>
+                -
+              </div>
+              {actionsElement}
             </div>
           );
         })}

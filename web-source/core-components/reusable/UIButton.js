@@ -6,6 +6,8 @@ import { css } from 'react-emotion';
 const STYLES_BUTTON = css`
   background: ${Constants.brand.line};
   color: ${Constants.brand.background};
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0);
+  transition: 200ms ease all;
   border-radius: 4px;
   font-weight: 600;
   height: 48px;
@@ -18,6 +20,11 @@ const STYLES_BUTTON = css`
   :focus {
     outline: 0;
     border: 0;
+  }
+
+  :hover {
+    background: ${Constants.colors.black};
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
   }
 `;
 

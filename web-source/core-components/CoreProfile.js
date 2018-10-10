@@ -38,6 +38,30 @@ const STYLES_CONTAINER = css`
 
 export default class CoreProfile extends React.Component {
   render() {
+    const mediaListElement =
+      this.props.creator.mediaItems && this.props.creator.mediaItems.length ? (
+        <UIListMedia
+          mediaItems={this.props.creator.mediaItems}
+          onMediaSelect={this.props.onMediaSelect}
+          onMediaRemove={this.props.onMediaRemove}
+        />
+      ) : (
+        <UIEmptyState title="No media yet">This user has not uploaded any media yet.</UIEmptyState>
+      );
+
+    const playlistListElement =
+      this.props.creator.playlists && this.props.creator.playlists.length ? (
+        <UIListPlaylists
+          playlists={this.props.creator.playlists}
+          onPlaylistSelect={this.props.onPlaylistSelect}
+          onPlaylistRemove={this.props.onPlaylistRemove}
+        />
+      ) : (
+        <UIEmptyState title="No playlists yet">
+          This user has not uploaded any playlists yet.
+        </UIEmptyState>
+      );
+
     return (
       <div className={STYLES_CONTAINER}>
         <UICardProfileHeader
@@ -51,18 +75,8 @@ export default class CoreProfile extends React.Component {
           onShowMediaList={this.props.onShowProfileMediaList}
           onShowPlaylistList={this.props.onShowProfilePlaylistList}
         />
-        {this.props.profileMode === 'media' || !this.props.profileMode ? (
-          <UIListMedia
-            mediaItems={this.props.creator.mediaItems}
-            onMediaSelect={this.props.onMediaSelect}
-          />
-        ) : null}
-        {this.props.profileMode === 'playlists' ? (
-          <UIListPlaylists
-            playlists={this.props.creator.playlists}
-            onPlaylistSelect={this.props.onPlaylistSelect}
-          />
-        ) : null}
+        {this.props.profileMode === 'media' || !this.props.profileMode ? mediaListElement : null}
+        {this.props.profileMode === 'playlists' ? playlistListElement : null}
       </div>
     );
   }

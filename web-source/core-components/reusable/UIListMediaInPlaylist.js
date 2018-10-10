@@ -66,12 +66,6 @@ const STYLES_COLUMN = css`
   padding: 12px 16px 12px 16px;
 `;
 
-const STYLES_FLUID_COLUMN = css`
-  min-width: 25%;
-  width: 100%;
-  padding: 12px 16px 12px 16px;
-`;
-
 export default class UIListMediaInPlaylist extends React.Component {
   render() {
     if (!this.props.mediaItems || !this.props.mediaItems.length) {
@@ -123,19 +117,11 @@ export default class UIListMediaInPlaylist extends React.Component {
           return (
             <div
               className={isSelected ? STYLES_ROW_SELECTED : STYLES_ROW}
-              key={`playlist-list-item-${i}`}
-              onClick={() => this.props.onMediaSelect(m)}>
-              <div className={STYLES_COLUMN} style={{ fontWeight: 600 }}>
+              key={`playlist-list-item-${i}`}>
+              <div className={STYLES_COLUMN} onClick={() => this.props.onMediaSelect(m)}>
                 {m.name}
               </div>
-              <div
-                className={STYLES_COLUMN}
-                style={{
-                  fontWeight: username ? 600 : 400,
-                  color: username ? null : '#666',
-                }}>
-                {username ? username : '-'}
-              </div>
+              <div className={STYLES_COLUMN}>{username ? username : '-'}</div>
               <div className={STYLES_COLUMN}>{date ? Strings.toDate(date) : 'Unknown'}</div>
             </div>
           );

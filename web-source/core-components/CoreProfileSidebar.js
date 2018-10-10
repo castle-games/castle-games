@@ -78,11 +78,11 @@ export default class CoreProfileSidebar extends React.Component {
   };
 
   _handleAddMedia = () => {
-    this.props.onAddMedia({ ...this.state.media });
+    this.props.onMediaAdd({ ...this.state.media });
   };
 
   _handleAddPlaylist = () => {
-    this.props.onAddPlaylist({ ...this.state.playlist });
+    this.props.onPlaylistAdd({ ...this.state.playlist });
   };
 
   render() {

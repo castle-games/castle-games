@@ -34,35 +34,20 @@ const STYLES_ROW = css`
   }
 
   transition: 200ms background ease;
-  :hover {
-    background: ${Constants.colors.yellow};
-  }
-`;
-
-const STYLES_ROW_SELECTED = css`
-  font-weight: 400;
-  font-size: 12px;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  cursor: pointer;
-  background: ${Constants.colors.green};
-
-  :last-child {
-    border-bottom: 0;
-  }
-`;
-
-const STYLES_COLUMN_FULL = css`
-  flex-shrink: 0;
-  width: 100%;
-  padding: 12px 16px 12px 16px;
-  overflow-wrap: break-word;
 `;
 
 const STYLES_COLUMN = css`
   flex-shrink: 0;
-  width: 33.33%;
+  width: 128px;
+  padding: 12px 16px 12px 16px;
+  :hover {
+    color: ${Constants.colors.yellow};
+  }
+`;
+
+const STYLES_COLUMN_NO_INTERACTION = css`
+  flex-shrink: 0;
+  width: 128px;
   padding: 12px 16px 12px 16px;
 `;
 
@@ -70,6 +55,21 @@ const STYLES_FLUID_COLUMN = css`
   min-width: 25%;
   width: 100%;
   padding: 12px 16px 12px 16px;
+  :hover {
+    color: ${Constants.colors.yellow};
+  }
+`;
+
+const STYLES_FLUID_COLUMN_NO_INTERACTION = css`
+  min-width: 25%;
+  width: 100%;
+  padding: 12px 16px 12px 16px;
+`;
+
+const STYLES_ITEM = css`
+  font-size: 10px;
+  text-transform: uppercase;
+  cursor: pointer;
 `;
 
 export default class UIListMedia extends React.Component {
@@ -77,12 +77,20 @@ export default class UIListMedia extends React.Component {
     return (
       <div className={STYLES_CONTAINER} style={this.props.style}>
         <div className={STYLES_ROW_TITLE}>
-          <div className={STYLES_COLUMN}>Name/URL</div>
-          <div className={STYLES_COLUMN}>Author</div>
-          <div className={STYLES_COLUMN}>Published</div>
+          <div className={STYLES_FLUID_COLUMN_NO_INTERACTION}>Name/URL</div>
+          <div className={STYLES_COLUMN_NO_INTERACTION}>Author</div>
+          <div className={STYLES_COLUMN_NO_INTERACTION}>Published</div>
+          <div className={STYLES_COLUMN_NO_INTERACTION} />
         </div>
         {this.props.mediaItems.map((m, i) => {
           const isSelected = this.props.media && this.props.media.mediaUrl === m.mediaUrl;
+          const actionsElement = (
+            <div className={STYLES_COLUMN}>
+              <span className={STYLES_ITEM} onClick={() => this.props.onMediaRemove(m)}>
+                Delete
+              </span>
+            </div>
+          );
 
           // NOTE(jim): God help me.
           let username = null;
@@ -103,32 +111,25 @@ export default class UIListMedia extends React.Component {
           if (!username) {
             return (
               <div
-                className={isSelected ? STYLES_ROW_SELECTED : STYLES_ROW}
+                className={STYLES_ROW}
                 key={`playlist-list-item-${i}`}
                 onClick={() => this.props.onMediaSelect(m)}>
-                <div className={STYLES_COLUMN_FULL}>{m.mediaUrl}</div>
+                <div className={STYLES_FLUID_COLUMN}>{m.mediaUrl}</div>
+                {actionsElement}
               </div>
             );
           }
 
-          // TODO(jim): Consolidate this when we properly have usernames
           return (
-            <div
-              className={isSelected ? STYLES_ROW_SELECTED : STYLES_ROW}
-              key={`media-list-item-${m.mediaId}`}
-              onClick={() => this.props.onMediaSelect(m)}>
-              <div className={STYLES_COLUMN} style={{ fontWeight: 600 }}>
+            <div className={STYLES_ROW} key={`media-list-item-${m.mediaId}`}>
+              <div className={STYLES_FLUID_COLUMN} onClick={() => this.props.onMediaSelect(m)}>
                 {m.name}
               </div>
-              <div
-                className={STYLES_COLUMN}
-                style={{
-                  fontWeight: username ? 600 : 400,
-                  color: username ? null : '#666',
-                }}>
-                {username ? username : '-'}
+              <div className={STYLES_COLUMN}>{username ? username : '-'}</div>
+              <div className={STYLES_COLUMN_NO_INTERACTION}>
+                {date ? Strings.toDate(date) : 'Unknown'}
               </div>
-              <div className={STYLES_COLUMN}>{date ? Strings.toDate(date) : 'Unknown'}</div>
+              {actionsElement}
             </div>
           );
         })}

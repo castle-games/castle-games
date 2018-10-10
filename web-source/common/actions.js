@@ -41,6 +41,16 @@ export async function getInitialData() {
           playlistId
           name
           description
+          user {
+            userId
+            name
+            username
+            photo {
+              url
+              height
+              width
+            }
+          }
           mediaItems {
             name
             published
@@ -72,6 +82,16 @@ export async function getInitialData() {
         playlistId
         name
         description
+        user {
+          userId
+          name
+          username
+          photo {
+            url
+            height
+            width
+          }
+        }
         mediaItems {
           name
           published
@@ -125,6 +145,8 @@ export async function search(query) {
             mediaId
             mediaUrl
             name
+            createdTime
+            published
             user {
               userId
               name
@@ -135,6 +157,17 @@ export async function search(query) {
             playlistId
             name
             description
+            createdTime
+            user {
+              userId
+              name
+              username
+              photo {
+                url
+                height
+                width
+              }
+            }
             mediaItems {
               name
               published
@@ -186,6 +219,7 @@ export async function authenticate({ username, password }) {
           mediaItems {
             name
             published
+            createdTime
             instructions
             description
             mediaUrl
@@ -210,10 +244,22 @@ export async function authenticate({ username, password }) {
           playlists {
             playlistId
             name
+            createdTime
             description
+            user {
+              userId
+              name
+              username
+              photo {
+                url
+                height
+                width
+              }
+            }
             mediaItems {
               name
               published
+              createdTime
               instructions
               description
               mediaUrl
@@ -279,10 +325,27 @@ export async function addMedia({ name, url, description }) {
           }
         }) {
           name
+          published
           createdTime
+          instructions
+          description
           mediaUrl
           mediaId
-          description
+          coverImage {
+            url
+            height
+            width
+          }
+          user {
+            userId
+            name
+            username
+            photo {
+              url
+              height
+              width
+            }
+          }
         }
       }
     `,
@@ -313,6 +376,16 @@ export async function addPlaylist({ name, description }) {
           description
           playlistId
           createdTime
+          user {
+            userId
+            name
+            username
+            photo {
+              url
+              height
+              width
+            }
+          }
         }
       }
     `,
@@ -325,4 +398,42 @@ export async function addPlaylist({ name, description }) {
   }
 
   return result.data.addPlaylist;
+}
+
+export async function removeMedia({ mediaId }) {
+  const variables = { mediaId };
+
+  const result = await API.graphqlAsync({
+    query: `
+      mutation RemoveMedia($mediaId: ID!) {
+        deleteMedia(mediaId: $mediaId)
+      }
+    `,
+    variables,
+  });
+
+  if (result.error) {
+    return;
+  }
+
+  return { mediaId };
+}
+
+export async function removePlaylist({ playlistId }) {
+  const variables = { playlistId };
+
+  const result = await API.graphqlAsync({
+    query: `
+      mutation RemovePlaylist($playlistId: ID!) {
+        deletePlaylist(playlistId: $playlistId)
+      }
+    `,
+    variables,
+  });
+
+  if (result.error) {
+    return;
+  }
+
+  return { playlistId };
 }
