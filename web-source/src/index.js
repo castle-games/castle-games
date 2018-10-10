@@ -58,6 +58,7 @@ const run = async () => {
     mediaUrl: '',
     playlist: currentPlaylist,
     media: null,
+    creator: null,
     viewer: me,
     local: null,
     searchQuery: '',

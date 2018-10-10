@@ -45,6 +45,9 @@ const isOverlayHotkey = isKeyHotkey('mod+e');
 const isDevelopmentLogHotkey = isKeyHotkey('mod+j');
 const POLL_DELAY = 300;
 
+// NOTES(jim):
+// + Assigning creator to `null` whenever `pageMode` changes is dangerous.
+//   We may want to think of an enumeration to represent that state.
 export default class CoreApp extends React.Component {
   _layout;
   _devTimeout;
@@ -58,9 +61,7 @@ export default class CoreApp extends React.Component {
   async componentDidMount() {
     window.addEventListener('nativeOpenUrl', this._handleNativeOpenUrl);
     window.addEventListener('keydown', this._handleKeyDown);
-    this._handleCEFupdateFrame();
 
-    // TODO(jim): Move this somewhere else.
     const processChannels = async () => {
       const logs = await CEF.getLogs();
 
@@ -68,11 +69,10 @@ export default class CoreApp extends React.Component {
       this._devTimeout = window.setTimeout(processChannels, POLL_DELAY);
     };
 
-    if (window.cefQuery) {
+    CEF.setBrowserReady(() => {
+      this._handleCEFupdateFrame();
       processChannels();
-    }
-
-    CEF.setBrowserReady();
+    });
   }
 
   componentWillUnmount() {
@@ -192,7 +192,7 @@ export default class CoreApp extends React.Component {
     CEF.closeWindowFrame();
 
     this._handleSetHistory(media);
-    this.setStateWithCEF({ media, mediaUrl: media.mediaUrl, pageMode: null });
+    this.setStateWithCEF({ media, mediaUrl: media.mediaUrl, pageMode: null, creator: null });
   };
 
   _handleGoToURL = mediaUrl => {
@@ -205,7 +205,7 @@ export default class CoreApp extends React.Component {
     CEF.openWindowFrame(mediaUrl);
 
     this._handleSetHistory({ mediaUrl });
-    this.setStateWithCEF({ media: { mediaUrl }, mediaUrl, pageMode: null });
+    this.setStateWithCEF({ media: { mediaUrl }, mediaUrl, pageMode: null, creator: null });
   };
 
   _handleNativeOpenUrl = e => {
@@ -280,7 +280,7 @@ export default class CoreApp extends React.Component {
   _handlePlaylistSelect = playlist => {
     CEF.closeWindowFrame();
 
-    this.setStateWithCEF({ pageMode: 'playlist', playlist, media: null });
+    this.setStateWithCEF({ pageMode: 'playlist', creator: null, playlist, media: null });
   };
 
   _handleMediaSelect = media => {
@@ -322,13 +322,16 @@ export default class CoreApp extends React.Component {
     this._handleMediaSelect(this.state.playlist.mediaItems[index]);
   };
 
-  _handleToggleBrowse = () =>
-    this.setStateWithCEF({ pageMode: this.state.pageMode === 'browse' ? null : 'browse' });
-
   _handleToggleProfile = () =>
     this.setStateWithCEF({
       pageMode: this.state.pageMode === 'profile' ? null : 'profile',
-      creator: this.state.viewer,
+      creator: this.state.pageMode === 'profile' ? null : this.state.viewer,
+    });
+
+  _handleToggleBrowse = () =>
+    this.setStateWithCEF({
+      pageMode: this.state.pageMode === 'browse' ? null : 'browse',
+      creator: null,
     });
 
   _handleToggleSignIn = () =>
@@ -337,11 +340,13 @@ export default class CoreApp extends React.Component {
   _handleToggleCurrentPlaylistDetails = () =>
     this.setStateWithCEF({
       pageMode: this.state.pageMode === 'playlist' ? null : 'playlist',
+      creator: null,
     });
 
   _handleToggleCurrentPlaylist = () =>
     this.setStateWithCEF({
       pageMode: null,
+      creator: null,
       sidebarMode: this.state.sidebarMode === 'current-playlist' ? null : 'current-playlist',
     });
 
@@ -349,18 +354,21 @@ export default class CoreApp extends React.Component {
     this.setStateWithCEF({
       sidebarMode: this.state.sidebarMode === 'dashboard' ? null : 'dashboard',
       pageMode: null,
+      creator: null,
     });
 
   _handleToggleDevelopmentLogs = () =>
     this.setStateWithCEF({
       sidebarMode: this.state.sidebarMode === 'development' ? null : 'development',
       pageMode: null,
+      creator: null,
     });
 
   _handleToggleMediaInfo = () =>
     this.setStateWithCEF({
       sidebarMode: this.state.sidebarMode === 'media-info' ? null : 'media-info',
       pageMode: null,
+      creator: null,
     });
 
   _handleShowProfileMediaList = () => {
@@ -387,6 +395,7 @@ export default class CoreApp extends React.Component {
 
     this.setStateWithCEF({
       viewer: null,
+      creator: null,
       pageMode: 'browse',
     });
   };
