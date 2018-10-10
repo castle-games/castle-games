@@ -4,6 +4,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 package.lock
+package-lock.json
 pids
 *.pid
 *.seed
