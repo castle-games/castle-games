@@ -74,6 +74,8 @@ export default class CorePlaylist extends React.Component {
           )}
         </div>
         <UIListMedia
+          viewer={this.props.viewer}
+          creator={this.props.playlist.user}
           mediaItems={this.props.playlist.mediaItems}
           onMediaRemove={this.props.onMediaRemove}
           onMediaSelect={this.props.onMediaSelect}

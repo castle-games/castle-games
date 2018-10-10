@@ -37,6 +37,7 @@ const STYLES_ROW = css`
 const STYLES_COLUMN = css`
   flex-shrink: 0;
   width: 128px;
+  overflow-wrap: break-word;
   padding: 12px 16px 12px 16px;
   :hover {
     color: ${Constants.colors.yellow};
@@ -46,12 +47,14 @@ const STYLES_COLUMN = css`
 const STYLES_COLUMN_NO_INTERACTION = css`
   flex-shrink: 0;
   width: 128px;
+  overflow-wrap: break-word;
   padding: 12px 16px 12px 16px;
 `;
 
 const STYLES_FLUID_COLUMN = css`
   min-width: 25%;
   width: 100%;
+  overflow-wrap: break-word;
   padding: 12px 16px 12px 16px;
   :hover {
     color: ${Constants.colors.yellow};
@@ -61,6 +64,7 @@ const STYLES_FLUID_COLUMN = css`
 const STYLES_FLUID_COLUMN_NO_INTERACTION = css`
   min-width: 25%;
   width: 100%;
+  overflow-wrap: break-word;
   padding: 12px 16px 12px 16px;
 `;
 
@@ -76,8 +80,8 @@ export default class UIListPlaylists extends React.Component {
       <div className={STYLES_CONTAINER} style={this.props.style}>
         <div className={STYLES_ROW_TITLE}>
           <div className={STYLES_FLUID_COLUMN}>Name/URL</div>
-          <div className={STYLES_COLUMN_NO_INTERACTION} style={{ width: 88 }}>
-            -
+          <div className={STYLES_COLUMN_NO_INTERACTION} style={{ width: '20%' }}>
+            Author
           </div>
           <div className={STYLES_COLUMN_NO_INTERACTION} style={{ width: 88 }}>
             -
@@ -86,21 +90,26 @@ export default class UIListPlaylists extends React.Component {
         </div>
         {this.props.playlists.map((p, i) => {
           const author = p && p.user && p.user.name ? p.user.name : '-';
-          const actionsElement = (
-            <div className={STYLES_COLUMN}>
-              <span className={STYLES_ITEM} onClick={() => this.props.onPlaylistRemove(p)}>
-                Delete
-              </span>
-            </div>
-          );
+          const actionsElement =
+            this.props.viewer &&
+            this.props.creator &&
+            this.props.viewer.userId === this.props.creator.userId ? (
+              <div className={STYLES_COLUMN}>
+                <span className={STYLES_ITEM} onClick={() => this.props.onPlaylistRemove(p)}>
+                  Delete
+                </span>
+              </div>
+            ) : (
+              <div className={STYLES_COLUMN_NO_INTERACTION} />
+            );
 
           return (
             <div className={STYLES_ROW} key={`playlist-list-item-${p.playlistId}`}>
               <div className={STYLES_FLUID_COLUMN} onClick={() => this.props.onPlaylistSelect(p)}>
                 {p.name}
               </div>
-              <div className={STYLES_COLUMN_NO_INTERACTION} style={{ width: 88 }}>
-                -
+              <div className={STYLES_COLUMN_NO_INTERACTION} style={{ width: '20%' }}>
+                {author}
               </div>
               <div className={STYLES_COLUMN_NO_INTERACTION} style={{ width: 88 }}>
                 -

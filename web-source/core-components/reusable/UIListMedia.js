@@ -40,6 +40,8 @@ const STYLES_COLUMN = css`
   flex-shrink: 0;
   width: 128px;
   padding: 12px 16px 12px 16px;
+  overflow-wrap: break-word;
+
   :hover {
     color: ${Constants.colors.yellow};
   }
@@ -48,12 +50,14 @@ const STYLES_COLUMN = css`
 const STYLES_COLUMN_NO_INTERACTION = css`
   flex-shrink: 0;
   width: 128px;
+  overflow-wrap: break-word;
   padding: 12px 16px 12px 16px;
 `;
 
 const STYLES_FLUID_COLUMN = css`
   min-width: 25%;
   width: 100%;
+  overflow-wrap: break-word;
   padding: 12px 16px 12px 16px;
   :hover {
     color: ${Constants.colors.yellow};
@@ -63,6 +67,7 @@ const STYLES_FLUID_COLUMN = css`
 const STYLES_FLUID_COLUMN_NO_INTERACTION = css`
   min-width: 25%;
   width: 100%;
+  overflow-wrap: break-word;
   padding: 12px 16px 12px 16px;
 `;
 
@@ -78,19 +83,26 @@ export default class UIListMedia extends React.Component {
       <div className={STYLES_CONTAINER} style={this.props.style}>
         <div className={STYLES_ROW_TITLE}>
           <div className={STYLES_FLUID_COLUMN_NO_INTERACTION}>Name/URL</div>
-          <div className={STYLES_COLUMN_NO_INTERACTION}>Author</div>
+          <div className={STYLES_COLUMN_NO_INTERACTION} style={{ width: '20%' }}>
+            Author
+          </div>
           <div className={STYLES_COLUMN_NO_INTERACTION}>Published</div>
           <div className={STYLES_COLUMN_NO_INTERACTION} />
         </div>
         {this.props.mediaItems.map((m, i) => {
           const isSelected = this.props.media && this.props.media.mediaUrl === m.mediaUrl;
-          const actionsElement = (
-            <div className={STYLES_COLUMN}>
-              <span className={STYLES_ITEM} onClick={() => this.props.onMediaRemove(m)}>
-                Delete
-              </span>
-            </div>
-          );
+          const actionsElement =
+            this.props.viewer &&
+            this.props.creator &&
+            this.props.viewer.userId === this.props.creator.userId ? (
+              <div className={STYLES_COLUMN}>
+                <span className={STYLES_ITEM} onClick={() => this.props.onMediaRemove(m)}>
+                  Delete
+                </span>
+              </div>
+            ) : (
+              <div className={STYLES_COLUMN_NO_INTERACTION} />
+            );
 
           // NOTE(jim): God help me.
           let username = null;
@@ -121,11 +133,13 @@ export default class UIListMedia extends React.Component {
           }
 
           return (
-            <div className={STYLES_ROW} key={`media-list-item-${m.mediaId}`}>
+            <div className={STYLES_ROW} key={`media-list-item-${m.mediaId}-${i}`}>
               <div className={STYLES_FLUID_COLUMN} onClick={() => this.props.onMediaSelect(m)}>
                 {m.name}
               </div>
-              <div className={STYLES_COLUMN}>{username ? username : '-'}</div>
+              <div className={STYLES_COLUMN} style={{ width: '20%' }}>
+                {username ? username : '-'}
+              </div>
               <div className={STYLES_COLUMN_NO_INTERACTION}>
                 {date ? Strings.toDate(date) : 'Unknown'}
               </div>

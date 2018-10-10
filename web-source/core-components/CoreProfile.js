@@ -41,6 +41,8 @@ export default class CoreProfile extends React.Component {
     const mediaListElement =
       this.props.creator.mediaItems && this.props.creator.mediaItems.length ? (
         <UIListMedia
+          viewer={this.props.viewer}
+          creator={this.props.creator}
           mediaItems={this.props.creator.mediaItems}
           onMediaSelect={this.props.onMediaSelect}
           onMediaRemove={this.props.onMediaRemove}
@@ -52,6 +54,8 @@ export default class CoreProfile extends React.Component {
     const playlistListElement =
       this.props.creator.playlists && this.props.creator.playlists.length ? (
         <UIListPlaylists
+          viewer={this.props.viewer}
+          creator={this.props.creator}
           playlists={this.props.creator.playlists}
           onPlaylistSelect={this.props.onPlaylistSelect}
           onPlaylistRemove={this.props.onPlaylistRemove}

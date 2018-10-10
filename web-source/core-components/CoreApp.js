@@ -494,6 +494,7 @@ export default class CoreApp extends React.Component {
           }}
           leftSidebarNode={maybeLeftSidebarNode}>
           <CorePlaylist
+            viewer={state.viewer}
             playlist={state.playlist}
             onMediaSelect={this._handleMediaSelect}
             onMediaRemove={this._handleRemoveMedia}
@@ -516,6 +517,7 @@ export default class CoreApp extends React.Component {
             />
           }>
           <CoreProfile
+            viewer={state.viewer}
             creator={state.viewer}
             profileMode={state.profileMode}
             onDismiss={this._handleToggleProfile}
