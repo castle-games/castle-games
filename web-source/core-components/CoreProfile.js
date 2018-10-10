@@ -46,6 +46,7 @@ export default class CoreProfile extends React.Component {
           mediaItems={this.props.creator.mediaItems}
           onMediaSelect={this.props.onMediaSelect}
           onMediaRemove={this.props.onMediaRemove}
+          onUserSelect={this._handleUserSelect}
         />
       ) : (
         <UIEmptyState title="No media yet">This user has not uploaded any media yet.</UIEmptyState>
@@ -59,6 +60,7 @@ export default class CoreProfile extends React.Component {
           playlists={this.props.creator.playlists}
           onPlaylistSelect={this.props.onPlaylistSelect}
           onPlaylistRemove={this.props.onPlaylistRemove}
+          onUserSelect={this._handleUserSelect}
         />
       ) : (
         <UIEmptyState title="No playlists yet">

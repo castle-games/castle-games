@@ -45,6 +45,7 @@ export default class CoreBrowsePlaylistResults extends React.Component {
           <UIHeaderDismiss />
           <UIListPlaylists
             onPlaylistSelect={this.props.onPlaylistSelect}
+            onUserSelect={this.props.onUserSelect}
             playlists={this.props.playlists}
           />
         </div>

@@ -3,6 +3,97 @@ import CastleApiClient from 'castle-api-client';
 // export const API = CastleApiClient("http://localhost:1380");
 export const API = CastleApiClient();
 
+export async function getUser({ userId }) {
+  const variables = { userId };
+  const result = await API(
+    `
+    query GetUser($userId: ID!) {
+      user(userId: $userId) {
+        userId
+        username
+        name
+        createdTime
+        photo {
+          url
+          height
+          width
+        }
+        playlists {
+          playlistId
+          name
+          description
+          createdTime
+          user {
+            userId
+            name
+            username
+            createdTime
+            photo {
+              url
+              height
+              width
+            }
+          }
+          mediaItems {
+            name
+            published
+            createdTime
+            instructions
+            description
+            mediaUrl
+            mediaId
+            coverImage {
+              url
+              height
+              width
+            }
+            user {
+              userId
+              name
+              username
+              createdTime
+              photo {
+                url
+                height
+                width
+              }
+            }
+          }
+        }
+        mediaItems {
+          name
+          published
+          createdTime
+          instructions
+          description
+          mediaUrl
+          mediaId
+          user {
+            userId
+            name
+            username
+            createdTime
+            photo {
+              url
+              height
+              width
+            }
+          }
+        }
+      }
+    }
+  `,
+    variables
+  );
+
+  // TOOD(jim): Write a global error handler.
+  if (result.error) {
+    return;
+  }
+
+  return result.data.user;
+}
+
 export async function getInitialData() {
   const result = await API(`
     query {
@@ -28,6 +119,7 @@ export async function getInitialData() {
             userId
             name
             username
+            createdTime
             photo {
               url
               height
@@ -45,6 +137,7 @@ export async function getInitialData() {
             userId
             name
             username
+            createdTime
             photo {
               url
               height
@@ -68,6 +161,7 @@ export async function getInitialData() {
               userId
               name
               username
+              createdTime
               photo {
                 url
                 height
@@ -87,6 +181,7 @@ export async function getInitialData() {
           userId
           name
           username
+          createdTime
           photo {
             url
             height
@@ -110,6 +205,7 @@ export async function getInitialData() {
             userId
             name
             username
+            createdTime
             photo {
               url
               height
@@ -163,6 +259,7 @@ export async function search(query) {
               userId
               name
               username
+              createdTime
               photo {
                 url
                 height
@@ -185,6 +282,7 @@ export async function search(query) {
                 userId
                 name
                 username
+                createdTime
                 photo {
                   url
                   height
@@ -234,6 +332,7 @@ export async function authenticate({ username, password }) {
               userId
               name
               username
+              createdTime
               photo {
                 url
                 height
@@ -251,6 +350,7 @@ export async function authenticate({ username, password }) {
               userId
               name
               username
+              createdTime
               photo {
                 url
                 height
@@ -274,6 +374,7 @@ export async function authenticate({ username, password }) {
                 userId
                 name
                 username
+                createdTime
                 photo {
                   url
                   height
@@ -341,6 +442,7 @@ export async function addMedia({ name, url, description }) {
             userId
             name
             username
+            createdTime
             photo {
               url
               height
@@ -381,6 +483,7 @@ export async function addPlaylist({ name, description }) {
             userId
             name
             username
+            createdTime
             photo {
               url
               height

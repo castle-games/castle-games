@@ -35,7 +35,7 @@ export const getLogs = () => {
   });
 };
 
-export const setBrowserReady = () => {
+export const setBrowserReady = callback => {
   if (!window.cefQuery) {
     console.error('setBrowserReady: window.cefQuery is undefined');
     return;
@@ -50,28 +50,37 @@ export const setBrowserReady = () => {
     });
   } catch (e) {
     alert('`cefQuery`: ' + e.message);
-  }
-};
-
-export const openWindowFrame = throttle(mediaUrl => {
-  if (!window.cefQuery) {
-    console.error('openWindowFrame: window.cefQuery is undefined');
     return;
   }
 
-  try {
-    window.cefQuery({
-      request: JSON.stringify({
-        type: 'OPEN_URI',
-        body: {
-          uri: mediaUrl,
-        },
-      }),
-    });
-  } catch (e) {
-    alert('`cefQuery`: ' + e.message);
+  if (callback) {
+    return callback();
   }
-}, 1000, { leading: true, trailing: false });
+};
+
+export const openWindowFrame = throttle(
+  mediaUrl => {
+    if (!window.cefQuery) {
+      console.error('openWindowFrame: window.cefQuery is undefined');
+      return;
+    }
+
+    try {
+      window.cefQuery({
+        request: JSON.stringify({
+          type: 'OPEN_URI',
+          body: {
+            uri: mediaUrl,
+          },
+        }),
+      });
+    } catch (e) {
+      alert('`cefQuery`: ' + e.message);
+    }
+  },
+  1000,
+  { leading: true, trailing: false }
+);
 
 export const updateWindowFrame = rect => {
   if (!window.cefQuery) {

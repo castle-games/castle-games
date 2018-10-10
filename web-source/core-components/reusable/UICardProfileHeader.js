@@ -16,6 +16,7 @@ const STYLES_BODY = css`
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
+  padding-bottom: 48px;
 `;
 
 const STYLES_BODY_LEFT = css`
@@ -45,7 +46,6 @@ const STYLES_META = css`
 `;
 
 const STYLES_DESCRIPTION = css`
-  margin: 16px 0 48px 0;
   line-height: 1.5;
   font-size: 16px;
   font-weight: 300;
@@ -69,6 +69,11 @@ export default class UICardProfileHeader extends React.Component {
     const isViewingMedia = this.props.profileMode === 'media' || !this.props.profileMode;
     const isViewingPlaylists = this.props.profileMode === 'playlists';
 
+    let rich = this.props.user && this.props.user.description && this.props.user.description.rich;
+    if (rich) {
+      rich = Strings.loadEditor(rich);
+    }
+
     return (
       <div
         className={STYLES_CONTAINER}
@@ -84,7 +89,11 @@ export default class UICardProfileHeader extends React.Component {
                 Joined on {Strings.toDate(this.props.creator.createdTime)}
               </div>
             </div>
-            <div className={STYLES_DESCRIPTION}>{this.props.creator.description}</div>
+            {rich ? (
+              <ContentEditor readOnly value={rich} />
+            ) : (
+              <p className={STYLES_DESCRIPTION}>A creator on Castle.</p>
+            )}
           </div>
         </div>
         <div className={STYLES_ROW}>

@@ -283,6 +283,16 @@ export default class CoreApp extends React.Component {
     this.setStateWithCEF({ pageMode: 'playlist', creator: null, playlist, media: null });
   };
 
+  _handleUserSelect = async user => {
+    if (!user) {
+      return;
+    }
+
+    const creator = await Actions.getUser(user);
+
+    this.setStateWithCEF({ pageMode: 'profile', creator });
+  };
+
   _handleMediaSelect = media => {
     if (!media) {
       return;
@@ -466,6 +476,7 @@ export default class CoreApp extends React.Component {
             <CoreBrowsePlaylistResults
               playlists={state.searchResultsPlaylist}
               onPlaylistSelect={this._handlePlaylistSelect}
+              onUserSelect={this._handleUserSelect}
               onDismiss={this._handleToggleBrowse}
             />
           }
@@ -473,6 +484,7 @@ export default class CoreApp extends React.Component {
           leftSidebarNode={maybeLeftSidebarNode}>
           <CoreBrowseMediaResults
             mediaItems={state.searchResultsMedia}
+            onUserSelect={this._handleUserSelect}
             onMediaSelect={this._handleMediaSelect}
             onSelectRandom={this._handleSelectRandom}
             onToggleCurrentPlaylist={this._handleToggleCurrentPlaylist}
@@ -507,6 +519,7 @@ export default class CoreApp extends React.Component {
           <CorePlaylist
             viewer={state.viewer}
             playlist={state.playlist}
+            onUserSelect={this._handleUserSelect}
             onMediaSelect={this._handleMediaSelect}
             onMediaRemove={this._handleRemoveMedia}
             onDismiss={this._handleToggleCurrentPlaylistDetails}
@@ -545,6 +558,7 @@ export default class CoreApp extends React.Component {
             onMediaRemove={this._handleMediaRemove}
             onPlaylistSelect={this._handlePlaylistSelect}
             onPlaylistRemove={this._handlePlaylistRemove}
+            onUserSelect={this._handleUserSelect}
           />
         </CoreLayout>
       );
@@ -606,6 +620,7 @@ export default class CoreApp extends React.Component {
           media={state.media}
           playlist={state.playlist}
           onMediaSelect={this._handleMediaSelect}
+          onUserSelect={this._handleUserSelect}
           onViewCurrentPlaylistDetails={this._handleToggleCurrentPlaylistDetails}
           onDismiss={this._handleDismissSidebar}
         />

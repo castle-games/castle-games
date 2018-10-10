@@ -54,7 +54,11 @@ export default class CoreBrowseMediaResults extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
-        <UIListMedia mediaItems={this.props.mediaItems} onMediaSelect={this.props.onMediaSelect} />
+        <UIListMedia
+          mediaItems={this.props.mediaItems}
+          onUserSelect={this.props.onUserSelect}
+          onMediaSelect={this.props.onMediaSelect}
+        />
       </div>
     );
   }

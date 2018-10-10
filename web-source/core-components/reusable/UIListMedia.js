@@ -139,7 +139,10 @@ export default class UIListMedia extends React.Component {
                   <div className={STYLES_FLUID_COLUMN} onClick={() => this.props.onMediaSelect(m)}>
                     {m.name}
                   </div>
-                  <div className={STYLES_COLUMN} style={{ width: '20%' }}>
+                  <div
+                    className={STYLES_COLUMN}
+                    style={{ width: '20%' }}
+                    onClick={() => this.props.onUserSelect(m.user)}>
                     {username ? username : '-'}
                   </div>
                   <div className={STYLES_COLUMN_NO_INTERACTION}>
