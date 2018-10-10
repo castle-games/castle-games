@@ -34,6 +34,10 @@ const STYLES_CONTAINER = css`
 
 export default class CoreMediaInformation extends React.Component {
   render() {
+    if (!this.props.media) {
+      return null;
+    }
+
     return (
       <div className={STYLES_CONTAINER}>
         <UIHeaderDismiss onDismiss={this.props.onDismiss} />
