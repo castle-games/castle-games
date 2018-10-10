@@ -122,9 +122,14 @@ export default class CoreApp extends React.Component {
       return;
     }
 
-    const mediaItems = [...this.state.viewer.mediaItems];
+    const mediaItems = [...this.state.creator.mediaItems];
     mediaItems.unshift(response);
-    this.setState({ viewer: { ...this.state.viewer, mediaItems }, profileMode: 'media' });
+    const updates = { ...this.state.creator, mediaItems };
+    this.setState({
+      viewer: { ...updates },
+      creator: { ...updates },
+      profileMode: 'media',
+    });
   };
 
   _handleMediaRemove = async data => {
@@ -133,10 +138,15 @@ export default class CoreApp extends React.Component {
       return;
     }
 
-    const mediaItems = this.state.viewer.mediaItems.filter(
+    const mediaItems = this.state.creator.mediaItems.filter(
       item => item.mediaId !== response.mediaId
     );
-    this.setState({ viewer: { ...this.state.viewer, mediaItems }, profileMode: 'media' });
+    const updates = { ...this.state.creator, mediaItems };
+    this.setState({
+      viewer: { ...updates },
+      creator: { ...updates },
+      profileMode: 'media',
+    });
   };
 
   _handlePlaylistAdd = async data => {
@@ -145,9 +155,10 @@ export default class CoreApp extends React.Component {
       return;
     }
 
-    const playlists = [...this.state.viewer.playlists];
+    const playlists = [...this.state.creator.playlists];
     playlists.unshift(response);
-    this.setState({ viewer: { ...this.state.viewer, playlists }, profileMode: 'playlists' });
+    const updates = { ...this.state.creator, playlists };
+    this.setState({ creator: { ...updates }, viewer: { ...updates }, profileMode: 'playlists' });
   };
 
   _handlePlaylistRemove = async data => {
@@ -156,10 +167,11 @@ export default class CoreApp extends React.Component {
       return;
     }
 
-    const playlists = this.state.viewer.playlists.filter(
+    const playlists = this.state.creator.playlists.filter(
       item => item.playlistId !== response.playlistId
     );
-    this.setState({ viewer: { ...this.state.viewer, playlists }, profileMode: 'playlists' });
+    const updates = { ...this.state.creator, playlists };
+    this.setState({ creator: { ...updates }, viewer: { ...updates }, profileMode: 'playlists' });
   };
 
   setStateWithCEF = state => this.setState({ ...state }, this._handleCEFupdateFrame);
@@ -335,7 +347,7 @@ export default class CoreApp extends React.Component {
   _handleToggleProfile = () =>
     this.setStateWithCEF({
       pageMode: this.state.pageMode === 'profile' ? null : 'profile',
-      creator: this.state.pageMode === 'profile' ? null : this.state.viewer,
+      creator: this.state.pageMode === 'profile' ? null : { ...this.state.viewer },
     });
 
   _handleToggleBrowse = () =>

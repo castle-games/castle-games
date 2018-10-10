@@ -83,6 +83,7 @@ export default class UICardMedia extends React.Component {
       this.props.media && this.props.media.published
         ? Strings.toDate(this.props.media.published)
         : Strings.toDate(this.props.media.createdTime);
+    const isReal = this.props.media && this.props.media.user && this.props.media.user.isReal;
 
     let rich =
       this.props.media && this.props.media.description && this.props.media.description.rich;
@@ -90,7 +91,34 @@ export default class UICardMedia extends React.Component {
       rich = Strings.loadEditor(rich);
     }
 
-    const isGameClaimed = this.props.media.user;
+    let textElement = (
+      <div>
+        <div className={STYLES_SECTION_TITLE}>A game on Castle</div>
+        <div className={STYLES_SECTION_PARAGRAPH}>
+          This user hasn't written anything about their game on Castle yet.
+        </div>
+      </div>
+    );
+    if (!isReal) {
+      textElement = (
+        <div>
+          <div className={STYLES_SECTION_TITLE}>Is this your game?</div>
+          <div className={STYLES_SECTION_PARAGRAPH}>
+            Castle lists all the games from a game jam, so people can browse and play them all
+            easily. If you created this game and want to claim it, change the way it is presented,
+            or remove it, please contact the Castle team and let us know.
+          </div>
+        </div>
+      );
+    }
+
+    if (rich) {
+      textElement = (
+        <div>
+          <ContentEditor value={rich} readOnly />
+        </div>
+      );
+    }
 
     return (
       <div className={STYLES_CONTAINER}>
@@ -100,22 +128,9 @@ export default class UICardMedia extends React.Component {
         </div>
 
         <div className={STYLES_SECTION}>
-          {!rich ? (
-            <div>
-              <div className={STYLES_SECTION_TITLE}>Is this your game?</div>
-              <div className={STYLES_SECTION_PARAGRAPH}>
-                Castle lists all the games from a game jam, so people can browse and play them all
-                easily. If you created this game and want to claim it, change the way it is
-                presented, or remove it, please contact the Castle team and let us know.
-              </div>
-            </div>
-          ) : (
-            <div>
-              <ContentEditor value={rich} readOnly />
-            </div>
-          )}
+          {textElement}
 
-          {!rich ? (
+          {!isReal ? (
             <div style={{ marginTop: 48 }}>
               <UIInput
                 value={this.state.email}
