@@ -1,4 +1,4 @@
-import CastleApiClient from "castle-api-client";
+import CastleApiClient from 'castle-api-client';
 
 // export const API = CastleApiClient("http://localhost:1380");
 export const API = CastleApiClient();
@@ -92,7 +92,11 @@ export async function getUser({ userId }) {
 
   // TOOD(jim): Write a global error handler.
   if (result.error) {
-    return;
+    return false;
+  }
+
+  if (result.errors) {
+    return false;
   }
 
   return result.data.user;
@@ -229,7 +233,11 @@ export async function getInitialData() {
 
   // TOOD(jim): Write a global error handler.
   if (result.error) {
-    return;
+    return false;
+  }
+
+  if (result.errors) {
+    return false;
   }
 
   return result.data;
@@ -306,12 +314,16 @@ export async function search(query) {
         }
       }
     `,
-    variables: { query }
+    variables: { query },
   });
 
   // TOOD(jim): Write a global error handler.
   if (result.error) {
-    return;
+    return false;
+  }
+
+  if (result.errors) {
+    return false;
   }
 
   return result.data.searchMediaAndPlaylists;
@@ -401,14 +413,17 @@ export async function authenticate({ username, password }) {
         }
       }
     `,
-    variables: { username, password }
+    variables: { username, password },
   });
 
   // TOOD(jim): Write a global error handler.
   if (result.error) {
-    return;
+    return false;
   }
 
+  if (result.errors) {
+    return false;
+  }
   return result.data.login;
 }
 
@@ -418,21 +433,75 @@ export async function logout() {
       mutation {
         logout
       }
-    `
+    `,
   });
 
+  // TOOD(jim): Write a global error handler.
   if (result.error) {
+    return false;
+  }
+
+  if (result.errors) {
     return false;
   }
 
   return true;
 }
 
+export async function getMediaByURL({ mediaUrl }) {
+  const variables = { mediaUrl };
+
+  const result = await API.graphqlAsync({
+    query: `
+      query GetMediaByURL($mediaUrl: String!) {
+        mediaByMediaUrl(mediaUrl: $mediaUrl) {
+          name
+          published
+          createdTime
+          instructions
+          description
+          mediaUrl
+          mediaId
+          coverImage {
+            url
+            height
+            width
+          }
+          user {
+            userId
+            name
+            username
+            createdTime
+            isReal
+            photo {
+              url
+              height
+              width
+            }
+          }
+        }
+      }
+    `,
+    variables,
+  });
+
+  // TOOD(jim): Write a global error handler.
+  if (result.error) {
+    return false;
+  }
+
+  if (result.errors) {
+    return false;
+  }
+
+  return result.data.mediaByMediaUrl;
+}
+
 export async function addMedia({ name, url, description }) {
   const variables = {
     name,
     mediaUrl: url,
-    description: JSON.stringify(description)
+    description: JSON.stringify(description),
   };
 
   const result = await API.graphqlAsync({
@@ -472,12 +541,16 @@ export async function addMedia({ name, url, description }) {
         }
       }
     `,
-    variables
+    variables,
   });
 
   // TOOD(jim): Write a global error handler.
   if (result.error) {
-    return;
+    return false;
+  }
+
+  if (result.errors) {
+    return false;
   }
 
   return result.data.addMedia;
@@ -514,12 +587,16 @@ export async function addPlaylist({ name, description }) {
         }
       }
     `,
-    variables
+    variables,
   });
 
   // TOOD(jim): Write a global error handler.
   if (result.error) {
-    return;
+    return false;
+  }
+
+  if (result.errors) {
+    return false;
   }
 
   return result.data.addPlaylist;
@@ -534,11 +611,16 @@ export async function removeMedia({ mediaId }) {
         deleteMedia(mediaId: $mediaId)
       }
     `,
-    variables
+    variables,
   });
 
+  // TOOD(jim): Write a global error handler.
   if (result.error) {
-    return;
+    return false;
+  }
+
+  if (result.errors) {
+    return false;
   }
 
   return { mediaId };
@@ -553,11 +635,16 @@ export async function removePlaylist({ playlistId }) {
         deletePlaylist(playlistId: $playlistId)
       }
     `,
-    variables
+    variables,
   });
 
+  // TOOD(jim): Write a global error handler.
   if (result.error) {
-    return;
+    return false;
+  }
+
+  if (result.errors) {
+    return false;
   }
 
   return { playlistId };

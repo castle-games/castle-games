@@ -225,13 +225,13 @@ export default class CoreApp extends React.Component {
       return;
     }
 
-    this.setState({ media: null }, () => {
+    this.setState({ media: null }, async () => {
       CEF.openWindowFrame(mediaUrl);
       this._handleSetHistory({ mediaUrl });
 
-      // TODO(jim): Fetch the media if it exists.
+      const media = await Actions.getMediaByURL({ mediaUrl });
       this.setStateWithCEF({
-        media: { mediaUrl },
+        media: media ? media : { mediaUrl },
         mediaUrl,
         pageMode: null,
         creator: null,
