@@ -51,6 +51,7 @@ const POLL_DELAY = 300;
 export default class CoreApp extends React.Component {
   _layout;
   _devTimeout;
+  _isLockedFromCEFUpdates;
 
   constructor(props) {
     super();
@@ -80,6 +81,34 @@ export default class CoreApp extends React.Component {
     window.removeEventListener('keydown', this._handleKeyDown);
     window.clearTimeout(this._devTimeout);
   }
+
+  closeCEF = () => {
+    if (this._isLockedFromCEFUpdates) {
+      return;
+    }
+
+    CEF.closeWindowFrame();
+    this._isLockedFromCEFUpdates = true;
+  };
+
+  openCEF = url => {
+    if (!this._isLockedFromCEFUpdates) {
+      return;
+    }
+
+    CEF.openWindowFrame(url);
+    this._isLockedFromCEFUpdates = false;
+  };
+
+  _handleCEFupdateFrame = () => {
+    if (this._isLockedFromCEFUpdates) {
+      return;
+    }
+
+    const element = this._layout.getMediaContainerRef();
+    const rect = element.getBoundingClientRect();
+    CEF.updateWindowFrame(rect);
+  };
 
   _handleSetHistory = media => {
     if (!this.props.storage) {
@@ -182,12 +211,22 @@ export default class CoreApp extends React.Component {
     });
   };
 
-  setStateWithCEF = state => this.setState({ ...state }, this._handleCEFupdateFrame);
+  setStateWithCEF = (state, callback) => {
+    if (this._isLockedFromCEFUpdates) {
+      return this.setState({ ...state }, () => {
+        if (callback) {
+          callback();
+        }
+      });
+    }
 
-  _handleCEFupdateFrame = () => {
-    const element = this._layout.getMediaContainerRef();
-    const rect = element.getBoundingClientRect();
-    CEF.updateWindowFrame(rect);
+    this.setState({ ...state }, () => {
+      this._handleCEFupdateFrame();
+
+      if (callback) {
+        callback();
+      }
+    });
   };
 
   _handleSetViewer = viewer => this.setState({ viewer, pageMode: viewer ? 'browse' : 'sign-in' });
@@ -201,35 +240,40 @@ export default class CoreApp extends React.Component {
     }
 
     if (this.state.mediaUrl.endsWith('.lua')) {
-      this._handleGoToURL(this.state.mediaUrl);
+      this.goToLUA(this.state.mediaUrl);
       return;
     }
 
-    this._handleGoToMedia({ mediaUrl: this.state.mediaUrl });
+    this.goToHTML5Media({ mediaUrl: this.state.mediaUrl });
   };
 
-  _handleGoToMedia = media => {
-    CEF.closeWindowFrame();
+  goToHTML5Media = async media => {
+    this.closeCEF();
 
-    this._handleSetHistory(media);
+    const existingMedia = await Actions.getMediaByURL({ mediaUrl });
+
+    this._handleSetHistory(existingMedia ? existingMedia : media);
+
     this.setStateWithCEF({
-      media,
+      media: existingMedia ? existingMedia : media,
       mediaUrl: media.mediaUrl,
       pageMode: null,
       creator: null,
     });
   };
 
-  _handleGoToURL = mediaUrl => {
+  goToLUA = async mediaUrl => {
     if (Strings.isEmpty(mediaUrl)) {
       return;
     }
 
+    this.closeCEF();
+
     this.setState({ media: null }, async () => {
-      CEF.openWindowFrame(mediaUrl);
-      this._handleSetHistory({ mediaUrl });
+      this.openCEF(mediaUrl);
 
       const media = await Actions.getMediaByURL({ mediaUrl });
+      this._handleSetHistory(media ? media : { mediaUrl });
       this.setStateWithCEF({
         media: media ? media : { mediaUrl },
         mediaUrl,
@@ -309,7 +353,9 @@ export default class CoreApp extends React.Component {
   _handleFavoriteMedia = () => window.alert('favorite');
 
   _handlePlaylistSelect = playlist => {
-    CEF.closeWindowFrame();
+    if (!this.state.pageMode) {
+      this.closeCEF();
+    }
 
     this.setStateWithCEF({
       pageMode: 'playlist',
@@ -326,6 +372,14 @@ export default class CoreApp extends React.Component {
 
     const creator = await Actions.getUser(user);
 
+    if (!creator) {
+      return;
+    }
+
+    if (!this.state.pageMode) {
+      this.closeCEF();
+    }
+
     this.setStateWithCEF({ pageMode: 'profile', creator });
   };
 
@@ -340,11 +394,11 @@ export default class CoreApp extends React.Component {
     }
 
     if (media.mediaUrl.endsWith('.lua')) {
-      this._handleGoToURL(media.mediaUrl);
+      this.goToLUA(media.mediaUrl);
       return;
     }
 
-    this._handleGoToMedia(media);
+    this.goToHTML5Media(media);
   };
 
   _handleSelectRandom = () => {
@@ -368,56 +422,133 @@ export default class CoreApp extends React.Component {
     this._handleMediaSelect(this.state.playlist.mediaItems[index]);
   };
 
-  _handleToggleProfile = () =>
+  // NOTE(jim):
+  // I wrote a god function today and I am unhappy.
+  determineNextStateOfCEF = ({ isClosing, isOpening, mediaUrl }) => {
+    if (isClosing) {
+      this.closeCEF();
+      return;
+    }
+
+    if (!isOpening) {
+      return;
+    }
+
+    // NOTE(jim): Restores the dead state.
+    if (!Strings.isEmpty(mediaUrl)) {
+      if (mediaUrl.endsWith('.lua')) {
+        this.openCEF(mediaUrl);
+      }
+    }
+  };
+
+  _handleToggleProfile = () => {
+    this.determineNextStateOfCEF({
+      isClosing: !this.state.pageMode,
+      isOpening: !this.state.pageMode && this.state.pageMode !== 'profile',
+      mediaUrl: this.state.mediaUrl,
+    });
+
     this.setStateWithCEF({
       pageMode: this.state.pageMode === 'profile' ? null : 'profile',
       creator: this.state.pageMode === 'profile' ? null : { ...this.state.viewer },
     });
+  };
 
-  _handleToggleBrowse = () =>
+  _handleToggleBrowse = () => {
+    this.determineNextStateOfCEF({
+      isClosing: !this.state.pageMode,
+      isOpening: !this.state.pageMode && this.state.pageMode !== 'browse',
+      mediaUrl: this.state.mediaUrl,
+    });
+
     this.setStateWithCEF({
       pageMode: this.state.pageMode === 'browse' ? null : 'browse',
       creator: null,
     });
+  };
 
-  _handleToggleSignIn = () =>
-    this.setStateWithCEF({
-      pageMode: this.state.pageMode === 'sign-in' ? null : 'sign-in',
+  _handleToggleSignIn = () => {
+    this.determineNextStateOfCEF({
+      isClosing: !this.state.pageMode,
+      isOpening: !this.state.pageMode && this.state.pageMode !== 'sign-in',
+      mediaUrl: this.state.mediaUrl,
     });
 
-  _handleToggleCurrentPlaylistDetails = () =>
+    this.setStateWithCEF({
+      pageMode: this.state.pageMode === 'sign-in' ? null : 'sign-in',
+      creator: null,
+    });
+  };
+
+  _handleToggleCurrentPlaylistDetails = () => {
+    this.determineNextStateOfCEF({
+      isClosing: !this.state.pageMode,
+      isOpening: !this.state.pageMode && this.state.pageMode !== 'playlist',
+      mediaUrl: this.state.mediaUrl,
+    });
+
     this.setStateWithCEF({
       pageMode: this.state.pageMode === 'playlist' ? null : 'playlist',
       creator: null,
     });
+  };
 
-  _handleToggleCurrentPlaylist = () =>
+  _handleToggleCurrentPlaylist = () => {
+    this.determineNextStateOfCEF({
+      isClosing: !this.state.pageMode,
+      isOpening: !!this.state.pageMode,
+      mediaUrl: this.state.mediaUrl,
+    });
+
     this.setStateWithCEF({
       pageMode: null,
       creator: null,
       sidebarMode: this.state.sidebarMode === 'current-playlist' ? null : 'current-playlist',
     });
+  };
 
-  _handleToggleDashboard = () =>
+  _handleToggleDashboard = () => {
+    this.determineNextStateOfCEF({
+      isClosing: !this.state.pageMode,
+      isOpening: !!this.state.pageMode,
+      mediaUrl: this.state.mediaUrl,
+    });
+
     this.setStateWithCEF({
       sidebarMode: this.state.sidebarMode === 'dashboard' ? null : 'dashboard',
       pageMode: null,
       creator: null,
     });
+  };
 
-  _handleToggleDevelopmentLogs = () =>
+  _handleToggleDevelopmentLogs = () => {
+    this.determineNextStateOfCEF({
+      isClosing: !this.state.pageMode,
+      isOpening: !!this.state.pageMode,
+      mediaUrl: this.state.mediaUrl,
+    });
+
     this.setStateWithCEF({
       sidebarMode: this.state.sidebarMode === 'development' ? null : 'development',
       pageMode: null,
       creator: null,
     });
+  };
 
-  _handleToggleMediaInfo = () =>
+  _handleToggleMediaInfo = () => {
+    this.determineNextStateOfCEF({
+      isClosing: !this.state.pageMode,
+      isOpening: !!this.state.pageMode,
+      mediaUrl: this.state.mediaUrl,
+    });
+
     this.setStateWithCEF({
       sidebarMode: this.state.sidebarMode === 'media-info' ? null : 'media-info',
       pageMode: null,
       creator: null,
     });
+  };
 
   _handleShowProfileMediaList = () => {
     this.setStateWithCEF({
@@ -441,6 +572,12 @@ export default class CoreApp extends React.Component {
       return;
     }
 
+    this.determineNextStateOfCEF({
+      isClosing: !this.state.pageMode,
+      isOpening: false,
+      mediaUrl: this.state.mediaUrl,
+    });
+
     this.setStateWithCEF({
       viewer: null,
       creator: null,
@@ -450,19 +587,38 @@ export default class CoreApp extends React.Component {
 
   _handleDismissSidebar = () => this.setStateWithCEF({ sidebarMode: null });
 
-  _handleHideOverlay = () => this.setStateWithCEF({ isOverlayActive: false, pageMode: null });
+  _handleHideOverlay = () => {
+    this.determineNextStateOfCEF({
+      isClosing: !this.state.pageMode,
+      isOpening: !!this.state.pageMode,
+      mediaUrl: this.state.mediaUrl,
+    });
 
-  _handleToggleOverlay = () =>
+    this.setStateWithCEF({ isOverlayActive: false, pageMode: null });
+  };
+
+  _handleToggleOverlay = () => {
+    this.determineNextStateOfCEF({
+      isClosing: !this.state.pageMode,
+      isOpening: !!this.state.pageMode,
+      mediaUrl: this.state.mediaUrl,
+    });
+
     this.setStateWithCEF({
       isOverlayActive: !this.state.isOverlayActive,
       pageMode: null,
     });
+  };
 
-  _handleToggleMediaExpanded = () =>
-    this.setStateWithCEF({
-      isMediaExpanded: !this.state.isMediaExpanded,
-      pageMode: null,
+  _handleToggleMediaExpanded = () => {
+    this.determineNextStateOfCEF({
+      isClosing: !this.state.pageMode,
+      isOpening: !!this.state.pageMode,
+      mediaUrl: this.state.mediaUrl,
     });
+
+    this.setStateWithCEF({ isMediaExpanded: !this.state.isMediaExpanded, pageMode: null });
+  };
 
   _handleGetReference = reference => {
     this._layout = reference;
@@ -544,10 +700,7 @@ export default class CoreApp extends React.Component {
           ref={this._handleGetReference}
           bottomNode={this.renderRootURLInput()}
           leftSidebarNode={maybeLeftSidebarNode}>
-          <CoreSignIn
-            onToggleBrowse={this._handleToggleBrowse}
-            onSetViewer={this._handleSetViewer}
-          />
+          <CoreSignIn onSetViewer={this._handleSetViewer} />
         </CoreLayout>
       );
     }

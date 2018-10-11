@@ -70,7 +70,6 @@ const run = async () => {
     isMediaFavorited: false,
     isMediaExpanded: false,
     isOverlayActive: true,
-    isScoreVisible: false,
   };
 
   ReactDOM.render(<App state={state} storage={storage} />, document.getElementById('root'));

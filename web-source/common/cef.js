@@ -58,29 +58,25 @@ export const setBrowserReady = callback => {
   }
 };
 
-export const openWindowFrame = throttle(
-  mediaUrl => {
-    if (!window.cefQuery) {
-      console.error('openWindowFrame: window.cefQuery is undefined');
-      return;
-    }
+export const openWindowFrame = mediaUrl => {
+  if (!window.cefQuery) {
+    console.error('openWindowFrame: window.cefQuery is undefined');
+    return;
+  }
 
-    try {
-      window.cefQuery({
-        request: JSON.stringify({
-          type: 'OPEN_URI',
-          body: {
-            uri: mediaUrl,
-          },
-        }),
-      });
-    } catch (e) {
-      alert('`cefQuery`: ' + e.message);
-    }
-  },
-  1000,
-  { leading: true, trailing: false }
-);
+  try {
+    window.cefQuery({
+      request: JSON.stringify({
+        type: 'OPEN_URI',
+        body: {
+          uri: mediaUrl,
+        },
+      }),
+    });
+  } catch (e) {
+    alert('`cefQuery`: ' + e.message);
+  }
+};
 
 export const updateWindowFrame = rect => {
   if (!window.cefQuery) {
