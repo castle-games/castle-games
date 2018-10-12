@@ -44,6 +44,7 @@ import CoreDevelopmentLogs from '~/core-components/CoreDevelopmentLogs';
 const isOverlayHotkey = isKeyHotkey('mod+e');
 const isDevelopmentLogHotkey = isKeyHotkey('mod+j');
 const POLL_DELAY = 300;
+const ENABLE_HIDE_OVERLAY = false;
 
 const delay = ms =>
   new Promise(resolve => {
@@ -306,7 +307,7 @@ export default class CoreApp extends React.Component {
   };
 
   _handleKeyDown = e => {
-    if (isOverlayHotkey(e)) {
+    if (isOverlayHotkey(e) && ENALBE_HIDE_OVERLAY) {
       return this._handleToggleOverlay();
     }
 

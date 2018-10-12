@@ -79,6 +79,8 @@ const STYLES_CONTAINER_TOOLBAR = css`
   flex-shrink: 0;
 `;
 
+const ENABLE_HIDE_OVERLAY = false;
+
 export default class CoreRootURLInput extends React.Component {
   _input;
 
@@ -120,10 +122,12 @@ export default class CoreRootURLInput extends React.Component {
         </div>
         <div className={STYLES_CONTAINER_TOOLBAR}>
           {dimensionToggleElement}
-          <UIButtonDarkSmall
-            icon={<SVG.CloseOverlay height="16px" />}
-            onClick={this.props.onHideOverlay}
-          />
+          {ENABLE_HIDE_OVERLAY ? (
+            <UIButtonDarkSmall
+              icon={<SVG.CloseOverlay height="16px" />}
+              onClick={this.props.onHideOverlay}
+            />
+          ) : null}
           <UIButtonDarkSmall
             icon={<SVG.History height="16px" />}
             onClick={this.props.onToggleDashboard}
