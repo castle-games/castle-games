@@ -45,13 +45,18 @@ const isOverlayHotkey = isKeyHotkey('mod+e');
 const isDevelopmentLogHotkey = isKeyHotkey('mod+j');
 const POLL_DELAY = 300;
 
+const delay = ms =>
+  new Promise(resolve => {
+    window.setTimeout(resolve, ms);
+  });
+
 // NOTES(jim):
 // + Assigning creator to `null` whenever `pageMode` changes is dangerous.
 //   We may want to think of an enumeration to represent that state.
 export default class CoreApp extends React.Component {
   _layout;
   _devTimeout;
-  _isLockedFromCEFUpdates;
+  _isLockedFromCEFUpdates = true;
 
   constructor(props) {
     super();
@@ -269,17 +274,20 @@ export default class CoreApp extends React.Component {
 
     this.closeCEF();
 
-    this.setState({ media: null }, async () => {
-      this.openCEF(mediaUrl);
+    this.setState({ media: null });
 
-      const media = await Actions.getMediaByURL({ mediaUrl });
-      this._handleSetHistory(media ? media : { mediaUrl });
-      this.setStateWithCEF({
-        media: media ? media : { mediaUrl },
-        mediaUrl,
-        pageMode: null,
-        creator: null,
-      });
+    // NOTE(jim): Nice way of saying setTimeout.
+    await delay(200);
+
+    const media = await Actions.getMediaByURL({ mediaUrl });
+
+    this.openCEF(mediaUrl);
+    this._handleSetHistory(media ? media : { mediaUrl });
+    this.setStateWithCEF({
+      media: media ? media : { mediaUrl },
+      mediaUrl,
+      pageMode: null,
+      creator: null,
     });
   };
 
@@ -422,8 +430,6 @@ export default class CoreApp extends React.Component {
     this._handleMediaSelect(this.state.playlist.mediaItems[index]);
   };
 
-  // NOTE(jim):
-  // I wrote a god function today and I am unhappy.
   determineNextStateOfCEF = ({ isClosing, isOpening, mediaUrl }) => {
     if (isClosing) {
       this.closeCEF();
@@ -443,110 +449,138 @@ export default class CoreApp extends React.Component {
   };
 
   _handleToggleProfile = () => {
+    const updates = {
+      pageMode: this.state.pageMode === 'profile' ? null : 'profile',
+      creator: this.state.pageMode === 'profile' ? null : { ...this.state.viewer },
+    };
+
     this.determineNextStateOfCEF({
-      isClosing: !this.state.pageMode,
-      isOpening: !this.state.pageMode && this.state.pageMode !== 'profile',
+      isClosing: !Strings.isEmpty(updates.pageMode),
+      isOpening: Strings.isEmpty(updates.pageMode),
       mediaUrl: this.state.mediaUrl,
     });
 
-    this.setStateWithCEF({
-      pageMode: this.state.pageMode === 'profile' ? null : 'profile',
-      creator: this.state.pageMode === 'profile' ? null : { ...this.state.viewer },
-    });
+    this.setStateWithCEF({ ...updates });
   };
 
   _handleToggleBrowse = () => {
+    const updates = {
+      pageMode: this.state.pageMode === 'browse' ? null : 'browse',
+      creator: null,
+    };
+
     this.determineNextStateOfCEF({
-      isClosing: !this.state.pageMode,
-      isOpening: !this.state.pageMode && this.state.pageMode !== 'browse',
+      isClosing: !Strings.isEmpty(updates.pageMode),
+      isOpening: Strings.isEmpty(updates.pageMode),
       mediaUrl: this.state.mediaUrl,
     });
 
     this.setStateWithCEF({
-      pageMode: this.state.pageMode === 'browse' ? null : 'browse',
-      creator: null,
+      ...updates,
     });
   };
 
   _handleToggleSignIn = () => {
+    const updates = {
+      pageMode: this.state.pageMode === 'sign-in' ? null : 'sign-in',
+      creator: null,
+    };
+
     this.determineNextStateOfCEF({
-      isClosing: !this.state.pageMode,
-      isOpening: !this.state.pageMode && this.state.pageMode !== 'sign-in',
+      isClosing: !Strings.isEmpty(updates.pageMode),
+      isOpening: Strings.isEmpty(updates.pageMode),
       mediaUrl: this.state.mediaUrl,
     });
 
-    this.setStateWithCEF({
-      pageMode: this.state.pageMode === 'sign-in' ? null : 'sign-in',
-      creator: null,
-    });
+    this.setStateWithCEF({ ...updates });
   };
 
   _handleToggleCurrentPlaylistDetails = () => {
+    const updates = {
+      pageMode: this.state.pageMode === 'playlist' ? null : 'playlist',
+      creator: null,
+    };
+
     this.determineNextStateOfCEF({
-      isClosing: !this.state.pageMode,
-      isOpening: !this.state.pageMode && this.state.pageMode !== 'playlist',
+      isClosing: !Strings.isEmpty(updates.pageMode),
+      isOpening: Strings.isEmpty(updates.pageMode),
       mediaUrl: this.state.mediaUrl,
     });
 
     this.setStateWithCEF({
-      pageMode: this.state.pageMode === 'playlist' ? null : 'playlist',
-      creator: null,
+      ...updates,
     });
   };
 
   _handleToggleCurrentPlaylist = () => {
+    const updates = {
+      pageMode: null,
+      creator: null,
+      sidebarMode: this.state.sidebarMode === 'current-playlist' ? null : 'current-playlist',
+    };
+
     this.determineNextStateOfCEF({
-      isClosing: !this.state.pageMode,
-      isOpening: !!this.state.pageMode,
+      isClosing: false,
+      isOpening: !Strings.isEmpty(this.state.pageMode),
       mediaUrl: this.state.mediaUrl,
     });
 
     this.setStateWithCEF({
-      pageMode: null,
-      creator: null,
-      sidebarMode: this.state.sidebarMode === 'current-playlist' ? null : 'current-playlist',
+      ...updates,
     });
   };
 
   _handleToggleDashboard = () => {
+    const updates = {
+      sidebarMode: this.state.sidebarMode === 'dashboard' ? null : 'dashboard',
+      pageMode: null,
+      creator: null,
+    };
+
     this.determineNextStateOfCEF({
-      isClosing: !this.state.pageMode,
-      isOpening: !!this.state.pageMode,
+      isClosing: false,
+      isOpening: !Strings.isEmpty(this.state.pageMode),
       mediaUrl: this.state.mediaUrl,
     });
 
     this.setStateWithCEF({
-      sidebarMode: this.state.sidebarMode === 'dashboard' ? null : 'dashboard',
-      pageMode: null,
-      creator: null,
+      ...updates,
     });
   };
 
   _handleToggleDevelopmentLogs = () => {
+    const updates = {
+      sidebarMode: this.state.sidebarMode === 'development' ? null : 'development',
+      pageMode: null,
+      creator: null,
+    };
+
     this.determineNextStateOfCEF({
-      isClosing: !this.state.pageMode,
-      isOpening: !!this.state.pageMode,
+      isClosing: false,
+      isOpening: !Strings.isEmpty(this.state.pageMode),
       mediaUrl: this.state.mediaUrl,
     });
 
     this.setStateWithCEF({
-      sidebarMode: this.state.sidebarMode === 'development' ? null : 'development',
-      pageMode: null,
-      creator: null,
+      ...updates,
     });
   };
 
   _handleToggleMediaInfo = () => {
+    const updates = {
+      sidebarMode: this.state.sidebarMode === 'media-info' ? null : 'media-info',
+      pageMode: null,
+      creator: null,
+    };
+
     this.determineNextStateOfCEF({
-      isClosing: !this.state.pageMode,
-      isOpening: !!this.state.pageMode,
+      isClosing: false,
+      isOpening: !Strings.isEmpty(this.state.pageMode),
       mediaUrl: this.state.mediaUrl,
     });
 
     this.setStateWithCEF({
-      sidebarMode: this.state.sidebarMode === 'media-info' ? null : 'media-info',
-      pageMode: null,
-      creator: null,
+      ...updates,
     });
   };
 
@@ -573,9 +607,8 @@ export default class CoreApp extends React.Component {
     }
 
     this.determineNextStateOfCEF({
-      isClosing: !this.state.pageMode,
+      isClosing: true,
       isOpening: false,
-      mediaUrl: this.state.mediaUrl,
     });
 
     this.setStateWithCEF({
@@ -588,36 +621,50 @@ export default class CoreApp extends React.Component {
   _handleDismissSidebar = () => this.setStateWithCEF({ sidebarMode: null });
 
   _handleHideOverlay = () => {
+    const updates = {
+      isOverlayActive: false,
+      pageMode: null,
+    };
+
     this.determineNextStateOfCEF({
-      isClosing: !this.state.pageMode,
-      isOpening: !!this.state.pageMode,
+      isClosing: false,
+      isOpening: !Strings.isEmpty(this.state.pageMode),
       mediaUrl: this.state.mediaUrl,
     });
 
-    this.setStateWithCEF({ isOverlayActive: false, pageMode: null });
+    this.setStateWithCEF({ ...updates });
   };
 
   _handleToggleOverlay = () => {
+    const updates = {
+      isOverlayActive: !this.state.isOverlayActive,
+      pageMode: null,
+    };
+
     this.determineNextStateOfCEF({
-      isClosing: !this.state.pageMode,
-      isOpening: !!this.state.pageMode,
+      isClosing: false,
+      isOpening: !Strings.isEmpty(this.state.pageMode),
       mediaUrl: this.state.mediaUrl,
     });
 
     this.setStateWithCEF({
-      isOverlayActive: !this.state.isOverlayActive,
-      pageMode: null,
+      ...updates,
     });
   };
 
   _handleToggleMediaExpanded = () => {
+    const updates = {
+      isMediaExpanded: !this.state.isMediaExpanded,
+      pageMode: null,
+    };
+
     this.determineNextStateOfCEF({
-      isClosing: !this.state.pageMode,
-      isOpening: !!this.state.pageMode,
+      isClosing: false,
+      isOpening: !Strings.isEmpty(this.state.pageMode),
       mediaUrl: this.state.mediaUrl,
     });
 
-    this.setStateWithCEF({ isMediaExpanded: !this.state.isMediaExpanded, pageMode: null });
+    this.setStateWithCEF({ ...updates });
   };
 
   _handleGetReference = reference => {
