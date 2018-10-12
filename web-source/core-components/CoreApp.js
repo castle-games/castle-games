@@ -258,7 +258,7 @@ export default class CoreApp extends React.Component {
   goToHTML5Media = async media => {
     this.closeCEF();
 
-    const existingMedia = await Actions.getMediaByURL({ mediaUrl });
+    const existingMedia = await Actions.getMediaByURL({ mediaUrl: media.mediaUrl });
 
     this._handleSetHistory(existingMedia ? existingMedia : media);
 
