@@ -90,20 +90,22 @@ export default class CoreApp extends React.Component {
 
   closeCEF = () => {
     if (this._isLockedFromCEFUpdates) {
+      console.log('closeCEF: already locked');
       return;
     }
 
-    CEF.closeWindowFrame();
     this._isLockedFromCEFUpdates = true;
+    CEF.closeWindowFrame();
   };
 
   openCEF = url => {
     if (!this._isLockedFromCEFUpdates) {
+      console.log('openCEF: is not closed');
       return;
     }
 
-    CEF.openWindowFrame(url);
     this._isLockedFromCEFUpdates = false;
+    CEF.openWindowFrame(url);
   };
 
   _handleCEFupdateFrame = () => {
