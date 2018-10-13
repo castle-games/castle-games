@@ -118,19 +118,24 @@ export default class CoreRootURLInput extends React.Component {
           />
         </div>
         <div className={STYLES_CONTAINER_RIGHT}>
-          <UIButtonDarkSmall icon={<SVG.Play height="12px" />} onClick={this.props.onSubmit} />
+          <UIButtonDarkSmall
+            icon={<SVG.Play height="10px" />}
+            onClick={this.props.onSubmit}
+            style={{ background: Constants.colors.black }}
+          />
         </div>
         <div className={STYLES_CONTAINER_TOOLBAR}>
           {dimensionToggleElement}
           {ENABLE_HIDE_OVERLAY ? (
             <UIButtonDarkSmall
-              icon={<SVG.CloseOverlay height="16px" />}
+              icon={<SVG.CloseOverlay height="14px" />}
               onClick={this.props.onHideOverlay}
             />
           ) : null}
           <UIButtonDarkSmall
-            icon={<SVG.History height="16px" />}
+            icon={<SVG.History height="14px" />}
             onClick={this.props.onToggleDashboard}
+            style={{ background: Constants.colors.black }}
           />
         </div>
       </div>

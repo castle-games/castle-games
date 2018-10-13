@@ -46,10 +46,14 @@ export default class CoreProfile extends React.Component {
           mediaItems={this.props.creator.mediaItems}
           onMediaSelect={this.props.onMediaSelect}
           onMediaRemove={this.props.onMediaRemove}
-          onUserSelect={this._handleUserSelect}
+          onUserSelect={this.props.onUserSelect}
         />
       ) : (
-        <UIEmptyState title="No media yet">This user has not uploaded any media yet.</UIEmptyState>
+        <UIEmptyState
+          title="No media yet"
+          style={{ borderTop: `1px solid ${Constants.colors.border}` }}>
+          This user has not uploaded any media yet.
+        </UIEmptyState>
       );
 
     const playlistListElement =
@@ -60,16 +64,19 @@ export default class CoreProfile extends React.Component {
           playlists={this.props.creator.playlists}
           onPlaylistSelect={this.props.onPlaylistSelect}
           onPlaylistRemove={this.props.onPlaylistRemove}
-          onUserSelect={this._handleUserSelect}
+          onUserSelect={this.props.onUserSelect}
         />
       ) : (
-        <UIEmptyState title="No playlists yet">
+        <UIEmptyState
+          title="No playlists yet"
+          style={{ borderTop: `1px solid ${Constants.colors.border}` }}>
           This user has not uploaded any playlists yet.
         </UIEmptyState>
       );
 
     return (
       <div className={STYLES_CONTAINER}>
+        <UIHeaderDismiss onDismiss={this.props.onDismiss} />
         <UICardProfileHeader
           creator={this.props.creator}
           profileMode={this.props.profileMode}

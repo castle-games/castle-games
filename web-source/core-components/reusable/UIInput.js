@@ -16,10 +16,10 @@ const STYLES_INPUT = css`
   border-radius: 4px;
   width: 100%;
   font-weight: 600;
-  border: 2px solid ${Constants.brand.line};
-  background: ${Constants.brand.background};
-  box-shadow: 2px 2px 0 ${Constants.brand.foreground};
-  color: ${Constants.brand.line};
+  border: 2px solid ${Constants.colors.border};
+  background: ${Constants.colors.background};
+  box-shadow: 2px 2px 0 ${Constants.colors.foreground};
+  color: ${Constants.colors.subdued};
   font-size: 16px;
   height: 64px;
   margin: 0 0 24px 0;
@@ -29,8 +29,8 @@ const STYLES_INPUT = css`
     outline: 0;
     color: ${Constants.colors.white};
     border: 2px solid ${Constants.colors.white};
-    background: ${Constants.brand.line};
-    box-shadow: 2px 2px 0 ${Constants.brand.foreground};
+    background: ${Constants.base.blue};
+    box-shadow: 2px 2px 0 ${Constants.colors.border};
   }
 `;
 

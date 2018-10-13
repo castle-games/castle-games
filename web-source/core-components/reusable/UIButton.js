@@ -4,8 +4,8 @@ import * as Constants from '~/common/constants';
 import { css } from 'react-emotion';
 
 const STYLES_BUTTON = css`
-  background: ${Constants.brand.line};
-  color: ${Constants.brand.background};
+  background: ${Constants.colors.white};
+  color: ${Constants.colors.black};
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0);
   transition: 200ms ease all;
   border-radius: 4px;
@@ -16,6 +16,7 @@ const STYLES_BUTTON = css`
   border: 0;
   font-size: 16px;
   cursor: pointer;
+  opacity: 1;
 
   :focus {
     outline: 0;
@@ -23,7 +24,7 @@ const STYLES_BUTTON = css`
   }
 
   :hover {
-    background: ${Constants.colors.black};
+    opacity: 0.9;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
   }
 `;

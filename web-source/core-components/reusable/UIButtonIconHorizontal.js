@@ -6,7 +6,7 @@ import { css } from 'react-emotion';
 const STYLES_ICON_BUTTON = css`
   display: inline-flex;
   margin-bottom: 8px;
-  color: ${Constants.colors.white};
+  color: ${Constants.colors.black};
   cursor: pointer;
   font-weight: 600;
   font-size: 10px;
@@ -18,11 +18,11 @@ const STYLES_ICON_BUTTON_LEFT = css`
   display: inline-flex;
   height: 36px;
   width: 36px;
-  background: rgba(0, 0, 0, 0.75);
+  background: rgba(255, 255, 255, 0.8);
   border-radius: 4px 0 0 4px;
   align-items: center;
   justify-content: center;
-  border-right: 1px solid ${Constants.colors.white10};
+  border-right: 1px solid ${Constants.colors.black10};
 `;
 
 const STYLES_ICON_BUTTON_RIGHT = css`
@@ -31,7 +31,7 @@ const STYLES_ICON_BUTTON_RIGHT = css`
   padding: 0 16px 0 16px;
   height: 36px;
   border-radius: 0 4px 4px 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(255, 255, 255, 0.95);
   text-transform: uppercase;
   letter-spacing: 1px;
 `;

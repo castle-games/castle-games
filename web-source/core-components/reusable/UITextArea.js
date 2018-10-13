@@ -17,8 +17,8 @@ const STYLES_INPUT = css`
   min-height: 112px;
   border-radius: 4px;
   width: 100%;
-  border: 2px solid #333333;
-  background: #323232;
+  border: 2px solid ${Constants.colors.border};
+  background: ${Constants.colors.black};
   color: ${Constants.colors.white};
   font-size: 16px;
   font-weight: 300;

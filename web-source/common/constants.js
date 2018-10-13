@@ -7,15 +7,17 @@ export const font = {
 
 export const base = {
   white: `#ffffff`,
-  black: `#39373D`,
-  green: `#00c851`,
-  yellow: `#ffc107`,
-  red: `#CC0000`,
+  black: `#010101`,
+  green: `#26B21C`,
+  purple: '#6B1AB2',
+  yellow: `#F7D002`,
+  red: `#C63019`,
   gray: `#ececec`,
+  blue: '#033888',
 };
 
 export const colors = {
-  black: '#000000',
+  black: base.black,
   white80: `rgba(255, 255, 255, 0.8)`,
   white60: `rgba(255, 255, 255, 0.6)`,
   white40: `rgba(255, 255, 255, 0.4)`,
@@ -30,18 +32,24 @@ export const colors = {
   black40: `rgba(0, 0, 0, 0.4)`,
   black30: `rgba(0, 0, 0, 0.3)`,
   black20: `rgba(0, 0, 0, 0.2)`,
+  black10: `rgba(0, 0, 0, 0.1)`,
   background: base.black,
-  foreground: `#444444`,
-  border: `#454545`,
-  card: `#D20014`,
+  foreground: `#222`,
+  border: `#333`,
+  card: `#444`,
+  subdued: '#666',
   white: base.white,
   green: base.green,
+  blue: base.blue,
   yellow: base.yellow,
+  purple: base.purple,
   red: base.red,
+  selected: base.green,
+  secondaryButtonSelected: '#B2BABB',
 };
 
 export const brand = {
-  background: '#FFD232',
-  foreground: '#B09436',
-  line: '#39373D',
+  background: base.black,
+  foreground: colors.card,
+  line: colors.foreground,
 };

@@ -26,7 +26,7 @@ const STYLES_BODY_LEFT = css`
 const STYLES_BODY_RIGHT = css`
   min-width: 25%;
   width: 100%;
-  color: ${Constants.brand.line};
+  color: ${Constants.colors.white};
 `;
 
 const STYLES_ROW = css`
@@ -52,7 +52,8 @@ const STYLES_DESCRIPTION = css`
 `;
 
 const STYLES_NAVIGATION_ITEM = css`
-  background: ${Constants.brand.line};
+  background: ${Constants.colors.foreground};
+  user-select: none;
   padding: 8px 16px 8px 16px;
   border-radius: 4px 4px 0 0;
   cursor: pointer;
@@ -101,8 +102,7 @@ export default class UICardProfileHeader extends React.Component {
             className={STYLES_NAVIGATION_ITEM}
             style={{
               marginRight: 16,
-              background: isViewingMedia ? null : Constants.brand.background,
-              color: isViewingMedia ? null : Constants.brand.line,
+              background: isViewingMedia ? null : Constants.colors.background,
             }}
             onClick={this.props.onShowMediaList}>
             Media
@@ -111,8 +111,7 @@ export default class UICardProfileHeader extends React.Component {
           <div
             className={STYLES_NAVIGATION_ITEM}
             style={{
-              background: isViewingPlaylists ? null : Constants.brand.background,
-              color: isViewingPlaylists ? null : Constants.brand.line,
+              background: isViewingPlaylists ? null : Constants.colors.background,
             }}
             onClick={this.props.onShowPlaylistList}>
             Playlists

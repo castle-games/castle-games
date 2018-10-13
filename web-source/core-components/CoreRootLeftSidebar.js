@@ -33,27 +33,33 @@ export default class CoreRootLeftSidebar extends React.Component {
         {this.props.viewer ? (
           <UIButtonIcon
             active={this.props.isViewingProfile}
-            icon={<SVG.Rook height="24px" />}
+            icon={<SVG.Rook height="20px" />}
+            style={{ background: Constants.colors.green }}
             onClick={this.props.onToggleProfile}>
             You
           </UIButtonIcon>
         ) : null}
         <UIButtonIcon
           active={this.props.isBrowsing}
-          icon={<SVG.Search height="24px" />}
+          icon={<SVG.Search height="20px" />}
+          style={{ background: Constants.colors.blue }}
           onClick={this.props.onToggleBrowse}>
           Browse
         </UIButtonIcon>
         {!this.props.viewer ? (
           <UIButtonIcon
             active={this.props.isSignIn}
-            icon={<SVG.Login height="24px" />}
+            icon={<SVG.Login height="20px" />}
+            style={{ background: Constants.colors.green }}
             onClick={this.props.onToggleSignIn}>
             Sign in
           </UIButtonIcon>
         ) : null}
         {this.props.viewer ? (
-          <UIButtonIcon icon={<SVG.Logout height="24px" />} onClick={this.props.onSignOut}>
+          <UIButtonIcon
+            style={{ background: Constants.colors.purple }}
+            icon={<SVG.Logout height="20px" />}
+            onClick={this.props.onSignOut}>
             Sign out
           </UIButtonIcon>
         ) : null}

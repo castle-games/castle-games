@@ -57,6 +57,7 @@ export default class UIButtonIcon extends React.Component {
           style={{
             backgroundImage: `url('${this.props.src}')`,
             boxShadow: this.props.active ? `0 0 0 3px ${Constants.colors.white}` : null,
+            ...this.props.style,
           }}>
           {!this.props.src ? this.props.icon : null}
         </div>

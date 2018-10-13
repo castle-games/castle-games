@@ -259,6 +259,7 @@ export default class CoreApp extends React.Component {
     this.closeCEF();
 
     const existingMedia = await Actions.getMediaByURL({ mediaUrl: media.mediaUrl });
+    console.log({ mediaUrl: media.mediaUrl });
 
     this._handleSetHistory(existingMedia ? existingMedia : media);
 
@@ -274,6 +275,8 @@ export default class CoreApp extends React.Component {
     if (Strings.isEmpty(mediaUrl)) {
       return;
     }
+
+    console.log({ mediaUrl });
 
     this.closeCEF();
 
@@ -391,7 +394,12 @@ export default class CoreApp extends React.Component {
       this.closeCEF();
     }
 
-    this.setStateWithCEF({ pageMode: 'profile', creator });
+    if (this.state.pageMode === 'profile') {
+      this.setState({ pageMode: 'profile', creator: { ...creator } });
+      return;
+    }
+
+    this.setStateWithCEF({ pageMode: 'profile', creator: { ...creator } });
   };
 
   _handleMediaSelect = media => {
@@ -806,6 +814,7 @@ export default class CoreApp extends React.Component {
             onPlaylistSelect={this._handlePlaylistSelect}
             onPlaylistRemove={this._handlePlaylistRemove}
             onUserSelect={this._handleUserSelect}
+            onDismiss={this._handleToggleProfile}
           />
         </CoreLayout>
       );

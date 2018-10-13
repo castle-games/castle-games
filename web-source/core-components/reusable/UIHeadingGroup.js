@@ -4,7 +4,7 @@ import * as Constants from '~/common/constants';
 import { css } from 'react-emotion';
 
 const STYLES_CONTAINER = css`
-  color: ${Constants.brand.line};
+  color: ${Constants.colors.white};
 `;
 
 const STYLES_HEADER = css`

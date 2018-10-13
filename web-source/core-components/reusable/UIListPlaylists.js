@@ -39,8 +39,9 @@ const STYLES_COLUMN = css`
   width: 128px;
   overflow-wrap: break-word;
   padding: 12px 16px 12px 16px;
+
   :hover {
-    color: ${Constants.colors.yellow};
+    color: ${Constants.colors.selected};
   }
 `;
 
@@ -56,8 +57,9 @@ const STYLES_FLUID_COLUMN = css`
   width: 100%;
   overflow-wrap: break-word;
   padding: 12px 16px 12px 16px;
+
   :hover {
-    color: ${Constants.colors.yellow};
+    color: ${Constants.colors.selected};
   }
 `;
 
@@ -70,6 +72,7 @@ const STYLES_FLUID_COLUMN_NO_INTERACTION = css`
 
 const STYLES_ITEM = css`
   font-size: 10px;
+  font-weight: 600;
   text-transform: uppercase;
   cursor: pointer;
 `;

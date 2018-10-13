@@ -32,25 +32,6 @@ const STYLES_ROW = css`
   :last-child {
     border-bottom: 0;
   }
-
-  transition: 200ms background ease;
-  :hover {
-    background: ${Constants.colors.yellow};
-  }
-`;
-
-const STYLES_ROW_SELECTED = css`
-  font-weight: 400;
-  font-size: 12px;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  cursor: pointer;
-  background: ${Constants.colors.green};
-
-  :last-child {
-    border-bottom: 0;
-  }
 `;
 
 const STYLES_COLUMN_FULL = css`
@@ -58,12 +39,27 @@ const STYLES_COLUMN_FULL = css`
   width: 100%;
   padding: 12px 16px 12px 16px;
   overflow-wrap: break-word;
+
+  :hover {
+    color: ${Constants.colors.selected};
+  }
+`;
+
+const STYLES_COLUMN_NO_INTERACTION = css`
+  flex-shrink: 0;
+  width: 33.33%;
+  overflow-wrap: break-word;
+  padding: 12px 16px 12px 16px;
 `;
 
 const STYLES_COLUMN = css`
   flex-shrink: 0;
   width: 33.33%;
   padding: 12px 16px 12px 16px;
+
+  :hover {
+    color: ${Constants.colors.selected};
+  }
 `;
 
 export default class UIListMediaInPlaylist extends React.Component {
@@ -79,9 +75,9 @@ export default class UIListMediaInPlaylist extends React.Component {
     return (
       <div className={STYLES_CONTAINER} style={this.props.style}>
         <div className={STYLES_ROW_TITLE}>
-          <div className={STYLES_COLUMN}>Name/URL</div>
-          <div className={STYLES_COLUMN}>Author</div>
-          <div className={STYLES_COLUMN}>Published</div>
+          <div className={STYLES_COLUMN_NO_INTERACTION}>Name/URL</div>
+          <div className={STYLES_COLUMN_NO_INTERACTION}>Author</div>
+          <div className={STYLES_COLUMN_NO_INTERACTION}>Published</div>
         </div>
         {this.props.mediaItems.map((m, i) => {
           const isSelected = this.props.media && this.props.media.mediaUrl === m.mediaUrl;
@@ -105,24 +101,30 @@ export default class UIListMediaInPlaylist extends React.Component {
           if (!username) {
             return (
               <div
-                className={isSelected ? STYLES_ROW_SELECTED : STYLES_ROW}
-                key={`playlist-list-item-${i}`}
-                onClick={() => this.props.onMediaSelect(m)}>
-                <div className={STYLES_COLUMN_FULL}>{m.mediaUrl}</div>
+                className={STYLES_ROW}
+                style={isSelected ? { background: `#666` } : null}
+                key={`playlist-list-item-${i}`}>
+                <div className={STYLES_COLUMN_FULL} onClick={() => this.props.onMediaSelect(m)}>
+                  {m.mediaUrl}
+                </div>
               </div>
             );
           }
 
-          // TODO(jim): Consolidate this when we properly have usernames
           return (
             <div
-              className={isSelected ? STYLES_ROW_SELECTED : STYLES_ROW}
+              className={STYLES_ROW}
+              style={isSelected ? { background: `#666` } : null}
               key={`playlist-list-item-${i}`}>
               <div className={STYLES_COLUMN} onClick={() => this.props.onMediaSelect(m)}>
                 {m.name}
               </div>
-              <div className={STYLES_COLUMN}>{username ? username : '-'}</div>
-              <div className={STYLES_COLUMN}>{date ? Strings.toDate(date) : 'Unknown'}</div>
+              <div className={STYLES_COLUMN} onClick={() => this.props.onUserSelect(m.user)}>
+                {username}
+              </div>
+              <div className={STYLES_COLUMN_NO_INTERACTION}>
+                {date ? Strings.toDate(date) : 'Unknown'}
+              </div>
             </div>
           );
         })}

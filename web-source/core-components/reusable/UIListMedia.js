@@ -43,7 +43,7 @@ const STYLES_COLUMN = css`
   overflow-wrap: break-word;
 
   :hover {
-    color: ${Constants.colors.yellow};
+    color: ${Constants.colors.selected};
   }
 `;
 
@@ -60,7 +60,7 @@ const STYLES_FLUID_COLUMN = css`
   overflow-wrap: break-word;
   padding: 12px 16px 12px 16px;
   :hover {
-    color: ${Constants.colors.yellow};
+    color: ${Constants.colors.selected};
   }
 `;
 
@@ -72,6 +72,7 @@ const STYLES_FLUID_COLUMN_NO_INTERACTION = css`
 `;
 
 const STYLES_ITEM = css`
+  font-weight: 600;
   font-size: 10px;
   text-transform: uppercase;
   cursor: pointer;
@@ -106,23 +107,13 @@ export default class UIListMedia extends React.Component {
                   <div className={STYLES_COLUMN_NO_INTERACTION} />
                 );
 
-              // NOTE(jim): God help me.
-              let username = null;
-              let date = null;
-              if (m.user) {
-                username = m.user.username;
-                date = m.createdTime;
-              }
-
-              if (m.extraData && m.extraData.itch && m.extraData.itch.itchUsername) {
-                username = m.extraData.itch.itchUsername;
-              }
-
+              let author = m && m.user && m.user.name ? m.user.name : '-';
+              let date = m && m.createdTime ? m.createdTime : '-';
               if (m.published) {
                 date = m.published;
               }
 
-              if (!username) {
+              if (!m.user || !m.user.username) {
                 return (
                   <div
                     className={STYLES_ROW}
@@ -143,7 +134,7 @@ export default class UIListMedia extends React.Component {
                     className={STYLES_COLUMN}
                     style={{ width: '20%' }}
                     onClick={() => this.props.onUserSelect(m.user)}>
-                    {username ? username : '-'}
+                    {author}
                   </div>
                   <div className={STYLES_COLUMN_NO_INTERACTION}>
                     {date ? Strings.toDate(date) : 'Unknown'}

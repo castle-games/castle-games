@@ -27,8 +27,8 @@ const STYLES_CONTAINER = css`
   flex-direction: column;
   width: 100%;
   height: 100%;
-  background ${Constants.brand.background};
-  color: ${Constants.brand.text};
+  background ${Constants.colors.background};
+  color: ${Constants.colors.white};
 
   ::-webkit-scrollbar {
     display: none;
@@ -46,8 +46,8 @@ const STYLES_TOP = css`
 `;
 
 const STYLES_BOTTOM = css`
-  border-top: ${Constants.brand.foreground} 1px solid;
-  color: ${Constants.brand.line};
+  border-top: ${Constants.colors.border} 1px solid;
+  color: ${Constants.colors.white};
   display: flex;
   align-items: center;
   height: 48px;
@@ -65,13 +65,18 @@ const STYLES_CONTENTS = css`
 
 const STYLES_LINK = css`
   font-weight: 600;
-  color: ${Constants.brand.line};
+  color: ${Constants.colors.subdued};
   font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-right: 24px;
   cursor: pointer;
   top: 8px;
+  transition: 200ms ease color;
+
+  :hover {
+    color: ${Constants.colors.white};
+  }
 `;
 
 export default class CoreSignIn extends React.Component {

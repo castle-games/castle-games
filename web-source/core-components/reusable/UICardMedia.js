@@ -13,7 +13,7 @@ import ContentEditor from '~/editor/ContentEditor';
 const STYLES_CONTAINER = css`
   padding: 16px;
   background: ${Constants.brand.background};
-  color: ${Constants.colors.black};
+  color: ${Constants.colors.white};
 `;
 
 const STYLES_CONTAINER_PREVIEW_LABEL = css`
