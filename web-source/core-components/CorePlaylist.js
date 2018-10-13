@@ -49,12 +49,13 @@ const STYLES_PARAGRAPH = css`
 `;
 
 const STYLES_HEADING = css`
-  font-size: 24px;
+  font-size: 48px;
+  line-height: 56px;
   font-weight: 700;
 `;
 
 const STYLES_META = css`
-  margin: 8px 0 24px 0;
+  margin: 4px 0 32px 0;
   font-size: 10px;
 `;
 
@@ -70,7 +71,6 @@ export default class CorePlaylist extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
-        <UIHeaderDismiss onDismiss={this.props.onDismiss} />
         <div className={STYLES_PLAYLIST_CARD}>
           <h1 className={STYLES_HEADING}>{this.props.playlist.name}</h1>
           <div className={STYLES_META}>

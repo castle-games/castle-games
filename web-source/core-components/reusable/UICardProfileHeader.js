@@ -36,12 +36,13 @@ const STYLES_ROW = css`
 const STYLES_TOP = css``;
 
 const STYLES_TITLE = css`
-  font-size: 24px;
+  font-size: 48px;
+  line-height: 56px;
   font-weight: 700;
 `;
 
 const STYLES_META = css`
-  margin: 8px 0 16px 0;
+  margin: 4px 0 32px 0;
   font-size: 10px;
 `;
 

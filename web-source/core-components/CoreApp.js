@@ -338,6 +338,8 @@ export default class CoreApp extends React.Component {
 
     const { mediaItems = [], playlists = [] } = data;
     this.setState({
+      pageMode: 'browse',
+      searchQuery: '',
       searchResultsMedia: mediaItems,
       searchResultsPlaylist: playlists,
     });
@@ -770,6 +772,14 @@ export default class CoreApp extends React.Component {
           ref={reference => {
             this._layout = reference;
           }}
+          topNode={
+            <CoreBrowseSearchInput
+              searchQuery={state.searchQuery}
+              onChange={this._handleSearchChange}
+              onSubmit={this._handleSearchSubmit}
+            />
+          }
+          bottomNode={this.renderRootURLInput()}
           leftSidebarNode={maybeLeftSidebarNode}>
           <CorePlaylist
             viewer={state.viewer}
@@ -789,6 +799,14 @@ export default class CoreApp extends React.Component {
         <CoreLayout
           ref={this._handleGetReference}
           leftSidebarNode={maybeLeftSidebarNode}
+          topNode={
+            <CoreBrowseSearchInput
+              searchQuery={state.searchQuery}
+              onChange={this._handleSearchChange}
+              onSubmit={this._handleSearchSubmit}
+            />
+          }
+          bottomNode={this.renderRootURLInput()}
           rightNode={
             state.viewer && state.creator && state.viewer.userId === state.creator.userId ? (
               <CoreProfileSidebar

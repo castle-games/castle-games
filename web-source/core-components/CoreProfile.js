@@ -76,7 +76,6 @@ export default class CoreProfile extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
-        <UIHeaderDismiss onDismiss={this.props.onDismiss} />
         <UICardProfileHeader
           creator={this.props.creator}
           profileMode={this.props.profileMode}
