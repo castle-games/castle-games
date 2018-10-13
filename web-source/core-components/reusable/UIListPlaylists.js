@@ -82,7 +82,7 @@ export default class UIListPlaylists extends React.Component {
     return (
       <div className={STYLES_CONTAINER} style={this.props.style}>
         <div className={STYLES_ROW_TITLE}>
-          <div className={STYLES_FLUID_COLUMN}>Name/URL</div>
+          <div className={STYLES_FLUID_COLUMN_NO_INTERACTION}>Name/URL</div>
           <div className={STYLES_COLUMN_NO_INTERACTION} style={{ width: '20%' }}>
             Author
           </div>
