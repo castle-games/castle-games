@@ -10,7 +10,7 @@ do that!
 
 - Copy the '.framework' files in https://love2d.org/sdk/love-osx-frameworks-0.10.zip to
 '/Library/Frameworks' (at the root of your file system) if you haven't done that before.
-- Download http://opensource.spotify.com/cefbuilds/cef_binary_3.3440.1806.g65046b7_macosx64.tar.bz2 and copy 'Chromium Embedded Framework.framework' from 'Release/` to '/Library/Frameworks'.
+- Download the `macosx` build from https://github.com/expo/cef-builds/tree/master/builds and copy 'Chromium Embedded Framework.framework' from 'Release/` to '/Library/Frameworks'.
 - Open './macosx/ghost.xcodeproj' with Xcode.
 - Run the 'ghost-macosx' target:
 ![Run Ghost on macOS](run-mac.png)
