@@ -144,6 +144,9 @@ extern "C" {
     lua_pushstring(L, uri.UTF8String);
     lua_setglobal(L, "GHOST_ROOT_URI");
   }
+  
+  // Not paused to start
+  self.lovePaused = NO;
 }
 
 - (void)stepLove {
