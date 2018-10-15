@@ -1,10 +1,10 @@
-import * as React from 'react';
-import * as Constants from '~/common/constants';
-import Plain from 'slate-plain-serializer';
-import { css } from 'react-emotion';
+import * as React from "react";
+import * as Constants from "~/common/constants";
+import Plain from "slate-plain-serializer";
+import { css } from "react-emotion";
 
-import ControlledInput from '~/core-components/primitives/ControlledInput';
-import ContentEditor from '~/editor/ContentEditor';
+import ControlledInput from "~/core-components/primitives/ControlledInput";
+import ContentEditor from "~/editor/ContentEditor";
 
 const STYLES_CONTAINER = css`
   position: relative;
@@ -33,7 +33,7 @@ const STYLES_INPUT = css`
 `;
 
 const STYLES_LABEL = css`
-  color: #777;
+  color: ${Constants.colors.white};
   font-size: 8px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -58,11 +58,11 @@ export default class UITextArea extends React.Component {
     onSubmit: () => {},
     onFocus: () => {},
     onBlur: () => {},
-    value: Plain.deserialize(''),
+    value: Plain.deserialize("")
   };
 
   state = {
-    focus: false,
+    focus: false
   };
 
   _handleFocus = e => {
@@ -80,7 +80,9 @@ export default class UITextArea extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTAINER} style={this.props.style}>
-        <label className={!this.state.focus ? STYLES_LABEL : STYLES_LABEL_WHITE}>
+        <label
+          className={!this.state.focus ? STYLES_LABEL : STYLES_LABEL_WHITE}
+        >
           {this.props.label}
         </label>
         <ContentEditor

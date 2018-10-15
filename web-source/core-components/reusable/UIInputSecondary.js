@@ -1,9 +1,9 @@
-import * as React from 'react';
-import * as Constants from '~/common/constants';
+import * as React from "react";
+import * as Constants from "~/common/constants";
 
-import { css } from 'react-emotion';
+import { css } from "react-emotion";
 
-import ControlledInput from '~/core-components/primitives/ControlledInput';
+import ControlledInput from "~/core-components/primitives/ControlledInput";
 
 const STYLES_CONTAINER = css`
   position: relative;
@@ -33,7 +33,7 @@ const STYLES_INPUT = css`
 `;
 
 const STYLES_LABEL = css`
-  color: #777;
+  color: ${Constants.colors.white};
   font-size: 8px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -47,11 +47,11 @@ export default class UIInputSecondary extends React.Component {
     onChange: () => {},
     onSubmit: () => {},
     onFocus: () => {},
-    onBlur: () => {},
+    onBlur: () => {}
   };
 
   state = {
-    focus: false,
+    focus: false
   };
 
   _handleFocus = e => {

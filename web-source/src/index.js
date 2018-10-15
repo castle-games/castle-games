@@ -1,14 +1,14 @@
-import ReactDOM from 'react-dom';
+import ReactDOM from "react-dom";
 
-import * as React from 'react';
-import * as Constants from '~/common/constants';
-import * as Actions from '~/common/actions';
+import * as React from "react";
+import * as Constants from "~/common/constants";
+import * as Actions from "~/common/actions";
 
-import App from './App';
+import App from "./App";
 
-import Storage from '~/common/storage';
+import Storage from "~/common/storage";
 
-import { injectGlobal } from 'react-emotion';
+import { injectGlobal } from "react-emotion";
 
 const injectGlobalStyles = () => injectGlobal`
   html, body, div, span, applet, object, iframe,
@@ -45,34 +45,96 @@ const injectGlobalStyles = () => injectGlobal`
       font-size: 14px;
     }
   }
+
+  #loader {
+    background: ${Constants.colors.black};
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 1;
+    transition: 200ms ease all;
+  }
+
+  #loader.loader--finished {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  @keyframes loader {
+    to {
+      transform: rotateY(0deg);
+      opacity: 1;
+    }
+  }
+
+  .loader svg:nth-child(2){
+    animation-delay:0.4s;
+  }
+  .loader svg:nth-child(3){
+    animation-delay:0.8s;
+  }
+  .loader svg:nth-child(4){
+    animation-delay:1.0s;
+  }
+  .loader svg:nth-child(5){
+    animation-delay:1.4s;
+  }
+
+  .loader svg {
+    color: ${Constants.colors.white};
+    margin-left: 1px;
+    display: inline-block;
+    opacity: 0;
+    transform: rotateY(360deg);
+    animation: loader 1.4s ease-in-out infinite alternate;
+  }
 `;
 
-const storage = new Storage('castle');
+const storage = new Storage("castle");
+const delay = ms =>
+  new Promise(resolve => {
+    window.setTimeout(resolve, ms);
+  });
 
 const run = async () => {
-  injectGlobalStyles();
   const { currentPlaylist, me } = await Actions.getInitialData();
+  await delay(1000);
+
+  document.getElementById("loader").classList.add("loader--finished");
 
   const state = {
     logs: [],
-    mediaUrl: '',
+    mediaUrl: "",
     playlist: currentPlaylist,
     media: null,
     creator: null,
     viewer: me,
     local: null,
-    searchQuery: '',
+    searchQuery: "",
     searchResultsMedia: null,
     searchResultsPlaylists: null,
     sidebarMode: null, // current-playlists | dashboard | media-info | authentication | null
-    pageMode: null, // browse | playlist | profile | sign-in | null
+    pageMode: "browse", // browse | playlist | profile | sign-in | null
     profileMode: null, // media | playlist | null
     isMediaFavorited: false,
     isMediaExpanded: false,
-    isOverlayActive: true,
+    isOverlayActive: true
   };
 
-  ReactDOM.render(<App state={state} storage={storage} />, document.getElementById('root'));
+  ReactDOM.render(
+    <App state={state} storage={storage} />,
+    document.getElementById("root")
+  );
+
+  await delay(1000);
+
+  document.getElementById("loader").outerHTML = "";
 };
 
+injectGlobalStyles();
 run();

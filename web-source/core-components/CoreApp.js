@@ -1,48 +1,48 @@
-import * as React from 'react';
-import * as Strings from '~/common/strings';
-import * as Utilities from '~/common/utilities';
-import * as ReactDOM from 'react-dom';
-import * as Fixtures from '~/common/fixtures';
-import * as Slack from '~/common/slack';
-import * as Actions from '~/common/actions';
-import * as CEF from '~/common/cef';
+import * as React from "react";
+import * as Strings from "~/common/strings";
+import * as Utilities from "~/common/utilities";
+import * as ReactDOM from "react-dom";
+import * as Fixtures from "~/common/fixtures";
+import * as Slack from "~/common/slack";
+import * as Actions from "~/common/actions";
+import * as CEF from "~/common/cef";
 
-import { css } from 'react-emotion';
-import { isKeyHotkey } from 'is-hotkey';
+import { css } from "react-emotion";
+import { isKeyHotkey } from "is-hotkey";
 
 // NOTE(jim): Reusable layout component.
-import CoreLayout from '~/core-components/layouts/CoreLayout';
+import CoreLayout from "~/core-components/layouts/CoreLayout";
 
 // NOTE(jim): Root Components
-import CoreRootHeader from '~/core-components/CoreRootHeader';
-import CoreRootURLInput from '~/core-components/CoreRootURLInput';
-import CoreRootLeftSidebar from '~/core-components/CoreRootLeftSidebar';
-import CoreRootDashboard from '~/core-components/CoreRootDashboard';
-import CoreRootToolbar from '~/core-components/CoreRootToolbar';
-import CoreRootPlaylistSidebar from '~/core-components/CoreRootPlaylistSidebar';
-import CoreSignIn from '~/core-components/CoreSignIn';
+import CoreRootHeader from "~/core-components/CoreRootHeader";
+import CoreRootURLInput from "~/core-components/CoreRootURLInput";
+import CoreRootLeftSidebar from "~/core-components/CoreRootLeftSidebar";
+import CoreRootDashboard from "~/core-components/CoreRootDashboard";
+import CoreRootToolbar from "~/core-components/CoreRootToolbar";
+import CoreRootPlaylistSidebar from "~/core-components/CoreRootPlaylistSidebar";
+import CoreSignIn from "~/core-components/CoreSignIn";
 
 // NOTE(jim): Media Scene
-import CoreMediaScreen from '~/core-components/CoreMediaScreen';
-import CoreMediaInformation from '~/core-components/CoreMediaInformation';
+import CoreMediaScreen from "~/core-components/CoreMediaScreen";
+import CoreMediaInformation from "~/core-components/CoreMediaInformation";
 
 // NOTE(jim): Browse Scene
-import CoreBrowsePlaylistResults from '~/core-components/CoreBrowsePlaylistResults';
-import CoreBrowseMediaResults from '~/core-components/CoreBrowseMediaResults';
-import CoreBrowseSearchInput from '~/core-components/CoreBrowseSearchInput';
+import CoreBrowsePlaylistResults from "~/core-components/CoreBrowsePlaylistResults";
+import CoreBrowseMediaResults from "~/core-components/CoreBrowseMediaResults";
+import CoreBrowseSearchInput from "~/core-components/CoreBrowseSearchInput";
 
 // NOTE(jim): Profile Scene
-import CoreProfile from '~/core-components/CoreProfile';
-import CoreProfileSidebar from '~/core-components/CoreProfileSidebar';
+import CoreProfile from "~/core-components/CoreProfile";
+import CoreProfileSidebar from "~/core-components/CoreProfileSidebar";
 
 // NOTE(jim): Playlist Scene
-import CorePlaylist from '~/core-components/CorePlaylist';
+import CorePlaylist from "~/core-components/CorePlaylist";
 
 // NOTE(jim): Development Logs Scene
-import CoreDevelopmentLogs from '~/core-components/CoreDevelopmentLogs';
+import CoreDevelopmentLogs from "~/core-components/CoreDevelopmentLogs";
 
-const isOverlayHotkey = isKeyHotkey('mod+e');
-const isDevelopmentLogHotkey = isKeyHotkey('mod+j');
+const isOverlayHotkey = isKeyHotkey("mod+e");
+const isDevelopmentLogHotkey = isKeyHotkey("mod+j");
 const POLL_DELAY = 300;
 const ENABLE_HIDE_OVERLAY = false;
 
@@ -66,8 +66,10 @@ export default class CoreApp extends React.Component {
   }
 
   async componentDidMount() {
-    window.addEventListener('nativeOpenUrl', this._handleNativeOpenUrl);
-    window.addEventListener('keydown', this._handleKeyDown);
+    window.addEventListener("nativeOpenUrl", this._handleNativeOpenUrl);
+    window.addEventListener("keydown", this._handleKeyDown);
+    window.addEventListener("nativeLoadEnd", this._handleNativeLoadEnd);
+    window.addEventListener("nativeLoadError", this._handleNativeLoadError);
 
     const processChannels = async () => {
       const logs = await CEF.getLogs();
@@ -83,14 +85,16 @@ export default class CoreApp extends React.Component {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('nativeOpenUrl', this._handleNativeOpenUrl);
-    window.removeEventListener('keydown', this._handleKeyDown);
+    window.removeEventListener("nativeOpenUrl", this._handleNativeOpenUrl);
+    window.removeEventListener("keydown", this._handleKeyDown);
+    window.removeEventListener("nativeLoadEnd", this._handleNativeLoadEnd);
+    window.removeEventListener("nativeLoadError", this._handleNativeLoadError);
     window.clearTimeout(this._devTimeout);
   }
 
   closeCEF = () => {
     if (this._isLockedFromCEFUpdates) {
-      console.log('closeCEF: already locked');
+      console.log("closeCEF: already locked");
       return;
     }
 
@@ -100,12 +104,20 @@ export default class CoreApp extends React.Component {
 
   openCEF = url => {
     if (!this._isLockedFromCEFUpdates) {
-      console.log('openCEF: is not closed');
+      console.log("openCEF: is not closed");
       return;
     }
 
     this._isLockedFromCEFUpdates = false;
     CEF.openWindowFrame(url);
+  };
+
+  _handleNativeLoadEnd = () => {
+    this.setState({ loadingMedia: false });
+  };
+
+  _handleNativeLoadError = () => {
+    this.setState({ loadingMedia: false });
   };
 
   _handleCEFupdateFrame = () => {
@@ -120,21 +132,21 @@ export default class CoreApp extends React.Component {
 
   _handleSetHistory = media => {
     if (!this.props.storage) {
-      alert('History is not supported at the moment.');
+      alert("History is not supported at the moment.");
       return;
     }
 
-    let data = this.props.storage.getItem('history');
+    let data = this.props.storage.getItem("history");
 
     // TODO(jim): Sync this with your profile if you're logged in.
     if (!data) {
-      console.log('Setting up your local viewing history.');
-      this.props.storage.setItem('history', JSON.stringify({ history: [] }));
+      console.log("Setting up your local viewing history.");
+      this.props.storage.setItem("history", JSON.stringify({ history: [] }));
     }
 
-    data = this.props.storage.getItem('history');
+    data = this.props.storage.getItem("history");
     if (!data) {
-      alert('History is not supported at the moment.');
+      alert("History is not supported at the moment.");
       return;
     }
 
@@ -146,7 +158,7 @@ export default class CoreApp extends React.Component {
     history = history.filter(h => h.mediaUrl !== media.mediaUrl);
 
     history.unshift(media);
-    this.props.storage.setItem('history', JSON.stringify({ history }));
+    this.props.storage.setItem("history", JSON.stringify({ history }));
 
     if (history.length > 10) {
       history.pop();
@@ -165,7 +177,7 @@ export default class CoreApp extends React.Component {
     this.setState({
       viewer: { ...updates },
       creator: { ...updates },
-      profileMode: 'media',
+      profileMode: "media"
     });
   };
 
@@ -182,7 +194,7 @@ export default class CoreApp extends React.Component {
     this.setState({
       viewer: { ...updates },
       creator: { ...updates },
-      profileMode: 'media',
+      profileMode: "media"
     });
   };
 
@@ -198,7 +210,7 @@ export default class CoreApp extends React.Component {
     this.setState({
       creator: { ...updates },
       viewer: { ...updates },
-      profileMode: 'playlists',
+      profileMode: "playlists"
     });
   };
 
@@ -215,11 +227,11 @@ export default class CoreApp extends React.Component {
     this.setState({
       creator: { ...updates },
       viewer: { ...updates },
-      profileMode: 'playlists',
+      profileMode: "playlists"
     });
   };
 
-  setStateWithCEF = (state) => {
+  setStateWithCEF = state => {
     if (this._isLockedFromCEFUpdates) {
       return this.setState({ ...state });
     }
@@ -227,17 +239,18 @@ export default class CoreApp extends React.Component {
     this.setState({ ...state }, this._handleCEFupdateFrame);
   };
 
-  _handleSetViewer = viewer => this.setState({ viewer, pageMode: viewer ? 'browse' : 'sign-in' });
+  _handleSetViewer = viewer =>
+    this.setState({ viewer, pageMode: viewer ? "browse" : "sign-in" });
 
   _handleURLChange = e => this.setState({ [e.target.name]: e.target.value });
 
   _handleURLSubmit = () => {
     if (Strings.isEmpty(this.state.mediaUrl)) {
-      alert('You must provide a URL');
+      alert("You must provide a URL");
       return;
     }
 
-    if (this.state.mediaUrl.endsWith('.lua')) {
+    if (this.state.mediaUrl.endsWith(".lua")) {
       this.goToLUA(this.state.mediaUrl);
       return;
     }
@@ -248,7 +261,11 @@ export default class CoreApp extends React.Component {
   goToHTML5Media = async media => {
     this.closeCEF();
 
-    const existingMedia = await Actions.getMediaByURL({ mediaUrl: media.mediaUrl });
+    this.setState({ mediaLoading: true });
+
+    const existingMedia = await Actions.getMediaByURL({
+      mediaUrl: media.mediaUrl
+    });
 
     this._handleSetHistory(existingMedia ? existingMedia : media);
 
@@ -256,7 +273,7 @@ export default class CoreApp extends React.Component {
       media: existingMedia ? existingMedia : media,
       mediaUrl: media.mediaUrl,
       pageMode: null,
-      creator: null,
+      creator: null
     });
   };
 
@@ -267,7 +284,7 @@ export default class CoreApp extends React.Component {
 
     this.closeCEF();
 
-    this.setState({ media: null });
+    this.setState({ media: null, mediaLoading: true });
 
     const media = await Actions.getMediaByURL({ mediaUrl });
 
@@ -280,7 +297,7 @@ export default class CoreApp extends React.Component {
       media: media ? media : { mediaUrl },
       mediaUrl,
       pageMode: null,
-      creator: null,
+      creator: null
     });
   };
 
@@ -292,7 +309,7 @@ export default class CoreApp extends React.Component {
       return;
     }
 
-    url = url.replace('castle://', 'https://');
+    url = url.replace("castle://", "https://");
     this.setState({ media: null, mediaUrl: url }, () => {
       this._handleURLSubmit();
     });
@@ -310,7 +327,7 @@ export default class CoreApp extends React.Component {
 
   _handleSearchSubmit = async () => {
     if (Strings.isEmpty(this.state.searchQuery)) {
-      alert('You must provide a search query.');
+      alert("You must provide a search query.");
       return;
     }
 
@@ -318,23 +335,23 @@ export default class CoreApp extends React.Component {
     if (!data) {
       this.setState({
         searchResultsMedia: [],
-        searchResultsPlaylist: [],
+        searchResultsPlaylist: []
       });
       return;
     }
 
     const { mediaItems = [], playlists = [] } = data;
     this.setState({
-      pageMode: 'browse',
-      searchQuery: '',
+      pageMode: "browse",
+      searchQuery: "",
       searchResultsMedia: mediaItems,
-      searchResultsPlaylist: playlists,
+      searchResultsPlaylist: playlists
     });
   };
 
   _handleSearchChange = async e => {
     this.setState({
-      searchQuery: e.target.value,
+      searchQuery: e.target.value
     });
   };
 
@@ -350,10 +367,12 @@ export default class CoreApp extends React.Component {
     }
 
     const emailUrl = `<mailto:${email}|${email}>`;
-    Slack.sendMessage(`*${emailUrl} who is playing "${this.state.mediaUrl}" said:*\n ${message}`);
+    Slack.sendMessage(
+      `*${emailUrl} who is playing "${this.state.mediaUrl}" said:*\n ${message}`
+    );
   };
 
-  _handleFavoriteMedia = () => window.alert('favorite');
+  _handleFavoriteMedia = () => window.alert("favorite");
 
   _handlePlaylistSelect = playlist => {
     if (!this.state.pageMode) {
@@ -361,10 +380,10 @@ export default class CoreApp extends React.Component {
     }
 
     this.setStateWithCEF({
-      pageMode: 'playlist',
+      pageMode: "playlist",
       creator: null,
       playlist,
-      media: null,
+      media: null
     });
   };
 
@@ -383,12 +402,12 @@ export default class CoreApp extends React.Component {
       this.closeCEF();
     }
 
-    if (this.state.pageMode === 'profile') {
-      this.setState({ pageMode: 'profile', creator: { ...creator } });
+    if (this.state.pageMode === "profile") {
+      this.setState({ pageMode: "profile", creator: { ...creator } });
       return;
     }
 
-    this.setStateWithCEF({ pageMode: 'profile', creator: { ...creator } });
+    this.setStateWithCEF({ pageMode: "profile", creator: { ...creator } });
   };
 
   _handleMediaSelect = media => {
@@ -397,11 +416,11 @@ export default class CoreApp extends React.Component {
     }
 
     if (Strings.isEmpty(media.mediaUrl)) {
-      console.error('handleMediaSelect: no media url provided on entity');
+      console.error("handleMediaSelect: no media url provided on entity");
       return;
     }
 
-    if (media.mediaUrl.endsWith('.lua')) {
+    if (media.mediaUrl.endsWith(".lua")) {
       this.goToLUA(media.mediaUrl);
       return;
     }
@@ -442,7 +461,7 @@ export default class CoreApp extends React.Component {
 
     // NOTE(jim): Restores the dead state.
     if (!Strings.isEmpty(mediaUrl)) {
-      if (mediaUrl.endsWith('.lua')) {
+      if (mediaUrl.endsWith(".lua")) {
         this.openCEF(mediaUrl);
       }
     }
@@ -450,14 +469,15 @@ export default class CoreApp extends React.Component {
 
   _handleToggleProfile = () => {
     const updates = {
-      pageMode: this.state.pageMode === 'profile' ? null : 'profile',
-      creator: this.state.pageMode === 'profile' ? null : { ...this.state.viewer },
+      pageMode: this.state.pageMode === "profile" ? null : "profile",
+      creator:
+        this.state.pageMode === "profile" ? null : { ...this.state.viewer }
     };
 
     this.determineNextStateOfCEF({
       isClosing: !Strings.isEmpty(updates.pageMode),
       isOpening: Strings.isEmpty(updates.pageMode),
-      mediaUrl: this.state.mediaUrl,
+      mediaUrl: this.state.mediaUrl
     });
 
     this.setStateWithCEF({ ...updates });
@@ -465,31 +485,31 @@ export default class CoreApp extends React.Component {
 
   _handleToggleBrowse = () => {
     const updates = {
-      pageMode: this.state.pageMode === 'browse' ? null : 'browse',
-      creator: null,
+      pageMode: this.state.pageMode === "browse" ? null : "browse",
+      creator: null
     };
 
     this.determineNextStateOfCEF({
       isClosing: !Strings.isEmpty(updates.pageMode),
       isOpening: Strings.isEmpty(updates.pageMode),
-      mediaUrl: this.state.mediaUrl,
+      mediaUrl: this.state.mediaUrl
     });
 
     this.setStateWithCEF({
-      ...updates,
+      ...updates
     });
   };
 
   _handleToggleSignIn = () => {
     const updates = {
-      pageMode: this.state.pageMode === 'sign-in' ? null : 'sign-in',
-      creator: null,
+      pageMode: this.state.pageMode === "sign-in" ? null : "sign-in",
+      creator: null
     };
 
     this.determineNextStateOfCEF({
       isClosing: !Strings.isEmpty(updates.pageMode),
       isOpening: Strings.isEmpty(updates.pageMode),
-      mediaUrl: this.state.mediaUrl,
+      mediaUrl: this.state.mediaUrl
     });
 
     this.setStateWithCEF({ ...updates });
@@ -497,18 +517,18 @@ export default class CoreApp extends React.Component {
 
   _handleToggleCurrentPlaylistDetails = () => {
     const updates = {
-      pageMode: this.state.pageMode === 'playlist' ? null : 'playlist',
-      creator: null,
+      pageMode: this.state.pageMode === "playlist" ? null : "playlist",
+      creator: null
     };
 
     this.determineNextStateOfCEF({
       isClosing: !Strings.isEmpty(updates.pageMode),
       isOpening: Strings.isEmpty(updates.pageMode),
-      mediaUrl: this.state.mediaUrl,
+      mediaUrl: this.state.mediaUrl
     });
 
     this.setStateWithCEF({
-      ...updates,
+      ...updates
     });
   };
 
@@ -516,87 +536,95 @@ export default class CoreApp extends React.Component {
     const updates = {
       pageMode: null,
       creator: null,
-      sidebarMode: this.state.sidebarMode === 'current-playlist' ? null : 'current-playlist',
+      sidebarMode:
+        this.state.sidebarMode === "current-playlist"
+          ? null
+          : "current-playlist"
     };
 
     this.determineNextStateOfCEF({
       isClosing: false,
       isOpening: !Strings.isEmpty(this.state.pageMode),
-      mediaUrl: this.state.mediaUrl,
+      mediaUrl: this.state.mediaUrl
     });
 
     this.setStateWithCEF({
-      ...updates,
+      ...updates
     });
   };
 
   _handleToggleDashboard = () => {
     const updates = {
-      sidebarMode: !this.state.pageMode && this.state.sidebarMode === 'dashboard' ? null : 'dashboard',
+      sidebarMode:
+        !this.state.pageMode && this.state.sidebarMode === "dashboard"
+          ? null
+          : "dashboard",
       pageMode: null,
-      creator: null,
+      creator: null
     };
 
     this.determineNextStateOfCEF({
       isClosing: false,
       isOpening: !Strings.isEmpty(this.state.pageMode),
-      mediaUrl: this.state.mediaUrl,
+      mediaUrl: this.state.mediaUrl
     });
 
     this.setStateWithCEF({
-      ...updates,
+      ...updates
     });
   };
 
   _handleToggleDevelopmentLogs = () => {
     const updates = {
-      sidebarMode: this.state.sidebarMode === 'development' ? null : 'development',
+      sidebarMode:
+        this.state.sidebarMode === "development" ? null : "development",
       pageMode: null,
-      creator: null,
+      creator: null
     };
 
     this.determineNextStateOfCEF({
       isClosing: false,
       isOpening: !Strings.isEmpty(this.state.pageMode),
-      mediaUrl: this.state.mediaUrl,
+      mediaUrl: this.state.mediaUrl
     });
 
     this.setStateWithCEF({
-      ...updates,
+      ...updates
     });
   };
 
   _handleToggleMediaInfo = () => {
     const updates = {
-      sidebarMode: this.state.sidebarMode === 'media-info' ? null : 'media-info',
+      sidebarMode:
+        this.state.sidebarMode === "media-info" ? null : "media-info",
       pageMode: null,
-      creator: null,
+      creator: null
     };
 
     this.determineNextStateOfCEF({
       isClosing: false,
       isOpening: !Strings.isEmpty(this.state.pageMode),
-      mediaUrl: this.state.mediaUrl,
+      mediaUrl: this.state.mediaUrl
     });
 
     this.setStateWithCEF({
-      ...updates,
+      ...updates
     });
   };
 
   _handleShowProfileMediaList = () => {
     this.setStateWithCEF({
-      profileMode: 'media',
+      profileMode: "media"
     });
   };
 
   _handleShowProfilePlaylistList = () =>
     this.setStateWithCEF({
-      profileMode: 'playlists',
+      profileMode: "playlists"
     });
 
   _handleSignOut = () => {
-    const confirm = window.confirm('Are you sure you want to sign out?');
+    const confirm = window.confirm("Are you sure you want to sign out?");
 
     if (!confirm) {
       return;
@@ -608,13 +636,13 @@ export default class CoreApp extends React.Component {
 
     this.determineNextStateOfCEF({
       isClosing: true,
-      isOpening: false,
+      isOpening: false
     });
 
     this.setStateWithCEF({
       viewer: null,
       creator: null,
-      pageMode: 'browse',
+      pageMode: "browse"
     });
   };
 
@@ -623,13 +651,13 @@ export default class CoreApp extends React.Component {
   _handleHideOverlay = () => {
     const updates = {
       isOverlayActive: false,
-      pageMode: null,
+      pageMode: null
     };
 
     this.determineNextStateOfCEF({
       isClosing: false,
       isOpening: !Strings.isEmpty(this.state.pageMode),
-      mediaUrl: this.state.mediaUrl,
+      mediaUrl: this.state.mediaUrl
     });
 
     this.setStateWithCEF({ ...updates });
@@ -638,30 +666,30 @@ export default class CoreApp extends React.Component {
   _handleToggleOverlay = () => {
     const updates = {
       isOverlayActive: !this.state.isOverlayActive,
-      pageMode: null,
+      pageMode: null
     };
 
     this.determineNextStateOfCEF({
       isClosing: false,
       isOpening: !Strings.isEmpty(this.state.pageMode),
-      mediaUrl: this.state.mediaUrl,
+      mediaUrl: this.state.mediaUrl
     });
 
     this.setStateWithCEF({
-      ...updates,
+      ...updates
     });
   };
 
   _handleToggleMediaExpanded = () => {
     const updates = {
       isMediaExpanded: !this.state.isMediaExpanded,
-      pageMode: null,
+      pageMode: null
     };
 
     this.determineNextStateOfCEF({
       isClosing: false,
       isOpening: !Strings.isEmpty(this.state.pageMode),
-      mediaUrl: this.state.mediaUrl,
+      mediaUrl: this.state.mediaUrl
     });
 
     this.setStateWithCEF({ ...updates });
@@ -695,10 +723,12 @@ export default class CoreApp extends React.Component {
       maybeLeftSidebarNode = (
         <CoreRootLeftSidebar
           viewer={state.viewer}
-          isBrowsing={state.pageMode === 'browse'}
-          isSignIn={state.pageMode === 'sign-in'}
-          isViewingProfile={state.pageMode === 'profile'}
-          isDashboardActive={!state.pageMode && state.sidebarMode === 'dashboard'}
+          isBrowsing={state.pageMode === "browse"}
+          isSignIn={state.pageMode === "sign-in"}
+          isViewingProfile={state.pageMode === "profile"}
+          isDashboardActive={
+            !state.pageMode && state.sidebarMode === "dashboard"
+          }
           onToggleProfile={this._handleToggleProfile}
           onToggleBrowse={this._handleToggleBrowse}
           onToggleSignIn={this._handleToggleSignIn}
@@ -709,7 +739,7 @@ export default class CoreApp extends React.Component {
     }
 
     // NOTE(jim): Browse/Search Scene
-    if (state.pageMode === 'browse') {
+    if (state.pageMode === "browse") {
       return (
         <CoreLayout
           ref={this._handleGetReference}
@@ -729,7 +759,8 @@ export default class CoreApp extends React.Component {
             />
           }
           bottomNode={this.renderRootURLInput()}
-          leftSidebarNode={maybeLeftSidebarNode}>
+          leftSidebarNode={maybeLeftSidebarNode}
+        >
           <CoreBrowseMediaResults
             mediaItems={state.searchResultsMedia}
             onUserSelect={this._handleUserSelect}
@@ -742,19 +773,20 @@ export default class CoreApp extends React.Component {
     }
 
     // NOTE(jim): Sign in scene
-    if (state.pageMode === 'sign-in') {
+    if (state.pageMode === "sign-in") {
       return (
         <CoreLayout
           ref={this._handleGetReference}
           bottomNode={this.renderRootURLInput()}
-          leftSidebarNode={maybeLeftSidebarNode}>
+          leftSidebarNode={maybeLeftSidebarNode}
+        >
           <CoreSignIn onSetViewer={this._handleSetViewer} />
         </CoreLayout>
       );
     }
 
     // NOTE(jim): Playlist Scene
-    if (state.pageMode === 'playlist') {
+    if (state.pageMode === "playlist") {
       return (
         <CoreLayout
           ref={reference => {
@@ -768,7 +800,8 @@ export default class CoreApp extends React.Component {
             />
           }
           bottomNode={this.renderRootURLInput()}
-          leftSidebarNode={maybeLeftSidebarNode}>
+          leftSidebarNode={maybeLeftSidebarNode}
+        >
           <CorePlaylist
             viewer={state.viewer}
             playlist={state.playlist}
@@ -782,7 +815,7 @@ export default class CoreApp extends React.Component {
     }
 
     // NOTE(jim): Profile Scene
-    if (state.pageMode === 'profile') {
+    if (state.pageMode === "profile") {
       return (
         <CoreLayout
           ref={this._handleGetReference}
@@ -796,13 +829,16 @@ export default class CoreApp extends React.Component {
           }
           bottomNode={this.renderRootURLInput()}
           rightNode={
-            state.viewer && state.creator && state.viewer.userId === state.creator.userId ? (
+            state.viewer &&
+            state.creator &&
+            state.viewer.userId === state.creator.userId ? (
               <CoreProfileSidebar
                 onMediaAdd={this._handleMediaAdd}
                 onPlaylistAdd={this._handlePlaylistAdd}
               />
             ) : null
-          }>
+          }
+        >
           <CoreProfile
             viewer={state.viewer}
             creator={state.creator}
@@ -813,8 +849,12 @@ export default class CoreApp extends React.Component {
             onPlayCreatorMedia={this._handlePlayCreatorMedia}
             onSubscribeToCreator={this._handleSubscribeToCreator}
             onClickCreatorAvatar={this._handleClickCreatorAvatar}
-            onClickCreatorCreations={() => this.setState({ profileMode: 'media' })}
-            onClickCreatorPlaylists={() => this.setState({ profileMode: 'playlists' })}
+            onClickCreatorCreations={() =>
+              this.setState({ profileMode: "media" })
+            }
+            onClickCreatorPlaylists={() =>
+              this.setState({ profileMode: "playlists" })
+            }
             onMediaSelect={this._handleMediaSelect}
             onMediaRemove={this._handleMediaRemove}
             onPlaylistSelect={this._handlePlaylistSelect}
@@ -849,7 +889,7 @@ export default class CoreApp extends React.Component {
     }
 
     let maybeRightNode;
-    if (state.isOverlayActive && state.sidebarMode === 'media-info') {
+    if (state.isOverlayActive && state.sidebarMode === "media-info") {
       maybeRightNode = (
         <CoreMediaInformation
           media={state.media}
@@ -859,13 +899,16 @@ export default class CoreApp extends React.Component {
       );
     }
 
-    if (state.isOverlayActive && state.sidebarMode === 'development') {
+    if (state.isOverlayActive && state.sidebarMode === "development") {
       maybeRightNode = (
-        <CoreDevelopmentLogs logs={state.logs} onDismiss={this._handleDismissSidebar} />
+        <CoreDevelopmentLogs
+          logs={state.logs}
+          onDismiss={this._handleDismissSidebar}
+        />
       );
     }
 
-    if (state.isOverlayActive && state.sidebarMode === 'dashboard') {
+    if (state.isOverlayActive && state.sidebarMode === "dashboard") {
       maybeRightNode = (
         <CoreRootDashboard
           media={state.media}
@@ -876,21 +919,26 @@ export default class CoreApp extends React.Component {
       );
     }
 
-    if (state.isOverlayActive && state.sidebarMode === 'current-playlist') {
+    if (state.isOverlayActive && state.sidebarMode === "current-playlist") {
       maybeRightNode = (
         <CoreRootPlaylistSidebar
           media={state.media}
           playlist={state.playlist}
           onMediaSelect={this._handleMediaSelect}
           onUserSelect={this._handleUserSelect}
-          onViewCurrentPlaylistDetails={this._handleToggleCurrentPlaylistDetails}
+          onViewCurrentPlaylistDetails={
+            this._handleToggleCurrentPlaylistDetails
+          }
           onDismiss={this._handleDismissSidebar}
         />
       );
     }
 
     // NOTE(jim): Rendering an IFrame while rendering a Lua window will trigger a double Open_URI
-    const isRenderingIFrame = state.media && !Strings.isEmpty(state.media.mediaUrl) && !state.media.mediaUrl.endsWith('.lua');
+    const isRenderingIFrame =
+      state.media &&
+      !Strings.isEmpty(state.media.mediaUrl) &&
+      !state.media.mediaUrl.endsWith(".lua");
 
     return (
       <CoreLayout
@@ -898,12 +946,15 @@ export default class CoreApp extends React.Component {
         topNode={maybeTopNode}
         bottomNode={maybeBottomNode}
         leftSidebarNode={maybeLeftSidebarNode}
-        rightNode={maybeRightNode}>
+        rightNode={maybeRightNode}
+      >
         {isRenderingIFrame ? (
-          <CoreMediaScreen expanded={state.isMediaExpanded} media={state.media} />
+          <CoreMediaScreen
+            expanded={state.isMediaExpanded}
+            media={state.media}
+          />
         ) : null}
       </CoreLayout>
     );
   }
 }
-
