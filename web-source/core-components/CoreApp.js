@@ -327,25 +327,81 @@ export default class CoreApp extends React.Component {
 
   _handleSearchSubmit = async () => {
     if (Strings.isEmpty(this.state.searchQuery)) {
-      alert("You must provide a search query.");
-      return;
-    }
-
-    const data = await Actions.search(this.state.searchQuery);
-    if (!data) {
       this.setState({
-        searchResultsMedia: [],
-        searchResultsPlaylist: []
+        pageMode: "browse",
+        searchQuery: "",
+        allMediaFiltered: this.state.allMedia,
+        allPlaylistsFiltered: this.state.allPlaylists
       });
+
       return;
     }
 
-    const { mediaItems = [], playlists = [] } = data;
+    // const data = await Actions.search(this.state.searchQuery);
+
+    const allMediaFiltered = this.state.allMedia.filter(m => {
+      if (m.name.includes(this.state.searchQuery)) {
+        return true;
+      }
+
+      if (m.mediaUrl.includes(this.state.searchQuery)) {
+        return true;
+      }
+
+      if (
+        m.user &&
+        m.user.name &&
+        m.user.name.includes(this.state.searchQuery)
+      ) {
+        return true;
+      }
+
+      if (
+        m.user &&
+        m.user.username &&
+        m.user.username.includes(this.state.searchQuery)
+      ) {
+        return true;
+      }
+
+      return false;
+    });
+
+    const allPlaylistsFiltered = this.state.allPlaylists.filter(p => {
+      if (p.name.includes(this.state.searchQuery)) {
+        return true;
+      }
+
+      if (
+        p.user &&
+        p.user.username &&
+        p.user.name.includes(this.state.searchQuery)
+      ) {
+        return true;
+      }
+
+      if (
+        p.user &&
+        p.user.username &&
+        p.user.username.includes(this.state.searchQuery)
+      ) {
+        return true;
+      }
+
+      return false;
+    });
+
     this.setState({
       pageMode: "browse",
       searchQuery: "",
-      searchResultsMedia: mediaItems,
-      searchResultsPlaylist: playlists
+      allMediaFiltered:
+        allMediaFiltered && allMediaFiltered.length
+          ? allMediaFiltered
+          : this.state.allMedia,
+      allPlaylistsFiltered:
+        allPlaylistsFiltered && allPlaylistsFiltered.length
+          ? allPlaylistsFiltered
+          : this.state.allPlaylists
     });
   };
 
@@ -752,7 +808,7 @@ export default class CoreApp extends React.Component {
           }
           rightSidebarNode={
             <CoreBrowsePlaylistResults
-              playlists={state.searchResultsPlaylist}
+              playlists={state.allPlaylistsFiltered}
               onPlaylistSelect={this._handlePlaylistSelect}
               onUserSelect={this._handleUserSelect}
               onDismiss={this._handleToggleBrowse}
@@ -762,7 +818,7 @@ export default class CoreApp extends React.Component {
           leftSidebarNode={maybeLeftSidebarNode}
         >
           <CoreBrowseMediaResults
-            mediaItems={state.searchResultsMedia}
+            mediaItems={state.allMediaFiltered}
             onUserSelect={this._handleUserSelect}
             onMediaSelect={this._handleMediaSelect}
             onSelectRandom={this._handleSelectRandom}

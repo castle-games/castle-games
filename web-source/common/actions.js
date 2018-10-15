@@ -1,4 +1,4 @@
-import CastleApiClient from 'castle-api-client';
+import CastleApiClient from "castle-api-client";
 
 // export const API = CastleApiClient("http://localhost:1380");
 export const API = CastleApiClient();
@@ -184,7 +184,47 @@ export async function getInitialData() {
         }
       }
 
-      currentPlaylist {
+      allMedia {
+        name
+        published
+        createdTime
+        instructions
+        description
+        mediaUrl
+        mediaId
+        coverImage {
+          url
+          height
+          width
+        }
+        user {
+          userId
+          name
+          username
+          createdTime
+          isReal
+          photo {
+            url
+            height
+            width
+          }
+        }
+      }
+      
+      allUsers {
+        userId
+        name
+        username
+        createdTime
+        isReal
+        photo {
+          url
+          height
+          width
+        }
+      }
+
+      allPlaylists {
         playlistId
         name
         description
@@ -314,7 +354,7 @@ export async function search(query) {
         }
       }
     `,
-    variables: { query },
+    variables: { query }
   });
 
   // TOOD(jim): Write a global error handler.
@@ -413,7 +453,7 @@ export async function authenticate({ username, password }) {
         }
       }
     `,
-    variables: { username, password },
+    variables: { username, password }
   });
 
   // TOOD(jim): Write a global error handler.
@@ -433,7 +473,7 @@ export async function logout() {
       mutation {
         logout
       }
-    `,
+    `
   });
 
   // TOOD(jim): Write a global error handler.
@@ -482,7 +522,7 @@ export async function getMediaByURL({ mediaUrl }) {
         }
       }
     `,
-    variables,
+    variables
   });
 
   // TOOD(jim): Write a global error handler.
@@ -501,7 +541,7 @@ export async function addMedia({ name, url, description }) {
   const variables = {
     name,
     mediaUrl: url,
-    description: JSON.stringify(description),
+    description: JSON.stringify(description)
   };
 
   const result = await API.graphqlAsync({
@@ -541,7 +581,7 @@ export async function addMedia({ name, url, description }) {
         }
       }
     `,
-    variables,
+    variables
   });
 
   // TOOD(jim): Write a global error handler.
@@ -587,7 +627,7 @@ export async function addPlaylist({ name, description }) {
         }
       }
     `,
-    variables,
+    variables
   });
 
   // TOOD(jim): Write a global error handler.
@@ -611,7 +651,7 @@ export async function removeMedia({ mediaId }) {
         deleteMedia(mediaId: $mediaId)
       }
     `,
-    variables,
+    variables
   });
 
   // TOOD(jim): Write a global error handler.
@@ -635,7 +675,7 @@ export async function removePlaylist({ playlistId }) {
         deletePlaylist(playlistId: $playlistId)
       }
     `,
-    variables,
+    variables
   });
 
   // TOOD(jim): Write a global error handler.

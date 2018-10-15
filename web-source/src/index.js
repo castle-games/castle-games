@@ -102,7 +102,11 @@ const delay = ms =>
   });
 
 const run = async () => {
-  const { currentPlaylist, me } = await Actions.getInitialData();
+  const {
+    allMedia = [],
+    allPlaylists = [],
+    me
+  } = await Actions.getInitialData();
   await delay(1000);
 
   document.getElementById("loader").classList.add("loader--finished");
@@ -110,14 +114,16 @@ const run = async () => {
   const state = {
     logs: [],
     mediaUrl: "",
-    playlist: currentPlaylist,
+    playlist: null,
     media: null,
     creator: null,
     viewer: me,
     local: null,
     searchQuery: "",
-    searchResultsMedia: null,
-    searchResultsPlaylists: null,
+    allMedia,
+    allPlaylists,
+    allMediaFiltered: [...allMedia],
+    allPlaylistsFiltered: [...allPlaylists],
     sidebarMode: null, // current-playlists | dashboard | media-info | authentication | null
     pageMode: "browse", // browse | playlist | profile | sign-in | null
     profileMode: null, // media | playlist | null
