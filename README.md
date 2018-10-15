@@ -8,6 +8,7 @@ do that!
 
 ### macOS
 
+- You must have git-lfs installed. Do not clone the repository without git-lfs. Install [Homebrew](https://brew.sh/). Then run `brew install git-lfs`. Then run `git lfs install`.
 - Copy the '.framework' files in https://love2d.org/sdk/love-osx-frameworks-0.10.zip to
 '/Library/Frameworks' (at the root of your file system) if you haven't done that before.
 - Download the `macosx` build from https://github.com/expo/cef-builds/tree/master/builds and copy 'Chromium Embedded Framework.framework' from 'Release/` to '/Library/Frameworks'.
