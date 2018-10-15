@@ -771,6 +771,14 @@ export default class CoreApp extends React.Component {
     />
   );
 
+  renderRootSearchInput = () => (
+    <CoreBrowseSearchInput
+      searchQuery={this.state.searchQuery}
+      onChange={this._handleSearchChange}
+      onSubmit={this._handleSearchSubmit}
+    />
+  );
+
   render() {
     const { state } = this;
 
@@ -799,13 +807,7 @@ export default class CoreApp extends React.Component {
       return (
         <CoreLayout
           ref={this._handleGetReference}
-          topNode={
-            <CoreBrowseSearchInput
-              searchQuery={state.searchQuery}
-              onChange={this._handleSearchChange}
-              onSubmit={this._handleSearchSubmit}
-            />
-          }
+          topNode={this.renderRootSearchInput()}
           rightSidebarNode={
             <CoreBrowsePlaylistResults
               playlists={state.allPlaylistsFiltered}
@@ -848,13 +850,7 @@ export default class CoreApp extends React.Component {
           ref={reference => {
             this._layout = reference;
           }}
-          topNode={
-            <CoreBrowseSearchInput
-              searchQuery={state.searchQuery}
-              onChange={this._handleSearchChange}
-              onSubmit={this._handleSearchSubmit}
-            />
-          }
+          topNode={this.renderRootSearchInput()}
           bottomNode={this.renderRootURLInput()}
           leftSidebarNode={maybeLeftSidebarNode}
         >
@@ -876,13 +872,7 @@ export default class CoreApp extends React.Component {
         <CoreLayout
           ref={this._handleGetReference}
           leftSidebarNode={maybeLeftSidebarNode}
-          topNode={
-            <CoreBrowseSearchInput
-              searchQuery={state.searchQuery}
-              onChange={this._handleSearchChange}
-              onSubmit={this._handleSearchSubmit}
-            />
-          }
+          topNode={this.renderRootSearchInput()}
           bottomNode={this.renderRootURLInput()}
           rightNode={
             state.viewer &&
@@ -955,6 +945,21 @@ export default class CoreApp extends React.Component {
       );
     }
 
+    if (state.isOverlayActive && state.sidebarMode === "current-playlist") {
+      maybeRightNode = (
+        <CoreRootPlaylistSidebar
+          media={state.media}
+          playlist={state.playlist}
+          onMediaSelect={this._handleMediaSelect}
+          onUserSelect={this._handleUserSelect}
+          onViewCurrentPlaylistDetails={
+            this._handleToggleCurrentPlaylistDetails
+          }
+          onDismiss={this._handleDismissSidebar}
+        />
+      );
+    }
+
     if (state.isOverlayActive && state.sidebarMode === "development") {
       maybeRightNode = (
         <CoreDevelopmentLogs
@@ -970,21 +975,6 @@ export default class CoreApp extends React.Component {
           media={state.media}
           onMediaSelect={this._handleMediaSelect}
           storage={this.props.storage}
-          onDismiss={this._handleDismissSidebar}
-        />
-      );
-    }
-
-    if (state.isOverlayActive && state.sidebarMode === "current-playlist") {
-      maybeRightNode = (
-        <CoreRootPlaylistSidebar
-          media={state.media}
-          playlist={state.playlist}
-          onMediaSelect={this._handleMediaSelect}
-          onUserSelect={this._handleUserSelect}
-          onViewCurrentPlaylistDetails={
-            this._handleToggleCurrentPlaylistDetails
-          }
           onDismiss={this._handleDismissSidebar}
         />
       );
