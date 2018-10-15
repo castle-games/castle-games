@@ -32,7 +32,7 @@ void Cocoa_DispatchEvent(NSEvent *theEvent);
 
 - (void)sendEvent:(NSEvent *)event {
   CefScopedSendingEvent sendingEventScoper;
-  Cocoa_DispatchEvent(event);
+//  Cocoa_DispatchEvent(event);
   [super sendEvent:event];
 }
 
