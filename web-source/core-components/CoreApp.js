@@ -219,22 +219,12 @@ export default class CoreApp extends React.Component {
     });
   };
 
-  setStateWithCEF = (state, callback) => {
+  setStateWithCEF = (state) => {
     if (this._isLockedFromCEFUpdates) {
-      return this.setState({ ...state }, () => {
-        if (callback) {
-          callback();
-        }
-      });
+      return this.setState({ ...state });
     }
 
-    this.setState({ ...state }, () => {
-      this._handleCEFupdateFrame();
-
-      if (callback) {
-        callback();
-      }
-    });
+    this.setState({ ...state }, this._handleCEFupdateFrame);
   };
 
   _handleSetViewer = viewer => this.setState({ viewer, pageMode: viewer ? 'browse' : 'sign-in' });
@@ -259,7 +249,6 @@ export default class CoreApp extends React.Component {
     this.closeCEF();
 
     const existingMedia = await Actions.getMediaByURL({ mediaUrl: media.mediaUrl });
-    console.log({ mediaUrl: media.mediaUrl });
 
     this._handleSetHistory(existingMedia ? existingMedia : media);
 
@@ -276,18 +265,16 @@ export default class CoreApp extends React.Component {
       return;
     }
 
-    console.log({ mediaUrl });
-
     this.closeCEF();
 
     this.setState({ media: null });
 
-    // NOTE(jim): Nice way of saying setTimeout.
-    await delay(200);
-
     const media = await Actions.getMediaByURL({ mediaUrl });
 
     this.openCEF(mediaUrl);
+
+    await delay(200);
+
     this._handleSetHistory(media ? media : { mediaUrl });
     this.setStateWithCEF({
       media: media ? media : { mediaUrl },
