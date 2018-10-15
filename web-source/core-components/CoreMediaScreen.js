@@ -16,11 +16,7 @@ export default class CoreMediaScreen extends React.Component {
         style={{ ...style, background: `#000000` }}
         allow="autoplay; camera; midi"
         frameBorder="0"
-        src={
-          this.props.media && !this.props.media.mediaUrl.endsWith('.lua')
-            ? this.props.media.mediaUrl
-            : null
-        }
+        src={this.props.media.mediaUrl}
         scrolling="yes"
       />
     );

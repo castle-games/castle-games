@@ -901,6 +901,9 @@ export default class CoreApp extends React.Component {
       );
     }
 
+    // NOTE(jim): Rendering an IFrame while rendering a Lua window will trigger a double Open_URI
+    const isRenderingIFrame = state.media && !Strings.isEmpty(state.media.mediaUrl) && !state.media.mediaUrl.endsWith('.lua');
+
     return (
       <CoreLayout
         ref={this._handleGetReference}
@@ -908,10 +911,11 @@ export default class CoreApp extends React.Component {
         bottomNode={maybeBottomNode}
         leftSidebarNode={maybeLeftSidebarNode}
         rightNode={maybeRightNode}>
-        {state.media ? (
+        {isRenderingIFrame ? (
           <CoreMediaScreen expanded={state.isMediaExpanded} media={state.media} />
         ) : null}
       </CoreLayout>
     );
   }
 }
+
