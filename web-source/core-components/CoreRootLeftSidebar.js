@@ -40,9 +40,16 @@ export default class CoreRootLeftSidebar extends React.Component {
           </UIButtonIcon>
         ) : null}
         <UIButtonIcon
+          active={this.props.isDashboardActive}
+          icon={<SVG.History height="24px" />}
+          style={{ background: Constants.colors.blue }}
+          onClick={this.props.onToggleDashboard}>
+          History
+        </UIButtonIcon>
+        <UIButtonIcon
           active={this.props.isBrowsing}
           icon={<SVG.Search height="20px" />}
-          style={{ background: Constants.colors.blue }}
+          style={{ background: Constants.colors.red }}
           onClick={this.props.onToggleBrowse}>
           Browse
         </UIButtonIcon>

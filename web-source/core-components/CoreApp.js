@@ -545,7 +545,7 @@ export default class CoreApp extends React.Component {
 
   _handleToggleDashboard = () => {
     const updates = {
-      sidebarMode: this.state.sidebarMode === 'dashboard' ? null : 'dashboard',
+      sidebarMode: !this.state.pageMode && this.state.sidebarMode === 'dashboard' ? null : 'dashboard',
       pageMode: null,
       creator: null,
     };
@@ -697,7 +697,6 @@ export default class CoreApp extends React.Component {
       onToggleMediaExpanded={this._handleToggleMediaExpanded}
       onHideOverlay={this._handleHideOverlay}
       onFavoriteMedia={this._handleFavoriteMedia}
-      onToggleDashboard={this._handleToggleDashboard}
     />
   );
 
@@ -712,9 +711,11 @@ export default class CoreApp extends React.Component {
           isBrowsing={state.pageMode === 'browse'}
           isSignIn={state.pageMode === 'sign-in'}
           isViewingProfile={state.pageMode === 'profile'}
+          isDashboardActive={!state.pageMode && state.sidebarMode === 'dashboard'}
           onToggleProfile={this._handleToggleProfile}
           onToggleBrowse={this._handleToggleBrowse}
           onToggleSignIn={this._handleToggleSignIn}
+          onToggleDashboard={this._handleToggleDashboard}
           onSignOut={this._handleSignOut}
         />
       );

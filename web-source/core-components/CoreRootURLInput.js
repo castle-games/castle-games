@@ -118,13 +118,13 @@ export default class CoreRootURLInput extends React.Component {
           />
         </div>
         <div className={STYLES_CONTAINER_RIGHT}>
+        </div>
+        <div className={STYLES_CONTAINER_TOOLBAR}>
           <UIButtonDarkSmall
             icon={<SVG.Play height="10px" />}
             onClick={this.props.onSubmit}
             style={{ background: Constants.colors.black }}
           />
-        </div>
-        <div className={STYLES_CONTAINER_TOOLBAR}>
           {dimensionToggleElement}
           {ENABLE_HIDE_OVERLAY ? (
             <UIButtonDarkSmall
@@ -132,11 +132,6 @@ export default class CoreRootURLInput extends React.Component {
               onClick={this.props.onHideOverlay}
             />
           ) : null}
-          <UIButtonDarkSmall
-            icon={<SVG.History height="14px" />}
-            onClick={this.props.onToggleDashboard}
-            style={{ background: Constants.colors.black }}
-          />
         </div>
       </div>
     );

@@ -16,6 +16,7 @@ const STYLES_CONTROL = css`
   opacity: 1;
   transition: 200ms ease opacity;
   cursor: pointer;
+  width: 100%;
 
   :hover {
     opacity: 0.8;
@@ -23,14 +24,15 @@ const STYLES_CONTROL = css`
 `;
 
 const STYLES_ICON = css`
-  height: 48px;
-  width: 48px;
+  height: 40px;
+  width: 40px;
   background: ${Constants.colors.foreground};
   margin-bottom: 8px;
   border-radius: 4px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  border-top: 1px solid ${Constants.colors.white10};
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
   background-position: 50% 50%;
   background-size: cover;
@@ -41,7 +43,7 @@ const STYLES_TEXT = css`
   font-family: ${Constants.font.default};
   font-size: 9px;
   letter-spacing: 0.2px;
-  font-weight: 400;
+  font-weight: 600;
   display: inline-flex;
   align-items: center;
   width: 100%;
