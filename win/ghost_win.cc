@@ -1,5 +1,8 @@
 #include "ghost.h"
 
+#define NTDDI_VERSION NTDDI_WINBLUE
+
+#include <ShellScalingApi.h>
 #include <windows.h>
 
 #include <mutex>
@@ -17,8 +20,8 @@ extern "C" {
 #include "modules/thread/Channel.h"
 #include "modules/timer/Timer.h"
 
-#include "simple_handler.h"
 #include "ghost_constants.h"
+#include "simple_handler.h"
 
 // internal
 
@@ -66,11 +69,11 @@ void ghostHandleOpenUri(const char *uri) {
   // Windows deep links add extra quotes around uri
   std::string stringUri = std::string(uri);
   if (stringUri.front() == '"' && stringUri.back() == '"') {
-	stringUri = stringUri.substr(1, stringUri.length() - 2);
+    stringUri = stringUri.substr(1, stringUri.length() - 2);
   }
 
   if (browserReady) {
-	_ghostSendNativeOpenUrlEvent(stringUri);
+    _ghostSendNativeOpenUrlEvent(stringUri);
   } else {
     initialUri = stringUri;
   }
@@ -273,27 +276,37 @@ void ghostStep() {
       Sleep(200);
     }
 
-    {
-      RECT currParentRect;
-      auto parent = ghostWinGetMainWindow();
-      if (parent) {
-        GetWindowRect(parent, &currParentRect);
-      }
-      if (prevParentRect.right != prevParentRect.left) {
-        auto dw = (currParentRect.right - currParentRect.left) -
-                  (prevParentRect.right - prevParentRect.left);
-        auto dy = (currParentRect.bottom - currParentRect.top) -
-                  (prevParentRect.bottom - prevParentRect.top);
-        childWidth += dw;
-        childHeight += dy;
-      }
-
-      prevParentRect = currParentRect;
-    }
-
     auto child = ghostWinGetChildWindow();
+
+    // Handle window resizing
     if (child) {
-      SetWindowPos(child, NULL, childLeft, childTop, childWidth, childHeight, 0);
+      // Get the display scale factor
+      auto scaleFactor = SCALE_100_PERCENT;
+      auto monitor = MonitorFromWindow(child, MONITOR_DEFAULTTOPRIMARY);
+      GetScaleFactorForMonitor(monitor, &scaleFactor);
+      auto s = 0.01 * scaleFactor;
+
+      // Check for parent window resizes at the native level and apply the delta
+      {
+        RECT currParentRect;
+        auto parent = ghostWinGetMainWindow();
+        if (parent) {
+          GetWindowRect(parent, &currParentRect);
+        }
+        if (prevParentRect.right != prevParentRect.left) {
+          auto dw = (currParentRect.right - currParentRect.left) -
+                    (prevParentRect.right - prevParentRect.left);
+          auto dy = (currParentRect.bottom - currParentRect.top) -
+                    (prevParentRect.bottom - prevParentRect.top);
+          childWidth += dw / s;
+          childHeight += dy / s;
+        }
+
+        prevParentRect = currParentRect;
+      }
+
+      // Apply the size!
+      SetWindowPos(child, NULL, s * childLeft, s * childTop, s * childWidth, s * childHeight, 0);
     }
 
     // Handle automatic pausing when unfocused

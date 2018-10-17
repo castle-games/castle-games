@@ -357,7 +357,7 @@ SET_CEF_TARGET_OUT_DIR()
 add_executable(${GHOST_TARGET} WIN32 ${GHOST_SRCS})
 add_dependencies(${GHOST_TARGET} libcef_dll_wrapper)
 SET_EXECUTABLE_TARGET_PROPERTIES(${GHOST_TARGET})
-target_link_libraries(${GHOST_TARGET} libcef_lib libcef_dll_wrapper ${CEF_STANDARD_LIBS} liblove ${LOVE_LUA_LIBRARY})
+target_link_libraries(${GHOST_TARGET} libcef_lib libcef_dll_wrapper ${CEF_STANDARD_LIBS} liblove ${LOVE_LUA_LIBRARY} shcore)
 include_directories(
   ../common
   ../cef
