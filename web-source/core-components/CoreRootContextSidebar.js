@@ -82,15 +82,15 @@ export default class CoreRootContextSidebar extends React.Component {
         ref={c => {
           this._reference = c;
         }}>
-        <UIHeaderDismiss onDismiss={this.props.onDismiss}>
+        <UIHeaderDismiss>
           <UIControl
             onClick={this.viewMediaContext}
             style={{ marginRight: 24 }}
             isActive={this.state.mode === 'media'}>
-            <SVG.MediaIcon height="19px" style={{ marginRight: 8 }} /> Now Playing
+            <SVG.MediaIcon height="19px" />
           </UIControl>
           <UIControl onClick={this.viewPlaylistContext} isActive={this.state.mode === 'playlist'}>
-            <SVG.PlaylistIcon height="18px" style={{ marginRight: 8 }} /> Current List Results
+            <SVG.PlaylistIcon height="17px" />
           </UIControl>
         </UIHeaderDismiss>
       </div>
