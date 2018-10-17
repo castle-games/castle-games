@@ -281,10 +281,10 @@ void ghostStep() {
     // Handle window resizing
     if (child) {
       // Get the display scale factor
-      auto scaleFactor = SCALE_100_PERCENT;
+      auto percentScale = SCALE_100_PERCENT;
       auto monitor = MonitorFromWindow(child, MONITOR_DEFAULTTOPRIMARY);
-      GetScaleFactorForMonitor(monitor, &scaleFactor);
-      auto s = 0.01 * scaleFactor;
+      GetScaleFactorForMonitor(monitor, &percentScale);
+      auto fracScale = 0.01 * percentScale;
 
       // Check for parent window resizes at the native level and apply the delta
       {
@@ -298,15 +298,16 @@ void ghostStep() {
                     (prevParentRect.right - prevParentRect.left);
           auto dy = (currParentRect.bottom - currParentRect.top) -
                     (prevParentRect.bottom - prevParentRect.top);
-          childWidth += dw / s;
-          childHeight += dy / s;
+          childWidth += dw / fracScale;
+          childHeight += dy / fracScale;
         }
 
         prevParentRect = currParentRect;
       }
 
       // Apply the size!
-      SetWindowPos(child, NULL, s * childLeft, s * childTop, s * childWidth, s * childHeight, 0);
+      SetWindowPos(child, NULL, fracScale * childLeft, fracScale * childTop, fracScale * childWidth,
+                   fracScale * childHeight, 0);
     }
 
     // Handle automatic pausing when unfocused
