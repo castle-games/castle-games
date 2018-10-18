@@ -740,7 +740,7 @@ export default class CoreApp extends React.Component {
   renderRootURLInput = () => (
     <CoreRootURLInput
       name="mediaUrl"
-      placeholder="Type in a Lua/LÖVE main.lua file URL or HTML URL..."
+      placeholder="Type in the URL to a Castle game..."
       value={this.state.mediaUrl}
       viewer={this.state.viewer}
       media={this.state.media}
