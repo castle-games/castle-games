@@ -522,6 +522,7 @@ export default class CoreApp extends React.Component {
           : [...this.state.allMediaFiltered],
       creator: null,
       playlist: serverPlaylist,
+      searchQuery: '',
       media: null,
     });
   };
@@ -599,8 +600,8 @@ export default class CoreApp extends React.Component {
 
   _handleToggleProfile = () => {
     const updates = {
-      pageMode: this.state.pageMode === 'profile' ? null : 'profile',
-      creator: this.state.pageMode === 'profile' ? null : { ...this.state.viewer },
+      pageMode: 'profile',
+      creator: { ...this.state.viewer },
     };
 
     this.determineNextStateOfCEF({
@@ -614,7 +615,7 @@ export default class CoreApp extends React.Component {
 
   _handleTogglePlay = () => {
     const updates = {
-      pageMode: !this.state.pageMode ? 'browse' : null,
+      pageMode: null,
       mediaUrl: '',
       media: null,
       sidebarMode: Strings.isEmpty(this.state.mediaUrl)
@@ -636,11 +637,11 @@ export default class CoreApp extends React.Component {
 
   _handleToggleBrowse = () => {
     const updates = {
-      pageMode: this.state.pageMode === 'browse' ? null : 'browse',
+      pageMode: 'browse',
       sidebarMode: null,
       creator: null,
-      mediaUrl: this.state.pageMode === 'browse' ? this.state.mediaUrl : '',
-      media: this.state.pageMode === 'browse' ? this.state.media : null,
+      mediaUrl: '',
+      media: null,
     };
 
     this.determineNextStateOfCEF({
@@ -656,7 +657,7 @@ export default class CoreApp extends React.Component {
 
   _handleToggleSignIn = () => {
     const updates = {
-      pageMode: this.state.pageMode === 'sign-in' ? null : 'sign-in',
+      pageMode: 'sign-in',
       creator: null,
     };
 
@@ -671,7 +672,7 @@ export default class CoreApp extends React.Component {
 
   _handleToggleCurrentPlaylistDetails = () => {
     const updates = {
-      pageMode: this.state.pageMode === 'playlist' ? null : 'playlist',
+      pageMode: 'playlist',
       creator: null,
     };
 
@@ -905,7 +906,6 @@ export default class CoreApp extends React.Component {
             onUserSelect={this._handleUserSelect}
             onMediaSelect={this._handleMediaSelect}
             onMediaRemoveFromPlaylist={this._handleRemoveMediaFromPlaylist}
-            onDismiss={this._handleToggleCurrentPlaylistDetails}
           />
         </CoreLayout>
       );

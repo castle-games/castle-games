@@ -59,7 +59,7 @@ export default class CoreBrowseResults extends React.Component {
         <UIListPlaylists
           playlists={this.props.playlists}
           onUserSelect={this.props.onUserSelect}
-          onPlaylistSelect={this.props.onMediaSelect}
+          onPlaylistSelect={this.props.onPlaylistSelect}
         />
         <UIListMedia
           mediaItems={this.props.mediaItems}
