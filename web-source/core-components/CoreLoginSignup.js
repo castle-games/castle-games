@@ -117,6 +117,7 @@ export default class CoreLoginSignup extends React.Component {
     this.setState({
       s: 'PASSWORD',
       passwordSubmitEnabled: true,
+      loginError: null,
     });
   }
 
@@ -241,16 +242,6 @@ export default class CoreLoginSignup extends React.Component {
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_CONTENTS}>
           <UIHeadingGroup title="Successfully signed in">
-            <img
-              style={{
-                height: 64,
-                width: 64,
-                float: 'left',
-                marginRight: 15,
-                borderRadius: 4,
-              }}
-              src={imgSrc}
-            />
             <h3>{this.state.loginUser.name}</h3>
             <h5>{'@' + this.state.loginUser.username}</h5>
           </UIHeadingGroup>
@@ -274,16 +265,6 @@ export default class CoreLoginSignup extends React.Component {
               this._loginAsync();
             }}>
             <UIHeadingGroup title="Sign in">
-              <img
-                style={{
-                  height: 64,
-                  width: 64,
-                  float: 'left',
-                  marginRight: 15,
-                  borderRadius: 4,
-                }}
-                src={imgSrc}
-              />
               <h3>{this.state.loginUser.name}</h3>
               <h5>{'@' + this.state.loginUser.username}</h5>
             </UIHeadingGroup>
@@ -299,15 +280,13 @@ export default class CoreLoginSignup extends React.Component {
               }}
               value={this.state.password}
             />
-            {this.state.loginError && (
-              <h5
-                style={{
-                  paddingBottom: 24,
-                  color: Constants.base.red,
-                }}>
-                {this.state.loginError}
-              </h5>
-            )}
+            <h5
+              style={{
+                paddingBottom: 16,
+                color: Constants.base.red,
+              }}>
+              {this.state.loginError || ' '}
+            </h5>
             <UIButton
               value="Login"
               type="submit"
