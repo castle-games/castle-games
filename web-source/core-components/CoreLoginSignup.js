@@ -5,7 +5,7 @@ import { API } from '~/common/actions';
 import * as Constants from '~/common/constants';
 
 import UIInput from '~/core-components/reusable/UIInput';
-import UIButton, { UIInputSubmit } from '~/core-components/reusable/UIButton';
+import UIButton from '~/core-components/reusable/UIButton';
 import UIHeadingGroup from '~/core-components/reusable/UIHeadingGroup';
 import UILink from '~/core-components/reusable/UILink';
 import { transparentGifDataUrl, base } from '../common/constants';
@@ -350,6 +350,7 @@ export default class CoreLoginSignup extends React.Component {
               )}
               <UIInputSubmit
                 value="Login"
+                type="submit"
                 onClick={event => {
                   event.preventDefault();
                   this._loginAsync();
@@ -489,8 +490,9 @@ export default class CoreLoginSignup extends React.Component {
                 }}
                 value={this.state.who}
               />
-              <UIInputSubmit
+              <UIButton
                 value="Next"
+                type="submit"
                 onFocus={event => {
                   this._submitEmailAsync();
                 }}
