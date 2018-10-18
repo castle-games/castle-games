@@ -54,5 +54,5 @@ export const brand = {
   line: colors.foreground,
 };
 
-export const transparentGifDataUrl =
+export const TRANSPARENT_GIF_DATA_URL =
   'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';

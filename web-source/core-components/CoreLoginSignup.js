@@ -8,7 +8,6 @@ import UIInput from '~/core-components/reusable/UIInput';
 import UIButton from '~/core-components/reusable/UIButton';
 import UIHeadingGroup from '~/core-components/reusable/UIHeadingGroup';
 import UILink from '~/core-components/reusable/UILink';
-import { transparentGifDataUrl, base } from '../common/constants';
 
 const STYLES_CONTAINER = css`
   @keyframes authentication-animation {
@@ -269,7 +268,7 @@ export default class CoreLoginSignup extends React.Component {
   }
 
   _renderSuccess() {
-    let imgSrc = transparentGifDataUrl;
+    let imgSrc = Constants.TRANSPARENT_GIF_DATA_URL;
     if (this.state.loginUser.photo && this.state.loginUser.photo.imgixUrl) {
       imgSrc = this.state.loginUser.photo.imgixUrl;
     }
@@ -299,7 +298,7 @@ export default class CoreLoginSignup extends React.Component {
   }
 
   _renderPassword() {
-    let imgSrc = transparentGifDataUrl;
+    let imgSrc = Constants.TRANSPARENT_GIF_DATA_URL;
     if (this.state.loginUser.photo && this.state.loginUser.photo.imgixUrl) {
       imgSrc = this.state.loginUser.photo.imgixUrl;
     }
@@ -343,7 +342,7 @@ export default class CoreLoginSignup extends React.Component {
                 <h5
                   style={{
                     paddingBottom: 24,
-                    color: base.red,
+                    color: Constants.base.red,
                   }}>
                   {this.state.loginError}
                 </h5>
