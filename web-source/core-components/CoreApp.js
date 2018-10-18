@@ -546,24 +546,15 @@ export default class CoreApp extends React.Component {
   };
 
   _handleSelectRandom = () => {
-    // TODO(jim): Oh man.
-    if (!this.state.playlist) {
-      return;
-    }
+    const list = this.state.allMediaFiltered.length
+      ? this.state.allMediaFiltered
+      : this.state.allMedia;
 
-    if (!this.state.playlist.mediaItems) {
-      return;
-    }
-
-    if (!this.state.playlist.mediaItems.length) {
-      return;
-    }
-
-    const max = this.state.playlist.mediaItems.length;
+    const max = list.length;
     const min = 1;
 
     const index = Utilities.getRandomInt(min, max);
-    this._handleMediaSelect(this.state.playlist.mediaItems[index]);
+    this._handleMediaSelect(list[index]);
   };
 
   determineNextStateOfCEF = ({ isClosing, isOpening, mediaUrl }) => {
@@ -866,7 +857,6 @@ export default class CoreApp extends React.Component {
             mediaItems={state.allMediaFiltered}
             onUserSelect={this._handleUserSelect}
             onMediaSelect={this._handleMediaSelect}
-            onSelectRandom={this._handleSelectRandom}
             onToggleCurrentPlaylist={this._handleToggleCurrentContext}
           />
         </CoreLayout>
@@ -981,6 +971,7 @@ export default class CoreApp extends React.Component {
           onUserSelect={this._handleUserSelect}
           onViewCurrentPlaylistDetails={this._handleToggleCurrentPlaylistDetails}
           onClearHistory={this._handleClearHistory}
+          onSelectRandom={this._handleSelectRandom}
           onDismiss={this._handleDismissSidebar}
         />
       );

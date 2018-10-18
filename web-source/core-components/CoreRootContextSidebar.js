@@ -7,6 +7,7 @@ import { css } from 'react-emotion';
 import CoreRootDashboard from '~/core-components/CoreRootDashboard';
 
 import UIListMediaInPlaylist from '~/core-components/reusable/UIListMediaInPlaylist';
+import UIButtonIconHorizontal from '~/core-components/reusable/UIButtonIconHorizontal';
 import UIHeaderDismiss from '~/core-components/reusable/UIHeaderDismiss';
 import UICardMedia from '~/core-components/reusable/UICardMedia';
 import UIEmptyState from '~/core-components/reusable/UIEmptyState';
@@ -51,6 +52,15 @@ const STYLES_CONTAINER = css`
     display: none;
     width: 1px;
   }
+`;
+
+const STYLES_ACTION = css`
+  margin-top: 8px;
+  padding: 0 16px 0 16px;
+`;
+
+const STYLES_ACTION_ITEM = css`
+  margin-top: 8px;
 `;
 
 export default class CoreRootContextSidebar extends React.Component {
@@ -118,10 +128,14 @@ export default class CoreRootContextSidebar extends React.Component {
             onMediaSelect={this.props.onMediaSelect}
             onUserSelect={this.props.onUserSelect}
             onClearHistory={this.props.onClearHistory}
+            onSelectRandom={this.props.onSelectRandom}
           />
         </div>
       );
     }
+
+    console.log(this.onToggleBrowse);
+    console.log(this.onSelectRandom);
 
     if (this.state.mode === 'media') {
       if (!this.props.media) {
@@ -134,9 +148,24 @@ export default class CoreRootContextSidebar extends React.Component {
             {headerNode}
             <div className={STYLES_CONTAINER}>
               <UIEmptyState title="No media loaded">
-                Once you load media, information about the media will appear here. Try{' '}
-                <UILink onClick={this.props.onToggleBrowse}>browsing</UILink>.
+                Once you load media, information about the media will appear here.
               </UIEmptyState>
+              <div className={STYLES_ACTION}>
+                <div className={STYLES_ACTION_ITEM}>
+                  <UIButtonIconHorizontal
+                    onClick={this.props.onToggleBrowse}
+                    icon={<SVG.Search height="16px" />}>
+                    Browse media
+                  </UIButtonIconHorizontal>
+                </div>
+                <div className={STYLES_ACTION_ITEM}>
+                  <UIButtonIconHorizontal
+                    onClick={this.props.onSelectRandom}
+                    icon={<SVG.MediaIcon height="16px" />}>
+                    Play a random game
+                  </UIButtonIconHorizontal>
+                </div>
+              </div>
             </div>
           </div>
         );
@@ -157,6 +186,7 @@ export default class CoreRootContextSidebar extends React.Component {
               onUserSelect={this.props.onUserSelect}
               onRegisterMedia={this.props.onRegisterMedia}
               onToggleProfile={this.props.onToggleProfile}
+              onSelectRandom={this.props.onSelectRandom}
               onRefreshViewer={this.props.onRefreshViewer}
             />
           </div>

@@ -179,6 +179,13 @@ export default class UICardMedia extends React.Component {
               />
             </div>
           ) : null}
+
+          <UIButtonIconHorizontal
+            style={{ marginTop: 8 }}
+            onClick={this.props.onSelectRandom}
+            icon={<SVG.MediaIcon height="16px" />}>
+            Play a random game
+          </UIButtonIconHorizontal>
         </div>
       </div>
     );

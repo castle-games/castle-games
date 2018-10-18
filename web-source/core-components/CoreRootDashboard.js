@@ -1,10 +1,12 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
+import * as SVG from '~/core-components/primitives/svg';
 
 import { css } from 'react-emotion';
 
 import UIListMediaInPlaylist from '~/core-components/reusable/UIListMediaInPlaylist';
 import UIHeaderDismiss from '~/core-components/reusable/UIHeaderDismiss';
+import UIButtonIconHorizontal from '~/core-components/reusable/UIButtonIconHorizontal';
 import UIEmptyState from '~/core-components/reusable/UIEmptyState';
 import UIControl from '~/core-components/reusable/UIControl';
 import UILink from '~/core-components/reusable/UILink';
@@ -52,7 +54,11 @@ export default class CoreRootDashboard extends React.Component {
           mediaItems={history}
         />
         <div className={STYLES_ACTIONS}>
-          <UIControl onClick={this.props.onClearHistory}>Clear History</UIControl>
+          <UIButtonIconHorizontal
+            onClick={this.props.onClearHistory}
+            icon={<SVG.Dismiss height="12px" />}>
+            Clear history
+          </UIButtonIconHorizontal>
         </div>
       </div>
     );
