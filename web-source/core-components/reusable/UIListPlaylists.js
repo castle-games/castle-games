@@ -102,7 +102,7 @@ export default class UIListPlaylists extends React.Component {
           {isOwner ? <div className={STYLES_COLUMN_NO_INTERACTION} /> : null}
         </div>
         {this.props.playlists.map((p, i) => {
-          const author = p && p.user && p.user.name ? p.user.name : '-';
+          const author = p && p.user && p.user.username ? p.user.username : '-';
           const actionsElement = isOwner ? (
             <div className={STYLES_COLUMN}>
               <span className={STYLES_ITEM} onClick={() => this.props.onPlaylistRemove(p)}>

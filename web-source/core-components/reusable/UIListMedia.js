@@ -126,7 +126,7 @@ export default class UIListMedia extends React.Component {
                 </div>
               ) : null;
 
-              let author = m && m.user && m.user.name ? m.user.name : '-';
+              let author = m && m.user && m.user.username ? m.user.username : '-';
               let date = m && m.createdTime ? m.createdTime : '-';
               if (m.published) {
                 date = m.published;
