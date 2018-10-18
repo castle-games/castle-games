@@ -415,23 +415,23 @@ export default class CoreLoginSignup extends React.Component {
               event.preventDefault();
               this._submitEmailAsync();
             }}>
-            <UIHeadingGroup title="What's your e-mail address?" />
+            <UIHeadingGroup title="Sign in or Create Account" />
             <p
               style={{
                 paddingBottom: 24,
                 color: Constants.base.gray,
               }}>
               <small>
-                When you're signed in to a Castle account, you can share art and games that you've
-                made.
+                Sign in to create playlists and share art and games you've made with
+                everyone on Castle.
               </small>
             </p>
             <UIInput
               value=""
               autoFocus={true}
-              label="email"
+              label="Your account"
               name="email"
-              placeholder="E-mail or username or phone #"
+              placeholder="E-mail or username"
               onChange={event => {
                 this.setState({ who: event.target.value });
               }}
