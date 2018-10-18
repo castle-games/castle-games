@@ -7,7 +7,7 @@ import { css } from 'react-emotion';
 import UIEmptyState from '~/core-components/reusable/UIEmptyState';
 
 const STYLES_CONTAINER = css`
-  padding: 0 0 88px 0;
+  padding: 0 0 0 0;
   color: ${Constants.colors.white};
 `;
 

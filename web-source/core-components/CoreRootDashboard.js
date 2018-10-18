@@ -12,6 +12,7 @@ import UILink from '~/core-components/reusable/UILink';
 const STYLES_ACTIONS = css`
   color: ${Constants.colors.white};
   padding: 16px;
+  border-top: 1px solid ${Constants.colors.border};
 `;
 
 export default class CoreRootDashboard extends React.Component {

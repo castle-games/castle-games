@@ -543,6 +543,8 @@ export default class CoreApp extends React.Component {
   _handleTogglePlay = () => {
     const updates = {
       pageMode: !this.state.pageMode ? 'browse' : null,
+      mediaUrl: '',
+      media: null,
       sidebarMode: Strings.isEmpty(this.state.mediaUrl)
         ? 'current-context'
         : this.state.sidebarMode,
@@ -565,6 +567,8 @@ export default class CoreApp extends React.Component {
       pageMode: this.state.pageMode === 'browse' ? null : 'browse',
       sidebarMode: null,
       creator: null,
+      mediaUrl: this.state.pageMode === 'browse' ? this.state.mediaUrl : '',
+      media: this.state.pageMode === 'browse' ? this.state.media : null,
     };
 
     this.determineNextStateOfCEF({
@@ -772,7 +776,7 @@ export default class CoreApp extends React.Component {
         <CoreRootLeftSidebar
           viewer={state.viewer}
           isPlaying={isViewerPlayingMedia}
-          isBrowsing={isViewerViewingBrowseScene}
+          isBrowsing={isViewerViewingBrowseScene || isViewerViewingPlaylistScene}
           isSignIn={isViewerViewingSignInScene}
           isViewingProfile={isViewerViewingProfileScene}
           onToggleProfile={this._handleToggleProfile}
@@ -798,7 +802,6 @@ export default class CoreApp extends React.Component {
               onDismiss={this._handleToggleBrowse}
             />
           }
-          bottomNode={this.renderRootURLInput()}
           leftSidebarNode={maybeLeftSidebarNode}>
           <CoreBrowseMediaResults
             mediaItems={state.allMediaFiltered}
