@@ -112,12 +112,12 @@ export default class CoreRootContextSidebar extends React.Component {
             this._reference = c;
           }}>
           {headerNode}
-          <UIEmptyState title="History" />
           <CoreRootDashboard
             media={this.props.media}
             storage={this.props.storage}
             onMediaSelect={this.props.onMediaSelect}
             onUserSelect={this.props.onUserSelect}
+            onClearHistory={this.props.onClearHistory}
           />
         </div>
       );

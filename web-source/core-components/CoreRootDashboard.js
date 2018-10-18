@@ -44,6 +44,7 @@ export default class CoreRootDashboard extends React.Component {
 
     return (
       <div>
+        <UIEmptyState title="History" />
         <UIListMediaInPlaylist
           media={this.props.media}
           onMediaSelect={this.props.onMediaSelect}

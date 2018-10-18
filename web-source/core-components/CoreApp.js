@@ -58,6 +58,7 @@ const delay = ms =>
 export default class CoreApp extends React.Component {
   _layout;
   _devTimeout;
+  _contextSidebar;
   _isLockedFromCEFUpdates = true;
 
   constructor(props) {
@@ -183,9 +184,12 @@ export default class CoreApp extends React.Component {
 
   _handleClearHistory = () => {
     this.props.storage.setItem('history', JSON.stringify({ history: [] }));
-    this.setState({
-      sidebarMode: null,
-    });
+
+    if (!this._contextSidebar) {
+      return;
+    }
+
+    this._contextSidebar.viewPlaylistContext();
   };
 
   _handleMediaAdd = async data => {
@@ -961,6 +965,9 @@ export default class CoreApp extends React.Component {
     if (state.isOverlayActive && state.sidebarMode === 'current-context') {
       maybeRightNode = (
         <CoreRootContextSidebar
+          ref={c => {
+            this._contextSidebar = c;
+          }}
           media={state.media}
           viewer={state.viewer}
           allMedia={state.allMedia}
@@ -973,6 +980,7 @@ export default class CoreApp extends React.Component {
           onMediaSelect={this._handleMediaSelect}
           onUserSelect={this._handleUserSelect}
           onViewCurrentPlaylistDetails={this._handleToggleCurrentPlaylistDetails}
+          onClearHistory={this._handleClearHistory}
           onDismiss={this._handleDismissSidebar}
         />
       );
