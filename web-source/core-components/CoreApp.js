@@ -867,6 +867,7 @@ export default class CoreApp extends React.Component {
         <CoreLayout
           ref={this._handleGetReference}
           topNode={this.renderRootSearchInput()}
+          bottomNode={this.renderRootURLInput()}
           leftSidebarNode={maybeLeftSidebarNode}>
           <CoreBrowseResults
             mediaItems={state.allMediaFiltered}

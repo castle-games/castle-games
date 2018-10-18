@@ -70,16 +70,6 @@ export default class CoreWelcomeScreen extends React.Component {
             Welcome! Use the top search bar to search for games, or enter a URL for a Lua & LÖVE or
             web based game you want to play.
           </p>
-
-          <div className={STYLES_ACTIONS}>
-            <div className={STYLES_OPTION} onClick={this.props.onToggleSidebar}>
-              →&nbsp;&nbsp;Explore games from our last Game Jam&nbsp;&nbsp;<span style={{ fontSize: 20 }}>🎮</span>
-            </div>
-
-            <div className={STYLES_OPTION} onClick={this.props.onSelectRandom}>
-              →&nbsp;&nbsp;Suprise me with something!&nbsp;&nbsp;<span style={{ fontSize: 20 }}>🎁</span>
-            </div>
-          </div>
         </div>
       </div>
     );
