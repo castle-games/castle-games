@@ -268,6 +268,14 @@ export default class CoreLoginSignup extends React.Component {
               <h3>{this.state.loginUser.name}</h3>
               <h5>{'@' + this.state.loginUser.username}</h5>
             </UIHeadingGroup>
+            <h5
+              style={{
+                paddingBottom: 8,
+                height: 24,
+                color: Constants.base.red,
+              }}>
+              {this.state.loginError || ' '}
+            </h5>
             <UIInput
               key="login-password"
               autoFocus={true}
@@ -280,21 +288,12 @@ export default class CoreLoginSignup extends React.Component {
               }}
               value={this.state.password}
             />
-            <h5
-              style={{
-                paddingBottom: 16,
-                color: Constants.base.red,
-              }}>
-              {this.state.loginError || ' '}
-            </h5>
             <UIButton
-              value="Login"
-              type="submit"
               onClick={event => {
                 event.preventDefault();
                 this._loginAsync();
               }}>
-              Login
+              Sign in
             </UIButton>
           </form>
         </div>
