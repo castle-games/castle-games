@@ -9,6 +9,7 @@ import * as CEF from '~/common/cef';
 
 import { css } from 'react-emotion';
 import { isKeyHotkey } from 'is-hotkey';
+import { LOADER_STRING } from '~/core-components/primitives/loader';
 
 // NOTE(jim): Reusable layout component.
 import CoreLayout from '~/core-components/layouts/CoreLayout';
@@ -42,9 +43,14 @@ import CoreDevelopmentLogs from '~/core-components/CoreDevelopmentLogs';
 const isOverlayHotkey = isKeyHotkey('mod+e');
 const isDevelopmentLogHotkey = isKeyHotkey('mod+j');
 const isReloadHotkey = isKeyHotkey('mod+r');
+const isAppReloadHotkey = isKeyHotkey('mod+shift+r');
 
 const POLL_DELAY = 300;
 const ENABLE_HIDE_OVERLAY = false;
+const delay = ms =>
+  new Promise(resolve => {
+    window.setTimeout(resolve, ms);
+  });
 
 // NOTES(jim):
 // + Assigning creator to `null` whenever `pageMode` changes is dangerous.
@@ -245,8 +251,52 @@ export default class CoreApp extends React.Component {
     this.setState({ ...state }, this._handleCEFupdateFrame);
   };
 
-  reload = () => {
+  appReload = async e => {
+    if (e) {
+      e.preventDefault();
+    }
+
+    document.body.innerHTML += LOADER_STRING;
+    const { allMedia = [], allPlaylists = [], me } = await Actions.getInitialData();
+
+    // TODO(jim): this is duplicated now, so make sure you consolidate this.
+    const state = {
+      logs: [],
+      mediaUrl: '',
+      playlist: null,
+      media: null,
+      creator: null,
+      viewer: me,
+      local: null,
+      searchQuery: '',
+      allMedia,
+      allPlaylists,
+      allMediaFiltered: [...allMedia],
+      allPlaylistsFiltered: [...allPlaylists],
+      sidebarMode: null, // current-context | media-info | null
+      pageMode: 'browse', // browse | playlist | profile | sign-in | null
+      profileMode: null, // media | playlist | null
+      isMediaFavorited: false,
+      isMediaExpanded: false,
+      isOverlayActive: true,
+    };
+    document.getElementById('loader').classList.add('loader--finished');
+    await delay(300);
+
+    this.setState(state, () => {
+      document.getElementById('loader').outerHTML = '';
+    });
+  };
+
+  reload = e => {
+    if (e) {
+      e.preventDefault();
+    }
+
     const mediaUrl = this.state.mediaUrl;
+    if (Strings.isEmpty(mediaUrl)) {
+      return;
+    }
 
     this.setState({ media: null, mediaUrl: '' }, () => {
       if (this.state.mediaUrl.endsWith('.lua')) {
@@ -337,6 +387,10 @@ export default class CoreApp extends React.Component {
   _handleKeyDown = e => {
     if (isReloadHotkey(e)) {
       return this.reload();
+    }
+
+    if (isAppReloadHotkey(e)) {
+      return this.appReload();
     }
 
     if (isOverlayHotkey(e) && ENALBE_HIDE_OVERLAY) {
