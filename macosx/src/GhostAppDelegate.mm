@@ -146,7 +146,7 @@ extern "C" {
     lua_pushstring(L, uri.UTF8String);
     lua_setglobal(L, "GHOST_ROOT_URI");
   }
-  
+
   // Not paused to start
   self.lovePaused = NO;
 }
@@ -218,7 +218,7 @@ extern "C" {
 
 // XXX(Ghost): Make this available for external use...
 extern "C" {
-  void Cocoa_DispatchEvent(NSEvent *theEvent);
+void Cocoa_DispatchEvent(NSEvent *theEvent);
 }
 
 - (void)sendEvent:(NSEvent *)event {
