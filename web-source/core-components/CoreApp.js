@@ -257,33 +257,22 @@ export default class CoreApp extends React.Component {
     }
 
     document.body.innerHTML += LOADER_STRING;
+
     const { allMedia = [], allPlaylists = [], me } = await Actions.getInitialData();
 
     // TODO(jim): this is duplicated now, so make sure you consolidate this.
     const state = {
-      logs: [],
-      mediaUrl: '',
-      playlist: null,
-      media: null,
-      creator: null,
       viewer: me,
-      local: null,
-      searchQuery: '',
       allMedia,
       allPlaylists,
       allMediaFiltered: [...allMedia],
       allPlaylistsFiltered: [...allPlaylists],
-      sidebarMode: null, // current-context | media-info | null
-      pageMode: 'browse', // browse | playlist | profile | sign-in | null
-      profileMode: null, // media | playlist | null
-      isMediaFavorited: false,
-      isMediaExpanded: false,
-      isOverlayActive: true,
     };
+
     document.getElementById('loader').classList.add('loader--finished');
     await delay(300);
 
-    this.setState(state, () => {
+    this.setState({ ...state }, () => {
       document.getElementById('loader').outerHTML = '';
     });
   };
