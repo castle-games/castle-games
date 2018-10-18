@@ -416,6 +416,16 @@ export default class CoreLoginSignup extends React.Component {
               this._submitEmailAsync();
             }}>
             <UIHeadingGroup title="What's your e-mail address?" />
+            <p
+              style={{
+                paddingBottom: 24,
+                color: Constants.base.gray,
+              }}>
+              <small>
+                When you're signed in to a Castle account, you can share art and games that you've
+                made.
+              </small>
+            </p>
             <UIInput
               value=""
               autoFocus={true}
