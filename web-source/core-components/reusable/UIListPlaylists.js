@@ -38,7 +38,7 @@ const STYLES_ROW = css`
 
 const STYLES_COLUMN = css`
   flex-shrink: 0;
-  width: 128px;
+  width: 112px;
   overflow-wrap: break-word;
   word-wrap: break-word;
   padding: 12px 16px 12px 16px;
@@ -50,7 +50,7 @@ const STYLES_COLUMN = css`
 
 const STYLES_COLUMN_NO_INTERACTION = css`
   flex-shrink: 0;
-  width: 128px;
+  width: 112px;
   overflow-wrap: break-word;
   word-wrap: break-word;
   padding: 12px 16px 12px 16px;
@@ -92,13 +92,11 @@ export default class UIListPlaylists extends React.Component {
     return (
       <div className={STYLES_CONTAINER} style={this.props.style}>
         <div className={STYLES_ROW_TITLE}>
-          <div className={STYLES_FLUID_COLUMN_NO_INTERACTION}>Name/URL</div>
+          <div className={STYLES_FLUID_COLUMN_NO_INTERACTION}>Playlist Name</div>
           <div className={STYLES_COLUMN_NO_INTERACTION} style={{ width: '20%' }}>
             Author
           </div>
-          <div className={STYLES_COLUMN_NO_INTERACTION} style={{ width: 88 }}>
-            Games
-          </div>
+          <div className={STYLES_COLUMN_NO_INTERACTION}>Games</div>
           {isOwner ? <div className={STYLES_COLUMN_NO_INTERACTION} /> : null}
         </div>
         {this.props.playlists.map((p, i) => {
@@ -122,9 +120,7 @@ export default class UIListPlaylists extends React.Component {
                 onClick={() => this.props.onUserSelect(p.user)}>
                 {author}
               </div>
-              <div className={STYLES_COLUMN_NO_INTERACTION} style={{ width: 88 }}>
-                {p.mediaItems.length}
-              </div>
+              <div className={STYLES_COLUMN_NO_INTERACTION}>{p.mediaItems.length}</div>
               {actionsElement}
             </div>
           );
