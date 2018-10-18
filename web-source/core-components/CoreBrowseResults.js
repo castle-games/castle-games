@@ -56,16 +56,28 @@ export default class CoreBrowseResults extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
-        <UIListPlaylists
-          playlists={this.props.playlists}
-          onUserSelect={this.props.onUserSelect}
-          onPlaylistSelect={this.props.onPlaylistSelect}
-        />
-        <UIListMedia
-          mediaItems={this.props.mediaItems}
-          onUserSelect={this.props.onUserSelect}
-          onMediaSelect={this.props.onMediaSelect}
-        />
+        {this.props.playlists.length ? (
+          <UIListPlaylists
+            playlists={this.props.playlists}
+            onUserSelect={this.props.onUserSelect}
+            onPlaylistSelect={this.props.onPlaylistSelect}
+          />
+        ) : (
+          <UIEmptyState title="No playlists found">Try another search.</UIEmptyState>
+        )}
+        {this.props.mediaItems.length ? (
+          <UIListMedia
+            mediaItems={this.props.mediaItems}
+            onUserSelect={this.props.onUserSelect}
+            onMediaSelect={this.props.onMediaSelect}
+          />
+        ) : (
+          <UIEmptyState
+            title="No media found"
+            style={{ borderTop: `1px solid ${Constants.colors.border}` }}>
+            Try another search.
+          </UIEmptyState>
+        )}
       </div>
     );
   }
