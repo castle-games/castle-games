@@ -12,6 +12,8 @@ compile_commands.json
 imgui.ini
 
 megasource/build
+megasource/installer/build
+megasource/Castle.exe
 
 ._*
 
