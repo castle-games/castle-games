@@ -348,14 +348,15 @@ export default class CoreLoginSignup extends React.Component {
                   {this.state.loginError}
                 </h5>
               )}
-              <UIInputSubmit
+              <UIButton
                 value="Login"
                 type="submit"
                 onClick={event => {
                   event.preventDefault();
                   this._loginAsync();
-                }}
-              />
+                }}>
+                Login
+              </UIButton>
             </form>
           </div>
         </div>
@@ -499,8 +500,9 @@ export default class CoreLoginSignup extends React.Component {
                 onClick={event => {
                   event.preventDefault();
                   this._submitEmailAsync();
-                }}
-              />
+                }}>
+                Next
+              </UIButton>
             </form>
           </div>
         </div>
