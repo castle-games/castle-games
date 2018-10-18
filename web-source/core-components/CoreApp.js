@@ -541,6 +541,26 @@ export default class CoreApp extends React.Component {
     this.setStateWithCEF({ ...updates });
   };
 
+  _handleTogglePlay = () => {
+    const updates = {
+      pageMode: !this.state.pageMode ? 'browse' : null,
+      sidebarMode: Strings.isEmpty(this.state.mediaUrl)
+        ? 'current-context'
+        : this.state.sidebarMode,
+      creator: null,
+    };
+
+    this.determineNextStateOfCEF({
+      isClosing: !Strings.isEmpty(updates.pageMode),
+      isOpening: Strings.isEmpty(updates.pageMode),
+      mediaUrl: this.state.mediaUrl,
+    });
+
+    this.setStateWithCEF({
+      ...updates,
+    });
+  };
+
   _handleToggleBrowse = () => {
     const updates = {
       pageMode: this.state.pageMode === 'browse' ? null : 'browse',
@@ -745,18 +765,21 @@ export default class CoreApp extends React.Component {
     const isViewerViewingSignInScene = state.pageMode === 'sign-in';
     const isViewerViewingProfileScene = state.pageMode === 'profile';
     const isViewerViewingPlaylistScene = state.pageMode === 'playlist';
+    const isViewerPlayingMedia = !state.pageMode;
 
     let maybeLeftSidebarNode;
     if (state.isOverlayActive) {
       maybeLeftSidebarNode = (
         <CoreRootLeftSidebar
           viewer={state.viewer}
+          isPlaying={isViewerPlayingMedia}
           isBrowsing={isViewerViewingBrowseScene}
           isSignIn={isViewerViewingSignInScene}
           isViewingProfile={isViewerViewingProfileScene}
           onToggleProfile={this._handleToggleProfile}
           onToggleBrowse={this._handleToggleBrowse}
           onToggleSignIn={this._handleToggleSignIn}
+          onTogglePlay={this._handleTogglePlay}
           onSignOut={this._handleSignOut}
         />
       );

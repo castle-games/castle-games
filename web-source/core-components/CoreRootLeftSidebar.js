@@ -31,6 +31,13 @@ export default class CoreRootLeftSidebar extends React.Component {
     return (
       <div className={STYLES_NAVIGATION}>
         <UIButtonIcon
+          active={this.props.isPlaying}
+          icon={<SVG.Play height="14px" />}
+          style={{ background: Constants.colors.blue }}
+          onClick={this.props.onTogglePlay}>
+          Playing
+        </UIButtonIcon>
+        <UIButtonIcon
           active={this.props.isBrowsing}
           icon={<SVG.Search height="20px" />}
           style={{ background: Constants.colors.red }}
