@@ -246,7 +246,16 @@ export default class CoreApp extends React.Component {
   };
 
   reload = () => {
-    this._handleURLSubmit();
+    const mediaUrl = this.state.mediaUrl;
+
+    this.setState({ media: null, mediaUrl: '' }, () => {
+      if (this.state.mediaUrl.endsWith('.lua')) {
+        this.goToLUA(mediaUrl);
+        return;
+      }
+
+      this.goToHTML5Media({ mediaUrl });
+    });
   };
 
   _handleSetViewer = viewer => this.setState({ viewer, pageMode: viewer ? 'browse' : 'sign-in' });
@@ -746,7 +755,7 @@ export default class CoreApp extends React.Component {
       media={this.state.media}
       expanded={this.state.isMediaExpanded}
       onChange={this._handleURLChange}
-      onSubmit={this._handleURLSubmit}
+      onSubmit={this.reload}
       onToggleMediaExpanded={this._handleToggleMediaExpanded}
       onHideOverlay={this._handleHideOverlay}
       onFavoriteMedia={this._handleFavoriteMedia}
