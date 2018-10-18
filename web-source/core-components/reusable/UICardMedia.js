@@ -9,8 +9,13 @@ import UIButtonIconHorizontal from '~/core-components/reusable/UIButtonIconHoriz
 import UIInputSecondary from '~/core-components/reusable/UIInputSecondary';
 import UILink from '~/core-components/reusable/UILink';
 import ControlPlaylistAdd from '~/core-components/controls/ControlPlaylistAdd';
+import UIControl from '~/core-components/reusable/UIControl';
 
 import ContentEditor from '~/editor/ContentEditor';
+
+const STYLES_FORM = css`
+  margin: 48px 0 48px 0;
+`;
 
 const STYLES_CONTAINER = css`
   padding: 16px;
@@ -143,7 +148,7 @@ export default class UICardMedia extends React.Component {
           {textElement}
 
           {!isReal ? (
-            <div style={{ marginTop: 48 }}>
+            <div className={STYLES_FORM}>
               <UIInputSecondary
                 value={this.state.email}
                 label="E-mail"
@@ -160,32 +165,29 @@ export default class UICardMedia extends React.Component {
                 onSubmit={this._handleSubmit}
               />
 
-              <UIButtonIconHorizontal
-                onClick={this._handleSubmit}
-                style={{ marginTop: 24 }}
-                icon={<SVG.Mail height="16px" />}>
-                Contact us
-              </UIButtonIconHorizontal>
+              <UIControl onClick={this._handleSubmit} style={{ marginTop: 16 }}>
+                Send message
+              </UIControl>
             </div>
           ) : null}
 
-          {this.props.viewer ? (
-            <div style={{ marginTop: 8 }}>
+          <div style={{ marginTop: 32 }}>
+            {this.props.viewer ? (
               <ControlPlaylistAdd
                 onToggleProfile={this.props.onToggleProfile}
                 onRefreshViewer={this.props.onRefreshViewer}
                 media={this.props.media}
                 viewer={this.props.viewer}
               />
-            </div>
-          ) : null}
+            ) : null}
 
-          <UIButtonIconHorizontal
-            style={{ marginTop: 8 }}
-            onClick={this.props.onSelectRandom}
-            icon={<SVG.MediaIcon height="16px" />}>
-            Play a random game
-          </UIButtonIconHorizontal>
+            <UIButtonIconHorizontal
+              style={{ marginTop: 8 }}
+              onClick={this.props.onSelectRandom}
+              icon={<SVG.MediaIcon height="16px" />}>
+              Play a random game
+            </UIButtonIconHorizontal>
+          </div>
         </div>
       </div>
     );

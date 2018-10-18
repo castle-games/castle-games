@@ -10,6 +10,7 @@ import UIButtonSecondary from '~/core-components/reusable/UIButtonSecondary';
 import UIInputSecondary from '~/core-components/reusable/UIInputSecondary';
 import UITextArea from '~/core-components/reusable/UITextArea';
 import UIHeaderDismiss from '~/core-components/reusable/UIHeaderDismiss';
+import UIControl from '~/core-components/reusable/UIControl';
 
 import ContentEditor from '~/editor/ContentEditor';
 import DefaultState from '~/editor/default.json';
@@ -131,9 +132,9 @@ export default class CoreProfileSidebar extends React.Component {
             value={this.state.media.description}
             onChange={this._handleChangeMediaDescription}
             placeholder="Type a description..."
-            style={{ marginBottom: 32 }}
+            style={{ marginBottom: 16 }}
           />
-          <UIButtonSecondary onClick={this._handleAddMedia}>Add Media</UIButtonSecondary>
+          <UIControl onClick={this._handleAddMedia}>Add Media</UIControl>
         </div>
         <div className={STYLES_SECTION}>
           <UIEmptyState
@@ -153,9 +154,9 @@ export default class CoreProfileSidebar extends React.Component {
             value={this.state.playlist.description}
             onChange={this._handleChangePlaylistDescription}
             placeholder="Type a description..."
-            style={{ marginBottom: 32 }}
+            style={{ marginBottom: 16 }}
           />
-          <UIButtonSecondary onClick={this._handleAddPlaylist}>Add Playlist</UIButtonSecondary>
+          <UIControl onClick={this._handleAddPlaylist}>Add Playlist</UIControl>
         </div>
       </div>
     );
