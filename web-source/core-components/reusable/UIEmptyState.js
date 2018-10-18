@@ -12,14 +12,13 @@ const STYLES_HEADER = css`
   font-weight: 600;
   font-size: 14px;
   letter-spacing: 0.2px;
-  margin-bottom: 8px;
 `;
 
 const STYLES_PARAGRAPH = css`
   font-size: 14px;
   font-weight: 200;
   line-height: 1.725;
-  margin-bottom: 8px;
+  margin-top: 16px;
 `;
 
 export default class UIEmptyState extends React.Component {
@@ -27,7 +26,7 @@ export default class UIEmptyState extends React.Component {
     return (
       <div className={STYLES_CONTAINER} style={this.props.style} onClick={this.props.onClick}>
         <div className={STYLES_HEADER}>{this.props.title}</div>
-        <div className={STYLES_PARAGRAPH}>{this.props.children}</div>
+        {this.props.children ? <div className={STYLES_PARAGRAPH}>{this.props.children}</div> : null}
       </div>
     );
   }

@@ -46,13 +46,6 @@ export default class CoreRootLeftSidebar extends React.Component {
             You
           </UIButtonIcon>
         ) : null}
-        <UIButtonIcon
-          active={this.props.isDashboardActive}
-          icon={<SVG.History height="24px" />}
-          style={{ background: Constants.colors.blue }}
-          onClick={this.props.onToggleDashboard}>
-          History
-        </UIButtonIcon>
         {!this.props.viewer ? (
           <UIButtonIcon
             active={this.props.isSignIn}

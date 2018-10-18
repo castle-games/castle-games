@@ -4,6 +4,8 @@ import * as SVG from '~/core-components/primitives/svg';
 
 import { css } from 'react-emotion';
 
+import CoreRootDashboard from '~/core-components/CoreRootDashboard';
+
 import UIListMediaInPlaylist from '~/core-components/reusable/UIListMediaInPlaylist';
 import UIHeaderDismiss from '~/core-components/reusable/UIHeaderDismiss';
 import UICardMedia from '~/core-components/reusable/UICardMedia';
@@ -71,17 +73,17 @@ export default class CoreRootContextSidebar extends React.Component {
     this.setState({ mode: 'playlist' });
   };
 
+  viewHistoryContext = () => {
+    this.setState({ mode: 'history' });
+  };
+
   getRef = () => {
     return this._reference;
   };
 
   render() {
     const headerNode = (
-      <div
-        className={STYLES_FIXED_HEADER}
-        ref={c => {
-          this._reference = c;
-        }}>
+      <div className={STYLES_FIXED_HEADER}>
         <UIHeaderDismiss>
           <UIControl
             onClick={this.viewMediaContext}
@@ -89,12 +91,37 @@ export default class CoreRootContextSidebar extends React.Component {
             isActive={this.state.mode === 'media'}>
             <SVG.MediaIcon height="19px" />
           </UIControl>
-          <UIControl onClick={this.viewPlaylistContext} isActive={this.state.mode === 'playlist'}>
-            <SVG.PlaylistIcon height="17px" />
+          <UIControl
+            onClick={this.viewPlaylistContext}
+            isActive={this.state.mode === 'playlist'}
+            style={{ marginRight: 24 }}>
+            <SVG.PlaylistIcon height="16px" />
+          </UIControl>
+          <UIControl onClick={this.viewHistoryContext} isActive={this.state.mode === 'history'}>
+            <SVG.History height="22px" />
           </UIControl>
         </UIHeaderDismiss>
       </div>
     );
+
+    if (this.state.mode === 'history') {
+      return (
+        <div
+          className={STYLES_FIXED_CONTAINER}
+          ref={c => {
+            this._reference = c;
+          }}>
+          {headerNode}
+          <UIEmptyState title="History" />
+          <CoreRootDashboard
+            media={this.props.media}
+            storage={this.props.storage}
+            onMediaSelect={this.props.onMediaSelect}
+            onUserSelect={this.props.onUserSelect}
+          />
+        </div>
+      );
+    }
 
     if (this.state.mode === 'media') {
       if (!this.props.media) {
@@ -123,6 +150,7 @@ export default class CoreRootContextSidebar extends React.Component {
           }}>
           {headerNode}
           <div className={STYLES_CONTAINER}>
+            <UIEmptyState title="Now playing" />
             <UICardMedia
               viewer={this.props.viewer}
               media={this.props.media}
@@ -144,6 +172,7 @@ export default class CoreRootContextSidebar extends React.Component {
         }}>
         {headerNode}
         <div className={STYLES_CONTAINER}>
+          <UIEmptyState title="Current list" />
           <UIListMediaInPlaylist
             media={this.props.media}
             onMediaSelect={this.props.onMediaSelect}

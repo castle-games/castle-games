@@ -120,7 +120,7 @@ const run = async () => {
     allPlaylists,
     allMediaFiltered: [...allMedia],
     allPlaylistsFiltered: [...allPlaylists],
-    sidebarMode: null, // current-context | dashboard | media-info | null
+    sidebarMode: null, // current-context | media-info | null
     pageMode: 'browse', // browse | playlist | profile | sign-in | null
     profileMode: null, // media | playlist | null
     isMediaFavorited: false,

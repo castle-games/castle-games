@@ -17,7 +17,6 @@ import CoreLayout from '~/core-components/layouts/CoreLayout';
 import CoreRootHeader from '~/core-components/CoreRootHeader';
 import CoreRootURLInput from '~/core-components/CoreRootURLInput';
 import CoreRootLeftSidebar from '~/core-components/CoreRootLeftSidebar';
-import CoreRootDashboard from '~/core-components/CoreRootDashboard';
 import CoreRootToolbar from '~/core-components/CoreRootToolbar';
 import CoreRootContextSidebar from '~/core-components/CoreRootContextSidebar';
 import CoreSignIn from '~/core-components/CoreSignIn';
@@ -283,8 +282,7 @@ export default class CoreApp extends React.Component {
       media: existingMedia ? existingMedia : media,
       mediaUrl: media.mediaUrl,
       pageMode: null,
-      sidebarMode:
-        this.state.sidebarMode === 'dashboard' ? this.state.sidebarMode : 'current-context',
+      sidebarMode: 'current-context',
       creator: null,
     });
   };
@@ -308,8 +306,7 @@ export default class CoreApp extends React.Component {
       media: media ? media : { mediaUrl },
       mediaUrl,
       pageMode: null,
-      sidebarMode:
-        this.state.sidebarMode === 'dashboard' ? this.state.sidebarMode : 'current-context',
+      sidebarMode: 'current-context',
       creator: null,
     });
   };
@@ -612,25 +609,6 @@ export default class CoreApp extends React.Component {
     });
   };
 
-  _handleToggleDashboard = () => {
-    const updates = {
-      sidebarMode:
-        !this.state.pageMode && this.state.sidebarMode === 'dashboard' ? null : 'dashboard',
-      pageMode: !this.state.pageMode && this.state.sidebarMode === 'dashboard' ? 'browse' : null,
-      creator: null,
-    };
-
-    this.determineNextStateOfCEF({
-      isClosing: false,
-      isOpening: !Strings.isEmpty(this.state.pageMode),
-      mediaUrl: this.state.mediaUrl,
-    });
-
-    this.setStateWithCEF({
-      ...updates,
-    });
-  };
-
   _handleToggleDevelopmentLogs = () => {
     const updates = {
       sidebarMode: this.state.sidebarMode === 'development' ? null : 'development',
@@ -767,7 +745,6 @@ export default class CoreApp extends React.Component {
     const isViewerViewingSignInScene = state.pageMode === 'sign-in';
     const isViewerViewingProfileScene = state.pageMode === 'profile';
     const isViewerViewingPlaylistScene = state.pageMode === 'playlist';
-    const isViewerViewingDashboardScene = !state.pageMode && state.sidebarMode === 'dashboard';
 
     let maybeLeftSidebarNode;
     if (state.isOverlayActive) {
@@ -777,11 +754,9 @@ export default class CoreApp extends React.Component {
           isBrowsing={isViewerViewingBrowseScene}
           isSignIn={isViewerViewingSignInScene}
           isViewingProfile={isViewerViewingProfileScene}
-          isDashboardActive={isViewerViewingDashboardScene}
           onToggleProfile={this._handleToggleProfile}
           onToggleBrowse={this._handleToggleBrowse}
           onToggleSignIn={this._handleToggleSignIn}
-          onToggleDashboard={this._handleToggleDashboard}
           onSignOut={this._handleSignOut}
         />
       );
@@ -909,6 +884,7 @@ export default class CoreApp extends React.Component {
           media={state.media}
           viewer={state.viewer}
           allMedia={state.allMedia}
+          storage={this.props.storage}
           allMediaFiltered={state.allMediaFiltered}
           onRefreshViewer={this.refreshViewer}
           onRegisterMedia={this._handleRegisterGame}
@@ -925,20 +901,6 @@ export default class CoreApp extends React.Component {
     if (state.isOverlayActive && state.sidebarMode === 'development') {
       maybeRightNode = (
         <CoreDevelopmentLogs logs={state.logs} onDismiss={this._handleDismissSidebar} />
-      );
-    }
-
-    if (state.isOverlayActive && state.sidebarMode === 'dashboard') {
-      maybeRightNode = (
-        <CoreRootDashboard
-          media={state.media}
-          onMediaSelect={this._handleMediaSelect}
-          onUserSelect={this._handleUserSelect}
-          onClearHistory={this._handleClearHistory}
-          onToggleBrowse={this._handleToggleBrowse}
-          storage={this.props.storage}
-          onDismiss={this._handleDismissSidebar}
-        />
       );
     }
 

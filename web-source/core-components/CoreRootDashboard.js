@@ -9,29 +9,9 @@ import UIEmptyState from '~/core-components/reusable/UIEmptyState';
 import UIControl from '~/core-components/reusable/UIControl';
 import UILink from '~/core-components/reusable/UILink';
 
-const STYLES_CONTAINER = css`
-  @keyframes dashboard-animation {
-    from {
-      opacity: 0;
-    }
-
-    to {
-      opacity: 1;
-    }
-  }
-
-  animation: dashboard-animation 280ms ease;
-
-  width: 420px;
-  height: 100%;
-  overflow-y: scroll;
-  background ${Constants.colors.background};
-  border-left: 1px solid ${Constants.colors.border};
-
-  ::-webkit-scrollbar {
-    display: none;
-    width: 1px;
-  }
+const STYLES_ACTIONS = css`
+  color: ${Constants.colors.white};
+  padding: 16px;
 `;
 
 export default class CoreRootDashboard extends React.Component {
@@ -40,8 +20,7 @@ export default class CoreRootDashboard extends React.Component {
 
     if (!data) {
       return (
-        <div className={STYLES_CONTAINER}>
-          <UIHeaderDismiss onDismiss={this.props.onDismiss} />
+        <div>
           <UIEmptyState title="History">
             As you play different Media using Castle, the last 10 links you visited will appear
             here. Try <UILink onClick={this.props.onToggleBrowse}>Browsing</UILink>.
@@ -53,8 +32,7 @@ export default class CoreRootDashboard extends React.Component {
     const { history } = JSON.parse(data);
     if (!history || !history.length) {
       return (
-        <div className={STYLES_CONTAINER}>
-          <UIHeaderDismiss onDismiss={this.props.onDismiss} />
+        <div>
           <UIEmptyState title="History">
             As you play different Media using Castle, the last 10 links you visited will appear
             here. Try <UILink onClick={this.props.onToggleBrowse}>Browsing</UILink>.
@@ -64,17 +42,16 @@ export default class CoreRootDashboard extends React.Component {
     }
 
     return (
-      <div className={STYLES_CONTAINER}>
-        <UIHeaderDismiss onDismiss={this.props.onDismiss}>
-          <UIControl onClick={this.props.onClearHistory}>Clear History</UIControl>
-        </UIHeaderDismiss>
-        <UIEmptyState title="History">Here is a history of the media you have played.</UIEmptyState>
+      <div>
         <UIListMediaInPlaylist
           media={this.props.media}
           onMediaSelect={this.props.onMediaSelect}
           onUserSelect={this.props.onUserSelect}
           mediaItems={history}
         />
+        <div className={STYLES_ACTIONS}>
+          <UIControl onClick={this.props.onClearHistory}>Clear History</UIControl>
+        </div>
       </div>
     );
   }
