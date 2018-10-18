@@ -256,11 +256,14 @@ export default class CoreApp extends React.Component {
       e.preventDefault();
     }
 
-    document.body.innerHTML += LOADER_STRING;
+    const loader = document.createElement('div');
+    loader.innerHTML = LOADER_STRING.trim();
+    loader.id = 'loader';
+
+    document.body.appendChild(loader);
 
     const { allMedia = [], allPlaylists = [], me } = await Actions.getInitialData();
 
-    // TODO(jim): this is duplicated now, so make sure you consolidate this.
     const state = {
       viewer: me,
       allMedia,

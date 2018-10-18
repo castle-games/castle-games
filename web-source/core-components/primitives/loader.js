@@ -1,4 +1,4 @@
-export const LOADER_STRING = `<div id="loader"><div class="loader">
+export const LOADER_STRING = `<div class="loader">
     <svg viewBox="0 0 24 24" height="20px">
       <g
         stroke-linecap="round"
@@ -70,4 +70,4 @@ export const LOADER_STRING = `<div id="loader"><div class="loader">
       </g>
     </svg>
   </div>
-  </div>`;
+`;
