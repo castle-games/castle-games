@@ -449,7 +449,6 @@ export default class CoreApp extends React.Component {
     this.setState({
       pageMode: 'browse',
       sidebarMode: null,
-      searchQuery: '',
       allMediaFiltered:
         allMediaFiltered && allMediaFiltered.length ? allMediaFiltered : this.state.allMedia,
       allPlaylistsFiltered:
