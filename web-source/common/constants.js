@@ -53,3 +53,6 @@ export const brand = {
   foreground: colors.card,
   line: colors.foreground,
 };
+
+export const transparentGifDataUrl =
+  'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
