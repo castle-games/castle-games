@@ -3,6 +3,8 @@
 // can be found in the LICENSE file.
 
 #include <windows.h>
+#include <KnownFolders.h>
+#include <ShlObj.h>
 
 #include "include/cef_sandbox_win.h"
 #include "simple_app.h"
@@ -105,21 +107,27 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
     return exit_code;
   }
 
-  CHAR buffer[MAX_PATH];
-  GetModuleFileNameA(NULL, buffer, MAX_PATH);
-  std::string::size_type pos = std::string(buffer).find_last_of("\\/");
-  std::string exeDir = std::string(buffer).substr(0, pos);
+
+  PWSTR appDataPath = NULL;
+  SHGetKnownFolderPath(FOLDERID_RoamingAppData, 0, NULL, &appDataPath);
 
   // Specify CEF global settings here.
   CefSettings settings;
   settings.multi_threaded_message_loop = true;
 
-  std::string cacheDir = exeDir + "/cef_cache";
-  CefString(&settings.cache_path) = cacheDir.c_str();
+  std::wstringstream cacheDir;
+  cacheDir << appDataPath << L"/Castle/CEFCache";
+
+  CefString(&settings.cache_path) = cacheDir.str().c_str();
 
 #if !defined(CEF_USE_SANDBOX)
   settings.no_sandbox = true;
 #endif
+
+  CHAR buffer[MAX_PATH];
+  GetModuleFileNameA(NULL, buffer, MAX_PATH);
+  std::string::size_type pos = std::string(buffer).find_last_of("\\/");
+  std::string exeDir = std::string(buffer).substr(0, pos);
 
   std::string url = exeDir + "/web/index.html";
   //url = "http://localhost:8000/index.html";
