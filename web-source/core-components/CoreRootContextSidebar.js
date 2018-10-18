@@ -134,9 +134,6 @@ export default class CoreRootContextSidebar extends React.Component {
       );
     }
 
-    console.log(this.onToggleBrowse);
-    console.log(this.onSelectRandom);
-
     if (this.state.mode === 'media') {
       if (!this.props.media) {
         return (
