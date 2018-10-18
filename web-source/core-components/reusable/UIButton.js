@@ -29,6 +29,10 @@ const STYLES_BUTTON = css`
   }
 `;
 
+export function UIInputSubmit(props) {
+  return <input type="submit" className={STYLES_BUTTON} {...props} />;
+}
+
 export default class UIButton extends React.Component {
   render() {
     return (
