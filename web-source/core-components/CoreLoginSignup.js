@@ -24,7 +24,7 @@ const STYLES_CONTAINER = css`
 
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   flex-direction: column;
   width: 100%;
   height: 100%;
@@ -37,47 +37,11 @@ const STYLES_CONTAINER = css`
   }
 `;
 
-const STYLES_TOP = css`
-  display: flex;
-  min-height: 25%;
-  height: 100%;
-  width: 100%;
-  align-items: center;
-  justify-content: center;
-`;
-
-const STYLES_BOTTOM = css`
-  border-top: ${Constants.colors.border} 1px solid;
-  color: ${Constants.colors.white};
-  display: flex;
-  align-items: center;
-  height: 48px;
-  width: 100%;
-  flex-shrink: 0;
-  padding: 0 18px 0 18px;
-`;
-
 const STYLES_CONTENTS = css`
   padding: 16px;
   box-sizing: border-box;
   width: 100%;
   max-width: 320px;
-`;
-
-const STYLES_LINK = css`
-  font-weight: 600;
-  color: ${Constants.colors.subdued};
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-right: 24px;
-  cursor: pointer;
-  top: 8px;
-  transition: 200ms ease color;
-
-  :hover {
-    color: ${Constants.colors.white};
-  }
 `;
 
 export default class CoreLoginSignup extends React.Component {
@@ -275,23 +239,21 @@ export default class CoreLoginSignup extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
-        <div className={STYLES_TOP}>
-          <div className={STYLES_CONTENTS}>
-            <UIHeadingGroup title="Successfully signed in">
-              <img
-                style={{
-                  height: 64,
-                  width: 64,
-                  float: 'left',
-                  marginRight: 15,
-                  borderRadius: 4,
-                }}
-                src={imgSrc}
-              />
-              <h3>{this.state.loginUser.name}</h3>
-              <h5>{'@' + this.state.loginUser.username}</h5>
-            </UIHeadingGroup>
-          </div>
+        <div className={STYLES_CONTENTS}>
+          <UIHeadingGroup title="Successfully signed in">
+            <img
+              style={{
+                height: 64,
+                width: 64,
+                float: 'left',
+                marginRight: 15,
+                borderRadius: 4,
+              }}
+              src={imgSrc}
+            />
+            <h3>{this.state.loginUser.name}</h3>
+            <h5>{'@' + this.state.loginUser.username}</h5>
+          </UIHeadingGroup>
         </div>
       </div>
     );
@@ -305,60 +267,59 @@ export default class CoreLoginSignup extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
-        <div className={STYLES_TOP}>
-          <div className={STYLES_CONTENTS}>
-            <form
-              onSubmit={event => {
+        <div className={STYLES_CONTENTS}>
+          <form
+            onSubmit={event => {
+              event.preventDefault();
+              this._loginAsync();
+            }}>
+            <UIHeadingGroup title="Sign in">
+              <img
+                style={{
+                  height: 64,
+                  width: 64,
+                  float: 'left',
+                  marginRight: 15,
+                  borderRadius: 4,
+                }}
+                src={imgSrc}
+              />
+              <h3>{this.state.loginUser.name}</h3>
+              <h5>{'@' + this.state.loginUser.username}</h5>
+            </UIHeadingGroup>
+            <UIInput
+              key="login-password"
+              autoFocus={true}
+              label="password"
+              name="password"
+              type="password"
+              placeholder="Enter your password"
+              onChange={event => {
+                this.setState({ password: event.target.value });
+              }}
+              value={this.state.password}
+            />
+            {this.state.loginError && (
+              <h5
+                style={{
+                  paddingBottom: 24,
+                  color: Constants.base.red,
+                }}>
+                {this.state.loginError}
+              </h5>
+            )}
+            <UIButton
+              value="Login"
+              type="submit"
+              onClick={event => {
                 event.preventDefault();
                 this._loginAsync();
               }}>
-              <UIHeadingGroup title="Sign in">
-                <img
-                  style={{
-                    height: 64,
-                    width: 64,
-                    float: 'left',
-                    marginRight: 15,
-                    borderRadius: 4,
-                  }}
-                  src={imgSrc}
-                />
-                <h3>{this.state.loginUser.name}</h3>
-                <h5>{'@' + this.state.loginUser.username}</h5>
-              </UIHeadingGroup>
-              <UIInput
-                key="login-password"
-                autoFocus={true}
-                label="password"
-                name="password"
-                type="password"
-                placeholder="Enter your password"
-                onChange={event => {
-                  this.setState({ password: event.target.value });
-                }}
-                value={this.state.password}
-              />
-              {this.state.loginError && (
-                <h5
-                  style={{
-                    paddingBottom: 24,
-                    color: Constants.base.red,
-                  }}>
-                  {this.state.loginError}
-                </h5>
-              )}
-              <UIButton
-                value="Login"
-                type="submit"
-                onClick={event => {
-                  event.preventDefault();
-                  this._loginAsync();
-                }}>
-                Login
-              </UIButton>
-            </form>
-          </div>
+              Login
+            </UIButton>
+          </form>
         </div>
+
         <p />
         <p>
           Not {this.state.loginUser.name || '@' + this.state.loginUser.username}?{' '}
@@ -396,65 +357,64 @@ export default class CoreLoginSignup extends React.Component {
   _renderSignup() {
     return (
       <div className={STYLES_CONTAINER}>
-        <div className={STYLES_TOP}>
-          <div className={STYLES_CONTENTS}>
-            <form
-              onSubmit={event => {
-                event.preventDefault();
+        <div className={STYLES_CONTENTS}>
+          <form
+            onSubmit={event => {
+              event.preventDefault();
+              this._signupAsync();
+            }}>
+            <UIHeadingGroup title="Create a Castle account" />
+            <UIInput
+              autoFocus
+              label="username"
+              name="username"
+              placeholder="Username"
+              onChange={event => {
+                this.setState({ username: event.target.value });
+              }}
+              value={this.state.username}
+            />
+            <UIInput
+              label="name"
+              name="name"
+              type="text"
+              placeholder="Your name"
+              onChange={event => {
+                this.setState({ name: event.target.value });
+              }}
+              value={this.state.name}
+            />
+            <UIInput
+              label="email"
+              name="email"
+              type="email"
+              noValidate={true}
+              placeholder="E-mail address"
+              onChange={event => {
+                this.setState({ email: event.target.value });
+              }}
+              value={this.state.email}
+            />
+
+            <UIInput
+              label="password"
+              name="password"
+              type="password"
+              placeholder="New password"
+              onChange={event => {
+                this.setState({ password: event.target.value });
+              }}
+              value={this.state.password}
+            />
+            <UIButton
+              onClick={() => {
                 this._signupAsync();
               }}>
-              <UIHeadingGroup title="Create a Castle account" />
-              <UIInput
-                autoFocus
-                label="username"
-                name="username"
-                placeholder="Username"
-                onChange={event => {
-                  this.setState({ username: event.target.value });
-                }}
-                value={this.state.username}
-              />
-              <UIInput
-                label="name"
-                name="name"
-                type="text"
-                placeholder="Your name"
-                onChange={event => {
-                  this.setState({ name: event.target.value });
-                }}
-                value={this.state.name}
-              />
-              <UIInput
-                label="email"
-                name="email"
-                type="email"
-                noValidate={true}
-                placeholder="E-mail address"
-                onChange={event => {
-                  this.setState({ email: event.target.value });
-                }}
-                value={this.state.email}
-              />
-
-              <UIInput
-                label="password"
-                name="password"
-                type="password"
-                placeholder="New password"
-                onChange={event => {
-                  this.setState({ password: event.target.value });
-                }}
-                value={this.state.password}
-              />
-              <UIButton
-                onClick={() => {
-                  this._signupAsync();
-                }}>
-                Create Account
-              </UIButton>
-            </form>
-          </div>
+              Create Account
+            </UIButton>
+          </form>
         </div>
+
         <p>
           Already have an account?{' '}
           <UILink
@@ -471,39 +431,37 @@ export default class CoreLoginSignup extends React.Component {
   _renderWho() {
     return (
       <div className={STYLES_CONTAINER}>
-        <div className={STYLES_TOP}>
-          <div className={STYLES_CONTENTS}>
-            <form
-              onSubmit={event => {
+        <div className={STYLES_CONTENTS}>
+          <form
+            onSubmit={event => {
+              event.preventDefault();
+              this._submitEmailAsync();
+            }}>
+            <UIHeadingGroup title="What's your e-mail address?" />
+            <UIInput
+              value=""
+              autoFocus={true}
+              label="email"
+              name="email"
+              placeholder="E-mail or username or phone #"
+              onChange={event => {
+                this.setState({ who: event.target.value });
+              }}
+              value={this.state.who}
+            />
+            <UIButton
+              value="Next"
+              type="submit"
+              onFocus={event => {
+                this._submitEmailAsync();
+              }}
+              onClick={event => {
                 event.preventDefault();
                 this._submitEmailAsync();
               }}>
-              <UIHeadingGroup title="What's your e-mail address?" />
-              <UIInput
-                value=""
-                autoFocus={true}
-                label="email"
-                name="email"
-                placeholder="E-mail or username or phone #"
-                onChange={event => {
-                  this.setState({ who: event.target.value });
-                }}
-                value={this.state.who}
-              />
-              <UIButton
-                value="Next"
-                type="submit"
-                onFocus={event => {
-                  this._submitEmailAsync();
-                }}
-                onClick={event => {
-                  event.preventDefault();
-                  this._submitEmailAsync();
-                }}>
-                Next
-              </UIButton>
-            </form>
-          </div>
+              Next
+            </UIButton>
+          </form>
         </div>
       </div>
     );
