@@ -30,15 +30,18 @@ set(CPACK_NSIS_DISPLAY_NAME "Castle 0.0.1")
 set(CPACK_NSIS_MODIFY_PATH OFF)
 set(CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES")
 
-#set(CPACK_NSIS_INSTALLED_ICON_NAME "${APP_LOW_NAME}.ico")
+set(CPACK_NSIS_MUI_ICON "${CMAKE_CURRENT_SOURCE_DIR}/../extra/castle.ico")
+# A path to the executable that contains the installer icon.
+#set(CPACK_NSIS_INSTALLED_ICON_NAME "castle.ico")
 #set(CPACK_NSIS_HELP_LINK ${APP_URL})
 #set(CPACK_NSIS_URL_INFO_ABOUT ${APP_URL})
 #set(CPACK_NSIS_CONTACT ${APP_EMAIL})
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/../extra/license.txt")
 
 set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
 	WriteRegStr HKCR \\\"castle\\\" \\\"\\\" \\\"URL:Castle Protocol\\\"
 	WriteRegStr HKCR \\\"castle\\\" \\\"URL Protocol\\\" \\\"\\\"
-	WriteRegStr HKCR \\\"castle\\\\DefaultIcon\\\" \\\"\\\" \\\"$INSTDIR\\\\game.ico\\\"
+	WriteRegStr HKCR \\\"castle\\\\DefaultIcon\\\" \\\"\\\" \\\"$INSTDIR\\\\castle.ico\\\"
 	WriteRegStr HKCR \\\"castle\\\\shell\\\" \\\"\\\" \\\"open\\\"
 	WriteRegStr HKCR \\\"castle\\\\shell\\\\open\\\" \\\"\\\" \\\"Open in Castle\\\"
 	WriteRegStr HKCR \\\"castle\\\\shell\\\\open\\\\command\\\" \\\"\\\" \\\"$INSTDIR\\\\Castle.exe $\\\\\\\"%1$\\\\\\\"\\\"

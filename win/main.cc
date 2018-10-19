@@ -72,16 +72,6 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
                       int nCmdShow) {
   UNREFERENCED_PARAMETER(hPrevInstance);
 
-  if (lpCmdLine) {
-	size_t size = wcstombs(NULL, lpCmdLine, 0);
-	if (size > 0) {
-		char* deepLink = new char[size + 1];
-		wcstombs(deepLink, lpCmdLine, size + 1);
-		ghostHandleOpenUri(deepLink);
-	}
-  }
-  //ghostHandleOpenUri("https://raw.githubusercontent.com/schazers/badboxart/master/main.lua");
-
   // Enable High-DPI support on Windows 7 or newer.
   CefEnableHighDPISupport();
 
@@ -107,7 +97,18 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
     return exit_code;
   }
 
+  // Deep linking
+  if (lpCmdLine) {
+	  size_t size = wcstombs(NULL, lpCmdLine, 0);
+	  if (size > 0) {
+		  char* deepLink = new char[size + 1];
+		  wcstombs(deepLink, lpCmdLine, size + 1);
+		  ghostHandleOpenUri(deepLink);
+	  }
+  }
+  //ghostHandleOpenUri("https://raw.githubusercontent.com/schazers/badboxart/master/main.lua");
 
+  // Get appdata path for CEF
   PWSTR appDataPath = NULL;
   SHGetKnownFolderPath(FOLDERID_RoamingAppData, 0, NULL, &appDataPath);
 
@@ -124,6 +125,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance,
   settings.no_sandbox = true;
 #endif
 
+  // Load local web page
   CHAR buffer[MAX_PATH];
   GetModuleFileNameA(NULL, buffer, MAX_PATH);
   std::string::size_type pos = std::string(buffer).find_last_of("\\/");
