@@ -36,7 +36,7 @@ set(CPACK_PACKAGE_ICON "${CMAKE_CURRENT_SOURCE_DIR}/../extra\\\\castle.bmp")
 set(CPACK_NSIS_MUI_ICON "${CMAKE_CURRENT_SOURCE_DIR}/../extra/castle.ico")
 set(CPACK_NSIS_MUI_UNIICON "${CMAKE_CURRENT_SOURCE_DIR}/../extra/castle.ico")
 # A path to the executable that contains the installer icon.
-#set(CPACK_NSIS_INSTALLED_ICON_NAME "castle.ico")
+set(CPACK_NSIS_INSTALLED_ICON_NAME "Castle.exe")
 #set(CPACK_NSIS_HELP_LINK ${APP_URL})
 #set(CPACK_NSIS_URL_INFO_ABOUT ${APP_URL})
 #set(CPACK_NSIS_CONTACT ${APP_EMAIL})
