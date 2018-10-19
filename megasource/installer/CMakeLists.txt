@@ -24,6 +24,7 @@ set(CPACK_SOURCE_GENERATOR "TGZ")
 set(CPACK_SOURCE_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}")
 
 set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
+# Castle.exe is in the root install directory
 set(CPACK_NSIS_EXECUTABLES_DIRECTORY .)
 set(CPACK_NSIS_PACKAGE_NAME "Castle")
 set(CPACK_NSIS_DISPLAY_NAME "Castle ${CPACK_PACKAGE_VERSION}")
@@ -38,7 +39,7 @@ set(CPACK_NSIS_MUI_UNIICON "${CMAKE_CURRENT_SOURCE_DIR}/../extra/castle.ico")
 # A path to the executable that contains the installer icon.
 set(CPACK_NSIS_INSTALLED_ICON_NAME "Castle.exe")
 #set(CPACK_NSIS_HELP_LINK ${APP_URL})
-#set(CPACK_NSIS_URL_INFO_ABOUT ${APP_URL})
+set(CPACK_NSIS_URL_INFO_ABOUT "https://playcastle.io/")
 #set(CPACK_NSIS_CONTACT ${APP_EMAIL})
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/../extra/license.txt")
 
@@ -57,9 +58,11 @@ set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "
 	System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v  (0x08000000, 0, 0, 0)'
 ")
 
+set(CPACK_NSIS_MUI_FINISHPAGE_RUN "Castle.exe")
+
 include(CPack)
 
 add_custom_target(PACKAGE_AND_MOVE
   COMMAND ${CMAKE_CPACK_COMMAND}
-  COMMAND ${CMAKE_COMMAND} -E copy "Castle-${CPACK_PACKAGE_VERSION}-win32.exe" ../../Castle.exe
+  COMMAND ${CMAKE_COMMAND} -E copy "Castle-${CPACK_PACKAGE_VERSION}-win32.exe" ../../CastleSetup.exe
 )

@@ -29,7 +29,7 @@ do that!
 - Run the application at 'megasourse/build/Debug/Castle.exe'.
 
 #### Release build
-- Run './release.sh' in 'megasource/'. Use the installer at 'megasource/Castle.exe' and then run Castle from the start menu.
+- Run './release.sh' in 'megasource/'. Use the installer at 'megasource/CastleSetup.exe' and then run Castle from the start menu.
 
 ### Linux
 
