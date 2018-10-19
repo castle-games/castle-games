@@ -1,5 +1,7 @@
 Copyright for portions of project Ghost are held by The Chromium Embedded Frameworks Authors, 2013 as part of project Chromium Embedded Frameworks and are provided under the BSD license.
 
+Copyright for additional portions of project Ghost are held by LOVE Development Team, 2006-2018 as part of project LOVE and are provided under the zlib license. This license within the LOVE project contains a license specifying additonal copyrights for portions of project LOVE.
+
 All other copyright for project Ghost are held by 650 Industries, Inc., 2018 per the following license:
 
 Copyright 2018, 650 Industries Inc.
