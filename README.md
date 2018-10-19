@@ -20,11 +20,12 @@ do that!
 
 - Install CMake. https://cmake.org/download/. Make sure to check the "add to PATH for current user" option.
 - Install Visual Studio 2017 (later versions have had issues). https://visualstudio.microsoft.com/vs.
-- Install https://gitforwindows.org/. In 'megasource/', run 'sh ./run_cmake.sh' with the Git Bash utility that comes with Git for Windows.
 - Install http://nsis.sourceforge.net
-- Open and build the 'ALL_BUILD.sln' file you will find deep inside 'megasource/build/'.
-- To run, run the generated love.exe with one argument -- the path to base/ under the ghost repo -- so eg. cd into ghost/base then do ../megasource/build/love/Release/love.exe .
-- To make a release build, run `./release.sh` in megasource. An installer will be created at megasource/Castle.exe.
+- Install https://gitforwindows.org/.
+- In 'megasource/', run './run_cmake.sh' with the Git Bash utility that comes with Git for Windows.
+- Open and build the 'ALL_BUILD.sln' file inside of 'megasource/build/'.
+- Run the application at 'megasourse/build/Debug/Castle.exe'.
+- To make a release build, run './release.sh' in megasource. An installer will be created at 'megasource/Castle.exe'.
 
 ### Linux
 
