@@ -616,8 +616,6 @@ export default class CoreApp extends React.Component {
   _handleTogglePlay = () => {
     const updates = {
       pageMode: null,
-      mediaUrl: '',
-      media: null,
       sidebarMode: Strings.isEmpty(this.state.mediaUrl)
         ? 'current-context'
         : this.state.sidebarMode,
