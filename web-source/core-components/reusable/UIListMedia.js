@@ -1,10 +1,22 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as Strings from '~/common/strings';
+import * as SVG from '~/core-components/primitives/svg';
 
 import { css } from 'react-emotion';
 
 import UIEmptyState from '~/core-components/reusable/UIEmptyState';
+
+const STYLES_ICON_COLUMN = css`
+  width: 40px;
+  flex-shrink: 0;
+  padding: 12px 16px 12px 16px;
+  color: ${Constants.colors.white};
+
+  :hover {
+    color: ${Constants.colors.selected};
+  }
+`;
 
 const STYLES_CONTAINER = css`
   padding: 0 0 0 0;
@@ -107,6 +119,7 @@ export default class UIListMedia extends React.Component {
     return (
       <div className={STYLES_CONTAINER} style={this.props.style}>
         <div className={STYLES_ROW_TITLE}>
+          <div className={STYLES_ICON_COLUMN} />
           <div className={STYLES_FLUID_COLUMN_NO_INTERACTION}>Media</div>
           <div className={STYLES_COLUMN_NO_INTERACTION} style={{ width: '20%' }}>
             Author
@@ -138,6 +151,9 @@ export default class UIListMedia extends React.Component {
                     className={STYLES_ROW}
                     key={`playlist-list-item-${i}`}
                     onClick={() => this.props.onMediaSelect(m)}>
+                    <div className={STYLES_ICON_COLUMN}>
+                      <SVG.MediaIcon height="16px" />
+                    </div>
                     <div className={STYLES_FLUID_COLUMN}>{m.mediaUrl}</div>
                     {actionsElement}
                   </div>
@@ -146,6 +162,9 @@ export default class UIListMedia extends React.Component {
 
               return (
                 <div className={STYLES_ROW} key={`media-list-item-${m.mediaId}-${i}`}>
+                  <div className={STYLES_ICON_COLUMN} onClick={() => this.props.onMediaSelect(m)}>
+                    <SVG.MediaIcon height="16px" />
+                  </div>
                   <div className={STYLES_FLUID_COLUMN} onClick={() => this.props.onMediaSelect(m)}>
                     {m.name}
                   </div>
