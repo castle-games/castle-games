@@ -397,37 +397,52 @@ export default class CoreApp extends React.Component {
     }
   };
 
-  _handleSearchMediaWithFilter = m => {
-    if (m.name.includes(this.state.searchQuery)) {
+  _stringAsSearchInvariant = s => {
+    return s.toLowerCase().trim();
+  }
+
+  _stringIncludesSearchQuery = (s, query) => {
+    if (s == null) {
+      return false;
+    }
+    return this._stringAsSearchInvariant(s).includes(query);
+  }
+
+  _filterMediaItemWithSearchState = m => {
+    const query = this._stringAsSearchInvariant(this.state.searchQuery);
+    if (this._stringIncludesSearchQuery(m.name, query)) {
       return true;
     }
 
-    if (m.mediaUrl.includes(this.state.searchQuery)) {
+    if (this._stringIncludesSearchQuery(m.mediaUrl, query)) {
       return true;
     }
 
-    if (m.user && m.user.name && m.user.name.includes(this.state.searchQuery)) {
-      return true;
-    }
-
-    if (m.user && m.user.username && m.user.username.includes(this.state.searchQuery)) {
-      return true;
+    if (m.user) {
+      if (this._stringIncludesSearchQuery(m.user.name, query)) {
+        return true;
+      }
+      if (this._stringIncludesSearchQuery(m.user.username, query)) {
+        return true;
+      }
     }
 
     return false;
   };
 
-  _handleSearchPlaylistWithFilter = p => {
-    if (p.name.includes(this.state.searchQuery)) {
+  _filterPlaylistWithSearchState = p => {
+    const query = this._stringAsSearchInvariant(this.state.searchQuery);
+    if (this._stringIncludesSearchQuery(p.name)) {
       return true;
     }
 
-    if (p.user && p.user.username && p.user.name.includes(this.state.searchQuery)) {
-      return true;
-    }
-
-    if (p.user && p.user.username && p.user.username.includes(this.state.searchQuery)) {
-      return true;
+    if (p.user) {
+      if (this._stringIncludesSearchQuery(p.user.name, query)) {
+        return true;
+      }
+      if (this._stringIncludesSearchQuery(p.user.username, query)) {
+        return true;
+      }
     }
 
     return false;
@@ -446,9 +461,9 @@ export default class CoreApp extends React.Component {
         allMediaFiltered = this.state.allMedia;
         allPlaylistsFiltered = this.state.allPlaylists;
       } else {
-        allMediaFiltered = this.state.allMedia.filter(this._handleSearchMediaWithFilter);
+        allMediaFiltered = this.state.allMedia.filter(this._filterMediaItemWithSearchState);
         allPlaylistsFiltered = this.state.allPlaylists.filter(
-          this._handleSearchPlaylistWithFilter
+          this._filterPlaylistWithSearchState
         );
       }
       this.setState({ allMediaFiltered, allPlaylistsFiltered });
