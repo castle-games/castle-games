@@ -194,8 +194,8 @@ export default class CoreLoginSignup extends React.Component {
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_CONTENTS}>
           <UIHeadingGroup title="Successfully signed in">
-            <h3>{this.state.loginUser.name}</h3>
-            <h5>{'@' + this.state.loginUser.username}</h5>
+            <h3>{this.state.loggedInUser.name}</h3>
+            <h5>{'@' + this.state.loggedInUser.username}</h5>
           </UIHeadingGroup>
         </div>
       </div>
