@@ -22,10 +22,14 @@ do that!
 - Install Visual Studio 2017 (later versions have had issues). https://visualstudio.microsoft.com/vs.
 - Install http://nsis.sourceforge.net
 - Install https://gitforwindows.org/.
+
+#### Debug build
 - In 'megasource/', run './run_cmake.sh' with the Git Bash utility that comes with Git for Windows.
 - Open and build the 'ALL_BUILD.sln' file inside of 'megasource/build/'.
 - Run the application at 'megasourse/build/Debug/Castle.exe'.
-- To make a release build, run './release.sh' in megasource. An installer will be created at 'megasource/Castle.exe'.
+
+#### Release build
+- Run './release.sh' in 'megasource/'. Use the installer at 'megasource/Castle.exe' and then run Castle from the start menu.
 
 ### Linux
 
