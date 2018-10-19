@@ -74,6 +74,7 @@ const STYLES_PLAYLIST_ITEM = css`
   overflow: hidden;
   background: ${Constants.colors.white};
   color: ${Constants.colors.black};
+  display: inline-block;
   width: 264px;
   transition: 200ms ease all;
   transform: scale(1);
