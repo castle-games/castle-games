@@ -3,6 +3,7 @@ import { css } from 'react-emotion';
 
 import * as Actions from '~/common/actions';
 import * as Constants from '~/common/constants';
+import * as Strings from '~/common/strings';
 
 import UIInput from '~/core-components/reusable/UIInput';
 import UIButton from '~/core-components/reusable/UIButton';
@@ -21,7 +22,6 @@ const STYLES_CONTAINER = css`
   }
 
   animation: authentication-animation 280ms ease;
-
   display: flex;
   align-items: center;
   justify-content: center;
@@ -44,6 +44,20 @@ const STYLES_CONTENTS = css`
   max-width: 320px;
 `;
 
+const STYLES_FOOTER = css`
+  color: ${Constants.colors.white80};
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  margin-top: 24px;
+`;
+
+const STYLES_ERROR_MESSAGE = css`
+  padding-bottom: 8px;
+  height: 24px;
+  color: ${Constants.colors.red};
+`;
+
 export default class CoreLoginSignup extends React.Component {
   // states:
   //  WHO - input who you are
@@ -64,29 +78,15 @@ export default class CoreLoginSignup extends React.Component {
     whoSubmitEnabled: true,
     passwordSubmitEnabled: true,
     signupSubmitEnabled: true,
+
+    // NOTE(jim): This user is the actual authenticated user
+    loggedInUser: null,
+
+    // NOTE(jim): This is the suggested user.
+    loginUser: null,
   };
 
-  async _submitEmailAsync() {
-    if (!this.state.whoSubmitEnabled) {
-      return;
-    }
-
-    this.setState({ whoSubmitEnabled: false });
-    const user = await Actions.getExistingUser({ who: this.state.who });
-
-    if (user) {
-      this.setState({
-        loginUser: user,
-      });
-      this._goToPassword();
-
-      return;
-    }
-
-    this._goToSignup();
-  }
-
-  _goToSignup() {
+  _goToSignup = () => {
     let s = {
       s: 'SIGNUP',
       signupSubmitEnabled: true,
@@ -101,22 +101,28 @@ export default class CoreLoginSignup extends React.Component {
       s.username = who;
     }
     this.setState(s);
-  }
+  };
 
-  _goToPassword() {
+  _goToPassword = () => {
     this.setState({
       s: 'PASSWORD',
       passwordSubmitEnabled: true,
       loginError: null,
     });
-  }
+  };
 
-  _goToWho() {
+  _goToWho = () => {
     this.setState({
       s: 'WHO',
       whoSubmitEnabled: true,
     });
-  }
+  };
+
+  _goToSuccess = () => {
+    this.setState({ s: 'SUCCESS' }, () => {
+      this.props.onLogin(this.state.loggedInUser);
+    });
+  };
 
   render() {
     switch (this.state.s) {
@@ -134,7 +140,9 @@ export default class CoreLoginSignup extends React.Component {
     }
   }
 
-  async _loginAsync() {
+  _handleLoginAsync = async e => {
+    e.preventDefault();
+
     if (!this.state.passwordSubmitEnabled) {
       return;
     }
@@ -162,15 +170,33 @@ export default class CoreLoginSignup extends React.Component {
     }
 
     this.setState({ loggedInUser: user }, this._goToSuccess);
-  }
+  };
 
-  _goToSuccess() {
-    this.setState({ s: 'SUCCESS' }, () => {
-      this.props.onLogin(this.state.loggedInUser);
-    });
-  }
+  _handleSubmitEmailAsync = async e => {
+    e.preventDefault();
 
-  async _signupAsync() {
+    if (!this.state.whoSubmitEnabled) {
+      return;
+    }
+
+    this.setState({ whoSubmitEnabled: false });
+    const user = await Actions.getExistingUser({ who: this.state.who });
+
+    if (user) {
+      this.setState({
+        loginUser: user,
+      });
+      this._goToPassword();
+
+      return;
+    }
+
+    this._goToSignup();
+  };
+
+  _handleSignUpAsync = async e => {
+    e.preventDefault();
+
     if (!this.state.signupSubmitEnabled) {
       return;
     }
@@ -187,23 +213,31 @@ export default class CoreLoginSignup extends React.Component {
     if (loggedInUser) {
       this.setState({ loggedInUser }, this._goToSuccess);
     }
-  }
+  };
 
-  _renderSuccess() {
+  _handleChange = e => this.setState({ [e.target.name]: e.target.value });
+
+  // TODO(jim): The user won't even see this because authentication takes them to
+  // another scene almost immediately.
+  _renderSuccess = () => {
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_CONTENTS}>
           <UIHeadingGroup title="Successfully signed in">
-            <h3>{this.state.loggedInUser.name}</h3>
-            <h5>{'@' + this.state.loggedInUser.username}</h5>
+            {this.state.loggedInUser.name}
+            <br />
+            <br />
+            {'@' + this.state.loggedInUser.username}
           </UIHeadingGroup>
         </div>
       </div>
     );
-  }
+  };
 
-  _renderPassword() {
+  _renderPassword = () => {
     let imgSrc = Constants.TRANSPARENT_GIF_DATA_URL;
+
+    // TODO(jim): How reliable is this? Where does imgixURL come from?
     if (this.state.loginUser && this.state.loginUser.photo && this.state.loginUser.photo.imgixUrl) {
       imgSrc = this.state.loginUser.photo.imgixUrl;
     }
@@ -211,23 +245,14 @@ export default class CoreLoginSignup extends React.Component {
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_CONTENTS}>
-          <form
-            onSubmit={event => {
-              event.preventDefault();
-              this._loginAsync();
-            }}>
+          <form onSubmit={this._handleLoginAsync}>
             <UIHeadingGroup title="Sign in">
               <h3>{this.state.loginUser.name}</h3>
               <h5>{'@' + this.state.loginUser.username}</h5>
             </UIHeadingGroup>
-            <h5
-              style={{
-                paddingBottom: 8,
-                height: 24,
-                color: Constants.base.red,
-              }}>
-              {this.state.loginError || ' '}
-            </h5>
+            {!Strings.isEmpty(this.state.loginError) ? (
+              <h5 className={STYLES_ERROR_MESSAGE}>{this.state.loginError}</h5>
+            ) : null}
             <UIInput
               key="login-password"
               autoFocus={true}
@@ -235,73 +260,45 @@ export default class CoreLoginSignup extends React.Component {
               name="password"
               type="password"
               placeholder="Enter your password"
-              onChange={event => {
-                this.setState({ password: event.target.value });
-              }}
+              onChange={this._handleChange}
               value={this.state.password}
             />
-            <UIButton
+            <UIButton onClick={this._handleLoginAsync}>Sign in</UIButton>
+          </form>
+
+          <div className={STYLES_FOOTER}>
+            Not {this.state.loginUser.name || '@' + this.state.loginUser.username}?{' '}
+            <UILink onClick={this._goToWho}>Sign in as someone else</UILink> or{' '}
+            <UILink onClick={this._goToSignup}>Create a new account</UILink>
+          </div>
+
+          <div className={STYLES_FOOTER}>
+            Forgot your password?
+            <UILink
               onClick={event => {
                 event.preventDefault();
-                this._loginAsync();
+                alert('Not implemented yet! :( E-mail ccheever@expo.io to get it reset');
               }}>
-              Sign in
-            </UIButton>
-          </form>
+              &nbsp;Reset it
+            </UILink>
+          </div>
         </div>
-
-        <p />
-        <p>
-          Not {this.state.loginUser.name || '@' + this.state.loginUser.username}?{' '}
-          <UILink
-            onClick={event => {
-              event.preventDefault();
-              this._goToWho();
-            }}>
-            Sign in as someone else
-          </UILink>{' '}
-          or{' '}
-          <UILink
-            onClick={event => {
-              event.preventDefault();
-              this._goToSignup();
-            }}>
-            Create a new account
-          </UILink>
-        </p>
-        <p />
-        <p>
-          Forgot your password?
-          <UILink
-            onClick={event => {
-              event.preventDefault();
-              alert('Not implemented yet! :( E-mail ccheever@expo.io to get it reset');
-            }}>
-            &nbsp;Reset it
-          </UILink>
-        </p>
       </div>
     );
-  }
+  };
 
-  _renderSignup() {
+  _renderSignup = () => {
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_CONTENTS}>
-          <form
-            onSubmit={event => {
-              event.preventDefault();
-              this._signupAsync();
-            }}>
+          <form onSubmit={this._handleSignUpAsync}>
             <UIHeadingGroup title="Create a Castle account" />
             <UIInput
               autoFocus
               label="username"
               name="username"
               placeholder="Username"
-              onChange={event => {
-                this.setState({ username: event.target.value });
-              }}
+              onChange={this._handleChange}
               value={this.state.username}
             />
             <UIInput
@@ -309,20 +306,16 @@ export default class CoreLoginSignup extends React.Component {
               name="name"
               type="text"
               placeholder="Your name"
-              onChange={event => {
-                this.setState({ name: event.target.value });
-              }}
+              onChange={this._handleChange}
               value={this.state.name}
             />
             <UIInput
               label="email"
               name="email"
               type="email"
-              noValidate={true}
+              noValidate
               placeholder="E-mail address"
-              onChange={event => {
-                this.setState({ email: event.target.value });
-              }}
+              onChange={this._handleChange}
               value={this.state.email}
             />
 
@@ -331,79 +324,51 @@ export default class CoreLoginSignup extends React.Component {
               name="password"
               type="password"
               placeholder="New password"
-              onChange={event => {
-                this.setState({ password: event.target.value });
-              }}
+              onChange={this._handleChange}
               value={this.state.password}
             />
-            <UIButton
-              onClick={() => {
-                this._signupAsync();
-              }}>
-              Create Account
-            </UIButton>
+            <UIButton onClick={this._handleSignUpAsync}>Create Account</UIButton>
           </form>
-        </div>
 
-        <p>
-          Already have an account?{' '}
-          <UILink
-            onClick={() => {
-              this._goToWho();
-            }}>
-            Sign in instead
-          </UILink>
-        </p>
+          <div className={STYLES_FOOTER}>
+            Already have an account? <UILink onClick={this._goToWho}>Sign in</UILink> instead.
+          </div>
+        </div>
       </div>
     );
-  }
+  };
 
-  _renderWho() {
+  _renderWho = () => {
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_CONTENTS}>
-          <form
-            onSubmit={event => {
-              event.preventDefault();
-              this._submitEmailAsync();
-            }}>
-            <UIHeadingGroup title="Sign in or Create Account" />
-            <p
-              style={{
-                paddingBottom: 24,
-                color: Constants.base.gray,
-              }}>
-              <small>
-                Sign in to create playlists and share art and games you've made with everyone on
-                Castle.
-              </small>
-            </p>
+          <form onSubmit={this._handleSubmitEmailAsync}>
+            <UIHeadingGroup title="Sign in or create account">
+              Sign in to create playlists and share art and games you've made with everyone on
+              Castle.
+            </UIHeadingGroup>
             <UIInput
               value=""
-              autoFocus={true}
-              label="Your account"
-              name="email"
+              autoFocus
+              label="Search"
+              name="who"
               placeholder="E-mail or username"
-              onChange={event => {
-                this.setState({ who: event.target.value });
-              }}
+              onChange={this._handleChange}
               value={this.state.who}
             />
             <UIButton
-              value="Next"
               type="submit"
-              onFocus={event => {
-                this._submitEmailAsync();
-              }}
-              onClick={event => {
-                event.preventDefault();
-                this._submitEmailAsync();
-              }}>
-              Next
+              onFocus={this._handleSubmitEmailAsync}
+              onClick={this._handleSubmitEmailAsync}>
+              Continue
             </UIButton>
+            <div className={STYLES_FOOTER}>
+              Don't worry, we will help you find your account or create a new one if you can't
+              remember.
+            </div>
           </form>
         </div>
       </div>
     );
-  }
+  };
 }

@@ -5,20 +5,20 @@ import { css } from 'react-emotion';
 
 const STYLES_CONTAINER = css`
   color: ${Constants.colors.white};
+  margin-bottom: 16px;
 `;
 
 const STYLES_HEADER = css`
   font-weight: 600;
-  font-size: 22px;
+  font-size: 16px;
   letter-spacing: 0.2px;
   padding-bottom: 8px;
 `;
 
 const STYLES_PARAGRAPH = css`
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 200;
   line-height: 1.725;
-  margin-bottom: 24px;
 `;
 
 export default class UIHeadingGroup extends React.Component {

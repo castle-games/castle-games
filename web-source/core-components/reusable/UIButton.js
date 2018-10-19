@@ -11,6 +11,8 @@ const STYLES_BUTTON = css`
   border-radius: 4px;
   font-weight: 600;
   height: 48px;
+  width: 100%;
+  text-align: center;
   padding: 0 24px 0 24px;
   outline: 0;
   border: 0;
@@ -21,6 +23,7 @@ const STYLES_BUTTON = css`
   :focus {
     outline: 0;
     border: 0;
+    box-shadow: 0 1px 2px ${Constants.colors.blue};
   }
 
   :hover {
@@ -30,16 +33,19 @@ const STYLES_BUTTON = css`
 `;
 
 export default class UIButton extends React.Component {
+  static defaultProps = {
+    type: 'submit',
+  };
+
   render() {
     return (
-      <button
+      <input
         className={STYLES_BUTTON}
-        value={this.props.value}
         type={this.props.type}
         style={this.props.style}
-        onClick={this.props.onClick}>
-        {this.props.children}
-      </button>
+        onClick={this.props.onClick}
+        value={this.props.value ? this.props.value : this.props.children}
+      />
     );
   }
 }
