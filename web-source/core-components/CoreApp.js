@@ -638,8 +638,6 @@ export default class CoreApp extends React.Component {
       pageMode: 'browse',
       sidebarMode: null,
       creator: null,
-      mediaUrl: '',
-      media: null,
     };
 
     this.determineNextStateOfCEF({
