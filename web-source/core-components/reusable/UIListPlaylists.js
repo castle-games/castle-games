@@ -11,7 +11,6 @@ const STYLES_ICON_COLUMN = css`
   width: 40px;
   flex-shrink: 0;
   padding: 12px 16px 12px 16px;
-  color: ${Constants.colors.white};
 
   :hover {
     color: ${Constants.colors.selected};

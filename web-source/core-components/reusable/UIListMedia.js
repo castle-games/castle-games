@@ -11,7 +11,6 @@ const STYLES_ICON_COLUMN = css`
   width: 40px;
   flex-shrink: 0;
   padding: 12px 16px 12px 16px;
-  color: ${Constants.colors.white};
 
   :hover {
     color: ${Constants.colors.selected};
@@ -150,6 +149,7 @@ export default class UIListMedia extends React.Component {
                   <div
                     className={STYLES_ROW}
                     key={`playlist-list-item-${i}`}
+                    style={isSelected ? { color: Constants.colors.green } : null}
                     onClick={() => this.props.onMediaSelect(m)}>
                     <div className={STYLES_ICON_COLUMN}>
                       <SVG.MediaIcon height="16px" />
@@ -161,7 +161,10 @@ export default class UIListMedia extends React.Component {
               }
 
               return (
-                <div className={STYLES_ROW} key={`media-list-item-${m.mediaId}-${i}`}>
+                <div
+                  className={STYLES_ROW}
+                  key={`media-list-item-${m.mediaId}-${i}`}
+                  style={isSelected ? { color: Constants.colors.green } : null}>
                   <div className={STYLES_ICON_COLUMN} onClick={() => this.props.onMediaSelect(m)}>
                     <SVG.MediaIcon height="16px" />
                   </div>

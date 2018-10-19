@@ -6,7 +6,7 @@ import { css } from 'react-emotion';
 
 import CoreRootDashboard from '~/core-components/CoreRootDashboard';
 
-import UIListMediaInPlaylist from '~/core-components/reusable/UIListMediaInPlaylist';
+import UIListMedia from '~/core-components/reusable/UIListMedia';
 import UIButtonIconHorizontal from '~/core-components/reusable/UIButtonIconHorizontal';
 import UIHeaderDismiss from '~/core-components/reusable/UIHeaderDismiss';
 import UICardMedia from '~/core-components/reusable/UICardMedia';
@@ -200,7 +200,7 @@ export default class CoreRootContextSidebar extends React.Component {
         {headerNode}
         <div className={STYLES_CONTAINER}>
           <UIEmptyState title="Current list" />
-          <UIListMediaInPlaylist
+          <UIListMedia
             media={this.props.media}
             onMediaSelect={this.props.onMediaSelect}
             onUserSelect={this.props.onUserSelect}

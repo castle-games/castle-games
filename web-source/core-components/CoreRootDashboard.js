@@ -4,7 +4,7 @@ import * as SVG from '~/core-components/primitives/svg';
 
 import { css } from 'react-emotion';
 
-import UIListMediaInPlaylist from '~/core-components/reusable/UIListMediaInPlaylist';
+import UIListMedia from '~/core-components/reusable/UIListMedia';
 import UIHeaderDismiss from '~/core-components/reusable/UIHeaderDismiss';
 import UIButtonIconHorizontal from '~/core-components/reusable/UIButtonIconHorizontal';
 import UIEmptyState from '~/core-components/reusable/UIEmptyState';
@@ -61,7 +61,7 @@ export default class CoreRootDashboard extends React.Component {
     return (
       <div>
         <UIEmptyState title="History" />
-        <UIListMediaInPlaylist
+        <UIListMedia
           media={this.props.media}
           onMediaSelect={this.props.onMediaSelect}
           onUserSelect={this.props.onUserSelect}
