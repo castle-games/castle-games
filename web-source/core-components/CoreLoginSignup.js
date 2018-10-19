@@ -66,34 +66,20 @@ export default class CoreLoginSignup extends React.Component {
     if (!this.state.whoSubmitEnabled) {
       return;
     }
+
     this.setState({ whoSubmitEnabled: false });
-    console.log('_submitEmailAsync');
-    let { data } = await API.graphqlAsync(
-      /* GraphQL */ `
-        query($who: String!) {
-          userForLoginInput(who: $who) {
-            userId
-            name
-            username
-            photo {
-              imgixUrl
-              height
-              width
-            }
-          }
-        }
-      `,
-      { who: this.state.who }
-    );
-    let user = data.userForLoginInput;
+    const user = Actions.getExistingUser({ who: this.state.who });
+
     if (user) {
       this.setState({
         loginUser: user,
       });
       this._goToPassword();
-    } else {
-      this._goToSignup();
+
+      return;
     }
+
+    this._goToSignup();
   }
 
   _goToSignup() {
@@ -422,8 +408,8 @@ export default class CoreLoginSignup extends React.Component {
                 color: Constants.base.gray,
               }}>
               <small>
-                Sign in to create playlists and share art and games you've made with
-                everyone on Castle.
+                Sign in to create playlists and share art and games you've made with everyone on
+                Castle.
               </small>
             </p>
             <UIInput
