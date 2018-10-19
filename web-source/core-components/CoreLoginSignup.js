@@ -1,7 +1,7 @@
 import React from 'react';
 import { css } from 'react-emotion';
 
-import { API } from '~/common/actions';
+import * as Actions from '~/common/actions';
 import * as Constants from '~/common/constants';
 
 import UIInput from '~/core-components/reusable/UIInput';
@@ -49,6 +49,10 @@ export default class CoreLoginSignup extends React.Component {
   //  WHO - input who you are
   //  PASSWORD - put in your password
   //  SIGNUP - create an account
+  static defaultProps = {
+    onLogin: () => {},
+  };
+
   state = {
     who: '',
     password: '',
@@ -68,7 +72,7 @@ export default class CoreLoginSignup extends React.Component {
     }
 
     this.setState({ whoSubmitEnabled: false });
-    const user = Actions.getExistingUser({ who: this.state.who });
+    const user = await Actions.getExistingUser({ who: this.state.who });
 
     if (user) {
       this.setState({
@@ -134,51 +138,37 @@ export default class CoreLoginSignup extends React.Component {
     if (!this.state.passwordSubmitEnabled) {
       return;
     }
+
     this.setState({ passwordSubmitEnabled: false });
-    console.log('_loginAsync called');
-    let result = await API.graphqlAsync(
-      /* GraphQL */ `
-        mutation($userId: ID!, $password: String!) {
-          login(userId: $userId, password: $password) {
-            userId
-            username
-            name
-            email
-            photo {
-              height
-              width
-              url
-            }
-          }
-        }
-      `,
-      {
-        userId: this.state.loginUser.userId,
-        password: this.state.password,
-      }
-    );
-    let { data } = result;
-    if (data.login) {
-      this.setState({ loggedInUser: data.login });
-      this._goToSuccess();
-    } else {
-      // console.log({ result });
-      // console.error(result.errors[0].message);
-      if (result.errors.length > 0) {
+
+    const user = await Actions.login({
+      userId: this.state.loginUser.userId,
+      password: this.state.password,
+    });
+
+    if (!user) {
+      return;
+    }
+
+    if (user.errors) {
+      if (user.errors.length > 0) {
         this.setState({
           passwordSubmitEnabled: true,
-          loginError: result.errors[0].message,
+          loginError: user.errors[0].message,
         });
       }
+
+      return;
     }
+
+    this.setState({ loggedInUser: user }, this._goToSuccess);
   }
 
   _goToSuccess() {
     console.log('success');
-    if (this.props.onLogin && typeof this.props.onLogin === 'function') {
+    this.setState({ s: 'SUCCESS' }, () => {
       this.props.onLogin(this.state.loggedInUser);
-    }
-    this.setState({ s: 'SUCCESS' });
+    });
   }
 
   async _signupAsync() {
@@ -211,8 +201,7 @@ export default class CoreLoginSignup extends React.Component {
       }
     );
     if (result.data.signup) {
-      this.setState({ loggedInUser: result.data.signup });
-      this._goToSuccess();
+      this.setState({ loggedInUser: result.data.signup }, this._goToSuccess);
     } else {
       // Handle errors
     }

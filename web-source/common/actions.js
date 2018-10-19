@@ -3,6 +3,137 @@ import CastleApiClient from 'castle-api-client';
 // export const API = CastleApiClient("http://localhost:1380");
 export const API = CastleApiClient();
 
+export async function getExistingUser({ who }) {
+  const response = await API.graphqlAsync(
+    `
+      query($who: String!) {
+        userForLoginInput(who: $who) {
+          userId
+          name
+          username
+          photo {
+            imgixUrl
+            height
+            width
+          }
+        }
+      }
+    `,
+    { who }
+  );
+
+  // TOOD(jim): Write a global error handler.
+  if (response.error) {
+    return false;
+  }
+
+  if (response.errors) {
+    return false;
+  }
+
+  return response.data.userForLoginInput;
+}
+
+export async function login({ userId, password }) {
+  const response = await API.graphqlAsync(
+    `
+      mutation($userId: ID!, $password: String!) {
+        login(userId: $userId, password: $password) {
+          userId
+          username
+          name
+          createdTime
+          isReal
+          photo {
+            url
+            height
+            width
+          }
+          playlists {
+            playlistId
+            name
+            description
+            createdTime
+            user {
+              userId
+              name
+              username
+              createdTime
+              isReal
+              photo {
+                url
+                height
+                width
+              }
+            }
+            mediaItems {
+              name
+              published
+              createdTime
+              instructions
+              description
+              mediaUrl
+              mediaId
+              coverImage {
+                url
+                height
+                width
+              }
+              user {
+                userId
+                name
+                username
+                createdTime
+                isReal
+                photo {
+                  url
+                  height
+                  width
+                }
+              }
+            }
+          }
+          mediaItems {
+            name
+            published
+            createdTime
+            instructions
+            description
+            mediaUrl
+            mediaId
+            user {
+              userId
+              name
+              username
+              createdTime
+              isReal
+              photo {
+                url
+                height
+                width
+              }
+            }
+          }
+        }
+      }
+    `,
+    {
+      userId,
+      password,
+    }
+  );
+
+  if (response.error) {
+    return false;
+  }
+
+  if (response.errors) {
+    return response;
+  }
+
+  return response.data.login;
+}
+
 export async function getPlaylist({ playlistId }) {
   const variables = { playlistId };
   const result = await API(
@@ -529,104 +660,6 @@ export async function search(query) {
   }
 
   return result.data.searchMediaAndPlaylists;
-}
-
-export async function authenticate({ username, password }) {
-  const result = await API.graphqlAsync({
-    query: `
-      mutation Login($username: String, $password: String!) {
-        login(who: $username, password: $password) {
-          userId
-          username
-          name
-          createdTime
-
-          mediaItems {
-            name
-            published
-            createdTime
-            instructions
-            description
-            mediaUrl
-            mediaId
-            coverImage {
-              url
-              height
-              width
-            }
-            user {
-              userId
-              name
-              username
-              createdTime
-              isReal
-              photo {
-                url
-                height
-                width
-              }
-            }
-          }
-
-          playlists {
-            playlistId
-            name
-            createdTime
-            description
-            user {
-              userId
-              name
-              username
-              createdTime
-              isReal
-              photo {
-                url
-                height
-                width
-              }
-            }
-            mediaItems {
-              name
-              published
-              createdTime
-              instructions
-              description
-              mediaUrl
-              mediaId
-              coverImage {
-                url
-                height
-                width
-              }
-              user {
-                userId
-                name
-                username
-                createdTime
-                isReal
-                photo {
-                  url
-                  height
-                  width
-                }
-              }
-            }
-          }
-        }
-      }
-    `,
-    variables: { username, password },
-  });
-
-  // TOOD(jim): Write a global error handler.
-  if (result.error) {
-    return false;
-  }
-
-  if (result.errors) {
-    return false;
-  }
-  return result.data.login;
 }
 
 export async function logout() {
