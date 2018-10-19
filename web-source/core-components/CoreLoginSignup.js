@@ -80,10 +80,10 @@ export default class CoreLoginSignup extends React.Component {
     signupSubmitEnabled: true,
 
     // NOTE(jim): This user is the actual authenticated user
-    loggedInUser: null,
+    localViewer: null,
 
     // NOTE(jim): This is the suggested user.
-    loginUser: null,
+    suggestedUser: null,
   };
 
   _goToSignup = () => {
@@ -120,7 +120,7 @@ export default class CoreLoginSignup extends React.Component {
 
   _goToSuccess = () => {
     this.setState({ s: 'SUCCESS' }, () => {
-      this.props.onLogin(this.state.loggedInUser);
+      this.props.onLogin(this.state.localViewer);
     });
   };
 
@@ -150,7 +150,7 @@ export default class CoreLoginSignup extends React.Component {
     this.setState({ passwordSubmitEnabled: false });
 
     const user = await Actions.login({
-      userId: this.state.loginUser.userId,
+      userId: this.state.suggestedUser.userId,
       password: this.state.password,
     });
 
@@ -169,7 +169,7 @@ export default class CoreLoginSignup extends React.Component {
       return;
     }
 
-    this.setState({ loggedInUser: user }, this._goToSuccess);
+    this.setState({ localViewer: user }, this._goToSuccess);
   };
 
   _handleSubmitEmailAsync = async e => {
@@ -184,7 +184,7 @@ export default class CoreLoginSignup extends React.Component {
 
     if (user) {
       this.setState({
-        loginUser: user,
+        suggestedUser: user,
       });
       this._goToPassword();
 
@@ -203,15 +203,15 @@ export default class CoreLoginSignup extends React.Component {
 
     this.setState({ signupSubmitEnabled: false });
 
-    const loggedInUser = await Actions.signup({
+    const localViewer = await Actions.signup({
       name: this.state.name,
       username: this.state.username,
       email: this.state.email,
       password: this.state.password,
     });
 
-    if (loggedInUser) {
-      this.setState({ loggedInUser }, this._goToSuccess);
+    if (localViewer) {
+      this.setState({ localViewer }, this._goToSuccess);
     }
   };
 
@@ -224,10 +224,10 @@ export default class CoreLoginSignup extends React.Component {
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_CONTENTS}>
           <UIHeadingGroup title="Successfully signed in">
-            {this.state.loggedInUser.name}
+            {this.state.localViewer.name}
             <br />
             <br />
-            {'@' + this.state.loggedInUser.username}
+            {'@' + this.state.localViewer.username}
           </UIHeadingGroup>
         </div>
       </div>
@@ -238,8 +238,12 @@ export default class CoreLoginSignup extends React.Component {
     let imgSrc = Constants.TRANSPARENT_GIF_DATA_URL;
 
     // TODO(jim): How reliable is this? Where does imgixURL come from?
-    if (this.state.loginUser && this.state.loginUser.photo && this.state.loginUser.photo.imgixUrl) {
-      imgSrc = this.state.loginUser.photo.imgixUrl;
+    if (
+      this.state.suggestedUser &&
+      this.state.suggestedUser.photo &&
+      this.state.suggestedUser.photo.imgixUrl
+    ) {
+      imgSrc = this.state.suggestedUser.photo.imgixUrl;
     }
 
     return (
@@ -247,8 +251,8 @@ export default class CoreLoginSignup extends React.Component {
         <div className={STYLES_CONTENTS}>
           <form onSubmit={this._handleLoginAsync}>
             <UIHeadingGroup title="Sign in">
-              <h3>{this.state.loginUser.name}</h3>
-              <h5>{'@' + this.state.loginUser.username}</h5>
+              <h3>{this.state.suggestedUser.name}</h3>
+              <h5>{'@' + this.state.suggestedUser.username}</h5>
             </UIHeadingGroup>
             {!Strings.isEmpty(this.state.loginError) ? (
               <h5 className={STYLES_ERROR_MESSAGE}>{this.state.loginError}</h5>
@@ -267,7 +271,7 @@ export default class CoreLoginSignup extends React.Component {
           </form>
 
           <div className={STYLES_FOOTER}>
-            Not {this.state.loginUser.name || '@' + this.state.loginUser.username}?{' '}
+            Not {this.state.suggestedUser.name || '@' + this.state.suggestedUser.username}?{' '}
             <UILink onClick={this._goToWho}>Sign in as someone else</UILink> or{' '}
             <UILink onClick={this._goToSignup}>Create a new account</UILink>
           </div>
