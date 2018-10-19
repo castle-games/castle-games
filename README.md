@@ -19,8 +19,8 @@ do that!
 ### Windows
 
 - Install CMake. https://cmake.org/download/. Make sure to check the "add to PATH for current user" option.
-- Install Visual Studio 2017 (later versions have had issues). https://visualstudio.microsoft.com/vs.
-- Install http://nsis.sourceforge.net
+- Install Visual Studio 2017. https://visualstudio.microsoft.com/vs.
+- Install http://nsis.sourceforge.net.
 - Install https://gitforwindows.org/.
 
 #### Debug build
