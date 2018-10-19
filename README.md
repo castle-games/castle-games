@@ -19,7 +19,7 @@ do that!
 ### Windows
 
 - Install CMake. https://cmake.org/download/. Make sure to check the "add to PATH for current user" option.
-- Install Visual Studio 2013 (later versions have had issues). https://visualstudio.microsoft.com/vs/older-downloads/. Choose '2013 Express for Desktop'.
+- Install Visual Studio 2017 (later versions have had issues). https://visualstudio.microsoft.com/vs.
 - Install https://gitforwindows.org/. In 'megasource/', run 'sh ./run_cmake.sh' with the Git Bash utility that comes with Git for Windows.
 - Install http://nsis.sourceforge.net
 - Open and build the 'ALL_BUILD.sln' file you will find deep inside 'megasource/build/'.
