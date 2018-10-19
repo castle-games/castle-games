@@ -351,8 +351,7 @@ export default class CoreLoginSignup extends React.Component {
         <div className={STYLES_CONTENTS}>
           <form onSubmit={this._handleSubmitEmailAsync}>
             <UIHeadingGroup title="Sign in or create account">
-              Sign in to create playlists and share art and games you've made with everyone on
-              Castle.
+              Sign in or register with Castle to share art and games you've made.
             </UIHeadingGroup>
             <UIInput
               value=""
@@ -370,8 +369,7 @@ export default class CoreLoginSignup extends React.Component {
               Continue
             </UIButton>
             <div className={STYLES_FOOTER}>
-              Don't worry, we will help you find your account or create a new one if you can't
-              remember.
+              You'll have another chance to review your info before submitting.
             </div>
           </form>
         </div>

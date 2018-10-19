@@ -154,8 +154,8 @@ export default class CoreWelcomeScreen extends React.Component {
         <div className={STYLES_CONTENT}>
           <img height="48px" src="static/castle-wordmark.png" />
           <p className={STYLES_PARAGRAPH}>
-            Use the top search bar to search for games. Below are some cool experiences that people
-            have made:
+            Welcome to Castle. Click a game or a playlist to get started, or use the top search bar
+            to find games.
           </p>
         </div>
 

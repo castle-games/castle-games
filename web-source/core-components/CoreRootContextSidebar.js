@@ -145,7 +145,8 @@ export default class CoreRootContextSidebar extends React.Component {
             {headerNode}
             <div className={STYLES_CONTAINER}>
               <UIEmptyState title="No media loaded">
-                Once you load media, information about the media will appear here.
+                You aren't playing anything at the moment. Want to get started with
+                Castle?
               </UIEmptyState>
               <div className={STYLES_ACTION}>
                 <div className={STYLES_ACTION_ITEM}>

@@ -52,7 +52,7 @@ export default class CoreProfile extends React.Component {
         <UIEmptyState
           title="No media yet"
           style={{ borderTop: `1px solid ${Constants.colors.border}` }}>
-          This user has not uploaded any media yet.
+          This user has not added any media yet.
         </UIEmptyState>
       );
 
@@ -70,7 +70,7 @@ export default class CoreProfile extends React.Component {
         <UIEmptyState
           title="No playlists yet"
           style={{ borderTop: `1px solid ${Constants.colors.border}` }}>
-          This user has not uploaded any playlists yet.
+          This user has not added any playlists yet.
         </UIEmptyState>
       );
 
