@@ -190,11 +190,6 @@ export default class CoreLoginSignup extends React.Component {
   }
 
   _renderSuccess() {
-    let imgSrc = Constants.TRANSPARENT_GIF_DATA_URL;
-    if (this.state.loginUser.photo && this.state.loginUser.photo.imgixUrl) {
-      imgSrc = this.state.loginUser.photo.imgixUrl;
-    }
-
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_CONTENTS}>
@@ -209,7 +204,7 @@ export default class CoreLoginSignup extends React.Component {
 
   _renderPassword() {
     let imgSrc = Constants.TRANSPARENT_GIF_DATA_URL;
-    if (this.state.loginUser.photo && this.state.loginUser.photo.imgixUrl) {
+    if (this.state.loginUser && this.state.loginUser.photo && this.state.loginUser.photo.imgixUrl) {
       imgSrc = this.state.loginUser.photo.imgixUrl;
     }
 
