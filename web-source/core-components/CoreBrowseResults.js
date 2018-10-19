@@ -59,31 +59,35 @@ export default class CoreBrowseResults extends React.Component {
       );
     }
 
-    return (
-      <div className={STYLES_CONTAINER}>
-        {this.props.playlists.length ? (
-          <UIListPlaylists
-            playlists={this.props.playlists}
-            onUserSelect={this.props.onUserSelect}
-            onPlaylistSelect={this.props.onPlaylistSelect}
-          />
-        ) : (
-          <UIEmptyState title="No playlists found">Try another search.</UIEmptyState>
-        )}
+    if (this.props.playlists.length || this.props.mediaItems.length) {
+      return (
+        <div className={STYLES_CONTAINER}>
+          {this.props.playlists.length ? (
+            <UIListPlaylists
+              playlists={this.props.playlists}
+              onUserSelect={this.props.onUserSelect}
+              onPlaylistSelect={this.props.onPlaylistSelect}
+            />
+          ) : (null)}
         {this.props.mediaItems.length ? (
           <UIListMedia
             mediaItems={this.props.mediaItems}
             onUserSelect={this.props.onUserSelect}
             onMediaSelect={this.props.onMediaSelect}
           />
-        ) : (
+        ) : (null)}
+        </div>
+      );
+    } else {
+      return (
+        <div className={STYLES_CONTAINER}>
           <UIEmptyState
             title="No media found"
             style={{ borderTop: `1px solid ${Constants.colors.border}` }}>
-            Try another search.
+            We didn't find any games or playlists matching your search. Try another search.
           </UIEmptyState>
-        )}
-      </div>
-    );
+        </div>
+      );
+    }
   }
 }
