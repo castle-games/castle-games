@@ -432,7 +432,7 @@ export default class CoreApp extends React.Component {
 
   _filterPlaylistWithSearchState = p => {
     const query = this._stringAsSearchInvariant(this.state.searchQuery);
-    if (this._stringIncludesSearchQuery(p.name)) {
+    if (this._stringIncludesSearchQuery(p.name, query)) {
       return true;
     }
 
