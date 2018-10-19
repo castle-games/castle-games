@@ -433,59 +433,27 @@ export default class CoreApp extends React.Component {
     return false;
   };
 
-  _handleSearchSubmit = async () => {
-    if (Strings.isEmpty(this.state.searchQuery)) {
-      this.setState({
-        pageMode: 'browse',
-        sidebarMode: null,
-        allMediaFiltered: this.state.allMedia,
-        allPlaylistsFiltered: this.state.allPlaylists,
-      });
-
-      return;
-    }
-
-    const allMediaFiltered = this.state.allMedia.filter(this._handleSearchMediaWithFilter);
-    const allPlaylistsFiltered = this.state.allPlaylists.filter(
-      this._handleSearchPlaylistWithFilter
-    );
-
-    this.setState({
-      pageMode: 'browse',
-      sidebarMode: null,
-      allMediaFiltered: allMediaFiltered.length ? allMediaFiltered : this.state.allMedia,
-      allPlaylistsFiltered: allPlaylistsFiltered.length
-        ? allPlaylistsFiltered
-        : this.state.allPlaylists,
-    });
-  };
+  _handleSearchSubmit = async e => this._handleSearchChange(e);
 
   _handleSearchChange = async e => {
-    if (Strings.isEmpty(this.state.searchQuery)) {
-      this.setState({
-        pageMode: 'browse',
-        sidebarMode: null,
-        searchQuery: e.target.value,
-        allMediaFiltered: this.state.allMedia,
-        allPlaylistsFiltered: this.state.allPlaylists,
-      });
-
-      return;
-    }
-
-    const allMediaFiltered = this.state.allMedia.filter(this._handleSearchMediaWithFilter);
-    const allPlaylistsFiltered = this.state.allPlaylists.filter(
-      this._handleSearchPlaylistWithFilter
-    );
-
     this.setState({
       pageMode: 'browse',
       sidebarMode: null,
       searchQuery: e.target.value,
-      allMediaFiltered,
-      allPlaylistsFiltered,
+    }, () => {
+      let allMediaFiltered, allPlaylistsFiltered;
+      if (Strings.isEmpty(this.state.searchQuery)) {
+        allMediaFiltered = this.state.allMedia;
+        allPlaylistsFiltered = this.state.allPlaylists;
+      } else {
+        allMediaFiltered = this.state.allMedia.filter(this._handleSearchMediaWithFilter);
+        allPlaylistsFiltered = this.state.allPlaylists.filter(
+          this._handleSearchPlaylistWithFilter
+        );
+      }
+      this.setState({ allMediaFiltered, allPlaylistsFiltered });
     });
-  };
+  }
 
   _handleRegisterGame = ({ email, message }) => {
     // TODO(jim): Handle this better
