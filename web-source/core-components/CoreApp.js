@@ -857,7 +857,6 @@ export default class CoreApp extends React.Component {
       );
     }
 
-    // NOTE(jim): Browse/Search Scene
     if (isViewerViewingBrowseScene) {
       return (
         <CoreLayout
@@ -880,7 +879,6 @@ export default class CoreApp extends React.Component {
       );
     }
 
-    // NOTE(jim): Sign in scene
     if (isViewerViewingSignInScene) {
       return (
         <CoreLayout ref={this._handleGetReference} leftSidebarNode={maybeLeftSidebarNode}>
@@ -889,7 +887,6 @@ export default class CoreApp extends React.Component {
       );
     }
 
-    // NOTE(jim): Playlist Scene
     if (isViewerViewingPlaylistScene) {
       return (
         <CoreLayout
@@ -910,7 +907,6 @@ export default class CoreApp extends React.Component {
       );
     }
 
-    // NOTE(jim): Profile Scene
     if (isViewerViewingProfileScene) {
       return (
         <CoreLayout

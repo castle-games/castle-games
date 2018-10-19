@@ -26,8 +26,15 @@ export default class CoreRootDashboard extends React.Component {
         <div>
           <UIEmptyState title="History">
             As you play different Media using Castle, the last 10 links you visited will appear
-            here. Try <UILink onClick={this.props.onToggleBrowse}>Browsing</UILink>.
+            here.
           </UIEmptyState>
+          <div className={STYLES_ACTIONS}>
+            <UIButtonIconHorizontal
+              onClick={this.props.onToggleBrowse}
+              icon={<SVG.Search height="16px" />}>
+              Browse media
+            </UIButtonIconHorizontal>
+          </div>
         </div>
       );
     }
@@ -38,8 +45,15 @@ export default class CoreRootDashboard extends React.Component {
         <div>
           <UIEmptyState title="History">
             As you play different Media using Castle, the last 10 links you visited will appear
-            here. Try <UILink onClick={this.props.onToggleBrowse}>Browsing</UILink>.
+            here.
           </UIEmptyState>
+          <div className={STYLES_ACTIONS}>
+            <UIButtonIconHorizontal
+              onClick={this.props.onToggleBrowse}
+              icon={<SVG.Search height="16px" />}>
+              Browse media
+            </UIButtonIconHorizontal>
+          </div>
         </div>
       );
     }
