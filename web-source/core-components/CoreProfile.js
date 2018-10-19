@@ -79,11 +79,6 @@ export default class CoreProfile extends React.Component {
         <UICardProfileHeader
           creator={this.props.creator}
           profileMode={this.props.profileMode}
-          onPlayCreatorMedia={this.props.onPlayCreatorMedia}
-          onSubscribeToCreator={this.props.onSubscribeToCreator}
-          onClickCreatorAvatar={this.props.onClickCreatorAvatar}
-          onClickCreatorCreations={this.props.onClickCreatorCreations}
-          onClickCreatorPlaylists={this.props.onClickCreatorPlaylists}
           onShowMediaList={this.props.onShowProfileMediaList}
           onShowPlaylistList={this.props.onShowProfilePlaylistList}
         />

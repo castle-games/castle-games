@@ -4,10 +4,6 @@ import * as Strings from '~/common/strings';
 
 import { css } from 'react-emotion';
 
-import UIAvatar from '~/core-components/reusable/UIAvatar';
-import UIStat from '~/core-components/reusable/UIStat';
-import UIButtonIconHorizontal from '~/core-components/reusable/UIButtonIconHorizontal';
-
 const STYLES_CONTAINER = css`
   padding: 16px 16px 0 16px;
 `;
