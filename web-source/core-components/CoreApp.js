@@ -872,6 +872,8 @@ export default class CoreApp extends React.Component {
           <CoreBrowseResults
             mediaItems={state.allMediaFiltered}
             playlists={state.allPlaylistsFiltered}
+            featuredPlaylists={state.featuredPlaylists}
+            featuredMedia={state.featuredMedia}
             isPristine={Strings.isEmpty(state.searchQuery)}
             onUserSelect={this._handleUserSelect}
             onMediaSelect={this._handleMediaSelect}

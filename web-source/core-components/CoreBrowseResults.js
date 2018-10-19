@@ -49,6 +49,11 @@ export default class CoreBrowseResults extends React.Component {
           <CoreWelcomeScreen
             onToggleSidebar={this.props.onToggleCurrentPlaylist}
             onSelectRandom={this.props.onSelectRandom}
+            onUserSelect={this.props.onUserSelect}
+            onPlaylistSelect={this.props.onPlaylistSelect}
+            onMediaSelect={this.props.onMediaSelect}
+            featuredMedia={this.props.featuredMedia}
+            featuredPlaylists={this.props.featuredPlaylists}
           />
         </div>
       );
