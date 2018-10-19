@@ -165,7 +165,6 @@ export default class CoreLoginSignup extends React.Component {
   }
 
   _goToSuccess() {
-    console.log('success');
     this.setState({ s: 'SUCCESS' }, () => {
       this.props.onLogin(this.state.loggedInUser);
     });
@@ -175,35 +174,18 @@ export default class CoreLoginSignup extends React.Component {
     if (!this.state.signupSubmitEnabled) {
       return;
     }
+
     this.setState({ signupSubmitEnabled: false });
-    console.log('_signupAsync');
-    let result = await API.graphqlAsync(
-      /* GraphQL */ `
-        mutation($name: String!, $username: String!, $email: String!, $password: String!) {
-          signup(user: { name: $name, username: $username }, email: $email, password: $password) {
-            userId
-            username
-            name
-            email
-            photo {
-              height
-              width
-              url
-            }
-          }
-        }
-      `,
-      {
-        name: this.state.name,
-        username: this.state.username,
-        email: this.state.email,
-        password: this.state.password,
-      }
-    );
-    if (result.data.signup) {
-      this.setState({ loggedInUser: result.data.signup }, this._goToSuccess);
-    } else {
-      // Handle errors
+
+    const loggedInUser = await Actions.signup({
+      name: this.state.name,
+      username: this.state.username,
+      email: this.state.email,
+      password: this.state.password,
+    });
+
+    if (loggedInUser) {
+      this.setState({ loggedInUser }, this._goToSuccess);
     }
   }
 

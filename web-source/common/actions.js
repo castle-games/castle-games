@@ -34,6 +34,108 @@ export async function getExistingUser({ who }) {
   return response.data.userForLoginInput;
 }
 
+export async function signup({ name, username, email, password }) {
+  const response = await API.graphqlAsync(
+    `
+      mutation($name: String!, $username: String!, $email: String!, $password: String!) {
+        signup(user: { name: $name, username: $username }, email: $email, password: $password) {
+          userId
+          username
+          name
+          createdTime
+          isReal
+          photo {
+            url
+            height
+            width
+          }
+          playlists {
+            playlistId
+            name
+            description
+            createdTime
+            user {
+              userId
+              name
+              username
+              createdTime
+              isReal
+              photo {
+                url
+                height
+                width
+              }
+            }
+            mediaItems {
+              name
+              published
+              createdTime
+              instructions
+              description
+              mediaUrl
+              mediaId
+              coverImage {
+                url
+                height
+                width
+              }
+              user {
+                userId
+                name
+                username
+                createdTime
+                isReal
+                photo {
+                  url
+                  height
+                  width
+                }
+              }
+            }
+          }
+          mediaItems {
+            name
+            published
+            createdTime
+            instructions
+            description
+            mediaUrl
+            mediaId
+            user {
+              userId
+              name
+              username
+              createdTime
+              isReal
+              photo {
+                url
+                height
+                width
+              }
+            }
+          }
+        }
+      }
+    `,
+    {
+      name,
+      username,
+      email,
+      password,
+    }
+  );
+
+  if (response.error) {
+    return false;
+  }
+
+  if (response.errors) {
+    return false;
+  }
+
+  return response.data.signup;
+}
+
 export async function login({ userId, password }) {
   const response = await API.graphqlAsync(
     `

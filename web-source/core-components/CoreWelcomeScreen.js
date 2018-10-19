@@ -148,8 +148,6 @@ export default class CoreWelcomeScreen extends React.Component {
 
   render() {
     const { featuredMedia, featuredPlaylists } = this.props;
-    console.log(this.props.featuredMedia);
-    console.log(this.props.featuredPlaylists);
 
     return (
       <div className={STYLES_CONTAINER}>
