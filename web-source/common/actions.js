@@ -1,7 +1,9 @@
 import CastleApiClient from 'castle-api-client';
 
 // export const API = CastleApiClient("http://localhost:1380");
-export const API = CastleApiClient();
+// export const API = CastleApiClient('https://ghost-server.app.render.com');
+export const API = CastleApiClient('http://api.playcastle.io');
+// export const API = CastleApiClient();
 
 export async function getExistingUser({ who }) {
   const response = await API.graphqlAsync(
