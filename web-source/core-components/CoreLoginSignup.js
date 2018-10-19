@@ -79,10 +79,7 @@ export default class CoreLoginSignup extends React.Component {
     passwordSubmitEnabled: true,
     signupSubmitEnabled: true,
 
-    // NOTE(jim): This user is the actual authenticated user
     localViewer: null,
-
-    // NOTE(jim): This is the suggested user.
     suggestedUser: null,
   };
 
@@ -246,6 +243,12 @@ export default class CoreLoginSignup extends React.Component {
       imgSrc = this.state.suggestedUser.photo.imgixUrl;
     }
 
+    let maybeErrorNode;
+    if (!Strings.isEmpty(this.state.loginError)) {
+      maybeErrorNode = <h5 className={STYLES_ERROR_MESSAGE}>{this.state.loginError}</h5>;
+    }
+
+    // TODO(jim): Refactor the Suggested User into a reusable UI component.
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_CONTENTS}>
@@ -254,9 +257,9 @@ export default class CoreLoginSignup extends React.Component {
               <h3>{this.state.suggestedUser.name}</h3>
               <h5>{'@' + this.state.suggestedUser.username}</h5>
             </UIHeadingGroup>
-            {!Strings.isEmpty(this.state.loginError) ? (
-              <h5 className={STYLES_ERROR_MESSAGE}>{this.state.loginError}</h5>
-            ) : null}
+
+            {maybeErrorNode}
+
             <UIInput
               key="login-password"
               autoFocus={true}
@@ -272,18 +275,18 @@ export default class CoreLoginSignup extends React.Component {
 
           <div className={STYLES_FOOTER}>
             Not {this.state.suggestedUser.name || '@' + this.state.suggestedUser.username}?{' '}
-            <UILink onClick={this._goToWho}>Sign in as someone else</UILink> or{' '}
-            <UILink onClick={this._goToSignup}>Create a new account</UILink>
+            <UILink onClick={this._goToWho}>Sign in</UILink> as someone else or{' '}
+            <UILink onClick={this._goToSignup}>create a new account</UILink>.
           </div>
 
           <div className={STYLES_FOOTER}>
-            Forgot your password?
+            Forgot your password?{' '}
             <UILink
               onClick={event => {
                 event.preventDefault();
                 alert('Not implemented yet! :( E-mail ccheever@expo.io to get it reset');
               }}>
-              &nbsp;Reset it
+              Reset it
             </UILink>
           </div>
         </div>

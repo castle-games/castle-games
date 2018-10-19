@@ -5,7 +5,7 @@ import { css } from 'react-emotion';
 
 const STYLES_CONTAINER = css`
   color: ${Constants.colors.white};
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 `;
 
 const STYLES_HEADER = css`
