@@ -69,6 +69,19 @@ const STYLES_NAVIGATION_ITEM = css`
 // TODO(jim): Plop in a rich text editor rendering component
 // since description is not a string.
 export default class UICardProfileHeader extends React.Component {
+  _renderTagline = creator => {
+    if (creator.isReal) {
+      return `Joined on ${Strings.toDate(creator.createdTime)}`;
+    } else {
+      // not real, so don't attribute the action of joining to them.
+      if (creator.userId.includes('user:itch')) {
+        return 'Creator on itch.io';
+      } else {
+        return '';
+      }
+    }
+  }
+
   render() {
     const isViewingMedia = this.props.profileMode === 'media' || !this.props.profileMode;
     const isViewingPlaylists = this.props.profileMode === 'playlists';
@@ -90,7 +103,7 @@ export default class UICardProfileHeader extends React.Component {
             <div className={STYLES_TOP}>
               <div className={STYLES_TITLE}>{this.props.creator.username}</div>
               <div className={STYLES_META}>
-                Joined on {Strings.toDate(this.props.creator.createdTime)}
+                {this._renderTagline(this.props.creator)}
               </div>
             </div>
             {rich ? (
