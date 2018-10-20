@@ -251,6 +251,11 @@ export async function getPlaylist({ playlistId }) {
         name
         description
         createdTime
+        coverImage {
+          imgixUrl
+          height
+          width
+        }
         user {
           userId
           name
@@ -328,6 +333,11 @@ export async function getUser({ userId }) {
           name
           description
           createdTime
+          coverImage {
+            imgixUrl
+            height
+            width
+          }
           user {
             userId
             name
@@ -447,6 +457,11 @@ export async function getViewer() {
           name
           description
           createdTime
+          coverImage {
+            height
+            width
+            imgixUrl
+          }
           user {
             userId
             name
@@ -543,6 +558,11 @@ export async function getInitialData() {
           name
           description
           createdTime
+          coverImage {
+            height
+            width
+            imgixUrl
+          }
           user {
             userId
             name
@@ -629,6 +649,11 @@ export async function getInitialData() {
         name
         description
         createdTime
+        coverImage {
+          height
+          width
+          imgixUrl
+        }
         user {
           userId
           name
@@ -713,6 +738,11 @@ export async function search(query) {
             name
             description
             createdTime
+            coverImage {
+              height
+              width
+              imgixUrl
+            }
             user {
               userId
               name

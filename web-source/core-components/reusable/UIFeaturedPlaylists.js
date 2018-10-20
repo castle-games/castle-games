@@ -72,6 +72,7 @@ export default class UIFeaturedPlaylists extends React.Component {
             <UIPlaylistItem
               key={p.playlistId}
               onPlaylistSelect={this.props.onPlaylistSelect}
+              src={p.coverImage && p.coverImage.imgixUrl}
               playlist={p}>
               {p.mediaItems.length} games
             </UIPlaylistItem>
