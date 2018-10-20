@@ -284,7 +284,6 @@ export async function getInitialData() {
         name
         published
         createdTime
-        instructions
         description
         mediaUrl
         mediaId
@@ -325,12 +324,10 @@ export async function getInitialData() {
     }
   `);
 
+  console.log(result);
+
   // TOOD(jim): Write a global error handler.
   if (result.error) {
-    return false;
-  }
-
-  if (result.errors) {
     return false;
   }
 

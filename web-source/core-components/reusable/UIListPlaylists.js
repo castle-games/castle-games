@@ -112,6 +112,11 @@ export default class UIListPlaylists extends React.Component {
           {isOwner ? <div className={STYLES_COLUMN_NO_INTERACTION} /> : null}
         </div>
         {this.props.playlists.map((p, i) => {
+          let mediaItems = [];
+          if (p.mediaItems && p.mediaItems.length) {
+            mediaItems = p.mediaItems;
+          }
+
           const author = p && p.user && p.user.username ? p.user.username : '-';
           const actionsElement = isOwner ? (
             <div className={STYLES_COLUMN}>
@@ -135,7 +140,7 @@ export default class UIListPlaylists extends React.Component {
                 onClick={() => this.props.onUserSelect(p.user)}>
                 {author}
               </div>
-              <div className={STYLES_COLUMN_NO_INTERACTION}>{p.mediaItems.length}</div>
+              <div className={STYLES_COLUMN_NO_INTERACTION}>{mediaItems.length}</div>
               {actionsElement}
             </div>
           );

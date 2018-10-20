@@ -399,14 +399,15 @@ export default class CoreApp extends React.Component {
 
   _stringAsSearchInvariant = s => {
     return s.toLowerCase().trim();
-  }
+  };
 
   _stringIncludesSearchQuery = (s, query) => {
-    if (s == null) {
+    if (Strings.isEmpty(s)) {
       return false;
     }
+
     return this._stringAsSearchInvariant(s).includes(query);
-  }
+  };
 
   _filterMediaItemWithSearchState = m => {
     const query = this._stringAsSearchInvariant(this.state.searchQuery);
@@ -451,24 +452,27 @@ export default class CoreApp extends React.Component {
   _handleSearchSubmit = async e => this._handleSearchChange(e);
 
   _handleSearchChange = async e => {
-    this.setState({
-      pageMode: 'browse',
-      sidebarMode: null,
-      searchQuery: e.target.value,
-    }, () => {
-      let allMediaFiltered, allPlaylistsFiltered;
-      if (Strings.isEmpty(this.state.searchQuery)) {
-        allMediaFiltered = this.state.allMedia;
-        allPlaylistsFiltered = this.state.allPlaylists;
-      } else {
-        allMediaFiltered = this.state.allMedia.filter(this._filterMediaItemWithSearchState);
-        allPlaylistsFiltered = this.state.allPlaylists.filter(
-          this._filterPlaylistWithSearchState
-        );
+    this.setState(
+      {
+        pageMode: 'browse',
+        sidebarMode: null,
+        searchQuery: e.target.value,
+      },
+      () => {
+        if (Strings.isEmpty(this.state.searchQuery)) {
+          return this.setState({
+            allMediaFiltered: [...this.state.allMedia],
+            allPlaylistsFiltered: [...this.state.allPlaylists],
+          });
+        }
+
+        this.setState({
+          allMediaFiltered: this.state.allMedia.filter(this._filterMediaItemWithSearchState),
+          allPlaylistsFiltered: this.state.allPlaylists.filter(this._filterPlaylistWithSearchState),
+        });
       }
-      this.setState({ allMediaFiltered, allPlaylistsFiltered });
-    });
-  }
+    );
+  };
 
   _handleRegisterGame = ({ email, message }) => {
     // TODO(jim): Handle this better
@@ -822,10 +826,11 @@ export default class CoreApp extends React.Component {
     const isViewerViewingPlaylistScene = state.pageMode === 'playlist';
     const isViewerPlayingMedia = !state.pageMode;
 
-    const isViewingOwnProfile = (
+    const isViewingOwnProfile =
       isViewerViewingProfileScene &&
-        state.viewer && state.creator && state.viewer.userId === state.creator.userId
-    );
+      state.viewer &&
+      state.creator &&
+      state.viewer.userId === state.creator.userId;
 
     let maybeLeftSidebarNode;
     if (state.isOverlayActive) {
@@ -833,11 +838,11 @@ export default class CoreApp extends React.Component {
         <CoreRootLeftSidebar
           viewer={state.viewer}
           isPlaying={isViewerPlayingMedia}
-          isBrowsing={(
+          isBrowsing={
             isViewerViewingBrowseScene ||
             isViewerViewingPlaylistScene ||
             (isViewerViewingProfileScene && !isViewingOwnProfile)
-          )}
+          }
           isSignIn={isViewerViewingSignInScene}
           isViewingProfile={isViewingOwnProfile}
           onToggleProfile={this._handleToggleProfile}
