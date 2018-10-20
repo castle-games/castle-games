@@ -79,7 +79,7 @@ export default class CorePlaylist extends React.Component {
           <div className={STYLES_META}>
             Created on {Strings.toDate(this.props.playlist.createdTime)} by{' '}
             <UILink onClick={() => this.props.onUserSelect(this.props.playlist.user)}>
-              {this.props.playlist.user.username}
+              {this.props.playlist.user && this.props.playlist.user.username}
             </UILink>
           </div>
           {rich ? (
