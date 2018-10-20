@@ -19,7 +19,7 @@ const STYLES_INPUT = css`
   border: 2px solid ${Constants.colors.border};
   background: ${Constants.colors.background};
   box-shadow: 2px 2px 0 ${Constants.colors.foreground};
-  color: ${Constants.colors.subdued};
+  color: ${Constants.colors.white};
   font-size: 16px;
   height: 64px;
   margin: 0 0 24px 0;
@@ -27,7 +27,6 @@ const STYLES_INPUT = css`
 
   :focus {
     outline: 0;
-    color: ${Constants.colors.white};
     border: 2px solid ${Constants.colors.white};
     background: ${Constants.base.blue};
     box-shadow: 2px 2px 0 ${Constants.colors.border};

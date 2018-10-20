@@ -278,17 +278,6 @@ export default class CoreLoginSignup extends React.Component {
             <UILink onClick={this._goToWho}>Sign in</UILink> as someone else or{' '}
             <UILink onClick={this._goToSignup}>create a new account</UILink>.
           </div>
-
-          <div className={STYLES_FOOTER}>
-            Forgot your password?{' '}
-            <UILink
-              onClick={event => {
-                event.preventDefault();
-                alert('Not implemented yet! :( E-mail ccheever@expo.io to get it reset');
-              }}>
-              Reset it
-            </UILink>
-          </div>
         </div>
       </div>
     );
