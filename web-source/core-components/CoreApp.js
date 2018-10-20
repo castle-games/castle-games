@@ -828,7 +828,11 @@ export default class CoreApp extends React.Component {
         <CoreRootLeftSidebar
           viewer={state.viewer}
           isPlaying={isViewerPlayingMedia}
-          isBrowsing={isViewerViewingBrowseScene || isViewerViewingPlaylistScene}
+          isBrowsing={(
+            isViewerViewingBrowseScene ||
+            isViewerViewingPlaylistScene ||
+            isViewerViewingProfileScene
+          )}
           isSignIn={isViewerViewingSignInScene}
           isViewingProfile={isViewerViewingProfileScene}
           onToggleProfile={this._handleToggleProfile}
