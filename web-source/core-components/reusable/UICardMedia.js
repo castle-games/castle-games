@@ -101,16 +101,7 @@ export default class UICardMedia extends React.Component {
       rich = Strings.loadEditor(rich);
     }
 
-    let textElement = (
-      <div>
-        <div className={STYLES_SECTION_TITLE} style={{ marginTop: 32 }}>
-          A game on Castle
-        </div>
-        <div className={STYLES_SECTION_PARAGRAPH}>
-          This user has not written anything about their game on Castle yet.
-        </div>
-      </div>
-    );
+    let textElement = <div />;
 
     if (!isReal) {
       textElement = (
