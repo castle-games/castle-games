@@ -25,7 +25,7 @@ do that!
 
 #### Debug build
 - In 'megasource/', run './run_cmake.sh' with the Git Bash utility that comes with Git for Windows.
-- Open and build the 'ALL_BUILD.sln' file inside of 'megasource/build/'.
+- Open and build the 'ALL_BUILD.vcxproj' file inside of 'megasource/build/'.
 - Run the application at 'megasourse/build/Debug/Castle.exe'.
 
 #### Release build
