@@ -7,6 +7,7 @@ import { css } from 'react-emotion';
 import UIListMedia from '~/core-components/reusable/UIListMedia';
 import UIListPlaylists from '~/core-components/reusable/UIListPlaylists';
 import UIEmptyState from '~/core-components/reusable/UIEmptyState';
+import UIFeaturedPlaylists from '~/core-components/reusable/UIFeaturedPlaylists';
 
 import CoreWelcomeScreen from '~/core-components/CoreWelcomeScreen';
 
@@ -34,6 +35,10 @@ const STYLES_CONTAINER = css`
     display: none;
     width: 1px;
   }
+`;
+
+const STYLES_NO_RESULTS_FEATURED_PLAYLISTS = css`
+  padding: 16px 0 0 48px;
 `;
 
 export default class CoreBrowseResults extends React.Component {
@@ -84,8 +89,15 @@ export default class CoreBrowseResults extends React.Component {
           <UIEmptyState
             title="No media found"
             style={{ borderTop: `1px solid ${Constants.colors.border}` }}>
-            We didn't find any games or playlists matching your search. Try another search.
+            We didn't find any games or playlists matching your search. If you're not sure
+            what to play, try one of the following playlists...
           </UIEmptyState>
+          <div className={STYLES_NO_RESULTS_FEATURED_PLAYLISTS}>
+            <UIFeaturedPlaylists
+              playlists={this.props.featuredPlaylists}
+              onPlaylistSelect={this.props.onPlaylistSelect}
+            />
+          </div>
         </div>
       );
     }
