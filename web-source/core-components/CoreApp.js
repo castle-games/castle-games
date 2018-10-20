@@ -845,7 +845,6 @@ export default class CoreApp extends React.Component {
         <CoreLayout
           ref={this._handleGetReference}
           topNode={this.renderRootSearchInput()}
-          bottomNode={this.renderRootURLInput()}
           leftSidebarNode={maybeLeftSidebarNode}>
           <CoreBrowseResults
             mediaItems={state.allMediaFiltered}
@@ -877,7 +876,6 @@ export default class CoreApp extends React.Component {
             this._layout = reference;
           }}
           topNode={this.renderRootSearchInput()}
-          bottomNode={this.renderRootURLInput()}
           leftSidebarNode={maybeLeftSidebarNode}>
           <CorePlaylist
             viewer={state.viewer}
@@ -896,7 +894,6 @@ export default class CoreApp extends React.Component {
           ref={this._handleGetReference}
           leftSidebarNode={maybeLeftSidebarNode}
           topNode={this.renderRootSearchInput()}
-          bottomNode={this.renderRootURLInput()}
           rightNode={
             state.viewer && state.creator && state.viewer.userId === state.creator.userId ? (
               <CoreProfileSidebar
