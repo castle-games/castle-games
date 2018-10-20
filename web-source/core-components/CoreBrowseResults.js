@@ -73,33 +73,33 @@ export default class CoreBrowseResults extends React.Component {
               onUserSelect={this.props.onUserSelect}
               onPlaylistSelect={this.props.onPlaylistSelect}
             />
-          ) : (null)}
-        {this.props.mediaItems.length ? (
-          <UIListMedia
-            mediaItems={this.props.mediaItems}
-            onUserSelect={this.props.onUserSelect}
-            onMediaSelect={this.props.onMediaSelect}
-          />
-        ) : (null)}
-        </div>
-      );
-    } else {
-      return (
-        <div className={STYLES_CONTAINER}>
-          <UIEmptyState
-            title="No media found"
-            style={{ borderTop: `1px solid ${Constants.colors.border}` }}>
-            We didn't find any games or playlists matching your search. If you're not sure
-            what to play, try one of the following playlists...
-          </UIEmptyState>
-          <div className={STYLES_NO_RESULTS_FEATURED_PLAYLISTS}>
-            <UIFeaturedPlaylists
-              playlists={this.props.featuredPlaylists}
-              onPlaylistSelect={this.props.onPlaylistSelect}
+          ) : null}
+          {this.props.mediaItems.length ? (
+            <UIListMedia
+              mediaItems={this.props.mediaItems}
+              onUserSelect={this.props.onUserSelect}
+              onMediaSelect={this.props.onMediaSelect}
             />
-          </div>
+          ) : null}
         </div>
       );
     }
+
+    return (
+      <div className={STYLES_CONTAINER}>
+        <UIEmptyState
+          title="No media found"
+          style={{ borderTop: `1px solid ${Constants.colors.border}` }}>
+          We didn't find any games or playlists matching your search. If you're not sure what to
+          play, try one of the following playlists...
+        </UIEmptyState>
+        <div className={STYLES_NO_RESULTS_FEATURED_PLAYLISTS}>
+          <UIFeaturedPlaylists
+            playlists={this.props.featuredPlaylists}
+            onPlaylistSelect={this.props.onPlaylistSelect}
+          />
+        </div>
+      </div>
+    );
   }
 }

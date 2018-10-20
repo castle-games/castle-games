@@ -6,6 +6,55 @@ import CastleApiClient from 'castle-api-client';
 export const API = CastleApiClient('https://apis.playcastle.io');
 // export const API = CastleApiClient();
 
+const NESTED_USER = `
+  user {
+    userId
+    name
+    username
+    createdTime
+    isReal
+    photo {
+      url
+      height
+      width
+    }
+  }
+`;
+
+const MEDIA_ITEMS = `
+  mediaItems {
+    name
+    published
+    createdTime
+    instructions
+    description
+    mediaUrl
+    mediaId
+    coverImage {
+      url
+      height
+      width
+    }
+    ${NESTED_USER}
+  }
+`;
+
+const PLAYLISTS = `
+  playlists {
+    playlistId
+    name
+    description
+    createdTime
+    coverImage {
+      url
+      height
+      width
+    }
+    ${NESTED_USER}
+    ${MEDIA_ITEMS}
+  }
+`;
+
 export async function getExistingUser({ who }) {
   const response = await API.graphqlAsync(
     `
@@ -52,71 +101,8 @@ export async function signup({ name, username, email, password }) {
             height
             width
           }
-          playlists {
-            playlistId
-            name
-            description
-            createdTime
-            user {
-              userId
-              name
-              username
-              createdTime
-              isReal
-              photo {
-                url
-                height
-                width
-              }
-            }
-            mediaItems {
-              name
-              published
-              createdTime
-              instructions
-              description
-              mediaUrl
-              mediaId
-              coverImage {
-                url
-                height
-                width
-              }
-              user {
-                userId
-                name
-                username
-                createdTime
-                isReal
-                photo {
-                  url
-                  height
-                  width
-                }
-              }
-            }
-          }
-          mediaItems {
-            name
-            published
-            createdTime
-            instructions
-            description
-            mediaUrl
-            mediaId
-            user {
-              userId
-              name
-              username
-              createdTime
-              isReal
-              photo {
-                url
-                height
-                width
-              }
-            }
-          }
+          ${PLAYLISTS}
+          ${MEDIA_ITEMS}
         }
       }
     `,
@@ -155,71 +141,8 @@ export async function login({ userId, password }) {
             height
             width
           }
-          playlists {
-            playlistId
-            name
-            description
-            createdTime
-            user {
-              userId
-              name
-              username
-              createdTime
-              isReal
-              photo {
-                url
-                height
-                width
-              }
-            }
-            mediaItems {
-              name
-              published
-              createdTime
-              instructions
-              description
-              mediaUrl
-              mediaId
-              coverImage {
-                url
-                height
-                width
-              }
-              user {
-                userId
-                name
-                username
-                createdTime
-                isReal
-                photo {
-                  url
-                  height
-                  width
-                }
-              }
-            }
-          }
-          mediaItems {
-            name
-            published
-            createdTime
-            instructions
-            description
-            mediaUrl
-            mediaId
-            user {
-              userId
-              name
-              username
-              createdTime
-              isReal
-              photo {
-                url
-                height
-                width
-              }
-            }
-          }
+          ${PLAYLISTS}
+          ${MEDIA_ITEMS}
         }
       }
     `,
@@ -256,44 +179,8 @@ export async function getPlaylist({ playlistId }) {
           height
           width
         }
-        user {
-          userId
-          name
-          username
-          createdTime
-          isReal
-          photo {
-            url
-            height
-            width
-          }
-        }
-        mediaItems {
-          name
-          published
-          createdTime
-          instructions
-          description
-          mediaUrl
-          mediaId
-          coverImage {
-            url
-            height
-            width
-          }
-          user {
-            userId
-            name
-            username
-            createdTime
-            isReal
-            photo {
-              url
-              height
-              width
-            }
-          }
-        }
+        ${NESTED_USER}
+        ${MEDIA_ITEMS}
       }
     }
   `,
@@ -328,76 +215,8 @@ export async function getUser({ userId }) {
           height
           width
         }
-        playlists {
-          playlistId
-          name
-          description
-          createdTime
-          coverImage {
-            imgixUrl
-            height
-            width
-          }
-          user {
-            userId
-            name
-            username
-            createdTime
-            isReal
-            photo {
-              url
-              height
-              width
-            }
-          }
-          mediaItems {
-            name
-            published
-            createdTime
-            instructions
-            description
-            mediaUrl
-            mediaId
-            coverImage {
-              url
-              height
-              width
-            }
-            user {
-              userId
-              name
-              username
-              createdTime
-              isReal
-              photo {
-                url
-                height
-                width
-              }
-            }
-          }
-        }
-        mediaItems {
-          name
-          published
-          createdTime
-          instructions
-          description
-          mediaUrl
-          mediaId
-          user {
-            userId
-            name
-            username
-            createdTime
-            isReal
-            photo {
-              url
-              height
-              width
-            }
-          }
-        }
+        ${PLAYLISTS}
+        ${MEDIA_ITEMS}
       }
     }
   `,
@@ -425,82 +244,13 @@ export async function getViewer() {
         name
         createdTime
         isReal
-        mediaItems {
-          name
-          published
-          createdTime
-          instructions
-          description
-          mediaUrl
-          mediaId
-          coverImage {
-            url
-            height
-            width
-          }
-          user {
-            userId
-            name
-            username
-            createdTime
-            isReal
-            photo {
-              url
-              height
-              width
-            }
-          }
+        photo {
+          url
+          height
+          width
         }
-
-        playlists {
-          playlistId
-          name
-          description
-          createdTime
-          coverImage {
-            height
-            width
-            imgixUrl
-          }
-          user {
-            userId
-            name
-            username
-            createdTime
-            isReal
-            photo {
-              url
-              height
-              width
-            }
-          }
-          mediaItems {
-            name
-            published
-            createdTime
-            instructions
-            description
-            mediaUrl
-            mediaId
-            coverImage {
-              url
-              height
-              width
-            }
-            user {
-              userId
-              name
-              username
-              createdTime
-              isReal
-              photo {
-                url
-                height
-                width
-              }
-            }
-          }
-        }
+        ${MEDIA_ITEMS}
+        ${PLAYLISTS}
       }
     }
   `);
@@ -526,82 +276,8 @@ export async function getInitialData() {
         name
         createdTime
         isReal
-        mediaItems {
-          name
-          published
-          createdTime
-          instructions
-          description
-          mediaUrl
-          mediaId
-          coverImage {
-            url
-            height
-            width
-          }
-          user {
-            userId
-            name
-            username
-            createdTime
-            isReal
-            photo {
-              url
-              height
-              width
-            }
-          }
-        }
-
-        playlists {
-          playlistId
-          name
-          description
-          createdTime
-          coverImage {
-            height
-            width
-            imgixUrl
-          }
-          user {
-            userId
-            name
-            username
-            createdTime
-            isReal
-            photo {
-              url
-              height
-              width
-            }
-          }
-          mediaItems {
-            name
-            published
-            createdTime
-            instructions
-            description
-            mediaUrl
-            mediaId
-            coverImage {
-              url
-              height
-              width
-            }
-            user {
-              userId
-              name
-              username
-              createdTime
-              isReal
-              photo {
-                url
-                height
-                width
-              }
-            }
-          }
-        }
+        ${MEDIA_ITEMS}
+        ${PLAYLISTS}
       }
 
       allMedia {
@@ -617,18 +293,7 @@ export async function getInitialData() {
           height
           width
         }
-        user {
-          userId
-          name
-          username
-          createdTime
-          isReal
-          photo {
-            url
-            height
-            width
-          }
-        }
+        ${NESTED_USER}
       }
 
       allUsers {
@@ -654,44 +319,8 @@ export async function getInitialData() {
           width
           imgixUrl
         }
-        user {
-          userId
-          name
-          username
-          createdTime
-          isReal
-          photo {
-            url
-            height
-            width
-          }
-        }
-        mediaItems {
-          name
-          published
-          createdTime
-          instructions
-          description
-          mediaUrl
-          mediaId
-          coverImage {
-            url
-            height
-            width
-          }
-          user {
-            userId
-            name
-            username
-            createdTime
-            isReal
-            photo {
-              url
-              height
-              width
-            }
-          }
-        }
+        ${NESTED_USER}
+        ${MEDIA_ITEMS}
       }
     }
   `);
@@ -721,66 +350,8 @@ export async function search(query) {
           cursorPosition: $cursorPosition
           limit: $limit
         ) {
-          mediaItems {
-            mediaId
-            mediaUrl
-            name
-            createdTime
-            published
-            user {
-              userId
-              name
-              username
-            }
-          }
-          playlists {
-            playlistId
-            name
-            description
-            createdTime
-            coverImage {
-              height
-              width
-              imgixUrl
-            }
-            user {
-              userId
-              name
-              username
-              createdTime
-              isReal
-              photo {
-                url
-                height
-                width
-              }
-            }
-            mediaItems {
-              name
-              published
-              createdTime
-              instructions
-              description
-              mediaUrl
-              coverImage {
-                url
-                height
-                width
-              }
-              user {
-                userId
-                name
-                username
-                createdTime
-                isReal
-                photo {
-                  url
-                  height
-                  width
-                }
-              }
-            }
-          }
+          ${MEDIA_ITEMS}
+          ${PLAYLISTS}
         }
       }
     `,
@@ -839,18 +410,7 @@ export async function getMediaByURL({ mediaUrl }) {
             height
             width
           }
-          user {
-            userId
-            name
-            username
-            createdTime
-            isReal
-            photo {
-              url
-              height
-              width
-            }
-          }
+          ${NESTED_USER}
         }
       }
     `,
@@ -886,30 +446,7 @@ export async function addMedia({ name, url, description }) {
             rich: $description
           }
         }) {
-          name
-          published
-          createdTime
-          instructions
-          description
-          mediaUrl
           mediaId
-          coverImage {
-            url
-            height
-            width
-          }
-          user {
-            userId
-            name
-            username
-            createdTime
-            isReal
-            photo {
-              url
-              height
-              width
-            }
-          }
         }
       }
     `,
@@ -940,22 +477,7 @@ export async function addPlaylist({ name, description }) {
             rich: $description
           }
         }) {
-          name
-          description
           playlistId
-          createdTime
-          user {
-            userId
-            name
-            username
-            createdTime
-            isReal
-            photo {
-              url
-              height
-              width
-            }
-          }
         }
       }
     `,

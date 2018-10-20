@@ -103,9 +103,21 @@ const delay = ms =>
 
 const run = async () => {
   const { allMedia = [], allPlaylists = [], me } = await Actions.getInitialData();
+
   const featuredPlaylist1 = await Actions.getPlaylist({ playlistId: 'playlist:ludum-dare-42' });
   const featuredPlaylist2 = await Actions.getPlaylist({ playlistId: 'playlist:ghost-games' });
+
+  let featuredPlaylists = [];
+  if (featuredPlaylist1 && featuredPlaylist2) {
+    featuredPlaylists = [featuredPlaylist1, featuredPlaylist2];
+  }
+
   const featuredPlaylist3 = await Actions.getPlaylist({ playlistId: 'playlist:jasons-favorites' });
+
+  let featuredMedia = [];
+  if (featuredPlaylist3) {
+    featuredMedia = [...featuredPlaylist3.mediaItems];
+  }
 
   await delay(300);
 
@@ -124,8 +136,8 @@ const run = async () => {
     allPlaylists,
     allMediaFiltered: [...allMedia],
     allPlaylistsFiltered: [...allPlaylists],
-    featuredPlaylists: [featuredPlaylist1, featuredPlaylist2],
-    featuredMedia: [...featuredPlaylist3.mediaItems],
+    featuredPlaylists,
+    featuredMedia,
     sidebarMode: null, // current-context | media-info | null
     pageMode: 'browse', // browse | playlist | profile | sign-in | null
     profileMode: null, // media | playlist | null
