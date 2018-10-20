@@ -822,6 +822,11 @@ export default class CoreApp extends React.Component {
     const isViewerViewingPlaylistScene = state.pageMode === 'playlist';
     const isViewerPlayingMedia = !state.pageMode;
 
+    const isViewingOwnProfile = (
+      isViewerViewingProfileScene &&
+        state.viewer && state.creator && state.viewer.userId === state.creator.userId
+    );
+
     let maybeLeftSidebarNode;
     if (state.isOverlayActive) {
       maybeLeftSidebarNode = (
@@ -831,10 +836,10 @@ export default class CoreApp extends React.Component {
           isBrowsing={(
             isViewerViewingBrowseScene ||
             isViewerViewingPlaylistScene ||
-            isViewerViewingProfileScene
+            (isViewerViewingProfileScene && !isViewingOwnProfile)
           )}
           isSignIn={isViewerViewingSignInScene}
-          isViewingProfile={isViewerViewingProfileScene}
+          isViewingProfile={isViewingOwnProfile}
           onToggleProfile={this._handleToggleProfile}
           onToggleBrowse={this._handleToggleBrowse}
           onToggleSignIn={this._handleToggleSignIn}
@@ -899,7 +904,7 @@ export default class CoreApp extends React.Component {
           leftSidebarNode={maybeLeftSidebarNode}
           topNode={this.renderRootSearchInput()}
           rightNode={
-            state.viewer && state.creator && state.viewer.userId === state.creator.userId ? (
+            isViewingOwnProfile ? (
               <CoreProfileSidebar
                 onMediaAdd={this._handleMediaAdd}
                 onPlaylistAdd={this._handlePlaylistAdd}
