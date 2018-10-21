@@ -49,6 +49,7 @@ const injectGlobalStyles = () => injectGlobal`
   #loader {
     background: ${Constants.colors.black};
     position: absolute;
+    z-index: 100;
     display: flex;
     align-items: center;
     justify-content: center;
