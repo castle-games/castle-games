@@ -114,16 +114,8 @@ export async function signup({ name, username, email, password }) {
     }
   );
 
-  // TOOD(jim): Write a global error handler.
-  if (response.error) {
-    return false;
-  }
+  return response;
 
-  if (response.errors) {
-    return false;
-  }
-
-  return response.data.signup;
 }
 
 export async function login({ userId, password }) {

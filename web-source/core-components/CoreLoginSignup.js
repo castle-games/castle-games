@@ -59,7 +59,7 @@ const STYLES_ERROR_MESSAGE = css`
 `;
 
 export default class CoreLoginSignup extends React.Component {
-  // states:
+  // steps:
   //  WHO - input who you are
   //  PASSWORD - put in your password
   //  SIGNUP - create an account
@@ -73,7 +73,7 @@ export default class CoreLoginSignup extends React.Component {
     email: '',
     name: '',
     username: '',
-    s: 'WHO',
+    step: 'WHO',
 
     whoSubmitEnabled: true,
     passwordSubmitEnabled: true,
@@ -81,11 +81,13 @@ export default class CoreLoginSignup extends React.Component {
 
     localViewer: null,
     suggestedUser: null,
+
+    sginupError: null,
   };
 
   _goToSignup = () => {
     let s = {
-      s: 'SIGNUP',
+      step: 'SIGNUP',
       signupSubmitEnabled: true,
     };
 
@@ -102,7 +104,7 @@ export default class CoreLoginSignup extends React.Component {
 
   _goToPassword = () => {
     this.setState({
-      s: 'PASSWORD',
+      step: 'PASSWORD',
       passwordSubmitEnabled: true,
       loginError: null,
     });
@@ -110,19 +112,19 @@ export default class CoreLoginSignup extends React.Component {
 
   _goToWho = () => {
     this.setState({
-      s: 'WHO',
+      step: 'WHO',
       whoSubmitEnabled: true,
     });
   };
 
   _goToSuccess = () => {
-    this.setState({ s: 'SUCCESS' }, () => {
+    this.setState({ step: 'SUCCESS' }, () => {
       this.props.onLogin(this.state.localViewer);
     });
   };
 
   render() {
-    switch (this.state.s) {
+    switch (this.state.step) {
       case 'WHO':
         return this._renderWho();
       case 'PASSWORD':
@@ -132,7 +134,7 @@ export default class CoreLoginSignup extends React.Component {
       case 'SUCCESS':
         return this._renderSuccess();
       default:
-        this.setState({ s: 'WHO' });
+        this.setState({ step: 'WHO' });
         return this._renderWho();
     }
   }
@@ -200,15 +202,32 @@ export default class CoreLoginSignup extends React.Component {
 
     this.setState({ signupSubmitEnabled: false });
 
-    const localViewer = await Actions.signup({
+    const response = await Actions.signup({
       name: this.state.name,
       username: this.state.username,
       email: this.state.email,
       password: this.state.password,
     });
 
-    if (localViewer) {
-      this.setState({ localViewer }, this._goToSuccess);
+    if (response.errors) {
+      this.setState({
+        signupError: response.errors[0].message,
+        signupSubmitEnabled: true,
+      });
+    } else {
+      let localViewer;
+
+      if (response && response.data && response.data.signup) {
+        localViewer = response.data.signup;
+        this.setState({ localViewer, signupError: null }, this._goToSuccess);
+      }
+
+      if (!localViewer) {
+        this.setState({
+          signupError: "Server didn't respond with a user",
+          signupSubmitEnabled: true,
+        });
+      }
     }
   };
 
@@ -284,11 +303,17 @@ export default class CoreLoginSignup extends React.Component {
   };
 
   _renderSignup = () => {
+    let maybeErrorNode;
+    if (!Strings.isEmpty(this.state.signupError)) {
+      maybeErrorNode = <h5 className={STYLES_ERROR_MESSAGE}>{this.state.signupError}</h5>;
+    }
+
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_CONTENTS}>
           <form onSubmit={this._handleSignUpAsync}>
             <UIHeadingGroup title="Create a Castle account" />
+            {maybeErrorNode}
             <UIInput
               autoFocus
               label="username"
