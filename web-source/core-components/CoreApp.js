@@ -334,11 +334,16 @@ export default class CoreApp extends React.Component {
 
     this._handleSetHistory(existingMedia ? existingMedia : media);
 
+    let sidebarMode = this.state.sidebarMode;
+    if (media.mediaUrl !== this.state.mediaUrl) {
+      sidebarMode = 'current-context';
+    }
+
     this.setStateWithCEF({
       media: existingMedia ? existingMedia : media,
       mediaUrl: media.mediaUrl,
       pageMode: null,
-      sidebarMode: this.state.sidebarMode ? this.state.sidebarMode : 'current-context',
+      sidebarMode,
       creator: null,
     });
   };
@@ -358,11 +363,16 @@ export default class CoreApp extends React.Component {
 
     this._handleSetHistory(media ? media : { mediaUrl });
 
+    let sidebarMode = this.state.sidebarMode;
+    if (mediaUrl !== this.state.mediaUrl) {
+      sidebarMode = 'current-context';
+    }
+
     this.setStateWithCEF({
       media: media ? media : { mediaUrl },
       mediaUrl,
       pageMode: null,
-      sidebarMode: this.state.sidebarMode ? this.state.sidebarMode : 'current-context',
+      sidebarMode,
       creator: null,
     });
   };
