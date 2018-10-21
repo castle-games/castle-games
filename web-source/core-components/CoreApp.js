@@ -293,6 +293,8 @@ export default class CoreApp extends React.Component {
       return;
     }
 
+    this.closeCEF();
+
     this.setState({ media: null, mediaUrl: '' }, () => {
       if (this.state.mediaUrl.endsWith('.lua')) {
         this.goToLUA(mediaUrl);
