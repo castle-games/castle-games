@@ -82,7 +82,7 @@ export default class CoreLoginSignup extends React.Component {
     localViewer: null,
     suggestedUser: null,
 
-    sginupError: null,
+    signupError: null,
   };
 
   _goToSignup = () => {
@@ -220,11 +220,12 @@ export default class CoreLoginSignup extends React.Component {
       if (response && response.data && response.data.signup) {
         localViewer = response.data.signup;
         this.setState({ localViewer, signupError: null }, this._goToSuccess);
+        return;
       }
 
       if (!localViewer) {
         this.setState({
-          signupError: "Server didn't respond with a user",
+          signupError: "Server didn't respond with an user",
           signupSubmitEnabled: true,
         });
       }
