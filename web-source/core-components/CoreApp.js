@@ -336,7 +336,7 @@ export default class CoreApp extends React.Component {
       media: existingMedia ? existingMedia : media,
       mediaUrl: media.mediaUrl,
       pageMode: null,
-      sidebarMode: 'current-context',
+      sidebarMode: this.state.sidebarMode ? this.state.sidebarMode : 'current-context',
       creator: null,
     });
   };
@@ -360,7 +360,7 @@ export default class CoreApp extends React.Component {
       media: media ? media : { mediaUrl },
       mediaUrl,
       pageMode: null,
-      sidebarMode: 'current-context',
+      sidebarMode: this.state.sidebarMode ? this.state.sidebarMode : 'current-context',
       creator: null,
     });
   };
@@ -623,7 +623,6 @@ export default class CoreApp extends React.Component {
   _handleToggleBrowse = () => {
     const updates = {
       pageMode: 'browse',
-      sidebarMode: null,
       creator: null,
     };
 
