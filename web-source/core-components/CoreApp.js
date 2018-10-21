@@ -283,26 +283,26 @@ export default class CoreApp extends React.Component {
     });
   };
 
-  reload = e => {
+  reload = async e => {
     if (e) {
       e.preventDefault();
     }
 
-    const mediaUrl = this.state.mediaUrl;
+    const mediaUrl = this.state.mediaUrl.slice(0);
     if (Strings.isEmpty(mediaUrl)) {
       return;
     }
 
-    this.closeCEF();
+    this.setState({ media: null, mediaUrl });
 
-    this.setState({ media: null, mediaUrl: '' }, () => {
-      if (this.state.mediaUrl.endsWith('.lua')) {
-        this.goToLUA(mediaUrl);
-        return;
-      }
+    await delay(100);
 
-      this.goToHTML5Media({ mediaUrl });
-    });
+    if (mediaUrl.endsWith('.lua')) {
+      this.goToLUA(mediaUrl);
+      return;
+    }
+
+    this.goToHTML5Media({ mediaUrl });
   };
 
   _handleSetViewer = viewer => this.setState({ viewer, pageMode: viewer ? 'browse' : 'sign-in' });
@@ -383,19 +383,19 @@ export default class CoreApp extends React.Component {
 
   _handleKeyDown = e => {
     if (isReloadHotkey(e)) {
-      return this.reload();
+      return this.reload(e);
     }
 
     if (isAppReloadHotkey(e)) {
-      return this.appReload();
+      return this.appReload(e);
     }
 
-    if (isOverlayHotkey(e) && ENALBE_HIDE_OVERLAY) {
-      return this._handleToggleOverlay();
+    if (isOverlayHotkey(e) && ENABLE_HIDE_OVERLAY) {
+      return this._handleToggleOverlay(e);
     }
 
     if (isDevelopmentLogHotkey(e)) {
-      return this._handleToggleDevelopmentLogs();
+      return this._handleToggleDevelopmentLogs(e);
     }
   };
 
