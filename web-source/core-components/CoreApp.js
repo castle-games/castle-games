@@ -274,6 +274,13 @@ export default class CoreApp extends React.Component {
     } catch (e) {}
 
     if (!data) {
+      document.getElementById('loader').classList.add('loader--finished');
+      await delay(300);
+
+      this.setState({ ...state }, () => {
+        document.getElementById('loader').outerHTML = '';
+      });
+
       return;
     }
 
