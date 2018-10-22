@@ -340,16 +340,10 @@ export default class CoreApp extends React.Component {
 
     this._handleSetHistory(existingMedia ? existingMedia : media);
 
-    let sidebarMode = this.state.sidebarMode;
-    if (media.mediaUrl !== this.state.mediaUrl) {
-      sidebarMode = 'current-context';
-    }
-
     this.setStateWithCEF({
       media: existingMedia ? existingMedia : media,
       mediaUrl: media.mediaUrl,
       pageMode: null,
-      sidebarMode,
       creator: null,
     });
   };
@@ -367,16 +361,10 @@ export default class CoreApp extends React.Component {
 
     this._handleSetHistory(media ? media : { mediaUrl });
 
-    let sidebarMode = this.state.sidebarMode;
-    if (mediaUrl !== this.state.mediaUrl) {
-      sidebarMode = 'current-context';
-    }
-
     this.setStateWithCEF({
       media: media ? media : { mediaUrl },
       mediaUrl,
       pageMode: null,
-      sidebarMode,
       creator: null,
     });
   };
@@ -471,7 +459,6 @@ export default class CoreApp extends React.Component {
     this.setState(
       {
         pageMode: 'browse',
-        sidebarMode: null,
         searchQuery: e.target.value,
       },
       () => {
@@ -619,9 +606,6 @@ export default class CoreApp extends React.Component {
   _handleTogglePlay = () => {
     const updates = {
       pageMode: null,
-      sidebarMode: Strings.isEmpty(this.state.mediaUrl)
-        ? 'current-context'
-        : this.state.sidebarMode,
       creator: null,
     };
 
