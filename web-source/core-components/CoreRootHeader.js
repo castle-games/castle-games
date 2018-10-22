@@ -62,38 +62,3 @@ export default class CoreRootHeader extends React.Component {
     );
   }
 }
-
-/*
-export default class CoreRootHeader extends React.Component {
-  render() {
-    return (
-      <div className={STYLES_CONTAINER}>
-        <div className={STYLES_CONTAINER_LEFT}>
-          {!this.props.viewer ? (
-            <UIControl style={{ marginRight: 24 }} onClick={this.props.onToggleAuthentication}>
-              Sign In
-            </UIControl>
-          ) : null}
-          {this.props.viewer ? (
-            <UIControl style={{ marginRight: 24 }} onClick={this.props.onToggleAuthentication}>
-              Sign out
-            </UIControl>
-          ) : null}
-        </div>
-        <div className={STYLES_CONTAINER_RIGHT}>
-          <UIControl style={{ marginRight: 24 }} onClick={this.props.onToggleCurrentPlaylist}>
-            Current Playlist
-          </UIControl>
-          <UIControl style={{ marginRight: 24 }} onClick={this.props.onToggleDashboard}>
-            Dashboard
-          </UIControl>
-          <UIControl style={{ marginRight: 24 }} onClick={this.props.onToggleMediaInfo}>
-            Info
-          </UIControl>
-          <UIControl onClick={this.props.onToggleScores}>Scores</UIControl>
-        </div>
-      </div>
-    );
-  }
-}
-*/

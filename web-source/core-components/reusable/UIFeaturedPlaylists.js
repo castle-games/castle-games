@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
+
 import { css } from 'react-emotion';
 
 const STYLES_PLAYLIST_ITEM = css`
@@ -15,7 +16,7 @@ const STYLES_PLAYLIST_ITEM = css`
   margin: 0 16px 16px 0;
 
   :hover {
-    transform: scale(1.1);
+    transform: scale(1.05);
   }
 `;
 
@@ -39,7 +40,7 @@ const STYLES_PLAYLIST_ITEM_BOTTOM_HEADING = css`
 `;
 
 const STYLES_PLAYLIST_ITEM_BOTTOM_DESCRIPTION = css`
-  font-size: 14px;
+  font-size: 12px;
   line-height: 1.725;
 `;
 

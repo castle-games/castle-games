@@ -68,9 +68,6 @@ const STYLES_OPTION = css`
   }
 `;
 
-// TODO(jim): Move this this
-// -----------------------------------------------------------
-
 const STYLES_SECTION = css`
   padding: 32px 16px 16px 16px;
 `;
