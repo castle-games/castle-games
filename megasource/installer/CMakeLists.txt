@@ -43,9 +43,10 @@ set(CPACK_NSIS_URL_INFO_ABOUT "https://playcastle.io/")
 #set(CPACK_NSIS_CONTACT ${APP_EMAIL})
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/../extra/license.txt")
 
+# Run install_redist.bat without opening a terminal window
 set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
-    nsExec::Exec '\\\"$sysdir\\\\cmd.exe\\\" /c if 1==1 \\\"$INSTDIR\\\\install_redist.bat\\\"'
-    Pop $0
+	nsExec::Exec '\\\"$sysdir\\\\cmd.exe\\\" /c if 1==1 \\\"$INSTDIR\\\\install_redist.bat\\\"'
+	Pop $0
 
 	WriteRegStr HKCR \\\"castle\\\" \\\"\\\" \\\"URL:Castle Protocol\\\"
 	WriteRegStr HKCR \\\"castle\\\" \\\"URL Protocol\\\" \\\"\\\"
