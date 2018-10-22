@@ -355,8 +355,6 @@ export default class CoreApp extends React.Component {
 
     this.closeCEF();
 
-    this.setState({ media: null, mediaLoading: true });
-
     const media = await Actions.getMediaByURL({ mediaUrl });
 
     this.openCEF(mediaUrl);
@@ -812,6 +810,7 @@ export default class CoreApp extends React.Component {
       viewer={this.state.viewer}
       media={this.state.media}
       expanded={this.state.isMediaExpanded}
+      isLoading={this.state.mediaLoading}
       onChange={this._handleURLChange}
       onSubmit={this.reload}
       onToggleMediaExpanded={this._handleToggleMediaExpanded}

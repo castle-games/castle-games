@@ -7,6 +7,7 @@ import { css } from 'react-emotion';
 import ControlledInput from '~/core-components/primitives/ControlledInput';
 import UIButtonDarkSmall from '~/core-components/reusable/UIButtonDarkSmall';
 import UIControl from '~/core-components/reusable/UIControl';
+import UIInputLoader from '~/core-components/reusable/UIInputLoader';
 
 const STYLES_CONTAINER = css`
   @keyframes url-animation {
@@ -30,6 +31,7 @@ const STYLES_CONTAINER = css`
   color: ${Constants.colors.white};
   padding: 0 16px 0 16px;
   border-top: 1px solid ${Constants.colors.border};
+  position: relative;
 `;
 
 const STYLES_CONTAINER_LEFT = css`
@@ -104,6 +106,7 @@ export default class CoreRootURLInput extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
+        <UIInputLoader isLoading={this.props.isLoading} />
         <div className={STYLES_CONTAINER_MIDDLE}>
           <ControlledInput
             ref={c => {
@@ -117,8 +120,7 @@ export default class CoreRootURLInput extends React.Component {
             onChange={this.props.onChange}
           />
         </div>
-        <div className={STYLES_CONTAINER_RIGHT}>
-        </div>
+        <div className={STYLES_CONTAINER_RIGHT} />
         <div className={STYLES_CONTAINER_TOOLBAR}>
           <UIButtonDarkSmall
             icon={<SVG.Play height="10px" />}
