@@ -129,6 +129,7 @@ const run = async () => {
     mediaUrl: '',
     playlist: null,
     media: null,
+    mediaLoading: false,
     creator: null,
     viewer: me,
     local: null,

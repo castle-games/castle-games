@@ -13,6 +13,7 @@ import { LOADER_STRING } from '~/core-components/primitives/loader';
 
 // NOTE(jim): Reusable layout component.
 import CoreLayout from '~/core-components/layouts/CoreLayout';
+import CoreLoadingScreen from '~/core-components/CoreLoadingScreen';
 
 // NOTE(jim): Root Components
 import CoreRootHeader from '~/core-components/CoreRootHeader';
@@ -128,12 +129,14 @@ export default class CoreApp extends React.Component {
     this.setState(updates);
   };
 
-  _handleNativeLoadEnd = () => {
-    this.setState({ loadingMedia: false });
+  _handleNativeLoadEnd = async () => {
+    await delay(2000);
+
+    this.setState({ mediaLoading: false });
   };
 
   _handleNativeLoadError = () => {
-    this.setState({ loadingMedia: false });
+    this.setState({ mediaLoading: false });
   };
 
   _handleCEFupdateFrame = () => {
@@ -326,7 +329,10 @@ export default class CoreApp extends React.Component {
   goToHTML5Media = async media => {
     this.closeCEF();
 
-    this.setState({ mediaLoading: true });
+    // HACK(jim): This is a great way to disable this feature for local web.
+    if (window.cefQuery) {
+      this.setState({ mediaLoading: true });
+    }
 
     const existingMedia = await Actions.getMediaByURL({
       mediaUrl: media.mediaUrl,
@@ -1012,6 +1018,7 @@ export default class CoreApp extends React.Component {
         bottomNode={maybeBottomNode}
         leftSidebarNode={maybeLeftSidebarNode}
         rightNode={maybeRightNode}>
+        {state.mediaLoading ? <CoreLoadingScreen /> : null}
         {isRenderingIFrame ? (
           <CoreMediaScreen expanded={state.isMediaExpanded} media={state.media} />
         ) : null}

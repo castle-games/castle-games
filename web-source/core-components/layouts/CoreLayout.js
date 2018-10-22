@@ -37,6 +37,7 @@ const STYLES_CHILDREN = css`
   min-height: 25%;
   height: 100%;
   width: 100%;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
