@@ -268,7 +268,16 @@ export default class CoreApp extends React.Component {
 
     document.body.appendChild(loader);
 
-    const { allMedia = [], allPlaylists = [], me } = await Actions.getInitialData();
+    let data;
+    try {
+      data = await Actions.getInitialData();
+    } catch (e) {}
+
+    if (!data) {
+      return;
+    }
+
+    const { allMedia = [], allPlaylists = [], me } = data;
 
     const state = {
       viewer: me,
@@ -276,6 +285,7 @@ export default class CoreApp extends React.Component {
       allPlaylists,
       allMediaFiltered: [...allMedia],
       allPlaylistsFiltered: [...allPlaylists],
+      isOffline: false,
     };
 
     document.getElementById('loader').classList.add('loader--finished');
