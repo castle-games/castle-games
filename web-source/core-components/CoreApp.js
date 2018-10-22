@@ -377,7 +377,7 @@ export default class CoreApp extends React.Component {
       return;
     }
 
-    url = url.replace('castle://', 'https://');
+    url = url.replace('castle://', 'http://');
     this.setState({ media: null, mediaUrl: url }, () => {
       this._handleURLSubmit();
     });
@@ -833,7 +833,7 @@ export default class CoreApp extends React.Component {
       state.viewer.userId === state.creator.userId;
 
     let maybeLeftSidebarNode;
-    if (state.isOverlayActive) {
+    if (state.isOverlayActive && !state.isOffline) {
       maybeLeftSidebarNode = (
         <CoreRootLeftSidebar
           viewer={state.viewer}
@@ -952,6 +952,7 @@ export default class CoreApp extends React.Component {
           media={state.media}
           playlist={state.playlist}
           isContextSidebarActive={state.sidebarMode === 'current-context'}
+          isOffline={state.isOffline}
           onToggleCurrentContext={this._handleToggleCurrentContext}
         />
       );

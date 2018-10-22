@@ -3,8 +3,15 @@ import CastleApiClient from 'castle-api-client';
 // export const API = CastleApiClient("http://localhost:1380");
 // export const API = CastleApiClient('https://ghost-server.app.render.com');
 // export const API = CastleApiClient('http://api.playcastle.io');
-export const API = CastleApiClient('https://apis.playcastle.io');
+// export const API = CastleApiClient('https://apis.playcastle.io');
 // export const API = CastleApiClient();
+
+let maybeAPI;
+try {
+  maybeAPI = CastleApiClient('https://apis.playcastle.io');
+} catch (e) {}
+
+export const API = maybeAPI;
 
 const NESTED_USER = `
   user {
@@ -115,7 +122,6 @@ export async function signup({ name, username, email, password }) {
   );
 
   return response;
-
 }
 
 export async function login({ userId, password }) {
@@ -178,6 +184,10 @@ export async function getPlaylist({ playlistId }) {
   `,
     variables
   );
+
+  if (!result) {
+    return false;
+  }
 
   // TOOD(jim): Write a global error handler.
   if (result.error) {
@@ -316,7 +326,9 @@ export async function getInitialData() {
     }
   `);
 
-  console.log(result);
+  if (!result) {
+    return false;
+  }
 
   // TOOD(jim): Write a global error handler.
   if (result.error) {

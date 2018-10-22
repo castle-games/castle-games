@@ -103,21 +103,40 @@ const delay = ms =>
   });
 
 const run = async () => {
-  const { allMedia = [], allPlaylists = [], me } = await Actions.getInitialData();
-
-  const featuredPlaylist1 = await Actions.getPlaylist({ playlistId: 'playlist:ludum-dare-42' });
-  const featuredPlaylist2 = await Actions.getPlaylist({ playlistId: 'playlist:ghost-games' });
-
+  let data;
+  let playlist1 = [];
+  let playlist2 = [];
+  let playlist3 = [];
+  let featuredMedia = [];
   let featuredPlaylists = [];
-  if (featuredPlaylist1 && featuredPlaylist2) {
-    featuredPlaylists = [featuredPlaylist1, featuredPlaylist2];
+  let allMedia = [];
+  let allPlaylists = [];
+  let viewer;
+
+  try {
+    data = await Actions.getInitialData();
+    playlist1 = await Actions.getPlaylist({ playlistId: 'playlist:ludum-dare-42' });
+    playlist2 = await Actions.getPlaylist({ playlistId: 'playlist:ghost-games' });
+    playlist3 = await Actions.getPlaylist({ playlistId: 'playlist:jasons-favorites' });
+  } catch (e) {
+    console.log(e);
   }
 
-  const featuredPlaylist3 = await Actions.getPlaylist({ playlistId: 'playlist:jasons-favorites' });
+  let isOffline = true;
 
-  let featuredMedia = [];
-  if (featuredPlaylist3) {
-    featuredMedia = [...featuredPlaylist3.mediaItems];
+  if (data) {
+    isOffline = false;
+    allMedia = data.allMedia ? data.allMedia : [];
+    allPlaylists = data.allPlaylists ? data.allPlaylists : [];
+    viewer = data.me;
+
+    if (playlist1 && playlist2) {
+      featuredPlaylists = [playlist1, playlist2];
+    }
+
+    if (playlist3) {
+      featuredMedia = [...playlist3.mediaItems];
+    }
   }
 
   await delay(300);
@@ -131,7 +150,7 @@ const run = async () => {
     media: null,
     mediaLoading: false,
     creator: null,
-    viewer: me,
+    viewer,
     local: null,
     searchQuery: '',
     allMedia,
@@ -140,12 +159,13 @@ const run = async () => {
     allPlaylistsFiltered: [...allPlaylists],
     featuredPlaylists,
     featuredMedia,
-    sidebarMode: 'current-context', // current-context | media-info | null
-    pageMode: 'browse', // browse | playlist | profile | sign-in | null
+    sidebarMode: !isOffline ? 'current-context' : null, // current-context | media-info | null
+    pageMode: !isOffline ? 'browse' : null, // browse | playlist | profile | sign-in | null
     profileMode: null, // media | playlist | null
     isMediaFavorited: false,
     isMediaExpanded: false,
     isOverlayActive: true,
+    isOffline,
   };
 
   ReactDOM.render(<App state={state} storage={storage} />, document.getElementById('root'));
