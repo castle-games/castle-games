@@ -362,7 +362,7 @@ set(CASTLE_RC
 add_executable(${GHOST_TARGET} WIN32 ${GHOST_SRCS} ${CASTLE_RC})
 add_dependencies(${GHOST_TARGET} libcef_dll_wrapper)
 SET_EXECUTABLE_TARGET_PROPERTIES(${GHOST_TARGET})
-target_link_libraries(${GHOST_TARGET} libcef_lib libcef_dll_wrapper ${CEF_STANDARD_LIBS} liblove ${LOVE_LUA_LIBRARY} shcore)
+target_link_libraries(${GHOST_TARGET} libcef_lib libcef_dll_wrapper ${CEF_STANDARD_LIBS} liblove ${LOVE_LUA_LIBRARY})
 include_directories(
   ../common
   ../cef
@@ -393,3 +393,6 @@ set(GHOST_FILES
 COPY_FILES("${GHOST_TARGET}" "${GHOST_FILES}" "${CMAKE_CURRENT_SOURCE_DIR}/.." "${CEF_TARGET_OUT_DIR}")
 
 #COPY_FILES("${GHOST_TARGET}" "castle.ico" "${CMAKE_CURRENT_SOURCE_DIR}/extra" "${CEF_TARGET_OUT_DIR}")
+
+COPY_FILES("${GHOST_TARGET}" "vc_redist.x86.exe" "${CMAKE_CURRENT_SOURCE_DIR}/extra" "${CEF_TARGET_OUT_DIR}")
+COPY_FILES("${GHOST_TARGET}" "install_redist.bat" "${CMAKE_CURRENT_SOURCE_DIR}/extra" "${CEF_TARGET_OUT_DIR}")

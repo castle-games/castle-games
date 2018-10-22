@@ -18,7 +18,7 @@
 
 #define NTDDI_VERSION NTDDI_WINBLUE
 
-#include <ShellScalingApi.h>
+//#include <ShellScalingApi.h>
 #include <windows.h>
 
 #include <mutex>
@@ -297,9 +297,10 @@ void ghostStep() {
     // Handle window resizing
     if (child) {
       // Get the display scale factor
-      auto percentScale = SCALE_100_PERCENT;
-      auto monitor = MonitorFromWindow(child, MONITOR_DEFAULTTOPRIMARY);
-      GetScaleFactorForMonitor(monitor, &percentScale);
+      //auto percentScale = SCALE_100_PERCENT;
+      //auto monitor = MonitorFromWindow(child, MONITOR_DEFAULTTOPRIMARY);
+      //GetScaleFactorForMonitor(monitor, &percentScale);
+	  auto percentScale = 100;
       auto fracScale = 0.01 * percentScale;
 
       // Check for parent window resizes at the native level and apply the delta
