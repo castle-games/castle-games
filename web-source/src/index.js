@@ -2,7 +2,7 @@ import ReactDOM from 'react-dom';
 
 import * as React from 'react';
 import * as Constants from '~/common/constants';
-import * as Actions from '~/common/actions';
+import * as Network from '~/common/network';
 
 import App from './App';
 
@@ -103,41 +103,14 @@ const delay = ms =>
   });
 
 const run = async () => {
-  let data;
-  let playlist1 = [];
-  let playlist2 = [];
-  let playlist3 = [];
-  let featuredMedia = [];
-  let featuredPlaylists = [];
-  let allMedia = [];
-  let allPlaylists = [];
-  let viewer;
-
-  try {
-    data = await Actions.getInitialData();
-    playlist1 = await Actions.getPlaylist({ playlistId: 'playlist:ludum-dare-42' });
-    playlist2 = await Actions.getPlaylist({ playlistId: 'playlist:ghost-games' });
-    playlist3 = await Actions.getPlaylist({ playlistId: 'playlist:jasons-favorites' });
-  } catch (e) {
-    console.log(e);
-  }
-
-  let isOffline = true;
-
-  if (data) {
-    isOffline = false;
-    allMedia = data.allMedia ? data.allMedia : [];
-    allPlaylists = data.allPlaylists ? data.allPlaylists : [];
-    viewer = data.me;
-
-    if (playlist1 && playlist2) {
-      featuredPlaylists = [playlist1, playlist2];
-    }
-
-    if (playlist3) {
-      featuredMedia = [...playlist3.mediaItems];
-    }
-  }
+  const {
+    featuredMedia,
+    featuredPlaylists,
+    allMedia,
+    allPlaylists,
+    viewer,
+    isOffline,
+  } = await Network.getProductData();
 
   await delay(300);
 

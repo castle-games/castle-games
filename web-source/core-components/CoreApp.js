@@ -5,6 +5,7 @@ import * as ReactDOM from 'react-dom';
 import * as Fixtures from '~/common/fixtures';
 import * as Slack from '~/common/slack';
 import * as Actions from '~/common/actions';
+import * as Network from '~/common/network';
 import * as CEF from '~/common/cef';
 
 import { css } from 'react-emotion';
@@ -268,31 +269,24 @@ export default class CoreApp extends React.Component {
 
     document.body.appendChild(loader);
 
-    let data;
-    try {
-      data = await Actions.getInitialData();
-    } catch (e) {}
-
-    if (!data) {
-      document.getElementById('loader').classList.add('loader--finished');
-      await delay(300);
-
-      this.setState({ ...state }, () => {
-        document.getElementById('loader').outerHTML = '';
-      });
-
-      return;
-    }
-
-    const { allMedia = [], allPlaylists = [], me } = data;
+    const {
+      featuredMedia,
+      featuredPlaylists,
+      allMedia,
+      allPlaylists,
+      viewer,
+      isOffline,
+    } = await Network.getProductData();
 
     const state = {
-      viewer: me,
+      featuredMedia,
+      featuredPlaylists,
+      viewer,
       allMedia,
       allPlaylists,
       allMediaFiltered: [...allMedia],
       allPlaylistsFiltered: [...allPlaylists],
-      isOffline: false,
+      isOffline,
     };
 
     document.getElementById('loader').classList.add('loader--finished');
