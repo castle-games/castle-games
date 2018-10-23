@@ -1,24 +1,21 @@
 // Copyright 2018, 650 Industries Inc.
-// Permission is hereby granted, free of charge, to any person obtaining a copy of 
-// this software and associated documentation files (the "Software"), to deal in the 
-// Software without restriction, including without limitation the rights to use, copy, 
-// modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, 
-// and to permit persons to whom the Software is furnished to do so, subject to the 
+// Permission is hereby granted, free of charge, to any person obtaining a copy of
+// this software and associated documentation files (the "Software"), to deal in the
+// Software without restriction, including without limitation the rights to use, copy,
+// modify, merge, publish, distribute, sublicense, and/or sell copies of the Software,
+// and to permit persons to whom the Software is furnished to do so, subject to the
 // following conditions:
-// The above copyright notice and this permission notice shall be included in all 
+// The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT 
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
-// CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+// CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
 // OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "ghost.h"
 
-#define NTDDI_VERSION NTDDI_WINBLUE
-
-//#include <ShellScalingApi.h>
 #include <windows.h>
 
 #include <mutex>
@@ -248,7 +245,21 @@ HWND ghostWinGetChildWindow();
 
 void ghostQuitMessageLoop() { shouldRunMessageLoop = false; }
 
+bool dllsLoaded = false;
+typedef HRESULT(WINAPI *GetScaleFactorForMonitor_Ptr)(HMONITOR hMon, int *pScale);
+GetScaleFactorForMonitor_Ptr pGetScaleFactorForMonitor = nullptr;
+
 void ghostStep() {
+  if (!dllsLoaded) {
+    auto shcore = SDL_LoadObject("SHCORE.DLL");
+    if (shcore) {
+      pGetScaleFactorForMonitor =
+          (GetScaleFactorForMonitor_Ptr)SDL_LoadFunction(shcore, "GetScaleFactorForMonitor");
+    }
+
+    dllsLoaded = true;
+  }
+
   // Process messages
   {
     while (true) {
@@ -297,10 +308,11 @@ void ghostStep() {
     // Handle window resizing
     if (child) {
       // Get the display scale factor
-      //auto percentScale = SCALE_100_PERCENT;
-      //auto monitor = MonitorFromWindow(child, MONITOR_DEFAULTTOPRIMARY);
-      //GetScaleFactorForMonitor(monitor, &percentScale);
-	  auto percentScale = 100;
+      int percentScale = 100;
+      if (pGetScaleFactorForMonitor) {
+        auto monitor = MonitorFromWindow(child, MONITOR_DEFAULTTOPRIMARY);
+        pGetScaleFactorForMonitor(monitor, &percentScale);
+      }
       auto fracScale = 0.01 * percentScale;
 
       // Check for parent window resizes at the native level and apply the delta
