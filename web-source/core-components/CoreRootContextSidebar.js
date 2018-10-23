@@ -19,7 +19,7 @@ const STYLES_FIXED_CONTAINER = css`
   position: relative;
   width: 420px;
   height: 100%;
-  padding-top: 48px;
+  padding: 48px 0 48px 0;
   border-left: 1px solid ${Constants.colors.border};
 `;
 
@@ -29,6 +29,47 @@ const STYLES_FIXED_HEADER = css`
   top: 0;
   right: 0;
   left: 0;
+`;
+
+const STYLES_FIXED_FOOTER = css`
+  background: ${Constants.colors.background};
+  color: ${Constants.colors.white};
+  border-top: 1px solid ${Constants.colors.border};
+  height: 48px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const STYLES_LEFT = css`
+  flex-shrink: 0;
+  padding-left: 16px;
+  height: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const STYLES_MIDDLE = css`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 25%;
+  width: 100%;
+  height: 100%;
+`;
+
+const STYLES_RIGHT = css`
+  flex-shrink: 0;
+  padding-right: 16px;
+  height: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const STYLES_CONTAINER = css`
@@ -115,6 +156,20 @@ export default class CoreRootContextSidebar extends React.Component {
       </div>
     );
 
+    const footerNode = (
+      <footer className={STYLES_FIXED_FOOTER}>
+        <div className={STYLES_LEFT}>
+          <UIControl onClick={this.props.onSelectPrevious}>Previous</UIControl>
+        </div>
+        <div className={STYLES_MIDDLE}>
+          <UIControl onClick={this.props.onSelectRandom}>Random</UIControl>
+        </div>
+        <div className={STYLES_RIGHT}>
+          <UIControl onClick={this.props.onSelectNext}>Next</UIControl>
+        </div>
+      </footer>
+    );
+
     if (this.state.mode === 'history') {
       return (
         <div
@@ -156,15 +211,9 @@ export default class CoreRootContextSidebar extends React.Component {
                     Browse media
                   </UIButtonIconHorizontal>
                 </div>
-                <div className={STYLES_ACTION_ITEM}>
-                  <UIButtonIconHorizontal
-                    onClick={this.props.onSelectRandom}
-                    icon={<SVG.MediaIcon height="16px" />}>
-                    Play a random game
-                  </UIButtonIconHorizontal>
-                </div>
               </div>
             </div>
+            {footerNode}
           </div>
         );
       }
@@ -184,10 +233,10 @@ export default class CoreRootContextSidebar extends React.Component {
               onUserSelect={this.props.onUserSelect}
               onRegisterMedia={this.props.onRegisterMedia}
               onToggleProfile={this.props.onToggleProfile}
-              onSelectRandom={this.props.onSelectRandom}
               onRefreshViewer={this.props.onRefreshViewer}
             />
           </div>
+          {footerNode}
         </div>
       );
     }
@@ -217,6 +266,7 @@ export default class CoreRootContextSidebar extends React.Component {
             }
           />
         </div>
+        {footerNode}
       </div>
     );
   }

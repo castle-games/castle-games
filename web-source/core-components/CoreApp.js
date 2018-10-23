@@ -578,6 +578,21 @@ export default class CoreApp extends React.Component {
     this._handleMediaSelect(list[index]);
   };
 
+  _handleSelectNext = () => {
+    const index = this.state.allMediaFiltered.findIndex(m => m.mediaUrl === this.state.mediaUrl);
+    const newIndex = (index + 1) % this.state.allMediaFiltered.length;
+
+    this._handleMediaSelect(this.state.allMediaFiltered[newIndex]);
+  };
+
+  _handleSelectPrevious = () => {
+    const index = this.state.allMediaFiltered.findIndex(m => m.mediaUrl === this.state.mediaUrl);
+    const newIndex =
+      (index + this.state.allMediaFiltered.length - 1) % this.state.allMediaFiltered.length;
+
+    this._handleMediaSelect(this.state.allMediaFiltered[newIndex]);
+  };
+
   _handleToggleProfile = () => {
     const updates = {
       pageMode: 'profile',
@@ -923,6 +938,8 @@ export default class CoreApp extends React.Component {
           onViewCurrentPlaylistDetails={this._handleToggleCurrentPlaylistDetails}
           onClearHistory={this._handleClearHistory}
           onSelectRandom={this._handleSelectRandom}
+          onSelectNext={this._handleSelectNext}
+          onSelectPrevious={this._handleSelectPrevious}
           onDismiss={this._handleDismissSidebar}
         />
       );
