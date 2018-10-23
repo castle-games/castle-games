@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
+import * as Strings from '~/common/strings';
 import * as SVG from '~/core-components/primitives/svg';
 
 import { css } from 'react-emotion';
@@ -145,8 +146,7 @@ export default class CoreRootContextSidebar extends React.Component {
             {headerNode}
             <div className={STYLES_CONTAINER}>
               <UIEmptyState title="No media loaded">
-                You aren't playing anything at the moment. Want to get started with
-                Castle?
+                You aren't playing anything at the moment. Want to get started with Castle?
               </UIEmptyState>
               <div className={STYLES_ACTION}>
                 <div className={STYLES_ACTION_ITEM}>
@@ -192,6 +192,13 @@ export default class CoreRootContextSidebar extends React.Component {
       );
     }
 
+    let titleString = `Showing ${this.props.allMedia.length} creations`;
+    if (!Strings.isEmpty(this.props.searchQuery) && this.props.allMediaFiltered.length) {
+      titleString = `Results for "${this.props.searchQuery}" (${
+        this.props.allMediaFiltered.length
+      })`;
+    }
+
     return (
       <div
         className={STYLES_FIXED_CONTAINER}
@@ -200,7 +207,7 @@ export default class CoreRootContextSidebar extends React.Component {
         }}>
         {headerNode}
         <div className={STYLES_CONTAINER}>
-          <UIEmptyState title="Current list" />
+          <UIEmptyState title={titleString} />
           <UIListMedia
             media={this.props.media}
             onMediaSelect={this.props.onMediaSelect}

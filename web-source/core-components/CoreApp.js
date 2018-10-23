@@ -519,7 +519,7 @@ export default class CoreApp extends React.Component {
           : [...this.state.allMediaFiltered],
       creator: null,
       playlist: serverPlaylist,
-      searchQuery: '',
+      searchQuery: Strings.isEmpty(playlist.name) ? '' : playlist.name.slice(0),
     });
   };
 
@@ -913,6 +913,7 @@ export default class CoreApp extends React.Component {
           allMedia={state.allMedia}
           storage={this.props.storage}
           allMediaFiltered={state.allMediaFiltered}
+          searchQuery={state.searchQuery}
           onRefreshViewer={this.refreshViewer}
           onRegisterMedia={this._handleRegisterGame}
           onToggleBrowse={this._handleToggleBrowse}
