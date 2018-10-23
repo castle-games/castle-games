@@ -18,7 +18,7 @@ const STYLES_CONTENT = css`
 `;
 
 const STYLES_TITLE = css`
-  font-family: ${Constants.font.mono};
+  font-family: ${Constants.font.default};
   color: ${Constants.colors.white};
   font-size: 24px;
   font-weight: 400;

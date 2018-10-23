@@ -4,7 +4,7 @@ import * as Constants from '~/common/constants';
 import { css } from 'react-emotion';
 
 const STYLES_CONTROL = css`
-  font-family: ${Constants.font.mono};
+  font-family: ${Constants.font.default};
   font-size: 10px;
   letter-spacing: 0.2px;
   text-transform: uppercase;

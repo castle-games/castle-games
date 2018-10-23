@@ -32,7 +32,7 @@ const STYLES_LOGS = css`
 `;
 
 const STYLES_LOG = css`
-  font-family: 'Monaco', mono;
+  font-family: ${Constants.font.mono};
   font-size: 10px;
   margin-bottom: 2px;
   display: flex;
