@@ -42,10 +42,6 @@ const injectGlobalStyles = () => injectGlobal`
     font-family: ${Constants.font.default};
     background: ${Constants.colors.black};
     font-size: 16px;
-
-    @media (max-width: 728px) {
-      font-size: 14px;
-    }
   }
 `;
 
