@@ -579,6 +579,10 @@ export default class CoreApp extends React.Component {
   };
 
   _handleSelectNext = () => {
+    if (!this.state.allMediaFiltered.length) {
+      return;
+    }
+
     const index = this.state.allMediaFiltered.findIndex(m => m.mediaUrl === this.state.mediaUrl);
     const newIndex = (index + 1) % this.state.allMediaFiltered.length;
 
@@ -586,6 +590,10 @@ export default class CoreApp extends React.Component {
   };
 
   _handleSelectPrevious = () => {
+    if (!this.state.allMediaFiltered.length) {
+      return;
+    }
+
     const index = this.state.allMediaFiltered.findIndex(m => m.mediaUrl === this.state.mediaUrl);
     const newIndex =
       (index + this.state.allMediaFiltered.length - 1) % this.state.allMediaFiltered.length;

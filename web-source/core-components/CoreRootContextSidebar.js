@@ -156,7 +156,7 @@ export default class CoreRootContextSidebar extends React.Component {
       </div>
     );
 
-    const footerNode = (
+    const footerNode = this.props.allMediaFiltered.length ? (
       <footer className={STYLES_FIXED_FOOTER}>
         <div className={STYLES_LEFT}>
           <UIControl onClick={this.props.onSelectPrevious}>Previous</UIControl>
@@ -168,7 +168,7 @@ export default class CoreRootContextSidebar extends React.Component {
           <UIControl onClick={this.props.onSelectNext}>Next</UIControl>
         </div>
       </footer>
-    );
+    ) : null;
 
     if (this.state.mode === 'history') {
       return (
