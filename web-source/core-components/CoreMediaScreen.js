@@ -4,11 +4,15 @@ import { css } from 'react-emotion';
 export default class CoreMediaScreen extends React.Component {
   render() {
     let style = { width: '100%', height: '100%' };
-    if (!this.props.expanded && this.props.media && this.props.media.dimensions) {
+    if (!this.props.isExpanded && this.props.media && this.props.media.dimensions) {
       style = {
         width: this.props.media.dimensions.width,
         height: this.props.media.dimensions.height,
       };
+    }
+
+    if (!this.props.isVisible) {
+      style = { width: '1px', height: '1px', position: 'absolute', top: 0, left: 0 };
     }
 
     return (

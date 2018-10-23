@@ -587,7 +587,7 @@ export default class CoreApp extends React.Component {
       creator: null,
     };
 
-    this.setStateHideCEF({
+    this.setStateWithCEF({
       ...updates,
     });
   };
@@ -740,6 +740,24 @@ export default class CoreApp extends React.Component {
       state.creator &&
       state.viewer.userId === state.creator.userId;
 
+    // NOTE(jim): Rendering an IFrame while rendering a Lua window will trigger a double Open_URI
+    const isRenderingIFrame =
+      state.media &&
+      !Strings.isEmpty(state.media.mediaUrl) &&
+      !state.media.mediaUrl.endsWith('.lua');
+
+    let maybeFrameNode;
+    if (isRenderingIFrame) {
+      maybeFrameNode = (
+        <CoreMediaScreen
+          key="core-media-screen"
+          isExpanded={state.isMediaExpanded}
+          isVisible={!state.pageMode}
+          media={state.media}
+        />
+      );
+    }
+
     let maybeLeftSidebarNode;
     if (state.isOverlayActive && !state.isOffline) {
       maybeLeftSidebarNode = (
@@ -768,6 +786,7 @@ export default class CoreApp extends React.Component {
           ref={this._handleGetReference}
           topNode={this.renderRootSearchInput()}
           leftSidebarNode={maybeLeftSidebarNode}>
+          {maybeFrameNode}
           <CoreBrowseResults
             mediaItems={state.allMediaFiltered}
             playlists={state.allPlaylistsFiltered}
@@ -786,6 +805,7 @@ export default class CoreApp extends React.Component {
     if (isViewerViewingSignInScene) {
       return (
         <CoreLayout ref={this._handleGetReference} leftSidebarNode={maybeLeftSidebarNode}>
+          {maybeFrameNode}
           <CoreLoginSignup onLogin={this._handleSetViewer} />
         </CoreLayout>
       );
@@ -799,6 +819,7 @@ export default class CoreApp extends React.Component {
           }}
           topNode={this.renderRootSearchInput()}
           leftSidebarNode={maybeLeftSidebarNode}>
+          {maybeFrameNode}
           <CorePlaylist
             viewer={state.viewer}
             playlist={state.playlist}
@@ -824,6 +845,7 @@ export default class CoreApp extends React.Component {
               />
             ) : null
           }>
+          {maybeFrameNode}
           <CoreProfile
             viewer={state.viewer}
             creator={state.creator}
@@ -898,12 +920,6 @@ export default class CoreApp extends React.Component {
       );
     }
 
-    // NOTE(jim): Rendering an IFrame while rendering a Lua window will trigger a double Open_URI
-    const isRenderingIFrame =
-      state.media &&
-      !Strings.isEmpty(state.media.mediaUrl) &&
-      !state.media.mediaUrl.endsWith('.lua');
-
     return (
       <CoreLayout
         ref={this._handleGetReference}
@@ -912,9 +928,7 @@ export default class CoreApp extends React.Component {
         leftSidebarNode={maybeLeftSidebarNode}
         rightNode={maybeRightNode}>
         {state.mediaLoading ? <CoreLoadingScreen /> : null}
-        {isRenderingIFrame ? (
-          <CoreMediaScreen expanded={state.isMediaExpanded} media={state.media} />
-        ) : null}
+        {maybeFrameNode}
       </CoreLayout>
     );
   }
