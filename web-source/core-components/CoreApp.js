@@ -106,17 +106,17 @@ export default class CoreApp extends React.Component {
   };
 
   hideFrame = () => {
+    // TODO(jim): Hide Frame doesn't actually close the CEF. but makes it invisible instead.
+    this.closeCEF();
+
     if (this._isLockedFromCEFUpdates) {
       return;
     }
 
-    // HACK(jim): Never close the CEF when navigating around, just reduce it to a pixel.
-    CEF.updateWindowFrame({
-      left: 0,
-      top: 0,
-      width: 1,
-      height: 1,
-    });
+    // TODO(jim): when we are ready to, we can replace this with actual hide code.
+    const element = this._layout.getMediaContainerRef();
+    const rect = element.getBoundingClientRect();
+    CEF.updateWindowFrame(rect);
   };
 
   refreshViewer = async () => {
@@ -309,16 +309,16 @@ export default class CoreApp extends React.Component {
       return;
     }
 
-    this.setState({ media: null, mediaUrl });
+    this.setState({ media: null, mediaUrl }, async () => {
+      await Actions.delay(100);
 
-    await Actions.delay(100);
+      if (mediaUrl.endsWith('.lua')) {
+        this.goToLUA(mediaUrl);
+        return;
+      }
 
-    if (mediaUrl.endsWith('.lua')) {
-      this.goToLUA(mediaUrl);
-      return;
-    }
-
-    this.goToHTML5Media({ mediaUrl });
+      this.goToHTML5Media({ mediaUrl });
+    });
   };
 
   _handleSetViewer = viewer => this.setState({ viewer, pageMode: viewer ? 'browse' : 'sign-in' });
@@ -586,6 +586,13 @@ export default class CoreApp extends React.Component {
       pageMode: null,
       creator: null,
     };
+
+    // TODO(jim): Won't be necessary when we enable hide.
+    if (!Strings.isEmpty(this.state.mediaUrl)) {
+      if (this.state.mediaUrl.endsWith('.lua')) {
+        this.openCEF(this.state.mediaUrl);
+      }
+    }
 
     this.setStateWithCEF({
       ...updates,
