@@ -12,33 +12,20 @@ import { css } from 'react-emotion';
 import { isKeyHotkey } from 'is-hotkey';
 import { LOADER_STRING } from '~/core-components/primitives/loader';
 
-// NOTE(jim): Reusable layout component.
 import CoreLayout from '~/core-components/layouts/CoreLayout';
 import CoreLoadingScreen from '~/core-components/CoreLoadingScreen';
-
-// NOTE(jim): Root Components
 import CoreRootHeader from '~/core-components/CoreRootHeader';
 import CoreRootURLInput from '~/core-components/CoreRootURLInput';
 import CoreRootLeftSidebar from '~/core-components/CoreRootLeftSidebar';
 import CoreRootToolbar from '~/core-components/CoreRootToolbar';
 import CoreRootContextSidebar from '~/core-components/CoreRootContextSidebar';
 import CoreLoginSignup from '~/core-components/CoreLoginSignup';
-
-// NOTE(jim): Media Scene
 import CoreMediaScreen from '~/core-components/CoreMediaScreen';
-
-// NOTE(jim): Browse Scene
 import CoreBrowseResults from '~/core-components/CoreBrowseResults';
 import CoreBrowseSearchInput from '~/core-components/CoreBrowseSearchInput';
-
-// NOTE(jim): Profile Scene
 import CoreProfile from '~/core-components/CoreProfile';
 import CoreProfileSidebar from '~/core-components/CoreProfileSidebar';
-
-// NOTE(jim): Playlist Scene
 import CorePlaylist from '~/core-components/CorePlaylist';
-
-// NOTE(jim): Development Logs Scene
 import CoreDevelopmentLogs from '~/core-components/CoreDevelopmentLogs';
 
 const isOverlayHotkey = isKeyHotkey('mod+e');
@@ -48,14 +35,7 @@ const isAppReloadHotkey = isKeyHotkey('mod+shift+r');
 
 const POLL_DELAY = 300;
 const ENABLE_HIDE_OVERLAY = false;
-const delay = ms =>
-  new Promise(resolve => {
-    window.setTimeout(resolve, ms);
-  });
 
-// NOTES(jim):
-// + Assigning creator to `null` whenever `pageMode` changes is dangerous.
-//   We may want to think of an enumeration to represent that state.
 export default class CoreApp extends React.Component {
   _layout;
   _devTimeout;
@@ -131,7 +111,7 @@ export default class CoreApp extends React.Component {
   };
 
   _handleNativeLoadEnd = async () => {
-    await delay(2000);
+    await Actions.delay(2000);
 
     this.setState({ mediaLoading: false });
   };
@@ -290,7 +270,7 @@ export default class CoreApp extends React.Component {
     };
 
     document.getElementById('loader').classList.add('loader--finished');
-    await delay(300);
+    await Actions.delay(300);
 
     this.setState({ ...state }, () => {
       document.getElementById('loader').outerHTML = '';
@@ -309,7 +289,7 @@ export default class CoreApp extends React.Component {
 
     this.setState({ media: null, mediaUrl });
 
-    await delay(100);
+    await Actions.delay(100);
 
     if (mediaUrl.endsWith('.lua')) {
       this.goToLUA(mediaUrl);

@@ -1,3 +1,59 @@
+import * as React from 'react';
+import * as Constants from '~/common/constants';
+
+import { injectGlobal } from 'react-emotion';
+
+export const injectGlobalLoaderStyles = () => injectGlobal`
+  #loader {
+    background: ${Constants.colors.black};
+    position: absolute;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 1;
+    transition: 200ms ease all;
+  }
+
+  #loader.loader--finished {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  @keyframes loader {
+    to {
+      transform: rotateY(0deg);
+      opacity: 1;
+    }
+  }
+
+  .loader svg:nth-child(2){
+    animation-delay:0.4s;
+  }
+  .loader svg:nth-child(3){
+    animation-delay:0.8s;
+  }
+  .loader svg:nth-child(4){
+    animation-delay:1.0s;
+  }
+  .loader svg:nth-child(5){
+    animation-delay:1.4s;
+  }
+
+  .loader svg {
+    color: ${Constants.colors.white};
+    margin-left: 1px;
+    display: inline-block;
+    opacity: 0;
+    transform: rotateY(360deg);
+    animation: loader 1.4s ease-in-out infinite alternate;
+  }
+`;
+
 export const LOADER_STRING = `<div class="loader">
     <svg viewBox="0 0 24 24" height="20px">
       <g

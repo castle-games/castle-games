@@ -62,6 +62,11 @@ const PLAYLISTS = `
   }
 `;
 
+export const delay = ms =>
+  new Promise(resolve => {
+    window.setTimeout(resolve, ms);
+  });
+
 export async function getExistingUser({ who }) {
   const response = await API.graphqlAsync(
     `

@@ -3,11 +3,13 @@ import ReactDOM from 'react-dom';
 import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as Network from '~/common/network';
+import * as Actions from '~/common/actions';
 
 import App from './App';
 
 import Storage from '~/common/storage';
 
+import { LOADER_STRING, injectGlobalLoaderStyles } from '~/core-components/primitives/loader';
 import { injectGlobal } from 'react-emotion';
 
 const injectGlobalStyles = () => injectGlobal`
@@ -45,62 +47,40 @@ const injectGlobalStyles = () => injectGlobal`
       font-size: 14px;
     }
   }
-
-  #loader {
-    background: ${Constants.colors.black};
-    position: absolute;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    opacity: 1;
-    transition: 200ms ease all;
-  }
-
-  #loader.loader--finished {
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  @keyframes loader {
-    to {
-      transform: rotateY(0deg);
-      opacity: 1;
-    }
-  }
-
-  .loader svg:nth-child(2){
-    animation-delay:0.4s;
-  }
-  .loader svg:nth-child(3){
-    animation-delay:0.8s;
-  }
-  .loader svg:nth-child(4){
-    animation-delay:1.0s;
-  }
-  .loader svg:nth-child(5){
-    animation-delay:1.4s;
-  }
-
-  .loader svg {
-    color: ${Constants.colors.white};
-    margin-left: 1px;
-    display: inline-block;
-    opacity: 0;
-    transform: rotateY(360deg);
-    animation: loader 1.4s ease-in-out infinite alternate;
-  }
 `;
 
 const storage = new Storage('castle');
-const delay = ms =>
-  new Promise(resolve => {
-    window.setTimeout(resolve, ms);
-  });
+
+const loader = document.createElement('div');
+loader.innerHTML = LOADER_STRING.trim();
+loader.id = 'loader';
+
+document.body.appendChild(loader);
+
+const INITIAL_STATE_OFFLINE = {
+  logs: [],
+  mediaUrl: '',
+  playlist: null,
+  media: null,
+  mediaLoading: false,
+  creator: null,
+  viewer: null,
+  local: null,
+  searchQuery: '',
+  allMedia: [],
+  allPlaylists: [],
+  allMediaFiltered: [],
+  allPlaylistsFiltered: [],
+  featuredPlaylists: [],
+  featuredMedia: [],
+  sidebarMode: null, // current-context | media-info | development | null
+  pageMode: null, // browse | playlist | profile | sign-in | null
+  profileMode: null, // media | playlist | null
+  isMediaFavorited: false,
+  isMediaExpanded: false,
+  isOverlayActive: true,
+  isOffline: true,
+};
 
 const run = async () => {
   const {
@@ -112,41 +92,30 @@ const run = async () => {
     isOffline,
   } = await Network.getProductData();
 
-  await delay(300);
+  await Actions.delay(300);
 
   document.getElementById('loader').classList.add('loader--finished');
 
-  const state = {
-    logs: [],
-    mediaUrl: '',
-    playlist: null,
-    media: null,
-    mediaLoading: false,
-    creator: null,
-    viewer,
-    local: null,
-    searchQuery: '',
+  const state = Object.assign({}, INITIAL_STATE_OFFLINE, {
     allMedia,
     allPlaylists,
     allMediaFiltered: [...allMedia],
     allPlaylistsFiltered: [...allPlaylists],
     featuredPlaylists,
     featuredMedia,
-    sidebarMode: !isOffline ? 'current-context' : null, // current-context | media-info | null
-    pageMode: !isOffline ? 'browse' : null, // browse | playlist | profile | sign-in | null
-    profileMode: null, // media | playlist | null
-    isMediaFavorited: false,
-    isMediaExpanded: false,
-    isOverlayActive: true,
     isOffline,
-  };
+    viewer,
+    sidebarMode: !isOffline ? 'current-context' : null,
+    pageMode: !isOffline ? 'browse' : null,
+  });
 
   ReactDOM.render(<App state={state} storage={storage} />, document.getElementById('root'));
 
-  await delay(300);
+  await Actions.delay(300);
 
   document.getElementById('loader').outerHTML = '';
 };
 
 injectGlobalStyles();
+injectGlobalLoaderStyles();
 run();
