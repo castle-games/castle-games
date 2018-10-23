@@ -150,7 +150,7 @@ export default class UIListMedia extends React.Component {
                     className={STYLES_ROW}
                     key={`playlist-list-item-${i}`}
                     style={isSelected ? { color: Constants.colors.green } : null}
-                    onClick={() => this.props.onMediaSelect(m)}>
+                    onClick={() => this.props.onMediaSelect(m, true)}>
                     <div className={STYLES_ICON_COLUMN}>
                       <SVG.MediaIcon height="16px" />
                     </div>
@@ -165,10 +165,14 @@ export default class UIListMedia extends React.Component {
                   className={STYLES_ROW}
                   key={`media-list-item-${m.mediaId}-${i}`}
                   style={isSelected ? { color: Constants.colors.green } : null}>
-                  <div className={STYLES_ICON_COLUMN} onClick={() => this.props.onMediaSelect(m)}>
+                  <div
+                    className={STYLES_ICON_COLUMN}
+                    onClick={() => this.props.onMediaSelect(m, true)}>
                     <SVG.MediaIcon height="16px" />
                   </div>
-                  <div className={STYLES_FLUID_COLUMN} onClick={() => this.props.onMediaSelect(m)}>
+                  <div
+                    className={STYLES_FLUID_COLUMN}
+                    onClick={() => this.props.onMediaSelect(m, true)}>
                     {m.name}
                   </div>
                   <div

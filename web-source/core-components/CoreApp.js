@@ -542,7 +542,7 @@ export default class CoreApp extends React.Component {
     this.setState({ pageMode: 'profile', creator: { ...creator } });
   };
 
-  _handleMediaSelect = media => {
+  _handleMediaSelect = (media, isHistory) => {
     if (!media) {
       return;
     }
@@ -555,6 +555,12 @@ export default class CoreApp extends React.Component {
     if (media.mediaUrl.endsWith('.lua')) {
       this.goToLUA(media.mediaUrl);
       return;
+    }
+
+    if (isHistory) {
+      this.setState({
+        allMediaFiltered: [...this.state.allMedia],
+      });
     }
 
     this.goToHTML5Media(media);
