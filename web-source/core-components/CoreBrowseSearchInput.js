@@ -1,5 +1,7 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
+import * as Strings from '~/common/strings';
+import * as SVG from '~/core-components/primitives/svg';
 
 import { css } from 'react-emotion';
 
@@ -31,17 +33,25 @@ const STYLES_CONTAINER = css`
 
 const STYLES_CONTAINER_LEFT = css`
   flex-shrink: 0;
-  font-size: 16px;
-  padding-right: 2px;
-  color: ${Constants.colors.white};
   display: flex;
   align-items: center;
+  cursor: pointer;
+  color: ${Constants.colors.white};
+  padding-right: 16px;
 `;
 
 const STYLES_CONTAINER_MIDDLE = css`
   min-width: 25%;
   width: 100%;
   padding-right: 16px;
+  display: flex;
+  align-items: center;
+`;
+
+const STYLES_CONTAINER_RIGHT = css`
+  flex-shrink: 0;
+  cursor: pointer;
+  color: ${Constants.colors.white};
   display: flex;
   align-items: center;
 `;
@@ -72,7 +82,9 @@ export default class CoreBrowseSearchInput extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTAINER}>
-        <div className={STYLES_CONTAINER_LEFT} onClick={this._handleFocusInput} />
+        <div className={STYLES_CONTAINER_LEFT} onClick={this._handleFocusInput}>
+          <SVG.SearchBarIcon height="24px" />
+        </div>
         <div className={STYLES_CONTAINER_MIDDLE}>
           <ControlledInput
             ref={c => {
@@ -86,6 +98,11 @@ export default class CoreBrowseSearchInput extends React.Component {
             onChange={this.props.onChange}
           />
         </div>
+        {!Strings.isEmpty(this.props.searchQuery) ? (
+          <div className={STYLES_CONTAINER_RIGHT} onClick={this.props.onSearchReset}>
+            <SVG.Dismiss height="16px" />
+          </div>
+        ) : null}
       </div>
     );
   }

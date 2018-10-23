@@ -468,6 +468,15 @@ export default class CoreApp extends React.Component {
 
   _handleSearchSubmit = async e => this._handleSearchChange(e);
 
+  _handleSearchReset = () => {
+    this.setState({
+      searchQuery: '',
+      allMediaFiltered: [...this.state.allMedia],
+      allPlaylistsFiltered: [...this.state.allPlaylists],
+      pageMode: 'browse',
+    });
+  };
+
   _handleSearchChange = async e => {
     this.setState(
       {
@@ -629,6 +638,12 @@ export default class CoreApp extends React.Component {
   };
 
   _handleToggleBrowse = () => {
+    // NOTE(jim):
+    // We can probably make this more elegant later.
+    if (this.state.pageMode === 'playlist') {
+      return;
+    }
+
     const updates = {
       pageMode: 'browse',
       creator: null,
@@ -756,6 +771,7 @@ export default class CoreApp extends React.Component {
   renderRootSearchInput = () => (
     <CoreBrowseSearchInput
       searchQuery={this.state.searchQuery}
+      onSearchReset={this._handleSearchReset}
       onChange={this._handleSearchChange}
       onSubmit={this._handleSearchSubmit}
     />
