@@ -1,5 +1,19 @@
 import * as React from 'react';
 
+export const ChevronRight = props => (
+  <svg version="1.1" viewBox="0 0 24 24" {...props}>
+    <path d="M8.59,16.34l4.58,-4.59l-4.58,-4.59l1.41,-1.41l6,6l-6,6Z" fill="currentColor" />
+    <path fill="none" d="M0,-0.25h24v24h-24Z" />
+  </svg>
+);
+
+export const ChevronLeft = props => (
+  <svg version="1.1" viewBox="0 0 24 24" {...props}>
+    <path d="M15.41,16.09l-4.58,-4.59l4.58,-4.59l-1.41,-1.41l-6,6l6,6Z" fill="currentColor" />
+    <path fill="none" d="M0,-0.5h24v24h-24Z" />
+  </svg>
+);
+
 export const SearchBarIcon = props => (
   <svg version="1.1" viewBox="0 0 24 24" {...props}>
     <path
