@@ -10,6 +10,12 @@ import UIListMedia from '~/core-components/reusable/UIListMedia';
 import UIListPlaylists from '~/core-components/reusable/UIListPlaylists';
 import UIEmptyState from '~/core-components/reusable/UIEmptyState';
 
+const STYLES_HEADER_TEXT = css`
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.2px;
+`;
+
 const STYLES_CONTAINER = css`
   @keyframes info-animation {
     from {
@@ -76,6 +82,9 @@ export default class CoreProfile extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
+        <UIHeaderDismiss onDismiss={this.props.onDismiss}>
+          <div className={STYLES_HEADER_TEXT}>Viewing profile</div>
+        </UIHeaderDismiss>
         <UICardProfileHeader
           creator={this.props.creator}
           profileMode={this.props.profileMode}

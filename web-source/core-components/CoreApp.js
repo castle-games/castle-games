@@ -879,12 +879,12 @@ export default class CoreApp extends React.Component {
           ref={reference => {
             this._layout = reference;
           }}
-          topNode={this.renderRootSearchInput()}
           leftSidebarNode={maybeLeftSidebarNode}>
           {maybeFrameNode}
           <CorePlaylist
             viewer={state.viewer}
             playlist={state.playlist}
+            onDismiss={this._handleSearchReset}
             onUserSelect={this._handleUserSelect}
             onMediaSelect={this._handleMediaSelect}
             onMediaRemoveFromPlaylist={this._handleRemoveMediaFromPlaylist}
@@ -898,7 +898,6 @@ export default class CoreApp extends React.Component {
         <CoreLayout
           ref={this._handleGetReference}
           leftSidebarNode={maybeLeftSidebarNode}
-          topNode={this.renderRootSearchInput()}
           rightNode={
             isViewingOwnProfile ? (
               <CoreProfileSidebar
@@ -912,7 +911,7 @@ export default class CoreApp extends React.Component {
             viewer={state.viewer}
             creator={state.creator}
             profileMode={state.profileMode}
-            onDismiss={this._handleToggleProfile}
+            onDismiss={this._handleSearchReset}
             onShowProfileMediaList={this._handleShowProfileMediaList}
             onShowProfilePlaylistList={this._handleShowProfilePlaylistList}
             onPlayCreatorMedia={this._handlePlayCreatorMedia}

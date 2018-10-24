@@ -10,6 +10,12 @@ import UIEmptyState from '~/core-components/reusable/UIEmptyState';
 import UILink from '~/core-components/reusable/UILink';
 import ContentEditor from '~/editor/ContentEditor';
 
+const STYLES_HEADER_TEXT = css`
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.2px;
+`;
+
 const STYLES_CONTAINER = css`
   @keyframes playlist-scene-animation {
     from {
@@ -74,6 +80,9 @@ export default class CorePlaylist extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
+        <UIHeaderDismiss onDismiss={this.props.onDismiss}>
+          <div className={STYLES_HEADER_TEXT}>Viewing playlist</div>
+        </UIHeaderDismiss>
         <div className={STYLES_PLAYLIST_CARD}>
           <h1 className={STYLES_HEADING}>{this.props.playlist.name}</h1>
           <div className={STYLES_META}>
