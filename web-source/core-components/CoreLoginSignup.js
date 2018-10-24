@@ -28,6 +28,7 @@ const STYLES_CONTAINER = css`
   flex-direction: column;
   width: 100%;
   height: 100%;
+  overflow-y: scroll;
   background ${Constants.colors.background};
   color: ${Constants.colors.white};
 
@@ -38,7 +39,7 @@ const STYLES_CONTAINER = css`
 `;
 
 const STYLES_CONTENTS = css`
-  padding: 16px;
+  padding: 88px 16px 88px 16px;
   box-sizing: border-box;
   width: 100%;
   max-width: 320px;
@@ -53,8 +54,9 @@ const STYLES_FOOTER = css`
 `;
 
 const STYLES_ERROR_MESSAGE = css`
-  padding-bottom: 8px;
-  height: 24px;
+  flex-shrink: 0;
+  display: block;
+  padding-bottom: 24px;
   color: ${Constants.colors.red};
 `;
 

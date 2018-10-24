@@ -35,7 +35,7 @@ const STYLES_MIDDLE_TOP = css`
 `;
 
 const STYLES_CHILDREN = css`
-  min-height: 25%;
+  min-height: 10%;
   height: 100%;
   width: 100%;
   position: relative;
