@@ -1,9 +1,9 @@
-import * as React from "react";
-import * as Constants from "~/common/constants";
+import * as React from 'react';
+import * as Constants from '~/common/constants';
 
-import { css } from "react-emotion";
+import { css } from 'react-emotion';
 
-import ControlledInput from "~/core-components/primitives/ControlledInput";
+import ControlledInput from '~/core-components/primitives/ControlledInput';
 
 const STYLES_CONTAINER = css`
   position: relative;
@@ -15,6 +15,7 @@ const STYLES_INPUT = css`
   padding: 16px 8px 0 8px;
   border-radius: 4px;
   width: 100%;
+  max-width: 480px;
   font-weight: 600;
   border: 2px solid ${Constants.colors.border};
   background: ${Constants.colors.background};
@@ -58,11 +59,11 @@ export default class UIInput extends React.Component {
     onChange: () => {},
     onSubmit: () => {},
     onFocus: () => {},
-    onBlur: () => {}
+    onBlur: () => {},
   };
 
   state = {
-    focus: false
+    focus: false,
   };
 
   _handleFocus = e => {
@@ -80,9 +81,7 @@ export default class UIInput extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTAINER}>
-        <label
-          className={!this.state.focus ? STYLES_LABEL : STYLES_LABEL_WHITE}
-        >
+        <label className={!this.state.focus ? STYLES_LABEL : STYLES_LABEL_WHITE}>
           {this.props.label}
         </label>
         <ControlledInput

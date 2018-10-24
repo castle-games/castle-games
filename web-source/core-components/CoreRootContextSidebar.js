@@ -17,10 +17,9 @@ import UIControl from '~/core-components/reusable/UIControl';
 
 const STYLES_FIXED_CONTAINER = css`
   position: relative;
-  width: 420px;
+  width: 100%;
   height: 100%;
   padding: 48px 0 48px 0;
-  border-left: 1px solid ${Constants.colors.border};
 `;
 
 const STYLES_FIXED_HEADER = css`
@@ -85,7 +84,7 @@ const STYLES_CONTAINER = css`
 
   animation: playlist-animation 280ms ease;
 
-  width: 420px;
+  width: 100%;
   height: 100%;
   overflow-y: scroll;
   background ${Constants.colors.background};
@@ -176,16 +175,19 @@ export default class CoreRootContextSidebar extends React.Component {
           className={STYLES_FIXED_CONTAINER}
           ref={c => {
             this._reference = c;
-          }}>
+          }}
+          style={{ padding: `48px 0 0 0` }}>
           {headerNode}
-          <CoreRootDashboard
-            media={this.props.media}
-            storage={this.props.storage}
-            onMediaSelect={this.props.onMediaSelect}
-            onUserSelect={this.props.onUserSelect}
-            onClearHistory={this.props.onClearHistory}
-            onSelectRandom={this.props.onSelectRandom}
-          />
+          <div className={STYLES_CONTAINER}>
+            <CoreRootDashboard
+              media={this.props.media}
+              storage={this.props.storage}
+              onMediaSelect={this.props.onMediaSelect}
+              onUserSelect={this.props.onUserSelect}
+              onClearHistory={this.props.onClearHistory}
+              onSelectRandom={this.props.onSelectRandom}
+            />
+          </div>
         </div>
       );
     }

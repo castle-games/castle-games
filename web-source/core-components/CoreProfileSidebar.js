@@ -28,12 +28,11 @@ const STYLES_CONTAINER = css`
 
   animation: profile-sidebar-scene-animation 280ms ease;
 
-  width: 420px;
+  width: 100%;
   height: 100%;
   overflow-y: scroll;
   background ${Constants.colors.background};
   color: ${Constants.colors.white};
-  border-left: 1px solid ${Constants.colors.border};
 
   ::-webkit-scrollbar {
     display: none;

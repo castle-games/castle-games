@@ -9,9 +9,8 @@ import UIEmptyState from '~/core-components/reusable/UIEmptyState';
 
 const STYLES_FIXED_CONTAINER = css`
   position: relative;
-  width: 420px;
+  width: 100%;
   height: 100%;
-  border-left: 1px solid ${Constants.colors.border};
 `;
 
 const STYLES_CONTAINER = css`

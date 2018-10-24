@@ -30,6 +30,7 @@ import CoreDevelopmentLogs from '~/core-components/CoreDevelopmentLogs';
 
 const isOverlayHotkey = isKeyHotkey('mod+e');
 const isDevelopmentLogHotkey = isKeyHotkey('mod+j');
+const isOrientationHotkey = isKeyHotkey('mod+shift+o');
 const isReloadHotkey = isKeyHotkey('mod+r');
 const isAppReloadHotkey = isKeyHotkey('mod+shift+r');
 
@@ -405,6 +406,10 @@ export default class CoreApp extends React.Component {
       return this.appReload(e);
     }
 
+    if (isOrientationHotkey(e)) {
+      return this._handleOrientationChange(e);
+    }
+
     if (isOverlayHotkey(e) && ENABLE_HIDE_OVERLAY) {
       return this._handleToggleOverlay(e);
     }
@@ -608,6 +613,10 @@ export default class CoreApp extends React.Component {
       (index + this.state.allMediaFiltered.length - 1) % this.state.allMediaFiltered.length;
 
     this._handleMediaSelect(this.state.allMediaFiltered[newIndex]);
+  };
+
+  _handleOrientationChange = () => {
+    this.setState({ isHorizontalOrientation: this.state.isHorizontalOrientation ? false : true });
   };
 
   _handleToggleProfile = () => {
@@ -981,6 +990,7 @@ export default class CoreApp extends React.Component {
         topNode={maybeTopNode}
         bottomNode={maybeBottomNode}
         leftSidebarNode={maybeLeftSidebarNode}
+        isHorizontalOrientation={state.isHorizontalOrientation}
         rightNode={maybeRightNode}>
         {state.mediaLoading ? <CoreLoadingScreen /> : null}
         {maybeFrameNode}
