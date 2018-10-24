@@ -1,6 +1,5 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
-import * as Fixtures from '~/common/fixtures';
 
 import { css } from 'react-emotion';
 

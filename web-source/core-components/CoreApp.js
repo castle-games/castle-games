@@ -2,7 +2,6 @@ import * as React from 'react';
 import * as Strings from '~/common/strings';
 import * as Utilities from '~/common/utilities';
 import * as ReactDOM from 'react-dom';
-import * as Fixtures from '~/common/fixtures';
 import * as Slack from '~/common/slack';
 import * as Actions from '~/common/actions';
 import * as Network from '~/common/network';
