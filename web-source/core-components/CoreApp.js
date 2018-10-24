@@ -616,7 +616,9 @@ export default class CoreApp extends React.Component {
   };
 
   _handleOrientationChange = () => {
-    this.setState({ isHorizontalOrientation: this.state.isHorizontalOrientation ? false : true });
+    this.setStateWithCEF({
+      isHorizontalOrientation: this.state.isHorizontalOrientation ? false : true,
+    });
   };
 
   _handleToggleProfile = () => {

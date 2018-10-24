@@ -75,7 +75,7 @@ const INITIAL_STATE_OFFLINE = {
   isMediaFavorited: false,
   isMediaExpanded: false,
   isOverlayActive: true,
-  isHorizontalOrientation: true,
+  isHorizontalOrientation: false,
   isOffline: true,
 };
 
