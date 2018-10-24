@@ -82,9 +82,11 @@ export default class CoreProfile extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
-        <UIHeaderDismiss onDismiss={this.props.onDismiss}>
-          <div className={STYLES_HEADER_TEXT}>Viewing profile</div>
-        </UIHeaderDismiss>
+        {!this.props.isViewingOwnProfile ? (
+          <UIHeaderDismiss onDismiss={this.props.onDismiss}>
+            <div className={STYLES_HEADER_TEXT}>Viewing profile</div>
+          </UIHeaderDismiss>
+        ) : null}
         <UICardProfileHeader
           creator={this.props.creator}
           profileMode={this.props.profileMode}

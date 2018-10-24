@@ -321,7 +321,8 @@ export default class CoreApp extends React.Component {
     });
   };
 
-  _handleSetViewer = viewer => this.setState({ viewer, pageMode: viewer ? 'browse' : 'sign-in' });
+  _handleLogin = viewer =>
+    this.setState({ viewer, creator: viewer, pageMode: viewer ? 'profile' : 'browse' });
 
   _handleURLChange = e => this.setState({ [e.target.name]: e.target.value });
 
@@ -868,7 +869,7 @@ export default class CoreApp extends React.Component {
       return (
         <CoreLayout ref={this._handleGetReference} leftSidebarNode={maybeLeftSidebarNode}>
           {maybeFrameNode}
-          <CoreLoginSignup onLogin={this._handleSetViewer} />
+          <CoreLoginSignup onLogin={this._handleLogin} />
         </CoreLayout>
       );
     }
@@ -911,6 +912,7 @@ export default class CoreApp extends React.Component {
             viewer={state.viewer}
             creator={state.creator}
             profileMode={state.profileMode}
+            isViewingOwnProfile={isViewingOwnProfile}
             onDismiss={this._handleSearchReset}
             onShowProfileMediaList={this._handleShowProfileMediaList}
             onShowProfilePlaylistList={this._handleShowProfilePlaylistList}
