@@ -37,6 +37,7 @@ const MEDIA_ITEMS = `
     description
     mediaUrl
     mediaId
+    jamVotingUrl
     coverImage {
       url
       height
@@ -294,6 +295,7 @@ export async function getInitialData() {
         description
         mediaUrl
         mediaId
+        jamVotingUrl
         coverImage {
           url
           height
@@ -411,6 +413,7 @@ export async function getMediaByURL({ mediaUrl }) {
           description
           mediaUrl
           mediaId
+          jamVotingUrl
           coverImage {
             url
             height

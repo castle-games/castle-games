@@ -15,8 +15,14 @@ const STYLES_ICON_BUTTON = css`
   user-select: none;
   opacity: 1;
   transition: 200ms ease all;
+  text-decoration: none;
+
+  :visited {
+    color: ${Constants.colors.black};
+  }
 
   :hover {
+    color: ${Constants.colors.black};
     opacity: 0.9;
   }
 `;
@@ -44,6 +50,15 @@ const STYLES_ICON_BUTTON_RIGHT = css`
 `;
 
 export default props => {
+  if (props.href) {
+    return (
+      <a className={STYLES_ICON_BUTTON} {...props}>
+        <span className={STYLES_ICON_BUTTON_LEFT}>{props.icon}</span>
+        <span className={STYLES_ICON_BUTTON_RIGHT}>{props.children}</span>
+      </a>
+    );
+  }
+
   return (
     <div className={STYLES_ICON_BUTTON} {...props}>
       <span className={STYLES_ICON_BUTTON_LEFT}>{props.icon}</span>

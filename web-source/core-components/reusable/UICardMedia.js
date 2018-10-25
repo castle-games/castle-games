@@ -171,6 +171,14 @@ export default class UICardMedia extends React.Component {
                 viewer={this.props.viewer}
               />
             ) : null}
+
+            {!Strings.isEmpty(this.props.media.jamVotingUrl) ? (
+              <UIButtonIconHorizontal
+                icon={<SVG.MediaIcon height="16px" />}
+                href={this.props.media.jamVotingUrl}>
+                Vote for it
+              </UIButtonIconHorizontal>
+            ) : null}
           </div>
         </div>
       </div>
