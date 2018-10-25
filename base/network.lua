@@ -169,6 +169,12 @@ function network.fetch(url, method, skipCache)
         else -- Else actually fetch then persist it
             local response, httpCode, headers, status
             if url:match('^https?://') then
+                -- Handle 'localhost' and '0.0.0.0'
+                url = url:gsub('^http://localhost', 'http://127.0.0.1')
+                url = url:gsub('^https://localhost', 'https://127.0.0.1')
+                url = url:gsub('^http://0.0.0.0', 'http://127.0.0.1')
+                url = url:gsub('^https://0.0.0.0', 'https://127.0.0.1')
+
                 if method == 'GET' then
                     response, httpCode, headers, status = network.request(url)
                     if httpCode ~= 200 then
