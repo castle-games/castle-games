@@ -171,10 +171,10 @@ extern "C" {
   if (!self.lovePaused) {
     // Weird fix for invisible window issue on Mojave: keep track of whether a new
     // window was created and resize it after a delay
-    
+
     NSWindow *window = [[NSApplication sharedApplication] mainWindow];
     NSWindow *prevChild = nil, *afterChild = nil;
-    
+
     if (window) {
       for (NSWindow *childWindow in window.childWindows) {
         if (childWindow) {
@@ -182,26 +182,27 @@ extern "C" {
         }
       }
     }
-    
+
     // Actually run Love for one step
     [self stepLove];
-    
+
     if (window && !prevChild) {
       for (NSWindow *childWindow in window.childWindows) {
         if (childWindow) {
           afterChild = childWindow;
         }
       }
-      
+
       if (afterChild) {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 80 * NSEC_PER_MSEC), dispatch_get_main_queue(), ^{
-          ghostResizeChildWindow(-1, -1);
-          ghostResizeChildWindow(1, 1);
-        });
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 80 * NSEC_PER_MSEC),
+                       dispatch_get_main_queue(), ^{
+                         ghostResizeChildWindow(-1, -1);
+                         ghostResizeChildWindow(1, 1);
+                       });
       }
     }
   }
-  
+
   if (!self.windowEventsSubscribed) {
     NSWindow *window = [[NSApplication sharedApplication] mainWindow];
     if (window) {
