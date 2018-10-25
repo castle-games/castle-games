@@ -160,7 +160,11 @@ static void bootLove(const char *uri) {
     CHAR buffer[MAX_PATH];
     GetModuleFileNameA(NULL, buffer, MAX_PATH);
     std::string::size_type pos = std::string(buffer).find_last_of("\\/");
-    std::string path = std::string(buffer).substr(0, pos) + "/base";
+#ifdef _DEBUG
+    std::string path = std::string(buffer).substr(0, pos) + "/../../../base";
+#else
+	std::string path = std::string(buffer).substr(0, pos) + "/base";
+#endif
     lua_pushstring(L, path.c_str());
     lua_rawseti(L, -2, 0);
     //  lua_pushstring(L, "--fused");
