@@ -18,10 +18,8 @@ const STYLES_NAVIGATION = css`
   }
 
   animation: sidebar-animation 280ms ease;
-
   background: ${Constants.colors.background};
   height: 100%;
-  width: 80px;
   padding: 8px;
   border-right: 1px solid ${Constants.colors.border};
 `;
@@ -47,7 +45,7 @@ export default class CoreRootLeftSidebar extends React.Component {
         {this.props.viewer ? (
           <UIButtonIcon
             active={this.props.isViewingProfile}
-            icon={<SVG.Rook height="20px" />}
+            icon={<SVG.Profile height="24px" />}
             style={{ background: Constants.colors.green }}
             onClick={this.props.onToggleProfile}>
             You
