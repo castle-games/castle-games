@@ -65,6 +65,10 @@ void ghostOpenLoveUri(const char *uri) {
   });
 }
 
+void ghostOpenExternalUrl(const char *url) {
+
+}
+
 void ghostClose() {
   dispatch_async(dispatch_get_main_queue(), ^{
     GhostAppDelegate *delegate = [NSApplication sharedApplication].delegate;

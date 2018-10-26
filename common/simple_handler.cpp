@@ -126,6 +126,11 @@ void SimpleHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
         ghostSetBrowserReady();
         callback->Success("success");
         return true;
+      } else if (type == "OPEN_EXTERNAL_URL") {
+        std::string url = body["url"];
+        ghostOpenExternalUrl(url.c_str());
+        callback->Success("success");
+        return true;
       }
 
       return false;
