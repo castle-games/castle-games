@@ -29,6 +29,11 @@ export default class ControlledInput extends React.Component {
     this._handleFocus(e);
   };
 
+  blur = e => {
+    this._input.blur();
+    this._handleBlur(e);
+  };
+
   _handleFocus = e => {
     this.setState({ focus: true });
     this.props.onFocus(e);
