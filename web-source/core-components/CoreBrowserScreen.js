@@ -51,7 +51,7 @@ export default class CoreBrowserScreen extends React.Component {
   render() {
     let style;
     if (!this.props.isVisible) {
-      style = { width: '1px', height: '1px', position: 'absolute', top: 0, left: 0 };
+      style = { width: '1px', height: '1px', position: 'absolute', top: 0, left: 0, opacity: 0 };
     }
 
     return (
