@@ -5,6 +5,7 @@ import { css } from 'react-emotion';
 
 const STYLES_PLAYLISTS = css`
   display: flex;
+  flex-wrap: wrap;
 `;
 
 const STYLES_PLAYLIST_ITEM = css`
@@ -15,6 +16,7 @@ const STYLES_PLAYLIST_ITEM = css`
   display: inline-block;
   width: 184px;
   height: 256px;
+  flex-shrink: 0;
   transition: 200ms ease all;
   transform: scale(1);
   cursor: pointer;
