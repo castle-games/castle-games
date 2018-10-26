@@ -596,6 +596,8 @@ export default class CoreApp extends React.Component {
 
     if (isHistory) {
       this.setState({
+        playlist: null,
+        searchQuery: '',
         allMediaFiltered: [...this.state.allMedia],
       });
     }
