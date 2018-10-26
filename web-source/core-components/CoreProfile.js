@@ -44,7 +44,10 @@ const STYLES_CONTAINER = css`
 
 export default class CoreProfile extends React.Component {
   render() {
-    const isOwnProfile = (this.props.viewer.userId == this.props.creator.userId);
+    const isOwnProfile = (
+      this.props.viewer &&
+      this.props.viewer.userId == this.props.creator.userId
+    );
     const mediaListElement =
       this.props.creator.mediaItems && this.props.creator.mediaItems.length ? (
         <UIListMedia
