@@ -373,9 +373,9 @@ export default class CoreLoginSignup extends React.Component {
             <UIInput
               value=""
               autoFocus
-              label="Search"
+              label="Email or Username"
               name="who"
-              placeholder="E-mail or username"
+              placeholder=""
               onChange={this._handleChange}
               value={this.state.who}
             />
