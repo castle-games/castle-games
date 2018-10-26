@@ -2,13 +2,6 @@
 
 @echo OFF
 
-:: check if windows 10. we can skip installing if so
-setlocal
-for /f "tokens=4-5 delims=. " %%i in ('ver') do set VERSION=%%i.%%j
-if "%version%" == "10.0" goto end
-rem etc etc
-endlocal
-
 :: check if 32/64
 reg Query "HKLM\Hardware\Description\System\CentralProcessor\0" | find /i "x86" > NUL && set OS=32BIT || set OS=64BIT
 
