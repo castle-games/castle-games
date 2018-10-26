@@ -36,6 +36,7 @@ const isAppReloadHotkey = isKeyHotkey('mod+shift+r');
 
 const POLL_DELAY = 300;
 const ENABLE_HIDE_OVERLAY = false;
+const CASTLE_IO = 'http://www.playcastle.io';
 
 export default class CoreApp extends React.Component {
   _layout;
@@ -399,7 +400,7 @@ export default class CoreApp extends React.Component {
       this._handleURLSubmit();
     });
   };
-
+  
   _handleKeyDown = e => {
     if (isReloadHotkey(e)) {
       return this.reload(e);
@@ -413,8 +414,9 @@ export default class CoreApp extends React.Component {
       return this._handleOrientationChange(e);
     }
 
-    if (isOverlayHotkey(e) && ENABLE_HIDE_OVERLAY) {
-      return this._handleToggleOverlay(e);
+    if (isOverlayHotkey(e)) {
+      // TODO: BEN
+      return CEF.openExternalUrl(CASTLE_IO);
     }
 
     if (isDevelopmentLogHotkey(e)) {

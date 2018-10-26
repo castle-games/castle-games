@@ -78,6 +78,26 @@ export const openWindowFrame = mediaUrl => {
   }
 };
 
+export const openExternalUrl = externalUrl => {
+  if (!window.cefQuery) {
+    console.error('openExternalUrl: window.cefQuery is undefined');
+    return;
+  }
+
+  try {
+    window.cefQuery({
+      request: JSON.stringify({
+        type: 'OPEN_EXTERNAL_URL',
+        body: {
+          url: externalUrl,
+        },
+      }),
+    });
+  } catch (e) {
+    alert('`cefQuery`: ' + e.message);
+  }
+}
+
 export const updateWindowFrame = rect => {
   if (!window.cefQuery) {
     console.error('updateWindowFrame: window.cefQuery is undefined');
