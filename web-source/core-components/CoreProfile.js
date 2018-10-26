@@ -11,9 +11,7 @@ import UIListPlaylists from '~/core-components/reusable/UIListPlaylists';
 import UIEmptyState from '~/core-components/reusable/UIEmptyState';
 
 const STYLES_HEADER_TEXT = css`
-  font-weight: 600;
-  font-size: 14px;
-  letter-spacing: 0.2px;
+  font-size: 16px;
 `;
 
 const STYLES_CONTAINER = css`
@@ -89,7 +87,7 @@ export default class CoreProfile extends React.Component {
       <div className={STYLES_CONTAINER}>
         {!this.props.isViewingOwnProfile ? (
           <UIHeaderDismiss onDismiss={this.props.onDismiss}>
-            <div className={STYLES_HEADER_TEXT}>Viewing profile</div>
+            <div className={STYLES_HEADER_TEXT}>{this.props.creator.username}</div>
           </UIHeaderDismiss>
         ) : null}
         <UICardProfileHeader
