@@ -116,7 +116,9 @@ void SimpleHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
             assert(var.getType() == love::Variant::STRING ||
                    var.getType() == love::Variant::SMALLSTRING);
             var.toLua(conversion_lua_state_);
-            response[channelName].push_back(luaL_checkstring(conversion_lua_state_, -1));
+            std::string str(luaL_checkstring(conversion_lua_state_, -1));
+            response[channelName].push_back(str);
+            lua_pop(conversion_lua_state_, 1);
           }
         }
 
