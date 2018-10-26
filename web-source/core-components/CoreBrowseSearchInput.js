@@ -82,7 +82,9 @@ export default class CoreBrowseSearchInput extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTAINER}>
-        <div className={STYLES_CONTAINER_LEFT} onClick={this._handleFocusInput}>
+        <div
+          className={STYLES_CONTAINER_LEFT}
+          onClick={this.props.readOnly ? this.props.onSearchReset : this._handleFocusInput}>
           <SVG.SearchBarIcon height="24px" />
         </div>
         <div className={STYLES_CONTAINER_MIDDLE}>
@@ -93,6 +95,7 @@ export default class CoreBrowseSearchInput extends React.Component {
             className={STYLES_INPUT}
             value={this.props.searchQuery}
             name={this.props.name}
+            readOnly={this.props.readOnly}
             placeholder="Search for games, media and playlists..."
             onSubmit={this.props.onSubmit}
             onChange={this.props.onChange}

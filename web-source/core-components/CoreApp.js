@@ -908,6 +908,7 @@ export default class CoreApp extends React.Component {
           <CorePlaylist
             viewer={state.viewer}
             playlist={state.playlist}
+            onSearchReset={this._handleSearchReset}
             onDismiss={this._handleSearchReset}
             onUserSelect={this._handleUserSelect}
             onMediaSelect={this._handleMediaSelect}
@@ -937,6 +938,7 @@ export default class CoreApp extends React.Component {
             profileMode={state.profileMode}
             isViewingOwnProfile={isViewingOwnProfile}
             onDismiss={this._handleSearchReset}
+            onSearchReset={this._handleSearchReset}
             onShowProfileMediaList={this._handleShowProfileMediaList}
             onShowProfilePlaylistList={this._handleShowProfilePlaylistList}
             onPlayCreatorMedia={this._handlePlayCreatorMedia}

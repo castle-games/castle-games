@@ -10,6 +10,8 @@ import UIEmptyState from '~/core-components/reusable/UIEmptyState';
 import UILink from '~/core-components/reusable/UILink';
 import ContentEditor from '~/editor/ContentEditor';
 
+import CoreBrowseSearchInput from '~/core-components/CoreBrowseSearchInput';
+
 const STYLES_HEADER_TEXT = css`
   font-size: 16px;
 `;
@@ -78,9 +80,11 @@ export default class CorePlaylist extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
-        <UIHeaderDismiss onDismiss={this.props.onDismiss}>
-          <div className={STYLES_HEADER_TEXT}>{this.props.playlist.name}</div>
-        </UIHeaderDismiss>
+        <CoreBrowseSearchInput
+          readOnly
+          searchQuery={this.props.playlist.name}
+          onSearchReset={this.props.onSearchReset}
+        />
         <div className={STYLES_PLAYLIST_CARD}>
           <h1 className={STYLES_HEADING}>{this.props.playlist.name}</h1>
           <div className={STYLES_META}>

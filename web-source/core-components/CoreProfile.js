@@ -10,6 +10,8 @@ import UIListMedia from '~/core-components/reusable/UIListMedia';
 import UIListPlaylists from '~/core-components/reusable/UIListPlaylists';
 import UIEmptyState from '~/core-components/reusable/UIEmptyState';
 
+import CoreBrowseSearchInput from '~/core-components/CoreBrowseSearchInput';
+
 const STYLES_HEADER_TEXT = css`
   font-size: 16px;
 `;
@@ -86,9 +88,11 @@ export default class CoreProfile extends React.Component {
     return (
       <div className={STYLES_CONTAINER}>
         {!this.props.isViewingOwnProfile ? (
-          <UIHeaderDismiss onDismiss={this.props.onDismiss}>
-            <div className={STYLES_HEADER_TEXT}>{this.props.creator.username}</div>
-          </UIHeaderDismiss>
+          <CoreBrowseSearchInput
+            readOnly
+            searchQuery={this.props.creator.username}
+            onSearchReset={this.props.onSearchReset}
+          />
         ) : null}
         <UICardProfileHeader
           creator={this.props.creator}
