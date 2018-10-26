@@ -78,7 +78,7 @@ export const openWindowFrame = mediaUrl => {
   }
 };
 
-export const openExternalUrl = externalUrl => {
+export const openExternalURL = externalUrl => {
   if (!window.cefQuery) {
     console.error('openExternalUrl: window.cefQuery is undefined');
     return;
@@ -96,7 +96,7 @@ export const openExternalUrl = externalUrl => {
   } catch (e) {
     alert('`cefQuery`: ' + e.message);
   }
-}
+};
 
 export const updateWindowFrame = rect => {
   if (!window.cefQuery) {

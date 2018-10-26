@@ -475,6 +475,12 @@ export default class CoreApp extends React.Component {
   };
 
   _handleNavigateToBrowserPage = browserUrl => {
+    if (window.cefQuery) {
+      CEF.openExternalURL(browserUrl);
+
+      return;
+    }
+
     this.setState({ browserUrl, pageMode: null });
   };
 
