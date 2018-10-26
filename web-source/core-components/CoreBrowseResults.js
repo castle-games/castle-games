@@ -56,6 +56,7 @@ export default class CoreBrowseResults extends React.Component {
             onUserSelect={this.props.onUserSelect}
             onPlaylistSelect={this.props.onPlaylistSelect}
             onMediaSelect={this.props.onMediaSelect}
+            allMedia={this.props.allMedia}
             featuredMedia={this.props.featuredMedia}
             featuredPlaylists={this.props.featuredPlaylists}
           />

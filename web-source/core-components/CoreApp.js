@@ -874,6 +874,7 @@ export default class CoreApp extends React.Component {
           leftSidebarNode={maybeLeftSidebarNode}>
           {maybeFrameNode}
           <CoreBrowseResults
+            allMedia={state.allMedia}
             mediaItems={state.allMediaFiltered}
             playlists={state.allPlaylistsFiltered}
             featuredPlaylists={state.featuredPlaylists}
