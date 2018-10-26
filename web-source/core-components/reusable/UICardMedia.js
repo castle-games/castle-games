@@ -126,6 +126,24 @@ export default class UICardMedia extends React.Component {
       );
     }
 
+    let jamVotingInfoElement;
+    if (!Strings.isEmpty(this.props.media.jamVotingUrl)) {
+      jamVotingInfoElement = (
+        <div>
+          <div className={STYLES_SECTION_PARAGRAPH}>
+            This game is part of an active game jam. If you'd like to show your support for
+            the creator, you can vote or provide feedback at the jam's website.
+          </div>
+          <UIButtonIconHorizontal
+            icon={<SVG.MediaIcon height="16px" />}
+            onClick={() => this.props.onNavigateToBrowserPage(this.props.media.jamVotingUrl)}>
+            Vote for it
+          </UIButtonIconHorizontal>
+        </div>
+      );
+    }
+
+    
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_CONTAINER_PREVIEW_NAME}>{name}</div>
@@ -162,7 +180,8 @@ export default class UICardMedia extends React.Component {
             </div>
           ) : null}
 
-          <div style={{ marginTop: 32 }}>
+        <div style={{ marginTop: 32 }}>
+            {jamVotingInfoElement}
             {this.props.viewer ? (
               <ControlPlaylistAdd
                 onToggleProfile={this.props.onToggleProfile}
@@ -170,14 +189,6 @@ export default class UICardMedia extends React.Component {
                 media={this.props.media}
                 viewer={this.props.viewer}
               />
-            ) : null}
-
-            {!Strings.isEmpty(this.props.media.jamVotingUrl) ? (
-              <UIButtonIconHorizontal
-                icon={<SVG.MediaIcon height="16px" />}
-                onClick={() => this.props.onNavigateToBrowserPage(this.props.media.jamVotingUrl)}>
-                Vote for it
-              </UIButtonIconHorizontal>
             ) : null}
           </div>
         </div>
