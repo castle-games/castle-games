@@ -45,7 +45,7 @@ export default class CoreRootLeftSidebar extends React.Component {
         {this.props.viewer ? (
           <UIButtonIcon
             active={this.props.isViewingProfile}
-            icon={<SVG.Profile height="24px" />}
+            icon={<SVG.Rook height="20px" />}
             style={{ background: Constants.colors.green }}
             onClick={this.props.onToggleProfile}>
             You
