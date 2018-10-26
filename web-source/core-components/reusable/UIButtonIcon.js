@@ -14,25 +14,32 @@ const STYLES_CONTROL = css`
   justify-content: center;
   color: ${Constants.colors.white};
   opacity: 1;
-  transition: 200ms ease opacity;
+  transition: 200ms ease all;
   cursor: pointer;
   user-select: none;
 
   :hover {
-    opacity: 0.8;
+    opacity: 0.9;
   }
 `;
 
 const STYLES_ICON = css`
   height: 40px;
   width: 40px;
-  background: ${Constants.colors.foreground};
+  background: #222222;
+  background: -webkit-linear-gradient(
+    45deg,
+    rgba(18, 18, 18, 1) 0%,
+    rgba(24, 24, 24, 1) 35%,
+    rgba(44, 44, 44, 1) 100%
+  );
   margin-bottom: 8px;
   border-radius: 4px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border-top: 1px solid ${Constants.colors.white10};
+  border-bottom: 1px solid #131313;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
   background-position: 50% 50%;
   background-size: cover;
