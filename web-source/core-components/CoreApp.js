@@ -576,7 +576,7 @@ export default class CoreApp extends React.Component {
       return;
     }
 
-    this.setState({ pageMode: 'profile', creator: { ...creator } });
+    this.setStateHideCEF({ pageMode: 'profile', creator: { ...creator } });
   };
 
   _handleMediaSelect = (media, isHistory) => {
