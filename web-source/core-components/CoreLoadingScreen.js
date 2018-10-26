@@ -7,6 +7,7 @@ import { css } from 'react-emotion';
 import UIHeaderDismiss from '~/core-components/reusable/UIHeaderDismiss';
 import UIEmptyState from '~/core-components/reusable/UIEmptyState';
 
+// TODO(jim): z-index will want to compete.
 const STYLES_CONTAINER = css`
   position: absolute;
   background: ${Constants.colors.black};
