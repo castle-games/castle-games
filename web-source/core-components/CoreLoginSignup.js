@@ -206,8 +206,8 @@ export default class CoreLoginSignup extends React.Component {
 
     const response = await Actions.signup({
       name: this.state.name,
-      username: this.state.username,
-      email: this.state.email,
+      username: this.state.username ? this.state.username.toLowerCase() : '',
+      email: this.state.email ? this.state.email.toLowerCase() : '',
       password: this.state.password,
     });
 

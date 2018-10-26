@@ -757,7 +757,7 @@ export default class CoreApp extends React.Component {
     this.setStateHideCEF({
       viewer: null,
       creator: null,
-      pageMode: 'browse',
+      pageMode: 'sign-in',
     });
   };
 
