@@ -349,6 +349,10 @@ export default class CoreApp extends React.Component {
       this.setState({ mediaLoading: true });
     }
 
+    amplitude.getInstance().logEvent('OPEN_HTML5', {
+      mediaUrl: media.mediaUrl,
+    });
+
     const existingMedia = await Actions.getMediaByURL({
       mediaUrl: media.mediaUrl,
     });
@@ -368,6 +372,10 @@ export default class CoreApp extends React.Component {
     if (Strings.isEmpty(mediaUrl)) {
       return;
     }
+
+    amplitude.getInstance().logEvent('OPEN_LUA', {
+      mediaUrl,
+    });
 
     this.closeCEF();
 

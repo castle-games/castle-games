@@ -342,6 +342,10 @@ export async function getInitialData() {
     return false;
   }
 
+  if (result.data.me && result.data.me.userId) {
+    amplitude.getInstance().setUserId(result.data.me.userId);
+  }
+
   return result.data;
 }
 
