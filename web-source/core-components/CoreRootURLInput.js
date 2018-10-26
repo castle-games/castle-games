@@ -88,6 +88,11 @@ export default class CoreRootURLInput extends React.Component {
 
   _handleFocusInput = () => this._input.focus();
 
+  _handleSubmit = e => {
+    this._input.blur();
+    this.props.onSubmit(e);
+  };
+
   render() {
     let dimensionToggleElement;
     if (this.props.media && this.props.media.dimensions) {
@@ -116,7 +121,7 @@ export default class CoreRootURLInput extends React.Component {
             value={this.props.value}
             name={this.props.name}
             placeholder={this.props.placeholder}
-            onSubmit={this.props.onSubmit}
+            onSubmit={this._handleSubmit}
             onChange={this.props.onChange}
           />
         </div>
@@ -124,7 +129,7 @@ export default class CoreRootURLInput extends React.Component {
         <div className={STYLES_CONTAINER_TOOLBAR}>
           <UIButtonDarkSmall
             icon={<SVG.Play height="10px" />}
-            onClick={this.props.onSubmit}
+            onClick={this._handleSubmit}
             style={{ background: Constants.colors.black }}
           />
           {dimensionToggleElement}
