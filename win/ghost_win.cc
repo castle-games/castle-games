@@ -17,6 +17,7 @@
 #include "ghost.h"
 
 #include <windows.h>
+#include <ShellApi.h>
 
 #include <mutex>
 #include <queue>
@@ -380,4 +381,11 @@ void ghostRunMessageLoop() {
   }
 
   stopLove();
+}
+
+void ghostOpenExternalUrl(const char *url) {
+  wchar_t wtext[500];
+  mbstowcs(wtext, url, strlen(url) + 1);
+  LPWSTR ptr = wtext;
+  ShellExecute(0, 0, ptr, 0, 0, SW_SHOW);
 }
