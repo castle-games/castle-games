@@ -77,6 +77,7 @@ export default class UIFeaturedPlaylists extends React.Component {
     return (
       <div className={STYLES_PLAYLISTS}>
         {playlists.map(p => {
+          console.log(p);
           return (
             <UIPlaylistItem
               key={p.playlistId}

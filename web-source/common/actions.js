@@ -55,6 +55,7 @@ const PLAYLISTS = `
     createdTime
     coverImage {
       url
+      imgixUrl
       height
       width
     }
