@@ -345,7 +345,7 @@ export default class CoreApp extends React.Component {
     this.closeCEF();
 
     // HACK(jim): This is a great way to disable this feature for local web.
-    if (window.cefQuery) {
+    if (this.state.mediaUrl !== media.mediaUrl && window.cefQuery) {
       this.setState({ mediaLoading: true });
     }
 
