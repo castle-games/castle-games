@@ -13,8 +13,8 @@ const STYLES_PLAYLIST_ITEM = css`
   background: ${Constants.colors.yellow};
   color: ${Constants.colors.black};
   display: inline-block;
-  width: 248px;
-  height: 360px;
+  width: 184px;
+  height: 256px;
   transition: 200ms ease all;
   transform: scale(1);
   cursor: pointer;
@@ -43,13 +43,13 @@ const STYLES_PLAYLIST_ITEM_BOTTOM = css`
 `;
 
 const STYLES_PLAYLIST_ITEM_BOTTOM_HEADING = css`
-  font-size: 18px;
+  font-size: 14px;
   line-height: 24px;
   font-weight: 600;
 `;
 
 const STYLES_PLAYLIST_ITEM_BOTTOM_DESCRIPTION = css`
-  font-size: 12px;
+  font-size: 10px;
   line-height: 1.725;
 `;
 
