@@ -106,11 +106,13 @@ export default class CoreWelcomeScreen extends React.Component {
         </div>
 
         <div className={STYLES_SECTION}>
-          <div className={STYLES_HEADING}>All games</div>
-          <div className={STYLES_SUB_PARAGRAPH}>Here are a list of games on castle.</div>
+          <div className={STYLES_HEADING}>Staff picks</div>
+          <div className={STYLES_SUB_PARAGRAPH}>
+            Here are some games we enjoy playing on Castle.
+          </div>
         </div>
         <UIListMedia
-          mediaItems={this.props.allMedia}
+          mediaItems={featuredMedia}
           onUserSelect={this.props.onUserSelect}
           onMediaSelect={this.props.onMediaSelect}
         />
