@@ -791,6 +791,8 @@ export default class CoreApp extends React.Component {
   render() {
     const { state } = this;
 
+    console.log(state);
+
     const isViewerViewingBrowseScene = state.pageMode === 'browse';
     const isViewerViewingSignInScene = state.pageMode === 'sign-in';
     const isViewerViewingProfileScene = state.pageMode === 'profile';
