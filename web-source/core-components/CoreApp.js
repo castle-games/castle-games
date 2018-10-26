@@ -20,6 +20,7 @@ import CoreRootToolbar from '~/core-components/CoreRootToolbar';
 import CoreRootContextSidebar from '~/core-components/CoreRootContextSidebar';
 import CoreLoginSignup from '~/core-components/CoreLoginSignup';
 import CoreMediaScreen from '~/core-components/CoreMediaScreen';
+import CoreBrowserScreen from '~/core-components/CoreBrowserScreen';
 import CoreBrowseResults from '~/core-components/CoreBrowseResults';
 import CoreBrowseSearchInput from '~/core-components/CoreBrowseSearchInput';
 import CoreProfile from '~/core-components/CoreProfile';
@@ -359,6 +360,7 @@ export default class CoreApp extends React.Component {
       mediaUrl: media.mediaUrl,
       pageMode: null,
       creator: null,
+      browserUrl: null,
     });
   };
 
@@ -380,6 +382,7 @@ export default class CoreApp extends React.Component {
       mediaUrl,
       pageMode: null,
       creator: null,
+      browserUrl: null,
     });
   };
 
@@ -470,6 +473,12 @@ export default class CoreApp extends React.Component {
 
     return false;
   };
+
+  _handleNavigateToBrowserPage = browserUrl => {
+    this.setState({ browserUrl, pageMode: null });
+  };
+
+  _handleDismissBrowserPage = () => this.setState({ browserUrl: null });
 
   _handleSearchSubmit = async e => this._handleSearchChange(e);
 
@@ -791,8 +800,6 @@ export default class CoreApp extends React.Component {
   render() {
     const { state } = this;
 
-    console.log(state);
-
     const isViewerViewingBrowseScene = state.pageMode === 'browse';
     const isViewerViewingSignInScene = state.pageMode === 'sign-in';
     const isViewerViewingProfileScene = state.pageMode === 'profile';
@@ -811,6 +818,8 @@ export default class CoreApp extends React.Component {
       !Strings.isEmpty(state.media.mediaUrl) &&
       !state.media.mediaUrl.endsWith('.lua');
 
+    const isRenderingBrowser = !Strings.isEmpty(state.browserUrl);
+
     let maybeFrameNode;
     if (isRenderingIFrame) {
       maybeFrameNode = (
@@ -819,6 +828,18 @@ export default class CoreApp extends React.Component {
           isExpanded={state.isMediaExpanded}
           isVisible={!state.pageMode}
           media={state.media}
+        />
+      );
+    }
+
+    let maybeBrowserNode;
+    if (isRenderingBrowser) {
+      maybeBrowserNode = (
+        <CoreBrowserScreen
+          key="core-browser-screen"
+          isVisible={!state.pageMode}
+          onDismiss={this._handleDismissBrowserPage}
+          browserUrl={state.browserUrl}
         />
       );
     }
@@ -966,6 +987,7 @@ export default class CoreApp extends React.Component {
           storage={this.props.storage}
           allMediaFiltered={state.allMediaFiltered}
           searchQuery={state.searchQuery}
+          onNavigateToBrowserPage={this._handleNavigateToBrowserPage}
           onRefreshViewer={this.refreshViewer}
           onRegisterMedia={this._handleRegisterGame}
           onToggleBrowse={this._handleToggleBrowse}
@@ -996,6 +1018,7 @@ export default class CoreApp extends React.Component {
         leftSidebarNode={maybeLeftSidebarNode}
         isHorizontalOrientation={state.isHorizontalOrientation}
         rightNode={maybeRightNode}>
+        {maybeBrowserNode}
         {state.mediaLoading ? <CoreLoadingScreen /> : null}
         {maybeFrameNode}
       </CoreLayout>

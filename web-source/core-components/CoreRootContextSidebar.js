@@ -236,6 +236,7 @@ export default class CoreRootContextSidebar extends React.Component {
               onRegisterMedia={this.props.onRegisterMedia}
               onToggleProfile={this.props.onToggleProfile}
               onRefreshViewer={this.props.onRefreshViewer}
+              onNavigateToBrowserPage={this.props.onNavigateToBrowserPage}
             />
           </div>
           {footerNode}

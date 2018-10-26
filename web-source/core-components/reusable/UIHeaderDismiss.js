@@ -37,13 +37,16 @@ const STYLES_LEFT = css`
 export default class UIHeaderDismiss extends React.Component {
   render() {
     return (
-      <div className={STYLES_CONTAINER}>
-        <div className={STYLES_LEFT}>{this.props.children}</div>
-        {this.props.onDismiss ? (
-          <span className={STYLES_ICON} onClick={this.props.onDismiss}>
-            <SVG.Dismiss height="16px" />
-          </span>
-        ) : null}
+      <div>
+        <div className={STYLES_CONTAINER}>
+          <div className={STYLES_LEFT}>{this.props.children}</div>
+          {this.props.onDismiss ? (
+            <span className={STYLES_ICON} onClick={this.props.onDismiss}>
+              <SVG.Dismiss height="14px" />
+            </span>
+          ) : null}
+        </div>
+        {this.props.subsection}
       </div>
     );
   }
