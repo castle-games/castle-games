@@ -96,7 +96,7 @@ export default class CoreWelcomeScreen extends React.Component {
         </div>
 
         <div className={STYLES_SECTION}>
-          <div className={STYLES_HEADING}>Playlists</div>
+          <div className={STYLES_HEADING}>Featured Playlists</div>
           <div className={STYLES_PLAYLISTS}>
             <UIFeaturedPlaylists
               playlists={featuredPlaylists}
@@ -106,10 +106,7 @@ export default class CoreWelcomeScreen extends React.Component {
         </div>
 
         <div className={STYLES_SECTION}>
-          <div className={STYLES_HEADING}>Staff picks</div>
-          <div className={STYLES_SUB_PARAGRAPH}>
-            Here are some games we enjoy playing on Castle.
-          </div>
+          <div className={STYLES_HEADING}>Featured Games</div>
         </div>
         <UIListMedia
           mediaItems={featuredMedia}
