@@ -209,7 +209,7 @@ export default class UICardMedia extends React.Component {
             <UIButtonIconHorizontal
               icon={<SVG.MediaIcon height="16px" />}
               onClick={() => this._handleShare(this.props.media)}>
-              Open share
+              Share it
             </UIButtonIconHorizontal>
           </div>
         </div>
