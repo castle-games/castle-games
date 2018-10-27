@@ -617,8 +617,14 @@ export default class CoreApp extends React.Component {
     const max = list.length;
     const min = 1;
 
-    const index = Utilities.getRandomInt(min, max);
-    this._handleMediaSelect(list[index]);
+    if (list.length > 0 && max > min) {
+      const currentIndex = this.state.allMediaFiltered.findIndex(m => m.mediaUrl === this.state.mediaUrl);
+      let nextIndex;
+      do {
+        nextIndex = Utilities.getRandomInt(min, max);
+      } while (nextIndex == currentIndex)
+      this._handleMediaSelect(list[nextIndex]);
+    }
   };
 
   _handleSelectNext = () => {
