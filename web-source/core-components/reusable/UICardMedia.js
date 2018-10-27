@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
+import * as CEF from '~/common/cef';
 import * as SVG from '~/core-components/primitives/svg';
 import * as Strings from '~/common/strings';
 
@@ -79,6 +80,21 @@ export default class UICardMedia extends React.Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
+  _handleShare = media => {
+    let name = media.name ? media.name : 'untitled';
+    let author = media.user ? media.user.username : 'anonymous';
+    let mediaUrl = media.mediaUrl;
+
+    const url = `https://www.playcastle.io/games?name=${name}&author=${author}&url=${mediaUrl}`;
+
+    if (window.cefQuery) {
+      CEF.openExternalURL(url);
+      return;
+    }
+
+    window.open(url);
+  };
+
   _handleSubmit = async () => {
     await this.props.onRegisterMedia({ email: this.state.email, message: this.state.message });
 
@@ -131,8 +147,8 @@ export default class UICardMedia extends React.Component {
       jamVotingInfoElement = (
         <div>
           <div className={STYLES_SECTION_PARAGRAPH}>
-            This game is part of an active game jam. If you'd like to show your support for
-            the creator, you can vote or provide feedback at the jam's website.
+            This game is part of an active game jam. If you'd like to show your support for the
+            creator, you can vote or provide feedback at the jam's website.
           </div>
           <UIButtonIconHorizontal
             icon={<SVG.MediaIcon height="16px" />}
@@ -143,7 +159,6 @@ export default class UICardMedia extends React.Component {
       );
     }
 
-    
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_CONTAINER_PREVIEW_NAME}>{name}</div>
@@ -180,7 +195,7 @@ export default class UICardMedia extends React.Component {
             </div>
           ) : null}
 
-        <div style={{ marginTop: 32 }}>
+          <div style={{ marginTop: 32 }}>
             {jamVotingInfoElement}
             {this.props.viewer ? (
               <ControlPlaylistAdd
@@ -190,6 +205,12 @@ export default class UICardMedia extends React.Component {
                 viewer={this.props.viewer}
               />
             ) : null}
+
+            <UIButtonIconHorizontal
+              icon={<SVG.MediaIcon height="16px" />}
+              onClick={() => this._handleShare(this.props.media)}>
+              Open share
+            </UIButtonIconHorizontal>
           </div>
         </div>
       </div>
