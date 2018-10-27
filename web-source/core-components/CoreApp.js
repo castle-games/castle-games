@@ -688,9 +688,7 @@ export default class CoreApp extends React.Component {
       this.state.viewer &&
       this.state.creator &&
       this.state.viewer.userId === this.state.creator.userId;
-    console.log(isOwner);
-    console.log(this.state.viewer);
-    console.log(this.state.creator);
+
     if (this.state.pageMode === 'profile' && this.state.creator && !isOwner) {
       return;
     }
