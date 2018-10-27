@@ -88,7 +88,7 @@ export default class UICardMedia extends React.Component {
     const url = `https://www.playcastle.io/games?name=${name}&author=${author}&url=${mediaUrl}`;
 
     if (window.cefQuery) {
-      CEF.openExternalURL(url);
+      CEF.openExternalURL(window.encodeURI(url));
       return;
     }
 
