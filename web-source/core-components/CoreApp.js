@@ -35,7 +35,7 @@ const isReloadHotkey = isKeyHotkey('mod+r');
 const isAppReloadHotkey = isKeyHotkey('mod+shift+r');
 
 const POLL_DELAY = 300;
-const ENABLE_HIDE_OVERLAY = false;
+const ENABLE_HIDE_OVERLAY = true;
 
 export default class CoreApp extends React.Component {
   _layout;
