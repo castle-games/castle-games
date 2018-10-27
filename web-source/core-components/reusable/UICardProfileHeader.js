@@ -120,6 +120,7 @@ export default class UICardProfileHeader extends React.Component {
             Media
           </div>
 
+      {this.props.creator.isReal ? (
           <div
             className={STYLES_NAVIGATION_ITEM}
             style={{
@@ -128,6 +129,7 @@ export default class UICardProfileHeader extends React.Component {
             onClick={this.props.onShowPlaylistList}>
             Playlists
           </div>
+        ) : null}
         </div>
       </div>
     );
