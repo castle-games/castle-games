@@ -85,7 +85,7 @@ function main.draw()
     do -- Debug overlay
         love.graphics.push('all')
         love.graphics.setFont(debugFont)
-        love.graphics.setColor(0.8, 0.5, 0.1)
+        love.graphics.setColor(0.969, 0.816, 0)
         -- Ongoing network requests on bottom of screen
         local fontH = love.graphics.getFont():getHeight()
         local yStep = 1.2 * fontH
