@@ -579,7 +579,7 @@ export default class CoreApp extends React.Component {
     this.setStateHideCEF({
       pageMode: 'profile',
       profileMode: 'media',
-      creator: { ...creator }
+      creator: { ...creator },
     });
   };
 
@@ -681,6 +681,17 @@ export default class CoreApp extends React.Component {
     // NOTE(jim):
     // We can probably make this more elegant later.
     if (this.state.pageMode === 'playlist') {
+      return;
+    }
+
+    const isOwner =
+      this.state.viewer &&
+      this.state.creator &&
+      this.state.viewer.userId === this.state.creator.userId;
+    console.log(isOwner);
+    console.log(this.state.viewer);
+    console.log(this.state.creator);
+    if (this.state.pageMode === 'profile' && this.state.creator && !isOwner) {
       return;
     }
 
