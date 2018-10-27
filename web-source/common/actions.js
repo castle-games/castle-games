@@ -407,8 +407,10 @@ export async function logout() {
 export async function getMediaByURL({ mediaUrl }) {
   const variables = { mediaUrl };
 
-  const result = await API.graphqlAsync({
-    query: `
+  let result;
+  try {
+    result = await API.graphqlAsync({
+      query: `
       query GetMediaByURL($mediaUrl: String!) {
         mediaByMediaUrl(mediaUrl: $mediaUrl) {
           name
@@ -427,9 +429,12 @@ export async function getMediaByURL({ mediaUrl }) {
           ${NESTED_USER}
         }
       }
-    `,
-    variables,
-  });
+      `,
+      variables,
+    });
+  } catch (e) {
+    return false;
+  }
 
   // TOOD(jim): Write a global error handler.
   if (result.error) {
