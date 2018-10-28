@@ -158,9 +158,7 @@ function network.fetch(url, method, skipCache)
         fetchEntries[method][url] = entry
 
         -- 'castle://' is just 'https://'
-        if url:match('^castle://') then
-            url = url:gsub('^castle://', 'https://')
-        end
+        url = url:gsub('^castle://', 'https://')
 
         -- Use persisted result if found
         local persistedResult = (not skipCache) and findPersistedFetchResult(url, method)
