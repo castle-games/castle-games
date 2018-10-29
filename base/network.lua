@@ -165,7 +165,7 @@ function network.fetch(url, method, skipCache)
         if persistedResult then
             entry.result = persistedResult
         else -- Else actually fetch then persist it
-            local response, httpCode, headers, status
+            local response, httpCode, headers, status, err
             if url:match('^https?://') then
                 -- Handle 'localhost' and '0.0.0.0'
                 url = url:gsub('^http://localhost', 'http://127.0.0.1')
@@ -176,7 +176,7 @@ function network.fetch(url, method, skipCache)
                 if method == 'GET' then
                     response, httpCode, headers, status = network.request(url)
                     if httpCode ~= 200 then
-                        error("error fetching '" .. url .. "': " .. status)
+                        err = "error fetching '" .. url .. "': " .. status
                     end
                 else
                     response, httpCode, headers, status = network.request {
@@ -198,7 +198,7 @@ function network.fetch(url, method, skipCache)
                     status = '200 ok'
                     file:close()
                 elseif method == 'GET' then
-                    error("error opening '" .. url .. "'")
+                    err = "error opening '" .. url .. "'"
                 else
                     response = nil
                     httpCode = 404
@@ -206,8 +206,12 @@ function network.fetch(url, method, skipCache)
                     status = '404 not found'
                 end
             end
-            entry.result = { response, httpCode, headers, status }
-            persistFetchResult(url, method, entry.result)
+            if err then
+                entry.err = err
+            else
+                entry.result = { response, httpCode, headers, status }
+                persistFetchResult(url, method, entry.result)
+            end
         end
 
         -- Wake waiters
@@ -215,15 +219,19 @@ function network.fetch(url, method, skipCache)
             copas.wakeup(waiter)
         end
         entry.waiters = nil
+        if entry.err then error(entry.err) end
         return unpack(entry.result)
     elseif entry.result then -- Already have an entry with `result`, just return it
         return unpack(entry.result)
-    else -- Entry with no `result` yet -- need to await it
+    elseif entry.err then -- Already have an entry with `err`, throw the error
+        error(entry.err)
+    else -- Entry with no `result` or `err` yet -- need to await it
         table.insert(entry.waiters, coroutine.running())
         copas.sleep(-1) -- Sleep till explicitly woken
-        if not entry.result then
-            error("error fetching '" .. url .. "': coroutine awoken without `result` set")
+        if not (entry.result or entry.err) then
+            error("error fetching '" .. url .. "': coroutine awoken without `result` or `err` set")
         end
+        if entry.err then error(entry.err) end
         return unpack(entry.result)
     end
 end
