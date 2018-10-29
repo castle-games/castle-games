@@ -4,6 +4,7 @@ import * as Window from '~/common/window';
 
 import { css } from 'react-emotion';
 
+import UIControl from '~/core-components/reusable/UIControl';
 import UIHeaderDismiss from '~/core-components/reusable/UIHeaderDismiss';
 import UIEmptyState from '~/core-components/reusable/UIEmptyState';
 
@@ -94,7 +95,9 @@ export default class CoreDevelopmentLogs extends React.Component {
     return (
       <div className={STYLES_FIXED_CONTAINER}>
         <div className={STYLES_FIXED_HEADER}>
-          <UIHeaderDismiss onDismiss={this.props.onDismiss} />
+          <UIHeaderDismiss onDismiss={this.props.onDismiss}>
+            <UIControl onClick={this.props.onClearLogs}>Clear logs</UIControl>
+          </UIHeaderDismiss>
         </div>
         <div
           className={STYLES_CONTAINER}

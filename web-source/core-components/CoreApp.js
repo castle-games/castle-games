@@ -135,6 +135,10 @@ export default class CoreApp extends React.Component {
     this.setState(updates);
   };
 
+  _handleClearLogs = () => {
+    this.setState({ logs: [] });
+  };
+
   _handleNativeLoadEnd = async () => {
     await Actions.delay(2000);
 
@@ -618,11 +622,13 @@ export default class CoreApp extends React.Component {
     const min = 1;
 
     if (list.length > 0 && max > min) {
-      const currentIndex = this.state.allMediaFiltered.findIndex(m => m.mediaUrl === this.state.mediaUrl);
+      const currentIndex = this.state.allMediaFiltered.findIndex(
+        m => m.mediaUrl === this.state.mediaUrl
+      );
       let nextIndex;
       do {
         nextIndex = Utilities.getRandomInt(min, max);
-      } while (nextIndex == currentIndex)
+      } while (nextIndex == currentIndex);
       this._handleMediaSelect(list[nextIndex]);
     }
   };
@@ -1044,7 +1050,11 @@ export default class CoreApp extends React.Component {
 
     if (state.isOverlayActive && state.sidebarMode === 'development') {
       maybeRightNode = (
-        <CoreDevelopmentLogs logs={state.logs} onDismiss={this._handleDismissSidebar} />
+        <CoreDevelopmentLogs
+          logs={state.logs}
+          onClearLogs={this._handleClearLogs}
+          onDismiss={this._handleDismissSidebar}
+        />
       );
     }
 
