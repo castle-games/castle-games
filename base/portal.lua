@@ -134,6 +134,12 @@ function portalMeta:setupLove()
         end
     end
 
+    if newLove.window then
+        function newLove.window.setFullscreen()
+            return false
+        end
+    end
+
     function newLove.image.newImageData(path, ...)
         if type(path) == 'string' then
             return love.image.newImageData(fetchFileData(path))
