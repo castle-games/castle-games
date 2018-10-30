@@ -109,6 +109,10 @@ function portalMeta:setupLove()
             end
         end
 
+        function newLove.graphics.setNewFont(...)
+            newLove.graphics.setFont(newLove.graphics.newFont(...))
+        end
+
         function newLove.graphics.newImage(path, ...)
             if type(path) == 'string' then
                 return love.graphics.newImage(love.image.newImageData(fetchFileData(path)))
