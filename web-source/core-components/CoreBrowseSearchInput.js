@@ -90,6 +90,11 @@ const STYLES_TOAST = css`
 `;
 
 export default class CoreBrowseSearchInput extends React.Component {
+  static defaultProps = {
+    allMediaFiltered: [],
+    searchQuery: '',
+  };
+
   _input;
 
   _handleFocusInput = () => this._input.focus();
@@ -131,7 +136,7 @@ export default class CoreBrowseSearchInput extends React.Component {
             <div className={STYLES_TOAST}>
               We could not find anything that matches <b>"{this.props.searchQuery}"</b> but it looks
               like a game URL <br /> <br />
-              <UIButtonSecondary onClick={this.props.onLoadURL}>
+              <UIButtonSecondary onClick={() => this.props.onLoadURL(this.props.searchQuery)}>
                 Open <b>{this.props.searchQuery}</b>
               </UIButtonSecondary>
             </div>
