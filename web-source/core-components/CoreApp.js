@@ -317,12 +317,7 @@ export default class CoreApp extends React.Component {
     this.setState({ media: null, mediaUrl }, async () => {
       await Actions.delay(100);
 
-      if (mediaUrl.endsWith('.lua')) {
-        this.goToLUA(mediaUrl);
-        return;
-      }
-
-      this.goToHTML5Media({ mediaUrl });
+      this.loadURL(mediaUrl);
     });
   };
 
@@ -331,18 +326,22 @@ export default class CoreApp extends React.Component {
 
   _handleURLChange = e => this.setState({ [e.target.name]: e.target.value });
 
+  loadURL = mediaUrl => {
+    if (this.state.mediaUrl.endsWith('.lua')) {
+      this.goToLUA(mediaUrl);
+      return;
+    }
+
+    this.goToHTML5Media({ mediaUrl });
+  };
+
   _handleURLSubmit = () => {
     if (Strings.isEmpty(this.state.mediaUrl)) {
       alert('You must provide a URL');
       return;
     }
 
-    if (this.state.mediaUrl.endsWith('.lua')) {
-      this.goToLUA(this.state.mediaUrl);
-      return;
-    }
-
-    this.goToHTML5Media({ mediaUrl: this.state.mediaUrl });
+    this.loadURL(this.state.mediaUrl);
   };
 
   goToHTML5Media = async media => {
@@ -831,7 +830,9 @@ export default class CoreApp extends React.Component {
 
   renderRootSearchInput = () => (
     <CoreBrowseSearchInput
+      allMediaFiltered={this.state.allMediaFiltered}
       searchQuery={this.state.searchQuery}
+      onLoadURL={this.loadURL}
       onSearchReset={this._handleSearchReset}
       onChange={this._handleSearchChange}
       onSubmit={this._handleSearchSubmit}
