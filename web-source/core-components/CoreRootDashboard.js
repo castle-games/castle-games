@@ -5,11 +5,9 @@ import * as SVG from '~/core-components/primitives/svg';
 import { css } from 'react-emotion';
 
 import UIListMedia from '~/core-components/reusable/UIListMedia';
-import UIHeaderDismiss from '~/core-components/reusable/UIHeaderDismiss';
 import UIButtonIconHorizontal from '~/core-components/reusable/UIButtonIconHorizontal';
 import UIEmptyState from '~/core-components/reusable/UIEmptyState';
 import UIControl from '~/core-components/reusable/UIControl';
-import UILink from '~/core-components/reusable/UILink';
 
 const STYLES_ACTIONS = css`
   color: ${Constants.colors.white};
@@ -19,7 +17,14 @@ const STYLES_ACTIONS = css`
 
 export default class CoreRootDashboard extends React.Component {
   render() {
-    const data = this.props.storage.getItem('history');
+    let data;
+    if (this.props.storage) {
+      try {
+        data = this.props.storage.getItem('history');
+      } catch (e) {
+        console.log(e);
+      }
+    }
 
     if (!data) {
       return (
@@ -39,7 +44,14 @@ export default class CoreRootDashboard extends React.Component {
       );
     }
 
-    const { history } = JSON.parse(data);
+    let history;
+    try {
+      const parsedData = JSON.parse(data);
+      history = parsedData.history;
+      console.log('HISTORY', history);
+    } catch (e) {
+      console.log(e);
+    }
     if (!history || !history.length) {
       return (
         <div>
