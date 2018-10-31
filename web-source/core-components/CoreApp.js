@@ -664,6 +664,7 @@ export default class CoreApp extends React.Component {
   _handleToggleProfile = () => {
     const updates = {
       pageMode: 'profile',
+      mediaLoading: false,
       creator: { ...this.state.viewer },
     };
 
@@ -706,6 +707,7 @@ export default class CoreApp extends React.Component {
 
     const updates = {
       pageMode: 'browse',
+      mediaLoading: false,
       creator: null,
     };
 
@@ -717,6 +719,7 @@ export default class CoreApp extends React.Component {
   _handleToggleSignIn = () => {
     const updates = {
       pageMode: 'sign-in',
+      mediaLoading: false,
       creator: null,
     };
 
