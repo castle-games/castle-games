@@ -327,7 +327,7 @@ export default class CoreApp extends React.Component {
   _handleURLChange = e => this.setState({ [e.target.name]: e.target.value });
 
   loadURL = mediaUrl => {
-    if (this.state.mediaUrl.endsWith('.lua')) {
+    if (mediaUrl.endsWith('.lua')) {
       this.goToLUA(mediaUrl);
       return;
     }
