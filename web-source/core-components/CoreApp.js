@@ -106,6 +106,9 @@ export default class CoreApp extends React.Component {
     CEF.updateWindowFrame(rect);
   };
 
+  // TODO(jim):
+  // Someone needs to implement the ability to pause/freeze a LUA game
+  // and make it invisible on screen.
   hideFrame = () => {
     // TODO(jim): Hide Frame doesn't actually close the CEF. but makes it invisible instead.
     this.closeCEF();
@@ -276,6 +279,9 @@ export default class CoreApp extends React.Component {
       this.state.mediaUrl.endsWith('.lua');
 
     if (isShowingLUAGame) {
+      // TODO(jim):
+      // Someone needs to implement the ability to pause/freeze a LUA game
+      // and make it invisible on screen.
       this.hideFrame();
     }
 

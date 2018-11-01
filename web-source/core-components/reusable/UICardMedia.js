@@ -151,7 +151,7 @@ export default class UICardMedia extends React.Component {
             creator, you can vote or provide feedback at the jam's website.
           </div>
           <UIButtonIconHorizontal
-            icon={<SVG.MediaIcon height="16px" />}
+            icon={<SVG.Vote height="16px" />}
             onClick={() => this.props.onNavigateToBrowserPage(this.props.media.jamVotingUrl)}>
             Vote for it
           </UIButtonIconHorizontal>
@@ -207,7 +207,7 @@ export default class UICardMedia extends React.Component {
             ) : null}
 
             <UIButtonIconHorizontal
-              icon={<SVG.MediaIcon height="16px" />}
+              icon={<SVG.Share height="16px" />}
               onClick={() => this._handleShare(this.props.media)}>
               Share it
             </UIButtonIconHorizontal>
