@@ -314,7 +314,7 @@ export default class CoreApp extends React.Component {
       return;
     }
 
-    this.setState({ media: null, mediaUrl }, async () => {
+    this.setState({ mediaUrl }, async () => {
       await Actions.delay(100);
 
       this.loadURL(mediaUrl);
@@ -363,7 +363,7 @@ export default class CoreApp extends React.Component {
     this._handleSetHistory(existingMedia ? existingMedia : media);
 
     this.setStateWithCEF({
-      media: existingMedia ? existingMedia : media,
+      media: existingMedia ? { ...existingMedia } : { ...media },
       mediaUrl: media.mediaUrl,
       pageMode: null,
       creator: null,
@@ -389,7 +389,7 @@ export default class CoreApp extends React.Component {
     this._handleSetHistory(media ? media : { mediaUrl });
 
     this.setStateWithCEF({
-      media: media ? media : { mediaUrl },
+      media: media ? { ...media } : { mediaUrl },
       mediaUrl,
       pageMode: null,
       creator: null,
@@ -406,7 +406,7 @@ export default class CoreApp extends React.Component {
     }
 
     url = url.replace('castle://', 'http://');
-    this.setState({ media: null, mediaUrl: url }, () => {
+    this.setState({ mediaUrl: url }, () => {
       this._handleURLSubmit();
     });
   };
@@ -609,7 +609,7 @@ export default class CoreApp extends React.Component {
       });
     }
 
-    this.goToHTML5Media(media);
+    this.goToHTML5Media({ ...media });
   };
 
   _handleSelectRandom = () => {
