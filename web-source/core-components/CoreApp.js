@@ -270,6 +270,15 @@ export default class CoreApp extends React.Component {
       e.preventDefault();
     }
 
+    const isShowingLUAGame =
+      !this.state.pageMode &&
+      !Strings.isEmpty(this.state.mediaUrl) &&
+      this.state.mediaUrl.endsWith('.lua');
+
+    if (isShowingLUAGame) {
+      this.hideFrame();
+    }
+
     const loader = document.createElement('div');
     loader.innerHTML = LOADER_STRING.trim();
     loader.id = 'loader';
@@ -301,6 +310,9 @@ export default class CoreApp extends React.Component {
 
     this.setState({ ...state }, () => {
       document.getElementById('loader').outerHTML = '';
+      if (isShowingLUAGame) {
+        this.reload();
+      }
     });
   };
 
