@@ -110,113 +110,39 @@ export default class CoreRootContextSidebar extends React.Component {
     allMediaFiltered: [],
   };
 
-  state = {
-    mode: 'media',
-  };
-
-  viewMediaContext = () => {
-    this.setState({ mode: 'media' });
-  };
-
-  viewPlaylistContext = () => {
-    this.setState({ mode: 'playlist' });
-  };
-
   getRef = () => {
     return this._reference;
   };
 
-  render() {
-    const headerNode = (
-      <div className={STYLES_FIXED_HEADER}>
-        <UIHeaderDismiss>
-          <UIControl
-            onClick={this.viewMediaContext}
-            style={{ marginRight: 24 }}
-            isActive={this.state.mode === 'media'}>
-            <SVG.MediaIcon height="19px" />
-          </UIControl>
-          <UIControl
-            onClick={this.viewPlaylistContext}
-            isActive={this.state.mode === 'playlist'}
-            style={{ marginRight: 24 }}>
-            <SVG.PlaylistIcon height="16px" />
-          </UIControl>
-        </UIHeaderDismiss>
+  _renderEmpty = () => {
+    const browseIcon = (<SVG.Search height="16px" />);
+    return (
+      <div
+        className={STYLES_FIXED_CONTAINER}
+        ref={c => {
+          this._reference = c;
+        }}>
+        <div className={STYLES_CONTAINER}>
+          <UIEmptyState title="No media loaded">
+            You aren't playing anything at the moment. Want to get started with Castle?
+          </UIEmptyState>
+          <div className={STYLES_ACTION}>
+            <div className={STYLES_ACTION_ITEM}>
+              <UIButtonIconHorizontal
+                onClick={this.props.onToggleBrowse}
+                icon={browseIcon}>
+                Browse media
+              </UIButtonIconHorizontal>
+            </div>
+          </div>
+        </div>
       </div>
     );
+  }
 
-    const footerNode = this.props.allMediaFiltered.length ? (
-      <footer className={STYLES_FIXED_FOOTER}>
-        <div className={STYLES_LEFT}>
-          <UIControl onClick={this.props.onSelectPrevious}>Previous</UIControl>
-        </div>
-        <div className={STYLES_MIDDLE}>
-          <UIControl onClick={this.props.onSelectRandom}>Random</UIControl>
-        </div>
-        <div className={STYLES_RIGHT}>
-          <UIControl onClick={this.props.onSelectNext}>Next</UIControl>
-        </div>
-      </footer>
-    ) : null;
-
-    if (this.state.mode === 'media') {
-      if (!this.props.media) {
-        return (
-          <div
-            className={STYLES_FIXED_CONTAINER}
-            ref={c => {
-              this._reference = c;
-            }}>
-            {headerNode}
-            <div className={STYLES_CONTAINER}>
-              <UIEmptyState title="No media loaded">
-                You aren't playing anything at the moment. Want to get started with Castle?
-              </UIEmptyState>
-              <div className={STYLES_ACTION}>
-                <div className={STYLES_ACTION_ITEM}>
-                  <UIButtonIconHorizontal
-                    onClick={this.props.onToggleBrowse}
-                    icon={<SVG.Search height="16px" />}>
-                    Browse media
-                  </UIButtonIconHorizontal>
-                </div>
-              </div>
-            </div>
-            {footerNode}
-          </div>
-        );
-      }
-
-      return (
-        <div
-          className={STYLES_FIXED_CONTAINER}
-          ref={c => {
-            this._reference = c;
-          }}>
-          {headerNode}
-          <div className={STYLES_CONTAINER}>
-            <UIEmptyState title="Now playing" />
-            <UICardMedia
-              viewer={this.props.viewer}
-              media={this.props.media}
-              onUserSelect={this.props.onUserSelect}
-              onRegisterMedia={this.props.onRegisterMedia}
-              onToggleProfile={this.props.onToggleProfile}
-              onRefreshViewer={this.props.onRefreshViewer}
-              onNavigateToBrowserPage={this.props.onNavigateToBrowserPage}
-            />
-          </div>
-          {footerNode}
-        </div>
-      );
-    }
-
-    let titleString = `Showing ${this.props.allMedia.length} creations`;
-    if (!Strings.isEmpty(this.props.searchQuery) && this.props.allMediaFiltered.length) {
-      titleString = `Results for "${this.props.searchQuery}" (${
-        this.props.allMediaFiltered.length
-      })`;
+  render() {
+    if (!this.props.media) {
+      return this._renderEmpty();
     }
 
     return (
@@ -225,19 +151,18 @@ export default class CoreRootContextSidebar extends React.Component {
         ref={c => {
           this._reference = c;
         }}>
-        {headerNode}
         <div className={STYLES_CONTAINER}>
-          <UIEmptyState title={titleString} />
-          <UIListMedia
+          <UIEmptyState title="Now playing" />
+          <UICardMedia
+            viewer={this.props.viewer}
             media={this.props.media}
-            onMediaSelect={this.props.onMediaSelect}
             onUserSelect={this.props.onUserSelect}
-            mediaItems={
-              this.props.allMediaFiltered.length ? this.props.allMediaFiltered : this.props.allMedia
-            }
-          />
+            onRegisterMedia={this.props.onRegisterMedia}
+            onToggleProfile={this.props.onToggleProfile}
+            onRefreshViewer={this.props.onRefreshViewer}
+            onNavigateToBrowserPage={this.props.onNavigateToBrowserPage}
+            />
         </div>
-        {footerNode}
       </div>
     );
   }
