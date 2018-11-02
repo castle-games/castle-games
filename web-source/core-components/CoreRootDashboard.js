@@ -10,8 +10,43 @@ import UIEmptyState from '~/core-components/reusable/UIEmptyState';
 import UIControl from '~/core-components/reusable/UIControl';
 
 const STYLES_CONTAINER = css`
+  @keyframes profile-sidebar-scene-animation {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  animation: profile-sidebar-scene-animation 280ms ease;
+
   width: 100%;
   height: 100%;
+  overflow-y: scroll;
+  background ${Constants.colors.background};
+  color: ${Constants.colors.white};
+
+  ::-webkit-scrollbar {
+    display: none;
+    width: 1px;
+  }
+`;
+
+const STYLES_HEADING = css`
+  color: ${Constants.colors.white};
+  font-size: 48px;
+  line-height: 52px;
+  font-weight: 400;
+  margin: 16px;
+`;
+
+const STYLES_PARAGRAPH = css`
+  font-size: 14px;
+  font-weight: 200;
+  color: ${Constants.colors.white};
+  margin: 0 0 0 16px;
 `;
 
 const STYLES_ACTIONS = css`
@@ -21,32 +56,12 @@ const STYLES_ACTIONS = css`
 `;
 
 export default class CoreRootDashboard extends React.Component {
-  _getHistory = () => {
-    let data, history;
-    if (this.props.storage) {
-      try {
-        data = this.props.storage.getItem('history');
-      } catch (e) {
-        console.log(e);
-      }
-    }
-    if (data) {
-      try {
-        const parsedData = JSON.parse(data);
-        history = parsedData.history;
-      } catch (e) {
-        console.log(e);
-      }
-    }
-    return history;
-  };
-
   _renderEmpty = () => {
     return (
       <div>
-        <UIEmptyState title="History">
+        <div className={STYLES_PARAGRAPH}>
           After you play some games in Castle, return here to find your recent plays.
-        </UIEmptyState>
+        </div>
         <div className={STYLES_ACTIONS}>
           <UIButtonIconHorizontal
             onClick={this.props.onToggleBrowse}
@@ -59,7 +74,7 @@ export default class CoreRootDashboard extends React.Component {
   };
 
   render() {
-    const history = this._getHistory();
+    const history = this.props.history.getItems();
     let contentElement;
  
     if (!history || !history.length) {
@@ -67,7 +82,6 @@ export default class CoreRootDashboard extends React.Component {
     } else {
       contentElement = (
         <div>
-          <UIEmptyState title="History" />
           <UIListMedia
             isHistory
             media={this.props.media}
@@ -88,6 +102,9 @@ export default class CoreRootDashboard extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
+        <div className={STYLES_HEADING}>
+          History
+        </div>
         {contentElement}
       </div>
     );

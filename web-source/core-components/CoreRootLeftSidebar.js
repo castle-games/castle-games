@@ -44,7 +44,7 @@ export default class CoreRootLeftSidebar extends React.Component {
         </UIButtonIcon>
         <UIButtonIcon
           active={this.props.isViewingHistory}
-          icon={<SVG.Search height="20px" />}
+          icon={<SVG.History height="20px" />}
           style={{background: Constants.colors.blue }}
           onClick={this.props.onToggleHistory}>
           History

@@ -6,6 +6,7 @@ import * as Slack from '~/common/slack';
 import * as Actions from '~/common/actions';
 import * as Network from '~/common/network';
 import * as CEF from '~/common/cef';
+import History from '~/common/history';
 
 import { css } from 'react-emotion';
 import { isKeyHotkey } from 'is-hotkey';
@@ -48,6 +49,7 @@ export default class CoreApp extends React.Component {
     super();
 
     this.state = props.state;
+    this._history = new History(props.storage);
   }
 
   async componentDidMount() {
@@ -153,51 +155,10 @@ export default class CoreApp extends React.Component {
     this.setState({ mediaLoading: false });
   };
 
-  _handleSetHistory = media => {
-    if (!this.props.storage) {
-      alert('History is not supported at the moment.');
-      return;
-    }
-
-    let data = this.props.storage.getItem('history');
-
-    // TODO(jim): Sync this with your profile if you're logged in.
-    if (!data) {
-      console.log('Setting up your local viewing history.');
-      this.props.storage.setItem('history', JSON.stringify({ history: [] }));
-    }
-
-    data = this.props.storage.getItem('history');
-    if (!data) {
-      alert('History is not supported at the moment.');
-      return;
-    }
-
-    let { history } = JSON.parse(data);
-    if (!history) {
-      return;
-    }
-
-    if (history.length > 10) {
-      history.pop();
-    }
-
-    history = history.filter(h => h.mediaUrl !== media.mediaUrl);
-
-    history.unshift(media);
-    this.props.storage.setItem('history', JSON.stringify({ history }));
-  };
-
   _handleClearHistory = () => {
-    this.props.storage.setItem('history', JSON.stringify({ history: [] }));
-
-    if (!this._contextSidebar) {
-      return;
-    }
-
-    this._contextSidebar.viewPlaylistContext();
-  };
-
+    this._history.clear();
+  }
+  
   _handleMediaAdd = async data => {
     const response = await Actions.addMedia(data);
     if (!response) {
@@ -379,7 +340,7 @@ export default class CoreApp extends React.Component {
       mediaUrl: media.mediaUrl,
     });
 
-    this._handleSetHistory(existingMedia ? existingMedia : media);
+    this._history.addItem(existingMedia ? existingMedia : media);
 
     this.setStateWithCEF({
       media: existingMedia ? { ...existingMedia } : { ...media },
@@ -405,7 +366,7 @@ export default class CoreApp extends React.Component {
 
     this.openCEF(mediaUrl);
 
-    this._handleSetHistory(media ? media : { mediaUrl });
+    this._history.addItem(media ? media : { mediaUrl });
 
     this.setStateWithCEF({
       media: media ? { ...media } : { mediaUrl },
@@ -635,49 +596,6 @@ export default class CoreApp extends React.Component {
     }
 
     this.goToHTML5Media({ ...media });
-  };
-
-  _handleSelectRandom = () => {
-    const list = this.state.allMediaFiltered.length
-      ? this.state.allMediaFiltered
-      : this.state.allMedia;
-
-    const max = list.length;
-    const min = 1;
-
-    if (list.length > 0 && max > min) {
-      const currentIndex = this.state.allMediaFiltered.findIndex(
-        m => m.mediaUrl === this.state.mediaUrl
-      );
-      let nextIndex;
-      do {
-        nextIndex = Utilities.getRandomInt(min, max);
-      } while (nextIndex == currentIndex);
-      this._handleMediaSelect(list[nextIndex]);
-    }
-  };
-
-  _handleSelectNext = () => {
-    if (!this.state.allMediaFiltered.length) {
-      return;
-    }
-
-    const index = this.state.allMediaFiltered.findIndex(m => m.mediaUrl === this.state.mediaUrl);
-    const newIndex = (index + 1) % this.state.allMediaFiltered.length;
-
-    this._handleMediaSelect(this.state.allMediaFiltered[newIndex]);
-  };
-
-  _handleSelectPrevious = () => {
-    if (!this.state.allMediaFiltered.length) {
-      return;
-    }
-
-    const index = this.state.allMediaFiltered.findIndex(m => m.mediaUrl === this.state.mediaUrl);
-    const newIndex =
-      (index + this.state.allMediaFiltered.length - 1) % this.state.allMediaFiltered.length;
-
-    this._handleMediaSelect(this.state.allMediaFiltered[newIndex]);
   };
 
   _handleOrientationChange = () => {
@@ -987,11 +905,10 @@ export default class CoreApp extends React.Component {
         {maybeFrameNode}
         <CoreRootDashboard
           media={state.media}
-          storage={this.props.storage}
+          history={this._history}
           onMediaSelect={this._handleMediaSelect}
           onUserSelect={this._handleUserSelect}
           onClearHistory={this._handleClearHistory}
-          onSelectRandom={this._handleSelectRandom}
           onToggleBrowse={this._handleToggleBrowse}
           />
       </CoreLayout>
@@ -1098,10 +1015,6 @@ export default class CoreApp extends React.Component {
           onMediaSelect={this._handleMediaSelect}
           onUserSelect={this._handleUserSelect}
           onViewCurrentPlaylistDetails={this._handleToggleCurrentPlaylistDetails}
-          onClearHistory={this._handleClearHistory}
-          onSelectRandom={this._handleSelectRandom}
-          onSelectNext={this._handleSelectNext}
-          onSelectPrevious={this._handleSelectPrevious}
           onDismiss={this._handleDismissSidebar}
         />
       );
