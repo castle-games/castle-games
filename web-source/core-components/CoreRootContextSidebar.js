@@ -5,8 +5,6 @@ import * as SVG from '~/core-components/primitives/svg';
 
 import { css } from 'react-emotion';
 
-import CoreRootDashboard from '~/core-components/CoreRootDashboard';
-
 import UIListMedia from '~/core-components/reusable/UIListMedia';
 import UIButtonIconHorizontal from '~/core-components/reusable/UIButtonIconHorizontal';
 import UIHeaderDismiss from '~/core-components/reusable/UIHeaderDismiss';
@@ -124,10 +122,6 @@ export default class CoreRootContextSidebar extends React.Component {
     this.setState({ mode: 'playlist' });
   };
 
-  viewHistoryContext = () => {
-    this.setState({ mode: 'history' });
-  };
-
   getRef = () => {
     return this._reference;
   };
@@ -148,9 +142,6 @@ export default class CoreRootContextSidebar extends React.Component {
             style={{ marginRight: 24 }}>
             <SVG.PlaylistIcon height="16px" />
           </UIControl>
-          <UIControl onClick={this.viewHistoryContext} isActive={this.state.mode === 'history'}>
-            <SVG.History height="22px" />
-          </UIControl>
         </UIHeaderDismiss>
       </div>
     );
@@ -168,29 +159,6 @@ export default class CoreRootContextSidebar extends React.Component {
         </div>
       </footer>
     ) : null;
-
-    if (this.state.mode === 'history') {
-      return (
-        <div
-          className={STYLES_FIXED_CONTAINER}
-          ref={c => {
-            this._reference = c;
-          }}
-          style={{ padding: `48px 0 0 0` }}>
-          {headerNode}
-          <div className={STYLES_CONTAINER}>
-            <CoreRootDashboard
-              media={this.props.media}
-              storage={this.props.storage}
-              onMediaSelect={this.props.onMediaSelect}
-              onUserSelect={this.props.onUserSelect}
-              onClearHistory={this.props.onClearHistory}
-              onSelectRandom={this.props.onSelectRandom}
-            />
-          </div>
-        </div>
-      );
-    }
 
     if (this.state.mode === 'media') {
       if (!this.props.media) {

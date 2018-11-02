@@ -18,6 +18,7 @@ import CoreRootURLInput from '~/core-components/CoreRootURLInput';
 import CoreRootLeftSidebar from '~/core-components/CoreRootLeftSidebar';
 import CoreRootToolbar from '~/core-components/CoreRootToolbar';
 import CoreRootContextSidebar from '~/core-components/CoreRootContextSidebar';
+import CoreRootDashboard from '~/core-components/CoreRootDashboard';
 import CoreLoginSignup from '~/core-components/CoreLoginSignup';
 import CoreMediaScreen from '~/core-components/CoreMediaScreen';
 import CoreBrowserScreen from '~/core-components/CoreBrowserScreen';
@@ -750,6 +751,16 @@ export default class CoreApp extends React.Component {
     this.setStateHideCEF({ ...updates });
   };
 
+  _handleToggleHistory = () => {
+    const updates = {
+      pageMode: 'history',
+      mediaLoading: false,
+      creator: null,
+    };
+
+    this.setStateHideCEF(updates);
+  };
+
   _handleToggleCurrentPlaylistDetails = () => {
     const updates = {
       pageMode: 'playlist',
@@ -873,6 +884,7 @@ export default class CoreApp extends React.Component {
     const isViewerViewingSignInScene = state.pageMode === 'sign-in';
     const isViewerViewingProfileScene = state.pageMode === 'profile';
     const isViewerViewingPlaylistScene = state.pageMode === 'playlist';
+    const isViewerViewingHistoryScene = state.pageMode === 'history';
     const isViewerPlayingMedia = !state.pageMode;
 
     const isViewingOwnProfile =
@@ -926,10 +938,12 @@ export default class CoreApp extends React.Component {
           }
           isSignIn={isViewerViewingSignInScene}
           isViewingProfile={isViewingOwnProfile}
+          isViewingHistory={isViewerViewingHistoryScene}
           onToggleProfile={this._handleToggleProfile}
           onToggleBrowse={this._handleToggleBrowse}
           onToggleSignIn={this._handleToggleSignIn}
           onTogglePlay={this._handleTogglePlay}
+          onToggleHistory={this._handleToggleHistory}
           onSignOut={this._handleSignOut}
         />
       );
@@ -966,6 +980,23 @@ export default class CoreApp extends React.Component {
         </CoreLayout>
       );
     }
+
+  if (isViewerViewingHistoryScene) {
+    return (
+      <CoreLayout ref={this._handleGetReference} leftSidebarNode={maybeLeftSidebarNode}>
+        {maybeFrameNode}
+        <CoreRootDashboard
+          media={state.media}
+          storage={this.props.storage}
+          onMediaSelect={this._handleMediaSelect}
+          onUserSelect={this._handleUserSelect}
+          onClearHistory={this._handleClearHistory}
+          onSelectRandom={this._handleSelectRandom}
+          onToggleBrowse={this._handleToggleBrowse}
+          />
+      </CoreLayout>
+    );
+  }
 
     if (isViewerViewingPlaylistScene) {
       return (

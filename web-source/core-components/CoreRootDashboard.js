@@ -9,6 +9,11 @@ import UIButtonIconHorizontal from '~/core-components/reusable/UIButtonIconHoriz
 import UIEmptyState from '~/core-components/reusable/UIEmptyState';
 import UIControl from '~/core-components/reusable/UIControl';
 
+const STYLES_CONTAINER = css`
+  width: 100%;
+  height: 100%;
+`;
+
 const STYLES_ACTIONS = css`
   color: ${Constants.colors.white};
   padding: 16px;
@@ -16,8 +21,8 @@ const STYLES_ACTIONS = css`
 `;
 
 export default class CoreRootDashboard extends React.Component {
-  render() {
-    let data;
+  _getHistory = () => {
+    let data, history;
     if (this.props.storage) {
       try {
         data = this.props.storage.getItem('history');
@@ -25,45 +30,56 @@ export default class CoreRootDashboard extends React.Component {
         console.log(e);
       }
     }
+    if (data) {
+      try {
+        const parsedData = JSON.parse(data);
+        history = parsedData.history;
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    return history;
+  };
 
-    if (!data) {
-      return (
-        <div>
-          <UIEmptyState title="History">
-            As you play different Media using Castle, the last 10 links you visited will appear
-            here.
-          </UIEmptyState>
-          <div className={STYLES_ACTIONS}>
-            <UIButtonIconHorizontal
-              onClick={this.props.onToggleBrowse}
-              icon={<SVG.Search height="16px" />}>
-              Browse media
-            </UIButtonIconHorizontal>
-          </div>
+  _renderEmpty = () => {
+    return (
+      <div>
+        <UIEmptyState title="History">
+          After you play some games in Castle, return here to find your recent plays.
+        </UIEmptyState>
+        <div className={STYLES_ACTIONS}>
+          <UIButtonIconHorizontal
+            onClick={this.props.onToggleBrowse}
+            icon={<SVG.Search height="16px" />}>
+            Browse media
+          </UIButtonIconHorizontal>
         </div>
-      );
-    }
+      </div>
+    );
+  };
 
-    let history;
-    try {
-      const parsedData = JSON.parse(data);
-      history = parsedData.history;
-      console.log('HISTORY', history);
-    } catch (e) {
-      console.log(e);
-    }
+  render() {
+    const history = this._getHistory();
+    let contentElement;
+ 
     if (!history || !history.length) {
-      return (
+      contentElement = this._renderEmpty();
+    } else {
+      contentElement = (
         <div>
-          <UIEmptyState title="History">
-            As you play different Media using Castle, the last 10 links you visited will appear
-            here.
-          </UIEmptyState>
+          <UIEmptyState title="History" />
+          <UIListMedia
+            isHistory
+            media={this.props.media}
+            onMediaSelect={this.props.onMediaSelect}
+            onUserSelect={this.props.onUserSelect}
+            mediaItems={history}
+            />
           <div className={STYLES_ACTIONS}>
             <UIButtonIconHorizontal
-              onClick={this.props.onToggleBrowse}
-              icon={<SVG.Search height="16px" />}>
-              Browse media
+              onClick={this.props.onClearHistory}
+              icon={<SVG.Dismiss height="12px" />}>
+              Clear history
             </UIButtonIconHorizontal>
           </div>
         </div>
@@ -71,22 +87,8 @@ export default class CoreRootDashboard extends React.Component {
     }
 
     return (
-      <div>
-        <UIEmptyState title="History" />
-        <UIListMedia
-          isHistory
-          media={this.props.media}
-          onMediaSelect={this.props.onMediaSelect}
-          onUserSelect={this.props.onUserSelect}
-          mediaItems={history}
-        />
-        <div className={STYLES_ACTIONS}>
-          <UIButtonIconHorizontal
-            onClick={this.props.onClearHistory}
-            icon={<SVG.Dismiss height="12px" />}>
-            Clear history
-          </UIButtonIconHorizontal>
-        </div>
+      <div className={STYLES_CONTAINER}>
+        {contentElement}
       </div>
     );
   }
