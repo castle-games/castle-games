@@ -129,6 +129,9 @@ export default class UIListMedia extends React.Component {
 
         {this.props.mediaItems
           ? this.props.mediaItems.map((m, i) => {
+              if (!m) {
+                return null;
+              }
               const isSelected = this.props.media && this.props.media.mediaUrl === m.mediaUrl;
               const actionsElement = isOwner ? (
                 <div className={STYLES_COLUMN}>

@@ -464,6 +464,9 @@ export default class CoreApp extends React.Component {
   };
 
   _filterMediaItemWithSearchState = m => {
+    if (!m) {
+      return false;
+    }
     const query = this._stringAsSearchInvariant(this.state.searchQuery);
     if (this._stringIncludesSearchQuery(m.name, query)) {
       return true;
@@ -486,6 +489,9 @@ export default class CoreApp extends React.Component {
   };
 
   _filterPlaylistWithSearchState = p => {
+    if (!p) {
+      return false;
+    }
     const query = this._stringAsSearchInvariant(this.state.searchQuery);
     if (this._stringIncludesSearchQuery(p.name, query)) {
       return true;
