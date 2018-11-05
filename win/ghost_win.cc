@@ -164,7 +164,7 @@ static void bootLove(const char *uri) {
 #ifdef _DEBUG
     std::string path = std::string(buffer).substr(0, pos) + "/../../../base";
 #else
-	std::string path = std::string(buffer).substr(0, pos) + "/base";
+    std::string path = std::string(buffer).substr(0, pos) + "/base";
 #endif
     lua_pushstring(L, path.c_str());
     lua_rawseti(L, -2, 0);
@@ -305,60 +305,62 @@ void ghostStep() {
     if (!lovePaused) {
       stepLove();
     } else {
-      Sleep(200);
+      Sleep(100);
     }
 
     auto child = ghostWinGetChildWindow();
 
-    // Handle window resizing
-    if (child) {
-      // Get the display scale factor
-      int percentScale = 100;
-      if (pGetScaleFactorForMonitor) {
-        auto monitor = MonitorFromWindow(child, MONITOR_DEFAULTTOPRIMARY);
-        pGetScaleFactorForMonitor(monitor, &percentScale);
-      }
-      auto fracScale = 0.01 * percentScale;
-
-      // Check for parent window resizes at the native level and apply the delta
-      {
-        RECT currParentRect;
-        auto parent = ghostWinGetMainWindow();
-        if (parent) {
-          GetWindowRect(parent, &currParentRect);
-        }
-        if (prevParentRect.right != prevParentRect.left) {
-          auto dw = (currParentRect.right - currParentRect.left) -
-                    (prevParentRect.right - prevParentRect.left);
-          auto dy = (currParentRect.bottom - currParentRect.top) -
-                    (prevParentRect.bottom - prevParentRect.top);
-          childWidth += dw / fracScale;
-          childHeight += dy / fracScale;
-        }
-
-        prevParentRect = currParentRect;
-      }
-
-      // Apply the size!
-      SetWindowPos(child, NULL, fracScale * childLeft, fracScale * childTop, fracScale * childWidth,
-                   fracScale * childHeight, 0);
-    }
-
-    // Handle automatic pausing when unfocused
     if (child) {
       auto foregroundWindow = GetForegroundWindow();
       auto focused = foregroundWindow == ghostWinGetMainWindow() || foregroundWindow == child;
-      if (lovePaused && focused) { // Unpause?
-        // Step timer so that next frame's `dt` doesn't include the time spent paused
-        auto timer = love::Module::getInstance<love::timer::Timer>(love::Module::M_TIMER);
-        if (timer) {
-          timer->step();
+
+      // Handle window resizing if focused
+      if (focused) {
+        // Get the display scale factor
+        int percentScale = 100;
+        if (pGetScaleFactorForMonitor) {
+          auto monitor = MonitorFromWindow(child, MONITOR_DEFAULTTOPRIMARY);
+          pGetScaleFactorForMonitor(monitor, &percentScale);
         }
-        lovePaused = false;
+        auto fracScale = 0.01 * percentScale;
+
+        // Check for parent window resizes at the native level and apply the delta
+        {
+          RECT currParentRect;
+          auto parent = ghostWinGetMainWindow();
+          if (parent) {
+            GetWindowRect(parent, &currParentRect);
+          }
+          if (prevParentRect.right != prevParentRect.left) {
+            auto dw = (currParentRect.right - currParentRect.left) -
+                      (prevParentRect.right - prevParentRect.left);
+            auto dy = (currParentRect.bottom - currParentRect.top) -
+                      (prevParentRect.bottom - prevParentRect.top);
+            childWidth += dw / fracScale;
+            childHeight += dy / fracScale;
+          }
+
+          prevParentRect = currParentRect;
+        }
+
+        // Apply the size!
+        SetWindowPos(child, NULL, fracScale * childLeft, fracScale * childTop,
+                     fracScale * childWidth, fracScale * childHeight, 0);
       }
-      if (!lovePaused && !focused) { // Pause?
-        lovePaused = true;
-      }
+
+	  // Automatic pausing when unfocused
+	  // XXX: DISABLED for now...
+      // if (lovePaused && focused) { // Unpause?
+      //  // Step timer so that next frame's `dt` doesn't include the time spent paused
+      //  auto timer = love::Module::getInstance<love::timer::Timer>(love::Module::M_TIMER);
+      //  if (timer) {
+      //    timer->step();
+      //  }
+      //  lovePaused = false;
+      //}
+      // if (!lovePaused && !focused) { // Pause?
+      //  lovePaused = true;
+      //}
     }
 
     auto channel = love::thread::Channel::getChannel("FOCUS_ME");
