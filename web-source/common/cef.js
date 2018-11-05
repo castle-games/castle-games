@@ -20,7 +20,13 @@ export const getLogs = () => {
         const logs = [];
         channels.PRINT.map(json => {
           const params = JSON.parse(json);
-          logs.push({ id: logId, type: 'print', text: `${params.join(' ')}` });
+          let logText;
+          if (params && Array.isArray(params)) {
+            logText = params.join(' ');
+          } else {
+            logText = '(nil)';
+          }
+          logs.push({ id: logId, type: 'print', text: `${logText}` });
           logId = logId + 1;
         });
 
