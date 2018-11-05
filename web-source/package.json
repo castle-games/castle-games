@@ -41,6 +41,7 @@
     "react-emotion": "^9.2.8",
     "slate": "^0.41.2",
     "slate-plain-serializer": "^0.6.7",
-    "slate-react": "^0.18.10"
+    "slate-react": "^0.18.10",
+    "url": "^0.11.0"
   }
 }
