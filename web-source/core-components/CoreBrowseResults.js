@@ -51,7 +51,6 @@ export default class CoreBrowseResults extends React.Component {
       return (
         <div className={STYLES_CONTAINER}>
           <CoreWelcomeScreen
-            onToggleSidebar={this.props.onToggleCurrentPlaylist}
             onSelectRandom={this.props.onSelectRandom}
             onUserSelect={this.props.onUserSelect}
             onPlaylistSelect={this.props.onPlaylistSelect}

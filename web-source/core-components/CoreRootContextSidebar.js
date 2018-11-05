@@ -7,7 +7,6 @@ import { css } from 'react-emotion';
 
 import UIListMedia from '~/core-components/reusable/UIListMedia';
 import UIButtonIconHorizontal from '~/core-components/reusable/UIButtonIconHorizontal';
-import UIHeaderDismiss from '~/core-components/reusable/UIHeaderDismiss';
 import UICardMedia from '~/core-components/reusable/UICardMedia';
 import UIEmptyState from '~/core-components/reusable/UIEmptyState';
 import UILink from '~/core-components/reusable/UILink';

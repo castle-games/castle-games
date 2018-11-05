@@ -95,7 +95,7 @@ export default class CoreDevelopmentLogs extends React.Component {
     return (
       <div className={STYLES_FIXED_CONTAINER}>
         <div className={STYLES_FIXED_HEADER}>
-          <UIHeaderDismiss onDismiss={this.props.onDismiss}>
+          <UIHeaderDismiss>
             <UIControl onClick={this.props.onClearLogs}>Clear logs</UIControl>
           </UIHeaderDismiss>
         </div>

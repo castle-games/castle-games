@@ -409,7 +409,13 @@ export default class CoreApp extends React.Component {
     }
 
     if (isDevelopmentLogHotkey(e)) {
-      return this._handleToggleDevelopmentLogs(e);
+      if (this.state.sidebarVisible === false) {
+        // if nothing is showing, force devlogs to show
+        return this._handleShowDevelopmentLogs(e);
+      } else {
+        // otherwise, switch between sidebar modes
+        return this._handleToggleSidebarMode(e);
+      }
     }
   };
 
@@ -690,26 +696,34 @@ export default class CoreApp extends React.Component {
     });
   };
 
-  _handleToggleCurrentContext = () => {
+  _handleToggleSidebar = () => {
+    this.setStateWithCEF({
+      sidebarVisible: !this.state.sidebarVisible,
+    });
+  }
+
+  _handleShowDevelopmentLogs = () => {
     const updates = {
-      pageMode: null,
-      creator: null,
-      sidebarMode: this.state.sidebarMode === 'current-context' ? null : 'current-context',
+      sidebarVisible: true,
+      sidebarMode: 'development',
     };
 
     this.setStateWithCEF({
+      pageMode: null,
+      creator: null,
       ...updates,
     });
   };
 
-  _handleToggleDevelopmentLogs = () => {
+  _handleToggleSidebarMode = () => {
     const updates = {
-      sidebarMode: this.state.sidebarMode === 'development' ? null : 'development',
-      pageMode: null,
-      creator: null,
+      sidebarVisible: true,
+      sidebarMode: (this.state.sidebarMode === 'development') ? 'current-context' : 'development',
     };
 
     this.setStateWithCEF({
+      pageMode: null,
+      creator: null,
       ...updates,
     });
   };
@@ -742,8 +756,6 @@ export default class CoreApp extends React.Component {
       pageMode: 'sign-in',
     });
   };
-
-  _handleDismissSidebar = () => this.setStateWithCEF({ sidebarMode: null });
 
   _handleHideOverlay = () => {
     const updates = {
@@ -884,7 +896,6 @@ export default class CoreApp extends React.Component {
             onUserSelect={this._handleUserSelect}
             onMediaSelect={this._handleMediaSelect}
             onPlaylistSelect={this._handlePlaylistSelect}
-            onToggleCurrentPlaylist={this._handleToggleCurrentContext}
           />
         </CoreLayout>
       );
@@ -987,47 +998,45 @@ export default class CoreApp extends React.Component {
           viewer={state.viewer}
           media={state.media}
           playlist={state.playlist}
-          isContextSidebarActive={state.sidebarMode === 'current-context'}
+          isContextSidebarActive={!!state.sidebarVisible}
           isOffline={state.isOffline}
-          onToggleCurrentContext={this._handleToggleCurrentContext}
+          onToggleSidebar={this._handleToggleSidebar}
         />
       );
     }
 
     let maybeRightNode;
-    if (state.isOverlayActive && state.sidebarMode === 'current-context') {
-      maybeRightNode = (
-        <CoreRootContextSidebar
-          ref={c => {
-            this._contextSidebar = c;
-          }}
-          media={state.media}
-          viewer={state.viewer}
-          allMedia={state.allMedia}
-          storage={this.props.storage}
-          allMediaFiltered={state.allMediaFiltered}
-          searchQuery={state.searchQuery}
-          onNavigateToBrowserPage={this._handleNavigateToBrowserPage}
-          onRefreshViewer={this.refreshViewer}
-          onRegisterMedia={this._handleRegisterGame}
-          onToggleBrowse={this._handleToggleBrowse}
-          onToggleProfile={this._handleToggleProfile}
-          onMediaSelect={this._handleMediaSelect}
-          onUserSelect={this._handleUserSelect}
-          onViewCurrentPlaylistDetails={this._handleToggleCurrentPlaylistDetails}
-          onDismiss={this._handleDismissSidebar}
-        />
-      );
-    }
-
-    if (state.isOverlayActive && state.sidebarMode === 'development') {
-      maybeRightNode = (
-        <CoreDevelopmentLogs
-          logs={state.logs}
-          onClearLogs={this._handleClearLogs}
-          onDismiss={this._handleDismissSidebar}
-        />
-      );
+    if (state.isOverlayActive && state.sidebarVisible === true) {
+      if (state.sidebarMode === 'current-context') {
+        maybeRightNode = (
+          <CoreRootContextSidebar
+            ref={c => {
+              this._contextSidebar = c;
+            }}
+            media={state.media}
+            viewer={state.viewer}
+            allMedia={state.allMedia}
+            storage={this.props.storage}
+            allMediaFiltered={state.allMediaFiltered}
+            searchQuery={state.searchQuery}
+            onNavigateToBrowserPage={this._handleNavigateToBrowserPage}
+            onRefreshViewer={this.refreshViewer}
+            onRegisterMedia={this._handleRegisterGame}
+            onToggleBrowse={this._handleToggleBrowse}
+            onToggleProfile={this._handleToggleProfile}
+            onMediaSelect={this._handleMediaSelect}
+            onUserSelect={this._handleUserSelect}
+            onViewCurrentPlaylistDetails={this._handleToggleCurrentPlaylistDetails}
+          />
+        );
+      } else if (state.sidebarMode === 'development') {
+        maybeRightNode = (
+          <CoreDevelopmentLogs
+            logs={state.logs}
+            onClearLogs={this._handleClearLogs}
+          />
+        );
+      }
     }
 
     return (

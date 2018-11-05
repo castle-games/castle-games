@@ -69,7 +69,8 @@ const INITIAL_STATE_OFFLINE = {
   allPlaylistsFiltered: [],
   featuredPlaylists: [],
   featuredMedia: [],
-  sidebarMode: null, // current-context | media-info | development | null
+  sidebarMode: 'current-context', // current-context | media-info | development
+  sidebarVisible: true,
   pageMode: null, // browse | playlist | profile | sign-in | null
   profileMode: null, // media | playlist | null
   isMediaFavorited: false,
@@ -102,7 +103,7 @@ const run = async () => {
     featuredMedia,
     isOffline,
     viewer,
-    sidebarMode: !isOffline ? 'current-context' : null,
+    sidebarVisible: !isOffline,
     pageMode: !isOffline ? 'browse' : null,
   });
 
