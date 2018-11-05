@@ -5,13 +5,17 @@ const isLua = (urlStr) => {
 }
 
 const isLocalUrl = (urlStr) => {
-  const components = url.parse(urlStr);
-  return (
-    components.hostname === 'localhost' ||
-    components.hostname === '0.0.0.0' ||
-    components.hostname === '127.0.0.1' ||
-    components.hostname.indexOf('192.168') != -1
-  );
+  let isLocal = false;
+  try {
+    const components = url.parse(urlStr);
+    isLocal = (
+      components.hostname === 'localhost' ||
+      components.hostname === '0.0.0.0' ||
+      components.hostname === '127.0.0.1' ||
+      components.hostname.indexOf('192.168') != -1
+    );
+  } catch (_) {}
+  return isLocal;
 }
 
 export {

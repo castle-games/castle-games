@@ -6,6 +6,7 @@ import * as Slack from '~/common/slack';
 import * as Actions from '~/common/actions';
 import * as Network from '~/common/network';
 import * as CEF from '~/common/cef';
+import * as Urls from '~/common/urls'
 import History from '~/common/history';
 
 import { css } from 'react-emotion';
@@ -238,7 +239,7 @@ export default class CoreApp extends React.Component {
     const isShowingLUAGame =
       !this.state.pageMode &&
       !Strings.isEmpty(this.state.mediaUrl) &&
-      this.state.mediaUrl.endsWith('.lua');
+      Urls.isLua(this.state.mediaUrl);
 
     if (isShowingLUAGame) {
       // TODO(jim):
@@ -307,7 +308,7 @@ export default class CoreApp extends React.Component {
   _handleURLChange = e => this.setState({ [e.target.name]: e.target.value });
 
   loadURL = mediaUrl => {
-    if (mediaUrl.endsWith('.lua')) {
+    if (Urls.isLua(mediaUrl)) {
       this.goToLUA(mediaUrl);
       return;
     }
@@ -368,9 +369,12 @@ export default class CoreApp extends React.Component {
 
     this._history.addItem(media ? media : { mediaUrl });
 
+    const isLocal = Urls.isLocalUrl(mediaUrl);
+    const sidebarMode = (isLocal) ? 'development' : 'current-context';
     this.setStateWithCEF({
       media: media ? { ...media } : { mediaUrl },
       mediaUrl,
+      sidebarMode,
       pageMode: null,
       creator: null,
       browserUrl: null,
@@ -588,7 +592,7 @@ export default class CoreApp extends React.Component {
       return;
     }
 
-    if (media.mediaUrl.endsWith('.lua')) {
+    if (Urls.isLua(media.mediaUrl)) {
       this.goToLUA(media.mediaUrl);
       return;
     }
@@ -628,7 +632,7 @@ export default class CoreApp extends React.Component {
 
     // TODO(jim): Won't be necessary when we enable hide.
     if (!Strings.isEmpty(this.state.mediaUrl)) {
-      if (this.state.mediaUrl.endsWith('.lua')) {
+      if (Urls.isLua(this.state.mediaUrl)) {
         this.openCEF(this.state.mediaUrl);
       }
     }
@@ -827,7 +831,7 @@ export default class CoreApp extends React.Component {
     const isRenderingIFrame =
       state.media &&
       !Strings.isEmpty(state.media.mediaUrl) &&
-      !state.media.mediaUrl.endsWith('.lua');
+      !Urls.isLua(state.media.mediaUrl);
 
     const isRenderingBrowser = !Strings.isEmpty(state.browserUrl);
 
