@@ -40,6 +40,7 @@ const MEDIA_ITEMS = `
     jamVotingUrl
     coverImage {
       url
+      imgixUrl
       height
       width
     }
