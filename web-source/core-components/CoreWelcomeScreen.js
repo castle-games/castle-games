@@ -1,9 +1,12 @@
 import * as React from 'react';
+import * as CEF from '~/common/cef';
 import * as Constants from '~/common/constants';
+import * as SVG from '~/core-components/primitives/svg';
 import { css } from 'react-emotion';
 
+import UIButtonIconHorizontal from '~/core-components/reusable/UIButtonIconHorizontal';
 import UIControl from '~/core-components/reusable/UIControl';
-import UIListMedia from '~/core-components/reusable/UIListMedia';
+import UIGridMedia from '~/core-components/reusable/UIGridMedia';
 import UIFeaturedPlaylists from '~/core-components/reusable/UIFeaturedPlaylists';
 
 const STYLES_CONTAINER = css`
@@ -46,11 +49,8 @@ const STYLES_PARAGRAPH = css`
   line-height: 1.725;
 `;
 
-const STYLES_ACTIONS = css`
+const STYLES_ACTION = css`
   margin-top: 24px;
-  font-size: 18px;
-  flex-shrink: 0;
-  border-top: 1px solid ${Constants.colors.border};
 `;
 
 const STYLES_OPTION = css`
@@ -72,47 +72,54 @@ const STYLES_SECTION = css`
   padding: 32px 16px 16px 16px;
 `;
 
-const STYLES_PLAYLISTS = css`
+const STYLES_MEDIA = css`
   padding: 16px 0 0 0;
 `;
 
 export default class CoreWelcomeScreen extends React.Component {
   static defaultProps = {
     featuredMedia: [],
-    featuredPlaylists: [],
+  };
+
+  _handleClickTutorial = () => {
+    CEF.openExternalURL('https://medium.com/castle-archives/making-games-with-castle-e4d0e9e7a910');
   };
 
   render() {
-    const { featuredMedia, featuredPlaylists } = this.props;
+    const { featuredMedia } = this.props;
+    const externalIcon = (<SVG.Share height="16px" />);
 
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_CONTENT}>
           <img height="48px" src="static/castle-wordmark.png" />
           <p className={STYLES_PARAGRAPH}>
-            Welcome to Castle. Click a game or a playlist to get started, or use the top search bar
-            to find games.
+            Welcome to Castle. Click a game to get started, or use the top search bar to find games.
           </p>
         </div>
-
         <div className={STYLES_SECTION}>
-          <div className={STYLES_HEADING}>Featured Playlists</div>
-          <div className={STYLES_PLAYLISTS}>
-            <UIFeaturedPlaylists
-              playlists={featuredPlaylists}
-              onPlaylistSelect={this.props.onPlaylistSelect}
+          <div className={STYLES_HEADING}>Featured Games</div>
+          <div className={STYLES_MEDIA}>
+            <UIGridMedia
+              mediaItems={featuredMedia}
+              onUserSelect={this.props.onUserSelect}
+              onMediaSelect={this.props.onMediaSelect}
             />
           </div>
         </div>
-
         <div className={STYLES_SECTION}>
-          <div className={STYLES_HEADING}>Featured Games</div>
+          <div className={STYLES_HEADING}>Create with Castle</div>
+          <p className={STYLES_PARAGRAPH}>
+            Check out our tutorial to get started making your own game or interactive media with Castle.
+          </p>
+          <div className={STYLES_ACTION}>
+            <UIButtonIconHorizontal
+              onClick={this._handleClickTutorial}
+              icon={externalIcon}>
+              Open Tutorial
+            </UIButtonIconHorizontal>
+          </div>
         </div>
-        <UIListMedia
-          mediaItems={featuredMedia}
-          onUserSelect={this.props.onUserSelect}
-          onMediaSelect={this.props.onMediaSelect}
-        />
       </div>
     );
   }

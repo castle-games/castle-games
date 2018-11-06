@@ -255,7 +255,6 @@ export default class CoreApp extends React.Component {
 
     const {
       featuredMedia,
-      featuredPlaylists,
       allMedia,
       allPlaylists,
       viewer,
@@ -264,7 +263,6 @@ export default class CoreApp extends React.Component {
 
     const state = {
       featuredMedia,
-      featuredPlaylists,
       viewer,
       allMedia,
       allPlaylists,
@@ -893,7 +891,6 @@ export default class CoreApp extends React.Component {
             allMedia={state.allMedia}
             mediaItems={state.allMediaFiltered}
             playlists={state.allPlaylistsFiltered}
-            featuredPlaylists={state.featuredPlaylists}
             featuredMedia={state.featuredMedia}
             isPristine={Strings.isEmpty(state.searchQuery)}
             onUserSelect={this._handleUserSelect}
