@@ -9,38 +9,18 @@ import UIEmptyState from '~/core-components/reusable/UIEmptyState';
 import UIButtonSecondary from '~/core-components/reusable/UIButtonSecondary';
 import UIInputSecondary from '~/core-components/reusable/UIInputSecondary';
 import UITextArea from '~/core-components/reusable/UITextArea';
-import UIHeaderDismiss from '~/core-components/reusable/UIHeaderDismiss';
 import UIControl from '~/core-components/reusable/UIControl';
 
 import ContentEditor from '~/editor/ContentEditor';
 import DefaultState from '~/editor/default.json';
 
 const STYLES_CONTAINER = css`
-  @keyframes profile-sidebar-scene-animation {
-    from {
-      opacity: 0;
-    }
-
-    to {
-      opacity: 1;
-    }
-  }
-
-  animation: profile-sidebar-scene-animation 280ms ease;
-
-  width: 100%;
-  height: 100%;
-  overflow-y: scroll;
   background ${Constants.colors.background};
   color: ${Constants.colors.white};
-
-  ::-webkit-scrollbar {
-    display: none;
-    width: 1px;
-  }
 `;
 
 const STYLES_SECTION = css`
+  margin-top: 32px;
   padding: 16px 16px 24px 16px;
   border-bottom: 1px solid ${Constants.colors.border};
 
@@ -49,15 +29,11 @@ const STYLES_SECTION = css`
   }
 `;
 
-export default class CoreProfileSidebar extends React.Component {
+export default class CoreProfileAddMedia extends React.Component {
   state = {
     media: {
       name: '',
       url: '',
-      description: Plain.deserialize(''),
-    },
-    playlist: {
-      name: '',
       description: Plain.deserialize(''),
     },
   };
@@ -68,14 +44,6 @@ export default class CoreProfileSidebar extends React.Component {
 
   _handleChangeMediaDescription = ({ value }) => {
     this.setState({ media: { ...this.state.media, description: value } });
-  };
-
-  _handleChangePlaylist = e => {
-    this.setState({ playlist: { ...this.state.playlist, [e.target.name]: e.target.value } });
-  };
-
-  _handleChangePlaylistDescription = ({ value }) => {
-    this.setState({ playlist: { ...this.state.playlist, description: value } });
   };
 
   _handleAddMedia = async () => {
@@ -90,21 +58,9 @@ export default class CoreProfileSidebar extends React.Component {
     });
   };
 
-  _handleAddPlaylist = async () => {
-    await this.props.onPlaylistAdd({ ...this.state.playlist });
-
-    this.setState({
-      playlist: {
-        name: '',
-        description: Plain.deserialize(''),
-      },
-    });
-  };
-
   render() {
     return (
       <div className={STYLES_CONTAINER}>
-        <UIHeaderDismiss />
         <div className={STYLES_SECTION}>
           <UIEmptyState
             style={{ padding: `0 0 24px 0`, color: Constants.colors.white }}
@@ -134,28 +90,6 @@ export default class CoreProfileSidebar extends React.Component {
             style={{ marginBottom: 16 }}
           />
           <UIControl onClick={this._handleAddMedia}>Add Media</UIControl>
-        </div>
-        <div className={STYLES_SECTION}>
-          <UIEmptyState
-            style={{ padding: `0 0 24px 0`, color: Constants.colors.white }}
-            title="Create a new playlist">
-            Playlists are lists of media you can share with other people to play.
-          </UIEmptyState>
-          <UIInputSecondary
-            value={this.state.playlist.name}
-            name="name"
-            label="Playlist name"
-            onChange={this._handleChangePlaylist}
-            style={{ marginBottom: 8 }}
-          />
-          <UITextArea
-            label="Playist description"
-            value={this.state.playlist.description}
-            onChange={this._handleChangePlaylistDescription}
-            placeholder="Type a description..."
-            style={{ marginBottom: 16 }}
-          />
-          <UIControl onClick={this._handleAddPlaylist}>Add Playlist</UIControl>
         </div>
       </div>
     );
