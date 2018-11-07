@@ -61,7 +61,9 @@ export default class CoreApp extends React.Component {
     const processChannels = async () => {
       const logs = await CEF.getLogs();
 
-      this.setState({ logs: [...this.state.logs, ...logs] });
+      if (logs && logs.length) {
+        this.setState({ logs: [...this.state.logs, ...logs] });
+      }
       this._devTimeout = window.setTimeout(processChannels, POLL_DELAY);
     };
 
