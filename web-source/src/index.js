@@ -72,7 +72,6 @@ const INITIAL_STATE_OFFLINE = {
   sidebarMode: 'current-context', // current-context | media-info | development
   sidebarVisible: true,
   pageMode: null, // browse | playlist | profile | sign-in | null
-  profileMode: null, // media | playlist | null
   isMediaFavorited: false,
   isMediaExpanded: false,
   isOverlayActive: true,

@@ -44,6 +44,27 @@ const STYLES_CONTAINER = css`
 `;
 
 export default class CoreProfile extends React.Component {
+  state = {
+    mode: 'media',
+  };
+
+  componentWillReceiveProps(nextProps) {
+    const existingUserId = (this.props.creator && this.props.creator.userId) ?
+          this.props.creator.userId :
+          null;
+    const nextUserId = (nextProps.creator && nextProps.creator.userId) ?
+          nextProps.creator.userId :
+          null
+    if (nextUserId != existingUserId) {
+      // we're rendering a new profile, reset state.
+      this.setState({ mode: 'media' });
+    }
+  }
+  
+  _onShowMedia = () => this.setState({ mode: 'media' });
+
+  _onShowPlaylists = () => this.setState({ mode: 'playlists' });
+  
   _renderMediaContent = (isOwnProfile) => {
     const mediaListElement =
       this.props.creator.mediaItems && this.props.creator.mediaItems.length ? (
@@ -107,8 +128,8 @@ export default class CoreProfile extends React.Component {
     );
 
     let profileContentElement;
-    const { profileMode } = this.props;
-    if (profileMode === 'playlists') {
+    const { mode } = this.state;
+    if (mode === 'playlists') {
       profileContentElement = this._renderPlaylistContent(isOwnProfile);
     } else {
       profileContentElement = this._renderMediaContent(isOwnProfile);
@@ -125,10 +146,10 @@ export default class CoreProfile extends React.Component {
         ) : null}
         <UICardProfileHeader
           creator={this.props.creator}
-          profileMode={this.props.profileMode}
+          profileMode={this.state.mode}
           isOwnProfile={isOwnProfile}
-          onShowMediaList={this.props.onShowProfileMediaList}
-          onShowPlaylistList={this.props.onShowProfilePlaylistList}
+          onShowMediaList={this._onShowMedia}
+          onShowPlaylistList={this._onShowPlaylists}
           onSignOut={this.props.onSignOut}
         />
         {profileContentElement}

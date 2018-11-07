@@ -168,7 +168,6 @@ export default class CoreApp extends React.Component {
     }
 
     await this.refreshViewer();
-    this.setState({ profileMode: 'media' });
   };
 
   _handleMediaRemove = async data => {
@@ -178,7 +177,6 @@ export default class CoreApp extends React.Component {
     }
 
     await this.refreshViewer();
-    this.setState({ profileMode: 'media' });
   };
 
   _handlePlaylistAdd = async data => {
@@ -188,7 +186,6 @@ export default class CoreApp extends React.Component {
     }
 
     await this.refreshViewer();
-    this.setState({ profileMode: 'playlists' });
   };
 
   _handlePlaylistRemove = async data => {
@@ -198,7 +195,6 @@ export default class CoreApp extends React.Component {
     }
 
     await this.refreshViewer();
-    this.setState({ profileMode: 'playlists' });
   };
 
   _handleRemoveMediaFromPlaylist = async data => {
@@ -576,7 +572,6 @@ export default class CoreApp extends React.Component {
 
     this.setStateHideCEF({
       pageMode: 'profile',
-      profileMode: 'media',
       creator: { ...creator },
     });
   };
@@ -730,17 +725,6 @@ export default class CoreApp extends React.Component {
       ...updates,
     });
   };
-
-  _handleShowProfileMediaList = () => {
-    this.setState({
-      profileMode: 'media',
-    });
-  };
-
-  _handleShowProfilePlaylistList = () =>
-    this.setState({
-      profileMode: 'playlists',
-    });
 
   _handleSignOut = () => {
     const confirm = window.confirm('Are you sure you want to sign out?');
@@ -957,15 +941,7 @@ export default class CoreApp extends React.Component {
           <CoreProfile
             viewer={state.viewer}
             creator={state.creator}
-            profileMode={state.profileMode}
             onSearchReset={this._handleSearchReset}
-            onShowProfileMediaList={this._handleShowProfileMediaList}
-            onShowProfilePlaylistList={this._handleShowProfilePlaylistList}
-            onPlayCreatorMedia={this._handlePlayCreatorMedia}
-            onSubscribeToCreator={this._handleSubscribeToCreator}
-            onClickCreatorAvatar={this._handleClickCreatorAvatar}
-            onClickCreatorCreations={() => this.setState({ profileMode: 'media' })}
-            onClickCreatorPlaylists={() => this.setState({ profileMode: 'playlists' })}
             onMediaAdd={this._handleMediaAdd}
             onMediaSelect={this._handleMediaSelect}
             onMediaRemove={this._handleMediaRemove}
