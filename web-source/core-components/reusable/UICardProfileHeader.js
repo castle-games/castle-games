@@ -4,6 +4,8 @@ import * as Strings from '~/common/strings';
 
 import { css } from 'react-emotion';
 
+import UIAvatar from '~/core-components/reusable/UIAvatar';
+
 const STYLES_CONTAINER = css`
   padding: 16px 16px 0 16px;
 `;
@@ -29,7 +31,9 @@ const STYLES_ROW = css`
   display: flex;
 `;
 
-const STYLES_TOP = css``;
+const STYLES_TOP = css`
+  display: flex;
+`;
 
 const STYLES_TITLE = css`
   font-size: 48px;
@@ -62,6 +66,10 @@ const STYLES_NAVIGATION_ITEM = css`
   text-transform: uppercase;
 `;
 
+const STYLES_CREATOR_IDENTITY = css`
+
+`;
+
 // TODO(jim): Plop in a rich text editor rendering component
 // since description is not a string.
 export default class UICardProfileHeader extends React.Component {
@@ -82,12 +90,19 @@ export default class UICardProfileHeader extends React.Component {
     const isViewingMedia = this.props.profileMode === 'media' || !this.props.profileMode;
     const isViewingPlaylists = this.props.profileMode === 'playlists';
 
-    let rich = this.props.creator &&
+    let richDescription;
+    if (this.props.creator &&
         this.props.creator.description &&
-        this.props.creator.description.rich;
-    if (rich) {
-      rich = Strings.loadEditor(rich);
+        this.props.creator.description.rich) {
+      richDescription = Strings.loadEditor(this.props.creator.description.rich);
     }
+    const descriptionElement = richDescription ? (
+      <ContentEditor readOnly value={richDescription} className={STYLES_DESCRIPTION} />
+    ) : (
+      <p className={STYLES_DESCRIPTION}>
+        {this.props.creator.description}
+      </p>
+    );
 
     return (
       <div
@@ -99,16 +114,18 @@ export default class UICardProfileHeader extends React.Component {
           <div className={STYLES_BODY_LEFT} />
           <div className={STYLES_BODY_RIGHT}>
             <div className={STYLES_TOP}>
-              <div className={STYLES_TITLE}>{this.props.creator.username}</div>
-              <div className={STYLES_META}>
-                {this._renderTagline(this.props.creator)}
+              <UIAvatar
+                user={this.props.creator}
+                style={{ width: 64, height: 64, marginRight: 12, marginTop: 6 }}
+              />
+              <div className={STYLES_CREATOR_IDENTITY}>
+                <div className={STYLES_TITLE}>{this.props.creator.username}</div>
+                <div className={STYLES_META}>
+                  {this._renderTagline(this.props.creator)}
+                </div>
               </div>
             </div>
-            {rich ? (
-              <ContentEditor readOnly value={rich} className={STYLES_DESCRIPTION} />
-            ) : (
-              <p className={STYLES_DESCRIPTION} />
-            )}
+            {descriptionElement}
           </div>
         </div>
         <div className={STYLES_ROW}>

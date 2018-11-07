@@ -17,28 +17,29 @@ const STYLES_ICON = css`
 
 export default class UIAvatar extends React.Component {
   render() {
+    const { user } = this.props;
+    const src = (user && user.photo) ? user.photo.imgixUrl : null;
+    const maybeIconChild = (!src && this.props.icon) ? this.props.icon : null;
+
     const avatarContextStyles = {
-      backgroundImage: `url('${this.props.src}')`,
+      backgroundImage: `url('${src}')`,
       cursor: this.props.onClick ? 'pointer' : null,
     };
 
-    if (!this.props.src && this.props.icon) {
-      return (
-        <span
-          className={STYLES_ICON}
-          onClick={this.props.onClick}
-          style={{ ...this.props.style, ...avatarContextStyles }}>
-          {this.props.icon}
-        </span>
-      );
+    let maybeEmptyStyles = {};
+    if (!maybeIconChild && !src) {
+      maybeEmptyStyles = {
+        backgroundColor: Constants.colors.white25,
+      };
     }
 
     return (
       <span
         className={STYLES_ICON}
         onClick={this.props.onClick}
-        style={{ ...this.props.style, ...avatarContextStyles }}
-      />
+        style={{ ...this.props.style, ...avatarContextStyles, ...maybeEmptyStyles }}>
+        {maybeIconChild}
+      </span>
     );
   }
 }

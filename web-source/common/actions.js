@@ -22,6 +22,7 @@ const NESTED_USER = `
     isReal
     photo {
       url
+      imgixUrl
       height
       width
     }
@@ -113,6 +114,7 @@ export async function signup({ name, username, email, password }) {
           isReal
           photo {
             url
+            imgixUrl
             height
             width
           }
@@ -144,6 +146,7 @@ export async function login({ userId, password }) {
           isReal
           photo {
             url
+            imgixUrl
             height
             width
           }
@@ -222,6 +225,7 @@ export async function getUser({ userId }) {
         isReal
         photo {
           url
+          imgixUrl
           height
           width
         }
@@ -256,6 +260,7 @@ export async function getViewer() {
         isReal
         photo {
           url
+          imgixUrl
           height
           width
         }
@@ -314,6 +319,7 @@ export async function getInitialData() {
         isReal
         photo {
           url
+          imgixUrl
           height
           width
         }
