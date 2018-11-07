@@ -82,7 +82,9 @@ export default class UICardProfileHeader extends React.Component {
     const isViewingMedia = this.props.profileMode === 'media' || !this.props.profileMode;
     const isViewingPlaylists = this.props.profileMode === 'playlists';
 
-    let rich = this.props.user && this.props.user.description && this.props.user.description.rich;
+    let rich = this.props.creator &&
+        this.props.creator.description &&
+        this.props.creator.description.rich;
     if (rich) {
       rich = Strings.loadEditor(rich);
     }
