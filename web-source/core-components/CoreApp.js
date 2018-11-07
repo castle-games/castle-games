@@ -170,6 +170,8 @@ export default class CoreApp extends React.Component {
     await this.refreshViewer();
   };
 
+  _handleProfileChange = () => this.refreshViewer();
+
   _handleMediaRemove = async data => {
     const response = await Actions.removeMedia(data);
     if (!response) {
@@ -948,6 +950,7 @@ export default class CoreApp extends React.Component {
             onPlaylistAdd={this._handlePlaylistAdd}
             onPlaylistSelect={this._handlePlaylistSelect}
             onPlaylistRemove={this._handlePlaylistRemove}
+            onAfterSave={this._handleProfileChange}
             onUserSelect={this._handleUserSelect}
             onSignOut={this._handleSignOut}
           />

@@ -102,6 +102,7 @@ export default class UICardProfileHeader extends React.Component {
   render() {
     const isViewingMedia = this.props.profileMode === 'media' || !this.props.profileMode;
     const isViewingPlaylists = this.props.profileMode === 'playlists';
+    const isViewingEditProfile = this.props.profileMode === 'edit-profile';
 
     let richDescription;
     if (this.props.creator &&
@@ -118,6 +119,35 @@ export default class UICardProfileHeader extends React.Component {
     );
 
     const ownProfileActionsElement = (this.props.isOwnProfile) ? this._renderOwnProfileActions() : null;
+
+    const playlistsNavigationElement = this.props.creator.isReal ? (
+      <div
+        className={STYLES_NAVIGATION_ITEM}
+        style={{
+          marginRight: 16,
+          background: isViewingPlaylists ? null : Constants.colors.background,
+        }}
+        onClick={this.props.onShowPlaylistList}>
+        Playlists
+      </div>
+    ) : null;
+
+    const editProfileNavigationElement = this.props.isOwnProfile ? (
+      <div
+        className={STYLES_NAVIGATION_ITEM}
+        style={{
+          marginRight: 16,
+          background: isViewingEditProfile ? null : Constants.colors.background,
+        }}
+        onClick={this.props.onShowEditProfile}>
+        Edit Profile
+      </div>
+    ) : null;
+
+    const avatarSrc = (this.props.creator && this.props.creator.photo)
+          ? this.props.creator.photo.imgixUrl
+          : null;
+    console.log(`ben core profile avatar src: ${JSON.stringify(this.props.creator, null, 2)}`);
     
     return (
       <div
@@ -130,7 +160,7 @@ export default class UICardProfileHeader extends React.Component {
           <div className={STYLES_BODY_RIGHT}>
             <div className={STYLES_TOP}>
               <UIAvatar
-                user={this.props.creator}
+                src={avatarSrc}
                 style={{ width: 64, height: 64, marginRight: 12, marginTop: 6 }}
               />
               <div className={STYLES_CREATOR_IDENTITY}>
@@ -154,17 +184,8 @@ export default class UICardProfileHeader extends React.Component {
             onClick={this.props.onShowMediaList}>
             Media
           </div>
-
-      {this.props.creator.isReal ? (
-          <div
-            className={STYLES_NAVIGATION_ITEM}
-            style={{
-              background: isViewingPlaylists ? null : Constants.colors.background,
-            }}
-            onClick={this.props.onShowPlaylistList}>
-            Playlists
-          </div>
-        ) : null}
+          {playlistsNavigationElement}
+          {editProfileNavigationElement}
         </div>
       </div>
     );

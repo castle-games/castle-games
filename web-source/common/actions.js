@@ -291,6 +291,12 @@ export async function getInitialData() {
         name
         createdTime
         isReal
+        photo {
+          url
+          imgixUrl
+          height
+          width
+        }
         ${MEDIA_ITEMS}
         ${PLAYLISTS}
       }
@@ -453,6 +459,72 @@ export async function getMediaByURL({ mediaUrl }) {
   }
 
   return result.data.mediaByMediaUrl;
+}
+
+export async function uploadImageAsync({ file }) {
+  const variables = { file };
+  const result = await API.graphqlAsync({
+    query: `
+      mutation($file: Upload!) {
+        uploadFile(file: $file) {
+          fileId
+          hash
+          name
+          encoding
+          mimeType
+          userId
+          user {
+            userId
+            username
+            name
+          }
+          uploadedTime
+          width
+          height
+          originUrl
+          imgixUrl
+        }
+      }
+    `,
+    variables,
+  });
+
+  // TODO(jim): Write a global error handler.
+  if (result.error || result.errors || !result.data) {
+    return false;
+  }
+
+  return result.data.uploadFile;
+}
+
+export async function setUserPhotoAsync({ userId, fileId }) {
+  const variables = {
+    userId,
+    photoFileId: fileId,
+  };
+  const result = await API.graphqlAsync({
+    query: `
+      mutation ($userId: ID!, $photoFileId: ID!) {
+       updateUser(
+         userId: $userId
+         user: { photoFileId: $photoFileId }
+       ) {
+         userId
+         photo {
+           imgixUrl
+         }
+       }
+      }
+    `,
+    variables,
+  });
+
+  // TODO(jim): Write a global error handler.
+  if (result.error || result.errors || !result.data) {
+    return false;
+  }
+
+  return result.data;
 }
 
 export async function addMedia({ name, url, description }) {

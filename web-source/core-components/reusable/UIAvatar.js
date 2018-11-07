@@ -17,9 +17,8 @@ const STYLES_ICON = css`
 
 export default class UIAvatar extends React.Component {
   render() {
-    const { user } = this.props;
-    const src = (user && user.photo) ? user.photo.imgixUrl : null;
-    const maybeIconChild = (!src && this.props.icon) ? this.props.icon : null;
+    const { src, icon } = this.props;
+    const maybeIconChild = (!src && icon) ? icon : null;
 
     const avatarContextStyles = {
       backgroundImage: `url('${src}')`,
