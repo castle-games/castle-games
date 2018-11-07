@@ -67,14 +67,6 @@ export default class CoreRootLeftSidebar extends React.Component {
             Sign in
           </UIButtonIcon>
         ) : null}
-        {this.props.viewer ? (
-          <UIButtonIcon
-            style={{ background: Constants.colors.purple }}
-            icon={<SVG.Logout height="20px" />}
-            onClick={this.props.onSignOut}>
-            Sign out
-          </UIButtonIcon>
-        ) : null}
       </div>
     );
   }

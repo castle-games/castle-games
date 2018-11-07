@@ -3,7 +3,6 @@ import * as Constants from '~/common/constants';
 
 import { css } from 'react-emotion';
 
-import UIHeaderDismiss from '~/core-components/reusable/UIHeaderDismiss';
 import UIControl from '~/core-components/reusable/UIControl';
 import UICardProfileHeader from '~/core-components/reusable/UICardProfileHeader';
 import UIListMedia from '~/core-components/reusable/UIListMedia';
@@ -127,8 +126,10 @@ export default class CoreProfile extends React.Component {
         <UICardProfileHeader
           creator={this.props.creator}
           profileMode={this.props.profileMode}
+          isOwnProfile={isOwnProfile}
           onShowMediaList={this.props.onShowProfileMediaList}
           onShowPlaylistList={this.props.onShowProfilePlaylistList}
+          onSignOut={this.props.onSignOut}
         />
         {profileContentElement}
       </div>

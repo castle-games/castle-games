@@ -1,10 +1,12 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as Strings from '~/common/strings';
+import * as SVG from '~/core-components/primitives/svg';
 
 import { css } from 'react-emotion';
 
 import UIAvatar from '~/core-components/reusable/UIAvatar';
+import UIButtonIconHorizontal from '~/core-components/reusable/UIButtonIconHorizontal';
 
 const STYLES_CONTAINER = css`
   padding: 16px 16px 0 16px;
@@ -52,6 +54,7 @@ const STYLES_DESCRIPTION = css`
   font-size: 16px;
   overflow-wrap: break-word;
   white-space: pre-wrap;
+  margin-bottom: 16px;
 `;
 
 const STYLES_NAVIGATION_ITEM = css`
@@ -86,6 +89,16 @@ export default class UICardProfileHeader extends React.Component {
     }
   }
 
+  _renderOwnProfileActions = () => {
+    return (
+      <UIButtonIconHorizontal
+        onClick={this.props.onSignOut}
+        icon={<SVG.Logout height="16px" />}>
+        Sign out
+      </UIButtonIconHorizontal>
+    );
+  }
+
   render() {
     const isViewingMedia = this.props.profileMode === 'media' || !this.props.profileMode;
     const isViewingPlaylists = this.props.profileMode === 'playlists';
@@ -104,6 +117,8 @@ export default class UICardProfileHeader extends React.Component {
       </p>
     );
 
+    const ownProfileActionsElement = (this.props.isOwnProfile) ? this._renderOwnProfileActions() : null;
+    
     return (
       <div
         className={STYLES_CONTAINER}
@@ -126,6 +141,7 @@ export default class UICardProfileHeader extends React.Component {
               </div>
             </div>
             {descriptionElement}
+            {ownProfileActionsElement}
           </div>
         </div>
         <div className={STYLES_ROW}>

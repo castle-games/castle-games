@@ -877,7 +877,6 @@ export default class CoreApp extends React.Component {
           onToggleSignIn={this._handleToggleSignIn}
           onTogglePlay={this._handleTogglePlay}
           onToggleHistory={this._handleToggleHistory}
-          onSignOut={this._handleSignOut}
         />
       );
     }
@@ -959,7 +958,6 @@ export default class CoreApp extends React.Component {
             viewer={state.viewer}
             creator={state.creator}
             profileMode={state.profileMode}
-            onDismiss={this._handleSearchReset}
             onSearchReset={this._handleSearchReset}
             onShowProfileMediaList={this._handleShowProfileMediaList}
             onShowProfilePlaylistList={this._handleShowProfilePlaylistList}
@@ -975,7 +973,7 @@ export default class CoreApp extends React.Component {
             onPlaylistSelect={this._handlePlaylistSelect}
             onPlaylistRemove={this._handlePlaylistRemove}
             onUserSelect={this._handleUserSelect}
-            onDismiss={this._handleToggleProfile}
+            onSignOut={this._handleSignOut}
           />
         </CoreLayout>
       );
