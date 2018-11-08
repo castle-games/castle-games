@@ -28,12 +28,13 @@ function network.async(foo, onError)
     local outerPortal = getfenv(2).portal
     tasks:addthread(function()
         copas.setErrorHandler(function(msg, co, skt)
+            local stack = debug.traceback(msg)
             if onError then
                 onError(msg)
             elseif outerPortal then
-                outerPortal:handleError(msg)
+                outerPortal:handleError(msg, stack)
             elseif DEFAULT_ERROR_HANDLER then
-                DEFAULT_ERROR_HANDLER(msg)
+                DEFAULT_ERROR_HANDLER(msg, stack)
             else
                 print('uncaught async error:', msg, co, skt, debug.traceback(co))
             end

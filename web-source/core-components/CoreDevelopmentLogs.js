@@ -113,7 +113,7 @@ export default class CoreDevelopmentLogs extends React.Component {
                   style={{ color: l.type === 'error' ? Constants.colors.red : null }}
                   key={`development-log-${l.id}`}>
                   <span className={STYLES_LOG_LEFT}>{l.type}</span>
-                  <span className={STYLES_LOG_RIGHT}>{l.text}</span>
+                  <span className={STYLES_LOG_RIGHT}>{l.text + (l.details ? `\n${l.details}` : '')}</span>
                 </div>
               );
             })}

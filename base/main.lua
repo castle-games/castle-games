@@ -21,12 +21,12 @@ do
     end
 end
 
-function DEFAULT_ERROR_HANDLER(err) -- Referenced in 'network.lua'
-    love.thread.getChannel('ERROR'):push(cjson.encode({ error = err }))
+function DEFAULT_ERROR_HANDLER(err, stack) -- Referenced in 'network.lua'
+    love.thread.getChannel('ERROR'):push(cjson.encode({ error = err, stacktrace = stack }))
 end
 
-function root.onError(err)
-    DEFAULT_ERROR_HANDLER(err)
+function root.onError(err, portal, stack)
+    DEFAULT_ERROR_HANDLER(err, stack)
 end
 
 

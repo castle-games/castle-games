@@ -31,8 +31,8 @@ export const getLogs = () => {
         });
 
         channels.ERROR.map(json => {
-          const error = JSON.parse(json).error;
-          logs.push({ id: logId, type: 'error', text: `${error}` });
+          const { error, stacktrace } = JSON.parse(json);
+          logs.push({ id: logId, type: 'error', text: error, details: stacktrace });
           logId = logId + 1;
         });
         return resolve(logs);

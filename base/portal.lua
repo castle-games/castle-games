@@ -199,21 +199,14 @@ end
 -- occurs. If the call to `foo` succeeded, returns `true` followed by its return
 -- values. If an error occured, returns `false` and the error message.
 function portalMeta:safeCall(foo, ...)
-    local function handle(succeeded, ...)
-        if not succeeded then
-            local err = select(1, ...)
-            self:handleError(err)
-        end
-        return succeeded, ...
-    end
-
-    return handle(pcall(foo, ...))
+    return xpcall(foo, function(err) self:handleError(err) end, ...)
 end
 
 -- Handle an error `err` occurring in the context of this portal. Calls
 -- `self.onError`, cascading to parents if that doesn't exist or raises an error
 -- itself
 function portalMeta:handleError(err)
+    local stack = debug.traceback(err, 2)
     local boundary = self
     local succeeded
     repeat
@@ -224,7 +217,7 @@ function portalMeta:handleError(err)
         if not boundary then error(err, 0) end
 
         -- Protect call to error handler, move upward if it failed
-        succeeded, err = pcall(boundary.onError, err, self)
+        succeeded, err = pcall(boundary.onError, err, self, stack)
         if not succeeded then boundary = boundary.parent end
     until succeeded
 end
