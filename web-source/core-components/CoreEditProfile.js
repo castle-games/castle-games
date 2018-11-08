@@ -5,7 +5,7 @@ import * as Constants from '~/common/constants';
 import { css } from 'react-emotion';
 
 import UIAvatar from '~/core-components/reusable/UIAvatar';
-import UIControl from '~/core-components/reusable/UIControl';
+import UISubmitButton from '~/core-components/reusable/UISubmitButton';
 
 const STYLES_CONTAINER = css`
   background ${Constants.colors.background};
@@ -24,7 +24,8 @@ const STYLES_SECTION = css`
 
 const STYLES_HEADING = css`
   font-weight: 600;
-  font-size: 12px;
+  font-size: 14px;
+  letter-spacing: 0.2px;
   overflow-wrap: break-word;
   word-wrap: break-word;
   margin-bottom: 12px;
@@ -69,6 +70,14 @@ export default class CoreEditProfile extends React.Component {
       uploadedAvatarFile: null,
     }, maybeCallback);
   };
+
+  _doesFormContainChanges = () => {
+    const state = this.state;
+    return (
+      state.isExistingAvatarRemoved !== false ||
+      state.uploadedAvatarFile !== null
+    );
+  }
   
   _onAvatarFileInputChangeAsync = async (e) => {
     let files = e.target.files;
@@ -136,6 +145,7 @@ export default class CoreEditProfile extends React.Component {
   };
 
   render() {
+    const isSubmitEnabled = this._doesFormContainChanges();
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_SECTION}>
@@ -143,7 +153,11 @@ export default class CoreEditProfile extends React.Component {
           {this._renderAvatarControl()}
         </div>
         <div className={STYLES_SECTION}>
-          <UIControl onClick={this._onSubmitEditProfileAsync}>Save Changes</UIControl>
+          <UISubmitButton
+            disabled={!isSubmitEnabled}
+            onClick={this._onSubmitEditProfileAsync}>
+            Save Changes
+          </UISubmitButton>
         </div>
       </div>
     );

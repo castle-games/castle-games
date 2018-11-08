@@ -9,7 +9,7 @@ import UIEmptyState from '~/core-components/reusable/UIEmptyState';
 import UIButtonSecondary from '~/core-components/reusable/UIButtonSecondary';
 import UIInputSecondary from '~/core-components/reusable/UIInputSecondary';
 import UITextArea from '~/core-components/reusable/UITextArea';
-import UIControl from '~/core-components/reusable/UIControl';
+import UISubmitButton from '~/core-components/reusable/UISubmitButton';
 
 import ContentEditor from '~/editor/ContentEditor';
 import DefaultState from '~/editor/default.json';
@@ -79,7 +79,7 @@ export default class CoreProfileAddPlaylist extends React.Component {
             placeholder="Type a description..."
             style={{ marginBottom: 16 }}
           />
-          <UIControl onClick={this._handleAddPlaylist}>Add Playlist</UIControl>
+          <UISubmitButton onClick={this._handleAddPlaylist}>Add Playlist</UISubmitButton>
         </div>
       </div>
     );
