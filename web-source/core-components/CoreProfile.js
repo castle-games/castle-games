@@ -13,6 +13,7 @@ import CoreBrowseSearchInput from '~/core-components/CoreBrowseSearchInput';
 import CoreEditProfile from '~/core-components/CoreEditProfile';
 import CoreProfileAddMedia from '~/core-components/CoreProfileAddMedia';
 import CoreProfileAddPlaylist from '~/core-components/CoreProfileAddPlaylist';
+import CoreSignOut from '~/core-components/CoreSignOut';
 
 const STYLES_HEADER_TEXT = css`
   font-size: 16px;
@@ -67,6 +68,8 @@ export default class CoreProfile extends React.Component {
   _onShowPlaylists = () => this.setState({ mode: 'playlists' });
 
   _onShowEditProfile = () => this.setState({ mode: 'edit-profile' });
+
+  _onShowSignOut = () => this.setState({ mode: 'sign-out' });
   
   _renderMediaContent = (isOwnProfile) => {
     const mediaListElement =
@@ -134,6 +137,13 @@ export default class CoreProfile extends React.Component {
       />
     );
   }
+
+  _renderSignOutContent = (isOwnProfile) => {
+    if (!isOwnProfile) return null;
+    return (
+      <CoreSignOut onSignOut={this.props.onSignOut} />
+    );
+  }
   
   render() {
     const isOwnProfile = (
@@ -147,6 +157,8 @@ export default class CoreProfile extends React.Component {
       profileContentElement = this._renderPlaylistContent(isOwnProfile);
     } else if (mode === 'edit-profile') {
       profileContentElement = this._renderEditProfileContent(isOwnProfile);
+    } else if (mode === 'sign-out') {
+      profileContentElement = this._renderSignOutContent(isOwnProfile);
     } else {
       profileContentElement = this._renderMediaContent(isOwnProfile);
     }
@@ -167,7 +179,7 @@ export default class CoreProfile extends React.Component {
           onShowMediaList={this._onShowMedia}
           onShowPlaylistList={this._onShowPlaylists}
           onShowEditProfile={this._onShowEditProfile}
-          onSignOut={this.props.onSignOut}
+          onShowSignOut={this._onShowSignOut}
         />
         {profileContentElement}
       </div>

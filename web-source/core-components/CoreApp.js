@@ -729,12 +729,6 @@ export default class CoreApp extends React.Component {
   };
 
   _handleSignOut = () => {
-    const confirm = window.confirm('Are you sure you want to sign out?');
-
-    if (!confirm) {
-      return;
-    }
-
     if (!Actions.logout()) {
       return;
     }
