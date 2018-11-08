@@ -58,7 +58,15 @@ export default class CoreProfileAddMedia extends React.Component {
     });
   };
 
+  _isFormSubmittable = () => {
+    return (
+      this.state.media.name && this.state.media.name.length > 0 &&
+      this.state.media.url && this.state.media.url.length > 0
+    );
+  };
+
   render() {
+    const isSubmitEnabled = this._isFormSubmittable();
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_SECTION}>
@@ -89,7 +97,11 @@ export default class CoreProfileAddMedia extends React.Component {
             placeholder="Type a description..."
             style={{ marginBottom: 16 }}
           />
-          <UISubmitButton onClick={this._handleAddMedia}>Add Media</UISubmitButton>
+          <UISubmitButton
+            disabled={!isSubmitEnabled}
+            onClick={this._handleAddMedia}>
+            Add Media
+          </UISubmitButton>
         </div>
       </div>
     );

@@ -160,44 +160,8 @@ export default class CoreApp extends React.Component {
   _handleClearHistory = () => {
     this._history.clear();
   }
-  
-  _handleMediaAdd = async data => {
-    const response = await Actions.addMedia(data);
-    if (!response) {
-      return;
-    }
-
-    await this.refreshViewer();
-  };
 
   _handleProfileChange = () => this.refreshViewer();
-
-  _handleMediaRemove = async data => {
-    const response = await Actions.removeMedia(data);
-    if (!response) {
-      return;
-    }
-
-    await this.refreshViewer();
-  };
-
-  _handlePlaylistAdd = async data => {
-    const response = await Actions.addPlaylist(data);
-    if (!response) {
-      return;
-    }
-
-    await this.refreshViewer();
-  };
-
-  _handlePlaylistRemove = async data => {
-    const response = await Actions.removePlaylist(data);
-    if (!response) {
-      return;
-    }
-
-    await this.refreshViewer();
-  };
 
   _handleRemoveMediaFromPlaylist = async data => {
     const response = await Actions.removeMediaFromPlaylist(data);
@@ -938,12 +902,8 @@ export default class CoreApp extends React.Component {
             viewer={state.viewer}
             creator={state.creator}
             onSearchReset={this._handleSearchReset}
-            onMediaAdd={this._handleMediaAdd}
             onMediaSelect={this._handleMediaSelect}
-            onMediaRemove={this._handleMediaRemove}
-            onPlaylistAdd={this._handlePlaylistAdd}
             onPlaylistSelect={this._handlePlaylistSelect}
-            onPlaylistRemove={this._handlePlaylistRemove}
             onAfterSave={this._handleProfileChange}
             onUserSelect={this._handleUserSelect}
             onSignOut={this._handleSignOut}

@@ -56,7 +56,14 @@ export default class CoreProfileAddPlaylist extends React.Component {
     });
   };
 
+  _isFormSubmittable = () => {
+    return (
+      this.state.playlist.name && this.state.playlist.name.length > 0
+    );
+  };
+
   render() {
+    const isSubmitEnabled = this._isFormSubmittable();
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_SECTION}>
@@ -79,7 +86,11 @@ export default class CoreProfileAddPlaylist extends React.Component {
             placeholder="Type a description..."
             style={{ marginBottom: 16 }}
           />
-          <UISubmitButton onClick={this._handleAddPlaylist}>Add Playlist</UISubmitButton>
+          <UISubmitButton
+            disabled={!isSubmitEnabled}
+            onClick={this._handleAddPlaylist}>
+            Add Playlist
+          </UISubmitButton>
         </div>
       </div>
     );

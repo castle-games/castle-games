@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as Actions from '~/common/actions';
 import * as Constants from '~/common/constants';
 
 import { css } from 'react-emotion';
@@ -70,6 +71,51 @@ export default class CoreProfile extends React.Component {
   _onShowEditProfile = () => this.setState({ mode: 'edit-profile' });
 
   _onShowSignOut = () => this.setState({ mode: 'sign-out' });
+
+  _addMediaAsync = async data => {
+    const response = await Actions.addMedia(data);
+    if (!response) {
+      return;
+    }
+
+    if (this.props.onAfterSave) {
+      this.props.onAfterSave();
+    }
+  };
+
+  _removeMediaAsync = async data => {
+    const response = await Actions.removeMedia(data);
+    if (!response) {
+      return;
+    }
+
+    if (this.props.onAfterSave) {
+      this.props.onAfterSave();
+    }
+  };
+
+  _addPlaylistAsync = async data => {
+    const response = await Actions.addPlaylist(data);
+    if (!response) {
+      return;
+    }
+    
+    if (this.props.onAfterSave) {
+      this.props.onAfterSave();
+    }
+  };
+
+  _removePlaylistAsync = async data => {
+    const response = await Actions.removePlaylist(data);
+    if (!response) {
+      return;
+    }
+
+    if (this.props.onAfterSave) {
+      this.props.onAfterSave();
+    }
+  };
+
   
   _renderMediaContent = (isOwnProfile) => {
     const mediaListElement =
@@ -79,7 +125,7 @@ export default class CoreProfile extends React.Component {
           creator={this.props.creator}
           mediaItems={this.props.creator.mediaItems}
           onMediaSelect={this.props.onMediaSelect}
-          onMediaRemove={this.props.onMediaRemove}
+          onMediaRemove={this._removeMediaAsync}
           onUserSelect={this.props.onUserSelect}
         />
       ) : (
@@ -94,7 +140,7 @@ export default class CoreProfile extends React.Component {
     return (
       <div>
         {mediaListElement}
-        {isOwnProfile ? (<CoreProfileAddMedia onMediaAdd={this.props.onMediaAdd} />) : null}
+        {isOwnProfile ? (<CoreProfileAddMedia onMediaAdd={this._addMediaAsync} />) : null}
       </div>
     );
   }
@@ -107,7 +153,7 @@ export default class CoreProfile extends React.Component {
           creator={this.props.creator}
           playlists={this.props.creator.playlists}
           onPlaylistSelect={this.props.onPlaylistSelect}
-          onPlaylistRemove={this.props.onPlaylistRemove}
+          onPlaylistRemove={this._removePlaylistAsync}
           onUserSelect={this.props.onUserSelect}
         />
       ) : (
@@ -122,7 +168,7 @@ export default class CoreProfile extends React.Component {
     return (
       <div>
         {playlistListElement}
-        {isOwnProfile ? (<CoreProfileAddPlaylist onPlaylistAdd={this.props.onPlaylistAdd} />) : null}
+        {isOwnProfile ? (<CoreProfileAddPlaylist onPlaylistAdd={this._addPlaylistAsync} />) : null}
       </div>
     );
   }
