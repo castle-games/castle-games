@@ -10,7 +10,8 @@ const STYLES_ICON = css`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
+  box-shadow: 0 0 0 2px ${Constants.colors.white};
+  border-radius: 4px;
   background-position: 50% 50%;
   background-size: cover;
 `;

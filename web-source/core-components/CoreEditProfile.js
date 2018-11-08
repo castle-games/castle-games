@@ -51,6 +51,7 @@ const STYLES_FILE_INPUT = css`
 export default class CoreEditProfile extends React.Component {
   state = {
     isExistingAvatarRemoved: false, // TODO: flag this once avatar removal is supported.
+    isAvatarUploading: false,
     uploadedAvatarFile: null,
     about: Plain.deserialize(''),
     name: null,
@@ -85,6 +86,7 @@ export default class CoreEditProfile extends React.Component {
         : Plain.deserialize('');
     this.setState({
       isExistingAvatarRemoved: false,
+      isAvatarUploading: false,
       uploadedAvatarFile: null,
       about: richAboutObject,
       name: user.name,
@@ -104,11 +106,14 @@ export default class CoreEditProfile extends React.Component {
   _onAvatarFileInputChangeAsync = async (e) => {
     let files = e.target.files;
     if (files && files.length) {
+      await this.setState({ isAvatarUploading: true });
       const result = await Actions.uploadImageAsync({
         file: files[0],
       });
       if (result) {
-        this.setState({ uploadedAvatarFile: result });
+        this.setState({ uploadedAvatarFile: result, isAvatarUploading: false });
+      } else {
+        this.setState({ isAvatarUploading: false });
       }
     }
   };
@@ -167,6 +172,14 @@ export default class CoreEditProfile extends React.Component {
         ? this.props.user.photo.imgixUrl
         : null;
     }
+    
+    let avatarLoadingElement;
+    let isAvatarUploadEnabled = true;
+    if (this.state.isAvatarUploading) {
+      avatarLoadingElement = (<p>Uploading...</p>);
+      isAvatarUploadEnabled = false;
+    }
+      
     return (
       <div className={STYLES_SECTION_CONTENT}>
         <UIAvatar
@@ -174,13 +187,15 @@ export default class CoreEditProfile extends React.Component {
           style={{ width: 128, height: 128, marginRight: 16 }}
           />
         <div className={STYLES_COLUMN}>
+          {avatarLoadingElement}
           <input
             type="file"
             id="avatar"
             name="avatar"
             className={STYLES_FILE_INPUT}
+            style={(isAvatarUploadEnabled) ? {} : { display: 'none' }}
             onChange={this._onAvatarFileInputChangeAsync}
-            />
+          />
         </div>
       </div>
     )
@@ -193,6 +208,7 @@ export default class CoreEditProfile extends React.Component {
         <UIInputSecondary
           name="name"
           value={value}
+          label="Name"
           onChange={this._onFieldChange}
           onFocus={this._onFieldFocus}
           placeholder="Your real name (optional)"
@@ -208,6 +224,7 @@ export default class CoreEditProfile extends React.Component {
       <div className={STYLES_SECTION_CONTENT}>
         <UITextArea
           value={value}
+          label="About"
           onChange={this._onAboutChangeAsync}
           onFocus={this._onFieldFocus}
           placeholder="Write something about yourself..."
@@ -226,11 +243,8 @@ export default class CoreEditProfile extends React.Component {
           {this._renderAvatarControl()}
         </div>
         <div className={STYLES_SECTION}>
-          <div className={STYLES_HEADING}>Name</div>
+          <div className={STYLES_HEADING}>Profile Info</div>
           {this._renderNameField()}
-        </div>
-        <div className={STYLES_SECTION}>
-          <div className={STYLES_HEADING}>About</div>
           {this._renderAboutField()}
         </div>
         <div className={STYLES_SECTION}>

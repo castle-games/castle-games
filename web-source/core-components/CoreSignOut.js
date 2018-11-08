@@ -17,7 +17,7 @@ const STYLES_CONTAINER = css`
 
 const STYLES_CONTENT = css`
   max-width: 480px;
-  padding: 32px;
+  padding: 64px 32px 32px 32px;
   flex-direction: column;
   box-sizing: border-box;
 `;
