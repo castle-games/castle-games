@@ -6,6 +6,7 @@ import { css } from 'react-emotion';
 
 import UIControl from '~/core-components/reusable/UIControl';
 import UICardProfileHeader from '~/core-components/reusable/UICardProfileHeader';
+import UIHorizontalNavigation from '~/core-components/reusable/UIHorizontalNavigation';
 import UIListMedia from '~/core-components/reusable/UIListMedia';
 import UIListPlaylists from '~/core-components/reusable/UIListPlaylists';
 import UIEmptyState from '~/core-components/reusable/UIEmptyState';
@@ -62,7 +63,7 @@ export default class CoreProfile extends React.Component {
       // we're rendering a new profile, reset state.
       this.setState({ mode: 'media' });
     }
-  }
+  };
   
   _onShowMedia = () => this.setState({ mode: 'media' });
 
@@ -72,7 +73,7 @@ export default class CoreProfile extends React.Component {
 
   _onShowSignOut = () => this.setState({ mode: 'sign-out' });
 
-  _addMediaAsync = async data => {
+  _addMediaAsync = async (data) => {
     const response = await Actions.addMedia(data);
     if (!response) {
       return;
@@ -83,7 +84,7 @@ export default class CoreProfile extends React.Component {
     }
   };
 
-  _removeMediaAsync = async data => {
+  _removeMediaAsync = async (data) => {
     const response = await Actions.removeMedia(data);
     if (!response) {
       return;
@@ -94,7 +95,7 @@ export default class CoreProfile extends React.Component {
     }
   };
 
-  _addPlaylistAsync = async data => {
+  _addPlaylistAsync = async (data) => {
     const response = await Actions.addPlaylist(data);
     if (!response) {
       return;
@@ -105,7 +106,7 @@ export default class CoreProfile extends React.Component {
     }
   };
 
-  _removePlaylistAsync = async data => {
+  _removePlaylistAsync = async (data) => {
     const response = await Actions.removePlaylist(data);
     if (!response) {
       return;
@@ -116,6 +117,31 @@ export default class CoreProfile extends React.Component {
     }
   };
 
+  _getNavigationItems = (isOwnProfile) => {
+    let navigationItems = [
+      { label: 'Media', key: 'media' },
+      { label: 'Playlists', key: 'playlists' },
+    ];
+
+    if (isOwnProfile) {
+      navigationItems.push({ label: 'Edit Profile', key: 'edit-profile' });
+      navigationItems.push({ label: 'Sign Out', key: 'sign-out' });
+    }
+
+    return navigationItems;
+  }
+
+  _onNavigationChange = (selectedKey) => {
+    const callbacks = {
+      'media': this._onShowMedia,
+      'playlists': this._onShowPlaylists,
+      'edit-profile': this._onShowEditProfile,
+      'sign-out': this._onShowSignOut,
+    }
+    if (callbacks.hasOwnProperty(selectedKey)) {
+      callbacks[selectedKey]();
+    }
+  }
   
   _renderMediaContent = (isOwnProfile) => {
     const mediaListElement =
@@ -137,10 +163,12 @@ export default class CoreProfile extends React.Component {
             : 'This user has not added any media yet.'}
         </UIEmptyState>
       );
+    const maybeAddMediaElement =
+      isOwnProfile ? (<CoreProfileAddMedia onMediaAdd={this._addMediaAsync} />) : null;
     return (
       <div>
         {mediaListElement}
-        {isOwnProfile ? (<CoreProfileAddMedia onMediaAdd={this._addMediaAsync} />) : null}
+        {maybeAddMediaElement}
       </div>
     );
   }
@@ -165,13 +193,15 @@ export default class CoreProfile extends React.Component {
             : 'This user has not added any playlists yet.'}
         </UIEmptyState>
       );
+    const maybeAddPlaylistElement =
+      isOwnProfile ? (<CoreProfileAddPlaylist onPlaylistAdd={this._addPlaylistAsync} />) : null;
     return (
       <div>
         {playlistListElement}
-        {isOwnProfile ? (<CoreProfileAddPlaylist onPlaylistAdd={this._addPlaylistAsync} />) : null}
+        {maybeAddPlaylistElement}
       </div>
     );
-  }
+  };
 
   _renderEditProfileContent = (isOwnProfile) => {
     if (!isOwnProfile) return null;
@@ -182,14 +212,14 @@ export default class CoreProfile extends React.Component {
         onAfterSave={this.props.onAfterSave}
       />
     );
-  }
+  };
 
   _renderSignOutContent = (isOwnProfile) => {
     if (!isOwnProfile) return null;
     return (
       <CoreSignOut onSignOut={this.props.onSignOut} />
     );
-  }
+  };
   
   render() {
     const isOwnProfile = (
@@ -220,12 +250,12 @@ export default class CoreProfile extends React.Component {
         ) : null}
         <UICardProfileHeader
           creator={this.props.creator}
-          profileMode={this.state.mode}
           isOwnProfile={isOwnProfile}
-          onShowMediaList={this._onShowMedia}
-          onShowPlaylistList={this._onShowPlaylists}
-          onShowEditProfile={this._onShowEditProfile}
-          onShowSignOut={this._onShowSignOut}
+        />
+        <UIHorizontalNavigation
+          items={this._getNavigationItems(isOwnProfile)}
+          selectedKey={this.state.mode}
+          onChange={this._onNavigationChange}
         />
         {profileContentElement}
       </div>

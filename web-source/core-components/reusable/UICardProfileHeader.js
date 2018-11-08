@@ -28,10 +28,6 @@ const STYLES_BODY_RIGHT = css`
   color: ${Constants.colors.white};
 `;
 
-const STYLES_ROW = css`
-  display: flex;
-`;
-
 const STYLES_TOP = css`
   display: flex;
 `;
@@ -57,18 +53,6 @@ const STYLES_ABOUT = css`
   margin-bottom: 16px;
 `;
 
-const STYLES_NAVIGATION_ITEM = css`
-  background: ${Constants.colors.foreground};
-  user-select: none;
-  padding: 8px 16px 8px 16px;
-  border-radius: 4px 4px 0 0;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 10px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-`;
-
 const STYLES_CREATOR_IDENTITY = css`
 
 `;
@@ -89,11 +73,6 @@ export default class UICardProfileHeader extends React.Component {
   }
 
   render() {
-    const isViewingMedia = this.props.profileMode === 'media' || !this.props.profileMode;
-    const isViewingPlaylists = this.props.profileMode === 'playlists';
-    const isViewingEditProfile = this.props.profileMode === 'edit-profile';
-    const isViewingSignOut = this.props.profileMode === 'sign-out';
-
     let richAbout;
     if (this.props.creator &&
         this.props.creator.about &&
@@ -105,42 +84,6 @@ export default class UICardProfileHeader extends React.Component {
     ) : (
       <p className={STYLES_ABOUT} />
     );
-
-    const playlistsNavigationElement = this.props.creator.isReal ? (
-      <div
-        className={STYLES_NAVIGATION_ITEM}
-        style={{
-          marginRight: 16,
-          background: isViewingPlaylists ? null : Constants.colors.background,
-        }}
-        onClick={this.props.onShowPlaylistList}>
-        Playlists
-      </div>
-    ) : null;
-
-    const editProfileNavigationElement = this.props.isOwnProfile ? (
-      <div
-        className={STYLES_NAVIGATION_ITEM}
-        style={{
-          marginRight: 16,
-          background: isViewingEditProfile ? null : Constants.colors.background,
-        }}
-        onClick={this.props.onShowEditProfile}>
-        Edit Profile
-      </div>
-    ) : null;
-
-    const signOutNavigationElement = this.props.isOwnProfile ? (
-      <div
-        className={STYLES_NAVIGATION_ITEM}
-        style={{
-          marginRight: 16,
-          background: isViewingSignOut ? null : Constants.colors.background,
-        }}
-        onClick={this.props.onShowSignOut}>
-        Sign Out
-      </div>
-    ) : null;
     
     const avatarSrc = (this.props.creator && this.props.creator.photo)
           ? this.props.creator.photo.imgixUrl
@@ -169,20 +112,6 @@ export default class UICardProfileHeader extends React.Component {
             </div>
             {aboutElement}
           </div>
-        </div>
-        <div className={STYLES_ROW}>
-          <div
-            className={STYLES_NAVIGATION_ITEM}
-            style={{
-              marginRight: 16,
-              background: isViewingMedia ? null : Constants.colors.background,
-            }}
-            onClick={this.props.onShowMediaList}>
-            Media
-          </div>
-          {playlistsNavigationElement}
-          {editProfileNavigationElement}
-          {signOutNavigationElement}
         </div>
       </div>
     );
