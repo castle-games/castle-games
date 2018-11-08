@@ -13,21 +13,34 @@ try {
 
 export const API = maybeAPI;
 
+// fetches partial user data to support some owning object
 const NESTED_USER = `
   user {
     userId
     name
     username
-    createdTime
-    updatedTime
     isReal
-    about
     photo {
-      url
       imgixUrl
       height
       width
     }
+  }
+`;
+
+// fetches all the data needed to render a full user profile
+const FULL_USER_FIELDS = `
+  userId
+  username
+  name
+  createdTime
+  updatedTime
+  isReal
+  about
+  photo {
+    imgixUrl
+    height
+    width
   }
 `;
 
@@ -109,17 +122,7 @@ export async function signup({ name, username, email, password }) {
     `
       mutation($name: String!, $username: String!, $email: String!, $password: String!) {
         signup(user: { name: $name, username: $username }, email: $email, password: $password) {
-          userId
-          username
-          name
-          createdTime
-          isReal
-          photo {
-            url
-            imgixUrl
-            height
-            width
-          }
+          ${FULL_USER_FIELDS}
           ${PLAYLISTS}
           ${MEDIA_ITEMS}
         }
@@ -141,17 +144,7 @@ export async function login({ userId, password }) {
     `
       mutation($userId: ID!, $password: String!) {
         login(userId: $userId, password: $password) {
-          userId
-          username
-          name
-          createdTime
-          isReal
-          photo {
-            url
-            imgixUrl
-            height
-            width
-          }
+          ${FULL_USER_FIELDS}
           ${PLAYLISTS}
           ${MEDIA_ITEMS}
         }
@@ -220,17 +213,7 @@ export async function getUser({ userId }) {
     `
     query GetUser($userId: ID!) {
       user(userId: $userId) {
-        userId
-        username
-        name
-        createdTime
-        isReal
-        photo {
-          url
-          imgixUrl
-          height
-          width
-        }
+        ${FULL_USER_FIELDS}
         ${PLAYLISTS}
         ${MEDIA_ITEMS}
       }
@@ -255,19 +238,7 @@ export async function getViewer() {
   const result = await API(`
     query {
       me {
-        userId
-        username
-        name
-        createdTime
-        updatedTime
-        isReal
-        about
-        photo {
-          url
-          imgixUrl
-          height
-          width
-        }
+        ${FULL_USER_FIELDS}
         ${MEDIA_ITEMS}
         ${PLAYLISTS}
       }
@@ -290,19 +261,7 @@ export async function getInitialData() {
   const result = await API(`
     query {
       me {
-        userId
-        username
-        name
-        createdTime
-        updatedTime
-        isReal
-        about
-        photo {
-          url
-          imgixUrl
-          height
-          width
-        }
+        ${FULL_USER_FIELDS}
         ${MEDIA_ITEMS}
         ${PLAYLISTS}
       }
@@ -330,7 +289,6 @@ export async function getInitialData() {
         createdTime
         isReal
         photo {
-          url
           imgixUrl
           height
           width
@@ -533,17 +491,21 @@ export async function setUserPhotoAsync({ userId, fileId }) {
   return result.data.updateUser;
 }
 
-export async function updateUserAsync({ userId, about }) {
+export async function updateUserAsync({ userId, about, name }) {
   const variables = {
     userId,
     about: JSON.stringify(about),
+    name: name,
   };
   const result = await API.graphqlAsync({
     query: `
-      mutation ($userId: ID!, $about: String!) {
+      mutation ($userId: ID!, $about: String!, $name: String!) {
        updateUser(
          userId: $userId
-         user: { about: { rich: $about } }
+         user: {
+           about: { rich: $about }
+           name: $name
+         }
        ) {
          userId
        }

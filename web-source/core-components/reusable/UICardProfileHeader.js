@@ -75,16 +75,17 @@ const STYLES_CREATOR_IDENTITY = css`
 
 export default class UICardProfileHeader extends React.Component {
   _renderTagline = creator => {
+    let name = creator.name;
+    let origin;
     if (creator.isReal) {
-      return `Joined on ${Strings.toDate(creator.createdTime)}`;
+      origin = `Joined on ${Strings.toDate(creator.createdTime)}`;
     } else {
       // not real, so don't attribute the action of joining to them.
-      if (creator.userId.includes('user:itch')) {
-        return 'Creator on itch.io';
-      } else {
-        return '';
-      }
     }
+    let components = [];
+    if (name) components.push(name);
+    if (origin) components.push(origin);
+    return components.join(' · ');
   }
 
   render() {

@@ -7,6 +7,7 @@ import Plain from 'slate-plain-serializer';
 import { css } from 'react-emotion';
 
 import UIAvatar from '~/core-components/reusable/UIAvatar';
+import UIInputSecondary from '~/core-components/reusable/UIInputSecondary';
 import UISubmitButton from '~/core-components/reusable/UISubmitButton';
 import UITextArea from '~/core-components/reusable/UITextArea';
 
@@ -49,10 +50,11 @@ const STYLES_FILE_INPUT = css`
 
 export default class CoreEditProfile extends React.Component {
   state = {
-    isExistingAvatarRemoved: false,
+    isExistingAvatarRemoved: false, // TODO: flag this once avatar removal is supported.
     uploadedAvatarFile: null,
     about: Plain.deserialize(''),
-    isAboutEdited: false,
+    name: null,
+    isAnyFieldEdited: false,
   };
 
   componentDidMount() {
@@ -78,14 +80,15 @@ export default class CoreEditProfile extends React.Component {
   }
 
   _resetForm = (user) => {
-    let richAboutObject = (user && user.about && user.about.rich)
+    const richAboutObject = (user && user.about && user.about.rich)
         ? Strings.loadEditor(user.about.rich)
         : Plain.deserialize('');
     this.setState({
       isExistingAvatarRemoved: false,
       uploadedAvatarFile: null,
       about: richAboutObject,
-      isAboutEdited: false,
+      name: user.name,
+      isAnyFieldEdited: false,
     });
   };
 
@@ -94,7 +97,7 @@ export default class CoreEditProfile extends React.Component {
     return (
       state.isExistingAvatarRemoved !== false ||
       state.uploadedAvatarFile !== null ||
-      state.isAboutEdited !== false
+      state.isAnyFieldEdited !== false
     );
   }
   
@@ -114,8 +117,12 @@ export default class CoreEditProfile extends React.Component {
     this.setState({ about: value });
   };
 
-  _onAboutFocus = (_) => {
-    this.setState({ isAboutEdited: true });
+  _onFieldChange = e => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
+
+  _onFieldFocus = (_) => {
+    this.setState({ isAnyFieldEdited: true });
   };
 
   _onSubmitEditProfileAsync = async () => {
@@ -129,10 +136,11 @@ export default class CoreEditProfile extends React.Component {
         didSucceed = false;
       }
     }
-    if (this.state.isAboutEdited) {
+    if (this.state.isAnyFieldEdited) {
       const result = await Actions.updateUserAsync({
         userId: this.props.user.userId,
         about: this.state.about,
+        name: this.state.name,
       });
       if (!result) {
         didSucceed = false;
@@ -178,6 +186,22 @@ export default class CoreEditProfile extends React.Component {
     )
   };
 
+  _renderNameField = () => {
+    const value = this.state.name;
+    return (
+      <div className={STYLES_SECTION_CONTENT}>
+        <UIInputSecondary
+          name="name"
+          value={value}
+          onChange={this._onFieldChange}
+          onFocus={this._onFieldFocus}
+          placeholder="Your real name (optional)"
+          style={{ width: 480, marginBottom: 16 }}
+          />
+      </div>
+    )
+  };
+
   _renderAboutField = () => {
     const value = this.state.about;
     return (
@@ -185,7 +209,7 @@ export default class CoreEditProfile extends React.Component {
         <UITextArea
           value={value}
           onChange={this._onAboutChangeAsync}
-          onFocus={this._onAboutFocus}
+          onFocus={this._onFieldFocus}
           placeholder="Write something about yourself..."
           style={{ width: 480, marginBottom: 16 }}
           />
@@ -200,6 +224,10 @@ export default class CoreEditProfile extends React.Component {
         <div className={STYLES_SECTION}>
           <div className={STYLES_HEADING}>Avatar</div>
           {this._renderAvatarControl()}
+        </div>
+        <div className={STYLES_SECTION}>
+          <div className={STYLES_HEADING}>Name</div>
+          {this._renderNameField()}
         </div>
         <div className={STYLES_SECTION}>
           <div className={STYLES_HEADING}>About</div>
