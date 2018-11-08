@@ -17,7 +17,11 @@ export default class EntityEntity extends React.Component {
         value={this.props.value}
         onChange={this.props.onChange}
         onPaste={this.props.onPaste}
-        onFocus={(event, change) => change.focus()}
+        onFocus={(event, change) => {
+          this.props.onFocus && this.props.onFocus(event);
+          return change.focus();
+        }}
+        onBlur={this.props.onBlur}
       />
     );
   }

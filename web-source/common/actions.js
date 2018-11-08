@@ -19,7 +19,9 @@ const NESTED_USER = `
     name
     username
     createdTime
+    updatedTime
     isReal
+    about
     photo {
       url
       imgixUrl
@@ -257,7 +259,9 @@ export async function getViewer() {
         username
         name
         createdTime
+        updatedTime
         isReal
+        about
         photo {
           url
           imgixUrl
@@ -290,7 +294,9 @@ export async function getInitialData() {
         username
         name
         createdTime
+        updatedTime
         isReal
+        about
         photo {
           url
           imgixUrl
@@ -524,7 +530,34 @@ export async function setUserPhotoAsync({ userId, fileId }) {
     return false;
   }
 
-  return result.data;
+  return result.data.updateUser;
+}
+
+export async function updateUserAsync({ userId, about }) {
+  const variables = {
+    userId,
+    about: JSON.stringify(about),
+  };
+  const result = await API.graphqlAsync({
+    query: `
+      mutation ($userId: ID!, $about: String!) {
+       updateUser(
+         userId: $userId
+         user: { about: { rich: $about } }
+       ) {
+         userId
+       }
+      }
+    `,
+    variables,
+  });
+
+  // TODO(jim): Write a global error handler.
+  if (result.error || result.errors || !result.data) {
+    return false;
+  }
+
+  return result.data.updateUser;
 }
 
 export async function addMedia({ name, url, description }) {

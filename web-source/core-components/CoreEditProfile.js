@@ -1,11 +1,14 @@
 import * as React from 'react';
 import * as Actions from '~/common/actions';
 import * as Constants from '~/common/constants';
+import * as Strings from '~/common/strings';
 
+import Plain from 'slate-plain-serializer';
 import { css } from 'react-emotion';
 
 import UIAvatar from '~/core-components/reusable/UIAvatar';
 import UISubmitButton from '~/core-components/reusable/UISubmitButton';
+import UITextArea from '~/core-components/reusable/UITextArea';
 
 const STYLES_CONTAINER = css`
   background ${Constants.colors.background};
@@ -35,7 +38,7 @@ const STYLES_SECTION_CONTENT = css`
   display: flex;
 `;
 
-const STYLES_AVATAR_CONTROL = css`
+const STYLES_COLUMN = css`
   display: flex;
   flex-direction: column;
 `;
@@ -48,7 +51,13 @@ export default class CoreEditProfile extends React.Component {
   state = {
     isExistingAvatarRemoved: false,
     uploadedAvatarFile: null,
+    about: Plain.deserialize(''),
+    isAboutEdited: false,
   };
+
+  componentDidMount() {
+    this._resetForm(this.props.user);
+  }
 
   componentWillReceiveProps(nextProps) {
     const existingUserId = (this.props.user && this.props.user.userId) ?
@@ -57,25 +66,35 @@ export default class CoreEditProfile extends React.Component {
     const nextUserId = (nextProps.user && nextProps.user.userId) ?
           nextProps.user.userId :
           null
-    if (nextUserId != existingUserId) {
+    if (existingUserId == null || nextUserId != existingUserId ||
+        (
+          nextUserId == existingUserId &&
+          nextProps.user.updatedTime !== this.props.user.updatedTime
+        )
+       ) {
       // we're rendering a new user, reset state.
-      this._resetForm();
+      this._resetForm(nextProps.user);
     }
   }
 
-  _resetForm = (callback) => {
-    const maybeCallback = (callback) ? callback : () => {};
+  _resetForm = (user) => {
+    let richAboutObject = (user && user.about && user.about.rich)
+        ? Strings.loadEditor(user.about.rich)
+        : Plain.deserialize('');
     this.setState({
       isExistingAvatarRemoved: false,
       uploadedAvatarFile: null,
-    }, maybeCallback);
+      about: richAboutObject,
+      isAboutEdited: false,
+    });
   };
 
   _doesFormContainChanges = () => {
     const state = this.state;
     return (
       state.isExistingAvatarRemoved !== false ||
-      state.uploadedAvatarFile !== null
+      state.uploadedAvatarFile !== null ||
+      state.isAboutEdited !== false
     );
   }
   
@@ -91,6 +110,14 @@ export default class CoreEditProfile extends React.Component {
     }
   };
 
+  _onAboutChangeAsync = async ({ value }) => {
+    this.setState({ about: value });
+  };
+
+  _onAboutFocus = (_) => {
+    this.setState({ isAboutEdited: true });
+  };
+
   _onSubmitEditProfileAsync = async () => {
     let didSucceed = true;
     if (this.state.uploadedAvatarFile) {
@@ -98,16 +125,23 @@ export default class CoreEditProfile extends React.Component {
         userId: this.props.user.userId,
         fileId: this.state.uploadedAvatarFile.fileId,
       });
-      if (!result || !result.updateUser) {
+      if (!result) {
+        didSucceed = false;
+      }
+    }
+    if (this.state.isAboutEdited) {
+      const result = await Actions.updateUserAsync({
+        userId: this.props.user.userId,
+        about: this.state.about,
+      });
+      if (!result) {
         didSucceed = false;
       }
     }
     if (didSucceed) {
-      this._resetForm(() => {
-        if (this.props.onAfterSave) {
-          this.props.onAfterSave();
-        }
-      });
+      if (this.props.onAfterSave) {
+        this.props.onAfterSave();
+      }
     }
   };
 
@@ -131,7 +165,7 @@ export default class CoreEditProfile extends React.Component {
           src={avatarSrc}
           style={{ width: 128, height: 128, marginRight: 16 }}
           />
-        <div className={STYLES_AVATAR_CONTROL}>
+        <div className={STYLES_COLUMN}>
           <input
             type="file"
             id="avatar"
@@ -144,6 +178,21 @@ export default class CoreEditProfile extends React.Component {
     )
   };
 
+  _renderAboutField = () => {
+    const value = this.state.about;
+    return (
+      <div className={STYLES_SECTION_CONTENT}>
+        <UITextArea
+          value={value}
+          onChange={this._onAboutChangeAsync}
+          onFocus={this._onAboutFocus}
+          placeholder="Write something about yourself..."
+          style={{ width: 480, marginBottom: 16 }}
+          />
+      </div>
+    )
+  };
+  
   render() {
     const isSubmitEnabled = this._doesFormContainChanges();
     return (
@@ -151,6 +200,10 @@ export default class CoreEditProfile extends React.Component {
         <div className={STYLES_SECTION}>
           <div className={STYLES_HEADING}>Avatar</div>
           {this._renderAvatarControl()}
+        </div>
+        <div className={STYLES_SECTION}>
+          <div className={STYLES_HEADING}>About</div>
+          {this._renderAboutField()}
         </div>
         <div className={STYLES_SECTION}>
           <UISubmitButton

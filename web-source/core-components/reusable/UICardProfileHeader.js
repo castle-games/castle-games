@@ -3,6 +3,7 @@ import * as Constants from '~/common/constants';
 import * as Strings from '~/common/strings';
 
 import { css } from 'react-emotion';
+import ContentEditor from '~/editor/ContentEditor';
 
 import UIAvatar from '~/core-components/reusable/UIAvatar';
 
@@ -46,7 +47,8 @@ const STYLES_META = css`
   font-size: 10px;
 `;
 
-const STYLES_DESCRIPTION = css`
+const STYLES_ABOUT = css`
+  color: ${Constants.colors.white};
   line-height: 1.725;
   font-weight: 200;
   font-size: 16px;
@@ -71,8 +73,6 @@ const STYLES_CREATOR_IDENTITY = css`
 
 `;
 
-// TODO(jim): Plop in a rich text editor rendering component
-// since description is not a string.
 export default class UICardProfileHeader extends React.Component {
   _renderTagline = creator => {
     if (creator.isReal) {
@@ -93,18 +93,16 @@ export default class UICardProfileHeader extends React.Component {
     const isViewingEditProfile = this.props.profileMode === 'edit-profile';
     const isViewingSignOut = this.props.profileMode === 'sign-out';
 
-    let richDescription;
+    let richAbout;
     if (this.props.creator &&
-        this.props.creator.description &&
-        this.props.creator.description.rich) {
-      richDescription = Strings.loadEditor(this.props.creator.description.rich);
+        this.props.creator.about &&
+        this.props.creator.about.rich) {
+      richAbout = Strings.loadEditor(this.props.creator.about.rich);
     }
-    const descriptionElement = richDescription ? (
-      <ContentEditor readOnly value={richDescription} className={STYLES_DESCRIPTION} />
+    const aboutElement = richAbout ? (
+      <ContentEditor readOnly value={richAbout} className={STYLES_ABOUT} />
     ) : (
-      <p className={STYLES_DESCRIPTION}>
-        {this.props.creator.description}
-      </p>
+      <p className={STYLES_ABOUT} />
     );
 
     const playlistsNavigationElement = this.props.creator.isReal ? (
@@ -146,7 +144,6 @@ export default class UICardProfileHeader extends React.Component {
     const avatarSrc = (this.props.creator && this.props.creator.photo)
           ? this.props.creator.photo.imgixUrl
           : null;
-    console.log(`ben core profile avatar src: ${JSON.stringify(this.props.creator, null, 2)}`);
     
     return (
       <div
@@ -169,7 +166,7 @@ export default class UICardProfileHeader extends React.Component {
                 </div>
               </div>
             </div>
-            {descriptionElement}
+            {aboutElement}
           </div>
         </div>
         <div className={STYLES_ROW}>

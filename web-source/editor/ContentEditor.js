@@ -18,6 +18,8 @@ export default class ContentEditor extends React.Component {
         readOnly={this.props.readOnly}
         value={this.props.value}
         onChange={this.props.onChange}
+        onFocus={this.props.onFocus}
+        onBlur={this.props.onBlur}
       />
     );
   }
