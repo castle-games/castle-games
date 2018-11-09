@@ -7,6 +7,7 @@ import { css } from 'react-emotion';
 import UIControl from '~/core-components/reusable/UIControl';
 import UIHeaderDismiss from '~/core-components/reusable/UIHeaderDismiss';
 import UIEmptyState from '~/core-components/reusable/UIEmptyState';
+import UILogItem from '~/core-components/reusable/UILogItem';
 
 const STYLES_FIXED_CONTAINER = css`
   position: relative;
@@ -113,7 +114,9 @@ export default class CoreDevelopmentLogs extends React.Component {
                   style={{ color: l.type === 'error' ? Constants.colors.red : null }}
                   key={`development-log-${l.id}`}>
                   <span className={STYLES_LOG_LEFT}>{l.type}</span>
-                  <span className={STYLES_LOG_RIGHT}>{l.text + (l.details ? `\n${l.details}` : '')}</span>
+                  <div className={STYLES_LOG_RIGHT}>
+                    {l.details ? (<UILogItem log={l} />) : l.text}
+                  </div>
                 </div>
               );
             })}

@@ -179,7 +179,7 @@ export default class CoreEditProfile extends React.Component {
       avatarLoadingElement = (<p>Uploading...</p>);
       isAvatarUploadEnabled = false;
     }
-      
+
     return (
       <div className={STYLES_SECTION_CONTENT}>
         <UIAvatar
