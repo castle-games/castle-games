@@ -147,6 +147,7 @@ export default class CoreProfile extends React.Component {
     const mediaListElement =
       this.props.creator.mediaItems && this.props.creator.mediaItems.length ? (
         <UIListMedia
+          noTitleRow
           viewer={this.props.viewer}
           creator={this.props.creator}
           mediaItems={this.props.creator.mediaItems}
@@ -157,7 +158,7 @@ export default class CoreProfile extends React.Component {
       ) : (
         <UIEmptyState
           title="No media yet"
-          style={{ borderTop: `1px solid ${Constants.colors.border}` }}>
+          style={{ borderTop: `16px solid ${Constants.colors.border}` }}>
           {isOwnProfile
             ? 'You have not added any media to your profile yet.'
             : 'This user has not added any media yet.'}
@@ -177,6 +178,7 @@ export default class CoreProfile extends React.Component {
     const playlistListElement =
       this.props.creator.playlists && this.props.creator.playlists.length ? (
         <UIListPlaylists
+          noTitleRow
           viewer={this.props.viewer}
           creator={this.props.creator}
           playlists={this.props.creator.playlists}
@@ -187,7 +189,7 @@ export default class CoreProfile extends React.Component {
       ) : (
         <UIEmptyState
           title="No playlists yet"
-          style={{ borderTop: `1px solid ${Constants.colors.border}` }}>
+          style={{ borderTop: `16px solid ${Constants.colors.border}` }}>
           {isOwnProfile
             ? 'You have not created any playlists yet.'
             : 'This user has not added any playlists yet.'}

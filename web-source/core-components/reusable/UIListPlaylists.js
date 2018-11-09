@@ -99,9 +99,14 @@ export default class UIListPlaylists extends React.Component {
     const isOwner =
       this.props.viewer &&
       this.props.creator &&
-      this.props.viewer.userId === this.props.creator.userId;
-    return (
-      <div className={STYLES_CONTAINER} style={this.props.style}>
+          this.props.viewer.userId === this.props.creator.userId;
+
+    let maybeTitleRow;
+    if (this.props.noTitleRow) {
+      maybeTitleRow = (<div style={{ borderTop: `16px solid ${Constants.colors.border}` }} />);
+    } else {
+      const ownerCol = (isOwner) ? (<div className={STYLES_COLUMN_NO_INTERACTION} />) : null;
+      maybeTitleRow = (
         <div className={STYLES_ROW_TITLE}>
           <div className={STYLES_ICON_COLUMN} />
           <div className={STYLES_FLUID_COLUMN_NO_INTERACTION}>Playlist Name</div>
@@ -109,8 +114,13 @@ export default class UIListPlaylists extends React.Component {
             Author
           </div>
           <div className={STYLES_COLUMN_NO_INTERACTION}>Games</div>
-          {isOwner ? <div className={STYLES_COLUMN_NO_INTERACTION} /> : null}
+          {ownerCol}
         </div>
+      );
+    }
+    return (
+      <div className={STYLES_CONTAINER} style={this.props.style}>
+        {maybeTitleRow}
         {this.props.playlists.map((p, i) => {
           let mediaItems = [];
           if (p.mediaItems && p.mediaItems.length) {

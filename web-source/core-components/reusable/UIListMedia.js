@@ -115,8 +115,12 @@ export default class UIListMedia extends React.Component {
       this.props.creator &&
       this.props.viewer.userId === this.props.creator.userId;
 
-    return (
-      <div className={STYLES_CONTAINER} style={this.props.style}>
+    let maybeTitleRow;
+    if (this.props.noTitleRow) {
+      maybeTitleRow = (<div style={{ borderTop: `16px solid ${Constants.colors.border}` }} />);
+    } else {
+      const ownerCol = (isOwner) ? (<div className={STYLES_COLUMN_NO_INTERACTION} />) : null;
+      maybeTitleRow = (
         <div className={STYLES_ROW_TITLE}>
           <div className={STYLES_ICON_COLUMN} />
           <div className={STYLES_FLUID_COLUMN_NO_INTERACTION}>Media</div>
@@ -124,9 +128,13 @@ export default class UIListMedia extends React.Component {
             Author
           </div>
           <div className={STYLES_COLUMN_NO_INTERACTION}>Published</div>
-          {isOwner ? <div className={STYLES_COLUMN_NO_INTERACTION} /> : null}
+          {ownerCol}
         </div>
-
+      );
+    }
+    return (
+      <div className={STYLES_CONTAINER} style={this.props.style}>
+        {maybeTitleRow}
         {this.props.mediaItems
           ? this.props.mediaItems.map((m, i) => {
               if (!m) {
