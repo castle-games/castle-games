@@ -43,3 +43,7 @@ export const loadEditor = text => {
 
   return Value.fromJSON(text);
 };
+
+export const isRichTextEmpty = val => {
+  return (!val || !Value.isValue(val) || val.document.text.length == 0);
+}

@@ -33,6 +33,7 @@ const FULL_USER_FIELDS = `
   userId
   username
   name
+  websiteUrl
   createdTime
   updatedTime
   isReal
@@ -491,20 +492,22 @@ export async function setUserPhotoAsync({ userId, fileId }) {
   return result.data.updateUser;
 }
 
-export async function updateUserAsync({ userId, about, name }) {
+export async function updateUserAsync({ userId, about, name, websiteUrl }) {
   const variables = {
     userId,
+    name,
+    websiteUrl,
     about: JSON.stringify(about),
-    name: name,
   };
   const result = await API.graphqlAsync({
     query: `
-      mutation ($userId: ID!, $about: String!, $name: String!) {
+      mutation ($userId: ID!, $about: String!, $name: String!, $websiteUrl: String!) {
        updateUser(
          userId: $userId
          user: {
            about: { rich: $about }
            name: $name
+           websiteUrl: $websiteUrl
          }
        ) {
          userId

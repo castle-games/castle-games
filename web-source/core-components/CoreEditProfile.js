@@ -55,6 +55,7 @@ export default class CoreEditProfile extends React.Component {
     uploadedAvatarFile: null,
     about: Plain.deserialize(''),
     name: null,
+    websiteUrl: null,
     isAnyFieldEdited: false,
   };
 
@@ -90,6 +91,7 @@ export default class CoreEditProfile extends React.Component {
       uploadedAvatarFile: null,
       about: richAboutObject,
       name: user.name,
+      websiteUrl: user.websiteUrl,
       isAnyFieldEdited: false,
     });
   };
@@ -146,6 +148,7 @@ export default class CoreEditProfile extends React.Component {
         userId: this.props.user.userId,
         about: this.state.about,
         name: this.state.name,
+        websiteUrl: this.state.websiteUrl,
       });
       if (!result) {
         didSucceed = false;
@@ -211,7 +214,24 @@ export default class CoreEditProfile extends React.Component {
           label="Name"
           onChange={this._onFieldChange}
           onFocus={this._onFieldFocus}
-          placeholder="Your real name (optional)"
+          placeholder="Name shown below your username (optional)"
+          style={{ width: 480, marginBottom: 16 }}
+          />
+      </div>
+    )
+  };
+
+  _renderWebsiteField = () => {
+    const value = this.state.websiteUrl;
+    return (
+      <div className={STYLES_SECTION_CONTENT}>
+        <UIInputSecondary
+          name="websiteUrl"
+          value={value}
+          label="Website"
+          onChange={this._onFieldChange}
+          onFocus={this._onFieldFocus}
+          placeholder="URL shown on your profile (optional)"
           style={{ width: 480, marginBottom: 16 }}
           />
       </div>
@@ -245,6 +265,7 @@ export default class CoreEditProfile extends React.Component {
         <div className={STYLES_SECTION}>
           <div className={STYLES_HEADING}>Profile Info</div>
           {this._renderNameField()}
+          {this._renderWebsiteField()}
           {this._renderAboutField()}
         </div>
         <div className={STYLES_SECTION}>

@@ -1,6 +1,8 @@
 import * as React from 'react';
+import * as CEF from '~/common/cef';
 import * as Constants from '~/common/constants';
 import * as Strings from '~/common/strings';
+import * as Urls from '~/common/urls';
 
 import { css } from 'react-emotion';
 import ContentEditor from '~/editor/ContentEditor';
@@ -39,18 +41,33 @@ const STYLES_TITLE = css`
 `;
 
 const STYLES_META = css`
-  margin: 4px 0 32px 0;
+  margin: 4px 0 16px 0;
   font-size: 10px;
 `;
 
 const STYLES_ABOUT = css`
-  color: ${Constants.colors.white};
   line-height: 1.725;
   font-weight: 200;
   font-size: 16px;
   overflow-wrap: break-word;
   white-space: pre-wrap;
+  padding: 16px 32px 16px 32px;
+`;
+
+const STYLES_LINKS_ROW = css`
+  display: flex;
+  flex-direction: row;
   margin-bottom: 16px;
+`;
+
+const STYLES_LINK_ITEM = css`
+  font-size: 14px;
+  margin-right: 16px;
+  cursor: pointer;
+
+  :hover {
+    color: ${Constants.colors.yellow};
+  }
 `;
 
 const STYLES_CREATOR_IDENTITY = css`
@@ -58,6 +75,10 @@ const STYLES_CREATOR_IDENTITY = css`
 `;
 
 export default class UICardProfileHeader extends React.Component {
+  _handleClickCreatorLink = url => {
+    CEF.openExternalURL(url);
+  };
+
   _renderTagline = creator => {
     let name = creator.name;
     let origin;
@@ -72,19 +93,37 @@ export default class UICardProfileHeader extends React.Component {
     return components.join(' · ');
   }
 
+  _renderLinks = creator => {
+    const { websiteUrl } = creator;
+    if (websiteUrl) {
+      const { urlToDisplay, urlToOpen } = Urls.canonizeUserProvidedUrl(websiteUrl);
+      return (
+        <div className={STYLES_LINKS_ROW}>
+          <div
+            className={STYLES_LINK_ITEM}
+            onClick={() => this._handleClickCreatorLink(urlToOpen)}>
+            {urlToDisplay}
+          </div>
+        </div>
+      );
+    }
+    return null;
+  }
+
   render() {
-    let richAbout;
+    let aboutElement;
     if (this.props.creator &&
         this.props.creator.about &&
         this.props.creator.about.rich) {
-      richAbout = Strings.loadEditor(this.props.creator.about.rich);
+      const richAbout = Strings.loadEditor(this.props.creator.about.rich);
+      if (!Strings.isRichTextEmpty(richAbout)) {
+        aboutElement = (
+          <ContentEditor readOnly value={richAbout} className={STYLES_ABOUT} />
+        );
+      }
     }
-    const aboutElement = richAbout ? (
-      <ContentEditor readOnly value={richAbout} className={STYLES_ABOUT} />
-    ) : (
-      <p className={STYLES_ABOUT} />
-    );
-    
+    const linksElement = this._renderLinks(this.props.creator);
+
     const avatarSrc = (this.props.creator && this.props.creator.photo)
           ? this.props.creator.photo.imgixUrl
           : null;
@@ -110,6 +149,7 @@ export default class UICardProfileHeader extends React.Component {
                 </div>
               </div>
             </div>
+            {linksElement}
             {aboutElement}
           </div>
         </div>

@@ -1,4 +1,4 @@
-const url = require('url');
+import * as url from 'url';
 
 const isLua = (urlStr) => {
   return urlStr.endsWith('.lua');
@@ -19,7 +19,33 @@ const isLocalUrl = (urlStr) => {
   return isLocal;
 }
 
+// return { urlToDisplay, urlToOpen }
+//   urlToDisplay guarantees no scheme
+//   urlToOpen guarantees some valid scheme
+const canonizeUserProvidedUrl = (urlStr) => {
+  let urlToDisplay, urlToOpen;
+  try {
+    const componentsToDisplay = url.parse(urlStr);
+    const componentsToOpen = url.parse(urlStr);
+
+    componentsToDisplay.protocol = '';
+    urlToDisplay = url.format(componentsToDisplay);
+    if (urlToDisplay.indexOf('//') === 0) {
+      urlToDisplay = urlToDisplay.substring(2);
+    }
+    if (urlToDisplay.slice(-1) == '/') {
+      urlToDisplay = urlToDisplay.substring(0, urlToDisplay.length - 1);
+    }
+    if (!componentsToOpen.protocol || componentsToOpen.protocol == '') {
+      componentsToOpen.protocol = 'http:';
+    }
+    urlToOpen = url.format(componentsToOpen);
+  } catch (_) {}
+  return { urlToDisplay, urlToOpen };
+}
+
 export {
+  canonizeUserProvidedUrl,
   isLocalUrl,
   isLua,
 }
