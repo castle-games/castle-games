@@ -76,6 +76,14 @@ const STYLES_INPUT = css`
   }
 `;
 
+const STYLES_INPUT_READONLY = css`
+  font-size: 16px;
+  background: ${Constants.colors.foreground};
+  border-radius: 3px;
+  padding: 4px 12px 4px 12px;
+  cursor: default;
+`;
+
 const STYLES_TOAST = css`
   position: absolute;
   top: 48px;
@@ -112,6 +120,28 @@ export default class CoreBrowseSearchInput extends React.Component {
         this.props.searchQuery.startsWith('0.0.0.0') ||
         this.props.searchQuery.startsWith('localhost'));
 
+    let queryElement;
+    if (this.props.readOnly) {
+      queryElement = (
+        <p className={STYLES_INPUT_READONLY}>
+          {this.props.searchQuery}
+        </p>
+      );
+    } else {
+      queryElement = (
+        <ControlledInput
+          ref={c => {
+            this._input = c;
+          }}
+          className={STYLES_INPUT}
+          value={this.props.searchQuery}
+          name={this.props.name}
+          placeholder="Search for games, media and playlists..."
+          onSubmit={this.props.onSubmit}
+          onChange={this.props.onChange}
+        />
+      );
+    }
     return (
       <div className={STYLES_CONTAINER}>
         <div
@@ -120,18 +150,7 @@ export default class CoreBrowseSearchInput extends React.Component {
           <SVG.SearchBarIcon height="24px" />
         </div>
         <div className={STYLES_CONTAINER_MIDDLE}>
-          <ControlledInput
-            ref={c => {
-              this._input = c;
-            }}
-            className={STYLES_INPUT}
-            value={this.props.searchQuery}
-            name={this.props.name}
-            readOnly={this.props.readOnly}
-            placeholder="Search for games, media and playlists..."
-            onSubmit={this.props.onSubmit}
-            onChange={this.props.onChange}
-          />
+          {queryElement}
           {isRenderingToast ? (
             <div className={STYLES_TOAST}>
               We could not find anything that matches <b>"{this.props.searchQuery}"</b> but it looks
