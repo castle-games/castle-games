@@ -1,3 +1,5 @@
+const MAX_HISTORY_LENGTH = 25;
+
 export default class History {
   _storage;
 
@@ -30,7 +32,7 @@ export default class History {
       return;
     }
 
-    if (history.length > 10) {
+    if (history.length > MAX_HISTORY_LENGTH) {
       history.pop();
     }
 
