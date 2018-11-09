@@ -34,6 +34,8 @@ const FULL_USER_FIELDS = `
   username
   name
   websiteUrl
+  itchUsername
+  twitterUsername
   createdTime
   updatedTime
   isReal
@@ -500,13 +502,15 @@ export async function updateUserAsync({ userId, user }) {
   };
   const result = await API.graphqlAsync({
     query: `
-      mutation ($userId: ID!, $about: String!, $name: String!, $websiteUrl: String!) {
+      mutation ($userId: ID!, $about: String!, $name: String!, $websiteUrl: String!, $itchUsername: String!, $twitterUsername: String!) {
        updateUser(
          userId: $userId
          user: {
            about: { rich: $about }
            name: $name
            websiteUrl: $websiteUrl
+           itchUsername: $itchUsername
+           twitterUsername: $twitterUsername
          }
        ) {
          userId

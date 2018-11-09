@@ -15,6 +15,7 @@ const STYLES_CONTAINER = css`
   background ${Constants.colors.background};
   color: ${Constants.colors.white};
   border-top: 16px solid ${Constants.colors.foreground};
+  margin-bottom: 16px;
 `;
 
 const STYLES_SECTION = css`
@@ -39,6 +40,12 @@ const STYLES_SECTION_CONTENT = css`
   display: flex;
 `;
 
+const STYLES_FIELDS = css`
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 1000px;
+`;
+
 const STYLES_COLUMN = css`
   display: flex;
   flex-direction: column;
@@ -46,6 +53,11 @@ const STYLES_COLUMN = css`
 
 const STYLES_FILE_INPUT = css`
   display: inline-flex;
+`;
+
+const STYLES_GENERIC_INPUT = css`
+  margin-bottom: 16px;
+  margin-right: 16px;
 `;
 
 export default class CoreEditProfile extends React.Component {
@@ -206,7 +218,7 @@ export default class CoreEditProfile extends React.Component {
   _renderGenericField = (name, label, placeholder) => {
     const value = this.state.user[name];
     return (
-      <div className={STYLES_SECTION_CONTENT}>
+      <div className={STYLES_GENERIC_INPUT}>
         <UIInputSecondary
           name={name}
           value={value}
@@ -214,8 +226,8 @@ export default class CoreEditProfile extends React.Component {
           onChange={this._onFieldChange}
           onFocus={this._onFieldFocus}
           placeholder={placeholder}
-          style={{ width: 480, marginBottom: 16 }}
-          />
+          style={{ width: 480 }}
+        />
       </div>
     )
   }
@@ -231,7 +243,7 @@ export default class CoreEditProfile extends React.Component {
           onFocus={this._onFieldFocus}
           placeholder="Write something about yourself..."
           style={{ width: 480, marginBottom: 16 }}
-          />
+        />
       </div>
     )
   };
@@ -241,21 +253,25 @@ export default class CoreEditProfile extends React.Component {
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_SECTION}>
-          <div className={STYLES_HEADING}>Avatar</div>
-          {this._renderAvatarControl()}
-        </div>
-        <div className={STYLES_SECTION}>
-          <div className={STYLES_HEADING}>Profile Info</div>
-          {this._renderGenericField('name', 'Name', 'Name shown below your username (optional)')}
-          {this._renderGenericField('websiteUrl', 'Website', 'URL shown on your profile (optional)')}
-          {this._renderAboutField()}
-        </div>
-        <div className={STYLES_SECTION}>
           <UISubmitButton
             disabled={!isSubmitEnabled}
             onClick={this._onSubmitEditProfileAsync}>
             Save Changes
           </UISubmitButton>
+        </div>
+        <div className={STYLES_SECTION}>
+          <div className={STYLES_HEADING}>Avatar</div>
+          {this._renderAvatarControl()}
+        </div>
+        <div className={STYLES_SECTION}>
+          <div className={STYLES_HEADING}>Profile Info</div>
+          <div className={STYLES_FIELDS}>
+            {this._renderGenericField('name', 'Name', 'Name shown below your username (optional)')}
+            {this._renderGenericField('websiteUrl', 'Website', 'URL shown on your profile (optional)')}
+            {this._renderGenericField('itchUsername', 'Itch', 'Itch username (optional)')}
+            {this._renderGenericField('twitterUsername', 'Twitter', 'Twitter handle (optional)')}
+          </div>
+          {this._renderAboutField()}
         </div>
       </div>
     );

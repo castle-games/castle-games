@@ -61,9 +61,14 @@ const STYLES_LINKS_ROW = css`
 `;
 
 const STYLES_LINK_ITEM = css`
+  color: ${Constants.colors.white60};
   font-size: 14px;
-  margin-right: 16px;
+  margin-right: 24px;
   cursor: pointer;
+`;
+
+const STYLES_LINK = css`
+  color: ${Constants.colors.white};
 
   :hover {
     color: ${Constants.colors.yellow};
@@ -94,16 +99,47 @@ export default class UICardProfileHeader extends React.Component {
   }
 
   _renderLinks = creator => {
-    const { websiteUrl } = creator;
+    let linkElements = [];
+    const { websiteUrl, itchUsername, twitterUsername } = creator;
+
     if (websiteUrl) {
       const { urlToDisplay, urlToOpen } = Urls.canonizeUserProvidedUrl(websiteUrl);
+      linkElements.push((
+        <div
+          key="websiteUrl"
+          className={STYLES_LINK_ITEM}
+          onClick={() => this._handleClickCreatorLink(urlToOpen)}>
+          <span className={STYLES_LINK}>{urlToDisplay}</span>
+        </div>
+      ));
+    }
+
+    if (itchUsername) {
+      linkElements.push((
+        <div
+          key="itchUsername"
+          className={STYLES_LINK_ITEM}
+          onClick={() => this._handleClickCreatorLink(`https://${itchUsername}.itch.io/`)}>
+          <span className={STYLES_LINK}>{itchUsername}</span> on itch
+        </div>
+      ));
+    }
+
+    if (twitterUsername) {
+      linkElements.push((
+        <div
+          key="twitterUsername"
+          className={STYLES_LINK_ITEM}
+          onClick={() => this._handleClickCreatorLink(`https://twitter.com/${twitterUsername}/`)}>
+          <span className={STYLES_LINK}>{twitterUsername}</span> on twitter
+        </div>
+      ));
+    }
+
+    if (linkElements.length) {
       return (
         <div className={STYLES_LINKS_ROW}>
-          <div
-            className={STYLES_LINK_ITEM}
-            onClick={() => this._handleClickCreatorLink(urlToOpen)}>
-            {urlToDisplay}
-          </div>
+          {linkElements}
         </div>
       );
     }
