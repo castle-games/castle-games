@@ -492,12 +492,11 @@ export async function setUserPhotoAsync({ userId, fileId }) {
   return result.data.updateUser;
 }
 
-export async function updateUserAsync({ userId, about, name, websiteUrl }) {
+export async function updateUserAsync({ userId, user }) {
   const variables = {
     userId,
-    name,
-    websiteUrl,
-    about: JSON.stringify(about),
+    ...user,
+    about: JSON.stringify(user.about),
   };
   const result = await API.graphqlAsync({
     query: `

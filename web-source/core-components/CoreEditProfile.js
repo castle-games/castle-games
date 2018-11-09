@@ -53,10 +53,10 @@ export default class CoreEditProfile extends React.Component {
     isExistingAvatarRemoved: false, // TODO: flag this once avatar removal is supported.
     isAvatarUploading: false,
     uploadedAvatarFile: null,
-    about: Plain.deserialize(''),
-    name: null,
-    websiteUrl: null,
     isAnyFieldEdited: false,
+    user: {
+      about: Plain.deserialize(''),
+    },
   };
 
   componentDidMount() {
@@ -89,9 +89,10 @@ export default class CoreEditProfile extends React.Component {
       isExistingAvatarRemoved: false,
       isAvatarUploading: false,
       uploadedAvatarFile: null,
-      about: richAboutObject,
-      name: user.name,
-      websiteUrl: user.websiteUrl,
+      user: {
+        ...user,
+        about: richAboutObject,
+      },
       isAnyFieldEdited: false,
     });
   };
@@ -121,11 +122,11 @@ export default class CoreEditProfile extends React.Component {
   };
 
   _onAboutChangeAsync = async ({ value }) => {
-    this.setState({ about: value });
+    this.setState({ user: { ...this.state.user, about: value } });
   };
 
   _onFieldChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
+    this.setState({ user: { ...this.state.user, [e.target.name]: e.target.value } });
   };
 
   _onFieldFocus = (_) => {
@@ -146,9 +147,7 @@ export default class CoreEditProfile extends React.Component {
     if (this.state.isAnyFieldEdited) {
       const result = await Actions.updateUserAsync({
         userId: this.props.user.userId,
-        about: this.state.about,
-        name: this.state.name,
-        websiteUrl: this.state.websiteUrl,
+        user: this.state.user,
       });
       if (!result) {
         didSucceed = false;
@@ -204,42 +203,25 @@ export default class CoreEditProfile extends React.Component {
     )
   };
 
-  _renderNameField = () => {
-    const value = this.state.name;
+  _renderGenericField = (name, label, placeholder) => {
+    const value = this.state.user[name];
     return (
       <div className={STYLES_SECTION_CONTENT}>
         <UIInputSecondary
-          name="name"
+          name={name}
           value={value}
-          label="Name"
+          label={label}
           onChange={this._onFieldChange}
           onFocus={this._onFieldFocus}
-          placeholder="Name shown below your username (optional)"
+          placeholder={placeholder}
           style={{ width: 480, marginBottom: 16 }}
           />
       </div>
     )
-  };
-
-  _renderWebsiteField = () => {
-    const value = this.state.websiteUrl;
-    return (
-      <div className={STYLES_SECTION_CONTENT}>
-        <UIInputSecondary
-          name="websiteUrl"
-          value={value}
-          label="Website"
-          onChange={this._onFieldChange}
-          onFocus={this._onFieldFocus}
-          placeholder="URL shown on your profile (optional)"
-          style={{ width: 480, marginBottom: 16 }}
-          />
-      </div>
-    )
-  };
+  }
 
   _renderAboutField = () => {
-    const value = this.state.about;
+    const value = this.state.user.about;
     return (
       <div className={STYLES_SECTION_CONTENT}>
         <UITextArea
@@ -264,8 +246,8 @@ export default class CoreEditProfile extends React.Component {
         </div>
         <div className={STYLES_SECTION}>
           <div className={STYLES_HEADING}>Profile Info</div>
-          {this._renderNameField()}
-          {this._renderWebsiteField()}
+          {this._renderGenericField('name', 'Name', 'Name shown below your username (optional)')}
+          {this._renderGenericField('websiteUrl', 'Website', 'URL shown on your profile (optional)')}
           {this._renderAboutField()}
         </div>
         <div className={STYLES_SECTION}>

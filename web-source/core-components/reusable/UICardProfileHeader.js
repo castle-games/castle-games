@@ -17,7 +17,7 @@ const STYLES_BODY = css`
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  padding-bottom: 48px;
+  padding-bottom: 16px;
 `;
 
 const STYLES_BODY_LEFT = css`
