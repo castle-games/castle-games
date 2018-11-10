@@ -9,6 +9,7 @@ import UIInput from '~/core-components/reusable/UIInput';
 import UIButton from '~/core-components/reusable/UIButton';
 import UIHeadingGroup from '~/core-components/reusable/UIHeadingGroup';
 import UILink from '~/core-components/reusable/UILink';
+import UIUserPreview from '~/core-components/reusable/UIUserPreview';
 
 const STYLES_CONTAINER = css`
   @keyframes authentication-animation {
@@ -243,10 +244,7 @@ export default class CoreLoginSignup extends React.Component {
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_CONTENTS}>
           <UIHeadingGroup title="Successfully signed in">
-            {this.state.localViewer.name}
-            <br />
-            <br />
-            {'@' + this.state.localViewer.username}
+            <UIUserPreview user={this.state.localViewer} />
           </UIHeadingGroup>
         </div>
       </div>
@@ -270,16 +268,13 @@ export default class CoreLoginSignup extends React.Component {
       maybeErrorNode = <h5 className={STYLES_ERROR_MESSAGE}>{this.state.loginError}</h5>;
     }
 
-    // TODO(jim): Refactor the Suggested User into a reusable UI component.
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_CONTENTS}>
           <form onSubmit={this._handleLoginAsync}>
             <UIHeadingGroup title="Sign in">
-              <h3>{this.state.suggestedUser.name}</h3>
-              <h5>{'@' + this.state.suggestedUser.username}</h5>
+              <UIUserPreview user={this.state.suggestedUser} />
             </UIHeadingGroup>
-
             {maybeErrorNode}
 
             <UIInput

@@ -84,7 +84,7 @@ export default class CoreProfileAddPlaylist extends React.Component {
             value={this.state.playlist.description}
             onChange={this._handleChangePlaylistDescription}
             placeholder="Type a description..."
-            style={{ marginBottom: 16 }}
+            style={{ marginBottom: 16, width: 480 }}
           />
           <UISubmitButton
             disabled={!isSubmitEnabled}

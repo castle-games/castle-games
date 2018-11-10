@@ -95,7 +95,7 @@ export default class CoreProfileAddMedia extends React.Component {
             value={this.state.media.description}
             onChange={this._handleChangeMediaDescription}
             placeholder="Type a description..."
-            style={{ marginBottom: 16 }}
+            style={{ marginBottom: 16, width: 480 }}
           />
           <UISubmitButton
             disabled={!isSubmitEnabled}
