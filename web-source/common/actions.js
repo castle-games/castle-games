@@ -45,6 +45,17 @@ const FULL_USER_FIELDS = `
     height
     width
   }
+  mostRecentUserplay {
+    userplayId
+    startTime
+    imputedEndTime
+    active
+    mediaUrl
+    media {
+      mediaId
+      name
+    }
+  }
 `;
 
 const MEDIA_ITEMS = `

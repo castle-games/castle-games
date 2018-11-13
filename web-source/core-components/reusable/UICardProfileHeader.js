@@ -41,7 +41,7 @@ const STYLES_TITLE = css`
 `;
 
 const STYLES_META = css`
-  margin: 4px 0 16px 0;
+  margin: 4px 0 4px 0;
   font-size: 10px;
 `;
 
@@ -76,12 +76,25 @@ const STYLES_LINK = css`
 `;
 
 const STYLES_CREATOR_IDENTITY = css`
-
+  margin-bottom: 8px;
 `;
 
 export default class UICardProfileHeader extends React.Component {
   _handleClickCreatorLink = url => {
     CEF.openExternalURL(url);
+  };
+
+  _renderRecentPlay = creator => {
+    if (creator.mostRecentUserplay) {
+      const { media, mediaUrl, active, imputedEndTime } = creator.mostRecentUserplay;
+      const mediaName = (media) ? media.name : 'an untitled game';
+      if (active) {
+        return `Playing ${mediaName}`;
+      } else {
+        return `Last played: ${mediaName} on ${Strings.toDate(imputedEndTime)}`;
+      }
+    }
+    return null;
   };
 
   _renderTagline = creator => {
@@ -92,9 +105,12 @@ export default class UICardProfileHeader extends React.Component {
     } else {
       // not real, so don't attribute the action of joining to them.
     }
+    const recentPlay = this._renderRecentPlay(creator);
+
     let components = [];
     if (name) components.push(name);
     if (origin) components.push(origin);
+    if (recentPlay) components.push(recentPlay);
     return components.join(' · ');
   }
 

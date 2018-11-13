@@ -14,6 +14,7 @@ class UserPlay {
     }
     if (this._currentUserplayPingInterval) {
       clearInterval(this._currentUserplayPingInterval);
+      this._currentUserplayPingInterval = null;
     }
   };
 
