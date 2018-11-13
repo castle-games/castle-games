@@ -8,6 +8,7 @@ import * as Network from '~/common/network';
 import * as CEF from '~/common/cef';
 import * as Urls from '~/common/urls';
 import History from '~/common/history';
+import UserPlay from '~/common/userplay';
 
 import { css } from 'react-emotion';
 import { isKeyHotkey } from 'is-hotkey';
@@ -88,16 +89,22 @@ export default class CoreApp extends React.Component {
     }
 
     this._isLockedFromCEFUpdates = true;
+
+    UserPlay.stopAsync();
     CEF.closeWindowFrame();
   };
 
-  openCEF = url => {
+  openCEF = (url, userPlayData) => {
     if (!this._isLockedFromCEFUpdates) {
       console.log('openCEF: is not closed');
       return;
     }
 
     this._isLockedFromCEFUpdates = false;
+
+    // Don't `await` this since we don't want to make it take longer to get the media
+    UserPlay.startAsync(userPlayData);
+
     CEF.openWindowFrame(url);
   };
 
@@ -268,17 +275,15 @@ export default class CoreApp extends React.Component {
 
   _handleURLChange = e => this.setState({ [e.target.name]: e.target.value });
 
-  loadURL = mediaUrl => {
-    // Don't `await` this since we don't want to make it
-    // take longer to get the media
-    Actions.startTrackingUserplayAsync({ mediaUrl });
+  loadURL = mediaUrl => this._loadMedia({ mediaUrl });
 
-    if (Urls.isLua(mediaUrl)) {
-      this.goToLUA(mediaUrl);
+  _loadMedia = media => {
+    if (Urls.isLua(media.mediaUrl)) {
+      this.goToLUA(media.mediaUrl);
       return;
     }
 
-    this.goToHTML5Media({ mediaUrl });
+    this.goToHTML5Media({ ...media });
   };
 
   _handleURLSubmit = () => {
@@ -322,17 +327,16 @@ export default class CoreApp extends React.Component {
       return;
     }
 
-    amplitude.getInstance().logEvent('OPEN_LUA', {
-      mediaUrl,
-    });
-
     this.closeCEF();
 
     const media = await Actions.getMediaByURL({ mediaUrl });
-
-    this.openCEF(mediaUrl);
-
+    const userPlayData = { mediaUrl, ...media };
+    this.openCEF(mediaUrl, userPlayData);
     this._history.addItem(media ? media : { mediaUrl });
+
+    amplitude.getInstance().logEvent('OPEN_LUA', {
+      mediaUrl,
+    });
 
     const isLocal = Urls.isLocalUrl(mediaUrl);
     const sidebarMode = isLocal ? 'development' : 'current-context';
@@ -556,15 +560,6 @@ export default class CoreApp extends React.Component {
       return;
     }
 
-    // Don't `await` this since we don't want to make it
-    // take longer to get the media
-    Actions.startTrackingUserplayAsync({ mediaUrl: media.mediaUrl, mediaId: media.mediaId });
-
-    if (Urls.isLua(media.mediaUrl)) {
-      this.goToLUA(media.mediaUrl);
-      return;
-    }
-
     if (isHistory) {
       this.setState({
         playlist: null,
@@ -573,7 +568,7 @@ export default class CoreApp extends React.Component {
       });
     }
 
-    this.goToHTML5Media({ ...media });
+    this._loadMedia(media);
   };
 
   _handleOrientationChange = () => {
@@ -601,7 +596,11 @@ export default class CoreApp extends React.Component {
     // TODO(jim): Won't be necessary when we enable hide.
     if (!Strings.isEmpty(this.state.mediaUrl)) {
       if (Urls.isLua(this.state.mediaUrl)) {
-        this.openCEF(this.state.mediaUrl);
+        const userPlayData = {
+          mediaUrl: this.state.mediaUrl,
+          mediaId: this.state.media ? this.state.media.mediaId : null,
+        };
+        this.openCEF(this.state.mediaUrl, userPlayData);
       }
     }
 

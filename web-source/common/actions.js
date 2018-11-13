@@ -740,27 +740,3 @@ export async function recordUserplayPingAsync(userplayId) {
     }
   );
 }
-
-export async function startTrackingUserplayAsync(data) {
-  if (API._currentUserplayId) {
-    await recordUserplayEndAsync(API._currentUserplayId);
-    API._currentUserplayId = null;
-  }
-  let { mediaId, mediaUrl } = data;
-  let result = await recordUserplayStartAsync(mediaUrl, mediaId);
-  API._currentUserplayId =
-    result.data && result.data.recordUserplayStart && result.data.recordUserplayStart.userplayId;
-  if (API._currentUserplayPingInterval) {
-    clearInterval(API._currentUserplayPingInterval);
-  }
-  API._currentUserplayPingInterval = setInterval(
-    () => {
-      if (API._currentUserplayId) {
-        recordUserplayPingAsync(API._currentUserplayId);
-      }
-    },
-    // ping every 25 seconds
-    25 * 1000
-    // 3 * 1000
-  );
-}
