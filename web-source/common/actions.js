@@ -502,7 +502,7 @@ export async function updateUserAsync({ userId, user }) {
   };
   const result = await API.graphqlAsync({
     query: `
-      mutation ($userId: ID!, $about: String!, $name: String!, $websiteUrl: String!, $itchUsername: String!, $twitterUsername: String!) {
+      mutation ($userId: ID!, $about: String, $name: String, $websiteUrl: String, $itchUsername: String, $twitterUsername: String) {
        updateUser(
          userId: $userId
          user: {
