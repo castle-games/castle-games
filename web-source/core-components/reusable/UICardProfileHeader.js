@@ -8,6 +8,7 @@ import { css } from 'react-emotion';
 import ContentEditor from '~/editor/ContentEditor';
 
 import UIAvatar from '~/core-components/reusable/UIAvatar';
+import UIUserStatusIndicator from '~/core-components/reusable/UIUserStatusIndicator';
 
 const STYLES_CONTAINER = css`
   padding: 16px 16px 0 16px;
@@ -84,19 +85,6 @@ export default class UICardProfileHeader extends React.Component {
     CEF.openExternalURL(url);
   };
 
-  _renderRecentPlay = creator => {
-    if (creator.mostRecentUserplay) {
-      const { media, mediaUrl, active, imputedEndTime } = creator.mostRecentUserplay;
-      const mediaName = (media) ? media.name : 'an untitled game';
-      if (active) {
-        return `Playing ${mediaName}`;
-      } else {
-        return `Last played: ${mediaName} on ${Strings.toDate(imputedEndTime)}`;
-      }
-    }
-    return null;
-  };
-
   _renderTagline = creator => {
     let name = creator.name;
     let origin;
@@ -105,12 +93,10 @@ export default class UICardProfileHeader extends React.Component {
     } else {
       // not real, so don't attribute the action of joining to them.
     }
-    const recentPlay = this._renderRecentPlay(creator);
 
     let components = [];
     if (name) components.push(name);
     if (origin) components.push(origin);
-    if (recentPlay) components.push(recentPlay);
     return components.join(' · ');
   }
 
@@ -201,6 +187,10 @@ export default class UICardProfileHeader extends React.Component {
                 </div>
               </div>
             </div>
+            <UIUserStatusIndicator
+              user={this.props.creator}
+              hideIfNotRecent
+            />
             {linksElement}
             {aboutElement}
           </div>
