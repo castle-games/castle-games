@@ -226,8 +226,7 @@ export default class CoreApp extends React.Component {
 
     const {
       featuredMedia,
-      allMedia,
-      allPlaylists,
+      allContent,
       viewer,
       isOffline,
     } = await Network.getProductData();
@@ -235,10 +234,11 @@ export default class CoreApp extends React.Component {
     const state = {
       featuredMedia,
       viewer,
-      allMedia,
-      allPlaylists,
-      allMediaFiltered: [...allMedia],
-      allPlaylistsFiltered: [...allPlaylists],
+      allContent,
+      searchResults: {
+        media: [ ...this.state.allContent.media ],
+        playlists: [ ...this.state.allContent.playlists ],
+      },
       isOffline,
     };
 
@@ -413,7 +413,7 @@ export default class CoreApp extends React.Component {
       return true;
     }
 
-    if (this._stringIncludesSearchQuery(m.mediaUrl, query)) {
+    if (Strings.isEmpty(m.name) && this._stringIncludesSearchQuery(m.mediaUrl, query)) {
       return true;
     }
 
@@ -467,8 +467,10 @@ export default class CoreApp extends React.Component {
   _handleSearchReset = () => {
     this.setState({
       searchQuery: '',
-      allMediaFiltered: [...this.state.allMedia],
-      allPlaylistsFiltered: [...this.state.allPlaylists],
+      searchResults: {
+        media: [ ...this.state.allContent.media ],
+        playlists: [ ...this.state.allContent.playlists ],
+      },
       pageMode: 'browse',
     });
   };
@@ -482,14 +484,18 @@ export default class CoreApp extends React.Component {
       () => {
         if (Strings.isEmpty(this.state.searchQuery)) {
           return this.setState({
-            allMediaFiltered: [...this.state.allMedia],
-            allPlaylistsFiltered: [...this.state.allPlaylists],
+            searchResults: {
+              media: [ ...this.state.allContent.media ],
+              playlists: [ ...this.state.allContent.playlists ],
+            },
           });
         }
 
         this.setState({
-          allMediaFiltered: this.state.allMedia.filter(this._filterMediaItemWithSearchState),
-          allPlaylistsFiltered: this.state.allPlaylists.filter(this._filterPlaylistWithSearchState),
+          searchResults: {
+            media: this.state.allContent.media.filter(this._filterMediaItemWithSearchState),
+            playlists: this.state.allContent.playlists.filter(this._filterPlaylistWithSearchState),
+          },
         });
       }
     );
@@ -518,10 +524,13 @@ export default class CoreApp extends React.Component {
 
     this.setState({
       pageMode: 'playlist',
-      allMediaFiltered:
-        serverPlaylist.mediaItems && serverPlaylist.mediaItems.length
+      searchResults: {
+        ...this.state.searchResults,
+        media:
+          serverPlaylist.mediaItems && serverPlaylist.mediaItems.length
           ? [...serverPlaylist.mediaItems]
-          : [...this.state.allMediaFiltered],
+          : [...this.state.searchResults.media],
+      },
       creator: null,
       playlist: serverPlaylist,
       searchQuery: Strings.isEmpty(playlist.name) ? '' : playlist.name.slice(0),
@@ -564,7 +573,9 @@ export default class CoreApp extends React.Component {
       this.setState({
         playlist: null,
         searchQuery: '',
-        allMediaFiltered: [...this.state.allMedia],
+        searchResults: {
+          ...this.state.allContent,
+        },
       });
     }
 
@@ -752,9 +763,7 @@ export default class CoreApp extends React.Component {
 
   renderRootSearchInput = () => (
     <CoreBrowseSearchInput
-      allMediaFiltered={this.state.allMediaFiltered}
       searchQuery={this.state.searchQuery}
-      onLoadURL={this.loadURL}
       onSearchReset={this._handleSearchReset}
       onChange={this._handleSearchChange}
       onSubmit={this._handleSearchSubmit}
@@ -838,14 +847,14 @@ export default class CoreApp extends React.Component {
           leftSidebarNode={maybeLeftSidebarNode}>
           {maybeFrameNode}
           <CoreBrowseResults
-            allMedia={state.allMedia}
-            mediaItems={state.allMediaFiltered}
-            playlists={state.allPlaylistsFiltered}
+            results={state.searchResults}
             featuredMedia={state.featuredMedia}
             isPristine={Strings.isEmpty(state.searchQuery)}
+            searchQuery={state.searchQuery}
             onUserSelect={this._handleUserSelect}
             onMediaSelect={this._handleMediaSelect}
             onPlaylistSelect={this._handlePlaylistSelect}
+            onLoadURL={this.loadURL}
           />
         </CoreLayout>
       );
@@ -944,9 +953,7 @@ export default class CoreApp extends React.Component {
             }}
             media={state.media}
             viewer={state.viewer}
-            allMedia={state.allMedia}
             storage={this.props.storage}
-            allMediaFiltered={state.allMediaFiltered}
             searchQuery={state.searchQuery}
             onNavigateToBrowserPage={this._handleNavigateToBrowserPage}
             onRefreshViewer={this.refreshViewer}

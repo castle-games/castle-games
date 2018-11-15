@@ -6,7 +6,6 @@ import * as SVG from '~/core-components/primitives/svg';
 import { css } from 'react-emotion';
 
 import ControlledInput from '~/core-components/primitives/ControlledInput';
-import UIButtonSecondary from '~/core-components/reusable/UIButtonSecondary';
 
 const STYLES_CONTAINER = css`
   @keyframes url-animation {
@@ -84,22 +83,8 @@ const STYLES_INPUT_READONLY = css`
   cursor: default;
 `;
 
-const STYLES_TOAST = css`
-  position: absolute;
-  top: 48px;
-  left: 0px;
-  padding: 16px;
-  border-radius: 4px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 1);
-  z-index: 2;
-  font-size: 12px;
-  color: ${Constants.colors.black};
-  background: ${Constants.colors.yellow};
-`;
-
 export default class CoreBrowseSearchInput extends React.Component {
   static defaultProps = {
-    allMediaFiltered: [],
     searchQuery: '',
   };
 
@@ -108,18 +93,6 @@ export default class CoreBrowseSearchInput extends React.Component {
   _handleFocusInput = () => this._input.focus();
 
   render() {
-    const isQualified =
-      !Strings.isEmpty(this.props.searchQuery) &&
-      !this.props.allMediaFiltered.length &&
-      this.props.searchQuery.length > 8;
-    const isRenderingToast =
-      isQualified &&
-      (this.props.searchQuery.endsWith('.lua') ||
-        this.props.searchQuery.startsWith('castle') ||
-        this.props.searchQuery.startsWith('http') ||
-        this.props.searchQuery.startsWith('0.0.0.0') ||
-        this.props.searchQuery.startsWith('localhost'));
-
     let queryElement;
     if (this.props.readOnly) {
       queryElement = (
@@ -151,15 +124,6 @@ export default class CoreBrowseSearchInput extends React.Component {
         </div>
         <div className={STYLES_CONTAINER_MIDDLE}>
           {queryElement}
-          {isRenderingToast ? (
-            <div className={STYLES_TOAST}>
-              We could not find anything that matches <b>"{this.props.searchQuery}"</b> but it looks
-              like a game URL <br /> <br />
-              <UIButtonSecondary onClick={() => this.props.onLoadURL(this.props.searchQuery)}>
-                Open <b>{this.props.searchQuery}</b>
-              </UIButtonSecondary>
-            </div>
-          ) : null}
         </div>
         {!Strings.isEmpty(this.props.searchQuery) ? (
           <div className={STYLES_CONTAINER_RIGHT} onClick={this.props.onSearchReset}>

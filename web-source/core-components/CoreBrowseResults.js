@@ -3,6 +3,7 @@ import * as Constants from '~/common/constants';
 
 import { css } from 'react-emotion';
 
+import UIButtonSecondary from '~/core-components/reusable/UIButtonSecondary';
 import UIListMedia from '~/core-components/reusable/UIListMedia';
 import UIListPlaylists from '~/core-components/reusable/UIListPlaylists';
 import UIEmptyState from '~/core-components/reusable/UIEmptyState';
@@ -42,8 +43,42 @@ const STYLES_NO_RESULTS_FEATURED_MEDIA = css`
 
 export default class CoreBrowseResults extends React.Component {
   static defaultProps = {
-    mediaItems: [],
-    playlists: [],
+    searchQuery: '',
+    results: {
+      media: [],
+      playlists: [],
+    },
+  };
+
+  _doesQueryLookLikeUrl = (query) => {
+    return (
+      query.endsWith('.lua') ||
+      query.startsWith('castle:') ||
+      query.startsWith('http')
+    );
+  };
+
+  _renderEmptyMessage = () => {
+    if (this.props.searchQuery && this._doesQueryLookLikeUrl(this.props.searchQuery)) {
+      return (
+        <div>
+          <div style={{ marginBottom: 12 }}>
+            We didn't find find anything matching <b>"{this.props.searchQuery}"</b>, but it looks
+            like a game URL.
+          </div>
+          <UIButtonSecondary onClick={() => this.props.onLoadURL(this.props.searchQuery)}>
+            Open <b>{this.props.searchQuery}</b>
+          </UIButtonSecondary>
+        </div>
+      );
+    } else {
+      return (
+        <span>
+          We didn't find any games or playlists matching your search. If you're not sure what
+          to play, try one of the following games...
+        </span>
+      );
+    }
   };
 
   render() {
@@ -55,26 +90,25 @@ export default class CoreBrowseResults extends React.Component {
             onUserSelect={this.props.onUserSelect}
             onPlaylistSelect={this.props.onPlaylistSelect}
             onMediaSelect={this.props.onMediaSelect}
-            allMedia={this.props.allMedia}
             featuredMedia={this.props.featuredMedia}
           />
         </div>
       );
     }
 
-    if (this.props.playlists.length || this.props.mediaItems.length) {
+    if (this.props.results.media.length || this.props.results.playlists.length) {
       return (
         <div className={STYLES_CONTAINER}>
-          {this.props.playlists.length ? (
+          {this.props.results.playlists.length ? (
             <UIListPlaylists
-              playlists={this.props.playlists}
+              playlists={this.props.results.playlists}
               onUserSelect={this.props.onUserSelect}
               onPlaylistSelect={this.props.onPlaylistSelect}
             />
           ) : null}
-          {this.props.mediaItems.length ? (
+          {this.props.results.media.length ? (
             <UIListMedia
-              mediaItems={this.props.mediaItems}
+              mediaItems={this.props.results.media}
               onUserSelect={this.props.onUserSelect}
               onMediaSelect={this.props.onMediaSelect}
             />
@@ -88,8 +122,7 @@ export default class CoreBrowseResults extends React.Component {
         <UIEmptyState
           title="No media found"
           style={{ borderTop: `1px solid ${Constants.colors.border}` }}>
-          We didn't find any games or playlists matching your search. If you're not sure what to
-          play, try one of the following games...
+          {this._renderEmptyMessage()}
         </UIEmptyState>
         <div className={STYLES_NO_RESULTS_FEATURED_MEDIA}>
           <UIGridMedia

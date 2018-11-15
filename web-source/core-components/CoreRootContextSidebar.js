@@ -104,11 +104,6 @@ const STYLES_ACTION_ITEM = css`
 export default class CoreRootContextSidebar extends React.Component {
   _reference;
 
-  static defaultProps = {
-    allMedia: [],
-    allMediaFiltered: [],
-  };
-
   getRef = () => {
     return this._reference;
   };

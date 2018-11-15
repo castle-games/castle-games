@@ -63,10 +63,14 @@ const INITIAL_STATE_OFFLINE = {
   viewer: null,
   local: null,
   searchQuery: '',
-  allMedia: [],
-  allPlaylists: [],
-  allMediaFiltered: [],
-  allPlaylistsFiltered: [],
+  allContent: {
+    media: [],
+    playlists: [],
+  },
+  searchResults: {
+    media: [],
+    playlists: [],
+  },
   featuredPlaylists: [],
   featuredMedia: [],
   sidebarMode: 'current-context', // current-context | media-info | development
@@ -81,10 +85,9 @@ const INITIAL_STATE_OFFLINE = {
 
 const run = async () => {
   const {
+    allContent,
     featuredMedia,
     featuredPlaylists,
-    allMedia,
-    allPlaylists,
     viewer,
     isOffline,
   } = await Network.getProductData();
@@ -94,10 +97,10 @@ const run = async () => {
   document.getElementById('loader').classList.add('loader--finished');
 
   const state = Object.assign({}, INITIAL_STATE_OFFLINE, {
-    allMedia,
-    allPlaylists,
-    allMediaFiltered: [...allMedia],
-    allPlaylistsFiltered: [...allPlaylists],
+    allContent,
+    searchResults: {
+      ...allContent,
+    },
     featuredPlaylists,
     featuredMedia,
     isOffline,

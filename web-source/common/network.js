@@ -4,8 +4,7 @@ export const getProductData = async () => {
   let data;
   let playlist = [];
   let featuredMedia = [];
-  let allMedia = [];
-  let allPlaylists = [];
+  let allContent = {};
   let viewer;
   let isOffline = true;
 
@@ -18,8 +17,8 @@ export const getProductData = async () => {
 
   if (data) {
     isOffline = false;
-    allMedia = data.allMedia ? data.allMedia : [];
-    allPlaylists = data.allPlaylists ? data.allPlaylists : [];
+    allContent.media = data.allMedia ? data.allMedia : [];
+    allContent.playlists = data.allPlaylists ? data.allPlaylists : [];
     viewer = data.me;
 
     if (playlist) {
@@ -27,5 +26,5 @@ export const getProductData = async () => {
     }
   }
 
-  return { featuredMedia, allMedia, allPlaylists, viewer, isOffline };
+  return { featuredMedia, allContent, viewer, isOffline };
 };
