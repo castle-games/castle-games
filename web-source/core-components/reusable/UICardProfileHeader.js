@@ -57,6 +57,7 @@ const STYLES_ABOUT = css`
 
 const STYLES_LINKS_ROW = css`
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row;
   margin-bottom: 16px;
 `;
@@ -103,6 +104,23 @@ export default class UICardProfileHeader extends React.Component {
   _renderLinks = creator => {
     let linkElements = [];
     const { websiteUrl, itchUsername, twitterUsername } = creator;
+
+    let statusElement = (
+      <UIUserStatusIndicator
+        user={creator}
+        onMediaSelect={this.props.onMediaSelect}
+        hideIfNotRecent
+      />
+    );
+    if (statusElement) {
+      linkElements.push(
+        (
+        <div key="status" className={STYLES_LINK_ITEM}>
+          {statusElement}
+        </div>
+        )
+      );
+    }
 
     if (websiteUrl) {
       const { urlToDisplay, urlToOpen } = Urls.canonizeUserProvidedUrl(websiteUrl);
@@ -187,10 +205,6 @@ export default class UICardProfileHeader extends React.Component {
                 </div>
               </div>
             </div>
-            <UIUserStatusIndicator
-              user={this.props.creator}
-              hideIfNotRecent
-            />
             {linksElement}
             {aboutElement}
           </div>

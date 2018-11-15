@@ -54,6 +54,7 @@ const FULL_USER_FIELDS = `
     media {
       mediaId
       name
+      mediaUrl
     }
   }
 `;

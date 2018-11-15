@@ -253,6 +253,7 @@ export default class CoreProfile extends React.Component {
         <UICardProfileHeader
           creator={this.props.creator}
           isOwnProfile={isOwnProfile}
+          onMediaSelect={this.props.onMediaSelect}
         />
         <UIHorizontalNavigation
           items={this._getNavigationItems(isOwnProfile)}

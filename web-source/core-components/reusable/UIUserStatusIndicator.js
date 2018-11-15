@@ -5,7 +5,6 @@ import { css } from 'react-emotion';
 
 const STYLES_CONTAINER = css`
   display: flex;
-  padding: 12px 4px 16px 0;
 `;
 
 const STYLES_INDICATOR_CONTAINER = css`
@@ -16,8 +15,16 @@ const STYLES_INDICATOR_CONTAINER = css`
 `;
 
 const STYLES_STATUS = css`
-  font-size: 12px;
+  font-size: 14px;
   line-height: 16px;
+`;
+
+const STYLES_MEDIA_NAME = css`
+  color: ${Constants.colors.white};
+
+  :hover {
+    color: ${Constants.colors.yellow};
+  }
 `;
 
 export default class UIUserStatusIndicator extends React.Component {
@@ -46,16 +53,20 @@ export default class UIUserStatusIndicator extends React.Component {
     } catch (_) {}
     if (!secondsElapsed) {
       return '';
-    } else if (secondsElapsed < 60) {
+    } else if (secondsElapsed < 60 * 2) {
       return 'just now';
     } else if (secondsElapsed < 60 * 15) {
       return `${Math.floor(secondsElapsed / 60)} minutes ago`;
     } else if (secondsElapsed < 60 * 60) {
       return 'less than an hour ago';
+    } else if (secondsElapsed < 60 * 60 * 2) {
+      return 'an hour ago';
     } else if (secondsElapsed < 60 * 60 * 6) {
       return `${Math.floor((secondsElapsed / 60) / 60)} hours ago`;
     } else if (secondsElapsed < 60 * 60 * 24) {
       return `in the last day`;
+    } else if (secondsElapsed < 60 * 60 * 24 * 2) {
+      return `a day ago`;
     } else if (secondsElapsed < 60 * 60 * 24 * 7) {
       return `${Math.floor(((secondsElapsed / 60) / 60) / 24)} days ago`;
     }
@@ -80,18 +91,32 @@ export default class UIUserStatusIndicator extends React.Component {
     );
   }
 
-  _renderStatusText = () => {
+  _renderStatus = () => {
     const { user } = this.props;
     if (user.mostRecentUserplay) {
       const { media, mediaUrl, active, imputedEndTime } = user.mostRecentUserplay;
       const mediaName = (media) ? media.name : 'an untitled game';
+      if (mediaName.length > 24) {
+        mediaName = `${mediaName.substring(0, 21)}...`;
+      }
+      const mediaElement = (
+        <span
+          className={STYLES_MEDIA_NAME}
+          onClick={() => { this.props.onMediaSelect && this.props.onMediaSelect(media); }}>
+          {mediaName}
+        </span>
+      );
       if (active) {
-        return `Playing ${mediaName}`;
+        return (<div>Playing {mediaElement}</div>);
       } else if (this._isRecent(user.mostRecentUserplay)) {
-        return `Last played ${mediaName} ${this._recentDateToString(imputedEndTime)}`;
+        return (
+          <div>
+            Last played {mediaElement} {this._recentDateToString(imputedEndTime)}
+          </div>
+        );
       }
     }
-    return 'Offline';
+    return (<div>Offline</div>);
   };
   
   render() {
@@ -103,7 +128,7 @@ export default class UIUserStatusIndicator extends React.Component {
       <div className={STYLES_CONTAINER}>
         {this._renderIndicator()}
         <div className={STYLES_STATUS}>
-          {this._renderStatusText()}
+          {this._renderStatus()}
         </div>
       </div>
     );
