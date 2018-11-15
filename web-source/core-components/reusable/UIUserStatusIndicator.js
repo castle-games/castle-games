@@ -99,13 +99,18 @@ export default class UIUserStatusIndicator extends React.Component {
       if (mediaName.length > 24) {
         mediaName = `${mediaName.substring(0, 21)}...`;
       }
-      const mediaElement = (
-        <span
-          className={STYLES_MEDIA_NAME}
-          onClick={() => { this.props.onMediaSelect && this.props.onMediaSelect(media); }}>
-          {mediaName}
-        </span>
-      );
+      let mediaElement;
+      if (media) {
+          mediaElement = (
+            <span
+              className={STYLES_MEDIA_NAME}
+              onClick={() => { this.props.onMediaSelect && this.props.onMediaSelect(media); }}>
+              {mediaName}
+            </span>
+          );
+      } else {
+        mediaElement = (<span>{mediaName}</span>);
+      }
       if (active) {
         return (<div>Playing {mediaElement}</div>);
       } else if (this._isRecent(user.mostRecentUserplay)) {
