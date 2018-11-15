@@ -14,7 +14,7 @@
   appMenuItem.submenu = appMenu;
 
   NSMenuItem *hideItem = [[NSMenuItem alloc] initWithTitle:@"Hide Castle"
-                                                    action:@selector(orderBack:)
+                                                    action:@selector(hide:)
                                              keyEquivalent:@"h"];
   [appMenu addItem:hideItem];
   NSMenuItem *quitItem =
