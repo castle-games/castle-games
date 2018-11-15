@@ -16,10 +16,16 @@ const STYLES_CONTAINER = css`
   height: 100%;
 `;
 
-const STYLES_CONTENT = css`
-  padding: 48px 16px 16px 16px;
-  max-width: 480px;
+const STYLES_FOOTER = css`
   width: 100%;
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid ${Constants.colors.border};
+`;
+
+const STYLES_FOOTER_CONTENT = css`
+  margin: 16px 32px 16px 0;
+  cursor: pointer;
 `;
 
 const STYLES_TITLE = css`
@@ -71,7 +77,7 @@ const STYLES_OPTION = css`
 `;
 
 const STYLES_SECTION = css`
-  padding: 32px 16px 16px 16px;
+  padding: 16px 16px 32px 16px;
 `;
 
 const STYLES_MEDIA = css`
@@ -85,6 +91,10 @@ export default class CoreWelcomeScreen extends React.Component {
 
   _handleClickTutorial = () => {
     CEF.openExternalURL('https://medium.com/castle-archives/making-games-with-castle-e4d0e9e7a910');
+  };
+
+  _handleClickFooter = () => {
+    CEF.openExternalURL('http://www.playcastle.io');
   };
 
   _getFeaturedMedia = () => {
@@ -105,14 +115,8 @@ export default class CoreWelcomeScreen extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
-        <div className={STYLES_CONTENT}>
-          <img height="48px" src="static/castle-wordmark.png" />
-          <p className={STYLES_PARAGRAPH}>
-            Welcome to Castle. Click a game to get started, or use the top search bar to find games.
-          </p>
-        </div>
         <div className={STYLES_SECTION}>
-          <div className={STYLES_HEADING}>Featured Games</div>
+          <div className={STYLES_HEADING}>Play Games</div>
           <div className={STYLES_MEDIA}>
             <UIGridMedia
               mediaItems={featuredMedia}
@@ -122,7 +126,7 @@ export default class CoreWelcomeScreen extends React.Component {
           </div>
         </div>
         <div className={STYLES_SECTION}>
-          <div className={STYLES_HEADING}>Create with Castle</div>
+          <div className={STYLES_HEADING}>Make a Game</div>
           <p className={STYLES_PARAGRAPH}>
             Check out our tutorial to get started making your own game or interactive media with Castle.
           </p>
@@ -132,6 +136,12 @@ export default class CoreWelcomeScreen extends React.Component {
               icon={externalIcon}>
               Open Tutorial
             </UIButtonIconHorizontal>
+          </div>
+        </div>
+        <div className={STYLES_FOOTER}>
+          <div />
+          <div className={STYLES_FOOTER_CONTENT} onClick={this._handleClickFooter}>
+            <img height="24px" src="static/castle-wordmark.png" />
           </div>
         </div>
       </div>
