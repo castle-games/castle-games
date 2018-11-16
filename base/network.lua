@@ -176,8 +176,8 @@ function network.fetch(url, method, skipCache)
 
                 if method == 'GET' then
                     response, httpCode, headers, status = network.request(url)
-                    if httpCode ~= 200 then
-                        err = "error fetching '" .. url .. "': " .. status
+                    if response == nil or httpCode ~= 200 then
+                        err = "error fetching '" .. url .. "': " .. tostring(status or httpCode)
                     end
                 else
                     response, httpCode, headers, status = network.request {
