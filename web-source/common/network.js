@@ -19,6 +19,7 @@ export const getProductData = async () => {
     isOffline = false;
     allContent.media = data.allMedia ? data.allMedia : [];
     allContent.playlists = data.allPlaylists ? data.allPlaylists : [];
+    allContent.users = data.allUsers ? data.allUsers : [];
     viewer = data.me;
 
     if (playlist) {

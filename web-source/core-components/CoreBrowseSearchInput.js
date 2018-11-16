@@ -109,7 +109,7 @@ export default class CoreBrowseSearchInput extends React.Component {
           className={STYLES_INPUT}
           value={this.props.searchQuery}
           name={this.props.name}
-          placeholder="Search for games, media and playlists..."
+          placeholder="Search for games, people, and playlists..."
           onSubmit={this.props.onSubmit}
           onChange={this.props.onChange}
         />

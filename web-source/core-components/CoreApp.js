@@ -236,8 +236,7 @@ export default class CoreApp extends React.Component {
       viewer,
       allContent,
       searchResults: {
-        media: [ ...this.state.allContent.media ],
-        playlists: [ ...this.state.allContent.playlists ],
+        ...this.state.allContent,
       },
       isOffline,
     };
@@ -450,6 +449,20 @@ export default class CoreApp extends React.Component {
     return false;
   };
 
+  _filterUserWithSearchState = u => {
+    if (!u) {
+      return false;
+    }
+    const query = this._stringAsSearchInvariant(this.state.searchQuery);
+    if (this._stringIncludesSearchQuery(u.name, query)) {
+      return true;
+    }
+    if (this._stringIncludesSearchQuery(u.username, query)) {
+      return true;
+    }
+    return false;
+  }
+
   _handleNavigateToBrowserPage = browserUrl => {
     if (window.cefQuery) {
       CEF.openExternalURL(browserUrl);
@@ -468,8 +481,7 @@ export default class CoreApp extends React.Component {
     this.setState({
       searchQuery: '',
       searchResults: {
-        media: [ ...this.state.allContent.media ],
-        playlists: [ ...this.state.allContent.playlists ],
+        ...this.state.allContent,
       },
       pageMode: 'browse',
     });
@@ -483,18 +495,14 @@ export default class CoreApp extends React.Component {
       },
       () => {
         if (Strings.isEmpty(this.state.searchQuery)) {
-          return this.setState({
-            searchResults: {
-              media: [ ...this.state.allContent.media ],
-              playlists: [ ...this.state.allContent.playlists ],
-            },
-          });
+          return this._handleSearchReset();
         }
 
         this.setState({
           searchResults: {
             media: this.state.allContent.media.filter(this._filterMediaItemWithSearchState),
             playlists: this.state.allContent.playlists.filter(this._filterPlaylistWithSearchState),
+            users: this.state.allContent.users.filter(this._filterUserWithSearchState),
           },
         });
       }

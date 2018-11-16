@@ -6,6 +6,7 @@ import { css } from 'react-emotion';
 import UIButtonSecondary from '~/core-components/reusable/UIButtonSecondary';
 import UIListMedia from '~/core-components/reusable/UIListMedia';
 import UIListPlaylists from '~/core-components/reusable/UIListPlaylists';
+import UIListUsers from '~/core-components/reusable/UIListUsers';
 import UIEmptyState from '~/core-components/reusable/UIEmptyState';
 import UIGridMedia from '~/core-components/reusable/UIGridMedia';
 
@@ -47,6 +48,7 @@ export default class CoreBrowseResults extends React.Component {
     results: {
       media: [],
       playlists: [],
+      users: [],
     },
   };
 
@@ -81,6 +83,70 @@ export default class CoreBrowseResults extends React.Component {
     }
   };
 
+  _isEmpty = () => {
+    return (
+      !this.props.results.media.length &&
+      !this.props.results.playlists.length &&
+      !this.props.results.users.length
+    );
+  };
+
+  _renderEmpty = () => {
+    return (
+      <div className={STYLES_CONTAINER}>
+        <UIEmptyState
+          title="No media found"
+          style={{ borderTop: `1px solid ${Constants.colors.border}` }}>
+          {this._renderEmptyMessage()}
+        </UIEmptyState>
+        <div className={STYLES_NO_RESULTS_FEATURED_MEDIA}>
+          <UIGridMedia
+            mediaItems={this.props.featuredMedia}
+            onMediaSelect={this.props.onMediaSelect}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  _renderPlaylists = () => {
+    if (this.props.results.playlists.length) {
+      return (
+        <UIListPlaylists
+          playlists={this.props.results.playlists}
+          onUserSelect={this.props.onUserSelect}
+          onPlaylistSelect={this.props.onPlaylistSelect}
+        />
+      );
+    }
+    return null;
+  };
+
+  _renderMedia = () => {
+    if (this.props.results.media.length) {
+      return (
+        <UIListMedia
+          mediaItems={this.props.results.media}
+          onUserSelect={this.props.onUserSelect}
+          onMediaSelect={this.props.onMediaSelect}
+        />
+      )
+    }
+    return null;
+  };
+
+  _renderUsers = () => {
+    if (this.props.results.users.length) {
+      return (
+        <UIListUsers
+          users={this.props.results.users}
+          onUserSelect={this.props.onUserSelect}
+        />
+      );
+    }
+    return null;
+  };
+
   render() {
     if (this.props.isPristine) {
       return (
@@ -96,41 +162,16 @@ export default class CoreBrowseResults extends React.Component {
       );
     }
 
-    if (this.props.results.media.length || this.props.results.playlists.length) {
+    if (this._isEmpty()) {
+      return this._renderEmpty();
+    } else {
       return (
         <div className={STYLES_CONTAINER}>
-          {this.props.results.playlists.length ? (
-            <UIListPlaylists
-              playlists={this.props.results.playlists}
-              onUserSelect={this.props.onUserSelect}
-              onPlaylistSelect={this.props.onPlaylistSelect}
-            />
-          ) : null}
-          {this.props.results.media.length ? (
-            <UIListMedia
-              mediaItems={this.props.results.media}
-              onUserSelect={this.props.onUserSelect}
-              onMediaSelect={this.props.onMediaSelect}
-            />
-          ) : null}
+          {this._renderMedia()}
+          {this._renderPlaylists()}
+          {this._renderUsers()}
         </div>
       );
     }
-
-    return (
-      <div className={STYLES_CONTAINER}>
-        <UIEmptyState
-          title="No media found"
-          style={{ borderTop: `1px solid ${Constants.colors.border}` }}>
-          {this._renderEmptyMessage()}
-        </UIEmptyState>
-        <div className={STYLES_NO_RESULTS_FEATURED_MEDIA}>
-          <UIGridMedia
-            mediaItems={this.props.featuredMedia}
-            onMediaSelect={this.props.onMediaSelect}
-            />
-        </div>
-      </div>
-    );
   }
 }
