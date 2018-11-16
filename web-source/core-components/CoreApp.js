@@ -589,13 +589,14 @@ export default class CoreApp extends React.Component {
   };
 
   _handleToggleProfile = () => {
-    const updates = {
+    // optimistically show profile right away
+    // but also async refresh profile data
+    this.setStateHideCEF({
       pageMode: 'profile',
       mediaLoading: false,
       creator: { ...this.state.viewer },
-    };
-
-    this.setStateHideCEF({ ...updates });
+    });
+    this.refreshViewer();
   };
 
   _handleTogglePlay = () => {
