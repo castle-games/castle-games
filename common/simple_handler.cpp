@@ -133,6 +133,16 @@ void SimpleHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
         ghostOpenExternalUrl(url.c_str());
         callback->Success("success");
         return true;
+      } else if (type == "WRITE_CHANNELS") {
+        auto channelData = body["channelData"];
+        for (auto it = channelData.begin(); it != channelData.end(); ++it) {
+          std::string name = it.key();
+          auto channel = love::thread::Channel::getChannel(name);
+          for (std::string val : it.value()) {
+            // Explicitly pass `.length()` because `val` may be in UTF-8
+            channel->push(love::Variant(val.c_str(), val.length()));
+          }
+        }
       }
 
       return false;

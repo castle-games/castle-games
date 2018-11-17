@@ -63,10 +63,35 @@ function main.load(arg)
     end)
 end
 
+local mplayChannel = love.thread.getChannel('MULTIPLAYER_SESSION_INFO')
+mplayChannel:clear()
+
 function main.update(dt)
     network.update(dt)
 
     if home then
+        local castle = home.globals.castle
+        if castle and (castle.startserver or castle.startclient) then
+            -- Forward multiplayer session events
+            local lastVal
+            while true do
+                local val = mplayChannel:pop()
+                if val == nil then
+                    break
+                end
+                lastVal = val
+            end
+            if lastVal ~= nil then
+                local parsed = cjson.decode(lastVal)
+                if parsed.type == 'client' and castle.startclient then
+                    castle.startclient(parsed.address, parsed.metadata)
+                end
+                if parsed.type == 'server' and castle.startserver then
+                    castle.startserver(parsed.address, parsed.metadata)
+                end
+            end
+        end
+
         home:update(dt)
     else
         splash:update(dt)

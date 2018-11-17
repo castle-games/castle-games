@@ -41,6 +41,28 @@ export const getLogs = () => {
   });
 };
 
+export const setMultiplayerSessionInfo = (info) => {
+  if (!window.cefQuery) {
+    console.error('setMultiplayerSessionInfo: window.cefQuery is undefined');
+    return new Promise(resolve => resolve([]));
+  }
+
+  return new Promise(resolve => {
+    window.cefQuery({
+      request: JSON.stringify({
+        type: 'WRITE_CHANNELS',
+        body: {
+          channelData: {
+            MULTIPLAYER_SESSION_INFO: [ // This name must match channel name query in Lua code
+              JSON.stringify(info),
+            ],
+          },
+        },
+      }),
+    });
+  });
+};
+
 export const setBrowserReady = callback => {
   if (!window.cefQuery) {
     console.error('setBrowserReady: window.cefQuery is undefined');

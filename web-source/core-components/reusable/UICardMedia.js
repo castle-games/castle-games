@@ -206,11 +206,23 @@ export default class UICardMedia extends React.Component {
               />
             ) : null}
 
-            <UIButtonIconHorizontal
-              icon={<SVG.Share height="16px" />}
-              onClick={() => this._handleShare(this.props.media)}>
-              Share it
-            </UIButtonIconHorizontal>
+            <div>
+              <UIButtonIconHorizontal icon={<SVG.Share height="16px" />}
+                                      onClick={() => this._handleShare(this.props.media)}>
+                Share it
+              </UIButtonIconHorizontal>
+            </div>
+            <div>
+              <UIButtonIconHorizontal
+                icon={<SVG.Share height="16px" />}
+                onClick={() => CEF.setMultiplayerSessionInfo({
+                  type: 'client',
+                  address: '1.2.3.4:12345',
+                  metadata: 'hello, world',
+                })}>
+                Join multiplayer session
+              </UIButtonIconHorizontal>
+            </div>
           </div>
         </div>
       </div>
