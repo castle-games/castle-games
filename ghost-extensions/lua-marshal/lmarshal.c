@@ -116,8 +116,6 @@ static void mar_encode_value(lua_State *L, mar_Buffer *buf, int val, size_t *idx
         break;
     }
     case LUA_TSTRING: {
-      int tag, ref;
-      
         const char *str_val = lua_tolstring(L, -1, &l);
         buf_write(L, (void*)&l, MAR_I32, buf);
         buf_write(L, str_val, l, buf);
