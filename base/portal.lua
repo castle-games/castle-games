@@ -208,7 +208,7 @@ end
 -- `self.onError`, cascading to parents if that doesn't exist or raises an error
 -- itself
 function portalMeta:handleError(err)
-    local stack = debug.traceback(err, 2)
+    local stack = debug.traceback(err, 3)
     local boundary = self
     local succeeded
     repeat
