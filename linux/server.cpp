@@ -200,16 +200,7 @@ static DoneAction runlove(int argc, char **argv, int &retval)
 }
 
 const std::function<void(Model::GameSession)> onStartGameSession = [](Model::GameSession session) {
-	std::vector<Model::GameProperty> properties = session.GetGameProperties();
-	std::vector<Model::GameProperty>::iterator it;
-	std::string castleUrl;
-	for (it = properties.begin(); it != properties.end(); it++)    {
-		Model::GameProperty property = *it;
-		if (property.GetKey() == "castleUrl") {
-			castleUrl = property.GetValue();
-		}
-	}
-
+	std::string castleUrl = session.GetGameSessionData();
 	if (castleUrl.empty()) {
 		sShouldQuit = true;
 		return;
