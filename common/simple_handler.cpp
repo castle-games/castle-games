@@ -148,11 +148,8 @@ void SimpleHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
         using namespace JSBinds;
         Function func = find(type.c_str());
         if (func) {
-          func(body, [=](const std::string &response) {
-            callback->Success(response);
-          }, [=](const std::string &message) {
-            callback->Failure(0, message);
-          });
+          func(body, [=](const std::string &response) { callback->Success(response); },
+               [=](const std::string &message) { callback->Failure(0, message); });
           return true;
         }
       }

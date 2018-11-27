@@ -66,7 +66,7 @@ void ghostOpenLoveUri(const char *uri) {
 }
 
 void ghostOpenExternalUrl(const char *url) {
-  NSString* urlStr = [NSString stringWithCString:url encoding:NSUTF8StringEncoding];
+  NSString *urlStr = [NSString stringWithCString:url encoding:NSUTF8StringEncoding];
   NSURL *macUrl = [NSURL URLWithString:urlStr];
   if (macUrl) { // will be nil if invalid
     [[NSWorkspace sharedWorkspace] openURL:macUrl];

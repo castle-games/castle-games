@@ -213,14 +213,14 @@ extern "C" {
       self.prevWindowFrame = window.frame;
 
       // XXX(nikki): Disabling pausing on window resignment for now...
-//      [[NSNotificationCenter defaultCenter] addObserver:self
-//                                               selector:@selector(windowDidBecomeKey:)
-//                                                   name:NSWindowDidBecomeKeyNotification
-//                                                 object:window];
-//      [[NSNotificationCenter defaultCenter] addObserver:self
-//                                               selector:@selector(windowDidResignKey:)
-//                                                   name:NSWindowDidResignKeyNotification
-//                                                 object:window];
+      //      [[NSNotificationCenter defaultCenter] addObserver:self
+      //                                               selector:@selector(windowDidBecomeKey:)
+      //                                                   name:NSWindowDidBecomeKeyNotification
+      //                                                 object:window];
+      //      [[NSNotificationCenter defaultCenter] addObserver:self
+      //                                               selector:@selector(windowDidResignKey:)
+      //                                                   name:NSWindowDidResignKeyNotification
+      //                                                 object:window];
 
       self.windowEventsSubscribed = YES;
     }

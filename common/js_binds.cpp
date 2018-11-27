@@ -4,7 +4,7 @@
 #include <unordered_map>
 
 namespace JSBinds {
-  
+
 // If `function` is not `nullptr`, puts it at `name` in the registry and returns it.
 // If `function` is `nullptr`, returns the `Function` previously put at `name` in the registry.
 static Function accessRegistry(const char *name, Function function) {
@@ -17,15 +17,11 @@ static Function accessRegistry(const char *name, Function function) {
   return function;
 }
 
-Register::Register(const char * name, Function function) {
-  accessRegistry(name, function);
-}
+Register::Register(const char *name, Function function) { accessRegistry(name, function); }
 
-Function find(const char *name) {
-  return accessRegistry(name, nullptr);
-}
-  
-}
+Function find(const char *name) { return accessRegistry(name, nullptr); }
+
+} // namespace JSBinds
 
 JS_BIND_DEFINE(hello, arg, success, failure) {
   const std::string &name = arg["name"];
