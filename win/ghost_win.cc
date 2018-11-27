@@ -79,6 +79,11 @@ struct Message {
 
 std::queue<Message> messages;
 
+bool ghostChooseDirectoryWithDialog(const char **result) {
+  // TODO: implement
+  return false;
+}
+
 void ghostHandleOpenUri(const char *uri) {
   // Windows deep links add extra quotes around uri
   std::string stringUri = std::string(uri);

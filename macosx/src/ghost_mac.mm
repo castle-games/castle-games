@@ -89,4 +89,27 @@ void ghostSetBrowserReady() {
   }
 }
 
+bool ghostChooseDirectoryWithDialog(const char **result) {
+  const char *chosenPathCStr = NULL;
+  NSOpenPanel *openPanel = [NSOpenPanel openPanel];
+  [openPanel setTitle:@"Create a New Castle Project"];
+  [openPanel setPrompt:@"Create Project"];
+  [openPanel setMessage:@"Choose a folder where the project will be created."];
+  [openPanel setAllowsMultipleSelection:NO];
+  [openPanel setCanChooseDirectories:YES];
+  [openPanel setCanCreateDirectories:YES];
+  [openPanel setCanChooseFiles:NO];
+  // NOTE: we might want [openPanel setDirectoryURL:]
+  NSModalResponse response = [openPanel runModal];
+  if (response == NSFileHandlingPanelOKButton) {
+    NSURL *url = [[openPanel URLs] lastObject];
+    chosenPathCStr = [[url path] cStringUsingEncoding:NSUTF8StringEncoding];
+  }
+  if (chosenPathCStr) {
+    *result = strdup(chosenPathCStr);
+    return true;
+  }
+  return false;
+}
+
 void ghostQuitMessageLoop() {}
