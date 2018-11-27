@@ -1528,7 +1528,7 @@
 		919D175A214326E4003D26E5 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0940;
+				LastUpgradeCheck = 1010;
 				ORGANIZATIONNAME = builders.game;
 				TargetAttributes = {
 					914F1D742149B33000C27A53 = {
