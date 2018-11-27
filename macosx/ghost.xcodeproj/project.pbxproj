@@ -14,6 +14,8 @@
 		91CF43B721484A3A002024DA /* Chromium Embedded Framework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5A0404221483BA5007A6CC1 /* Chromium Embedded Framework.framework */; };
 		91CF43B921485687002024DA /* liblibcef_dll_wrapper.a in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 91FDEBD521475159008FFB60 /* liblibcef_dll_wrapper.a */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		91CF43BD21485694002024DA /* liblibcef_dll_wrapper.a in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 91FDEBD521475159008FFB60 /* liblibcef_dll_wrapper.a */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		A18221D021ACB2FE0018B6DD /* js_binds.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A18221C821ACB2FE0018B6DD /* js_binds.cpp */; };
+		A18221D121ACB2FE0018B6DD /* js_binds.h in Headers */ = {isa = PBXBuildFile; fileRef = A18221CF21ACB2FE0018B6DD /* js_binds.h */; };
 		A1ED98E9211DFA0700CBC701 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A194C6C4211CD1D50093B328 /* SDL2.framework */; };
 		A1ED98EA211DFA0700CBC701 /* SDL2.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = A194C6C4211CD1D50093B328 /* SDL2.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B500022A215AEB1E00CD2309 /* ghost-env.plist in Resources */ = {isa = PBXBuildFile; fileRef = B5000229215AEB1E00CD2309 /* ghost-env.plist */; };
@@ -226,6 +228,8 @@
 		91CF43B321484A26002024DA /* US_W-2_2017.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "US_W-2_2017.pdf"; sourceTree = "<group>"; };
 		91CF43B421484A26002024DA /* move in todos.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "move in todos.txt"; sourceTree = "<group>"; };
 		91CF43B621484A26002024DA /* full extreme tenor solo.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "full extreme tenor solo.m4a"; sourceTree = "<group>"; };
+		A18221C821ACB2FE0018B6DD /* js_binds.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = js_binds.cpp; sourceTree = "<group>"; };
+		A18221CF21ACB2FE0018B6DD /* js_binds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = js_binds.h; sourceTree = "<group>"; };
 		A194C6BA211CD1D50093B328 /* SDL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL.xcodeproj; path = "../ghost-extensions/SDL2-2.0.8/Xcode/SDL/SDL.xcodeproj"; sourceTree = "<group>"; };
 		A1E7953C20721BC800731DD3 /* package.love */ = {isa = PBXFileReference; lastKnownFileType = file; name = package.love; path = ../package.love; sourceTree = "<group>"; };
 		A9255E021043195A00BA1496 /* vorbis.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = vorbis.framework; path = /Library/Frameworks/vorbis.framework; sourceTree = "<absolute>"; };
@@ -419,6 +423,8 @@
 		B5B06A402150751A001C4382 /* common */ = {
 			isa = PBXGroup;
 			children = (
+				A18221C821ACB2FE0018B6DD /* js_binds.cpp */,
+				A18221CF21ACB2FE0018B6DD /* js_binds.h */,
 				B5B06A492151A8EB001C4382 /* ghost.h */,
 				B57FCFB72166835B00D661B2 /* ghost.cpp */,
 				B53E72AA2152F8D2003C8616 /* ghost_constants.h */,
@@ -514,6 +520,7 @@
 				B5BAE390215ABA89001354F9 /* json.hpp in Headers */,
 				B5BAE397215ABA89001354F9 /* GhostFileSystem.h in Headers */,
 				B5B06A4A2151A8EB001C4382 /* ghost.h in Headers */,
+				A18221D121ACB2FE0018B6DD /* js_binds.h in Headers */,
 				B5000233215AEBED00CD2309 /* GhostEnv.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -785,6 +792,7 @@
 				B5BAE396215ABA89001354F9 /* simple_handler_mac.mm in Sources */,
 				B5BAE39D215ABA9A001354F9 /* main.mm in Sources */,
 				B53E72AD2152F8D2003C8616 /* ghost_constants.cpp in Sources */,
+				A18221D021ACB2FE0018B6DD /* js_binds.cpp in Sources */,
 				B5B06A482150751A001C4382 /* simple_handler.cpp in Sources */,
 				B5BAE39A215ABA89001354F9 /* GhostMainMenu.m in Sources */,
 			);

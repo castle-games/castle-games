@@ -47,6 +47,18 @@ export const setMultiplayerSessionInfo = (info) => {
     return new Promise(resolve => resolve([]));
   }
 
+  // DEMO FOR BEN -- TODO(ben): Remove
+  window.cefQuery({
+    request: JSON.stringify({
+      type: 'hello',
+      body: { name: 'ben' },
+    }),
+    onSuccess: str => {
+      alert(str);
+    },
+  });
+  // DEMO ENDS HERE
+
   return new Promise(resolve => {
     window.cefQuery({
       request: JSON.stringify({

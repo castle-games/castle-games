@@ -21,6 +21,7 @@ using nlohmann::json;
 
 #include "ghost.h"
 #include "ghost_constants.h"
+#include "js_binds.h"
 
 namespace {
 
@@ -142,6 +143,17 @@ void SimpleHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
             // Explicitly pass `.length()` because `val` may be in UTF-8
             channel->push(love::Variant(val.c_str(), val.length()));
           }
+        }
+      } else {
+        using namespace JSBinds;
+        Function func = find(type.c_str());
+        if (func) {
+          func(body, [=](const std::string &response) {
+            callback->Success(response);
+          }, [=](const std::string &message) {
+            callback->Failure(0, message);
+          });
+          return true;
         }
       }
 
