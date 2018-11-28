@@ -349,6 +349,7 @@ set(GHOST_SRCS
   ../common/ghost_constants.cpp
   ../common/simple_app.cpp
   ../common/simple_handler.cpp
+  ../common/js_binds.cpp
 )
 
 ADD_LOGICAL_TARGET("libcef_lib" "${CEF_LIB_DEBUG}" "${CEF_LIB_RELEASE}")
