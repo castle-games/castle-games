@@ -1,7 +1,7 @@
 // `NativeBinds.<name>(arg)` calls the `JS_BIND_DEFINE`'d function with '<name>', passing `arg` as
 // the only parameter. Returns a `Promise` that is resolved with the `success` response when calling
-// that function. If no such function exists or the found function throws a failure, `alert(...)`s
-// with the failure message.
+// that function. If no such function exists or the found function throws a failure, the `Promise`
+// is rejected with the error message.
 export const NativeBinds = new Proxy({}, {
   get(self, name) {
     if (name in self) { // Memoize
@@ -18,8 +18,7 @@ export const NativeBinds = new Proxy({}, {
             request: JSON.stringify({ name: name, arg: arg }),
             onSuccess: resolve,
             onFailure(code, message) {
-              alert(`\`NativeBinds.${name}\`: ${message}`);
-              resolve();
+              reject(new Error(message));
             },
           });
         });
