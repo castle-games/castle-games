@@ -187,7 +187,7 @@ function network.fetch(url, method, skipCache)
                 end
             elseif url:match('^file://') then
                 local filePath = url:gsub('^file://', ''):gsub('%%25', '%%')
-                local file = io.open(filePath, 'r')
+                local file = io.open(filePath, 'rb')
                 if file ~= nil then
                     if method == 'GET' then
                         response = file:read('*all')
