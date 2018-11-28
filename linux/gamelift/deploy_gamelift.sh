@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Run this outside of Docker
+
 cp ../build/castle-server gamelift-upload/
 
 oldversion=`cat gamelift-upload/version.txt`

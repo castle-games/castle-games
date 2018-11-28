@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Run this outside of Docker
+
 rm InstancePrivateKey.pem
 
 fleetId=`./current_fleet_id.sh`

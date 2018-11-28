@@ -39,6 +39,8 @@
 #ifdef LOVE_BUILD_EXE
 
 #define PORT 22122
+// We pad the game session data with the string "castle" because otherwise aws sends us the content of the url instead of the url string
+#define GAME_SESSION_DATA_PADDING 6
 
 using namespace Aws::GameLift::Server;
 
@@ -200,20 +202,23 @@ static DoneAction runlove(int argc, char **argv, int &retval)
 }
 
 const std::function<void(Model::GameSession)> onStartGameSession = [](Model::GameSession session) {
+	printf("castle: onStartGameSession\n");
 	std::string castleUrl = session.GetGameSessionData();
-	if (castleUrl.empty()) {
+	if (castleUrl.empty() || castleUrl.length() < GAME_SESSION_DATA_PADDING) {
 		sShouldQuit = true;
 		return;
 	}
 
-	sCastleUrl = castleUrl;
+	sCastleUrl = castleUrl.substr(GAME_SESSION_DATA_PADDING);
 };
 
 const std::function<void()> onProcessTerminate = []() {
+	printf("castle: onProcessTerminate\n");
 	sShouldQuit = true;
 };
 
 const std::function<bool()> onHealthCheck = []() {
+	printf("castle: onHealthCheck\n");
 	return !sShouldQuit;
 };
 
