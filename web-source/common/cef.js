@@ -56,7 +56,7 @@ export const getLogs = async () => {
 };
 
 export const setMultiplayerSessionInfo = async (info) => {
-  NativeBinds.writeChannels({
+  await NativeBinds.writeChannels({
     channelData: {
       MULTIPLAYER_SESSION_INFO: [ // This name must match channel name query in Lua code
         JSON.stringify(info),
