@@ -24,7 +24,7 @@ void ghostResizeChildWindow(float dw, float dh);
 void ghostSetChildWindowFrame(float left, float top, float width, float height);
 void ghostSetBrowserReady();
 
-bool ghostChooseDirectoryWithDialog(const char **result);
+bool ghostChooseDirectoryWithDialog(const char *title, const char *message, const char *action, const char **result);
 
 #ifdef __cplusplus
 }

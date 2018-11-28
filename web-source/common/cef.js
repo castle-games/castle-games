@@ -54,6 +54,16 @@ export const getLogs = async () => {
   return logs;
 };
 
+export const chooseDirectoryWithDialogAsync = async ({ title, message, action }) => {
+  let chosenDirectory;
+  try {
+    chosenDirectory = await NativeBinds.chooseDirectoryWithDialog({ title, message, action });
+  } catch (e) {
+    // TODO: handle
+  }
+  return chosenDirectory;
+};
+
 export const setMultiplayerSessionInfo = async (info) => {
   await NativeBinds.writeChannels({
     channelData: {

@@ -33,10 +33,21 @@ Function find(const char *name) { return accessRegistry(name, nullptr); }
 //   `success`: call this with a string to send back a successful response
 //   `failure`: call this with a string to send back an error message
 
-JS_BIND_DEFINE(hello) {
-  const std::string &name = arg["name"];
-  printf("hello called with name: %s\n", name.c_str());
-  success("hello, " + name);
+JS_BIND_DEFINE(chooseDirectoryWithDialog) {
+  const char *result;
+
+  const std::string &title = arg["title"];
+  const std::string &message = arg["message"];
+  const std::string &action = arg["action"];
+
+  bool didChooseDirectory =
+  ghostChooseDirectoryWithDialog(title.c_str(), message.c_str(), action.c_str(), &result);
+  if (didChooseDirectory) {
+    success(result);
+    std::free((void *)result);
+  } else {
+    failure("Unable to choose directory");
+  }
 }
 
 JS_BIND_DEFINE(openUri) {

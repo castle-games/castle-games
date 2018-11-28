@@ -79,7 +79,7 @@ struct Message {
 
 std::queue<Message> messages;
 
-bool ghostChooseDirectoryWithDialog(const char **result) {
+bool ghostChooseDirectoryWithDialog(const char *title, const char *message, const char *action, const char **result) {
   // TODO: implement
   return false;
 }

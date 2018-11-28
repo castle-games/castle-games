@@ -423,8 +423,8 @@
 		B5B06A402150751A001C4382 /* common */ = {
 			isa = PBXGroup;
 			children = (
-				A18221C821ACB2FE0018B6DD /* js_binds.cpp */,
 				A18221CF21ACB2FE0018B6DD /* js_binds.h */,
+				A18221C821ACB2FE0018B6DD /* js_binds.cpp */,
 				B5B06A492151A8EB001C4382 /* ghost.h */,
 				B57FCFB72166835B00D661B2 /* ghost.cpp */,
 				B53E72AA2152F8D2003C8616 /* ghost_constants.h */,
