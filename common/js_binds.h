@@ -18,7 +18,7 @@ Function find(const char *name);
 
 #define JS_BIND_REGISTER_NAMED(name, func) JSBinds::Register jsBindRegister_##name(#name, &func);
 
-#define JS_BIND_DEFINE(name, arg, success, failure)                                                \
+#define JS_BIND_DEFINE(name)                                                                       \
   void jsBindFunc_##name(const json &arg,                                                          \
                          std::function<void(const std::string &response)> success,                 \
                          std::function<void(const std::string &message)> failure);                 \

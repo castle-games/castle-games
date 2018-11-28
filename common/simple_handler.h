@@ -90,8 +90,6 @@ private:
   CefRefPtr<CefMessageRouterBrowserSide> message_router_;
   scoped_ptr<CefMessageRouterBrowserSide::Handler> message_handler_;
 
-  lua_State *conversion_lua_state_;
-
   // Include the default reference counting implementation.
   IMPLEMENT_REFCOUNTING(SimpleHandler);
 };

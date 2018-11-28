@@ -29,16 +29,12 @@ SimpleHandler *g_instance = NULL;
 
 } // namespace
 
-SimpleHandler::SimpleHandler(bool use_views)
-    : use_views_(use_views), is_closing_(false), conversion_lua_state_(luaL_newstate()) {
+SimpleHandler::SimpleHandler(bool use_views) : use_views_(use_views), is_closing_(false) {
   DCHECK(!g_instance);
   g_instance = this;
 }
 
-SimpleHandler::~SimpleHandler() {
-  g_instance = NULL;
-  lua_close(conversion_lua_state_);
-}
+SimpleHandler::~SimpleHandler() { g_instance = NULL; }
 
 // static
 SimpleHandler *SimpleHandler::GetInstance() { return g_instance; }
@@ -75,7 +71,7 @@ void SimpleHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
 
   class MessageHandler : public CefMessageRouterBrowserSide::Handler {
   public:
-    MessageHandler(lua_State *conversion_lua_state) : conversion_lua_state_(conversion_lua_state) {}
+    MessageHandler() {}
 
     // Called due to cefQuery execution in message_router.html.
     bool OnQuery(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, int64 query_id,
@@ -83,72 +79,13 @@ void SimpleHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
       const std::string &strRequest = request;
       auto parsed = json::parse(strRequest);
 
-      std::string type = parsed["type"];
-      auto body = parsed["body"];
-      if (type == "OPEN_URI") {
-        std::string uri = body["uri"];
-        ghostOpenLoveUri(uri.c_str());
-
-        callback->Success("success");
-        return true;
-      } else if (type == "CLOSE") {
-        ghostClose();
-
-        callback->Success("success");
-        return true;
-      } else if (type == "SET_CHILD_WINDOW_FRAME") {
-        float left = body["left"];
-        float top = body["top"];
-        float width = body["width"];
-        float height = body["height"];
-
-        ghostSetChildWindowFrame(left, top, width, height);
-
-        callback->Success("success");
-        return true;
-      } else if (type == "READ_CHANNELS") {
-        auto response = json::object();
-
-        for (const std::string &channelName : body["channelNames"]) {
-          response[channelName] = json::array();
-          auto channel = love::thread::Channel::getChannel(channelName);
-          love::Variant var;
-          while (channel->pop(&var)) {
-            assert(var.getType() == love::Variant::STRING ||
-                   var.getType() == love::Variant::SMALLSTRING);
-            var.toLua(conversion_lua_state_);
-            std::string str(luaL_checkstring(conversion_lua_state_, -1));
-            response[channelName].push_back(str);
-            lua_pop(conversion_lua_state_, 1);
-          }
-        }
-
-        callback->Success(response.dump());
-        return true;
-      } else if (type == "BROWSER_READY") {
-        ghostSetBrowserReady();
-        callback->Success("success");
-        return true;
-      } else if (type == "OPEN_EXTERNAL_URL") {
-        std::string url = body["url"];
-        ghostOpenExternalUrl(url.c_str());
-        callback->Success("success");
-        return true;
-      } else if (type == "WRITE_CHANNELS") {
-        auto channelData = body["channelData"];
-        for (auto it = channelData.begin(); it != channelData.end(); ++it) {
-          std::string name = it.key();
-          auto channel = love::thread::Channel::getChannel(name);
-          for (std::string val : it.value()) {
-            // Explicitly pass `.length()` because `val` may be in UTF-8
-            channel->push(love::Variant(val.c_str(), val.length()));
-          }
-        }
-      } else {
+      std::string type = parsed["name"];
+      auto arg = parsed["arg"];
+      {
         using namespace JSBinds;
         Function func = find(type.c_str());
         if (func) {
-          func(body, [=](const std::string &response) { callback->Success(response); },
+          func(arg, [=](const std::string &response) { callback->Success(response); },
                [=](const std::string &message) { callback->Failure(0, message); });
           return true;
         }
@@ -158,7 +95,6 @@ void SimpleHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
     }
 
   private:
-    lua_State *conversion_lua_state_;
     DISALLOW_COPY_AND_ASSIGN(MessageHandler);
   };
 
@@ -166,7 +102,7 @@ void SimpleHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
     CefMessageRouterConfig config;
     message_router_ = CefMessageRouterBrowserSide::Create(config);
 
-    message_handler_.reset(new MessageHandler(conversion_lua_state_));
+    message_handler_.reset(new MessageHandler());
     message_router_->AddHandler(message_handler_.get(), false);
   }
 }

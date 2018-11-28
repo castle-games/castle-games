@@ -11,8 +11,8 @@ export const getLogs = () => {
   return new Promise(resolve => {
     window.cefQuery({
       request: JSON.stringify({
-        type: 'READ_CHANNELS',
-        body: { channelNames: ['PRINT', 'ERROR'] },
+        name: 'readChannels',
+        arg: { channelNames: ['PRINT', 'ERROR'] },
       }),
       onSuccess: json => {
         const channels = JSON.parse(json);
@@ -50,8 +50,8 @@ export const setMultiplayerSessionInfo = (info) => {
   // DEMO FOR BEN -- TODO(ben): Remove
   window.cefQuery({
     request: JSON.stringify({
-      type: 'hello',
-      body: { name: 'ben' },
+      name: 'hello',
+      arg: { name: 'ben' },
     }),
     onSuccess: str => {
       alert(str);
@@ -62,8 +62,8 @@ export const setMultiplayerSessionInfo = (info) => {
   return new Promise(resolve => {
     window.cefQuery({
       request: JSON.stringify({
-        type: 'WRITE_CHANNELS',
-        body: {
+        name: 'writeChannels',
+        arg: {
           channelData: {
             MULTIPLAYER_SESSION_INFO: [ // This name must match channel name query in Lua code
               JSON.stringify(info),
@@ -84,8 +84,8 @@ export const setBrowserReady = callback => {
   try {
     window.cefQuery({
       request: JSON.stringify({
-        type: 'BROWSER_READY',
-        body: {},
+        name: 'browserReady',
+        arg: {},
       }),
     });
   } catch (e) {
@@ -107,8 +107,8 @@ export const openWindowFrame = mediaUrl => {
   try {
     window.cefQuery({
       request: JSON.stringify({
-        type: 'OPEN_URI',
-        body: {
+        name: 'openUri',
+        arg: {
           uri: mediaUrl,
         },
       }),
@@ -127,8 +127,8 @@ export const openExternalURL = externalUrl => {
   try {
     window.cefQuery({
       request: JSON.stringify({
-        type: 'OPEN_EXTERNAL_URL',
-        body: {
+        name: 'openExternalUrl',
+        arg: {
           url: externalUrl,
         },
       }),
@@ -147,8 +147,8 @@ export const updateWindowFrame = rect => {
   try {
     window.cefQuery({
       request: JSON.stringify({
-        type: 'SET_CHILD_WINDOW_FRAME',
-        body: {
+        name: 'setChildWindowFrame',
+        arg: {
           left: rect.left,
           top: rect.top,
           width: rect.width,
@@ -169,8 +169,8 @@ export const closeWindowFrame = () => {
 
   window.cefQuery({
     request: JSON.stringify({
-      type: 'CLOSE',
-      body: '',
+      name: 'close',
+      arg: '',
     }),
   });
 };
