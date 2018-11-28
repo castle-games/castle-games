@@ -16,13 +16,14 @@ public:
 Function find(const char *name);
 } // namespace JSBinds
 
-#define JS_BIND_REGISTER_NAMED(name, func) JSBinds::Register jsBindRegister_##name(#name, &func);
+#define JS_BIND_REGISTER_NAMED(name, func)                                                         \
+  static JSBinds::Register jsBindRegister_##name(#name, &func);
 
 #define JS_BIND_DEFINE(name)                                                                       \
-  void jsBindFunc_##name(const json &arg,                                                          \
-                         std::function<void(const std::string &response)> success,                 \
-                         std::function<void(const std::string &message)> failure);                 \
+  static void jsBindFunc_##name(const json &arg,                                                   \
+                                std::function<void(const std::string &response)> success,          \
+                                std::function<void(const std::string &message)> failure);          \
   JS_BIND_REGISTER_NAMED(name, jsBindFunc_##name);                                                 \
-  void jsBindFunc_##name(const json &arg,                                                          \
-                         std::function<void(const std::string &response)> success,                 \
-                         std::function<void(const std::string &message)> failure)
+  static void jsBindFunc_##name(const json &arg,                                                   \
+                                std::function<void(const std::string &response)> success,          \
+                                std::function<void(const std::string &message)> failure)
