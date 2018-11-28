@@ -2,6 +2,8 @@
 
 #include "json.hpp"
 
+// Registered functions are available under `NativeBinds.` in JavaScript
+
 using json = nlohmann::json;
 
 namespace JSBinds {

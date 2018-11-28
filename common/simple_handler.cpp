@@ -72,26 +72,23 @@ void SimpleHandler::OnAfterCreated(CefRefPtr<CefBrowser> browser) {
   class MessageHandler : public CefMessageRouterBrowserSide::Handler {
   public:
     MessageHandler() {}
-
+    
     // Called due to cefQuery execution in message_router.html.
     bool OnQuery(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame, int64 query_id,
                  const CefString &request, bool persistent, CefRefPtr<Callback> callback) OVERRIDE {
       const std::string &strRequest = request;
       auto parsed = json::parse(strRequest);
-
-      std::string type = parsed["name"];
-      auto arg = parsed["arg"];
-      {
-        using namespace JSBinds;
-        Function func = find(type.c_str());
-        if (func) {
-          func(arg, [=](const std::string &response) { callback->Success(response); },
-               [=](const std::string &message) { callback->Failure(0, message); });
-          return true;
-        }
+      std::string name = parsed["name"];
+      JSBinds::Function func = JSBinds::find(name.c_str());
+      if (func) {
+        auto arg = parsed["arg"];
+        func(arg, [=](const std::string &response) { callback->Success(response); },
+             [=](const std::string &message) { callback->Failure(0, message); });
+        return true;
+      } else {
+        callback->Failure(0, "no JS binding named '" + name + "'");
+        return true;
       }
-
-      return false;
     }
 
   private:
