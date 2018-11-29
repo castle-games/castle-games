@@ -50,6 +50,18 @@ JS_BIND_DEFINE(chooseDirectoryWithDialog) {
   }
 }
 
+JS_BIND_DEFINE(createProjectAtPath) {
+  const std::string path = arg["path"];
+  const char *entryPoint;
+  bool didCreate = ghostCreateProjectAtPath(path.c_str(), &entryPoint);
+  if (didCreate) {
+    success(entryPoint);
+    std::free((void *)entryPoint);
+  } else {
+    failure("Unable to create project");
+  }
+}
+
 JS_BIND_DEFINE(openUri) {
   std::string uri = arg["uri"];
   ghostOpenLoveUri(uri.c_str());

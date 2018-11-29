@@ -57,8 +57,19 @@ const STYLES_PARAGRAPH = css`
   line-height: 1.725;
 `;
 
-const STYLES_ACTION = css`
+const STYLES_BUTTON_CONTAINER = css`
   margin-top: 24px;
+`;
+
+const STYLES_ACTIONS = css`
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 1000px;
+`;
+
+const STYLES_ACTION = css`
+  max-width: 400px;
+  margin-right: 16px;
 `;
 
 const STYLES_OPTION = css`
@@ -93,6 +104,24 @@ export default class CoreWelcomeScreen extends React.Component {
     CEF.openExternalURL('https://medium.com/castle-archives/making-games-with-castle-e4d0e9e7a910');
   };
 
+  _handleClickCreateProjectAsync = async () => {
+    const newProjectDirectory = await CEF.chooseDirectoryWithDialogAsync({
+      title: 'Create a New Castle Project',
+      message: 'Choose a folder where the project will be created.',
+      action: 'Create Project',
+    });
+    if (newProjectDirectory) {
+      let entryPointFilePath;
+      try {
+        entryPointFilePath = await CEF.createProjectAtPathAsync(newProjectDirectory);
+      } catch (_) {}
+      if (entryPointFilePath) {
+        const mediaUrl = `file://${entryPointFilePath}`;
+        this.props.onMediaSelect({ mediaUrl });
+      }
+    }
+  };
+
   _handleClickFooter = () => {
     CEF.openExternalURL('http://www.playcastle.io');
   };
@@ -112,6 +141,7 @@ export default class CoreWelcomeScreen extends React.Component {
   render() {
     const featuredMedia = this._getFeaturedMedia();
     const externalIcon = (<SVG.Share height="16px" />);
+    const createIcon = (<SVG.Play height="16px" />);
 
     return (
       <div className={STYLES_CONTAINER}>
@@ -127,15 +157,31 @@ export default class CoreWelcomeScreen extends React.Component {
         </div>
         <div className={STYLES_SECTION}>
           <div className={STYLES_HEADING}>Make a Game</div>
-          <p className={STYLES_PARAGRAPH}>
-            Check out our tutorial to get started making your own game or interactive media with Castle.
-          </p>
-          <div className={STYLES_ACTION}>
-            <UIButtonIconHorizontal
-              onClick={this._handleClickTutorial}
-              icon={externalIcon}>
-              Open Tutorial
-            </UIButtonIconHorizontal>
+          <div className={STYLES_ACTIONS}>
+            <div className={STYLES_ACTION}>
+              <p className={STYLES_PARAGRAPH}>
+                Click this button to create a new minimal Castle project and start tinkering.
+              </p>
+              <div className={STYLES_BUTTON_CONTAINER}>
+                <UIButtonIconHorizontal
+                  onClick={this._handleClickCreateProjectAsync}
+                  icon={createIcon}>
+                  Create a Castle Project
+                </UIButtonIconHorizontal>
+              </div>
+            </div>
+            <div className={STYLES_ACTION}>
+              <p className={STYLES_PARAGRAPH}>
+                Check out our tutorial to get started making your own game or interactive media with Castle.
+              </p>
+              <div className={STYLES_BUTTON_CONTAINER}>
+                <UIButtonIconHorizontal
+                  onClick={this._handleClickTutorial}
+                  icon={externalIcon}>
+                  Open Tutorial
+                </UIButtonIconHorizontal>
+              </div>
+            </div>
           </div>
         </div>
         <div className={STYLES_FOOTER}>
