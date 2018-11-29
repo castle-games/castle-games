@@ -1,8 +1,8 @@
 #include "ghost.h"
 #include "simple_handler.h"
 
-#include <iostream>
 #include <fstream>
+#include <iostream>
 
 void ghostSendJSEvent(const char *eventName, const char *serializedParams) {
   std::string validatedParams = (serializedParams) ? serializedParams : "{}";
@@ -34,17 +34,19 @@ bool ghostCreateProjectAtPath(const char *path, const char **entryPoint) {
   }
   mainFilePathStream << "main.lua";
   mainFilePath = mainFilePathStream.str();
-  
+
   // don't overwrite existing file
   if (fileExists(mainFilePath.c_str())) {
     return false;
   }
-  
+
   // write main.lua
   std::ofstream outfile(mainFilePath);
-  outfile << "function love.draw()\n  love.graphics.print(\"Edit main.lua to get started!\", 400, 300)\nend" << std::endl;
+  outfile << "function love.draw()\n  love.graphics.print(\"Edit main.lua to get started!\", 400, "
+             "300)\nend"
+          << std::endl;
   outfile.close();
-  
+
   // check that we actually created the file
   bool didCreate = fileExists(mainFilePath.c_str());
   if (didCreate) {

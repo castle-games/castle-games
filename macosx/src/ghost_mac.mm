@@ -89,7 +89,8 @@ void ghostSetBrowserReady() {
   }
 }
 
-bool ghostChooseDirectoryWithDialog(const char *title, const char *message, const char *action, const char **result) {
+bool ghostChooseDirectoryWithDialog(const char *title, const char *message, const char *action,
+                                    const char **result) {
   const char *chosenPathCStr = NULL;
   NSOpenPanel *openPanel = [NSOpenPanel openPanel];
   [openPanel setTitle:[NSString stringWithCString:title encoding:NSUTF8StringEncoding]];

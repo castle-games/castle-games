@@ -41,7 +41,7 @@ JS_BIND_DEFINE(chooseDirectoryWithDialog) {
   const std::string &action = arg["action"];
 
   bool didChooseDirectory =
-  ghostChooseDirectoryWithDialog(title.c_str(), message.c_str(), action.c_str(), &result);
+      ghostChooseDirectoryWithDialog(title.c_str(), message.c_str(), action.c_str(), &result);
   if (didChooseDirectory) {
     success(result);
     std::free((void *)result);
