@@ -32,10 +32,13 @@ find_library(BOOST_LIBRARY_SYSTEM NAMES boost_system)
 find_library(BOOST_LIBRARY_RANDOM NAMES boost_random)
 
 set(GHOST_TARGET "castle-server")
-#set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD")
-#set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MDd")
 
-SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -ldl -lpthread -lm")
+# Uncomment these to create a build with debug symbols. Also change line 10 in run_cmake.sh to "Debug".
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
+set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -g")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -g")
+
+SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -ldl -lpthread -lm -g")
 
 set(GHOST_SRCS
   server.cpp

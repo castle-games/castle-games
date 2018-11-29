@@ -7,4 +7,4 @@ cmake -DMEGA_LOVE=../love \
 	-D CMAKE_PREFIX_PATH=gamelift/gamelift-build \
 	-H. -Bbuild
 
-cmake --build build --config Release
+cmake --build build --config Debug

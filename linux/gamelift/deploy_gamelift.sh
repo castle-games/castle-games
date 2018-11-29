@@ -3,6 +3,8 @@
 # Run this outside of Docker
 
 cp ../build/castle-server gamelift-upload/
+rm -rf gamelift-upload/base
+cp -r ../build/base gamelift-upload/
 
 oldversion=`cat gamelift-upload/version.txt`
 newversion=`expr $oldversion + 1`

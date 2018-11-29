@@ -79,7 +79,8 @@ static int l_my_print(lua_State* L) {
     int nargs = lua_gettop(L);
     std::cout << "  ";
     for (int i=1; i <= nargs; ++i) {
-		std::cout << lua_tostring(L, i);
+		const char* line = lua_tostring(L, i);
+		std::cout << line;
     }
     std::cout << std::endl;
 
@@ -94,7 +95,7 @@ static const struct luaL_Reg printlib [] = {
 static DoneAction runlove(int argc, char **argv, int &retval)
 {
 	while (sCastleUrl.empty() && !sShouldQuit) {
-		sleep(10);
+		sleep(0);
 	}
 	if (sShouldQuit) {
 		return DONE_QUIT;
