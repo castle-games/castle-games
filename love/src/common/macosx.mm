@@ -28,7 +28,7 @@
 #ifdef LOVE_MACOSX_SDL_DIRECT_INCLUDE
 # include <SDL.h>
 #else
-# include <SDL2/SDL.h>
+# include <SDL.h>
 #endif
 
 namespace love
