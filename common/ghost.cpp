@@ -4,6 +4,10 @@
 #include <fstream>
 #include <iostream>
 
+const std::string kStarterTemplateCode =
+    "function love.draw()\n  love.graphics.print(\"Edit main.lua to get started!\", 400, 300)\n  "
+    "love.graphics.print(\"Press Cmd/Ctrl + R to reload.\", 400, 316)\nend";
+
 void ghostSendJSEvent(const char *eventName, const char *serializedParams) {
   std::string validatedParams = (serializedParams) ? serializedParams : "{}";
   std::stringstream msg;
@@ -42,9 +46,7 @@ bool ghostCreateProjectAtPath(const char *path, const char **entryPoint) {
 
   // write main.lua
   std::ofstream outfile(mainFilePath);
-  outfile << "function love.draw()\n  love.graphics.print(\"Edit main.lua to get started!\", 400, "
-             "300)\nend"
-          << std::endl;
+  outfile << kStarterTemplateCode << std::endl;
   outfile.close();
 
   // check that we actually created the file
