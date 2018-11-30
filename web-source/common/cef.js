@@ -1,3 +1,5 @@
+import Logs from '~/common/logs';
+
 // `NativeBinds.<name>(arg)` calls the `JS_BIND_DEFINE`'d function with '<name>', passing `arg` as
 // the only parameter. Returns a `Promise` that is resolved with the `success` response when calling
 // that function. If no such function exists or the found function throws a failure, the `Promise`
@@ -29,12 +31,10 @@ export const NativeBinds = new Proxy({}, {
   }
 });
 
-let logId = 1;
-export const getLogs = async () => {
+export const readLogChannelsAsync = async () => {
   const channelsJson = await NativeBinds.readChannels({ channelNames: ['PRINT', 'ERROR'] });
   const channels = JSON.parse(channelsJson);
 
-  const logs = [];
   channels.PRINT.map(json => {
     const params = JSON.parse(json);
     let logText;
@@ -43,15 +43,12 @@ export const getLogs = async () => {
     } else {
       logText = '(nil)';
     }
-    logs.push({ id: logId, type: 'print', text: `${logText}` });
-    logId = logId + 1;
+    Logs.print(logText);
   });
   channels.ERROR.map(json => {
     const { error, stacktrace } = JSON.parse(json);
-    logs.push({ id: logId, type: 'error', text: error, details: stacktrace });
-    logId = logId + 1;
+    Logs.error(error, stacktrace);
   });
-  return logs;
 };
 
 export const chooseDirectoryWithDialogAsync = async ({ title, message, action }) => {

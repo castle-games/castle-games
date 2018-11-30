@@ -8,6 +8,7 @@ import * as Network from '~/common/network';
 import * as CEF from '~/common/cef';
 import * as Urls from '~/common/urls';
 import History from '~/common/history';
+import Logs from '~/common/logs';
 import UserPlay from '~/common/userplay';
 
 import { css } from 'react-emotion';
@@ -60,7 +61,8 @@ export default class CoreApp extends React.Component {
     window.addEventListener('nativeLoadError', this._handleNativeLoadError);
 
     const processChannels = async () => {
-      const logs = await CEF.getLogs();
+      await CEF.readLogChannelsAsync();
+      const logs = Logs.consume();
 
       if (logs && logs.length) {
         this.setState({ logs: [...this.state.logs, ...logs] });
