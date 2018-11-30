@@ -126,9 +126,9 @@ export default class UICardMedia extends React.Component {
             Is this your game?
           </div>
           <div className={STYLES_SECTION_PARAGRAPH}>
-            Castle lists all the games from a game jam, so people can browse and play them all
-            easily. If you created this game and want to claim it, change the way it is presented,
-            or remove it, please contact the Castle team and let us know.
+            Castle can open any publicly visible url to a compatible game. If you created this game
+            and want to claim it, change the way it's presented, or remove it, please contact the
+            Castle team and let us know.
           </div>
         </div>
       );
@@ -138,23 +138,6 @@ export default class UICardMedia extends React.Component {
       textElement = (
         <div>
           <ContentEditor value={rich} className={STYLES_SECTION_PARAGRAPH} readOnly />
-        </div>
-      );
-    }
-
-    let jamVotingInfoElement;
-    if (!Strings.isEmpty(this.props.media.jamVotingUrl)) {
-      jamVotingInfoElement = (
-        <div>
-          <div className={STYLES_SECTION_PARAGRAPH}>
-            This game is part of an active game jam. If you'd like to show your support for the
-            creator, you can vote or provide feedback at the jam's website.
-          </div>
-          <UIButtonIconHorizontal
-            icon={<SVG.Vote height="16px" />}
-            onClick={() => this.props.onNavigateToBrowserPage(this.props.media.jamVotingUrl)}>
-            Vote for it
-          </UIButtonIconHorizontal>
         </div>
       );
     }
@@ -196,7 +179,6 @@ export default class UICardMedia extends React.Component {
           ) : null}
 
           <div style={{ marginTop: 32 }}>
-            {jamVotingInfoElement}
             {this.props.viewer ? (
               <ControlPlaylistAdd
                 onToggleProfile={this.props.onToggleProfile}
@@ -210,17 +192,6 @@ export default class UICardMedia extends React.Component {
               <UIButtonIconHorizontal icon={<SVG.Share height="16px" />}
                                       onClick={() => this._handleShare(this.props.media)}>
                 Share it
-              </UIButtonIconHorizontal>
-            </div>
-            <div>
-              <UIButtonIconHorizontal
-                icon={<SVG.Share height="16px" />}
-                onClick={() => CEF.setMultiplayerSessionInfo({
-                  type: 'client',
-                  address: '1.2.3.4:12345',
-                  metadata: 'hello, world',
-                })}>
-                Join multiplayer session
               </UIButtonIconHorizontal>
             </div>
           </div>
