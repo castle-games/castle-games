@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as CEF from '~/common/cef';
 import * as Constants from '~/common/constants';
 import * as SVG from '~/core-components/primitives/svg';
+import Logs from '~/common/logs';
 import shuffle from 'lodash.shuffle';
 import { css } from 'react-emotion';
 
@@ -118,6 +119,10 @@ export default class CoreWelcomeScreen extends React.Component {
       if (entryPointFilePath) {
         const mediaUrl = `file://${entryPointFilePath}`;
         this.props.onMediaSelect({ mediaUrl });
+        Logs.system('Welcome to Castle!');
+        Logs.system(`We created some starer code for your project at ${entryPointFilePath}.`);
+        Logs.system(`Open that file in your favorite text editor to get started.`);
+        Logs.system(`Need help? Check out http://www.playcastle.io/get-started`);
       }
     }
   };

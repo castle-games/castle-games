@@ -6,10 +6,10 @@ class Logs {
     this._logs = [];
   }
 
-  print = (message) => {
+  print = (text) => {
     this._logs.push({
       type: 'print',
-      text: message,
+      text,
       id: this._logId++,
     });
   };
@@ -19,6 +19,14 @@ class Logs {
       type: 'error',
       text: error,
       stacktrace,
+      id: this._logId++,
+    });
+  };
+
+  system = (text) => {
+    this._logs.push({
+      type: 'system',
+      text,
       id: this._logId++,
     });
   };
