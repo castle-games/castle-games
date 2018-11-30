@@ -92,6 +92,15 @@ export default class CoreDevelopmentLogs extends React.Component {
     });
   };
 
+  _getLogColor = (log) => {
+    if (log.type === 'error') {
+      return Constants.colors.red;
+    } else if (log.type === 'system') {
+      return Constants.colors.yellow;
+    }
+    return null;
+  };
+
   render() {
     return (
       <div className={STYLES_FIXED_CONTAINER}>
@@ -111,7 +120,7 @@ export default class CoreDevelopmentLogs extends React.Component {
               return (
                 <div
                   className={STYLES_LOG}
-                  style={{ color: l.type === 'error' ? Constants.colors.red : null }}
+                  style={{ color: this._getLogColor(l) }}
                   key={`development-log-${l.id}`}>
                   <span className={STYLES_LOG_LEFT}>{l.type}</span>
                   <div className={STYLES_LOG_RIGHT}>
