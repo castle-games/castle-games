@@ -18,15 +18,20 @@ do that!
 
 ### Windows
 
-- Install CMake. https://cmake.org/download/. Make sure to check the "add to PATH for current user" option.
-- Install Visual Studio 2017. https://visualstudio.microsoft.com/vs.
+- Install https://gitforwindows.org/. Use this program to clone this repo (not WSL git).
+- Install CMake. https://cmake.org/download/
+  - Make sure to check the "add to PATH for current user" option.
+- Install Visual Studio 2017. https://visualstudio.microsoft.com/vs
+  - When you are prompted to install some "Workloads", at the minimum you want "Desktop development with C++". You can come back to this screen later if you want more things.
 - Install http://nsis.sourceforge.net.
-- Install https://gitforwindows.org/.
 
 #### Debug build
-- In 'megasource/', run './run_cmake.sh' with the Git Bash utility that comes with Git for Windows.
+- Make sure `git lfs` is initialized.
+- Open the Git Bash utility that comes with Git for Windows and navigate to the `megasource` directory.
+- In 'megasource/', run './run_cmake.sh'.
 - Open and build the 'ALL_BUILD.vcxproj' file inside of 'megasource/build/'.
 - Run the application at 'megasourse/build/Debug/Castle.exe'.
+- If the build succeeds but is unable to write Castle.exe, make sure any existing Castle processes are terminated and try again.
 
 #### Release build
 - Run './release.sh' in 'megasource/'. Use the installer at 'megasource/CastleSetup.exe' and then run Castle from the start menu.
