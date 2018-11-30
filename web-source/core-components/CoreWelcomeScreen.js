@@ -120,7 +120,7 @@ export default class CoreWelcomeScreen extends React.Component {
         const mediaUrl = `file://${entryPointFilePath}`;
         this.props.onMediaSelect({ mediaUrl });
         Logs.system('Welcome to Castle!');
-        Logs.system(`We created some starer code for your project at ${entryPointFilePath}.`);
+        Logs.system(`We created some starter code for your project at ${entryPointFilePath}.`);
         Logs.system(`Open that file in your favorite text editor to get started.`);
         Logs.system(`Need help? Check out http://www.playcastle.io/get-started`);
       }
