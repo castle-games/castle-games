@@ -102,7 +102,7 @@ export default class CoreWelcomeScreen extends React.Component {
   };
 
   _handleClickTutorial = () => {
-    CEF.openExternalURL('https://medium.com/castle-archives/making-games-with-castle-e4d0e9e7a910');
+    CEF.openExternalURL('http://www.playcastle.io/get-started');
   };
 
   _handleClickCreateProjectAsync = async () => {
