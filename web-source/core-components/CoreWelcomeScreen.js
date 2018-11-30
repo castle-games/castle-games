@@ -101,10 +101,6 @@ export default class CoreWelcomeScreen extends React.Component {
     featuredMedia: [],
   };
 
-  _handleClickTutorial = () => {
-    CEF.openExternalURL('http://www.playcastle.io/get-started');
-  };
-
   _handleClickCreateProjectAsync = async () => {
     const newProjectDirectory = await CEF.chooseDirectoryWithDialogAsync({
       title: 'Create a New Castle Project',
@@ -181,7 +177,7 @@ export default class CoreWelcomeScreen extends React.Component {
               </p>
               <div className={STYLES_BUTTON_CONTAINER}>
                 <UIButtonIconHorizontal
-                  onClick={this._handleClickTutorial}
+                  onClick={this.props.onLoadHelp}
                   icon={externalIcon}>
                   Open Tutorial
                 </UIButtonIconHorizontal>

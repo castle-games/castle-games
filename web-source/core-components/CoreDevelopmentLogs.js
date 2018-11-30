@@ -106,7 +106,12 @@ export default class CoreDevelopmentLogs extends React.Component {
       <div className={STYLES_FIXED_CONTAINER}>
         <div className={STYLES_FIXED_HEADER}>
           <UIHeaderDismiss>
-            <UIControl onClick={this.props.onClearLogs}>Clear logs</UIControl>
+            <UIControl
+              style={{ marginRight: 12 }}
+              onClick={this.props.onClearLogs}>
+              Clear logs
+            </UIControl>
+            <UIControl onClick={this.props.onLoadHelp}>Get Help</UIControl>
           </UIHeaderDismiss>
         </div>
         <div

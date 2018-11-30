@@ -156,6 +156,10 @@ export default class CoreApp extends React.Component {
     this.setState({ logs: [] });
   };
 
+  _handleLoadTutorial = () => {
+    CEF.openExternalURL('http://www.playcastle.io/get-started');
+  };
+  
   _handleNativeLoadEnd = async () => {
     await Actions.delay(2000);
 
@@ -865,6 +869,7 @@ export default class CoreApp extends React.Component {
             onUserSelect={this._handleUserSelect}
             onMediaSelect={this._handleMediaSelect}
             onPlaylistSelect={this._handlePlaylistSelect}
+            onLoadHelp={this._handleLoadTutorial}
             onLoadURL={this.loadURL}
           />
         </CoreLayout>
@@ -978,7 +983,11 @@ export default class CoreApp extends React.Component {
         );
       } else if (state.sidebarMode === 'development') {
         maybeRightNode = (
-          <CoreDevelopmentLogs logs={state.logs} onClearLogs={this._handleClearLogs} />
+          <CoreDevelopmentLogs
+            logs={state.logs}
+            onLoadHelp={this._handleLoadTutorial}
+            onClearLogs={this._handleClearLogs}
+          />
         );
       }
     }
