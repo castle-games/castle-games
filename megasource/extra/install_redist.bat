@@ -24,7 +24,7 @@ IF %ERRORLEVEL% == 1 goto install
 
 :install
 
-vc_redist.x86.exe
+vc_redist.x86.exe /install /quiet /norestart
 
 :end
 @exit
