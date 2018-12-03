@@ -32,6 +32,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <fstream>
+#include <algorithm>
 #include "aws/gamelift/server/GameLiftServerAPI.h"
 #include "aws/gamelift/server/LogParameters.h"
 #include "aws/gamelift/server/ProcessParameters.h"
@@ -43,6 +45,10 @@
 #define GAME_SESSION_DATA_PADDING 6
 
 using namespace Aws::GameLift::Server;
+
+static bool sShouldQuit = false;
+static std::string sCastleUrl;
+static std::string sBinaryDirectory;
 
 // Lua
 extern "C" {
@@ -67,22 +73,42 @@ enum DoneAction
 	DONE_RESTART,
 };
 
-static bool sShouldQuit = false;
-static std::string sCastleUrl;
+static void log(const char * format, ...) {
+	va_list args;
+    va_start(args, format);
+	char buffer[1000];
+	vsnprintf(buffer, 1000, format, args);
+    va_end(args);
+
+	time_t _tm = time(NULL);
+	struct tm * curtime = localtime(&_tm);
+	std::string formattedTime = std::string(asctime(curtime));
+	formattedTime.erase(std::remove(formattedTime.begin(), formattedTime.end(), '\n'), formattedTime.end());
+
+	std::string str = buffer;
+	std::cout << formattedTime << ": " << str << std::endl;
+
+	std::ofstream outfile;
+	outfile.open(sBinaryDirectory + "log.txt", std::ofstream::out | std::ofstream::app);
+	outfile << formattedTime << ": " << str << std::endl;
+}
+
+static void log(std::string str) {
+	log(str.c_str());
+}
+
 void my_handler(int s) {
-    printf("Caught signal %d\n",s);
+    log("Caught signal %d",s);
     sShouldQuit = true;
 }
 
 // from https://gist.github.com/5at/3671566
 static int l_my_print(lua_State* L) {
     int nargs = lua_gettop(L);
-    std::cout << "  ";
+    log("Lua logs:");
     for (int i=1; i <= nargs; ++i) {
-		const char* line = lua_tostring(L, i);
-		std::cout << line;
+		log("   " + std::string(lua_tostring(L, i)));
     }
-    std::cout << std::endl;
 
     return 0;
 }
@@ -97,7 +123,9 @@ static DoneAction runlove(int argc, char **argv, int &retval)
 	while (sCastleUrl.empty() && !sShouldQuit) {
 		sleep(0);
 	}
+	log("Done sleeping");
 	if (sShouldQuit) {
+		log("Quitting from runlove");
 		return DONE_QUIT;
 	}
 
@@ -118,10 +146,9 @@ static DoneAction runlove(int argc, char **argv, int &retval)
 		lua_pushstring(L, "embedded boot.lua");
 		lua_rawseti(L, -2, -1);
 
-        std::string::size_type pos = std::string(argv[0]).find_last_of("\\/");
-        std::string path = std::string(argv[0]).substr(0, pos) + "/base";
+        std::string path = sBinaryDirectory + "base";
 
-        printf("Castle lua path: %s\n", path.c_str());
+        log("Castle lua path: %s", path.c_str());
         lua_pushstring(L, path.c_str());
         lua_rawseti(L, -2, 0);
 
@@ -153,6 +180,7 @@ static DoneAction runlove(int argc, char **argv, int &retval)
 	lua_newthread(L);
 	lua_pushvalue(L, -2);
 
+	log("Setting GHOST_ROOT_URI to " + sCastleUrl);
     lua_pushstring(L, sCastleUrl.c_str());
     lua_setglobal(L, "GHOST_ROOT_URI");
 
@@ -203,41 +231,48 @@ static DoneAction runlove(int argc, char **argv, int &retval)
 }
 
 const std::function<void(Model::GameSession)> onStartGameSession = [](Model::GameSession session) {
-	printf("castle: onStartGameSession\n");
+	log("onStartGameSession");
 	std::string castleUrl = session.GetGameSessionData();
 	if (castleUrl.empty() || castleUrl.length() < GAME_SESSION_DATA_PADDING) {
 		sShouldQuit = true;
+		log("No GameSessionData");
 		return;
 	}
 
 	sCastleUrl = castleUrl.substr(GAME_SESSION_DATA_PADDING);
+	log("Castle url is: " + sCastleUrl);
 };
 
 const std::function<void()> onProcessTerminate = []() {
-	printf("castle: onProcessTerminate\n");
+	log("onProcessTerminate");
 	sShouldQuit = true;
 };
 
 const std::function<bool()> onHealthCheck = []() {
-	printf("castle: onHealthCheck\n");
+	log("onHealthCheck");
 	return !sShouldQuit;
 };
 
 int main(int argc, char **argv)
 {
+    std::string::size_type pos = std::string(argv[0]).find_last_of("\\/");
+    sBinaryDirectory = std::string(argv[0]).substr(0, pos) + "/";
+    struct sigaction sigIntHandler;
+
 	if (strcmp(LOVE_VERSION_STRING, love_version()) != 0)
 	{
-		printf("Version mismatch detected!\nLOVE binary is version %s\n"
-			   "LOVE library is version %s\n", LOVE_VERSION_STRING, love_version());
+		log("Version mismatch detected!\nLOVE binary is version %s\n"
+			   "LOVE library is version %s", LOVE_VERSION_STRING, love_version());
 		return 1;
 	}
 
     if (argc != 1) {
-        printf("Does not take any args\n");
+        log("Does not take any args");
 		return 1;
-    }
+	}
 
-    struct sigaction sigIntHandler;
+    log("\n\n\n\n");
+    log("Castle server started");
     sigIntHandler.sa_handler = my_handler;
     sigemptyset(&sigIntHandler.sa_mask);
     sigIntHandler.sa_flags = 0;
@@ -249,12 +284,16 @@ int main(int argc, char **argv)
 	InitSDK();
 	ProcessReady(gameLiftParams);
 
+	log("Finished initializing GameLift");
+
 	int retval = 0;
 	DoneAction done = DONE_QUIT;
 
 	do {
 		done = runlove(argc, argv, retval);
 	} while (done != DONE_QUIT);
+
+	log("Done running Lua");
 
 	return retval;
 }
