@@ -100,3 +100,7 @@ export const updateWindowFrame = async rect => {
 export const closeWindowFrame = async () => {
   await NativeBinds.close();
 };
+
+export const sendLuaEvent = async (name, params) => {
+  await NativeBinds.sendLuaEvent({ jsonified: JSON.stringify({ name, params }) });
+};

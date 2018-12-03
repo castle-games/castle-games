@@ -125,3 +125,10 @@ JS_BIND_DEFINE(writeChannels) {
     }
   }
 }
+
+JS_BIND_DEFINE(sendLuaEvent) {
+  std::string jsonified = arg["jsonified"];
+  auto channel = love::thread::Channel::getChannel("JS_EVENTS");
+  // Explicitly pass `.length()` because `val` may be in UTF-8
+  channel->push(love::Variant(jsonified.c_str(), jsonified.length()));
+}
