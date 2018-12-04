@@ -18,7 +18,7 @@ class Logs {
     this._logs.push({
       type: 'error',
       text: error,
-      stacktrace,
+      details: stacktrace,
       id: this._logId++,
     });
   };
