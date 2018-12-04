@@ -10,6 +10,7 @@ import * as Urls from '~/common/urls';
 import History from '~/common/history';
 import Logs from '~/common/logs';
 import UserPlay from '~/common/userplay';
+import Share from '~/common/share';
 
 import { css } from 'react-emotion';
 import { isKeyHotkey } from 'is-hotkey';
@@ -59,6 +60,7 @@ export default class CoreApp extends React.Component {
     window.addEventListener('keydown', this._handleKeyDown);
     window.addEventListener('nativeLoadEnd', this._handleNativeLoadEnd);
     window.addEventListener('nativeLoadError', this._handleNativeLoadError);
+    Share.addEventListeners();
 
     const processChannels = async () => {
       await CEF.readLogChannelsAsync();
@@ -81,6 +83,7 @@ export default class CoreApp extends React.Component {
     window.removeEventListener('keydown', this._handleKeyDown);
     window.removeEventListener('nativeLoadEnd', this._handleNativeLoadEnd);
     window.removeEventListener('nativeLoadError', this._handleNativeLoadError);
+    Share.removeEventListeners();
     window.clearTimeout(this._devTimeout);
   }
 
@@ -159,7 +162,7 @@ export default class CoreApp extends React.Component {
   _handleLoadTutorial = () => {
     CEF.openExternalURL('http://www.playcastle.io/get-started');
   };
-  
+
   _handleNativeLoadEnd = async () => {
     await Actions.delay(2000);
 
@@ -230,12 +233,7 @@ export default class CoreApp extends React.Component {
 
     document.body.appendChild(loader);
 
-    const {
-      featuredMedia,
-      allContent,
-      viewer,
-      isOffline,
-    } = await Network.getProductData();
+    const { featuredMedia, allContent, viewer, isOffline } = await Network.getProductData();
 
     const state = {
       featuredMedia,
@@ -467,7 +465,7 @@ export default class CoreApp extends React.Component {
       return true;
     }
     return false;
-  }
+  };
 
   _handleNavigateToBrowserPage = browserUrl => {
     if (window.cefQuery) {
@@ -542,8 +540,8 @@ export default class CoreApp extends React.Component {
         ...this.state.searchResults,
         media:
           serverPlaylist.mediaItems && serverPlaylist.mediaItems.length
-          ? [...serverPlaylist.mediaItems]
-          : [...this.state.searchResults.media],
+            ? [...serverPlaylist.mediaItems]
+            : [...this.state.searchResults.media],
       },
       creator: null,
       playlist: serverPlaylist,

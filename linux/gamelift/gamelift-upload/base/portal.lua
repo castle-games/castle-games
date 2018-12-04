@@ -1,5 +1,7 @@
 -- Manage loading, lifetime management and event forwarding for entries
 
+local share = require 'share'
+
 -- The root `_G`
 local GG = _G
 
@@ -285,10 +287,31 @@ function portalMeta:newChild(path, args)
     if not succeeded then return nil, err end
 
     -- Call `love.load` callback and set as loaded
-    if child.globals.love.load then
-        child.globals.love.load({ child.basePath })
+    -- This has to happen after startClient otherwise the client will miss the love.load event
+    local loadLove = function()
+        if child.globals.love.load then
+            child.globals.love.load({ child.basePath })
+        end
+        child.loaded = true
     end
-    child.loaded = true
+
+    -- Call share.lua callbacks
+    if CASTLE_SERVER and child.globals.castle.startServer then
+        child.globals.castle.startServer(GHOST_PORT)
+    end
+
+    local isStartingShareClient = false
+    if not CASTLE_SERVER and child.globals.castle.startClient then
+        isStartingShareClient = true
+        share.connectClient(path, function(address)
+            child.globals.castle.startClient(address)
+            loadLove()
+        end)
+    end
+
+    if not isStartingShareClient then
+        loadLove()
+    end
 
     return child
 end

@@ -752,3 +752,31 @@ export async function recordUserplayPingAsync(userplayId) {
     }
   );
 }
+
+export async function multiplayerJoinAsync(mediaUrl) {
+  let result;
+  try {
+    result = await API.graphqlAsync(
+      /* GraphQL */ `
+        mutation($mediaUrl: String!) {
+          multiplayerJoin(mediaUrl: $mediaUrl)
+        }
+      `,
+      {
+        mediaUrl,
+      }
+    );
+  } catch (e) {
+    return false;
+  }
+
+  if (result.error) {
+    return false;
+  }
+
+  if (result.errors) {
+    return false;
+  }
+
+  return result.data.multiplayerJoin;
+}
