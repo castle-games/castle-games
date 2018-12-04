@@ -30,17 +30,25 @@
 #include "modules/love/love.h"
 #include <SDL.h>
 #include <algorithm>
+#include <fcntl.h>
 #include <fstream>
 #include <iostream>
 #include <signal.h>
+#include <sstream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
+#include <sys/file.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <unistd.h>
 
 #ifdef LOVE_BUILD_EXE
 
-#define PORT 22122
+#define START_PORT 22122
+#define END_PORT 42122
+#define PORT_FILE "current_port.txt"
+#define PORT_LOCK_FILE "port_lockfile.txt"
 // We pad the game session data with the string "castle" because otherwise aws sends us the content
 // of the url instead of the url string
 #define GAME_SESSION_DATA_PADDING 6
@@ -50,6 +58,36 @@ using namespace Aws::GameLift::Server;
 static bool sShouldQuit = false;
 static std::string sCastleUrl;
 static std::string sBinaryDirectory;
+static int sPort = -1;
+
+// From https://stackoverflow.com/a/1643134
+/*! Try to get lock. Return its file descriptor or -1 if failed.
+ *
+ *  @param lockName Name of file used as lock (i.e. '/var/lock/myLock').
+ *  @return File descriptor of lock file, or -1 if failed.
+ */
+int tryGetLock(char const *lockName) {
+  mode_t m = umask(0);
+  int fd = open(lockName, O_RDWR | O_CREAT, 0666);
+  umask(m);
+  if (fd >= 0 && flock(fd, LOCK_EX | LOCK_NB) < 0) {
+    close(fd);
+    fd = -1;
+  }
+  return fd;
+}
+
+/*! Release the lock obtained with tryGetLock( lockName ).
+ *
+ *  @param fd File descriptor of lock returned by tryGetLock( lockName ).
+ *  @param lockName Name of file used as lock (i.e. '/var/lock/myLock').
+ */
+void releaseLock(int fd, char const *lockName) {
+  if (fd < 0)
+    return;
+  remove(lockName);
+  close(fd);
+}
 
 // Lua
 extern "C" {
@@ -180,6 +218,10 @@ static DoneAction runlove(int argc, char **argv, int &retval) {
   lua_pushstring(L, sCastleUrl.c_str());
   lua_setglobal(L, "GHOST_ROOT_URI");
 
+  log("Setting GHOST_PORT to %i", sPort);
+  lua_pushinteger(L, sPort);
+  lua_setglobal(L, "GHOST_PORT");
+
   // Add custom print lib
   lua_getglobal(L, "_G");
   luaL_register(L, NULL, printlib);
@@ -249,9 +291,54 @@ const std::function<bool()> onHealthCheck = []() {
   return !sShouldQuit;
 };
 
+// PORT_FILE has the next available port. We grab a file lock before doing anything since GameLift
+// starts multiple of these same processes at the same time when a new instance is created.
+void findFreePort() {
+  std::string lockFile = sBinaryDirectory + PORT_LOCK_FILE;
+  int lockFd = -1;
+  while (lockFd == -1) {
+    sleep(0);
+    lockFd = tryGetLock(lockFile.c_str());
+  }
+
+  std::ifstream t(sBinaryDirectory + PORT_FILE);
+  if (!t.good()) { // file doesn't exist. port is definitely free
+    sPort = START_PORT;
+    log("Port file doesn't exist. Using port %i", sPort);
+  } else {
+    while (sPort == -1) {
+      try {
+        std::stringstream buffer;
+        buffer << t.rdbuf();
+        std::string str = buffer.str();
+        sPort = std::stoi(str);
+      } catch (const std::exception &ex) {
+        log("Could not convert port file to integer. Waiting and trying again.");
+        sleep(1);
+      }
+    }
+
+    if (sPort > END_PORT) {
+      sPort = START_PORT;
+    }
+    log("Port file exists. Using port %i", sPort);
+  }
+
+  std::ofstream outfile;
+  outfile.open(sBinaryDirectory + PORT_FILE, std::ofstream::out);
+  outfile << (sPort + 1) << std::endl;
+  outfile.flush();
+  outfile.close();
+
+  releaseLock(lockFd, lockFile.c_str());
+}
+
 int main(int argc, char **argv) {
   std::string::size_type pos = std::string(argv[0]).find_last_of("\\/");
   sBinaryDirectory = std::string(argv[0]).substr(0, pos) + "/";
+
+  findFreePort();
+
   struct sigaction sigIntHandler;
 
   if (strcmp(LOVE_VERSION_STRING, love_version()) != 0) {
@@ -274,7 +361,7 @@ int main(int argc, char **argv) {
   sigaction(SIGINT, &sigIntHandler, NULL);
 
   LogParameters logParameters;
-  ProcessParameters gameLiftParams(onStartGameSession, onProcessTerminate, onHealthCheck, PORT,
+  ProcessParameters gameLiftParams(onStartGameSession, onProcessTerminate, onHealthCheck, sPort,
                                    logParameters);
 
   InitSDK();

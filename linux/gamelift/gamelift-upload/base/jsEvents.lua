@@ -1,0 +1,60 @@
+local jsEvents = {}
+
+
+local cjson = require 'cjson'
+
+
+local lists = {} -- `eventName` -> `listenerId` -> `listener`
+
+local nextId = 1
+function jsEvents.listen(name, listener)
+    local list = lists[name]
+    if not list then
+        list = {}
+        lists[name] = list
+    end
+
+    local id = nextId
+    nextId = nextId + 1
+    list[id] = listener
+
+    return function()
+        list[id] = nil
+    end
+end
+
+local channel = love.thread.getChannel('JS_EVENTS')
+channel:clear()
+
+function jsEvents.update()
+    local eventJson
+    while true do
+        local eventJson = channel:pop()
+        if eventJson == nil then
+            return
+        end
+        local event = cjson.decode(eventJson)
+        if event then
+            local list = lists[event.name]
+            if list then
+                local params = event.params
+                for _, listener in pairs(list) do
+                    listener(params)
+                end
+            end
+        end
+    end
+end
+
+local ffi = require 'ffi'
+ffi.cdef[[
+void ghostSendJSEvent(const char *eventName, const char *serializedParams);
+]]
+local C = ffi.C
+
+function jsEvents.send(name, params)
+    C.ghostSendJSEvent(name, cjson.encode(params))
+end
+
+
+return jsEvents
