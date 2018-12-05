@@ -10,7 +10,6 @@ import UIButtonIconHorizontal from '~/core-components/reusable/UIButtonIconHoriz
 import UICardMedia from '~/core-components/reusable/UICardMedia';
 import UIEmptyState from '~/core-components/reusable/UIEmptyState';
 import UILink from '~/core-components/reusable/UILink';
-import UIControl from '~/core-components/reusable/UIControl';
 
 const STYLES_FIXED_CONTAINER = css`
   position: relative;

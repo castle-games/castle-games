@@ -3,6 +3,7 @@ import * as Constants from '~/common/constants';
 import * as CEF from '~/common/cef';
 import * as SVG from '~/core-components/primitives/svg';
 import * as Strings from '~/common/strings';
+import * as Urls from '~/common/urls';
 
 import { css } from 'react-emotion';
 
@@ -95,6 +96,10 @@ export default class UICardMedia extends React.Component {
     window.open(url);
   };
 
+  _handleViewSource = () => {
+    CEF.openExternalURL(Urls.githubUserContentToRepoUrl(this.props.media.mediaUrl));
+  };
+  
   _handleSubmit = async () => {
     await this.props.onRegisterMedia({ email: this.state.email, message: this.state.message });
 
@@ -142,6 +147,30 @@ export default class UICardMedia extends React.Component {
       );
     }
 
+    let maybeAddToPlaylistElement;
+    if (this.props.viewer) {
+      maybeAddToPlaylistElement = (
+        <ControlPlaylistAdd
+          onToggleProfile={this.props.onToggleProfile}
+          onRefreshViewer={this.props.onRefreshViewer}
+          media={this.props.media}
+          viewer={this.props.viewer}
+        />
+      )
+    }
+
+    let maybeViewSourceElement;
+    if (Urls.isOpenSource(this.props.media.mediaUrl)) {
+      maybeViewSourceElement = (
+        <div>
+          <UIButtonIconHorizontal icon={<SVG.Share height="16px" />}
+           onClick={this._handleViewSource}>
+            View Source
+          </UIButtonIconHorizontal>
+        </div>
+      );
+    }
+
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_CONTAINER_PREVIEW_NAME}>{name}</div>
@@ -179,21 +208,14 @@ export default class UICardMedia extends React.Component {
           ) : null}
 
           <div style={{ marginTop: 32 }}>
-            {this.props.viewer ? (
-              <ControlPlaylistAdd
-                onToggleProfile={this.props.onToggleProfile}
-                onRefreshViewer={this.props.onRefreshViewer}
-                media={this.props.media}
-                viewer={this.props.viewer}
-              />
-            ) : null}
-
+            {maybeAddToPlaylistElement}
             <div>
               <UIButtonIconHorizontal icon={<SVG.Share height="16px" />}
                                       onClick={() => this._handleShare(this.props.media)}>
                 Share it
               </UIButtonIconHorizontal>
             </div>
+            {maybeViewSourceElement}
           </div>
         </div>
       </div>

@@ -4,6 +4,34 @@ const isLua = (urlStr) => {
   return urlStr.endsWith('.lua');
 }
 
+const isOpenSource = (urlStr) => {
+  let isOSS = false;
+  try {
+    const components = url.parse(urlStr);
+    isOSS = (
+      components.hostname === 'raw.githubusercontent.com'
+      // ... could do a better job here ...
+    );
+  } catch (_) {}
+  return isOSS;
+}
+
+const githubUserContentToRepoUrl = (urlStr) => {
+  if (isOpenSource(urlStr)) {
+    try {
+      const pattern = /raw\.githubusercontent\.com\/[\w\-]+\/[\w\-]+\//g;
+      const matches = urlStr.match(pattern);
+      if (matches && matches.length) {
+        const components = matches[0].split('/');
+        const githubOwner = components[1];
+        const githubRepo = components[2];
+        return `https://github.com/${githubOwner}/${githubRepo}/`;
+      }
+    } catch (_) {}
+  }
+  return null;
+}
+
 const isLocalUrl = (urlStr) => {
   let isLocal = false;
   try {
@@ -46,6 +74,8 @@ const canonizeUserProvidedUrl = (urlStr) => {
 
 export {
   canonizeUserProvidedUrl,
+  githubUserContentToRepoUrl,
   isLocalUrl,
   isLua,
+  isOpenSource,
 }
