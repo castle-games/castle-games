@@ -557,7 +557,10 @@ export async function addMedia({ name, url, description }) {
             rich: $description
           }
         }) {
-          mediaId
+          mediaId,
+          name,
+          mediaUrl,
+          description,
         }
       }
     `,

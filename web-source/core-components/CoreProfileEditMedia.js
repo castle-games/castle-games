@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as Actions from '~/common/actions';
 import * as Constants from '~/common/constants';
 
 import Plain from 'slate-plain-serializer';
@@ -17,6 +18,7 @@ import DefaultState from '~/editor/default.json';
 const STYLES_CONTAINER = css`
   background ${Constants.colors.background};
   color: ${Constants.colors.white};
+  border-top: 16px solid ${Constants.colors.border};
 `;
 
 const STYLES_SECTION = css`
@@ -29,8 +31,9 @@ const STYLES_SECTION = css`
   }
 `;
 
-export default class CoreProfileAddMedia extends React.Component {
+export default class CoreProfileEditMedia extends React.Component {
   state = {
+    mediaId: null, // if null, create new media
     media: {
       name: '',
       url: '',
@@ -47,15 +50,23 @@ export default class CoreProfileAddMedia extends React.Component {
   };
 
   _handleAddMedia = async () => {
-    await this.props.onMediaAdd({ ...this.state.media });
+    const response = await Actions.addMedia({ ...this.state.media });
+    if (!response) {
+      return;
+    }
 
-    this.setState({
+    await this.setState({
+      mediaId: response.mediaId,
       media: {
-        name: '',
-        url: '',
-        description: Plain.deserialize(''),
+        name: response.name,
+        url: response.mediaUrl,
+        description: Plain.deserialize(''), // TODO: BEN
       },
     });
+
+    if (this.props.onAfterSave) {
+      this.props.onAfterSave();
+    }
   };
 
   _isFormSubmittable = () => {

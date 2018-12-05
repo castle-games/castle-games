@@ -1,9 +1,11 @@
 import * as React from 'react';
 import * as Actions from '~/common/actions';
 import * as Constants from '~/common/constants';
+import * as SVG from '~/core-components/primitives/svg';
 
 import { css } from 'react-emotion';
 
+import UIButtonIconHorizontal from '~/core-components/reusable/UIButtonIconHorizontal';
 import UIControl from '~/core-components/reusable/UIControl';
 import UICardProfileHeader from '~/core-components/reusable/UICardProfileHeader';
 import UIHorizontalNavigation from '~/core-components/reusable/UIHorizontalNavigation';
@@ -13,7 +15,7 @@ import UIEmptyState from '~/core-components/reusable/UIEmptyState';
 
 import CoreBrowseSearchInput from '~/core-components/CoreBrowseSearchInput';
 import CoreEditProfile from '~/core-components/CoreEditProfile';
-import CoreProfileAddMedia from '~/core-components/CoreProfileAddMedia';
+import CoreProfileEditMedia from '~/core-components/CoreProfileEditMedia';
 import CoreProfileAddPlaylist from '~/core-components/CoreProfileAddPlaylist';
 import CoreSignOut from '~/core-components/CoreSignOut';
 
@@ -50,6 +52,8 @@ const STYLES_CONTAINER = css`
 export default class CoreProfile extends React.Component {
   state = {
     mode: 'media',
+    isEditingMedia: false,
+    editingMediaId: null,
   };
 
   componentWillReceiveProps(nextProps) {
@@ -61,11 +65,19 @@ export default class CoreProfile extends React.Component {
           null
     if (nextUserId != existingUserId) {
       // we're rendering a new profile, reset state.
-      this.setState({ mode: 'media' });
+      this.setState({
+        mode: 'media',
+        isEditingMedia: false,
+        editingMediaId: null,
+      });
     }
   };
   
-  _onShowMedia = () => this.setState({ mode: 'media' });
+  _onShowMedia = () => this.setState({
+    mode: 'media',
+    isEditingMedia: false,
+    editingMediaId: null,
+  });
 
   _onShowPlaylists = () => this.setState({ mode: 'playlists' });
 
@@ -73,16 +85,11 @@ export default class CoreProfile extends React.Component {
 
   _onShowSignOut = () => this.setState({ mode: 'sign-out' });
 
-  _addMediaAsync = async (data) => {
-    const response = await Actions.addMedia(data);
-    if (!response) {
-      return;
-    }
-
-    if (this.props.onAfterSave) {
-      this.props.onAfterSave();
-    }
-  };
+  _onPressAddMedia = () => this.setState({
+    mode: 'media',
+    isEditingMedia: true,
+    editingMediaId: null,
+  });
 
   _removeMediaAsync = async (data) => {
     const response = await Actions.removeMedia(data);
@@ -144,34 +151,52 @@ export default class CoreProfile extends React.Component {
   }
   
   _renderMediaContent = (isOwnProfile) => {
-    const mediaListElement =
-      this.props.creator.mediaItems && this.props.creator.mediaItems.length ? (
-        <UIListMedia
-          noTitleRow
-          viewer={this.props.viewer}
-          creator={this.props.creator}
-          mediaItems={this.props.creator.mediaItems}
-          onMediaSelect={this.props.onMediaSelect}
-          onMediaRemove={this._removeMediaAsync}
-          onUserSelect={this.props.onUserSelect}
+    const { isEditingMedia, editingMediaId } = this.state;
+    if (isEditingMedia) {
+      return (
+        <CoreProfileEditMedia
+          mediaId={editingMediaId}
+          onAfterSave={this.props.onAfterSave}
         />
-      ) : (
-        <UIEmptyState
-          title="No media yet"
-          style={{ borderTop: `16px solid ${Constants.colors.border}` }}>
-          {isOwnProfile
-            ? 'You have not added any media to your profile yet.'
-            : 'This user has not added any media yet.'}
-        </UIEmptyState>
       );
-    const maybeAddMediaElement =
-      isOwnProfile ? (<CoreProfileAddMedia onMediaAdd={this._addMediaAsync} />) : null;
-    return (
-      <div>
-        {mediaListElement}
-        {maybeAddMediaElement}
-      </div>
-    );
+    } else {
+      const mediaListElement =
+        this.props.creator.mediaItems && this.props.creator.mediaItems.length ? (
+          <UIListMedia
+            noTitleRow
+            viewer={this.props.viewer}
+            creator={this.props.creator}
+            mediaItems={this.props.creator.mediaItems}
+            onMediaSelect={this.props.onMediaSelect}
+            onMediaRemove={this._removeMediaAsync}
+            onUserSelect={this.props.onUserSelect}
+          />
+        ) : (
+          <UIEmptyState
+            title="No media yet"
+            style={{ borderTop: `16px solid ${Constants.colors.border}` }}>
+            {isOwnProfile
+              ? 'You have not added any media to your profile yet.'
+              : 'This user has not added any media yet.'}
+          </UIEmptyState>
+        );
+      const addMediaIcon = (<SVG.Add height="16px" />);
+      const maybeAddMediaElement =
+        isOwnProfile ? (
+          <UIButtonIconHorizontal
+            style={{ margin: 16 }}
+            onClick={this._onPressAddMedia}
+            icon={addMediaIcon}>
+            Add Media
+          </UIButtonIconHorizontal>
+        ) : null;
+      return (
+        <div>
+          {mediaListElement}
+          {maybeAddMediaElement}
+        </div>
+      );
+    }
   }
 
   _renderPlaylistContent = (isOwnProfile) => {
