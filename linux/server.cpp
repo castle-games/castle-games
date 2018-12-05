@@ -28,6 +28,7 @@
 #include "aws/gamelift/server/ProcessParameters.h"
 #include "common/version.h"
 #include "modules/love/love.h"
+#include "modules/thread/Channel.h"
 #include <SDL.h>
 #include <algorithm>
 #include <fcntl.h>
@@ -42,6 +43,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <assert.h>
 
 #ifdef LOVE_BUILD_EXE
 
@@ -108,20 +110,22 @@ void my_handler(int s) {
   sShouldQuit = true;
 }
 
-// from https://gist.github.com/5at/3671566
-static int l_my_print(lua_State *L) {
-  int nargs = lua_gettop(L);
-  log("Lua logs:");
-  for (int i = 1; i <= nargs; ++i) {
-    log("   " + std::string(lua_tostring(L, i)));
+static void checkForLogs() {
+  static lua_State *conversionLuaState = lua_open();
+
+  std::string channelNames[] = {"PRINT", "ERROR"};
+  for (const std::string channelName : channelNames) {
+    auto channel = love::thread::Channel::getChannel(channelName);
+    love::Variant var;
+    while (channel->pop(&var)) {
+      assert(var.getType() == love::Variant::STRING || var.getType() == love::Variant::SMALLSTRING);
+      var.toLua(conversionLuaState);
+      std::string str(luaL_checkstring(conversionLuaState, -1));
+      log("   " + str);
+      lua_pop(conversionLuaState, 1);
+    }
   }
-
-  return 0;
 }
-
-static const struct luaL_Reg printlib[] = {
-    {"print", l_my_print}, {NULL, NULL} /* end of array */
-};
 
 static DoneAction runlove(int argc, char **argv, int &retval) {
   while (sCastleUrl.empty() && !sShouldQuit) {
@@ -192,11 +196,6 @@ static DoneAction runlove(int argc, char **argv, int &retval) {
   lua_pushinteger(L, sPort);
   lua_setglobal(L, "GHOST_PORT");
 
-  // Add custom print lib
-  lua_getglobal(L, "_G");
-  luaL_register(L, NULL, printlib);
-  lua_pop(L, 1);
-
   // TODO: should actually test whether lua is finished initializing
   struct timespec start, finish;
   double elapsed;
@@ -222,6 +221,7 @@ static DoneAction runlove(int argc, char **argv, int &retval) {
     }
 
     lua_pop(L, lua_gettop(L) - stackpos);
+    checkForLogs();
   }
 
   retval = 0;
