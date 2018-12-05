@@ -2,7 +2,6 @@ import * as React from 'react';
 import * as Actions from '~/common/actions';
 import * as Constants from '~/common/constants';
 
-import Plain from 'slate-plain-serializer';
 import { Value } from 'slate';
 import { css } from 'react-emotion';
 
@@ -22,7 +21,6 @@ const STYLES_CONTAINER = css`
 `;
 
 const STYLES_SECTION = css`
-  margin-top: 32px;
   padding: 16px 16px 24px 16px;
   border-bottom: 1px solid ${Constants.colors.border};
 
@@ -37,16 +35,11 @@ export default class CoreProfileEditMedia extends React.Component {
     media: {
       name: '',
       url: '',
-      description: Plain.deserialize(''),
     },
   };
 
   _handleChangeMedia = e => {
     this.setState({ media: { ...this.state.media, [e.target.name]: e.target.value } });
-  };
-
-  _handleChangeMediaDescription = ({ value }) => {
-    this.setState({ media: { ...this.state.media, description: value } });
   };
 
   _handleAddMedia = async () => {
@@ -60,7 +53,6 @@ export default class CoreProfileEditMedia extends React.Component {
       media: {
         name: response.name,
         url: response.mediaUrl,
-        description: Plain.deserialize(''), // TODO: BEN
       },
     });
 
@@ -100,13 +92,6 @@ export default class CoreProfileEditMedia extends React.Component {
             label="Media URL"
             onChange={this._handleChangeMedia}
             style={{ marginBottom: 8 }}
-          />
-          <UITextArea
-            label="Media description"
-            value={this.state.media.description}
-            onChange={this._handleChangeMediaDescription}
-            placeholder="Type a description..."
-            style={{ marginBottom: 16, width: 480 }}
           />
           <UISubmitButton
             disabled={!isSubmitEnabled}

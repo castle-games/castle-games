@@ -540,27 +540,22 @@ export async function updateUserAsync({ userId, user }) {
   return result.data.updateUser;
 }
 
-export async function addMedia({ name, url, description }) {
+export async function addMedia({ name, url }) {
   const variables = {
     name,
     mediaUrl: url,
-    description: JSON.stringify(description),
   };
 
   const result = await API.graphqlAsync({
     query: `
-      mutation AddMedia($name: String, $mediaUrl: String, $description: String) {
+      mutation AddMedia($name: String, $mediaUrl: String) {
         addMedia(media: {
           name: $name
           mediaUrl: $mediaUrl
-          description: {
-            rich: $description
-          }
         }) {
           mediaId,
           name,
           mediaUrl,
-          description,
         }
       }
     `,
