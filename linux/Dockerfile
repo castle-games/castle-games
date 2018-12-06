@@ -1,10 +1,7 @@
 FROM amazonlinux:latest
 
-# These were from trying to compile on amazon linux
 RUN yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 #RUN yum -y groupinstall "Development Tools"
-
-#luajit mesa-libGL-devel 
 
 WORKDIR /app
 
@@ -13,9 +10,7 @@ RUN yum -y groupinstall "Development Tools"
 
 # Installs OpenSSL to /usr/local/ssl
 COPY openssl-1.0.2l.tar.gz openssl-1.0.2l.tar.gz
-RUN tar -xf openssl-1.0.2l.tar.gz && cd openssl-1.0.2l && ./config && make install && cd .. && rm openssl-1.0.2l.tar.gz && rm -rf openssl-1.0.2l
-
-#RUN echo "source /hbb_exe/activate" >> ~/.bashrc
+RUN tar -xf openssl-1.0.2l.tar.gz && cd openssl-1.0.2l && ./config shared && make install && cd .. && rm openssl-1.0.2l.tar.gz && rm -rf openssl-1.0.2l
 
 # Need wget and hg for building packages
 # hg install steps from http://e-mak.blogspot.com/2016/04/how-to-install-mercurial-in-centos-7.html
@@ -39,12 +34,5 @@ RUN cd /opt && wget https://downloads.sourceforge.net/openil/DevIL-1.8.0.tar.gz 
 #RUN cd /opt && source /hbb_exe/activate && wget https://github.com/kcat/openal-soft/archive/v1.18.zip && 
 RUN yum -y install openal-soft-devel libmodplug-devel libmpg123-devel
 
-# libmodplug-devel
-# libmpg123-devel
-
-#COPY base base/
-#COPY common common/
-#COPY ghost-extensions ghost-extensions/
-#COPY linux linux/
-#COPY love love/
-#COPY openssl openssl/
+# needed for aws-sdk
+RUN yum -y install curl-devel

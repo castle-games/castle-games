@@ -13,7 +13,9 @@ From this directory:
 
 `./docker.sh` - Creates a new container and starts a bash session.
 
-Once you're in the container, cd into `linux` and run `./run_cmake.sh`.
+Once you're in the container, cd into `linux` and run:
+`cd aws-sdk && ./build_aws_sdk.sh && cd ..`
+`./run_cmake.sh`.
 
 ### Testing castle-server
 
@@ -45,3 +47,7 @@ The game server writes logs to `local/game/log.txt`.
 
 OpenSSL from
 http://www.openssl.org/source/openssl-1.0.2l.tar.gz
+
+### AWS SDK
+
+https://github.com/aws/aws-sdk-cpp/archive/1.7.14.zip

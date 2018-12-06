@@ -24,14 +24,14 @@ else()
 	message(STATUS "LOVE was not found")
 endif()
 
+set(GHOST_TARGET "castle-server")
+
 # GameLift
 include("gamelift/gamelift-build/cmake/aws-cpp-sdk-gamelift-serverConfig.cmake")
 # Boost libs needed by GameLift
 find_library(BOOST_LIBRARY_DATE_TIME NAMES boost_date_time)
 find_library(BOOST_LIBRARY_SYSTEM NAMES boost_system)
 find_library(BOOST_LIBRARY_RANDOM NAMES boost_random)
-
-set(GHOST_TARGET "castle-server")
 
 # Uncomment these to create a build with debug symbols. Also change line 10 in run_cmake.sh to "Debug".
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
@@ -41,25 +41,37 @@ set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -g")
 SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -ldl -lpthread -lm -g")
 
 set(GHOST_SRCS
-  server.cpp
+  src/logs.cpp
+  src/server.cpp
 )
+
+# needed by aws sdk
+link_directories(/usr/local/ssl/lib)
 
 add_executable(${GHOST_TARGET} ${GHOST_SRCS})
 target_link_libraries(${GHOST_TARGET} liblove ${CASTLE_LUA_LIBRARY} ${SERVERSDK_LIBRARIES} ${BOOST_LIBRARY_DATE_TIME} ${BOOST_LIBRARY_SYSTEM} ${BOOST_LIBRARY_RANDOM})
 include_directories(
+  src
   ../common
   ../love/src
   ${CASTLE_INCLUDE_DIRS}
   ${SERVERSDK_INCLUDE_DIRS}
+  /usr/local/include
 )
 
 target_link_libraries(${GHOST_TARGET} ${CASTLE_LINK_LIBRARIES} ${CASTLE_3P})
 find_package(OpenSSL REQUIRED)
 target_link_libraries(${GHOST_TARGET} OpenSSL::SSL)
+target_link_libraries(${GHOST_TARGET} curl)
 
 if(CASTLE_EXTRA_DEPENDECIES)
 	add_dependencies(${GHOST_TARGET} ${CASTLE_EXTRA_DEPENDECIES})
 endif()
+
+# AWS SDK
+
+find_package(AWSSDK REQUIRED COMPONENTS s3 gamelift)
+target_link_libraries(${GHOST_TARGET} ${AWSSDK_LINK_LIBRARIES})
 
 # From cef_macros.cmake
 # Copy a list of files from one directory to another. Relative files paths are maintained.
