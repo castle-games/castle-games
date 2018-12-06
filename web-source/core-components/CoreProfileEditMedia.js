@@ -75,28 +75,28 @@ export default class CoreProfileEditMedia extends React.Component {
         <div className={STYLES_SECTION}>
           <UIEmptyState
             style={{ padding: `0 0 24px 0`, color: Constants.colors.white }}
-            title="Add your media">
+            title="Add your games">
             Add something you've created to your profile! When people view your profile they can
             find the games you've made.
           </UIEmptyState>
           <UIInputSecondary
             value={this.state.media.name}
             name="name"
-            label="Media name"
+            label="Game Title"
             onChange={this._handleChangeMedia}
             style={{ marginBottom: 8 }}
           />
           <UIInputSecondary
             value={this.state.media.url}
             name="url"
-            label="Media URL"
+            label="Game URL"
             onChange={this._handleChangeMedia}
             style={{ marginBottom: 8 }}
           />
           <UISubmitButton
             disabled={!isSubmitEnabled}
             onClick={this._handleAddMedia}>
-            Add Media
+            Add Game
           </UISubmitButton>
         </div>
       </div>

@@ -123,7 +123,7 @@ export default class UIListMedia extends React.Component {
       maybeTitleRow = (
         <div className={STYLES_ROW_TITLE}>
           <div className={STYLES_ICON_COLUMN} />
-          <div className={STYLES_FLUID_COLUMN_NO_INTERACTION}>Media</div>
+          <div className={STYLES_FLUID_COLUMN_NO_INTERACTION}>Game Title</div>
           <div className={STYLES_COLUMN_NO_INTERACTION} style={{ width: '20%' }}>
             Author
           </div>

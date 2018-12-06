@@ -126,7 +126,7 @@ export default class CoreProfile extends React.Component {
 
   _getNavigationItems = (isOwnProfile) => {
     let navigationItems = [
-      { label: 'Media', key: 'media' },
+      { label: 'Games', key: 'media' },
       { label: 'Playlists', key: 'playlists' },
     ];
 
@@ -176,8 +176,8 @@ export default class CoreProfile extends React.Component {
             title="No media yet"
             style={{ borderTop: `16px solid ${Constants.colors.border}` }}>
             {isOwnProfile
-              ? 'You have not added any media to your profile yet.'
-              : 'This user has not added any media yet.'}
+              ? 'You have not added any games to your profile yet.'
+              : 'This user has not added any games yet.'}
           </UIEmptyState>
         );
       const addMediaIcon = (<SVG.Add height="16px" />);
@@ -187,7 +187,7 @@ export default class CoreProfile extends React.Component {
             style={{ margin: 16 }}
             onClick={this._onPressAddMedia}
             icon={addMediaIcon}>
-            Add Media
+            Add Your Games
           </UIButtonIconHorizontal>
         ) : null;
       return (
