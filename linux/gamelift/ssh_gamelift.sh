@@ -5,7 +5,7 @@
 rm InstancePrivateKey.pem
 
 fleetId=`./current_fleet_id.sh`
-fleetId="fleet-95e81704-f910-4c5a-aea6-23978e830b5e"
+fleetId="fleet-960b8406-751d-487c-9af2-af8ddb0194ce"
 instanceId=`aws gamelift describe-instances --fleet-id $fleetId --query 'Instances[0].InstanceId' --output text`
 instanceAccessResult=`aws gamelift get-instance-access --fleet-id $fleetId --instance-id $instanceId`
 instanceIp=$(echo $instanceAccessResult | jq -r '.InstanceAccess.IpAddress')

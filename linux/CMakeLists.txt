@@ -70,8 +70,8 @@ endif()
 
 # AWS SDK
 
-find_package(AWSSDK REQUIRED COMPONENTS s3 gamelift)
-target_link_libraries(${GHOST_TARGET} ${AWSSDK_LINK_LIBRARIES})
+include("aws-sdk/aws-sdk-cpp/build/aws-sdk-cpp-config.cmake")
+target_link_libraries(${GHOST_TARGET} aws-cpp-sdk-core aws-cpp-sdk-s3 aws-cpp-sdk-gamelift)
 
 # From cef_macros.cmake
 # Copy a list of files from one directory to another. Relative files paths are maintained.
