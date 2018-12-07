@@ -5,6 +5,7 @@
 rm InstancePrivateKey.pem
 
 fleetId=`./current_fleet_id.sh`
+fleetId="fleet-95e81704-f910-4c5a-aea6-23978e830b5e"
 instanceId=`aws gamelift describe-instances --fleet-id $fleetId --query 'Instances[0].InstanceId' --output text`
 instanceAccessResult=`aws gamelift get-instance-access --fleet-id $fleetId --instance-id $instanceId`
 instanceIp=$(echo $instanceAccessResult | jq -r '.InstanceAccess.IpAddress')
@@ -19,4 +20,5 @@ echo "Using IP $publicIp"
 
 aws gamelift update-fleet-port-settings --fleet-id $fleetId --inbound-permission-authorizations "FromPort=22,ToPort=22,IpRange=$publicIp/32,Protocol=TCP"
 
+echo "Connect with: ssh -i InstancePrivateKey.pem $userName@$instanceIp"
 ssh -i InstancePrivateKey.pem $userName@$instanceIp
