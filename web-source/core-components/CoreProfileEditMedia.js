@@ -29,6 +29,11 @@ const STYLES_SECTION = css`
   }
 `;
 
+const STYLES_FORM_ACTIONS = css`
+  display: flex;
+  margin-top: 12px;
+`;
+
 export default class CoreProfileEditMedia extends React.Component {
   state = {
     media: {
@@ -80,14 +85,17 @@ export default class CoreProfileEditMedia extends React.Component {
     );
   };
 
-  _removeMediaAsync = async (data) => {
-    const response = await Actions.removeMedia(data);
-    if (!response) {
-      return;
-    }
+  _removeMediaAsync = async () => {
+    const mediaId = (this.props.media) ? this.props.media.mediaId : null;
+    if (mediaId) {
+      const response = await Actions.removeMedia({ mediaId });
+      if (!response) {
+        return;
+      }
 
-    if (this.props.onAfterSave) {
-      this.props.onAfterSave();
+      if (this.props.onAfterSave) {
+        this.props.onAfterSave();
+      }
     }
   };
   
@@ -121,10 +129,22 @@ export default class CoreProfileEditMedia extends React.Component {
 
   render() {
     const isSubmitEnabled = this._isFormSubmittable();
-    const isEditing = !!(this.state.media && this.state.media.mediaId);
+    const isEditing = !!(this.props.media && this.props.media.mediaId);
     const gameTitle = (isEditing && this.props.media && this.props.media.name) ? this.props.media.name : 'an untitled game';
     const formTitle = (isEditing) ? `Editing ${gameTitle}` : 'Register a game with Castle';
     const formAction = (isEditing) ? 'Save Changes' : 'Register';
+
+    let maybeDeleteButton;
+    if (isEditing) {
+      maybeDeleteButton = (
+        <div style={{ marginLeft: 32 }}>
+          <UIButtonSecondary
+            onClick={this._removeMediaAsync}>
+            Delete
+          </UIButtonSecondary>
+        </div>
+      );
+    }
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_SECTION}>
@@ -147,11 +167,14 @@ export default class CoreProfileEditMedia extends React.Component {
             onChange={this._handleChangeMedia}
             style={{ marginBottom: 8 }}
           />
-          <UISubmitButton
-            disabled={!isSubmitEnabled}
-            onClick={this._handleSubmitForm}>
-            {formAction}
-          </UISubmitButton>
+          <div className={STYLES_FORM_ACTIONS}>
+            <UISubmitButton
+              disabled={!isSubmitEnabled}
+              onClick={this._handleSubmitForm}>
+              {formAction}
+            </UISubmitButton>
+            {maybeDeleteButton}
+          </div>
         </div>
       </div>
     );
