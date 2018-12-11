@@ -2,8 +2,6 @@ splash = {
    _shineTimer = 2,
    _shineX = 0,
    _shineVelocity = 800,
-   _toggleTimer = 0.25,
-   _toggle = 1,
    _textY = 0,
    _textYTimer = 0,
 }
@@ -52,12 +50,6 @@ function splash:update(dt)
       self._shineX = 0
       self._shineVelocity = 800
       self._shineTimer = 1.75
-   end
-
-   self._toggleTimer = self._toggleTimer - dt
-   if self._toggleTimer <= 0 then
-      self._toggleTimer = 0.25
-      self._toggle = 1 - self._toggle
    end
    
    if self._shineX < imgSize.width then
