@@ -680,9 +680,6 @@ Cocoa_HandleKeyEvent(_THIS, NSEvent *event)
         }
 
         SDL_SendKeyboardKey(SDL_PRESSED, code);
-            
-        // XXX(Ghost): Skip text input events for now (oversends to Castle UI)
-        break;
 #if 1
         if (code == SDL_SCANCODE_UNKNOWN) {
             fprintf(stderr, "The key you just pressed is not recognized by SDL. To help get this fixed, report this to the SDL forums/mailing list <https://discourse.libsdl.org/> or to Christian Walther <cwalther@gmx.ch>. Mac virtual key code is %d.\n", scancode);
@@ -690,12 +687,14 @@ Cocoa_HandleKeyEvent(_THIS, NSEvent *event)
 #endif
         if (SDL_EventState(SDL_TEXTINPUT, SDL_QUERY)) {
             /* FIXME CW 2007-08-16: only send those events to the field editor for which we actually want text events, not e.g. esc or function keys. Arrow keys in particular seem to produce crashes sometimes. */
-            [data->fieldEdit interpretKeyEvents:[NSArray arrayWithObject:event]];
+            
+            // XXX(Ghost): Directly read out of `event` because other `NSResponder`s may exist
 #if 0
-            text = [[event characters] UTF8String];
+            [data->fieldEdit interpretKeyEvents:[NSArray arrayWithObject:event]];
+#else
+            const char *text = [[event characters] UTF8String];
             if(text && *text) {
                 SDL_SendKeyboardText(text);
-                [data->fieldEdit setString:@""];
             }
 #endif
         }
