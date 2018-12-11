@@ -64,6 +64,7 @@ const MEDIA_ITEMS = `
     name
     published
     createdTime
+    updatedTime
     instructions
     description
     mediaUrl
@@ -540,10 +541,9 @@ export async function updateUserAsync({ userId, user }) {
   return result.data.updateUser;
 }
 
-export async function addMedia({ name, url }) {
+export async function addMedia({ media }) {
   const variables = {
-    name,
-    mediaUrl: url,
+    ...media,
   };
 
   const result = await API.graphqlAsync({
@@ -556,6 +556,7 @@ export async function addMedia({ name, url }) {
           mediaId,
           name,
           mediaUrl,
+          updatedTime,
         }
       }
     `,
@@ -572,6 +573,39 @@ export async function addMedia({ name, url }) {
   }
 
   return result.data.addMedia;
+}
+
+export async function updateMediaAsync({ mediaId, media }) {
+  const variables = {
+    mediaId,
+    ...media,
+  };
+  const result = await API.graphqlAsync({
+    query: `
+      mutation UpdateMedia($mediaId: ID!, $name: String, $mediaUrl: String) {
+       updateMedia(
+         mediaId: $mediaId,
+         media: {
+           name: $name,
+           mediaUrl: $mediaUrl,
+         }
+       ) {
+         mediaId,
+         name,
+         mediaUrl,
+         updatedTime,
+       }
+      }
+    `,
+    variables,
+  });
+
+  // TODO(jim): Write a global error handler.
+  if (result.error || result.errors || !result.data) {
+    return false;
+  }
+
+  return result.data.updateMedia;
 }
 
 export async function addPlaylist({ name, description }) {

@@ -109,6 +109,12 @@ export default class UIListMedia extends React.Component {
     return this.props.onMediaRemove(media);
   };
 
+  _handleMediaEdit = media => {
+    if (this.props.onMediaEdit) {
+      this.props.onMediaEdit(media);
+    }
+  };
+  
   render() {
     const isOwner =
       this.props.viewer &&
@@ -132,6 +138,7 @@ export default class UIListMedia extends React.Component {
         </div>
       );
     }
+
     return (
       <div className={STYLES_CONTAINER} style={this.props.style}>
         {maybeTitleRow}
@@ -140,12 +147,27 @@ export default class UIListMedia extends React.Component {
               if (!m) {
                 return null;
               }
-              const isSelected = this.props.media && this.props.media.mediaUrl === m.mediaUrl;
-              const actionsElement = isOwner ? (
-                <div className={STYLES_COLUMN}>
+              let maybeDeleteButton;
+              if (this.props.onMediaRemove) {
+                maybeDeleteButton = (
                   <span className={STYLES_ITEM} onClick={() => this._handleMediaRemove(m)}>
                     Delete
                   </span>
+                );
+              }
+              let maybeEditButton;
+              if (this.props.onMediaEdit) {
+                maybeEditButton = (
+                  <span className={STYLES_ITEM} onClick={() => this._handleMediaEdit(m)}>
+                    Edit
+                  </span>
+                );
+              }
+              const isSelected = this.props.media && this.props.media.mediaUrl === m.mediaUrl;
+              const actionsElement = isOwner ? (
+                <div className={STYLES_COLUMN}>
+                  {maybeEditButton}
+                  {maybeDeleteButton}
                 </div>
               ) : null;
 

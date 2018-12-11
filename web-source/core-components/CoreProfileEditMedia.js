@@ -31,28 +31,86 @@ const STYLES_SECTION = css`
 
 export default class CoreProfileEditMedia extends React.Component {
   state = {
-    mediaId: null, // if null, create new media
     media: {
+      mediaId: null,
       name: '',
-      url: '',
+      mediaUrl: '',
     },
+  };
+
+  componentDidMount() {
+    this._resetForm(this.props.media);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const existingMediaId = (this.props.media && this.props.media.mediaId) ?
+          this.props.media.mediaId :
+          null;
+    const nextMediaId = (nextProps.media && nextProps.media.mediaId) ?
+          nextProps.media.mediaId :
+          null
+    if (existingMediaId == null || nextMediaId != existingMediaId ||
+        (
+          nextMediaId == existingMediaId &&
+          nextProps.media.updatedTime !== this.props.media.updatedTime
+        )
+       ) {
+      // we're rendering a new user, reset state.
+      this._resetForm(nextProps.media);
+    }
+  }
+
+  _resetForm = (media) => {
+    this.setState({
+      media: {
+        ...media,
+      },
+    });
   };
 
   _handleChangeMedia = e => {
     this.setState({ media: { ...this.state.media, [e.target.name]: e.target.value } });
   };
 
-  _handleAddMedia = async () => {
-    const response = await Actions.addMedia({ ...this.state.media });
+  _isFormSubmittable = () => {
+    return (
+      this.state.media &&
+      this.state.media.name && this.state.media.name.length > 0 &&
+      this.state.media.mediaUrl && this.state.media.mediaUrl.length > 0
+    );
+  };
+
+  _removeMediaAsync = async (data) => {
+    const response = await Actions.removeMedia(data);
     if (!response) {
       return;
     }
 
+    if (this.props.onAfterSave) {
+      this.props.onAfterSave();
+    }
+  };
+  
+  _handleSubmitForm = async () => {
+    let response;
+    if (this.state.media.mediaId) {
+      response = await Actions.updateMediaAsync({
+        mediaId: this.state.media.mediaId,
+        media: { ...this.state.media },
+      });
+      if (!response) {
+        return;
+      }
+    } else {
+      response = await Actions.addMedia({ media: { ...this.state.media } });
+      if (!response) {
+        return;
+      }
+    }
+
     await this.setState({
-      mediaId: response.mediaId,
       media: {
-        name: response.name,
-        url: response.mediaUrl,
+        ...response,
       },
     });
 
@@ -61,23 +119,19 @@ export default class CoreProfileEditMedia extends React.Component {
     }
   };
 
-  _isFormSubmittable = () => {
-    return (
-      this.state.media.name && this.state.media.name.length > 0 &&
-      this.state.media.url && this.state.media.url.length > 0
-    );
-  };
-
   render() {
     const isSubmitEnabled = this._isFormSubmittable();
+    const isEditing = !!(this.state.media && this.state.media.mediaId);
+    const gameTitle = (isEditing && this.props.media && this.props.media.name) ? this.props.media.name : 'an untitled game';
+    const formTitle = (isEditing) ? `Editing ${gameTitle}` : 'Register a game with Castle';
+    const formAction = (isEditing) ? 'Save Changes' : 'Register';
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_SECTION}>
           <UIEmptyState
             style={{ padding: `0 0 24px 0`, color: Constants.colors.white }}
-            title="Add your games">
-            Add something you've created to your profile! When people view your profile they can
-            find the games you've made.
+            title={formTitle}>
+            When a game is registered, it appears on your Castle profile.
           </UIEmptyState>
           <UIInputSecondary
             value={this.state.media.name}
@@ -87,16 +141,16 @@ export default class CoreProfileEditMedia extends React.Component {
             style={{ marginBottom: 8 }}
           />
           <UIInputSecondary
-            value={this.state.media.url}
-            name="url"
+            value={this.state.media.mediaUrl}
+            name="mediaUrl"
             label="Game URL"
             onChange={this._handleChangeMedia}
             style={{ marginBottom: 8 }}
           />
           <UISubmitButton
             disabled={!isSubmitEnabled}
-            onClick={this._handleAddMedia}>
-            Add Game
+            onClick={this._handleSubmitForm}>
+            {formAction}
           </UISubmitButton>
         </div>
       </div>

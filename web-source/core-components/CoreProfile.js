@@ -53,7 +53,7 @@ export default class CoreProfile extends React.Component {
   state = {
     mode: 'media',
     isEditingMedia: false,
-    editingMediaId: null,
+    mediaToEdit: null,
   };
 
   componentWillReceiveProps(nextProps) {
@@ -68,7 +68,7 @@ export default class CoreProfile extends React.Component {
       this.setState({
         mode: 'media',
         isEditingMedia: false,
-        editingMediaId: null,
+        mediaToEdit: null,
       });
     }
   };
@@ -76,7 +76,7 @@ export default class CoreProfile extends React.Component {
   _onShowMedia = () => this.setState({
     mode: 'media',
     isEditingMedia: false,
-    editingMediaId: null,
+    mediaToEdit: null,
   });
 
   _onShowPlaylists = () => this.setState({ mode: 'playlists' });
@@ -85,18 +85,19 @@ export default class CoreProfile extends React.Component {
 
   _onShowSignOut = () => this.setState({ mode: 'sign-out' });
 
-  _onPressAddMedia = () => this.setState({
+  _onSelectEditMedia = (media) => this.setState({
     mode: 'media',
     isEditingMedia: true,
-    editingMediaId: null,
+    mediaToEdit: media,
   });
-
-  _removeMediaAsync = async (data) => {
-    const response = await Actions.removeMedia(data);
-    if (!response) {
-      return;
-    }
-
+  
+  _onAfterEditMedia = () => {
+    // after creating/editing media, back out to the full list of media
+    this.setState({
+      mode: 'media',
+      isEditingMedia: false,
+      mediaToEdit: null,
+    });
     if (this.props.onAfterSave) {
       this.props.onAfterSave();
     }
@@ -151,12 +152,12 @@ export default class CoreProfile extends React.Component {
   }
   
   _renderMediaContent = (isOwnProfile) => {
-    const { isEditingMedia, editingMediaId } = this.state;
+    const { isEditingMedia, mediaToEdit } = this.state;
     if (isEditingMedia) {
       return (
         <CoreProfileEditMedia
-          mediaId={editingMediaId}
-          onAfterSave={this.props.onAfterSave}
+          media={mediaToEdit}
+          onAfterSave={this._onAfterEditMedia}
         />
       );
     } else {
@@ -168,7 +169,7 @@ export default class CoreProfile extends React.Component {
             creator={this.props.creator}
             mediaItems={this.props.creator.mediaItems}
             onMediaSelect={this.props.onMediaSelect}
-            onMediaRemove={this._removeMediaAsync}
+            onMediaEdit={this._onSelectEditMedia}
             onUserSelect={this.props.onUserSelect}
           />
         ) : (
@@ -185,7 +186,7 @@ export default class CoreProfile extends React.Component {
         isOwnProfile ? (
           <UIButtonIconHorizontal
             style={{ margin: 16 }}
-            onClick={this._onPressAddMedia}
+            onClick={() => this._onSelectEditMedia(null)}
             icon={addMediaIcon}>
             Add Your Games
           </UIButtonIconHorizontal>
