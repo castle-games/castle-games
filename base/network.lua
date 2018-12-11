@@ -245,7 +245,6 @@ function network.prefetch(urls, baseUrl)
         if baseUrl and not network.isAbsolute(url) then
             url = baseUrl .. '/' .. url
         end
-        print('PREFETCH', url)
         prefetched[url] = true
         network.async(function()
             network.fetch(url)
