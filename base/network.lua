@@ -294,5 +294,8 @@ function network.update(dt)
     copas.step(0)
 end
 
+-- Expose `fetchEntries` for use in soft-reloading in `'main'`
+network.fetchEntries = fetchEntries
+
 return network
 
