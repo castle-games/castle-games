@@ -4,17 +4,11 @@
 #include <fstream>
 #include <iostream>
 
-#ifdef _MSC_VER
-#define EXPORT extern "C" __declspec(dllexport)
-#else
-#define EXPORT extern "C" __attribute__((visibility("default")))
-#endif
-
 const std::string kStarterTemplateCode =
     "function love.draw()\n  love.graphics.print(\"Edit main.lua to get started!\", 400, 300)\n  "
     "love.graphics.print(\"Press Cmd/Ctrl + R to reload.\", 400, 316)\nend";
 
-EXPORT void ghostSendJSEvent(const char *eventName, const char *serializedParams) {
+GHOST_EXPORT void ghostSendJSEvent(const char *eventName, const char *serializedParams) {
   std::string validatedParams = (serializedParams) ? serializedParams : "{}";
   std::stringstream msg;
   msg << "{ let event = new Event('" << eventName << "'); "

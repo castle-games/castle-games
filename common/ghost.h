@@ -1,6 +1,12 @@
 #ifndef __GHOST_H__
 #define __GHOST_H__
 
+#ifdef _MSC_VER
+#define GHOST_EXPORT extern "C" __declspec(dllexport)
+#else
+#define GHOST_EXPORT extern "C" __attribute__((visibility("default")))
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -15,7 +21,7 @@ void ghostOpenLoveUri(const char *uri);
 void ghostOpenExternalUrl(const char *url);
 
 // dispatch a JS Event with the given name and params.
-void ghostSendJSEvent(const char *eventName, const char *serializedParams);
+GHOST_EXPORT void ghostSendJSEvent(const char *eventName, const char *serializedParams);
 
 void ghostQuitMessageLoop();
 void ghostClose();
