@@ -82,6 +82,12 @@ JS_BIND_DEFINE(setChildWindowFrame) {
   success("success");
 }
 
+JS_BIND_DEFINE(setWindowFrameVisible) {
+  float isVisible = arg["isVisible"];
+  ghostSetChildWindowVisible(isVisible);
+  success("success");
+}
+
 JS_BIND_DEFINE(readChannels) {
   static lua_State *conversionLuaState = lua_open();
 

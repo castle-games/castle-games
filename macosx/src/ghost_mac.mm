@@ -19,13 +19,34 @@ static float childLeft = 0, childTop = 0, childWidth = 200, childHeight = 200;
 
 static BOOL browserReady = NO;
 static char *initialUri = NULL;
+NSWindow *hiddenWindow = nil;
+
+void ghostSetChildWindowVisible(bool visible) {
+  dispatch_async(dispatch_get_main_queue(), ^{
+    NSWindow *window = [[NSApplication sharedApplication] mainWindow];
+    if (window) {
+      if (visible) {
+        if (hiddenWindow) {
+          [window addChildWindow:hiddenWindow ordered:NSWindowAbove];
+          hiddenWindow = nil;
+        }
+      } else {
+        for (NSWindow *childWindow in window.childWindows) {
+          assert(!hiddenWindow);
+          [childWindow setIsVisible:FALSE];
+          hiddenWindow = childWindow;
+        }
+      }
+    }
+  });
+}
 
 void ghostSetChildWindowFrame(float left, float top, float width, float height) {
   childLeft = left;
   childTop = top;
   childWidth = width;
   childHeight = height;
-
+  
   NSWindow *window = [[NSApplication sharedApplication] mainWindow];
   if (window) {
     CGRect frame;
@@ -33,7 +54,7 @@ void ghostSetChildWindowFrame(float left, float top, float width, float height) 
     frame.origin.y = window.frame.origin.y + window.contentLayoutRect.size.height - top - height;
     frame.size.width = width;
     frame.size.height = height;
-
+    
     for (NSWindow *childWindow in window.childWindows) {
       [childWindow setFrame:frame display:NO];
     }
@@ -74,6 +95,7 @@ void ghostOpenExternalUrl(const char *url) {
 }
 
 void ghostClose() {
+  hiddenWindow = nil;
   dispatch_async(dispatch_get_main_queue(), ^{
     GhostAppDelegate *delegate = [NSApplication sharedApplication].delegate;
     [delegate stopLove];

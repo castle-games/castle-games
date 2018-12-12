@@ -88,6 +88,10 @@ export const openExternalURL = async externalUrl => {
   await NativeBinds.openExternalUrl({ url: externalUrl });
 };
 
+export const setWindowFrameVisible = async isVisible => {
+  await NativeBinds.setWindowFrameVisible({ isVisible });
+};
+
 export const updateWindowFrame = async rect => {
   await NativeBinds.setChildWindowFrame({
     left: rect.left,
