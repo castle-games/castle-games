@@ -123,6 +123,14 @@ function portalMeta:setupLove()
             end
         end
 
+        function newLove.graphics.newCubeImage(path, ...)
+            if type(path) == 'string' then
+                return love.graphics.newCubeImage(love.image.newImageData(fetchFileData(path)))
+            else
+                return love.graphics.newCubeImage(path, ...)
+            end
+        end
+
         function newLove.graphics.newImageFont(path, ...)
             if type(path) == 'string' then
                 return love.graphics.newImageFont(love.image.newImageData(fetchFileData(path)), ...)
