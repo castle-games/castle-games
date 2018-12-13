@@ -55,6 +55,7 @@ const STYLES_PARAGRAPH = css`
   color: ${Constants.colors.white};
   font-size: 14px;
   margin-top: 16px;
+  margin-bottom: 12px;
   line-height: 1.725;
 `;
 
@@ -65,7 +66,7 @@ const STYLES_BUTTON_CONTAINER = css`
 const STYLES_ACTIONS = css`
   display: flex;
   flex-wrap: wrap;
-  max-width: 1000px;
+  max-width: 1200px;
 `;
 
 const STYLES_ACTION = css`
@@ -94,6 +95,22 @@ const STYLES_SECTION = css`
 
 const STYLES_MEDIA = css`
   padding: 16px 0 0 0;
+`;
+
+const STYLES_HELP_GLYPH = css`
+  display: inline-block;
+  vertical-align: top;
+  margin: 0 12px 0 0;
+  font-size: 12px;
+  color: ${Constants.colors.white80};
+`;
+
+const STYLES_HELP_ACTION = css`
+  cursor: pointer;
+  color: ${Constants.colors.yellow};
+  line-height: 1.5rem;
+  font-size: 14px;
+  padding: 6px 0 2px 4px;
 `;
 
 export default class CoreWelcomeScreen extends React.Component {
@@ -125,6 +142,14 @@ export default class CoreWelcomeScreen extends React.Component {
 
   _handleClickFooter = () => {
     CEF.openExternalURL('http://www.playcastle.io');
+  };
+
+  _handleClickExamples = () => {
+    CEF.openExternalURL('http://www.playcastle.io/examples');
+  };
+
+  _handleClickDiscord = () => {
+    CEF.openExternalURL('https://discordapp.com/invite/4C7yEEC');
   };
 
   _getFeaturedMedia = () => {
@@ -173,14 +198,19 @@ export default class CoreWelcomeScreen extends React.Component {
             </div>
             <div className={STYLES_ACTION}>
               <p className={STYLES_PARAGRAPH}>
-                Check out our tutorial to get started making your own game or interactive media with Castle.
+                Need help, or just want to chat with other Castlers?
               </p>
-              <div className={STYLES_BUTTON_CONTAINER}>
-                <UIButtonIconHorizontal
-                  onClick={this.props.onLoadHelp}
-                  icon={externalIcon}>
-                  Open Tutorial
-                </UIButtonIconHorizontal>
+              <div onClick={this.props.onLoadHelp} className={STYLES_HELP_ACTION}>
+                <div className={STYLES_HELP_GLYPH}>&gt;</div>
+                <span>Read our Tutorial</span>
+              </div>
+              <div onClick={this._handleClickExamples} className={STYLES_HELP_ACTION}>
+                <div className={STYLES_HELP_GLYPH}>&gt;</div>
+                <span>View Example Projects</span>
+              </div>
+              <div onClick={this._handleClickDiscord}  className={STYLES_HELP_ACTION}>
+                <div className={STYLES_HELP_GLYPH}>&gt;</div>
+                <span>Join Discord</span>
               </div>
             </div>
           </div>
