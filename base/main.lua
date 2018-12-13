@@ -6,8 +6,11 @@ math.randomseed(10000 * require('socket').gettime())
 network = require 'network'
 require = require 'require'
 local root = require 'portal'
-splash = require 'splash'
 local jsEvents = require 'jsEvents'
+
+if not CASTLE_SERVER then
+    splash = require 'splash'
+end
 
 
 -- Forward `print` and errors to JS
@@ -71,7 +74,7 @@ function main.update(dt)
 
     if home then
         home:update(dt)
-    else
+    elseif not CASTLE_SERVER then
         splash:update(dt)
     end
 end
@@ -84,7 +87,7 @@ end
 function main.draw()
     if home then
         home:draw()
-    else
+    elseif not CASTLE_SERVER then
         splash:draw()
     end
 
