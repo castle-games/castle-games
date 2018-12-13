@@ -16,13 +16,13 @@
 
 #include "ghost.h"
 
-#include <windows.h>
 #include <ShellApi.h>
+#include <windows.h>
 
 #include <atlbase.h>
+#include <comdef.h>
 #include <shlobj.h>
 #include <shobjidl.h>
-#include <comdef.h>
 
 #include <mutex>
 #include <queue>
@@ -67,6 +67,7 @@ static std::mutex mutex;
 enum MessageType {
   OPEN_LOVE_URI,
   SET_CHILD_WINDOW_FRAME,
+  SET_CHILD_WINDOW_VISIBLE,
   CLOSE,
 };
 
@@ -79,62 +80,68 @@ struct Message {
     struct SetChildWindowFrameBody {
       float left, top, width, height;
     } setChildWindowFrame;
+    struct SetChildWindowVisibleBody {
+      bool visible;
+    } setChildWindowVisible;
   } body;
 };
 
 std::queue<Message> messages;
 
 // TODO: move to utility file
-inline wchar_t *convertCharArrayToLPCWSTR(const char* charArray)
-{
-	wchar_t* wString = new wchar_t[4096];
-	MultiByteToWideChar(CP_ACP, 0, charArray, -1, wString, 4096);
-	return wString;
+inline wchar_t *convertCharArrayToLPCWSTR(const char *charArray) {
+  wchar_t *wString = new wchar_t[4096];
+  MultiByteToWideChar(CP_ACP, 0, charArray, -1, wString, 4096);
+  return wString;
 }
 
-bool ghostChooseDirectoryWithDialog(const char *title, const char *message, const char *action, const char **result) {
-	std::wstring titleStr = std::wstring(convertCharArrayToLPCWSTR(title));
-	std::wstring actionStr = std::wstring(convertCharArrayToLPCWSTR(action));
+bool ghostChooseDirectoryWithDialog(const char *title, const char *message, const char *action,
+                                    const char **result) {
+  std::wstring titleStr = std::wstring(convertCharArrayToLPCWSTR(title));
+  std::wstring actionStr = std::wstring(convertCharArrayToLPCWSTR(action));
 
-	ATL::CComPtr<IFileOpenDialog> fileOpenDialog;
-	HRESULT hr = fileOpenDialog.CoCreateInstance(CLSID_FileOpenDialog);
-	if (FAILED(hr)) return false;
+  ATL::CComPtr<IFileOpenDialog> fileOpenDialog;
+  HRESULT hr = fileOpenDialog.CoCreateInstance(CLSID_FileOpenDialog);
+  if (FAILED(hr))
+    return false;
 
-	DWORD options =
-		FOS_FORCEFILESYSTEM |
-		FOS_FILEMUSTEXIST |
-		FOS_PICKFOLDERS;
-	fileOpenDialog->SetOptions(options);
+  DWORD options = FOS_FORCEFILESYSTEM | FOS_FILEMUSTEXIST | FOS_PICKFOLDERS;
+  fileOpenDialog->SetOptions(options);
 
-	fileOpenDialog->SetTitle(titleStr.c_str());
-	fileOpenDialog->SetOkButtonLabel(actionStr.c_str());
+  fileOpenDialog->SetTitle(titleStr.c_str());
+  fileOpenDialog->SetOkButtonLabel(actionStr.c_str());
 
-	hr = fileOpenDialog->Show(NULL);
-	if (FAILED(hr)) return false;
+  hr = fileOpenDialog->Show(NULL);
+  if (FAILED(hr))
+    return false;
 
-	ATL::CComPtr<IShellItemArray> items;
-	hr = fileOpenDialog->GetResults(&items);
-	if (FAILED(hr)) return false;
+  ATL::CComPtr<IShellItemArray> items;
+  hr = fileOpenDialog->GetResults(&items);
+  if (FAILED(hr))
+    return false;
 
-	ATL::CComPtr<IShellItem> item;
-	DWORD count = 0;
-	hr = items->GetCount(&count);
-	if (FAILED(hr)) return false;
+  ATL::CComPtr<IShellItem> item;
+  DWORD count = 0;
+  hr = items->GetCount(&count);
+  if (FAILED(hr))
+    return false;
 
-	hr = items->GetItemAt(count - 1, &item);
-	if (FAILED(hr)) return false;
+  hr = items->GetItemAt(count - 1, &item);
+  if (FAILED(hr))
+    return false;
 
-	wchar_t chosenFilename[MAX_PATH];
-	LPWSTR outFilename = NULL;
-	hr = item->GetDisplayName(SIGDN_FILESYSPATH, &outFilename);
-	if (FAILED(hr)) return false;
-	wcscpy_s(chosenFilename, MAX_PATH, outFilename);
-	::CoTaskMemFree(outFilename);
+  wchar_t chosenFilename[MAX_PATH];
+  LPWSTR outFilename = NULL;
+  hr = item->GetDisplayName(SIGDN_FILESYSPATH, &outFilename);
+  if (FAILED(hr))
+    return false;
+  wcscpy_s(chosenFilename, MAX_PATH, outFilename);
+  ::CoTaskMemFree(outFilename);
 
-	_bstr_t filename_bstr(chosenFilename);
-	const char *filenameUTF8 = filename_bstr;
-	*result = strdup(filenameUTF8);
-	return true;
+  _bstr_t filename_bstr(chosenFilename);
+  const char *filenameUTF8 = filename_bstr;
+  *result = strdup(filenameUTF8);
+  return true;
 }
 
 void ghostHandleOpenUri(const char *uri) {
@@ -164,6 +171,14 @@ void ghostSetChildWindowFrame(float left, float top, float width, float height) 
   Message msg;
   msg.type = SET_CHILD_WINDOW_FRAME;
   msg.body.setChildWindowFrame = {left, top, width, height};
+  messages.push(msg);
+}
+
+void ghostSetChildWindowVisible(bool visible) {
+  std::lock_guard<std::mutex> guard(mutex);
+  Message msg;
+  msg.type = SET_CHILD_WINDOW_VISIBLE;
+  msg.body.setChildWindowVisible.visible = visible;
   messages.push(msg);
 }
 
@@ -352,6 +367,14 @@ void ghostStep() {
         childHeight = msg.body.setChildWindowFrame.height;
       } break;
 
+      case SET_CHILD_WINDOW_VISIBLE: {
+        auto child = ghostWinGetChildWindow();
+
+        if (child) {
+          ShowWindow(child, msg.body.setChildWindowVisible.visible ? SW_SHOW : SW_HIDE);
+        }
+      } break;
+
       case CLOSE: {
         stopLove();
       } break;
@@ -406,8 +429,8 @@ void ghostStep() {
                      fracScale * childWidth, fracScale * childHeight, 0);
       }
 
-	  // Automatic pausing when unfocused
-	  // XXX: DISABLED for now...
+      // Automatic pausing when unfocused
+      // XXX: DISABLED for now...
       // if (lovePaused && focused) { // Unpause?
       //  // Step timer so that next frame's `dt` doesn't include the time spent paused
       //  auto timer = love::Module::getInstance<love::timer::Timer>(love::Module::M_TIMER);
