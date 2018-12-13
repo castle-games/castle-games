@@ -16,8 +16,8 @@
 
 #include "ghost.h"
 
-#include <ShellApi.h>
 #include <windows.h>
+#include <ShellApi.h>
 
 #include <atlbase.h>
 #include <comdef.h>
@@ -369,7 +369,6 @@ void ghostStep() {
 
       case SET_CHILD_WINDOW_VISIBLE: {
         auto child = ghostWinGetChildWindow();
-
         if (child) {
           ShowWindow(child, msg.body.setChildWindowVisible.visible ? SW_SHOW : SW_HIDE);
         }
