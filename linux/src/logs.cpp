@@ -13,6 +13,8 @@
 #define AWS_SECRET_KEY "Ooi8ypZoSAvOhSTfi+pWQs8iAVFjjytJagmwNuvm"
 #define S3_BUCKET_NAME "castle-server-logs"
 #define FLUSH_LOGS_INTERVAL_SECONDS 5
+// Max log file size is 1mb
+#define MAX_FILE_SIZE (1 * 1024 * 1024)
 
 Logs::Logs(std::string rootDirectory) {
   mRootDirectory = rootDirectory;
@@ -87,7 +89,10 @@ void Logs::logInternal(std::string str, bool isLua) {
   if (isLua && hasUrl()) {
     std::ofstream outfile2;
     outfile2.open(urlLogFile(), std::ofstream::out | std::ofstream::app);
-    outfile2 << output << std::endl;
+    // lua logs are already formatted like a json array
+    outfile2 << "{\"id\": " << rand() << ", \"time\": \"" << formattedTime
+             << "\", \"port\": " << std::to_string(mPort) << ", \"logs\": " << str << "}"
+             << std::endl;
     mHasWrittenSinceLastFlush = true;
   }
 }
@@ -130,5 +135,15 @@ void Logs::forceFlush() {
   } else {
     std::cout << "PutObject error: " << put_object_outcome.GetError().GetExceptionName() << " "
               << put_object_outcome.GetError().GetMessage() << std::endl;
+  }
+
+  std::ifstream in(urlLogFile().c_str(), std::ifstream::ate | std::ifstream::binary);
+  int fileSize = in.tellg();
+  std::cout << "file size : " << fileSize << std::endl;
+
+  // We might miss a few logs here, but this is the easiest way to handle for now
+  if (fileSize > MAX_FILE_SIZE) {
+    std::cout << "deleted log file" << std::endl;
+    remove(urlLogFile().c_str());
   }
 }

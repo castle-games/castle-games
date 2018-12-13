@@ -101,7 +101,7 @@ static void checkForLogs() {
       assert(var.getType() == love::Variant::STRING || var.getType() == love::Variant::SMALLSTRING);
       var.toLua(conversionLuaState);
       std::string str(luaL_checkstring(conversionLuaState, -1));
-      sCastleLogs->logLua("   " + str);
+      sCastleLogs->logLua(str);
       lua_pop(conversionLuaState, 1);
     }
   }
