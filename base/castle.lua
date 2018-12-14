@@ -1,8 +1,8 @@
 local jsEvents = require 'jsEvents'
 
-local share = {}
+local castle = {}
 
-function share.connectClient(mediaUrl, callback)
+function castle.connectClient(mediaUrl, callback)
     jsEvents.listen('CASTLE_CONNECT_MULTIPLAYER_CLIENT_RESPONSE', function(params)
         callback(params.address)
     end)
@@ -11,4 +11,4 @@ function share.connectClient(mediaUrl, callback)
     })
 end
 
-return share
+return castle

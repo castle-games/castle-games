@@ -5,6 +5,7 @@ math.randomseed(10000 * require('socket').gettime())
 
 network = require 'network'
 require = require 'require'
+castle = require 'castle'
 local root = require 'portal'
 local jsEvents = require 'jsEvents'
 

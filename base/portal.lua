@@ -1,7 +1,6 @@
 -- Manage loading, lifetime management and event forwarding for entries
 
 local jsEvents = require 'jsEvents'
-local share = require 'share'
 
 -- The root `_G`
 local GG = _G
@@ -276,7 +275,6 @@ function portalMeta:newChild(path, args)
     -- Create a new globals table `__index`ing to the base one
     child.globals = setmetatable({}, { __index = GG })
     child.globals.portal = child
-    child.globals.castle = {}
 
     -- Make a copy of the `package` table that resets the loaded modules
     child.globals.package = setmetatable({}, { __index = package })
@@ -321,21 +319,16 @@ function portalMeta:newChild(path, args)
         child.loaded = true
     end
 
-    -- Call share.lua callbacks
-    if CASTLE_SERVER and child.globals.castle.startServer then
+    -- Call multiplayer callbacks
+    if CASTLE_SERVER and child.globals.castle.startServer then -- We're on server
         child.globals.castle.startServer(GHOST_PORT)
     end
-
-    local isStartingShareClient = false
     if not CASTLE_SERVER and child.globals.castle.startClient then
-        isStartingShareClient = true
-        share.connectClient(path, function(address)
+        castle.connectClient(path, function(address)
             child.globals.castle.startClient(address)
             loadLove()
         end)
-    end
-
-    if not isStartingShareClient then
+    else
         loadLove()
     end
 
