@@ -89,7 +89,6 @@ export default class CoreApp extends React.Component {
 
   closeCEF = () => {
     UserPlay.stopAsync();
-    Logs.stopPollingForRemoteLogs();
 
     if (this._isLockedFromCEFUpdates) {
       console.log('closeCEF: already locked');
@@ -110,7 +109,6 @@ export default class CoreApp extends React.Component {
 
     // Don't `await` this since we don't want to make it take longer to get the media
     UserPlay.startAsync(userPlayData);
-    Logs.startPollingForRemoteLogs(url);
 
     CEF.openWindowFrame(url);
   };
@@ -705,6 +703,13 @@ export default class CoreApp extends React.Component {
       sidebarVisible: true,
       sidebarMode: this.state.sidebarMode === 'development' ? 'current-context' : 'development',
     };
+
+    // only poll for remote logs if the user is viewing the logs
+    if (updates.sidebarMode === 'development') {
+      Logs.startPollingForRemoteLogs(this.state.mediaUrl);
+    } else {
+      Logs.stopPollingForRemoteLogs();
+    }
 
     this.setStateWithCEF({
       pageMode: null,
