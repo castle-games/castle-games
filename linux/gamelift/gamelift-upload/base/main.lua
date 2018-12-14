@@ -199,6 +199,7 @@ end
 
 for k in pairs({
     load = true,
+    quit = true,
     update = true,
     draw = true,
     keypressed = true,

@@ -42,6 +42,7 @@ set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -g")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -ldl -lpthread -lm -g -Wl,-rpath,'$ORIGIN/lib:$ORIGIN/lib-gcc'")
 
 set(GHOST_SRCS
+  src/timer.cpp
   src/aws.cpp
   src/logs.cpp
   src/server.cpp

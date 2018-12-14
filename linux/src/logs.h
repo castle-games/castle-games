@@ -2,6 +2,7 @@
 #define __CASTLE_LOGS_H__
 
 #include "aws/s3/S3Client.h"
+#include "timer.h"
 #include <string>
 
 class Logs {
@@ -10,7 +11,7 @@ private:
   std::string mUrl;
   int mPort = -1;
   Aws::S3::S3Client mS3Client;
-  struct timespec mStartTime;
+  Timer mTimer;
   bool mHasWrittenSinceLastFlush;
 
   std::string logFile();

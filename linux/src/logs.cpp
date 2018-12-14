@@ -17,8 +17,7 @@ Logs::Logs(std::string rootDirectory) {
   mRootDirectory = rootDirectory;
   mS3Client = Aws::S3::S3Client(castleAwsCredentials(), castleAwsConfiguration());
   mHasWrittenSinceLastFlush = false;
-
-  clock_gettime(CLOCK_MONOTONIC, &mStartTime);
+  mTimer.start();
 }
 
 std::string Logs::logFile() { return mRootDirectory + "log.txt"; }
@@ -92,16 +91,11 @@ void Logs::logInternal(std::string str, bool isLua) {
 }
 
 void Logs::tick() {
-  struct timespec finishTime;
-  double elapsed;
-
-  clock_gettime(CLOCK_MONOTONIC, &finishTime);
-  elapsed = (finishTime.tv_sec - mStartTime.tv_sec);
-  elapsed += (finishTime.tv_nsec - mStartTime.tv_nsec) / 1000000000.0;
+  double elapsed = mTimer.elapsedTimeS();
 
   if (elapsed > FLUSH_LOGS_INTERVAL_SECONDS) {
     forceFlush();
-    clock_gettime(CLOCK_MONOTONIC, &mStartTime);
+    mTimer.reset();
   }
 }
 

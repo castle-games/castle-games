@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-# Good:
-url="https://raw.githubusercontent.com/jesseruder/triangle_warz/b89e4045f8a2a36c760ce043e133a2903ac38e8a/combined.lua"
+# Good with fixed heartbeat of 1:
+url="https://raw.githubusercontent.com/jesseruder/triangle_warz/f7e26c40b2065f68759f240af05334e1546ea84f/combined.lua"
 
 # Lots of logs:
 # url="https://raw.githubusercontent.com/jesseruder/triangle_warz/da3e16193ab788c6a3d8803eb48eb411294740db/combined.lua"

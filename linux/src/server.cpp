@@ -34,6 +34,7 @@
 #include "logs.h"
 #include "modules/love/love.h"
 #include "modules/thread/Channel.h"
+#include "timer.h"
 #include <SDL.h>
 #include <algorithm>
 #include <assert.h>
@@ -58,6 +59,8 @@
 // We pad the game session data with the string "castle" because otherwise aws sends us the content
 // of the url instead of the url string
 #define GAME_SESSION_DATA_PADDING 6
+#define DELAY_BEFORE_HEARTBEAT_TEST 30
+#define HEARTBEAT_MAX_INTERVAL 5
 
 using namespace Aws::GameLift::Server;
 
@@ -69,6 +72,8 @@ static int sPort = -1;
 static Logs *sCastleLogs;
 static Aws::GameLift::GameLiftClient *sGameLiftClient;
 static bool sIsAcceptingPlayers = true;
+static Timer sGameTimer;
+static Timer sHeartbeatTimer;
 
 const auto updateGameSessionResponse =
     [](const Aws::GameLift::GameLiftClient *gameLiftClient,
@@ -90,6 +95,21 @@ GHOST_EXPORT void ghostSetIsAcceptingPlayers(bool isAcceptingPlayers) {
     request.SetMaximumPlayerSessionCount(isAcceptingPlayers ? 2 : 1);
     sGameLiftClient->UpdateGameSessionAsync(request, updateGameSessionResponse);
     sIsAcceptingPlayers = isAcceptingPlayers;
+  }
+}
+
+GHOST_EXPORT void ghostHeartbeat(int numConnectedPeers) {
+  if (numConnectedPeers > 0) {
+    sHeartbeatTimer.reset();
+  }
+}
+
+void checkHeartbeat() {
+  if (sGameTimer.elapsedTimeS() > DELAY_BEFORE_HEARTBEAT_TEST) {
+    if (!sHeartbeatTimer.hasStarted() || sHeartbeatTimer.elapsedTimeS() > HEARTBEAT_MAX_INTERVAL) {
+      sCastleLogs->log("Heartbeat test failed. Shutting down.");
+      sShouldQuit = true;
+    }
   }
 }
 
@@ -206,31 +226,27 @@ static DoneAction runlove(int argc, char **argv, int &retval) {
   lua_setglobal(L, "GHOST_PORT");
 
   // TODO: should actually test whether lua is finished initializing
-  struct timespec start, finish;
-  double elapsed;
-  clock_gettime(CLOCK_MONOTONIC, &start);
+  Timer timer;
+  timer.start();
   bool hasActivatedGameSession = false;
 
   int stackpos = lua_gettop(L);
   while (lua_resume(L, 0) == LUA_YIELD) {
     if (!hasActivatedGameSession) {
-      clock_gettime(CLOCK_MONOTONIC, &finish);
-      elapsed = (finish.tv_sec - start.tv_sec);
-      elapsed += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
-
-      if (elapsed > 5) {
+      if (timer.elapsedTimeS() > 5) {
         hasActivatedGameSession = true;
         // ActivateGameSession();
         // log("Called ActivateGameSession()");
       }
     }
 
+    lua_pop(L, lua_gettop(L) - stackpos);
+    checkForLogs();
+    checkHeartbeat();
+
     if (sShouldQuit) {
       return DONE_QUIT;
     }
-
-    lua_pop(L, lua_gettop(L) - stackpos);
-    checkForLogs();
   }
 
   retval = 0;
@@ -257,10 +273,7 @@ const std::function<void(Model::GameSession)> onStartGameSession = [](Model::Gam
     return;
   }
 
-  sCastleUrl = castleUrl.substr(GAME_SESSION_DATA_PADDING);
-  sCastleLogs->log("Castle url is: " + sCastleUrl);
-  sCastleLogs->setUrl(sCastleUrl);
-
+  sGameTimer.start();
   sGameSessionId = session.GetGameSessionId();
   sGameLiftClient =
       new Aws::GameLift::GameLiftClient(castleAwsCredentials(), castleAwsConfiguration());
@@ -268,6 +281,11 @@ const std::function<void(Model::GameSession)> onStartGameSession = [](Model::Gam
   // We should really call this from runlove(), but GameLift has some bug where it will terminate
   // the session if this isn't called quickly
   ActivateGameSession();
+
+  std::string url = castleUrl.substr(GAME_SESSION_DATA_PADDING);
+  sCastleLogs->log("Castle url is: " + url);
+  sCastleLogs->setUrl(url);
+  sCastleUrl = url;
 };
 
 const std::function<void()> onProcessTerminate = []() {
@@ -384,6 +402,8 @@ int main(int argc, char **argv) {
 
   sShouldQuit = true;
   logsThread.join();
+
+  ProcessEnding();
 
   return retval;
 }

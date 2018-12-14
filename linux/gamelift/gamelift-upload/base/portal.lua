@@ -1,5 +1,6 @@
 -- Manage loading, lifetime management and event forwarding for entries
 
+local jsEvents = require 'jsEvents'
 local share = require 'share'
 
 -- The root `_G`
@@ -43,6 +44,13 @@ local loveCallbacks = {
     joystickreleased = true,
     joystickremoved = true,
 }
+
+-- Maintaining outer master volume / listening for requests to change it
+local outerVolume, innerVolume = 1, 1
+jsEvents.listen('CASTLE_SET_VOLUME', function(volume)
+    outerVolume = volume
+    love.audio.setVolume(outerVolume * innerVolume)
+end)
 
 -- Metatable of portal instances
 local portalMeta = {}
@@ -170,6 +178,15 @@ function portalMeta:setupLove()
                 return love.audio.newSource(path, ...)
             end
         end
+
+        function newLove.audio.setVolume(volume)
+            innerVolume = volume
+            return love.audio.setVolume(outerVolume * innerVolume)
+        end
+
+        function newLove.audio.getVolume()
+            return innerVolume
+        end
     end
 
     function newLove.thread.newThread(s)
@@ -247,6 +264,7 @@ function portalMeta:newChild(path, args)
     child.args = args or {}
     child.path = path
     child.onError = child.args.onError
+    child.volume = 1
 
     -- Figure out base path
     if network.isAbsolute(path) then
