@@ -40,6 +40,7 @@ export const colors = {
   white: base.white,
   green: base.green,
   blue: base.blue,
+  blueLighter: '#1263dc',
   yellow: base.yellow,
   purple: base.purple,
   red: base.red,
