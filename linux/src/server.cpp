@@ -23,7 +23,10 @@
 #define GAMELIFT_USE_STD 1
 #endif
 
+#include "aws.h"
 #include "aws/core/Aws.h"
+#include "aws/gamelift/GameLiftClient.h"
+#include "aws/gamelift/model/UpdateGameSessionRequest.h"
 #include "aws/gamelift/server/GameLiftServerAPI.h"
 #include "aws/gamelift/server/LogParameters.h"
 #include "aws/gamelift/server/ProcessParameters.h"
@@ -48,8 +51,7 @@
 #include <thread>
 #include <unistd.h>
 
-#ifdef LOVE_BUILD_EXE
-
+#define GHOST_EXPORT extern "C" __attribute__((visibility("default")))
 #define START_PORT 22122
 #define END_PORT 42122
 #define PORT_FILE "current_port.txt"
@@ -62,8 +64,34 @@ using namespace Aws::GameLift::Server;
 static bool sShouldQuit = false;
 static std::string sCastleUrl;
 static std::string sBinaryDirectory;
+static std::string sGameSessionId;
 static int sPort = -1;
 static Logs *sCastleLogs;
+static Aws::GameLift::GameLiftClient *sGameLiftClient;
+static bool sIsAcceptingPlayers = true;
+
+const auto updateGameSessionResponse =
+    [](const Aws::GameLift::GameLiftClient *gameLiftClient,
+       const Aws::GameLift::Model::UpdateGameSessionRequest &updateGameSessionRequest,
+       const Aws::GameLift::Model::UpdateGameSessionOutcome &updateGameSessionOutcome,
+       const std::shared_ptr<const Aws::Client::AsyncCallerContext> &callerContext) {};
+
+GHOST_EXPORT void ghostSetIsAcceptingPlayers(bool isAcceptingPlayers) {
+  if (sIsAcceptingPlayers == isAcceptingPlayers) {
+    return;
+  }
+
+  if (sGameLiftClient && !sGameSessionId.empty()) {
+    Aws::GameLift::Model::UpdateGameSessionRequest request =
+        Aws::GameLift::Model::UpdateGameSessionRequest();
+    request.SetGameSessionId(sGameSessionId.c_str());
+    // Use 2 to signal that there are open spots. 1 to signal that there aren't. You can't search
+    // using PlayerSessionCreationPolicy :/
+    request.SetMaximumPlayerSessionCount(isAcceptingPlayers ? 2 : 1);
+    sGameLiftClient->UpdateGameSessionAsync(request, updateGameSessionResponse);
+    sIsAcceptingPlayers = isAcceptingPlayers;
+  }
+}
 
 // Lua
 extern "C" {
@@ -233,6 +261,10 @@ const std::function<void(Model::GameSession)> onStartGameSession = [](Model::Gam
   sCastleLogs->log("Castle url is: " + sCastleUrl);
   sCastleLogs->setUrl(sCastleUrl);
 
+  sGameSessionId = session.GetGameSessionId();
+  sGameLiftClient =
+      new Aws::GameLift::GameLiftClient(castleAwsCredentials(), castleAwsConfiguration());
+
   // We should really call this from runlove(), but GameLift has some bug where it will terminate
   // the session if this isn't called quickly
   ActivateGameSession();
@@ -355,5 +387,3 @@ int main(int argc, char **argv) {
 
   return retval;
 }
-
-#endif // LOVE_BUILD_EXE

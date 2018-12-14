@@ -1,6 +1,5 @@
 #include "logs.h"
-#include "aws/core/Aws.h"
-#include "aws/core/auth/AWSCredentialsProvider.h"
+#include "aws.h"
 #include "aws/s3/S3Client.h"
 #include "aws/s3/model/PutObjectRequest.h"
 #include <curl/curl.h>
@@ -9,8 +8,6 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-#define AWS_ACCESS_KEY "AKIAIYZJVIYATRZDBP5Q"
-#define AWS_SECRET_KEY "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"
 #define S3_BUCKET_NAME "castle-server-logs"
 #define FLUSH_LOGS_INTERVAL_SECONDS 5
 // Max log file size is 256k
@@ -18,10 +15,7 @@
 
 Logs::Logs(std::string rootDirectory) {
   mRootDirectory = rootDirectory;
-  Aws::Auth::AWSCredentials credentials(AWS_ACCESS_KEY, AWS_SECRET_KEY);
-  Aws::Client::ClientConfiguration configuration;
-  configuration.region = "us-west-2";
-  mS3Client = Aws::S3::S3Client(credentials, configuration);
+  mS3Client = Aws::S3::S3Client(castleAwsCredentials(), castleAwsConfiguration());
   mHasWrittenSinceLastFlush = false;
 
   clock_gettime(CLOCK_MONOTONIC, &mStartTime);
