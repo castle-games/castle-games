@@ -739,6 +739,13 @@ export default class CoreApp extends React.Component {
     this.setStateWithCEF({ ...updates });
   };
 
+  _handleToggleMute = async () => {
+    const isMuted = !this.state.isMuted;
+    CEF.sendLuaEvent('CASTLE_SET_VOLUME', isMuted ? 0 : 1);
+    this.setStateWithCEF({ isMuted });
+    return;
+  };
+
   _handleToggleOverlay = () => {
     const updates = {
       isOverlayActive: !this.state.isOverlayActive,
@@ -762,10 +769,12 @@ export default class CoreApp extends React.Component {
       viewer={this.state.viewer}
       media={this.state.media}
       expanded={this.state.isMediaExpanded}
+      isMuted={this.state.isMuted}
       isLoading={this.state.mediaLoading}
       onChange={this._handleURLChange}
       onSubmit={this.reload}
       onHideOverlay={this._handleHideOverlay}
+      onToggleMute={this._handleToggleMute}
     />
   );
 

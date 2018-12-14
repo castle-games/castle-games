@@ -81,6 +81,7 @@ const INITIAL_STATE_OFFLINE = {
   isOverlayActive: true,
   isHorizontalOrientation: false,
   isOffline: true,
+  isMuted: false,
 };
 
 const run = async () => {

@@ -4,7 +4,6 @@ import * as Constants from '~/common/constants';
 import { css } from 'react-emotion';
 
 const STYLES_CONTROL = css`
-  flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;

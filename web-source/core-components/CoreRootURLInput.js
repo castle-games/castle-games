@@ -79,6 +79,9 @@ const STYLES_INPUT = css`
 const STYLES_CONTAINER_TOOLBAR = css`
   padding-left: 16px;
   flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+  display: flex;
 `;
 
 const ENABLE_HIDE_OVERLAY = false;
@@ -108,6 +111,25 @@ export default class CoreRootURLInput extends React.Component {
         />
       );
     }
+    let fullScreenElement;
+    if (ENABLE_HIDE_OVERLAY) {
+      fullScreenElement = (
+        <UIButtonDarkSmall
+          icon={<SVG.CloseOverlay height="14px" />}
+          onClick={this.props.onHideOverlay}
+        />
+      );
+    }
+    let muteIcon = (this.props.isMuted) ?
+        <SVG.Mute height="16px" /> :
+        <SVG.Audio height="16px" />;
+    let muteElement = (
+      <UIButtonDarkSmall
+        icon={muteIcon}
+        onClick={this.props.onToggleMute}
+        style={{ background: Constants.colors.black }}
+        />
+    );
 
     return (
       <div className={STYLES_CONTAINER}>
@@ -132,13 +154,9 @@ export default class CoreRootURLInput extends React.Component {
             onClick={this._handleSubmit}
             style={{ background: Constants.colors.black }}
           />
+          {muteElement}
           {dimensionToggleElement}
-          {ENABLE_HIDE_OVERLAY ? (
-            <UIButtonDarkSmall
-              icon={<SVG.CloseOverlay height="14px" />}
-              onClick={this.props.onHideOverlay}
-            />
-          ) : null}
+          {fullScreenElement}
         </div>
       </div>
     );
