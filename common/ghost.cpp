@@ -5,8 +5,8 @@
 #include <iostream>
 
 const std::string kStarterTemplateCode =
-    "function love.draw()\n  love.graphics.print(\"Edit main.lua to get started!\", 400, 300)\n  "
-    "love.graphics.print(\"Press Cmd/Ctrl + R to reload.\", 400, 316)\nend";
+    "function love.draw()\n    love.graphics.print('Edit main.lua to get started!', 400, 300)\n    "
+    "love.graphics.print('Press Cmd/Ctrl + R to reload.', 400, 316)\nend";
 
 GHOST_EXPORT void ghostSendJSEvent(const char *eventName, const char *serializedParams) {
   std::string validatedParams = (serializedParams) ? serializedParams : "{}";
