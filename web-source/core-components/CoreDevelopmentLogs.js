@@ -97,6 +97,8 @@ export default class CoreDevelopmentLogs extends React.Component {
       return Constants.colors.red;
     } else if (log.type === 'system') {
       return Constants.colors.yellow;
+    } else if (log.type === 'remote') {
+      return Constants.colors.purple;
     }
     return null;
   };
