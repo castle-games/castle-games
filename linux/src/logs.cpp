@@ -13,8 +13,8 @@
 #define AWS_SECRET_KEY "Ooi8ypZoSAvOhSTfi+pWQs8iAVFjjytJagmwNuvm"
 #define S3_BUCKET_NAME "castle-server-logs"
 #define FLUSH_LOGS_INTERVAL_SECONDS 5
-// Max log file size is 1mb
-#define MAX_FILE_SIZE (1 * 1024 * 1024)
+// Max log file size is 256k
+#define MAX_FILE_SIZE (256 * 1024)
 
 Logs::Logs(std::string rootDirectory) {
   mRootDirectory = rootDirectory;

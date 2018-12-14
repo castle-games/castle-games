@@ -45,6 +45,7 @@
 #include <sys/file.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <thread>
 #include <unistd.h>
 
 #ifdef LOVE_BUILD_EXE
@@ -105,8 +106,6 @@ static void checkForLogs() {
       lua_pop(conversionLuaState, 1);
     }
   }
-
-  sCastleLogs->tick();
 }
 
 static DoneAction runlove(int argc, char **argv, int &retval) {
@@ -289,6 +288,13 @@ void findFreePort() {
   close(fd);
 }
 
+void tickLogs() {
+  while (!sShouldQuit) {
+    sCastleLogs->tick();
+    sleep(1);
+  }
+}
+
 int main(int argc, char **argv) {
   Aws::SDKOptions options;
   Aws::InitAPI(options);
@@ -297,6 +303,7 @@ int main(int argc, char **argv) {
   sBinaryDirectory = std::string(argv[0]).substr(0, pos) + "/";
 
   sCastleLogs = new Logs(sBinaryDirectory);
+  std::thread logsThread(tickLogs);
 
   sCastleLogs->log("\n\n\n\n");
   findFreePort();
@@ -342,6 +349,9 @@ int main(int argc, char **argv) {
   sCastleLogs->log("Done running Lua");
   sCastleLogs->forceFlush();
   Aws::ShutdownAPI(options);
+
+  sShouldQuit = true;
+  logsThread.join();
 
   return retval;
 }
