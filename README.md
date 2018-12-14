@@ -54,7 +54,7 @@ do that!
 
 Portals offer views into content from the web to render as a Lua/Love game. That's how the 'Base'
 experience included with Ghost loads other experiences. You can load your own portals that you
-create, and have those portals load other portals, and so on. You have full freedom now how portals
+create, and have those portals load other portals, and so on. You have full freedom now how 
 your portal loads are displayed, given input, and managed.
 
 Edit 'base/main.lua' to change the default portal(s) opened by the Base.
