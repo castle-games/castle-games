@@ -9,7 +9,7 @@ class Logs {
   _logId = 0;
 
   _remoteLogsUrl = null;
-  _remoteLogsPollInterval = null;
+  _remoteLogsPollTimer = null;
   _lastRemoteLogIdSeen = 0;
   
   constructor() {
@@ -63,10 +63,7 @@ class Logs {
 
     if (!Urls.isLocalUrl(mediaUrl)) {
       this._remoteLogsUrl = this._makeRemoteLogsUrl(mediaUrl);
-      this._remoteLogsPollInterval = setInterval(
-        this._pollForRemoteLogsAsync,
-        REMOTE_LOGS_POLL_INTERVAL_SEC * 1000
-      );
+      this._pollForRemoteLogsAsync();
     }
   };
 
@@ -74,9 +71,9 @@ class Logs {
     if (this._remoteLogsUrl) {
       this._remoteLogsUrl = null;
     }
-    if (this._remoteLogsPollInterval) {
-      clearInterval(this._remoteLogsPollInterval);
-      this._remoteLogsPollInterval = null;
+    if (this._remoteLogsPollTimer) {
+      clearTimeout(this._remoteLogsPollTimer);
+      this._remoteLogsPollTimer = null;
     }
     this._lastRemoteLogIdSeen = 0;
   };
@@ -119,6 +116,10 @@ class Logs {
         this._lastRemoteLogIdSeen = log.id;
       });
     }
+    this._remoteLogsPollTimer = setTimeout(
+      this._pollForRemoteLogsAsync,
+      REMOTE_LOGS_POLL_INTERVAL_SEC * 1000
+    );
   };
 
   _makeRemoteLogsUrl = (mediaUrl) => {
