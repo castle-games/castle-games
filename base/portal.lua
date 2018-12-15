@@ -310,9 +310,10 @@ function portalMeta:newChild(path, args)
     end
     if not succeeded then return nil, err end
 
-    -- Call `love.load` callback and set as loaded
-    -- This has to happen after startClient otherwise the client will miss the love.load event
-    local loadLove = function()
+    -- Call `love.load` callback and set as loaded.
+    -- This has to happen after `castle.startClient` otherwise the client will miss the `love.load` event.
+    -- This must also be called on a network coroutine (such as using `network.async`).
+    local function loadLove()
         if child.globals.love.load then
             child.globals.love.load({ child.basePath })
         end
@@ -326,7 +327,9 @@ function portalMeta:newChild(path, args)
     if not CASTLE_SERVER and child.globals.castle.startClient then
         castle.connectClient(path, function(address)
             child.globals.castle.startClient(address)
-            loadLove()
+            network.async(function()
+                loadLove()
+            end)
         end)
     else
         loadLove()
