@@ -118,28 +118,6 @@ export default class CoreWelcomeScreen extends React.Component {
     featuredMedia: [],
   };
 
-  _handleClickCreateProjectAsync = async () => {
-    const newProjectDirectory = await CEF.chooseDirectoryWithDialogAsync({
-      title: 'Create a New Castle Project',
-      message: 'Choose a folder where the project will be created.',
-      action: 'Create Project',
-    });
-    if (newProjectDirectory) {
-      let entryPointFilePath;
-      try {
-        entryPointFilePath = await CEF.createProjectAtPathAsync(newProjectDirectory);
-      } catch (_) {}
-      if (entryPointFilePath) {
-        const mediaUrl = `file://${entryPointFilePath}`;
-        this.props.onMediaSelect({ mediaUrl });
-        Logs.system('Welcome to Castle!');
-        Logs.system(`We created some starter code for your project at ${entryPointFilePath}.`);
-        Logs.system(`Open that file in your favorite text editor to get started.`);
-        Logs.system(`Need help? Check out http://www.playcastle.io/get-started`);
-      }
-    }
-  };
-
   _handleClickFooter = () => {
     CEF.openExternalURL('http://www.playcastle.io');
   };
@@ -190,7 +168,7 @@ export default class CoreWelcomeScreen extends React.Component {
               </p>
               <div className={STYLES_BUTTON_CONTAINER}>
                 <UIButtonIconHorizontal
-                  onClick={this._handleClickCreateProjectAsync}
+                  onClick={this.props.onCreateProject}
                   icon={createIcon}>
                   Create a Castle Project
                 </UIButtonIconHorizontal>

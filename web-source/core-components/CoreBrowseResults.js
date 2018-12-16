@@ -154,6 +154,7 @@ export default class CoreBrowseResults extends React.Component {
           <CoreWelcomeScreen
             onSelectRandom={this.props.onSelectRandom}
             onUserSelect={this.props.onUserSelect}
+            onCreateProject={this.props.onCreateProject}
             onPlaylistSelect={this.props.onPlaylistSelect}
             onMediaSelect={this.props.onMediaSelect}
             onLoadHelp={this.props.onLoadHelp}

@@ -355,6 +355,31 @@ export default class CoreApp extends React.Component {
     });
   };
 
+  _handleCreateProjectAsync = async () => {
+    const newProjectDirectory = await CEF.chooseDirectoryWithDialogAsync({
+      title: 'Create a New Castle Project',
+      message: 'Choose a folder where the project will be created.',
+      action: 'Create Project',
+    });
+    if (newProjectDirectory) {
+      let entryPointFilePath;
+      try {
+        entryPointFilePath = await CEF.createProjectAtPathAsync(newProjectDirectory);
+      } catch (_) {}
+      if (entryPointFilePath) {
+        const mediaUrl = `file://${entryPointFilePath}`;
+        this._handleMediaSelect({ mediaUrl });
+        Logs.system('Welcome to Castle!');
+        Logs.system(`We created some starter code for your project at ${entryPointFilePath}.`);
+        Logs.system(`Open that file in your favorite text editor to get started.`);
+        Logs.system(`Need help? Check out http://www.playcastle.io/get-started`);
+        // regardless of previous sidebar state, force sidebar visible and
+        // logs visible within sidebar.
+        this._handleShowDevelopmentLogs();
+      }
+    }
+  };
+
   _handleKeyDown = e => {
     if (isReloadHotkey(e)) {
       return this.reload(e);
@@ -870,6 +895,7 @@ export default class CoreApp extends React.Component {
             searchQuery={state.searchQuery}
             onUserSelect={this._handleUserSelect}
             onMediaSelect={this._handleMediaSelect}
+            onCreateProject={this._handleCreateProjectAsync}
             onPlaylistSelect={this._handlePlaylistSelect}
             onLoadHelp={this._handleLoadTutorial}
             onLoadURL={this.loadURL}
