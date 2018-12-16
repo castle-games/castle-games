@@ -3,6 +3,7 @@ import * as Urls from '~/common/urls';
 const REMOTE_LOGS_POLL_INTERVAL_SEC = 5;
 const DUMMY_REMOTE_LOGS = `{"id": 1967513926, "time": "Thu Dec 13 20:47:02 2018", "port": 22132, "logs": ["75ms","GET","https:\/\/raw.githubusercontent.com\/pkulchenko\/serpent\/522a6239f25997b101c585c0daf6a15b7e37fad9\/src\/serpent.lua"]}
 {"id": 1365180540, "time": "Thu Dec 13 20:47:02 2018", "port": 22132, "logs": ["107ms","GET","https:\/\/raw.githubusercontent.com\/jesseruder\/triangle_warz\/b89e4045f8a2a36c760ce043e133a2903ac38e8a\/state.lua"]}`;
+const DUMMY_REMOTE_ERROR = `{"id": 772995100, "time": "Sat Dec 15 18:30:12 2018", "port": 22128, "logs": {"error":"[string \"game\"]:737: attempt to index global 'player' (a nil value)","stacktrace":"[string \"game\"]:737: attempt to index global 'player' (a nil value)\nstack traceback:\n\t[string \"game\"]:737: in function 'update'\n\t[string \"object\"]:48: in function 'update_objects'\n\t[string \"game\"]:233: in function 'update_game'\n\t[string \"game\"]:123: in function '_update'\n\t[string \"server\"]:75: in function 'serverCb'\n\t[string \"cs\"]:363: in function <[string \"cs\"]:356>\n\t[C]: in function 'safeCall'\n\tportal.lua:342: in function 'update'\n\tmain.lua:77: in function <main.lua:71>\n\tmain.lua:234: in function 'update'\n\t[string \"boot.lua\"]:509: in function <[string \"boot.lua\"]:493>\n\t[C]: in function 'xpcall'\n\t[string \"boot.lua\"]:657: in function <[string \"boot.lua\"]:630>"}}`;
 
 class Logs {
   _logs = null;
@@ -41,10 +42,11 @@ class Logs {
     });
   };
 
-  remote = (text) => {
+  remote = (text, details) => {
     this._logs.push({
       type: 'remote',
       text,
+      details,
       id: this._logId++,
     });
   };
@@ -111,8 +113,8 @@ class Logs {
 
       // format and pipe through this.remote()
       remoteLogsFetched.forEach(log => {
-        const text = log.logs.join(' ');
-        this.remote(text);
+        const { text, details } = this._formatLog(log);
+        this.remote(text, details);
         this._lastRemoteLogIdSeen = log.id;
       });
     }
@@ -127,6 +129,20 @@ class Logs {
     const encodedMediaUrl = encodeURIComponent(encodeURIComponent(mediaUrl));
     return `https://s3-us-west-2.amazonaws.com/castle-server-logs/logs-${encodedMediaUrl}`;
   }
+
+  _formatLog = (logObj) => {
+    if (Array.isArray(logObj.logs)) {
+      return {
+        text: logObj.logs.join(' '),
+      };
+    } else if (logObj.logs.error) {
+      return {
+        text: logObj.logs.error,
+        details: logObj.logs.stacktrace,
+      };
+    }
+    return {};
+  };
 }
 
 export default new Logs();
