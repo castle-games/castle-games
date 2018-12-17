@@ -997,6 +997,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_IDENTIFIER = builders.game.ghost;
 				PRODUCT_NAME = Castle;
+				STRIP_INSTALLED_PRODUCT = NO;
 			};
 			name = Debug;
 		};
@@ -1027,6 +1028,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_IDENTIFIER = builders.game.ghost;
 				PRODUCT_NAME = Castle;
+				STRIP_INSTALLED_PRODUCT = NO;
 			};
 			name = Release;
 		};
@@ -1057,6 +1059,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				PRODUCT_BUNDLE_IDENTIFIER = builders.game.ghost;
 				PRODUCT_NAME = Castle;
+				STRIP_INSTALLED_PRODUCT = NO;
 			};
 			name = Distribution;
 		};
