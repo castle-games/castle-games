@@ -14,6 +14,17 @@ local network = {}
 network.requests = {}
 
 local tasks = limit.new(10)
+local coros = setmetatable({}, { __mode = 'k' })
+
+local function ensureCoro(uri)
+    if not coros[coroutine.running()] then -- avoid `assert` to skip concats in the happy case
+        error("attempted a network call for '" .. uri
+                .. "' in a non-network coroutine -- ensure that resource loading "
+                .. "(eg. `network.fetch`, `require`, `love.image.newImage` etc.) happens only in "
+                .. "network coroutines (eg. top-level module code, `love.load`, `network.async` "
+                .. "blocks) and not elsewhere (eg. `love.update`, `love.draw` or other events)")
+    end
+end
 
 -- Database for persistent storage.
 love.filesystem.write('dummy', '') -- Create a dummy file to make sure the save directory exists
@@ -27,6 +38,7 @@ local db = sqlite3.open(love.filesystem.getSaveDirectory() .. '/ghost_network.db
 function network.async(foo, onError)
     local outerPortal = getfenv(2).portal
     tasks:addthread(function()
+        coros[coroutine.running()] = true
         copas.setErrorHandler(function(msg, co, skt)
             local stack = debug.traceback(msg)
             if onError then
@@ -55,6 +67,9 @@ function network.request(firstArg, ...)
         url = firstArg
         method = select('#', ...) == 0 and 'GET' or 'POST'
     end
+
+    -- Ensure we're in a network coroutine
+    ensureCoro(url)
 
     -- Add entry in `network.requests` table
     local id = {} -- Cheap UUID ^_^
@@ -148,6 +163,9 @@ local fetchEntries = { GET = {}, HEAD = {} }
 -- Fetch a resource with default caching semantics. If `skipCache` is true, skip looking in the
 -- persistent cache (still saves it to the cache after).
 function network.fetch(url, method, skipCache)
+    -- Ensure we're in a network coroutine
+    ensureCoro(url)
+
     method = (method or 'GET'):upper()
     assert(method == 'GET' or method == 'HEAD', "`network.fetch` only supports 'GET' or 'HEAD'")
 
