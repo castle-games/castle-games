@@ -2,6 +2,7 @@ import { Updates } from 'expo';
 import React from 'react';
 import { View, StatusBar, Alert } from 'react-native';
 
+import './js/Console';
 import Navigation from './js/Navigation';
 
 // Check for published JS updates periodically in non-development
