@@ -18,4 +18,9 @@ EXBuildConstants.*
 android/app/src/main/assets/shell-app-manifest.json
 android/app/src/main/assets/shell-app.bundle
 
+ios/castle/Supporting/shell-app-manifest.json
+ios/castle/Supporting/shell-app.bundle
+ios/castle/Supporting/EXShell.json
+ios/castle/Supporting/EXShell.plist.bak
+
 .DS_Store
