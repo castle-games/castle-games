@@ -21,4 +21,4 @@ Keep this running. It will show logs.
 
 Do 'Common' above first (it will write a file telling the iOS code how to load the JavaScript from your computer).
 
-Make sure you have Xcode. Open the file ending in '.xcworkspace' under 'ios/'. Then hit Cmd + R.
+Make sure you have Xcode. Open the file ending in '.xcworkspace' under 'ios/'. *(You may have to click on 'castle' in the left sidebar (hit Cmd + 0 if it's not visible) then set up some code-signing certificate stuff -- like using your personal subscription. I have it on my personal iOS developer subscription right now, so that's why. I'll discuss with @terribleben and get a team certificate set up.)* Then hit Cmd + R.
