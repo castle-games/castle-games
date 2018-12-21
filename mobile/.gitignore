@@ -13,7 +13,7 @@ brushy.iml
 ios/DerivedData/
 ios/DerivedData-beta/
 
-EXBuildConstants.*
+ios/castle/**/EXBuildConstants.*
 
 android/app/src/main/assets/shell-app-manifest.json
 android/app/src/main/assets/shell-app.bundle
