@@ -4,7 +4,7 @@ import { Button as RNButton, View, TextInput, TouchableOpacity } from 'react-nat
 import { FontAwesome } from '@expo/vector-icons';
 
 const DEFAULT_GAME_URI =
-  'https://raw.githubusercontent.com/nikki93/procjam-oct-2018/4fe417f846c5d752adcac59f56e64e823116dfe1/main.lua';
+  'https://raw.githubusercontent.com/nikki93/procjam-oct-2018/69511b9ac7ec4631ec215a2dc8cd5b034cdd1b0d/main.lua';
 
 export default class GameScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
