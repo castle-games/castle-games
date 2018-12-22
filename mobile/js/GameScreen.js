@@ -15,14 +15,6 @@ const widgetStyle = {
   borderColor: '#ddd',
 };
 
-const usernameQuery = gql`
-  query {
-    me {
-      username
-    }
-  }
-`;
-
 export default class GameScreen extends React.Component {
   state = {
     viewedUri: DEFAULT_GAME_URI,
@@ -41,7 +33,14 @@ export default class GameScreen extends React.Component {
               justifyContent: 'center',
               padding: 4,
             }}>
-            <Query query={usernameQuery}>
+            <Query
+              query={gql`
+                query {
+                  me {
+                    username
+                  }
+                }
+              `}>
               {({ loading, data }) =>
                 loading ? <Text>...</Text> : <Text>{data.me.username}</Text>}
             </Query>

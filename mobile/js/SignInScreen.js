@@ -12,14 +12,6 @@ const textInputStyle = {
   margin: 4,
 };
 
-const signInMutation = gql`
-  mutation($who: String!, $password: String!) {
-    login(who: $who, password: $password) {
-      userId
-    }
-  }
-`;
-
 export default class SignInScreen extends React.Component {
   render() {
     return (
@@ -35,7 +27,14 @@ export default class SignInScreen extends React.Component {
         <TextInput style={textInputStyle} onChangeText={password => this.setState({ password })} />
         <ApolloConsumer>
           {client => (
-            <Mutation mutation={signInMutation}>
+            <Mutation
+              mutation={gql`
+                mutation($who: String!, $password: String!) {
+                  login(who: $who, password: $password) {
+                    userId
+                  }
+                }
+              `}>
               {(signIn, { data }) => {
                 if (data && data.login && data.login.userId) {
                   client.clearStore();
