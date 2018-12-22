@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View, TextInput, TouchableOpacity } from 'react-native';
 
-import { ApolloConsumer, gql, Mutation } from './GraphQL';
+import { apolloClient, gql, Mutation } from './GraphQL';
 
 const textInputStyle = {
   width: '100%',
@@ -25,45 +25,42 @@ export default class SignInScreen extends React.Component {
         }}>
         <TextInput style={textInputStyle} onChangeText={who => this.setState({ who })} />
         <TextInput style={textInputStyle} onChangeText={password => this.setState({ password })} />
-        <ApolloConsumer>
-          {client => (
-            <Mutation
-              mutation={gql`
-                mutation($who: String!, $password: String!) {
-                  login(who: $who, password: $password) {
-                    userId
-                  }
-                }
-              `}>
-              {(signIn, { data }) => {
-                if (data && data.login && data.login.userId) {
-                  client.clearStore();
-                  setTimeout(() => this.props.navigation.navigate('GameScreen'));
-                }
+        <Mutation
+          mutation={gql`
+            mutation($who: String!, $password: String!) {
+              login(who: $who, password: $password) {
+                userId
+              }
+            }
+          `}>
+          {(signIn, { data }) => {
+            if (data && data.login && data.login.userId) {
+              apolloClient.clearStore();
+              setTimeout(() => this.props.navigation.navigate('GameScreen'));
+            }
 
-                return (
-                  <TouchableOpacity
-                    style={{
-                      backgroundColor: '#ddd',
-                      borderRadius: 4,
-                      padding: 4,
-                      margin: 4,
-                      alignItems: 'center',
-                    }}
-                    onPress={() =>
-                      signIn({
-                        variables: {
-                          who: this.state.who,
-                          password: this.state.password,
-                        },
-                      })}>
-                    <Text>Sign In</Text>
-                  </TouchableOpacity>
-                );
-              }}
-            </Mutation>
-          )}
-        </ApolloConsumer>
+            return (
+              <TouchableOpacity
+                style={{
+                  backgroundColor: '#ddd',
+                  borderRadius: 4,
+                  padding: 4,
+                  margin: 4,
+                  alignItems: 'center',
+                }}
+                onPress={() =>
+                  signIn({
+                    variables: {
+                      who: this.state.who,
+                      password: this.state.password,
+                    },
+                  })
+                }>
+                <Text>Sign In</Text>
+              </TouchableOpacity>
+            );
+          }}
+        </Mutation>
       </View>
     );
   }

@@ -8,6 +8,7 @@ import { ApolloProvider } from 'react-apollo';
 import './js/Console';
 import { createRootNavigator } from './js/Navigation';
 import { gql } from './js/GraphQL';
+import * as GraphQL from './js/GraphQL';
 
 export default class App extends React.Component {
   state = {
@@ -20,17 +21,17 @@ export default class App extends React.Component {
 
     (async () => {
       // Initialize Castle API client to get HTTP headers
-      this._castleClient = CastleApiClient().client;
-      // await this._castleClient.forgetAllSessionsAsync(); // Uncomment this to force sign-out
+      GraphQL.castleClient = CastleApiClient().client;
+      await GraphQL.castleClient.forgetAllSessionsAsync(); // Uncomment this to force sign-out
 
       // Initialize Apollo client
-      this._apolloClient = new ApolloClient({
+      GraphQL.apolloClient = new ApolloClient({
         uri: 'https://apis.playcastle.io/graphql',
-        headers: await this._castleClient._getRequestHeadersAsync(),
+        headers: await GraphQL.castleClient._getRequestHeadersAsync(),
       });
 
       // Check whether we're signed in and set initial route accordingly
-      const { data } = await this._apolloClient.query({
+      const { data } = await GraphQL.apolloClient.query({
         query: gql`
           query {
             me {
@@ -53,7 +54,7 @@ export default class App extends React.Component {
 
     const RootNavigator = createRootNavigator({ initialRouteName: this.state.initialRouteName });
     return (
-      <ApolloProvider client={this._apolloClient}>
+      <ApolloProvider client={GraphQL.apolloClient}>
         <View style={{ flex: 1, backgroundColor: 'white' }}>
           <StatusBar backgroundColor="white" barStyle="dark-content" />
           <RootNavigator />
