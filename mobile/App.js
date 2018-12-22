@@ -22,7 +22,7 @@ export default class App extends React.Component {
     (async () => {
       // Initialize Castle API client to get HTTP headers
       GraphQL.castleClient = CastleApiClient().client;
-      await GraphQL.castleClient.forgetAllSessionsAsync(); // Uncomment this to force sign-out
+      // await GraphQL.castleClient.forgetAllSessionsAsync(); // Uncomment this to force sign-out
 
       // Initialize Apollo client
       GraphQL.apolloClient = new ApolloClient({
