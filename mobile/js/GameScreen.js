@@ -3,7 +3,7 @@ import GhostView from './GhostView';
 import { View, TextInput, TouchableOpacity, Text } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 
-import { gql, Query } from './GraphQL';
+import { gql, Query } from './Conn';
 
 const DEFAULT_GAME_URI =
   'https://raw.githubusercontent.com/nikki93/procjam-oct-2018/69511b9ac7ec4631ec215a2dc8cd5b034cdd1b0d/main.lua';

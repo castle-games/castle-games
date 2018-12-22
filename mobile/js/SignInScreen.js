@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View, TextInput, TouchableOpacity } from 'react-native';
 
-import { apolloClient, gql, Mutation } from './GraphQL';
+import { apolloClient, gql, Mutation } from './Conn';
 
 const textInputStyle = {
   width: '100%',
