@@ -1,16 +1,21 @@
 import React from 'React';
 import GhostView from './GhostView';
-import { Button as RNButton, View, TextInput, TouchableOpacity } from 'react-native';
+import { View, TextInput, TouchableOpacity, Text } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
+
+import { gql, Query } from './GraphQL';
 
 const DEFAULT_GAME_URI =
   'https://raw.githubusercontent.com/nikki93/procjam-oct-2018/69511b9ac7ec4631ec215a2dc8cd5b034cdd1b0d/main.lua';
 
-export default class GameScreen extends React.Component {
-  static navigationOptions = ({ navigation }) => ({
-    headerLeft: <RNButton title="Quit" onPress={() => navigation.pop()} color="#666" />,
-  });
+const widgetStyle = {
+  backgroundColor: 'white',
+  borderRadius: 4,
+  borderWidth: 1,
+  borderColor: '#ddd',
+};
 
+export default class GameScreen extends React.Component {
   state = {
     viewedUri: DEFAULT_GAME_URI,
     editedUri: null,
@@ -21,13 +26,31 @@ export default class GameScreen extends React.Component {
     return (
       <View style={{ flex: 1 }}>
         <View style={{ flexDirection: 'row' }}>
+          <View
+            style={{
+              ...widgetStyle,
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: 4,
+            }}>
+            <Query
+              query={gql`
+                query {
+                  me {
+                    username
+                  }
+                }
+              `}>
+              {({ loading, data }) =>
+                loading ? <Text>...</Text> : <Text>{data.me.username}</Text>}
+            </Query>
+          </View>
+
           <TextInput
             style={{
+              ...widgetStyle,
               flex: 1,
-              backgroundColor: 'white',
               borderColor: '#ddd',
-              borderRadius: 4,
-              borderWidth: 1,
               padding: 4,
             }}
             returnKeyType="go"
@@ -42,8 +65,7 @@ export default class GameScreen extends React.Component {
           />
           <TouchableOpacity
             style={{
-              backgroundColor: 'white',
-              borderRadius: 4,
+              ...widgetStyle,
               alignItems: 'center',
               justifyContent: 'center',
               aspectRatio: 1,

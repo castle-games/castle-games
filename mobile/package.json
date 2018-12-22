@@ -9,10 +9,15 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "apollo-boost": "^0.1.23",
+    "castle-api-client": "^5.1.1",
     "expo": "^30.0.0",
     "expo-cli": "^1.1.0-beta.6",
     "expokit": "^1.5.0",
+    "graphql": "^14.0.2",
+    "graphql-tag": "^2.10.0",
     "react": "16.3.1",
+    "react-apollo": "^2.3.3",
     "react-native": "https://github.com/expo/react-native/archive/sdk-30.0.0.tar.gz",
     "react-navigation": "^2.16.0"
   }
