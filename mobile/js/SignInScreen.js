@@ -3,14 +3,6 @@ import { Text, View, TextInput, TouchableOpacity } from 'react-native';
 
 import { ApolloConsumer, gql, Mutation } from './GraphQL';
 
-const signInMutation = gql`
-  mutation($who: String!, $password: String!) {
-    login(who: $who, password: $password) {
-      userId
-    }
-  }
-`;
-
 const textInputStyle = {
   width: '100%',
   borderColor: '#ddd',
@@ -19,6 +11,14 @@ const textInputStyle = {
   padding: 4,
   margin: 4,
 };
+
+const signInMutation = gql`
+  mutation($who: String!, $password: String!) {
+    login(who: $who, password: $password) {
+      userId
+    }
+  }
+`;
 
 export default class SignInScreen extends React.Component {
   render() {
