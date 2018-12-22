@@ -14,7 +14,7 @@ public class AppConstants {
   public static final String VERSION_NAME = "2.7.2";
   public static String INITIAL_URL = "exp://exp.host/@nikki/castle";
   public static final boolean IS_DETACHED = true;
-  public static final String SHELL_APP_SCHEME = "expa988c6d467e64bd69e23f73802ce3ea9";
+  public static final String SHELL_APP_SCHEME = "castle";
   public static final String RELEASE_CHANNEL = "default";
   public static boolean SHOW_LOADING_VIEW_IN_SHELL_APP = false;
   public static boolean ARE_REMOTE_UPDATES_ENABLED = true;
