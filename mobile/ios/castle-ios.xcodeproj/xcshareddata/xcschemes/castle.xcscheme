@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "B56386401DB9693800A0598C"
-               BuildableName = "castle.app"
-               BlueprintName = "castle"
-               ReferencedContainer = "container:castle.xcodeproj">
+               BuildableName = "castle-ios.app"
+               BlueprintName = "castle-ios"
+               ReferencedContainer = "container:castle-ios.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "B56386401DB9693800A0598C"
-            BuildableName = "castle.app"
-            BlueprintName = "castle"
-            ReferencedContainer = "container:castle.xcodeproj">
+            BuildableName = "castle-ios.app"
+            BlueprintName = "castle-ios"
+            ReferencedContainer = "container:castle-ios.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -56,9 +56,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "B56386401DB9693800A0598C"
-            BuildableName = "castle.app"
-            BlueprintName = "castle"
-            ReferencedContainer = "container:castle.xcodeproj">
+            BuildableName = "castle-ios.app"
+            BlueprintName = "castle-ios"
+            ReferencedContainer = "container:castle-ios.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <CommandLineArguments>
@@ -88,9 +88,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "B56386401DB9693800A0598C"
-            BuildableName = "castle.app"
-            BlueprintName = "castle"
-            ReferencedContainer = "container:castle.xcodeproj">
+            BuildableName = "castle-ios.app"
+            BlueprintName = "castle-ios"
+            ReferencedContainer = "container:castle-ios.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
