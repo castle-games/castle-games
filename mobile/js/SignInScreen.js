@@ -24,7 +24,12 @@ export default class SignInScreen extends React.Component {
           justifyContent: 'center',
         }}>
         <TextInput style={textInputStyle} onChangeText={who => this.setState({ who })} />
-        <TextInput style={textInputStyle} onChangeText={password => this.setState({ password })} />
+        <TextInput
+          style={textInputStyle}
+          secureTextEntry
+          textContentType="password"
+          onChangeText={password => this.setState({ password })}
+        />
         <Mutation
           mutation={gql`
             mutation($who: String!, $password: String!) {
@@ -54,8 +59,7 @@ export default class SignInScreen extends React.Component {
                       who: this.state.who,
                       password: this.state.password,
                     },
-                  })
-                }>
+                  })}>
                 <Text>Sign In</Text>
               </TouchableOpacity>
             );

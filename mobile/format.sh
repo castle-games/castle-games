@@ -1,2 +1,2 @@
 #!/bin/sh
-prettier --write js/*.js *.js
+/Users/nikki/Development/exp/universe/tools/bin/prettier-exp --write js/*.js *.js

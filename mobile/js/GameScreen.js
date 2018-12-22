@@ -42,8 +42,7 @@ export default class GameScreen extends React.Component {
                 }
               `}>
               {({ loading, data }) =>
-                loading ? <Text>...</Text> : <Text>{data.me.username}</Text>
-              }
+                loading ? <Text>...</Text> : <Text>{data.me.username}</Text>}
             </Query>
           </View>
 
@@ -62,8 +61,7 @@ export default class GameScreen extends React.Component {
               this.setState(({ editedUri, loadCounter }) => ({
                 viewedUri: editedUri,
                 loadCounter: loadCounter + 1,
-              }))
-            }
+              }))}
           />
 
           <TouchableOpacity
