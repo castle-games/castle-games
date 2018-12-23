@@ -1,7 +1,7 @@
 import { Linking } from 'expo';
 import React from 'React';
 import GhostView from './GhostView';
-import { View, TextInput, TouchableOpacity, Text } from 'react-native';
+import { View, TextInput, TouchableOpacity, Text, TouchableWithoutFeedback } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 
 import { gql, Query, isSignedInAsync } from './Conn';
