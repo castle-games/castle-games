@@ -17,7 +17,7 @@ let linkingUri = null; // Last posted linking URI
 // Consume posted linking URI
 async function consumeUri() {
   if (linkingUri !== null) {
-    if (mountedInstance) { // Currently mounted?
+    if (mountedInstance) {
       mountedInstance.openUri(linkingUri);
       linkingUri = null;
     } else if ((await isSignedInAsync()) && navigate('GameScreen', { uri: linkingUri })) {
@@ -30,7 +30,7 @@ async function consumeUri() {
 }
 
 // Post linking URI when booted with initial URI
-(async() => {
+(async () => {
   const candidateUri = await Linking.getInitialURL();
   if (candidateUri && candidateUri !== 'castle://') {
     linkingUri = candidateUri;
@@ -44,6 +44,19 @@ Linking.addEventListener('url', ({ url: candidateUri }) => {
   consumeUri();
 });
 
+// Convert a URI to a simplified title
+function simplifyUri(uri) {
+  let matches;
+
+  // GitHub raw
+  matches = uri.match(/^(castle|https?):\/\/raw\.githubusercontent\.com\/([^/]*)\/([^/]*)\//);
+  if (matches) {
+    return `${matches[2]}/${matches[3]}`;
+  }
+
+  return uri;
+}
+
 const widgetStyle = {
   backgroundColor: 'white',
   borderRadius: 4,
@@ -56,6 +69,7 @@ export default class GameScreen extends React.Component {
     viewedUri: null, // Uri that the `GhostView` should display
     editedUri: null, // Uri that the `TextInput` should display
     loadCounter: 0, // To force reloads of `GhostView`
+    uriInputFocused: false, // Whether the `TextInput` is focused
   };
 
   constructor(props, context) {
@@ -64,7 +78,7 @@ export default class GameScreen extends React.Component {
     // Consume possible linking URI sources
     this.state.viewedUri = linkingUri || props.navigation.getParam('uri') || DEFAULT_GAME_URI;
     linkingUri = null;
-    this.state.editedUri =  this.state.viewedUri;
+    this.state.editedUri = this.state.viewedUri;
   }
 
   componentDidMount() {
@@ -99,19 +113,40 @@ export default class GameScreen extends React.Component {
             </Query>
           </View>
 
-          <TextInput
-            style={{
-              ...widgetStyle,
-              flex: 1,
-              borderColor: '#ddd',
-              padding: 4,
-            }}
-            returnKeyType="go"
-            value={this.state.editedUri}
-            placeholder={'enter a castle uri here'}
-            onChangeText={text => this.setState({ editedUri: text })}
-            onSubmitEditing={() => this.openUri(this.state.editedUri)}
-          />
+          <View style={{ flex: 1 }}>
+            <TextInput
+              ref={ref => (this._uriInput = ref)}
+              style={{
+                ...widgetStyle,
+                flex: 1,
+                borderColor: '#ddd',
+                padding: 4,
+              }}
+              onFocus={() => this.setState({ uriInputFocused: true })}
+              onBlur={() => this.setState({ uriInputFocused: false })}
+              selectTextOnFocus
+              returnKeyType="go"
+              value={this.state.editedUri}
+              placeholder={'enter a castle uri here'}
+              onChangeText={text => this.setState({ editedUri: text })}
+              onSubmitEditing={() => this.openUri(this.state.editedUri, { forceReload: true })}
+            />
+
+            {this.state.uriInputFocused ? null : (
+              <View style={{ position: 'absolute', left: 0, top: 0, right: 0, bottom: 0 }}>
+                <TouchableOpacity
+                  style={{
+                    ...widgetStyle,
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                  onPress={() => this._uriInput.focus()}>
+                  <Text>{simplifyUri(this.state.viewedUri)}</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </View>
 
           <TouchableOpacity
             style={{
@@ -136,13 +171,13 @@ export default class GameScreen extends React.Component {
     );
   }
 
-  openUri(uri) {
-    if (uri !== this.state.viewedUri) { // Don't restart game if already there
+  openUri(uri, { forceReload = false } = {}) {
+    if (forceReload || uri !== this.state.viewedUri) {
       this.setState(({ loadCounter }) => ({
         editedUri: uri,
         viewedUri: uri,
         loadCounter: loadCounter + 1,
-      }))
+      }));
     }
   }
 }
