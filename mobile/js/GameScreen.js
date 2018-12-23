@@ -1,7 +1,14 @@
 import { Linking } from 'expo';
 import React from 'React';
 import GhostView from './GhostView';
-import { View, TextInput, TouchableOpacity, Text, TouchableWithoutFeedback } from 'react-native';
+import {
+  View,
+  TextInput,
+  TouchableOpacity,
+  Text,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 
 import { gql, Query, isSignedInAsync } from './Conn';
@@ -92,73 +99,76 @@ export default class GameScreen extends React.Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
-        <View style={{ flexDirection: 'row' }}>
-          <View
-            style={{
-              ...widgetStyle,
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: 4,
-            }}>
-            <Query
-              query={gql`
-                query {
-                  me {
-                    username
-                  }
-                }
-              `}>
-              {({ loading, data }) =>
-                loading ? <Text>...</Text> : <Text>{data.me.username}</Text>}
-            </Query>
-          </View>
-
-          <View style={{ flex: 1 }}>
-            <TextInput
-              ref={ref => (this._uriInput = ref)}
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+          <View style={{ flexDirection: 'row' }}>
+            <View
               style={{
                 ...widgetStyle,
-                flex: 1,
-                borderColor: '#ddd',
+                alignItems: 'center',
+                justifyContent: 'center',
                 padding: 4,
+              }}>
+              <Query
+                query={gql`
+                  query {
+                    me {
+                      username
+                    }
+                  }
+                `}>
+                {({ loading, data }) =>
+                  loading ? <Text>...</Text> : <Text>{data.me.username}</Text>}
+              </Query>
+            </View>
+
+            <View style={{ flex: 1 }}>
+              <TextInput
+                ref={ref => (this._uriInput = ref)}
+                style={{
+                  ...widgetStyle,
+                  flex: 1,
+                  borderColor: '#ddd',
+                  padding: 4,
+                }}
+                onFocus={() => this.setState({ uriInputFocused: true })}
+                onBlur={() => this.setState({ uriInputFocused: false })}
+                selectTextOnFocus
+                returnKeyType="go"
+                value={this.state.editedUri}
+                placeholder={'enter a castle uri here'}
+                onChangeText={text => this.setState({ editedUri: text })}
+                onSubmitEditing={() => this.openUri(this.state.editedUri, { forceReload: true })}
+              />
+
+              {this.state.uriInputFocused ? null : (
+                <View style={{ position: 'absolute', left: 0, top: 0, right: 0, bottom: 0 }}>
+                  <TouchableOpacity
+                    style={{
+                      ...widgetStyle,
+                      flex: 1,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                    onPress={() => this._uriInput.focus()}>
+                    <Text>{simplifyUri(this.state.viewedUri)}</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+            </View>
+
+            <TouchableOpacity
+              style={{
+                ...widgetStyle,
+                alignItems: 'center',
+                justifyContent: 'center',
+                aspectRatio: 1,
               }}
-              onFocus={() => this.setState({ uriInputFocused: true })}
-              onBlur={() => this.setState({ uriInputFocused: false })}
-              selectTextOnFocus
-              returnKeyType="go"
-              value={this.state.editedUri}
-              placeholder={'enter a castle uri here'}
-              onChangeText={text => this.setState({ editedUri: text })}
-              onSubmitEditing={() => this.openUri(this.state.editedUri, { forceReload: true })}
-            />
-
-            {this.state.uriInputFocused ? null : (
-              <View style={{ position: 'absolute', left: 0, top: 0, right: 0, bottom: 0 }}>
-                <TouchableOpacity
-                  style={{
-                    ...widgetStyle,
-                    flex: 1,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                  onPress={() => this._uriInput.focus()}>
-                  <Text>{simplifyUri(this.state.viewedUri)}</Text>
-                </TouchableOpacity>
-              </View>
-            )}
+              onPress={() =>
+                this.setState(({ loadCounter }) => ({ loadCounter: loadCounter + 1 }))}>
+              <FontAwesome name="refresh" size={16} color="black" />
+            </TouchableOpacity>
           </View>
-
-          <TouchableOpacity
-            style={{
-              ...widgetStyle,
-              alignItems: 'center',
-              justifyContent: 'center',
-              aspectRatio: 1,
-            }}
-            onPress={() => this.setState(({ loadCounter }) => ({ loadCounter: loadCounter + 1 }))}>
-            <FontAwesome name="refresh" size={16} color="black" />
-          </TouchableOpacity>
-        </View>
+        </TouchableWithoutFeedback>
 
         <View style={{ flex: 1 }}>
           <GhostView
@@ -166,6 +176,20 @@ export default class GameScreen extends React.Component {
             style={{ backgroundColor: 'black', width: '100%', height: '100%' }}
             uri={this.state.viewedUri}
           />
+
+          {this.state.uriInputFocused ? (
+            <TouchableOpacity
+              style={{
+                position: 'absolute',
+                left: 0,
+                top: 0,
+                right: 0,
+                bottom: 0,
+                backgroundColor: 'rgba(0, 0, 0, 0.7)',
+              }}
+              onPress={() => this._uriInput.blur()}
+            />
+          ) : null}
         </View>
       </View>
     );
