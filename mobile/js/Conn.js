@@ -9,7 +9,7 @@ export let apolloClient = null;
 
 export async function initAsync() {
   castleClient = CastleApiClient().client;
-  await castleClient.forgetAllSessionsAsync(); // Uncomment this to force sign-out
+  // await castleClient.forgetAllSessionsAsync(); // Uncomment this to force sign-out
 
   apolloClient = new ApolloClient({
     uri: 'https://apis.playcastle.io/graphql',
@@ -18,6 +18,10 @@ export async function initAsync() {
 }
 
 export async function isSignedInAsync() {
+  if (apolloClient === null) {
+    return false;
+  }
+
   const { data: { me } } = await apolloClient.query({
     query: gql`
       query {
