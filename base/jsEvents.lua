@@ -46,14 +46,21 @@ function jsEvents.update()
     end
 end
 
-local ffi = require 'ffi'
-ffi.cdef[[
-void ghostSendJSEvent(const char *eventName, const char *serializedParams);
-]]
-local C = ffi.C
+local platform = love.system.getOS()
+if platform == 'iOS' or platform == 'Android' then -- Use channels on mobile
+    function jsEvents.send(name, params)
+        love.thread.getChannel(name):push(cjson.encode(params))
+    end
+else -- Use FFI on desktop
+    local ffi = require 'ffi'
+    ffi.cdef[[
+        void ghostSendJSEvent(const char *eventName, const char *serializedParams);
+    ]]
+    local C = ffi.C
 
-function jsEvents.send(name, params)
-    C.ghostSendJSEvent(name, cjson.encode(params))
+    function jsEvents.send(name, params)
+        C.ghostSendJSEvent(name, cjson.encode(params))
+    end
 end
 
 
