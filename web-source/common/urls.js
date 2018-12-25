@@ -19,13 +19,9 @@ const isOpenSource = (urlStr) => {
 const githubUserContentToRepoUrl = (urlStr) => {
   if (isOpenSource(urlStr)) {
     try {
-      const pattern = /raw\.githubusercontent\.com\/[\w\-]+\/[\w\-]+\//g;
-      const matches = urlStr.match(pattern);
-      if (matches && matches.length) {
-        const components = matches[0].split('/');
-        const githubOwner = components[1];
-        const githubRepo = components[2];
-        return `https://github.com/${githubOwner}/${githubRepo}/`;
+      const matches = urlStr.match(/^(castle|https?):\/\/raw\.githubusercontent\.com\/([^/]*)\/([^/]*)\/([^/]*)/);
+      if (matches) {
+        return `https://github.com/${matches[2]}/${matches[3]}/tree/${matches[4]}`;
       }
     } catch (_) {}
   }
