@@ -349,7 +349,6 @@ export default class CoreApp extends React.Component {
       return;
     }
 
-    url = url.replace('castle://', 'https://');
     this.setState({ mediaUrl: url }, () => {
       this._handleURLSubmit();
     });
