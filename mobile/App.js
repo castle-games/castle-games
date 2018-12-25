@@ -6,6 +6,7 @@ import { ApolloProvider } from 'react-apollo';
 import './js/GhostConsole';
 import { createRootNavigator } from './js/Navigation';
 import * as Conn from './js/Conn';
+import './js/GhostMultiplayer';
 
 export default class App extends React.Component {
   state = {
