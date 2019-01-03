@@ -1,6 +1,6 @@
 // Implemented by 'GhostView.m'.
 
 import React from 'react';
-import { requireNativeComponent } from 'react-native';
+import { requireNativeComponent, Platform } from 'react-native';
 
-export default requireNativeComponent('GhostView', null);
+export default (Platform.OS !== 'android' ? requireNativeComponent('GhostView', null) : () => null);

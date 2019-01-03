@@ -6,7 +6,7 @@
 //
 // Implemented by 'GhostChannels.mm'.
 
-import { NativeModules } from 'react-native';
+import { NativeModules, Platform } from 'react-native';
 
 // Clears all the messages in the Channel queue.
 export function clearAsync(name) {
@@ -65,6 +65,10 @@ export function supplyAsync(name, value, options = {}) {
 // Call `handler` when a message arrives at a Channel. `handler` is called with the message as the
 // only parameter. Call `.remove()` on the returned value to unsubscribe.
 export function on(name, handler) {
+  if (Platform.OS === 'android') {
+    return { remove() {} };
+  }
+
   const interval = setInterval(async () => {
     (await popAllAsync(name)).forEach(handler);
   });
