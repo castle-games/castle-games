@@ -181,6 +181,8 @@ dependencies {
     exclude group: 'com.squareup.okhttp3', module: 'okhttp-urlconnection'
   }
   REMOVED_WHEN_DISTRIBUTING_TO_HERE */
+
+  implementation project(':love')
 }
 
 // This has to be down here for some reason
