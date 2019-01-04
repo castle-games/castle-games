@@ -252,7 +252,10 @@ export default class CoreApp extends React.Component {
       e.preventDefault();
     }
 
-    const mediaUrl = this.state.mediaUrl.slice(0);
+    let mediaUrl;
+    try {
+      mediaUrl = this.state.mediaUrl.slice(0).trim();
+    } catch (_) {}
     if (Strings.isEmpty(mediaUrl)) {
       return;
     }
