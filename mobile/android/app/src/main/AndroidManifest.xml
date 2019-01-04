@@ -82,12 +82,39 @@
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
       </intent-filter>
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN"/>
 
-        <category android:name="android.intent.category.LAUNCHER"/>
-      </intent-filter>
+      <!-- UNCOMMENT THIS AND COMMENT THE INSTANCE IN 'GameActivity' TO SWITCH TO EXPOKIT -->
+      <!--<intent-filter>-->
+        <!--<action android:name="android.intent.action.MAIN"/>-->
+        <!--<category android:name="android.intent.category.LAUNCHER"/>-->
+      <!--</intent-filter>-->
+
       <!-- ADD DETACH APP SPECIFIC INTENT FILTERS -->
+    </activity>
+
+    <activity
+      android:name="org.love2d.android.GameActivity"
+      android:configChanges="orientation|screenSize|keyboard|keyboardHidden|navigation"
+      android:label="LÖVE for Android"
+      android:launchMode="singleTop"
+      android:screenOrientation="portrait" >
+
+      <!-- UNCOMMENT THIS AND COMMENT THE INSTANCE IN 'MainActivity' TO SWITCH TO LOVE -->
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+        <category android:name="tv.ouya.intent.category.GAME"/>
+      </intent-filter>
+
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data android:scheme="file" />
+        <data android:mimeType="*/*" />
+        <data android:pathPattern=".*\\.love" />
+        <data android:host="*" />
+      </intent-filter>
     </activity>
 
     <activity
