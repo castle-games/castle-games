@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import expolib_v1.okhttp3.OkHttpClient;
+import ghost.GhostPackage;
 
 // Needed for `react-native link`
 // import com.facebook.react.ReactApplication;
@@ -23,6 +24,7 @@ public class MainApplication extends ExpoApplication {
     return Arrays.<ReactPackage>asList(
         // Add your own packages here!
         // TODO: add native modules!
+        new GhostPackage()
 
         // Needed for `react-native link`
         // new MainReactPackage()
