@@ -84,10 +84,10 @@
       </intent-filter>
 
       <!-- UNCOMMENT THIS AND COMMENT THE INSTANCE IN 'GameActivity' TO SWITCH TO EXPOKIT -->
-      <!--<intent-filter>-->
-        <!--<action android:name="android.intent.action.MAIN"/>-->
-        <!--<category android:name="android.intent.category.LAUNCHER"/>-->
-      <!--</intent-filter>-->
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN"/>
+        <category android:name="android.intent.category.LAUNCHER"/>
+      </intent-filter>
 
       <!-- ADD DETACH APP SPECIFIC INTENT FILTERS -->
     </activity>
@@ -100,11 +100,11 @@
       android:screenOrientation="portrait" >
 
       <!-- UNCOMMENT THIS AND COMMENT THE INSTANCE IN 'MainActivity' TO SWITCH TO LOVE -->
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN" />
-        <category android:name="android.intent.category.LAUNCHER" />
-        <category android:name="tv.ouya.intent.category.GAME"/>
-      </intent-filter>
+      <!--<intent-filter>-->
+        <!--<action android:name="android.intent.action.MAIN" />-->
+        <!--<category android:name="android.intent.category.LAUNCHER" />-->
+        <!--<category android:name="tv.ouya.intent.category.GAME"/>-->
+      <!--</intent-filter>-->
 
       <intent-filter>
         <action android:name="android.intent.action.VIEW" />
