@@ -1,10 +1,16 @@
 package ghost;
 
+import android.view.View;
+
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 
-public class GhostViewManager extends SimpleViewManager<GhostView> {
+import org.love2d.android.GameActivity;
+
+public class GhostViewManager extends SimpleViewManager<View> {
   public static final String REACT_CLASS = "GhostView";
+
+  protected GameActivity mGameActivity;
 
   @Override
   public String getName() {
@@ -12,7 +18,14 @@ public class GhostViewManager extends SimpleViewManager<GhostView> {
   }
 
   @Override
-  protected GhostView createViewInstance(ThemedReactContext reactContext) {
-    return new GhostView(reactContext);
+  protected View createViewInstance(ThemedReactContext reactContext) {
+    if (mGameActivity == null) {
+      mGameActivity = new GameActivity();
+      mGameActivity.loadLibraries();
+    }
+    View view = mGameActivity.startNative(reactContext.getCurrentActivity());
+    mGameActivity.resume();
+    return view;
+//    return new GhostView(reactContext, mGameActivity);
   }
 }

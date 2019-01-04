@@ -245,6 +245,12 @@ public class SDLActivity extends Activity {
         SDLActivity.handleNativeState();
     }
 
+    public void resume() {
+      mNextNativeState = NativeState.RESUMED;
+      mIsResumedCalled = true;
+      SDLActivity.handleNativeState();
+    }
+
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -321,10 +327,12 @@ public class SDLActivity extends Activity {
         SDLActivity.initialize();
     }
 
-    public void startNative() {
-        Log.v("SDL", "startNative()");
+    public View startNative() {
+        throw new IllegalStateException("`startNative()` without arguments!");
+    }
 
-        SDLActivity.initialize();
+    public View startNative(Activity activity) {
+        Log.v("SDL", "startNative()");
 
         // Set up JNI
         SDL.setupJNI();
@@ -334,7 +342,7 @@ public class SDLActivity extends Activity {
 
         // So we can call stuff from static callbacks
         mSingleton = this;
-        SDL.setContext(this);
+        SDL.setContext(activity);
 
         if (Build.VERSION.SDK_INT >= 11) {
             mClipboardHandler = new SDLClipboardHandler_API11();
@@ -344,12 +352,13 @@ public class SDLActivity extends Activity {
         }
 
         // Set up the surface
-        mSurface = new SDLSurface(getApplication());
+        // XXX(Ghost): Use provided activity, just return view
+        mSurface = new SDLSurface(activity.getApplication());
 
-        mLayout = new RelativeLayout(this);
+        mLayout = new RelativeLayout(activity);
         mLayout.addView(mSurface);
 
-        setContentView(mLayout);
+        return mLayout;
     }
     // love2d-mod-end: allow restarting of the native thread
 
@@ -1149,7 +1158,13 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
         SDLActivity.onNativeSurfaceDestroyed();
     }
 
-    // Called when the surface is resized
+//    @Override
+//    protected void onDetachedFromWindow() {
+//      super.onDetachedFromWindow();
+//      SDLActivity.nativeQuit();
+//    }
+
+  // Called when the surface is resized
     @Override
     public void surfaceChanged(SurfaceHolder holder,
                                int format, int width, int height) {
