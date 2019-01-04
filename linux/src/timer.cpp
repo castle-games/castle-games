@@ -6,7 +6,6 @@ void Timer::start() {
 }
 
 double Timer::elapsedTimeS() {
-
   struct timespec finishTime;
   double elapsed;
 
