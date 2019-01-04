@@ -99,7 +99,7 @@ export default class CoreApp extends React.Component {
     CEF.closeWindowFrame();
   };
 
-  openCEF = (url, userPlayData) => {
+  openCEF = async (url, userPlayData) => {
     if (!this._isLockedFromCEFUpdates) {
       console.log('openCEF: is not closed');
       return;
@@ -110,7 +110,10 @@ export default class CoreApp extends React.Component {
     // Don't `await` this since we don't want to make it take longer to get the media
     UserPlay.startAsync(userPlayData);
 
-    CEF.openWindowFrame(url);
+    await CEF.openWindowFrame(url);
+
+    // sync JS mute state to native lua volume since we started a new ghost instance
+    CEF.sendLuaEvent('CASTLE_SET_VOLUME', this.state.isMuted ? 0 : 1);
   };
 
   updateFrame = () => {
