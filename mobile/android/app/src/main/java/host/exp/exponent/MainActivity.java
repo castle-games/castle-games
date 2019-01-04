@@ -1,9 +1,6 @@
 package host.exp.exponent;
 
-import android.content.Context;
-import android.media.AudioManager;
 import android.os.Bundle;
-import android.support.annotation.Keep;
 
 import com.facebook.react.ReactPackage;
 
@@ -53,22 +50,5 @@ public class MainActivity extends DetachActivity {
   public Bundle initialProps(Bundle expBundle) {
     // Add extra initialProps here
     return expBundle;
-  }
-
-
-
-  // Functions called from 'android.cpp' in Love code
-
-  public void setImmersiveMode(boolean immersive_mode) {
-  }
-
-  public boolean getImmersiveMode() {
-    return false;
-  }
-
-  @Keep
-  public boolean hasBackgroundMusic() {
-    AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-    return audioManager.isMusicActive();
   }
 }
