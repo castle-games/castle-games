@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "apollo-boost": "^0.1.23",
-    "castle-api-client": "^5.1.1",
+    "castle-api-client": "^5.1.2",
     "expo": "^30.0.0",
     "expo-cli": "^1.1.0-beta.6",
     "expokit": "^1.5.0",
