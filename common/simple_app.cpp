@@ -7,10 +7,12 @@
 #include "ghost_constants.h"
 #include "include/cef_browser.h"
 #include "include/cef_command_line.h"
+#include "include/cef_origin_whitelist.h"
 #include "include/views/cef_browser_view.h"
 #include "include/views/cef_window.h"
 #include "include/wrapper/cef_helpers.h"
 #include "simple_handler.h"
+
 
 namespace {
 
@@ -53,10 +55,15 @@ SimpleApp::SimpleApp(std::string initialUrl, int initialWindowWidth, int initial
   this->_initialUrl = initialUrl;
   this->_initialWindowWidth = initialWindowWidth;
   this->_initialWindowHeight = initialWindowHeight;
+
 }
 
 void SimpleApp::OnRegisterCustomSchemes(CefRawPtr<CefSchemeRegistrar> registrar) {
   registrar->AddCustomScheme(kGhostUrlScheme, true, false, false, false, false, false);
+  
+
+
+  
 }
 
 void SimpleApp::OnContextInitialized() {
@@ -79,6 +86,18 @@ void SimpleApp::OnContextInitialized() {
 
   // Specify CEF browser settings here.
   CefBrowserSettings browser_settings;
+  browser_settings.universal_access_from_file_urls = STATE_ENABLED;
+  browser_settings.file_access_from_file_urls = STATE_ENABLED;
+//  browser_settings.web_security = STATE_DISABLED;
+  
+  // Make it so we disable web security for http(s) and castle(s) requests on the initial URL
+  // This will let us do arbitrary `fetch` requests, etc.
+  CefAddCrossOriginWhitelistEntry(this->_initialUrl, "http", "", true);
+  CefAddCrossOriginWhitelistEntry(this->_initialUrl, "castle", "", true);
+  CefAddCrossOriginWhitelistEntry(this->_initialUrl, "https", "", true);
+  CefAddCrossOriginWhitelistEntry(this->_initialUrl, "castles", "", true);
+
+
 
   std::string url;
 
