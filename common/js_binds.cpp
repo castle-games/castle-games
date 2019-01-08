@@ -2,6 +2,8 @@
 
 #include <string>
 #include <unordered_map>
+#include <sstream>
+#include <fstream>
 
 namespace JSBinds {
 
@@ -137,4 +139,12 @@ JS_BIND_DEFINE(sendLuaEvent) {
   auto channel = love::thread::Channel::getChannel("JS_EVENTS");
   // Explicitly pass `.length()` because `val` may be in UTF-8
   channel->push(love::Variant(jsonified.c_str(), jsonified.length()));
+}
+
+JS_BIND_DEFINE(readFile) {
+  std::string filepath = arg["filepath"];
+  std::ifstream t(filepath);
+  std::stringstream buffer;
+  buffer << t.rdbuf();
+  success(buffer.str());
 }
