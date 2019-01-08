@@ -43,13 +43,16 @@ bool ghostCreateProjectAtPath(const char *path, const char **entryPoint) {
   std::string mainFilePath(path);
   std::stringstream mainFilePathStream;
   mainFilePathStream << mainFilePath;
-  if (mainFilePath.back() != '/') {
+  
 #if defined(WIN32) || defined(_WIN32)
+  if (mainFilePath.back() != '\') {
     mainFilePathStream << "\";
-#else
-    mainFilePathStream << "/";
-#endif
   }
+#else
+  if (mainFilePath.back() != '/') {
+    mainFilePathStream << "/";
+  }
+#endif
   mainFilePathStream << "main.lua";
   mainFilePath = mainFilePathStream.str();
 
