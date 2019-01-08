@@ -88,6 +88,10 @@ struct Message {
 
 std::queue<Message> messages;
 
+bool ghostGetPathToFileInAppBundle(const char *filename, const char **result) {
+  // TODO: implement
+}
+
 // TODO: move to utility file
 inline wchar_t *convertCharArrayToLPCWSTR(const char *charArray) {
   wchar_t *wString = new wchar_t[4096];

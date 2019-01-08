@@ -34,6 +34,7 @@ void ghostSetBrowserReady();
 bool ghostChooseDirectoryWithDialog(const char *title, const char *message, const char *action,
                                     const char **result);
 bool ghostCreateProjectAtPath(const char *path, const char **entryPoint);
+bool ghostGetPathToFileInAppBundle(const char *filename, const char **result);
 
 #ifdef __cplusplus
 }

@@ -58,6 +58,7 @@
 		B5BAE39A215ABA89001354F9 /* GhostMainMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = B5BAE38E215ABA89001354F9 /* GhostMainMenu.m */; };
 		B5BAE39D215ABA9A001354F9 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = B5BAE39C215ABA9A001354F9 /* main.mm */; };
 		B5BAE39E215ABAA2001354F9 /* process_helper_mac.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B5BAE388215ABA89001354F9 /* process_helper_mac.cpp */; };
+		B5D8A85921E4186D00735E56 /* blank.lua in Resources */ = {isa = PBXBuildFile; fileRef = B5D8A85821E4186D00735E56 /* blank.lua */; };
 		B5E9FC48211B6C190068BEB9 /* ghost_extensions_macos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5E9FC43211B6BA00068BEB9 /* ghost_extensions_macos.framework */; };
 		B5E9FC4B211B6E610068BEB9 /* ghost_extensions_macos.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = B5E9FC43211B6BA00068BEB9 /* ghost_extensions_macos.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -265,6 +266,7 @@
 		B5BAE38D215ABA89001354F9 /* GhostAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GhostAppDelegate.h; sourceTree = "<group>"; };
 		B5BAE38E215ABA89001354F9 /* GhostMainMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GhostMainMenu.m; sourceTree = "<group>"; };
 		B5BAE39C215ABA9A001354F9 /* main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
+		B5D8A85821E4186D00735E56 /* blank.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = blank.lua; sourceTree = "<group>"; };
 		B5E9FC3B211B6B9F0068BEB9 /* ghost-extensions.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "ghost-extensions.xcodeproj"; path = "../ghost-extensions/ghost-extensions.xcodeproj"; sourceTree = "<group>"; };
 		CE73F7FF1EEB64150052DAB3 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
 		FA08F69116C765A200F007B5 /* love.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = love.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -423,6 +425,7 @@
 		B5B06A402150751A001C4382 /* common */ = {
 			isa = PBXGroup;
 			children = (
+				B5D8A84E21E4178100735E56 /* new-project-template */,
 				A18221CF21ACB2FE0018B6DD /* js_binds.h */,
 				A18221C821ACB2FE0018B6DD /* js_binds.cpp */,
 				B5B06A492151A8EB001C4382 /* ghost.h */,
@@ -465,6 +468,14 @@
 				B5BAE388215ABA89001354F9 /* process_helper_mac.cpp */,
 			);
 			path = "ghost-macosx_Helper";
+			sourceTree = "<group>";
+		};
+		B5D8A84E21E4178100735E56 /* new-project-template */ = {
+			isa = PBXGroup;
+			children = (
+				B5D8A85821E4186D00735E56 /* blank.lua */,
+			);
+			path = "new-project-template";
 			sourceTree = "<group>";
 		};
 		B5E9FC3C211B6B9F0068BEB9 /* Products */ = {
@@ -718,6 +729,7 @@
 				B5256F7D211A56EE00891B27 /* package.love in Resources */,
 				B59617512149BF7100BE403F /* index.html in Resources */,
 				38F81FA0214B4B0F00E6E242 /* static in Resources */,
+				B5D8A85921E4186D00735E56 /* blank.lua in Resources */,
 				B5256F43211A555500891B27 /* Images.xcassets in Resources */,
 				38F81F9B214B4A8E00E6E242 /* main.js in Resources */,
 				B500022A215AEB1E00CD2309 /* ghost-env.plist in Resources */,

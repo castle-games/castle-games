@@ -3,5 +3,6 @@
 @interface GhostFileSystem : NSObject
 
 + (NSString *)ghostCachesDirectory;
++ (NSString *)pathToFileInAppBundle:(NSString *)filename;
 
 @end

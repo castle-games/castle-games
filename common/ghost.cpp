@@ -4,7 +4,7 @@
 #include <fstream>
 #include <iostream>
 
-const std::string kStarterTemplateCode =
+const std::string kDefaultStarterTemplateCode =
     "function love.draw()\n    love.graphics.print('Edit main.lua to get started!', 400, 300)\n    "
     "love.graphics.print('Press Cmd/Ctrl + R to reload.', 400, 316)\nend";
 
@@ -29,6 +29,16 @@ inline bool fileExists(const char *path) {
 }
 
 bool ghostCreateProjectAtPath(const char *path, const char **entryPoint) {
+  // get the starter code
+  const char *pathToBundledStarterCode;
+  std::string starterCode = kDefaultStarterTemplateCode;
+  bool success = ghostGetPathToFileInAppBundle("blank.lua", &pathToBundledStarterCode);
+  if (success) {
+    std::ifstream starterCodeStream(pathToBundledStarterCode);
+    starterCode = std::string((std::istreambuf_iterator<char>(starterCodeStream)),
+                              std::istreambuf_iterator<char>());
+  }
+
   // construct path to main.lua
   std::string mainFilePath(path);
   std::stringstream mainFilePathStream;
@@ -50,7 +60,7 @@ bool ghostCreateProjectAtPath(const char *path, const char **entryPoint) {
 
   // write main.lua
   std::ofstream outfile(mainFilePath);
-  outfile << kStarterTemplateCode << std::endl;
+  outfile << starterCode << std::endl;
   outfile.close();
 
   // check that we actually created the file

@@ -2,6 +2,7 @@
 #import "ghost_constants.h"
 
 #import "GhostAppDelegate.h"
+#import "GhostFileSystem.h"
 
 #import <sstream>
 
@@ -136,3 +137,17 @@ bool ghostChooseDirectoryWithDialog(const char *title, const char *message, cons
 }
 
 void ghostQuitMessageLoop() {}
+
+bool ghostGetPathToFileInAppBundle(const char *filename, const char **result) {
+  NSString *_filename = [NSString stringWithCString:filename encoding:NSUTF8StringEncoding];
+  NSString *path = [GhostFileSystem pathToFileInAppBundle:_filename];
+  const char *pathStr = NULL;
+  if (path) {
+    pathStr = [path cStringUsingEncoding:NSUTF8StringEncoding];
+  }
+  if (pathStr) {
+    *result = strdup(pathStr);
+    return true;
+  }
+  return false;
+}

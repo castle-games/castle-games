@@ -30,4 +30,11 @@
   return nil;
 }
 
++ (NSString *)pathToFileInAppBundle:(NSString *)filename {
+  if (filename) {
+    return [[NSBundle mainBundle] pathForResource:filename ofType:nil];
+  }
+  return nil;
+}
+
 @end
