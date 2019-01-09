@@ -355,7 +355,7 @@ export default class CoreApp extends React.Component {
       return;
     }
 
-    if (Urls.isLocalUrl(url)) {
+    if (Urls.isPrivateUrl(url)) {
       url = url.replace('castle://', 'http://');
     }
     this.setState({ mediaUrl: url }, () => {
