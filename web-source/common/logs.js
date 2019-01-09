@@ -63,7 +63,7 @@ class Logs {
     // clear any existing state
     this.stopPollingForRemoteLogs();
 
-    if (!Urls.isPrivateUrl(mediaUrl)) {
+    if (!Urls.isLocalUrl(mediaUrl)) {
       this._remoteLogsUrl = this._makeRemoteLogsUrl(mediaUrl);
       this._pollForRemoteLogsAsync();
     }
