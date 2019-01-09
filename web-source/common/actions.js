@@ -806,3 +806,35 @@ export async function multiplayerJoinAsync(mediaUrl) {
 
   return result.data.multiplayerJoin;
 }
+
+export async function indexPublicUrlAsync(mediaUrl) {
+  let result;
+  try {
+    result = await API.graphqlAsync(
+      /* GraphQL */ `
+      mutation($mediaUrl: String!) {
+        fetchMediaMetadata(url: $mediaUrl) {
+          # npref
+          # metadata
+          # mainUrl
+          # canonicalUrl
+          updatedTime
+          # createdTime
+        }
+      }
+      `,
+      {
+        mediaUrl,
+      }
+    );
+  } catch (e) {
+    return false;
+  }
+  if (result.error) {
+    return false;
+  }
+  if (result.errors) {
+    return false;
+  }
+  return true;
+}

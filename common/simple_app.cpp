@@ -13,7 +13,6 @@
 #include "include/wrapper/cef_helpers.h"
 #include "simple_handler.h"
 
-
 namespace {
 
 // When using the Views framework this object provides the delegate
@@ -55,15 +54,10 @@ SimpleApp::SimpleApp(std::string initialUrl, int initialWindowWidth, int initial
   this->_initialUrl = initialUrl;
   this->_initialWindowWidth = initialWindowWidth;
   this->_initialWindowHeight = initialWindowHeight;
-
 }
 
 void SimpleApp::OnRegisterCustomSchemes(CefRawPtr<CefSchemeRegistrar> registrar) {
   registrar->AddCustomScheme(kGhostUrlScheme, true, false, false, false, false, false);
-  
-
-
-  
 }
 
 void SimpleApp::OnContextInitialized() {
@@ -88,7 +82,6 @@ void SimpleApp::OnContextInitialized() {
   CefBrowserSettings browser_settings;
   browser_settings.universal_access_from_file_urls = STATE_ENABLED;
   browser_settings.file_access_from_file_urls = STATE_ENABLED;
-//  browser_settings.web_security = STATE_DISABLED;
   
   // Make it so we disable web security for http(s) and castle(s) requests on the initial URL
   // This will let us do arbitrary `fetch` requests, etc.
@@ -96,8 +89,6 @@ void SimpleApp::OnContextInitialized() {
   CefAddCrossOriginWhitelistEntry(this->_initialUrl, "castle", "", true);
   CefAddCrossOriginWhitelistEntry(this->_initialUrl, "https", "", true);
   CefAddCrossOriginWhitelistEntry(this->_initialUrl, "castles", "", true);
-
-
 
   std::string url;
 

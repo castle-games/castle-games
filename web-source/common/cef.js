@@ -116,8 +116,5 @@ export const sendLuaEvent = async (name, params) => {
 
 export const readFile = async (filepath) => {
   let result = await NativeBinds.readFile({ filepath });
-  console.log('filepath=' + filepath);
-  console.log('readFile result:');
-  console.log(result);
   return result;
 };

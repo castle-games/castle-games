@@ -280,48 +280,19 @@ export default class CoreApp extends React.Component {
     let m = await metadatalib.fetchMetadataForUrlAsync(media.mediaUrl);
     let { metadata, info, errors, warnings } = m;
 
-    console.log(JSON.stringify(m));
-
     if (info && info.isPublicUrl) {
       // If its a public URL, index it on the server
       // Don't `await` since we don't want to block
       // loading the media
-      Actions.API.graphqlAsync(
-        /* GraphQL */ `
-          mutation($mediaUrl: String!) {
-            fetchMediaMetadata(url: $mediaUrl) {
-              # npref
-              # metadata
-              # mainUrl
-              # canonicalUrl
-              updatedTime
-              # createdTime
-            }
-          }
-        `,
-        {
-          mediaUrl: media.mediaUrl,
-        }
-      );
+      Actions.indexPublicUrlAsync(media.mediaUrl);
     }
 
-    if (info.main) {
+    if (info && info.main) {
       this.goToLUA(info.main);
     } else {
       this.goToLUA(media.mediaUrl);
     }
-
- 
   };
-
-  // _loadMedia = (media) => {
-  //   if (Urls.isLua(media.mediaUrl)) {
-  //     this.goToLUA(media.mediaUrl);
-  //     return;
-  //   }
-
-  //   this.goToHTML5Media({ ...media });
-  // };
 
   _handleURLSubmit = () => {
     if (Strings.isEmpty(this.state.mediaUrl)) {
@@ -330,33 +301,6 @@ export default class CoreApp extends React.Component {
     }
 
     this.loadURL(this.state.mediaUrl);
-  };
-
-  goToHTML5Media = async (media) => {
-    this.closeCEF();
-
-    // HACK(jim): This is a great way to disable this feature for local web.
-    if (this.state.mediaUrl !== media.mediaUrl && window.cefQuery) {
-      this.setState({ mediaLoading: true });
-    }
-
-    amplitude.getInstance().logEvent('OPEN_HTML5', {
-      mediaUrl: media.mediaUrl,
-    });
-
-    const existingMedia = await Actions.getMediaByURL({
-      mediaUrl: media.mediaUrl,
-    });
-
-    this._history.addItem(existingMedia ? existingMedia : media);
-
-    this.setStateWithCEF({
-      media: existingMedia ? { ...existingMedia } : { ...media },
-      mediaUrl: media.mediaUrl,
-      pageMode: null,
-      creator: null,
-      browserUrl: null,
-    });
   };
 
   goToLUA = async (mediaUrl) => {
