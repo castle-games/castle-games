@@ -90,6 +90,7 @@ std::queue<Message> messages;
 
 bool ghostGetPathToFileInAppBundle(const char *filename, const char **result) {
   // TODO: implement
+  return false;
 }
 
 // TODO: move to utility file

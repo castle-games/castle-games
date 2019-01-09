@@ -45,8 +45,8 @@ bool ghostCreateProjectAtPath(const char *path, const char **entryPoint) {
   mainFilePathStream << mainFilePath;
   
 #if defined(WIN32) || defined(_WIN32)
-  if (mainFilePath.back() != '\') {
-    mainFilePathStream << "\";
+  if (mainFilePath.back() != '\\') {
+    mainFilePathStream << "\\";
   }
 #else
   if (mainFilePath.back() != '/') {
