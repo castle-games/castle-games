@@ -20,7 +20,7 @@ class UserPlay {
 
   startAsync = async ({ mediaUrl, mediaId }) => {
     await this.stopAsync();
-    if (!Urls.isLocalUrl(mediaUrl)) {
+    if (!Urls.isPrivateUrl(mediaUrl)) {
       let result = await Actions.recordUserplayStartAsync(mediaUrl, mediaId);
       if (result && result.data && result.data.recordUserplayStart) {
         this._currentUserplayId = result.data.recordUserplayStart.userplayId;

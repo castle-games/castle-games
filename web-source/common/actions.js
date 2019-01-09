@@ -3,15 +3,8 @@ import CastleApiClient from 'castle-api-client';
 // export const API = CastleApiClient('http://localhost:1380');
 // export const API = CastleApiClient('https://ghost-server.app.render.com');
 // export const API = CastleApiClient('http://api.playcastle.io');
-// export const API = CastleApiClient('https://apis.playcastle.io');
+export const API = CastleApiClient('https://apis.playcastle.io');
 // export const API = CastleApiClient();
-
-let maybeAPI;
-try {
-  maybeAPI = CastleApiClient('https://apis.playcastle.io');
-} catch (e) {}
-
-export const API = maybeAPI;
 
 // fetches partial user data to support some owning object
 const NESTED_USER = `
