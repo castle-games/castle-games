@@ -1,4 +1,5 @@
 import CastleApiClient from 'castle-api-client';
+import * as Constants from '~/common/constants';
 
 // export const API = CastleApiClient('http://localhost:1380');
 // export const API = CastleApiClient('https://ghost-server.app.render.com');
@@ -8,7 +9,7 @@ import CastleApiClient from 'castle-api-client';
 
 let maybeAPI;
 try {
-  maybeAPI = CastleApiClient('https://apis.playcastle.io');
+  maybeAPI = CastleApiClient(Constants.API_HOST);
 } catch (e) {}
 
 export const API = maybeAPI;

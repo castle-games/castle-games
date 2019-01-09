@@ -1,3 +1,5 @@
+export const API_HOST = 'https://apis.playcastle.io';
+
 export const font = {
   default: `-apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica,
     ubuntu, roboto, noto, segoe ui, arial, sans-serif`,
