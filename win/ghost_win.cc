@@ -89,7 +89,18 @@ struct Message {
 std::queue<Message> messages;
 
 bool ghostGetPathToFileInAppBundle(const char *filename, const char **result) {
-  // TODO: implement
+  CHAR buffer[MAX_PATH];
+  DWORD length = GetModuleFileNameA(NULL, buffer, MAX_PATH);
+  if (length > 0) {
+    std::string::size_type pos = std::string(buffer).find_last_of("\\/");
+#ifdef _DEBUG
+    std::string path = std::string(buffer).substr(0, pos) + "/../../../shared-assets/" + std::string(filename);
+#else
+    std::string path = std::string(buffer).substr(0, pos) + "/shared-assets/" + std::string(filename);
+#endif
+    *result = strdup(path.c_str());
+    return true;
+  }
   return false;
 }
 
