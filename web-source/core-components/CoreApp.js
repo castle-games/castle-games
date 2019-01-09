@@ -1,4 +1,6 @@
 import * as React from 'react';
+
+import metadatalib from 'castle-metadata';
 import * as Strings from '~/common/strings';
 import * as Utilities from '~/common/utilities';
 import * as ReactDOM from 'react-dom';
@@ -170,7 +172,7 @@ export default class CoreApp extends React.Component {
 
   _handleProfileChange = () => this.refreshViewer();
 
-  _handleRemoveMediaFromPlaylist = async data => {
+  _handleRemoveMediaFromPlaylist = async (data) => {
     const response = await Actions.removeMediaFromPlaylist(data);
     if (!response) {
       return;
@@ -185,7 +187,7 @@ export default class CoreApp extends React.Component {
     await this.refreshViewer();
   };
 
-  setStateWithCEF = state => {
+  setStateWithCEF = (state) => {
     if (this._isLockedFromCEFUpdates) {
       return this.setState({ ...state });
     }
@@ -193,7 +195,7 @@ export default class CoreApp extends React.Component {
     this.setState({ ...state }, this.updateFrame);
   };
 
-  setStateHideCEF = state => {
+  setStateHideCEF = (state) => {
     if (this._isLockedFromCEFUpdates) {
       return this.setState({ ...state });
     }
@@ -201,7 +203,7 @@ export default class CoreApp extends React.Component {
     this.setState({ ...state }, this.hideFrame);
   };
 
-  appReload = async e => {
+  appReload = async (e) => {
     if (e) {
       e.preventDefault();
     }
@@ -247,7 +249,7 @@ export default class CoreApp extends React.Component {
     });
   };
 
-  reload = async e => {
+  reload = async (e) => {
     if (e) {
       e.preventDefault();
     }
@@ -267,21 +269,59 @@ export default class CoreApp extends React.Component {
     });
   };
 
-  _handleLogin = viewer =>
+  _handleLogin = (viewer) =>
     this.setState({ viewer, creator: viewer, pageMode: viewer ? 'profile' : 'browse' });
 
-  _handleURLChange = e => this.setState({ [e.target.name]: e.target.value });
+  _handleURLChange = (e) => this.setState({ [e.target.name]: e.target.value });
 
-  loadURL = mediaUrl => this._loadMedia({ mediaUrl });
+  loadURL = (mediaUrl) => this._loadCastleMediaAsync({ mediaUrl });
 
-  _loadMedia = media => {
-    if (Urls.isLua(media.mediaUrl)) {
-      this.goToLUA(media.mediaUrl);
-      return;
+  _loadCastleMediaAsync = async (media) => {
+    let m = await metadatalib.fetchMetadataForUrlAsync(media.mediaUrl);
+    let { metadata, info, errors, warnings } = m;
+
+    console.log(JSON.stringify(m));
+
+    if (info && info.isPublicUrl) {
+      // If its a public URL, index it on the server
+      // Don't `await` since we don't want to block
+      // loading the media
+      Actions.API.graphqlAsync(
+        /* GraphQL */ `
+          mutation($mediaUrl: String!) {
+            fetchMediaMetadata(url: $mediaUrl) {
+              # npref
+              # metadata
+              # mainUrl
+              # canonicalUrl
+              updatedTime
+              # createdTime
+            }
+          }
+        `,
+        {
+          mediaUrl: media.mediaUrl,
+        }
+      );
     }
 
-    this.goToHTML5Media({ ...media });
+    if (info.main) {
+      this.goToLUA(info.main);
+    } else {
+      this.goToLUA(media.mediaUrl);
+    }
+
+ 
   };
+
+  // _loadMedia = (media) => {
+  //   if (Urls.isLua(media.mediaUrl)) {
+  //     this.goToLUA(media.mediaUrl);
+  //     return;
+  //   }
+
+  //   this.goToHTML5Media({ ...media });
+  // };
 
   _handleURLSubmit = () => {
     if (Strings.isEmpty(this.state.mediaUrl)) {
@@ -292,7 +332,7 @@ export default class CoreApp extends React.Component {
     this.loadURL(this.state.mediaUrl);
   };
 
-  goToHTML5Media = async media => {
+  goToHTML5Media = async (media) => {
     this.closeCEF();
 
     // HACK(jim): This is a great way to disable this feature for local web.
@@ -319,7 +359,7 @@ export default class CoreApp extends React.Component {
     });
   };
 
-  goToLUA = async mediaUrl => {
+  goToLUA = async (mediaUrl) => {
     if (Strings.isEmpty(mediaUrl)) {
       return;
     }
@@ -335,7 +375,7 @@ export default class CoreApp extends React.Component {
       mediaUrl,
     });
 
-    const isLocal = Urls.isLocalUrl(mediaUrl);
+    const isLocal = Urls.isPrivateUrl(mediaUrl);
     const sidebarMode = isLocal ? 'development' : 'current-context';
     this.setStateWithCEF({
       media: media ? { ...media } : { mediaUrl },
@@ -347,7 +387,7 @@ export default class CoreApp extends React.Component {
     });
   };
 
-  _handleNativeOpenUrl = e => {
+  _handleNativeOpenUrl = (e) => {
     let { params } = e;
     let { url } = params;
 
@@ -388,7 +428,7 @@ export default class CoreApp extends React.Component {
     }
   };
 
-  _handleKeyDown = e => {
+  _handleKeyDown = (e) => {
     if (isReloadHotkey(e)) {
       return this.reload(e);
     }
@@ -416,7 +456,7 @@ export default class CoreApp extends React.Component {
     }
   };
 
-  _stringAsSearchInvariant = s => {
+  _stringAsSearchInvariant = (s) => {
     return s.toLowerCase().trim();
   };
 
@@ -428,7 +468,7 @@ export default class CoreApp extends React.Component {
     return this._stringAsSearchInvariant(s).includes(query);
   };
 
-  _filterMediaItemWithSearchState = m => {
+  _filterMediaItemWithSearchState = (m) => {
     if (!m) {
       return false;
     }
@@ -453,7 +493,7 @@ export default class CoreApp extends React.Component {
     return false;
   };
 
-  _filterPlaylistWithSearchState = p => {
+  _filterPlaylistWithSearchState = (p) => {
     if (!p) {
       return false;
     }
@@ -474,7 +514,7 @@ export default class CoreApp extends React.Component {
     return false;
   };
 
-  _filterUserWithSearchState = u => {
+  _filterUserWithSearchState = (u) => {
     if (!u) {
       return false;
     }
@@ -488,7 +528,7 @@ export default class CoreApp extends React.Component {
     return false;
   };
 
-  _handleNavigateToBrowserPage = browserUrl => {
+  _handleNavigateToBrowserPage = (browserUrl) => {
     if (window.cefQuery) {
       CEF.openExternalURL(browserUrl);
 
@@ -500,7 +540,7 @@ export default class CoreApp extends React.Component {
 
   _handleDismissBrowserPage = () => this.setState({ browserUrl: null });
 
-  _handleSearchSubmit = async e => this._handleSearchChange(e);
+  _handleSearchSubmit = async (e) => this._handleSearchChange(e);
 
   _handleSearchReset = () => {
     this.setState({
@@ -512,7 +552,7 @@ export default class CoreApp extends React.Component {
     });
   };
 
-  _handleSearchChange = async e => {
+  _handleSearchChange = async (e) => {
     this.setState(
       {
         pageMode: 'browse',
@@ -549,7 +589,7 @@ export default class CoreApp extends React.Component {
     Slack.sendMessage(`*${emailUrl} who is playing "${this.state.mediaUrl}" said:*\n ${message}`);
   };
 
-  _handlePlaylistSelect = async playlist => {
+  _handlePlaylistSelect = async (playlist) => {
     const serverPlaylist = await Actions.getPlaylist(playlist);
     if (!serverPlaylist) {
       return;
@@ -570,7 +610,7 @@ export default class CoreApp extends React.Component {
     });
   };
 
-  _handleUserSelect = async user => {
+  _handleUserSelect = async (user) => {
     if (!user) {
       return;
     }
@@ -612,7 +652,7 @@ export default class CoreApp extends React.Component {
       });
     }
 
-    this._loadMedia(media);
+    this._loadCastleMediaAsync(media);
   };
 
   _handleOrientationChange = () => {
@@ -790,7 +830,7 @@ export default class CoreApp extends React.Component {
     });
   };
 
-  _handleGetReference = reference => {
+  _handleGetReference = (reference) => {
     this._layout = reference;
   };
 
@@ -940,7 +980,7 @@ export default class CoreApp extends React.Component {
     if (isViewerViewingPlaylistScene) {
       return (
         <CoreLayout
-          ref={reference => {
+          ref={(reference) => {
             this._layout = reference;
           }}
           leftSidebarNode={maybeLeftSidebarNode}>
@@ -1000,7 +1040,7 @@ export default class CoreApp extends React.Component {
       if (state.sidebarMode === 'current-context') {
         maybeRightNode = (
           <CoreRootContextSidebar
-            ref={c => {
+            ref={(c) => {
               this._contextSidebar = c;
             }}
             media={state.media}
