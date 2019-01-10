@@ -277,21 +277,30 @@ export default class CoreApp extends React.Component {
   loadURL = (mediaUrl) => this._loadCastleMediaAsync({ mediaUrl });
 
   _loadCastleMediaAsync = async (media) => {
-    let m = await metadatalib.fetchMetadataForUrlAsync(media.mediaUrl);
-    let { metadata, info, errors, warnings } = m;
+    let luaUrlToOpen = media.mediaUrl;
+    try {
+      let m = await metadatalib.fetchMetadataForUrlAsync(
+        media.mediaUrl,
+        {
+          readFileUrlAsyncFunction: CEF.readFile,
+        }
+      );
+      let { metadata, info, errors, warnings } = m;
 
-    if (info && info.isPublicUrl) {
-      // If its a public URL, index it on the server
-      // Don't `await` since we don't want to block
-      // loading the media
-      Actions.indexPublicUrlAsync(media.mediaUrl);
+      if (info && info.isPublicUrl) {
+        // If its a public URL, index it on the server
+        // Don't `await` since we don't want to block
+        // loading the media
+        Actions.indexPublicUrlAsync(media.mediaUrl);
+      }
+      if (info && info.main) {
+        luaUrlToOpen = info.main;
+      }
+    } catch (e) {
+      console.warn(`Couldn't fetch metadata when opening Castle url: ${e}`);
     }
 
-    if (info && info.main) {
-      this.goToLUA(info.main);
-    } else {
-      this.goToLUA(media.mediaUrl);
-    }
+    this.goToLUA(luaUrlToOpen);
   };
 
   _handleURLSubmit = () => {
