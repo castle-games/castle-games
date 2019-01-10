@@ -37,6 +37,7 @@ bool ghostCreateProjectAtPath(const char *path, const char **entryPoint) {
     std::ifstream starterCodeStream(pathToBundledStarterCode);
     starterCode = std::string((std::istreambuf_iterator<char>(starterCodeStream)),
                               std::istreambuf_iterator<char>());
+    std::free((void *)pathToBundledStarterCode);
   }
 
   // construct path to main.lua
