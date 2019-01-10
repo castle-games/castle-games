@@ -5,7 +5,7 @@ function love.conf(t)
     local mobile = theOS == 'iOS' or theOS == 'Android'
 
     t.window.title = 'castle-player'
-    t.window.msaa = 4
+    t.window.msaa = 0
     t.window.highdpi = true
 
     if not mobile then
