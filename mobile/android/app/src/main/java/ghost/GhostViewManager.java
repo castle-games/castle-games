@@ -29,6 +29,7 @@ public class GhostViewManager extends SimpleViewManager<ViewGroup> {
 
     // Create own instance
     gameActivity = new GameActivity();
+    gameActivity.setMetricsFromDisplay(activity.getWindowManager().getDefaultDisplay());
     gameActivity.setContexts(activity, reactContext.getApplicationContext());
     gameActivity.loadLibraries();
     gameActivity.onNewIntent(intent);

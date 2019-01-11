@@ -236,6 +236,10 @@ public class GameActivity extends SDLActivity {
         return metrics;
     }
 
+    public static void setMetricsFromDisplay(Display display) {
+      display.getMetrics(metrics);
+    }
+
     public static void vibrate(double seconds) {
         if (vibrator != null) {
             vibrator.vibrate((long) (seconds * 1000.));
