@@ -238,34 +238,20 @@ export default class CoreApp extends React.Component {
     if (e) {
       e.preventDefault();
     }
-
-    let mediaUrl;
-    try {
-      mediaUrl = this.state.mediaUrl.slice(0).trim();
-    } catch (_) {}
-    if (Strings.isEmpty(mediaUrl)) {
-      return;
-    }
-
-    this.setState({ mediaUrl }, async () => {
-      await Actions.delay(100);
-
-      this.loadURL(mediaUrl);
-    });
+    await Actions.delay(100);
+    this.requestMediaAtUrlAsync(this.state.mediaUrl);
   };
 
   _handleLogin = (viewer) =>
     this.setState({ viewer, creator: viewer, pageMode: viewer ? 'profile' : 'browse' });
 
-  _handleURLChange = (e) => this.setState({ [e.target.name]: e.target.value });
+  _onUrlInputChange = (e) => this.setState({ urlBarInputValue: e.target.value });
 
-  loadURL = (mediaUrl) => this._loadCastleMediaAsync({ mediaUrl });
-
-  _loadCastleMediaAsync = async (media) => {
-    let luaUrlToOpen = media.mediaUrl;
+  requestMediaAtUrlAsync = async (mediaUrl) => {
+    let entryPoint = mediaUrl;
     try {
       let m = await metadatalib.fetchMetadataForUrlAsync(
-        media.mediaUrl,
+        mediaUrl,
         {
           readFileUrlAsyncFunction: CEF.readFile,
         }
@@ -276,37 +262,35 @@ export default class CoreApp extends React.Component {
         // If its a public URL, index it on the server
         // Don't `await` since we don't want to block
         // loading the media
-        Actions.indexPublicUrlAsync(media.mediaUrl);
+        Actions.indexPublicUrlAsync(mediaUrl);
       }
       if (info && info.main) {
-        luaUrlToOpen = info.main;
+        // TODO: metadata: actually read metadata when available
+        entryPoint = info.main;
       }
     } catch (e) {
       console.warn(`Couldn't fetch metadata when opening Castle url: ${e}`);
     }
+    this.loadMediaAsync({
+      mediaUrl,
+      entryPoint,
+    });
+  }
 
-    this.goToLUA(luaUrlToOpen);
-  };
-
-  _handleURLSubmit = () => {
-    if (Strings.isEmpty(this.state.mediaUrl)) {
-      alert('You must provide a URL');
-      return;
+  loadMediaAsync = async (media) => {
+    let { mediaUrl, entryPoint } = media;
+    if (!entryPoint) {
+      // TODO: metadata: this should always be defined by this point
+      entryPoint = mediaUrl;
     }
-
-    this.loadURL(this.state.mediaUrl);
-  };
-
-  goToLUA = async (mediaUrl) => {
     if (Strings.isEmpty(mediaUrl)) {
       return;
     }
 
     this.closeCEF();
 
-    const media = await Actions.getMediaByURL({ mediaUrl });
     const userPlayData = { mediaUrl, ...media };
-    this.openCEF(mediaUrl, userPlayData);
+    this.openCEF(entryPoint, userPlayData);
     this._history.addItem(media ? media : { mediaUrl });
 
     amplitude.getInstance().logEvent('OPEN_LUA', {
@@ -316,8 +300,9 @@ export default class CoreApp extends React.Component {
     const isLocal = Urls.isPrivateUrl(mediaUrl);
     const sidebarMode = isLocal ? 'development' : 'current-context';
     this.setStateWithCEF({
-      media: media ? { ...media } : { mediaUrl },
+      media,
       mediaUrl,
+      urlBarInputValue: mediaUrl,
       sidebarMode,
       pageMode: null,
       creator: null,
@@ -326,18 +311,29 @@ export default class CoreApp extends React.Component {
   };
 
   _handleNativeOpenUrl = (e) => {
-    let { params } = e;
-    let { url } = params;
+    this.setState({ urlBarInputValue: e.params.url }, this._onUrlInputSubmit);
+  };
 
-    if (Strings.isEmpty(url)) {
+  _onUrlInputSubmit = (e) => {
+    if (e) {
+      e.preventDefault();
+    }
+    let mediaUrl;
+    try {
+      mediaUrl = this.state.urlBarInputValue.slice(0).trim();
+      if (Urls.isPrivateUrl(mediaUrl)) {
+        mediaUrl = mediaUrl.replace('castle://', 'http://');
+      }
+    } catch (_) {}
+    if (Strings.isEmpty(mediaUrl)) {
       return;
     }
 
-    if (Urls.isPrivateUrl(url)) {
-      url = url.replace('castle://', 'http://');
-    }
-    this.setState({ mediaUrl: url }, () => {
-      this._handleURLSubmit();
+    this.setState({
+      mediaUrl,
+      urlBarInputValue: mediaUrl,
+    }, async () => {
+      this.requestMediaAtUrlAsync(this.state.mediaUrl);
     });
   };
 
@@ -590,7 +586,13 @@ export default class CoreApp extends React.Component {
       });
     }
 
-    this._loadCastleMediaAsync(media);
+    if (media.mediaId) {
+      // this is a known media object, not an abstract url request
+      this.loadMediaAsync(media);
+    } else {
+      // this is an incomplete media object, so try to resolve it before loading
+      this.requestMediaAtUrlAsync(media.mediaUrl);
+    }
   };
 
   _handleOrientationChange = () => {
@@ -614,17 +616,6 @@ export default class CoreApp extends React.Component {
       pageMode: null,
       creator: null,
     };
-
-    // TODO(jim): Won't be necessary when we enable hide.
-    if (!Strings.isEmpty(this.state.mediaUrl)) {
-      if (Urls.isLua(this.state.mediaUrl)) {
-        const userPlayData = {
-          mediaUrl: this.state.mediaUrl,
-          mediaId: this.state.media ? this.state.media.mediaId : null,
-        };
-        this.openCEF(this.state.mediaUrl, userPlayData);
-      }
-    }
 
     this.setStateWithCEF({
       ...updates,
@@ -762,15 +753,13 @@ export default class CoreApp extends React.Component {
 
   renderRootURLInput = () => (
     <CoreRootURLInput
-      name="mediaUrl"
+      name="urlBarInputValue"
       placeholder="Type in the URL to a Castle game..."
-      value={this.state.mediaUrl}
+      value={this.state.urlBarInputValue}
       viewer={this.state.viewer}
-      media={this.state.media}
-      expanded={this.state.isMediaExpanded}
       isMuted={this.state.isMuted}
-      onChange={this._handleURLChange}
-      onSubmit={this.reload}
+      onChange={this._onUrlInputChange}
+      onSubmit={this._onUrlInputSubmit}
       onHideOverlay={this._handleHideOverlay}
       onToggleMute={this._handleToggleMute}
     />
@@ -854,7 +843,7 @@ export default class CoreApp extends React.Component {
             onCreateProject={this._handleCreateProjectAsync}
             onPlaylistSelect={this._handlePlaylistSelect}
             onLoadHelp={this._handleLoadTutorial}
-            onLoadURL={this.loadURL}
+            onLoadURL={this.requestMediaAtUrlAsync}
           />
         </CoreLayout>
       );

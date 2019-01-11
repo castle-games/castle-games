@@ -55,9 +55,10 @@ document.body.appendChild(loader);
 
 const INITIAL_STATE_OFFLINE = {
   logs: [],
+  urlBarInputValue: '',
   mediaUrl: '',
-  playlist: null,
   media: null,
+  playlist: null,
   creator: null,
   viewer: null,
   local: null,
@@ -76,7 +77,6 @@ const INITIAL_STATE_OFFLINE = {
   sidebarVisible: true,
   pageMode: null, // browse | playlist | profile | sign-in | null
   isMediaFavorited: false,
-  isMediaExpanded: false,
   isOverlayActive: true,
   isHorizontalOrientation: false,
   isOffline: true,

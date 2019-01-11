@@ -96,20 +96,6 @@ export default class CoreRootURLInput extends React.Component {
   };
 
   render() {
-    let dimensionToggleElement;
-    if (this.props.media && this.props.media.dimensions) {
-      dimensionToggleElement = !this.props.expanded ? (
-        <UIButtonDarkSmall
-          icon={<SVG.Expand height="16px" />}
-          onClick={this.props.onToggleMediaExpanded}
-        />
-      ) : (
-        <UIButtonDarkSmall
-          icon={<SVG.Collapse height="16px" />}
-          onClick={this.props.onToggleMediaExpanded}
-        />
-      );
-    }
     let fullScreenElement;
     if (ENABLE_HIDE_OVERLAY) {
       fullScreenElement = (
@@ -153,7 +139,6 @@ export default class CoreRootURLInput extends React.Component {
             style={{ background: Constants.colors.black }}
           />
           {muteElement}
-          {dimensionToggleElement}
           {fullScreenElement}
         </div>
       </div>
