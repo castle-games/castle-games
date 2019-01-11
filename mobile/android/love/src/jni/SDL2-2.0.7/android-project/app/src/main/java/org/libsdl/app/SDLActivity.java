@@ -321,6 +321,14 @@ public class SDLActivity extends Activity {
         SDLActivity.initialize();
     }
 
+    Context mContext;
+    Context mApplicationContext;
+
+    public void setContexts(Context context, Context applicationContext) {
+      mContext = context;
+      mApplicationContext = applicationContext;
+    }
+
     public void startNative() {
         Log.v("SDL", "startNative()");
 
@@ -334,7 +342,7 @@ public class SDLActivity extends Activity {
 
         // So we can call stuff from static callbacks
         mSingleton = this;
-        SDL.setContext(this);
+        SDL.setContext(mContext);
 
         if (Build.VERSION.SDK_INT >= 11) {
             mClipboardHandler = new SDLClipboardHandler_API11();
@@ -344,14 +352,42 @@ public class SDLActivity extends Activity {
         }
 
         // Set up the surface
-        mSurface = new SDLSurface(getApplication());
+        mSurface = new SDLSurface(mApplicationContext);
 
-        mLayout = new RelativeLayout(this);
+        mLayout = new RelativeLayout(mContext);
         mLayout.addView(mSurface);
 
-        setContentView(mLayout);
+//        setContentView(mLayout);
     }
-    // love2d-mod-end: allow restarting of the native thread
+
+    public ViewGroup getView() {
+      return mLayout;
+    }
+
+  public void pause() {
+    Log.v(TAG, "resume()");
+    mNextNativeState = NativeState.PAUSED;
+    mIsResumedCalled = false;
+
+    if (SDLActivity.mBrokenLibraries) {
+      return;
+    }
+
+    SDLActivity.handleNativeState();
+  }
+
+  public void resume() {
+    Log.v(TAG, "resume()");
+    mNextNativeState = NativeState.RESUMED;
+    mIsResumedCalled = true;
+
+    if (SDLActivity.mBrokenLibraries) {
+      return;
+    }
+
+    SDLActivity.handleNativeState();
+  }
+  // love2d-mod-end: allow restarting of the native thread
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {

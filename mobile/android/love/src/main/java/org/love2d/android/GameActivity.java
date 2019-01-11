@@ -77,7 +77,7 @@ public class GameActivity extends SDLActivity {
     }
 
     @Override
-    protected void onNewIntent(Intent intent) {
+    public void onNewIntent(Intent intent) {
         Log.d("GameActivity", "onNewIntent() with " + intent);
         handleIntent(intent);
         resetNative();

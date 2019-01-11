@@ -51,4 +51,14 @@ public class MainActivity extends DetachActivity {
     // Add extra initialProps here
     return expBundle;
   }
+
+
+  // Is called from JNI by Love's code
+
+  public void setImmersiveMode(boolean immersive_mode) {
+  }
+
+  public boolean getImmersiveMode() {
+    return false;
+  }
 }
