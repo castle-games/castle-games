@@ -19,7 +19,6 @@ import { isKeyHotkey } from 'is-hotkey';
 import { LOADER_STRING } from '~/core-components/primitives/loader';
 
 import CoreLayout from '~/core-components/layouts/CoreLayout';
-import CoreLoadingScreen from '~/core-components/CoreLoadingScreen';
 import CoreRootHeader from '~/core-components/CoreRootHeader';
 import CoreRootURLInput from '~/core-components/CoreRootURLInput';
 import CoreRootLeftSidebar from '~/core-components/CoreRootLeftSidebar';
@@ -27,7 +26,6 @@ import CoreRootToolbar from '~/core-components/CoreRootToolbar';
 import CoreRootContextSidebar from '~/core-components/CoreRootContextSidebar';
 import CoreRootDashboard from '~/core-components/CoreRootDashboard';
 import CoreLoginSignup from '~/core-components/CoreLoginSignup';
-import CoreMediaScreen from '~/core-components/CoreMediaScreen';
 import CoreBrowserScreen from '~/core-components/CoreBrowserScreen';
 import CoreBrowseResults from '~/core-components/CoreBrowseResults';
 import CoreBrowseSearchInput from '~/core-components/CoreBrowseSearchInput';
@@ -156,15 +154,10 @@ export default class CoreApp extends React.Component {
     CEF.openExternalURL('http://www.playcastle.io/get-started');
   };
 
-  _handleNativeLoadEnd = async () => {
-    await Actions.delay(2000);
-
-    this.setState({ mediaLoading: false });
-  };
-
-  _handleNativeLoadError = () => {
-    this.setState({ mediaLoading: false });
-  };
+  // could implement these hooks to listen for CEF callbacks after loading
+  // or failing to load web pages.
+  _handleNativeLoadEnd = () => {};
+  _handleNativeLoadError = () => {};
 
   _handleClearHistory = () => {
     this._history.clear();
@@ -208,15 +201,7 @@ export default class CoreApp extends React.Component {
       e.preventDefault();
     }
 
-    const isShowingLUAGame =
-      !this.state.pageMode &&
-      !Strings.isEmpty(this.state.mediaUrl) &&
-      Urls.isLua(this.state.mediaUrl);
-
-    if (isShowingLUAGame) {
-      // TODO(jim):
-      // Someone needs to implement the ability to pause/freeze a LUA game
-      // and make it invisible on screen.
+    if (!this.state.pageMode && !Strings.isEmpty(this.state.mediaUrl)) {
       this.hideFrame();
     }
 
@@ -243,7 +228,7 @@ export default class CoreApp extends React.Component {
 
     this.setState({ ...state }, () => {
       document.getElementById('loader').outerHTML = '';
-      if (isShowingLUAGame) {
+      if (!Strings.isEmpty(this.state.mediaUrl)) {
         this.reload();
       }
     });
@@ -619,7 +604,6 @@ export default class CoreApp extends React.Component {
     // but also async refresh profile data
     this.setStateHideCEF({
       pageMode: 'profile',
-      mediaLoading: false,
       creator: { ...this.state.viewer },
     });
     this.refreshViewer();
@@ -663,35 +647,24 @@ export default class CoreApp extends React.Component {
       return;
     }
 
-    const updates = {
-      pageMode: 'browse',
-      mediaLoading: false,
-      creator: null,
-    };
-
     this.setStateHideCEF({
-      ...updates,
+      pageMode: 'browse',
+      creator: null,
     });
   };
 
   _handleToggleSignIn = () => {
-    const updates = {
+    this.setStateHideCEF({
       pageMode: 'sign-in',
-      mediaLoading: false,
       creator: null,
-    };
-
-    this.setStateHideCEF({ ...updates });
+    });
   };
 
   _handleToggleHistory = () => {
-    const updates = {
+    this.setStateHideCEF({
       pageMode: 'history',
-      mediaLoading: false,
       creator: null,
-    };
-
-    this.setStateHideCEF(updates);
+    });
   };
 
   _handleToggleCurrentPlaylistDetails = () => {
@@ -796,7 +769,6 @@ export default class CoreApp extends React.Component {
       media={this.state.media}
       expanded={this.state.isMediaExpanded}
       isMuted={this.state.isMuted}
-      isLoading={this.state.mediaLoading}
       onChange={this._handleURLChange}
       onSubmit={this.reload}
       onHideOverlay={this._handleHideOverlay}
@@ -829,23 +801,7 @@ export default class CoreApp extends React.Component {
       state.creator &&
       state.viewer.userId === state.creator.userId;
 
-    // NOTE(jim): Rendering an IFrame while rendering a Lua window will trigger a double Open_URI
-    const isRenderingIFrame =
-      state.media && !Strings.isEmpty(state.media.mediaUrl) && !Urls.isLua(state.media.mediaUrl);
-
     const isRenderingBrowser = !Strings.isEmpty(state.browserUrl);
-
-    let maybeFrameNode;
-    if (isRenderingIFrame) {
-      maybeFrameNode = (
-        <CoreMediaScreen
-          key="core-media-screen"
-          isExpanded={state.isMediaExpanded}
-          isVisible={!state.pageMode}
-          media={state.media}
-        />
-      );
-    }
 
     let maybeBrowserNode;
     if (isRenderingBrowser) {
@@ -888,7 +844,6 @@ export default class CoreApp extends React.Component {
           ref={this._handleGetReference}
           topNode={this.renderRootSearchInput()}
           leftSidebarNode={maybeLeftSidebarNode}>
-          {maybeFrameNode}
           <CoreBrowseResults
             results={state.searchResults}
             featuredMedia={state.featuredMedia}
@@ -908,7 +863,6 @@ export default class CoreApp extends React.Component {
     if (isViewerViewingSignInScene) {
       return (
         <CoreLayout ref={this._handleGetReference} leftSidebarNode={maybeLeftSidebarNode}>
-          {maybeFrameNode}
           <CoreLoginSignup onLogin={this._handleLogin} />
         </CoreLayout>
       );
@@ -917,7 +871,6 @@ export default class CoreApp extends React.Component {
     if (isViewerViewingHistoryScene) {
       return (
         <CoreLayout ref={this._handleGetReference} leftSidebarNode={maybeLeftSidebarNode}>
-          {maybeFrameNode}
           <CoreRootDashboard
             media={state.media}
             history={this._history}
@@ -937,7 +890,6 @@ export default class CoreApp extends React.Component {
             this._layout = reference;
           }}
           leftSidebarNode={maybeLeftSidebarNode}>
-          {maybeFrameNode}
           <CorePlaylist
             viewer={state.viewer}
             playlist={state.playlist}
@@ -954,7 +906,6 @@ export default class CoreApp extends React.Component {
     if (isViewerViewingProfileScene) {
       return (
         <CoreLayout ref={this._handleGetReference} leftSidebarNode={maybeLeftSidebarNode}>
-          {maybeFrameNode}
           <CoreProfile
             viewer={state.viewer}
             creator={state.creator}
@@ -1030,8 +981,6 @@ export default class CoreApp extends React.Component {
         isHorizontalOrientation={state.isHorizontalOrientation}
         rightNode={maybeRightNode}>
         {maybeBrowserNode}
-        {state.mediaLoading ? <CoreLoadingScreen /> : null}
-        {maybeFrameNode}
       </CoreLayout>
     );
   }

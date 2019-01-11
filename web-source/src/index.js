@@ -58,7 +58,6 @@ const INITIAL_STATE_OFFLINE = {
   mediaUrl: '',
   playlist: null,
   media: null,
-  mediaLoading: false,
   creator: null,
   viewer: null,
   local: null,
