@@ -84,7 +84,7 @@ public class GameActivity extends SDLActivity {
         startNative();
     }
 
-    protected void handleIntent(Intent intent) {
+    public void handleIntent(Intent intent) {
         Uri game = intent.getData();
 
         if (game != null) {
@@ -124,7 +124,7 @@ public class GameActivity extends SDLActivity {
             // No game specified via the intent data -> check whether we have a game.love in our assets.
             boolean game_love_in_assets = false;
             try {
-                List<String> assets = Arrays.asList(getAssets().list(""));
+                List<String> assets = Arrays.asList(getContext().getAssets().list(""));
                 game_love_in_assets = assets.contains("game.love");
             } catch (Exception e) {
                 Log.d("GameActivity", "could not list application assets:" + e.getMessage());
@@ -133,7 +133,7 @@ public class GameActivity extends SDLActivity {
             if (game_love_in_assets) {
                 // If we have a game.love in our assets folder copy it to the cache folder
                 // so that we can load it from native LÖVE code
-                String destination_file = this.getCacheDir().getPath() + "/game.love";
+                String destination_file = getContext().getCacheDir().getPath() + "/game.love";
                 if (mustCacheArchive && copyAssetFile("game.love", destination_file))
                     gamePath = destination_file;
                 else

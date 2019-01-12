@@ -334,6 +334,7 @@ public class SDLActivity extends Activity {
 
     public void setContexts(Context context, Context applicationContext) {
       mContext = context;
+      SDL.setContext(mContext);
       mApplicationContext = applicationContext;
     }
 

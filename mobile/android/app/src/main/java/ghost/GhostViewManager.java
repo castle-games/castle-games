@@ -1,6 +1,7 @@
 package ghost;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.view.ViewGroup;
 
 import com.facebook.react.uimanager.SimpleViewManager;
@@ -32,8 +33,9 @@ public class GhostViewManager extends SimpleViewManager<ViewGroup> {
     if (gameActivity == null) {
       Activity activity = reactContext.getCurrentActivity();
       gameActivity = new GameActivity();
-      GameActivity.setMetricsFromDisplay(activity.getWindowManager().getDefaultDisplay());
       gameActivity.setContexts(activity, reactContext.getApplicationContext());
+      gameActivity.handleIntent(new Intent(activity, GameActivity.class));
+      GameActivity.setMetricsFromDisplay(activity.getWindowManager().getDefaultDisplay());
       gameActivity.loadLibraries();
     }
   }
