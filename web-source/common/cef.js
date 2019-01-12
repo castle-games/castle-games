@@ -1,3 +1,5 @@
+import fileUriToPath from 'file-uri-to-path';
+
 import Logs from '~/common/logs';
 
 // `NativeBinds.<name>(arg)` calls the `JS_BIND_DEFINE`'d function with '<name>', passing `arg` as
@@ -115,6 +117,18 @@ export const sendLuaEvent = async (name, params) => {
 };
 
 export const readFile = async (filepath) => {
+  let result = await NativeBinds.readFile({ filepath });
+  return result;
+};
+
+export const readFileUrl = async (fileUrl) => {
+  let filepath;
+  try {
+    filepath = fileUriToPath(fileUrl);
+  } catch (e) {
+    console.warn(`something bad happened`);
+    return '';
+  }
   let result = await NativeBinds.readFile({ filepath });
   return result;
 };

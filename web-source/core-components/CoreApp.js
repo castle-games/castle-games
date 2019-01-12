@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import metadatalib from 'castle-metadata';
+
 import * as Strings from '~/common/strings';
 import * as Utilities from '~/common/utilities';
 import * as ReactDOM from 'react-dom';
@@ -76,6 +77,7 @@ export default class CoreApp extends React.Component {
       this.updateFrame();
       processChannels();
     });
+
   }
 
   componentWillUnmount() {
@@ -250,12 +252,9 @@ export default class CoreApp extends React.Component {
   requestMediaAtUrlAsync = async (mediaUrl) => {
     let entryPoint = mediaUrl;
     try {
-      let m = await metadatalib.fetchMetadataForUrlAsync(
-        mediaUrl,
-        {
-          readFileUrlAsyncFunction: CEF.readFile,
-        }
-      );
+      let m = await metadatalib.fetchMetadataForUrlAsync(mediaUrl, {
+        readFileUrlAsyncFunction: CEF.readFileUrl,
+      });
       let { metadata, info, errors, warnings } = m;
 
       if (info && info.isPublicUrl) {
@@ -275,7 +274,7 @@ export default class CoreApp extends React.Component {
       mediaUrl,
       entryPoint,
     });
-  }
+  };
 
   loadMediaAsync = async (media) => {
     let { mediaUrl, entryPoint } = media;
@@ -329,12 +328,15 @@ export default class CoreApp extends React.Component {
       return;
     }
 
-    this.setState({
-      mediaUrl,
-      urlBarInputValue: mediaUrl,
-    }, async () => {
-      this.requestMediaAtUrlAsync(this.state.mediaUrl);
-    });
+    this.setState(
+      {
+        mediaUrl,
+        urlBarInputValue: mediaUrl,
+      },
+      async () => {
+        this.requestMediaAtUrlAsync(this.state.mediaUrl);
+      }
+    );
   };
 
   _handleCreateProjectAsync = async () => {
