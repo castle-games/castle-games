@@ -64,6 +64,28 @@ extern "C"
 #	include "libraries/lua53/lutf8lib.h"
 #endif
 
+// Extensions.
+extern "C"
+{
+	int luaopen_lpeg(lua_State *L);
+
+	int luaopen_ssl_core(lua_State *L);
+	int luaopen_ssl_config(lua_State *L);
+	int luaopen_ssl_x509(lua_State *L);
+	int luaopen_ssl_context(lua_State *L);
+
+	int luaopen_crypto(lua_State *L);
+
+	int luaopen_cjson(lua_State *l);
+	int luaopen_cjson_safe(lua_State *l);
+
+	int luaopen_lsqlite3(lua_State *L);
+	
+	int redis_main(lua_State *lua, int argc, char **argv);
+
+	int luaopen_marshal(lua_State *L);
+}
+
 // For love::graphics::setGammaCorrect.
 #ifdef LOVE_ENABLE_GRAPHICS
 #	include "graphics/Graphics.h"
@@ -433,6 +455,22 @@ int luaopen_love(lua_State *L)
 #ifdef LOVE_ENABLE_LUA53
 	love::luax_preload(L, luaopen_luautf8, "utf8");
 #endif
+
+	love::luax_preload(L, luaopen_lpeg, "lpeg");
+
+	love::luax_preload(L, luaopen_ssl_core, "ssl.core");
+	love::luax_preload(L, luaopen_ssl_config, "ssl.config");
+	love::luax_preload(L, luaopen_ssl_x509, "ssl.x509");
+	love::luax_preload(L, luaopen_ssl_context, "ssl.context");
+
+	love::luax_preload(L, luaopen_crypto, "crypto");
+
+	love::luax_preload(L, luaopen_cjson, "cjson");
+	love::luax_preload(L, luaopen_cjson_safe, "cjson.safe");
+
+	love::luax_preload(L, luaopen_lsqlite3, "lsqlite3");
+
+	love::luax_preload(L, luaopen_marshal, "marshal");
 
 	return 1;
 }
