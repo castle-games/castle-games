@@ -1,7 +1,6 @@
 package ghost;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.view.ViewGroup;
 
 import com.facebook.react.uimanager.SimpleViewManager;
@@ -21,22 +20,21 @@ public class GhostViewManager extends SimpleViewManager<ViewGroup> {
 
   @Override
   protected ViewGroup createViewInstance(ThemedReactContext reactContext) {
-    Activity activity = reactContext.getCurrentActivity();
-    Intent intent = new Intent(activity, GameActivity.class);
+    ensureGameActivityInitialized(reactContext);
 
-    // Launch activity normally -- works
-//    activity.startActivity(intent);
-
-    // Create own instance
-    gameActivity = new GameActivity();
-    gameActivity.setMetricsFromDisplay(activity.getWindowManager().getDefaultDisplay());
-    gameActivity.setContexts(activity, reactContext.getApplicationContext());
-    gameActivity.loadLibraries();
-    gameActivity.onNewIntent(intent);
+    gameActivity.resetNative();
+    gameActivity.startNative();
     gameActivity.resume();
-    ViewGroup view = gameActivity.getView();
-//    gameActivity.onCreate(null, null);
+    return gameActivity.getView();
+  }
 
-    return view;
+  private void ensureGameActivityInitialized(ThemedReactContext reactContext) {
+    if (gameActivity == null) {
+      Activity activity = reactContext.getCurrentActivity();
+      gameActivity = new GameActivity();
+      GameActivity.setMetricsFromDisplay(activity.getWindowManager().getDefaultDisplay());
+      gameActivity.setContexts(activity, reactContext.getApplicationContext());
+      gameActivity.loadLibraries();
+    }
   }
 }

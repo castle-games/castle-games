@@ -299,8 +299,14 @@ public class SDLActivity extends Activity {
     }
 
     // love2d-mod-start: allow restarting of the native thread
+    boolean running = false;
+
     public void resetNative() {
         Log.v("SDL", "resetNative()");
+
+        if (!running) {
+          return;
+        }
 
         // Send a quit message to the application
         SDLActivity.mExitCalledFromJava = true;
@@ -319,6 +325,8 @@ public class SDLActivity extends Activity {
         }
 
         SDLActivity.initialize();
+
+        running = false;
     }
 
     Context mContext;
@@ -356,6 +364,8 @@ public class SDLActivity extends Activity {
 
         mLayout = new RelativeLayout(mContext);
         mLayout.addView(mSurface);
+
+        running = true;
 
 //        setContentView(mLayout);
     }
