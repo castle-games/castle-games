@@ -254,6 +254,12 @@ public class GameActivity extends SDLActivity {
         context.startActivity(i);
     }
 
+  public static String ghostRootUri = "https://raw.githubusercontent.com/nikki93/procjam-oct-2018/69511b9ac7ec4631ec215a2dc8cd5b034cdd1b0d/main.lua";
+
+  public static String getGhostRootUri() {
+    return ghostRootUri;
+  }
+
     /**
      * Copies a given file from the assets folder to the destination.
      *

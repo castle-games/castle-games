@@ -44,6 +44,10 @@ extern "C" {
 #include "common/ios.h"
 #endif
 
+#ifdef LOVE_ANDROID
+#include "common/android.h"
+#endif
+
 #ifdef LOVE_WINDOWS
 extern "C"
 {
@@ -210,7 +214,14 @@ static DoneAction runlove(int argc, char **argv, int &retval)
 	lua_pushstring(L, "love.boot");
 	lua_call(L, 1, 1);
 
-	// Turn the returned boot function into a coroutine and call it until done.
+    // XXX(Ghost): if Ghost `uri` is set, set it as the global variable `GHOST_ROOT_URI`
+    const char *uri = love::android::getGhostRootUri();
+    if (uri) {
+        lua_pushstring(L, uri);
+        lua_setglobal(L, "GHOST_ROOT_URI");
+    }
+
+    // Turn the returned boot function into a coroutine and call it until done.
 	lua_newthread(L);
 	lua_pushvalue(L, -2);
 	int stackpos = lua_gettop(L);

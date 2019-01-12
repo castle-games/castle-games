@@ -241,6 +241,34 @@ bool hasBackgroundMusic()
 	return result;
 }
 
+const char *getGhostRootUri()
+{
+    static const char *path = NULL;
+
+    if (path)
+    {
+        delete path;
+        path = NULL;
+    }
+
+    JNIEnv *env = (JNIEnv*) SDL_AndroidGetJNIEnv();
+    jclass activity = env->FindClass("org/love2d/android/GameActivity");
+
+    jmethodID getGhostRootUri = env->GetStaticMethodID(activity, "getGhostRootUri", "()Ljava/lang/String;");
+    jstring ghostRootUri = (jstring) env->CallStaticObjectMethod(activity, getGhostRootUri);
+    const char *utf = env->GetStringUTFChars(ghostRootUri, 0);
+    if (utf)
+    {
+        path = SDL_strdup(utf);
+        env->ReleaseStringUTFChars(ghostRootUri, utf);
+    }
+
+    env->DeleteLocalRef(ghostRootUri);
+    env->DeleteLocalRef(activity);
+
+    return path;
+}
+
 } // android
 } // love
 

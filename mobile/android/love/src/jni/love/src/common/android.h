@@ -68,6 +68,11 @@ bool createStorageDirectories();
 
 bool hasBackgroundMusic();
 
+/*
+ * XXX(Ghost): Ghost additions
+ */
+const char *getGhostRootUri();
+
 } // android
 } // love
 
