@@ -3,6 +3,7 @@ import React from 'react';
 import { View, StatusBar } from 'react-native';
 import { ApolloProvider } from 'react-apollo';
 
+import './js/AutoUpdates';
 import './js/GhostConsole';
 import { createRootNavigator } from './js/Navigation';
 import * as Conn from './js/Conn';
