@@ -77,6 +77,7 @@ export default class GameScreen extends React.Component {
     editedUri: null, // Uri that the `TextInput` should display
     loadCounter: 0, // To force reloads of `GhostView`
     uriInputFocused: false, // Whether the `TextInput` is focused
+    showGhostView: true, // Whether to show the `GhostView` -- `false` to display black instead
   };
 
   constructor(props, context) {
@@ -163,19 +164,22 @@ export default class GameScreen extends React.Component {
                 justifyContent: 'center',
                 aspectRatio: 1,
               }}
-              onPress={() =>
-                this.setState(({ loadCounter }) => ({ loadCounter: loadCounter + 1 }))}>
-              <FontAwesome name="refresh" size={16} color="black" />
+              onPress={() => this.openUri(this.state.viewedUri, { forceReload: true })}>
+              <FontAwesome name="refresh" size={16} color="black"/>
             </TouchableOpacity>
           </View>
         </TouchableWithoutFeedback>
 
         <View style={{ flex: 1 }}>
-          <GhostView
-            key={this.state.loadCounter}
-            style={{ backgroundColor: 'black', width: '100%', height: '100%' }}
-            uri={this.state.viewedUri}
-          />
+          {this.state.showGhostView ? (
+            <GhostView
+              key={this.state.loadCounter}
+              style={{ backgroundColor: 'black', width: '100%', height: '100%' }}
+              uri={this.state.viewedUri}
+            />
+          ) : (
+            <View style={{ backgroundColor: 'black', width: '100%', height: '100%' }}/>
+          )}
 
           {this.state.uriInputFocused ? (
             <TouchableOpacity
@@ -195,9 +199,12 @@ export default class GameScreen extends React.Component {
     );
   }
 
-  openUri(uri, { forceReload = false } = {}) {
+  async openUri(uri, { forceReload = false } = {}) {
     if (forceReload || uri !== this.state.viewedUri) {
+      this.setState({ showGhostView: false });
+      await new Promise(resolve => setTimeout(resolve, 200));
       this.setState(({ loadCounter }) => ({
+        showGhostView: true,
         editedUri: uri,
         viewedUri: uri,
         loadCounter: loadCounter + 1,
