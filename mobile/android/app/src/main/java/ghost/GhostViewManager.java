@@ -6,8 +6,11 @@ import android.view.ViewGroup;
 
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
+import com.facebook.react.uimanager.annotations.ReactProp;
 
 import org.love2d.android.GameActivity;
+
+import javax.annotation.Nullable;
 
 public class GhostViewManager extends SimpleViewManager<ViewGroup> {
   public static final String REACT_CLASS = "GhostView";
@@ -22,7 +25,6 @@ public class GhostViewManager extends SimpleViewManager<ViewGroup> {
   @Override
   protected ViewGroup createViewInstance(ThemedReactContext reactContext) {
     ensureGameActivityInitialized(reactContext);
-
     gameActivity.resetNative();
     gameActivity.startNative();
     gameActivity.resume();
@@ -38,5 +40,10 @@ public class GhostViewManager extends SimpleViewManager<ViewGroup> {
       GameActivity.setMetricsFromDisplay(activity.getWindowManager().getDefaultDisplay());
       gameActivity.loadLibraries();
     }
+  }
+
+  @ReactProp(name = "uri")
+  public void setUri(ViewGroup view, @Nullable String uri) {
+    GameActivity.ghostRootUri = uri;
   }
 }

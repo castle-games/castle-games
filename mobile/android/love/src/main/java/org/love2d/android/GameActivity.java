@@ -254,10 +254,12 @@ public class GameActivity extends SDLActivity {
         context.startActivity(i);
     }
 
-  public static String ghostRootUri = "https://raw.githubusercontent.com/nikki93/procjam-oct-2018/69511b9ac7ec4631ec215a2dc8cd5b034cdd1b0d/main.lua";
+    private static final String DEFAULT_GHOST_ROOT_URI = "https://raw.githubusercontent.com/nikki93/procjam-oct-2018/69511b9ac7ec4631ec215a2dc8cd5b034cdd1b0d/main.lua";
+
+  public static String ghostRootUri;
 
   public static String getGhostRootUri() {
-    return ghostRootUri;
+    return ghostRootUri == null ? DEFAULT_GHOST_ROOT_URI : ghostRootUri;
   }
 
     /**
