@@ -305,9 +305,15 @@ static int mar_encode_table(lua_State *L, mar_Buffer *buf, size_t *idx)
 #define mar_incr_ptr(l) \
     if (((*p)-buf)+(l) > len) luaL_error(L, "bad code"); (*p) += (l);
 
+#ifdef __ANDROID__
+#define mar_next_len(l,T) \
+    if (((*p)-buf)+sizeof(T) > len) luaL_error(L, "bad code"); \
+    memcpy(&l, *p, sizeof(T)); (*p) += sizeof(T);
+#else
 #define mar_next_len(l,T) \
     if (((*p)-buf)+sizeof(T) > len) luaL_error(L, "bad code"); \
     l = *(T*)*p; (*p) += sizeof(T);
+#endif
 
 static void mar_decode_value
     (lua_State *L, const char *buf, size_t len, const char **p, size_t *idx)
