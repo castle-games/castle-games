@@ -11,7 +11,7 @@ import java.util.List;
 public class GhostPackage implements ReactPackage {
   @Override
   public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
-    return Collections.emptyList();
+    return Collections.<NativeModule>singletonList(new GhostChannelsModule(reactContext));
   }
 
   @Override

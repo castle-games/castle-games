@@ -30,6 +30,16 @@
 #include <unistd.h>
 #include <errno.h>
 
+extern "C" {
+#include <lauxlib.h>
+#include <lua.h>
+#include <lualib.h>
+}
+
+#include "modules/thread/Channel.h"
+
+#include "org_love2d_android_Channels.h"
+
 namespace love
 {
 namespace android
@@ -271,5 +281,118 @@ const char *getGhostRootUri()
 
 } // android
 } // love
+
+// XXX(Ghost): Added for access to `Channel`s from Java
+
+#define STATIC_METHOD(retType, methodName) \
+    extern "C" JNIEXPORT retType JNICALL Java_org_love2d_android_Channels_ ## methodName
+
+#define GET_CHANNEL() \
+    auto cName = env->GetStringUTFChars(jName, nullptr); \
+    auto channel = love::thread::Channel::getChannel(cName); \
+    env->ReleaseStringUTFChars(jName, cName)
+
+static jstring jstringFromVariant(JNIEnv *env, love::Variant &var) {
+    if (var.getType() != love::Variant::STRING &&
+        var.getType() != love::Variant::SMALLSTRING) {
+        return nullptr;
+    }
+
+    static lua_State *conversionLuaState = nullptr;
+    if (!conversionLuaState) {
+        conversionLuaState = luaL_newstate();
+    }
+
+    var.toLua(conversionLuaState);
+    jstring jResult = env->NewStringUTF(luaL_checkstring(conversionLuaState, -1));
+    lua_pop(conversionLuaState, 1);
+
+    return jResult;
+}
+
+STATIC_METHOD(void, nativeClear)(JNIEnv *env, jclass, jstring jName) {
+    GET_CHANNEL();
+
+    channel->clear();
+}
+
+STATIC_METHOD(jstring, nativeDemand)(JNIEnv *env, jclass, jstring jName, jdouble jTimeout) {
+    GET_CHANNEL();
+
+    love::Variant var;
+    bool result;
+    if (jTimeout >= 0) {
+        result = channel->demand(&var, jTimeout);
+    } else {
+        result = channel->demand(&var);
+    }
+
+    if (result) {
+        return jstringFromVariant(env, var);
+    } else {
+        return nullptr;
+    }
+}
+
+STATIC_METHOD(jint, nativeGetCount)(JNIEnv *env, jclass, jstring jName) {
+    GET_CHANNEL();
+
+    return channel->getCount();
+}
+
+STATIC_METHOD(jboolean, nativeHasRead)(JNIEnv *env, jclass, jstring jName, jint jId) {
+    GET_CHANNEL();
+
+    return channel->hasRead(jId);
+}
+
+STATIC_METHOD(jstring, nativePeek)(JNIEnv *env, jclass, jstring jName) {
+    GET_CHANNEL();
+
+    love::Variant var;
+    if (channel->peek(&var)) {
+        return jstringFromVariant(env, var);
+    } else {
+        return nullptr;
+    }
+}
+
+STATIC_METHOD(jstring, nativePop)(JNIEnv *env, jclass, jstring jName) {
+    GET_CHANNEL();
+
+    love::Variant var;
+    if (channel->pop(&var)) {
+        return jstringFromVariant(env, var);
+    } else {
+        return nullptr;
+    }
+}
+
+STATIC_METHOD(jint, nativePush)(JNIEnv *env, jclass, jstring jName, jstring jValue) {
+    GET_CHANNEL();
+
+    auto cValue = env->GetStringUTFChars(jValue, NULL);
+    auto var = love::Variant(cValue, env->GetStringUTFLength(jValue));
+    env->ReleaseStringUTFChars(jValue, cValue);
+
+    return channel->push(var);
+}
+
+STATIC_METHOD(jboolean, nativeSupply)(JNIEnv *env, jclass, jstring jName, jstring jValue, jdouble jTimeout) {
+    GET_CHANNEL();
+
+    auto cValue = env->GetStringUTFChars(jValue, NULL);
+    auto var = love::Variant(cValue, env->GetStringUTFLength(jValue));
+    env->ReleaseStringUTFChars(jValue, cValue);
+
+    bool result;
+    if (jTimeout >= 0) {
+        result = channel->supply(var, jTimeout);
+    } else {
+        result = channel->supply(var);
+    }
+
+    return result;
+}
 
 #endif // LOVE_ANDROID
