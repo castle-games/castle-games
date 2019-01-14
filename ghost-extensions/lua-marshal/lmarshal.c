@@ -321,7 +321,15 @@ static void mar_decode_value
         mar_incr_ptr(MAR_CHR);
         break;
     case LUA_TNUMBER:
+#ifdef __ANDROID__
+        {
+            lua_Number num;
+            memcpy(&num, *p, sizeof(num));
+            lua_pushnumber(L, num);
+        }
+#else
         lua_pushnumber(L, *(lua_Number*)*p);
+#endif
         mar_incr_ptr(MAR_I64);
         break;
     case LUA_TSTRING:
