@@ -13,13 +13,11 @@ import org.love2d.android.GameActivity;
 import javax.annotation.Nullable;
 
 public class GhostViewManager extends SimpleViewManager<ViewGroup> {
-  public static final String REACT_CLASS = "GhostView";
-
   private GameActivity gameActivity;
 
   @Override
   public String getName() {
-    return REACT_CLASS;
+    return "GhostView";
   }
 
   @Override
