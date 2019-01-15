@@ -301,6 +301,10 @@ public class SDLActivity extends Activity {
     // love2d-mod-start: allow restarting of the native thread
     boolean running = false;
 
+    public boolean isRunning() {
+      return running;
+    }
+
     public void resetNative() {
         Log.v("SDL", "resetNative()");
 
@@ -521,7 +525,7 @@ public class SDLActivity extends Activity {
 
                     InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(mTextEdit.getWindowToken(), 0);
-                    
+
                     mScreenKeyboardShown = false;
                 }
                 break;
@@ -592,7 +596,7 @@ public class SDLActivity extends Activity {
     /**
      * This method is called by SDL using JNI.
      * This is a static method for JNI convenience, it calls a non-static method
-     * so that is can be overridden  
+     * so that is can be overridden
      */
     public static void setOrientation(int w, int h, boolean resizable, String hint)
     {
@@ -600,11 +604,11 @@ public class SDLActivity extends Activity {
             mSingleton.setOrientationBis(w, h, resizable, hint);
         }
     }
-   
+
     /**
      * This can be overridden
      */
-    public void setOrientationBis(int w, int h, boolean resizable, String hint) 
+    public void setOrientationBis(int w, int h, boolean resizable, String hint)
     {
         int orientation = -1;
 
@@ -645,7 +649,7 @@ public class SDLActivity extends Activity {
     /**
      * This method is called by SDL using JNI.
      */
-    public static boolean isScreenKeyboardShown() 
+    public static boolean isScreenKeyboardShown()
     {
         if (mTextEdit == null) {
             return false;
@@ -701,7 +705,7 @@ public class SDLActivity extends Activity {
                 }
             }
             /* environment variables set! */
-            return true; 
+            return true;
         } catch (Exception e) {
            Log.v("SDL", "exception " + e.toString());
         }
@@ -758,12 +762,12 @@ public class SDLActivity extends Activity {
     }
 
     public static boolean isTextInputEvent(KeyEvent event) {
-      
+
         // Key pressed with Ctrl should be sent as SDL_KEYDOWN/SDL_KEYUP and not SDL_TEXTINPUT
         if (android.os.Build.VERSION.SDK_INT >= 11) {
             if (event.isCtrlPressed()) {
                 return false;
-            }  
+            }
         }
 
         return event.isPrintingKey() || event.getKeyCode() == KeyEvent.KEYCODE_SPACE;
@@ -1079,7 +1083,7 @@ public class SDLActivity extends Activity {
     public static boolean clipboardHasText() {
         return mClipboardHandler.clipboardHasText();
     }
-    
+
     /**
      * This method is called by SDL using JNI.
      */
@@ -1200,7 +1204,9 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
   protected void onDetachedFromWindow() {
     super.onDetachedFromWindow();
 
-    SDLActivity.mSingleton.resetNative();
+    if (SDLActivity.mSingleton != null) {
+      SDLActivity.mSingleton.resetNative();
+    }
   }
 
   // Called when the surface is resized
@@ -1208,6 +1214,10 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
     public void surfaceChanged(SurfaceHolder holder,
                                int format, int width, int height) {
         Log.v("SDL", "surfaceChanged()");
+
+        if (SDLActivity.mSingleton == null) {
+          return;
+        }
 
         int sdlFormat = 0x15151002; // SDL_PIXELFORMAT_RGB565 by default
         switch (format) {

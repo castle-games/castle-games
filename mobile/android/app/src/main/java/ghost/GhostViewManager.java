@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.view.ViewGroup;
 
+import com.facebook.react.bridge.LifecycleEventListener;
+import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
@@ -12,8 +14,12 @@ import org.love2d.android.GameActivity;
 
 import javax.annotation.Nullable;
 
-public class GhostViewManager extends SimpleViewManager<ViewGroup> {
+public class GhostViewManager extends SimpleViewManager<ViewGroup> implements LifecycleEventListener {
   private GameActivity gameActivity;
+
+  GhostViewManager(ReactApplicationContext reactContext) {
+    reactContext.addLifecycleEventListener(this);
+  }
 
   @Override
   public String getName() {
@@ -43,5 +49,26 @@ public class GhostViewManager extends SimpleViewManager<ViewGroup> {
   @ReactProp(name = "uri")
   public void setUri(ViewGroup view, @Nullable String uri) {
     GameActivity.ghostRootUri = uri;
+  }
+
+  @Override
+  public void onHostPause() {
+    if (gameActivity != null && gameActivity.isRunning()) {
+      gameActivity.onWindowFocusChanged(false);
+      gameActivity.pause();
+    }
+  }
+
+  @Override
+  public void onHostResume() {
+    if (gameActivity != null && gameActivity.isRunning()) {
+      gameActivity.resume();
+      gameActivity.onWindowFocusChanged(true);
+    }
+  }
+
+  @Override
+  public void onHostDestroy() {
+
   }
 }

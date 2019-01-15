@@ -16,6 +16,6 @@ public class GhostPackage implements ReactPackage {
 
   @Override
   public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
-    return Collections.<ViewManager>singletonList(new GhostViewManager());
+    return Collections.<ViewManager>singletonList(new GhostViewManager(reactContext));
   }
 }
