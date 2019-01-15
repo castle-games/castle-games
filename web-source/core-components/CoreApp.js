@@ -249,7 +249,13 @@ export default class CoreApp extends React.Component {
   _onUrlInputChange = (e) => this.setState({ urlBarInputValue: e.target.value });
 
   requestMediaAtUrlAsync = async (mediaUrl) => {
-    const media = await Browser.resolveMediaAtUrlAsync(mediaUrl);
+    let media;
+    try {
+      media = await Browser.resolveMediaAtUrlAsync(mediaUrl);
+    } catch (e) {
+      // forward this error to the user
+      Logs.error(e.message);
+    }
     this.loadMediaAsync(media);
   };
 

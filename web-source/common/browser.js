@@ -67,7 +67,7 @@ async function resolveMediaAtUrlAsync(mediaUrl) {
     }
     metadataFetched = _validateMetadata(metadata, isRegisteredMedia);
   } catch (e) {
-    console.warn(`Couldn't fetch metadata when opening Castle url: ${e}`);
+    throw new Error(`Couldn't resolve Castle url: ${e.message}`);
   }
   return {
     mediaUrl,
