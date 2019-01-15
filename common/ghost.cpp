@@ -28,50 +28,64 @@ inline bool fileExists(const char *path) {
   return false;
 }
 
-bool ghostCreateProjectAtPath(const char *path, const char **entryPoint) {
-  // get the starter code
-  const char *pathToBundledStarterCode;
-  std::string starterCode = kDefaultStarterTemplateCode;
-  bool success = ghostGetPathToFileInAppBundle("blank.lua", &pathToBundledStarterCode);
+bool _ghostCreateFileFromTemplateAtPath(const char *path,
+                                        const char *filenameToRead,
+                                        const char *filenameToWrite,
+                                        const char **filePathCreated)
+{
+  // read bundled file
+  const char *pathToBundledFile;
+  std::string fileContents;
+  bool success = ghostGetPathToFileInAppBundle(filenameToRead, &pathToBundledFile);
   if (success) {
-    std::ifstream starterCodeStream(pathToBundledStarterCode);
-    starterCode = std::string((std::istreambuf_iterator<char>(starterCodeStream)),
+    std::ifstream fileContentsStream(pathToBundledFile);
+    fileContents = std::string((std::istreambuf_iterator<char>(fileContentsStream)),
                               std::istreambuf_iterator<char>());
-    std::free((void *)pathToBundledStarterCode);
+    std::free((void *)pathToBundledFile);
   }
-
-  // construct path to main.lua
-  std::string mainFilePath(path);
-  std::stringstream mainFilePathStream;
-  mainFilePathStream << mainFilePath;
+  
+  // construct path to output file
+  std::string outputFilePath(path);
+  std::stringstream outputFilePathStream;
+  outputFilePathStream << outputFilePath;
   
 #if defined(WIN32) || defined(_WIN32)
-  if (mainFilePath.back() != '\\') {
-    mainFilePathStream << "\\";
+  if (outputFilePath.back() != '\\') {
+    outputFilePathStream << "\\";
   }
 #else
-  if (mainFilePath.back() != '/') {
-    mainFilePathStream << "/";
+  if (outputFilePath.back() != '/') {
+    outputFilePathStream << "/";
   }
 #endif
-  mainFilePathStream << "main.lua";
-  mainFilePath = mainFilePathStream.str();
-
+  outputFilePathStream << filenameToWrite;
+  outputFilePath = outputFilePathStream.str();
+  
   // don't overwrite existing file
-  if (fileExists(mainFilePath.c_str())) {
+  if (fileExists(outputFilePath.c_str())) {
     return false;
   }
-
-  // write main.lua
-  std::ofstream outfile(mainFilePath);
-  outfile << starterCode << std::endl;
+  
+  // write output file
+  std::ofstream outfile(outputFilePath);
+  outfile << fileContents << std::endl;
   outfile.close();
-
+  
   // check that we actually created the file
-  bool didCreate = fileExists(mainFilePath.c_str());
+  bool didCreate = fileExists(outputFilePath.c_str());
   if (didCreate) {
-    *entryPoint = strdup(mainFilePath.c_str());
+    *filePathCreated = strdup(outputFilePath.c_str());
     return true;
   }
   return false;
+}
+
+bool ghostCreateProjectAtPath(const char *path, const char **entryPoint) {
+  const char *mainFileCreated;
+  bool result = _ghostCreateFileFromTemplateAtPath(path, "blank.lua", "main.lua", &mainFileCreated);
+  if (!result) {
+    return false;
+  }
+  std::free((void *)mainFileCreated);
+  return _ghostCreateFileFromTemplateAtPath(path, "blank.castle", "project.castle", entryPoint);
 }

@@ -335,9 +335,9 @@ export default class CoreApp extends React.Component {
       } catch (_) {}
       if (entryPointFilePath) {
         const mediaUrl = `file://${entryPointFilePath}`;
-        this._handleMediaSelect({ mediaUrl });
+        await this.requestMediaAtUrlAsync(mediaUrl);
         Logs.system('Welcome to Castle!');
-        Logs.system(`We created some starter code for your project at ${entryPointFilePath}.`);
+        Logs.system(`We created some starter code for your project at ${this.state.media.entryPoint}.`);
         Logs.system(`Open that file in your favorite text editor to get started.`);
         Logs.system(`Need help? Check out http://www.playcastle.io/get-started`);
         // regardless of previous sidebar state, force sidebar visible and

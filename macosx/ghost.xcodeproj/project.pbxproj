@@ -41,6 +41,7 @@
 		B53E72AD2152F8D2003C8616 /* ghost_constants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B53E72AB2152F8D2003C8616 /* ghost_constants.cpp */; };
 		B57FCFB62166834A00D661B2 /* ghost_mac.mm in Sources */ = {isa = PBXBuildFile; fileRef = B57FCFB52166834A00D661B2 /* ghost_mac.mm */; };
 		B57FCFB82166835B00D661B2 /* ghost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B57FCFB72166835B00D661B2 /* ghost.cpp */; };
+		B580674921EEA57100631D76 /* blank.castle in Resources */ = {isa = PBXBuildFile; fileRef = B580674221EEA57100631D76 /* blank.castle */; };
 		B59617512149BF7100BE403F /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = B59617502149BF7100BE403F /* index.html */; };
 		B5A0404321483BA5007A6CC1 /* Chromium Embedded Framework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5A0404221483BA5007A6CC1 /* Chromium Embedded Framework.framework */; };
 		B5A0404621483D2C007A6CC1 /* Chromium Embedded Framework.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = B5A0404221483BA5007A6CC1 /* Chromium Embedded Framework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -249,6 +250,7 @@
 		B55858EE215AB95300926105 /* ghost-macosx.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ghost-macosx.plist"; sourceTree = "<group>"; };
 		B57FCFB52166834A00D661B2 /* ghost_mac.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ghost_mac.mm; sourceTree = "<group>"; };
 		B57FCFB72166835B00D661B2 /* ghost.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ghost.cpp; sourceTree = "<group>"; };
+		B580674221EEA57100631D76 /* blank.castle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = blank.castle; sourceTree = "<group>"; };
 		B59617502149BF7100BE403F /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		B5A0404221483BA5007A6CC1 /* Chromium Embedded Framework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "Chromium Embedded Framework.framework"; path = "/Library/Frameworks/Chromium Embedded Framework.framework"; sourceTree = "<group>"; };
 		B5B06A412150751A001C4382 /* simple_app.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = simple_app.cpp; sourceTree = "<group>"; };
@@ -405,6 +407,7 @@
 		B50F244521E6A23200967055 /* shared-assets */ = {
 			isa = PBXGroup;
 			children = (
+				B580674221EEA57100631D76 /* blank.castle */,
 				B50F244621E6A23200967055 /* blank.lua */,
 			);
 			name = "shared-assets";
@@ -733,6 +736,7 @@
 				B50F244721E6A23200967055 /* blank.lua in Resources */,
 				B5256F43211A555500891B27 /* Images.xcassets in Resources */,
 				38F81F9B214B4A8E00E6E242 /* main.js in Resources */,
+				B580674921EEA57100631D76 /* blank.castle in Resources */,
 				B500022A215AEB1E00CD2309 /* ghost-env.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
