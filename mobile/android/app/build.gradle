@@ -82,6 +82,15 @@ android {
   }
 }
 
+android.applicationVariants.all { variant ->
+  def zipTask = project.tasks.create "zipBase${variant.name.capitalize()}", Zip
+  zipTask.destinationDir = file("$buildDir/intermediates/assets/${variant.dirName}")
+  zipTask.baseName = "game"
+  zipTask.extension = "love"
+  zipTask.from fileTree(dir: '../../../base', include: '**/*')
+  variant.processJavaResources.dependsOn(zipTask)
+}
+
 // Don't use modern jsc-android since it still has some critical bugs that
 // crash applications when the string for the JS bundle is loaded and when
 // locale-specific date functions are called.
