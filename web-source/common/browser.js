@@ -23,6 +23,33 @@ function _validateMetadata(metadata, isRegistered) {
   return validatedMetadata;
 };
 
+async function _resolveMetadataAtUrlAsync(metadataUrl, isRegisteredMedia) {
+  try {
+    let {
+      metadata,
+      info,
+      errors,
+      warnings
+    } = await metadatalib.fetchMetadataForUrlAsync(metadataUrl, {
+      readFileUrlAsyncFunction: CEF.readFileUrl,
+    });
+    if (errors && errors.length) {
+      throw new Error(`Error fetching metadata: ${errors.join(',')}`);
+    }
+    if (info && info.isPublicUrl) {
+      // If its a public URL, index it on the server
+      // Don't `await` since we don't want to block
+      // loading the media
+      Actions.indexPublicUrlAsync(metadataUrl);
+    }
+    metadata = _validateMetadata(metadata, isRegisteredMedia);
+    return { metadata, info };
+  } catch (e) {
+    throw new Error(`Couldn't resolve metadata at .castle url: ${e.message}`);
+  }
+  return null;
+}
+
 async function resolveMediaAtUrlAsync(mediaUrl) {
   let metadataUrl = mediaUrl;
   let entryPoint = mediaUrl;
@@ -43,32 +70,14 @@ async function resolveMediaAtUrlAsync(mediaUrl) {
     }
   }
 
-  try {
-    let {
-      metadata,
-      info,
-      errors,
-      warnings
-    } = await metadatalib.fetchMetadataForUrlAsync(metadataUrl, {
-      readFileUrlAsyncFunction: CEF.readFileUrl,
-    });
-    if (errors && errors.length) {
-      throw new Error(`Error fetching metadata: ${errors.join(',')}`);
-    } else {
-      if (info && info.isPublicUrl) {
-        // If its a public URL, index it on the server
-        // Don't `await` since we don't want to block
-        // loading the media
-        Actions.indexPublicUrlAsync(metadataUrl);
-      }
-      if (info && info.main) {
-        entryPoint = info.main;
-      }
+  if (Urls.isMetadataFileUrl(metadataUrl)) {
+    const { metadata, info } = await _resolveMetadataAtUrlAsync(metadataUrl);
+    if (info && info.main) {
+      entryPoint = info.main;
     }
-    metadataFetched = _validateMetadata(metadata, isRegisteredMedia);
-  } catch (e) {
-    throw new Error(`Couldn't resolve Castle url: ${e.message}`);
+    metadataFetched = metadata;
   }
+
   return {
     mediaUrl,
     entryPoint,

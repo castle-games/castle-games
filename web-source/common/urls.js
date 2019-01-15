@@ -88,6 +88,10 @@ const isCastleHostedUrl = (urlStr) => {
   return isCastle;
 };
 
+const isMetadataFileUrl = (urlStr) => {
+  return (urlStr && urlStr.endsWith('.castle'));
+};
+
 const parseIdFromCastleHostedUrl = (mediaUrl) => {
   let username, slug;
   try {
@@ -117,5 +121,6 @@ export {
   isPrivateUrl,
   isLua,
   isOpenSource,
+  isMetadataFileUrl,
   parseIdFromCastleHostedUrl,
 };
