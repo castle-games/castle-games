@@ -21,4 +21,10 @@ Keep this running. It will show logs.
 
 Do 'Common' above first (it will write a file telling the iOS code how to load the JavaScript from your computer).
 
-Make sure you have Xcode. Open 'ios/castle.xcworkspace' in this directory. *(You may have to click on 'castle' in the left sidebar (hit Cmd + 0 if it's not visible) then set up some code-signing certificate stuff -- like using your personal subscription. I have it on my personal iOS developer subscription right now, so that's why. I'll discuss with @terribleben and get a team certificate set up.)* Then hit Cmd + R.
+Make sure you have Xcode. Open 'ios/castle.xcworkspace' in this directory. Then hit Cmd + R.
+
+### Android
+
+Do 'Common' above first (it will write a file telling the Android code how to load the JavaScript from your computer).
+
+Make sure you have Android studio. Open 'android/'. Then go to the 'Run' menu and hit "Run 'app'".
