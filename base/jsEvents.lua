@@ -24,7 +24,6 @@ function jsEvents.listen(name, listener)
 end
 
 local channel = love.thread.getChannel('JS_EVENTS')
-channel:clear()
 
 function jsEvents.update()
     local eventJson

@@ -11,4 +11,8 @@ function castle.connectClient(mediaUrl, callback)
     })
 end
 
+jsEvents.listen('CASTLE_SET_LOGGED_IN', function(isLoggedIn)
+    castle.isLoggedIn = isLoggedIn
+end)
+
 return castle
