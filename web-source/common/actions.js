@@ -1,5 +1,6 @@
 import CastleApiClient from 'castle-api-client';
 import * as Constants from '~/common/constants';
+import * as CEF from '~/common/cef';
 
 // export const API = CastleApiClient('http://localhost:1380');
 // export const API = CastleApiClient('https://ghost-server.app.render.com');
@@ -175,6 +176,7 @@ export async function login({ userId, password }) {
     return response;
   }
 
+  CEF.sendLuaEvent('CASTLE_SET_LOGGED_IN', !!response.data.login);
   return response.data.login;
 }
 
@@ -388,6 +390,7 @@ export async function logout() {
     return false;
   }
 
+  CEF.sendLuaEvent('CASTLE_SET_LOGGED_IN', false);
   return true;
 }
 
