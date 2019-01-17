@@ -200,7 +200,8 @@ export default class GameScreen extends React.Component {
   }
 
   async openUri(uri, { forceReload = false } = {}) {
-    if (forceReload || uri !== this.state.viewedUri) {
+    if (forceReload || uri !== this._lastOpenedUri) {
+      this._lastOpenedUri = uri;
       this.setState({ showGhostView: false });
       await new Promise(resolve => setTimeout(resolve, 200));
       this.setState(({ loadCounter }) => ({
