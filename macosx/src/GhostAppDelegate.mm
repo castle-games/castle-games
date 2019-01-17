@@ -16,6 +16,8 @@ extern "C" {
 
 #include "simple_handler.h"
 
+extern "C" NSWindow *ghostMacGetMainWindow();
+  
 @interface GhostAppDelegate ()
 
 @property(nonatomic, assign) lua_State *luaState;
@@ -172,7 +174,7 @@ extern "C" {
     // Weird fix for invisible window issue on Mojave: keep track of whether a new
     // window was created and resize it after a delay
 
-    NSWindow *window = [[NSApplication sharedApplication] mainWindow];
+    NSWindow *window = ghostMacGetMainWindow();
     NSWindow *prevChild = nil, *afterChild = nil;
 
     if (window) {
@@ -204,7 +206,7 @@ extern "C" {
   }
 
   if (!self.windowEventsSubscribed) {
-    NSWindow *window = [[NSApplication sharedApplication] mainWindow];
+    NSWindow *window = ghostMacGetMainWindow();
     if (window) {
       [[NSNotificationCenter defaultCenter] addObserver:self
                                                selector:@selector(windowResized:)
@@ -268,7 +270,7 @@ void Cocoa_DispatchEvent(NSEvent *theEvent);
 }
 
 - (void)windowResized:(NSNotification *)notification {
-  NSWindow *window = [[NSApplication sharedApplication] mainWindow];
+  NSWindow *window = ghostMacGetMainWindow();
   float dw = window.frame.size.width - self.prevWindowFrame.size.width;
   float dh = window.frame.size.height - self.prevWindowFrame.size.height;
   ghostResizeChildWindow(dw, dh);

@@ -1321,7 +1321,10 @@ Cocoa_CreateWindow(_THIS, SDL_Window * window)
     @try {
         nswindow = [[SDLWindow alloc] initWithContentRect:rect styleMask:style backing:NSBackingStoreBuffered defer:NO screen:screen];
         /// XXX(Ghost): Add as child of main window
-        [[[NSApplication sharedApplication] mainWindow] addChildWindow:nswindow ordered:NSWindowAbove];
+        NSArray<NSWindow *> *windows = [[NSApplication sharedApplication] windows];
+        if (windows.firstObject) {
+            [windows.firstObject addChildWindow:nswindow ordered:NSWindowAbove];
+        }
     }
     @catch (NSException *e) {
         return SDL_SetError("%s", [[e reason] UTF8String]);

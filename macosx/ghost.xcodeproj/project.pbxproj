@@ -18,6 +18,7 @@
 		A18221D121ACB2FE0018B6DD /* js_binds.h in Headers */ = {isa = PBXBuildFile; fileRef = A18221CF21ACB2FE0018B6DD /* js_binds.h */; };
 		A1ED98E9211DFA0700CBC701 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A194C6C4211CD1D50093B328 /* SDL2.framework */; };
 		A1ED98EA211DFA0700CBC701 /* SDL2.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = A194C6C4211CD1D50093B328 /* SDL2.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A1F9225521EFFB1100D8F23D /* debug_utils.h in Headers */ = {isa = PBXBuildFile; fileRef = A1F9224E21EFFB1100D8F23D /* debug_utils.h */; };
 		B500022A215AEB1E00CD2309 /* ghost-env.plist in Resources */ = {isa = PBXBuildFile; fileRef = B5000229215AEB1E00CD2309 /* ghost-env.plist */; };
 		B5000233215AEBED00CD2309 /* GhostEnv.h in Headers */ = {isa = PBXBuildFile; fileRef = B5000231215AEBED00CD2309 /* GhostEnv.h */; };
 		B5000234215AEBED00CD2309 /* GhostEnv.m in Sources */ = {isa = PBXBuildFile; fileRef = B5000232215AEBED00CD2309 /* GhostEnv.m */; };
@@ -234,6 +235,7 @@
 		A18221CF21ACB2FE0018B6DD /* js_binds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = js_binds.h; sourceTree = "<group>"; };
 		A194C6BA211CD1D50093B328 /* SDL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL.xcodeproj; path = "../ghost-extensions/SDL2-2.0.8/Xcode/SDL/SDL.xcodeproj"; sourceTree = "<group>"; };
 		A1E7953C20721BC800731DD3 /* package.love */ = {isa = PBXFileReference; lastKnownFileType = file; name = package.love; path = ../package.love; sourceTree = "<group>"; };
+		A1F9224E21EFFB1100D8F23D /* debug_utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = debug_utils.h; sourceTree = "<group>"; };
 		A9255E021043195A00BA1496 /* vorbis.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = vorbis.framework; path = /Library/Frameworks/vorbis.framework; sourceTree = "<absolute>"; };
 		A9255F51104324D700BA1496 /* ogg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ogg.framework; path = /Library/Frameworks/ogg.framework; sourceTree = "<absolute>"; };
 		A93E6E4710420B4A007D418B /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
@@ -438,6 +440,7 @@
 		B5B06A402150751A001C4382 /* common */ = {
 			isa = PBXGroup;
 			children = (
+				A1F9224E21EFFB1100D8F23D /* debug_utils.h */,
 				A18221CF21ACB2FE0018B6DD /* js_binds.h */,
 				A18221C821ACB2FE0018B6DD /* js_binds.cpp */,
 				B5B06A492151A8EB001C4382 /* ghost.h */,
@@ -535,6 +538,7 @@
 				B5BAE390215ABA89001354F9 /* json.hpp in Headers */,
 				B5BAE397215ABA89001354F9 /* GhostFileSystem.h in Headers */,
 				B5B06A4A2151A8EB001C4382 /* ghost.h in Headers */,
+				A1F9225521EFFB1100D8F23D /* debug_utils.h in Headers */,
 				A18221D121ACB2FE0018B6DD /* js_binds.h in Headers */,
 				B5000233215AEBED00CD2309 /* GhostEnv.h in Headers */,
 			);

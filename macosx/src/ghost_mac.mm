@@ -8,6 +8,16 @@
 
 #pragma mark - internal
 
+NSWindow *mainWindow = nil;
+
+extern "C" NSWindow *ghostMacGetMainWindow() {
+  return mainWindow;
+}
+
+extern "C" void ghostMacSetMainWindow(NSWindow *window) {
+  mainWindow = window;
+}
+
 static void _ghostSendNativeOpenUrlEvent(const char *uri) {
   std::stringstream params;
   params << "{ url: '" << uri << "' }";
@@ -24,7 +34,7 @@ NSWindow *hiddenWindow = nil;
 
 void ghostSetChildWindowVisible(bool visible) {
   dispatch_async(dispatch_get_main_queue(), ^{
-    NSWindow *window = [[NSApplication sharedApplication] mainWindow];
+    NSWindow *window = ghostMacGetMainWindow();
     if (window) {
       if (visible) {
         if (hiddenWindow) {
@@ -48,7 +58,7 @@ void ghostSetChildWindowFrame(float left, float top, float width, float height) 
   childWidth = width;
   childHeight = height;
   
-  NSWindow *window = [[NSApplication sharedApplication] mainWindow];
+  NSWindow *window = ghostMacGetMainWindow();
   if (window) {
     CGRect frame;
     frame.origin.x = window.frame.origin.x + left;
