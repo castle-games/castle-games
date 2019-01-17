@@ -8,7 +8,7 @@
 
 #pragma mark - internal
 
-NSWindow *mainWindow = nil;
+__weak NSWindow *mainWindow = nil;
 
 extern "C" NSWindow *ghostMacGetMainWindow() {
   return mainWindow;
