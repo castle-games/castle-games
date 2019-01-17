@@ -510,7 +510,8 @@ bool Window::setWindow(int width, int height, WindowSettings *settings)
 	if ((f.useposition || f.centered) && !f.fullscreen)
 		SDL_SetWindowPosition(window, x, y);
 
-	SDL_RaiseWindow(window);
+	// XXX(Ghost): Don't raise window on `setMode`
+//	SDL_RaiseWindow(window);
 
 	SDL_GL_SetSwapInterval(f.vsync);
 
