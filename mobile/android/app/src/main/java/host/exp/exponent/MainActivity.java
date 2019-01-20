@@ -1,6 +1,7 @@
 package host.exp.exponent;
 
 import android.os.Bundle;
+import android.view.KeyEvent;
 
 import com.facebook.react.ReactPackage;
 
@@ -53,7 +54,22 @@ public class MainActivity extends DetachActivity {
   }
 
 
-  // Is called from JNI by Love's code
+  @Override
+  public boolean dispatchKeyEvent(KeyEvent event) {
+    // System behavior for volume, camera, zoom buttons
+    int keyCode = event.getKeyCode();
+    if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN ||
+        keyCode == KeyEvent.KEYCODE_VOLUME_UP ||
+        keyCode == KeyEvent.KEYCODE_CAMERA ||
+        keyCode == KeyEvent.KEYCODE_ZOOM_IN ||
+        keyCode == KeyEvent.KEYCODE_ZOOM_OUT) {
+      return false;
+    }
+    return super.dispatchKeyEvent(event);
+  }
+
+
+  // Called from JNI by Love's code
 
   public void setImmersiveMode(boolean immersive_mode) {
   }
