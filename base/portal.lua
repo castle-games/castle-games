@@ -188,6 +188,16 @@ function portalMeta:setupLove()
         end
     end
 
+    if newLove.sound then
+        function newLove.sound.newSoundData(path, ...)
+            if type(path) == 'string' then
+                return love.sound.newSoundData(fetchFileData(path), ...)
+            else
+                return love.sound.newSoundData(path, ...)
+            end
+        end
+    end
+
     function newLove.thread.newThread(s)
         -- See https://github.com/love2d-community/love-api/blob/ca6cae9b4fa21a450f28f52e18dd949693b20862/modules/thread/Thread.lua#L90
         local code
