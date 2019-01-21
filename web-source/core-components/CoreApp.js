@@ -288,6 +288,7 @@ export default class CoreApp extends React.Component {
     const userPlayData = { mediaUrl, ...media };
     this.openCEF(entryPoint, userPlayData);
     this._history.addItem(media ? media : { mediaUrl });
+    Logs.system(`Loading project at ${mediaUrl}`);
 
     amplitude.getInstance().logEvent('OPEN_LUA', {
       mediaUrl,
