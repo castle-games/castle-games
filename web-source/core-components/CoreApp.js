@@ -259,7 +259,18 @@ export default class CoreApp extends React.Component {
       // forward this error to the user
       Logs.error(e.message);
     }
-    this.loadMediaAsync(media);
+
+    if (media && media.mediaUrl) {
+      this.loadMediaAsync(media);
+    } else {
+      // something went wrong, just show the error
+      this.setStateWithCEF({
+        sidebarMode: 'development',
+        pageMode: null,
+        creator: null,
+        browserUrl: null,
+      });
+    }
   };
 
   loadMediaAsync = async (media) => {
