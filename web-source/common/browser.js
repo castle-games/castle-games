@@ -16,8 +16,15 @@ function _fixWindowsFilePath(path) {
     // broken paths look something like file://c/Users/...
     let filePath = path.substring(7);
     let pathComponents = filePath.split('/');
+    while (pathComponents.length && pathComponents[0].length == 0) {
+      pathComponents.splice(0, 1);
+    }
     if (pathComponents.length > 1) {
-      pathComponents[0] = `${pathComponents[0].toString().toUpperCase()}:`;
+      let mount = pathComponents[0].toString().toUpperCase();
+      if (mount[mount.length - 1] !== ':') {
+        mount = `${mount}:`;
+      }
+      pathComponents[0] = mount;
       filePath = pathComponents.join('\\');
     }
     return `file://${filePath}`;
