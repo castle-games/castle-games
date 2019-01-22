@@ -22,7 +22,6 @@ import CoreLayout from '~/core-components/layouts/CoreLayout';
 import CoreRootHeader from '~/core-components/CoreRootHeader';
 import CoreRootURLInput from '~/core-components/CoreRootURLInput';
 import CoreRootLeftSidebar from '~/core-components/CoreRootLeftSidebar';
-import CoreRootToolbar from '~/core-components/CoreRootToolbar';
 import CoreRootContextSidebar from '~/core-components/CoreRootContextSidebar';
 import CoreRootDashboard from '~/core-components/CoreRootDashboard';
 import CoreLoginSignup from '~/core-components/CoreLoginSignup';
