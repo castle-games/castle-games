@@ -267,6 +267,9 @@ end
 
 -- Load a portal to given `require`-able `path`
 function portalMeta:newChild(path, args)
+    -- Convert backslashes to slashes (mostly relevant for Windows 'file://' URLs)
+    path = path:gsub('\\', '/')
+
     -- Create the portal instance
     local child = createInstance()
     child.parent = self
