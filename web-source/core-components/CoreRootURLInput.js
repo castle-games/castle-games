@@ -83,8 +83,6 @@ const STYLES_CONTAINER_TOOLBAR = css`
   display: flex;
 `;
 
-const ENABLE_HIDE_OVERLAY = false;
-
 export default class CoreRootURLInput extends React.Component {
   _input;
 
@@ -96,15 +94,6 @@ export default class CoreRootURLInput extends React.Component {
   };
 
   render() {
-    let fullScreenElement;
-    if (ENABLE_HIDE_OVERLAY) {
-      fullScreenElement = (
-        <UIButtonDarkSmall
-          icon={<SVG.CloseOverlay height="14px" />}
-          onClick={this.props.onHideOverlay}
-        />
-      );
-    }
     let muteIcon = (this.props.isMuted) ?
         <SVG.Mute height="16px" /> :
         <SVG.Audio height="16px" />;
@@ -139,7 +128,6 @@ export default class CoreRootURLInput extends React.Component {
             style={{ background: Constants.colors.black }}
           />
           {muteElement}
-          {fullScreenElement}
         </div>
       </div>
     );

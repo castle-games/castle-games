@@ -3,8 +3,6 @@ import * as React from 'react';
 import * as Browser from '~/common/browser';
 import * as Strings from '~/common/strings';
 import * as Utilities from '~/common/utilities';
-import * as ReactDOM from 'react-dom';
-import * as Slack from '~/common/slack';
 import * as Actions from '~/common/actions';
 import * as Network from '~/common/network';
 import * as CEF from '~/common/cef';
@@ -25,20 +23,17 @@ import CoreRootLeftSidebar from '~/core-components/CoreRootLeftSidebar';
 import CoreRootContextSidebar from '~/core-components/CoreRootContextSidebar';
 import CoreRootDashboard from '~/core-components/CoreRootDashboard';
 import CoreLoginSignup from '~/core-components/CoreLoginSignup';
-import CoreBrowserScreen from '~/core-components/CoreBrowserScreen';
 import CoreBrowseResults from '~/core-components/CoreBrowseResults';
 import CoreBrowseSearchInput from '~/core-components/CoreBrowseSearchInput';
 import CoreProfile from '~/core-components/CoreProfile';
 import CoreDevelopmentLogs from '~/core-components/CoreDevelopmentLogs';
 
-const isOverlayHotkey = isKeyHotkey('mod+e');
 const isDevelopmentLogHotkey = isKeyHotkey('mod+j');
 const isOrientationHotkey = isKeyHotkey('mod+shift+o');
 const isReloadHotkey = isKeyHotkey('mod+r');
 const isAppReloadHotkey = isKeyHotkey('mod+shift+r');
 
 const POLL_DELAY = 300;
-const ENABLE_HIDE_OVERLAY = true;
 
 export default class CoreApp extends React.Component {
   _layout;
@@ -251,7 +246,6 @@ export default class CoreApp extends React.Component {
         sidebarMode: 'development',
         pageMode: null,
         creator: null,
-        browserUrl: null,
       });
     }
   };
@@ -286,7 +280,6 @@ export default class CoreApp extends React.Component {
       sidebarMode,
       pageMode: null,
       creator: null,
-      browserUrl: null,
     });
   };
 
@@ -358,10 +351,6 @@ export default class CoreApp extends React.Component {
       return this._handleOrientationChange(e);
     }
 
-    if (isOverlayHotkey(e) && ENABLE_HIDE_OVERLAY) {
-      return this._handleToggleOverlay(e);
-    }
-
     if (isDevelopmentLogHotkey(e)) {
       if (this.state.sidebarVisible === false) {
         // if nothing is showing, force devlogs to show
@@ -423,18 +412,6 @@ export default class CoreApp extends React.Component {
     }
     return false;
   };
-
-  _handleNavigateToBrowserPage = (browserUrl) => {
-    if (window.cefQuery) {
-      CEF.openExternalURL(browserUrl);
-
-      return;
-    }
-
-    this.setState({ browserUrl, pageMode: null });
-  };
-
-  _handleDismissBrowserPage = () => this.setState({ browserUrl: null });
 
   _handleSearchSubmit = async (e) => this._handleSearchChange(e);
 
@@ -627,31 +604,11 @@ export default class CoreApp extends React.Component {
     });
   };
 
-  _handleHideOverlay = () => {
-    const updates = {
-      isOverlayActive: false,
-      pageMode: null,
-    };
-
-    this.setStateWithCEF({ ...updates });
-  };
-
   _handleToggleMute = async () => {
     const isMuted = !this.state.isMuted;
     CEF.sendLuaEvent('CASTLE_SET_VOLUME', isMuted ? 0 : 1);
     this.setStateWithCEF({ isMuted });
     return;
-  };
-
-  _handleToggleOverlay = () => {
-    const updates = {
-      isOverlayActive: !this.state.isOverlayActive,
-      pageMode: null,
-    };
-
-    this.setStateWithCEF({
-      ...updates,
-    });
   };
 
   _handleGetReference = (reference) => {
@@ -667,7 +624,6 @@ export default class CoreApp extends React.Component {
       isMuted={this.state.isMuted}
       onChange={this._onUrlInputChange}
       onSubmit={this._onUrlInputSubmit}
-      onHideOverlay={this._handleHideOverlay}
       onToggleMute={this._handleToggleMute}
     />
   );
@@ -696,22 +652,8 @@ export default class CoreApp extends React.Component {
       state.creator &&
       state.viewer.userId === state.creator.userId;
 
-    const isRenderingBrowser = !Strings.isEmpty(state.browserUrl);
-
-    let maybeBrowserNode;
-    if (isRenderingBrowser) {
-      maybeBrowserNode = (
-        <CoreBrowserScreen
-          key="core-browser-screen"
-          isVisible={!state.pageMode}
-          onDismiss={this._handleDismissBrowserPage}
-          browserUrl={state.browserUrl}
-        />
-      );
-    }
-
     let maybeLeftSidebarNode;
-    if (state.isOverlayActive && !state.isOffline) {
+    if (!state.isOffline) {
       maybeLeftSidebarNode = (
         <CoreRootLeftSidebar
           viewer={state.viewer}
@@ -792,26 +734,18 @@ export default class CoreApp extends React.Component {
       );
     }
 
-    let maybeBottomNode;
-    if (state.isOverlayActive) {
-      maybeBottomNode = this.renderRootURLInput();
-    }
-
-    let maybeTopNode;
-    if (state.isOverlayActive) {
-      maybeTopNode = (
-        <CoreRootHeader
-          viewer={state.viewer}
-          media={state.media}
-          isContextSidebarActive={!!state.sidebarVisible}
-          isOffline={state.isOffline}
-          onToggleSidebar={this._handleToggleSidebar}
+    let topNode = (
+      <CoreRootHeader
+        viewer={state.viewer}
+        media={state.media}
+        isContextSidebarActive={!!state.sidebarVisible}
+        isOffline={state.isOffline}
+        onToggleSidebar={this._handleToggleSidebar}
         />
-      );
-    }
+    );
 
     let maybeRightNode;
-    if (state.isOverlayActive && state.sidebarVisible === true) {
+    if (state.sidebarVisible === true) {
       if (state.sidebarMode === 'current-context') {
         maybeRightNode = (
           <CoreRootContextSidebar
@@ -822,7 +756,6 @@ export default class CoreApp extends React.Component {
             viewer={state.viewer}
             storage={this.props.storage}
             searchQuery={state.searchQuery}
-            onNavigateToBrowserPage={this._handleNavigateToBrowserPage}
             onRefreshViewer={this.refreshViewer}
             onToggleBrowse={this._handleToggleBrowse}
             onToggleProfile={this._handleToggleProfile}
@@ -844,13 +777,11 @@ export default class CoreApp extends React.Component {
     return (
       <CoreLayout
         ref={this._handleGetReference}
-        topNode={maybeTopNode}
-        bottomNode={maybeBottomNode}
+        topNode={topNode}
+        bottomNode={this.renderRootURLInput()}
         leftSidebarNode={maybeLeftSidebarNode}
         isHorizontalOrientation={state.isHorizontalOrientation}
-        rightNode={maybeRightNode}>
-        {maybeBrowserNode}
-      </CoreLayout>
+        rightNode={maybeRightNode} />
     );
   }
 }
