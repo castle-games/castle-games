@@ -88,12 +88,7 @@ export default class UICardProfileHeader extends React.Component {
 
   _renderTagline = creator => {
     let name = creator.name;
-    let origin;
-    if (creator.isReal) {
-      origin = `Joined on ${Strings.toDate(creator.createdTime)}`;
-    } else {
-      // not real, so don't attribute the action of joining to them.
-    }
+    let origin = `Joined on ${Strings.toDate(creator.createdTime)}`;
 
     let components = [];
     if (name) components.push(name);
