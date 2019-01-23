@@ -1,5 +1,5 @@
 {
-  "name": "castle-web-interface",
+  "name": "castle-desktop-interface",
   "version": "0.1.0",
   "main": "index.js",
   "scripts": {

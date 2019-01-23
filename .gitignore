@@ -23,6 +23,6 @@ linux/aws-sdk/aws-sdk-cpp
 
 macosx/DerivedData-beta
 
-web-source/package-lock.json
+desktop/package-lock.json
 
 ghost-releases/
