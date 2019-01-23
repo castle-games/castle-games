@@ -53,7 +53,7 @@ export default class CoreApp extends React.Component {
     window.addEventListener('keydown', this._handleKeyDown);
     window.addEventListener('nativeLoadEnd', this._handleNativeLoadEnd);
     window.addEventListener('nativeLoadError', this._handleNativeLoadError);
-    Share.addEventListeners();
+    window.addEventListener('CASTLE_SYSTEM_KEY_PRESSED', this._handleLuaSystemKeyDown);
 
     const processChannels = async () => {
       await CEF.readLogChannelsAsync();
@@ -77,7 +77,7 @@ export default class CoreApp extends React.Component {
     window.removeEventListener('keydown', this._handleKeyDown);
     window.removeEventListener('nativeLoadEnd', this._handleNativeLoadEnd);
     window.removeEventListener('nativeLoadError', this._handleNativeLoadError);
-    Share.removeEventListeners();
+    window.removeEventListener('CASTLE_SYSTEM_KEY_PRESSED', this._handleLuaSystemKeyDown);
     window.clearTimeout(this._devTimeout);
   }
 
@@ -336,6 +336,10 @@ export default class CoreApp extends React.Component {
         this._handleShowDevelopmentLogs();
       }
     }
+  };
+
+  _handleLuaSystemKeyDown = (e) => {
+    this._handleKeyDown({ ...e.params, preventDefault() {} });
   };
 
   _handleKeyDown = (e) => {
