@@ -1,5 +1,8 @@
 math.randomseed(10000 * require('socket').gettime())
 
+local theOS = love.system.getOS()
+local isMobile = theOS == 'Android' or theOS == 'iOS'
+
 
 -- Built-in libraries
 
@@ -14,24 +17,53 @@ if not CASTLE_SERVER then
 end
 
 
--- Forward `print` and errors to JS
+-- Forward `print` and errors to JS, write them to '.log' files on desktop
 
-local cjson = require 'cjson'
-
+local updateLogs
 do
-    local oldPrint = print
+    local cjson = require 'cjson'
+
+    local ERRORS_FILE_NAME, PRINTS_FILE_NAME = 'castle_errors.log', 'castle_prints.log'
+
+    love.filesystem.write(ERRORS_FILE_NAME, '')
+    love.filesystem.write(PRINTS_FILE_NAME, '')
+
+    local collectedPrints = {} -- Stash prints and flush them to the '.log' file once in a while
+    local oldPrint = print -- Save original print function to call later
     function print(...)
         oldPrint(...)
-        love.thread.getChannel('PRINT'):push(cjson.encode({ ... }))
+        local json = cjson.encode({ ... })
+        love.thread.getChannel('PRINT'):push(json)
+        if not isMobile then
+            collectedPrints[#collectedPrints + 1] = json
+        end
     end
-end
 
-function DEFAULT_ERROR_HANDLER(err, stack) -- Referenced in 'network.lua'
-    love.thread.getChannel('ERROR'):push(cjson.encode({ error = err, stacktrace = stack }))
-end
+    local errors = {}
+    function DEFAULT_ERROR_HANDLER(err, stack) -- Referenced in 'network.lua'
+        local json = cjson.encode({ error = err, stacktrace = stack })
+        love.thread.getChannel('ERROR'):push(json)
+        love.filesystem.append(ERRORS_FILE_NAME, json .. '\n')
+    end
+    function root.onError(err, portal, stack)
+        DEFAULT_ERROR_HANDLER(err, stack)
+    end
 
-function root.onError(err, portal, stack)
-    DEFAULT_ERROR_HANDLER(err, stack)
+    local lastPrintDumpTime
+    function updateLogs(isQuitting)
+        -- Flush stashed prints to '.log' file once in a while
+        if not isMobile then
+            local now = love.timer.getTime()
+            if isQuitting or not lastPrintDumpTime or now - lastPrintDumpTime > 0.5 then
+                lastPrintDumpTime = now
+                if #collectedPrints > 0 then
+                    love.filesystem.append(PRINTS_FILE_NAME,
+                        table.concat(collectedPrints, '\n') .. '\n')
+                    collectedPrints = {}
+                end
+            end
+        end
+    end
 end
 
 
@@ -54,7 +86,7 @@ function main.load(arg)
         else -- Default to remote URI based on `remoteHomeVersion`, using local version if served
             homeUrl = 'https://raw.githubusercontent.com/nikki93/ghost-home2/'
                     .. remoteHomeVersion .. '/main.lua'
-            if love.system.getOS() ~= 'Windows' -- Failed `0.0.0.0` requests hang on Windows...
+            if theOS ~= 'Windows' -- Failed `0.0.0.0` requests hang on Windows...
                     and network.exists(localHomeUrl) then
                 homeUrl = localHomeUrl
             end
@@ -72,6 +104,8 @@ function main.update(dt)
     network.update(dt)
 
     jsEvents.update()
+
+    updateLogs()
 
     if home then
         home:update(dt)
@@ -226,6 +260,14 @@ function main.mousemoved(...)
     love.thread.getChannel('FOCUS_ME'):push('PLEASE')
     if home then
         home:mousemoved(...)
+    end
+end
+
+function main.quit(...)
+    updateLogs(true)
+
+    if home then
+        home:quit(...)
     end
 end
 
