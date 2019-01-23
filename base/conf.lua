@@ -1,6 +1,8 @@
 local system = require 'love.system'
 
 function love.conf(t)
+    t.identity = 'Castle'
+
     local theOS = system.getOS()
     local mobile = theOS == 'iOS' or theOS == 'Android'
 
