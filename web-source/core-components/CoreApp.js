@@ -338,7 +338,8 @@ export default class CoreApp extends React.Component {
     }
   };
 
-  _handleLuaSystemKeyDown = (e) => {
+  _handleLuaSystemKeyDown = async (e) => {
+    await Actions.delay(50);
     this._handleKeyDown({ ...e.params, preventDefault() {} });
   };
 
