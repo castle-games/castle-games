@@ -361,11 +361,20 @@ end
 
 -- Override the `draw` method to scope graphics state changes to the portal
 function portalMeta:draw()
-    love.graphics.push('all')
-    if self.globals.love.draw then
-        self:safeCall(self.globals.love.draw)
+    local initialStackDepth = love.graphics.getStackDepth()
+    local succ, err = pcall(function()
+        love.graphics.push('all')
+        if self.globals.love.draw then
+            self:safeCall(self.globals.love.draw)
+        end
+        love.graphics.pop()
+    end)
+    while love.graphics.getStackDepth() > initialStackDepth do
+        love.graphics.pop()
     end
-    love.graphics.pop()
+    if not succ then
+        error(err, 0)
+    end
 end
 
 -- Return a root portal instance
