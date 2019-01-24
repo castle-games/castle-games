@@ -15,6 +15,8 @@ import UIEmptyState from '~/core-components/reusable/UIEmptyState';
 import CoreEditProfile from '~/core-components/CoreEditProfile';
 import CoreProfileEditMedia from '~/core-components/CoreProfileEditMedia';
 import CoreSignOut from '~/core-components/CoreSignOut';
+import { CurrentUserContext } from '~/contexts/CurrentUserContext';
+import { NavigationContext } from '~/contexts/NavigationContext';
 
 const STYLES_HEADER_TEXT = css`
   font-size: 16px;
@@ -46,7 +48,7 @@ const STYLES_CONTAINER = css`
   }
 `;
 
-export default class ProfileScreen extends React.Component {
+class ProfileScreen extends React.Component {
   state = {
     mode: 'media',
     isEditingMedia: false,
@@ -122,7 +124,7 @@ export default class ProfileScreen extends React.Component {
     }
   }
   
-  _renderMediaContent = (isOwnProfile) => {
+  _renderMediaContent = (isOwnProfile, viewer, creator) => {
     const { isEditingMedia, mediaToEdit } = this.state;
     if (isEditingMedia) {
       return (
@@ -133,12 +135,12 @@ export default class ProfileScreen extends React.Component {
       );
     } else {
       const mediaListElement =
-        this.props.creator.mediaItems && this.props.creator.mediaItems.length ? (
+        creator.mediaItems && creator.mediaItems.length ? (
           <UIListMedia
             noTitleRow
-            viewer={this.props.viewer}
-            creator={this.props.creator}
-            mediaItems={this.props.creator.mediaItems}
+            viewer={viewer}
+            creator={creator}
+            mediaItems={creator.mediaItems}
             onMediaSelect={this.props.onMediaSelect}
             onMediaEdit={this._onSelectEditMedia}
             onUserSelect={this.props.onUserSelect}
@@ -171,12 +173,12 @@ export default class ProfileScreen extends React.Component {
     }
   }
 
-  _renderEditProfileContent = (isOwnProfile) => {
+  _renderEditProfileContent = (isOwnProfile, user) => {
     if (!isOwnProfile) return null;
     
     return (
       <CoreEditProfile
-        user={this.props.viewer}
+        user={user}
         onAfterSave={this.props.onAfterSave}
       />
     );
@@ -188,27 +190,27 @@ export default class ProfileScreen extends React.Component {
       <CoreSignOut onSignOut={this.props.onSignOut} />
     );
   };
-  
+
   render() {
+    const { viewer, creator } = this.props;
     const isOwnProfile = (
-      this.props.viewer &&
-      this.props.viewer.userId == this.props.creator.userId
+      viewer && viewer.userId == creator.userId
     );
 
     let profileContentElement;
     const { mode } = this.state;
     if (mode === 'edit-profile') {
-      profileContentElement = this._renderEditProfileContent(isOwnProfile);
+      profileContentElement = this._renderEditProfileContent(isOwnProfile, viewer);
     } else if (mode === 'sign-out') {
       profileContentElement = this._renderSignOutContent(isOwnProfile);
     } else {
-      profileContentElement = this._renderMediaContent(isOwnProfile);
+      profileContentElement = this._renderMediaContent(isOwnProfile, viewer, creator);
     }
 
     return (
       <div className={STYLES_CONTAINER}>
         <UICardProfileHeader
-          creator={this.props.creator}
+          creator={creator}
           isOwnProfile={isOwnProfile}
           onMediaSelect={this.props.onMediaSelect}
         />
@@ -219,6 +221,31 @@ export default class ProfileScreen extends React.Component {
         />
         {profileContentElement}
       </div>
+    );
+  };
+}
+
+export default class ProfileScreenWithContext extends React.Component {
+  _renderProfile = (navigation, currentUser) => {
+    const viewer = currentUser.user;
+    const creator = navigation.userProfileShown;
+    return (
+      <ProfileScreen
+        viewer={viewer}
+        creator={creator}
+      />
+    );
+  };
+
+  render() {
+    return (
+      <NavigationContext.Consumer>
+        {navigation => (
+          <CurrentUserContext.Consumer>
+            {currentUser => this._renderProfile(navigation, currentUser)}
+          </CurrentUserContext.Consumer>
+        )}
+      </NavigationContext.Consumer>
     );
   }
 }

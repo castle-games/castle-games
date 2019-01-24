@@ -2,6 +2,8 @@ import ReactDOM from 'react-dom';
 
 import * as React from 'react';
 import * as Constants from '~/common/constants';
+import { CurrentUserContextDefaults } from '~/contexts/CurrentUserContext';
+import { NavigationContextDefaults } from '~/contexts/NavigationContext';
 import * as Network from '~/common/network';
 import * as Actions from '~/common/actions';
 
@@ -54,13 +56,6 @@ loader.id = 'loader';
 document.body.appendChild(loader);
 
 const INITIAL_STATE_OFFLINE = {
-  logs: [],
-  urlBarInputValue: '',
-  mediaUrl: '',
-  media: null,
-  creator: null,
-  viewer: null,
-  local: null,
   searchQuery: '',
   allContent: {
     media: [],
@@ -70,11 +65,10 @@ const INITIAL_STATE_OFFLINE = {
   },
   featuredPlaylists: [],
   featuredMedia: [],
-  sidebarMode: 'current-context', // current-context | media-info | development
-  sidebarVisible: true,
-  pageMode: null, // browse | playlist | profile | sign-in | null
   isOffline: true,
   isMuted: false,
+  navigation: NavigationContextDefaults,
+  currentUser: CurrentUserContextDefaults,
 };
 
 const run = async () => {
@@ -90,7 +84,7 @@ const run = async () => {
 
   document.getElementById('loader').classList.add('loader--finished');
 
-  const state = Object.assign({}, INITIAL_STATE_OFFLINE, {
+  let state = Object.assign({}, INITIAL_STATE_OFFLINE, {
     allContent,
     searchResults: {
       ...allContent,
@@ -98,10 +92,10 @@ const run = async () => {
     featuredPlaylists,
     featuredMedia,
     isOffline,
-    viewer,
-    sidebarVisible: !isOffline,
-    pageMode: !isOffline ? 'browse' : null,
   });
+
+  state.currentUser.user = viewer;
+  state.navigation.contentMode = (isOffline) ? 'game' : 'home';
 
   ReactDOM.render(<App state={state} storage={storage} />, document.getElementById('root'));
 

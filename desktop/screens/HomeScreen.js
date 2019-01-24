@@ -5,6 +5,7 @@ import * as SVG from '~/core-components/primitives/svg';
 import shuffle from 'lodash.shuffle';
 import { css } from 'react-emotion';
 
+import { NavigationContext } from '~/contexts/NavigationContext';
 import UIButtonIconHorizontal from '~/core-components/reusable/UIButtonIconHorizontal';
 import UIGridMedia from '~/core-components/reusable/UIGridMedia';
 
@@ -115,6 +116,7 @@ export default class HomeScreen extends React.Component {
   static defaultProps = {
     featuredMedia: [],
   };
+  static contextType = NavigationContext;
 
   _handleClickFooter = () => {
     CEF.openExternalURL('http://www.playcastle.io');
@@ -153,7 +155,7 @@ export default class HomeScreen extends React.Component {
             <UIGridMedia
               mediaItems={featuredMedia}
               onUserSelect={this.props.onUserSelect}
-              onMediaSelect={this.props.onMediaSelect}
+              onMediaSelect={this.context.navigateToMedia}
             />
           </div>
         </div>

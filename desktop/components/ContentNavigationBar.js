@@ -22,10 +22,7 @@ export default class ContentNavigationBar extends React.Component {
         <div>
           Its the content navigation bar
         </div>
-        <Viewer
-          viewer={this.props.viewer}
-          onClick={this.props.onSelectViewer}
-        />
+        <Viewer />
       </div>
     );
   }

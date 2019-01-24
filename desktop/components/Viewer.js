@@ -2,6 +2,8 @@ import * as React from 'react';
 import { css } from 'react-emotion';
 
 import * as Constants from '~/common/constants';
+import { CurrentUserContext } from '~/contexts/CurrentUserContext';
+import { NavigationContext } from '~/contexts/NavigationContext';
 
 const STYLES_CONTAINER = css`
   background: ${Constants.colors.black};
@@ -18,14 +20,26 @@ const STYLES_CONTAINER = css`
 `;
 
 export default class Viewer extends React.Component {
-  render() {
-    const name = (this.props.viewer) ? this.props.viewer.username : 'Sign In';
+  _renderViewer = (navigation, currentUser) => {
+    const name = (currentUser.user) ? currentUser.user.username : 'Sign In';
     return (
       <div
         className={STYLES_CONTAINER}
-        onClick={this.props.onClick}>
+        onClick={navigation.navigateToCurrentUserProfile}>
         {name}
       </div>
+    )
+  };
+
+  render() {
+    return (
+      <NavigationContext.Consumer>
+        {navigation => (
+          <CurrentUserContext.Consumer>
+            {currentUser => this._renderViewer(navigation, currentUser)}
+          </CurrentUserContext.Consumer>
+        )}
+      </NavigationContext.Consumer>
     );
   }
 }

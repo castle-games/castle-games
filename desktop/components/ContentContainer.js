@@ -7,6 +7,7 @@ import GameScreen from '~/screens/GameScreen';
 import HomeScreen from '~/screens/HomeScreen';
 import ProfileScreen from '~/screens/ProfileScreen';
 import LoginSignupScreen from '~/screens/LoginSignupScreen';
+import { NavigationContext } from '~/contexts/NavigationContext';
 
 const STYLES_CONTAINER = css`
   font-family: ${Constants.font.default};
@@ -15,58 +16,41 @@ const STYLES_CONTAINER = css`
 `;
 
 export default class ContentContainer extends React.Component {
-  state = {
-    mode: 'home',
-  };
-  
-  _renderContent = () => {
-    if (this.state.mode === 'game') {
+  static contextType = NavigationContext;
+
+  _renderContent = (mode) => {
+    if (mode === 'game') {
       return (
         <GameScreen />
       );
-    } else if (this.state.mode === 'home') {
+    } else if (mode === 'home') {
       return (
         <HomeScreen
           onUserSelect={this.props.onUserSelect}
           onCreateProject={this.props.onCreateProject}
-          onMediaSelect={this.props.onMediaSelect}
           onLoadHelp={this.props.onLoadHelp}
           featuredMedia={this.props.featuredMedia}
         />
       );
-    } else if (this.state.mode === 'profile') {
+    } else if (mode === 'profile') {
       // TODO: distinguish own profile from other profiles
       return (
-        <ProfileScreen
-          viewer={this.props.viewer}
-          creator={this.props.viewer}
-        />
+        <ProfileScreen />
       );
-    } else if (this.state.mode === 'signin') {
+    } else if (mode === 'signin') {
       return (
         <LoginSignupScreen />
       );
     }
     return (<div>Its the content</div>);
   };
-
-  _onSelectViewer = () => {
-    if (this.props.viewer) {
-      // TODO: distinguish own profile from other profiles
-      this.setState({ mode: 'profile' });
-    } else {
-      this.setState({ mode: 'signin' });
-    }
-  };
   
   render() {
+    const navigation = this.context;
     return (
       <div className={STYLES_CONTAINER}>
-        <ContentNavigationBar
-          viewer={this.props.viewer}
-          onSelectViewer={this._onSelectViewer}
-        />
-        {this._renderContent()}
+        <ContentNavigationBar />
+        {this._renderContent(navigation.contentMode)}
       </div>
     );
   }
