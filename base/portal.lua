@@ -90,11 +90,25 @@ function portalMeta:setupLove()
     end
 
     if newLove.window then -- Unavailable in non-main thread
-        function newLove.window.setMode() end
-
-        function newLove.window.setFullscreen()
-            return false
+        function newLove.window.close() end
+        function newLove.window.maximize() end
+        function newLove.window.minimize() end
+        function newLove.window.requestAttention() end
+        function newLove.window.restore() end
+        function newLove.window.setDisplaySleepEnabled() end
+        function newLove.window.setFullscreen() return true end
+        function newLove.window.setIcon() return true end
+        function newLove.window.setMode() return true end
+        function newLove.window.setPosition() end
+        function newLove.window.setTitle() end
+        function newLove.window.showMessageBox(...)
+            if select('#', ...) <= 4 then
+                return true
+            else
+                return 0
+            end
         end
+        function newLove.window.updateMode() return true end
     end
 
     function newLove.filesystem.load(path)
