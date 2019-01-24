@@ -29,6 +29,8 @@ void ghostUpdateChildWindowFrame();
 void ghostResizeChildWindow(float dw, float dh);
 void ghostSetChildWindowFrame(float left, float top, float width, float height);
 void ghostSetChildWindowVisible(bool visible);
+void ghostSetChildWindowFullscreen(bool fullscreen);
+bool ghostGetChildWindowFullscreen();
 void ghostSetBrowserReady();
 
 bool ghostChooseDirectoryWithDialog(const char *title, const char *message, const char *action,

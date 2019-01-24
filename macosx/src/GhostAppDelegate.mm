@@ -232,6 +232,7 @@ extern "C" NSWindow *ghostMacGetMainWindow();
 }
 
 - (void)stopLove {
+  ghostSetChildWindowFullscreen(false);
   if (self.luaState) {
     SDL_Event quitEvent;
     quitEvent.type = SDL_QUIT;

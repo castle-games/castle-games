@@ -8,14 +8,14 @@
 
 #pragma mark - internal
 
-__weak NSWindow *mainWindow = nil;
+extern __weak NSWindow *ghostMacMainWindow;
 
 extern "C" NSWindow *ghostMacGetMainWindow() {
-  return mainWindow;
+  return ghostMacMainWindow;
 }
 
 extern "C" void ghostMacSetMainWindow(NSWindow *window) {
-  mainWindow = window;
+  ghostMacMainWindow = window;
 }
 
 static void _ghostSendNativeOpenUrlEvent(const char *uri) {
@@ -52,7 +52,59 @@ void ghostSetChildWindowVisible(bool visible) {
   });
 }
 
+extern bool ghostMacCanBecomeKeyMainWindow;
+static BOOL isFullscreen = NO;
+
+GHOST_EXPORT void ghostSetChildWindowFullscreen(bool fullscreen) {
+  // Same as previous state? Skip...
+  if (fullscreen == isFullscreen) {
+    return;
+  }
+  // At this point we can assume we're toggling the state
+  
+  NSWindow *mainWindow = ghostMacGetMainWindow();
+  if (!mainWindow) {
+    return;
+  }
+  static __weak NSWindow *lastFullscreenedChildWindow = nil;
+  if (fullscreen) { // Entering fullscreen
+    NSWindow *childWindow = nil;
+    for (NSWindow *candidateChildWindow in mainWindow.childWindows) {
+      childWindow = candidateChildWindow;
+    }
+    if (childWindow) {
+      // NOTE: Order of operations is super important here!
+      ghostMacCanBecomeKeyMainWindow = true;
+      [mainWindow removeChildWindow:childWindow];
+      [childWindow setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
+      [childWindow toggleFullScreen:childWindow];
+      lastFullscreenedChildWindow = childWindow;
+      isFullscreen = YES;
+    }
+  } else {
+    if (lastFullscreenedChildWindow) {
+      // NOTE: Order of operations is super important here!
+      [lastFullscreenedChildWindow toggleFullScreen:lastFullscreenedChildWindow];
+      [lastFullscreenedChildWindow setCollectionBehavior:NSWindowCollectionBehaviorManaged];
+      [mainWindow addChildWindow:lastFullscreenedChildWindow ordered:NSWindowAbove];
+      [mainWindow makeMainWindow];
+      [mainWindow makeKeyWindow];
+      ghostMacCanBecomeKeyMainWindow = false;
+      isFullscreen = NO;
+      lastFullscreenedChildWindow = nil;
+    }
+  }
+}
+
+GHOST_EXPORT bool ghostGetChildWindowFullscreen() {
+  return isFullscreen;
+}
+
 void ghostSetChildWindowFrame(float left, float top, float width, float height) {
+  if (isFullscreen) {
+    return;
+  }
+  
   childLeft = left;
   childTop = top;
   childWidth = width;

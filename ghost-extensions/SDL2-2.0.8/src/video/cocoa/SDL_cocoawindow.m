@@ -91,16 +91,18 @@
     return [super validateMenuItem:menuItem];
 }
 
+bool ghostMacCanBecomeKeyMainWindow = NO;
+
 - (BOOL)canBecomeKeyWindow
 {
     /// XXX(Ghost): We're just gonna be a child of the main window, don't allow 'key'
-    return NO;
+    return ghostMacCanBecomeKeyMainWindow;
 }
 
 - (BOOL)canBecomeMainWindow
 {
     /// XXX(Ghost): We're just gonna be a child of the main window, don't allow 'main'
-    return NO;
+    return ghostMacCanBecomeKeyMainWindow;
 }
 
 - (void)sendEvent:(NSEvent *)event
@@ -1283,6 +1285,8 @@ SetupWindowData(_THIS, SDL_Window * window, NSWindow *nswindow, SDL_bool created
     return 0;
 }}
 
+__weak NSWindow *ghostMacMainWindow = nil;
+
 int
 Cocoa_CreateWindow(_THIS, SDL_Window * window)
 { @autoreleasepool
@@ -1321,10 +1325,7 @@ Cocoa_CreateWindow(_THIS, SDL_Window * window)
     @try {
         nswindow = [[SDLWindow alloc] initWithContentRect:rect styleMask:style backing:NSBackingStoreBuffered defer:NO screen:screen];
         /// XXX(Ghost): Add as child of main window
-        NSArray<NSWindow *> *windows = [[NSApplication sharedApplication] windows];
-        if (windows.firstObject) {
-            [windows.firstObject addChildWindow:nswindow ordered:NSWindowAbove];
-        }
+        [ghostMacMainWindow addChildWindow:nswindow ordered:NSWindowAbove];
     }
     @catch (NSException *e) {
         return SDL_SetError("%s", [[e reason] UTF8String]);
