@@ -3,6 +3,7 @@ import { css } from 'react-emotion';
 
 import * as Actions from '~/common/actions';
 import * as Constants from '~/common/constants';
+import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import * as Strings from '~/common/strings';
 
 import UIInput from '~/core-components/reusable/UIInput';
@@ -12,17 +13,6 @@ import UILink from '~/core-components/reusable/UILink';
 import UIUserPreview from '~/core-components/reusable/UIUserPreview';
 
 const STYLES_CONTAINER = css`
-  @keyframes authentication-animation {
-    from {
-      opacity: 0;
-    }
-
-    to {
-      opacity: 1;
-    }
-  }
-
-  animation: authentication-animation 280ms ease;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -62,13 +52,12 @@ const STYLES_ERROR_MESSAGE = css`
 `;
 
 export default class LoginSignupScreen extends React.Component {
+  static contextType = CurrentUserContext;
+
   // steps:
   //  WHO - input who you are
   //  PASSWORD - put in your password
   //  SIGNUP - create an account
-  static defaultProps = {
-    onLogin: () => {},
-  };
 
   state = {
     who: '',
@@ -122,7 +111,7 @@ export default class LoginSignupScreen extends React.Component {
 
   _goToSuccess = () => {
     this.setState({ step: 'SUCCESS' }, () => {
-      this.props.onLogin(this.state.localViewer);
+      this.context.setCurrentUser(this.state.localViewer);
     });
   };
 

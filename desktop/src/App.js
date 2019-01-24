@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { css } from 'react-emotion';
 
+import * as Actions from '~/common/actions';
 import * as Browser from '~/common/browser';
 import * as Constants from '~/common/constants';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
@@ -27,10 +28,13 @@ export default class App extends React.Component {
     super();
 
     this.state = props.state;
+    this.state.navigation.navigateToHome = this.navigateToHome;
     this.state.navigation.navigateToMediaUrl = this.navigateToMediaUrl;
     this.state.navigation.navigateToMedia = this.navigateToMedia;
     this.state.navigation.navigateToCurrentUserProfile = this.navigateToCurrentUserProfile;
     this.state.navigation.navigateToUserProfile = this.navigateToUserProfile;
+    this.state.currentUser.setCurrentUser = this.setCurrentUser;
+    this.state.currentUser.clearCurrentUser = this.clearCurrentUser;
     // TODO: restore this._history = new History(props.storage);
   }
 
@@ -58,6 +62,15 @@ export default class App extends React.Component {
   };
 
   // navigation actions
+  navigateToHome = () => {
+    this.setState({
+      navigation: {
+        ...this.state.navigation,
+        contentMode: 'home',
+      },
+    });
+  }
+
   navigateToMediaUrl = async (mediaUrl) => {
     let media;
     try {
@@ -110,6 +123,36 @@ export default class App extends React.Component {
       },
     });
   };
+
+  // currentUser actions
+  setCurrentUser = (user) => {
+    this.setState({
+      currentUser: {
+        ...this.state.currentUser,
+        user,
+      },
+    }, () => {
+      if (user) {
+        this.navigateToCurrentUserProfile();
+      } else {
+        this.navigateToHome();
+      }
+    });
+  }
+
+  clearCurrentUser = () => {
+    if (!Actions.logout()) {
+      return;
+    }
+    this.setState({
+      currentUser: {
+        ...this.state.currentUser,
+        user: null,
+      },
+    }, () => {
+      this.navigateToCurrentUserProfile();
+    });
+  }
 
   render() {
     return (
