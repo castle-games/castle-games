@@ -3,6 +3,7 @@ import { css } from 'react-emotion';
 
 import * as Constants from '~/common/constants';
 import ContentNavigationBar from '~/components/ContentNavigationBar';
+import GameScreen from '~/screens/GameScreen';
 import HomeScreen from '~/screens/HomeScreen';
 import ProfileScreen from '~/screens/ProfileScreen';
 import LoginSignupScreen from '~/screens/LoginSignupScreen';
@@ -19,7 +20,11 @@ export default class ContentContainer extends React.Component {
   };
   
   _renderContent = () => {
-    if (this.state.mode === 'home') {
+    if (this.state.mode === 'game') {
+      return (
+        <GameScreen />
+      );
+    } else if (this.state.mode === 'home') {
       return (
         <HomeScreen
           onUserSelect={this.props.onUserSelect}
