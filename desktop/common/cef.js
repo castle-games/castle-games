@@ -99,6 +99,14 @@ export const setWindowFrameVisible = async (isVisible) => {
   await NativeBinds.setWindowFrameVisible({ isVisible });
 };
 
+export const setWindowFrameFullscreen = async (isFullscreen) => {
+  await NativeBinds.setWindowFrameFullscreen({ isFullscreen });
+};
+
+export const getWindowFrameFullscreen = async () => {
+  return await NativeBinds.getWindowFrameFullscreen({}) === 'true';
+};
+
 export const updateWindowFrame = async (rect) => {
   await NativeBinds.setChildWindowFrame({
     left: rect.left,

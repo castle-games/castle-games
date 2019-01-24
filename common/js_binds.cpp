@@ -90,6 +90,16 @@ JS_BIND_DEFINE(setWindowFrameVisible) {
   success("success");
 }
 
+JS_BIND_DEFINE(setWindowFrameFullscreen) {
+  float isFullscreen = arg["isFullscreen"];
+  ghostSetChildWindowFullscreen(isFullscreen);
+  success("success");
+}
+
+JS_BIND_DEFINE(getWindowFrameFullscreen) {
+  success(ghostGetChildWindowFullscreen() ? "true" : "false");
+}
+
 JS_BIND_DEFINE(readChannels) {
   static lua_State *conversionLuaState = lua_open();
 

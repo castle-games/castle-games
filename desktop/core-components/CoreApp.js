@@ -32,6 +32,7 @@ const isDevelopmentLogHotkey = isKeyHotkey('mod+j');
 const isOrientationHotkey = isKeyHotkey('mod+shift+o');
 const isReloadHotkey = isKeyHotkey('mod+r');
 const isAppReloadHotkey = isKeyHotkey('mod+shift+r');
+const isFullscreenHotkey = isKeyHotkey('mod+f');
 
 const POLL_DELAY = 300;
 
@@ -344,6 +345,13 @@ export default class CoreApp extends React.Component {
   };
 
   _handleKeyDown = (e) => {
+    if (isFullscreenHotkey(e)) {
+      (async () => {
+        CEF.setWindowFrameFullscreen(!(await CEF.getWindowFrameFullscreen()));
+      })();
+      return;
+    }
+
     if (isReloadHotkey(e)) {
       return this.reload(e);
     }
