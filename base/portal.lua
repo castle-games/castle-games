@@ -91,6 +91,10 @@ function portalMeta:setupLove()
 
     if newLove.window then -- Unavailable in non-main thread
         function newLove.window.setMode() end
+
+        function newLove.window.setFullscreen()
+            return false
+        end
     end
 
     function newLove.filesystem.load(path)
@@ -152,12 +156,6 @@ function portalMeta:setupLove()
             else
                 return love.graphics.newShader(path, ...)
             end
-        end
-    end
-
-    if newLove.window then
-        function newLove.window.setFullscreen()
-            return false
         end
     end
 
