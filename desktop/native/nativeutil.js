@@ -1,41 +1,7 @@
 import fileUriToPath from 'file-uri-to-path';
 
 import Logs from '~/common/logs';
-
-// `NativeBinds.<name>(arg)` calls the `JS_BIND_DEFINE`'d function with '<name>', passing `arg` as
-// the only parameter. Returns a `Promise` that is resolved with the `success` response when calling
-// that function. If no such function exists or the found function throws a failure, the `Promise`
-// is rejected with the error message.
-export const NativeBinds = new Proxy(
-  {},
-  {
-    get(self, name) {
-      if (name in self) {
-        // Memoize
-        return self[name];
-      } else {
-        const wrapper = async (arg) => {
-          if (!window.cefQuery) {
-            console.error(`\`NativeBinds.${name}\`: \`window.cefQuery\` is not defined`);
-            return [];
-          }
-
-          return new Promise((resolve, reject) => {
-            window.cefQuery({
-              request: JSON.stringify({ name: name, arg: arg }),
-              onSuccess: resolve,
-              onFailure(code, message) {
-                reject(new Error(message));
-              },
-            });
-          });
-        };
-        self[name] = wrapper;
-        return wrapper;
-      }
-    },
-  }
-);
+import { NativeBinds } from '~/native/nativebinds';
 
 export const readLogChannelsAsync = async () => {
   const channelsJson = await NativeBinds.readChannels({ channelNames: ['PRINT', 'ERROR'] });
@@ -87,16 +53,8 @@ export const setBrowserReady = async (callback) => {
   }
 };
 
-export const openWindowFrame = async (mediaUrl) => {
-  await NativeBinds.openUri({ uri: mediaUrl });
-};
-
 export const openExternalURL = async (externalUrl) => {
   await NativeBinds.openExternalUrl({ url: externalUrl });
-};
-
-export const setWindowFrameVisible = async (isVisible) => {
-  await NativeBinds.setWindowFrameVisible({ isVisible });
 };
 
 export const setWindowFrameFullscreen = async (isFullscreen) => {
@@ -105,19 +63,6 @@ export const setWindowFrameFullscreen = async (isFullscreen) => {
 
 export const getWindowFrameFullscreen = async () => {
   return await NativeBinds.getWindowFrameFullscreen({}) === 'true';
-};
-
-export const updateWindowFrame = async (rect) => {
-  await NativeBinds.setChildWindowFrame({
-    left: rect.left,
-    top: rect.top,
-    width: rect.width,
-    height: rect.height,
-  });
-};
-
-export const closeWindowFrame = async () => {
-  await NativeBinds.close();
 };
 
 export const sendLuaEvent = async (name, params) => {

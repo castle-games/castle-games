@@ -1,6 +1,6 @@
 import * as React from 'react';
-import * as CEF from '~/common/cef';
 import * as Constants from '~/common/constants';
+import * as NativeUtil from '~/native/nativeutil';
 import * as Strings from '~/common/strings';
 import * as Urls from '~/common/urls';
 
@@ -83,7 +83,7 @@ const STYLES_CREATOR_IDENTITY = css`
 
 export default class UICardProfileHeader extends React.Component {
   _handleClickCreatorLink = url => {
-    CEF.openExternalURL(url);
+    NativeUtil.openExternalURL(url);
   };
 
   _renderTagline = creator => {

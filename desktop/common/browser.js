@@ -2,7 +2,7 @@ import metadatalib from 'castle-metadata';
 import platform from 'platform';
 
 import * as Actions from '~/common/actions';
-import * as CEF from '~/common/cef';
+import * as NativeUtil from '~/native/nativeutil';
 import * as Urls from '~/common/urls';
 
 function _isWindows() {
@@ -59,7 +59,7 @@ async function _resolveMetadataAtUrlAsync(metadataUrl, isRegisteredMedia) {
       errors,
       warnings
     } = await metadatalib.fetchMetadataForUrlAsync(metadataUrl, {
-      readFileUrlAsyncFunction: CEF.readFileUrl,
+      readFileUrlAsyncFunction: NativeUtil.readFileUrl,
     });
     if (errors && errors.length) {
       throw new Error(`Error fetching metadata: ${errors.join(',')}`);

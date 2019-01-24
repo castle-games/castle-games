@@ -5,6 +5,7 @@ import * as Browser from '~/common/browser';
 import * as Constants from '~/common/constants';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigationContext } from '~/contexts/NavigationContext';
+import * as NativeUtil from '~/native/nativeutil';
 import * as Strings from '~/common/strings';
 
 import ContentContainer from '~/components/ContentContainer.js';
@@ -31,6 +32,10 @@ export default class App extends React.Component {
     this.state.navigation.navigateToCurrentUserProfile = this.navigateToCurrentUserProfile;
     this.state.navigation.navigateToUserProfile = this.navigateToUserProfile;
     // TODO: restore this._history = new History(props.storage);
+  }
+
+  componentDidMount() {
+    NativeUtil.setBrowserReady(() => {});
   }
 
   _loadMediaAsync = async (media) => {

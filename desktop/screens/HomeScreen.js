@@ -1,6 +1,6 @@
 import * as React from 'react';
-import * as CEF from '~/common/cef';
 import * as Constants from '~/common/constants';
+import * as NativeUtil from '~/native/nativeutil';
 import * as SVG from '~/core-components/primitives/svg';
 import shuffle from 'lodash.shuffle';
 import { css } from 'react-emotion';
@@ -119,15 +119,15 @@ export default class HomeScreen extends React.Component {
   static contextType = NavigationContext;
 
   _handleClickFooter = () => {
-    CEF.openExternalURL('http://www.playcastle.io');
+    NativeUtil.openExternalURL('http://www.playcastle.io');
   };
 
   _handleClickExamples = () => {
-    CEF.openExternalURL('http://www.playcastle.io/examples');
+    NativeUtil.openExternalURL('http://www.playcastle.io/examples');
   };
 
   _handleClickDiscord = () => {
-    CEF.openExternalURL('https://discordapp.com/invite/4C7yEEC');
+    NativeUtil.openExternalURL('https://discordapp.com/invite/4C7yEEC');
   };
 
   _getFeaturedMedia = () => {
