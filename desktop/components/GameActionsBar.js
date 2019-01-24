@@ -5,8 +5,6 @@ import * as Constants from '~/common/constants';
 
 const STYLES_CONTAINER = css`
   background: ${Constants.colors.white};
-  position: absolute;
-  bottom: 0;
   height: 48px;
   flex-shrink: 0;
   width: 100%;

@@ -10,7 +10,8 @@ const STYLES_CONTAINER = css`
   background: ${Constants.colors.black};
   width: 100%;
   height: 100%;
-  display: flex;
+  position: relative;
+  display: inline-flex;
   flex-direction: column;
   justify-content: space-between;
 `;
@@ -18,6 +19,7 @@ const STYLES_CONTAINER = css`
 const STYLES_GAME_CONTAINER = css`
   width: 100%;
   height: 100%;
+  position: relative;
   align-items: center;
   justify-content: center;
   display: flex;

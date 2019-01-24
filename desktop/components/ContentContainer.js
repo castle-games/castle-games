@@ -13,6 +13,8 @@ const STYLES_CONTAINER = css`
   font-family: ${Constants.font.default};
   background: ${Constants.colors.default};
   width: 100%;
+  display: flex;
+  flex-direction: column;
 `;
 
 export default class ContentContainer extends React.Component {
