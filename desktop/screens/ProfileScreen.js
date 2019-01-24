@@ -141,9 +141,9 @@ class ProfileScreen extends React.Component {
             viewer={viewer}
             creator={creator}
             mediaItems={creator.mediaItems}
-            onMediaSelect={this.props.onMediaSelect}
+            onMediaSelect={this.props.navigation.navigateToMedia}
             onMediaEdit={this._onSelectEditMedia}
-            onUserSelect={this.props.onUserSelect}
+            onUserSelect={this.props.navigation.navigateToUserProfile}
           />
         ) : (
           <UIEmptyState
@@ -212,7 +212,7 @@ class ProfileScreen extends React.Component {
         <UICardProfileHeader
           creator={creator}
           isOwnProfile={isOwnProfile}
-          onMediaSelect={this.props.onMediaSelect}
+          onMediaSelect={this.props.navigation.navigateToMedia}
         />
         <UIHorizontalNavigation
           items={this._getNavigationItems(isOwnProfile)}
@@ -231,6 +231,7 @@ export default class ProfileScreenWithContext extends React.Component {
     const creator = navigation.userProfileShown;
     return (
       <ProfileScreen
+        navigation={navigation}
         viewer={viewer}
         creator={creator}
       />

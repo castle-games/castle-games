@@ -8,27 +8,14 @@ import { css } from 'react-emotion';
 import ControlledInput from '~/core-components/primitives/ControlledInput';
 
 const STYLES_CONTAINER = css`
-  @keyframes url-animation {
-    from {
-      opacity: 0;
-    }
-
-    to {
-      opacity: 1;
-    }
-  }
-
-  animation: url-animation 280ms ease;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: 48px;
-  width: 100%;
-  background: ${Constants.colors.background};
-  color: ${Constants.colors.white};
+  min-width: 30%;
+  width: 95%;
   padding: 0 16px 0 16px;
-  border-bottom: 1px solid ${Constants.colors.border};
 `;
 
 const STYLES_CONTAINER_LEFT = css`
@@ -36,7 +23,7 @@ const STYLES_CONTAINER_LEFT = css`
   display: flex;
   align-items: center;
   cursor: pointer;
-  color: ${Constants.colors.white};
+  color: ${Constants.colors.black};
   padding-right: 16px;
 `;
 
@@ -52,7 +39,7 @@ const STYLES_CONTAINER_MIDDLE = css`
 const STYLES_CONTAINER_RIGHT = css`
   flex-shrink: 0;
   cursor: pointer;
-  color: ${Constants.colors.white};
+  color: ${Constants.colors.black};
   display: flex;
   align-items: center;
 `;
@@ -60,7 +47,7 @@ const STYLES_CONTAINER_RIGHT = css`
 const STYLES_INPUT = css`
   background: transparent;
   font-family: ${Constants.font.default};
-  color: ${Constants.colors.white};
+  color: ${Constants.colors.black};
   font-size: 16px;
   min-width: 25%;
   width: 100%;
@@ -109,7 +96,7 @@ export default class CoreBrowseSearchInput extends React.Component {
           className={STYLES_INPUT}
           value={this.props.searchQuery}
           name={this.props.name}
-          placeholder="Search for games, people, and playlists..."
+          placeholder="Search for games and people..."
           onSubmit={this.props.onSubmit}
           onChange={this.props.onChange}
         />

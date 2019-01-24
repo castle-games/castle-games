@@ -26,14 +26,12 @@ export default class ContentContainer extends React.Component {
     } else if (mode === 'home') {
       return (
         <HomeScreen
-          onUserSelect={this.props.onUserSelect}
           onCreateProject={this.props.onCreateProject}
           onLoadHelp={this.props.onLoadHelp}
           featuredMedia={this.props.featuredMedia}
         />
       );
     } else if (mode === 'profile') {
-      // TODO: distinguish own profile from other profiles
       return (
         <ProfileScreen />
       );

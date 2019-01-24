@@ -154,7 +154,7 @@ export default class HomeScreen extends React.Component {
           <div className={STYLES_MEDIA}>
             <UIGridMedia
               mediaItems={featuredMedia}
-              onUserSelect={this.props.onUserSelect}
+              onUserSelect={this.context.naviateToUserProfile}
               onMediaSelect={this.context.navigateToMedia}
             />
           </div>
