@@ -52,7 +52,6 @@ void ghostSetChildWindowVisible(bool visible) {
   });
 }
 
-extern bool ghostMacCanBecomeKeyMainWindow;
 static BOOL isFullscreen = NO;
 
 GHOST_EXPORT void ghostSetChildWindowFullscreen(bool fullscreen) {
@@ -74,7 +73,6 @@ GHOST_EXPORT void ghostSetChildWindowFullscreen(bool fullscreen) {
     }
     if (childWindow) {
       // NOTE: Order of operations is super important here!
-      ghostMacCanBecomeKeyMainWindow = true;
       [mainWindow removeChildWindow:childWindow];
       [childWindow setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
       [childWindow toggleFullScreen:childWindow];
@@ -89,7 +87,6 @@ GHOST_EXPORT void ghostSetChildWindowFullscreen(bool fullscreen) {
       [mainWindow addChildWindow:lastFullscreenedChildWindow ordered:NSWindowAbove];
       [mainWindow makeMainWindow];
       [mainWindow makeKeyWindow];
-      ghostMacCanBecomeKeyMainWindow = false;
       isFullscreen = NO;
       lastFullscreenedChildWindow = nil;
     }

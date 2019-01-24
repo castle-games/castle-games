@@ -91,18 +91,16 @@
     return [super validateMenuItem:menuItem];
 }
 
-bool ghostMacCanBecomeKeyMainWindow = NO;
-
 - (BOOL)canBecomeKeyWindow
 {
     /// XXX(Ghost): We're just gonna be a child of the main window, don't allow 'key'
-    return ghostMacCanBecomeKeyMainWindow;
+    return NO;
 }
 
 - (BOOL)canBecomeMainWindow
 {
     /// XXX(Ghost): We're just gonna be a child of the main window, don't allow 'main'
-    return ghostMacCanBecomeKeyMainWindow;
+    return NO;
 }
 
 - (void)sendEvent:(NSEvent *)event
