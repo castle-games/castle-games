@@ -2,15 +2,13 @@ import * as React from 'react';
 import * as CEF from '~/common/cef';
 import * as Constants from '~/common/constants';
 import * as SVG from '~/core-components/primitives/svg';
-import Logs from '~/common/logs';
 import shuffle from 'lodash.shuffle';
 import { css } from 'react-emotion';
 
 import UIButtonIconHorizontal from '~/core-components/reusable/UIButtonIconHorizontal';
-import UIControl from '~/core-components/reusable/UIControl';
 import UIGridMedia from '~/core-components/reusable/UIGridMedia';
 
-const MAX_NUM_FEATURED_MEDIA = 6;
+const MAX_NUM_FEATURED_MEDIA = 4;
 
 const STYLES_CONTAINER = css`
   width: 100%;
@@ -113,7 +111,7 @@ const STYLES_HELP_ACTION = css`
   padding: 6px 0 2px 4px;
 `;
 
-export default class CoreWelcomeScreen extends React.Component {
+export default class HomeScreen extends React.Component {
   static defaultProps = {
     featuredMedia: [],
   };
