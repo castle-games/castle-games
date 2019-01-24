@@ -61,7 +61,7 @@ const STYLES_ERROR_MESSAGE = css`
   color: ${Constants.colors.red};
 `;
 
-export default class CoreLoginSignup extends React.Component {
+export default class LoginSignupScreen extends React.Component {
   // steps:
   //  WHO - input who you are
   //  PASSWORD - put in your password

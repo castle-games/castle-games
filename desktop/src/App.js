@@ -24,6 +24,7 @@ export default class App extends React.Component {
         <SocialContainer />
         <ContentContainer
           featuredMedia={state.featuredMedia}
+          viewer={state.viewer}
         />
       </div>
     );

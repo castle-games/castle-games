@@ -14,13 +14,17 @@ const STYLES_CONTAINER = css`
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 `;
 
 export default class Viewer extends React.Component {
   render() {
+    const name = (this.props.viewer) ? this.props.viewer.username : 'Sign In';
     return (
-      <div className={STYLES_CONTAINER}>
-        Me
+      <div
+        className={STYLES_CONTAINER}
+        onClick={this.props.onClick}>
+        {name}
       </div>
     );
   }

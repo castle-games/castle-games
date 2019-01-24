@@ -4,6 +4,8 @@ import { css } from 'react-emotion';
 import * as Constants from '~/common/constants';
 import ContentNavigationBar from '~/components/ContentNavigationBar';
 import HomeScreen from '~/screens/HomeScreen';
+import ProfileScreen from '~/screens/ProfileScreen';
+import LoginSignupScreen from '~/screens/LoginSignupScreen';
 
 const STYLES_CONTAINER = css`
   font-family: ${Constants.font.default};
@@ -12,12 +14,12 @@ const STYLES_CONTAINER = css`
 `;
 
 export default class ContentContainer extends React.Component {
-  static defaultProps = {
+  state = {
     mode: 'home',
   };
-
+  
   _renderContent = () => {
-    if (this.props.mode === 'home') {
+    if (this.state.mode === 'home') {
       return (
         <HomeScreen
           onUserSelect={this.props.onUserSelect}
@@ -27,15 +29,39 @@ export default class ContentContainer extends React.Component {
           featuredMedia={this.props.featuredMedia}
         />
       );
+    } else if (this.state.mode === 'profile') {
+      // TODO: distinguish own profile from other profiles
+      return (
+        <ProfileScreen
+          viewer={this.props.viewer}
+          creator={this.props.viewer}
+        />
+      );
+    } else if (this.state.mode === 'signin') {
+      return (
+        <LoginSignupScreen />
+      );
     }
     return (<div>Its the content</div>);
   };
 
+  _onSelectViewer = () => {
+    if (this.props.viewer) {
+      // TODO: distinguish own profile from other profiles
+      this.setState({ mode: 'profile' });
+    } else {
+      this.setState({ mode: 'signin' });
+    }
+  };
+  
   render() {
     return (
       <div className={STYLES_CONTAINER}>
-          <ContentNavigationBar />
-          {this._renderContent()}
+        <ContentNavigationBar
+          viewer={this.props.viewer}
+          onSelectViewer={this._onSelectViewer}
+        />
+        {this._renderContent()}
       </div>
     );
   }

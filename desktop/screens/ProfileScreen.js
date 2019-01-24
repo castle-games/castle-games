@@ -12,7 +12,6 @@ import UIHorizontalNavigation from '~/core-components/reusable/UIHorizontalNavig
 import UIListMedia from '~/core-components/reusable/UIListMedia';
 import UIEmptyState from '~/core-components/reusable/UIEmptyState';
 
-import CoreBrowseSearchInput from '~/core-components/CoreBrowseSearchInput';
 import CoreEditProfile from '~/core-components/CoreEditProfile';
 import CoreProfileEditMedia from '~/core-components/CoreProfileEditMedia';
 import CoreSignOut from '~/core-components/CoreSignOut';
@@ -47,7 +46,7 @@ const STYLES_CONTAINER = css`
   }
 `;
 
-export default class CoreProfile extends React.Component {
+export default class ProfileScreen extends React.Component {
   state = {
     mode: 'media',
     isEditingMedia: false,
@@ -208,13 +207,6 @@ export default class CoreProfile extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
-        {!isOwnProfile ? (
-          <CoreBrowseSearchInput
-            readOnly
-            searchQuery={this.props.creator.username}
-            onSearchReset={this.props.onSearchReset}
-          />
-        ) : null}
         <UICardProfileHeader
           creator={this.props.creator}
           isOwnProfile={isOwnProfile}
