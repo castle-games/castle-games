@@ -214,32 +214,17 @@ function main.keypressed(key, ...)
     -- On Windows we need to intercept the 'system' hotkeys
     if love.system.getOS() == 'Windows' then
         local ctrl = love.keyboard.isDown('lctrl') or love.keyboard.isDown('rctrl')
-        local alt = love.keyboard.isDown('lalt') or love.keyboard.isDown('ralt')
-        local gui = love.keyboard.isDown('lgui') or love.keyboard.isDown('rgui')
         local shift = love.keyboard.isDown('lshift') or love.keyboard.isDown('rshift')
-        local key
-
-        -- TODO(nikki): Allow JS to set these rather than hard-coding...
-        if ctrl and (not alt) and (not shift) and (not gui) and love.keyboard.isDown('j') then
-            key = 'j'
-        end
-        if ctrl and (not alt) and shift and (not gui) and love.keyboard.isDown('o') then
-            key = 'o'
-        end
-        if ctrl and (not alt) and (not shift) and (not gui) and love.keyboard.isDown('r') then
-            key = 'r'
-        end
-
-        if key then
+	if (ctrl or shift) and (key == 'j' or key == 'o' or key == 'r' or key == 'f') then
             jsEvents.send('CASTLE_SYSTEM_KEY_PRESSED', {
                 ctrlKey = ctrl,
-                altKey = alt,
-                metaKey = gui,
+                altKey = false,
+                metaKey = false,
                 shiftKey = shift,
                 key = key,
             })
             return
-        end
+	end
     end
 
     -- F12: Soft-reload

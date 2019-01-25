@@ -198,6 +198,12 @@ void ghostSetChildWindowVisible(bool visible) {
   messages.push(msg);
 }
 
+void ghostSetChildWindowFullscreen(bool fullscreen) {
+
+}
+
+bool ghostGetChildWindowFullscreen() { return false; }
+
 void ghostResizeChildWindow(float dw, float dh) { std::lock_guard<std::mutex> guard(mutex); }
 
 void ghostUpdateChildWindowFrame() { std::lock_guard<std::mutex> guard(mutex); }
