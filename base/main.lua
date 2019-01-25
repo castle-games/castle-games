@@ -45,6 +45,7 @@ do
         love.thread.getChannel('ERROR'):push(json)
         love.filesystem.append(ERRORS_FILE_NAME, json .. '\n')
     end
+
     function root.onError(err, portal, stack)
         DEFAULT_ERROR_HANDLER(err, stack)
     end
@@ -204,7 +205,7 @@ local function softReload()
 end
 
 local ffi = require 'ffi'
-ffi.cdef[[
+ffi.cdef [[
 void ghostSetChildWindowFullscreen(bool fullscreen);
 bool ghostGetChildWindowFullscreen();
 ]]
@@ -215,7 +216,7 @@ function main.keypressed(key, ...)
     if love.system.getOS() == 'Windows' then
         local ctrl = love.keyboard.isDown('lctrl') or love.keyboard.isDown('rctrl')
         local shift = love.keyboard.isDown('lshift') or love.keyboard.isDown('rshift')
-	if (ctrl or shift) and (key == 'j' or key == 'o' or key == 'r' or key == 'f') then
+        if (ctrl or shift) and (key == 'j' or key == 'o' or key == 'r' or key == 'f') then
             jsEvents.send('CASTLE_SYSTEM_KEY_PRESSED', {
                 ctrlKey = ctrl,
                 altKey = false,
@@ -224,7 +225,7 @@ function main.keypressed(key, ...)
                 key = key,
             })
             return
-	end
+        end
     end
 
     -- F12: Soft-reload
