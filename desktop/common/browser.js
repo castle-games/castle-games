@@ -84,6 +84,7 @@ async function resolveMediaAtUrlAsync(mediaUrl) {
   let metadataFetched = {};
   let isRegisteredMedia = false;
 
+  // TODO: ben: move to getGameByURL
   if (Urls.isCastleHostedUrl(mediaUrl)) {
     try {
       // look up underlying .castle url to retrieve metadata

@@ -38,21 +38,26 @@ const FULL_USER_FIELDS = `
     height
     width
   }
-  mostRecentUserplay {
-    userplayId
-    startTime
-    imputedEndTime
-    active
-    mediaUrl
-    media {
-      mediaId
-      name
-      mediaUrl
+`;
+
+const GAME_ITEMS = `
+  gameItems {
+    gameId
+    name
+    url
+    createdTime
+    description
+    coverImage {
+      url
+      imgixUrl
+      height
+      width
     }
+    ${NESTED_USER}
   }
 `;
 
-const MEDIA_ITEMS = `
+const DEPRECATED_MEDIA_ITEMS = `
   mediaItems {
     name
     published
@@ -117,7 +122,7 @@ export async function signup({ name, username, email, password }) {
       mutation($name: String!, $username: String!, $email: String!, $password: String!) {
         signup(user: { name: $name, username: $username }, email: $email, password: $password) {
           ${FULL_USER_FIELDS}
-          ${MEDIA_ITEMS}
+          ${GAME_ITEMS}
           token
         }
       }
@@ -141,7 +146,7 @@ export async function login({ userId, password }) {
       mutation($userId: ID!, $password: String!) {
         login(userId: $userId, password: $password) {
           ${FULL_USER_FIELDS}
-          ${MEDIA_ITEMS}
+          ${GAME_ITEMS}
           token
         }
       }
@@ -182,7 +187,7 @@ export async function getPlaylist({ playlistId }) {
           width
         }
         ${NESTED_USER}
-        ${MEDIA_ITEMS}
+        ${DEPRECATED_MEDIA_ITEMS}
       }
     }
   `,
@@ -212,7 +217,7 @@ export async function getUser({ userId }) {
     query GetUser($userId: ID!) {
       user(userId: $userId) {
         ${FULL_USER_FIELDS}
-        ${MEDIA_ITEMS}
+        ${GAME_ITEMS}
       }
     }
   `,
@@ -236,7 +241,7 @@ export async function getViewer() {
     query {
       me {
         ${FULL_USER_FIELDS}
-        ${MEDIA_ITEMS}
+        ${GAME_ITEMS}
       }
     }
   `);
@@ -258,16 +263,15 @@ export async function getInitialData() {
     query {
       me {
         ${FULL_USER_FIELDS}
-        ${MEDIA_ITEMS}
+        ${GAME_ITEMS}
       }
 
-      allMedia {
+      allGames {
+        gameId
         name
-        published
+        url
         createdTime
         description
-        mediaUrl
-        mediaId
         coverImage {
           url
           height
@@ -306,38 +310,6 @@ export async function getInitialData() {
   return result.data;
 }
 
-export async function search(query) {
-  const result = await API.graphqlAsync({
-    query: `
-      query SearchMediaAndPlaylists(
-        $query: String
-        $cursorPosition: Int
-        $limit: Int
-      ) {
-        searchMediaAndPlaylists(
-          query: $query
-          cursorPosition: $cursorPosition
-          limit: $limit
-        ) {
-          ${MEDIA_ITEMS}
-        }
-      }
-    `,
-    variables: { query },
-  });
-
-  // TOOD(jim): Write a global error handler.
-  if (result.error) {
-    return false;
-  }
-
-  if (result.errors) {
-    return false;
-  }
-
-  return result.data.searchMediaAndPlaylists;
-}
-
 export async function logout() {
   const result = await API.graphqlAsync({
     query: `
@@ -361,21 +333,20 @@ export async function logout() {
   return true;
 }
 
-export async function getMediaByURL({ mediaUrl }) {
-  const variables = { mediaUrl };
+export async function getGameByURL({ url }) {
+  const variables = { url };
 
   let result;
   try {
     result = await API.graphqlAsync({
       query: `
-      query GetMediaByURL($mediaUrl: String!) {
-        mediaByMediaUrl(mediaUrl: $mediaUrl) {
+      query GetGame($url: String!) {
+        game(url: $url) {
+          gameId
           name
-          published
+          url
           createdTime
           description
-          mediaUrl
-          mediaId
           coverImage {
             url
             height
@@ -391,16 +362,7 @@ export async function getMediaByURL({ mediaUrl }) {
     return false;
   }
 
-  // TOOD(jim): Write a global error handler.
-  if (result.error) {
-    return false;
-  }
-
-  if (result.errors) {
-    return false;
-  }
-
-  return result.data.mediaByMediaUrl;
+  return result.data.game;
 }
 
 export async function uploadImageAsync({ file }) {
@@ -503,21 +465,21 @@ export async function updateUserAsync({ userId, user }) {
   return result.data.updateUser;
 }
 
-export async function addMedia({ media }) {
+export async function registerGame({ url }) {
   const variables = {
-    ...media,
+    ...url,
   };
 
   const result = await API.graphqlAsync({
     query: `
-      mutation AddMedia($name: String, $mediaUrl: String) {
-        addMedia(media: {
-          name: $name
-          mediaUrl: $mediaUrl
-        }) {
-          mediaId,
+      mutation RegisterGame($url: String!) {
+        registerGame(url: $url) {
+          gameId,
+          slug,
           name,
-          mediaUrl,
+          url,
+          description,
+          createdTime,
           updatedTime,
         }
       }
@@ -525,73 +487,7 @@ export async function addMedia({ media }) {
     variables,
   });
 
-  // TOOD(jim): Write a global error handler.
-  if (result.error) {
-    return false;
-  }
-
-  if (result.errors) {
-    return false;
-  }
-
-  return result.data.addMedia;
-}
-
-export async function updateMediaAsync({ mediaId, media }) {
-  const variables = {
-    mediaId,
-    ...media,
-  };
-  const result = await API.graphqlAsync({
-    query: `
-      mutation UpdateMedia($mediaId: ID!, $name: String, $mediaUrl: String) {
-       updateMedia(
-         mediaId: $mediaId,
-         media: {
-           name: $name,
-           mediaUrl: $mediaUrl,
-         }
-       ) {
-         mediaId,
-         name,
-         mediaUrl,
-         updatedTime,
-       }
-      }
-    `,
-    variables,
-  });
-
-  // TODO(jim): Write a global error handler.
-  if (result.error || result.errors || !result.data) {
-    return false;
-  }
-
-  return result.data.updateMedia;
-}
-
-export async function removeMedia({ mediaId }) {
-  const variables = { mediaId };
-
-  const result = await API.graphqlAsync({
-    query: `
-      mutation RemoveMedia($mediaId: ID!) {
-        deleteMedia(mediaId: $mediaId)
-      }
-    `,
-    variables,
-  });
-
-  // TOOD(jim): Write a global error handler.
-  if (result.error) {
-    return false;
-  }
-
-  if (result.errors) {
-    return false;
-  }
-
-  return { mediaId };
+  return result.data.registerGame;
 }
 
 export async function recordUserplayEndAsync(userplayId) {
@@ -609,6 +505,7 @@ export async function recordUserplayEndAsync(userplayId) {
   );
 }
 
+// TODO: UserActivity
 export async function recordUserplayStartAsync(mediaUrl, mediaId) {
   return await API.graphqlAsync(
     /* GraphQL */ `
@@ -625,6 +522,7 @@ export async function recordUserplayStartAsync(mediaUrl, mediaId) {
   );
 }
 
+// TODO: UserActivity
 export async function recordUserplayPingAsync(userplayId) {
   return await API.graphqlAsync(
     /* GraphQL */ `
@@ -640,6 +538,7 @@ export async function recordUserplayPingAsync(userplayId) {
   );
 }
 
+// TODO: media -> game
 export async function multiplayerJoinAsync(mediaUrl) {
   let result;
   try {
@@ -666,52 +565,4 @@ export async function multiplayerJoinAsync(mediaUrl) {
   }
 
   return result.data.multiplayerJoin;
-}
-
-export async function indexPublicUrlAsync(mediaUrl) {
-  let result;
-  try {
-    result = await API.graphqlAsync(
-      /* GraphQL */ `
-        mutation($mediaUrl: String!) {
-          fetchMediaMetadata(url: $mediaUrl) {
-            # npref
-            # metadata
-            # mainUrl
-            # canonicalUrl
-            updatedTime
-            # createdTime
-          }
-        }
-      `,
-      {
-        mediaUrl,
-      }
-    );
-  } catch (e) {
-    return false;
-  }
-  if (result.error) {
-    return false;
-  }
-  if (result.errors) {
-    return false;
-  }
-  return true;
-}
-
-export async function getPrimaryUrlForRegisteredMediaByIdAsync(username, slug) {
-  let registeredMediaPath = `@${username}/${slug}`;
-  let result = await API.graphqlAsync({
-    query: /* GraphQL */ `
-      query CastleUrlForRegisteredMediaPath($registeredMediaPath: String!) {
-        castleUrlForRegisteredMediaPath(registeredMediaPath: $registeredMediaPath)
-      }
-    `,
-    variables: {
-      registeredMediaPath,
-    },
-  });
-  // let this throw if it's invalid
-  return result.data.castleUrlForRegisteredMediaPath;
 }

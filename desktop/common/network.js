@@ -17,8 +17,7 @@ export const getProductData = async () => {
 
   if (data) {
     isOffline = false;
-    allContent.media = data.allMedia ? data.allMedia : [];
-    allContent.playlists = data.allPlaylists ? data.allPlaylists : [];
+    allContent.games = data.allGames ? data.allGames : [];
     allContent.users = data.allUsers ? data.allUsers : [];
     viewer = data.me;
 
