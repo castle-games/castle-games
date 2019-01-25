@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { css } from 'react-emotion';
+import { isKeyHotkey } from 'is-hotkey';
 
 import * as Actions from '~/common/actions';
 import * as Browser from '~/common/browser';
@@ -11,6 +12,9 @@ import * as Strings from '~/common/strings';
 
 import ContentContainer from '~/components/ContentContainer.js';
 import SocialContainer from '~/components/SocialContainer.js';
+
+const isReloadHotkey = isKeyHotkey('mod+r');
+const isFullscreenHotkey = isKeyHotkey('mod+f');
 
 const STYLES_CONTAINER = css`
   font-family: ${Constants.font.default};
@@ -39,9 +43,51 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
+    window.addEventListener('nativeOpenUrl', this._handleNativeOpenUrlEvent);
+    window.addEventListener('keydown', this._handleKeyDownEvent);
+    window.addEventListener('CASTLE_SYSTEM_KEY_PRESSED', this._handleLuaSystemKeyDownEvent);
+
     NativeUtil.setBrowserReady(() => {});
   }
+  
+  componentWillUnmount() {
+    window.removeEventListener('nativeOpenUrl', this._handleNativeOpenUrlEvent);
+    window.removeEventListener('keydown', this._handleKeyDownEvent);
+    window.removeEventListener('CASTLE_SYSTEM_KEY_PRESSED', this._handleLuaSystemKeyDownEvent);
+  }
 
+  // event listeners
+  _handleNativeOpenUrlEvent = (e) => {
+    this.navigateToMediaUrl(e.params.url);
+  };
+
+  _handleLuaSystemKeyDownEvent = async (e) => {
+    await Actions.delay(50);
+    this._handleKeyDownEvent({ ...e.params, preventDefault() {} });
+  };
+
+  _handleKeyDownEvent = (e) => {
+    if (isReloadHotkey(e)) {
+      return this.reload(e);
+    }
+    if (isFullscreenHotkey(e)) {
+      (async () => {
+        NativeUtil.setWindowFrameFullscreen(!(await NativeUtil.getWindowFrameFullscreen()));
+      })();
+      return;
+    }
+  };
+
+  reload = async (e) => {
+    if (e) {
+      e.preventDefault();
+    }
+    await Actions.delay(100);
+    console.log(`reload: navigating to ${this.state.navigation.media.mediaUrl}`);
+    this.navigateToMediaUrl(this.state.navigation.media.mediaUrl);
+  };
+
+  // load media
   _loadMediaAsync = async (media) => {
     let { mediaUrl, entryPoint } = media;
     if (!entryPoint) {

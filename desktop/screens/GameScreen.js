@@ -55,6 +55,24 @@ class GameScreen extends React.Component {
       // close window and open new
       await GameWindow.close();
       await GameWindow.open(newUrl);
+      // TODO: restore this behavior
+      /*
+      const userPlayData = { mediaUrl, ...media };
+      this._history.addItem(media ? media : { mediaUrl });
+      Logs.system(`Loading project at ${mediaUrl}`);
+
+      amplitude.getInstance().logEvent('OPEN_LUA', {
+        mediaUrl,
+      });
+
+      const isLocal = Urls.isPrivateUrl(mediaUrl);
+      const sidebarMode = isLocal ? 'development' : 'current-context';
+      // Don't `await` this since we don't want to make it take longer to get the media
+      UserPlay.startAsync(userPlayData); 
+      // Sync state for new Ghost instance
+      CEF.sendLuaEvent('CASTLE_SET_LOGGED_IN', isLoggedIn);
+      CEF.sendLuaEvent('CASTLE_SET_VOLUME', this.state.isMuted ? 0 : 1);
+      */
     }
     this._updateGameWindowFrame();
   }

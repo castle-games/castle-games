@@ -130,6 +130,10 @@ export default class HomeScreen extends React.Component {
     NativeUtil.openExternalURL('https://discordapp.com/invite/4C7yEEC');
   };
 
+  _handleClickTutorial = () => {
+    NativeUtil.openExternalURL('http://www.playcastle.io/get-started');
+  };
+
   _getFeaturedMedia = () => {
     const { featuredMedia } = this.props;
     let result;
@@ -178,7 +182,7 @@ export default class HomeScreen extends React.Component {
               <p className={STYLES_PARAGRAPH}>
                 Need help, or just want to chat with other Castlers?
               </p>
-              <div onClick={this.props.onLoadHelp} className={STYLES_HELP_ACTION}>
+              <div onClick={this._handleClickTutorial} className={STYLES_HELP_ACTION}>
                 <div className={STYLES_HELP_GLYPH}>&gt;</div>
                 <span>Read our Tutorial</span>
               </div>
