@@ -5,6 +5,7 @@ import * as Constants from '~/common/constants';
 import GameActionsBar from '~/components/GameActionsBar';
 import GameWindow from '~/native/gamewindow';
 import { NavigationContext } from '~/contexts/NavigationContext';
+import * as NativeUtil from '~/native/nativeutil';
 
 const STYLES_CONTAINER = css`
   background: ${Constants.colors.black};
@@ -29,6 +30,9 @@ const STYLES_GAME_CONTAINER = css`
 class GameScreen extends React.Component {
   static defaultProps = {
     media: null,
+  };
+  state = {
+    isMuted: false,
   };
   _gameContainerReference = null;
 
@@ -71,8 +75,8 @@ class GameScreen extends React.Component {
       UserPlay.startAsync(userPlayData); 
       // Sync state for new Ghost instance
       CEF.sendLuaEvent('CASTLE_SET_LOGGED_IN', isLoggedIn);
-      CEF.sendLuaEvent('CASTLE_SET_VOLUME', this.state.isMuted ? 0 : 1);
       */
+      NativeUtil.sendLuaEvent('CASTLE_SET_VOLUME', this.state.isMuted ? 0 : 1);
     }
     this._updateGameWindowFrame();
   }
@@ -85,6 +89,12 @@ class GameScreen extends React.Component {
     }
   };
 
+  _toggleIsMuted = () => {
+    const isMuted = !this.state.isMuted;
+    NativeUtil.sendLuaEvent('CASTLE_SET_VOLUME', isMuted ? 0 : 1);
+    this.setState({ isMuted });
+  };
+
   render() {
     return (
       <div className={STYLES_CONTAINER}>
@@ -93,7 +103,11 @@ class GameScreen extends React.Component {
           ref={(ref) => { this._gameContainerReference = ref; }}>
           Its the game
         </div>
-        <GameActionsBar />
+        <GameActionsBar
+          media={this.props.media}
+          isMuted={this.state.isMuted}
+          onToggleMute={this._toggleIsMuted}
+        />
       </div>
     );
   }
