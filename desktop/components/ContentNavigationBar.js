@@ -19,6 +19,10 @@ const STYLES_CONTAINER = css`
   justify-content: space-between;
 `;
 
+const STYLES_NAV_ITEMS = css`
+  display: flex;
+`;
+
 const STYLES_NAV_ITEM = css`
   display: inline-flex;
   color: ${Constants.colors.black};
@@ -82,10 +86,17 @@ export default class ContentNavigationBar extends React.Component {
 
   _renderTopNavigationItems = () => {
     return (
-      <div
-        className={STYLES_NAV_ITEM}
-        onClick={this.context.navigateToHome}>
-        Home
+      <div className={STYLES_NAV_ITEMS}>
+        <div
+          className={STYLES_NAV_ITEM}
+          onClick={this.context.navigateToHome}>
+          Home
+        </div>
+        <div
+          className={STYLES_NAV_ITEM}
+          onClick={this.context.navigateToHistory}>
+          Recent
+        </div>
       </div>
     );
   };

@@ -9,19 +9,10 @@ import UIButtonIconHorizontal from '~/core-components/reusable/UIButtonIconHoriz
 import UIEmptyState from '~/core-components/reusable/UIEmptyState';
 import UIControl from '~/core-components/reusable/UIControl';
 
+import { HistoryContext } from '~/contexts/HistoryContext';
+import { NavigationContext } from '~/contexts/NavigationContext';
+
 const STYLES_CONTAINER = css`
-  @keyframes profile-sidebar-scene-animation {
-    from {
-      opacity: 0;
-    }
-
-    to {
-      opacity: 1;
-    }
-  }
-
-  animation: profile-sidebar-scene-animation 280ms ease;
-
   width: 100%;
   height: 100%;
   overflow-y: scroll;
@@ -55,8 +46,9 @@ const STYLES_ACTIONS = css`
   border-top: 1px solid ${Constants.colors.border};
 `;
 
-export default class CoreRootDashboard extends React.Component {
+class HistoryScreen extends React.Component {
   _renderEmpty = () => {
+    const searchIcon = (<SVG.Search height="16px" />);
     return (
       <div>
         <div className={STYLES_PARAGRAPH}>
@@ -64,8 +56,8 @@ export default class CoreRootDashboard extends React.Component {
         </div>
         <div className={STYLES_ACTIONS}>
           <UIButtonIconHorizontal
-            onClick={this.props.onToggleBrowse}
-            icon={<SVG.Search height="16px" />}>
+            onClick={this.props.navigation.navigateToHome}
+            icon={searchIcon}>
             Browse media
           </UIButtonIconHorizontal>
         </div>
@@ -74,6 +66,7 @@ export default class CoreRootDashboard extends React.Component {
   };
 
   render() {
+    const clearIcon = (<SVG.Dismiss height="12px" />);
     const history = this.props.history.getItems();
     let contentElement;
  
@@ -84,15 +77,15 @@ export default class CoreRootDashboard extends React.Component {
         <div>
           <UIListMedia
             isHistory
-            media={this.props.media}
-            onMediaSelect={this.props.onMediaSelect}
-            onUserSelect={this.props.onUserSelect}
+            media={this.props.navigation.media}
+            onMediaSelect={this.props.navigation.navigateToMedia}
+            onUserSelect={this.props.navigation.navigateToUserProfile}
             mediaItems={history}
-            />
+          />
           <div className={STYLES_ACTIONS}>
             <UIButtonIconHorizontal
-              onClick={this.props.onClearHistory}
-              icon={<SVG.Dismiss height="12px" />}>
+              onClick={this.props.history.clear}
+              icon={clearIcon}>
               Clear history
             </UIButtonIconHorizontal>
           </div>
@@ -107,6 +100,25 @@ export default class CoreRootDashboard extends React.Component {
         </div>
         {contentElement}
       </div>
+    );
+  }
+}
+
+export default class HistoryScreenWithContext extends React.Component {
+  render() {
+    return (
+      <HistoryContext.Consumer>
+        {history => (
+          <NavigationContext.Consumer>
+            {navigation => (
+              <HistoryScreen
+                navigation={navigation}
+                history={history}
+              />
+            )}
+          </NavigationContext.Consumer>
+        )}
+      </HistoryContext.Consumer>
     );
   }
 }

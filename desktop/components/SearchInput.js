@@ -8,13 +8,12 @@ import { css } from 'react-emotion';
 import ControlledInput from '~/core-components/primitives/ControlledInput';
 
 const STYLES_CONTAINER = css`
-  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: 48px;
   min-width: 30%;
-  width: 90%;
+  width: 100%;
   padding: 0 16px 0 16px;
 `;
 

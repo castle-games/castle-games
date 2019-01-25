@@ -5,6 +5,7 @@ import { isKeyHotkey } from 'is-hotkey';
 import * as Actions from '~/common/actions';
 import * as Browser from '~/common/browser';
 import * as Constants from '~/common/constants';
+import { History, HistoryContext } from '~/contexts/HistoryContext';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigationContext } from '~/contexts/NavigationContext';
 import * as NativeUtil from '~/native/nativeutil';
@@ -37,10 +38,11 @@ export default class App extends React.Component {
     this.state.navigation.navigateToMedia = this.navigateToMedia;
     this.state.navigation.navigateToCurrentUserProfile = this.navigateToCurrentUserProfile;
     this.state.navigation.navigateToUserProfile = this.navigateToUserProfile;
+    this.state.navigation.navigateToHistory = this.navigateToHistory;
     this.state.currentUser.setCurrentUser = this.setCurrentUser;
     this.state.currentUser.clearCurrentUser = this.clearCurrentUser;
     this.state.currentUser.refreshCurrentUser = this.refreshCurrentUser;
-    // TODO: restore this._history = new History(props.storage);
+    this.state.history = new History(props.storage);
   }
 
   componentDidMount() {
@@ -172,6 +174,15 @@ export default class App extends React.Component {
     });
   };
 
+  navigateToHistory = () => {
+    this.setState({
+      navigation: {
+        ...this.state.navigation,
+        contentMode: 'history',
+      },
+    });
+  };
+
   // currentUser actions
   setCurrentUser = (user) => {
     this.setState({
@@ -227,12 +238,14 @@ export default class App extends React.Component {
     return (
       <NavigationContext.Provider value={this.state.navigation}>
         <CurrentUserContext.Provider value={this.state.currentUser}>
-          <div className={STYLES_CONTAINER}>
-            <SocialContainer />
-            <ContentContainer
-              featuredMedia={this.state.featuredMedia}
-            />
-          </div>
+          <HistoryContext.Provider value={this.state.history}>
+            <div className={STYLES_CONTAINER}>
+              <SocialContainer />
+              <ContentContainer
+                featuredMedia={this.state.featuredMedia}
+              />
+            </div>
+            </HistoryContext.Provider>
         </CurrentUserContext.Provider>
       </NavigationContext.Provider>
     );

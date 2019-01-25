@@ -13,6 +13,8 @@ export const NavigationContextDefaults = {
   userProfileShown: null,
   navigateToCurrentUserProfile: () => {},
   navigateToUserProfile: (user) => {},
+
+  navigateToHistory: () => {},
 };
 
 export const NavigationContext = React.createContext(NavigationContextDefaults);

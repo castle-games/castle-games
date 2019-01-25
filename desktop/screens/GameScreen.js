@@ -4,6 +4,7 @@ import { css } from 'react-emotion';
 import * as Constants from '~/common/constants';
 import GameActionsBar from '~/components/GameActionsBar';
 import GameWindow from '~/native/gamewindow';
+import { HistoryContext } from '~/contexts/HistoryContext';
 import { NavigationContext } from '~/contexts/NavigationContext';
 import * as NativeUtil from '~/native/nativeutil';
 
@@ -59,10 +60,10 @@ class GameScreen extends React.Component {
       // close window and open new
       await GameWindow.close();
       await GameWindow.open(newUrl);
+      this.props.history.addItem(this.props.media);
       // TODO: restore this behavior
       /*
       const userPlayData = { mediaUrl, ...media };
-      this._history.addItem(media ? media : { mediaUrl });
       Logs.system(`Loading project at ${mediaUrl}`);
 
       amplitude.getInstance().logEvent('OPEN_LUA', {
@@ -114,10 +115,20 @@ class GameScreen extends React.Component {
 }
 
 export default class GameScreenWithContext extends React.Component {
-  static contextType = NavigationContext;
   render() {
     return (
-      <GameScreen media={this.context.media} />
+      <NavigationContext.Consumer>
+        {navigation => (
+          <HistoryContext.Consumer>
+            {history => (
+              <GameScreen
+                media={navigation.media}
+                history={history}
+              />
+            )}
+          </HistoryContext.Consumer>
+        )}
+      </NavigationContext.Consumer>
     );
   }
 }

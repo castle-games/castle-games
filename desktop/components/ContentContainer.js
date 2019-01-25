@@ -4,6 +4,7 @@ import { css } from 'react-emotion';
 import * as Constants from '~/common/constants';
 import ContentNavigationBar from '~/components/ContentNavigationBar';
 import GameScreen from '~/screens/GameScreen';
+import HistoryScreen from '~/screens/HistoryScreen';
 import HomeScreen from '~/screens/HomeScreen';
 import ProfileScreen from '~/screens/ProfileScreen';
 import LoginSignupScreen from '~/screens/LoginSignupScreen';
@@ -22,27 +23,21 @@ export default class ContentContainer extends React.Component {
 
   _renderContent = (mode) => {
     if (mode === 'game') {
-      return (
-        <GameScreen />
-      );
+      return (<GameScreen />);
     } else if (mode === 'home') {
       return (
         <HomeScreen
           onCreateProject={this.props.onCreateProject}
-          onLoadHelp={this.props.onLoadHelp}
           featuredMedia={this.props.featuredMedia}
         />
       );
     } else if (mode === 'profile') {
-      return (
-        <ProfileScreen />
-      );
+      return (<ProfileScreen />);
     } else if (mode === 'signin') {
-      return (
-        <LoginSignupScreen />
-      );
+      return (<LoginSignupScreen />);
+    } else if (mode === 'history') {
+      return (<HistoryScreen />);
     }
-    return (<div>Its the content</div>);
   };
   
   render() {

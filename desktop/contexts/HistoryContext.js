@@ -1,6 +1,8 @@
+import * as React from 'react';
+
 const MAX_HISTORY_LENGTH = 25;
 
-export default class History {
+export class History {
   _storage;
 
   constructor(storage) {
@@ -66,3 +68,5 @@ export default class History {
     this._storage.setItem('history', JSON.stringify({ history: [] }));
   };
 }
+
+export const HistoryContext = React.createContext({});
