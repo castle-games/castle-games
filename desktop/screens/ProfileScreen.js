@@ -235,6 +235,7 @@ export default class ProfileScreenWithContext extends React.Component {
         viewer={viewer}
         creator={creator}
         onSignOut={currentUser.clearCurrentUser}
+        onAfterSave={currentUser.refreshCurrentUser}
       />
     );
   };

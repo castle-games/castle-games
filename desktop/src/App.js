@@ -39,6 +39,7 @@ export default class App extends React.Component {
     this.state.navigation.navigateToUserProfile = this.navigateToUserProfile;
     this.state.currentUser.setCurrentUser = this.setCurrentUser;
     this.state.currentUser.clearCurrentUser = this.clearCurrentUser;
+    this.state.currentUser.refreshCurrentUser = this.refreshCurrentUser;
     // TODO: restore this._history = new History(props.storage);
   }
 
@@ -149,6 +150,7 @@ export default class App extends React.Component {
   navigateToCurrentUserProfile = () => {
     if (this.state.currentUser.user) {
       this.navigateToUserProfile(this.state.currentUser.user);
+      this.refreshCurrentUser();
     } else {
       // show sign in
       this.setState({
@@ -198,6 +200,27 @@ export default class App extends React.Component {
     }, () => {
       this.navigateToCurrentUserProfile();
     });
+  }
+
+  refreshCurrentUser = async () => {
+    const viewer = await Actions.getViewer();
+    if (!viewer) {
+      return;
+    }
+    const updates = {
+      currentUser: {
+        ...this.state.currentUser,
+        user: viewer,
+      },
+    };
+    const userProfileShown = this.state.navigation.userProfileShown;
+    if (viewer && userProfileShown && viewer.userId === userProfileShown.userId) {
+      updates.navigation = {
+        ...this.state.navigation,
+        userProfileShown: viewer,
+      };
+    }
+    this.setState(updates);
   }
 
   render() {
