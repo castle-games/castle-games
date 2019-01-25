@@ -4,6 +4,7 @@ import { css } from 'react-emotion';
 import * as Constants from '~/common/constants';
 import GameActionsBar from '~/components/GameActionsBar';
 import GameWindow from '~/native/gamewindow';
+import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { HistoryContext } from '~/contexts/HistoryContext';
 import { NavigationContext } from '~/contexts/NavigationContext';
 import * as NativeUtil from '~/native/nativeutil';
@@ -74,9 +75,9 @@ class GameScreen extends React.Component {
       const sidebarMode = isLocal ? 'development' : 'current-context';
       // Don't `await` this since we don't want to make it take longer to get the media
       UserPlay.startAsync(userPlayData); 
-      // Sync state for new Ghost instance
-      CEF.sendLuaEvent('CASTLE_SET_LOGGED_IN', isLoggedIn);
       */
+      // Sync state for new Ghost instance
+      NativeUtil.sendLuaEvent('CASTLE_SET_LOGGED_IN', this.props.isLoggedIn);
       NativeUtil.sendLuaEvent('CASTLE_SET_VOLUME', this.state.isMuted ? 0 : 1);
     }
     this._updateGameWindowFrame();
@@ -121,10 +122,15 @@ export default class GameScreenWithContext extends React.Component {
         {navigation => (
           <HistoryContext.Consumer>
             {history => (
-              <GameScreen
-                media={navigation.media}
-                history={history}
-              />
+              <CurrentUserContext.Consumer>
+                {currentUser => (
+                  <GameScreen
+                    media={navigation.media}
+                    history={history}
+                    isLoggedIn={currentUser.user !== null}
+                  />
+                )}
+              </CurrentUserContext.Consumer>
             )}
           </HistoryContext.Consumer>
         )}
