@@ -71,8 +71,12 @@ const MEDIA_ITEMS = `
   }
 `;
 
-export const delay = ms =>
-  new Promise(resolve => {
+export async function getHeadersAsync() {
+  return await API.client._getRequestHeadersAsync();
+}
+
+export const delay = (ms) =>
+  new Promise((resolve) => {
     window.setTimeout(resolve, ms);
   });
 
@@ -114,6 +118,7 @@ export async function signup({ name, username, email, password }) {
         signup(user: { name: $name, username: $username }, email: $email, password: $password) {
           ${FULL_USER_FIELDS}
           ${MEDIA_ITEMS}
+          token
         }
       }
     `,
@@ -125,6 +130,8 @@ export async function signup({ name, username, email, password }) {
     }
   );
 
+  await API.client.setTokenAsync(response.data.signup.token);
+
   return response;
 }
 
@@ -135,6 +142,7 @@ export async function login({ userId, password }) {
         login(userId: $userId, password: $password) {
           ${FULL_USER_FIELDS}
           ${MEDIA_ITEMS}
+          token
         }
       }
     `,
@@ -154,6 +162,7 @@ export async function login({ userId, password }) {
   }
 
   NativeUtil.sendLuaEvent('CASTLE_SET_LOGGED_IN', !!response.data.login);
+  await API.client.setTokenAsync(response.data.login.token);
   return response.data.login;
 }
 
@@ -348,6 +357,7 @@ export async function logout() {
   }
 
   NativeUtil.sendLuaEvent('CASTLE_SET_LOGGED_IN', false);
+  await API.client.setTokenAsync(null);
   return true;
 }
 
@@ -663,16 +673,16 @@ export async function indexPublicUrlAsync(mediaUrl) {
   try {
     result = await API.graphqlAsync(
       /* GraphQL */ `
-      mutation($mediaUrl: String!) {
-        fetchMediaMetadata(url: $mediaUrl) {
-          # npref
-          # metadata
-          # mainUrl
-          # canonicalUrl
-          updatedTime
-          # createdTime
+        mutation($mediaUrl: String!) {
+          fetchMediaMetadata(url: $mediaUrl) {
+            # npref
+            # metadata
+            # mainUrl
+            # canonicalUrl
+            updatedTime
+            # createdTime
+          }
         }
-      }
       `,
       {
         mediaUrl,
@@ -695,11 +705,12 @@ export async function getPrimaryUrlForRegisteredMediaByIdAsync(username, slug) {
   let result = await API.graphqlAsync({
     query: /* GraphQL */ `
       query CastleUrlForRegisteredMediaPath($registeredMediaPath: String!) {
-        castleUrlForRegisteredMediaPath(registeredMediaPath:$registeredMediaPath)
-      }`,
+        castleUrlForRegisteredMediaPath(registeredMediaPath: $registeredMediaPath)
+      }
+    `,
     variables: {
       registeredMediaPath,
-    }
+    },
   });
   // let this throw if it's invalid
   return result.data.castleUrlForRegisteredMediaPath;
