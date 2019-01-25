@@ -14,7 +14,7 @@ const STYLES_CONTAINER = css`
   justify-content: space-between;
   height: 48px;
   min-width: 30%;
-  width: 95%;
+  width: 90%;
   padding: 0 16px 0 16px;
 `;
 

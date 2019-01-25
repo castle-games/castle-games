@@ -11,7 +11,7 @@ const STYLES_CONTAINER = css`
   color: ${Constants.colors.white};
   width: 36px;
   height: 36px;
-  margin: 6px 8px 0 8px;
+  margin: 0 8px 0 8px;
   border-radius: 18px;
   display: inline-flex;
   align-items: center;

@@ -19,6 +19,14 @@ const STYLES_CONTAINER = css`
   justify-content: space-between;
 `;
 
+const STYLES_NAV_ITEM = css`
+  display: inline-flex;
+  color: ${Constants.colors.black};
+  cursor: pointer;
+  font-size: 10pt;
+  margin: 0 6px 0 6px;
+`;
+
 export default class ContentNavigationBar extends React.Component {
   static contextType = NavigationContext;
   state = {
@@ -72,6 +80,16 @@ export default class ContentNavigationBar extends React.Component {
     this._handleSearchReset();
   };
 
+  _renderTopNavigationItems = () => {
+    return (
+      <div
+        className={STYLES_NAV_ITEM}
+        onClick={this.context.navigateToHome}>
+        Home
+      </div>
+    );
+  };
+
   render() {
     return (
       <div className={STYLES_CONTAINER}>
@@ -81,6 +99,7 @@ export default class ContentNavigationBar extends React.Component {
           onChange={this._handleSearchChange}
           onSubmit={this._handleSearchSubmit}
         />
+        {this._renderTopNavigationItems()}
         <Viewer />
       </div>
     );
