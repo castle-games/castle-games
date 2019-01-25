@@ -60,6 +60,8 @@ static lua_State *luaState = NULL;
 static int loveBootStackPos = 0;
 static bool lovePaused = false;
 
+static bool isFullscreen = false;
+
 static bool shouldRunMessageLoop = true;
 
 static std::mutex mutex;
@@ -68,6 +70,7 @@ enum MessageType {
   OPEN_LOVE_URI,
   SET_CHILD_WINDOW_FRAME,
   SET_CHILD_WINDOW_VISIBLE,
+  SET_CHILD_WINDOW_FULLSCREEN,
   CLOSE,
 };
 
@@ -83,6 +86,9 @@ struct Message {
     struct SetChildWindowVisibleBody {
       bool visible;
     } setChildWindowVisible;
+    struct SetChildWindowFullscreenBody {
+      bool fullscreen;
+    } setChildWindowFullscreen;
   } body;
 };
 
@@ -94,9 +100,11 @@ bool ghostGetPathToFileInAppBundle(const char *filename, const char **result) {
   if (length > 0) {
     std::string::size_type pos = std::string(buffer).find_last_of("\\/");
 #ifdef _DEBUG
-    std::string path = std::string(buffer).substr(0, pos) + "/../../../shared-assets/" + std::string(filename);
+    std::string path =
+        std::string(buffer).substr(0, pos) + "/../../../shared-assets/" + std::string(filename);
 #else
-    std::string path = std::string(buffer).substr(0, pos) + "/shared-assets/" + std::string(filename);
+    std::string path =
+        std::string(buffer).substr(0, pos) + "/shared-assets/" + std::string(filename);
 #endif
     *result = strdup(path.c_str());
     return true;
@@ -199,10 +207,17 @@ void ghostSetChildWindowVisible(bool visible) {
 }
 
 void ghostSetChildWindowFullscreen(bool fullscreen) {
-
+  std::lock_guard<std::mutex> guard(mutex);
+  Message msg;
+  msg.type = SET_CHILD_WINDOW_FULLSCREEN;
+  msg.body.setChildWindowFullscreen.fullscreen = fullscreen;
+  messages.push(msg);
 }
 
-bool ghostGetChildWindowFullscreen() { return false; }
+bool ghostGetChildWindowFullscreen() {
+  std::lock_guard<std::mutex> guard(mutex);
+  return isFullscreen;
+}
 
 void ghostResizeChildWindow(float dw, float dh) { std::lock_guard<std::mutex> guard(mutex); }
 
@@ -396,6 +411,47 @@ void ghostStep() {
         }
       } break;
 
+      case SET_CHILD_WINDOW_FULLSCREEN: {
+        static LONG oldStyle = WS_OVERLAPPED;
+        static LONG oldExStyle = WS_OVERLAPPED;
+        static RECT oldRect = {100, 100, 1000, 1000};
+
+        auto parent = ghostWinGetMainWindow();
+        auto child = ghostWinGetChildWindow();
+
+        if (child) {
+          if (msg.body.setChildWindowFullscreen.fullscreen) {
+            isFullscreen = true;
+
+            oldStyle = GetWindowLong(parent, GWL_STYLE);
+            oldExStyle = GetWindowLong(parent, GWL_EXSTYLE);
+            GetWindowRect(parent, &oldRect);
+
+            SetWindowLong(parent, GWL_STYLE, oldStyle & ~(WS_CAPTION | WS_THICKFRAME));
+            SetWindowLong(parent, GWL_EXSTYLE,
+                          oldExStyle & ~(WS_EX_DLGMODALFRAME | WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE |
+                                         WS_EX_STATICEDGE));
+            MONITORINFO monitorInfo;
+            monitorInfo.cbSize = sizeof(monitorInfo);
+            GetMonitorInfo(MonitorFromWindow(child, MONITOR_DEFAULTTONEAREST), &monitorInfo);
+            SetWindowPos(parent, 0, monitorInfo.rcMonitor.left, monitorInfo.rcMonitor.top,
+                         monitorInfo.rcMonitor.right - monitorInfo.rcMonitor.left,
+                         monitorInfo.rcMonitor.bottom - monitorInfo.rcMonitor.top, SWP_SHOWWINDOW);
+            SetWindowPos(child, 0, monitorInfo.rcMonitor.left, monitorInfo.rcMonitor.top,
+                         monitorInfo.rcMonitor.right - monitorInfo.rcMonitor.left,
+                         monitorInfo.rcMonitor.bottom - monitorInfo.rcMonitor.top, SWP_SHOWWINDOW);
+          } else {
+            isFullscreen = false;
+
+            SetWindowLong(parent, GWL_STYLE, oldStyle);
+            SetWindowLong(parent, GWL_EXSTYLE, oldExStyle);
+            SetWindowPos(parent, 0, oldRect.left, oldRect.top, oldRect.right - oldRect.left,
+                         oldRect.bottom - oldRect.top, SWP_SHOWWINDOW);
+            // `child` frame gets updated every frame in non-fullscreen anyways...
+          }
+        }
+      } break;
+
       case CLOSE: {
         stopLove();
       } break;
@@ -411,66 +467,74 @@ void ghostStep() {
     }
 
     auto child = ghostWinGetChildWindow();
-
-    if (child) {
-      auto foregroundWindow = GetForegroundWindow();
-      auto focused = foregroundWindow == ghostWinGetMainWindow() || foregroundWindow == child;
-
-      // Handle window resizing if focused
-      if (focused) {
-        // Get the display scale factor
-        int percentScale = 100;
-        if (pGetScaleFactorForMonitor) {
-          auto monitor = MonitorFromWindow(child, MONITOR_DEFAULTTOPRIMARY);
-          pGetScaleFactorForMonitor(monitor, &percentScale);
+    if (isFullscreen) {
+      if (child) {
+        auto parent = ghostWinGetMainWindow();
+        if (parent && GetForegroundWindow() == parent) {
+          SetFocus(child);
         }
-        auto fracScale = 0.01 * percentScale;
+      }
+    } else {
+      if (child) {
+        auto foregroundWindow = GetForegroundWindow();
+        auto focused = foregroundWindow == ghostWinGetMainWindow() || foregroundWindow == child;
 
-        // Check for parent window resizes at the native level and apply the delta
-        {
-          RECT currParentRect;
-          auto parent = ghostWinGetMainWindow();
-          if (parent) {
-            GetWindowRect(parent, &currParentRect);
+        // Handle window resizing if focused
+        if (focused) {
+          // Get the display scale factor
+          int percentScale = 100;
+          if (pGetScaleFactorForMonitor) {
+            auto monitor = MonitorFromWindow(child, MONITOR_DEFAULTTOPRIMARY);
+            pGetScaleFactorForMonitor(monitor, &percentScale);
           }
-          if (prevParentRect.right != prevParentRect.left) {
-            auto dw = (currParentRect.right - currParentRect.left) -
-                      (prevParentRect.right - prevParentRect.left);
-            auto dy = (currParentRect.bottom - currParentRect.top) -
-                      (prevParentRect.bottom - prevParentRect.top);
-            childWidth += dw / fracScale;
-            childHeight += dy / fracScale;
+          auto fracScale = 0.01 * percentScale;
+
+          // Check for parent window resizes at the native level and apply the delta
+          {
+            RECT currParentRect;
+            auto parent = ghostWinGetMainWindow();
+            if (parent) {
+              GetWindowRect(parent, &currParentRect);
+            }
+            if (prevParentRect.right != prevParentRect.left) {
+              auto dw = (currParentRect.right - currParentRect.left) -
+                        (prevParentRect.right - prevParentRect.left);
+              auto dy = (currParentRect.bottom - currParentRect.top) -
+                        (prevParentRect.bottom - prevParentRect.top);
+              childWidth += dw / fracScale;
+              childHeight += dy / fracScale;
+            }
+
+            prevParentRect = currParentRect;
           }
 
-          prevParentRect = currParentRect;
+          // Apply the size!
+          SetWindowPos(child, NULL, fracScale * childLeft, fracScale * childTop,
+                       fracScale * childWidth, fracScale * childHeight, 0);
         }
 
-        // Apply the size!
-        SetWindowPos(child, NULL, fracScale * childLeft, fracScale * childTop,
-                     fracScale * childWidth, fracScale * childHeight, 0);
+        // Automatic pausing when unfocused
+        // XXX: DISABLED for now...
+        // if (lovePaused && focused) { // Unpause?
+        //  // Step timer so that next frame's `dt` doesn't include the time spent paused
+        //  auto timer = love::Module::getInstance<love::timer::Timer>(love::Module::M_TIMER);
+        //  if (timer) {
+        //    timer->step();
+        //  }
+        //  lovePaused = false;
+        //}
+        // if (!lovePaused && !focused) { // Pause?
+        //  lovePaused = true;
+        //}
       }
 
-      // Automatic pausing when unfocused
-      // XXX: DISABLED for now...
-      // if (lovePaused && focused) { // Unpause?
-      //  // Step timer so that next frame's `dt` doesn't include the time spent paused
-      //  auto timer = love::Module::getInstance<love::timer::Timer>(love::Module::M_TIMER);
-      //  if (timer) {
-      //    timer->step();
-      //  }
-      //  lovePaused = false;
-      //}
-      // if (!lovePaused && !focused) { // Pause?
-      //  lovePaused = true;
-      //}
-    }
-
-    auto channel = love::thread::Channel::getChannel("FOCUS_ME");
-    if (channel->getCount() > 0) {
-      channel->clear();
-      auto parent = ghostWinGetMainWindow();
-      if (parent && GetForegroundWindow() == parent) {
-        SetFocus(child);
+      auto channel = love::thread::Channel::getChannel("FOCUS_ME");
+      if (channel->getCount() > 0) {
+        channel->clear();
+        auto parent = ghostWinGetMainWindow();
+        if (parent && GetForegroundWindow() == parent) {
+          SetFocus(child);
+        }
       }
     }
   } else {
