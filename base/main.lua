@@ -41,6 +41,7 @@ do
 
     local errors = {}
     function DEFAULT_ERROR_HANDLER(err, stack) -- Referenced in 'network.lua'
+        oldPrint(stack)
         local json = cjson.encode({ error = err, stacktrace = stack })
         love.thread.getChannel('ERROR'):push(json)
         love.filesystem.append(ERRORS_FILE_NAME, json .. '\n')
