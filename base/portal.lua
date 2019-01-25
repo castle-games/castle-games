@@ -287,6 +287,7 @@ function portalMeta:newChild(path, args)
     child.parent = self
     child.args = args or {}
     child.path = path
+    child.loaded = false
     child.onError = child.args.onError
     child.volume = 1
 
@@ -366,6 +367,7 @@ end
 -- Add all of the callbacks as methods
 for cbName in pairs(loveCallbacks) do
     portalMeta[cbName] = function(self, ...)
+        if not self.loaded then return end
         local found = self.globals.love[cbName]
         if found then self:safeCall(found, ...) end
     end
@@ -373,6 +375,7 @@ end
 
 -- Override the `draw` method to scope graphics state changes to the portal
 function portalMeta:draw()
+    if not self.loaded then return end
     local initialStackDepth = love.graphics.getStackDepth()
     local succ, err = pcall(function()
         love.graphics.push('all')
