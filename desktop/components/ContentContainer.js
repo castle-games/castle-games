@@ -27,7 +27,6 @@ export default class ContentContainer extends React.Component {
     } else if (mode === 'home') {
       return (
         <HomeScreen
-          onCreateProject={this.props.onCreateProject}
           featuredMedia={this.props.featuredMedia}
         />
       );

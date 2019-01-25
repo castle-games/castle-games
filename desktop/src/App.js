@@ -86,17 +86,12 @@ export default class App extends React.Component {
       e.preventDefault();
     }
     await Actions.delay(100);
-    console.log(`reload: navigating to ${this.state.navigation.media.mediaUrl}`);
     this.navigateToMediaUrl(this.state.navigation.media.mediaUrl);
   };
 
   // load media
   _loadMediaAsync = async (media) => {
-    let { mediaUrl, entryPoint } = media;
-    if (!entryPoint) {
-      // TODO: metadata: this should always be defined by this point
-      entryPoint = mediaUrl;
-    }
+    let { mediaUrl } = media;
     if (Strings.isEmpty(mediaUrl)) {
       return;
     }

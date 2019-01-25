@@ -32,6 +32,8 @@ const STYLES_GAME_CONTAINER = css`
 class GameScreen extends React.Component {
   static defaultProps = {
     media: null,
+    isLoggedIn: false,
+    history: null,
   };
   state = {
     isMuted: false,
@@ -54,6 +56,15 @@ class GameScreen extends React.Component {
   _updateGameWindow = async (prevProps, prevState) => {
     let newUrl = (this.props.media) ? this.props.media.mediaUrl : null;
     let oldUrl = (prevProps && prevProps.media) ? prevProps.media.mediaUrl : null;
+
+    // TODO: metadata: entryPoint should always be defined by this point
+    if (prevProps && prevProps.media && prevProps.media.entryPoint) {
+      oldUrl = prevProps.media.entryPoint;
+    }
+    if (this.props.media && this.props.media.entryPoint) {
+      newUrl = this.props.media.entryPoint;
+    }
+
     if (!newUrl) {
       // close window
       await GameWindow.close();

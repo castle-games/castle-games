@@ -134,6 +134,30 @@ export default class HomeScreen extends React.Component {
     NativeUtil.openExternalURL('http://www.playcastle.io/get-started');
   };
 
+  _handleCreateProject = async () => {
+    const newProjectDirectory = await NativeUtil.chooseDirectoryWithDialogAsync({
+      title: 'Create a New Castle Project',
+      message: 'Choose a folder where the project will be created.',
+      action: 'Create Project',
+    });
+    if (newProjectDirectory) {
+      let entryPointFilePath;
+      try {
+        entryPointFilePath = await NativeUtil.createProjectAtPathAsync(newProjectDirectory);
+      } catch (_) {}
+      if (entryPointFilePath) {
+        const mediaUrl = `file://${entryPointFilePath}`;
+        await this.context.navigateToMediaUrl(mediaUrl);
+        // TODO: logs:
+        // log the following, then force development logs to show
+        /* Logs.system('Welcome to Castle!');
+        Logs.system(`We created some starter code for your project at ${this.state.media.entryPoint}.`);
+        Logs.system(`Open that file in your favorite text editor to get started.`);
+        Logs.system(`Need help? Check out http://www.playcastle.io/get-started`); */
+      }
+    }
+  };
+
   _getFeaturedMedia = () => {
     const { featuredMedia } = this.props;
     let result;
@@ -172,7 +196,7 @@ export default class HomeScreen extends React.Component {
               </p>
               <div className={STYLES_BUTTON_CONTAINER}>
                 <UIButtonIconHorizontal
-                  onClick={this.props.onCreateProject}
+                  onClick={this._handleCreateProject}
                   icon={createIcon}>
                   Create a Castle Project
                 </UIButtonIconHorizontal>
