@@ -4,6 +4,7 @@ import { css } from 'react-emotion';
 import * as Constants from '~/common/constants';
 import UIButtonDarkSmall from '~/core-components/reusable/UIButtonDarkSmall';
 import * as SVG from '~/core-components/primitives/svg';
+import * as Strings from '~/common/strings';
 
 const STYLES_CONTAINER = css`
   background: ${Constants.colors.white};
@@ -56,7 +57,7 @@ export default class GameActionsBar extends React.Component {
     let { game } = this.props;
     if (game) {
       name = (game.name) ? game.name : name;
-      isRegistered = (game.gameId !== null);
+      isRegistered = (!Strings.isEmpty(game.gameId));
       if (isRegistered) {
         username = game.user.username;
       } else {

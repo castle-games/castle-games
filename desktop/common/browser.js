@@ -1,8 +1,10 @@
 import metadatalib from 'castle-metadata';
 import platform from 'platform';
+import url from 'url';
 
 import * as Actions from '~/common/actions';
 import * as NativeUtil from '~/native/nativeutil';
+import * as Strings from '~/common/strings';
 import * as Urls from '~/common/urls';
 
 function _isWindows() {
@@ -37,12 +39,16 @@ function _validateMetadata(metadata, isRegistered) {
     throw new Error(`Metadata is invalid: ${metadata}`);
   }
   let validatedMetadata = { ...metadata };
+  const registeredFields = [ 'gameId', 'user', 'slug' ];
   if (isRegistered) {
-    // TODO: enforce mediaId
+    registeredFields.forEach(field => {
+      if (!validatedMetadata.hasOwnProperty(field)) {
+        throw new Error(`Registered game is missing field: ${field}`);
+      }
+    });
   } else {
-    // unregistered media can't have any of these
-    const fieldsToRemove = [ 'mediaId', 'user', 'slug' ];
-    fieldsToRemove.forEach(field => {
+    // unregistered games can't have any of these
+    registeredFields.forEach(field => {
       if (validatedMetadata.hasOwnProperty(field)) {
         delete validatedMetadata[field];
       }
@@ -51,7 +57,7 @@ function _validateMetadata(metadata, isRegistered) {
   return validatedMetadata;
 };
 
-async function _resolveMetadataAtUrlAsync(metadataUrl, isRegisteredMedia) {
+async function _resolveMetadataAtUrlAsync(metadataUrl) {
   try {
     let {
       metadata,
@@ -64,13 +70,7 @@ async function _resolveMetadataAtUrlAsync(metadataUrl, isRegisteredMedia) {
     if (errors && errors.length) {
       throw new Error(`Error fetching metadata: ${errors.join(',')}`);
     }
-    if (info && info.isPublicUrl) {
-      // If its a public URL, index it on the server
-      // Don't `await` since we don't want to block
-      // loading the media
-      Actions.indexPublicUrlAsync(metadataUrl);
-    }
-    metadata = _validateMetadata(metadata, isRegisteredMedia);
+    metadata = _validateMetadata(metadata, false);
     return { metadata, info };
   } catch (e) {
     throw new Error(`Couldn't resolve metadata at .castle url: ${e.message}`);
@@ -78,46 +78,59 @@ async function _resolveMetadataAtUrlAsync(metadataUrl, isRegisteredMedia) {
   return null;
 }
 
-async function resolveMediaAtUrlAsync(mediaUrl) {
-  let metadataUrl = mediaUrl;
-  let entryPoint = mediaUrl;
-  let metadataFetched = {};
-  let isRegisteredMedia = false;
+async function _readGameFromMetadataUrlAsync(url) {
+  let game = { url };
+  const { metadata, info } = await _resolveMetadataAtUrlAsync(url);
+  if (info && info.main) {
+    game.entryPoint = info.main;
+  }
+  if (metadata) {
+    game.metadata = metadata;
+    if (metadata.name) game.name = metadata.name;
+    if (metadata.description) game.description = metadata.description;
+    if (metadata.username) game.username = metadata.username;
+  }
+  return game;
+}
 
-  // TODO: ben: move to getGameByURL
-  if (Urls.isCastleHostedUrl(mediaUrl)) {
+async function resolveGameAtUrlAsync(gameUrl) {
+  let game;
+
+  // always try to resolve from the server first
+  try {
+    game = await Actions.getGameByUrl(gameUrl);
+    game.metadata = _validateMetadata(game.metadata, !Strings.isEmpty(game.gameId));
+    if (game.metadata.main) {
+      game.entryPoint = url.resolve(gameUrl, game.metadata.main);
+    }
+  } catch (e) {
+    game = null;
+  }
+
+  // if the server failed, try to read the .castle file directly
+  if (!game && Urls.isMetadataFileUrl(gameUrl)) {
     try {
-      // look up underlying .castle url to retrieve metadata
-      let { username, slug } = Urls.parseIdFromCastleHostedUrl(mediaUrl);
-      metadataUrl = await Actions.getPrimaryUrlForRegisteredMediaByIdAsync(username, slug);
-      if (metadataUrl) {
-        isRegisteredMedia = true;
-      }
+      game = await _readGameFromMetadataUrlAsync(gameUrl);
     } catch (e) {
-      // this didn't work, try to get metadata from the original url
-      metadataUrl = mediaUrl;
+      game = null;
     }
   }
 
-  if (Urls.isMetadataFileUrl(metadataUrl)) {
-    const { metadata, info } = await _resolveMetadataAtUrlAsync(metadataUrl);
-    if (info && info.main) {
-      entryPoint = info.main;
+  // if nothing worked, assume this is a direct url to some code with no metadata
+  if (!game) {
+    game = {
+      url: gameUrl,
+      entryPoint: gameUrl,
     }
-    metadataFetched = metadata;
-  }
-
-  if (_isWindows() && entryPoint) {
-    entryPoint = _fixWindowsFilePath(entryPoint);
-  }
-
-  return {
-    mediaUrl,
-    entryPoint,
-    ...metadataFetched,
   };
-};
+
+  if (_isWindows() && game.entryPoint) {
+    game.entryPoint = _fixWindowsFilePath(game.entryPoint);
+  }
+
+  return game;
+}
 
 export {
-  resolveMediaAtUrlAsync,
+  resolveGameAtUrlAsync,
 };

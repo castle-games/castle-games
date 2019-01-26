@@ -76,18 +76,6 @@ const canonizeUserProvidedUrl = (urlStr) => {
   return { urlToDisplay, urlToOpen };
 };
 
-const isCastleHostedUrl = (urlStr) => {
-  let isCastle = false;
-  try {
-    const components = url.parse(urlStr);
-    isCastle = (
-      components.hostname === 'playcastle.io' ||
-      components.hostname === 'www.playcastle.io'
-    );
-  } catch (_) {}
-  return isCastle;
-};
-
 const isMetadataFileUrl = (urlStr) => {
   return (urlStr && urlStr.endsWith('.castle'));
 };
@@ -117,7 +105,6 @@ const parseIdFromCastleHostedUrl = (mediaUrl) => {
 export {
   canonizeUserProvidedUrl,
   githubUserContentToRepoUrl,
-  isCastleHostedUrl,
   isPrivateUrl,
   isLua,
   isOpenSource,

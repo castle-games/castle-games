@@ -333,35 +333,34 @@ export async function logout() {
   return true;
 }
 
-export async function getGameByURL({ url }) {
+export async function getGameByUrl(url) {
   const variables = { url };
 
-  let result;
-  try {
-    result = await API.graphqlAsync({
-      query: `
-      query GetGame($url: String!) {
-        game(url: $url) {
-          gameId
-          name
+  let result = await API.graphqlAsync({
+    query: `
+    query GetGame($url: String!) {
+      game(url: $url) {
+        gameId
+        name
+        url
+        createdTime
+        description
+        metadata
+        coverImage {
           url
-          createdTime
-          description
-          coverImage {
-            url
-            height
-            width
-          }
-          ${NESTED_USER}
+          height
+          width
         }
+        ${NESTED_USER}
       }
-      `,
-      variables,
-    });
-  } catch (e) {
-    return false;
-  }
+    }
+    `,
+    variables,
+  });
 
+  if (result.errors && result.errors.length) {
+    throw new Error(`Unable to resolve game url: ${result.errors[0].message}`);
+  }
   return result.data.game;
 }
 

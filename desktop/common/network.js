@@ -22,7 +22,13 @@ export const getProductData = async () => {
     viewer = data.me;
 
     if (playlist) {
-      featuredMedia = [...playlist.mediaItems];
+      featuredMedia = playlist.mediaItems.map(item => {
+        return {
+          ...item,
+          url: item.mediaUrl,
+          gameId: item.mediaId,
+        };
+      });
     }
   }
 
