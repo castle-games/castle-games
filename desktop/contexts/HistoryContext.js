@@ -9,7 +9,7 @@ export class History {
     this._storage = storage;
   }
   
-  addItem(media) {
+  addItem(game) {
     if (!this._storage) {
       alert('History is not supported at the moment.');
       return;
@@ -38,9 +38,15 @@ export class History {
       history.pop();
     }
 
-    history = history.filter(h => h.mediaUrl !== media.mediaUrl);
+    history = history.filter(h => {
+      let url = h.url;
+      if (h.mediaUrl) { // legacy media object
+        return false;
+      }
+      return h.url !== game.url;
+    });
 
-    history.unshift(media);
+    history.unshift(game);
     this._storage.setItem('history', JSON.stringify({ history }));
   };
 

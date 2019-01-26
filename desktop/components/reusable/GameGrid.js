@@ -8,7 +8,7 @@ const STYLES_CONTAINER = css`
   flex-wrap: wrap;
 `;
 
-const STYLES_MEDIA_ITEM = css`
+const STYLES_GAME_ITEM = css`
   border-radius: 8px;
   overflow: hidden;
   background: ${Constants.colors.yellow};
@@ -34,7 +34,7 @@ const STYLES_MEDIA_ITEM = css`
   }
 `;
 
-const STYLES_MEDIA_ITEM_BOTTOM = css`
+const STYLES_GAME_ITEM_BOTTOM = css`
   padding: 8px;
   height: 100%;
   width: 100%;
@@ -44,47 +44,47 @@ const STYLES_MEDIA_ITEM_BOTTOM = css`
   flex-direction: column;
 `;
 
-const STYLES_MEDIA_ITEM_BOTTOM_HEADING = css`
+const STYLES_GAME_ITEM_BOTTOM_HEADING = css`
   font-size: 14px;
   line-height: 24px;
   font-weight: 600;
 `;
 
-const STYLES_MEDIA_ITEM_BOTTOM_DESCRIPTION = css`
+const STYLES_GAME_ITEM_BOTTOM_DESCRIPTION = css`
   font-size: 10px;
   line-height: 1.725;
 `;
 
-class UIMediaCell extends React.Component {
+class UIGameCell extends React.Component {
   render() {
-    const name = (this.props.media.name) ? this.props.media.name : '';
+    const name = (this.props.game.name) ? this.props.game.name : '';
     return (
       <div
-        className={STYLES_MEDIA_ITEM}
-        onClick={() => this.props.onMediaSelect(this.props.media)}
+        className={STYLES_GAME_ITEM}
+        onClick={() => this.props.onGameSelect(this.props.game)}
         style={{ backgroundImage: this.props.src ? `url(${this.props.src})` : null }}>
-        <div className={STYLES_MEDIA_ITEM_BOTTOM}>
-          <div className={STYLES_MEDIA_ITEM_BOTTOM_HEADING}>{name}</div>
-          <div className={STYLES_MEDIA_ITEM_BOTTOM_DESCRIPTION}>{this.props.children}</div>
+        <div className={STYLES_GAME_ITEM_BOTTOM}>
+          <div className={STYLES_GAME_ITEM_BOTTOM_HEADING}>{name}</div>
+          <div className={STYLES_GAME_ITEM_BOTTOM_DESCRIPTION}>{this.props.children}</div>
         </div>
       </div>
     );
   }
 }
 
-export default class UIGridMedia extends React.Component {
+export default class GameGrid extends React.Component {
   render() {
-    const { mediaItems } = this.props;
+    const { gameItems } = this.props;
     return (
       <div className={STYLES_CONTAINER}>
-        {mediaItems.map(m => {
-          const key = (m.mediaId) ? m.mediaId : m.mediaUrl;
+        {gameItems.map(m => {
+          const key = (m.gameId) ? m.gameId : m.url;
           return (
-            <UIMediaCell
+            <UIGameCell
               key={key}
-              onMediaSelect={this.props.onMediaSelect}
+              onGameSelect={this.props.onGameSelect}
               src={m.coverImage && m.coverImage.imgixUrl}
-              media={m}
+              game={m}
             />
           );
         })}

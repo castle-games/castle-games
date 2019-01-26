@@ -69,18 +69,18 @@ export default class ContentNavigationBar extends React.Component {
     if (e) {
       e.preventDefault();
     }
-    let mediaUrl;
+    let url;
     try {
-      mediaUrl = this.state.searchQuery.slice(0).trim();
-      if (Urls.isPrivateUrl(mediaUrl)) {
-        mediaUrl = mediaUrl.replace('castle://', 'http://');
+      url = this.state.searchQuery.slice(0).trim();
+      if (Urls.isPrivateUrl(url)) {
+        url = url.replace('castle://', 'http://');
       }
     } catch (_) {}
-    if (Strings.isEmpty(mediaUrl)) {
+    if (Strings.isEmpty(url)) {
       return;
     }
 
-    this.context.navigateToMediaUrl(mediaUrl);
+    this.context.navigateToGameUrl(url);
     this._handleSearchReset();
   };
 

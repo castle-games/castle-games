@@ -5,10 +5,10 @@ export const NavigationContextDefaults = {
 
   navigateToHome: () => {},
 
-  mediaUrl: '',
-  media: null,
-  navigateToMediaUrl: async (url) => {},
-  navigateToMedia: async (media) => {},
+  gameUrl: '',
+  game: null,
+  navigateToGameUrl: async (url) => {},
+  navigateToGame: async (game) => {},
 
   userProfileShown: null,
   navigateToCurrentUserProfile: () => {},

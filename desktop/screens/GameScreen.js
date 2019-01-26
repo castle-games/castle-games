@@ -31,7 +31,7 @@ const STYLES_GAME_CONTAINER = css`
 
 class GameScreen extends React.Component {
   static defaultProps = {
-    media: null,
+    game: null,
     isLoggedIn: false,
     history: null,
   };
@@ -54,15 +54,15 @@ class GameScreen extends React.Component {
   }
 
   _updateGameWindow = async (prevProps, prevState) => {
-    let newUrl = (this.props.media) ? this.props.media.mediaUrl : null;
-    let oldUrl = (prevProps && prevProps.media) ? prevProps.media.mediaUrl : null;
+    let newUrl = (this.props.game) ? this.props.game.url : null;
+    let oldUrl = (prevProps && prevProps.game) ? prevProps.game.url : null;
 
     // TODO: metadata: entryPoint should always be defined by this point
-    if (prevProps && prevProps.media && prevProps.media.entryPoint) {
-      oldUrl = prevProps.media.entryPoint;
+    if (prevProps && prevProps.game && prevProps.game.entryPoint) {
+      oldUrl = prevProps.game.entryPoint;
     }
-    if (this.props.media && this.props.media.entryPoint) {
-      newUrl = this.props.media.entryPoint;
+    if (this.props.game && this.props.game.entryPoint) {
+      newUrl = this.props.game.entryPoint;
     }
 
     if (!newUrl) {
@@ -72,19 +72,19 @@ class GameScreen extends React.Component {
       // close window and open new
       await GameWindow.close();
       await GameWindow.open(newUrl);
-      this.props.history.addItem(this.props.media);
+      this.props.history.addItem(this.props.game);
       // TODO: restore this behavior
       /*
-      const userPlayData = { mediaUrl, ...media };
-      Logs.system(`Loading project at ${mediaUrl}`);
+      const userPlayData = { gameUrl, ...game };
+      Logs.system(`Loading project at ${gameUrl}`);
 
       amplitude.getInstance().logEvent('OPEN_LUA', {
-        mediaUrl,
+        gameUrl,
       });
 
-      const isLocal = Urls.isPrivateUrl(mediaUrl);
+      const isLocal = Urls.isPrivateUrl(gameUrl);
       const sidebarMode = isLocal ? 'development' : 'current-context';
-      // Don't `await` this since we don't want to make it take longer to get the media
+      // Don't `await` this since we don't want to make it take longer to get the game
       UserPlay.startAsync(userPlayData); 
       */
       // Sync state for new Ghost instance
@@ -117,7 +117,7 @@ class GameScreen extends React.Component {
           Its the game
         </div>
         <GameActionsBar
-          media={this.props.media}
+          game={this.props.game}
           isMuted={this.state.isMuted}
           onToggleMute={this._toggleIsMuted}
         />
@@ -136,7 +136,7 @@ export default class GameScreenWithContext extends React.Component {
               <CurrentUserContext.Consumer>
                 {currentUser => (
                   <GameScreen
-                    media={navigation.media}
+                    game={navigation.game}
                     history={history}
                     isLoggedIn={currentUser.user !== null}
                   />

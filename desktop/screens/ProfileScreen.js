@@ -9,12 +9,12 @@ import UIButtonIconHorizontal from '~/core-components/reusable/UIButtonIconHoriz
 import UIControl from '~/core-components/reusable/UIControl';
 import UICardProfileHeader from '~/core-components/reusable/UICardProfileHeader';
 import UIHorizontalNavigation from '~/core-components/reusable/UIHorizontalNavigation';
-import UIListMedia from '~/core-components/reusable/UIListMedia';
 import UIEmptyState from '~/core-components/reusable/UIEmptyState';
 
 import CoreEditProfile from '~/core-components/CoreEditProfile';
 import CoreProfileEditMedia from '~/core-components/CoreProfileEditMedia';
 import CoreSignOut from '~/core-components/CoreSignOut';
+import GameList from '~/components/reusable/GameList';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigationContext } from '~/contexts/NavigationContext';
 
@@ -136,13 +136,13 @@ class ProfileScreen extends React.Component {
     } else {
       const mediaListElement =
         creator.mediaItems && creator.mediaItems.length ? (
-          <UIListMedia
+          <GameList
             noTitleRow
             viewer={viewer}
             creator={creator}
-            mediaItems={creator.mediaItems}
-            onMediaSelect={this.props.navigation.navigateToMedia}
-            onMediaEdit={this._onSelectEditMedia}
+            gameItems={creator.gameItems}
+            onGameSelect={this.props.navigation.navigateToGame}
+            onGameEdit={this._onSelectEditMedia}
             onUserSelect={this.props.navigation.navigateToUserProfile}
           />
         ) : (

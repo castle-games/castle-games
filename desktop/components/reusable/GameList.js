@@ -95,23 +95,14 @@ const STYLES_ITEM = css`
   cursor: pointer;
 `;
 
-export default class UIListMedia extends React.Component {
-  // NOTE(jim): This isn't so great.. but allows us to reuse this component.
-  _handleMediaRemove = media => {
-    if (this.props.onMediaRemoveFromPlaylist) {
-      this.props.onMediaRemoveFromPlaylist({
-        mediaId: media.mediaId,
-        playlistId: this.props.playlist.playlistId,
-      });
-      return;
-    }
-
-    return this.props.onMediaRemove(media);
+export default class GameList extends React.Component {
+  _handleGameRemove = game => {
+    return this.props.onGameRemove(game);
   };
 
-  _handleMediaEdit = media => {
-    if (this.props.onMediaEdit) {
-      this.props.onMediaEdit(media);
+  _handleGameEdit = game => {
+    if (this.props.onGameEdit) {
+      this.props.onGameEdit(game);
     }
   };
   
@@ -142,28 +133,28 @@ export default class UIListMedia extends React.Component {
     return (
       <div className={STYLES_CONTAINER} style={this.props.style}>
         {maybeTitleRow}
-        {this.props.mediaItems
-          ? this.props.mediaItems.map((m, i) => {
+        {this.props.gameItems
+          ? this.props.gameItems.map((m, i) => {
               if (!m) {
                 return null;
               }
               let maybeDeleteButton;
-              if (this.props.onMediaRemove) {
+              if (this.props.onGameRemove) {
                 maybeDeleteButton = (
-                  <span className={STYLES_ITEM} onClick={() => this._handleMediaRemove(m)}>
+                  <span className={STYLES_ITEM} onClick={() => this._handleGameRemove(m)}>
                     Delete
                   </span>
                 );
               }
               let maybeEditButton;
-              if (this.props.onMediaEdit) {
+              if (this.props.onGameEdit) {
                 maybeEditButton = (
-                  <span className={STYLES_ITEM} onClick={() => this._handleMediaEdit(m)}>
+                  <span className={STYLES_ITEM} onClick={() => this._handleGameEdit(m)}>
                     Edit
                   </span>
                 );
               }
-              const isSelected = this.props.media && this.props.media.mediaUrl === m.mediaUrl;
+              const isSelected = this.props.game && this.props.game.url === m.url;
               const actionsElement = isOwner ? (
                 <div className={STYLES_COLUMN}>
                   {maybeEditButton}
@@ -173,9 +164,6 @@ export default class UIListMedia extends React.Component {
 
               let author = m && m.user && m.user.username ? m.user.username : '-';
               let date = m && m.createdTime ? m.createdTime : '-';
-              if (m.published) {
-                date = m.published;
-              }
 
               if (!m.user || !m.user.username) {
                 return (
@@ -183,11 +171,11 @@ export default class UIListMedia extends React.Component {
                     className={STYLES_ROW}
                     key={`playlist-list-item-${i}`}
                     style={isSelected ? { color: Constants.colors.green } : null}
-                    onClick={() => this.props.onMediaSelect(m, this.props.isHistory)}>
+                    onClick={() => this.props.onGameSelect(m, this.props.isHistory)}>
                     <div className={STYLES_ICON_COLUMN}>
                       <SVG.MediaIcon height="16px" />
                     </div>
-                    <div className={STYLES_FLUID_COLUMN}>{m.mediaUrl}</div>
+                    <div className={STYLES_FLUID_COLUMN}>{m.url}</div>
                     {actionsElement}
                   </div>
                 );
@@ -196,16 +184,16 @@ export default class UIListMedia extends React.Component {
               return (
                 <div
                   className={STYLES_ROW}
-                  key={`media-list-item-${m.mediaId}-${i}`}
+                  key={`game-list-item-${m.gameId}-${i}`}
                   style={isSelected ? { color: Constants.colors.green } : null}>
                   <div
                     className={STYLES_ICON_COLUMN}
-                    onClick={() => this.props.onMediaSelect(m, this.props.isHistory)}>
+                    onClick={() => this.props.onGameSelect(m, this.props.isHistory)}>
                     <SVG.MediaIcon height="16px" />
                   </div>
                   <div
                     className={STYLES_FLUID_COLUMN}
-                    onClick={() => this.props.onMediaSelect(m, this.props.isHistory)}>
+                    onClick={() => this.props.onGameSelect(m, this.props.isHistory)}>
                     {m.name}
                   </div>
                   <div

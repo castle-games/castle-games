@@ -53,19 +53,14 @@ export default class GameActionsBar extends React.Component {
     let name = 'Untitled';
     let username = 'Anonymous';
     let isRegistered = false;
-    let { media } = this.props;
-    if (media) {
-      name = (media.name) ? media.name : name;
-      isRegistered = (media.slug && media.user);
+    let { game } = this.props;
+    if (game) {
+      name = (game.name) ? game.name : name;
+      isRegistered = (game.gameId !== null);
       if (isRegistered) {
-        username = media.user.username;
+        username = game.user.username;
       } else {
-        username = media.username ? media.username : username;
-        if (media.user && media.user.username) {
-          // TODO: deprecated: unregistered media shouldn't have a `user`,
-          // so we can just delete this case once that's true.
-          username = media.user.username;
-        }
+        username = game.username ? game.username : username;
       }
     }
     return (

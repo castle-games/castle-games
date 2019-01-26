@@ -34,8 +34,8 @@ export default class App extends React.Component {
 
     this.state = props.state;
     this.state.navigation.navigateToHome = this.navigateToHome;
-    this.state.navigation.navigateToMediaUrl = this.navigateToMediaUrl;
-    this.state.navigation.navigateToMedia = this.navigateToMedia;
+    this.state.navigation.navigateToGameUrl = this.navigateToGameUrl;
+    this.state.navigation.navigateToGame = this.navigateToGame;
     this.state.navigation.navigateToCurrentUserProfile = this.navigateToCurrentUserProfile;
     this.state.navigation.navigateToUserProfile = this.navigateToUserProfile;
     this.state.navigation.navigateToHistory = this.navigateToHistory;
@@ -61,7 +61,7 @@ export default class App extends React.Component {
 
   // event listeners
   _handleNativeOpenUrlEvent = (e) => {
-    this.navigateToMediaUrl(e.params.url);
+    this.navigateToGameUrl(e.params.url);
   };
 
   _handleLuaSystemKeyDownEvent = async (e) => {
@@ -86,21 +86,21 @@ export default class App extends React.Component {
       e.preventDefault();
     }
     await Actions.delay(100);
-    this.navigateToMediaUrl(this.state.navigation.media.mediaUrl);
+    this.navigateToGameUrl(this.state.navigation.game.url);
   };
 
-  // load media
-  _loadMediaAsync = async (media) => {
-    let { mediaUrl } = media;
-    if (Strings.isEmpty(mediaUrl)) {
+  // load game
+  _loadGameAsync = async (game) => {
+    let { url } = game;
+    if (Strings.isEmpty(url)) {
       return;
     }
     this.setState({
       navigation: {
         ...this.state.navigation,
         contentMode: 'game',
-        media,
-        mediaUrl,
+        game,
+        gameUrl: url,
       },
     });
   };
@@ -115,32 +115,32 @@ export default class App extends React.Component {
     });
   }
 
-  navigateToMediaUrl = async (mediaUrl) => {
-    let media;
+  navigateToGameUrl = async (gameUrl) => {
+    let game;
     try {
-      media = await Browser.resolveMediaAtUrlAsync(mediaUrl);
+      game = await Browser.resolveGameAtUrlAsync(gameUrl);
     } catch (e) {
       // forward this error to the user
       // Logs.error(e.message);
     }
 
-    if (media && media.mediaUrl) {
-      this._loadMediaAsync(media);
+    if (game && game.url) {
+      this._loadGameAsync(game);
     } else {
       // TODO: an error happened, surface it
     }
   };
 
-  navigateToMedia = (media) => {
-    if (!media || Strings.isEmpty(media.mediaUrl)) {
+  navigateToGame = (game) => {
+    if (!game || Strings.isEmpty(game.url)) {
       return;
     }
-    if (media.mediaId) {
-      // this is a known media object, not an abstract url request
-      this._loadMediaAsync(media);
+    if (game.gameId) {
+      // this is a known game object, not an abstract url request
+      this._loadGameAsync(game);
     } else {
-      // this is an incomplete media object, so try to resolve it before loading
-      this.navigateToMediaUrl(media.mediaUrl);
+      // this is an incomplete game object, so try to resolve it before loading
+      this.navigateToGameUrl(game.url);
     }
   };
 

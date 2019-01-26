@@ -4,7 +4,7 @@ import * as SVG from '~/core-components/primitives/svg';
 
 import { css } from 'react-emotion';
 
-import UIListMedia from '~/core-components/reusable/UIListMedia';
+import GameList from '~/components/reusable/GameList';
 import UIButtonIconHorizontal from '~/core-components/reusable/UIButtonIconHorizontal';
 import UIEmptyState from '~/core-components/reusable/UIEmptyState';
 import UIControl from '~/core-components/reusable/UIControl';
@@ -58,7 +58,7 @@ class HistoryScreen extends React.Component {
           <UIButtonIconHorizontal
             onClick={this.props.navigation.navigateToHome}
             icon={searchIcon}>
-            Browse media
+            Browse Games
           </UIButtonIconHorizontal>
         </div>
       </div>
@@ -75,12 +75,12 @@ class HistoryScreen extends React.Component {
     } else {
       contentElement = (
         <div>
-          <UIListMedia
+          <GameList
             isHistory
-            media={this.props.navigation.media}
-            onMediaSelect={this.props.navigation.navigateToMedia}
+            game={this.props.navigation.game}
+            onGameSelect={this.props.navigation.navigateToGame}
             onUserSelect={this.props.navigation.navigateToUserProfile}
-            mediaItems={history}
+            gameItems={history}
           />
           <div className={STYLES_ACTIONS}>
             <UIButtonIconHorizontal

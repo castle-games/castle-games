@@ -7,7 +7,7 @@ import { css } from 'react-emotion';
 
 import { NavigationContext } from '~/contexts/NavigationContext';
 import UIButtonIconHorizontal from '~/core-components/reusable/UIButtonIconHorizontal';
-import UIGridMedia from '~/core-components/reusable/UIGridMedia';
+import GameGrid from '~/components/reusable/GameGrid';
 
 const MAX_NUM_FEATURED_MEDIA = 4;
 
@@ -92,7 +92,7 @@ const STYLES_SECTION = css`
   padding: 16px 16px 32px 16px;
 `;
 
-const STYLES_MEDIA = css`
+const STYLES_GAME = css`
   padding: 16px 0 0 0;
 `;
 
@@ -146,12 +146,12 @@ export default class HomeScreen extends React.Component {
         entryPointFilePath = await NativeUtil.createProjectAtPathAsync(newProjectDirectory);
       } catch (_) {}
       if (entryPointFilePath) {
-        const mediaUrl = `file://${entryPointFilePath}`;
-        await this.context.navigateToMediaUrl(mediaUrl);
+        const gameUrl = `file://${entryPointFilePath}`;
+        await this.context.navigateToGameUrl(gameUrl);
         // TODO: logs:
         // log the following, then force development logs to show
         /* Logs.system('Welcome to Castle!');
-        Logs.system(`We created some starter code for your project at ${this.state.media.entryPoint}.`);
+        Logs.system(`We created some starter code for your project at ${this.state.game.entryPoint}.`);
         Logs.system(`Open that file in your favorite text editor to get started.`);
         Logs.system(`Need help? Check out http://www.playcastle.io/get-started`); */
       }
@@ -179,11 +179,11 @@ export default class HomeScreen extends React.Component {
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_SECTION}>
           <div className={STYLES_HEADING}>Play Games</div>
-          <div className={STYLES_MEDIA}>
-            <UIGridMedia
-              mediaItems={featuredMedia}
+          <div className={STYLES_GAME}>
+            <GameGrid
+              gameItems={featuredMedia}
               onUserSelect={this.context.naviateToUserProfile}
-              onMediaSelect={this.context.navigateToMedia}
+              onGameSelect={this.context.navigateToGame}
             />
           </div>
         </div>
