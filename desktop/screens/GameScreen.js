@@ -8,6 +8,7 @@ import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { HistoryContext } from '~/contexts/HistoryContext';
 import { NavigationContext } from '~/contexts/NavigationContext';
 import * as NativeUtil from '~/native/nativeutil';
+import Share from '~/common/share';
 
 const STYLES_CONTAINER = css`
   background: ${Constants.colors.black};
@@ -53,6 +54,35 @@ class GameScreen extends React.Component {
     GameWindow.setVisible(false);
   }
 
+  _closeGame = async () => {
+    // close window
+    await GameWindow.close();
+    Share.removeEventListeners();
+  };
+
+  _openGame = async (url) => {
+    Share.addEventListeners();
+    await GameWindow.open(url);
+    this.props.history.addItem(this.props.game);
+    // TODO: restore this behavior
+    /*
+      const userPlayData = { gameUrl, ...game };
+      Logs.system(`Loading project at ${gameUrl}`);
+
+      amplitude.getInstance().logEvent('OPEN_LUA', {
+        gameUrl,
+      });
+
+      const isLocal = Urls.isPrivateUrl(gameUrl);
+      const sidebarMode = isLocal ? 'development' : 'current-context';
+      // Don't `await` this since we don't want to make it take longer to get the game
+      UserPlay.startAsync(userPlayData);
+      */
+      // Sync state for new Ghost instance
+    NativeUtil.sendLuaEvent('CASTLE_SET_LOGGED_IN', this.props.isLoggedIn);
+    NativeUtil.sendLuaEvent('CASTLE_SET_VOLUME', this.state.isMuted ? 0 : 1);
+  }
+
   _updateGameWindow = async (prevProps, prevState) => {
     let newUrl = (this.props.game) ? this.props.game.url : null;
     let oldUrl = (prevProps && prevProps.game) ? prevProps.game.url : null;
@@ -66,30 +96,12 @@ class GameScreen extends React.Component {
     }
 
     if (!newUrl) {
-      // close window
-      await GameWindow.close();
+      // just close old game
+      await this._closeGame();
     } else if (newUrl !== oldUrl) {
-      // close window and open new
-      await GameWindow.close();
-      await GameWindow.open(newUrl);
-      this.props.history.addItem(this.props.game);
-      // TODO: restore this behavior
-      /*
-      const userPlayData = { gameUrl, ...game };
-      Logs.system(`Loading project at ${gameUrl}`);
-
-      amplitude.getInstance().logEvent('OPEN_LUA', {
-        gameUrl,
-      });
-
-      const isLocal = Urls.isPrivateUrl(gameUrl);
-      const sidebarMode = isLocal ? 'development' : 'current-context';
-      // Don't `await` this since we don't want to make it take longer to get the game
-      UserPlay.startAsync(userPlayData); 
-      */
-      // Sync state for new Ghost instance
-      NativeUtil.sendLuaEvent('CASTLE_SET_LOGGED_IN', this.props.isLoggedIn);
-      NativeUtil.sendLuaEvent('CASTLE_SET_VOLUME', this.state.isMuted ? 0 : 1);
+      // close game and open new
+      await this._closeGame();
+      await this._openGame(newUrl);
     }
     this._updateGameWindowFrame();
   }

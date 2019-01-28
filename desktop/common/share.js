@@ -1,5 +1,5 @@
 import * as Actions from '~/common/actions';
-import * as CEF from '~/common/cef';
+import * as NativeUtil from '~/native/nativeutil';
 
 class Share {
   addEventListeners = () => {
@@ -20,7 +20,7 @@ class Share {
     let mediaUrl = e.params.mediaUrl;
     let response = await Actions.multiplayerJoinAsync(mediaUrl);
 
-    CEF.sendLuaEvent('CASTLE_CONNECT_MULTIPLAYER_CLIENT_RESPONSE', {
+    NativeUtil.sendLuaEvent('CASTLE_CONNECT_MULTIPLAYER_CLIENT_RESPONSE', {
       address: response.address,
     });
   };
