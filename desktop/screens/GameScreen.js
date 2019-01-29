@@ -33,6 +33,7 @@ const STYLES_GAME_CONTAINER = css`
 class GameScreen extends React.Component {
   static defaultProps = {
     game: null,
+    timeGameLoaded: 0,
     isLoggedIn: false,
     history: null,
   };
@@ -102,6 +103,10 @@ class GameScreen extends React.Component {
       // close game and open new
       await this._closeGame();
       await this._openGame(newUrl);
+    } else if (newUrl === oldUrl && this.props.timeGameLoaded !== prevProps.timeGameLoaded) {
+      // reload
+      await this._closeGame();
+      await this._openGame(oldUrl);
     }
     this._updateGameWindowFrame();
   }
@@ -149,6 +154,7 @@ export default class GameScreenWithContext extends React.Component {
                 {currentUser => (
                   <GameScreen
                     game={navigation.game}
+                    timeGameLoaded={navigation.timeGameLoaded}
                     history={history}
                     isLoggedIn={currentUser.user !== null}
                   />

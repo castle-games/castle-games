@@ -101,6 +101,7 @@ export default class App extends React.Component {
         contentMode: 'game',
         game,
         gameUrl: url,
+        timeGameLoaded: Date.now(),
       },
     });
   };

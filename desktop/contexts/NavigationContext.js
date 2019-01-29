@@ -7,6 +7,7 @@ export const NavigationContextDefaults = {
 
   gameUrl: '',
   game: null,
+  timeGameLoaded: 0,
   navigateToGameUrl: async (url) => {},
   navigateToGame: async (game) => {},
 
