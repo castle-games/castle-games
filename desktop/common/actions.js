@@ -46,6 +46,7 @@ const GAME_ITEMS = `
     name
     url
     createdTime
+    updatedTime
     description
     coverImage {
       url
@@ -464,9 +465,26 @@ export async function updateUserAsync({ userId, user }) {
   return result.data.updateUser;
 }
 
-export async function registerGame({ url }) {
+function _validateRegisterGameResult(result) {
+  if (result.errors && result.errors.length) {
+    const error = result.errors[0];
+    const code = error.extensions ? error.extensions.code : '';
+    if (code === 'REGISTER_GAME_DUPLICATE_URL') {
+      throw new Error(`A game already exists in Castle with this url.`);
+    } else if (code === 'REGISTER_GAME_DUPLICATE_SLUG') {
+      throw new Error(`You have already added a game with this name.`);
+    } else if (code === 'REGISTER_GAME_INVALID_USERNAME') {
+      throw new Error(`The \`username\` given at this url does not match your username.`);
+    } else {
+      throw new Error(`There was a problem looking up the game at the url you provided: ${error.message}`);
+    }
+  }
+  return true;
+}
+
+export async function registerGameAtUrl(url) {
   const variables = {
-    ...url,
+    url,
   };
 
   const result = await API.graphqlAsync({
@@ -486,7 +504,36 @@ export async function registerGame({ url }) {
     variables,
   });
 
+  _validateRegisterGameResult(result);
   return result.data.registerGame;
+}
+
+export async function previewGameAtUrl(url) {
+  const variables = {
+    url,
+  };
+
+  const result = await API.graphqlAsync({
+    query: `
+      query PreviewGame($url: String!) {
+        previewGame(url: $url) {
+          slug,
+          name,
+          url,
+          user {
+            username,
+          },
+          description,
+          createdTime,
+          updatedTime,
+        }
+      }
+    `,
+    variables,
+  });
+
+  _validateRegisterGameResult(result);
+  return result.data.previewGame;
 }
 
 export async function recordUserplayEndAsync(userplayId) {

@@ -23,18 +23,6 @@ const STYLES_HEADER_TEXT = css`
 `;
 
 const STYLES_CONTAINER = css`
-  @keyframes info-animation {
-    from {
-      opacity: 0;
-    }
-
-    to {
-      opacity: 1;
-    }
-  }
-
-  animation: info-animation 280ms ease;
-
   width: 100%;
   min-width: 25%;
   height: 100%;
@@ -51,8 +39,7 @@ const STYLES_CONTAINER = css`
 class ProfileScreen extends React.Component {
   state = {
     mode: 'games',
-    isEditingGame: false,
-    gameToEdit: null,
+    isAddingGame: false,
   };
 
   componentWillReceiveProps(nextProps) {
@@ -64,37 +51,24 @@ class ProfileScreen extends React.Component {
           null
     if (nextUserId != existingUserId) {
       // we're rendering a new profile, reset state.
-      this.setState({
-        mode: 'games',
-        isEditingGame: false,
-        gameToEdit: null,
-      });
+      this._onShowGames();
     }
   };
   
-  _onShowGames = () => this.setState({
-    mode: 'games',
-    isEditingGame: false,
-    gameToEdit: null,
-  });
+  _onShowGames = () => this.setState({ mode: 'games', isAddingGame: false });
 
   _onShowEditProfile = () => this.setState({ mode: 'edit-profile' });
 
   _onShowSignOut = () => this.setState({ mode: 'sign-out' });
 
-  _onSelectEditGame = (game) => this.setState({
+  _onSelectAddGame = () => this.setState({
     mode: 'games',
-    isEditingGame: true,
-    gameToEdit: game,
+    isAddingGame: true,
   });
   
-  _onAfterEditGame = () => {
-    // after creating/editing game, back out to the full list of games
-    this.setState({
-      mode: 'games',
-      isEditingGame: false,
-      gameToEdit: null,
-    });
+  _onAfterAddGame = () => {
+    // after adding a game, back out to the full list of games
+    this._onShowGames();
     if (this.props.onAfterSave) {
       this.props.onAfterSave();
     }
@@ -125,12 +99,11 @@ class ProfileScreen extends React.Component {
   }
   
   _renderGameContent = (isOwnProfile, viewer, creator) => {
-    const { isEditingGame, gameToEdit } = this.state;
-    if (isEditingGame) {
+    const { isAddingGame } = this.state;
+    if (isAddingGame) {
       return (
         <EditGame
-          game={gameToEdit}
-          onAfterSave={this._onAfterEditGame}
+          onAfterSave={this._onAfterAddGame}
         />
       );
     } else {
@@ -142,7 +115,6 @@ class ProfileScreen extends React.Component {
             creator={creator}
             gameItems={creator.gameItems}
             onGameSelect={this.props.navigation.navigateToGame}
-            onGameEdit={this._onSelectEditGame}
             onUserSelect={this.props.navigation.navigateToUserProfile}
           />
         ) : (
@@ -159,7 +131,7 @@ class ProfileScreen extends React.Component {
         isOwnProfile ? (
           <UIButtonIconHorizontal
             style={{ margin: 16 }}
-            onClick={() => this._onSelectEditGame(null)}
+            onClick={() => this._onSelectAddGame()}
             icon={addGameIcon}>
             Add Your Games
           </UIButtonIconHorizontal>

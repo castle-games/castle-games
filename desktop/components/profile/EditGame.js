@@ -6,7 +6,6 @@ import { Value } from 'slate';
 import { css } from 'react-emotion';
 
 import UIEmptyState from '~/core-components/reusable/UIEmptyState';
-import UIButtonSecondary from '~/core-components/reusable/UIButtonSecondary';
 import UIInputSecondary from '~/core-components/reusable/UIInputSecondary';
 import UITextArea from '~/core-components/reusable/UITextArea';
 import UISubmitButton from '~/core-components/reusable/UISubmitButton';
@@ -34,122 +33,143 @@ const STYLES_FORM_ACTIONS = css`
   margin-top: 12px;
 `;
 
+const STYLES_GAME_PREVIEW = css`
+  background: ${Constants.colors.white20};
+  padding: 16px;
+  cursor: default;
+  margin-bottom: 24px;
+`;
+
+const STYLES_GAME_PREVIEW_LABEL = css`
+  color: ${Constants.colors.white};
+  font-size: 10pt;
+  margin: 24px 0 8px 0;
+`;
+
+const STYLES_GAME_PREVIEW_URL = css`
+  text-decoration: underline;
+`;
+
+const STYLES_GAME_PREVIEW_TITLE = css`
+  margin-bottom: 12px;
+  font-size: 14pt;
+`;
+
+const STYLES_GAME_PREVIEW_ERROR = css`
+  color: ${Constants.colors.red};
+  margin: 16px 0 16px 0;
+`;
+
 export default class EditGame extends React.Component {
   state = {
-    game: {
-      gameId: null,
-      name: '',
-      url: '',
+    urlInputValue: '',
+    previewedGame: {
+      slug: null,
     },
+    previewError: null,
   };
-
-  componentDidMount() {
-    this._resetForm(this.props.game);
-  }
+  _debouncePreviewTimeout = null;
 
   componentWillReceiveProps(nextProps) {
-    const existingGameId = (this.props.game && this.props.game.gameId) ?
-          this.props.game.gameId :
-          null;
-    const nextGameId = (nextProps.game && nextProps.game.gameId) ?
-          nextProps.game.gameId :
-          null
-    // TODO: ben: updatedTime is valid?
-    if (existingGameId == null || nextGameId != existingGameId ||
-        (
-          nextGameId == existingGameId &&
-          nextProps.game.updatedTime !== this.props.game.updatedTime
-        )
-       ) {
-      // we're rendering a new user, reset state.
-      this._resetForm(nextProps.game);
-    }
+    this._resetForm();
   }
 
-  _resetForm = (game) => {
+  _resetForm = () => {
     this.setState({
-      game: {
-        ...game,
+      urlInputValue: '',
+      previewedGame: {
+        slug: null,
       },
+      previewError: null,
     });
   };
 
-  _handleChangeGame = e => {
-    this.setState({ game: { ...this.state.game, [e.target.name]: e.target.value } });
+  _updateGamePreview = async () => {
+    this._debouncePreviewTimeout = null;
+    let previewedGame = {};
+    let previewError = null;
+    if (this.state.urlInputValue && this.state.urlInputValue.length) {
+      try {
+        previewedGame = await Actions.previewGameAtUrl(this.state.urlInputValue);
+      } catch (e) {
+        previewedGame = {};
+        previewError = e.message;
+      }
+    }
+    this.setState({ previewedGame, previewError });
+  };
+
+  _handleChangeUrl = e => {
+    this.setState({ urlInputValue: e.target.value }, () => {
+      if (this._debouncePreviewTimeout) {
+        clearTimeout(this._debouncePreviewTimeout);
+      }
+      this._debouncePreviewTimeout = setTimeout(this._updateGamePreview, 300);
+    });
   };
 
   _isFormSubmittable = () => {
     return (
-      this.state.game &&
-      this.state.game.name && this.state.game.name.length > 0 &&
-      this.state.game.url && this.state.game.url.length > 0
+      this.state.previewedGame &&
+      this.state.previewedGame.slug &&
+      this.state.previewedGame.slug.length > 0
     );
-  };
-
-  _removeGameAsync = async () => {
-    const gameId = (this.props.game) ? this.props.game.gameId : null;
-    // TODO: we don't have a way to remove games yet
-    /* if (gameId) {
-      const response = await Actions.removeGame({ gameId });
-      if (!response) {
-        return;
-      }
-
-      if (this.props.onAfterSave) {
-        this.props.onAfterSave();
-      }
-    } */
   };
   
   _handleSubmitForm = async () => {
-    let response;
-    // TODO: we don't have a way to update or re-index games yet
-    /* if (this.state.game.gameId) {
-      response = await Actions.updateGameAsync({
-        gameId: this.state.game.gameId,
-        game: { ...this.state.game },
-      });
-      if (!response) {
-        return;
+    let addedGame, previewError;
+    if (this.state.urlInputValue && this.state.urlInputValue.length) {
+      try {
+        addedGame = await Actions.registerGameAtUrl(this.state.urlInputValue);
+      } catch (e) {
+        addedGame = {};
+        previewError = e.message;
       }
+    }
+
+    if (previewError) {
+      this.setState({ previewError });
     } else {
-      response = await Actions.addGame({ game: { ...this.state.game } });
-      if (!response) {
-        return;
+      if (this.props.onAfterSave) {
+        this.props.onAfterSave();
       }
     }
+  };
 
-    await this.setState({
-      game: {
-        ...response,
-      },
-    }); */
-
-    if (this.props.onAfterSave) {
-      this.props.onAfterSave();
+  _renderGamePreview = () => {
+    if (this.state.previewedGame && this.state.previewedGame.slug) {
+      return (
+        <div>
+          <div className={STYLES_GAME_PREVIEW_LABEL}>Game Preview</div>
+          <div className={STYLES_GAME_PREVIEW}>
+            <p className={STYLES_GAME_PREVIEW_TITLE}>
+              <b>{this.state.previewedGame.name}</b>{' '}
+              by {this.state.previewedGame.user.username}
+            </p>
+            <p>
+              Your Castle url will be{' '}
+              <span className={STYLES_GAME_PREVIEW_URL}>
+                http://playcastle.io/{this.state.previewedGame.slug}
+              </span>
+            </p>
+          </div>
+        </div>
+      );
+    } else if (this.state.previewError) {
+      return (
+        <div className={STYLES_GAME_PREVIEW_ERROR}>
+          {this.state.previewError}
+        </div>
+      );
     }
+    return null;
   };
 
   render() {
     const isSubmitEnabled = this._isFormSubmittable();
-    const isEditing = !!(this.props.game && this.props.game.gameId);
-    const gameTitle = (isEditing && this.props.game && this.props.game.name) ? this.props.game.name : 'an untitled game';
-    const formTitle = (isEditing) ?
-          `Editing ${gameTitle}` :
-          'Link a game to your Castle profile';
-    const formAction = (isEditing) ? 'Save Changes' : 'Add';
-
-    let maybeDeleteButton;
-    if (isEditing) {
-      maybeDeleteButton = (
-        <div style={{ marginLeft: 32 }}>
-          <UIButtonSecondary
-            onClick={this._removeGameAsync}>
-            Delete
-          </UIButtonSecondary>
-        </div>
-      );
-    }
+    const formTitle = 'Link a game to your Castle profile';
+    const formAction = 'Add';
+    const gamePreviewElement = this._renderGamePreview();
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_SECTION}>
@@ -159,26 +179,19 @@ export default class EditGame extends React.Component {
             When you link a game to Castle, it appears on your Castle profile.
           </UIEmptyState>
           <UIInputSecondary
-            value={this.state.game.name}
-            name="name"
-            label="Game Title"
-            onChange={this._handleChangeGame}
+            value={this.state.urlInputValue}
+            name="urlInputValue"
+            label="URL to a .castle file"
+            onChange={this._handleChangeUrl}
             style={{ marginBottom: 8 }}
           />
-          <UIInputSecondary
-            value={this.state.game.url}
-            name="url"
-            label="Game URL"
-            onChange={this._handleChangeGame}
-            style={{ marginBottom: 8 }}
-          />
+          {gamePreviewElement}
           <div className={STYLES_FORM_ACTIONS}>
             <UISubmitButton
               disabled={!isSubmitEnabled}
               onClick={this._handleSubmitForm}>
               {formAction}
             </UISubmitButton>
-            {maybeDeleteButton}
           </div>
         </div>
       </div>
