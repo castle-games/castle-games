@@ -60,7 +60,7 @@ const STYLES_GENERIC_INPUT = css`
   margin-right: 16px;
 `;
 
-export default class CoreEditProfile extends React.Component {
+export default class EditProfile extends React.Component {
   state = {
     isExistingAvatarRemoved: false, // TODO: flag this once avatar removal is supported.
     isAvatarUploading: false,

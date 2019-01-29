@@ -11,8 +11,8 @@ import UICardProfileHeader from '~/core-components/reusable/UICardProfileHeader'
 import UIHorizontalNavigation from '~/core-components/reusable/UIHorizontalNavigation';
 import UIEmptyState from '~/core-components/reusable/UIEmptyState';
 
-import CoreEditProfile from '~/core-components/CoreEditProfile';
-import CoreProfileEditMedia from '~/core-components/CoreProfileEditMedia';
+import EditProfile from '~/components/profile/EditProfile';
+import EditGame from '~/components/profile/EditGame';
 import CoreSignOut from '~/core-components/CoreSignOut';
 import GameList from '~/components/reusable/GameList';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
@@ -50,9 +50,9 @@ const STYLES_CONTAINER = css`
 
 class ProfileScreen extends React.Component {
   state = {
-    mode: 'media',
-    isEditingMedia: false,
-    mediaToEdit: null,
+    mode: 'games',
+    isEditingGame: false,
+    gameToEdit: null,
   };
 
   componentWillReceiveProps(nextProps) {
@@ -65,35 +65,35 @@ class ProfileScreen extends React.Component {
     if (nextUserId != existingUserId) {
       // we're rendering a new profile, reset state.
       this.setState({
-        mode: 'media',
-        isEditingMedia: false,
-        mediaToEdit: null,
+        mode: 'games',
+        isEditingGame: false,
+        gameToEdit: null,
       });
     }
   };
   
-  _onShowMedia = () => this.setState({
-    mode: 'media',
-    isEditingMedia: false,
-    mediaToEdit: null,
+  _onShowGames = () => this.setState({
+    mode: 'games',
+    isEditingGame: false,
+    gameToEdit: null,
   });
 
   _onShowEditProfile = () => this.setState({ mode: 'edit-profile' });
 
   _onShowSignOut = () => this.setState({ mode: 'sign-out' });
 
-  _onSelectEditMedia = (media) => this.setState({
-    mode: 'media',
-    isEditingMedia: true,
-    mediaToEdit: media,
+  _onSelectEditGame = (game) => this.setState({
+    mode: 'games',
+    isEditingGame: true,
+    gameToEdit: game,
   });
   
-  _onAfterEditMedia = () => {
-    // after creating/editing media, back out to the full list of media
+  _onAfterEditGame = () => {
+    // after creating/editing game, back out to the full list of games
     this.setState({
-      mode: 'media',
-      isEditingMedia: false,
-      mediaToEdit: null,
+      mode: 'games',
+      isEditingGame: false,
+      gameToEdit: null,
     });
     if (this.props.onAfterSave) {
       this.props.onAfterSave();
@@ -102,7 +102,7 @@ class ProfileScreen extends React.Component {
 
   _getNavigationItems = (isOwnProfile) => {
     let navigationItems = [
-      { label: 'Games', key: 'media' },
+      { label: 'Games', key: 'games' },
     ];
 
     if (isOwnProfile) {
@@ -115,7 +115,7 @@ class ProfileScreen extends React.Component {
 
   _onNavigationChange = (selectedKey) => {
     const callbacks = {
-      'media': this._onShowMedia,
+      'games': this._onShowGames,
       'edit-profile': this._onShowEditProfile,
       'sign-out': this._onShowSignOut,
     }
@@ -124,50 +124,50 @@ class ProfileScreen extends React.Component {
     }
   }
   
-  _renderMediaContent = (isOwnProfile, viewer, creator) => {
-    const { isEditingMedia, mediaToEdit } = this.state;
-    if (isEditingMedia) {
+  _renderGameContent = (isOwnProfile, viewer, creator) => {
+    const { isEditingGame, gameToEdit } = this.state;
+    if (isEditingGame) {
       return (
-        <CoreProfileEditMedia
-          media={mediaToEdit}
-          onAfterSave={this._onAfterEditMedia}
+        <EditGame
+          game={gameToEdit}
+          onAfterSave={this._onAfterEditGame}
         />
       );
     } else {
-      const mediaListElement =
-        creator.mediaItems && creator.mediaItems.length ? (
+      const gameListElement =
+        creator.gameItems && creator.gameItems.length ? (
           <GameList
             noTitleRow
             viewer={viewer}
             creator={creator}
             gameItems={creator.gameItems}
             onGameSelect={this.props.navigation.navigateToGame}
-            onGameEdit={this._onSelectEditMedia}
+            onGameEdit={this._onSelectEditGame}
             onUserSelect={this.props.navigation.navigateToUserProfile}
           />
         ) : (
           <UIEmptyState
-            title="No media yet"
+            title="No games yet"
             style={{ borderTop: `16px solid ${Constants.colors.border}` }}>
             {isOwnProfile
               ? 'You have not added any games to your profile yet.'
-              : 'This user has not added any games yet.'}
+              : 'This user has not added any games to their profile yet.'}
           </UIEmptyState>
         );
-      const addMediaIcon = (<SVG.Add height="16px" />);
-      const maybeAddMediaElement =
+      const addGameIcon = (<SVG.Add height="16px" />);
+      const maybeAddGameElement =
         isOwnProfile ? (
           <UIButtonIconHorizontal
             style={{ margin: 16 }}
-            onClick={() => this._onSelectEditMedia(null)}
-            icon={addMediaIcon}>
+            onClick={() => this._onSelectEditGame(null)}
+            icon={addGameIcon}>
             Add Your Games
           </UIButtonIconHorizontal>
         ) : null;
       return (
         <div>
-          {mediaListElement}
-          {maybeAddMediaElement}
+          {gameListElement}
+          {maybeAddGameElement}
         </div>
       );
     }
@@ -177,7 +177,7 @@ class ProfileScreen extends React.Component {
     if (!isOwnProfile) return null;
     
     return (
-      <CoreEditProfile
+      <EditProfile
         user={user}
         onAfterSave={this.props.onAfterSave}
       />
@@ -204,7 +204,7 @@ class ProfileScreen extends React.Component {
     } else if (mode === 'sign-out') {
       profileContentElement = this._renderSignOutContent(isOwnProfile);
     } else {
-      profileContentElement = this._renderMediaContent(isOwnProfile, viewer, creator);
+      profileContentElement = this._renderGameContent(isOwnProfile, viewer, creator);
     }
 
     return (
@@ -212,7 +212,7 @@ class ProfileScreen extends React.Component {
         <UICardProfileHeader
           creator={creator}
           isOwnProfile={isOwnProfile}
-          onMediaSelect={this.props.navigation.navigateToMedia}
+          onGameSelect={this.props.navigation.navigateToGame}
         />
         <UIHorizontalNavigation
           items={this._getNavigationItems(isOwnProfile)}
