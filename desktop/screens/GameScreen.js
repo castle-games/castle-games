@@ -99,6 +99,9 @@ class GameScreen extends React.Component {
     if (!newUrl) {
       // just close old game
       await this._closeGame();
+    } else if (!oldUrl && this.props.timeNavigatedToGame !== this.props.timeGameLoaded) {
+      // resume previously-loaded game
+      // by calling this._updateGameWindowFrame() later.
     } else if (newUrl !== oldUrl) {
       // close game and open new
       await this._closeGame();
@@ -130,7 +133,10 @@ class GameScreen extends React.Component {
       <div className={STYLES_CONTAINER}>
         <div
           className={STYLES_GAME_CONTAINER}
-          ref={(ref) => { this._gameContainerReference = ref; }}>
+          ref={(ref) => {
+            this._gameContainerReference = ref;
+            this._updateGameWindowFrame();
+          }}>
           Its the game
         </div>
         <GameActionsBar
@@ -155,6 +161,7 @@ export default class GameScreenWithContext extends React.Component {
                   <GameScreen
                     game={navigation.game}
                     timeGameLoaded={navigation.timeGameLoaded}
+                    timeNavigatedToGame={navigation.timeLastNavigated}
                     history={history}
                     isLoggedIn={currentUser.user !== null}
                   />

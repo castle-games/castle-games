@@ -85,8 +85,19 @@ export default class ContentNavigationBar extends React.Component {
   };
 
   _renderTopNavigationItems = () => {
+    let maybePlayingItem;
+    if (this.context.game) {
+      maybePlayingItem = (
+        <div
+          className={STYLES_NAV_ITEM}
+          onClick={this.context.navigateToCurrentGame}>
+          Playing
+        </div>
+      );
+    }
     return (
       <div className={STYLES_NAV_ITEMS}>
+        {maybePlayingItem}
         <div
           className={STYLES_NAV_ITEM}
           onClick={this.context.navigateToHome}>

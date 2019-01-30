@@ -14,6 +14,7 @@ const STYLES_CONTAINER = css`
   margin: 0 8px 0 8px;
   border-radius: 18px;
   display: inline-flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
   cursor: pointer;
@@ -21,7 +22,7 @@ const STYLES_CONTAINER = css`
 
 export default class Viewer extends React.Component {
   _renderViewer = (navigation, currentUser) => {
-    const name = (currentUser.user) ? currentUser.user.username : 'Sign In';
+    const name = (currentUser.user) ? currentUser.user.username[0].toUpperCase() : 'Log In';
     return (
       <div
         className={STYLES_CONTAINER}

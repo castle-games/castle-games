@@ -2,6 +2,7 @@ import * as React from 'react';
 
 export const NavigationContextDefaults = {
   contentMode: 'home',
+  timeLastNavigated: 0,
 
   navigateToHome: () => {},
 
@@ -10,6 +11,7 @@ export const NavigationContextDefaults = {
   timeGameLoaded: 0,
   navigateToGameUrl: async (url) => {},
   navigateToGame: async (game) => {},
+  navigateToCurrentGame: () => {},
 
   userProfileShown: null,
   navigateToCurrentUserProfile: () => {},

@@ -36,6 +36,7 @@ export default class App extends React.Component {
     this.state.navigation.navigateToHome = this.navigateToHome;
     this.state.navigation.navigateToGameUrl = this.navigateToGameUrl;
     this.state.navigation.navigateToGame = this.navigateToGame;
+    this.state.navigation.navigateToCurrentGame = this.navigateToCurrentGame;
     this.state.navigation.navigateToCurrentUserProfile = this.navigateToCurrentUserProfile;
     this.state.navigation.navigateToUserProfile = this.navigateToUserProfile;
     this.state.navigation.navigateToHistory = this.navigateToHistory;
@@ -95,13 +96,15 @@ export default class App extends React.Component {
     if (Strings.isEmpty(url)) {
       return;
     }
+    const time = Date.now();
     this.setState({
       navigation: {
         ...this.state.navigation,
         contentMode: 'game',
         game,
         gameUrl: url,
-        timeGameLoaded: Date.now(),
+        timeGameLoaded: time,
+        timeLastNavigated: time,
       },
     });
   };
@@ -112,9 +115,23 @@ export default class App extends React.Component {
       navigation: {
         ...this.state.navigation,
         contentMode: 'home',
+        timeLastNavigated: Date.now(),
       },
     });
   }
+
+  navigateToCurrentGame = () => {
+    if (!this.state.navigation.game) {
+      throw new Error(`Cannot navigate to current game because there is no current game.`);
+    }
+    this.setState({
+      navigation: {
+        ...this.state.navigation,
+        contentMode: 'game',
+        timeLastNavigated: Date.now(),
+      }
+    });
+  };
 
   navigateToGameUrl = async (gameUrl) => {
     let game;
@@ -155,6 +172,7 @@ export default class App extends React.Component {
         navigation: ({
           ...this.state.navigation,
           contentMode: 'signin',
+          timeLastNavigated: Date.now(),
         }),
       });
     }
@@ -166,6 +184,7 @@ export default class App extends React.Component {
         ...this.state.navigation,
         contentMode: 'profile',
         userProfileShown: user,
+        timeLastNavigated: Date.now(),
       },
     });
   };
@@ -175,6 +194,7 @@ export default class App extends React.Component {
       navigation: {
         ...this.state.navigation,
         contentMode: 'history',
+        timeLastNavigated: Date.now(),
       },
     });
   };
