@@ -40,20 +40,24 @@ const FULL_USER_FIELDS = `
   }
 `;
 
+const GAME_FIELDS = `
+  gameId
+  name
+  url
+  createdTime
+  updatedTime
+  description
+  metadata
+  coverImage {
+    imgixUrl
+    height
+    width
+  }
+`;
+
 const GAME_ITEMS = `
   gameItems {
-    gameId
-    name
-    url
-    createdTime
-    updatedTime
-    description
-    coverImage {
-      url
-      imgixUrl
-      height
-      width
-    }
+    ${GAME_FIELDS}
     ${NESTED_USER}
   }
 `;
@@ -210,16 +214,7 @@ export async function getInitialData() {
       }
 
       allGames {
-        gameId
-        name
-        url
-        createdTime
-        description
-        coverImage {
-          url
-          height
-          width
-        }
+        ${GAME_FIELDS}
         ${NESTED_USER}
       }
 
@@ -236,16 +231,7 @@ export async function getInitialData() {
       }
 
       featuredGames {
-        gameId
-        name
-        url
-        createdTime
-        description
-        coverImage {
-          url
-          height
-          width
-        }
+        ${GAME_FIELDS}
         ${NESTED_USER}
       }
     }
@@ -297,17 +283,7 @@ export async function getGameByUrl(url) {
     query: `
     query GetGame($url: String!) {
       game(url: $url) {
-        gameId
-        name
-        url
-        createdTime
-        description
-        metadata
-        coverImage {
-          url
-          height
-          width
-        }
+        ${GAME_FIELDS}
         ${NESTED_USER}
       }
     }
@@ -449,13 +425,7 @@ export async function registerGameAtUrl(url) {
     query: `
       mutation RegisterGame($url: String!) {
         registerGame(url: $url) {
-          gameId,
-          slug,
-          name,
-          url,
-          description,
-          createdTime,
-          updatedTime,
+          ${GAME_FIELDS}
         }
       }
     `,

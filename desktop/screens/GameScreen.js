@@ -9,6 +9,7 @@ import { HistoryContext } from '~/contexts/HistoryContext';
 import { NavigationContext } from '~/contexts/NavigationContext';
 import * as NativeUtil from '~/native/nativeutil';
 import Share from '~/common/share';
+import * as Utilities from '~/common/utilities';
 
 const STYLES_CONTAINER = css`
   background: ${Constants.colors.black};
@@ -85,16 +86,8 @@ class GameScreen extends React.Component {
   }
 
   _updateGameWindow = async (prevProps, prevState) => {
-    let newUrl = (this.props.game) ? this.props.game.url : null;
-    let oldUrl = (prevProps && prevProps.game) ? prevProps.game.url : null;
-
-    // TODO: metadata: entryPoint should always be defined by this point
-    if (prevProps && prevProps.game && prevProps.game.entryPoint) {
-      oldUrl = prevProps.game.entryPoint;
-    }
-    if (this.props.game && this.props.game.entryPoint) {
-      newUrl = this.props.game.entryPoint;
-    }
+    let newUrl = Utilities.getLuaEntryPoint(this.props.game);
+    let oldUrl = prevProps ? Utilities.getLuaEntryPoint(prevProps.game) : null;
 
     if (!newUrl) {
       // just close old game
