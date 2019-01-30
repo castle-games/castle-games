@@ -473,6 +473,8 @@ function _validateRegisterGameResult(result) {
       throw new Error(`A game already exists in Castle with this url.`);
     } else if (code === 'REGISTER_GAME_DUPLICATE_SLUG') {
       throw new Error(`You have already added a game with this name.`);
+    } else if (code === 'REGISTER_GAME_INVALID_CASTLE_FILE') {
+      throw new Error(`The file at this url doesn't look like a valid Castle project file.`);
     } else if (code === 'REGISTER_GAME_INVALID_USERNAME') {
       throw new Error(`The \`username\` given at this url does not match your username.`);
     } else {
