@@ -538,6 +538,28 @@ export async function previewGameAtUrl(url) {
   return result.data.previewGame;
 }
 
+export async function updateGameAtUrl(url) {
+  const variables = {
+    url,
+  };
+
+  const result = await API.graphqlAsync({
+    query: `
+      mutation UpdateGame($url: String!) {
+        updateGame(url: $url) {
+          gameId,
+          slug,
+          name,
+        }
+      }
+    `,
+    variables,
+  });
+
+  _validateRegisterGameResult(result);
+  return result.data.updateGame;
+}
+
 export async function recordUserplayEndAsync(userplayId) {
   let result = await API.graphqlAsync(
     /* GraphQL */ `

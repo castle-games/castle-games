@@ -96,16 +96,12 @@ const STYLES_ITEM = css`
 `;
 
 export default class GameList extends React.Component {
-  _handleGameRemove = game => {
-    return this.props.onGameRemove(game);
-  };
-
-  _handleGameEdit = game => {
-    if (this.props.onGameEdit) {
-      this.props.onGameEdit(game);
+  _handleGameUpdate = game => {
+    if (this.props.onGameUpdate) {
+      this.props.onGameUpdate(game);
     }
   };
-  
+
   render() {
     const isOwner =
       this.props.viewer &&
@@ -138,27 +134,18 @@ export default class GameList extends React.Component {
               if (!m) {
                 return null;
               }
-              let maybeDeleteButton;
-              if (this.props.onGameRemove) {
-                maybeDeleteButton = (
-                  <span className={STYLES_ITEM} onClick={() => this._handleGameRemove(m)}>
-                    Delete
-                  </span>
-                );
-              }
-              let maybeEditButton;
-              if (this.props.onGameEdit) {
-                maybeEditButton = (
-                  <span className={STYLES_ITEM} onClick={() => this._handleGameEdit(m)}>
-                    Edit
+              let maybeUpdateButton;
+              if (this.props.onGameUpdate) {
+                maybeUpdateButton = (
+                  <span className={STYLES_ITEM} onClick={() => this._handleGameUpdate(m)}>
+                    Sync
                   </span>
                 );
               }
               const isSelected = this.props.game && this.props.game.url === m.url;
               const actionsElement = isOwner ? (
                 <div className={STYLES_COLUMN}>
-                  {maybeEditButton}
-                  {maybeDeleteButton}
+                  {maybeUpdateButton}
                 </div>
               ) : null;
 

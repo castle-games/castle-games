@@ -97,7 +97,19 @@ class ProfileScreen extends React.Component {
       callbacks[selectedKey]();
     }
   }
-  
+
+  _updateGame = async (game) => {
+    let updatedGame;
+    try {
+      updatedGame = await Actions.updateGameAtUrl(game.url);
+    } catch (e) {
+      updatedGame = {};
+    }
+    if (updatedGame && updatedGame.gameId) {
+      this.props.onAfterSave();
+    }
+  };
+
   _renderGameContent = (isOwnProfile, viewer, creator) => {
     const { isAddingGame } = this.state;
     if (isAddingGame) {
@@ -116,6 +128,7 @@ class ProfileScreen extends React.Component {
             gameItems={creator.gameItems}
             onGameSelect={this.props.navigation.navigateToGame}
             onUserSelect={this.props.navigation.navigateToUserProfile}
+            onGameUpdate={this._updateGame}
           />
         ) : (
           <UIEmptyState
