@@ -58,25 +58,6 @@ const GAME_ITEMS = `
   }
 `;
 
-const DEPRECATED_MEDIA_ITEMS = `
-  mediaItems {
-    name
-    published
-    createdTime
-    updatedTime
-    description
-    mediaUrl
-    mediaId
-    coverImage {
-      url
-      imgixUrl
-      height
-      width
-    }
-    ${NESTED_USER}
-  }
-`;
-
 export async function getHeadersAsync() {
   return await API.client._getRequestHeadersAsync();
 }
@@ -172,45 +153,6 @@ export async function login({ userId, password }) {
   return response.data.login;
 }
 
-export async function getPlaylist({ playlistId }) {
-  const variables = { playlistId };
-  const result = await API(
-    `
-    query GetPlaylist($playlistId: ID!) {
-      playlist(playlistId: $playlistId) {
-        playlistId
-        name
-        description
-        createdTime
-        coverImage {
-          imgixUrl
-          height
-          width
-        }
-        ${NESTED_USER}
-        ${DEPRECATED_MEDIA_ITEMS}
-      }
-    }
-  `,
-    variables
-  );
-
-  if (!result) {
-    return false;
-  }
-
-  // TOOD(jim): Write a global error handler.
-  if (result.error) {
-    return false;
-  }
-
-  if (result.errors) {
-    return false;
-  }
-
-  return result.data.playlist;
-}
-
 export async function getUser({ userId }) {
   const variables = { userId };
   const result = await API(
@@ -291,6 +233,20 @@ export async function getInitialData() {
           height
           width
         }
+      }
+
+      featuredGames {
+        gameId
+        name
+        url
+        createdTime
+        description
+        coverImage {
+          url
+          height
+          width
+        }
+        ${NESTED_USER}
       }
     }
   `);

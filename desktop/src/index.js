@@ -56,17 +56,14 @@ loader.id = 'loader';
 document.body.appendChild(loader);
 
 const INITIAL_STATE_OFFLINE = {
-  searchQuery: '',
   allContent: {
     media: [],
   },
   searchResults: {
     media: [],
   },
-  featuredPlaylists: [],
-  featuredMedia: [],
+  featuredGames: [],
   isOffline: true,
-  isMuted: false,
   navigation: NavigationContextDefaults,
   currentUser: CurrentUserContextDefaults,
 };
@@ -74,8 +71,7 @@ const INITIAL_STATE_OFFLINE = {
 const run = async () => {
   const {
     allContent,
-    featuredMedia,
-    featuredPlaylists,
+    featuredGames,
     viewer,
     isOffline,
   } = await Network.getProductData();
@@ -89,8 +85,7 @@ const run = async () => {
     searchResults: {
       ...allContent,
     },
-    featuredPlaylists,
-    featuredMedia,
+    featuredGames,
     isOffline,
   });
 

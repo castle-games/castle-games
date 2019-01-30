@@ -27,7 +27,7 @@ export default class ContentContainer extends React.Component {
     } else if (mode === 'home') {
       return (
         <HomeScreen
-          featuredMedia={this.props.featuredMedia}
+          featuredGames={this.props.featuredGames}
         />
       );
     } else if (mode === 'profile') {

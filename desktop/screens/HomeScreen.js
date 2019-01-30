@@ -9,7 +9,7 @@ import { NavigationContext } from '~/contexts/NavigationContext';
 import UIButtonIconHorizontal from '~/core-components/reusable/UIButtonIconHorizontal';
 import GameGrid from '~/components/reusable/GameGrid';
 
-const MAX_NUM_FEATURED_MEDIA = 4;
+const MAX_NUM_FEATURED_GAMES = 4;
 
 const STYLES_CONTAINER = css`
   width: 100%;
@@ -114,7 +114,7 @@ const STYLES_HELP_ACTION = css`
 
 export default class HomeScreen extends React.Component {
   static defaultProps = {
-    featuredMedia: [],
+    featuredGames: [],
   };
   static contextType = NavigationContext;
 
@@ -158,20 +158,20 @@ export default class HomeScreen extends React.Component {
     }
   };
 
-  _getFeaturedMedia = () => {
-    const { featuredMedia } = this.props;
+  _getFeaturedGames = () => {
+    const { featuredGames } = this.props;
     let result;
-    if (featuredMedia) {
-      result = shuffle(featuredMedia);
-      if (result.length > MAX_NUM_FEATURED_MEDIA) {
-        result = result.slice(0, MAX_NUM_FEATURED_MEDIA);
+    if (featuredGames) {
+      result = shuffle(featuredGames);
+      if (result.length > MAX_NUM_FEATURED_GAMES) {
+        result = result.slice(0, MAX_NUM_FEATURED_GAMES);
       }
     }
     return result;
   }
 
   render() {
-    const featuredMedia = this._getFeaturedMedia();
+    const featuredGames = this._getFeaturedGames();
     const externalIcon = (<SVG.Share height="16px" />);
     const createIcon = (<SVG.Play height="16px" />);
 
@@ -181,7 +181,7 @@ export default class HomeScreen extends React.Component {
           <div className={STYLES_HEADING}>Play Games</div>
           <div className={STYLES_GAME}>
             <GameGrid
-              gameItems={featuredMedia}
+              gameItems={featuredGames}
               onUserSelect={this.context.naviateToUserProfile}
               onGameSelect={this.context.navigateToGame}
             />
