@@ -5,6 +5,8 @@ import * as Constants from '~/common/constants';
 import GameGrid from '~/components/reusable/GameGrid';
 import { NavigationContext } from '~/contexts/NavigationContext';
 import * as Strings from '~/common/strings';
+import UIButtonSecondary from '~/core-components/reusable/UIButtonSecondary';
+import * as Urls from '~/common/urls';
 
 const STYLES_CONTAINER = css`
   width: 100%;
@@ -39,11 +41,6 @@ export default class SearchScreen extends React.Component {
       users: [],
     }
   };
-
-  constructor(props) {
-    super(props);
-    this._updateResults();
-  }
 
   componentDidUpdate(prevProps, prevState) {
     const oldQuery = (prevProps && prevProps.query) ? prevProps.query : null;
@@ -122,10 +119,51 @@ export default class SearchScreen extends React.Component {
     return false;
   };
 
-  _renderNoResults = () => {
+  _maybeNavigateToUrl = (url) => {
+    try {
+      url = url.slice(0).trim();
+      if (Urls.isPrivateUrl(url)) {
+        url = url.replace('castle://', 'http://');
+      }
+    } catch (_) {}
+    if (Strings.isEmpty(url)) {
+      return;
+    }
+
+    this.context.navigateToGameUrl(url);
+    this.props.onSearchReset();
+  };
+
+  _doesQueryLookLikeUrl = (query) => {
+    query = query.slice(0).trim();
     return (
-      <div>No results for {this.props.query}</div>
+      query.endsWith('.lua') ||
+      query.startsWith('castle:') ||
+      query.startsWith('http')
     );
+  };
+
+  _renderNoResults = () => {
+    if (this.props.query && this._doesQueryLookLikeUrl(this.props.query)) {
+      return (
+        <div className={STYLES_SECTION}>
+          <div className={STYLES_HEADING}>
+            No results
+          </div>
+          <div style={{ marginBottom: 12 }}>
+            We didn't find find anything matching <b>"{this.props.query}"</b>, but it looks
+            like a game URL.
+          </div>
+          <UIButtonSecondary onClick={() => this._maybeNavigateToUrl(this.props.query)}>
+            Open <b>{this.props.query}</b>
+          </UIButtonSecondary>
+        </div>
+      );
+    } else {
+      return (
+        <div>No results for {this.props.query}</div>
+      );
+    }
   };
 
   _renderGameResults = () => {

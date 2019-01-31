@@ -45,31 +45,7 @@ export default class ContentContainer extends React.Component {
     );
   };
 
-  _handleSearchSubmit = async (e) => {
-    this._handleSearchChange(e);
-    // TODO: we should already be showing search results
-    // for now, assume this is a URL and try to navigate to it
-    this._handleUrlSubmit(e);
-  };
-
-  _handleUrlSubmit = (e) => {
-    if (e) {
-      e.preventDefault();
-    }
-    let url;
-    try {
-      url = this.state.searchQuery.slice(0).trim();
-      if (Urls.isPrivateUrl(url)) {
-        url = url.replace('castle://', 'http://');
-      }
-    } catch (_) {}
-    if (Strings.isEmpty(url)) {
-      return;
-    }
-
-    this.context.navigateToGameUrl(url);
-    this._handleSearchReset();
-  };
+  _handleSearchSubmit = async (e) => this._handleSearchChange(e);
 
   _renderContent = (mode) => {
     if (mode === 'game') {
@@ -94,6 +70,7 @@ export default class ContentContainer extends React.Component {
       <SearchScreen
         query={this.state.searchQuery}
         allContent={this.props.allContent}
+        onSearchReset={this._handleSearchReset}
       />
     )
   };
