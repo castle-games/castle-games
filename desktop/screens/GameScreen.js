@@ -2,7 +2,7 @@ import * as React from 'react';
 import { css } from 'react-emotion';
 
 import * as Constants from '~/common/constants';
-import GameActionsBar from '~/components/GameActionsBar';
+import GameActionsBar from '~/components/game/GameActionsBar';
 import GameWindow from '~/native/gamewindow';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { HistoryContext } from '~/contexts/HistoryContext';

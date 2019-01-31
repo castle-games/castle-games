@@ -5,9 +5,10 @@ import { isKeyHotkey } from 'is-hotkey';
 import * as Actions from '~/common/actions';
 import * as Browser from '~/common/browser';
 import * as Constants from '~/common/constants';
-import { History, HistoryContext } from '~/contexts/HistoryContext';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { DevelopmentContext } from '~/contexts/DevelopmentContext';
+import { History, HistoryContext } from '~/contexts/HistoryContext';
+import Logs from '~/common/logs';
 import { NavigationContext } from '~/contexts/NavigationContext';
 import * as NativeUtil from '~/native/nativeutil';
 import * as Strings from '~/common/strings';
@@ -50,6 +51,7 @@ export default class App extends React.Component {
     this.state.currentUser.clearCurrentUser = this.clearCurrentUser;
     this.state.currentUser.refreshCurrentUser = this.refreshCurrentUser;
     this.state.development.setIsDeveloping = this.setIsDeveloping;
+    this.state.development.clearLogs = this.clearLogs;
     this.state.history = new History(props.storage);
   }
 
@@ -73,6 +75,17 @@ export default class App extends React.Component {
   // interface with lua channels
   _processNativeChannels = async () => {
     await NativeUtil.readLogChannelsAsync();
+    const logs = Logs.consume();
+
+    if (logs && logs.length) {
+      this.setState({
+        development: {
+          ...this.state.development,
+          logs: [...this.state.development.logs, ...logs]
+        },
+      });
+    }
+  
     this._nativeChannelsPollTimeout = window.setTimeout(
       this._processNativeChannels,
       NATIVE_CHANNELS_POLL_INTERVAL
@@ -278,6 +291,15 @@ export default class App extends React.Component {
       development: {
         ...this.state.development,
         isDeveloping,
+      }
+    });
+  };
+
+  clearLogs = () => {
+    this.setState({
+      development: {
+        ...this.state.development,
+        logs: [],
       }
     });
   };

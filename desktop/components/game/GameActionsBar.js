@@ -3,6 +3,7 @@ import { css } from 'react-emotion';
 
 import * as Constants from '~/common/constants';
 import { DevelopmentContext } from '~/contexts/DevelopmentContext';
+import DevelopmentLogs from '~/components/game/DevelopmentLogs';
 import UIButtonDarkSmall from '~/core-components/reusable/UIButtonDarkSmall';
 import * as SVG from '~/core-components/primitives/svg';
 import * as Strings from '~/common/strings';
@@ -72,14 +73,13 @@ export default class GameActionsBar extends React.Component {
   };
 
   _renderDeveloping = (game, muteElement) => {
+    // TODO: mute etc.
     return (
       <div className={STYLES_CONTAINER}>
-        <div className={STYLES_NAME_ROW}>
-          Logs for {game.name ? game.name : 'a game'}
-          <div className={STYLES_LEFT_ACTIONS}>
-            {muteElement}
-          </div>
-        </div>
+        <DevelopmentLogs
+          logs={this.context.logs}
+          onClearLogs={this.context.clearLogs}
+        />
       </div>
     );
   };

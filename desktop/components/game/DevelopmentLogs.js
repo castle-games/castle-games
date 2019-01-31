@@ -19,8 +19,8 @@ const STYLES_CONTAINER = css`
   width: 100%;
   height: 100%;
   overflow-y: scroll;
-  background ${Constants.colors.background};
-  color: ${Constants.colors.white};
+  background ${Constants.colors.white};
+  color: ${Constants.colors.black};
 
   ::-webkit-scrollbar {
     display: none;
@@ -55,7 +55,7 @@ const STYLES_LOG_RIGHT = css`
 `;
 
 const STYLES_FIXED_HEADER = css`
-  background: ${Constants.colors.background};
+  background: ${Constants.colors.white};
   opacity: 0.8;
   position: absolute;
   top: 0;
@@ -64,10 +64,10 @@ const STYLES_FIXED_HEADER = css`
 `;
 
 const STYLES_SPACER = css`
-  height: 48px;
+  height: 24px;
 `;
 
-export default class CoreDevelopmentLogs extends React.Component {
+export default class DevelopmentLogs extends React.Component {
   _logs;
   _container;
 
@@ -107,14 +107,11 @@ export default class CoreDevelopmentLogs extends React.Component {
     return (
       <div className={STYLES_FIXED_CONTAINER}>
         <div className={STYLES_FIXED_HEADER}>
-          <UIHeaderDismiss>
-            <UIControl
-              style={{ marginRight: 12 }}
-              onClick={this.props.onClearLogs}>
-              Clear logs
-            </UIControl>
-            <UIControl onClick={this.props.onLoadHelp}>Get Help</UIControl>
-          </UIHeaderDismiss>
+          <UIControl
+            style={{ marginRight: 12 }}
+            onClick={this.props.onClearLogs}>
+            Clear logs
+          </UIControl>
         </div>
         <div
           className={STYLES_CONTAINER}
