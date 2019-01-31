@@ -2,6 +2,7 @@ import * as React from 'react';
 import { css } from 'react-emotion';
 
 import * as Constants from '~/common/constants';
+import { DevelopmentContext } from '~/contexts/DevelopmentContext';
 import UIButtonDarkSmall from '~/core-components/reusable/UIButtonDarkSmall';
 import * as SVG from '~/core-components/primitives/svg';
 import * as Strings from '~/common/strings';
@@ -40,21 +41,12 @@ const STYLES_CREATOR_ROW = css`
 `;
 
 export default class GameActionsBar extends React.Component {
-  render() {
-    let muteIcon = (this.props.isMuted) ?
-        <SVG.Mute height="14px" /> :
-        <SVG.Audio height="14px" />;
-    let muteElement = (
-      <UIButtonDarkSmall
-        icon={muteIcon}
-        onClick={this.props.onToggleMute}
-        style={{ background: Constants.colors.black }}
-        />
-    );
+  static contextType = DevelopmentContext;
+
+  _renderPlaying = (game, muteElement) => {
     let name = 'Untitled';
     let username = 'Anonymous';
     let isRegistered = false;
-    let { game } = this.props;
     if (game) {
       name = (game.name) ? game.name : name;
       isRegistered = (!Strings.isEmpty(game.gameId));
@@ -77,5 +69,37 @@ export default class GameActionsBar extends React.Component {
         </div>
       </div>
     );
+  };
+
+  _renderDeveloping = (game, muteElement) => {
+    return (
+      <div className={STYLES_CONTAINER}>
+        <div className={STYLES_NAME_ROW}>
+          Logs for {game.name ? game.name : 'a game'}
+          <div className={STYLES_LEFT_ACTIONS}>
+            {muteElement}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  render() {
+    let muteIcon = (this.props.isMuted) ?
+        <SVG.Mute height="14px" /> :
+        <SVG.Audio height="14px" />;
+    let muteElement = (
+      <UIButtonDarkSmall
+        icon={muteIcon}
+        onClick={this.props.onToggleMute}
+        style={{ background: Constants.colors.black }}
+        />
+    );
+    let { game } = this.props;
+    if (this.context.isDeveloping) {
+      return this._renderDeveloping(game, muteElement);
+    } else {
+      return this._renderPlaying(game, muteElement);
+    }
   }
 }

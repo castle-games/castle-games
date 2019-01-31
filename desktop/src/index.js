@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import * as React from 'react';
 import * as Constants from '~/common/constants';
 import { CurrentUserContextDefaults } from '~/contexts/CurrentUserContext';
+import { DevelopmentContextDefaults } from '~/contexts/DevelopmentContext';
 import { NavigationContextDefaults } from '~/contexts/NavigationContext';
 import * as Network from '~/common/network';
 import * as Actions from '~/common/actions';
@@ -64,6 +65,7 @@ const INITIAL_STATE_OFFLINE = {
   isOffline: true,
   navigation: NavigationContextDefaults,
   currentUser: CurrentUserContextDefaults,
+  development: DevelopmentContextDefaults,
 };
 
 const run = async () => {

@@ -7,6 +7,7 @@ import * as Browser from '~/common/browser';
 import * as Constants from '~/common/constants';
 import { History, HistoryContext } from '~/contexts/HistoryContext';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
+import { DevelopmentContext } from '~/contexts/DevelopmentContext';
 import { NavigationContext } from '~/contexts/NavigationContext';
 import * as NativeUtil from '~/native/nativeutil';
 import * as Strings from '~/common/strings';
@@ -16,6 +17,9 @@ import SocialContainer from '~/components/SocialContainer.js';
 
 const isReloadHotkey = isKeyHotkey('mod+r');
 const isFullscreenHotkey = isKeyHotkey('mod+f');
+const isDevelopmentHotkey = isKeyHotkey('mod+j');
+
+const NATIVE_CHANNELS_POLL_INTERVAL = 300;
 
 const STYLES_CONTAINER = css`
   font-family: ${Constants.font.default};
@@ -29,6 +33,8 @@ const STYLES_CONTAINER = css`
 `;
 
 export default class App extends React.Component {
+  _nativeChannelsPollTimeout;
+
   constructor(props) {
     super();
 
@@ -43,6 +49,7 @@ export default class App extends React.Component {
     this.state.currentUser.setCurrentUser = this.setCurrentUser;
     this.state.currentUser.clearCurrentUser = this.clearCurrentUser;
     this.state.currentUser.refreshCurrentUser = this.refreshCurrentUser;
+    this.state.development.setIsDeveloping = this.setIsDeveloping;
     this.state.history = new History(props.storage);
   }
 
@@ -51,14 +58,26 @@ export default class App extends React.Component {
     window.addEventListener('keydown', this._handleKeyDownEvent);
     window.addEventListener('CASTLE_SYSTEM_KEY_PRESSED', this._handleLuaSystemKeyDownEvent);
 
-    NativeUtil.setBrowserReady(() => {});
+    NativeUtil.setBrowserReady(() => {
+      this._processNativeChannels();
+    });
   }
   
   componentWillUnmount() {
     window.removeEventListener('nativeOpenUrl', this._handleNativeOpenUrlEvent);
     window.removeEventListener('keydown', this._handleKeyDownEvent);
     window.removeEventListener('CASTLE_SYSTEM_KEY_PRESSED', this._handleLuaSystemKeyDownEvent);
+    window.clearTimeout(this._nativeChannelsPollTimeout);
   }
+
+  // interface with lua channels
+  _processNativeChannels = async () => {
+    await NativeUtil.readLogChannelsAsync();
+    this._nativeChannelsPollTimeout = window.setTimeout(
+      this._processNativeChannels,
+      NATIVE_CHANNELS_POLL_INTERVAL
+    );
+  };
 
   // event listeners
   _handleNativeOpenUrlEvent = (e) => {
@@ -79,6 +98,9 @@ export default class App extends React.Component {
         NativeUtil.setWindowFrameFullscreen(!(await NativeUtil.getWindowFrameFullscreen()));
       })();
       return;
+    }
+    if (isDevelopmentHotkey(e)) {
+      return this.setIsDeveloping(!this.state.development.isDeveloping);
     }
   };
 
@@ -250,19 +272,31 @@ export default class App extends React.Component {
     this.setState(updates);
   }
 
+  // development actions
+  setIsDeveloping = (isDeveloping) => {
+    this.setState({
+      development: {
+        ...this.state.development,
+        isDeveloping,
+      }
+    });
+  };
+
   render() {
     return (
       <NavigationContext.Provider value={this.state.navigation}>
         <CurrentUserContext.Provider value={this.state.currentUser}>
           <HistoryContext.Provider value={this.state.history}>
-            <div className={STYLES_CONTAINER}>
-              <SocialContainer />
-              <ContentContainer
-                featuredGames={this.state.featuredGames}
-                allContent={this.state.allContent}
-              />
-            </div>
-            </HistoryContext.Provider>
+            <DevelopmentContext.Provider value={this.state.development}>
+              <div className={STYLES_CONTAINER}>
+                <SocialContainer />
+                <ContentContainer
+                  featuredGames={this.state.featuredGames}
+                  allContent={this.state.allContent}
+                />
+              </div>
+            </DevelopmentContext.Provider>
+          </HistoryContext.Provider>
         </CurrentUserContext.Provider>
       </NavigationContext.Provider>
     );
