@@ -7,6 +7,7 @@ const STYLES_CONTAINER = css`
   font-family: ${Constants.font.default};
   background: ${Constants.colors.white};
   width: 30vh;
+  min-width: 280px;
 `;
 
 export default class SocialContainer extends React.Component {

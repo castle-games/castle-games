@@ -21,9 +21,12 @@ const STYLES_CONTAINER = css`
   justify-content: space-between;
 `;
 
+// the height and padding force this element
+// to maintain 16:9 aspect ratio.
 const STYLES_GAME_CONTAINER = css`
   width: 100%;
-  height: 100%;
+  height: 0;
+  padding-top: 56.25%;
   position: relative;
   align-items: center;
   justify-content: center;
@@ -46,6 +49,7 @@ class GameScreen extends React.Component {
   constructor(props) {
     super(props);
     this._updateGameWindow(null, null);
+    window.addEventListener('resize', this._updateGameWindowFrame);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -54,6 +58,7 @@ class GameScreen extends React.Component {
 
   componentWillUnmount() {
     GameWindow.setVisible(false);
+    window.removeEventListener('resize', this._updateGameWindowFrame);
   }
 
   _closeGame = async () => {
@@ -130,7 +135,6 @@ class GameScreen extends React.Component {
             this._gameContainerReference = ref;
             this._updateGameWindowFrame();
           }}>
-          Its the game
         </div>
         <GameActionsBar
           game={this.props.game}

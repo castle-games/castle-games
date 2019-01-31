@@ -8,9 +8,9 @@ import * as Strings from '~/common/strings';
 
 const STYLES_CONTAINER = css`
   background: ${Constants.colors.white};
-  height: 72px;
-  flex-shrink: 0;
+  min-height: 96px;
   width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   flex-direction: column;
