@@ -259,6 +259,7 @@ export default class App extends React.Component {
               <SocialContainer />
               <ContentContainer
                 featuredGames={this.state.featuredGames}
+                allContent={this.state.allContent}
               />
             </div>
             </HistoryContext.Provider>

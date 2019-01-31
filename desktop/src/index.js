@@ -57,10 +57,8 @@ document.body.appendChild(loader);
 
 const INITIAL_STATE_OFFLINE = {
   allContent: {
-    media: [],
-  },
-  searchResults: {
-    media: [],
+    games: [],
+    users: [],
   },
   featuredGames: [],
   isOffline: true,
@@ -82,9 +80,6 @@ const run = async () => {
 
   let state = Object.assign({}, INITIAL_STATE_OFFLINE, {
     allContent,
-    searchResults: {
-      ...allContent,
-    },
     featuredGames,
     isOffline,
   });
