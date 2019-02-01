@@ -9,25 +9,28 @@ const STYLES_CONTAINER = css`
 `;
 
 const STYLES_GAME_ITEM = css`
-  border-radius: 8px;
+  display: inline-block;
+  margin-bottom: 16px;
+`;
+
+const STYLES_GAME_HOVER_BOX = css`
   overflow: hidden;
   background: ${Constants.colors.blue};
   color: ${Constants.colors.black};
-  display: inline-block;
-  width: 184px;
-  height: 256px;
+  width: 384px;
+  height: 216px;
   flex-shrink: 0;
   transition: 200ms ease all;
   transform: scale(1);
   cursor: pointer;
-  margin: 0 24px 24px 0;
+  margin: 0 24px 8px 0;
   background-size: cover;
   background-position: 50% 50%;
   display: flex;
   justify-content: flex-end;
   flex-direction: column;
   color: ${Constants.colors.white};
-  border: 2px solid ${Constants.colors.blue};
+  border: 1px solid ${Constants.colors.border};
 
   :hover {
     transform: scale(1.025);
@@ -55,18 +58,41 @@ const STYLES_GAME_ITEM_BOTTOM_DESCRIPTION = css`
   line-height: 1.725;
 `;
 
+const STYLES_GAME_ACTIONS = css`
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: ${Constants.colors.black80};
+  cursor: pointer;
+`;
+
 class UIGameCell extends React.Component {
   render() {
-    const name = (this.props.game.name) ? this.props.game.name : '';
-    return (
-      <div
-        className={STYLES_GAME_ITEM}
-        onClick={() => this.props.onGameSelect(this.props.game)}
-        style={{ backgroundImage: this.props.src ? `url(${this.props.src})` : null }}>
-        <div className={STYLES_GAME_ITEM_BOTTOM}>
-          <div className={STYLES_GAME_ITEM_BOTTOM_HEADING}>{name}</div>
-          <div className={STYLES_GAME_ITEM_BOTTOM_DESCRIPTION}>{this.props.children}</div>
+    const name = (this.props.game.name) ? this.props.game.name : 'Untitled';
+    const creator = (this.props.game.user && this.props.game.user.name)
+          ? this.props.game.user.name
+          : 'anonymous'
+    let maybeSyncElement;
+    if (this.props.onGameUpdate) {
+      maybeSyncElement = (
+        <div className={STYLES_GAME_ACTIONS}
+             onClick={() => this.props.onGameUpdate(this.props.game)}>
+          Sync
         </div>
+      );
+    }
+    return (
+      <div className={STYLES_GAME_ITEM}>
+        <div
+          className={STYLES_GAME_HOVER_BOX}
+          onClick={() => this.props.onGameSelect(this.props.game)}
+          style={{ backgroundImage: this.props.src ? `url(${this.props.src})` : null }}>
+          <div className={STYLES_GAME_ITEM_BOTTOM}>
+            <div className={STYLES_GAME_ITEM_BOTTOM_HEADING}>{name}</div>
+            <div className={STYLES_GAME_ITEM_BOTTOM_DESCRIPTION}>by {creator}</div>
+          </div>
+        </div>
+        {maybeSyncElement}
       </div>
     );
   }
@@ -83,6 +109,7 @@ export default class GameGrid extends React.Component {
             <UIGameCell
               key={key}
               onGameSelect={this.props.onGameSelect}
+              onGameUpdate={this.props.onGameUpdate}
               src={m.coverImage && m.coverImage.imgixUrl}
               game={m}
             />

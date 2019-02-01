@@ -11,8 +11,8 @@ import UIHorizontalNavigation from '~/components/reusable/UIHorizontalNavigation
 import UIEmptyState from '~/components/reusable/UIEmptyState';
 
 import EditProfile from '~/components/profile/EditProfile';
-import EditGame from '~/components/profile/EditGame';
-import UIGameList from '~/components/reusable/UIGameList';
+import RegisterGame from '~/components/profile/RegisterGame';
+import UIGameGrid from '~/components/reusable/UIGameGrid';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigationContext } from '~/contexts/NavigationContext';
 import ProfileHeader from '~/components/profile/ProfileHeader';
@@ -36,7 +36,19 @@ const STYLES_CONTAINER = css`
   }
 `;
 
+const STYLES_GAME_GRID = css`
+  border-top: 16px solid ${Constants.colors.background};
+  padding: 32px;
+`;
+
 class ProfileScreen extends React.Component {
+  static defaultProps = {
+    creator: null,
+    viewer: null,
+    onAfterSave: () => {},
+    navigateToGame: (game) => {},
+    navigateToUserProfile: (user) => {},
+  };
   state = {
     mode: 'games',
     isAddingGame: false,
@@ -69,9 +81,7 @@ class ProfileScreen extends React.Component {
   _onAfterAddGame = () => {
     // after adding a game, back out to the full list of games
     this._onShowGames();
-    if (this.props.onAfterSave) {
-      this.props.onAfterSave();
-    }
+    this.props.onAfterSave();
   };
 
   _getNavigationItems = (isOwnProfile) => {
@@ -114,22 +124,22 @@ class ProfileScreen extends React.Component {
     const { isAddingGame } = this.state;
     if (isAddingGame) {
       return (
-        <EditGame
+        <RegisterGame
           onAfterSave={this._onAfterAddGame}
         />
       );
     } else {
       const gameListElement =
         creator.gameItems && creator.gameItems.length ? (
-          <UIGameList
-            noTitleRow
-            viewer={viewer}
-            creator={creator}
-            gameItems={creator.gameItems}
-            onGameSelect={this.props.navigation.navigateToGame}
-            onUserSelect={this.props.navigation.navigateToUserProfile}
-            onGameUpdate={this._updateGame}
-          />
+          <div class={STYLES_GAME_GRID}>
+            <UIGameGrid
+              viewer={viewer}
+              creator={creator}
+              gameItems={creator.gameItems}
+              onGameSelect={this.props.navigateToGame}
+              onGameUpdate={this._updateGame}
+            />
+          </div>
         ) : (
           <UIEmptyState
             title="No games yet"
@@ -197,7 +207,7 @@ class ProfileScreen extends React.Component {
         <ProfileHeader
           creator={creator}
           isOwnProfile={isOwnProfile}
-          onGameSelect={this.props.navigation.navigateToGame}
+          onGameSelect={this.props.navigateToGame}
         />
         <UIHorizontalNavigation
           items={this._getNavigationItems(isOwnProfile)}
@@ -212,13 +222,12 @@ class ProfileScreen extends React.Component {
 
 export default class ProfileScreenWithContext extends React.Component {
   _renderProfile = (navigation, currentUser) => {
-    const viewer = currentUser.user;
-    const creator = navigation.userProfileShown;
     return (
       <ProfileScreen
-        navigation={navigation}
-        viewer={viewer}
-        creator={creator}
+        navigateToGame={navigation.navigateToGame}
+        navigateToUserProfile={navigation.navigateToUserProfile}
+        viewer={currentUser.user}
+        creator={navigation.userProfileShown}
         onSignOut={currentUser.clearCurrentUser}
         onAfterSave={currentUser.refreshCurrentUser}
       />

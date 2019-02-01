@@ -419,9 +419,7 @@ function _validateRegisterGameResult(result) {
     } else if (code === 'REGISTER_GAME_INVALID_USERNAME') {
       throw new Error(`The \`username\` given at this url does not match your username.`);
     } else {
-      throw new Error(
-        `There was a problem looking up the game at the url you provided: ${error.message}`
-      );
+      throw new Error(error.message);
     }
   }
   return true;
@@ -460,7 +458,13 @@ export async function previewGameAtUrl(url) {
           name,
           url,
           user {
+            name,
             username,
+          },
+          coverImage {
+            imgixUrl
+            height
+            width
           },
           description,
           createdTime,
