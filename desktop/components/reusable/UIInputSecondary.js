@@ -18,8 +18,8 @@ const STYLES_INPUT = css`
   max-width: 480px;
   font-weight: 600;
   border: 1px solid ${Constants.colors.border};
-  background: ${Constants.colors.black};
-  color: ${Constants.colors.white};
+  background: ${Constants.colors.background};
+  color: ${Constants.colors.black};
   font-size: 16px;
   height: 64px;
   margin: 0 0 0 0;
@@ -27,14 +27,12 @@ const STYLES_INPUT = css`
 
   :focus {
     outline: 0;
-    color: ${Constants.colors.white};
-    border: 1px solid ${Constants.colors.white};
-    background: ${Constants.colors.foreground};
+    border: 1px solid ${Constants.colors.blue};
   }
 `;
 
 const STYLES_LABEL = css`
-  color: ${Constants.colors.white};
+  color: ${Constants.colors.black};
   font-size: 8px;
   text-transform: uppercase;
   letter-spacing: 0.5px;

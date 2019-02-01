@@ -6,7 +6,7 @@ import * as Constants from '~/common/constants';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import * as Strings from '~/common/strings';
 
-import UIInput from '~/components/reusable/UIInput';
+import UIInputSecondary from '~/components/reusable/UIInputSecondary';
 import UIButton from '~/components/reusable/UIButton';
 import UIHeadingGroup from '~/components/reusable/UIHeadingGroup';
 import UILink from '~/components/reusable/UILink';
@@ -20,8 +20,8 @@ const STYLES_CONTAINER = css`
   width: 100%;
   height: 100%;
   overflow-y: scroll;
-  background ${Constants.colors.background};
-  color: ${Constants.colors.white};
+  background ${Constants.colors.backgroundTint};
+  color: ${Constants.colors.black};
 
   ::-webkit-scrollbar {
     display: none;
@@ -37,7 +37,7 @@ const STYLES_CONTENTS = css`
 `;
 
 const STYLES_FOOTER = css`
-  color: ${Constants.colors.white80};
+  color: ${Constants.colors.black80};
   font-size: 12px;
   font-weight: 400;
   line-height: 1.5;
@@ -266,7 +266,7 @@ export default class LoginSignupScreen extends React.Component {
             </UIHeadingGroup>
             {maybeErrorNode}
 
-            <UIInput
+            <UIInputSecondary
               key="login-password"
               autoFocus={true}
               label="password"
@@ -301,7 +301,7 @@ export default class LoginSignupScreen extends React.Component {
           <form onSubmit={this._handleSignUpAsync}>
             <UIHeadingGroup title="Create a Castle account" />
             {maybeErrorNode}
-            <UIInput
+            <UIInputSecondary
               autoFocus
               label="username"
               name="username"
@@ -309,7 +309,7 @@ export default class LoginSignupScreen extends React.Component {
               onChange={this._handleChange}
               value={this.state.username}
             />
-            <UIInput
+            <UIInputSecondary
               label="name"
               name="name"
               type="text"
@@ -317,7 +317,7 @@ export default class LoginSignupScreen extends React.Component {
               onChange={this._handleChange}
               value={this.state.name}
             />
-            <UIInput
+            <UIInputSecondary
               label="email"
               name="email"
               type="email"
@@ -327,7 +327,7 @@ export default class LoginSignupScreen extends React.Component {
               value={this.state.email}
             />
 
-            <UIInput
+            <UIInputSecondary
               label="password"
               name="password"
               type="password"
@@ -354,7 +354,7 @@ export default class LoginSignupScreen extends React.Component {
             <UIHeadingGroup title="Sign in or create account">
               Sign in or register with Castle to share art and games you've made.
             </UIHeadingGroup>
-            <UIInput
+            <UIInputSecondary
               value=""
               autoFocus
               label="Email or Username"

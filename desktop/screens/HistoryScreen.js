@@ -16,8 +16,8 @@ const STYLES_CONTAINER = css`
   width: 100%;
   height: 100%;
   overflow-y: scroll;
-  background ${Constants.colors.background};
-  color: ${Constants.colors.white};
+  background ${Constants.colors.backgroundTint};
+  color: ${Constants.colors.black};
 
   ::-webkit-scrollbar {
     display: none;
@@ -25,23 +25,14 @@ const STYLES_CONTAINER = css`
   }
 `;
 
-const STYLES_HEADING = css`
-  color: ${Constants.colors.white};
-  font-size: 48px;
-  line-height: 52px;
-  font-weight: 400;
-  margin: 16px;
-`;
-
 const STYLES_PARAGRAPH = css`
   font-size: 14px;
   font-weight: 200;
-  color: ${Constants.colors.white};
+  color: ${Constants.colors.black};
   margin: 0 0 0 16px;
 `;
 
 const STYLES_ACTIONS = css`
-  color: ${Constants.colors.white};
   padding: 16px;
   border-top: 1px solid ${Constants.colors.border};
 `;
@@ -95,9 +86,6 @@ class HistoryScreen extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
-        <div className={STYLES_HEADING}>
-          History
-        </div>
         {contentElement}
       </div>
     );

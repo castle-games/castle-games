@@ -28,7 +28,7 @@ const STYLES_BODY_LEFT = css`
 const STYLES_BODY_RIGHT = css`
   min-width: 25%;
   width: 100%;
-  color: ${Constants.colors.white};
+  color: ${Constants.colors.black};
 `;
 
 const STYLES_TOP = css`
@@ -63,22 +63,22 @@ const STYLES_LINKS_ROW = css`
 `;
 
 const STYLES_LINK_ITEM = css`
-  color: ${Constants.colors.white60};
+  color: ${Constants.colors.black};
   font-size: 14px;
   margin-right: 24px;
   cursor: pointer;
 `;
 
 const STYLES_LINK = css`
-  color: ${Constants.colors.white};
+  color: ${Constants.colors.black};
 
   :hover {
-    color: ${Constants.colors.yellow};
+    color: ${Constants.colors.selected};
   }
 `;
 
 const STYLES_CREATOR_IDENTITY = css`
-  margin-bottom: 8px;
+  margin-bottom: 16px;
 `;
 
 export default class ProfileHeader extends React.Component {
@@ -100,7 +100,8 @@ export default class ProfileHeader extends React.Component {
     let linkElements = [];
     const { websiteUrl, itchUsername, twitterUsername } = creator;
 
-    let statusElement = (
+    // TODO: restore UserPlay / UserActivity
+    /* let statusElement = (
       <UIUserStatusIndicator
         user={creator}
         onMediaSelect={this.props.onMediaSelect}
@@ -115,7 +116,7 @@ export default class ProfileHeader extends React.Component {
         </div>
         )
       );
-    }
+    } */
 
     if (websiteUrl) {
       const { urlToDisplay, urlToOpen } = Urls.canonizeUserProvidedUrl(websiteUrl);
@@ -183,10 +184,8 @@ export default class ProfileHeader extends React.Component {
       <div
         className={STYLES_CONTAINER}
         style={this.props.style}
-        onClick={this.props.onClick}
-        style={{ background: Constants.brand.background }}>
+        onClick={this.props.onClick}>
         <div className={STYLES_BODY}>
-          <div className={STYLES_BODY_LEFT} />
           <div className={STYLES_BODY_RIGHT}>
             <div className={STYLES_TOP}>
               <UIAvatar

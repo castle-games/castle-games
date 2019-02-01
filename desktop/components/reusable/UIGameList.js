@@ -19,16 +19,16 @@ const STYLES_ICON_COLUMN = css`
 
 const STYLES_CONTAINER = css`
   padding: 0 0 0 0;
-  color: ${Constants.colors.white};
+  color: ${Constants.colors.black};
 `;
 
 const STYLES_ROW_TITLE = css`
-  font-weight: 400;
+  font-weight: 700;
   font-size: 12px;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  background: ${Constants.colors.foreground};
+  background: ${Constants.colors.backgroundTint};
 `;
 
 const STYLES_ROW = css`
@@ -110,7 +110,7 @@ export default class GameList extends React.Component {
 
     let maybeTitleRow;
     if (this.props.noTitleRow) {
-      maybeTitleRow = (<div style={{ borderTop: `16px solid ${Constants.colors.border}` }} />);
+      maybeTitleRow = (<div style={{ borderTop: `16px solid ${Constants.colors.background}` }} />);
     } else {
       const ownerCol = (isOwner) ? (<div className={STYLES_COLUMN_NO_INTERACTION} />) : null;
       maybeTitleRow = (

@@ -69,9 +69,9 @@ const STYLES_INPUT_READONLY = css`
   cursor: default;
 `;
 
-export default class CoreBrowseSearchInput extends React.Component {
+export default class SearchInput extends React.Component {
   static defaultProps = {
-    searchQuery: '',
+    query: '',
   };
 
   _input;
@@ -83,7 +83,7 @@ export default class CoreBrowseSearchInput extends React.Component {
     if (this.props.readOnly) {
       queryElement = (
         <p className={STYLES_INPUT_READONLY}>
-          {this.props.searchQuery}
+          {this.props.query}
         </p>
       );
     } else {
@@ -93,7 +93,7 @@ export default class CoreBrowseSearchInput extends React.Component {
             this._input = c;
           }}
           className={STYLES_INPUT}
-          value={this.props.searchQuery}
+          value={this.props.query}
           name={this.props.name}
           placeholder="Search for games and people..."
           onSubmit={this.props.onSubmit}
@@ -111,7 +111,7 @@ export default class CoreBrowseSearchInput extends React.Component {
         <div className={STYLES_CONTAINER_MIDDLE}>
           {queryElement}
         </div>
-        {!Strings.isEmpty(this.props.searchQuery) ? (
+        {!Strings.isEmpty(this.props.query) ? (
           <div className={STYLES_CONTAINER_RIGHT} onClick={this.props.onSearchReset}>
             <SVG.Dismiss height="16px" />
           </div>

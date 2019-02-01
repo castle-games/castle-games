@@ -11,7 +11,7 @@ const STYLES_CONTAINER = css`
 const STYLES_GAME_ITEM = css`
   border-radius: 8px;
   overflow: hidden;
-  background: ${Constants.colors.yellow};
+  background: ${Constants.colors.blue};
   color: ${Constants.colors.black};
   display: inline-block;
   width: 184px;
@@ -27,7 +27,7 @@ const STYLES_GAME_ITEM = css`
   justify-content: flex-end;
   flex-direction: column;
   color: ${Constants.colors.white};
-  border: 2px solid ${Constants.colors.yellow};
+  border: 2px solid ${Constants.colors.blue};
 
   :hover {
     transform: scale(1.025);

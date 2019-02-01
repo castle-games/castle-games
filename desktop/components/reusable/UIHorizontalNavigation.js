@@ -28,7 +28,7 @@ class UINavigationItem extends React.Component {
         className={STYLES_NAVIGATION_ITEM}
         style={{
           marginRight: 16,
-          background: this.props.selected ? null : Constants.colors.background,
+          background: this.props.selected ? Constants.colors.background : Constants.colors.backgroundTint,
         }}
         onClick={() => this.props.onSelect(key)}>
         {label}

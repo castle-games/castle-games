@@ -14,18 +14,7 @@ const MAX_NUM_FEATURED_GAMES = 4;
 const STYLES_CONTAINER = css`
   width: 100%;
   height: 100%;
-`;
-
-const STYLES_FOOTER = css`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  border-top: 1px solid ${Constants.colors.border};
-`;
-
-const STYLES_FOOTER_CONTENT = css`
-  margin: 16px 32px 16px 0;
-  cursor: pointer;
+  background: ${Constants.colors.backgroundTint};
 `;
 
 const STYLES_TITLE = css`
@@ -38,20 +27,13 @@ const STYLES_TITLE = css`
 `;
 
 const STYLES_HEADING = css`
-  color: ${Constants.colors.white};
+  color: ${Constants.colors.black};
   font-size: 18px;
   font-weight: 600;
 `;
 
-const STYLES_SUB_PARAGRAPH = css`
-  color: ${Constants.colors.white};
-  font-size: 14px;
-  margin-top: 8px;
-  line-height: 1.725;
-`;
-
 const STYLES_PARAGRAPH = css`
-  color: ${Constants.colors.white};
+  color: ${Constants.colors.black};
   font-size: 14px;
   margin-top: 16px;
   margin-bottom: 12px;
@@ -101,12 +83,12 @@ const STYLES_HELP_GLYPH = css`
   vertical-align: top;
   margin: 0 12px 0 0;
   font-size: 12px;
-  color: ${Constants.colors.white80};
+  color: ${Constants.colors.black80};
 `;
 
 const STYLES_HELP_ACTION = css`
   cursor: pointer;
-  color: ${Constants.colors.yellow};
+  color: ${Constants.colors.blue};
   line-height: 1.5rem;
   font-size: 14px;
   padding: 6px 0 2px 4px;
@@ -117,10 +99,6 @@ export default class HomeScreen extends React.Component {
     featuredGames: [],
   };
   static contextType = NavigationContext;
-
-  _handleClickFooter = () => {
-    NativeUtil.openExternalURL('http://www.playcastle.io');
-  };
 
   _handleClickExamples = () => {
     NativeUtil.openExternalURL('http://www.playcastle.io/examples');
@@ -219,12 +197,6 @@ export default class HomeScreen extends React.Component {
                 <span>Join Discord</span>
               </div>
             </div>
-          </div>
-        </div>
-        <div className={STYLES_FOOTER}>
-          <div />
-          <div className={STYLES_FOOTER_CONTENT} onClick={this._handleClickFooter}>
-            <img height="24px" src="static/castle-wordmark.png" />
           </div>
         </div>
       </div>

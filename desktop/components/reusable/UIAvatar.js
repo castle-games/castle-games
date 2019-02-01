@@ -6,11 +6,11 @@ import { css } from 'react-emotion';
 const STYLES_ICON = css`
   height: 48px;
   width: 48px;
-  background: ${Constants.colors.black};
+  background: ${Constants.colors.black60};
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 0 2px ${Constants.colors.white};
+  box-shadow: 0 0 0 1px ${Constants.colors.black};
   border-radius: 4px;
   background-position: 50% 50%;
   background-size: cover;
@@ -29,7 +29,7 @@ export default class UIAvatar extends React.Component {
     let maybeEmptyStyles = {};
     if (!maybeIconChild && !src) {
       maybeEmptyStyles = {
-        backgroundColor: Constants.colors.white25,
+        backgroundColor: Constants.colors.black25,
       };
     }
 

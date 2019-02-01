@@ -18,32 +18,20 @@ const STYLES_INPUT = css`
   border-radius: 4px;
   width: 100%;
   border: 1px solid ${Constants.colors.border};
-  background: ${Constants.colors.black};
-  color: ${Constants.colors.white};
+  background: ${Constants.colors.background};
+  color: ${Constants.colors.black};
   font-size: 16px;
   font-weight: 300;
   margin: 0 0 0 0;
   transition: 200ms ease all;
 
   :focus {
-    color: ${Constants.colors.white};
-    border: 1px solid ${Constants.colors.white};
-    background: ${Constants.colors.foreground};
+    border: 1px solid ${Constants.colors.blue};
   }
 `;
 
 const STYLES_LABEL = css`
-  color: ${Constants.colors.white};
-  font-size: 8px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  left: 10px;
-  top: 8px;
-  position: absolute;
-`;
-
-const STYLES_LABEL_WHITE = css`
-  color: ${Constants.colors.white};
+  color: ${Constants.colors.black};
   font-size: 8px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -80,9 +68,7 @@ export default class UITextArea extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTAINER} style={this.props.style}>
-        <label
-          className={!this.state.focus ? STYLES_LABEL : STYLES_LABEL_WHITE}
-        >
+        <label className={STYLES_LABEL}>
           {this.props.label}
         </label>
         <ContentEditor

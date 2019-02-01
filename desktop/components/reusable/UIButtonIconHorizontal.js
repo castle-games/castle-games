@@ -31,7 +31,7 @@ const STYLES_ICON_BUTTON_LEFT = css`
   display: inline-flex;
   height: 36px;
   width: 36px;
-  background: rgba(255, 255, 255, 0.8);
+  background: #fcfcfc;
   border-radius: 4px 0 0 4px;
   align-items: center;
   justify-content: center;
@@ -44,7 +44,7 @@ const STYLES_ICON_BUTTON_RIGHT = css`
   padding: 0 16px 0 16px;
   height: 36px;
   border-radius: 0 4px 4px 0;
-  background: rgba(255, 255, 255, 0.95);
+  background: #ffffff;
   text-transform: uppercase;
   letter-spacing: 1px;
 `;

@@ -65,7 +65,7 @@ export default class ContentNavigationBar extends React.Component {
     return (
       <div className={STYLES_CONTAINER}>
         <SearchInput
-          searchQuery={this.props.searchQuery}
+          query={this.props.searchQuery}
           onSearchReset={this.props.onSearchReset}
           onChange={this.props.onSearchChange}
           onSubmit={this.props.onSearchSubmit}

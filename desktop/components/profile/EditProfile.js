@@ -12,9 +12,8 @@ import UISubmitButton from '~/components/reusable/UISubmitButton';
 import UITextArea from '~/components/reusable/UITextArea';
 
 const STYLES_CONTAINER = css`
-  background ${Constants.colors.background};
-  color: ${Constants.colors.white};
-  border-top: 16px solid ${Constants.colors.foreground};
+  color: ${Constants.colors.black};
+  border-top: 16px solid ${Constants.colors.background};
   margin-bottom: 16px;
 `;
 

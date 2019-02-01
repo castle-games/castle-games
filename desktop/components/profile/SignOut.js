@@ -7,9 +7,8 @@ import { css } from 'react-emotion';
 import UIButtonIconHorizontal from '~/components/reusable/UIButtonIconHorizontal';
 
 const STYLES_CONTAINER = css`
-  background ${Constants.colors.background};
-  color: ${Constants.colors.white};
-  border-top: 16px solid ${Constants.colors.foreground};
+  color: ${Constants.colors.black};
+  border-top: 16px solid ${Constants.colors.background};
   display: flex;
   align-items: center;
   justify-content: center;

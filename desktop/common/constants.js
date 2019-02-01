@@ -15,7 +15,7 @@ export const base = {
   yellow: `#F7D002`,
   red: `#C63019`,
   gray: `#ececec`,
-  blue: '#033888',
+  blue: '#054ebb',
 };
 
 export const colors = {
@@ -35,7 +35,8 @@ export const colors = {
   black30: `rgba(0, 0, 0, 0.3)`,
   black20: `rgba(0, 0, 0, 0.2)`,
   black10: `rgba(0, 0, 0, 0.1)`,
-  background: base.black,
+  background: base.white,
+  backgroundTint: `#f0f0f0`,
   foreground: `#222`,
   border: `#232323`,
   card: `#444`,
@@ -47,7 +48,7 @@ export const colors = {
   yellow: base.yellow,
   purple: base.purple,
   red: base.red,
-  selected: base.yellow,
+  selected: base.blue,
   secondaryButtonSelected: '#B2BABB',
 };
 
