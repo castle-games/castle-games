@@ -40,18 +40,9 @@ export default class App extends React.Component {
     super();
 
     this.state = props.state;
-    this.state.navigation.navigateToHome = this.navigateToHome;
-    this.state.navigation.navigateToGameUrl = this.navigateToGameUrl;
-    this.state.navigation.navigateToGame = this.navigateToGame;
-    this.state.navigation.navigateToCurrentGame = this.navigateToCurrentGame;
-    this.state.navigation.navigateToCurrentUserProfile = this.navigateToCurrentUserProfile;
-    this.state.navigation.navigateToUserProfile = this.navigateToUserProfile;
-    this.state.navigation.navigateToHistory = this.navigateToHistory;
-    this.state.currentUser.setCurrentUser = this.setCurrentUser;
-    this.state.currentUser.clearCurrentUser = this.clearCurrentUser;
-    this.state.currentUser.refreshCurrentUser = this.refreshCurrentUser;
-    this.state.development.setIsDeveloping = this.setIsDeveloping;
-    this.state.development.clearLogs = this.clearLogs;
+    ['navigation', 'currentUser', 'development'].forEach(contextName => {
+      this._applyContextFunctions(contextName);
+    });
     this.state.history = new History(props.storage);
   }
 
@@ -71,6 +62,19 @@ export default class App extends React.Component {
     window.removeEventListener('CASTLE_SYSTEM_KEY_PRESSED', this._handleLuaSystemKeyDownEvent);
     window.clearTimeout(this._nativeChannelsPollTimeout);
   }
+
+  // the App component uses its own state as the value for our ContextProviders.
+  // for Contexts which include methods, this allows us to provide App's implementation
+  // of those methods.
+  // for example, this.state.navigation.navigateToGame = this.navigateToGame
+  _applyContextFunctions = (contextName) => {
+    const context = this.state[contextName];
+    Object.getOwnPropertyNames(context).forEach(prop => {
+      if (typeof context[prop] === 'function' && this.hasOwnProperty(prop)) {
+        this.state[contextName][prop] = this[prop];
+      }
+    });
+  };
 
   // interface with lua channels
   _processNativeChannels = async () => {
@@ -145,27 +149,23 @@ export default class App extends React.Component {
   };
 
   // navigation actions
-  navigateToHome = () => {
+  _navigateToContentMode = (mode) => {
     this.setState({
-      navigation: {
+      navigation: ({
         ...this.state.navigation,
-        contentMode: 'home',
+        contentMode: mode,
         timeLastNavigated: Date.now(),
-      },
+      }),
     });
-  }
+  };
+
+  navigateToHome = () => this._navigateToContentMode('home');
 
   navigateToCurrentGame = () => {
     if (!this.state.navigation.game) {
       throw new Error(`Cannot navigate to current game because there is no current game.`);
     }
-    this.setState({
-      navigation: {
-        ...this.state.navigation,
-        contentMode: 'game',
-        timeLastNavigated: Date.now(),
-      }
-    });
+    this._navigateToContentMode('game');
   };
 
   navigateToGameUrl = async (gameUrl) => {
@@ -203,13 +203,7 @@ export default class App extends React.Component {
       this.refreshCurrentUser();
     } else {
       // show sign in
-      this.setState({
-        navigation: ({
-          ...this.state.navigation,
-          contentMode: 'signin',
-          timeLastNavigated: Date.now(),
-        }),
-      });
+      this._navigateToContentMode('signin');
     }
   };
 
@@ -224,15 +218,7 @@ export default class App extends React.Component {
     });
   };
 
-  navigateToHistory = () => {
-    this.setState({
-      navigation: {
-        ...this.state.navigation,
-        contentMode: 'history',
-        timeLastNavigated: Date.now(),
-      },
-    });
-  };
+  navigateToHistory = () => this._navigateToContentMode('history');
 
   // currentUser actions
   setCurrentUser = (user) => {
