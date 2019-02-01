@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { css } from 'react-emotion';
 
-import UIAvatar from '~/core-components/reusable/UIAvatar';
+import UIAvatar from '~/components/reusable/UIAvatar';
 
 const STYLES_CONTAINER = css`
   display: flex;

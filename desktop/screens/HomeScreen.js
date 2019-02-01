@@ -1,13 +1,13 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as NativeUtil from '~/native/nativeutil';
-import * as SVG from '~/core-components/primitives/svg';
+import * as SVG from '~/components/primitives/svg';
 import shuffle from 'lodash.shuffle';
 import { css } from 'react-emotion';
 
 import { NavigationContext } from '~/contexts/NavigationContext';
-import UIButtonIconHorizontal from '~/core-components/reusable/UIButtonIconHorizontal';
-import GameGrid from '~/components/reusable/GameGrid';
+import UIButtonIconHorizontal from '~/components/reusable/UIButtonIconHorizontal';
+import UIGameGrid from '~/components/reusable/UIGameGrid';
 
 const MAX_NUM_FEATURED_GAMES = 4;
 
@@ -180,7 +180,7 @@ export default class HomeScreen extends React.Component {
         <div className={STYLES_SECTION}>
           <div className={STYLES_HEADING}>Play Games</div>
           <div className={STYLES_GAME}>
-            <GameGrid
+            <UIGameGrid
               gameItems={featuredGames}
               onUserSelect={this.context.naviateToUserProfile}
               onGameSelect={this.context.navigateToGame}

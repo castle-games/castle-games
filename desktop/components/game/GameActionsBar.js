@@ -4,8 +4,8 @@ import { css } from 'react-emotion';
 import * as Constants from '~/common/constants';
 import { DevelopmentContext } from '~/contexts/DevelopmentContext';
 import DevelopmentLogs from '~/components/game/DevelopmentLogs';
-import UIButtonDarkSmall from '~/core-components/reusable/UIButtonDarkSmall';
-import * as SVG from '~/core-components/primitives/svg';
+import UIButtonDarkSmall from '~/components/reusable/UIButtonDarkSmall';
+import * as SVG from '~/components/primitives/svg';
 import * as Strings from '~/common/strings';
 
 const STYLES_CONTAINER = css`

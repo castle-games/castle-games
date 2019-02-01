@@ -4,10 +4,10 @@ import * as Window from '~/common/window';
 
 import { css } from 'react-emotion';
 
-import UIControl from '~/core-components/reusable/UIControl';
-import UIHeaderDismiss from '~/core-components/reusable/UIHeaderDismiss';
-import UIEmptyState from '~/core-components/reusable/UIEmptyState';
-import UILogItem from '~/core-components/reusable/UILogItem';
+import UIControl from '~/components/reusable/UIControl';
+import UIHeaderDismiss from '~/components/reusable/UIHeaderDismiss';
+import UIEmptyState from '~/components/reusable/UIEmptyState';
+import UILogItem from '~/components/reusable/UILogItem';
 
 const STYLES_FIXED_CONTAINER = css`
   position: relative;

@@ -2,10 +2,10 @@ import * as React from 'react';
 import { css } from 'react-emotion';
 
 import * as Constants from '~/common/constants';
-import GameGrid from '~/components/reusable/GameGrid';
+import UIGameGrid from '~/components/reusable/UIGameGrid';
 import { NavigationContext } from '~/contexts/NavigationContext';
 import * as Strings from '~/common/strings';
-import UIButtonSecondary from '~/core-components/reusable/UIButtonSecondary';
+import UIButtonSecondary from '~/components/reusable/UIButtonSecondary';
 import * as Urls from '~/common/urls';
 
 const STYLES_CONTAINER = css`
@@ -172,7 +172,7 @@ export default class SearchScreen extends React.Component {
         <div className={STYLES_HEADING}>
           Games
         </div>
-        <GameGrid
+        <UIGameGrid
           gameItems={this.state.results.games}
           onUserSelect={this.context.naviateToUserProfile}
           onGameSelect={this.context.navigateToGame}

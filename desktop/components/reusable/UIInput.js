@@ -1,10 +1,9 @@
-import * as React from "react";
-import * as Constants from "~/common/constants";
-import Plain from "slate-plain-serializer";
-import { css } from "react-emotion";
+import * as React from 'react';
+import * as Constants from '~/common/constants';
 
-import ControlledInput from "~/core-components/primitives/ControlledInput";
-import ContentEditor from "~/editor/ContentEditor";
+import { css } from 'react-emotion';
+
+import ControlledInput from '~/components/primitives/ControlledInput';
 
 const STYLES_CONTAINER = css`
   position: relative;
@@ -13,22 +12,25 @@ const STYLES_CONTAINER = css`
 const STYLES_INPUT = css`
   display: block;
   box-sizing: border-box;
-  padding: 32px 8px 16px 8px;
-  min-height: 112px;
+  padding: 16px 8px 0 8px;
   border-radius: 4px;
   width: 100%;
-  border: 1px solid ${Constants.colors.border};
-  background: ${Constants.colors.black};
+  max-width: 480px;
+  font-weight: 600;
+  border: 2px solid ${Constants.colors.border};
+  background: ${Constants.colors.background};
+  box-shadow: 2px 2px 0 ${Constants.colors.foreground};
   color: ${Constants.colors.white};
   font-size: 16px;
-  font-weight: 300;
-  margin: 0 0 0 0;
+  height: 64px;
+  margin: 0 0 24px 0;
   transition: 200ms ease all;
 
   :focus {
-    color: ${Constants.colors.white};
-    border: 1px solid ${Constants.colors.white};
-    background: ${Constants.colors.foreground};
+    outline: 0;
+    border: 2px solid ${Constants.colors.white};
+    background: ${Constants.base.blue};
+    box-shadow: 2px 2px 0 ${Constants.colors.border};
   }
 `;
 
@@ -52,17 +54,16 @@ const STYLES_LABEL_WHITE = css`
   position: absolute;
 `;
 
-export default class UITextArea extends React.Component {
+export default class UIInput extends React.Component {
   static defaultProps = {
     onChange: () => {},
     onSubmit: () => {},
     onFocus: () => {},
     onBlur: () => {},
-    value: Plain.deserialize("")
   };
 
   state = {
-    focus: false
+    focus: false,
   };
 
   _handleFocus = e => {
@@ -79,20 +80,19 @@ export default class UITextArea extends React.Component {
 
   render() {
     return (
-      <div className={STYLES_CONTAINER} style={this.props.style}>
-        <label
-          className={!this.state.focus ? STYLES_LABEL : STYLES_LABEL_WHITE}
-        >
+      <div className={STYLES_CONTAINER}>
+        <label className={!this.state.focus ? STYLES_LABEL : STYLES_LABEL_WHITE}>
           {this.props.label}
         </label>
-        <ContentEditor
+        <ControlledInput
           autoFocus={this.props.autoFocus}
-          readOnly={this.props.readOnly}
           onChange={this.props.onChange}
           onFocus={this._handleFocus}
           onBlur={this._handleBlur}
           onSubmit={this.props.onSubmit}
+          name={this.props.name}
           placeholder={this.props.placeholder}
+          type={this.props.type}
           value={this.props.value}
           className={STYLES_INPUT}
         />

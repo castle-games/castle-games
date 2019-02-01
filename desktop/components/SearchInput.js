@@ -1,11 +1,11 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as Strings from '~/common/strings';
-import * as SVG from '~/core-components/primitives/svg';
+import * as SVG from '~/components/primitives/svg';
 
 import { css } from 'react-emotion';
 
-import ControlledInput from '~/core-components/primitives/ControlledInput';
+import ControlledInput from '~/components/primitives/ControlledInput';
 
 const STYLES_CONTAINER = css`
   display: flex;

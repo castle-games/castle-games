@@ -3,7 +3,7 @@ import * as Constants from '~/common/constants';
 
 import { css } from 'react-emotion';
 
-import ControlledInput from '~/core-components/primitives/ControlledInput';
+import ControlledInput from '~/components/primitives/ControlledInput';
 
 const STYLES_CONTAINER = css`
   position: relative;
@@ -17,20 +17,19 @@ const STYLES_INPUT = css`
   width: 100%;
   max-width: 480px;
   font-weight: 600;
-  border: 2px solid ${Constants.colors.border};
-  background: ${Constants.colors.background};
-  box-shadow: 2px 2px 0 ${Constants.colors.foreground};
+  border: 1px solid ${Constants.colors.border};
+  background: ${Constants.colors.black};
   color: ${Constants.colors.white};
   font-size: 16px;
   height: 64px;
-  margin: 0 0 24px 0;
+  margin: 0 0 0 0;
   transition: 200ms ease all;
 
   :focus {
     outline: 0;
-    border: 2px solid ${Constants.colors.white};
-    background: ${Constants.base.blue};
-    box-shadow: 2px 2px 0 ${Constants.colors.border};
+    color: ${Constants.colors.white};
+    border: 1px solid ${Constants.colors.white};
+    background: ${Constants.colors.foreground};
   }
 `;
 
@@ -44,17 +43,7 @@ const STYLES_LABEL = css`
   position: absolute;
 `;
 
-const STYLES_LABEL_WHITE = css`
-  color: ${Constants.colors.white};
-  font-size: 8px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  left: 10px;
-  top: 8px;
-  position: absolute;
-`;
-
-export default class UIInput extends React.Component {
+export default class UIInputSecondary extends React.Component {
   static defaultProps = {
     onChange: () => {},
     onSubmit: () => {},
@@ -80,10 +69,8 @@ export default class UIInput extends React.Component {
 
   render() {
     return (
-      <div className={STYLES_CONTAINER}>
-        <label className={!this.state.focus ? STYLES_LABEL : STYLES_LABEL_WHITE}>
-          {this.props.label}
-        </label>
+      <div className={STYLES_CONTAINER} style={this.props.style}>
+        <label className={STYLES_LABEL}>{this.props.label}</label>
         <ControlledInput
           autoFocus={this.props.autoFocus}
           onChange={this.props.onChange}

@@ -6,11 +6,11 @@ import * as Constants from '~/common/constants';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import * as Strings from '~/common/strings';
 
-import UIInput from '~/core-components/reusable/UIInput';
-import UIButton from '~/core-components/reusable/UIButton';
-import UIHeadingGroup from '~/core-components/reusable/UIHeadingGroup';
-import UILink from '~/core-components/reusable/UILink';
-import UIUserPreview from '~/core-components/reusable/UIUserPreview';
+import UIInput from '~/components/reusable/UIInput';
+import UIButton from '~/components/reusable/UIButton';
+import UIHeadingGroup from '~/components/reusable/UIHeadingGroup';
+import UILink from '~/components/reusable/UILink';
+import UIUserPreview from '~/components/reusable/UIUserPreview';
 
 const STYLES_CONTAINER = css`
   display: flex;

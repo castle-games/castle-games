@@ -12,7 +12,7 @@ import App from './App';
 
 import Storage from '~/common/storage';
 
-import { LOADER_STRING, injectGlobalLoaderStyles } from '~/core-components/primitives/loader';
+import { LOADER_STRING, injectGlobalLoaderStyles } from '~/components/primitives/loader';
 import { injectGlobal } from 'react-emotion';
 
 const injectGlobalStyles = () => injectGlobal`

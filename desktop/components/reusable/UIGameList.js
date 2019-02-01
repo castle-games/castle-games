@@ -1,11 +1,11 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as Strings from '~/common/strings';
-import * as SVG from '~/core-components/primitives/svg';
+import * as SVG from '~/components/primitives/svg';
 
 import { css } from 'react-emotion';
 
-import UIEmptyState from '~/core-components/reusable/UIEmptyState';
+import UIEmptyState from '~/components/reusable/UIEmptyState';
 
 const STYLES_ICON_COLUMN = css`
   width: 40px;

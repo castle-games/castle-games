@@ -1,13 +1,13 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
-import * as SVG from '~/core-components/primitives/svg';
+import * as SVG from '~/components/primitives/svg';
 
 import { css } from 'react-emotion';
 
-import GameList from '~/components/reusable/GameList';
-import UIButtonIconHorizontal from '~/core-components/reusable/UIButtonIconHorizontal';
-import UIEmptyState from '~/core-components/reusable/UIEmptyState';
-import UIControl from '~/core-components/reusable/UIControl';
+import UIGameList from '~/components/reusable/UIGameList';
+import UIButtonIconHorizontal from '~/components/reusable/UIButtonIconHorizontal';
+import UIEmptyState from '~/components/reusable/UIEmptyState';
+import UIControl from '~/components/reusable/UIControl';
 
 import { HistoryContext } from '~/contexts/HistoryContext';
 import { NavigationContext } from '~/contexts/NavigationContext';
@@ -75,7 +75,7 @@ class HistoryScreen extends React.Component {
     } else {
       contentElement = (
         <div>
-          <GameList
+          <UIGameList
             isHistory
             game={this.props.navigation.game}
             onGameSelect={this.props.navigation.navigateToGame}

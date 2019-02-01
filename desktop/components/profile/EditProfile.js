@@ -6,10 +6,10 @@ import * as Strings from '~/common/strings';
 import Plain from 'slate-plain-serializer';
 import { css } from 'react-emotion';
 
-import UIAvatar from '~/core-components/reusable/UIAvatar';
-import UIInputSecondary from '~/core-components/reusable/UIInputSecondary';
-import UISubmitButton from '~/core-components/reusable/UISubmitButton';
-import UITextArea from '~/core-components/reusable/UITextArea';
+import UIAvatar from '~/components/reusable/UIAvatar';
+import UIInputSecondary from '~/components/reusable/UIInputSecondary';
+import UISubmitButton from '~/components/reusable/UISubmitButton';
+import UITextArea from '~/components/reusable/UITextArea';
 
 const STYLES_CONTAINER = css`
   background ${Constants.colors.background};

@@ -5,10 +5,10 @@ import * as Constants from '~/common/constants';
 import { Value } from 'slate';
 import { css } from 'react-emotion';
 
-import UIEmptyState from '~/core-components/reusable/UIEmptyState';
-import UIInputSecondary from '~/core-components/reusable/UIInputSecondary';
-import UITextArea from '~/core-components/reusable/UITextArea';
-import UISubmitButton from '~/core-components/reusable/UISubmitButton';
+import UIEmptyState from '~/components/reusable/UIEmptyState';
+import UIInputSecondary from '~/components/reusable/UIInputSecondary';
+import UITextArea from '~/components/reusable/UITextArea';
+import UISubmitButton from '~/components/reusable/UISubmitButton';
 
 import ContentEditor from '~/editor/ContentEditor';
 import DefaultState from '~/editor/default.json';

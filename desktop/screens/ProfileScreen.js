@@ -1,22 +1,22 @@
 import * as React from 'react';
 import * as Actions from '~/common/actions';
 import * as Constants from '~/common/constants';
-import * as SVG from '~/core-components/primitives/svg';
+import * as SVG from '~/components/primitives/svg';
 
 import { css } from 'react-emotion';
 
-import UIButtonIconHorizontal from '~/core-components/reusable/UIButtonIconHorizontal';
-import UIControl from '~/core-components/reusable/UIControl';
-import UICardProfileHeader from '~/core-components/reusable/UICardProfileHeader';
-import UIHorizontalNavigation from '~/core-components/reusable/UIHorizontalNavigation';
-import UIEmptyState from '~/core-components/reusable/UIEmptyState';
+import UIButtonIconHorizontal from '~/components/reusable/UIButtonIconHorizontal';
+import UIControl from '~/components/reusable/UIControl';
+import UIHorizontalNavigation from '~/components/reusable/UIHorizontalNavigation';
+import UIEmptyState from '~/components/reusable/UIEmptyState';
 
 import EditProfile from '~/components/profile/EditProfile';
 import EditGame from '~/components/profile/EditGame';
-import CoreSignOut from '~/core-components/CoreSignOut';
-import GameList from '~/components/reusable/GameList';
+import UIGameList from '~/components/reusable/UIGameList';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigationContext } from '~/contexts/NavigationContext';
+import ProfileHeader from '~/components/profile/ProfileHeader';
+import SignOut from '~/components/profile/SignOut';
 
 const STYLES_HEADER_TEXT = css`
   font-size: 16px;
@@ -121,7 +121,7 @@ class ProfileScreen extends React.Component {
     } else {
       const gameListElement =
         creator.gameItems && creator.gameItems.length ? (
-          <GameList
+          <UIGameList
             noTitleRow
             viewer={viewer}
             creator={creator}
@@ -172,7 +172,7 @@ class ProfileScreen extends React.Component {
   _renderSignOutContent = (isOwnProfile) => {
     if (!isOwnProfile) return null;
     return (
-      <CoreSignOut onSignOut={this.props.onSignOut} />
+      <SignOut onSignOut={this.props.onSignOut} />
     );
   };
 

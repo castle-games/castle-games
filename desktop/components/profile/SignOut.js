@@ -1,10 +1,10 @@
 import * as React from 'react';
-import * as SVG from '~/core-components/primitives/svg';
+import * as SVG from '~/components/primitives/svg';
 import * as Constants from '~/common/constants';
 
 import { css } from 'react-emotion';
 
-import UIButtonIconHorizontal from '~/core-components/reusable/UIButtonIconHorizontal';
+import UIButtonIconHorizontal from '~/components/reusable/UIButtonIconHorizontal';
 
 const STYLES_CONTAINER = css`
   background ${Constants.colors.background};
@@ -27,7 +27,7 @@ const STYLES_PARAGRAPH = css`
   margin-bottom: 16px;
 `;
 
-export default class CoreSignOut extends React.Component {
+export default class SignOut extends React.Component {
   render() {
     const icon = (<SVG.Logout height="16px" />);
     return (

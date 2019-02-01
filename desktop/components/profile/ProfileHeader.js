@@ -7,8 +7,8 @@ import * as Urls from '~/common/urls';
 import { css } from 'react-emotion';
 import ContentEditor from '~/editor/ContentEditor';
 
-import UIAvatar from '~/core-components/reusable/UIAvatar';
-import UIUserStatusIndicator from '~/core-components/reusable/UIUserStatusIndicator';
+import UIAvatar from '~/components/reusable/UIAvatar';
+import UIUserStatusIndicator from '~/components/reusable/UIUserStatusIndicator';
 
 const STYLES_CONTAINER = css`
   padding: 16px 16px 0 16px;
@@ -81,7 +81,7 @@ const STYLES_CREATOR_IDENTITY = css`
   margin-bottom: 8px;
 `;
 
-export default class UICardProfileHeader extends React.Component {
+export default class ProfileHeader extends React.Component {
   _handleClickCreatorLink = url => {
     NativeUtil.openExternalURL(url);
   };
