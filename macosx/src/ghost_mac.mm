@@ -9,6 +9,7 @@
 #pragma mark - internal
 
 extern __weak NSWindow *ghostMacMainWindow;
+extern __weak NSWindow *ghostMacChildWindow;
 
 extern "C" NSWindow *ghostMacGetMainWindow() {
   return ghostMacMainWindow;
@@ -42,10 +43,10 @@ void ghostSetChildWindowVisible(bool visible) {
           hiddenWindow = nil;
         }
       } else {
-        for (NSWindow *childWindow in window.childWindows) {
+        if (ghostMacChildWindow) {
           assert(!hiddenWindow);
-          [childWindow setIsVisible:FALSE];
-          hiddenWindow = childWindow;
+          [ghostMacChildWindow setIsVisible:FALSE];
+          hiddenWindow = ghostMacChildWindow;
         }
       }
     }
@@ -60,30 +61,29 @@ GHOST_EXPORT void ghostSetChildWindowFullscreen(bool fullscreen) {
     return;
   }
   // At this point we can assume we're toggling the state
-  
+
   NSWindow *mainWindow = ghostMacGetMainWindow();
   if (!mainWindow) {
     return;
   }
   static __weak NSWindow *lastFullscreenedChildWindow = nil;
   if (fullscreen) { // Entering fullscreen
-    NSWindow *childWindow = nil;
-    for (NSWindow *candidateChildWindow in mainWindow.childWindows) {
-      childWindow = candidateChildWindow;
-    }
-    if (childWindow) {
+    if (ghostMacChildWindow) {
       // NOTE: Order of operations is super important here!
-      [mainWindow removeChildWindow:childWindow];
-      [childWindow setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
-      [childWindow toggleFullScreen:childWindow];
-      lastFullscreenedChildWindow = childWindow;
+      [mainWindow removeChildWindow:ghostMacChildWindow];
+      [ghostMacChildWindow setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
+      [ghostMacChildWindow toggleFullScreen:ghostMacChildWindow];
+      lastFullscreenedChildWindow = ghostMacChildWindow;
+      [ghostMacChildWindow makeKeyWindow];
       isFullscreen = YES;
+      [mainWindow setIsVisible:NO];
     }
   } else {
     if (lastFullscreenedChildWindow) {
       // NOTE: Order of operations is super important here!
       [lastFullscreenedChildWindow toggleFullScreen:lastFullscreenedChildWindow];
       [lastFullscreenedChildWindow setCollectionBehavior:NSWindowCollectionBehaviorManaged];
+      [mainWindow setIsVisible:YES];
       [mainWindow addChildWindow:lastFullscreenedChildWindow ordered:NSWindowAbove];
       [mainWindow makeMainWindow];
       [mainWindow makeKeyWindow];
@@ -115,8 +115,8 @@ void ghostSetChildWindowFrame(float left, float top, float width, float height) 
     frame.size.width = width;
     frame.size.height = height;
     
-    for (NSWindow *childWindow in window.childWindows) {
-      [childWindow setFrame:frame display:NO];
+    if (ghostMacChildWindow) {
+      [ghostMacChildWindow setFrame:frame display:NO];
     }
   }
 }

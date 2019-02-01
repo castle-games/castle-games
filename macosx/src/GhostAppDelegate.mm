@@ -17,7 +17,8 @@ extern "C" {
 #include "simple_handler.h"
 
 extern "C" NSWindow *ghostMacGetMainWindow();
-  
+extern __weak NSWindow *ghostMacChildWindow;
+
 @interface GhostAppDelegate ()
 
 @property(nonatomic, assign) lua_State *luaState;
@@ -178,10 +179,8 @@ extern "C" NSWindow *ghostMacGetMainWindow();
     NSWindow *prevChild = nil, *afterChild = nil;
 
     if (window) {
-      for (NSWindow *childWindow in window.childWindows) {
-        if (childWindow) {
-          prevChild = childWindow;
-        }
+      if (ghostMacChildWindow) {
+        prevChild = ghostMacChildWindow;
       }
     }
 
@@ -189,10 +188,8 @@ extern "C" NSWindow *ghostMacGetMainWindow();
     [self stepLove];
 
     if (window && !prevChild) {
-      for (NSWindow *childWindow in window.childWindows) {
-        if (childWindow) {
-          afterChild = childWindow;
-        }
+      if (ghostMacChildWindow) {
+        afterChild = ghostMacChildWindow;
       }
 
       if (afterChild) {
@@ -257,7 +254,7 @@ void Cocoa_DispatchEvent(NSEvent *theEvent);
 }
 
 - (void)sendEvent:(NSEvent *)event {
-  if (self.luaState && self.loveStepping) {
+  if ([ghostMacChildWindow isKeyWindow] && self.luaState && self.loveStepping) {
     Cocoa_DispatchEvent(event);
   }
 }
