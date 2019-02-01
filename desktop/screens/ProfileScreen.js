@@ -194,7 +194,7 @@ class ProfileScreen extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
-        <UICardProfileHeader
+        <ProfileHeader
           creator={creator}
           isOwnProfile={isOwnProfile}
           onGameSelect={this.props.navigation.navigateToGame}
