@@ -8,6 +8,7 @@ import * as Constants from '~/common/constants';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { DevelopmentContext } from '~/contexts/DevelopmentContext';
 import { History, HistoryContext } from '~/contexts/HistoryContext';
+import { Social, SocialContext } from '~/contexts/SocialContext';
 import Logs from '~/common/logs';
 import { NavigationContext } from '~/contexts/NavigationContext';
 import * as NativeUtil from '~/native/nativeutil';
@@ -40,10 +41,11 @@ export default class App extends React.Component {
     super();
 
     this.state = props.state;
-    ['navigation', 'currentUser', 'development'].forEach(contextName => {
+    ['navigation', 'currentUser', 'development'].forEach((contextName) => {
       this._applyContextFunctions(contextName);
     });
     this.state.history = new History(props.storage);
+    this.state.social = new Social();
   }
 
   componentDidMount() {
@@ -55,7 +57,7 @@ export default class App extends React.Component {
       this._processNativeChannels();
     });
   }
-  
+
   componentWillUnmount() {
     window.removeEventListener('nativeOpenUrl', this._handleNativeOpenUrlEvent);
     window.removeEventListener('keydown', this._handleKeyDownEvent);
@@ -69,7 +71,7 @@ export default class App extends React.Component {
   // for example, this.state.navigation.navigateToGame = this.navigateToGame
   _applyContextFunctions = (contextName) => {
     const context = this.state[contextName];
-    Object.getOwnPropertyNames(context).forEach(prop => {
+    Object.getOwnPropertyNames(context).forEach((prop) => {
       if (typeof context[prop] === 'function' && this.hasOwnProperty(prop)) {
         this.state[contextName][prop] = this[prop];
       }
@@ -85,11 +87,11 @@ export default class App extends React.Component {
       this.setState({
         development: {
           ...this.state.development,
-          logs: [...this.state.development.logs, ...logs]
+          logs: [...this.state.development.logs, ...logs],
         },
       });
     }
-  
+
     this._nativeChannelsPollTimeout = window.setTimeout(
       this._processNativeChannels,
       NATIVE_CHANNELS_POLL_INTERVAL
@@ -151,11 +153,11 @@ export default class App extends React.Component {
   // navigation actions
   _navigateToContentMode = (mode) => {
     this.setState({
-      navigation: ({
+      navigation: {
         ...this.state.navigation,
         contentMode: mode,
         timeLastNavigated: Date.now(),
-      }),
+      },
     });
   };
 
@@ -222,33 +224,39 @@ export default class App extends React.Component {
 
   // currentUser actions
   setCurrentUser = (user) => {
-    this.setState({
-      currentUser: {
-        ...this.state.currentUser,
-        user,
+    this.setState(
+      {
+        currentUser: {
+          ...this.state.currentUser,
+          user,
+        },
       },
-    }, () => {
-      if (user) {
-        this.navigateToCurrentUserProfile();
-      } else {
-        this.navigateToHome();
+      () => {
+        if (user) {
+          this.navigateToCurrentUserProfile();
+        } else {
+          this.navigateToHome();
+        }
       }
-    });
-  }
+    );
+  };
 
   clearCurrentUser = () => {
     if (!Actions.logout()) {
       return;
     }
-    this.setState({
-      currentUser: {
-        ...this.state.currentUser,
-        user: null,
+    this.setState(
+      {
+        currentUser: {
+          ...this.state.currentUser,
+          user: null,
+        },
       },
-    }, () => {
-      this.navigateToCurrentUserProfile();
-    });
-  }
+      () => {
+        this.navigateToCurrentUserProfile();
+      }
+    );
+  };
 
   refreshCurrentUser = async () => {
     const viewer = await Actions.getViewer();
@@ -269,7 +277,7 @@ export default class App extends React.Component {
       };
     }
     this.setState(updates);
-  }
+  };
 
   // development actions
   setIsDeveloping = (isDeveloping) => {
@@ -277,7 +285,7 @@ export default class App extends React.Component {
       development: {
         ...this.state.development,
         isDeveloping,
-      }
+      },
     });
   };
 
@@ -286,7 +294,7 @@ export default class App extends React.Component {
       development: {
         ...this.state.development,
         logs: [],
-      }
+      },
     });
   };
 
@@ -296,17 +304,19 @@ export default class App extends React.Component {
         <CurrentUserContext.Provider value={this.state.currentUser}>
           <HistoryContext.Provider value={this.state.history}>
             <DevelopmentContext.Provider value={this.state.development}>
-              <div className={STYLES_CONTAINER}>
-                <SocialContainer />
-                <ContentContainer
-                  featuredGames={this.state.featuredGames}
-                  allContent={this.state.allContent}
-                />
-              </div>
+              <SocialContext.Provider value={this.state.social}>
+                <div className={STYLES_CONTAINER}>
+                  <SocialContainer />
+                  <ContentContainer
+                    featuredGames={this.state.featuredGames}
+                    allContent={this.state.allContent}
+                  />
+                </div>
+              </SocialContext.Provider>
             </DevelopmentContext.Provider>
           </HistoryContext.Provider>
         </CurrentUserContext.Provider>
       </NavigationContext.Provider>
     );
   }
-};
+}

@@ -18,17 +18,11 @@ export default class SocialContainer extends React.Component {
     let { user } = this.context;
     let contentElement;
     if (user) {
-      contentElement = (
-        <ChatContainer />
-      );
+      contentElement = <ChatContainer />;
     } else {
       // TODO: what happens here when you aren't logged in?
-      contentElement = (<span>Log in to chat</span>);
+      contentElement = <span>Log in to chat</span>;
     }
-    return (
-      <div className={STYLES_CONTAINER}>
-        {contentElement}
-      </div>
-    );
+    return <div className={STYLES_CONTAINER}>{contentElement}</div>;
   }
 }

@@ -8,7 +8,7 @@ export class History {
   constructor(storage) {
     this._storage = storage;
   }
-  
+
   addItem(game) {
     if (!this._storage) {
       alert('History is not supported at the moment.');
@@ -38,9 +38,10 @@ export class History {
       history.pop();
     }
 
-    history = history.filter(h => {
+    history = history.filter((h) => {
       let url = h.url;
-      if (h.mediaUrl) { // legacy media object
+      if (h.mediaUrl) {
+        // legacy media object
         return false;
       }
       return h.url !== game.url;
@@ -48,7 +49,7 @@ export class History {
 
     history.unshift(game);
     this._storage.setItem('history', JSON.stringify({ history }));
-  };
+  }
 
   getItems() {
     let data, history;
@@ -72,7 +73,7 @@ export class History {
 
   clear() {
     this._storage.setItem('history', JSON.stringify({ history: [] }));
-  };
+  }
 }
 
 export const HistoryContext = React.createContext({});

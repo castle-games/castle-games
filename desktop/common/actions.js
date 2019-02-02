@@ -170,7 +170,7 @@ export async function getUser({ userId }) {
   const variables = { userId };
   const result = await API(
     `
-    query GetUser($userId: ID!) {
+    query($userId: ID!) {
       user(userId: $userId) {
         ${FULL_USER_FIELDS}
         ${GAME_ITEMS}
