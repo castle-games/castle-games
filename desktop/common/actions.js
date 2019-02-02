@@ -66,6 +66,15 @@ export async function getHeadersAsync() {
   return await API.client._getRequestHeadersAsync();
 }
 
+export async function getAccessTokenAsync() {
+  let headers = await getHeadersAsync();
+  if (!headers) {
+    return null;
+  }
+
+  return headers['X-Auth-Token'];
+}
+
 export const delay = (ms) =>
   new Promise((resolve) => {
     window.setTimeout(resolve, ms);
@@ -410,7 +419,9 @@ function _validateRegisterGameResult(result) {
     } else if (code === 'REGISTER_GAME_INVALID_USERNAME') {
       throw new Error(`The \`username\` given at this url does not match your username.`);
     } else {
-      throw new Error(`There was a problem looking up the game at the url you provided: ${error.message}`);
+      throw new Error(
+        `There was a problem looking up the game at the url you provided: ${error.message}`
+      );
     }
   }
   return true;
