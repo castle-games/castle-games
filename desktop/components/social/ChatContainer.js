@@ -63,7 +63,6 @@ class ChatContainer extends React.Component {
 
     try {
       let users = await Actions.getUsers({ userIds: _.keys(userIdsToLoad) });
-      console.log(users);
       for (let i = 0; i < users.length; i++) {
         this.props.social.setUserForId(users[i].userId, users[i]);
       }
