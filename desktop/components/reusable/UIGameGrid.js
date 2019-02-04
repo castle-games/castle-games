@@ -68,15 +68,15 @@ const STYLES_GAME_ACTIONS = css`
 
 class UIGameCell extends React.Component {
   render() {
-    const name = (this.props.game.name) ? this.props.game.name : 'Untitled';
-    const creator = (this.props.game.user && this.props.game.user.name)
-          ? this.props.game.user.name
-          : 'anonymous'
+    const name = this.props.game.name ? this.props.game.name : 'Untitled';
+    const creator =
+      this.props.game.user && this.props.game.user.name ? this.props.game.user.name : 'anonymous';
     let maybeSyncElement;
     if (this.props.onGameUpdate) {
       maybeSyncElement = (
-        <div className={STYLES_GAME_ACTIONS}
-             onClick={() => this.props.onGameUpdate(this.props.game)}>
+        <div
+          className={STYLES_GAME_ACTIONS}
+          onClick={() => this.props.onGameUpdate(this.props.game)}>
           Sync
         </div>
       );
@@ -98,13 +98,13 @@ class UIGameCell extends React.Component {
   }
 }
 
-export default class GameGrid extends React.Component {
+export default class UIGameGrid extends React.Component {
   render() {
     const { gameItems } = this.props;
     return (
       <div className={STYLES_CONTAINER}>
-        {gameItems.map(m => {
-          const key = (m.gameId) ? m.gameId : m.url;
+        {gameItems.map((m) => {
+          const key = m.gameId ? m.gameId : m.url;
           return (
             <UIGameCell
               key={key}

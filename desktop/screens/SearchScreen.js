@@ -2,10 +2,11 @@ import * as React from 'react';
 import { css } from 'react-emotion';
 
 import * as Constants from '~/common/constants';
-import UIGameGrid from '~/components/reusable/UIGameGrid';
 import { NavigationContext } from '~/contexts/NavigationContext';
 import * as Strings from '~/common/strings';
 import UIButtonSecondary from '~/components/reusable/UIButtonSecondary';
+import UIGameGrid from '~/components/reusable/UIGameGrid';
+import UIUserGrid from '~/components/reusable/UIUserGrid';
 import * as Urls from '~/common/urls';
 
 const STYLES_CONTAINER = css`
@@ -14,6 +15,7 @@ const STYLES_CONTAINER = css`
   display: flex;
   background: ${Constants.colors.white};
   border-top: 1px solid ${Constants.colors.border};
+  flex-direction: column;
 `;
 
 const STYLES_HEADING = css`
@@ -33,17 +35,17 @@ export default class SearchScreen extends React.Component {
     allContent: {
       games: [],
       users: [],
-    }
+    },
   };
   state = {
     results: {
       games: [],
       users: [],
-    }
+    },
   };
 
   componentDidUpdate(prevProps, prevState) {
-    const oldQuery = (prevProps && prevProps.query) ? prevProps.query : null;
+    const oldQuery = prevProps && prevProps.query ? prevProps.query : null;
     const newQuery = this.props.query;
     if (oldQuery !== newQuery) {
       this._updateResults();
@@ -56,7 +58,7 @@ export default class SearchScreen extends React.Component {
         results: {
           games: [],
           users: [],
-        }
+        },
       });
     } else {
       this.setState({
@@ -134,25 +136,29 @@ export default class SearchScreen extends React.Component {
     this.props.onSearchReset();
   };
 
+  _navigateToGame = (game) => {
+    this.context.navigateToGame(game);
+    this.props.onSearchReset();
+  };
+
+  _navigateToUserProfile = (user) => {
+    this.context.navigateToUserProfile(user);
+    this.props.onSearchReset();
+  };
+
   _doesQueryLookLikeUrl = (query) => {
     query = query.slice(0).trim();
-    return (
-      query.endsWith('.lua') ||
-      query.startsWith('castle:') ||
-      query.startsWith('http')
-    );
+    return query.endsWith('.lua') || query.startsWith('castle:') || query.startsWith('http');
   };
 
   _renderNoResults = () => {
     if (this.props.query && this._doesQueryLookLikeUrl(this.props.query)) {
       return (
         <div className={STYLES_SECTION}>
-          <div className={STYLES_HEADING}>
-            No results
-          </div>
+          <div className={STYLES_HEADING}>No results</div>
           <div style={{ marginBottom: 12 }}>
-            We didn't find find anything matching <b>"{this.props.query}"</b>, but it looks
-            like a game URL.
+            We didn't find find anything matching <b>"{this.props.query}"</b>, but it looks like a
+            game URL.
           </div>
           <UIButtonSecondary onClick={() => this._maybeNavigateToUrl(this.props.query)}>
             Open <b>{this.props.query}</b>
@@ -161,7 +167,12 @@ export default class SearchScreen extends React.Component {
       );
     } else {
       return (
-        <div>No results for {this.props.query}</div>
+        <div className={STYLES_SECTION}>
+          <div className={STYLES_HEADING}>No results</div>
+          <div>
+            We didn't find find anything matching <b>"{this.props.query}"</b>.
+          </div>
+        </div>
       );
     }
   };
@@ -169,29 +180,40 @@ export default class SearchScreen extends React.Component {
   _renderGameResults = () => {
     return (
       <div className={STYLES_SECTION}>
-        <div className={STYLES_HEADING}>
-          Games
-        </div>
+        <div className={STYLES_HEADING}>Games</div>
         <UIGameGrid
           gameItems={this.state.results.games}
-          onUserSelect={this.context.naviateToUserProfile}
-          onGameSelect={this.context.navigateToGame}
+          onUserSelect={this._navigateToUserProfile}
+          onGameSelect={this._navigateToGame}
         />
       </div>
     );
   };
 
+  _renderUserResults = () => {
+    return (
+      <div className={STYLES_SECTION}>
+        <div className={STYLES_HEADING}>Users</div>
+        <UIUserGrid users={this.state.results.users} onUserSelect={this._navigateToUserProfile} />
+      </div>
+    );
+  };
+
   render() {
-    let maybeGameResults, maybeNoResults;
+    let maybeGameResults, maybeUserResults, maybeNoResults;
     if (this.state.results.games && this.state.results.games.length) {
       maybeGameResults = this._renderGameResults();
     }
-    if (!maybeGameResults) {
+    if (this.state.results.users && this.state.results.users.length) {
+      maybeUserResults = this._renderUserResults();
+    }
+    if (!maybeGameResults && !maybeUserResults) {
       maybeNoResults = this._renderNoResults();
     }
     return (
       <div className={STYLES_CONTAINER}>
         {maybeGameResults}
+        {maybeUserResults}
         {maybeNoResults}
       </div>
     );
