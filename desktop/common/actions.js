@@ -192,6 +192,32 @@ export async function getUser({ userId }) {
   return result.data.user;
 }
 
+export async function getUsers({ userIds }) {
+  const variables = { userIds };
+  const result = await API(
+    `
+    query($userIds: [ID]!) {
+      users(userIds: $userIds) {
+        ${FULL_USER_FIELDS}
+        ${GAME_ITEMS}
+      }
+    }
+  `,
+    variables
+  );
+
+  // TOOD(jim): Write a global error handler.
+  if (result.error) {
+    return false;
+  }
+
+  if (result.errors) {
+    return false;
+  }
+
+  return result.data.users;
+}
+
 export async function getViewer() {
   const result = await API(`
     query {

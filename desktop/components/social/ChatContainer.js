@@ -15,7 +15,7 @@ class ChatContainer extends React.Component {
       chatMessages: [],
     };
 
-    this._handleMessageLock = false;
+    this._handleMessagesLock = false;
   }
 
   componentWillMount() {
@@ -39,39 +39,64 @@ class ChatContainer extends React.Component {
 
     this._castleChat = new CastleChat();
     this._castleChat.init('http://chat.castle.games:5280/http-bind/', userId, token, ['general']);
-    this._castleChat.setOnMessageHandler(this._handleMessageAsync);
+    this._castleChat.setOnMessagesHandler(this._handleMessagesAsync);
   };
 
   _sleep = async (ms) => {
     return new Promise((resolve) => setTimeout(resolve, ms));
   };
 
-  _handleMessageAsync = async (msg) => {
-    while (this._handleMessageLock) {
+  _handleMessagesAsync = async (messages) => {
+    while (this._handleMessagesLock) {
       await this._sleep(100);
     }
 
-    this._handleMessageLock = true;
-
-    let roomName = msg.roomName;
-    let fromUserId = msg.message.name;
-    let messageBody = msg.message.body;
-
-    let fromUser = this.props.social.getUserForId(fromUserId);
-    if (!fromUser) {
-      try {
-        fromUser = await Actions.getUser({ userId: fromUserId });
-        this.props.social.setUserForId(fromUserId, fromUser);
-      } catch (e) {
-        fromUser = {
-          username: fromUserId,
-        };
+    // load all users first
+    let userIdsToLoad = {};
+    for (let i = 0; i < messages.length; i++) {
+      let fromUserId = messages[i].message.name;
+      let fromUser = this.props.social.getUserForId(fromUserId);
+      if (!fromUser) {
+        userIdsToLoad[fromUserId] = true;
       }
     }
-    //
+
+    try {
+      let users = await Actions.getUsers({ userIds: _.keys(userIdsToLoad) });
+      console.log(users);
+      for (let i = 0; i < users.length; i++) {
+        this.props.social.setUserForId(users[i].userId, users[i]);
+      }
+    } catch (e) {}
+
+    this._handleMessagesLock = true;
+
     this.setState((state) => {
-      state.chatMessages.push(`${fromUser.username}: ${messageBody}`);
-      this._handleMessageLock = false;
+      for (let i = 0; i < messages.length; i++) {
+        let msg = messages[i];
+        let roomName = msg.roomName;
+        let fromUserId = msg.message.name;
+        let messageBody = msg.message.body;
+        let timestamp = msg.timestamp;
+        let fromUser = this.props.social.getUserForId(fromUserId);
+        if (!fromUser) {
+          fromUser = {
+            username: fromUserId,
+          };
+        }
+
+        state.chatMessages.push({
+          key: Math.random(),
+          message: `${fromUser.username}: ${messageBody}`,
+          timestamp,
+        });
+      }
+
+      state.chatMessages.sort((a, b) => {
+        return new Date(a.timestamp) - new Date(b.timestamp);
+      });
+
+      this._handleMessagesLock = false;
       return {
         chatMessages: state.chatMessages,
       };
@@ -92,7 +117,9 @@ class ChatContainer extends React.Component {
   };
 
   render() {
-    const listItems = this.state.chatMessages.map((chatMessage) => <li>{chatMessage}</li>);
+    const listItems = this.state.chatMessages.map((chatMessage) => (
+      <li key={chatMessage.key}>{chatMessage.message}</li>
+    ));
 
     return (
       <div>
