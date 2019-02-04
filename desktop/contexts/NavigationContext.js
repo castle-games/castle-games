@@ -15,7 +15,7 @@ export const NavigationContextDefaults = {
 
   userProfileShown: null,
   navigateToCurrentUserProfile: () => {},
-  navigateToUserProfile: (user) => {},
+  navigateToUserProfile: async (user) => {},
 
   navigateToHistory: () => {},
 };

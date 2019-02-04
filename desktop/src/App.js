@@ -209,12 +209,22 @@ export default class App extends React.Component {
     }
   };
 
-  navigateToUserProfile = (user) => {
+  navigateToUserProfile = async (user) => {
+    let fullUser = this.state.social.getUserForId(user.userId);
+    if (!fullUser) {
+      try {
+        fullUser = await Actions.getUser({ userId: user.userId });
+        this.state.social.setUserForId(user.userId, fullUser);
+      } catch (e) {
+        // fall back to whatever we were given
+        fullUser = user;
+      }
+    }
     this.setState({
       navigation: {
         ...this.state.navigation,
         contentMode: 'profile',
-        userProfileShown: user,
+        userProfileShown: fullUser,
         timeLastNavigated: Date.now(),
       },
     });
