@@ -11,7 +11,7 @@ const STYLES_ICON = css`
   align-items: center;
   justify-content: center;
   box-shadow: 0 0 0 1px ${Constants.colors.black};
-  border-radius: 4px;
+  border-radius: 24px;
   background-position: 50% 50%;
   background-size: cover;
 `;
@@ -19,7 +19,7 @@ const STYLES_ICON = css`
 export default class UIAvatar extends React.Component {
   render() {
     const { src, icon } = this.props;
-    const maybeIconChild = (!src && icon) ? icon : null;
+    const maybeIconChild = !src && icon ? icon : null;
 
     const avatarContextStyles = {
       backgroundImage: `url('${src}')`,

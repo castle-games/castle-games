@@ -82,11 +82,11 @@ const STYLES_CREATOR_IDENTITY = css`
 `;
 
 export default class ProfileHeader extends React.Component {
-  _handleClickCreatorLink = url => {
+  _handleClickCreatorLink = (url) => {
     NativeUtil.openExternalURL(url);
   };
 
-  _renderTagline = creator => {
+  _renderTagline = (creator) => {
     let name = creator.name;
     let origin = `Joined on ${Strings.toDate(creator.createdTime)}`;
 
@@ -94,9 +94,9 @@ export default class ProfileHeader extends React.Component {
     if (name) components.push(name);
     if (origin) components.push(origin);
     return components.join(' · ');
-  }
+  };
 
-  _renderLinks = creator => {
+  _renderLinks = (creator) => {
     let linkElements = [];
     const { websiteUrl, itchUsername, twitterUsername } = creator;
 
@@ -120,83 +120,69 @@ export default class ProfileHeader extends React.Component {
 
     if (websiteUrl) {
       const { urlToDisplay, urlToOpen } = Urls.canonizeUserProvidedUrl(websiteUrl);
-      linkElements.push((
+      linkElements.push(
         <div
           key="websiteUrl"
           className={STYLES_LINK_ITEM}
           onClick={() => this._handleClickCreatorLink(urlToOpen)}>
           <span className={STYLES_LINK}>{urlToDisplay}</span>
         </div>
-      ));
+      );
     }
 
     if (itchUsername) {
-      linkElements.push((
+      linkElements.push(
         <div
           key="itchUsername"
           className={STYLES_LINK_ITEM}
           onClick={() => this._handleClickCreatorLink(`https://${itchUsername}.itch.io/`)}>
           <span className={STYLES_LINK}>{itchUsername}</span> on itch
         </div>
-      ));
+      );
     }
 
     if (twitterUsername) {
-      linkElements.push((
+      linkElements.push(
         <div
           key="twitterUsername"
           className={STYLES_LINK_ITEM}
           onClick={() => this._handleClickCreatorLink(`https://twitter.com/${twitterUsername}/`)}>
           <span className={STYLES_LINK}>{twitterUsername}</span> on twitter
         </div>
-      ));
+      );
     }
 
     if (linkElements.length) {
-      return (
-        <div className={STYLES_LINKS_ROW}>
-          {linkElements}
-        </div>
-      );
+      return <div className={STYLES_LINKS_ROW}>{linkElements}</div>;
     }
     return null;
-  }
+  };
 
   render() {
     let aboutElement;
-    if (this.props.creator &&
-        this.props.creator.about &&
-        this.props.creator.about.rich) {
+    if (this.props.creator && this.props.creator.about && this.props.creator.about.rich) {
       const richAbout = Strings.loadEditor(this.props.creator.about.rich);
       if (!Strings.isRichTextEmpty(richAbout)) {
-        aboutElement = (
-          <ContentEditor readOnly value={richAbout} className={STYLES_ABOUT} />
-        );
+        aboutElement = <ContentEditor readOnly value={richAbout} className={STYLES_ABOUT} />;
       }
     }
     const linksElement = this._renderLinks(this.props.creator);
 
-    const avatarSrc = (this.props.creator && this.props.creator.photo)
-          ? this.props.creator.photo.imgixUrl
-          : null;
-    
+    const avatarSrc =
+      this.props.creator && this.props.creator.photo ? this.props.creator.photo.imgixUrl : null;
+
     return (
-      <div
-        className={STYLES_CONTAINER}
-        style={this.props.style}
-        onClick={this.props.onClick}>
+      <div className={STYLES_CONTAINER} style={this.props.style} onClick={this.props.onClick}>
         <div className={STYLES_BODY}>
           <div className={STYLES_BODY_RIGHT}>
             <div className={STYLES_TOP}>
               <UIAvatar
                 src={avatarSrc}
-                style={{ width: 64, height: 64, marginRight: 12, marginTop: 6 }}
+                style={{ width: 64, height: 64, marginRight: 12, marginTop: 6, borderRadius: 32 }}
               />
               <div className={STYLES_CREATOR_IDENTITY}>
                 <div className={STYLES_TITLE}>{this.props.creator.username}</div>
-                <div className={STYLES_META}>
-                  {this._renderTagline(this.props.creator)}
-                </div>
+                <div className={STYLES_META}>{this._renderTagline(this.props.creator)}</div>
               </div>
             </div>
             {linksElement}
