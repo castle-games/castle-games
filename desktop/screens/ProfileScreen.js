@@ -55,29 +55,28 @@ class ProfileScreen extends React.Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    const existingUserId = (this.props.creator && this.props.creator.userId) ?
-          this.props.creator.userId :
-          null;
-    const nextUserId = (nextProps.creator && nextProps.creator.userId) ?
-          nextProps.creator.userId :
-          null
+    const existingUserId =
+      this.props.creator && this.props.creator.userId ? this.props.creator.userId : null;
+    const nextUserId =
+      nextProps.creator && nextProps.creator.userId ? nextProps.creator.userId : null;
     if (nextUserId != existingUserId) {
       // we're rendering a new profile, reset state.
       this._onShowGames();
     }
-  };
-  
+  }
+
   _onShowGames = () => this.setState({ mode: 'games', isAddingGame: false });
 
   _onShowEditProfile = () => this.setState({ mode: 'edit-profile' });
 
   _onShowSignOut = () => this.setState({ mode: 'sign-out' });
 
-  _onSelectAddGame = () => this.setState({
-    mode: 'games',
-    isAddingGame: true,
-  });
-  
+  _onSelectAddGame = () =>
+    this.setState({
+      mode: 'games',
+      isAddingGame: true,
+    });
+
   _onAfterAddGame = () => {
     // after adding a game, back out to the full list of games
     this._onShowGames();
@@ -85,9 +84,7 @@ class ProfileScreen extends React.Component {
   };
 
   _getNavigationItems = (isOwnProfile) => {
-    let navigationItems = [
-      { label: 'Games', key: 'games' },
-    ];
+    let navigationItems = [{ label: 'Games', key: 'games' }];
 
     if (isOwnProfile) {
       navigationItems.push({ label: 'Edit Profile', key: 'edit-profile' });
@@ -95,18 +92,18 @@ class ProfileScreen extends React.Component {
     }
 
     return navigationItems;
-  }
+  };
 
   _onNavigationChange = (selectedKey) => {
     const callbacks = {
-      'games': this._onShowGames,
+      games: this._onShowGames,
       'edit-profile': this._onShowEditProfile,
       'sign-out': this._onShowSignOut,
-    }
+    };
     if (callbacks.hasOwnProperty(selectedKey)) {
       callbacks[selectedKey]();
     }
-  }
+  };
 
   _updateGame = async (game) => {
     let updatedGame;
@@ -123,11 +120,7 @@ class ProfileScreen extends React.Component {
   _renderGameContent = (isOwnProfile, viewer, creator) => {
     const { isAddingGame } = this.state;
     if (isAddingGame) {
-      return (
-        <RegisterGame
-          onAfterSave={this._onAfterAddGame}
-        />
-      );
+      return <RegisterGame onAfterSave={this._onAfterAddGame} />;
     } else {
       const gameListElement =
         creator.gameItems && creator.gameItems.length ? (
@@ -143,22 +136,21 @@ class ProfileScreen extends React.Component {
         ) : (
           <UIEmptyState
             title="No games yet"
-            style={{ borderTop: `16px solid ${Constants.colors.border}` }}>
+            style={{ borderTop: `16px solid ${Constants.colors.background}` }}>
             {isOwnProfile
               ? 'You have not added any games to your profile yet.'
               : 'This user has not added any games to their profile yet.'}
           </UIEmptyState>
         );
-      const addGameIcon = (<SVG.Add height="16px" />);
-      const maybeAddGameElement =
-        isOwnProfile ? (
-          <UIButtonIconHorizontal
-            style={{ margin: 16 }}
-            onClick={() => this._onSelectAddGame()}
-            icon={addGameIcon}>
-            Add Your Games
-          </UIButtonIconHorizontal>
-        ) : null;
+      const addGameIcon = <SVG.Add height="16px" />;
+      const maybeAddGameElement = isOwnProfile ? (
+        <UIButtonIconHorizontal
+          style={{ margin: 16 }}
+          onClick={() => this._onSelectAddGame()}
+          icon={addGameIcon}>
+          Add Your Games
+        </UIButtonIconHorizontal>
+      ) : null;
       return (
         <div>
           {gameListElement}
@@ -166,31 +158,22 @@ class ProfileScreen extends React.Component {
         </div>
       );
     }
-  }
+  };
 
   _renderEditProfileContent = (isOwnProfile, user) => {
     if (!isOwnProfile) return null;
-    
-    return (
-      <EditProfile
-        user={user}
-        onAfterSave={this.props.onAfterSave}
-      />
-    );
+
+    return <EditProfile user={user} onAfterSave={this.props.onAfterSave} />;
   };
 
   _renderSignOutContent = (isOwnProfile) => {
     if (!isOwnProfile) return null;
-    return (
-      <SignOut onSignOut={this.props.onSignOut} />
-    );
+    return <SignOut onSignOut={this.props.onSignOut} />;
   };
 
   render() {
     const { viewer, creator } = this.props;
-    const isOwnProfile = (
-      viewer && viewer.userId == creator.userId
-    );
+    const isOwnProfile = viewer && viewer.userId == creator.userId;
 
     let profileContentElement;
     const { mode } = this.state;
@@ -217,7 +200,7 @@ class ProfileScreen extends React.Component {
         {profileContentElement}
       </div>
     );
-  };
+  }
 }
 
 export default class ProfileScreenWithContext extends React.Component {
@@ -237,9 +220,9 @@ export default class ProfileScreenWithContext extends React.Component {
   render() {
     return (
       <NavigationContext.Consumer>
-        {navigation => (
+        {(navigation) => (
           <CurrentUserContext.Consumer>
-            {currentUser => this._renderProfile(navigation, currentUser)}
+            {(currentUser) => this._renderProfile(navigation, currentUser)}
           </CurrentUserContext.Consumer>
         )}
       </NavigationContext.Consumer>

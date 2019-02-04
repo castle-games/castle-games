@@ -5,7 +5,7 @@ import { css } from 'react-emotion';
 
 const STYLES_CONTAINER = css`
   padding: 16px;
-  color: ${Constants.colors.white};
+  color: ${Constants.colors.black};
 `;
 
 const STYLES_HEADER = css`

@@ -6,6 +6,7 @@ import GameActionsBar from '~/components/game/GameActionsBar';
 import GameWindow from '~/native/gamewindow';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { HistoryContext } from '~/contexts/HistoryContext';
+import Logs from '~/common/logs';
 import { NavigationContext } from '~/contexts/NavigationContext';
 import * as NativeUtil from '~/native/nativeutil';
 import Share from '~/common/share';
@@ -68,27 +69,26 @@ class GameScreen extends React.Component {
   };
 
   _openGame = async (url) => {
+    Logs.system(`Loading project at ${url}`);
+    amplitude.getInstance().logEvent('OPEN_LUA', {
+      url,
+    });
     Share.addEventListeners();
     await GameWindow.open(url);
     this.props.history.addItem(this.props.game);
     // TODO: restore this behavior
     /*
       const userPlayData = { gameUrl, ...game };
-      Logs.system(`Loading project at ${gameUrl}`);
-
-      amplitude.getInstance().logEvent('OPEN_LUA', {
-        gameUrl,
-      });
 
       const isLocal = Urls.isPrivateUrl(gameUrl);
       const sidebarMode = isLocal ? 'development' : 'current-context';
       // Don't `await` this since we don't want to make it take longer to get the game
       UserPlay.startAsync(userPlayData);
       */
-      // Sync state for new Ghost instance
+    // Sync state for new Ghost instance
     NativeUtil.sendLuaEvent('CASTLE_SET_LOGGED_IN', this.props.isLoggedIn);
     NativeUtil.sendLuaEvent('CASTLE_SET_VOLUME', this.state.isMuted ? 0 : 1);
-  }
+  };
 
   _updateGameWindow = async (prevProps, prevState) => {
     let newUrl = Utilities.getLuaEntryPoint(this.props.game);
@@ -110,7 +110,7 @@ class GameScreen extends React.Component {
       await this._openGame(oldUrl);
     }
     this._updateGameWindowFrame();
-  }
+  };
 
   _updateGameWindowFrame = () => {
     if (this._gameContainerReference) {
@@ -134,8 +134,8 @@ class GameScreen extends React.Component {
           ref={(ref) => {
             this._gameContainerReference = ref;
             this._updateGameWindowFrame();
-          }}>
-        </div>
+          }}
+        />
         <GameActionsBar
           game={this.props.game}
           isMuted={this.state.isMuted}
@@ -150,11 +150,11 @@ export default class GameScreenWithContext extends React.Component {
   render() {
     return (
       <NavigationContext.Consumer>
-        {navigation => (
+        {(navigation) => (
           <HistoryContext.Consumer>
-            {history => (
+            {(history) => (
               <CurrentUserContext.Consumer>
-                {currentUser => (
+                {(currentUser) => (
                   <GameScreen
                     game={navigation.game}
                     timeGameLoaded={navigation.timeGameLoaded}

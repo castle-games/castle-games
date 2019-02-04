@@ -5,6 +5,7 @@ import * as SVG from '~/components/primitives/svg';
 import shuffle from 'lodash.shuffle';
 import { css } from 'react-emotion';
 
+import Logs from '~/common/logs';
 import { NavigationContext } from '~/contexts/NavigationContext';
 import UIButtonIconHorizontal from '~/components/reusable/UIButtonIconHorizontal';
 import UIGameGrid from '~/components/reusable/UIGameGrid';
@@ -126,12 +127,12 @@ export default class HomeScreen extends React.Component {
       if (entryPointFilePath) {
         const gameUrl = `file://${entryPointFilePath}`;
         await this.context.navigateToGameUrl(gameUrl);
-        // TODO: logs:
-        // log the following, then force development logs to show
-        /* Logs.system('Welcome to Castle!');
-        Logs.system(`We created some starter code for your project at ${this.state.game.entryPoint}.`);
+        Logs.system('Welcome to Castle!');
+        Logs.system(
+          `We created some starter code for your project at ${this.state.game.entryPoint}.`
+        );
         Logs.system(`Open that file in your favorite text editor to get started.`);
-        Logs.system(`Need help? Check out http://www.playcastle.io/get-started`); */
+        Logs.system(`Need help? Check out http://www.playcastle.io/get-started`);
       }
     }
   };
@@ -146,12 +147,12 @@ export default class HomeScreen extends React.Component {
       }
     }
     return result;
-  }
+  };
 
   render() {
     const featuredGames = this._getFeaturedGames();
-    const externalIcon = (<SVG.Share height="16px" />);
-    const createIcon = (<SVG.Play height="16px" />);
+    const externalIcon = <SVG.Share height="16px" />;
+    const createIcon = <SVG.Play height="16px" />;
 
     return (
       <div className={STYLES_CONTAINER}>
@@ -173,9 +174,7 @@ export default class HomeScreen extends React.Component {
                 Click this button to create a new minimal Castle project and start tinkering.
               </p>
               <div className={STYLES_BUTTON_CONTAINER}>
-                <UIButtonIconHorizontal
-                  onClick={this._handleCreateProject}
-                  icon={createIcon}>
+                <UIButtonIconHorizontal onClick={this._handleCreateProject} icon={createIcon}>
                   Create a Castle Project
                 </UIButtonIconHorizontal>
               </div>
@@ -192,7 +191,7 @@ export default class HomeScreen extends React.Component {
                 <div className={STYLES_HELP_GLYPH}>&gt;</div>
                 <span>View Example Projects</span>
               </div>
-              <div onClick={this._handleClickDiscord}  className={STYLES_HELP_ACTION}>
+              <div onClick={this._handleClickDiscord} className={STYLES_HELP_ACTION}>
                 <div className={STYLES_HELP_GLYPH}>&gt;</div>
                 <span>Join Discord</span>
               </div>
