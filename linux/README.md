@@ -33,6 +33,8 @@ From there you can run `./create_game_session.sh` which simulates creating a new
 
 ### Deploying
 
+If you don't already have the AWS CLI installed and configured: install it (eg. `brew install awcli` on macOS), then configure it with `aws configure` -- you'll need to log into the AWS console in a browser and go to "My Security Credentials" for your user to get the credentials to paste in.
+
 cd into `gamelift` and run `./deploy_gamelift.sh`. This will create a new GameLift Fleet here: https://us-west-2.console.aws.amazon.com/gamelift/home?region=us-west-2#/r/fleets. It'll take a while (around 10-15 minutes) for the Fleet to be ready. Once it's ready, point the "castle-prod" alias at the new fleet using this page https://us-west-2.console.aws.amazon.com/gamelift/home?region=us-west-2#/r/aliases/alias-893656f2-c282-48a7-a3f9-60dc98332062. https://github.com/expo/ghost-server/blob/master/server/gamelift.js has the ID of the "castle-prod" alias hardcoded.
 
 #### Debugging a GameLift instance
