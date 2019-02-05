@@ -31,7 +31,7 @@ static float childLeft = 0, childTop = 0, childWidth = 200, childHeight = 200;
 
 static BOOL browserReady = NO;
 static char *initialUri = NULL;
-NSWindow *hiddenWindow = nil;
+__weak NSWindow *hiddenWindow = nil;
 
 void ghostSetChildWindowVisible(bool visible) {
   dispatch_async(dispatch_get_main_queue(), ^{
@@ -51,6 +51,16 @@ void ghostSetChildWindowVisible(bool visible) {
       }
     }
   });
+}
+
+GHOST_EXPORT bool ghostGetBackgrounded() {
+  if (!ghostMacChildWindow) {
+    return false;
+  }
+  if (hiddenWindow) {
+    return true;
+  }
+  return !([ghostMacMainWindow isKeyWindow] or [ghostMacChildWindow isKeyWindow]);
 }
 
 static BOOL isFullscreen = NO;

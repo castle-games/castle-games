@@ -32,6 +32,7 @@ void ghostSetChildWindowVisible(bool visible);
 void ghostSetChildWindowFullscreen(bool fullscreen);
 bool ghostGetChildWindowFullscreen();
 void ghostSetBrowserReady();
+GHOST_EXPORT bool ghostGetBackgrounded();
 
 bool ghostChooseDirectoryWithDialog(const char *title, const char *message, const char *action,
                                     const char **result);

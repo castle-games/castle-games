@@ -1,3 +1,6 @@
+local ffi = require 'ffi'
+local C = ffi.C
+
 math.randomseed(10000 * require('socket').gettime())
 
 local theOS = love.system.getOS()
@@ -102,6 +105,8 @@ function main.load(arg)
     end)
 end
 
+ffi.cdef 'bool ghostGetBackgrounded();'
+
 function main.update(dt)
     network.update(dt)
 
@@ -110,7 +115,13 @@ function main.update(dt)
     updateLogs()
 
     if home then
-        home:update(dt)
+        if not isMobile and C.ghostGetBackgrounded() then -- FFI `ghost*` calls are desktop-only
+            if home.globals.castle.backgroundupdate then
+                home:safeCall(home.globals.castle.backgroundupdate, dt)
+            end
+        else
+            home:update(dt)
+        end
     elseif not CASTLE_SERVER then
         splash:update(dt)
     end
