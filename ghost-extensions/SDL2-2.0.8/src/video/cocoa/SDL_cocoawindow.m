@@ -1325,6 +1325,7 @@ Cocoa_CreateWindow(_THIS, SDL_Window * window)
         /// XXX(Ghost): Add as child of main window
         [ghostMacMainWindow addChildWindow:nswindow ordered:NSWindowAbove];
         ghostMacChildWindow = nswindow;
+        [ghostMacChildWindow makeKeyWindow];
     }
     @catch (NSException *e) {
         return SDL_SetError("%s", [[e reason] UTF8String]);
