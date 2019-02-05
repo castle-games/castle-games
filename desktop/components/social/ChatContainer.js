@@ -1,8 +1,25 @@
 import * as React from 'react';
+import { css } from 'react-emotion';
+
 import CastleChat from 'castle-chat-lib';
 import * as Actions from '~/common/actions';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { SocialContext } from '~/contexts/SocialContext';
+
+const STYLES_CONTAINER = css`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  justify-content: flex-end;
+  overflow-y: scroll;
+`;
+
+const STYLES_CHAT_ITEM = css`
+  padding-left: 8px;
+  font-size: 10pt;
+  cursor: default;
+`;
 
 class ChatContainer extends React.Component {
   static contextType = SocialContext;
@@ -117,11 +134,13 @@ class ChatContainer extends React.Component {
 
   render() {
     const listItems = this.state.chatMessages.map((chatMessage) => (
-      <li key={chatMessage.key}>{chatMessage.message}</li>
+      <li key={chatMessage.key} className={STYLES_CHAT_ITEM}>
+        {chatMessage.message}
+      </li>
     ));
 
     return (
-      <div>
+      <div className={STYLES_CONTAINER}>
         <div>{listItems}</div>
 
         <form onSubmit={this._onSubmit}>
