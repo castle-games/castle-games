@@ -205,13 +205,6 @@ local function softReload()
     end
 end
 
-local ffi = require 'ffi'
-ffi.cdef [[
-void ghostSetChildWindowFullscreen(bool fullscreen);
-bool ghostGetChildWindowFullscreen();
-]]
-local C = ffi.C
-
 function main.keypressed(key, ...)
     -- Intercept system hotkeys
     if not isMobile then
@@ -235,12 +228,6 @@ function main.keypressed(key, ...)
         network.async(function()
             softReload()
         end)
-        return
-    end
-
-    -- F11: Fullscreen
-    if key == 'f10' then
-        C.ghostSetChildWindowFullscreen(not C.ghostGetChildWindowFullscreen())
         return
     end
 
