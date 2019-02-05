@@ -1,7 +1,6 @@
 -- Manage loading, lifetime management and event forwarding for entries
 
 local jsEvents = require 'jsEvents'
-local share = require 'share'
 
 -- The root `_G`
 local GG = _G
@@ -91,7 +90,25 @@ function portalMeta:setupLove()
     end
 
     if newLove.window then -- Unavailable in non-main thread
-        function newLove.window.setMode() end
+        function newLove.window.close() end
+        function newLove.window.maximize() end
+        function newLove.window.minimize() end
+        function newLove.window.requestAttention() end
+        function newLove.window.restore() end
+        function newLove.window.setDisplaySleepEnabled() end
+        function newLove.window.setFullscreen() return true end
+        function newLove.window.setIcon() return true end
+        function newLove.window.setMode() return true end
+        function newLove.window.setPosition() end
+        function newLove.window.setTitle() end
+        function newLove.window.showMessageBox(...)
+            if select('#', ...) <= 4 then
+                return true
+            else
+                return 0
+            end
+        end
+        function newLove.window.updateMode() return true end
     end
 
     function newLove.filesystem.load(path)
@@ -156,12 +173,6 @@ function portalMeta:setupLove()
         end
     end
 
-    if newLove.window then
-        function newLove.window.setFullscreen()
-            return false
-        end
-    end
-
     function newLove.image.newImageData(path, ...)
         if type(path) == 'string' then
             return love.image.newImageData(fetchFileData(path))
@@ -186,6 +197,16 @@ function portalMeta:setupLove()
 
         function newLove.audio.getVolume()
             return innerVolume
+        end
+    end
+
+    if newLove.sound then
+        function newLove.sound.newSoundData(path, ...)
+            if type(path) == 'string' then
+                return love.sound.newSoundData(fetchFileData(path), ...)
+            else
+                return love.sound.newSoundData(path, ...)
+            end
         end
     end
 
@@ -258,11 +279,15 @@ end
 
 -- Load a portal to given `require`-able `path`
 function portalMeta:newChild(path, args)
+    -- Convert backslashes to slashes (mostly relevant for Windows 'file://' URLs)
+    path = path:gsub('\\', '/')
+
     -- Create the portal instance
     local child = createInstance()
     child.parent = self
     child.args = args or {}
     child.path = path
+    child.loaded = false
     child.onError = child.args.onError
     child.volume = 1
 
@@ -276,7 +301,6 @@ function portalMeta:newChild(path, args)
     -- Create a new globals table `__index`ing to the base one
     child.globals = setmetatable({}, { __index = GG })
     child.globals.portal = child
-    child.globals.castle = {}
 
     -- Make a copy of the `package` table that resets the loaded modules
     child.globals.package = setmetatable({}, { __index = package })
@@ -312,30 +336,28 @@ function portalMeta:newChild(path, args)
     end
     if not succeeded then return nil, err end
 
-    -- Call `love.load` callback and set as loaded
-    -- This has to happen after startClient otherwise the client will miss the love.load event
-    local loadLove = function()
+    -- Call `love.load` callback and set as loaded.
+    -- This has to happen after `castle.startClient` otherwise the client will miss the `love.load` event.
+    -- This must also be called on a network coroutine (such as using `network.async`).
+    local function loadLove()
         if child.globals.love.load then
             child.globals.love.load({ child.basePath })
         end
         child.loaded = true
     end
 
-    -- Call share.lua callbacks
-    if CASTLE_SERVER and child.globals.castle.startServer then
+    -- Call multiplayer callbacks
+    if CASTLE_SERVER and child.globals.castle.startServer then -- We're on server
         child.globals.castle.startServer(GHOST_PORT)
     end
-
-    local isStartingShareClient = false
     if not CASTLE_SERVER and child.globals.castle.startClient then
-        isStartingShareClient = true
-        share.connectClient(path, function(address)
+        castle.connectClient(path, function(address)
             child.globals.castle.startClient(address)
-            loadLove()
+            network.async(function()
+                loadLove()
+            end)
         end)
-    end
-
-    if not isStartingShareClient then
+    else
         loadLove()
     end
 
@@ -345,6 +367,7 @@ end
 -- Add all of the callbacks as methods
 for cbName in pairs(loveCallbacks) do
     portalMeta[cbName] = function(self, ...)
+        if not self.loaded then return end
         local found = self.globals.love[cbName]
         if found then self:safeCall(found, ...) end
     end
@@ -352,11 +375,21 @@ end
 
 -- Override the `draw` method to scope graphics state changes to the portal
 function portalMeta:draw()
-    love.graphics.push('all')
-    if self.globals.love.draw then
-        self:safeCall(self.globals.love.draw)
+    if not self.loaded then return end
+    local initialStackDepth = love.graphics.getStackDepth()
+    local succ, err = pcall(function()
+        love.graphics.push('all')
+        if self.globals.love.draw then
+            self:safeCall(self.globals.love.draw)
+        end
+        love.graphics.pop()
+    end)
+    while love.graphics.getStackDepth() > initialStackDepth do
+        love.graphics.pop()
     end
-    love.graphics.pop()
+    if not succ then
+        error(err, 0)
+    end
 end
 
 -- Return a root portal instance
