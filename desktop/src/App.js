@@ -13,6 +13,7 @@ import Logs from '~/common/logs';
 import { NavigationContext } from '~/contexts/NavigationContext';
 import * as NativeUtil from '~/native/nativeutil';
 import * as Strings from '~/common/strings';
+import * as Urls from '~/common/urls';
 
 import ContentContainer from '~/components/ContentContainer.js';
 import SocialContainer from '~/components/SocialContainer.js';
@@ -148,6 +149,8 @@ export default class App extends React.Component {
         timeLastNavigated: time,
       },
     });
+    const isLocal = Urls.isPrivateUrl(url);
+    this.setIsDeveloping(isLocal);
   };
 
   // navigation actions

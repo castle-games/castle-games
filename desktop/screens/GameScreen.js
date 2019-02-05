@@ -76,15 +76,7 @@ class GameScreen extends React.Component {
     Share.addEventListeners();
     await GameWindow.open(url);
     this.props.history.addItem(this.props.game);
-    // TODO: restore this behavior
-    /*
-      const userPlayData = { gameUrl, ...game };
 
-      const isLocal = Urls.isPrivateUrl(gameUrl);
-      const sidebarMode = isLocal ? 'development' : 'current-context';
-      // Don't `await` this since we don't want to make it take longer to get the game
-      UserPlay.startAsync(userPlayData);
-      */
     // Sync state for new Ghost instance
     NativeUtil.sendLuaEvent('CASTLE_SET_LOGGED_IN', this.props.isLoggedIn);
     NativeUtil.sendLuaEvent('CASTLE_SET_VOLUME', this.state.isMuted ? 0 : 1);
