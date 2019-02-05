@@ -1,24 +1,43 @@
 import * as React from 'react';
 import { css } from 'react-emotion';
 
-import CastleChat from 'castle-chat-lib';
 import * as Actions from '~/common/actions';
+import CastleChat from 'castle-chat-lib';
+import * as Constants from '~/common/constants';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { SocialContext } from '~/contexts/SocialContext';
 
 const STYLES_CONTAINER = css`
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+`;
+
+const STYLES_MESSAGES_CONTAINER = css`
   width: 100%;
   height: 100%;
-  justify-content: flex-end;
   overflow-y: scroll;
+
+  ::-webkit-scrollbar {
+    display: none;
+    width: 1px;
+  }
 `;
 
 const STYLES_CHAT_ITEM = css`
-  padding-left: 8px;
+  padding: 4px 0 0 8px;
   font-size: 10pt;
   cursor: default;
+  min-height: 24px;
+
+  :hover {
+    background: ${Constants.colors.backgroundTint};
+  }
+`;
+
+const STYLES_MESSAGE_USERNAME = css`
+  font-weight: 700;
 `;
 
 class ChatContainer extends React.Component {
@@ -103,7 +122,8 @@ class ChatContainer extends React.Component {
 
         state.chatMessages.push({
           key: Math.random(),
-          message: `${fromUser.username}: ${messageBody}`,
+          user: fromUser,
+          message: messageBody,
           timestamp,
         });
       }
@@ -134,14 +154,15 @@ class ChatContainer extends React.Component {
 
   render() {
     const listItems = this.state.chatMessages.map((chatMessage) => (
-      <li key={chatMessage.key} className={STYLES_CHAT_ITEM}>
+      <div key={chatMessage.key} className={STYLES_CHAT_ITEM}>
+        <span class={STYLES_MESSAGE_USERNAME}>{chatMessage.user.username}</span>:{' '}
         {chatMessage.message}
-      </li>
+      </div>
     ));
 
     return (
       <div className={STYLES_CONTAINER}>
-        <div>{listItems}</div>
+        <div className={STYLES_MESSAGES_CONTAINER}>{listItems}</div>
 
         <form onSubmit={this._onSubmit}>
           <input type="text" value={this.state.inputValue} onChange={this._onChangeInput} />
