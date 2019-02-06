@@ -6,6 +6,7 @@ import CastleChat from 'castle-chat-lib';
 import ChatMessagesList from '~/components/social/ChatMessagesList';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { SocialContext } from '~/contexts/SocialContext';
+import { NavigationContext } from '~/contexts/NavigationContext';
 
 const STYLES_CONTAINER = css`
   display: flex;
@@ -15,8 +16,6 @@ const STYLES_CONTAINER = css`
 `;
 
 class ChatContainer extends React.Component {
-  static contextType = SocialContext;
-
   constructor(props) {
     super(props);
 
@@ -129,7 +128,10 @@ class ChatContainer extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTAINER}>
-        <ChatMessagesList messages={this.state.chatMessages} />
+        <ChatMessagesList
+          messages={this.state.chatMessages}
+          navigateToUserProfile={this.props.navigateToUserProfile}
+        />
         <form onSubmit={this._onSubmit}>
           <input type="text" value={this.state.inputValue} onChange={this._onChangeInput} />
           <input type="submit" value="Submit" />
@@ -145,7 +147,17 @@ export default class ChatContainerWithContext extends React.Component {
       <CurrentUserContext.Consumer>
         {(currentUser) => (
           <SocialContext.Consumer>
-            {(social) => <ChatContainer user={currentUser.user} social={social} />}
+            {(social) => (
+              <NavigationContext.Consumer>
+                {(navigation) => (
+                  <ChatContainer
+                    user={currentUser.user}
+                    social={social}
+                    navigateToUserProfile={navigation.navigateToUserProfile}
+                  />
+                )}
+              </NavigationContext.Consumer>
+            )}
           </SocialContext.Consumer>
         )}
       </CurrentUserContext.Consumer>

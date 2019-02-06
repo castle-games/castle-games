@@ -27,6 +27,7 @@ const STYLES_CHAT_ITEM = css`
 const STYLES_MESSAGE_USERNAME = css`
   padding-top: 8px;
   font-weight: 700;
+  cursor: pointer;
 `;
 
 const STYLES_MESSAGE = css`
@@ -70,7 +71,13 @@ export default class ChatMessagesList extends React.Component {
       const userId = chatMessage.user.userId;
       let maybeUsername;
       if (!prevUserId || prevUserId !== userId) {
-        maybeUsername = <div class={STYLES_MESSAGE_USERNAME}>{chatMessage.user.username}</div>;
+        maybeUsername = (
+          <div
+            class={STYLES_MESSAGE_USERNAME}
+            onClick={() => this.props.navigateToUserProfile(chatMessage.user)}>
+            {chatMessage.user.username}
+          </div>
+        );
       }
       listItems.push(
         <div key={chatMessage.key} className={STYLES_CHAT_ITEM}>
