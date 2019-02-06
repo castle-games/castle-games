@@ -3,7 +3,7 @@ import { css } from 'react-emotion';
 
 import * as Actions from '~/common/actions';
 import CastleChat from 'castle-chat-lib';
-import * as Constants from '~/common/constants';
+import ChatMessagesList from '~/components/social/ChatMessagesList';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { SocialContext } from '~/contexts/SocialContext';
 
@@ -12,36 +12,6 @@ const STYLES_CONTAINER = css`
   flex-direction: column;
   justify-content: flex-end;
   height: 100%;
-`;
-
-const STYLES_MESSAGES_CONTAINER = css`
-  width: 100%;
-  height: 100%;
-  overflow-y: scroll;
-
-  ::-webkit-scrollbar {
-    display: none;
-    width: 1px;
-  }
-`;
-
-const STYLES_CHAT_ITEM = css`
-  padding-left: 8px;
-  font-size: 10pt;
-  cursor: default;
-
-  :hover {
-    background: ${Constants.colors.backgroundTint};
-  }
-`;
-
-const STYLES_MESSAGE_USERNAME = css`
-  padding-top: 8px;
-  font-weight: 700;
-`;
-
-const STYLES_MESSAGE = css`
-  padding: 4px 0 4px 16px;
 `;
 
 class ChatContainer extends React.Component {
@@ -157,29 +127,9 @@ class ChatContainer extends React.Component {
   };
 
   render() {
-    let listItems = [];
-    let prevUserId = null;
-    for (let ii = 0, nn = this.state.chatMessages.length; ii < nn; ii++) {
-      // TODO: show UIAvatar on the left along with author name.
-      const chatMessage = this.state.chatMessages[ii];
-      const userId = chatMessage.user.userId;
-      let maybeUsername;
-      if (!prevUserId || prevUserId !== userId) {
-        maybeUsername = <div class={STYLES_MESSAGE_USERNAME}>{chatMessage.user.username}</div>;
-      }
-      listItems.push(
-        <div key={chatMessage.key} className={STYLES_CHAT_ITEM}>
-          {maybeUsername}
-          <div class={STYLES_MESSAGE}>{chatMessage.message}</div>
-        </div>
-      );
-      prevUserId = userId;
-    }
-
     return (
       <div className={STYLES_CONTAINER}>
-        <div className={STYLES_MESSAGES_CONTAINER}>{listItems}</div>
-
+        <ChatMessagesList messages={this.state.chatMessages} />
         <form onSubmit={this._onSubmit}>
           <input type="text" value={this.state.inputValue} onChange={this._onChangeInput} />
           <input type="submit" value="Submit" />
