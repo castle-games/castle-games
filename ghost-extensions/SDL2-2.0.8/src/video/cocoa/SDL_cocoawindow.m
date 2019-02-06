@@ -1282,8 +1282,8 @@ SetupWindowData(_THIS, SDL_Window * window, NSWindow *nswindow, SDL_bool created
     return 0;
 }}
 
-__weak NSWindow *ghostMacMainWindow = nil;
-__weak NSWindow *ghostMacChildWindow = nil;
+__attribute__((visibility("default"))) __weak NSWindow *ghostMacMainWindow = nil;
+__attribute__((visibility("default"))) __weak NSWindow *ghostMacChildWindow = nil;
 
 int
 Cocoa_CreateWindow(_THIS, SDL_Window * window)
