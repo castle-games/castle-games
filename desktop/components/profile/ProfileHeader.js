@@ -192,9 +192,6 @@ export default class ProfileHeader extends React.Component {
             </div>
             {linksElement}
           </div>
-          <div className={STYLES_BODY_RIGHT}>
-            {aboutElement}
-          </div>
         </div>
       </div>
     );
