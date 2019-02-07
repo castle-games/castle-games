@@ -9,6 +9,7 @@ import Logs from '~/common/logs';
 import { NavigationContext } from '~/contexts/NavigationContext';
 import UIButtonIconHorizontal from '~/components/reusable/UIButtonIconHorizontal';
 import UIGameGrid from '~/components/reusable/UIGameGrid';
+import UIHeading from '~/components/reusable/UIHeading';
 
 const MAX_NUM_FEATURED_GAMES = 4;
 
@@ -16,12 +17,6 @@ const STYLES_CONTAINER = css`
   width: 100%;
   height: 100%;
   background: ${Constants.colors.background};
-`;
-
-const STYLES_HEADING = css`
-  color: ${Constants.colors.text};
-  font-family: ${Constants.font.heading};
-  font-size: ${Constants.typescale.lvl3};
 `;
 
 const STYLES_PARAGRAPH = css`
@@ -67,7 +62,6 @@ const STYLES_SECTION = css`
 `;
 
 const STYLES_GAME = css`
-  padding: 16px 0 0 0;
 `;
 
 const STYLES_HELP_GLYPH = css`
@@ -148,7 +142,7 @@ export default class HomeScreen extends React.Component {
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_SECTION}>
-          <div className={STYLES_HEADING}>Play Games</div>
+          <UIHeading>Play Games</UIHeading>
           <div className={STYLES_GAME}>
             <UIGameGrid
               gameItems={featuredGames}
@@ -158,7 +152,7 @@ export default class HomeScreen extends React.Component {
           </div>
         </div>
         <div className={STYLES_SECTION}>
-          <div className={STYLES_HEADING}>Make a Game</div>
+          <UIHeading>Make a Game</UIHeading>
           <div className={STYLES_ACTIONS}>
             <div className={STYLES_ACTION}>
               <p className={STYLES_PARAGRAPH}>

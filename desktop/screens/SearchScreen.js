@@ -6,6 +6,7 @@ import { NavigationContext } from '~/contexts/NavigationContext';
 import * as Strings from '~/common/strings';
 import UIButtonSecondary from '~/components/reusable/UIButtonSecondary';
 import UIGameGrid from '~/components/reusable/UIGameGrid';
+import UIHeading from '~/components/reusable/UIHeading';
 import UIUserGrid from '~/components/reusable/UIUserGrid';
 import * as Urls from '~/common/urls';
 
@@ -14,15 +15,7 @@ const STYLES_CONTAINER = css`
   height: 100%;
   display: flex;
   background: ${Constants.colors.white};
-  border-top: 1px solid ${Constants.colors.border};
   flex-direction: column;
-`;
-
-const STYLES_HEADING = css`
-  color: ${Constants.colors.black};
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 16px;
 `;
 
 const STYLES_SECTION = css`
@@ -155,7 +148,7 @@ export default class SearchScreen extends React.Component {
     if (this.props.query && this._doesQueryLookLikeUrl(this.props.query)) {
       return (
         <div className={STYLES_SECTION}>
-          <div className={STYLES_HEADING}>No results</div>
+          <UIHeading>No results</UIHeading>
           <div style={{ marginBottom: 12 }}>
             We didn't find find anything matching <b>"{this.props.query}"</b>, but it looks like a
             game URL.
@@ -168,7 +161,7 @@ export default class SearchScreen extends React.Component {
     } else {
       return (
         <div className={STYLES_SECTION}>
-          <div className={STYLES_HEADING}>No results</div>
+          <UIHeading>No results</UIHeading>
           <div>
             We didn't find find anything matching <b>"{this.props.query}"</b>.
           </div>
@@ -180,7 +173,7 @@ export default class SearchScreen extends React.Component {
   _renderGameResults = () => {
     return (
       <div className={STYLES_SECTION}>
-        <div className={STYLES_HEADING}>Games</div>
+        <UIHeading>Games</UIHeading>
         <UIGameGrid
           gameItems={this.state.results.games}
           onUserSelect={this._navigateToUserProfile}
@@ -193,7 +186,7 @@ export default class SearchScreen extends React.Component {
   _renderUserResults = () => {
     return (
       <div className={STYLES_SECTION}>
-        <div className={STYLES_HEADING}>Users</div>
+        <UIHeading>Users</UIHeading>
         <UIUserGrid users={this.state.results.users} onUserSelect={this._navigateToUserProfile} />
       </div>
     );

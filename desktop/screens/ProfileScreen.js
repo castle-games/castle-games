@@ -18,17 +18,13 @@ import { NavigationContext } from '~/contexts/NavigationContext';
 import ProfileHeader from '~/components/profile/ProfileHeader';
 import SignOut from '~/components/profile/SignOut';
 
-const STYLES_HEADER_TEXT = css`
-  font-size: 16px;
-`;
-
 const STYLES_CONTAINER = css`
   width: 100%;
   min-width: 25%;
   height: 100%;
   overflow-y: scroll;
-  background ${Constants.colors.backgroundTint};
-  color: ${Constants.colors.black};
+  color: ${Constants.colors.text};
+  background: ${Constants.colors.background2};
 
   ::-webkit-scrollbar {
     display: none;
@@ -37,7 +33,6 @@ const STYLES_CONTAINER = css`
 `;
 
 const STYLES_GAME_GRID = css`
-  border-top: 16px solid ${Constants.colors.background};
   padding: 32px;
 `;
 

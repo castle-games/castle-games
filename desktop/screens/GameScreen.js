@@ -32,7 +32,6 @@ const STYLES_GAME_CONTAINER = css`
   align-items: center;
   justify-content: center;
   display: flex;
-  color: ${Constants.colors.white};
 `;
 
 class GameScreen extends React.Component {

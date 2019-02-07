@@ -8,10 +8,12 @@ import { css } from 'react-emotion';
 import ContentEditor from '~/editor/ContentEditor';
 
 import UIAvatar from '~/components/reusable/UIAvatar';
+import UIHeading from '~/components/reusable/UIHeading';
 import UIUserStatusIndicator from '~/components/reusable/UIUserStatusIndicator';
 
 const STYLES_CONTAINER = css`
   padding: 16px 16px 0 16px;
+  background: ${Constants.colors.background};
 `;
 
 const STYLES_BODY = css`
@@ -28,7 +30,7 @@ const STYLES_BODY_LEFT = css`
 const STYLES_BODY_RIGHT = css`
   min-width: 25%;
   width: 100%;
-  color: ${Constants.colors.black};
+  color: ${Constants.colors.text};
 `;
 
 const STYLES_TOP = css`
@@ -43,7 +45,9 @@ const STYLES_TITLE = css`
 
 const STYLES_META = css`
   margin: 4px 0 4px 0;
-  font-size: 10px;
+  font-size: ${Constants.typescale.lvl7};
+  text-transform: uppercase;
+  font-family: ${Constants.font.mono};
 `;
 
 const STYLES_ABOUT = css`
@@ -87,13 +91,13 @@ export default class ProfileHeader extends React.Component {
   };
 
   _renderTagline = (creator) => {
-    let name = creator.name;
+    let name = creator.username;
     let origin = `Joined on ${Strings.toDate(creator.createdTime)}`;
 
     let components = [];
     if (name) components.push(name);
     if (origin) components.push(origin);
-    return components.join(' · ');
+    return components.join(' // ');
   };
 
   _renderLinks = (creator) => {
@@ -171,8 +175,10 @@ export default class ProfileHeader extends React.Component {
     const avatarSrc =
       this.props.creator && this.props.creator.photo ? this.props.creator.photo.imgixUrl : null;
 
+    const name = (this.props.creator && this.props.creator.name) ? this.props.creator.name : this.props.creator.username;
+    
     return (
-      <div className={STYLES_CONTAINER} style={this.props.style} onClick={this.props.onClick}>
+      <div className={STYLES_CONTAINER} onClick={this.props.onClick}>
         <div className={STYLES_BODY}>
           <div className={STYLES_BODY_RIGHT}>
             <div className={STYLES_TOP}>
@@ -181,12 +187,11 @@ export default class ProfileHeader extends React.Component {
                 style={{ width: 64, height: 64, marginRight: 12, marginTop: 6, borderRadius: 32 }}
               />
               <div className={STYLES_CREATOR_IDENTITY}>
-                <div className={STYLES_TITLE}>{this.props.creator.username}</div>
+                <UIHeading style={{ marginBottom: 8 }}>{name}</UIHeading>
                 <div className={STYLES_META}>{this._renderTagline(this.props.creator)}</div>
               </div>
             </div>
             {linksElement}
-            {aboutElement}
           </div>
         </div>
       </div>

@@ -4,9 +4,10 @@ import * as SVG from '~/components/primitives/svg';
 
 import { css } from 'react-emotion';
 
-import UIGameList from '~/components/reusable/UIGameList';
+import UIGameGrid from '~/components/reusable/UIGameGrid';
 import UIButtonIconHorizontal from '~/components/reusable/UIButtonIconHorizontal';
 import UIEmptyState from '~/components/reusable/UIEmptyState';
+import UIHeading from '~/components/reusable/UIHeading';
 import UIControl from '~/components/reusable/UIControl';
 
 import { HistoryContext } from '~/contexts/HistoryContext';
@@ -16,25 +17,24 @@ const STYLES_CONTAINER = css`
   width: 100%;
   height: 100%;
   overflow-y: scroll;
-  background ${Constants.colors.backgroundTint};
-  color: ${Constants.colors.black};
+  color: ${Constants.colors.text};
 
   ::-webkit-scrollbar {
     display: none;
     width: 1px;
   }
+  padding: 16px;
 `;
 
 const STYLES_PARAGRAPH = css`
-  font-size: 14px;
-  font-weight: 200;
   color: ${Constants.colors.black};
+  font-size: ${Constants.typescale.base};
+  line-height: ${Constants.linescale.base};
   margin: 0 0 0 16px;
 `;
 
 const STYLES_ACTIONS = css`
   padding: 16px;
-  border-top: 1px solid ${Constants.colors.border};
 `;
 
 class HistoryScreen extends React.Component {
@@ -66,8 +66,7 @@ class HistoryScreen extends React.Component {
     } else {
       contentElement = (
         <div>
-          <UIGameList
-            isHistory
+          <UIGameGrid
             game={this.props.navigation.game}
             onGameSelect={this.props.navigation.navigateToGame}
             onUserSelect={this.props.navigation.navigateToUserProfile}
@@ -86,6 +85,7 @@ class HistoryScreen extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
+        <UIHeading>Recent</UIHeading>
         {contentElement}
       </div>
     );

@@ -5,7 +5,10 @@ export const API_HOST = 'https://new-castle-server.app.render.com';
 export const colors = {
   text: `#000`,
   background: `#e4e0e0`,
+  background2: `#D9D9D9`,
+  background3: `#CECECE`,
   white: `#fff`,
+  black: `#000`,
   action: `blue`,
 };
 

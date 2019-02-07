@@ -6,18 +6,16 @@ import { css } from 'react-emotion';
 const STYLES_ROW = css`
   display: flex;
   padding-left: 16px;
+  background: ${Constants.colors.background3};
 `;
 
 const STYLES_NAVIGATION_ITEM = css`
-  background: ${Constants.colors.foreground};
   user-select: none;
-  padding: 8px 16px 8px 16px;
-  border-radius: 4px 4px 0 0;
+  padding: 16px;
   cursor: pointer;
   font-weight: 600;
-  font-size: 10px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
+  font-size: ${Constants.typescale.lvl6};
+  letter-spacing: 2px;
 `;
 
 class UINavigationItem extends React.Component {
@@ -28,7 +26,7 @@ class UINavigationItem extends React.Component {
         className={STYLES_NAVIGATION_ITEM}
         style={{
           marginRight: 16,
-          background: this.props.selected ? Constants.colors.background : Constants.colors.backgroundTint,
+          color: this.props.selected ? Constants.colors.white : Constants.colors.text,
         }}
         onClick={() => this.props.onSelect(key)}>
         {label}
