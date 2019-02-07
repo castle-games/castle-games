@@ -22,7 +22,7 @@ const STYLES_CONTAINER_LEFT = css`
   display: flex;
   align-items: center;
   cursor: pointer;
-  color: ${Constants.colors.black};
+  color: ${Constants.colors.white};
   padding-right: 16px;
 `;
 
@@ -38,7 +38,7 @@ const STYLES_CONTAINER_MIDDLE = css`
 const STYLES_CONTAINER_RIGHT = css`
   flex-shrink: 0;
   cursor: pointer;
-  color: ${Constants.colors.black};
+  color: ${Constants.colors.white};
   display: flex;
   align-items: center;
 `;
@@ -46,7 +46,7 @@ const STYLES_CONTAINER_RIGHT = css`
 const STYLES_INPUT = css`
   background: transparent;
   font-family: ${Constants.font.default};
-  color: ${Constants.colors.black};
+  color: ${Constants.colors.white};
   font-size: 16px;
   min-width: 25%;
   width: 100%;
@@ -63,7 +63,7 @@ const STYLES_INPUT = css`
 
 const STYLES_INPUT_READONLY = css`
   font-size: 16px;
-  background: ${Constants.colors.foreground};
+  background: ${Constants.colors.background3};
   border-radius: 3px;
   padding: 4px 12px 4px 12px;
   cursor: default;

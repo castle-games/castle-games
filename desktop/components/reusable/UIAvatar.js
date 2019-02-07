@@ -6,12 +6,12 @@ import { css } from 'react-emotion';
 const STYLES_ICON = css`
   height: 48px;
   width: 48px;
-  background: ${Constants.colors.black60};
+  background: ${Constants.colors.black};
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 0 1px ${Constants.colors.black};
-  border-radius: 24px;
+  box-shadow: 0 0 0 2px ${Constants.colors.white};
+  border-radius: 6px;
   background-position: 50% 50%;
   background-size: cover;
 `;

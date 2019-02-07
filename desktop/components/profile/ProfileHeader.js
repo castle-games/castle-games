@@ -12,8 +12,8 @@ import UIHeading from '~/components/reusable/UIHeading';
 import UIUserStatusIndicator from '~/components/reusable/UIUserStatusIndicator';
 
 const STYLES_CONTAINER = css`
-  padding: 16px 16px 0 16px;
-  background: ${Constants.colors.background};
+  padding: 24px 16px 0 32px;
+  background: ${Constants.colors.background4};
 `;
 
 const STYLES_BODY = css`
@@ -24,13 +24,12 @@ const STYLES_BODY = css`
 `;
 
 const STYLES_BODY_LEFT = css`
-  flex-shrink: 0;
+  min-width: 25%;
+  color: ${Constants.colors.text};
 `;
 
 const STYLES_BODY_RIGHT = css`
-  min-width: 25%;
-  width: 100%;
-  color: ${Constants.colors.text};
+  width: 25%
 `;
 
 const STYLES_TOP = css`
@@ -56,7 +55,7 @@ const STYLES_ABOUT = css`
   font-size: 16px;
   overflow-wrap: break-word;
   white-space: pre-wrap;
-  padding: 16px 32px 16px 32px;
+  padding: 0 24px 16px 16px;
 `;
 
 const STYLES_LINKS_ROW = css`
@@ -180,11 +179,11 @@ export default class ProfileHeader extends React.Component {
     return (
       <div className={STYLES_CONTAINER} onClick={this.props.onClick}>
         <div className={STYLES_BODY}>
-          <div className={STYLES_BODY_RIGHT}>
+          <div className={STYLES_BODY_LEFT}>
             <div className={STYLES_TOP}>
               <UIAvatar
                 src={avatarSrc}
-                style={{ width: 64, height: 64, marginRight: 12, marginTop: 6, borderRadius: 32 }}
+                style={{ width: 64, height: 64, marginRight: 24, marginTop: 6, borderRadius: 8 }}
               />
               <div className={STYLES_CREATOR_IDENTITY}>
                 <UIHeading style={{ marginBottom: 8 }}>{name}</UIHeading>
@@ -192,6 +191,9 @@ export default class ProfileHeader extends React.Component {
               </div>
             </div>
             {linksElement}
+          </div>
+          <div className={STYLES_BODY_RIGHT}>
+            {aboutElement}
           </div>
         </div>
       </div>

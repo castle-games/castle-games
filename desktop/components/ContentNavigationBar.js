@@ -8,8 +8,7 @@ import * as Urls from '~/common/urls';
 import Viewer from '~/components/Viewer';
 
 const STYLES_CONTAINER = css`
-  font-family: ${Constants.font.default};
-  background: ${Constants.colors.white};
+  background: ${Constants.colors.black};
   height: 48px;
   flex-shrink: 0;
   width: 100%;
@@ -24,9 +23,11 @@ const STYLES_NAV_ITEMS = css`
 
 const STYLES_NAV_ITEM = css`
   display: inline-flex;
-  color: ${Constants.colors.black};
+  color: ${Constants.colors.white};
   cursor: pointer;
-  font-size: 10pt;
+  font-size: ${Constants.typescale.lvl6};
+  font-weight: 400;
+  text-decoration: underline;
   margin: 0 6px 0 6px;
 `;
 

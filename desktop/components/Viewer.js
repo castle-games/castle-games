@@ -27,7 +27,7 @@ export default class Viewer extends React.Component {
         <UIAvatar
           src={avatarSrc}
           onClick={navigation.navigateToCurrentUserProfile}
-          style={{ width: 36, height: 36, borderRadius: 18 }}
+          style={{ width: 32, height: 32, borderRadius: 4 }}
         />
       </div>
     );

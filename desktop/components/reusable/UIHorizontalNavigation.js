@@ -10,12 +10,11 @@ const STYLES_ROW = css`
 `;
 
 const STYLES_NAVIGATION_ITEM = css`
+  font-family: ${Constants.font.heading};
   user-select: none;
   padding: 16px;
   cursor: pointer;
-  font-weight: 600;
-  font-size: ${Constants.typescale.lvl6};
-  letter-spacing: 2px;
+  font-size: ${Constants.typescale.base};
 `;
 
 class UINavigationItem extends React.Component {
@@ -26,7 +25,7 @@ class UINavigationItem extends React.Component {
         className={STYLES_NAVIGATION_ITEM}
         style={{
           marginRight: 16,
-          color: this.props.selected ? Constants.colors.white : Constants.colors.text,
+          color: this.props.selected ? Constants.colors.text : Constants.colors.text2,
         }}
         onClick={() => this.props.onSelect(key)}>
         {label}
