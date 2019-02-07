@@ -15,18 +15,19 @@ const STYLES_MESSAGES_CONTAINER = css`
 `;
 
 const STYLES_CHAT_ITEM = css`
-  padding-left: 8px;
-  font-size: 10pt;
+  padding: 0 8px 0 8px;
+  font-size: 0.9rem;
+  line-height: ${Constants.linescale.lvl7};
   cursor: default;
 
   :hover {
-    background: ${Constants.colors.backgroundTint};
+    background: ${Constants.colors.background4};
   }
 `;
 
 const STYLES_MESSAGE_USERNAME = css`
   padding-top: 8px;
-  font-weight: 700;
+  font-weight: 800;
   cursor: pointer;
 `;
 

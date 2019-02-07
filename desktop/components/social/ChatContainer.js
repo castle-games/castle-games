@@ -4,6 +4,7 @@ import { css } from 'react-emotion';
 import * as Actions from '~/common/actions';
 import { CastleChat, ConnectionStatus } from 'castle-chat-lib';
 import ChatMessagesList from '~/components/social/ChatMessagesList';
+import * as Constants from '~/common/constants';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { SocialContext } from '~/contexts/SocialContext';
 import { NavigationContext } from '~/contexts/NavigationContext';
@@ -13,6 +14,7 @@ const STYLES_CONTAINER = css`
   flex-direction: column;
   justify-content: flex-end;
   height: 100%;
+  background: ${Constants.colors.backgroundLeftContext};
 `;
 
 const ROOM_NAME = 'general';
@@ -151,11 +153,11 @@ class ChatContainer extends React.Component {
     this._castleChat.connect();
   };
 
-  render() {
+  _renderContent() {
     switch (this.state.connectionStatus) {
       case ConnectionStatus.CONNECTED:
         return (
-          <div className={STYLES_CONTAINER}>
+          <div>
             <ChatMessagesList
               messages={this.state.chatMessages}
               navigateToUserProfile={this.props.navigateToUserProfile}
@@ -171,11 +173,16 @@ class ChatContainer extends React.Component {
       case ConnectionStatus.DISCONNECTED:
         return (
           <div>
-            Chat is disconnected.<p />
+            Chat is disconnected.
+            <p />
             <input type="button" value="Reconnect" onClick={this._onClickConnect} />
           </div>
         );
     }
+  }
+
+  render() {
+    return <div className={STYLES_CONTAINER}>{this._renderContent()}</div>;
   }
 }
 
