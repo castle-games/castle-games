@@ -2,11 +2,7 @@ import CastleApiClient from 'castle-api-client';
 import * as Constants from '~/common/constants';
 import * as NativeUtil from '~/native/nativeutil';
 
-// export const API = CastleApiClient('http://localhost:1380');
-// export const API = CastleApiClient('https://ghost-server.app.render.com');
-// export const API = CastleApiClient('http://api.playcastle.io');
 export const API = CastleApiClient(Constants.API_HOST);
-// export const API = CastleApiClient();
 
 // fetches partial user data to support some owning object
 const NESTED_USER = `

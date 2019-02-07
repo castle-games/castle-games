@@ -15,30 +15,21 @@ const MAX_NUM_FEATURED_GAMES = 4;
 const STYLES_CONTAINER = css`
   width: 100%;
   height: 100%;
-  background: ${Constants.colors.backgroundTint};
-`;
-
-const STYLES_TITLE = css`
-  font-family: ${Constants.font.default};
-  color: ${Constants.colors.white};
-  font-size: 24px;
-  font-weight: 400;
-  display: flex;
-  align-items: center;
+  background: ${Constants.colors.background};
 `;
 
 const STYLES_HEADING = css`
-  color: ${Constants.colors.black};
-  font-size: 18px;
-  font-weight: 600;
+  color: ${Constants.colors.text};
+  font-family: ${Constants.font.heading};
+  font-size: ${Constants.typescale.lvl3};
 `;
 
 const STYLES_PARAGRAPH = css`
   color: ${Constants.colors.black};
-  font-size: 14px;
+  font-size: ${Constants.typescale.base};
+  line-height: ${Constants.linescale.base};
   margin-top: 16px;
   margin-bottom: 12px;
-  line-height: 1.725;
 `;
 
 const STYLES_BUTTON_CONTAINER = css`

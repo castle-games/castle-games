@@ -16,6 +16,18 @@ import { LOADER_STRING, injectGlobalLoaderStyles } from '~/components/primitives
 import { injectGlobal } from 'react-emotion';
 
 const injectGlobalStyles = () => injectGlobal`
+  @font-face {
+    font-family: 'sf-heading';
+    src: url('static/Font-Headings-SFDisplay.woff');
+  }
+  @font-face {
+    font-family: 'sf-body';
+    src: url('static/Font-Body-SFDisplay.woff');
+  }
+  @font-face {
+    font-family: 'sf-mono';
+    src: url('static/Font-Mono-SFMono.woff');
+  }
   html, body, div, span, applet, object, iframe,
   h1, h2, h3, h4, h5, h6, p, blockquote, pre,
   a, abbr, acronym, address, big, cite, code,
@@ -69,12 +81,7 @@ const INITIAL_STATE_OFFLINE = {
 };
 
 const run = async () => {
-  const {
-    allContent,
-    featuredGames,
-    viewer,
-    isOffline,
-  } = await Network.getProductData();
+  const { allContent, featuredGames, viewer, isOffline } = await Network.getProductData();
 
   await Actions.delay(300);
 
@@ -87,7 +94,7 @@ const run = async () => {
   });
 
   state.currentUser.user = viewer;
-  state.navigation.contentMode = (isOffline) ? 'game' : 'home';
+  state.navigation.contentMode = isOffline ? 'game' : 'home';
 
   ReactDOM.render(<App state={state} storage={storage} />, document.getElementById('root'));
 
