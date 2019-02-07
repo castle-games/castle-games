@@ -42,26 +42,13 @@ const STYLES_ACTION = css`
   margin-right: 16px;
 `;
 
-const STYLES_OPTION = css`
-  color: ${Constants.colors.white60};
-  border-bottom: 1px solid ${Constants.colors.border};
-  font-size: 12px;
-  font-weight: 600;
-  padding: 16px 0 16px 0;
-  transition: 200ms ease color;
-  display: flex;
-  align-items: center;
-  :hover {
-    cursor: pointer;
-    color: ${Constants.colors.white};
-  }
-`;
-
 const STYLES_SECTION = css`
   padding: 16px 16px 32px 16px;
 `;
 
-const STYLES_GAME = css`
+const STYLES_SECTION_DARK = css`
+  background: ${Constants.colors.background3};
+  padding: 16px 16px 32px 16px;
 `;
 
 const STYLES_HELP_GLYPH = css`
@@ -69,15 +56,20 @@ const STYLES_HELP_GLYPH = css`
   vertical-align: top;
   margin: 0 12px 0 0;
   font-size: 12px;
-  color: ${Constants.colors.black80};
 `;
 
 const STYLES_HELP_ACTION = css`
   cursor: pointer;
-  color: ${Constants.colors.blue};
+  font: ${Constants.font.mono};
+  color: ${Constants.colors.action};
   line-height: 1.5rem;
-  font-size: 14px;
+  font-size: ${Constants.typescale.lvl7};
   padding: 6px 0 2px 4px;
+`;
+
+const STYLES_HELP_LABEL = css`
+  text-transform: uppercase;
+  text-decoration: underline;
 `;
 
 export default class HomeScreen extends React.Component {
@@ -141,17 +133,7 @@ export default class HomeScreen extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
-        <div className={STYLES_SECTION}>
-          <UIHeading>Play Games</UIHeading>
-          <div className={STYLES_GAME}>
-            <UIGameGrid
-              gameItems={featuredGames}
-              onUserSelect={this.context.naviateToUserProfile}
-              onGameSelect={this.context.navigateToGame}
-            />
-          </div>
-        </div>
-        <div className={STYLES_SECTION}>
+        <div className={STYLES_SECTION_DARK}>
           <UIHeading>Make a Game</UIHeading>
           <div className={STYLES_ACTIONS}>
             <div className={STYLES_ACTION}>
@@ -170,17 +152,27 @@ export default class HomeScreen extends React.Component {
               </p>
               <div onClick={this._handleClickTutorial} className={STYLES_HELP_ACTION}>
                 <div className={STYLES_HELP_GLYPH}>&gt;</div>
-                <span>Read our Tutorial</span>
+                <span className={STYLES_HELP_LABEL}>Read our Tutorial</span>
               </div>
               <div onClick={this._handleClickExamples} className={STYLES_HELP_ACTION}>
                 <div className={STYLES_HELP_GLYPH}>&gt;</div>
-                <span>View Example Projects</span>
+                <span className={STYLES_HELP_LABEL}>View Example Projects</span>
               </div>
               <div onClick={this._handleClickDiscord} className={STYLES_HELP_ACTION}>
                 <div className={STYLES_HELP_GLYPH}>&gt;</div>
-                <span>Join Discord</span>
+                <span className={STYLES_HELP_LABEL}>Join Discord</span>
               </div>
             </div>
+          </div>
+        </div>
+        <div className={STYLES_SECTION}>
+          <UIHeading>Play Games</UIHeading>
+          <div>
+            <UIGameGrid
+              gameItems={featuredGames}
+              onUserSelect={this.context.naviateToUserProfile}
+              onGameSelect={this.context.navigateToGame}
+            />
           </div>
         </div>
       </div>
