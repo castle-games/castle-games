@@ -2,7 +2,7 @@ import * as React from 'react';
 import { css } from 'react-emotion';
 
 import * as Actions from '~/common/actions';
-import CastleChat from 'castle-chat-lib';
+import { CastleChat, ConnectionStatus } from 'castle-chat-lib';
 import ChatMessagesList from '~/components/social/ChatMessagesList';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { SocialContext } from '~/contexts/SocialContext';
@@ -15,6 +15,8 @@ const STYLES_CONTAINER = css`
   height: 100%;
 `;
 
+const ROOM_NAME = 'general';
+
 class ChatContainer extends React.Component {
   constructor(props) {
     super(props);
@@ -22,6 +24,8 @@ class ChatContainer extends React.Component {
     this.state = {
       inputValue: '',
       chatMessages: [],
+      onlineUsers: [],
+      connectionStatus: ConnectionStatus.CONNECTING,
     };
 
     this._handleMessagesLock = false;
@@ -47,8 +51,20 @@ class ChatContainer extends React.Component {
     }
 
     this._castleChat = new CastleChat();
-    this._castleChat.init('http://chat.castle.games:5280/http-bind/', userId, token, ['general']);
+    this._castleChat.init('http://chat.castle.games:5280/http-bind/', userId, token, [ROOM_NAME]);
     this._castleChat.setOnMessagesHandler(this._handleMessagesAsync);
+    this._castleChat.setOnPresenceHandler(this._handlePresenceAsync);
+    this._castleChat.setConnectionStatusHandler((status) => {
+      this.setState({ connectionStatus: status });
+
+      if (status === ConnectionStatus.DISCONNECTED) {
+        this.setState({
+          chatMessages: [],
+          onlineUsers: [],
+        });
+      }
+    });
+    this._castleChat.connect();
   };
 
   _sleep = async (ms) => {
@@ -112,6 +128,12 @@ class ChatContainer extends React.Component {
     });
   };
 
+  _handlePresenceAsync = async (event) => {
+    if (event.roomName === ROOM_NAME) {
+      this.setState({ onlineUsers: event.roster });
+    }
+  };
+
   _onChangeInput = (event) => {
     this.setState({ inputValue: event.target.value });
   };
@@ -120,24 +142,40 @@ class ChatContainer extends React.Component {
     e.preventDefault();
 
     if (this._castleChat) {
-      this._castleChat.sendMessage('general', this.state.inputValue);
+      this._castleChat.sendMessage(ROOM_NAME, this.state.inputValue);
       this.setState({ inputValue: '' });
     }
   };
 
+  _onClickConnect = () => {
+    this._castleChat.connect();
+  };
+
   render() {
-    return (
-      <div className={STYLES_CONTAINER}>
-        <ChatMessagesList
-          messages={this.state.chatMessages}
-          navigateToUserProfile={this.props.navigateToUserProfile}
-        />
-        <form onSubmit={this._onSubmit}>
-          <input type="text" value={this.state.inputValue} onChange={this._onChangeInput} />
-          <input type="submit" value="Submit" />
-        </form>
-      </div>
-    );
+    switch (this.state.connectionStatus) {
+      case ConnectionStatus.CONNECTED:
+        return (
+          <div className={STYLES_CONTAINER}>
+            <ChatMessagesList
+              messages={this.state.chatMessages}
+              navigateToUserProfile={this.props.navigateToUserProfile}
+            />
+            <form onSubmit={this._onSubmit}>
+              <input type="text" value={this.state.inputValue} onChange={this._onChangeInput} />
+              <input type="submit" value="Submit" />
+            </form>
+          </div>
+        );
+      case ConnectionStatus.CONNECTING:
+        return <div>Connecting...</div>;
+      case ConnectionStatus.DISCONNECTED:
+        return (
+          <div>
+            Chat is disconnected.<p />
+            <input type="button" value="Reconnect" onClick={this._onClickConnect} />
+          </div>
+        );
+    }
   }
 }
 
