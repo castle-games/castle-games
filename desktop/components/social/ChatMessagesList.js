@@ -82,7 +82,7 @@ class ChatMessagesList extends React.Component {
           <div
             class={STYLES_MESSAGE_USERNAME}
             onClick={() => this.props.navigateToUserProfile(user)}>
-            {user.name}
+            {user.username}
           </div>
         );
       }
