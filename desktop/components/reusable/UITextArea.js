@@ -1,10 +1,10 @@
-import * as React from "react";
-import * as Constants from "~/common/constants";
-import Plain from "slate-plain-serializer";
-import { css } from "react-emotion";
+import * as React from 'react';
+import * as Constants from '~/common/constants';
+import Plain from 'slate-plain-serializer';
+import { css } from 'react-emotion';
 
-import ControlledInput from "~/components/primitives/ControlledInput";
-import ContentEditor from "~/editor/ContentEditor";
+import ControlledInput from '~/components/primitives/ControlledInput';
+import ContentEditor from '~/editor/ContentEditor';
 
 const STYLES_CONTAINER = css`
   position: relative;
@@ -17,8 +17,8 @@ const STYLES_INPUT = css`
   min-height: 112px;
   border-radius: 4px;
   width: 100%;
-  border: 1px solid ${Constants.colors.border};
-  background: ${Constants.colors.background};
+  border: 1px solid ${Constants.colors.black};
+  background: ${Constants.colors.white};
   color: ${Constants.colors.black};
   font-size: 16px;
   font-weight: 300;
@@ -26,7 +26,7 @@ const STYLES_INPUT = css`
   transition: 200ms ease all;
 
   :focus {
-    border: 1px solid ${Constants.colors.blue};
+    border: 1px solid ${Constants.colors.action};
   }
 `;
 
@@ -46,20 +46,20 @@ export default class UITextArea extends React.Component {
     onSubmit: () => {},
     onFocus: () => {},
     onBlur: () => {},
-    value: Plain.deserialize("")
+    value: Plain.deserialize(''),
   };
 
   state = {
-    focus: false
+    focus: false,
   };
 
-  _handleFocus = e => {
+  _handleFocus = (e) => {
     this.setState({ focus: true });
 
     this.props.onFocus(e);
   };
 
-  _handleBlur = e => {
+  _handleBlur = (e) => {
     this.setState({ focus: false });
 
     this.props.onBlur(e);
@@ -68,9 +68,7 @@ export default class UITextArea extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTAINER} style={this.props.style}>
-        <label className={STYLES_LABEL}>
-          {this.props.label}
-        </label>
+        <label className={STYLES_LABEL}>{this.props.label}</label>
         <ContentEditor
           autoFocus={this.props.autoFocus}
           readOnly={this.props.readOnly}

@@ -13,7 +13,6 @@ import UITextArea from '~/components/reusable/UITextArea';
 
 const STYLES_CONTAINER = css`
   color: ${Constants.colors.black};
-  border-top: 16px solid ${Constants.colors.background};
   margin-bottom: 16px;
 `;
 
@@ -75,25 +74,22 @@ export default class EditProfile extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const existingUserId = (this.props.user && this.props.user.userId) ?
-          this.props.user.userId :
-          null;
-    const nextUserId = (nextProps.user && nextProps.user.userId) ?
-          nextProps.user.userId :
-          null
-    if (existingUserId == null || nextUserId != existingUserId ||
-        (
-          nextUserId == existingUserId &&
-          nextProps.user.updatedTime !== this.props.user.updatedTime
-        )
-       ) {
+    const existingUserId =
+      this.props.user && this.props.user.userId ? this.props.user.userId : null;
+    const nextUserId = nextProps.user && nextProps.user.userId ? nextProps.user.userId : null;
+    if (
+      existingUserId == null ||
+      nextUserId != existingUserId ||
+      (nextUserId == existingUserId && nextProps.user.updatedTime !== this.props.user.updatedTime)
+    ) {
       // we're rendering a new user, reset state.
       this._resetForm(nextProps.user);
     }
   }
 
   _resetForm = (user) => {
-    const richAboutObject = (user && user.about && user.about.rich)
+    const richAboutObject =
+      user && user.about && user.about.rich
         ? Strings.loadEditor(user.about.rich)
         : Plain.deserialize('');
     this.setState({
@@ -115,8 +111,8 @@ export default class EditProfile extends React.Component {
       state.uploadedAvatarFile !== null ||
       state.isAnyFieldEdited !== false
     );
-  }
-  
+  };
+
   _onAvatarFileInputChangeAsync = async (e) => {
     let files = e.target.files;
     if (files && files.length) {
@@ -136,7 +132,7 @@ export default class EditProfile extends React.Component {
     this.setState({ user: { ...this.state.user, about: value } });
   };
 
-  _onFieldChange = e => {
+  _onFieldChange = (e) => {
     this.setState({ user: { ...this.state.user, [e.target.name]: e.target.value } });
   };
 
@@ -181,24 +177,19 @@ export default class EditProfile extends React.Component {
       avatarSrc = this.state.uploadedAvatarFile.imgixUrl;
     } else {
       // display existing creator avatar.
-      avatarSrc = (this.props.user && this.props.user.photo)
-        ? this.props.user.photo.imgixUrl
-        : null;
+      avatarSrc = this.props.user && this.props.user.photo ? this.props.user.photo.imgixUrl : null;
     }
-    
+
     let avatarLoadingElement;
     let isAvatarUploadEnabled = true;
     if (this.state.isAvatarUploading) {
-      avatarLoadingElement = (<p>Uploading...</p>);
+      avatarLoadingElement = <p>Uploading...</p>;
       isAvatarUploadEnabled = false;
     }
 
     return (
       <div className={STYLES_SECTION_CONTENT}>
-        <UIAvatar
-          src={avatarSrc}
-          style={{ width: 128, height: 128, marginRight: 16 }}
-          />
+        <UIAvatar src={avatarSrc} style={{ width: 128, height: 128, marginRight: 16 }} />
         <div className={STYLES_COLUMN}>
           {avatarLoadingElement}
           <input
@@ -206,12 +197,12 @@ export default class EditProfile extends React.Component {
             id="avatar"
             name="avatar"
             className={STYLES_FILE_INPUT}
-            style={(isAvatarUploadEnabled) ? {} : { display: 'none' }}
+            style={isAvatarUploadEnabled ? {} : { display: 'none' }}
             onChange={this._onAvatarFileInputChangeAsync}
           />
         </div>
       </div>
-    )
+    );
   };
 
   _renderGenericField = (name, label, placeholder) => {
@@ -228,8 +219,8 @@ export default class EditProfile extends React.Component {
           style={{ width: 480 }}
         />
       </div>
-    )
-  }
+    );
+  };
 
   _renderAboutField = () => {
     const value = this.state.user.about;
@@ -244,17 +235,15 @@ export default class EditProfile extends React.Component {
           style={{ width: 480, marginBottom: 16 }}
         />
       </div>
-    )
+    );
   };
-  
+
   render() {
     const isSubmitEnabled = this._doesFormContainChanges();
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_SECTION}>
-          <UISubmitButton
-            disabled={!isSubmitEnabled}
-            onClick={this._onSubmitEditProfileAsync}>
+          <UISubmitButton disabled={!isSubmitEnabled} onClick={this._onSubmitEditProfileAsync}>
             Save Changes
           </UISubmitButton>
         </div>
@@ -266,7 +255,11 @@ export default class EditProfile extends React.Component {
           <div className={STYLES_HEADING}>Profile Info</div>
           <div className={STYLES_FIELDS}>
             {this._renderGenericField('name', 'Name', 'Name shown below your username (optional)')}
-            {this._renderGenericField('websiteUrl', 'Website', 'URL shown on your profile (optional)')}
+            {this._renderGenericField(
+              'websiteUrl',
+              'Website',
+              'URL shown on your profile (optional)'
+            )}
             {this._renderGenericField('itchUsername', 'Itch', 'Itch username (optional)')}
             {this._renderGenericField('twitterUsername', 'Twitter', 'Twitter handle (optional)')}
           </div>

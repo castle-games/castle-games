@@ -8,7 +8,6 @@ import UIButtonIconHorizontal from '~/components/reusable/UIButtonIconHorizontal
 
 const STYLES_CONTAINER = css`
   color: ${Constants.colors.black};
-  border-top: 16px solid ${Constants.colors.background};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -28,16 +27,12 @@ const STYLES_PARAGRAPH = css`
 
 export default class SignOut extends React.Component {
   render() {
-    const icon = (<SVG.Logout height="16px" />);
+    const icon = <SVG.Logout height="16px" />;
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_CONTENT}>
-          <div className={STYLES_PARAGRAPH}>
-            Are you sure you want to sign out of Castle?
-          </div>
-          <UIButtonIconHorizontal
-            onClick={this.props.onSignOut}
-            icon={icon}>
+          <div className={STYLES_PARAGRAPH}>Are you sure you want to sign out of Castle?</div>
+          <UIButtonIconHorizontal onClick={this.props.onSignOut} icon={icon}>
             Sign out
           </UIButtonIconHorizontal>
         </div>

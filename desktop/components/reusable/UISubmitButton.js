@@ -4,28 +4,24 @@ import * as Constants from '~/common/constants';
 import { css } from 'react-emotion';
 
 const STYLES_BUTTON = css`
-  background: ${Constants.colors.background};
-  text-transform: uppercase;
-  transition: 200ms ease all;
+  background: ${Constants.colors.black};
+  font-family: ${Constants.font.heading};
   border-radius: 4px;
-  font-weight: 600;
   height: 34px;
   text-align: center;
   padding: 0 24px 0 24px;
   outline: 0;
   border: 0;
-  font-size: 12px;
-  opacity: 1;
+  font-size: ${Constants.typescale.lvl6};
 
   :enabled {
-    color: ${Constants.colors.black};
-    box-shadow: 0 0 0 3px ${Constants.colors.blue};
+    color: ${Constants.colors.white};
     cursor: pointer;
   }
 
   :disabled {
-    color: ${Constants.colors.black30};
-    box-shadow: 0 0 0 1px ${Constants.colors.black30};
+    color: ${Constants.colors.background};
+    background: ${Constants.colors.background4};
   }
 `;
 

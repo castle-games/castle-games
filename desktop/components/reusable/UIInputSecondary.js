@@ -16,18 +16,16 @@ const STYLES_INPUT = css`
   border-radius: 4px;
   width: 100%;
   max-width: 480px;
-  font-weight: 600;
-  border: 1px solid ${Constants.colors.border};
-  background: ${Constants.colors.background};
+  border: 1px solid ${Constants.colors.black};
+  background: ${Constants.colors.white};
   color: ${Constants.colors.black};
   font-size: 16px;
   height: 64px;
   margin: 0 0 0 0;
-  transition: 200ms ease all;
 
   :focus {
     outline: 0;
-    border: 1px solid ${Constants.colors.blue};
+    border: 1px solid ${Constants.colors.action};
   }
 `;
 
@@ -53,13 +51,13 @@ export default class UIInputSecondary extends React.Component {
     focus: false,
   };
 
-  _handleFocus = e => {
+  _handleFocus = (e) => {
     this.setState({ focus: true });
 
     this.props.onFocus(e);
   };
 
-  _handleBlur = e => {
+  _handleBlur = (e) => {
     this.setState({ focus: false });
 
     this.props.onBlur(e);
