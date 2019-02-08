@@ -35,10 +35,11 @@ const STYLES_MESSAGE_USERNAME = css`
 
 const STYLES_MESSAGE = css`
   padding: 4px 0 4px 16px;
+  overflow-wrap: break-word;
 `;
 
 const STYLES_BOTTOM = css`
-  height: 16px;
+  height: 8px;
 `;
 
 class ChatMessagesList extends React.Component {

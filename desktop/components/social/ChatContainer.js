@@ -3,6 +3,7 @@ import { css } from 'react-emotion';
 
 import * as Actions from '~/common/actions';
 import { CastleChat, ConnectionStatus } from 'castle-chat-lib';
+import ChatInput from '~/components/social/ChatInput';
 import ChatMessagesList from '~/components/social/ChatMessagesList';
 import * as Constants from '~/common/constants';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
@@ -174,10 +175,12 @@ class ChatContainer extends React.Component {
               messages={this.state.chatMessages}
               navigateToUserProfile={this.props.navigateToUserProfile}
             />
-            <form onSubmit={this._onSubmit}>
-              <input type="text" value={this.state.inputValue} onChange={this._onChangeInput} />
-              <input type="submit" value="Submit" />
-            </form>
+            <ChatInput
+              value={this.state.inputValue}
+              onChange={this._onChangeInput}
+              onSubmit={this._onSubmit}
+              placeholder="Message global chat"
+            />
           </div>
         );
       case ConnectionStatus.CONNECTING:
