@@ -1,5 +1,3 @@
-import * as Utilities from '~/common/utilities';
-
 export const API_HOST = 'https://new-castle-server.app.render.com';
 
 export const colors = {
@@ -37,18 +35,11 @@ export const linescale = {
   base: '1.5',
 };
 
-export const font = Utilities.isWindows()
-  ? {
-      // no custom fonts on windows
-      default: `avenir next, avenir, helvetica neue, helvetica,  ubuntu, roboto, noto, segoe ui, arial, sans-serif`,
-      heading: `avenir next, avenir, helvetica neue, helvetica,  ubuntu, roboto, noto, segoe ui, arial, sans-serif`,
-      mono: `Consolas, monaco, monospace`,
-    }
-  : {
-      default: `'sf-body', -apple-system, BlinkMacSystemFont, sans-serif`,
-      heading: `'sf-heading', -apple-system, BlinkMacSystemFont, sans-serif`,
-      mono: `'sf-mono', Consolas, monaco, monospace`,
-    };
+export const font = {
+  default: `'sf-body', -apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica,  ubuntu, roboto, noto, segoe ui, arial, sans-serif`,
+  heading: `'sf-heading', -apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica,  ubuntu, roboto, noto, segoe ui, arial, sans-serif`,
+  mono: `'sf-mono', Consolas, monaco, monospace`,
+};
 
 export const TRANSPARENT_GIF_DATA_URL =
   'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
