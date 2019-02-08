@@ -1,24 +1,11 @@
 import * as React from 'react';
 
-export class Social {
-  constructor() {
-    this._userIdToUser = {};
-  }
+export const SocialContextDefaults = {
+  userIdToUser: {},
+  onlineUserIds: {},
+  addUser: (user) => {},
+  addUsers: (users) => {},
+  setOnlineUserIds: (userIds) => {},
+};
 
-  getUserForId(userId) {
-    if (userId == 'admin') {
-      return {
-        userId: 'admin',
-        username: 'admin',
-      };
-    }
-
-    return this._userIdToUser[userId];
-  }
-
-  setUserForId(userId, user) {
-    this._userIdToUser[userId] = user;
-  }
-}
-
-export const SocialContext = React.createContext({});
+export const SocialContext = React.createContext(SocialContextDefaults);

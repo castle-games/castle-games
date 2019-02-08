@@ -8,7 +8,7 @@ import * as Constants from '~/common/constants';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { DevelopmentContext } from '~/contexts/DevelopmentContext';
 import { History, HistoryContext } from '~/contexts/HistoryContext';
-import { Social, SocialContext } from '~/contexts/SocialContext';
+import { SocialContext } from '~/contexts/SocialContext';
 import Logs from '~/common/logs';
 import { NavigationContext } from '~/contexts/NavigationContext';
 import * as NativeUtil from '~/native/nativeutil';
@@ -42,11 +42,10 @@ export default class App extends React.Component {
     super();
 
     this.state = props.state;
-    ['navigation', 'currentUser', 'development'].forEach((contextName) => {
+    ['navigation', 'currentUser', 'development', 'social'].forEach((contextName) => {
       this._applyContextFunctions(contextName);
     });
     this.state.history = new History(props.storage);
-    this.state.social = new Social();
   }
 
   componentDidMount() {
@@ -213,11 +212,11 @@ export default class App extends React.Component {
   };
 
   navigateToUserProfile = async (user) => {
-    let fullUser = this.state.social.getUserForId(user.userId);
+    let fullUser = this.state.social.userIdToUser[user.userId];
     if (!fullUser) {
       try {
         fullUser = await Actions.getUser({ userId: user.userId });
-        this.state.social.setUserForId(user.userId, fullUser);
+        this.state.social.addUser(fullUser);
       } catch (e) {
         // fall back to whatever we were given
         fullUser = user;
@@ -276,10 +275,15 @@ export default class App extends React.Component {
     if (!viewer) {
       return;
     }
+    this.state.social.userIdToUser[viewer.userId] = viewer;
     const updates = {
       currentUser: {
         ...this.state.currentUser,
         user: viewer,
+      },
+      social: {
+        ...this.state.social,
+        userIdToUser: this.state.social.userIdToUser,
       },
     };
     const userProfileShown = this.state.navigation.userProfileShown;
@@ -307,6 +311,43 @@ export default class App extends React.Component {
       development: {
         ...this.state.development,
         logs: [],
+      },
+    });
+  };
+
+  // social actions
+  addUser = (user) => {
+    this.setState((state) => {
+      state.social.userIdToUser[user.userId] = user;
+      return {
+        social: {
+          ...this.state.social,
+          userIdToUser: state.social.userIdToUser,
+        },
+      };
+    });
+  };
+
+  addUsers = (users) => {
+    this.setState((state) => {
+      users.forEach((user) => {
+        state.social.userIdToUser[user.userId] = user;
+      });
+
+      return {
+        social: {
+          ...this.state.social,
+          userIdToUser: state.social.userIdToUser,
+        },
+      };
+    });
+  };
+
+  setOnlineUserIds = (userIds) => {
+    this.setState({
+      social: {
+        ...this.state.social,
+        onlineUserIds: userIds,
       },
     });
   };

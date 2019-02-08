@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { css } from 'react-emotion';
+import { SocialContext } from '~/contexts/SocialContext';
 
 import * as Constants from '~/common/constants';
 
@@ -39,7 +40,7 @@ const STYLES_BOTTOM = css`
   height: 16px;
 `;
 
-export default class ChatMessagesList extends React.Component {
+class ChatMessagesList extends React.Component {
   _container;
   _containerBottom;
 
@@ -69,14 +70,19 @@ export default class ChatMessagesList extends React.Component {
     for (let ii = 0, nn = this.props.messages.length; ii < nn; ii++) {
       // TODO: show UIAvatar on the left along with author name.
       const chatMessage = this.props.messages[ii];
-      const userId = chatMessage.user.userId;
+      const userId = chatMessage.userId;
       let maybeUsername;
       if (!prevUserId || prevUserId !== userId) {
+        let user = this.props.social.userIdToUser[chatMessage.userId] || {
+          userId: chatMessage.userId,
+          username: chatMessage.userId,
+        };
+
         maybeUsername = (
           <div
             class={STYLES_MESSAGE_USERNAME}
-            onClick={() => this.props.navigateToUserProfile(chatMessage.user)}>
-            {chatMessage.user.username}
+            onClick={() => this.props.navigateToUserProfile(user)}>
+            {user.name}
           </div>
         );
       }
@@ -103,6 +109,16 @@ export default class ChatMessagesList extends React.Component {
           }}
         />
       </div>
+    );
+  }
+}
+
+export default class ChatMessagesListWithContext extends React.Component {
+  render() {
+    return (
+      <SocialContext.Consumer>
+        {(social) => <ChatMessagesList {...this.props} social={social} />}
+      </SocialContext.Consumer>
     );
   }
 }

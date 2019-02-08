@@ -5,6 +5,7 @@ import * as Constants from '~/common/constants';
 import { CurrentUserContextDefaults } from '~/contexts/CurrentUserContext';
 import { DevelopmentContextDefaults } from '~/contexts/DevelopmentContext';
 import { NavigationContextDefaults } from '~/contexts/NavigationContext';
+import { SocialContextDefaults } from '~/contexts/SocialContext';
 import * as Network from '~/common/network';
 import * as Actions from '~/common/actions';
 
@@ -78,6 +79,7 @@ const INITIAL_STATE_OFFLINE = {
   navigation: NavigationContextDefaults,
   currentUser: CurrentUserContextDefaults,
   development: DevelopmentContextDefaults,
+  social: SocialContextDefaults,
 };
 
 const run = async () => {

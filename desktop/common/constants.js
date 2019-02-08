@@ -11,6 +11,8 @@ export const colors = {
   white: `#fff`,
   black: `#000`,
   action: `blue`,
+  indicatorOnline: `#26B21C`,
+  indicatorOffline: `#666`,
 };
 
 export const typescale = {

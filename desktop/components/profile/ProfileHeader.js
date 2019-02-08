@@ -29,7 +29,7 @@ const STYLES_BODY_LEFT = css`
 `;
 
 const STYLES_BODY_RIGHT = css`
-  width: 25%
+  width: 25%;
 `;
 
 const STYLES_TOP = css`
@@ -103,23 +103,16 @@ export default class ProfileHeader extends React.Component {
     let linkElements = [];
     const { websiteUrl, itchUsername, twitterUsername } = creator;
 
-    // TODO: restore UserPlay / UserActivity
-    /* let statusElement = (
-      <UIUserStatusIndicator
-        user={creator}
-        onMediaSelect={this.props.onMediaSelect}
-        hideIfNotRecent
-      />
+    let statusElement = (
+      <UIUserStatusIndicator user={creator} onMediaSelect={this.props.onMediaSelect} />
     );
     if (statusElement) {
       linkElements.push(
-        (
         <div key="status" className={STYLES_LINK_ITEM}>
           {statusElement}
         </div>
-        )
       );
-    } */
+    }
 
     if (websiteUrl) {
       const { urlToDisplay, urlToOpen } = Urls.canonizeUserProvidedUrl(websiteUrl);
@@ -174,8 +167,11 @@ export default class ProfileHeader extends React.Component {
     const avatarSrc =
       this.props.creator && this.props.creator.photo ? this.props.creator.photo.imgixUrl : null;
 
-    const name = (this.props.creator && this.props.creator.name) ? this.props.creator.name : this.props.creator.username;
-    
+    const name =
+      this.props.creator && this.props.creator.name
+        ? this.props.creator.name
+        : this.props.creator.username;
+
     return (
       <div className={STYLES_CONTAINER} onClick={this.props.onClick}>
         <div className={STYLES_BODY}>

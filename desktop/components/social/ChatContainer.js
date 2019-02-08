@@ -73,6 +73,17 @@ class ChatContainer extends React.Component {
     return new Promise((resolve) => setTimeout(resolve, ms));
   };
 
+  _getUserForId = (userId) => {
+    if (userId == 'admin') {
+      return {
+        userId: 'admin',
+        username: 'admin',
+      };
+    }
+
+    return this.props.social.userIdToUser[userId];
+  };
+
   _handleMessagesAsync = async (messages) => {
     while (this._handleMessagesLock) {
       await this._sleep(100);
@@ -82,7 +93,7 @@ class ChatContainer extends React.Component {
     let userIdsToLoad = {};
     for (let i = 0; i < messages.length; i++) {
       let fromUserId = messages[i].message.name;
-      let fromUser = this.props.social.getUserForId(fromUserId);
+      let fromUser = this._getUserForId(fromUserId);
       if (!fromUser) {
         userIdsToLoad[fromUserId] = true;
       }
@@ -90,9 +101,7 @@ class ChatContainer extends React.Component {
 
     try {
       let users = await Actions.getUsers({ userIds: _.keys(userIdsToLoad) });
-      for (let i = 0; i < users.length; i++) {
-        this.props.social.setUserForId(users[i].userId, users[i]);
-      }
+      this.props.social.addUsers(users);
     } catch (e) {}
 
     this._handleMessagesLock = true;
@@ -104,17 +113,12 @@ class ChatContainer extends React.Component {
         let fromUserId = msg.message.name;
         let messageBody = msg.message.body;
         let timestamp = msg.timestamp;
-        let fromUser = this.props.social.getUserForId(fromUserId);
-        if (!fromUser) {
-          fromUser = {
-            username: fromUserId,
-          };
-        }
 
         state.chatMessages.push({
           key: Math.random(),
-          user: fromUser,
+          userId: fromUserId,
           message: messageBody,
+          roomName,
           timestamp,
         });
       }
@@ -132,7 +136,13 @@ class ChatContainer extends React.Component {
 
   _handlePresenceAsync = async (event) => {
     if (event.roomName === ROOM_NAME) {
-      this.setState({ onlineUsers: event.roster });
+      this.setState({ onlineUsers: event.roster.map((user) => user.name) });
+
+      let onlineUsersMap = {};
+      event.roster.forEach((user) => {
+        onlineUsersMap[user.name] = true;
+      });
+      this.props.social.setOnlineUserIds(onlineUsersMap);
     }
   };
 
