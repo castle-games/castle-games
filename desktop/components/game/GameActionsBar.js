@@ -9,12 +9,11 @@ import * as SVG from '~/components/primitives/svg';
 import * as Strings from '~/common/strings';
 
 const STYLES_CONTAINER = css`
-  background: ${Constants.colors.white};
+  background: ${Constants.colors.background};
   min-height: 96px;
   width: 100%;
   height: 100%;
   display: flex;
-  align-items: center;
   flex-direction: column;
 `;
 
@@ -26,12 +25,22 @@ const STYLES_LEFT_ACTIONS = css`
   display: flex;
 `;
 
+const STYLES_METADATA = css`
+  padding: 16px 16px 0 16px;
+  overflow-y: scroll;
+
+  ::-webkit-scrollbar {
+    display: none;
+    width: 1px;
+  }
+`;
+
 const STYLES_NAME_ROW = css`
   color: ${Constants.colors.black};
-  font-size: 14pt;
+  font-size: ${Constants.typescale.lvl5};
+  line-height: ${Constants.linescale.lvl5};
   display: flex;
   width: 100%;
-  height: 44px;
   align-items: center;
 `;
 
@@ -41,6 +50,12 @@ const STYLES_CREATOR_ROW = css`
   font-size: 10pt;
 `;
 
+const STYLES_DESCRIPTION = css`
+  margin: 16px 0 16px 0;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+`;
+
 export default class GameActionsBar extends React.Component {
   static contextType = DevelopmentContext;
 
@@ -48,9 +63,11 @@ export default class GameActionsBar extends React.Component {
     let name = 'Untitled';
     let username = 'Anonymous';
     let isRegistered = false;
+    let description = '';
     if (game) {
-      name = (game.name) ? game.name : name;
-      isRegistered = (!Strings.isEmpty(game.gameId));
+      name = game.name ? game.name : name;
+      isRegistered = !Strings.isEmpty(game.gameId);
+      description = game.description ? game.description : description;
       if (isRegistered) {
         username = game.user.username;
       } else {
@@ -59,14 +76,13 @@ export default class GameActionsBar extends React.Component {
     }
     return (
       <div className={STYLES_CONTAINER}>
-        <div className={STYLES_NAME_ROW}>
-          {name}
-          <div className={STYLES_LEFT_ACTIONS}>
-            {muteElement}
+        <div className={STYLES_METADATA}>
+          <div className={STYLES_NAME_ROW}>
+            {name}
+            <div className={STYLES_LEFT_ACTIONS}>{muteElement}</div>
           </div>
-        </div>
-        <div className={STYLES_CREATOR_ROW}>
-          Made by {username}
+          <div className={STYLES_CREATOR_ROW}>Made by {username}</div>
+          <div className={STYLES_DESCRIPTION}>{description}</div>
         </div>
       </div>
     );
@@ -76,24 +92,19 @@ export default class GameActionsBar extends React.Component {
     // TODO: mute etc.
     return (
       <div className={STYLES_CONTAINER}>
-        <DevelopmentLogs
-          logs={this.context.logs}
-          onClearLogs={this.context.clearLogs}
-        />
+        <DevelopmentLogs logs={this.context.logs} onClearLogs={this.context.clearLogs} />
       </div>
     );
   };
 
   render() {
-    let muteIcon = (this.props.isMuted) ?
-        <SVG.Mute height="14px" /> :
-        <SVG.Audio height="14px" />;
+    let muteIcon = this.props.isMuted ? <SVG.Mute height="14px" /> : <SVG.Audio height="14px" />;
     let muteElement = (
       <UIButtonDarkSmall
         icon={muteIcon}
         onClick={this.props.onToggleMute}
         style={{ background: Constants.colors.black }}
-        />
+      />
     );
     let { game } = this.props;
     if (this.context.isDeveloping) {
