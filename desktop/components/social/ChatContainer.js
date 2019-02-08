@@ -64,6 +64,8 @@ class ChatContainer extends React.Component {
           chatMessages: [],
           onlineUsers: [],
         });
+
+        this.props.social.setOnlineUserIds({}); //
       }
     });
     this._castleChat.connect();
