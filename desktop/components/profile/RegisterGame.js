@@ -15,7 +15,6 @@ import ContentEditor from '~/editor/ContentEditor';
 import DefaultState from '~/editor/default.json';
 
 const STYLES_CONTAINER = css`
-  border-top: 16px solid ${Constants.colors.background};
   display: flex;
   flex-wrap: wrap;
 `;
@@ -33,16 +32,14 @@ const STYLES_FORM_ACTIONS = css`
 `;
 
 const STYLES_HEADING = css`
-  font-weight: 600;
-  font-size: 14px;
-  letter-spacing: 0.2px;
+  font-family: ${Constants.font.heading};
+  font-size: ${Constants.typescale.lvl5};
   margin-bottom: 16px;
 `;
 
 const STYLES_PARAGRAPH = css`
-  font-size: 14px;
-  font-weight: 200;
-  line-height: 1.725;
+  font-size: ${Constants.typescale.lvl6};
+  line-height: ${Constants.linescale.lvl6};
   margin-bottom: 16px;
 `;
 
@@ -52,11 +49,10 @@ const STYLES_GAME_PREVIEW_ERROR = css`
 `;
 
 const STYLES_GAME_PREVIEW_ERROR_DETAIL = css`
-  color: ${Constants.colors.black80};
-  font-size: 14px;
+  font-size: ${Constants.typescale.lvl6};
   margin-bottom: 16px;
   padding-left: 16px;
-  border-left: 3px solid ${Constants.colors.black60};
+  border-left: 3px solid ${Constants.colors.background4};
 `;
 
 const STYLES_GAME_PREVIEW_URL = css`
@@ -106,7 +102,7 @@ export default class RegisterGame extends React.Component {
     this.setState({ previewedGame, previewError, isLoadingPreview: false });
   };
 
-  _handleChangeUrl = e => {
+  _handleChangeUrl = (e) => {
     this.setState({ urlInputValue: e.target.value }, () => {
       if (this._debouncePreviewTimeout) {
         clearTimeout(this._debouncePreviewTimeout);
@@ -122,7 +118,7 @@ export default class RegisterGame extends React.Component {
       this.state.previewedGame.slug.length > 0
     );
   };
-  
+
   _handleSubmitForm = async () => {
     let addedGame, previewError;
     if (this.state.urlInputValue && this.state.urlInputValue.length) {
@@ -147,17 +143,13 @@ export default class RegisterGame extends React.Component {
     if (this.state.previewedGame && this.state.previewedGame.slug) {
       return (
         <div>
-          <div className={STYLES_HEADING}>
-            Game Preview
-          </div>
-          <UIGameGrid
-            gameItems={[ this.state.previewedGame ]}
-            onGameSelect={() => {}}
-          />
+          <div className={STYLES_HEADING}>Game Preview</div>
+          <UIGameGrid gameItems={[this.state.previewedGame]} onGameSelect={() => {}} />
           <div className={STYLES_PARAGRAPH}>
             Your Castle url will be{' '}
             <span className={STYLES_GAME_PREVIEW_URL}>
-              http://playcastle.io/{this.state.previewedGame.slug}
+              http://playcastle.io/
+              {this.state.previewedGame.slug}
             </span>
           </div>
         </div>
@@ -165,23 +157,15 @@ export default class RegisterGame extends React.Component {
     } else if (this.state.previewError) {
       return (
         <div>
-          <div className={STYLES_HEADING}>
-            Game Preview Failed
-          </div>
+          <div className={STYLES_HEADING}>Game Preview Failed</div>
           <div className={STYLES_GAME_PREVIEW_ERROR}>
             There was a problem previewing the game at that url.
           </div>
-          <div className={STYLES_GAME_PREVIEW_ERROR_DETAIL}>
-            {this.state.previewError}
-          </div>
+          <div className={STYLES_GAME_PREVIEW_ERROR_DETAIL}>{this.state.previewError}</div>
         </div>
       );
     } else if (this.state.isLoadingPreview) {
-      return (
-        <div className={STYLES_HEADING}>
-          Loading Game Preview...
-        </div>
-      );
+      return <div className={STYLES_HEADING}>Loading Game Preview...</div>;
     }
     return null;
   };
@@ -193,11 +177,13 @@ export default class RegisterGame extends React.Component {
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_SECTION}>
-          <div className={STYLES_HEADING}>
-            Link a game to your Castle profile
-          </div>
+          <div className={STYLES_HEADING}>Link a game to your Castle profile</div>
           <div className={STYLES_PARAGRAPH}>
             When you link a game to Castle, it appears on your Castle profile.
+          </div>
+          <div className={STYLES_PARAGRAPH}>
+            Enter the url of a .castle file you made, and we'll check for a game project at that
+            url.
           </div>
           <UIInputSecondary
             value={this.state.urlInputValue}
@@ -205,18 +191,14 @@ export default class RegisterGame extends React.Component {
             label="URL to a .castle file"
             onChange={this._handleChangeUrl}
             style={{ marginBottom: 8 }}
-            />
+          />
           <div className={STYLES_FORM_ACTIONS}>
-            <UISubmitButton
-              disabled={!isSubmitEnabled}
-              onClick={this._handleSubmitForm}>
+            <UISubmitButton disabled={!isSubmitEnabled} onClick={this._handleSubmitForm}>
               {formAction}
             </UISubmitButton>
           </div>
         </div>
-        <div className={STYLES_SECTION}>
-          {gamePreviewElement}
-        </div>
+        <div className={STYLES_SECTION}>{gamePreviewElement}</div>
       </div>
     );
   }
