@@ -14,6 +14,7 @@ import { NavigationContext } from '~/contexts/NavigationContext';
 import * as NativeUtil from '~/native/nativeutil';
 import * as Strings from '~/common/strings';
 import * as Urls from '~/common/urls';
+import { linkify } from 'react-linkify';
 
 import ContentContainer from '~/components/ContentContainer.js';
 import SocialContainer from '~/components/SocialContainer.js';
@@ -56,6 +57,21 @@ export default class App extends React.Component {
     NativeUtil.setBrowserReady(() => {
       this._processNativeChannels();
     });
+
+    linkify.add('castle:', 'http:').add('castles:', 'https:');
+    window.onclick = (e) => {
+      if (e.target.localName == 'a') {
+        e.preventDefault();
+
+        let url = e.target.href;
+        if (url.startsWith('castle') || url.endsWith('.castle')) {
+          url = url.replace('castle://', 'http://');
+          this.navigateToGameUrl(url);
+        } else {
+          NativeUtil.openExternalURL(url);
+        }
+      }
+    };
   }
 
   componentWillUnmount() {

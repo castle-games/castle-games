@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { css } from 'react-emotion';
 import { SocialContext } from '~/contexts/SocialContext';
+import Linkify from 'react-linkify';
 
 import * as Constants from '~/common/constants';
 
@@ -89,7 +90,9 @@ class ChatMessagesList extends React.Component {
       listItems.push(
         <div key={chatMessage.key} className={STYLES_CHAT_ITEM}>
           {maybeUsername}
-          <div class={STYLES_MESSAGE}>{chatMessage.message}</div>
+          <div class={STYLES_MESSAGE}>
+            <Linkify>{chatMessage.message}</Linkify>
+          </div>
         </div>
       );
       prevUserId = userId;
