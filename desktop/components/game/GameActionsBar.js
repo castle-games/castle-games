@@ -47,7 +47,17 @@ const STYLES_NAME_ROW = css`
 const STYLES_CREATOR_ROW = css`
   display: flex;
   width: 100%;
-  font-size: 10pt;
+  font-family: ${Constants.font.mono};
+  font-size: ${Constants.typescale.lvl7};
+  line-height: ${Constants.typescale.lvl7};
+  text-transform: uppercase;
+  margin-top: 8px;
+`;
+
+const STYLES_CREATOR_LINK = css`
+  cursor: pointer;
+  color: ${Constants.colors.action};
+  text-decoration: underline;
 `;
 
 const STYLES_DESCRIPTION = css`
@@ -61,18 +71,32 @@ export default class GameActionsBar extends React.Component {
 
   _renderPlaying = (game, muteElement) => {
     let name = 'Untitled';
-    let username = 'Anonymous';
+    let publishedInfo = 'By Anonymous';
     let isRegistered = false;
     let description = '';
     if (game) {
       name = game.name ? game.name : name;
       isRegistered = !Strings.isEmpty(game.gameId);
       description = game.description ? game.description : description;
+      let username, updated;
       if (isRegistered) {
-        username = game.user.username;
+        username = (
+          <span
+            className={STYLES_CREATOR_LINK}
+            onClick={() => this.props.navigateToUserProfile(game.user)}>
+            {game.user.username}
+          </span>
+        );
+        updated = Strings.toDate(game.updatedTime);
       } else {
         username = game.username ? game.username : username;
+        updated = 'in development';
       }
+      publishedInfo = (
+        <div>
+          By {username} // {updated}
+        </div>
+      );
     }
     return (
       <div className={STYLES_CONTAINER}>
@@ -81,7 +105,7 @@ export default class GameActionsBar extends React.Component {
             {name}
             <div className={STYLES_LEFT_ACTIONS}>{muteElement}</div>
           </div>
-          <div className={STYLES_CREATOR_ROW}>Made by {username}</div>
+          <div className={STYLES_CREATOR_ROW}>{publishedInfo}</div>
           <div className={STYLES_DESCRIPTION}>{description}</div>
         </div>
       </div>

@@ -39,6 +39,7 @@ class GameScreen extends React.Component {
     game: null,
     timeGameLoaded: 0,
     isLoggedIn: false,
+    navigateToUserProfile: null,
     history: null,
   };
   state = {
@@ -131,6 +132,7 @@ class GameScreen extends React.Component {
           game={this.props.game}
           isMuted={this.state.isMuted}
           onToggleMute={this._toggleIsMuted}
+          navigateToUserProfile={this.props.navigateToUserProfile}
         />
       </div>
     );
@@ -150,6 +152,7 @@ export default class GameScreenWithContext extends React.Component {
                     game={navigation.game}
                     timeGameLoaded={navigation.timeGameLoaded}
                     timeNavigatedToGame={navigation.timeLastNavigated}
+                    navigateToUserProfile={navigation.navigateToUserProfile}
                     history={history}
                     isLoggedIn={currentUser.user !== null}
                   />
