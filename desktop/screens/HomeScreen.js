@@ -1,13 +1,12 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as NativeUtil from '~/native/nativeutil';
-import * as SVG from '~/components/primitives/svg';
 import shuffle from 'lodash.shuffle';
 import { css } from 'react-emotion';
 
 import Logs from '~/common/logs';
 import { NavigationContext } from '~/contexts/NavigationContext';
-import UIButtonIconHorizontal from '~/components/reusable/UIButtonIconHorizontal';
+import UIButton from '~/components/reusable/UIButton';
 import UIGameGrid from '~/components/reusable/UIGameGrid';
 import UIHeading from '~/components/reusable/UIHeading';
 
@@ -128,8 +127,6 @@ export default class HomeScreen extends React.Component {
 
   render() {
     const featuredGames = this._getFeaturedGames();
-    const externalIcon = <SVG.Share height="16px" />;
-    const createIcon = <SVG.Play height="16px" />;
 
     return (
       <div className={STYLES_CONTAINER}>
@@ -141,9 +138,7 @@ export default class HomeScreen extends React.Component {
                 Click this button to create a new minimal Castle project and start tinkering.
               </p>
               <div className={STYLES_BUTTON_CONTAINER}>
-                <UIButtonIconHorizontal onClick={this._handleCreateProject} icon={createIcon}>
-                  Create a Castle Project
-                </UIButtonIconHorizontal>
+                <UIButton onClick={this._handleCreateProject}>Create a Castle Project</UIButton>
               </div>
             </div>
             <div className={STYLES_ACTION}>

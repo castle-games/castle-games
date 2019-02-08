@@ -9,15 +9,16 @@ const STYLES_CONTAINER = css`
 `;
 
 const STYLES_HEADER = css`
-  font-weight: 600;
-  font-size: 14px;
-  letter-spacing: 0.2px;
+  color: ${Constants.colors.text};
+  font-family: ${Constants.font.heading};
+  font-size: ${Constants.typescale.lvl5};
+  margin-bottom: 16px;
 `;
 
 const STYLES_PARAGRAPH = css`
-  font-size: 14px;
-  font-weight: 200;
-  line-height: 1.725;
+  color: ${Constants.colors.black};
+  font-size: ${Constants.typescale.base};
+  line-height: ${Constants.linescale.base};
   margin-top: 16px;
 `;
 

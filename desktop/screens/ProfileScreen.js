@@ -5,7 +5,7 @@ import * as SVG from '~/components/primitives/svg';
 
 import { css } from 'react-emotion';
 
-import UIButtonIconHorizontal from '~/components/reusable/UIButtonIconHorizontal';
+import UIButton from '~/components/reusable/UIButton';
 import UIControl from '~/components/reusable/UIControl';
 import UIHorizontalNavigation from '~/components/reusable/UIHorizontalNavigation';
 import UIEmptyState from '~/components/reusable/UIEmptyState';
@@ -129,22 +129,16 @@ class ProfileScreen extends React.Component {
             />
           </div>
         ) : (
-          <UIEmptyState
-            title="No games yet"
-            style={{ borderTop: `16px solid ${Constants.colors.background}` }}>
+          <UIEmptyState title="No games yet">
             {isOwnProfile
               ? 'You have not added any games to your profile yet.'
               : 'This user has not added any games to their profile yet.'}
           </UIEmptyState>
         );
-      const addGameIcon = <SVG.Add height="16px" />;
       const maybeAddGameElement = isOwnProfile ? (
-        <UIButtonIconHorizontal
-          style={{ margin: 16 }}
-          onClick={() => this._onSelectAddGame()}
-          icon={addGameIcon}>
+        <UIButton style={{ margin: 16 }} onClick={() => this._onSelectAddGame()}>
           Add Your Games
-        </UIButtonIconHorizontal>
+        </UIButton>
       ) : null;
       return (
         <div>
