@@ -194,13 +194,14 @@ export default class App extends React.Component {
       game = await Browser.resolveGameAtUrlAsync(gameUrl);
     } catch (e) {
       // forward this error to the user
-      // Logs.error(e.message);
+      Logs.error(e.message);
+      return;
     }
 
     if (game && game.url) {
       this._loadGameAsync(game);
     } else {
-      // TODO: an error happened, surface it
+      Logs.error(`There was a problem opening the game at this url: ${gameUrl}`);
     }
   };
 
