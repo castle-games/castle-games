@@ -48,7 +48,7 @@ const STYLES_ERROR_MESSAGE = css`
   flex-shrink: 0;
   display: block;
   padding-bottom: 24px;
-  color: ${Constants.colors.red};
+  color: ${Constants.colors.error};
 `;
 
 export default class LoginSignupScreen extends React.Component {
@@ -131,7 +131,7 @@ export default class LoginSignupScreen extends React.Component {
     }
   }
 
-  _handleLoginAsync = async e => {
+  _handleLoginAsync = async (e) => {
     e.preventDefault();
 
     if (!this.state.passwordSubmitEnabled) {
@@ -163,7 +163,7 @@ export default class LoginSignupScreen extends React.Component {
     this.setState({ localViewer: user }, this._goToSuccess);
   };
 
-  _handleSubmitEmailAsync = async e => {
+  _handleSubmitEmailAsync = async (e) => {
     e.preventDefault();
 
     if (!this.state.whoSubmitEnabled) {
@@ -185,7 +185,7 @@ export default class LoginSignupScreen extends React.Component {
     this._goToSignup();
   };
 
-  _handleSignUpAsync = async e => {
+  _handleSignUpAsync = async (e) => {
     e.preventDefault();
 
     if (!this.state.signupSubmitEnabled) {
@@ -224,7 +224,7 @@ export default class LoginSignupScreen extends React.Component {
     }
   };
 
-  _handleChange = e => this.setState({ [e.target.name]: e.target.value });
+  _handleChange = (e) => this.setState({ [e.target.name]: e.target.value });
 
   // TODO(jim): The user won't even see this because authentication takes them to
   // another scene almost immediately.
@@ -241,20 +241,9 @@ export default class LoginSignupScreen extends React.Component {
   };
 
   _renderPassword = () => {
-    let imgSrc = Constants.TRANSPARENT_GIF_DATA_URL;
-
-    // TODO(jim): How reliable is this? Where does imgixURL come from?
-    if (
-      this.state.suggestedUser &&
-      this.state.suggestedUser.photo &&
-      this.state.suggestedUser.photo.imgixUrl
-    ) {
-      imgSrc = this.state.suggestedUser.photo.imgixUrl;
-    }
-
     let maybeErrorNode;
     if (!Strings.isEmpty(this.state.loginError)) {
-      maybeErrorNode = <h5 className={STYLES_ERROR_MESSAGE}>{this.state.loginError}</h5>;
+      maybeErrorNode = <h5 className={STYLES_ERROR_MESSAGE}>Error: {this.state.loginError}</h5>;
     }
 
     return (
@@ -292,7 +281,7 @@ export default class LoginSignupScreen extends React.Component {
   _renderSignup = () => {
     let maybeErrorNode;
     if (!Strings.isEmpty(this.state.signupError)) {
-      maybeErrorNode = <h5 className={STYLES_ERROR_MESSAGE}>{this.state.signupError}</h5>;
+      maybeErrorNode = <h5 className={STYLES_ERROR_MESSAGE}>Error: {this.state.signupError}</h5>;
     }
 
     return (

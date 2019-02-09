@@ -27,10 +27,8 @@ const STYLES_USERNAME = css`
 export default class UIUserPreview extends React.Component {
   render() {
     const { user } = this.props;
-    const avatarSrc = (user && user.photo)
-          ? user.photo.imgixUrl
-          : null;
-    const name = (user.name) ? user.name : user.username;
+    const avatarSrc = user && user.photo ? user.photo.url : null;
+    const name = user.name ? user.name : user.username;
     return (
       <div className={STYLES_CONTAINER}>
         <UIAvatar src={avatarSrc} />

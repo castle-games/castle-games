@@ -11,6 +11,7 @@ export const colors = {
   white: `#fff`,
   black: `#000`,
   action: `blue`,
+  error: '#f00',
   indicatorOnline: `#26B21C`,
   indicatorOffline: `#666`,
 };

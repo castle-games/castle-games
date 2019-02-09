@@ -11,6 +11,7 @@ const NESTED_USER = `
     name
     username
     photo {
+      url
       imgixUrl
       height
       width
@@ -30,6 +31,7 @@ const FULL_USER_FIELDS = `
   updatedTime
   about
   photo {
+    url
     imgixUrl
     height
     width
@@ -45,6 +47,7 @@ const GAME_FIELDS = `
   description
   metadata
   coverImage {
+    url
     imgixUrl
     height
     width
@@ -85,6 +88,7 @@ export async function getExistingUser({ who }) {
           name
           username
           photo {
+            url
             imgixUrl
             height
             width
@@ -125,6 +129,14 @@ export async function signup({ name, username, email, password }) {
       password,
     }
   );
+
+  if (response.error) {
+    return false;
+  }
+
+  if (response.errors) {
+    return response;
+  }
 
   await API.client.setTokenAsync(response.data.signup.token);
 
@@ -255,6 +267,7 @@ export async function getInitialData() {
         username
         createdTime
         photo {
+          url
           imgixUrl
           height
           width
@@ -349,6 +362,7 @@ export async function uploadImageAsync({ file }) {
           width
           height
           originUrl
+          url
           imgixUrl
         }
       }
@@ -378,6 +392,7 @@ export async function setUserPhotoAsync({ userId, fileId }) {
        ) {
          userId
          photo {
+           url
            imgixUrl
          }
        }
@@ -484,6 +499,7 @@ export async function previewGameAtUrl(url) {
             username,
           },
           coverImage {
+            url
             imgixUrl
             height
             width
