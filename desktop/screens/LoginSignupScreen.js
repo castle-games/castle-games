@@ -8,7 +8,7 @@ import * as Strings from '~/common/strings';
 
 import UIInputSecondary from '~/components/reusable/UIInputSecondary';
 import UIButton from '~/components/reusable/UIButton';
-import UIHeadingGroup from '~/components/reusable/UIHeadingGroup';
+import UIHeading from '~/components/reusable/UIHeading';
 import UILink from '~/components/reusable/UILink';
 import UIUserPreview from '~/components/reusable/UIUserPreview';
 
@@ -20,7 +20,6 @@ const STYLES_CONTAINER = css`
   width: 100%;
   height: 100%;
   overflow-y: scroll;
-  background ${Constants.colors.backgroundTint};
   color: ${Constants.colors.black};
 
   ::-webkit-scrollbar {
@@ -30,14 +29,23 @@ const STYLES_CONTAINER = css`
 `;
 
 const STYLES_CONTENTS = css`
-  padding: 88px 16px 88px 16px;
-  box-sizing: border-box;
   width: 100%;
-  max-width: 320px;
+  max-width: 480px;
+`;
+
+const STYLES_SPACER = css`
+  height: 16px;
+`;
+
+const STYLES_PARAGRAPH = css`
+  color: ${Constants.colors.black};
+  font-size: ${Constants.typescale.base};
+  line-height: ${Constants.linescale.base};
+  margin-top: 16px;
+  margin-bottom: 12px;
 `;
 
 const STYLES_FOOTER = css`
-  color: ${Constants.colors.black80};
   font-size: 12px;
   font-weight: 400;
   line-height: 1.5;
@@ -124,9 +132,8 @@ export default class LoginSignupScreen extends React.Component {
       case 'SIGNUP':
         return this._renderSignup();
       case 'SUCCESS':
-        return this._renderSuccess();
+        return <div />; // won't be seen because we redirect to profile
       default:
-        this.setState({ step: 'WHO' });
         return this._renderWho();
     }
   }
@@ -226,20 +233,6 @@ export default class LoginSignupScreen extends React.Component {
 
   _handleChange = (e) => this.setState({ [e.target.name]: e.target.value });
 
-  // TODO(jim): The user won't even see this because authentication takes them to
-  // another scene almost immediately.
-  _renderSuccess = () => {
-    return (
-      <div className={STYLES_CONTAINER}>
-        <div className={STYLES_CONTENTS}>
-          <UIHeadingGroup title="Successfully signed in">
-            <UIUserPreview user={this.state.localViewer} />
-          </UIHeadingGroup>
-        </div>
-      </div>
-    );
-  };
-
   _renderPassword = () => {
     let maybeErrorNode;
     if (!Strings.isEmpty(this.state.loginError)) {
@@ -250,9 +243,8 @@ export default class LoginSignupScreen extends React.Component {
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_CONTENTS}>
           <form onSubmit={this._handleLoginAsync}>
-            <UIHeadingGroup title="Sign in">
-              <UIUserPreview user={this.state.suggestedUser} />
-            </UIHeadingGroup>
+            <UIUserPreview user={this.state.suggestedUser} />
+            <div className={STYLES_SPACER} />
             {maybeErrorNode}
 
             <UIInputSecondary
@@ -265,6 +257,7 @@ export default class LoginSignupScreen extends React.Component {
               onChange={this._handleChange}
               value={this.state.password}
             />
+            <div className={STYLES_SPACER} />
             <UIButton onClick={this._handleLoginAsync}>Sign in</UIButton>
           </form>
 
@@ -288,7 +281,7 @@ export default class LoginSignupScreen extends React.Component {
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_CONTENTS}>
           <form onSubmit={this._handleSignUpAsync}>
-            <UIHeadingGroup title="Create a Castle account" />
+            <UIHeading>Create a Castle account</UIHeading>
             {maybeErrorNode}
             <UIInputSecondary
               autoFocus
@@ -298,6 +291,7 @@ export default class LoginSignupScreen extends React.Component {
               onChange={this._handleChange}
               value={this.state.username}
             />
+            <div className={STYLES_SPACER} />
             <UIInputSecondary
               label="name"
               name="name"
@@ -306,6 +300,7 @@ export default class LoginSignupScreen extends React.Component {
               onChange={this._handleChange}
               value={this.state.name}
             />
+            <div className={STYLES_SPACER} />
             <UIInputSecondary
               label="email"
               name="email"
@@ -315,7 +310,7 @@ export default class LoginSignupScreen extends React.Component {
               onChange={this._handleChange}
               value={this.state.email}
             />
-
+            <div className={STYLES_SPACER} />
             <UIInputSecondary
               label="password"
               name="password"
@@ -324,6 +319,7 @@ export default class LoginSignupScreen extends React.Component {
               onChange={this._handleChange}
               value={this.state.password}
             />
+            <div className={STYLES_SPACER} />
             <UIButton onClick={this._handleSignUpAsync}>Create Account</UIButton>
           </form>
 
@@ -340,9 +336,10 @@ export default class LoginSignupScreen extends React.Component {
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_CONTENTS}>
           <form onSubmit={this._handleSubmitEmailAsync}>
-            <UIHeadingGroup title="Sign in or create account">
-              Sign in or register with Castle to share art and games you've made.
-            </UIHeadingGroup>
+            <UIHeading>Sign in or create account</UIHeading>
+            <div className={STYLES_PARAGRAPH}>
+              Sign in or register with Castle to share and play games with the Castle community.
+            </div>
             <UIInputSecondary
               value=""
               autoFocus
@@ -352,6 +349,7 @@ export default class LoginSignupScreen extends React.Component {
               onChange={this._handleChange}
               value={this.state.who}
             />
+            <div className={STYLES_SPACER} />
             <UIButton
               type="submit"
               onFocus={this._handleSubmitEmailAsync}
