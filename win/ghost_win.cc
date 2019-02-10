@@ -42,6 +42,11 @@ extern "C" {
 #include "ghost_constants.h"
 #include "simple_handler.h"
 
+extern "C" {
+HWND ghostWinGetMainWindow();
+HWND ghostWinGetChildWindow();
+}
+
 // internal
 
 static void _ghostSendNativeOpenUrlEvent(std::string uri) {
@@ -240,6 +245,20 @@ void ghostSetBrowserReady() {
   }
 }
 
+GHOST_EXPORT bool ghostGetBackgrounded() {
+  if (!luaState) {
+    return false;
+  }
+
+  auto child = ghostWinGetChildWindow();
+  if (!IsWindowVisible(child)) {
+    return true;
+  }
+
+  auto foregroundWindow = GetForegroundWindow();
+  return !(foregroundWindow == child || foregroundWindow == ghostWinGetMainWindow());
+}
+
 extern "C" {
 void ghostRunMessageLoop();
 }
@@ -351,11 +370,6 @@ void stopLove() {
     stepLove();
     closeLua();
   }
-}
-
-extern "C" {
-HWND ghostWinGetMainWindow();
-HWND ghostWinGetChildWindow();
 }
 
 void ghostQuitMessageLoop() { shouldRunMessageLoop = false; }
