@@ -4,25 +4,69 @@ import { css } from 'react-emotion';
 import ChatContainer from '~/components/social/ChatContainer';
 import * as Constants from '~/common/constants';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
+import { NavigationContext } from '~/contexts/NavigationContext';
 
 const STYLES_CONTAINER = css`
   font-family: ${Constants.font.default};
-  background: ${Constants.colors.white};
   width: 30vh;
   min-width: 280px;
+  background: ${Constants.colors.backgroundLeftContext};
 `;
 
-export default class SocialContainer extends React.Component {
-  static contextType = CurrentUserContext;
+const STYLES_LOGGED_OUT = css`
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 64px;
+  flex-direction: column;
+  margin: 0 16px 0 16px;
+`;
+
+const STYLES_LOGIN_ACTION = css`
+  color: ${Constants.colors.action};
+  text-decoration: underline;
+  cursor: pointer;
+`;
+
+class SocialContainer extends React.Component {
   render() {
-    let { user } = this.context;
+    let { user, navigateToCurrentUserProfile } = this.props;
     let contentElement;
     if (user) {
       contentElement = <ChatContainer />;
     } else {
-      // TODO: what happens here when you aren't logged in?
-      contentElement = <span>Log in to chat</span>;
+      contentElement = (
+        <div className={STYLES_LOGGED_OUT}>
+          <p>
+            Welcome to Castle!{' '}
+            <span className={STYLES_LOGIN_ACTION} onClick={navigateToCurrentUserProfile}>
+              Sign in
+            </span>{' '}
+            to chat with other Castlers.
+          </p>
+        </div>
+      );
     }
     return <div className={STYLES_CONTAINER}>{contentElement}</div>;
+  }
+}
+
+export default class SocialContainerWithContext extends React.Component {
+  render() {
+    return (
+      <CurrentUserContext.Consumer>
+        {(currentUser) => (
+          <NavigationContext.Consumer>
+            {(navigation) => (
+              <SocialContainer
+                user={currentUser.user}
+                navigateToCurrentUserProfile={navigation.navigateToCurrentUserProfile}
+              />
+            )}
+          </NavigationContext.Consumer>
+        )}
+      </CurrentUserContext.Consumer>
+    );
   }
 }

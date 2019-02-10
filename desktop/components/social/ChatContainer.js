@@ -16,7 +16,6 @@ const STYLES_CONTAINER = css`
   flex-direction: column;
   justify-content: flex-end;
   height: 100%;
-  background: ${Constants.colors.backgroundLeftContext};
 `;
 
 const STYLES_CONNECTING = css`
