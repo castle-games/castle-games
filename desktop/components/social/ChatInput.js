@@ -28,6 +28,25 @@ const STYLES_INPUT = css`
   }
 `;
 
+const STYLES_INPUT_READONLY = css`
+  display: block;
+  box-sizing: border-box;
+  padding: 0 4px 0 4px;
+  border-radius: 0;
+  width: 100%;
+  border: 1px solid ${Constants.colors.background4};
+  background: ${Constants.colors.background2};
+  color: ${Constants.colors.background4};
+  font-size: 12px;
+  height: 28px;
+  margin: 0;
+  cursor: default;
+
+  :focus {
+    outline: 0;
+  }
+`;
+
 export default class ChatInput extends React.Component {
   static defaultProps = {
     onChange: () => {},
@@ -51,6 +70,7 @@ export default class ChatInput extends React.Component {
   };
 
   render() {
+    const inputStyle = this.props.readOnly ? STYLES_INPUT_READONLY : STYLES_INPUT;
     return (
       <div className={STYLES_CONTAINER} style={this.props.style}>
         <ControlledInput
@@ -63,7 +83,8 @@ export default class ChatInput extends React.Component {
           placeholder={this.props.placeholder}
           type={this.props.type}
           value={this.props.value}
-          className={STYLES_INPUT}
+          readOnly={this.props.readOnly}
+          className={inputStyle}
         />
       </div>
     );

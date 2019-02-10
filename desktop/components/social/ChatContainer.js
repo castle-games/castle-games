@@ -9,6 +9,7 @@ import * as Constants from '~/common/constants';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { SocialContext } from '~/contexts/SocialContext';
 import { NavigationContext } from '~/contexts/NavigationContext';
+import UIButton from '~/components/reusable/UIButton';
 
 const STYLES_CONTAINER = css`
   display: flex;
@@ -16,6 +17,15 @@ const STYLES_CONTAINER = css`
   justify-content: flex-end;
   height: 100%;
   background: ${Constants.colors.backgroundLeftContext};
+`;
+
+const STYLES_CONNECTING = css`
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 32px;
+  flex-direction: column;
 `;
 
 const ROOM_NAME = 'general';
@@ -175,29 +185,35 @@ class ChatContainer extends React.Component {
               messages={this.state.chatMessages}
               navigateToUserProfile={this.props.navigateToUserProfile}
             />
-            <ChatInput
-              value={this.state.inputValue}
-              onChange={this._onChangeInput}
-              onSubmit={this._onSubmit}
-              placeholder="Message global chat"
-            />
           </div>
         );
       case ConnectionStatus.CONNECTING:
-        return <div>Connecting...</div>;
+        return <div className={STYLES_CONNECTING}>Global chat is connecting...</div>;
       case ConnectionStatus.DISCONNECTED:
         return (
-          <div>
-            Chat is disconnected.
-            <p />
-            <input type="button" value="Reconnect" onClick={this._onClickConnect} />
+          <div className={STYLES_CONNECTING}>
+            <p style={{ marginBottom: 16 }}>Global chat is not connected.</p>
+            <UIButton onClick={this._onClickConnect}>Reconnect</UIButton>
           </div>
         );
     }
   }
 
   render() {
-    return <div className={STYLES_CONTAINER}>{this._renderContent()}</div>;
+    const readOnly = this.state.connectionStatus !== ConnectionStatus.CONNECTED;
+    const placeholder = readOnly ? '' : 'Message global chat';
+    return (
+      <div className={STYLES_CONTAINER}>
+        {this._renderContent()}
+        <ChatInput
+          value={this.state.inputValue}
+          onChange={this._onChangeInput}
+          onSubmit={this._onSubmit}
+          readOnly={readOnly}
+          placeholder={placeholder}
+        />
+      </div>
+    );
   }
 }
 
