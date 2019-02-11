@@ -136,7 +136,7 @@ class ProfileScreen extends React.Component {
           </UIEmptyState>
         );
       const maybeAddGameElement = isOwnProfile ? (
-        <UIButton style={{ margin: 16 }} onClick={() => this._onSelectAddGame()}>
+        <UIButton style={{ margin: `16px 16px 0 32px` }} onClick={() => this._onSelectAddGame()}>
           Add Your Games
         </UIButton>
       ) : null;

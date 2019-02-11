@@ -17,8 +17,10 @@ const STYLES_USER_CELL = css`
   justify-content: center;
   flex-direction: column;
   width: 180px;
-  min-width: 100px;
+  height: 180px;
+  flex-shrink: 0;
   cursor: pointer;
+  background: ${Constants.colors.background};
 `;
 
 const STYLES_USER_NAME = css`
@@ -33,7 +35,7 @@ class UIUserCell extends React.Component {
     const name = user.name ? user.name : user.username;
     return (
       <div className={STYLES_USER_CELL} onClick={() => this.props.onUserSelect(this.props.user)}>
-        <UIAvatar src={avatarSrc} style={{ width: 48, height: 48, borderRadius: 24 }} />
+        <UIAvatar src={avatarSrc} />
         <div className={STYLES_USER_NAME}>{name}</div>
       </div>
     );
