@@ -1,5 +1,9 @@
 export const API_HOST = 'https://api.castle.games';
 
+const brand = {
+  fuchsia: `#ff00ff`,
+};
+
 export const colors = {
   text: `#000`,
   text2: `#6e6e6e`,
@@ -12,8 +16,17 @@ export const colors = {
   black: `#000`,
   action: `blue`,
   error: '#f00',
-  indicatorOnline: `#26B21C`,
-  indicatorOffline: `#666`,
+  userStatus: {
+    online: `#26B21C`,
+    offline: `#666`,
+  },
+};
+
+export const logs = {
+  default: colors.text,
+  error: colors.error,
+  remote: `#00a55d`,
+  system: brand.fuchsia,
 };
 
 export const typescale = {

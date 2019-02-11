@@ -94,28 +94,26 @@ export default class DevelopmentLogs extends React.Component {
 
   _getLogColor = (log) => {
     if (log.type === 'error') {
-      return Constants.colors.red;
+      return Constants.logs.error;
     } else if (log.type === 'system') {
-      return Constants.colors.yellow;
+      return Constants.logs.system;
     } else if (log.type === 'remote') {
-      return Constants.colors.blueLighter
+      return Constants.logs.remote;
     }
-    return null;
+    return Constants.logs.default;
   };
 
   render() {
     return (
       <div className={STYLES_FIXED_CONTAINER}>
         <div className={STYLES_FIXED_HEADER}>
-          <UIControl
-            style={{ marginRight: 12 }}
-            onClick={this.props.onClearLogs}>
+          <UIControl style={{ marginRight: 12 }} onClick={this.props.onClearLogs}>
             Clear logs
           </UIControl>
         </div>
         <div
           className={STYLES_CONTAINER}
-          ref={c => {
+          ref={(c) => {
             this._container = c;
           }}>
           <div className={STYLES_SPACER} />
@@ -128,7 +126,7 @@ export default class DevelopmentLogs extends React.Component {
                   key={`development-log-${l.id}`}>
                   <span className={STYLES_LOG_LEFT}>{l.type}</span>
                   <div className={STYLES_LOG_RIGHT}>
-                    {l.details ? (<UILogItem log={l} />) : l.text}
+                    {l.details ? <UILogItem log={l} /> : l.text}
                   </div>
                 </div>
               );
@@ -136,7 +134,7 @@ export default class DevelopmentLogs extends React.Component {
           </div>
           <div
             className={STYLES_SPACER}
-            ref={c => {
+            ref={(c) => {
               this._logs = c;
             }}
           />

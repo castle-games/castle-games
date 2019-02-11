@@ -22,10 +22,6 @@ const STYLES_STATUS = css`
 
 const STYLES_MEDIA_NAME = css`
   color: ${Constants.colors.white};
-
-  :hover {
-    color: ${Constants.colors.yellow};
-  }
 `;
 
 // TODO: restore status
@@ -77,13 +73,13 @@ class UIUserStatusIndicator extends React.Component {
 
   _renderIndicator = () => {
     // offline
-    let indicatorStyle = { border: `2px solid ${Constants.colors.indicatorOffline}` };
+    let indicatorStyle = { border: `2px solid ${Constants.colors.userStatus.offline}` };
     const { user } = this.props;
     if (user.userId && this.props.social.onlineUserIds[user.userId]) {
       // online
       indicatorStyle = {
-        border: `2px solid ${Constants.colors.indicatorOnline}`,
-        background: Constants.colors.indicatorOnline,
+        border: `2px solid ${Constants.colors.userStatus.online}`,
+        background: Constants.colors.userStatus.online,
       };
     }
     return <div className={STYLES_INDICATOR_CONTAINER} style={indicatorStyle} />;

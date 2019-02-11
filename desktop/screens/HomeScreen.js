@@ -104,9 +104,7 @@ export default class HomeScreen extends React.Component {
         const gameUrl = `file://${entryPointFilePath}`;
         await this.context.navigateToGameUrl(gameUrl);
         Logs.system('Welcome to Castle!');
-        Logs.system(
-          `We created some starter code for your project at ${this.state.game.entryPoint}.`
-        );
+        Logs.system(`We created your project at ${gameUrl}.`);
         Logs.system(`Open that file in your favorite text editor to get started.`);
         Logs.system(`Need help? Check out http://www.playcastle.io/get-started`);
       }

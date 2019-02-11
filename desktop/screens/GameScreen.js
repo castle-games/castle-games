@@ -69,7 +69,7 @@ class GameScreen extends React.Component {
   };
 
   _openGame = async (url) => {
-    Logs.system(`Loading project at ${url}`);
+    Logs.system(`Loading game entry point: ${url}`);
     amplitude.getInstance().logEvent('OPEN_LUA', {
       url,
     });
