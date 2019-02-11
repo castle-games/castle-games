@@ -141,7 +141,12 @@ export default class SearchScreen extends React.Component {
 
   _doesQueryLookLikeUrl = (query) => {
     query = query.slice(0).trim();
-    return query.endsWith('.lua') || query.startsWith('castle:') || query.startsWith('http');
+    return (
+      query.endsWith('.lua') ||
+      query.startsWith('castle:') ||
+      query.startsWith('http') ||
+      query.startsWith('file://')
+    );
   };
 
   _renderNoResults = () => {
