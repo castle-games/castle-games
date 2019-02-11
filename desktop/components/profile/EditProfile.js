@@ -17,7 +17,7 @@ const STYLES_CONTAINER = css`
 `;
 
 const STYLES_SECTION = css`
-  border-bottom: 1px solid ${Constants.colors.border};
+  border-bottom: 1px solid ${Constants.colors.background4};
   padding: 16px 32px 16px 32px;
 
   :last-child {
@@ -263,7 +263,7 @@ export default class EditProfile extends React.Component {
             {this._renderGenericField('itchUsername', 'Itch', 'Itch username (optional)')}
             {this._renderGenericField('twitterUsername', 'Twitter', 'Twitter handle (optional)')}
           </div>
-          {this._renderAboutField()}
+          {/* this._renderAboutField() */}
         </div>
       </div>
     );
