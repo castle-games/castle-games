@@ -65,7 +65,6 @@ export default class App extends React.Component {
 
         let url = e.target.href;
         if (url.startsWith('castle') || url.endsWith('.castle')) {
-          url = url.replace('castle://', 'http://');
           this.navigateToGameUrl(url);
         } else {
           NativeUtil.openExternalURL(url);
@@ -189,6 +188,7 @@ export default class App extends React.Component {
   };
 
   navigateToGameUrl = async (gameUrl) => {
+    gameUrl = gameUrl.replace('castle://', 'http://');
     let game;
     try {
       game = await Browser.resolveGameAtUrlAsync(gameUrl);
