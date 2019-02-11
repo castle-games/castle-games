@@ -77,7 +77,6 @@ export default class GameActionsBar extends React.Component {
     if (game) {
       name = game.name ? game.name : name;
       isRegistered = !Strings.isEmpty(game.gameId);
-      console.log(`ben is registered? ${isRegistered}. game id is ${game.gameId}`);
       description = game.description ? game.description : description;
       let username = 'Anonymous',
         updated;

@@ -5,7 +5,7 @@ import * as Constants from '~/common/constants';
 import GameActionsBar from '~/components/game/GameActionsBar';
 import GameWindow from '~/native/gamewindow';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
-import { HistoryContext } from '~/contexts/HistoryContext';
+import History from '~/common/history';
 import Logs from '~/common/logs';
 import { NavigationContext } from '~/contexts/NavigationContext';
 import * as NativeUtil from '~/native/nativeutil';
@@ -144,22 +144,18 @@ export default class GameScreenWithContext extends React.Component {
     return (
       <NavigationContext.Consumer>
         {(navigation) => (
-          <HistoryContext.Consumer>
-            {(history) => (
-              <CurrentUserContext.Consumer>
-                {(currentUser) => (
-                  <GameScreen
-                    game={navigation.game}
-                    timeGameLoaded={navigation.timeGameLoaded}
-                    timeNavigatedToGame={navigation.timeLastNavigated}
-                    navigateToUserProfile={navigation.navigateToUserProfile}
-                    history={history}
-                    isLoggedIn={currentUser.user !== null}
-                  />
-                )}
-              </CurrentUserContext.Consumer>
+          <CurrentUserContext.Consumer>
+            {(currentUser) => (
+              <GameScreen
+                game={navigation.game}
+                timeGameLoaded={navigation.timeGameLoaded}
+                timeNavigatedToGame={navigation.timeLastNavigated}
+                navigateToUserProfile={navigation.navigateToUserProfile}
+                history={History}
+                isLoggedIn={currentUser.user !== null}
+              />
             )}
-          </HistoryContext.Consumer>
+          </CurrentUserContext.Consumer>
         )}
       </NavigationContext.Consumer>
     );

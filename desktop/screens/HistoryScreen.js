@@ -8,7 +8,7 @@ import UIButton from '~/components/reusable/UIButton';
 import UIEmptyState from '~/components/reusable/UIEmptyState';
 import UIHeading from '~/components/reusable/UIHeading';
 
-import { HistoryContext } from '~/contexts/HistoryContext';
+import History from '~/common/history';
 import { NavigationContext } from '~/contexts/NavigationContext';
 
 const STYLES_CONTAINER = css`
@@ -44,7 +44,7 @@ class HistoryScreen extends React.Component {
   };
 
   render() {
-    const history = this.props.history.getItems();
+    const { history } = this.props;
     let contentElement;
 
     if (!history || !history.length) {
@@ -58,7 +58,7 @@ class HistoryScreen extends React.Component {
             onUserSelect={this.props.navigation.navigateToUserProfile}
             gameItems={history}
           />
-          <UIButton onClick={this.props.history.clear}>Clear history</UIButton>
+          <UIButton onClick={this.props.onClearHistory}>Clear history</UIButton>
         </div>
       );
     }
@@ -73,15 +73,30 @@ class HistoryScreen extends React.Component {
 }
 
 export default class HistoryScreenWithContext extends React.Component {
+  state = {
+    historyItems: [],
+  };
+
+  componentDidMount() {
+    this.setState({ historyItems: History.getItems() });
+  }
+
+  _clearHistory = () => {
+    History.clear();
+    this.setState({ historyItems: History.getItems() });
+  };
+
   render() {
     return (
-      <HistoryContext.Consumer>
-        {(history) => (
-          <NavigationContext.Consumer>
-            {(navigation) => <HistoryScreen navigation={navigation} history={history} />}
-          </NavigationContext.Consumer>
+      <NavigationContext.Consumer>
+        {(navigation) => (
+          <HistoryScreen
+            navigation={navigation}
+            history={this.state.historyItems}
+            onClearHistory={this._clearHistory}
+          />
         )}
-      </HistoryContext.Consumer>
+      </NavigationContext.Consumer>
     );
   }
 }

@@ -7,7 +7,7 @@ import * as Browser from '~/common/browser';
 import * as Constants from '~/common/constants';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { DevelopmentContext } from '~/contexts/DevelopmentContext';
-import { History, HistoryContext } from '~/contexts/HistoryContext';
+import History from '~/common/history';
 import { SocialContext } from '~/contexts/SocialContext';
 import Logs from '~/common/logs';
 import { NavigationContext } from '~/contexts/NavigationContext';
@@ -46,7 +46,7 @@ export default class App extends React.Component {
     ['navigation', 'currentUser', 'development', 'social'].forEach((contextName) => {
       this._applyContextFunctions(contextName);
     });
-    this.state.history = new History(props.storage);
+    History.setStorage(props.storage);
   }
 
   componentDidMount() {
@@ -373,19 +373,17 @@ export default class App extends React.Component {
     return (
       <NavigationContext.Provider value={this.state.navigation}>
         <CurrentUserContext.Provider value={this.state.currentUser}>
-          <HistoryContext.Provider value={this.state.history}>
-            <DevelopmentContext.Provider value={this.state.development}>
-              <SocialContext.Provider value={this.state.social}>
-                <div className={STYLES_CONTAINER}>
-                  <SocialContainer />
-                  <ContentContainer
-                    featuredGames={this.state.featuredGames}
-                    allContent={this.state.allContent}
-                  />
-                </div>
-              </SocialContext.Provider>
-            </DevelopmentContext.Provider>
-          </HistoryContext.Provider>
+          <DevelopmentContext.Provider value={this.state.development}>
+            <SocialContext.Provider value={this.state.social}>
+              <div className={STYLES_CONTAINER}>
+                <SocialContainer />
+                <ContentContainer
+                  featuredGames={this.state.featuredGames}
+                  allContent={this.state.allContent}
+                />
+              </div>
+            </SocialContext.Provider>
+          </DevelopmentContext.Provider>
         </CurrentUserContext.Provider>
       </NavigationContext.Provider>
     );
