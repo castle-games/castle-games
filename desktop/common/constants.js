@@ -1,4 +1,4 @@
-export const API_HOST = 'https://new-castle-server.app.render.com';
+export const API_HOST = 'https://api.castle.games';
 
 export const colors = {
   text: `#000`,
