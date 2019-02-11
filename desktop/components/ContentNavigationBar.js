@@ -8,7 +8,7 @@ import * as Urls from '~/common/urls';
 import Viewer from '~/components/Viewer';
 
 const STYLES_CONTAINER = css`
-  background: ${Constants.colors.black};
+  background: #242729;
   height: 48px;
   flex-shrink: 0;
   width: 100%;
@@ -38,9 +38,7 @@ export default class ContentNavigationBar extends React.Component {
     let maybePlayingItem;
     if (this.context.game) {
       maybePlayingItem = (
-        <div
-          className={STYLES_NAV_ITEM}
-          onClick={this.context.navigateToCurrentGame}>
+        <div className={STYLES_NAV_ITEM} onClick={this.context.navigateToCurrentGame}>
           Playing
         </div>
       );
@@ -48,14 +46,10 @@ export default class ContentNavigationBar extends React.Component {
     return (
       <div className={STYLES_NAV_ITEMS}>
         {maybePlayingItem}
-        <div
-          className={STYLES_NAV_ITEM}
-          onClick={this.context.navigateToHome}>
+        <div className={STYLES_NAV_ITEM} onClick={this.context.navigateToHome}>
           Home
         </div>
-        <div
-          className={STYLES_NAV_ITEM}
-          onClick={this.context.navigateToHistory}>
+        <div className={STYLES_NAV_ITEM} onClick={this.context.navigateToHistory}>
           Recent
         </div>
       </div>

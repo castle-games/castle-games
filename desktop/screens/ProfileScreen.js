@@ -23,7 +23,7 @@ const STYLES_CONTAINER = css`
   height: 100%;
   overflow-y: scroll;
   color: ${Constants.colors.text};
-  background: ${Constants.colors.background2};
+  background: ${Constants.colors.background};
 
   ::-webkit-scrollbar {
     display: none;

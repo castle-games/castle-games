@@ -7,17 +7,17 @@ const brand = {
 export const colors = {
   text: `#000`,
   text2: `#6e6e6e`,
-  background: `#e4e0e0`,
-  background2: `#D9D9D9`,
-  background3: `#C9C9C9`,
-  background4: `#B1B1B1`,
-  backgroundLeftContext: `#9E9E9E`,
+  background: `#FAFAFB`,
+  background3: `#EFF0F1`,
+  background4: `#D6D9DC`,
+  backgroundLeftContext: `#C0C0C2`,
   white: `#fff`,
   black: `#000`,
   action: `blue`,
   error: '#f00',
   userStatus: {
-    online: `#26B21C`,
+    online: `#62D96B`,
+    // online: `#2EE6D6`, -- cyan option
     offline: `#666`,
   },
 };

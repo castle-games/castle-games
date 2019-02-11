@@ -35,7 +35,7 @@ const STYLES_INPUT_READONLY = css`
   border-radius: 0;
   width: 100%;
   border: 1px solid ${Constants.colors.background4};
-  background: ${Constants.colors.background2};
+  background: ${Constants.colors.background};
   color: ${Constants.colors.background4};
   font-size: 12px;
   height: 28px;

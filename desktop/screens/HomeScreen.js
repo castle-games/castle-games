@@ -46,7 +46,7 @@ const STYLES_SECTION = css`
 `;
 
 const STYLES_SECTION_DARK = css`
-  background: ${Constants.colors.background3};
+  background: ${Constants.colors.background4};
   padding: 16px 16px 32px 16px;
 `;
 
