@@ -179,12 +179,10 @@ class ChatContainer extends React.Component {
     switch (this.state.connectionStatus) {
       case ConnectionStatus.CONNECTED:
         return (
-          <div>
-            <ChatMessagesList
-              messages={this.state.chatMessages}
-              navigateToUserProfile={this.props.navigateToUserProfile}
-            />
-          </div>
+          <ChatMessagesList
+            messages={this.state.chatMessages}
+            navigateToUserProfile={this.props.navigateToUserProfile}
+          />
         );
       case ConnectionStatus.CONNECTING:
         return <div className={STYLES_CONNECTING}>Global chat is connecting...</div>;
