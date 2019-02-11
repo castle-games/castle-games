@@ -119,7 +119,7 @@ export default class App extends React.Component {
   };
 
   _handleLuaSystemKeyDownEvent = async (e) => {
-    await Actions.delay(50);
+    await Actions.delay(10);
     this._handleKeyDownEvent({ ...e.params, preventDefault() {} });
   };
 
@@ -142,7 +142,6 @@ export default class App extends React.Component {
     if (e) {
       e.preventDefault();
     }
-    await Actions.delay(100);
     this.navigateToGameUrl(this.state.navigation.game.url);
   };
 
