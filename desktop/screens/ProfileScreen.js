@@ -124,7 +124,7 @@ class ProfileScreen extends React.Component {
               creator={creator}
               gameItems={creator.gameItems}
               onGameSelect={this.props.navigateToGame}
-              onGameUpdate={this._updateGame}
+              onGameUpdate={(isOwnProfile) ? this._updateGame : null}
             />
           </div>
         ) : (
