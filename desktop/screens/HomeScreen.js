@@ -1,7 +1,6 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as NativeUtil from '~/native/nativeutil';
-import shuffle from 'lodash.shuffle';
 import { css } from 'react-emotion';
 
 import Logs from '~/common/logs';
@@ -10,12 +9,18 @@ import UIButton from '~/components/reusable/UIButton';
 import UIGameGrid from '~/components/reusable/UIGameGrid';
 import UIHeading from '~/components/reusable/UIHeading';
 
-const MAX_NUM_FEATURED_GAMES = 4;
+const MAX_NUM_FEATURED_GAMES = 16;
 
 const STYLES_CONTAINER = css`
   width: 100%;
   height: 100%;
   background: ${Constants.colors.background};
+  overflow-y: scroll;
+
+  ::-webkit-scrollbar {
+    display: none;
+    width: 1px;
+  }
 `;
 
 const STYLES_PARAGRAPH = css`
@@ -115,7 +120,7 @@ export default class HomeScreen extends React.Component {
     const { featuredGames } = this.props;
     let result;
     if (featuredGames) {
-      result = shuffle(featuredGames);
+      result = featuredGames;
       if (result.length > MAX_NUM_FEATURED_GAMES) {
         result = result.slice(0, MAX_NUM_FEATURED_GAMES);
       }

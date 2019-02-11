@@ -20,7 +20,7 @@ const STYLES_USER_CELL = css`
   height: 180px;
   flex-shrink: 0;
   cursor: pointer;
-  background: ${Constants.colors.background};
+  background: ${Constants.colors.background3};
 `;
 
 const STYLES_USER_NAME = css`
