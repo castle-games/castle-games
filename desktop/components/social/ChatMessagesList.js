@@ -62,7 +62,9 @@ class ChatMessagesList extends React.Component {
 
   scroll = () => {
     window.setTimeout(() => {
-      this._containerBottom.scrollIntoView(false);
+      if (this._containerBottom) {
+        this._containerBottom.scrollIntoView(false);
+      }
     });
   };
 
@@ -82,7 +84,7 @@ class ChatMessagesList extends React.Component {
 
         maybeUsername = (
           <div
-            class={STYLES_MESSAGE_USERNAME}
+            className={STYLES_MESSAGE_USERNAME}
             onClick={() => this.props.navigateToUserProfile(user)}>
             {user.username}
           </div>
@@ -91,7 +93,7 @@ class ChatMessagesList extends React.Component {
       listItems.push(
         <div key={chatMessage.key} className={STYLES_CHAT_ITEM}>
           {maybeUsername}
-          <div class={STYLES_MESSAGE}>
+          <div className={STYLES_MESSAGE}>
             <Linkify>{chatMessage.message}</Linkify>
           </div>
         </div>
