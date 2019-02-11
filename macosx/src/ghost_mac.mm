@@ -117,16 +117,27 @@ void ghostSetChildWindowFrame(float left, float top, float width, float height) 
   childWidth = width;
   childHeight = height;
   
-  NSWindow *window = ghostMacGetMainWindow();
-  if (window) {
-    CGRect frame;
-    frame.origin.x = window.frame.origin.x + left;
-    frame.origin.y = window.frame.origin.y + window.contentLayoutRect.size.height - top - height;
-    frame.size.width = width;
-    frame.size.height = height;
-    
+  if (ghostMacMainWindow) {
     if (ghostMacChildWindow) {
+      CGRect frame;
+      frame.origin.x = ghostMacMainWindow.frame.origin.x + left;
+      frame.origin.y = ghostMacMainWindow.frame.origin.y + ghostMacMainWindow.contentLayoutRect.size.height - top - height;
+      frame.size.width = width;
+      frame.size.height = height;
       [ghostMacChildWindow setFrame:frame display:NO];
+      
+      // Focus-follows-mouse
+      NSPoint mouse = [NSEvent mouseLocation];
+      if (frame.origin.x <= mouse.x && mouse.x <= frame.origin.x + width &&
+          frame.origin.y <= mouse.y && mouse.y <= frame.origin.y + height) {
+        if (![ghostMacChildWindow isKeyWindow]) {
+          [ghostMacChildWindow makeKeyWindow];
+        }
+      } else if (![ghostMacMainWindow isKeyWindow]) {
+        [ghostMacMainWindow makeKeyWindow];
+      }
+    } else if (![ghostMacMainWindow isKeyWindow]) {
+      [ghostMacMainWindow makeKeyWindow];
     }
   }
 }
