@@ -6,7 +6,6 @@ import * as SVG from '~/components/primitives/svg';
 import { css } from 'react-emotion';
 
 import UIButton from '~/components/reusable/UIButton';
-import UIControl from '~/components/reusable/UIControl';
 import UIHorizontalNavigation from '~/components/reusable/UIHorizontalNavigation';
 import UIEmptyState from '~/components/reusable/UIEmptyState';
 

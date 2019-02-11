@@ -4,7 +4,6 @@ import * as Window from '~/common/window';
 
 import { css } from 'react-emotion';
 
-import UIControl from '~/components/reusable/UIControl';
 import UIHeaderDismiss from '~/components/reusable/UIHeaderDismiss';
 import UIEmptyState from '~/components/reusable/UIEmptyState';
 import UILogItem from '~/components/reusable/UILogItem';
@@ -67,6 +66,20 @@ const STYLES_SPACER = css`
   height: 24px;
 `;
 
+const STYLES_CONTROL = css`
+  margin: 16px 16px 0 16px;
+  letter-spacing: 0.2px;
+  color: ${Constants.colors.action};
+  font-family: ${Constants.font.mono};
+  font-size: ${Constants.typescale.lvl7};
+  text-transform: uppercase;
+  text-decoration: underline;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+`;
+
 export default class DevelopmentLogs extends React.Component {
   _logs;
   _container;
@@ -107,9 +120,9 @@ export default class DevelopmentLogs extends React.Component {
     return (
       <div className={STYLES_FIXED_CONTAINER}>
         <div className={STYLES_FIXED_HEADER}>
-          <UIControl style={{ marginRight: 12 }} onClick={this.props.onClearLogs}>
+          <div className={STYLES_CONTROL} onClick={this.props.onClearLogs}>
             Clear logs
-          </UIControl>
+          </div>
         </div>
         <div
           className={STYLES_CONTAINER}

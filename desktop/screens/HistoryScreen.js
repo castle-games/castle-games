@@ -7,7 +7,6 @@ import UIGameGrid from '~/components/reusable/UIGameGrid';
 import UIButton from '~/components/reusable/UIButton';
 import UIEmptyState from '~/components/reusable/UIEmptyState';
 import UIHeading from '~/components/reusable/UIHeading';
-import UIControl from '~/components/reusable/UIControl';
 
 import { HistoryContext } from '~/contexts/HistoryContext';
 import { NavigationContext } from '~/contexts/NavigationContext';
