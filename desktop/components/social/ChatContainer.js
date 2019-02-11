@@ -5,7 +5,6 @@ import * as Actions from '~/common/actions';
 import { CastleChat, ConnectionStatus } from 'castle-chat-lib';
 import ChatInput from '~/components/social/ChatInput';
 import ChatMessagesList from '~/components/social/ChatMessagesList';
-import * as Constants from '~/common/constants';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { SocialContext } from '~/contexts/SocialContext';
 import { NavigationContext } from '~/contexts/NavigationContext';
@@ -178,12 +177,18 @@ class ChatContainer extends React.Component {
   _renderContent() {
     switch (this.state.connectionStatus) {
       case ConnectionStatus.CONNECTED:
-        return (
-          <ChatMessagesList
-            messages={this.state.chatMessages}
-            navigateToUserProfile={this.props.navigateToUserProfile}
-          />
-        );
+        if (this.state.chatMessages.length == 0) {
+          // TODO: this is a little buggy in that when the server is restarted there won't be any messages sent back
+          // Fix this by actually requesting history every time chat opens
+          return <div className={STYLES_CONNECTING}>Loading messages...</div>;
+        } else {
+          return (
+            <ChatMessagesList
+              messages={this.state.chatMessages}
+              navigateToUserProfile={this.props.navigateToUserProfile}
+            />
+          );
+        }
       case ConnectionStatus.CONNECTING:
         return <div className={STYLES_CONNECTING}>Global chat is connecting...</div>;
       case ConnectionStatus.DISCONNECTED:
