@@ -5,7 +5,7 @@ import { SocialContext } from '~/contexts/SocialContext';
 import { css } from 'react-emotion';
 
 const STYLES_CONTAINER = css`
-  display: flex;
+  display: inline-flex;
 `;
 
 const STYLES_INDICATOR_CONTAINER = css`
@@ -81,7 +81,10 @@ class UIUserStatusIndicator extends React.Component {
     const { user } = this.props;
     if (user.userId && this.props.social.onlineUserIds[user.userId]) {
       // online
-      indicatorStyle = { background: Constants.colors.indicatorOnline };
+      indicatorStyle = {
+        border: `2px solid ${Constants.colors.indicatorOnline}`,
+        background: Constants.colors.indicatorOnline,
+      };
     }
     return <div className={STYLES_INDICATOR_CONTAINER} style={indicatorStyle} />;
   };

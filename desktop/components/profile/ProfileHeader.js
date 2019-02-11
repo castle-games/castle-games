@@ -47,6 +47,7 @@ const STYLES_META = css`
   font-size: ${Constants.typescale.lvl7};
   text-transform: uppercase;
   font-family: ${Constants.font.mono};
+  line-height: ${Constants.linescale.lvl6};
 `;
 
 const STYLES_ABOUT = css`
@@ -80,6 +81,13 @@ const STYLES_LINK = css`
   }
 `;
 
+const STYLES_STATUS = css`
+  margin-right: 8px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const STYLES_CREATOR_IDENTITY = css`
   margin-bottom: 16px;
 `;
@@ -87,6 +95,14 @@ const STYLES_CREATOR_IDENTITY = css`
 export default class ProfileHeader extends React.Component {
   _handleClickCreatorLink = (url) => {
     NativeUtil.openExternalURL(url);
+  };
+
+  _renderOnlineStatus = (creator) => {
+    return (
+      <div className={STYLES_STATUS}>
+        <UIUserStatusIndicator user={creator} onMediaSelect={this.props.onMediaSelect} />
+      </div>
+    );
   };
 
   _renderTagline = (creator) => {
@@ -102,17 +118,6 @@ export default class ProfileHeader extends React.Component {
   _renderLinks = (creator) => {
     let linkElements = [];
     const { websiteUrl, itchUsername, twitterUsername } = creator;
-
-    let statusElement = (
-      <UIUserStatusIndicator user={creator} onMediaSelect={this.props.onMediaSelect} />
-    );
-    if (statusElement) {
-      linkElements.push(
-        <div key="status" className={STYLES_LINK_ITEM}>
-          {statusElement}
-        </div>
-      );
-    }
 
     if (websiteUrl) {
       const { urlToDisplay, urlToOpen } = Urls.canonizeUserProvidedUrl(websiteUrl);
@@ -183,7 +188,10 @@ export default class ProfileHeader extends React.Component {
               />
               <div className={STYLES_CREATOR_IDENTITY}>
                 <UIHeading style={{ marginBottom: 8 }}>{name}</UIHeading>
-                <div className={STYLES_META}>{this._renderTagline(this.props.creator)}</div>
+                <div className={STYLES_META}>
+                  {this._renderOnlineStatus(this.props.creator)}
+                  {this._renderTagline(this.props.creator)}
+                </div>
               </div>
             </div>
             {linksElement}
