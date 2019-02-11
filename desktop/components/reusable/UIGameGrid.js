@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
+import * as Urls from '~/common/urls';
 
 import { css } from 'react-emotion';
 
@@ -68,15 +69,19 @@ const STYLES_GAME_ACTIONS = css`
 
 class UIGameCell extends React.Component {
   render() {
-    const name = this.props.game.name ? this.props.game.name : 'Untitled';
-    const creator =
-      this.props.game.user && this.props.game.user.name ? this.props.game.user.name : 'anonymous';
+    let { game } = this.props;
+    const name = game.name ? game.name : 'Untitled';
+    let description;
+    if (Urls.isPrivateUrl(game.url) || !game.user || !game.user.name) {
+      // if it's a local project, or we don't know about the creator, display the url
+      description = game.url;
+    } else {
+      description = `By ${game.user.name}`;
+    }
     let maybeSyncElement;
     if (this.props.onGameUpdate) {
       maybeSyncElement = (
-        <div
-          className={STYLES_GAME_ACTIONS}
-          onClick={() => this.props.onGameUpdate(this.props.game)}>
+        <div className={STYLES_GAME_ACTIONS} onClick={() => this.props.onGameUpdate(game)}>
           Sync
         </div>
       );
@@ -85,11 +90,11 @@ class UIGameCell extends React.Component {
       <div className={STYLES_GAME_ITEM}>
         <div
           className={STYLES_GAME_HOVER_BOX}
-          onClick={() => this.props.onGameSelect(this.props.game)}
+          onClick={() => this.props.onGameSelect(game)}
           style={{ backgroundImage: this.props.src ? `url(${this.props.src})` : null }}>
           <div className={STYLES_GAME_ITEM_BOTTOM}>
             <div className={STYLES_GAME_ITEM_BOTTOM_HEADING}>{name}</div>
-            <div className={STYLES_GAME_ITEM_BOTTOM_DESCRIPTION}>by {creator}</div>
+            <div className={STYLES_GAME_ITEM_BOTTOM_DESCRIPTION}>{description}</div>
           </div>
         </div>
         {maybeSyncElement}
