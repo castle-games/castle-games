@@ -20,7 +20,7 @@ import ContentContainer from '~/components/ContentContainer.js';
 import SocialContainer from '~/components/SocialContainer.js';
 
 const isReloadHotkey = isKeyHotkey('mod+r');
-const isFullscreenHotkey = isKeyHotkey('mod+f');
+const isFullscreenHotkey = isKeyHotkey('mod+shift+f');
 const isDevelopmentHotkey = isKeyHotkey('mod+j');
 
 const NATIVE_CHANNELS_POLL_INTERVAL = 300;
