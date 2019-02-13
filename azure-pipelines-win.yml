@@ -1,5 +1,5 @@
 trigger:
-  - win_ci_test
+  - release/win
 
 pool:
   vmImage: "vs2017-win2016"
