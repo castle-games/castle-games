@@ -59,6 +59,7 @@ class GameScreen extends React.Component {
   }
 
   componentWillUnmount() {
+    // don't call GameWindow.close(), because we might just be hiding the game.
     GameWindow.setVisible(false);
     window.removeEventListener('resize', this._updateGameWindowFrame);
   }
