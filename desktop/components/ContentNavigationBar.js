@@ -3,6 +3,7 @@ import { css } from 'react-emotion';
 
 import * as Constants from '~/common/constants';
 import { NavigationContext } from '~/contexts/NavigationContext';
+import { NavigatorContext } from '~/contexts/NavigatorContext';
 import SearchInput from '~/components/SearchInput';
 import * as Urls from '~/common/urls';
 import Viewer from '~/components/Viewer';
@@ -31,14 +32,13 @@ const STYLES_NAV_ITEM = css`
   margin: 0 6px 0 6px;
 `;
 
-export default class ContentNavigationBar extends React.Component {
-  static contextType = NavigationContext;
-
+class ContentNavigationBar extends React.Component {
   _renderTopNavigationItems = () => {
+    let { game, navigator } = this.props;
     let maybePlayingItem;
-    if (this.context.game) {
+    if (game) {
       maybePlayingItem = (
-        <div className={STYLES_NAV_ITEM} onClick={this.context.navigateToCurrentGame}>
+        <div className={STYLES_NAV_ITEM} onClick={navigator.navigateToCurrentGame}>
           Playing
         </div>
       );
@@ -46,10 +46,10 @@ export default class ContentNavigationBar extends React.Component {
     return (
       <div className={STYLES_NAV_ITEMS}>
         {maybePlayingItem}
-        <div className={STYLES_NAV_ITEM} onClick={this.context.navigateToHome}>
+        <div className={STYLES_NAV_ITEM} onClick={navigator.navigateToHome}>
           Home
         </div>
-        <div className={STYLES_NAV_ITEM} onClick={this.context.navigateToHistory}>
+        <div className={STYLES_NAV_ITEM} onClick={navigator.navigateToHistory}>
           Recent
         </div>
       </div>
@@ -68,6 +68,22 @@ export default class ContentNavigationBar extends React.Component {
         {this._renderTopNavigationItems()}
         <Viewer />
       </div>
+    );
+  }
+}
+
+export default class ContentNavigationBarWithContext extends React.Component {
+  render() {
+    return (
+      <NavigationContext.Consumer>
+        {(navigation) => (
+          <NavigatorContext.Consumer>
+            {(navigator) => (
+              <ContentNavigationBar game={navigation.game} navigator={navigator} {...this.props} />
+            )}
+          </NavigatorContext.Consumer>
+        )}
+      </NavigationContext.Consumer>
     );
   }
 }

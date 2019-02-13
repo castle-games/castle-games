@@ -14,6 +14,7 @@ import RegisterGame from '~/components/profile/RegisterGame';
 import UIGameGrid from '~/components/reusable/UIGameGrid';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigationContext } from '~/contexts/NavigationContext';
+import { NavigatorContext } from '~/contexts/NavigatorContext';
 import ProfileHeader from '~/components/profile/ProfileHeader';
 import SignOut from '~/components/profile/SignOut';
 
@@ -124,7 +125,7 @@ class ProfileScreen extends React.Component {
               creator={creator}
               gameItems={creator.gameItems}
               onGameSelect={this.props.navigateToGame}
-              onGameUpdate={(isOwnProfile) ? this._updateGame : null}
+              onGameUpdate={isOwnProfile ? this._updateGame : null}
             />
           </div>
         ) : (
@@ -192,11 +193,11 @@ class ProfileScreen extends React.Component {
 }
 
 export default class ProfileScreenWithContext extends React.Component {
-  _renderProfile = (navigation, currentUser) => {
+  _renderProfile = (navigator, navigation, currentUser) => {
     return (
       <ProfileScreen
-        navigateToGame={navigation.navigateToGame}
-        navigateToUserProfile={navigation.navigateToUserProfile}
+        navigateToGame={navigator.navigateToGame}
+        navigateToUserProfile={navigator.navigateToUserProfile}
         viewer={currentUser.user}
         creator={navigation.userProfileShown}
         onSignOut={currentUser.clearCurrentUser}
@@ -207,13 +208,17 @@ export default class ProfileScreenWithContext extends React.Component {
 
   render() {
     return (
-      <NavigationContext.Consumer>
-        {(navigation) => (
-          <CurrentUserContext.Consumer>
-            {(currentUser) => this._renderProfile(navigation, currentUser)}
-          </CurrentUserContext.Consumer>
+      <NavigatorContext.Consumer>
+        {(navigator) => (
+          <NavigationContext.Consumer>
+            {(navigation) => (
+              <CurrentUserContext.Consumer>
+                {(currentUser) => this._renderProfile(navigator, navigation, currentUser)}
+              </CurrentUserContext.Consumer>
+            )}
+          </NavigationContext.Consumer>
         )}
-      </NavigationContext.Consumer>
+      </NavigatorContext.Consumer>
     );
   }
 }

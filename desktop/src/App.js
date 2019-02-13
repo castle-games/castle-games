@@ -11,6 +11,7 @@ import History from '~/common/history';
 import { SocialContext } from '~/contexts/SocialContext';
 import Logs from '~/common/logs';
 import { NavigationContext } from '~/contexts/NavigationContext';
+import { NavigatorContext } from '~/contexts/NavigatorContext';
 import * as NativeUtil from '~/native/nativeutil';
 import * as Strings from '~/common/strings';
 import * as Urls from '~/common/urls';
@@ -43,7 +44,7 @@ export default class App extends React.Component {
     super();
 
     this.state = props.state;
-    ['navigation', 'currentUser', 'development', 'social'].forEach((contextName) => {
+    ['navigator', 'currentUser', 'development', 'social'].forEach((contextName) => {
       this._applyContextFunctions(contextName);
     });
     History.setStorage(props.storage);
@@ -83,7 +84,7 @@ export default class App extends React.Component {
   // the App component uses its own state as the value for our ContextProviders.
   // for Contexts which include methods, this allows us to provide App's implementation
   // of those methods.
-  // for example, this.state.navigation.navigateToGame = this.navigateToGame
+  // for example, this.state.navigator.navigateToGame = this.navigateToGame
   _applyContextFunctions = (contextName) => {
     const context = this.state[contextName];
     Object.getOwnPropertyNames(context).forEach((prop) => {
@@ -166,7 +167,7 @@ export default class App extends React.Component {
     this.setIsDeveloping(isLocal);
   };
 
-  // navigation actions
+  // navigator actions
   _navigateToContentMode = (mode) => {
     this.setState({
       navigation: {
@@ -370,21 +371,23 @@ export default class App extends React.Component {
 
   render() {
     return (
-      <NavigationContext.Provider value={this.state.navigation}>
-        <CurrentUserContext.Provider value={this.state.currentUser}>
-          <DevelopmentContext.Provider value={this.state.development}>
-            <SocialContext.Provider value={this.state.social}>
-              <div className={STYLES_CONTAINER}>
-                <SocialContainer />
-                <ContentContainer
-                  featuredGames={this.state.featuredGames}
-                  allContent={this.state.allContent}
-                />
-              </div>
-            </SocialContext.Provider>
-          </DevelopmentContext.Provider>
-        </CurrentUserContext.Provider>
-      </NavigationContext.Provider>
+      <NavigatorContext.Provider value={this.state.navigator}>
+        <NavigationContext.Provider value={this.state.navigation}>
+          <CurrentUserContext.Provider value={this.state.currentUser}>
+            <DevelopmentContext.Provider value={this.state.development}>
+              <SocialContext.Provider value={this.state.social}>
+                <div className={STYLES_CONTAINER}>
+                  <SocialContainer />
+                  <ContentContainer
+                    featuredGames={this.state.featuredGames}
+                    allContent={this.state.allContent}
+                  />
+                </div>
+              </SocialContext.Provider>
+            </DevelopmentContext.Provider>
+          </CurrentUserContext.Provider>
+        </NavigationContext.Provider>
+      </NavigatorContext.Provider>
     );
   }
 }

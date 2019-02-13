@@ -3,7 +3,7 @@ import { css } from 'react-emotion';
 
 import * as Constants from '~/common/constants';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
-import { NavigationContext } from '~/contexts/NavigationContext';
+import { NavigatorContext } from '~/contexts/NavigatorContext';
 import UIAvatar from '~/components/reusable/UIAvatar';
 
 const STYLES_CONTAINER = css`
@@ -18,7 +18,7 @@ const STYLES_CONTAINER = css`
 `;
 
 export default class Viewer extends React.Component {
-  _renderViewer = (navigation, currentUser) => {
+  _renderViewer = (navigateToCurrentUserProfile, currentUser) => {
     const name = currentUser.user ? currentUser.user.username[0].toUpperCase() : 'Log In';
     const avatarSrc =
       currentUser.user && currentUser.user.photo ? currentUser.user.photo.imgixUrl : null;
@@ -26,7 +26,7 @@ export default class Viewer extends React.Component {
       <div className={STYLES_CONTAINER}>
         <UIAvatar
           src={avatarSrc}
-          onClick={navigation.navigateToCurrentUserProfile}
+          onClick={navigateToCurrentUserProfile}
           style={{ width: 32, height: 32, borderRadius: 4 }}
         />
       </div>
@@ -35,13 +35,15 @@ export default class Viewer extends React.Component {
 
   render() {
     return (
-      <NavigationContext.Consumer>
-        {(navigation) => (
+      <NavigatorContext.Consumer>
+        {(navigator) => (
           <CurrentUserContext.Consumer>
-            {(currentUser) => this._renderViewer(navigation, currentUser)}
+            {(currentUser) =>
+              this._renderViewer(navigator.navigateToCurrentUserProfile, currentUser)
+            }
           </CurrentUserContext.Consumer>
         )}
-      </NavigationContext.Consumer>
+      </NavigatorContext.Consumer>
     );
   }
 }

@@ -4,7 +4,7 @@ import * as NativeUtil from '~/native/nativeutil';
 import { css } from 'react-emotion';
 
 import Logs from '~/common/logs';
-import { NavigationContext } from '~/contexts/NavigationContext';
+import { NavigatorContext } from '~/contexts/NavigatorContext';
 import UIButton from '~/components/reusable/UIButton';
 import UIGameGrid from '~/components/reusable/UIGameGrid';
 import UIHeading from '~/components/reusable/UIHeading';
@@ -80,7 +80,7 @@ export default class HomeScreen extends React.Component {
   static defaultProps = {
     featuredGames: [],
   };
-  static contextType = NavigationContext;
+  static contextType = NavigatorContext;
 
   _handleClickExamples = () => {
     NativeUtil.openExternalURL('http://www.playcastle.io/examples');

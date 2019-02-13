@@ -5,6 +5,7 @@ import * as Constants from '~/common/constants';
 import { CurrentUserContextDefaults } from '~/contexts/CurrentUserContext';
 import { DevelopmentContextDefaults } from '~/contexts/DevelopmentContext';
 import { NavigationContextDefaults } from '~/contexts/NavigationContext';
+import { NavigatorContextDefaults } from '~/contexts/NavigatorContext';
 import { SocialContextDefaults } from '~/contexts/SocialContext';
 import * as Network from '~/common/network';
 import * as Actions from '~/common/actions';
@@ -77,6 +78,7 @@ const INITIAL_STATE_OFFLINE = {
   featuredGames: [],
   isOffline: true,
   navigation: NavigationContextDefaults,
+  navigator: NavigatorContextDefaults,
   currentUser: CurrentUserContextDefaults,
   development: DevelopmentContextDefaults,
   social: SocialContextDefaults,

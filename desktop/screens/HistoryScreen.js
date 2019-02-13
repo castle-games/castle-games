@@ -10,6 +10,7 @@ import UIHeading from '~/components/reusable/UIHeading';
 
 import History from '~/common/history';
 import { NavigationContext } from '~/contexts/NavigationContext';
+import { NavigatorContext } from '~/contexts/NavigatorContext';
 
 const STYLES_CONTAINER = css`
   width: 100%;
@@ -38,7 +39,7 @@ class HistoryScreen extends React.Component {
         <div className={STYLES_PARAGRAPH}>
           After you play some games in Castle, return here to find your recent plays.
         </div>
-        <UIButton onClick={this.props.navigation.navigateToHome}>Browse Games</UIButton>
+        <UIButton onClick={this.props.navigator.navigateToHome}>Browse Games</UIButton>
       </div>
     );
   };
@@ -53,9 +54,9 @@ class HistoryScreen extends React.Component {
       contentElement = (
         <div>
           <UIGameGrid
-            game={this.props.navigation.game}
-            onGameSelect={this.props.navigation.navigateToGame}
-            onUserSelect={this.props.navigation.navigateToUserProfile}
+            game={this.props.game}
+            onGameSelect={this.props.navigator.navigateToGame}
+            onUserSelect={this.props.navigator.navigateToUserProfile}
             gameItems={history}
           />
           <UIButton onClick={this.props.onClearHistory}>Clear history</UIButton>
@@ -88,15 +89,20 @@ export default class HistoryScreenWithContext extends React.Component {
 
   render() {
     return (
-      <NavigationContext.Consumer>
-        {(navigation) => (
-          <HistoryScreen
-            navigation={navigation}
-            history={this.state.historyItems}
-            onClearHistory={this._clearHistory}
-          />
+      <NavigatorContext.Consumer>
+        {(navigator) => (
+          <NavigationContext.Consumer>
+            {(navigation) => (
+              <HistoryScreen
+                game={navigation.game}
+                navigator={navigator}
+                history={this.state.historyItems}
+                onClearHistory={this._clearHistory}
+              />
+            )}
+          </NavigationContext.Consumer>
         )}
-      </NavigationContext.Consumer>
+      </NavigatorContext.Consumer>
     );
   }
 }

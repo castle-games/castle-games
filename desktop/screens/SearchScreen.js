@@ -2,7 +2,7 @@ import * as React from 'react';
 import { css } from 'react-emotion';
 
 import * as Constants from '~/common/constants';
-import { NavigationContext } from '~/contexts/NavigationContext';
+import { NavigatorContext } from '~/contexts/NavigatorContext';
 import * as Strings from '~/common/strings';
 import UIButtonSecondary from '~/components/reusable/UIButtonSecondary';
 import UIGameGrid from '~/components/reusable/UIGameGrid';
@@ -23,7 +23,7 @@ const STYLES_SECTION = css`
 `;
 
 export default class SearchScreen extends React.Component {
-  static contextType = NavigationContext;
+  static contextType = NavigatorContext;
   static defaultProps = {
     allContent: {
       games: [],

@@ -7,7 +7,7 @@ import ChatInput from '~/components/social/ChatInput';
 import ChatMessagesList from '~/components/social/ChatMessagesList';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { SocialContext } from '~/contexts/SocialContext';
-import { NavigationContext } from '~/contexts/NavigationContext';
+import { NavigatorContext } from '~/contexts/NavigatorContext';
 import UIButton from '~/components/reusable/UIButton';
 
 const STYLES_CONTAINER = css`
@@ -226,15 +226,15 @@ export default class ChatContainerWithContext extends React.Component {
         {(currentUser) => (
           <SocialContext.Consumer>
             {(social) => (
-              <NavigationContext.Consumer>
-                {(navigation) => (
+              <NavigatorContext.Consumer>
+                {(navigator) => (
                   <ChatContainer
                     user={currentUser.user}
                     social={social}
-                    navigateToUserProfile={navigation.navigateToUserProfile}
+                    navigateToUserProfile={navigator.navigateToUserProfile}
                   />
                 )}
-              </NavigationContext.Consumer>
+              </NavigatorContext.Consumer>
             )}
           </SocialContext.Consumer>
         )}

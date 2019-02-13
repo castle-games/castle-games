@@ -4,7 +4,7 @@ import { css } from 'react-emotion';
 import ChatContainer from '~/components/social/ChatContainer';
 import * as Constants from '~/common/constants';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
-import { NavigationContext } from '~/contexts/NavigationContext';
+import { NavigatorContext } from '~/contexts/NavigatorContext';
 
 const STYLES_CONTAINER = css`
   font-family: ${Constants.font.default};
@@ -57,14 +57,14 @@ export default class SocialContainerWithContext extends React.Component {
     return (
       <CurrentUserContext.Consumer>
         {(currentUser) => (
-          <NavigationContext.Consumer>
-            {(navigation) => (
+          <NavigatorContext.Consumer>
+            {(navigator) => (
               <SocialContainer
                 user={currentUser.user}
-                navigateToCurrentUserProfile={navigation.navigateToCurrentUserProfile}
+                navigateToCurrentUserProfile={navigator.navigateToCurrentUserProfile}
               />
             )}
-          </NavigationContext.Consumer>
+          </NavigatorContext.Consumer>
         )}
       </CurrentUserContext.Consumer>
     );
