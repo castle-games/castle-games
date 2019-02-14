@@ -1,6 +1,11 @@
 version: 2
 jobs:
   build:
+    branches:
+      only:
+        - release/macos
+        - ci_test
+
     macos:
       xcode: "10.1.0"
 
@@ -10,3 +15,7 @@ jobs:
       - run:
           name: Build
           command: cd macosx && ./release.sh
+
+      - run:
+          name: Upload
+          command: cd ci && ci-macos mac ../macosx/Castle.pkg

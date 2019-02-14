@@ -3,9 +3,16 @@
   "version": "1.0.0",
   "description": "",
   "main": "upload_script.js",
+  "bin": "upload_script.js",
   "author": "",
   "license": "ISC",
+  "scripts": {
+    "build": "pkg . --targets node10-macos-x64,node10-win-x64"
+  },
   "dependencies": {
     "request": "^2.88.0"
+  },
+  "devDependencies": {
+    "pkg": "^4.3.7"
   }
 }
