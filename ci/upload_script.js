@@ -29,8 +29,8 @@ exec("git rev-parse HEAD", function(error, stdout) {
       }
     },
     function(err, resp, body) {
-      if (err) {
-        console.log("Error!");
+      if (err || resp.statusCode != 200) {
+        console.log("Error! " + resp.body);
         process.exit(1);
       } else {
         console.log("Success!");
