@@ -4,6 +4,12 @@
 
 @implementation GhostFileSystem
 
+/**
+ *  Provides the path CEF uses for LocalStorage.
+ *  Note: If testing LocalStorage, you cannot use the Stop button from Xcode.
+ *  You need to properly terminate the program (i.e. with Cmd+Q) for LocalStorage to flush.
+ *  Reference: https://magpcss.org/ceforum/viewtopic.php?f=6&t=13332
+ */
 + (NSString *)ghostCachesDirectory {
   NSError *err;
   NSURL *userCacheFileUrl = [[NSFileManager defaultManager] URLForDirectory:NSCachesDirectory
