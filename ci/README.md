@@ -1,6 +1,16 @@
-Azure runs the azure-pipelines-mac.yml and azure-pipelines-win.yml pipelines when release/macox and release/win are pushed to respectively.
+### Windows
 
-The pipelines build the installers and then they run 'upload_script.js' in this directory which uploads the binary to our server. It includes that platform name and git hash during the upload. We use a secure file (https://docs.microsoft.com/en-us/azure/devops/pipelines/library/secure-files?view=azure-devops) on Azure to store a token with admin access that gets passed into the script.
+Azure listens to release/win and runs azure-pipelines-win.yml.
+https://dev.azure.com/Castle-Games/Castle%20Desktop/_build?definitionId=3
+
+### Mac
+
+CircleCI listens to release/macos and runs .circleci/config.yml.
+https://circleci.com/gh/castle-games/ghost
+
+### Shared
+
+The pipelines build the installers and then they run 'upload_script.js' in this directory which uploads the binary to our server. It includes that platform name and git hash during the upload. We use a secure file (https://docs.microsoft.com/en-us/azure/devops/pipelines/library/secure-files?view=azure-devops) on Azure and an env var on CircleCI to store a token with admin access that gets passed into the script.
 
 To check for updates, the client calls https://api.castle.games/api/client-release?platform=win&current-git-hash=[HASH]. That returns a JSON object:
 
@@ -16,4 +26,4 @@ To check for updates, the client calls https://api.castle.games/api/client-relea
 
 ### Debugging
 
-The mac build was stuck on connecting to an agent. I cloned the Castle Desktop Mac pipeline and started a build in the clone and it unblocked the first build.
+https://dev.azure.com/Castle-Games/_settings/buildqueue?project=Castle%20Desktop&_a=concurrentJobs to change Azure concurrent jobs.
