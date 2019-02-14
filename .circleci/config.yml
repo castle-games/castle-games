@@ -18,4 +18,4 @@ jobs:
 
       - run:
           name: Upload
-          command: cd ci && ci-macos mac ../macosx/Castle.pkg
+          command: cd ci && ./ci-macos mac ../macosx/Castle.pkg
