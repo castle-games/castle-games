@@ -5,18 +5,20 @@
 @implementation GhostFileSystem
 
 + (NSString *)ghostCachesDirectory {
-  NSArray<NSURL *> *cachesUrls = [[NSFileManager defaultManager] URLsForDirectory:NSCachesDirectory
-                                                                        inDomains:NSUserDomainMask];
-  NSURL *userCachePath = [cachesUrls lastObject];
-  if (userCachePath) {
+  NSError *err;
+  NSURL *userCacheFileUrl = [[NSFileManager defaultManager] URLForDirectory:NSCachesDirectory
+                                                                   inDomain:NSUserDomainMask
+                                                          appropriateForURL:nil
+                                                                     create:YES
+                                                                      error:&err];
+  if (userCacheFileUrl) {
     NSString *bundleId = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIdentifier"];
-    NSString *ghostCachePath =
-        [[userCachePath URLByAppendingPathComponent:bundleId] absoluteString];
+    NSURL *ghostCacheFileUrl = [userCacheFileUrl URLByAppendingPathComponent:bundleId];
+    NSString *ghostCachePath = [ghostCacheFileUrl path];
     BOOL isDirectory;
     BOOL exists =
         [[NSFileManager defaultManager] fileExistsAtPath:ghostCachePath isDirectory:&isDirectory];
     if (!exists) {
-      NSError *err;
       [[NSFileManager defaultManager] createDirectoryAtPath:ghostCachePath
                                 withIntermediateDirectories:YES
                                                  attributes:nil
