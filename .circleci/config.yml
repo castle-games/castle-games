@@ -1,23 +1,25 @@
 version: 2
 jobs:
   build:
-    context: castle-secret
-
-    branches:
-      only:
-        - release/macos
-        - ci_test
-
     macos:
-      xcode: "10.1.0"
-
+      xcode: 10.1.0
     steps:
       - checkout
-
       - run:
           name: Build
           command: cd macosx && ./release.sh
-
       - run:
           name: Upload
           command: cd ci && ./ci-macos mac ../macosx/Castle.pkg
+
+workflows:
+  version: 2
+  workflow:
+    jobs:
+      - build:
+          context: castle-secret
+          filters:
+            branches:
+              only:
+                - release/macos
+                - ci_test
