@@ -1,6 +1,8 @@
 version: 2
 jobs:
   build:
+    context: castle-secret
+
     branches:
       only:
         - release/macos

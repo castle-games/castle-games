@@ -2,11 +2,15 @@ var fs = require("fs");
 var request = require("request");
 var exec = require("child_process").exec;
 
-var tokenFilename =
-  process.env["DOWNLOADSECUREFILE_SECUREFILEPATH"] ||
-  "../../ghost-secret/ci-secret-file.txt";
+var token = process.env["CASTLE_UPLOAD_TOKEN"];
 
-var token = fs.readFileSync(tokenFilename, "utf8");
+if (!token) {
+  var tokenFilename =
+    process.env["DOWNLOADSECUREFILE_SECUREFILEPATH"] ||
+    "../../ghost-secret/ci-secret-file.txt";
+
+  token = fs.readFileSync(tokenFilename, "utf8");
+}
 
 exec("git rev-parse HEAD", function(error, stdout) {
   stdout = stdout.trim();
