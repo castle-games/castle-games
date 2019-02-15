@@ -11,6 +11,7 @@ import { NavigationContext } from '~/contexts/NavigationContext';
 import { NavigatorContext } from '~/contexts/NavigatorContext';
 import * as NativeUtil from '~/native/nativeutil';
 import Share from '~/common/share';
+import UserStatus from '~/common/userstatus';
 import * as Utilities from '~/common/utilities';
 
 const STYLES_CONTAINER = css`
@@ -67,6 +68,7 @@ class GameScreen extends React.Component {
   _closeGame = async () => {
     // close window
     await GameWindow.close();
+    UserStatus.stopAsync();
     Share.removeEventListeners();
   };
 
@@ -76,6 +78,7 @@ class GameScreen extends React.Component {
       url,
     });
     Share.addEventListeners();
+    UserStatus.startAsync(this.props.game);
     await GameWindow.open(url);
     this.props.history.addItem(this.props.game);
 

@@ -539,52 +539,70 @@ export async function updateGameAtUrl(url) {
   return result.data.updateGame;
 }
 
-export async function recordUserplayEndAsync(userplayId) {
-  let result = await API.graphqlAsync(
-    /* GraphQL */ `
-      mutation($userplayId: ID!) {
-        recordUserplayEnd(userplayId: $userplayId) {
-          userId
-        }
-      }
-    `,
-    {
-      userplayId,
-    }
-  );
+export async function recordUserStatus(status, isNewSession, game) {
+  if (game.gameId) {
+    return _recordUserStatusRegisteredGame(status, isNewSession, game.gameId);
+  } else {
+    return _recordUserStatusUnregisteredGame(status, isNewSession, game);
+  }
 }
 
-// TODO: UserActivity
-export async function recordUserplayStartAsync(mediaUrl, mediaId) {
-  return await API.graphqlAsync(
+async function _recordUserStatusUnregisteredGame(status, isNewSession, game) {
+  const result = await API.graphqlAsync(
     /* GraphQL */ `
-      mutation($mediaId: ID, $mediaUrl: String) {
-        recordUserplayStart(mediaId: $mediaId, mediaUrl: $mediaUrl) {
-          userplayId
+      mutation(
+        $status: String!
+        $url: String!
+        $name: String
+        $coverImage: String
+        $isNewSession: Boolean
+      ) {
+        recordUserStatus(
+          status: $status
+          isNewSession: $isNewSession
+          unregisteredGame: { url: $url, name: $name, coverImage: $coverImage }
+        ) {
+          userStatusId
         }
       }
     `,
     {
-      mediaId,
-      mediaUrl,
+      status,
+      isNewSession,
+      url: game.url,
+      name: game.name,
+      coverImage: game.coverImage ? game.coverImage.url : null,
     }
   );
+  if (result.error || result.errors) {
+    return false;
+  }
+  return result.data.recordUserStatus.userStatusId;
 }
 
-// TODO: UserActivity
-export async function recordUserplayPingAsync(userplayId) {
-  return await API.graphqlAsync(
+async function _recordUserStatusRegisteredGame(status, isNewSession, gameId) {
+  const result = await API.graphqlAsync(
     /* GraphQL */ `
-      mutation($userplayId: ID!) {
-        recordUserplayPing(userplayId: $userplayId) {
-          userplayId
+      mutation($status: String!, $isNewSession: Boolean, $registeredGameId: ID!) {
+        recordUserStatus(
+          status: $status
+          isNewSession: $isNewSession
+          registeredGameId: $registeredGameId
+        ) {
+          userStatusId
         }
       }
     `,
     {
-      userplayId,
+      status,
+      isNewSession,
+      registeredGameId: gameId,
     }
   );
+  if (result.error || result.errors) {
+    return false;
+  }
+  return result.data.recordUserStatus.userStatusId;
 }
 
 // TODO: media -> game
