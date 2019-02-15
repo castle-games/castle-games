@@ -10,7 +10,9 @@ MACOS_VERSION=$MACOS_BASE_VERSION.$(git rev-list release-root..HEAD --count)
 
 rm -rf archive.xcarchive
 xcodebuild -project ghost.xcodeproj -config Release -scheme ghost-macosx -archivePath ./archive archive
-mv archive.xcarchive/Products/Applications/Castle.app .
-ditto -c -k --sequesterRsrc --keepParent Castle.app Castle-$MACOS_VERSION.zip
+ditto -c -k --sequesterRsrc --keepParent archive.xcarchive/Products/Applications/Castle.app Castle-$MACOS_VERSION.zip
 rm -rf archive.xcarchive
 
+/usr/libexec/PlistBuddy -c "Set GHGitHash GIT_HASH_UNSET" Supporting/ghost-macosx.plist
+/usr/libexec/PlistBuddy -c "Set CFBundleVersion VERSION_UNSET" Supporting/ghost-macosx.plist
+/usr/libexec/PlistBuddy -c "Set CFBundleShortVersionString VERSION_UNSET" Supporting/ghost-macosx.plist
