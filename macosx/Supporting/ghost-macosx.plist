@@ -14,8 +14,12 @@
 	<string>Castle</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
+	<key>GHGitHash</key>
+	<string>GIT_HASH_UNSET</string>
+	<key>CFBundleVersion</key>
+	<string>VERSION_UNSET</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.0.13</string>
+	<string>VERSION_UNSET</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
