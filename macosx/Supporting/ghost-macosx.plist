@@ -14,10 +14,6 @@
 	<string>Castle</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
-	<key>GHGitHash</key>
-	<string>GIT_HASH_UNSET</string>
-	<key>CFBundleVersion</key>
-	<string>VERSION_UNSET</string>
 	<key>CFBundleShortVersionString</key>
 	<string>VERSION_UNSET</string>
 	<key>CFBundleSignature</key>
@@ -33,6 +29,10 @@
 			</array>
 		</dict>
 	</array>
+	<key>CFBundleVersion</key>
+	<string>VERSION_UNSET</string>
+	<key>GHGitHash</key>
+	<string>GIT_HASH_UNSET</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.games</string>
 	<key>LSEnvironment</key>
@@ -44,11 +44,11 @@
 	<true/>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
-	<key>SUFeedURL</key>
-	<string>https://ac5500cc.ngrok.io/appcast.xml</string>
-	<key>SUEnableAutomaticChecks</key>
-	<true/>
 	<key>NSSupportsAutomaticGraphicsSwitching</key>
 	<true/>
+	<key>SUEnableAutomaticChecks</key>
+	<true/>
+	<key>SUFeedURL</key>
+	<string>https://ac5500cc.ngrok.io/appcast.xml</string>
 </dict>
 </plist>
