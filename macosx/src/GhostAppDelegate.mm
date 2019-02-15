@@ -14,6 +14,8 @@ extern "C" {
 #include "modules/thread/Channel.h"
 #include "modules/timer/Timer.h"
 
+#import <Sparkle/SUUpdater.h>
+
 #include "simple_handler.h"
 
 extern "C" NSWindow *ghostMacGetMainWindow();
@@ -39,26 +41,27 @@ extern __weak NSWindow *ghostMacChildWindow;
   return NO;
 }
 
-// Create the application on the UI thread.
+// Create the application on the UI thread
 - (void)createApplication:(id)object {
   [NSApplication sharedApplication];
   [NSApplication sharedApplication].mainMenu = [GhostMainMenu makeMainMenu];
 
-  // Set the delegate for application events.
+  // Set the delegate for application events
   [[NSApplication sharedApplication] setDelegate:self];
 
-  self.luaState = nil;
+  // Initialize Sparkle
+  [[SUUpdater sharedUpdater] resetUpdateCycle];
 
+  // Initialize Lua / game loop stuff
+  self.luaState = nil;
   self.mainLoopTimer = [NSTimer timerWithTimeInterval:1.0f / 60.0f
                                                target:self
                                              selector:@selector(stepMainLoop)
                                              userInfo:nil
                                               repeats:YES];
   [[NSRunLoop mainRunLoop] addTimer:self.mainLoopTimer forMode:NSRunLoopCommonModes];
-
   self.lovePaused = NO;
   self.loveStepping = NO;
-
   self.windowEventsSubscribed = NO;
 }
 
