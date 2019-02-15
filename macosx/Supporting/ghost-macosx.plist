@@ -50,5 +50,7 @@
 	<true/>
 	<key>SUFeedURL</key>
 	<string>https://ac5500cc.ngrok.io/appcast.xml</string>
+	<key>SUPublicEDKey</key>
+	<string>uZotBBxbk+/JlVAWhEmAV/cefqX2EeFQGu4sAGDfDzE=</string>
 </dict>
 </plist>
