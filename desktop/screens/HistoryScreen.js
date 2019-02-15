@@ -3,12 +3,13 @@ import * as Constants from '~/common/constants';
 
 import { css } from 'react-emotion';
 
+import * as Actions from '~/common/actions';
+import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import UIGameGrid from '~/components/reusable/UIGameGrid';
 import UIButton from '~/components/reusable/UIButton';
 import UIEmptyState from '~/components/reusable/UIEmptyState';
 import UIHeading from '~/components/reusable/UIHeading';
 
-import History from '~/common/history';
 import { NavigationContext } from '~/contexts/NavigationContext';
 import { NavigatorContext } from '~/contexts/NavigatorContext';
 
@@ -33,6 +34,15 @@ const STYLES_PARAGRAPH = css`
 `;
 
 class HistoryScreen extends React.Component {
+  static defaultProps = {
+    refreshHistory: async () => {},
+    history: [],
+  };
+
+  componentDidMount() {
+    this.props.refreshHistory();
+  }
+
   _renderEmpty = () => {
     return (
       <div>
@@ -51,15 +61,17 @@ class HistoryScreen extends React.Component {
     if (!history || !history.length) {
       contentElement = this._renderEmpty();
     } else {
+      const gameItems = history.map((historyItem) => {
+        return { ...historyItem.game, key: historyItem.userStatusId };
+      });
       contentElement = (
         <div>
           <UIGameGrid
             game={this.props.game}
             onGameSelect={this.props.navigator.navigateToGame}
             onUserSelect={this.props.navigator.navigateToUserProfile}
-            gameItems={history}
+            gameItems={gameItems}
           />
-          <UIButton onClick={this.props.onClearHistory}>Clear history</UIButton>
         </div>
       );
     }
@@ -74,35 +86,26 @@ class HistoryScreen extends React.Component {
 }
 
 export default class HistoryScreenWithContext extends React.Component {
-  state = {
-    historyItems: [],
-  };
-
-  componentDidMount() {
-    this.setState({ historyItems: History.getItems() });
-  }
-
-  _clearHistory = () => {
-    History.clear();
-    this.setState({ historyItems: History.getItems() });
-  };
-
   render() {
     return (
-      <NavigatorContext.Consumer>
-        {(navigator) => (
-          <NavigationContext.Consumer>
-            {(navigation) => (
-              <HistoryScreen
-                game={navigation.game}
-                navigator={navigator}
-                history={this.state.historyItems}
-                onClearHistory={this._clearHistory}
-              />
+      <CurrentUserContext.Consumer>
+        {(currentUser) => (
+          <NavigatorContext.Consumer>
+            {(navigator) => (
+              <NavigationContext.Consumer>
+                {(navigation) => (
+                  <HistoryScreen
+                    game={navigation.game}
+                    navigator={navigator}
+                    refreshHistory={currentUser.refreshCurrentUser}
+                    history={currentUser.userStatusHistory}
+                  />
+                )}
+              </NavigationContext.Consumer>
             )}
-          </NavigationContext.Consumer>
+          </NavigatorContext.Consumer>
         )}
-      </NavigatorContext.Consumer>
+      </CurrentUserContext.Consumer>
     );
   }
 }

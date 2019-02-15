@@ -7,7 +7,6 @@ import * as Browser from '~/common/browser';
 import * as Constants from '~/common/constants';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { DevelopmentContext } from '~/contexts/DevelopmentContext';
-import History from '~/common/history';
 import { SocialContext } from '~/contexts/SocialContext';
 import Logs from '~/common/logs';
 import { NavigationContext } from '~/contexts/NavigationContext';
@@ -47,7 +46,6 @@ export default class App extends React.Component {
     ['navigator', 'currentUser', 'development', 'social'].forEach((contextName) => {
       this._applyContextFunctions(contextName);
     });
-    History.setStorage(props.storage);
   }
 
   componentDidMount() {
@@ -279,6 +277,7 @@ export default class App extends React.Component {
         currentUser: {
           ...this.state.currentUser,
           user: null,
+          userStatusHistory: [],
         },
       },
       () => {
@@ -292,11 +291,13 @@ export default class App extends React.Component {
     if (!viewer) {
       return;
     }
+    const userStatusHistory = await Actions.getUserStatusHistory(viewer.userId);
     this.state.social.userIdToUser[viewer.userId] = viewer;
     const updates = {
       currentUser: {
         ...this.state.currentUser,
         user: viewer,
+        userStatusHistory,
       },
       social: {
         ...this.state.social,

@@ -5,7 +5,6 @@ import * as Constants from '~/common/constants';
 import GameActionsBar from '~/components/game/GameActionsBar';
 import GameWindow from '~/native/gamewindow';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
-import History from '~/common/history';
 import Logs from '~/common/logs';
 import { NavigationContext } from '~/contexts/NavigationContext';
 import { NavigatorContext } from '~/contexts/NavigatorContext';
@@ -42,7 +41,6 @@ class GameScreen extends React.Component {
     timeGameLoaded: 0,
     isLoggedIn: false,
     navigateToUserProfile: null,
-    history: null,
   };
   state = {
     isMuted: false,
@@ -80,7 +78,6 @@ class GameScreen extends React.Component {
     Share.addEventListeners();
     UserStatus.startAsync(this.props.game);
     await GameWindow.open(url);
-    this.props.history.addItem(this.props.game);
 
     // Sync state for new Ghost instance
     NativeUtil.sendLuaEvent('CASTLE_SET_LOGGED_IN', this.props.isLoggedIn);
@@ -158,7 +155,6 @@ export default class GameScreenWithContext extends React.Component {
                     timeGameLoaded={navigation.timeGameLoaded}
                     timeNavigatedToGame={navigation.timeLastNavigated}
                     navigateToUserProfile={navigator.navigateToUserProfile}
-                    history={History}
                     isLoggedIn={currentUser.user !== null}
                   />
                 )}

@@ -248,6 +248,33 @@ export async function getViewer() {
   return result.data.me;
 }
 
+export async function getUserStatusHistory(userId) {
+  const result = await API(
+    `
+    query($userId: ID!) {
+      userStatusHistory(userId: $userId) {
+        userStatusId
+        status
+        game {
+          gameId
+          name
+          url
+          gameId
+          coverImage {
+            imgixUrl
+          }
+          ${NESTED_USER}
+        }
+      }
+    }`,
+    { userId }
+  );
+  if (result.error || result.errors) {
+    return false;
+  }
+  return result.data.userStatusHistory;
+}
+
 export async function getInitialData() {
   const result = await API(`
     query {

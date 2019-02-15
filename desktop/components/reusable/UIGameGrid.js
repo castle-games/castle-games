@@ -109,7 +109,7 @@ export default class UIGameGrid extends React.Component {
     return (
       <div className={STYLES_CONTAINER}>
         {gameItems.map((m) => {
-          const key = m.gameId ? m.gameId : m.url;
+          const key = m.key ? m.key : m.gameId ? m.gameId : m.url;
           return (
             <UIGameCell
               key={key}
