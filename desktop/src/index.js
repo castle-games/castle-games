@@ -62,6 +62,17 @@ const injectGlobalStyles = () => injectGlobal`
   }
 `;
 
+const injectGlobalScrollOverflowPreventionStyles = () => injectGlobal`
+  html {
+    overflow: hidden;
+  }
+  
+  body {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+`;
+
 const storage = new Storage('castle');
 
 const loader = document.createElement('div');
@@ -109,4 +120,5 @@ const run = async () => {
 
 injectGlobalStyles();
 injectGlobalLoaderStyles();
+injectGlobalScrollOverflowPreventionStyles();
 run();
