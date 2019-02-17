@@ -22,7 +22,7 @@ extern "C" void ghostMacSetMainWindow(NSWindow *window) {
 static void _ghostSendNativeOpenUrlEvent(const char *uri) {
   std::stringstream params;
   params << "{ url: '" << uri << "' }";
-  ghostSendJSEvent(kGhostOpenUrlEventName.c_str(), params.str().c_str());
+  ghostSendJSEvent(kGhostOpenUrlEventName, params.str().c_str());
 }
 
 #pragma mark - macos implementation of ghost.h
@@ -230,4 +230,9 @@ bool ghostGetPathToFileInAppBundle(const char *filename, const char **result) {
     return true;
   }
   return false;
+}
+
+void ghostInstallUpdate() {
+  GhostAppDelegate *delegate = [NSApplication sharedApplication].delegate;
+  [delegate installUpdate];
 }

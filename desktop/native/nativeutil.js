@@ -3,6 +3,10 @@ import fileUriToPath from 'file-uri-to-path';
 import Logs from '~/common/logs';
 import { NativeBinds } from '~/native/nativebinds';
 
+export const installUpdate = async () => {
+  await NativeBinds.installUpdate();
+};
+
 export const readLogChannelsAsync = async () => {
   const channelsJson = await NativeBinds.readChannels({ channelNames: ['PRINT', 'ERROR'] });
   const channels = JSON.parse(channelsJson);

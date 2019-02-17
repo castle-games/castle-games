@@ -52,6 +52,7 @@ export default class App extends React.Component {
     window.addEventListener('nativeOpenUrl', this._handleNativeOpenUrlEvent);
     window.addEventListener('keydown', this._handleKeyDownEvent);
     window.addEventListener('CASTLE_SYSTEM_KEY_PRESSED', this._handleLuaSystemKeyDownEvent);
+    window.addEventListener('nativeUpdateAvailable', this._handleNativeUpdateAvailableEvent);
 
     NativeUtil.setBrowserReady(() => {
       this._processNativeChannels();
@@ -120,6 +121,17 @@ export default class App extends React.Component {
   _handleLuaSystemKeyDownEvent = async (e) => {
     await Actions.delay(10);
     this._handleKeyDownEvent({ ...e.params, preventDefault() {} });
+  };
+
+  _handleNativeUpdateAvailableEvent = async ({ params }) => {
+    // TODO: Make a non-janky UI
+    window.removeEventListener('nativeUpdateAvailable', this._handleNativeUpdateAvailableEvent);
+    if (confirm(`update available: ${JSON.stringify(params, null, 2)}\ninstall?`)) {
+      await NativeUtil.installUpdate();
+    } else {
+      await Actions.delay(3 * 3600 * 1000); // 3 hours
+      window.addEventListener('nativeUpdateAvailable', this._handleNativeUpdateAvailableEvent);
+    }
   };
 
   _handleKeyDownEvent = (e) => {

@@ -35,6 +35,11 @@ Function find(const char *name) { return accessRegistry(name, nullptr); }
 //   `success`: call this with a string to send back a successful response
 //   `failure`: call this with a string to send back an error message
 
+JS_BIND_DEFINE(installUpdate) {
+  ghostInstallUpdate();
+  success("success");
+}
+
 JS_BIND_DEFINE(chooseDirectoryWithDialog) {
   const char *result;
 

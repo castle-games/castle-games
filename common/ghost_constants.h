@@ -4,9 +4,10 @@
 
 #include <string>
 
-extern const std::string kGhostLoadEndEventName;
-extern const std::string kGhostLoadErrorEventName;
-extern const std::string kGhostOpenUrlEventName;
-extern const std::string kGhostUrlScheme;
+extern const char *kGhostLoadEndEventName;
+extern const char *kGhostLoadErrorEventName;
+extern const char *kGhostOpenUrlEventName;
+extern const char *kGhostUpdateAvailableEventName;
+extern const char *kGhostUrlScheme;
 
 #endif

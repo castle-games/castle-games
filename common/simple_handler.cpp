@@ -158,7 +158,7 @@ void SimpleHandler::OnLoadEnd(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame>
   params << "{"
          << " url: \"" << url << "\", "
          << "}";
-  ghostSendJSEvent(kGhostLoadEndEventName.c_str(), params.str().c_str());
+  ghostSendJSEvent(kGhostLoadEndEventName, params.str().c_str());
 }
 
 void SimpleHandler::OnLoadError(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFrame> frame,
@@ -176,7 +176,7 @@ void SimpleHandler::OnLoadError(CefRefPtr<CefBrowser> browser, CefRefPtr<CefFram
          << " errorText: \"" << std::string(errorText) << "\", "
          << " errorCode: " << errorCode << ", "
          << "}";
-  ghostSendJSEvent(kGhostLoadErrorEventName.c_str(), params.str().c_str());
+  ghostSendJSEvent(kGhostLoadErrorEventName, params.str().c_str());
 
   // Display a load error message.
   std::stringstream ss;
@@ -208,7 +208,7 @@ bool SimpleHandler::OnBeforeBrowse(CefRefPtr<CefBrowser> browser, CefRefPtr<CefF
 
   message_router_->OnBeforeBrowse(browser, frame);
   auto url = std::string(request->GetURL());
-  if (url.compare(0, kGhostUrlScheme.length(), kGhostUrlScheme) == 0) {
+  if (strncmp(url.c_str(), kGhostUrlScheme, strlen(kGhostUrlScheme)) == 0) {
     ghostHandleOpenUri(url.c_str());
 
     // don't allow the browser to handle these.

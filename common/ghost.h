@@ -38,6 +38,7 @@ bool ghostChooseDirectoryWithDialog(const char *title, const char *message, cons
                                     const char **result);
 bool ghostCreateProjectAtPath(const char *path, const char **entryPoint);
 bool ghostGetPathToFileInAppBundle(const char *filename, const char **result);
+void ghostInstallUpdate();
 
 #ifdef __cplusplus
 }

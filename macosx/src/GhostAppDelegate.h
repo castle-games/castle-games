@@ -16,12 +16,15 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface GhostAppDelegate : NSObject <NSApplicationDelegate>
+#import <Sparkle/SUUpdaterDelegate.h>
+
+@interface GhostAppDelegate : NSObject <NSApplicationDelegate, SUUpdaterDelegate>
 
 - (void)stopLove;
 - (void)bootLoveWithUri:(NSString *)uri;
 - (void)tryToTerminateApplication:(NSApplication *)app;
 - (void)createApplication:(id)object;
 - (void)sendEvent:(NSEvent *)event;
+- (void)installUpdate;
 
 @end

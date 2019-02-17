@@ -1,6 +1,8 @@
 #import "GhostAppDelegate.h"
 #import "GhostMainMenu.h"
 #import "ghost.h"
+#import "ghost_constants.h"
+#import "GhostEnv.h"
 
 extern "C" {
 #include <lauxlib.h>
@@ -15,6 +17,7 @@ extern "C" {
 #include "modules/timer/Timer.h"
 
 #import <Sparkle/SUUpdater.h>
+#import <Sparkle/SUAppcastItem.h>
 
 #include "simple_handler.h"
 
@@ -22,6 +25,8 @@ extern "C" NSWindow *ghostMacGetMainWindow();
 extern __weak NSWindow *ghostMacChildWindow;
 
 @interface GhostAppDelegate ()
+
+@property(nonatomic, strong) NSInvocation *updateImmediateInstallationInvocation;
 
 @property(nonatomic, assign) lua_State *luaState;
 @property(nonatomic, assign) int loveBootStackPos;
@@ -49,8 +54,15 @@ extern __weak NSWindow *ghostMacChildWindow;
   // Set the delegate for application events
   [[NSApplication sharedApplication] setDelegate:self];
 
-  // Initialize Sparkle
-  [[SUUpdater sharedUpdater] resetUpdateCycle];
+  // Initialize Sparkle. Also force an update check 5 seconds after boot.
+  if ([GhostEnv shouldCheckForUpdatesInDevMode] ||
+      ![[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] isEqualToString:@"VERSION_UNSET"]) {
+    [SUUpdater sharedUpdater].delegate = self;
+    self.updateImmediateInstallationInvocation = nil;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+      [[SUUpdater sharedUpdater] checkForUpdatesInBackground];
+    });
+  }
 
   // Initialize Lua / game loop stuff
   self.luaState = nil;
@@ -290,6 +302,54 @@ void Cocoa_DispatchEvent(NSEvent *theEvent);
 
 - (void)windowDidResignKey:(NSNotification *)notification {
   self.lovePaused = YES;
+}
+
+- (void)updater:(SUUpdater *)updater willInstallUpdateOnQuit:(SUAppcastItem *)item immediateInstallationInvocation:(NSInvocation *)invocation {
+  self.updateImmediateInstallationInvocation = invocation;
+  [self sendJSUpdateAvailableEventForAppcastItem:item];
+}
+
+- (void)sendJSUpdateAvailableEventForAppcastItem:(SUAppcastItem *)item {
+  // `item` has the following properties:
+  //   @property (copy, readonly) NSString *title;
+  //   @property (copy, readonly) NSString *dateString;
+  //   @property (copy, readonly) NSString *itemDescription;
+  //   @property (strong, readonly) NSURL *releaseNotesURL;
+  //   @property (strong, readonly) SUSignatures *signatures;
+  //   @property (copy, readonly) NSString *minimumSystemVersion;
+  //   @property (copy, readonly) NSString *maximumSystemVersion;
+  //   @property (strong, readonly) NSURL *fileURL;
+  //   @property (nonatomic, readonly) uint64_t contentLength;
+  //   @property (copy, readonly) NSString *versionString;
+  //   @property (copy, readonly) NSString *osString;
+  //   @property (copy, readonly) NSString *displayVersionString;
+  //   @property (copy, readonly) NSDictionary *deltaUpdates;
+  //   @property (strong, readonly) NSURL *infoURL;
+  std::stringstream params;
+  params << "{"
+  << " title: \"" << std::string([item.title UTF8String]) << "\", "
+  << " dateString: \"" << std::string([item.dateString UTF8String]) << "\", "
+  << " versionString: \"" << std::string([item.versionString UTF8String]) << "\", ";
+  if (item.itemDescription) {
+    params << " itemDescription: \"" << std::string([item.itemDescription UTF8String]) << "\", ";
+  }
+  if (item.releaseNotesURL) {
+    params << " releaseNotesURL: \"" << std::string([item.releaseNotesURL.absoluteString UTF8String]) << "\", ";
+  }
+  if (item.infoURL) {
+    params << " infoURL: \"" << std::string([item.infoURL.absoluteString UTF8String]) << "\", ";
+  }
+  params << "}";
+  ghostSendJSEvent(kGhostUpdateAvailableEventName, params.str().c_str());
+}
+
+- (void)installUpdate {
+  // If already downloaded and extracted, run that immediately, else download and run
+  if (self.updateImmediateInstallationInvocation) {
+    [self.updateImmediateInstallationInvocation invoke];
+  } else {
+    [[SUUpdater sharedUpdater] installUpdatesIfAvailable];
+  }
 }
 
 @end

@@ -9,4 +9,10 @@
  */
 + (NSString *)initialCastleUrl;
 
+/**
+ *  Whether to check for updates in development mode. Useful while developing the updates
+ *  UI itself.
+ */
++ (BOOL)shouldCheckForUpdatesInDevMode;
+
 @end

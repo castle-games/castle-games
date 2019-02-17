@@ -51,7 +51,7 @@ HWND ghostWinGetChildWindow();
 
 static void _ghostSendNativeOpenUrlEvent(std::string uri) {
   std::string params = "{ url: '" + uri + "' }";
-  ghostSendJSEvent(kGhostOpenUrlEventName.c_str(), params.c_str());
+  ghostSendJSEvent(kGhostOpenUrlEventName, params.c_str());
 }
 
 // win implementation of 'ghost.h'

@@ -46,11 +46,15 @@
 	<string>NSApplication</string>
 	<key>NSSupportsAutomaticGraphicsSwitching</key>
 	<true/>
+	<key>SUAutomaticallyUpdate</key>
+	<true/>
 	<key>SUEnableAutomaticChecks</key>
 	<true/>
 	<key>SUFeedURL</key>
-	<string>https://ac5500cc.ngrok.io/appcast.xml</string>
+	<string>https://raw.githubusercontent.com/castle-games/castle-releases-test/master/mac/appcast.xml</string>
 	<key>SUPublicEDKey</key>
 	<string>uZotBBxbk+/JlVAWhEmAV/cefqX2EeFQGu4sAGDfDzE=</string>
+	<key>SUScheduledCheckInterval</key>
+	<integer>3600</integer>
 </dict>
 </plist>
