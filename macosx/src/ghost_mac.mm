@@ -119,6 +119,9 @@ void ghostSetChildWindowFrame(float left, float top, float width, float height) 
   
   if (ghostMacMainWindow) {
     if (ghostMacChildWindow) {
+      width = fmin(width, ghostMacMainWindow.contentLayoutRect.size.width - left);
+      height = fmin(height, ghostMacMainWindow.contentLayoutRect.size.height - top);
+
       CGRect frame;
       frame.origin.x = ghostMacMainWindow.frame.origin.x + left;
       frame.origin.y = ghostMacMainWindow.frame.origin.y + ghostMacMainWindow.contentLayoutRect.size.height - top - height;
