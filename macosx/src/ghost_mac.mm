@@ -111,6 +111,8 @@ void ghostSetChildWindowFrame(float left, float top, float width, float height) 
   if (isFullscreen) {
     return;
   }
+  left = fmax(0, left);
+  top = fmax(0, top);
   
   childLeft = left;
   childTop = top;
