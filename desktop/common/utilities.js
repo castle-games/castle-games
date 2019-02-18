@@ -33,6 +33,10 @@ function _fixWindowsFilePath(path) {
 }
 
 export function getLuaEntryPoint(game) {
+  if (game.entryPoint) {
+    // if the server knows about this game, just use the value given by the server
+    return game.entryPoint;
+  }
   if (!game.url) {
     throw new Error(`Can't resolve lua entry point against this game url: ${game.url}`);
   }

@@ -46,6 +46,7 @@ const GAME_FIELDS = `
   updatedTime
   description
   metadata
+  entryPoint
   coverImage {
     url
     imgixUrl
@@ -256,13 +257,7 @@ export async function getUserStatusHistory(userId) {
         userStatusId
         status
         game {
-          gameId
-          name
-          url
-          gameId
-          coverImage {
-            imgixUrl
-          }
+          ${GAME_FIELDS}
           ${NESTED_USER}
         }
       }
