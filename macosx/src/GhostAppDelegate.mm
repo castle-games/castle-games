@@ -187,36 +187,24 @@ extern __weak NSWindow *ghostMacChildWindow;
 
 - (void)stepMainLoop {
   if (!self.lovePaused) {
-    // Weird fix for invisible window issue on Mojave: keep track of whether a new
-    // window was created and resize it after a delay
-
-    NSWindow *window = ghostMacGetMainWindow();
-    NSWindow *prevChild = nil, *afterChild = nil;
-
-    if (window) {
-      if (ghostMacChildWindow) {
-        prevChild = ghostMacChildWindow;
-      }
-    }
-
-    // Actually run Love for one step
-    [self stepLove];
-
-    if (window && !prevChild) {
-      if (ghostMacChildWindow) {
-        afterChild = ghostMacChildWindow;
-      }
-
-      if (afterChild) {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 80 * NSEC_PER_MSEC),
-                       dispatch_get_main_queue(), ^{
-                         ghostResizeChildWindow(-1, -1);
-                         ghostResizeChildWindow(1, 1);
-                       });
-      }
+    // Detect whether a new child window was created
+    bool prevChild = !!ghostMacChildWindow;
+    [self stepLove]; // Actually run Love for one step
+    if (!prevChild && ghostMacChildWindow) { // New child window!
+      // Add as child, make visible and focus
+      ghostResizeChildWindow(0, 0);
+      ghostSetChildWindowVisible(true);
+      [ghostMacChildWindow makeKeyWindow];
+      
+      // Force resize after small delay to fix a weird issue on Mojave
+      dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 80 * NSEC_PER_MSEC),
+                     dispatch_get_main_queue(), ^{
+                       ghostResizeChildWindow(-1, -1);
+                       ghostResizeChildWindow(1, 1);
+                     });
     }
   }
-
+  
   if (!self.windowEventsSubscribed) {
     NSWindow *window = ghostMacGetMainWindow();
     if (window) {

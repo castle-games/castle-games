@@ -31,23 +31,22 @@ static float childLeft = 0, childTop = 0, childWidth = 200, childHeight = 200;
 
 static BOOL browserReady = NO;
 static char *initialUri = NULL;
-__weak NSWindow *hiddenWindow = nil;
+
+// Child windows are hidden on creation (see 'SDL_cocoawindow.m') then made visible after
+// the first time bounds are set. This prevents an initial render with wrong bounds.
+static bool hidden = true;
+static bool explicitlyHidden = false;
 
 void ghostSetChildWindowVisible(bool visible) {
+  explicitlyHidden = !visible;
   dispatch_async(dispatch_get_main_queue(), ^{
-    NSWindow *window = ghostMacGetMainWindow();
-    if (window) {
+    if (ghostMacMainWindow && ghostMacChildWindow && visible == hidden) {
+      hidden = !visible;
       if (visible) {
-        if (hiddenWindow) {
-          [window addChildWindow:hiddenWindow ordered:NSWindowAbove];
-          hiddenWindow = nil;
-        }
+        [ghostMacMainWindow addChildWindow:ghostMacChildWindow ordered:NSWindowAbove];
+        [ghostMacChildWindow setIsVisible:YES];
       } else {
-        if (ghostMacChildWindow) {
-          assert(!hiddenWindow);
-          [ghostMacChildWindow setIsVisible:FALSE];
-          hiddenWindow = ghostMacChildWindow;
-        }
+        [ghostMacChildWindow setIsVisible:NO];
       }
     }
   });
@@ -57,7 +56,7 @@ GHOST_EXPORT bool ghostGetBackgrounded() {
   if (!ghostMacChildWindow) {
     return false;
   }
-  if (hiddenWindow) {
+  if (explicitlyHidden) {
     return true;
   }
   return !([ghostMacMainWindow isKeyWindow] or [ghostMacChildWindow isKeyWindow]);
@@ -166,6 +165,8 @@ void ghostHandleOpenUri(const char *uri) {
 void ghostOpenLoveUri(const char *uri) {
   NSString *uriStr = [NSString stringWithCString:uri encoding:NSUTF8StringEncoding];
   dispatch_async(dispatch_get_main_queue(), ^{
+    hidden = true;
+    explicitlyHidden = false;
     GhostAppDelegate *delegate = [NSApplication sharedApplication].delegate;
     [delegate stopLove];
     [delegate bootLoveWithUri:uriStr];
@@ -181,7 +182,6 @@ void ghostOpenExternalUrl(const char *url) {
 }
 
 void ghostClose() {
-  hiddenWindow = nil;
   dispatch_async(dispatch_get_main_queue(), ^{
     GhostAppDelegate *delegate = [NSApplication sharedApplication].delegate;
     [delegate stopLove];

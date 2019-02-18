@@ -1322,10 +1322,9 @@ Cocoa_CreateWindow(_THIS, SDL_Window * window)
 
     @try {
         nswindow = [[SDLWindow alloc] initWithContentRect:rect styleMask:style backing:NSBackingStoreBuffered defer:NO screen:screen];
-        /// XXX(Ghost): Add as child of main window
-        [ghostMacMainWindow addChildWindow:nswindow ordered:NSWindowAbove];
+        /// XXX(Ghost): Track child window
+        [ghostMacChildWindow setIsVisible:NO];
         ghostMacChildWindow = nswindow;
-        [ghostMacChildWindow makeKeyWindow];
     }
     @catch (NSException *e) {
         return SDL_SetError("%s", [[e reason] UTF8String]);
@@ -1514,7 +1513,8 @@ Cocoa_ShowWindow(_THIS, SDL_Window * window)
 
     if (![nswindow isMiniaturized]) {
         [windowData->listener pauseVisibleObservation];
-        [nswindow makeKeyAndOrderFront:nil];
+        // XXX(Ghost): Control window visibility in Ghost
+        //[nswindow makeKeyAndOrderFront:nil];
         [windowData->listener resumeVisibleObservation];
     }
 }}
