@@ -10,9 +10,9 @@ import * as Strings from '~/common/strings';
 
 const STYLES_CONTAINER = css`
   background: ${Constants.colors.background};
+  height: 144px;
   min-height: 96px;
   width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
 `;
