@@ -571,3 +571,6 @@ void ghostOpenExternalUrl(const char *url) {
   LPWSTR ptr = wtext;
   ShellExecute(0, 0, ptr, 0, 0, SW_SHOW);
 }
+
+void ghostInstallUpdate() {
+}
