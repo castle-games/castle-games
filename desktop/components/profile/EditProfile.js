@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as Actions from '~/common/actions';
 import * as Constants from '~/common/constants';
 import * as Strings from '~/common/strings';
+import * as Utilities from '~/common/utilities';
 
 import Plain from 'slate-plain-serializer';
 import { css } from 'react-emotion';
@@ -51,6 +52,11 @@ const STYLES_COLUMN = css`
 
 const STYLES_FILE_INPUT = css`
   display: inline-flex;
+`;
+
+// NOTE: using `display: inline-flex` here causes
+// windows client to become unresponsive.
+const STYLES_FILE_INPUT_WIN = css`
 `;
 
 const STYLES_GENERIC_INPUT = css`
@@ -187,6 +193,7 @@ export default class EditProfile extends React.Component {
       isAvatarUploadEnabled = false;
     }
 
+    const inputClass = (Utilities.isWindows()) ? STYLES_FILE_INPUT_WIN : STYLES_FILE_INPUT;
     return (
       <div className={STYLES_SECTION_CONTENT}>
         <UIAvatar src={avatarSrc} style={{ width: 128, height: 128, marginRight: 16 }} />
@@ -196,7 +203,7 @@ export default class EditProfile extends React.Component {
             type="file"
             id="avatar"
             name="avatar"
-            className={STYLES_FILE_INPUT}
+            className={inputClass}
             style={isAvatarUploadEnabled ? {} : { display: 'none' }}
             onChange={this._onAvatarFileInputChangeAsync}
           />
