@@ -10,7 +10,7 @@ function _validateMetadata(metadata, isRegistered) {
     throw new Error(`Metadata is invalid: ${metadata}`);
   }
   let validatedMetadata = { ...metadata };
-  const registeredFields = [ 'gameId', 'user', 'slug' ];
+  const registeredFields = [ 'gameId', 'owner', 'slug' ];
   if (isRegistered) {
     registeredFields.forEach(field => {
       if (!validatedMetadata.hasOwnProperty(field)) {
@@ -56,7 +56,7 @@ async function _readGameFromMetadataUrlAsync(url) {
     game.metadata = metadata;
     if (metadata.name) game.name = metadata.name;
     if (metadata.description) game.description = metadata.description;
-    if (metadata.username) game.username = metadata.username;
+    if (metadata.owner) game.owner = metadata.owner;
   }
   return game;
 }

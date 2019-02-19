@@ -84,13 +84,13 @@ export default class GameActionsBar extends React.Component {
         username = (
           <span
             className={STYLES_CREATOR_LINK}
-            onClick={() => this.props.navigateToUserProfile(game.user)}>
-            {game.user.username}
+            onClick={() => this.props.navigateToUserProfile(game.owner)}>
+            {game.owner.username}
           </span>
         );
         updated = Strings.toDate(game.updatedTime);
       } else {
-        username = game.username ? game.username : username;
+        username = game.owner ? game.owner : username;
         updated = 'in development';
       }
       publishedInfo = (

@@ -5,8 +5,8 @@ import * as NativeUtil from '~/native/nativeutil';
 export const API = CastleApiClient(Constants.API_HOST);
 
 // fetches partial user data to support some owning object
-const NESTED_USER = `
-  user {
+const NESTED_GAME_OWNER = `
+  owner {
     userId
     name
     username
@@ -58,7 +58,7 @@ const GAME_FIELDS = `
 const GAME_ITEMS = `
   gameItems {
     ${GAME_FIELDS}
-    ${NESTED_USER}
+    ${NESTED_GAME_OWNER}
   }
 `;
 
@@ -258,7 +258,7 @@ export async function getUserStatusHistory(userId) {
         status
         game {
           ${GAME_FIELDS}
-          ${NESTED_USER}
+          ${NESTED_GAME_OWNER}
         }
       }
     }`,
@@ -280,7 +280,7 @@ export async function getInitialData() {
 
       allGames {
         ${GAME_FIELDS}
-        ${NESTED_USER}
+        ${NESTED_GAME_OWNER}
       }
 
       allUsers {
@@ -298,7 +298,7 @@ export async function getInitialData() {
 
       featuredGames {
         ${GAME_FIELDS}
-        ${NESTED_USER}
+        ${NESTED_GAME_OWNER}
       }
     }
   `);
@@ -350,7 +350,7 @@ export async function getGameByUrl(url) {
     query GetGame($url: String!) {
       game(url: $url) {
         ${GAME_FIELDS}
-        ${NESTED_USER}
+        ${NESTED_GAME_OWNER}
       }
     }
     `,
@@ -476,7 +476,7 @@ function _validateRegisterGameResult(result) {
     } else if (code === 'REGISTER_GAME_INVALID_CASTLE_FILE') {
       throw new Error(`The file at this url doesn't look like a valid Castle project file.`);
     } else if (code === 'REGISTER_GAME_INVALID_USERNAME') {
-      throw new Error(`The \`username\` given at this url does not match your username.`);
+      throw new Error(`The \`owner\` given at this url does not match your username.`);
     } else {
       throw new Error(error.message);
     }
@@ -516,7 +516,7 @@ export async function previewGameAtUrl(url) {
           slug,
           name,
           url,
-          user {
+          owner {
             name,
             username,
           },

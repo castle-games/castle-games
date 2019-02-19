@@ -72,11 +72,11 @@ class UIGameCell extends React.Component {
     let { game } = this.props;
     const name = game.name ? game.name : 'Untitled';
     let description;
-    if (Urls.isPrivateUrl(game.url) || !game.user || !game.user.name) {
+    if (Urls.isPrivateUrl(game.url) || !game.owner || !game.owner.name) {
       // if it's a local project, or we don't know about the creator, display the url
       description = game.url;
     } else {
-      description = `By ${game.user.name}`;
+      description = `By ${game.owner.name}`;
     }
     let maybeSyncElement;
     if (this.props.onGameUpdate) {

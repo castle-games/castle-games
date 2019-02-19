@@ -149,10 +149,10 @@ export default class GameList extends React.Component {
                 </div>
               ) : null;
 
-              let author = m && m.user && m.user.username ? m.user.username : '-';
+              let author = m && m.owner && m.owner.username ? m.owner.username : '-';
               let date = m && m.createdTime ? m.createdTime : '-';
 
-              if (!m.user || !m.user.username) {
+              if (!m.owner || !m.owner.username) {
                 return (
                   <div
                     className={STYLES_ROW}
@@ -186,7 +186,7 @@ export default class GameList extends React.Component {
                   <div
                     className={STYLES_COLUMN}
                     style={{ width: '20%' }}
-                    onClick={() => this.props.onUserSelect(m.user)}>
+                    onClick={() => this.props.onUserSelect(m.owner)}>
                     {author}
                   </div>
                   <div className={STYLES_COLUMN_NO_INTERACTION}>
