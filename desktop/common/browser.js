@@ -54,9 +54,13 @@ async function _readGameFromMetadataUrlAsync(url) {
   const { metadata } = await _resolveMetadataAtUrlAsync(url);
   if (metadata) {
     game.metadata = metadata;
-    if (metadata.name) game.name = metadata.name;
+    if (metadata.title) game.title = metadata.title;
     if (metadata.description) game.description = metadata.description;
     if (metadata.owner) game.owner = metadata.owner;
+
+    // TODO: remove deprecated name and username
+    if (!game.title && metadata.name) game.title = metadata.name;
+    if (!game.owner && metadata.username) game.owner = metadata.username;
   }
   return game;
 }

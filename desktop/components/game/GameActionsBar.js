@@ -35,7 +35,7 @@ const STYLES_METADATA = css`
   }
 `;
 
-const STYLES_NAME_ROW = css`
+const STYLES_TITLE_ROW = css`
   color: ${Constants.colors.black};
   font-size: ${Constants.typescale.lvl5};
   line-height: ${Constants.linescale.lvl5};
@@ -70,12 +70,12 @@ export default class GameActionsBar extends React.Component {
   static contextType = DevelopmentContext;
 
   _renderPlaying = (game, muteElement) => {
-    let name = 'Untitled';
+    let title = 'Untitled';
     let publishedInfo = 'By Anonymous';
     let isRegistered = false;
     let description = '';
     if (game) {
-      name = game.name ? game.name : name;
+      title = game.title ? game.title : title;
       isRegistered = !Strings.isEmpty(game.gameId);
       description = game.description ? game.description : description;
       let username = 'Anonymous',
@@ -102,8 +102,8 @@ export default class GameActionsBar extends React.Component {
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_METADATA}>
-          <div className={STYLES_NAME_ROW}>
-            {name}
+          <div className={STYLES_TITLE_ROW}>
+            {title}
             <div className={STYLES_LEFT_ACTIONS}>{muteElement}</div>
           </div>
           <div className={STYLES_CREATOR_ROW}>{publishedInfo}</div>

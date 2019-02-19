@@ -40,7 +40,7 @@ const FULL_USER_FIELDS = `
 
 const GAME_FIELDS = `
   gameId
-  name
+  title
   url
   createdTime
   updatedTime
@@ -575,14 +575,14 @@ async function _recordUserStatusUnregisteredGame(status, isNewSession, game) {
       mutation(
         $status: String!
         $url: String!
-        $name: String
+        $title: String
         $coverImage: String
         $isNewSession: Boolean
       ) {
         recordUserStatus(
           status: $status
           isNewSession: $isNewSession
-          unregisteredGame: { url: $url, name: $name, coverImage: $coverImage }
+          unregisteredGame: { url: $url, title: $title, coverImage: $coverImage }
         ) {
           userStatusId
         }
@@ -592,7 +592,7 @@ async function _recordUserStatusUnregisteredGame(status, isNewSession, game) {
       status,
       isNewSession,
       url: game.url,
-      name: game.name,
+      title: game.title ? game.title : game.name, // name is deprecated
       coverImage: game.coverImage ? game.coverImage.url : null,
     }
   );

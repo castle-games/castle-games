@@ -70,7 +70,7 @@ const STYLES_GAME_ACTIONS = css`
 class UIGameCell extends React.Component {
   render() {
     let { game } = this.props;
-    const name = game.name ? game.name : 'Untitled';
+    const title = game.title ? game.title : 'Untitled';
     let description;
     if (Urls.isPrivateUrl(game.url) || !game.owner || !game.owner.name) {
       // if it's a local project, or we don't know about the creator, display the url
@@ -93,7 +93,7 @@ class UIGameCell extends React.Component {
           onClick={() => this.props.onGameSelect(game)}
           style={{ backgroundImage: this.props.src ? `url(${this.props.src})` : null }}>
           <div className={STYLES_GAME_ITEM_BOTTOM}>
-            <div className={STYLES_GAME_ITEM_BOTTOM_HEADING}>{name}</div>
+            <div className={STYLES_GAME_ITEM_BOTTOM_HEADING}>{title}</div>
             <div className={STYLES_GAME_ITEM_BOTTOM_DESCRIPTION}>{description}</div>
           </div>
         </div>

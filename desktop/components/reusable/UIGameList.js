@@ -181,7 +181,7 @@ export default class GameList extends React.Component {
                   <div
                     className={STYLES_FLUID_COLUMN}
                     onClick={() => this.props.onGameSelect(m)}>
-                    {m.name}
+                    {m.title}
                   </div>
                   <div
                     className={STYLES_COLUMN}
