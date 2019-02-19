@@ -10,34 +10,32 @@ function _validateMetadata(metadata, isRegistered) {
     throw new Error(`Metadata is invalid: ${metadata}`);
   }
   let validatedMetadata = { ...metadata };
-  const registeredFields = [ 'gameId', 'owner', 'slug' ];
+  const registeredFields = ['gameId', 'owner', 'slug'];
   if (isRegistered) {
-    registeredFields.forEach(field => {
+    registeredFields.forEach((field) => {
       if (!validatedMetadata.hasOwnProperty(field)) {
         throw new Error(`Registered game is missing field: ${field}`);
       }
     });
   } else {
     // unregistered games can't have any of these
-    registeredFields.forEach(field => {
+    registeredFields.forEach((field) => {
       if (validatedMetadata.hasOwnProperty(field)) {
         delete validatedMetadata[field];
       }
     });
   }
   return validatedMetadata;
-};
+}
 
 async function _resolveMetadataAtUrlAsync(metadataUrl) {
   try {
-    let {
-      metadata,
-      info,
-      errors,
-      warnings
-    } = await metadatalib.fetchMetadataForUrlAsync(metadataUrl, {
-      readFileUrlAsyncFunction: NativeUtil.readFileUrl,
-    });
+    let { metadata, info, errors, warnings } = await metadatalib.fetchMetadataForUrlAsync(
+      metadataUrl,
+      {
+        readFileUrlAsyncFunction: NativeUtil.readFileUrl,
+      }
+    );
     if (errors && errors.length) {
       throw new Error(`Error fetching metadata: ${errors.join(',')}`);
     }
@@ -71,7 +69,7 @@ async function resolveGameAtUrlAsync(gameUrl) {
   // always try to resolve from the server first
   try {
     game = await Actions.getGameByUrl(gameUrl);
-    game.metadata = _validateMetadata(game.metadata, !Strings.isEmpty(game.gameId));
+    game.metadata = _validateMetadata(game, !Strings.isEmpty(game.gameId));
   } catch (e) {
     game = null;
   }
@@ -89,12 +87,10 @@ async function resolveGameAtUrlAsync(gameUrl) {
     // if nothing worked, assume this is a direct url to some code with no metadata
     game = {
       url: gameUrl,
-    }
-  };
+    };
+  }
 
   return game;
 }
 
-export {
-  resolveGameAtUrlAsync,
-};
+export { resolveGameAtUrlAsync };

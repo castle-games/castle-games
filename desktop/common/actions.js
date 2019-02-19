@@ -42,11 +42,13 @@ const GAME_FIELDS = `
   gameId
   title
   url
+  slug
   createdTime
   updatedTime
   description
   metadata
   entryPoint
+  sessionId
   coverImage {
     url
     imgixUrl
