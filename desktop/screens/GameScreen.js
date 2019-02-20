@@ -47,7 +47,9 @@ class GameScreen extends React.Component {
   constructor(props) {
     super(props);
     this._updateGameWindow(null, null);
-    window.addEventListener('resize', this._updateGameWindowFrame);
+    // NOTE(nikki): This is handled on the native level if resizes maintain same border widths
+    //              on all sides
+    //window.addEventListener('resize', this._updateGameWindowFrame);
   }
 
   componentDidUpdate(prevProps, prevState) {
