@@ -27,6 +27,16 @@ const STYLES_SECTION = css`
   padding: 16px 16px 32px 16px;
 `;
 
+const STYLES_SEE_ALL = css`
+  cursor: pointer;
+  color: ${Constants.colors.action};
+  font-size: ${Constants.typescale.base};
+  line-height: ${Constants.linescale.base};
+  text-decoration: underline;
+  font: ${Constants.font.mono};
+  text-transform: uppercase;
+`;
+
 class HomeScreen extends React.Component {
   static defaultProps = {
     featuredGames: [],
@@ -47,8 +57,14 @@ class HomeScreen extends React.Component {
       return null;
     } else {
       let gameItems = games;
+      let seeAllElement;
       if (this.state.mode === 'default') {
         gameItems = gameItems.slice(0, PREVIEW_GRID_SIZE);
+        seeAllElement = (
+          <div className={STYLES_SEE_ALL} onClick={() => this.setState({ mode: featuredMode })}>
+            See All
+          </div>
+        );
       }
       return (
         <div className={STYLES_SECTION}>
@@ -60,6 +76,7 @@ class HomeScreen extends React.Component {
               onGameSelect={this.props.navigateToGame}
             />
           </div>
+          {seeAllElement}
         </div>
       );
     }
@@ -73,14 +90,15 @@ class HomeScreen extends React.Component {
       : null;
     const featuredGamesElement = this._renderGameSection(
       this.props.featuredGames,
-      'Play Games',
+      'Featured Games',
       'games'
     );
-    const recentElement = this._renderGameSection(recentGames, 'Recent', 'history');
+    const recentElement = this._renderGameSection(recentGames, 'Recent Games', 'history');
+    const makeElement = this.state.mode === 'default' ? <HomeMakeBanner /> : null;
 
     return (
       <div className={STYLES_CONTAINER}>
-        <HomeMakeBanner />
+        {makeElement}
         {recentElement}
         {featuredGamesElement}
       </div>
