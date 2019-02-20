@@ -83,7 +83,7 @@ export default class HomeScreen extends React.Component {
   static contextType = NavigatorContext;
 
   _handleClickExamples = () => {
-    NativeUtil.openExternalURL('http://www.playcastle.io/examples');
+    NativeUtil.openExternalURL(`${Constants.WEB_HOST}/examples`);
   };
 
   _handleClickDiscord = () => {
@@ -91,7 +91,7 @@ export default class HomeScreen extends React.Component {
   };
 
   _handleClickTutorial = () => {
-    NativeUtil.openExternalURL('http://www.playcastle.io/get-started');
+    NativeUtil.openExternalURL(`${Constants.WEB_HOST}/documentation`);
   };
 
   _handleCreateProject = async () => {
@@ -111,7 +111,7 @@ export default class HomeScreen extends React.Component {
         Logs.system('Welcome to Castle!');
         Logs.system(`We created your project at ${gameUrl}.`);
         Logs.system(`Open that file in your favorite text editor to get started.`);
-        Logs.system(`Need help? Check out http://www.playcastle.io/get-started`);
+        Logs.system(`Need help? Check out ${Constants.WEB_HOST}/documentation`);
       }
     }
   };

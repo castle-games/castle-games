@@ -1,4 +1,5 @@
 export const API_HOST = 'https://api.castle.games';
+export const WEB_HOST = 'https://castle.games';
 
 const brand = {
   fuchsia: `#ff00ff`,

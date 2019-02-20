@@ -148,7 +148,7 @@ export default class RegisterGame extends React.Component {
           <div className={STYLES_PARAGRAPH}>
             Your Castle url will be{' '}
             <span className={STYLES_GAME_PREVIEW_URL}>
-              http://playcastle.io/
+              {Constants.WEB_HOST}/
               {this.state.previewedGame.slug}
             </span>
           </div>
