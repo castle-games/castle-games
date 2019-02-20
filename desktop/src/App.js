@@ -259,8 +259,6 @@ export default class App extends React.Component {
     });
   };
 
-  navigateToHistory = () => this._navigateToContentMode('history');
-
   // currentUser actions
   setCurrentUser = (user) => {
     this.setState(

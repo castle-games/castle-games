@@ -8,7 +8,7 @@ import * as React from 'react';
  *  should have an effect on values here.
  */
 export const NavigationContextDefaults = {
-  contentMode: 'home', // game | profile | home | signin | history
+  contentMode: 'home', // game | profile | home | signin
   timeLastNavigated: 0,
   gameUrl: '',
   game: null,

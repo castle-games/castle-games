@@ -15,7 +15,6 @@ export const NavigatorContextDefaults = {
   navigateToCurrentGame: () => {},
   navigateToCurrentUserProfile: () => {},
   navigateToUserProfile: async (user) => {},
-  navigateToHistory: () => {},
 };
 
 export const NavigatorContext = React.createContext(NavigatorContextDefaults);

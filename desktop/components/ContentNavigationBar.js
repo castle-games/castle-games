@@ -49,9 +49,6 @@ class ContentNavigationBar extends React.Component {
         <div className={STYLES_NAV_ITEM} onClick={navigator.navigateToHome}>
           Home
         </div>
-        <div className={STYLES_NAV_ITEM} onClick={navigator.navigateToHistory}>
-          Recent
-        </div>
       </div>
     );
   };
