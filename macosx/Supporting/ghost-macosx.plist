@@ -51,7 +51,7 @@
 	<key>SUEnableAutomaticChecks</key>
 	<true/>
 	<key>SUFeedURL</key>
-	<string>https://raw.githubusercontent.com/castle-games/castle-releases-test/master/mac/appcast.xml</string>
+	<string>https://api.castle.games/api/releases/mac/mac/appcast.xml</string>
 	<key>SUPublicEDKey</key>
 	<string>uZotBBxbk+/JlVAWhEmAV/cefqX2EeFQGu4sAGDfDzE=</string>
 	<key>SUScheduledCheckInterval</key>
