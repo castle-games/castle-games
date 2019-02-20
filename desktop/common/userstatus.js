@@ -8,7 +8,17 @@ class UserStatus {
   _status = null;
   _pingInterval = null;
 
-  stopAsync = async () => {
+  _recordUserStatus = async (isNewSession) => {
+    const result = await Actions.recordUserStatus(this._status, isNewSession, this._game);
+    if (result.errors && result.errors.length) {
+      if (result.errors[0].extensions.code === 'LOGIN_REQUIRED') {
+        // if the user logged out, don't send any further pings
+        this.stop();
+      }
+    }
+  };
+
+  stop = () => {
     if (this._pingInterval) {
       clearInterval(this._pingInterval);
       this._pingInterval = null;
@@ -18,12 +28,12 @@ class UserStatus {
   };
 
   startAsync = async (game) => {
-    await this.stopAsync();
+    this.stop();
     this._game = game;
     this._status = Urls.isPrivateUrl(game.url) ? 'make' : 'play';
-    Actions.recordUserStatus(this._status, true, this._game);
+    this._recordUserStatus(true);
     this._pingInterval = setInterval(
-      () => Actions.recordUserStatus(this._status, false, this._game),
+      () => this._recordUserStatus(false),
       USERSTATUS_PING_INTERVAL_SEC * 1000
     );
   };

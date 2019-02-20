@@ -65,7 +65,7 @@ class GameScreen extends React.Component {
   _closeGame = async () => {
     // close window
     await GameWindow.close();
-    UserStatus.stopAsync();
+    UserStatus.stop();
     Share.removeEventListeners();
   };
 

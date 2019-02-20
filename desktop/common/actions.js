@@ -598,10 +598,7 @@ async function _recordUserStatusUnregisteredGame(status, isNewSession, game) {
       coverImage: game.coverImage ? game.coverImage.url : null,
     }
   );
-  if (result.error || result.errors) {
-    return false;
-  }
-  return result.data.recordUserStatus.userStatusId;
+  return result;
 }
 
 async function _recordUserStatusRegisteredGame(status, isNewSession, gameId) {
@@ -623,10 +620,7 @@ async function _recordUserStatusRegisteredGame(status, isNewSession, gameId) {
       registeredGameId: gameId,
     }
   );
-  if (result.error || result.errors) {
-    return false;
-  }
-  return result.data.recordUserStatus.userStatusId;
+  return result;
 }
 
 // TODO: media -> game
