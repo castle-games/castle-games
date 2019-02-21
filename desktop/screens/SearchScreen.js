@@ -16,6 +16,12 @@ const STYLES_CONTAINER = css`
   display: flex;
   background: ${Constants.colors.white};
   flex-direction: column;
+  overflow-y: scroll;
+
+  ::-webkit-scrollbar {
+    display: none;
+    width: 1px;
+  }
 `;
 
 const STYLES_SECTION = css`
