@@ -69,6 +69,4 @@ class CurrentUserContextProvider extends React.Component {
   }
 }
 
-const CurrentUserContextConsumer = CurrentUserContext.Consumer;
-
-export { CurrentUserContext, CurrentUserContextProvider, CurrentUserContextConsumer };
+export { CurrentUserContext, CurrentUserContextProvider };

@@ -58,6 +58,4 @@ class SocialContextProvider extends React.Component {
   }
 }
 
-const SocialContextConsumer = SocialContext.Consumer;
-
-export { SocialContext, SocialContextProvider, SocialContextConsumer };
+export { SocialContext, SocialContextProvider };

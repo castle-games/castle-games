@@ -5,10 +5,7 @@ import { isKeyHotkey } from 'is-hotkey';
 import * as Actions from '~/common/actions';
 import * as Constants from '~/common/constants';
 import { CurrentUserContextProvider } from '~/contexts/CurrentUserContext';
-import {
-  DevelopmentContextConsumer,
-  DevelopmentContextProvider,
-} from '~/contexts/DevelopmentContext';
+import { DevelopmentContext, DevelopmentContextProvider } from '~/contexts/DevelopmentContext';
 import { SocialContextProvider } from '~/contexts/SocialContext';
 import Logs from '~/common/logs';
 import {
@@ -153,7 +150,7 @@ class App extends React.Component {
 class AppWithContext extends React.Component {
   render() {
     return (
-      <DevelopmentContextConsumer>
+      <DevelopmentContext.Consumer>
         {(development) => (
           <NavigatorContext.Consumer>
             {(navigator) => (
@@ -170,7 +167,7 @@ class AppWithContext extends React.Component {
             )}
           </NavigatorContext.Consumer>
         )}
-      </DevelopmentContextConsumer>
+      </DevelopmentContext.Consumer>
     );
   }
 }

@@ -52,9 +52,6 @@ class GameScreen extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // TODO: see if timeGameLoaded changed and then update isDeveloping
-    // const isLocal = Urls.isPrivateUrl(url);
-    // this.props.development.setIsDeveloping(isLocal);
     this._updateGameWindow(prevProps, prevState);
   }
 
@@ -133,6 +130,7 @@ class GameScreen extends React.Component {
         />
         <GameActionsBar
           game={this.props.game}
+          timeGameLoaded={this.props.timeGameLoaded}
           isMuted={this.state.isMuted}
           onToggleMute={this._toggleIsMuted}
           navigateToUserProfile={this.props.navigateToUserProfile}

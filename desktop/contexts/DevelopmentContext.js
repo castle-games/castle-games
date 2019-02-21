@@ -51,6 +51,4 @@ class DevelopmentContextProvider extends React.Component {
   }
 }
 
-const DevelopmentContextConsumer = DevelopmentContext.Consumer;
-
-export { DevelopmentContext, DevelopmentContextProvider, DevelopmentContextConsumer };
+export { DevelopmentContext, DevelopmentContextProvider };
