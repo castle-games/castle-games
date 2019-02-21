@@ -13,8 +13,7 @@ import EditProfile from '~/components/profile/EditProfile';
 import RegisterGame from '~/components/profile/RegisterGame';
 import UIGameGrid from '~/components/reusable/UIGameGrid';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
-import { NavigationContext } from '~/contexts/NavigationContext';
-import { NavigatorContext } from '~/contexts/NavigatorContext';
+import { NavigationContext, NavigatorContext } from '~/contexts/NavigationContext';
 import ProfileHeader from '~/components/profile/ProfileHeader';
 import SignOut from '~/components/profile/SignOut';
 

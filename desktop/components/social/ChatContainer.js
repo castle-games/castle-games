@@ -7,7 +7,7 @@ import ChatInput from '~/components/social/ChatInput';
 import ChatMessagesList from '~/components/social/ChatMessagesList';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { SocialContext } from '~/contexts/SocialContext';
-import { NavigatorContext } from '~/contexts/NavigatorContext';
+import { NavigatorContext } from '~/contexts/NavigationContext';
 import UIButton from '~/components/reusable/UIButton';
 
 const STYLES_CONTAINER = css`

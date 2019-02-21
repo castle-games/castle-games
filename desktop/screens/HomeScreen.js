@@ -4,7 +4,7 @@ import { css } from 'react-emotion';
 import * as Constants from '~/common/constants';
 import HomeMakeBanner from '~/components/home/HomeMakeBanner';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
-import { NavigatorContext } from '~/contexts/NavigatorContext';
+import { NavigatorContext } from '~/contexts/NavigationContext';
 import UIGameGrid from '~/components/reusable/UIGameGrid';
 import UIHeading from '~/components/reusable/UIHeading';
 

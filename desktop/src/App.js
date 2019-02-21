@@ -3,23 +3,20 @@ import { css } from 'react-emotion';
 import { isKeyHotkey } from 'is-hotkey';
 
 import * as Actions from '~/common/actions';
-import * as Browser from '~/common/browser';
 import * as Constants from '~/common/constants';
-import {
-  CurrentUserContextConsumer,
-  CurrentUserContextProvider,
-} from '~/contexts/CurrentUserContext';
+import { CurrentUserContextProvider } from '~/contexts/CurrentUserContext';
 import {
   DevelopmentContextConsumer,
   DevelopmentContextProvider,
 } from '~/contexts/DevelopmentContext';
-import { SocialContextConsumer, SocialContextProvider } from '~/contexts/SocialContext';
+import { SocialContextProvider } from '~/contexts/SocialContext';
 import Logs from '~/common/logs';
-import { NavigationContext } from '~/contexts/NavigationContext';
-import { NavigatorContext } from '~/contexts/NavigatorContext';
+import {
+  NavigatorContext,
+  NavigationContext,
+  NavigationContextProvider,
+} from '~/contexts/NavigationContext';
 import * as NativeUtil from '~/native/nativeutil';
-import * as Strings from '~/common/strings';
-import * as Urls from '~/common/urls';
 import { linkify } from 'react-linkify';
 
 import ContentContainer from '~/components/ContentContainer.js';
@@ -47,11 +44,7 @@ class App extends React.Component {
 
   constructor(props) {
     super();
-
     this.state = props.state;
-    ['navigator'].forEach((contextName) => {
-      this._applyContextFunctions(contextName);
-    });
   }
 
   componentDidMount() {
@@ -71,7 +64,7 @@ class App extends React.Component {
 
         let url = e.target.href;
         if (url.startsWith('castle') || url.endsWith('.castle')) {
-          this.navigateToGameUrl(url);
+          this.props.navigator.navigateToGameUrl(url);
         } else {
           NativeUtil.openExternalURL(url);
         }
@@ -85,46 +78,6 @@ class App extends React.Component {
     window.removeEventListener('CASTLE_SYSTEM_KEY_PRESSED', this._handleLuaSystemKeyDownEvent);
     window.clearTimeout(this._nativeChannelsPollTimeout);
   }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (
-      prevProps.currentUser.user &&
-      !!prevProps.currentUser.user !== !!this.props.currentUser.user
-    ) {
-      // current user logged in or out
-      this.navigateToCurrentUserProfile();
-    }
-    if (
-      prevProps.currentUser.timeLastLoaded !== 0 &&
-      prevProps.currentUser.timeLastLoaded !== this.props.currentUser.timeLastLoaded
-    ) {
-      // current user was refreshed
-      const viewer = this.props.currentUser.user;
-      this.props.social.addUser(viewer);
-      const userProfileShown = this.state.navigation.userProfileShown;
-      if (viewer && userProfileShown && viewer.userId === userProfileShown.userId) {
-        this.setState({
-          navigation: {
-            ...this.state.navigation,
-            userProfileShown: viewer,
-          },
-        });
-      }
-    }
-  }
-
-  // the App component uses its own state as the value for our ContextProviders.
-  // for Contexts which include methods, this allows us to provide App's implementation
-  // of those methods.
-  // for example, this.state.navigator.navigateToGame = this.navigateToGame
-  _applyContextFunctions = (contextName) => {
-    const context = this.state[contextName];
-    Object.getOwnPropertyNames(context).forEach((prop) => {
-      if (typeof context[prop] === 'function' && this.hasOwnProperty(prop)) {
-        this.state[contextName][prop] = this[prop];
-      }
-    });
-  };
 
   // interface with lua channels
   _processNativeChannels = async () => {
@@ -143,7 +96,7 @@ class App extends React.Component {
 
   // event listeners
   _handleNativeOpenUrlEvent = (e) => {
-    this.navigateToGameUrl(e.params.url);
+    this.props.navigator.navigateToGameUrl(e.params.url);
   };
 
   _handleLuaSystemKeyDownEvent = async (e) => {
@@ -181,126 +134,18 @@ class App extends React.Component {
     if (e) {
       e.preventDefault();
     }
-    this.navigateToGameUrl(this.state.navigation.game.url);
-  };
-
-  // load game
-  _loadGameAsync = async (game) => {
-    let { url } = game;
-    if (Strings.isEmpty(url)) {
-      return;
-    }
-    const time = Date.now();
-    this.setState({
-      navigation: {
-        ...this.state.navigation,
-        contentMode: 'game',
-        game,
-        gameUrl: url,
-        timeGameLoaded: time,
-        timeLastNavigated: time,
-      },
-    });
-    const isLocal = Urls.isPrivateUrl(url);
-    this.props.development.setIsDeveloping(isLocal);
-  };
-
-  // navigator actions
-  _navigateToContentMode = (mode) => {
-    this.setState({
-      navigation: {
-        ...this.state.navigation,
-        contentMode: mode,
-        userProfileShown: null,
-        timeLastNavigated: Date.now(),
-      },
-    });
-  };
-
-  navigateToHome = () => this._navigateToContentMode('home');
-
-  navigateToCurrentGame = () => {
-    if (!this.state.navigation.game) {
-      throw new Error(`Cannot navigate to current game because there is no current game.`);
-    }
-    this._navigateToContentMode('game');
-  };
-
-  navigateToGameUrl = async (gameUrl) => {
-    gameUrl = gameUrl.replace('castle://', 'http://');
-    let game;
-    try {
-      game = await Browser.resolveGameAtUrlAsync(gameUrl);
-    } catch (e) {
-      // forward this error to the user
-      Logs.error(e.message);
-      return;
-    }
-
-    if (game && game.url) {
-      this._loadGameAsync(game);
-    } else {
-      Logs.error(`There was a problem opening the game at this url: ${gameUrl}`);
-    }
-  };
-
-  navigateToGame = (game) => {
-    if (!game || Strings.isEmpty(game.url)) {
-      return;
-    }
-    if (game.gameId) {
-      // this is a known game object, not an abstract url request
-      this._loadGameAsync(game);
-    } else {
-      // this is an incomplete game object, so try to resolve it before loading
-      this.navigateToGameUrl(game.url);
-    }
-  };
-
-  navigateToCurrentUserProfile = () => {
-    if (this.props.currentUser.user) {
-      this.navigateToUserProfile(this.props.currentUser.user);
-      this.props.currentUser.refreshCurrentUser();
-    } else {
-      // show sign in
-      this._navigateToContentMode('signin');
-    }
-  };
-
-  navigateToUserProfile = async (user) => {
-    let fullUser = this.props.social.userIdToUser[user.userId];
-    if (!fullUser) {
-      try {
-        fullUser = await Actions.getUser({ userId: user.userId });
-        this.props.social.addUser(fullUser);
-      } catch (e) {
-        // fall back to whatever we were given
-        fullUser = user;
-      }
-    }
-    this.setState({
-      navigation: {
-        ...this.state.navigation,
-        contentMode: 'profile',
-        userProfileShown: fullUser,
-        timeLastNavigated: Date.now(),
-      },
-    });
+    this.props.navigator.navigateToGameUrl(this.props.navigation.game.url);
   };
 
   render() {
     return (
-      <NavigatorContext.Provider value={this.state.navigator}>
-        <NavigationContext.Provider value={this.state.navigation}>
-          <div className={STYLES_CONTAINER}>
-            <SocialContainer />
-            <ContentContainer
-              featuredGames={this.state.featuredGames}
-              allContent={this.state.allContent}
-            />
-          </div>
-        </NavigationContext.Provider>
-      </NavigatorContext.Provider>
+      <div className={STYLES_CONTAINER}>
+        <SocialContainer />
+        <ContentContainer
+          featuredGames={this.state.featuredGames}
+          allContent={this.state.allContent}
+        />
+      </div>
     );
   }
 }
@@ -308,37 +153,40 @@ class App extends React.Component {
 class AppWithContext extends React.Component {
   render() {
     return (
-      <CurrentUserContextConsumer>
-        {(currentUser) => (
-          <DevelopmentContextConsumer>
-            {(development) => (
-              <SocialContextConsumer>
-                {(social) => (
+      <DevelopmentContextConsumer>
+        {(development) => (
+          <NavigatorContext.Consumer>
+            {(navigator) => (
+              <NavigationContext.Consumer>
+                {(navigation) => (
                   <App
-                    currentUser={currentUser}
                     development={development}
-                    social={social}
+                    navigator={navigator}
+                    navigation={navigation}
                     {...this.props}
                   />
                 )}
-              </SocialContextConsumer>
+              </NavigationContext.Consumer>
             )}
-          </DevelopmentContextConsumer>
+          </NavigatorContext.Consumer>
         )}
-      </CurrentUserContextConsumer>
+      </DevelopmentContextConsumer>
     );
   }
 }
 
 export default class AppWithProvider extends React.Component {
   render() {
+    let { currentUser, navigation } = this.props.state;
     return (
-      <CurrentUserContextProvider value={this.props.currentUser}>
-        <DevelopmentContextProvider>
-          <SocialContextProvider>
-            <AppWithContext {...this.props} />
-          </SocialContextProvider>
-        </DevelopmentContextProvider>
+      <CurrentUserContextProvider value={currentUser}>
+        <SocialContextProvider>
+          <DevelopmentContextProvider>
+            <NavigationContextProvider value={{ navigation }}>
+              <AppWithContext {...this.props} />
+            </NavigationContextProvider>
+          </DevelopmentContextProvider>
+        </SocialContextProvider>
       </CurrentUserContextProvider>
     );
   }

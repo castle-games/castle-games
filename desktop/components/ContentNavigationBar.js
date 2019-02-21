@@ -2,8 +2,7 @@ import * as React from 'react';
 import { css } from 'react-emotion';
 
 import * as Constants from '~/common/constants';
-import { NavigationContext } from '~/contexts/NavigationContext';
-import { NavigatorContext } from '~/contexts/NavigatorContext';
+import { NavigationContext, NavigatorContext } from '~/contexts/NavigationContext';
 import SearchInput from '~/components/SearchInput';
 import * as Urls from '~/common/urls';
 import Viewer from '~/components/Viewer';

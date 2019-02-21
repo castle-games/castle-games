@@ -6,8 +6,7 @@ import GameActionsBar from '~/components/game/GameActionsBar';
 import GameWindow from '~/native/gamewindow';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import Logs from '~/common/logs';
-import { NavigationContext } from '~/contexts/NavigationContext';
-import { NavigatorContext } from '~/contexts/NavigatorContext';
+import { NavigationContext, NavigatorContext } from '~/contexts/NavigationContext';
 import * as NativeUtil from '~/native/nativeutil';
 import Share from '~/common/share';
 import UserStatus from '~/common/userstatus';
@@ -53,6 +52,9 @@ class GameScreen extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    // TODO: see if timeGameLoaded changed and then update isDeveloping
+    // const isLocal = Urls.isPrivateUrl(url);
+    // this.props.development.setIsDeveloping(isLocal);
     this._updateGameWindow(prevProps, prevState);
   }
 

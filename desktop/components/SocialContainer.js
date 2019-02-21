@@ -4,7 +4,7 @@ import { css } from 'react-emotion';
 import ChatContainer from '~/components/social/ChatContainer';
 import * as Constants from '~/common/constants';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
-import { NavigatorContext } from '~/contexts/NavigatorContext';
+import { NavigatorContext } from '~/contexts/NavigationContext';
 
 const STYLES_CONTAINER = css`
   font-family: ${Constants.font.default};

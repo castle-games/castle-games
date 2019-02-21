@@ -2,8 +2,6 @@ import ReactDOM from 'react-dom';
 
 import * as React from 'react';
 import * as Constants from '~/common/constants';
-import { NavigationContextDefaults } from '~/contexts/NavigationContext';
-import { NavigatorContextDefaults } from '~/contexts/NavigatorContext';
 import * as Network from '~/common/network';
 import * as Actions from '~/common/actions';
 
@@ -85,8 +83,6 @@ const INITIAL_STATE_OFFLINE = {
   },
   featuredGames: [],
   isOffline: true,
-  navigation: NavigationContextDefaults,
-  navigator: NavigatorContextDefaults,
 };
 
 const run = async () => {
@@ -103,7 +99,7 @@ const run = async () => {
   });
 
   state.currentUser = { user: viewer };
-  state.navigation.contentMode = isOffline ? 'game' : 'home';
+  state.navigation = { contentMode: isOffline ? 'game' : 'home' };
 
   ReactDOM.render(<App state={state} storage={storage} />, document.getElementById('root'));
 

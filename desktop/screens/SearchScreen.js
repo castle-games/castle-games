@@ -2,7 +2,7 @@ import * as React from 'react';
 import { css } from 'react-emotion';
 
 import * as Constants from '~/common/constants';
-import { NavigatorContext } from '~/contexts/NavigatorContext';
+import { NavigatorContext } from '~/contexts/NavigationContext';
 import * as Strings from '~/common/strings';
 import UIButtonSecondary from '~/components/reusable/UIButtonSecondary';
 import UIGameGrid from '~/components/reusable/UIGameGrid';

@@ -3,7 +3,7 @@ import { css } from 'react-emotion';
 
 import * as Constants from '~/common/constants';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
-import { NavigatorContext } from '~/contexts/NavigatorContext';
+import { NavigatorContext } from '~/contexts/NavigationContext';
 import UIAvatar from '~/components/reusable/UIAvatar';
 
 const STYLES_CONTAINER = css`
