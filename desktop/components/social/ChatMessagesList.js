@@ -79,19 +79,20 @@ class ChatMessagesList extends React.Component {
       const userId = chatMessage.userId;
       let maybeUsername;
       if (!prevUserId || prevUserId !== userId) {
+        let isRealUser = !!this.props.social.userIdToUser[chatMessage.userId];
         let user = this.props.social.userIdToUser[chatMessage.userId] || {
           userId: chatMessage.userId,
           username: chatMessage.userId,
         };
 
         if (chatMessage.userId === NOTIFICATIONS_USER_ID) {
-          user = { userId: NOTIFICATIONS_USER_ID, username: 'Notification' };
+          user = { userId: NOTIFICATIONS_USER_ID, username: 'Castle' };
         }
 
         maybeUsername = (
           <div
             className={STYLES_MESSAGE_USERNAME}
-            onClick={() => this.props.navigateToUserProfile(user)}>
+            onClick={isRealUser ? () => this.props.navigateToUserProfile(user) : null}>
             {user.username}
           </div>
         );

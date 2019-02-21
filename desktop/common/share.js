@@ -31,12 +31,11 @@ class Share {
     });
 
     if (response.sessionId && this._game) {
-      let message;
-      if (response.sessionId === this._sessionId) {
-        message = `You joined session ${this._game.url}#${response.sessionId}`;
-      } else {
-        message = `You created session ${this._game.url}#${response.sessionId}`;
-      }
+      let gameTitle = this._game.title || 'Untitled';
+      let verb = response.sessionId === this._sessionId ? 'joined' : 'created';
+      let message = `You ${verb} a session of ${gameTitle}. Share this link to invite other people: ${
+        this._game.url
+      }#${response.sessionId}`;
 
       let event = new Event('CASTLE_ADD_CHAT_NOTIFICATION');
       event.params = {
