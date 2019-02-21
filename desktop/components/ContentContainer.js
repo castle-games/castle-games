@@ -3,6 +3,7 @@ import { css } from 'react-emotion';
 
 import * as Constants from '~/common/constants';
 import ContentNavigationBar from '~/components/ContentNavigationBar';
+import { DevelopmentSetterContext } from '~/contexts/DevelopmentContext';
 import GameScreen from '~/screens/GameScreen';
 import HomeScreen from '~/screens/HomeScreen';
 import ProfileScreen from '~/screens/ProfileScreen';
@@ -10,6 +11,7 @@ import LoginSignupScreen from '~/screens/LoginSignupScreen';
 import { NavigationContext } from '~/contexts/NavigationContext';
 import SearchScreen from '~/screens/SearchScreen';
 import * as Strings from '~/common/strings';
+import * as Urls from '~/common/urls';
 
 const STYLES_CONTAINER = css`
   font-family: ${Constants.font.default};
@@ -19,11 +21,26 @@ const STYLES_CONTAINER = css`
   flex-direction: column;
 `;
 
-export default class ContentContainer extends React.Component {
-  static contextType = NavigationContext;
+class ContentContainer extends React.Component {
+  static defaultProps = {
+    mode: 'home',
+    setIsDeveloping: () => {},
+  };
   state = {
     searchQuery: '',
   };
+
+  componentDidUpdate(prevProps) {
+    if (
+      this.props.mode === 'game' &&
+      this.props.timeGameLoaded !== prevProps.timeGameLoaded &&
+      this.props.game
+    ) {
+      // if we loaded a new game, auto-show logs for local urls
+      const isLocal = Urls.isPrivateUrl(this.props.game.url);
+      this.props.setIsDeveloping(isLocal);
+    }
+  }
 
   _handleSearchReset = () => {
     this.setState({
@@ -69,11 +86,9 @@ export default class ContentContainer extends React.Component {
   };
 
   render() {
-    const navigation = this.context;
-
     let contentElement;
     if (Strings.isEmpty(this.state.searchQuery)) {
-      contentElement = this._renderContent(navigation.contentMode);
+      contentElement = this._renderContent(this.props.mode);
     } else {
       contentElement = this._renderSearch();
     }
@@ -88,6 +103,28 @@ export default class ContentContainer extends React.Component {
         />
         {contentElement}
       </div>
+    );
+  }
+}
+
+export default class ContentContainerWithContext extends React.Component {
+  render() {
+    return (
+      <DevelopmentSetterContext.Consumer>
+        {(development) => (
+          <NavigationContext.Consumer>
+            {(navigation) => (
+              <ContentContainer
+                mode={navigation.contentMode}
+                timeGameLoaded={navigation.timeGameLoaded}
+                game={navigation.game}
+                setIsDeveloping={development.setIsDeveloping}
+                {...this.props}
+              />
+            )}
+          </NavigationContext.Consumer>
+        )}
+      </DevelopmentSetterContext.Consumer>
     );
   }
 }

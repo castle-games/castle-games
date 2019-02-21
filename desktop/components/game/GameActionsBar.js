@@ -7,7 +7,6 @@ import DevelopmentLogs from '~/components/game/DevelopmentLogs';
 import UIButtonDarkSmall from '~/components/reusable/UIButtonDarkSmall';
 import * as SVG from '~/components/primitives/svg';
 import * as Strings from '~/common/strings';
-import * as Urls from '~/common/urls';
 
 const STYLES_CONTAINER = css`
   background: ${Constants.colors.background};
@@ -69,22 +68,6 @@ const STYLES_DESCRIPTION = css`
 
 export default class GameActionsBar extends React.Component {
   static contextType = DevelopmentContext;
-  constructor(props) {
-    super(props);
-    this._update({}, props);
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    this._update(prevProps, this.props);
-  }
-
-  _update = (prevProps, props) => {
-    if (props.timeGameLoaded !== prevProps.timeGameLoaded && props.game) {
-      // auto-show logs for local urls
-      const isLocal = Urls.isPrivateUrl(props.game.url);
-      // TODO: BEN this.context.setters.setIsDeveloping(isLocal);
-    }
-  };
 
   _renderPlaying = (game, muteElement) => {
     let title = 'Untitled';
