@@ -1,5 +1,13 @@
 #!/bin/sh
 
+# Build and upload a new version of Castle for macOS
+
+if [[ -n $(git status --porcelain) ]]; then
+  echo "Tree is dirty, aborting"
+  exit 1
+fi
+
+git fetch --tags --prune
 GIT_HASH=$(git rev-parse HEAD)
 MACOS_BASE_VERSION=1
 MACOS_VERSION=$MACOS_BASE_VERSION.$(git rev-list release-root..HEAD --count)
@@ -16,3 +24,15 @@ rm -rf archive.xcarchive
 /usr/libexec/PlistBuddy -c "Set GHGitHash GIT_HASH_UNSET" Supporting/ghost-macosx.plist
 /usr/libexec/PlistBuddy -c "Set CFBundleVersion VERSION_UNSET" Supporting/ghost-macosx.plist
 /usr/libexec/PlistBuddy -c "Set CFBundleShortVersionString VERSION_UNSET" Supporting/ghost-macosx.plist
+
+echo -e "\n\b\bCreated 'Castle-$MACOS_VERSION.zip'"
+
+if [ ! -d castle-releases ]; then
+  echo "Cloning 'castle-releases'..."
+  git clone git@github.com:castle-games/castle-releases.git
+fi
+cd castle-releases
+echo "Pulling 'castle-releases'..."
+git pull origin master
+echo "Performing release..."
+./castle-releases-macos mac ../Castle-$MACOS_VERSION.zip

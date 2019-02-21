@@ -12,9 +12,5 @@ jobs:
       - checkout
 
       - run:
-          name: Build
+          name: Build and Upload
           command: cd macosx && ./release.sh
-
-      - run:
-          name: Upload
-          command: cd ci && ./ci-macos mac ../macosx/Castle.pkg
