@@ -3,6 +3,7 @@ import { css } from 'react-emotion';
 
 import * as Constants from '~/common/constants';
 import HomeMakeBanner from '~/components/home/HomeMakeBanner';
+import HomeUpdateBanner from '~/components/home/HomeUpdateBanner';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigatorContext } from '~/contexts/NavigationContext';
 import UIGameGrid from '~/components/reusable/UIGameGrid';
@@ -95,9 +96,16 @@ class HomeScreen extends React.Component {
     );
     const recentElement = this._renderGameSection(recentGames, 'Recent Games', 'history');
     const makeElement = this.state.mode === 'default' ? <HomeMakeBanner /> : null;
+    const updateElement = this.props.updateAvailable ? (
+      <HomeUpdateBanner
+        updateAvailable={this.props.updateAvailable}
+        onNativeUpdateInstall={this.props.onNativeUpdateInstall}
+      />
+    ) : null;
 
     return (
       <div className={STYLES_CONTAINER}>
+        {updateElement}
         {makeElement}
         {recentElement}
         {featuredGamesElement}

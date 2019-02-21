@@ -42,6 +42,7 @@ class App extends React.Component {
   constructor(props) {
     super();
     this.state = props.state;
+    this.state.updateAvailable = null;
   }
 
   componentDidMount() {
@@ -102,11 +103,15 @@ class App extends React.Component {
   };
 
   _handleNativeUpdateAvailableEvent = async ({ params }) => {
-    // TODO: Make a non-janky UI
     window.removeEventListener('nativeUpdateAvailable', this._handleNativeUpdateAvailableEvent);
-    if (confirm(`update available: ${JSON.stringify(params, null, 2)}\ninstall?`)) {
+    this.setState({ updateAvailable: params });
+  };
+
+  _handleNativeUpdateInstall = async (shouldInstall) => {
+    if (shouldInstall) {
       await NativeUtil.installUpdate();
     } else {
+      await this.setState({ updateAvailable: null });
       await Actions.delay(3 * 3600 * 1000); // 3 hours
       window.addEventListener('nativeUpdateAvailable', this._handleNativeUpdateAvailableEvent);
     }
@@ -135,6 +140,8 @@ class App extends React.Component {
         <ContentContainer
           featuredGames={this.state.featuredGames}
           allContent={this.state.allContent}
+          updateAvailable={this.state.updateAvailable}
+          onNativeUpdateInstall={this._handleNativeUpdateInstall}
         />
       </div>
     );

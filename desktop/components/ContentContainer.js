@@ -67,7 +67,13 @@ class ContentContainer extends React.Component {
     if (mode === 'game') {
       return <GameScreen />;
     } else if (mode === 'home') {
-      return <HomeScreen featuredGames={this.props.featuredGames} />;
+      return (
+        <HomeScreen
+          featuredGames={this.props.featuredGames}
+          updateAvailable={this.props.updateAvailable}
+          onNativeUpdateInstall={this.props.onNativeUpdateInstall}
+        />
+      );
     } else if (mode === 'profile') {
       return <ProfileScreen />;
     } else if (mode === 'signin') {
