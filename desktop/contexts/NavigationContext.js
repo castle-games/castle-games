@@ -67,10 +67,7 @@ class NavigationContextManager extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (
-      prevProps.currentUser.timeLastLoaded !== 0 &&
-      !!prevProps.currentUser.user !== !!this.props.currentUser.user
-    ) {
+    if (!!prevProps.currentUser.user !== !!this.props.currentUser.user) {
       // current user logged in or out
       this.navigateToCurrentUserProfile();
     }
