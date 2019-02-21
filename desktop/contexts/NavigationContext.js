@@ -38,6 +38,7 @@ const NavigatorContextDefaults = {
   navigateToCurrentGame: () => {},
   navigateToCurrentUserProfile: () => {},
   navigateToUserProfile: async (user) => {},
+  reloadGame: () => {},
 };
 
 const NavigatorContext = React.createContext(NavigatorContextDefaults);
@@ -60,6 +61,7 @@ class NavigationContextManager extends React.Component {
         navigateToCurrentGame: this.navigateToCurrentGame,
         navigateToCurrentUserProfile: this.navigateToCurrentUserProfile,
         navigateToUserProfile: this.navigateToUserProfile,
+        reloadGame: this.reloadGame,
       },
     };
   }
@@ -193,6 +195,10 @@ class NavigationContextManager extends React.Component {
         timeLastNavigated: Date.now(),
       },
     });
+  };
+
+  reloadGame = () => {
+    this.navigateToGameUrl(this.state.navigation.game.url);
   };
 
   render() {

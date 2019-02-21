@@ -8,11 +8,7 @@ import { CurrentUserContextProvider } from '~/contexts/CurrentUserContext';
 import { DevelopmentContext, DevelopmentContextProvider } from '~/contexts/DevelopmentContext';
 import { SocialContextProvider } from '~/contexts/SocialContext';
 import Logs from '~/common/logs';
-import {
-  NavigatorContext,
-  NavigationContext,
-  NavigationContextProvider,
-} from '~/contexts/NavigationContext';
+import { NavigatorContext, NavigationContextProvider } from '~/contexts/NavigationContext';
 import * as NativeUtil from '~/native/nativeutil';
 import { linkify } from 'react-linkify';
 
@@ -114,7 +110,8 @@ class App extends React.Component {
 
   _handleKeyDownEvent = (e) => {
     if (isReloadHotkey(e)) {
-      return this.reload(e);
+      e.preventDefault();
+      return this.props.navigator.reloadGame();
     }
     if (isFullscreenHotkey(e)) {
       (async () => {
@@ -125,13 +122,6 @@ class App extends React.Component {
     if (isDevelopmentHotkey(e)) {
       return this.props.development.setIsDeveloping(!this.props.development.isDeveloping);
     }
-  };
-
-  reload = async (e) => {
-    if (e) {
-      e.preventDefault();
-    }
-    this.props.navigator.navigateToGameUrl(this.props.navigation.game.url);
   };
 
   render() {
@@ -153,18 +143,7 @@ class AppWithContext extends React.Component {
       <DevelopmentContext.Consumer>
         {(development) => (
           <NavigatorContext.Consumer>
-            {(navigator) => (
-              <NavigationContext.Consumer>
-                {(navigation) => (
-                  <App
-                    development={development}
-                    navigator={navigator}
-                    navigation={navigation}
-                    {...this.props}
-                  />
-                )}
-              </NavigationContext.Consumer>
-            )}
+            {(navigator) => <App development={development} navigator={navigator} {...this.props} />}
           </NavigatorContext.Consumer>
         )}
       </DevelopmentContext.Consumer>
