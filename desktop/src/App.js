@@ -49,8 +49,6 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-    alert("Welcome to Castle 1.58! This message is part of nikki's test of the auto-updates system.\nThis release wasn't really meant for the public! :O");
-
     window.addEventListener('nativeOpenUrl', this._handleNativeOpenUrlEvent);
     window.addEventListener('keydown', this._handleKeyDownEvent);
     window.addEventListener('CASTLE_SYSTEM_KEY_PRESSED', this._handleLuaSystemKeyDownEvent);
