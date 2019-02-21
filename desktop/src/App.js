@@ -5,7 +5,10 @@ import { isKeyHotkey } from 'is-hotkey';
 import * as Actions from '~/common/actions';
 import * as Constants from '~/common/constants';
 import { CurrentUserContextProvider } from '~/contexts/CurrentUserContext';
-import { DevelopmentContext, DevelopmentContextProvider } from '~/contexts/DevelopmentContext';
+import {
+  DevelopmentSetterContext,
+  DevelopmentContextProvider,
+} from '~/contexts/DevelopmentContext';
 import { SocialContextProvider } from '~/contexts/SocialContext';
 import Logs from '~/common/logs';
 import { NavigatorContext, NavigationContextProvider } from '~/contexts/NavigationContext';
@@ -120,7 +123,7 @@ class App extends React.Component {
       return;
     }
     if (isDevelopmentHotkey(e)) {
-      return this.props.development.setIsDeveloping(!this.props.development.isDeveloping);
+      return this.props.development.toggleIsDeveloping();
     }
   };
 
@@ -140,13 +143,13 @@ class App extends React.Component {
 class AppWithContext extends React.Component {
   render() {
     return (
-      <DevelopmentContext.Consumer>
+      <DevelopmentSetterContext.Consumer>
         {(development) => (
           <NavigatorContext.Consumer>
             {(navigator) => <App development={development} navigator={navigator} {...this.props} />}
           </NavigatorContext.Consumer>
         )}
-      </DevelopmentContext.Consumer>
+      </DevelopmentSetterContext.Consumer>
     );
   }
 }

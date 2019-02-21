@@ -69,7 +69,6 @@ const STYLES_DESCRIPTION = css`
 
 export default class GameActionsBar extends React.Component {
   static contextType = DevelopmentContext;
-
   constructor(props) {
     super(props);
     this._update({}, props);
@@ -83,7 +82,7 @@ export default class GameActionsBar extends React.Component {
     if (props.timeGameLoaded !== prevProps.timeGameLoaded && props.game) {
       // auto-show logs for local urls
       const isLocal = Urls.isPrivateUrl(props.game.url);
-      // TODO: BEN this.context.setIsDeveloping(isLocal);
+      // TODO: BEN this.context.setters.setIsDeveloping(isLocal);
     }
   };
 
@@ -135,7 +134,7 @@ export default class GameActionsBar extends React.Component {
     // TODO: mute etc.
     return (
       <div className={STYLES_CONTAINER}>
-        <DevelopmentLogs logs={this.context.logs} onClearLogs={this.context.clearLogs} />
+        <DevelopmentLogs logs={this.context.logs} onClearLogs={this.context.setters.clearLogs} />
       </div>
     );
   };
