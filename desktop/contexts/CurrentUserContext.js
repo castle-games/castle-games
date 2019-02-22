@@ -7,7 +7,7 @@ const CurrentUserContextDefaults = {
   timeLastLoaded: 0,
   userStatusHistory: [],
   setCurrentUser: (user) => {},
-  clearCurrentUser: () => {},
+  clearCurrentUser: async () => {},
   refreshCurrentUser: async () => {},
 };
 
@@ -36,10 +36,8 @@ class CurrentUserContextProvider extends React.Component {
     });
   };
 
-  clearCurrentUser = () => {
-    if (!Actions.logout()) {
-      return;
-    }
+  clearCurrentUser = async () => {
+    await Actions.logout();
     this.setState({
       user: null,
       timeLastLoaded: 0,
