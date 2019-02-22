@@ -45,6 +45,8 @@ const NavigatorContext = React.createContext(NavigatorContextDefaults);
 const NavigationContext = React.createContext(NavigationContextDefaults);
 
 class NavigationContextManager extends React.Component {
+  _reloadDebounceTimeout;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -195,7 +197,13 @@ class NavigationContextManager extends React.Component {
   };
 
   reloadGame = () => {
-    this.navigateToGameUrl(this.state.navigation.game.url);
+    if (this._reloadDebounceTimeout) {
+      clearTimeout(this._reloadDebounceTimeout);
+    }
+    this._reloadDebounceTimout = setTimeout(() => {
+      this.navigateToGameUrl(this.state.navigation.game.url);
+      this._reloadDebounceTimeout = null;
+    }, 50);
   };
 
   render() {
