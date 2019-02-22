@@ -47,10 +47,29 @@ class HomeScreen extends React.Component {
   state = {
     mode: 'default', // default | history | games
   };
+  _container;
 
   componentDidMount() {
     this.props.refreshHistory();
   }
+
+  componentDidUpdate(prevProps) {
+    if (
+      prevProps.timeLastNavigated !== this.props.timeLastNavigated &&
+      this.state.mode !== 'default'
+    ) {
+      // if the user re-navigated to 'home', reset to show all content
+      this._setModeAndScrollToTop('default');
+    }
+  }
+
+  _setModeAndScrollToTop = (mode) => {
+    this.setState({ mode: mode }, () => {
+      if (this._container) {
+        this._container.scroll({ top: 0 });
+      }
+    });
+  };
 
   _renderGameSection = (games, sectionTitle, featuredMode) => {
     const isSectionVisible = this.state.mode === 'default' || this.state.mode === featuredMode;
@@ -62,7 +81,7 @@ class HomeScreen extends React.Component {
       if (this.state.mode === 'default') {
         gameItems = gameItems.slice(0, PREVIEW_GRID_SIZE);
         seeAllElement = (
-          <div className={STYLES_SEE_ALL} onClick={() => this.setState({ mode: featuredMode })}>
+          <div className={STYLES_SEE_ALL} onClick={() => this._setModeAndScrollToTop(featuredMode)}>
             See All
           </div>
         );
@@ -104,7 +123,11 @@ class HomeScreen extends React.Component {
     ) : null;
 
     return (
-      <div className={STYLES_CONTAINER}>
+      <div
+        className={STYLES_CONTAINER}
+        ref={(r) => {
+          this._container = r;
+        }}>
         {updateElement}
         {makeElement}
         {recentElement}

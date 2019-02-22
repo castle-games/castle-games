@@ -72,6 +72,7 @@ class ContentContainer extends React.Component {
           featuredGames={this.props.featuredGames}
           updateAvailable={this.props.updateAvailable}
           onNativeUpdateInstall={this.props.onNativeUpdateInstall}
+          timeLastNavigated={this.props.timeLastNavigated}
         />
       );
     } else if (mode === 'profile') {
@@ -123,6 +124,7 @@ export default class ContentContainerWithContext extends React.Component {
               <ContentContainer
                 mode={navigation.contentMode}
                 timeGameLoaded={navigation.timeGameLoaded}
+                timeLastNavigated={navigation.timeLastNavigated}
                 game={navigation.game}
                 setIsDeveloping={development.setIsDeveloping}
                 {...this.props}
