@@ -31,9 +31,9 @@ const STYLES_LOGIN_ACTION = css`
 
 class SocialContainer extends React.Component {
   render() {
-    let { user, navigateToCurrentUserProfile } = this.props;
+    let { isLoggedIn, navigateToCurrentUserProfile } = this.props;
     let contentElement;
-    if (user) {
+    if (isLoggedIn) {
       contentElement = <ChatContainer />;
     } else {
       contentElement = (
@@ -60,7 +60,7 @@ export default class SocialContainerWithContext extends React.Component {
           <NavigatorContext.Consumer>
             {(navigator) => (
               <SocialContainer
-                user={currentUser.user}
+                isLoggedIn={!!currentUser.user}
                 navigateToCurrentUserProfile={navigator.navigateToCurrentUserProfile}
               />
             )}
