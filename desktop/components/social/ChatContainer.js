@@ -77,18 +77,14 @@ class ChatContainer extends React.Component {
   };
 
   _startChatAsync = async () => {
-    let { user } = this.props;
-    if (!user) {
-      throw new Error('no user');
-    }
-    let userId = user.userId;
+    const userId = this.props.currentUserId;
     if (!userId) {
-      throw new Error('no userId');
+      throw new Error('Cannot start chat without a logged in userId');
     }
 
     let token = await Actions.getAccessTokenAsync();
     if (!token) {
-      throw new Error('no token');
+      throw new Error('Cannot start chat without an access token');
     }
 
     this._castleChat = new CastleChat();
@@ -260,21 +256,24 @@ export default class ChatContainerWithContext extends React.Component {
   render() {
     return (
       <CurrentUserContext.Consumer>
-        {(currentUser) => (
-          <SocialContext.Consumer>
-            {(social) => (
-              <NavigatorContext.Consumer>
-                {(navigator) => (
-                  <ChatContainer
-                    user={currentUser.user}
-                    social={social}
-                    navigateToUserProfile={navigator.navigateToUserProfile}
-                  />
-                )}
-              </NavigatorContext.Consumer>
-            )}
-          </SocialContext.Consumer>
-        )}
+        {(currentUser) => {
+          const currentUserId = currentUser.user ? currentUser.user.userId : null;
+          return (
+            <SocialContext.Consumer>
+              {(social) => (
+                <NavigatorContext.Consumer>
+                  {(navigator) => (
+                    <ChatContainer
+                      currentUserId={currentUserId}
+                      social={social}
+                      navigateToUserProfile={navigator.navigateToUserProfile}
+                    />
+                  )}
+                </NavigatorContext.Consumer>
+              )}
+            </SocialContext.Consumer>
+          );
+        }}
       </CurrentUserContext.Consumer>
     );
   }

@@ -4,6 +4,23 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeIconFile</key>
+			<string>GameIcon</string>
+			<key>CFBundleTypeName</key>
+			<string>Castle</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>games.castle.castle</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIdentifier</key>
@@ -56,5 +73,28 @@
 	<string>uZotBBxbk+/JlVAWhEmAV/cefqX2EeFQGu4sAGDfDzE=</string>
 	<key>SUScheduledCheckInterval</key>
 	<integer>3600</integer>
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.text</string>
+				<string>public.plain-text</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Castle File</string>
+			<key>UTTypeIconFile</key>
+			<string>GameIcon</string>
+			<key>UTTypeIdentifier</key>
+			<string>games.castle.castle</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<string>castle</string>
+				<key>public.mime-type</key>
+				<string>text/yaml</string>
+			</dict>
+		</dict>
+	</array>
 </dict>
 </plist>
