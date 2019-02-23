@@ -1,1 +1,1 @@
-taskkill //F //IM Castle.exe //T
+taskkill.exe /F /IM Castle.exe /T
