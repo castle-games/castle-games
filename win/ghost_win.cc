@@ -17,6 +17,7 @@
 #include "ghost.h"
 
 #include <windows.h>
+
 #include <ShellApi.h>
 
 #include <atlbase.h>
@@ -495,6 +496,12 @@ void ghostStep() {
 
         // Handle window resizing if focused
         if (focused) {
+          RECT currParentRect;
+          auto parent = ghostWinGetMainWindow();
+          if (parent) {
+            GetWindowRect(parent, &currParentRect);
+          }
+
           // Get the display scale factor
           int percentScale = 100;
           if (pGetScaleFactorForMonitor) {
@@ -505,11 +512,6 @@ void ghostStep() {
 
           // Check for parent window resizes at the native level and apply the delta
           {
-            RECT currParentRect;
-            auto parent = ghostWinGetMainWindow();
-            if (parent) {
-              GetWindowRect(parent, &currParentRect);
-            }
             if (prevParentRect.right != prevParentRect.left) {
               auto dw = (currParentRect.right - currParentRect.left) -
                         (prevParentRect.right - prevParentRect.left);
@@ -523,8 +525,12 @@ void ghostStep() {
           }
 
           // Apply the size!
-          SetWindowPos(child, NULL, fracScale * childLeft, fracScale * childTop,
-                       fracScale * childWidth, fracScale * childHeight, 0);
+          auto newLeft = fmax(0, fracScale * childLeft), newTop = fmax(0, fracScale * childTop);
+          auto newWidth =
+              fmin(fracScale * childWidth, currParentRect.right - currParentRect.left - newLeft);
+          auto newHeight =
+              fmin(fracScale * childHeight, currParentRect.bottom - currParentRect.top - newTop);
+          SetWindowPos(child, NULL, newLeft, newTop, newWidth, newHeight, 0);
         }
 
         // Automatic pausing when unfocused
@@ -572,5 +578,4 @@ void ghostOpenExternalUrl(const char *url) {
   ShellExecute(0, 0, ptr, 0, 0, SW_SHOW);
 }
 
-void ghostInstallUpdate() {
-}
+void ghostInstallUpdate() {}
