@@ -35,7 +35,6 @@ function _fixWindowsFilePath(path) {
       pathComponents[0] = mount;
       filePath = pathComponents.join('\\');
     }
-    filePath = decodeURIComponent(filePath);
     return `file://${filePath}`;
   }
   return path;
@@ -52,6 +51,7 @@ export function getLuaEntryPoint(game) {
   let entryPoint;
   if (game.metadata && game.metadata.main) {
     entryPoint = url.resolve(game.url, game.metadata.main);
+    entryPoint = decodeURIComponent(entryPoint);
   } else {
     entryPoint = game.url;
   }
