@@ -17,8 +17,6 @@ const STYLES_CONTAINER = css`
 const STYLES_INNER_CONTAINER = css`
   position: absolute;
   bottom: 2px;
-  padding: 6px 6px 6px 6px;
-  border-radius: 4px;
   width: 100%;
   border: 1px solid ${Constants.colors.black};
   background: ${Constants.colors.white};
@@ -26,29 +24,34 @@ const STYLES_INNER_CONTAINER = css`
   width: 100%;
 `;
 
+const STYLES_HEADING = css`
+  background: ${Constants.colors.background4};
+  color: ${Constants.colors.text2};
+  padding: 8px;
+`;
+
 const STYLE_RESULT_ROW = css`
   cursor: pointer;
-  padding: 4px 4px 4px 4px;
-  border-radius: 0px;
+  padding: 8px;
   width: 100%;
   color: ${Constants.colors.black};
-  font-weight: 900;
   letter-spacing: 0.2px;
+  font-weight: 800;
 `;
 
 const STYLE_RESULT_ROW_SELECTED = css`
   cursor: pointer;
-  padding: 4px 4px 4px 4px;
+  padding: 8px;
   border-radius: 0px;
   width: 100%;
-  color: ${Constants.colors.black};
-  background: #aaa;
-  font-weight: 900;
+  color: ${Constants.colors.action};
+  background: ${Constants.colors.background3};
   letter-spacing: 0.2px;
+  font-weight: 100;
 `;
 
 const STYLE_RESULT_ROW_REAL_NAME = css`
-  margin-left: 40px;
+  margin-left: 16px;
   border-radius: 0px;
   width: 100%;
   color: #666;
@@ -179,6 +182,10 @@ export default class ChatAutocomplete extends React.Component {
     return (
       <div className={STYLES_CONTAINER} style={this.props.style}>
         <div className={STYLES_INNER_CONTAINER} style={this.props.style}>
+          <div className={STYLES_HEADING}>
+            People matching "@
+            {this.props.text}"
+          </div>
           {rows}
         </div>
       </div>
