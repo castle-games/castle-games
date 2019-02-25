@@ -5,7 +5,6 @@ import * as Window from '~/common/window';
 import { css } from 'react-emotion';
 
 import UIHeaderDismiss from '~/components/reusable/UIHeaderDismiss';
-import UIEmptyState from '~/components/reusable/UIEmptyState';
 import UILogItem from '~/components/reusable/UILogItem';
 
 const STYLES_FIXED_CONTAINER = css`

@@ -5,7 +5,6 @@ import * as Constants from '~/common/constants';
 import { Value } from 'slate';
 import { css } from 'react-emotion';
 
-import UIEmptyState from '~/components/reusable/UIEmptyState';
 import UIGameGrid from '~/components/reusable/UIGameGrid';
 import UIInputSecondary from '~/components/reusable/UIInputSecondary';
 import UITextArea from '~/components/reusable/UITextArea';
@@ -148,8 +147,7 @@ export default class RegisterGame extends React.Component {
           <div className={STYLES_PARAGRAPH}>
             Your Castle url will be{' '}
             <span className={STYLES_GAME_PREVIEW_URL}>
-              {Constants.WEB_HOST}/
-              {this.state.previewedGame.slug}
+              {Constants.WEB_HOST}/{this.state.previewedGame.slug}
             </span>
           </div>
         </div>

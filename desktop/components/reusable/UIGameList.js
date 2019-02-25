@@ -5,8 +5,6 @@ import * as SVG from '~/components/primitives/svg';
 
 import { css } from 'react-emotion';
 
-import UIEmptyState from '~/components/reusable/UIEmptyState';
-
 const STYLES_ICON_COLUMN = css`
   width: 40px;
   flex-shrink: 0;
@@ -96,7 +94,7 @@ const STYLES_ITEM = css`
 `;
 
 export default class GameList extends React.Component {
-  _handleGameUpdate = game => {
+  _handleGameUpdate = (game) => {
     if (this.props.onGameUpdate) {
       this.props.onGameUpdate(game);
     }
@@ -110,9 +108,9 @@ export default class GameList extends React.Component {
 
     let maybeTitleRow;
     if (this.props.noTitleRow) {
-      maybeTitleRow = (<div style={{ borderTop: `16px solid ${Constants.colors.background}` }} />);
+      maybeTitleRow = <div style={{ borderTop: `16px solid ${Constants.colors.background}` }} />;
     } else {
-      const ownerCol = (isOwner) ? (<div className={STYLES_COLUMN_NO_INTERACTION} />) : null;
+      const ownerCol = isOwner ? <div className={STYLES_COLUMN_NO_INTERACTION} /> : null;
       maybeTitleRow = (
         <div className={STYLES_ROW_TITLE}>
           <div className={STYLES_ICON_COLUMN} />
@@ -144,9 +142,7 @@ export default class GameList extends React.Component {
               }
               const isSelected = this.props.game && this.props.game.url === m.url;
               const actionsElement = isOwner ? (
-                <div className={STYLES_COLUMN}>
-                  {maybeUpdateButton}
-                </div>
+                <div className={STYLES_COLUMN}>{maybeUpdateButton}</div>
               ) : null;
 
               let author = m && m.owner && m.owner.username ? m.owner.username : '-';
@@ -173,14 +169,10 @@ export default class GameList extends React.Component {
                   className={STYLES_ROW}
                   key={`game-list-item-${m.gameId}-${i}`}
                   style={isSelected ? { color: Constants.colors.green } : null}>
-                  <div
-                    className={STYLES_ICON_COLUMN}
-                    onClick={() => this.props.onGameSelect(m)}>
+                  <div className={STYLES_ICON_COLUMN} onClick={() => this.props.onGameSelect(m)}>
                     <SVG.MediaIcon height="16px" />
                   </div>
-                  <div
-                    className={STYLES_FLUID_COLUMN}
-                    onClick={() => this.props.onGameSelect(m)}>
+                  <div className={STYLES_FLUID_COLUMN} onClick={() => this.props.onGameSelect(m)}>
                     {m.title}
                   </div>
                   <div
