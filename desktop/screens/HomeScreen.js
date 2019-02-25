@@ -114,7 +114,10 @@ class HomeScreen extends React.Component {
       'games'
     );
     const recentElement = this._renderGameSection(recentGames, 'Recent Games', 'history');
-    const makeElement = this.state.mode === 'default' ? <HomeMakeBanner /> : null;
+    const makeElement =
+      this.state.mode === 'default' ? (
+        <HomeMakeBanner navigateToGameUrl={this.props.navigateToGameUrl} />
+      ) : null;
     const updateElement = this.props.updateAvailable ? (
       <HomeUpdateBanner
         updateAvailable={this.props.updateAvailable}
@@ -147,6 +150,7 @@ export default class HomeScreenWithContext extends React.Component {
               <HomeScreen
                 navigateToUserProfile={navigator.navigateToUserProfile}
                 navigateToGame={navigator.navigateToGame}
+                navigateToGameUrl={navigator.navigateToGameUrl}
                 history={currentUser.userStatusHistory}
                 refreshHistory={currentUser.refreshCurrentUser}
                 {...this.props}

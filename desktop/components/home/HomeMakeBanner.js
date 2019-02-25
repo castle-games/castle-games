@@ -57,6 +57,10 @@ const STYLES_HELP_LABEL = css`
 `;
 
 export default class HomeMakeBanner extends React.Component {
+  static defaultProps = {
+    navigateToGameUrl: async (url) => {},
+  };
+
   _handleClickExamples = () => {
     NativeUtil.openExternalURL(`${Constants.WEB_HOST}/examples`);
   };
@@ -82,7 +86,7 @@ export default class HomeMakeBanner extends React.Component {
       } catch (_) {}
       if (entryPointFilePath) {
         const gameUrl = `file://${entryPointFilePath}`;
-        await this.context.navigateToGameUrl(gameUrl);
+        await this.props.navigateToGameUrl(gameUrl);
         Logs.system('Welcome to Castle!');
         Logs.system(`We created your project at ${gameUrl}.`);
         Logs.system(`Open that file in your favorite text editor to get started.`);
