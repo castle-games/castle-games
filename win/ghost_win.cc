@@ -525,6 +525,7 @@ void ghostStep() {
           }
 
           // Apply the size!
+          // NOTE: This parent-window bounding doesn't actually seem to work in practice...
           auto newLeft = fmax(0, fracScale * childLeft), newTop = fmax(0, fracScale * childTop);
           auto newWidth =
               fmin(fracScale * childWidth, currParentRect.right - currParentRect.left - newLeft);
