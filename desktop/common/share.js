@@ -32,7 +32,7 @@ class Share {
 
     if (response.sessionId && this._game) {
       let gameTitle = this._game.title || 'Untitled';
-      let verb = response.sessionId === this._sessionId ? 'joined' : 'created';
+      let verb = response.isNewSession ? 'created' : 'joined';
       let message = `You ${verb} a session of ${gameTitle}. Share this link to invite other people: ${
         this._game.url
       }#${response.sessionId}`;
