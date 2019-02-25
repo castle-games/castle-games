@@ -36,7 +36,7 @@ if (!instance) {
 }
 
 process.env.GAMELIFT_INSTANCE_ID = instance.InstanceId;
-process.env.GAMELIFT_SSH_COMMAND = `sudo lsof -ti :${args[1]} | sudo kill`;
+process.env.GAMELIFT_SSH_COMMAND = `sudo kill -9 $(sudo lsof -ti :${args[1]})`;
 child_process.spawn("./ssh_gamelift.sh", {
   stdio: "inherit"
 });
