@@ -4,7 +4,7 @@ import * as Constants from '~/common/constants';
 import { css } from 'react-emotion';
 
 const STYLES_CONTAINER = css`
-  padding: 16px;
+  padding: 32px;
   color: ${Constants.colors.black};
 `;
 
