@@ -44,9 +44,9 @@ const STYLES_HELP_GLYPH = css`
 
 const STYLES_HELP_ACTION = css`
   cursor: pointer;
-  font: ${Constants.font.mono};
+  font-family: ${Constants.font.mono};
   color: ${Constants.colors.action};
-  line-height: 1.5rem;
+  line-height: ${Constants.linescale.lvl7};
   font-size: ${Constants.typescale.lvl7};
   padding: 6px 0 2px 4px;
 `;

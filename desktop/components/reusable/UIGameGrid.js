@@ -49,21 +49,27 @@ const STYLES_GAME_ITEM_BOTTOM = css`
 `;
 
 const STYLES_GAME_ITEM_BOTTOM_HEADING = css`
-  font-size: 14px;
-  line-height: 24px;
-  font-weight: 600;
+  font-family: ${Constants.font.heading};
+  font-size: ${Constants.typescale.lvl5};
+  line-height: ${Constants.linescale.lvl5};
+  font-weight: 400;
 `;
 
 const STYLES_GAME_ITEM_BOTTOM_DESCRIPTION = css`
-  font-size: 10px;
-  line-height: 1.725;
+  font-size: ${Constants.typescale.lvl7};
+  line-height: ${Constants.linescale.lvl7};
+  font-family: ${Constants.font.mono};
+  text-transform: uppercase;
 `;
 
 const STYLES_GAME_ACTIONS = css`
-  font-size: 12px;
+  font-family: ${Constants.font.mono};
+  color: ${Constants.colors.action};
+  line-height: ${Constants.linescale.lvl7};
+  font-size: ${Constants.typescale.lvl7};
+  padding: 6px 0 2px 4px;
   text-transform: uppercase;
-  font-weight: 600;
-  color: ${Constants.colors.black80};
+  text-decoration: underline;
   cursor: pointer;
 `;
 

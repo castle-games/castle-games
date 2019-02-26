@@ -17,8 +17,20 @@ const STYLES_CONTAINER = css`
   justify-content: space-between;
 `;
 
+const STYLES_SEARCH_SECTION = css`
+  width: 100%;
+  min-width: 25%;
+`;
+
 const STYLES_NAV_ITEMS = css`
   display: flex;
+  justify-content: flex-end;
+  flex-shrink: 0;
+  padding-left: 128px;
+
+  @media (max-width: 960px) {
+    padding-left: 0px;
+  }
 `;
 
 const STYLES_NAV_ITEM = css`
@@ -26,9 +38,9 @@ const STYLES_NAV_ITEM = css`
   color: ${Constants.colors.white};
   cursor: pointer;
   font-size: ${Constants.typescale.lvl6};
-  font-weight: 400;
-  text-decoration: underline;
-  margin: 0 6px 0 6px;
+  font-weight: 600;
+  text-decoration: none;
+  margin: 0 24px 0 0;
 `;
 
 class ContentNavigationBar extends React.Component {
@@ -55,12 +67,14 @@ class ContentNavigationBar extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTAINER}>
-        <SearchInput
-          query={this.props.searchQuery}
-          onSearchReset={this.props.onSearchReset}
-          onChange={this.props.onSearchChange}
-          onSubmit={this.props.onSearchSubmit}
-        />
+        <div className={STYLES_SEARCH_SECTION}>
+          <SearchInput
+            query={this.props.searchQuery}
+            onSearchReset={this.props.onSearchReset}
+            onChange={this.props.onSearchChange}
+            onSubmit={this.props.onSearchSubmit}
+          />
+        </div>
         {this._renderTopNavigationItems()}
         <Viewer />
       </div>

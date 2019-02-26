@@ -81,15 +81,11 @@ export default class SearchInput extends React.Component {
   render() {
     let queryElement;
     if (this.props.readOnly) {
-      queryElement = (
-        <p className={STYLES_INPUT_READONLY}>
-          {this.props.query}
-        </p>
-      );
+      queryElement = <p className={STYLES_INPUT_READONLY}>{this.props.query}</p>;
     } else {
       queryElement = (
         <ControlledInput
-          ref={c => {
+          ref={(c) => {
             this._input = c;
           }}
           className={STYLES_INPUT}
@@ -108,9 +104,7 @@ export default class SearchInput extends React.Component {
           onClick={this.props.readOnly ? this.props.onSearchReset : this._handleFocusInput}>
           <SVG.SearchBarIcon height="24px" />
         </div>
-        <div className={STYLES_CONTAINER_MIDDLE}>
-          {queryElement}
-        </div>
+        <div className={STYLES_CONTAINER_MIDDLE}>{queryElement}</div>
         {!Strings.isEmpty(this.props.query) ? (
           <div className={STYLES_CONTAINER_RIGHT} onClick={this.props.onSearchReset}>
             <SVG.Dismiss height="16px" />

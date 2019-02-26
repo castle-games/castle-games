@@ -30,7 +30,8 @@ const STYLES_CONTAINER = css`
 
 const STYLES_CONTENTS = css`
   width: 100%;
-  max-width: 480px;
+  max-width: 528px;
+  padding: 24px;
 `;
 
 const STYLES_SPACER = css`
