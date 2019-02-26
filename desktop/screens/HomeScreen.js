@@ -34,7 +34,7 @@ const STYLES_SEE_ALL = css`
   font-size: ${Constants.typescale.base};
   line-height: ${Constants.linescale.base};
   text-decoration: underline;
-  font: ${Constants.font.mono};
+  font-family: ${Constants.font.mono};
   text-transform: uppercase;
 `;
 
