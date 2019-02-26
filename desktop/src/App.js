@@ -105,7 +105,7 @@ class App extends React.Component {
   _handleKeyDownEvent = (e) => {
     if (isReloadHotkey(e)) {
       e.preventDefault();
-      return this.props.navigator.reloadGame();
+      return this.props.navigator.reloadGame(true);
     }
     if (isFullscreenHotkey(e)) {
       (async () => {

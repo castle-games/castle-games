@@ -38,7 +38,7 @@ const NavigatorContextDefaults = {
   navigateToCurrentGame: () => {},
   navigateToCurrentUserProfile: () => {},
   navigateToUserProfile: async (user) => {},
-  reloadGame: () => {},
+  reloadGame: (onlyIfVisible) => {},
 };
 
 const NavigatorContext = React.createContext(NavigatorContextDefaults);
@@ -196,7 +196,12 @@ class NavigationContextManager extends React.Component {
     });
   };
 
-  reloadGame = () => {
+  reloadGame = (onlyIfVisible) => {
+    if (onlyIfVisible && this.state.navigation.contentMode !== 'game') {
+      // not currently viewing the game and `onlyIfVisible` was set,
+      // so ignore this
+      return;
+    }
     if (this._reloadDebounceTimeout) {
       clearTimeout(this._reloadDebounceTimeout);
     }
