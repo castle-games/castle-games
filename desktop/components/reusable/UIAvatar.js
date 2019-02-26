@@ -3,10 +3,10 @@ import * as Constants from '~/common/constants';
 
 import { css } from 'react-emotion';
 
+// TODO(jim): Need to revisit this primitive.
 const STYLES_ICON = css`
   height: 48px;
   width: 48px;
-  background: ${Constants.colors.black};
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -14,6 +14,7 @@ const STYLES_ICON = css`
   border-radius: 6px;
   background-position: 50% 50%;
   background-size: cover;
+  background-color: #171717;
 `;
 
 export default class UIAvatar extends React.Component {
@@ -37,7 +38,7 @@ export default class UIAvatar extends React.Component {
       <span
         className={STYLES_ICON}
         onClick={this.props.onClick}
-        style={{ ...this.props.style, ...avatarContextStyles, ...maybeEmptyStyles }}>
+        style={{ ...avatarContextStyles, ...maybeEmptyStyles, ...this.props.style }}>
         {maybeIconChild}
       </span>
     );
