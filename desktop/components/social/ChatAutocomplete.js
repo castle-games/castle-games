@@ -152,8 +152,8 @@ export default class ChatAutocomplete extends React.Component {
       });
 
       e.preventDefault();
-    } else if (keyCode == 13) {
-      // enter
+    } else if (keyCode == 13 || keyCode == 9) {
+      // enter or tab
       if (
         this.state.selectedRowIndex >= 0 &&
         this.state.selectedRowIndex < this.state.users.length
