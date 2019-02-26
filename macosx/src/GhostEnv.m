@@ -3,6 +3,11 @@
 NSString *const kCastleUseCustomWebUrlKey = @"CastleUseCustomWebUrl";
 NSString *const kCastleCustomWebUrlKey = @"CastleCustomWebUrl";
 NSString *const kCastleCheckForUpdatesInDevModeKey = @"CastleCheckForUpdatesInDevMode";
+NSString *const kCastleDisableUpdatesEntirelyKey = @"CastleDisableUpdatesEntirely";
+
+@interface GhostEnv ()
+
+@end
 
 @implementation GhostEnv
 
@@ -15,6 +20,17 @@ NSString *const kCastleCheckForUpdatesInDevModeKey = @"CastleCheckForUpdatesInDe
   }
 }
 
+// Lazy-load the config just once
++ (NSDictionary *)_configFromPlist {
+  static NSDictionary *plistConfig = nil;
+  if (!plistConfig) {
+    NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"ghost-env" ofType:@"plist"];
+    plistConfig = (plistPath) ? [NSDictionary dictionaryWithContentsOfFile:plistPath]
+    : [NSDictionary dictionary];
+  }
+  return plistConfig;
+}
+
 + (NSString *)_indexPathFromBundle {
   NSString *indexPath = [[NSBundle mainBundle] pathForResource:@"index" ofType:@"html"];
   NSAssert(indexPath && indexPath.length,
@@ -24,9 +40,7 @@ NSString *const kCastleCheckForUpdatesInDevModeKey = @"CastleCheckForUpdatesInDe
 }
 
 + (NSString *)_indexPathFromEnvPlist {
-  NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"ghost-env" ofType:@"plist"];
-  NSDictionary *config = (plistPath) ? [NSDictionary dictionaryWithContentsOfFile:plistPath]
-                                     : [NSDictionary dictionary];
+  NSDictionary *config = [self _configFromPlist];
   if (config[kCastleUseCustomWebUrlKey] != nil) {
     BOOL useCustomUrl = [config[kCastleUseCustomWebUrlKey] boolValue];
     if (useCustomUrl) {
@@ -37,11 +51,17 @@ NSString *const kCastleCheckForUpdatesInDevModeKey = @"CastleCheckForUpdatesInDe
 }
 
 + (BOOL)shouldCheckForUpdatesInDevMode {
-  NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"ghost-env" ofType:@"plist"];
-  NSDictionary *config = (plistPath) ? [NSDictionary dictionaryWithContentsOfFile:plistPath]
-  : [NSDictionary dictionary];
+  NSDictionary *config = [self _configFromPlist];
   if (config[kCastleCheckForUpdatesInDevModeKey] != nil) {
     return [config[kCastleCheckForUpdatesInDevModeKey] boolValue];
+  }
+  return false;
+}
+
++ (BOOL)disableUpdatesEntirely {
+  NSDictionary *config = [self _configFromPlist];
+  if (config[kCastleDisableUpdatesEntirelyKey] != nil) {
+    return [config[kCastleDisableUpdatesEntirelyKey] boolValue];
   }
   return false;
 }

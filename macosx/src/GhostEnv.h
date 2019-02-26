@@ -15,4 +15,10 @@
  */
 + (BOOL)shouldCheckForUpdatesInDevMode;
 
+/**
+ *  Whether to just disable updates entirely. Auto-updates may cause weird bugs so this can
+ *  be useful some times.
+ */
++ (BOOL)disableUpdatesEntirely;
+
 @end

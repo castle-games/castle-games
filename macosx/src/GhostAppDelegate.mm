@@ -55,15 +55,17 @@ extern __weak NSWindow *ghostMacChildWindow;
   [[NSApplication sharedApplication] setDelegate:self];
 
   // Initialize Sparkle. Also force an update check 5 seconds after boot.
-  if ([GhostEnv shouldCheckForUpdatesInDevMode] ||
-      ![[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] isEqualToString:@"VERSION_UNSET"]) {
-    [SUUpdater sharedUpdater].delegate = self;
-    self.updateImmediateInstallationInvocation = nil;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-      [[SUUpdater sharedUpdater] checkForUpdatesInBackground];
-    });
+  if (![GhostEnv disableUpdatesEntirely]) {
+    if ([GhostEnv shouldCheckForUpdatesInDevMode] ||
+        ![[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] isEqualToString:@"VERSION_UNSET"]) {
+      [SUUpdater sharedUpdater].delegate = self;
+      self.updateImmediateInstallationInvocation = nil;
+      dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [[SUUpdater sharedUpdater] checkForUpdatesInBackground];
+      });
+    }
   }
-
+  
   // Initialize Lua / game loop stuff
   self.luaState = nil;
   self.mainLoopTimer = [NSTimer timerWithTimeInterval:1.0f / 60.0f
