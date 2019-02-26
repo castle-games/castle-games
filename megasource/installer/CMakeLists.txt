@@ -30,6 +30,7 @@ set(CPACK_NSIS_PACKAGE_NAME "Castle")
 set(CPACK_NSIS_DISPLAY_NAME "Castle ${CPACK_PACKAGE_VERSION}")
 set(CPACK_NSIS_MODIFY_PATH OFF)
 set(CPACK_NSIS_INSTALL_ROOT "$PROGRAMFILES")
+set(CPACK_NSIS_DEFINES "ManifestDPIAware true")
 
 # Need \\\\ for some reason. https://stackoverflow.com/questions/28768417/how-to-set-an-icon-in-nsis-install-cmake.
 # Icon is 150x57
