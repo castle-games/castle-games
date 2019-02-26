@@ -219,7 +219,7 @@ class ChatContainer extends React.Component {
 
   _onSubmit = (message) => {
     if (this._castleChat) {
-      this._castleChat.sendMessage(ROOM_NAME, message);
+      this._castleChat.sendMessageAsync(ROOM_NAME, message);
     }
   };
 
