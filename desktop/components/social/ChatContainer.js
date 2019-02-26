@@ -1,14 +1,16 @@
 import * as React from 'react';
+import * as Actions from '~/common/actions';
+import * as ChatUtils from '~/common/chatutils';
+import * as Strings from '~/common/strings';
+
 import { css } from 'react-emotion';
 
-import * as Actions from '~/common/actions';
 import { CastleChat, ConnectionStatus } from 'castle-chat-lib';
-import ChatInput from '~/components/social/ChatInput';
-import ChatMessagesList from '~/components/social/ChatMessagesList';
-import * as ChatUtils from '~/common/chatutils';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { SocialContext } from '~/contexts/SocialContext';
 import { NavigatorContext } from '~/contexts/NavigationContext';
+import ChatInput from '~/components/social/ChatInput';
+import ChatMessagesList from '~/components/social/ChatMessagesList';
 import UIButton from '~/components/reusable/UIButton';
 
 const STYLES_CONTAINER = css`

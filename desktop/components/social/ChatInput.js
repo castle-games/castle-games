@@ -1,11 +1,12 @@
-import * as React from 'react';
 import _ from 'lodash';
+
+import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as ChatUtils from '~/common/chatutils';
-import ChatAutocomplete from '~/components/social/ChatAutocomplete';
 
 import { css } from 'react-emotion';
 
+import ChatAutocomplete from '~/components/social/ChatAutocomplete';
 import ControlledInput from '~/components/primitives/ControlledInput';
 
 const SUBMIT_DELAY_AFTER_CLOSING_AUTOCOMPLETE_MS = 150;
