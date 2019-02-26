@@ -1,8 +1,8 @@
 #import "GhostAppDelegate.h"
+#import "GhostEnv.h"
 #import "GhostMainMenu.h"
 #import "ghost.h"
 #import "ghost_constants.h"
-#import "GhostEnv.h"
 
 extern "C" {
 #include <lauxlib.h>
@@ -16,8 +16,8 @@ extern "C" {
 #include "modules/thread/Channel.h"
 #include "modules/timer/Timer.h"
 
-#import <Sparkle/SUUpdater.h>
 #import <Sparkle/SUAppcastItem.h>
+#import <Sparkle/SUUpdater.h>
 
 #include "simple_handler.h"
 
@@ -42,12 +42,12 @@ extern __weak NSWindow *ghostMacChildWindow;
 
 @implementation GhostAppDelegate
 
-- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
+- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(__unused NSApplication *)sender {
   return NO;
 }
 
 // Create the application on the UI thread
-- (void)createApplication:(id)object {
+- (void)createApplication:(__unused id)object {
   [NSApplication sharedApplication];
   [NSApplication sharedApplication].mainMenu = [GhostMainMenu makeMainMenu];
 
@@ -57,15 +57,17 @@ extern __weak NSWindow *ghostMacChildWindow;
   // Initialize Sparkle. Also force an update check 5 seconds after boot.
   if (![GhostEnv disableUpdatesEntirely]) {
     if ([GhostEnv shouldCheckForUpdatesInDevMode] ||
-        ![[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] isEqualToString:@"VERSION_UNSET"]) {
+        ![[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"]
+            isEqualToString:@"VERSION_UNSET"]) {
       [SUUpdater sharedUpdater].delegate = self;
       self.updateImmediateInstallationInvocation = nil;
-      dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [[SUUpdater sharedUpdater] checkForUpdatesInBackground];
-      });
+      dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)),
+                     dispatch_get_main_queue(), ^{
+                       [[SUUpdater sharedUpdater] checkForUpdatesInBackground];
+                     });
     }
   }
-  
+
   // Initialize Lua / game loop stuff
   self.luaState = nil;
   self.mainLoopTimer = [NSTimer timerWithTimeInterval:1.0f / 60.0f
@@ -79,22 +81,24 @@ extern __weak NSWindow *ghostMacChildWindow;
   self.windowEventsSubscribed = NO;
 }
 
-- (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender {
+- (NSApplicationTerminateReply)applicationShouldTerminate:(__unused NSApplication *)sender {
   return NSTerminateNow;
 }
 
-- (void)application:(NSApplication *)application
+- (void)application:(__unused NSApplication *)application
           openFiles:(nonnull NSArray<NSString *> *)filenames {
   for (NSString *filename in filenames) {
     ghostHandleOpenUri(filename.UTF8String);
   }
 }
 
-- (BOOL)application:(NSApplication *)application openFile:(nonnull NSString *)filename {
+- (BOOL)application:(__unused NSApplication *)application openFile:(nonnull NSString *)filename {
   ghostHandleOpenUri(filename.UTF8String);
+  return YES;
 }
 
-- (void)application:(NSApplication *)application openURLs:(nonnull NSArray<NSURL *> *)urls {
+- (void)application:(__unused NSApplication *)application
+           openURLs:(nonnull NSArray<NSURL *> *)urls {
   for (NSURL *url in urls) {
     ghostHandleOpenUri([url.absoluteString UTF8String]);
   }
@@ -191,13 +195,13 @@ extern __weak NSWindow *ghostMacChildWindow;
   if (!self.lovePaused) {
     // Detect whether a new child window was created
     bool prevChild = !!ghostMacChildWindow;
-    [self stepLove]; // Actually run Love for one step
+    [self stepLove];                         // Actually run Love for one step
     if (!prevChild && ghostMacChildWindow) { // New child window!
       // Add as child, make visible and focus
       ghostResizeChildWindow(0, 0);
       ghostSetChildWindowVisible(true);
       [ghostMacChildWindow makeKeyWindow];
-      
+
       // Force resize after small delay to fix a weird issue on Mojave
       dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 80 * NSEC_PER_MSEC),
                      dispatch_get_main_queue(), ^{
@@ -206,7 +210,7 @@ extern __weak NSWindow *ghostMacChildWindow;
                      });
     }
   }
-  
+
   if (!self.windowEventsSubscribed) {
     NSWindow *window = ghostMacGetMainWindow();
     if (window) {
@@ -264,7 +268,7 @@ void Cocoa_DispatchEvent(NSEvent *theEvent);
   }
 }
 
-- (void)tryToTerminateApplication:(NSApplication *)app {
+- (void)tryToTerminateApplication:(__unused NSApplication *)app {
   [self stopLove];
 
   SimpleHandler *handler = SimpleHandler::GetInstance();
@@ -272,7 +276,7 @@ void Cocoa_DispatchEvent(NSEvent *theEvent);
     handler->CloseAllBrowsers(false);
 }
 
-- (void)windowResized:(NSNotification *)notification {
+- (void)windowResized:(__unused NSNotification *)notification {
   NSWindow *window = ghostMacGetMainWindow();
   float dw = window.frame.size.width - self.prevWindowFrame.size.width;
   float dh = window.frame.size.height - self.prevWindowFrame.size.height;
@@ -280,7 +284,7 @@ void Cocoa_DispatchEvent(NSEvent *theEvent);
   self.prevWindowFrame = window.frame;
 }
 
-- (void)windowDidBecomeKey:(NSNotification *)notification {
+- (void)windowDidBecomeKey:(__unused NSNotification *)notification {
   // Step timer so that next frame's `dt` doesn't include time spent paused
   auto timer = love::Module::getInstance<love::timer::Timer>(love::Module::M_TIMER);
   if (timer) {
@@ -290,11 +294,13 @@ void Cocoa_DispatchEvent(NSEvent *theEvent);
   self.lovePaused = NO;
 }
 
-- (void)windowDidResignKey:(NSNotification *)notification {
+- (void)windowDidResignKey:(__unused NSNotification *)notification {
   self.lovePaused = YES;
 }
 
-- (void)updater:(SUUpdater *)updater willInstallUpdateOnQuit:(SUAppcastItem *)item immediateInstallationInvocation:(NSInvocation *)invocation {
+- (void)updater:(__unused SUUpdater *)updater
+            willInstallUpdateOnQuit:(SUAppcastItem *)item
+    immediateInstallationInvocation:(NSInvocation *)invocation {
   self.updateImmediateInstallationInvocation = invocation;
   [self sendJSUpdateAvailableEventForAppcastItem:item];
 }
@@ -317,14 +323,15 @@ void Cocoa_DispatchEvent(NSEvent *theEvent);
   //   @property (strong, readonly) NSURL *infoURL;
   std::stringstream params;
   params << "{"
-  << " title: \"" << std::string([item.title UTF8String]) << "\", "
-  << " dateString: \"" << std::string([item.dateString UTF8String]) << "\", "
-  << " versionString: \"" << std::string([item.versionString UTF8String]) << "\", ";
+         << " title: \"" << std::string([item.title UTF8String]) << "\", "
+         << " dateString: \"" << std::string([item.dateString UTF8String]) << "\", "
+         << " versionString: \"" << std::string([item.versionString UTF8String]) << "\", ";
   if (item.itemDescription) {
     params << " itemDescription: \"" << std::string([item.itemDescription UTF8String]) << "\", ";
   }
   if (item.releaseNotesURL) {
-    params << " releaseNotesURL: \"" << std::string([item.releaseNotesURL.absoluteString UTF8String]) << "\", ";
+    params << " releaseNotesURL: \""
+           << std::string([item.releaseNotesURL.absoluteString UTF8String]) << "\", ";
   }
   if (item.infoURL) {
     params << " infoURL: \"" << std::string([item.infoURL.absoluteString UTF8String]) << "\", ";
