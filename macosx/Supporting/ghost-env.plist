@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CastleDisableUpdatesEntirely</key>
-	<true/>
+	<false/>
 	<key>CastleCheckForUpdatesInDevMode</key>
 	<false/>
 	<key>CastleCustomWebUrl</key>

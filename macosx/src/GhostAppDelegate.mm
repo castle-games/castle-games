@@ -57,9 +57,11 @@ extern __weak NSWindow *ghostMacChildWindow;
   // Initialize Sparkle. Also force an update check 5 seconds after boot.
   if (![GhostEnv disableUpdatesEntirely]) {
     if ([GhostEnv shouldCheckForUpdatesInDevMode] ||
-        ![[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"]
-            isEqualToString:@"VERSION_UNSET"]) {
-      [SUUpdater sharedUpdater].delegate = self;
+        ![[[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"] isEqualToString:@"VERSION_UNSET"]) {
+      auto updater = [SUUpdater sharedUpdater];
+      updater.automaticallyChecksForUpdates = YES;
+      updater.automaticallyDownloadsUpdates = YES; // Force Sparkle to assume the user checked this box
+      updater.delegate = self;
       self.updateImmediateInstallationInvocation = nil;
       dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)),
                      dispatch_get_main_queue(), ^{
