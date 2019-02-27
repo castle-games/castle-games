@@ -1,14 +1,15 @@
 import * as React from 'react';
-import { css } from 'react-emotion';
-
 import * as Constants from '~/common/constants';
-import { NavigationContext, NavigatorContext } from '~/contexts/NavigationContext';
-import SearchInput from '~/components/SearchInput';
 import * as Urls from '~/common/urls';
+
+import { css } from 'react-emotion';
+import { NavigationContext, NavigatorContext } from '~/contexts/NavigationContext';
+
+import SearchInput from '~/components/SearchInput';
 import Viewer from '~/components/Viewer';
 
 const STYLES_CONTAINER = css`
-  background: #242729;
+  background: #171717;
   height: 48px;
   flex-shrink: 0;
   width: 100%;

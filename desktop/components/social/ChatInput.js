@@ -11,44 +11,49 @@ import ControlledInput from '~/components/primitives/ControlledInput';
 
 const SUBMIT_DELAY_AFTER_CLOSING_AUTOCOMPLETE_MS = 150;
 
+const CHAT_INPUT_BACKGROUND = `#3d3d3d`;
+
 const STYLES_CONTAINER = css`
   position: relative;
-  padding: 0 4px 4px 4px;
+  background: ${CHAT_INPUT_BACKGROUND};
 `;
 
 const STYLES_INPUT = css`
   display: block;
-  box-sizing: border-box;
-  padding: 0 4px 0 4px;
-  border-radius: 0;
+  background: transparent;
+  font-family: ${Constants.font.system};
+  color: ${Constants.colors.white};
+  font-size: 16px;
+  min-width: 25%;
+  height: 48px;
   width: 100%;
-  border: 1px solid ${Constants.colors.black};
-  background: ${Constants.colors.white};
-  color: ${Constants.colors.black};
-  font-size: 12px;
-  height: 28px;
+  border: 0;
+  outline: 0;
   margin: 0;
+  padding: 0 8px 0 8px;
 
   :focus {
+    border: 0;
     outline: 0;
   }
 `;
 
 const STYLES_INPUT_READONLY = css`
   display: block;
-  box-sizing: border-box;
-  padding: 0 4px 0 4px;
-  border-radius: 0;
+  background: transparent;
+  font-family: ${Constants.font.system};
+  color: ${Constants.colors.white};
+  font-size: 16px;
+  min-width: 25%;
+  height: 48px;
   width: 100%;
-  border: 1px solid ${Constants.colors.background4};
-  background: ${Constants.colors.background};
-  color: ${Constants.colors.background4};
-  font-size: 12px;
-  height: 28px;
+  border: 0;
+  outline: 0;
   margin: 0;
-  cursor: default;
+  padding: 0 8px 0 8px;
 
   :focus {
+    border: 0;
     outline: 0;
   }
 `;

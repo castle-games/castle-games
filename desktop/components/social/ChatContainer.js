@@ -25,7 +25,7 @@ const STYLES_CONNECTING = css`
   height: 100%;
   align-items: center;
   justify-content: flex-start;
-  padding-top: 32px;
+  padding: 32px 16px 16px 16px;
   flex-direction: column;
 `;
 
@@ -258,12 +258,12 @@ class ChatContainer extends React.Component {
 
   render() {
     const readOnly = this.state.connectionStatus !== ConnectionStatus.CONNECTED;
-    const placeholder = readOnly ? '' : 'Message global chat';
+    const placeholder = readOnly ? '' : 'Type here to chat...';
     return (
-      <div className={STYLES_CONTAINER}>
-        {this._renderContent()}
+      <React.Fragment>
+        <div className={STYLES_CONTAINER}>{this._renderContent()}</div>
         <ChatInput onSubmit={this._onSubmit} readOnly={readOnly} placeholder={placeholder} />
-      </div>
+      </React.Fragment>
     );
   }
 }

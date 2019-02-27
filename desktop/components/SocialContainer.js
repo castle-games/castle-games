@@ -8,9 +8,23 @@ import { NavigatorContext } from '~/contexts/NavigationContext';
 
 const STYLES_CONTAINER = css`
   font-family: ${Constants.font.default};
-  width: 30vh;
-  min-width: 280px;
+  position: relative;
   background: ${Constants.colors.backgroundLeftContext};
+  color: ${Constants.colors.white};
+  display: flex;
+  flex-direction: column;
+  width: 280px;
+
+  @media (max-width: 960px) {
+    width: 228px;
+  }
+`;
+
+const STYLES_CONTAINER_HEADER = css`
+  flex-shrink: 0;
+  width: 100%;
+  height: 48px;
+  background: #171717;
 `;
 
 const STYLES_LOGGED_OUT = css`
@@ -48,7 +62,13 @@ class SocialContainer extends React.Component {
         </div>
       );
     }
-    return <div className={STYLES_CONTAINER}>{contentElement}</div>;
+
+    return (
+      <div className={STYLES_CONTAINER}>
+        <div className={STYLES_CONTAINER_HEADER} />
+        {contentElement}
+      </div>
+    );
   }
 }
 

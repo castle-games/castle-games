@@ -9,10 +9,10 @@ export const brand = {
 export const colors = {
   text: `#000`,
   text2: `#6e6e6e`,
-  background: `#FAFAFB`,
-  background3: `#EFF0F1`,
-  background4: `#D6D9DC`,
-  backgroundLeftContext: `#C0C0C2`,
+  background: `#ffffff`,
+  background3: `#f3f3f3`,
+  background4: `#dcdcdc`,
+  backgroundLeftContext: `#282828`,
   white: `#fff`,
   black: `#000`,
   action: `blue`,
@@ -54,6 +54,7 @@ export const linescale = {
 };
 
 export const font = {
+  system: `-apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica,  ubuntu, roboto, noto, segoe ui, arial, sans-serif`,
   default: `'sf-body', -apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica,  ubuntu, roboto, noto, segoe ui, arial, sans-serif`,
   heading: `'sf-heading', -apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica,  ubuntu, roboto, noto, segoe ui, arial, sans-serif`,
   mono: `'sf-mono', Consolas, monaco, monospace`,
