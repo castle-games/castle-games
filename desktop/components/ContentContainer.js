@@ -8,6 +8,7 @@ import GameScreen from '~/screens/GameScreen';
 import HomeScreen from '~/screens/HomeScreen';
 import ProfileScreen from '~/screens/ProfileScreen';
 import LoginSignupScreen from '~/screens/LoginSignupScreen';
+import NotificationScreen from '~/screens/NotificationScreen';
 import { NavigationContext } from '~/contexts/NavigationContext';
 import SearchScreen from '~/screens/SearchScreen';
 import * as Strings from '~/common/strings';
@@ -79,6 +80,8 @@ class ContentContainer extends React.Component {
       return <ProfileScreen />;
     } else if (mode === 'signin') {
       return <LoginSignupScreen />;
+    } else if (mode === 'notifications') {
+      return <NotificationScreen />;
     }
   };
 

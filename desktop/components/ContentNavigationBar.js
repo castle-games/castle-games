@@ -8,6 +8,8 @@ import { NavigationContext, NavigatorContext } from '~/contexts/NavigationContex
 import SearchInput from '~/components/SearchInput';
 import Viewer from '~/components/Viewer';
 
+const ENABLE_NOTIF_SCREEN = false; // feature flag notification item
+
 const STYLES_CONTAINER = css`
   background: #171717;
   height: 48px;
@@ -47,7 +49,7 @@ const STYLES_NAV_ITEM = css`
 class ContentNavigationBar extends React.Component {
   _renderTopNavigationItems = () => {
     let { game, navigator } = this.props;
-    let maybePlayingItem;
+    let maybePlayingItem, maybeNotifItem;
     if (game) {
       maybePlayingItem = (
         <div className={STYLES_NAV_ITEM} onClick={navigator.navigateToCurrentGame}>
@@ -55,9 +57,17 @@ class ContentNavigationBar extends React.Component {
         </div>
       );
     }
+    if (ENABLE_NOTIF_SCREEN) {
+      maybeNotifItem = (
+        <div className={STYLES_NAV_ITEM} onClick={navigator.navigateToNotifications}>
+          Notifications
+        </div>
+      );
+    }
     return (
       <div className={STYLES_NAV_ITEMS}>
         {maybePlayingItem}
+        {maybeNotifItem}
         <div className={STYLES_NAV_ITEM} onClick={navigator.navigateToHome}>
           Home
         </div>
