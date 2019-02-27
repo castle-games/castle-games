@@ -26,7 +26,7 @@ NSString *const kCastleDisableUpdatesEntirelyKey = @"CastleDisableUpdatesEntirel
   if (!plistConfig) {
     NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"ghost-env" ofType:@"plist"];
     plistConfig = (plistPath) ? [NSDictionary dictionaryWithContentsOfFile:plistPath]
-    : [NSDictionary dictionary];
+                              : [NSDictionary dictionary];
   }
   return plistConfig;
 }
