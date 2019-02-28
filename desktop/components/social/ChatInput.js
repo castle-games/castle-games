@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import AutoSizeTextarea from 'react-textarea-autosize';
+import ReactDOM from 'react-dom';
 
 import * as React from 'react';
 import * as Constants from '~/common/constants';
@@ -92,7 +93,6 @@ export default class ChatInput extends React.Component {
     super(props);
 
     this._chatAutocomplete = React.createRef();
-    this._controllerInput = React.createRef();
     this._autocompleteCache = {
       users: {},
       games: {},
@@ -140,8 +140,10 @@ export default class ChatInput extends React.Component {
       };
     });
 
-    this._controllerInput.current.focus();
-    this._controllerInput.current.getRef().setSelectionRange(cursorPosition, cursorPosition);
+    const element = ReactDOM.findDOMNode(this._controllerInput);
+    console.log(element);
+    element.focus();
+    element.setSelectionRange(cursorPosition, cursorPosition);
   };
 
   _onChangeInput = (event) => {
@@ -229,7 +231,9 @@ export default class ChatInput extends React.Component {
         />
         <div className={STYLES_CONTAINER} style={this.props.style}>
           <AutoSizeTextarea
-            ref={this._controllerInput}
+            ref={(c) => {
+              this._controllerInput = c;
+            }}
             autoFocus={this.props.autoFocus}
             onChange={this._onChangeInput}
             onFocus={this._handleFocus}
