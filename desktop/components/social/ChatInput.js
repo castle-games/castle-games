@@ -1,10 +1,12 @@
 import _ from 'lodash';
+import AutoSizeTextarea from 'react-textarea-autosize';
 
 import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as ChatUtils from '~/common/chatutils';
 
 import { css } from 'react-emotion';
+import { isKeyHotkey } from 'is-hotkey';
 
 import ChatAutocomplete from '~/components/social/ChatAutocomplete';
 import ControlledInput from '~/components/primitives/ControlledInput';
@@ -13,8 +15,16 @@ const SUBMIT_DELAY_AFTER_CLOSING_AUTOCOMPLETE_MS = 150;
 
 const CHAT_INPUT_BACKGROUND = `#3d3d3d`;
 
-const STYLES_CONTAINER = css`
+const isCommandReturnHotkey = isKeyHotkey('mod+enter');
+const isReturnHotkey = isKeyHotkey('enter');
+
+const STYLES_RELATIVE_CONTAINER = css`
   position: relative;
+  flex-shrink: 0;
+`;
+
+const STYLES_CONTAINER = css`
+  width: 100%;
   background: ${CHAT_INPUT_BACKGROUND};
 `;
 
@@ -23,14 +33,17 @@ const STYLES_INPUT = css`
   background: transparent;
   font-family: ${Constants.font.system};
   color: ${Constants.colors.white};
+  overflow-wrap: break-word;
+  box-sizing: border-box;
   font-size: 16px;
   min-width: 25%;
   height: 48px;
   width: 100%;
   border: 0;
   outline: 0;
+  resize: none;
   margin: 0;
-  padding: 0 8px 0 8px;
+  padding: 16px 8px 16px 8px;
 
   :focus {
     border: 0;
@@ -50,7 +63,9 @@ const STYLES_INPUT_READONLY = css`
   border: 0;
   outline: 0;
   margin: 0;
-  padding: 0 8px 0 8px;
+  resize: none;
+  padding: 16px 8px 16px 8px;
+  cursor: not-allowed;
 
   :focus {
     border: 0;
@@ -175,6 +190,14 @@ export default class ChatInput extends React.Component {
   };
 
   _onKeyDown = (e) => {
+    if (isCommandReturnHotkey(e)) {
+      return;
+    }
+
+    if (isReturnHotkey(e)) {
+      return this._onSubmitAsync(e);
+    }
+
     this._chatAutocomplete.current.onKeyDown(e);
   };
 
@@ -191,7 +214,7 @@ export default class ChatInput extends React.Component {
   render() {
     const inputStyle = this.props.readOnly ? STYLES_INPUT_READONLY : STYLES_INPUT;
     return (
-      <div className={STYLES_CONTAINER} style={this.props.style}>
+      <div className={STYLES_RELATIVE_CONTAINER}>
         <ChatAutocomplete
           ref={this._chatAutocomplete}
           text={this.state.autocompleteValue}
@@ -199,22 +222,22 @@ export default class ChatInput extends React.Component {
           onChangeFocus={this._onChangeAutocompleteFocus}
           onFetchAutocomplete={this._onFetchAutocomplete}
         />
-
-        <ControlledInput
-          ref={this._controllerInput}
-          autoFocus={this.props.autoFocus}
-          onChange={this._onChangeInput}
-          onFocus={this._handleFocus}
-          onBlur={this._handleBlur}
-          onSubmit={this._onSubmitAsync}
-          onKeyDown={this._onKeyDown}
-          name={this.props.name}
-          placeholder={this.props.placeholder}
-          type={this.props.type}
-          value={this.state.inputValue}
-          readOnly={this.props.readOnly}
-          className={inputStyle}
-        />
+        <div className={STYLES_CONTAINER} style={this.props.style}>
+          <AutoSizeTextarea
+            ref={this._controllerInput}
+            autoFocus={this.props.autoFocus}
+            onChange={this._onChangeInput}
+            onFocus={this._handleFocus}
+            onBlur={this._handleBlur}
+            onKeyDown={this._onKeyDown}
+            name={this.props.name}
+            readOnly={this.props.readOnly}
+            placeholder={this.props.placeholder}
+            type={this.props.type}
+            value={this.state.inputValue}
+            className={inputStyle}
+          />
+        </div>
       </div>
     );
   }
