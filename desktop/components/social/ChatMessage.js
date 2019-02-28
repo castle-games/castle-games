@@ -21,6 +21,7 @@ const STYLES_AVATAR = css`
   height: 24px;
   width: 24px;
   border-radius: 4px;
+  cursor: pointer;
 `;
 
 const STYLES_CHAT_ITEM = css`
@@ -160,6 +161,7 @@ class ChatMessage extends React.Component {
         maybeAvatar = (
           <div
             className={STYLES_AVATAR}
+            onClick={isRealUser ? () => this.props.navigateToUserProfile(user) : null}
             style={{
               backgroundImage: `url('${user.photo.url}')`,
               boxShadow: '0px 1px 4px rgba(0, 0, 0, 0.07)',
