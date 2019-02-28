@@ -141,7 +141,6 @@ export default class ChatInput extends React.Component {
     });
 
     const element = ReactDOM.findDOMNode(this._controllerInput);
-    console.log(element);
     element.focus();
     element.setSelectionRange(cursorPosition, cursorPosition);
   };
