@@ -15,8 +15,7 @@ do that!
 
 ### Windows
 
-- *Option 1*: Install https://gitforwindows.org/.
-- *Option 2*: Install WSL.
+- Install https://gitforwindows.org/. *Use this program to clone the repo, not WSL.*
 - Install CMake. https://cmake.org/download/
   - Make sure to check the "add to PATH for current user" option.
 - Install Visual Studio 2017. https://visualstudio.microsoft.com/vs
