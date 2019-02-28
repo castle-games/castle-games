@@ -31,6 +31,8 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    alert("Hi! I'm showing you this message to test auto updates. Let nikki know if you saw this!");
+
     window.addEventListener('nativeOpenUrl', this._handleNativeOpenUrlEvent);
     window.addEventListener('keydown', this._handleKeyDownEvent);
     window.addEventListener('CASTLE_SYSTEM_KEY_PRESSED', this._handleLuaSystemKeyDownEvent);
