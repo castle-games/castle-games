@@ -35,4 +35,5 @@ cd castle-releases
 echo "Pulling 'castle-releases'..."
 git pull origin master
 echo "Performing release..."
+security add-generic-password -a "ed25519" -s "https://sparkle-project.org" -w "$CASTLE_SPARKLE_KEY" -U login.keychain
 ./castle-releases-macos mac ../Castle-$MACOS_VERSION.zip
