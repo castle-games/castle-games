@@ -190,7 +190,12 @@ export default class ChatInput extends React.Component {
   };
 
   _onKeyDown = (e) => {
-    this._chatAutocomplete.current.onKeyDown(e);
+    const response = this._chatAutocomplete.current.onKeyDown(e);
+
+    if (response) {
+      e.preventDefault();
+      return;
+    }
 
     if (isCommandReturnHotkey(e)) {
       return;

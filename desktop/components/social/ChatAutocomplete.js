@@ -132,6 +132,7 @@ export default class ChatAutocomplete extends React.Component {
     );
   };
 
+  // NOTE(jim): Allow the callsite to handle preventDefault behavior.
   onKeyDown = (e) => {
     let keyCode = e.keyCode;
     if (keyCode === 38) {
@@ -142,7 +143,7 @@ export default class ChatAutocomplete extends React.Component {
         };
       });
 
-      e.preventDefault();
+      return true;
     } else if (keyCode == 40) {
       // down arrow
       this.setState((state) => {
@@ -151,7 +152,7 @@ export default class ChatAutocomplete extends React.Component {
         };
       });
 
-      e.preventDefault();
+      return true;
     } else if (keyCode == 13 || keyCode == 9) {
       // enter or tab
       if (
@@ -159,7 +160,8 @@ export default class ChatAutocomplete extends React.Component {
         this.state.selectedRowIndex < this.state.users.length
       ) {
         this.props.onSelectUser(this.state.users[this.state.selectedRowIndex]);
-        e.preventDefault();
+
+        return true;
       }
     } else if (keyCode == 27) {
       // escape
