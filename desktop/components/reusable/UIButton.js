@@ -14,6 +14,8 @@ const STYLES_BUTTON = css`
   outline: 0;
   border: 0;
   font-size: ${Constants.typescale.lvl6};
+  font-family: ${Constants.font.system};
+  font-weight: 700;
   cursor: pointer;
   opacity: 1;
 `;
