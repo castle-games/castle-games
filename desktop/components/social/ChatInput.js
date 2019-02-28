@@ -190,6 +190,8 @@ export default class ChatInput extends React.Component {
   };
 
   _onKeyDown = (e) => {
+    this._chatAutocomplete.current.onKeyDown(e);
+
     if (isCommandReturnHotkey(e)) {
       return;
     }
@@ -197,8 +199,6 @@ export default class ChatInput extends React.Component {
     if (isReturnHotkey(e)) {
       return this._onSubmitAsync(e);
     }
-
-    this._chatAutocomplete.current.onKeyDown(e);
   };
 
   _onChangeAutocompleteFocus = (autocompleteHasFocus) => {
