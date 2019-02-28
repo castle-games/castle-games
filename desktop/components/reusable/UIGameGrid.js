@@ -49,9 +49,9 @@ const STYLES_GAME_ITEM_BOTTOM = css`
 `;
 
 const STYLES_GAME_ITEM_BOTTOM_HEADING = css`
-  font-family: ${Constants.font.heading};
-  font-size: ${Constants.typescale.lvl5};
-  line-height: ${Constants.linescale.lvl5};
+  font-family: ${Constants.font.game};
+  font-size: ${Constants.typescale.lvl4};
+  line-height: ${Constants.linescale.lvl4};
   font-weight: 400;
 `;
 

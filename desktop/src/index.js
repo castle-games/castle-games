@@ -14,6 +14,10 @@ import { injectGlobal } from 'react-emotion';
 
 const injectGlobalStyles = () => injectGlobal`
   @font-face {
+    font-family: 'game-heading';
+    src: url('static/Font-Logo-RTAliasBold.woff');
+  }
+  @font-face {
     font-family: 'sf-heading';
     src: url('static/Font-Headings-SFDisplay.woff');
   }

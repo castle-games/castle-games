@@ -25,7 +25,7 @@ const STYLES_CONTAINER_HEADER = css`
   flex-shrink: 0;
   width: 100%;
   height: 48px;
-  background: #171717;
+  background: #141414;
 `;
 
 const STYLES_LOGGED_OUT = css`
