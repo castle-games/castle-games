@@ -15,7 +15,8 @@ do that!
 
 ### Windows
 
-- Install https://gitforwindows.org/. Use this program to clone this repo (not WSL git).
+- *Option 1*: Install https://gitforwindows.org/.
+- *Option 2*: Install WSL.
 - Install CMake. https://cmake.org/download/
   - Make sure to check the "add to PATH for current user" option.
 - Install Visual Studio 2017. https://visualstudio.microsoft.com/vs
@@ -24,12 +25,17 @@ do that!
 
 #### Debug build
 
+1. Using either Git Bash or WSL...
+
 - Make sure `git lfs` is initialized.
-- Open the Git Bash utility that comes with Git for Windows and navigate to the `megasource` directory.
-- In 'megasource/', run './run_cmake.sh'.
+- In 'megasource/', run './run_cmake.sh'. You don't need to do this every time, but you need to do it at least on your first time, and whenever installer resources change.
+
+2. Using Visual Studio...
+
 - Open and build the 'ALL_BUILD.vcxproj' file inside of 'megasource/build/'.
 - Run the application at 'megasourse/build/Debug/Castle.exe'.
 - If the build succeeds but is unable to write Castle.exe, make sure any existing Castle processes are terminated and try again.
+- If you're using WSL, `megasource/kill_castle.sh` works for terminating Castle processes.
 
 #### Release build
 
