@@ -13,7 +13,8 @@ const STYLES_CONTAINER = css`
   color: ${Constants.colors.white};
   display: flex;
   flex-direction: column;
-  width: 280px;
+  width: 288px;
+  flex-shrink: 0;
 
   @media (max-width: 960px) {
     width: 228px;

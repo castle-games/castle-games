@@ -18,6 +18,7 @@ const STYLES_CONTAINER = css`
   flex-direction: column;
   justify-content: flex-end;
   height: 100%;
+  width: 100%;
 `;
 
 const STYLES_CONNECTING = css`
@@ -27,6 +28,7 @@ const STYLES_CONNECTING = css`
   justify-content: flex-start;
   padding: 32px 16px 16px 16px;
   flex-direction: column;
+  width: 100%;
 `;
 
 const ROOM_NAME = 'general';
