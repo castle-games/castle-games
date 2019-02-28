@@ -22,6 +22,10 @@ export const colors = {
     // online: `#2EE6D6`, -- cyan option
     offline: `#666`,
   },
+  brand1: `#00ffff`, // cyan
+  brand2: `#ff00ff`, // magenta
+  brand3: '#8F79D8', // violet
+  brand4: '#ffff00', // yellow
 };
 
 export const logs = {

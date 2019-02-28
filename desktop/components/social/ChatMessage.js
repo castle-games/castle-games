@@ -90,10 +90,24 @@ const STYLES_MESSAGE_HEADING_RIGHT = css`
   text-align: right;
 `;
 
-const STYLES_MESSAGE_TAG = css`
+const STYLES_MESSAGE_MENTION = css`
   cursor: pointer;
   font-weight: 900;
-  background: ${TIMESTAMP_COLOR};
+  color: ${Constants.colors.brand4};
+
+  @keyframes color-change {
+    0% {
+      color: ${Constants.colors.brand4};
+    }
+    50% {
+      color: ${Constants.colors.brand1};
+    }
+    100% {
+      color: ${Constants.colors.brand2};
+    }
+  }
+
+  animation: color-change infinite 300ms;
 `;
 
 const STYLES_MESSAGE_ELEMENT = css`
@@ -119,7 +133,7 @@ class ChatMessage extends React.Component {
         result.push(
           <span
             key={i}
-            className={STYLES_MESSAGE_TAG}
+            className={STYLES_MESSAGE_MENTION}
             onClick={isRealUser ? () => this.props.navigateToUserProfile(user) : null}>{`@${
             user.username
           }`}</span>
