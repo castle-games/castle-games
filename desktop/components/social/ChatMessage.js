@@ -53,6 +53,7 @@ const STYLES_CHAT_ITEM = css`
 
 const STYLES_LEFT = css`
   padding: 4px 8px 8px 0;
+  width: 32px;
   flex-shrink: 0;
 `;
 
@@ -157,8 +158,8 @@ class ChatMessage extends React.Component {
   render() {
     const chatMessage = this.props.message;
     const userId = chatMessage.userId;
-    let maybeAvatar = <div className={STYLES_AVATAR} />;
-    let maybeUsernameAndTimestamp = null;
+    let maybeAvatar;
+    let maybeUsernameAndTimestamp;
 
     if (!this.props.prevUserId || this.props.prevUserId !== userId) {
       let isRealUser = !!this.props.social.userIdToUser[chatMessage.userId];
