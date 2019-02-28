@@ -29,7 +29,7 @@ echo -e "\n\b\bCreated 'Castle-$MACOS_VERSION.zip'"
 
 if [ ! -d castle-releases ]; then
   echo "Cloning 'castle-releases'..."
-  git clone git@github.com:castle-games/castle-releases.git
+  git clone https://$CASTLE_GITHUB_TOKEN@github.com/castle-games/castle-releases.git
 fi
 cd castle-releases
 echo "Pulling 'castle-releases'..."
