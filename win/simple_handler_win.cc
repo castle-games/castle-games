@@ -4,6 +4,7 @@
 
 #include "simple_handler.h"
 
+#include <CommCtrl.h>
 #include <string>
 #include <windows.h>
 
@@ -15,6 +16,21 @@ extern "C" {
 void ghostWinSetMainWindow(HWND window);
 }
 
+LRESULT CALLBACK GhostSubclassProc(HWND hwnd,
+  UINT msg,
+  WPARAM w_param,
+  LPARAM l_param,
+  UINT_PTR subclass_id,
+  DWORD_PTR ref_data) {
+  switch (msg) {
+  case WM_CREATE:
+/// fucking windows
+    break;
+  }
+  UNREFERENCED_PARAMETER(ref_data);
+  return DefSubclassProc(hwnd, msg, w_param, l_param);
+}
+
 void SimpleHandler::PlatformTitleChange(CefRefPtr<CefBrowser> browser, const CefString &title) {
   CefWindowHandle hwnd = browser->GetHost()->GetWindowHandle();
   ghostWinSetMainWindow(hwnd);
@@ -24,4 +40,8 @@ void SimpleHandler::PlatformTitleChange(CefRefPtr<CefBrowser> browser, const Cef
   HICON hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(ICON_ID));
   SendMessage(hwnd, WM_SETICON, ICON_SMALL, (LPARAM)hIcon);
   SendMessage(hwnd, WM_SETICON, ICON_BIG, (LPARAM)hIcon);
+}
+
+void SimpleHandler::SubclassWndProc(CefWindowHandle hwnd) {
+  SetWindowSubclass(hwnd, GhostSubclassProc, 1, reinterpret_cast<DWORD_PTR>(this));
 }

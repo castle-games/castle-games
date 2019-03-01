@@ -73,6 +73,10 @@ private:
   // Platform-specific implementation.
   void PlatformTitleChange(CefRefPtr<CefBrowser> browser, const CefString &title);
 
+#if defined(OS_WIN)
+  void SubclassWndProc(CefWindowHandle hwnd);
+#endif
+
 #ifdef __APPLE__
   void OnProtocolExecution(CefRefPtr<CefBrowser> browser, const CefString &url,
                            bool &allow_os_execution);
