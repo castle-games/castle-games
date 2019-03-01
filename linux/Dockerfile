@@ -3,10 +3,9 @@ FROM ubuntu:18.04
 # Love deps from https://love2d.org/wiki/Building_L%C3%96VE
 RUN apt-get update && apt-get install -y build-essential autotools-dev automake libtool pkg-config libdevil-dev libfreetype6-dev libluajit-5.1-dev libphysfs-dev libsdl2-dev libopenal-dev libogg-dev libvorbis-dev libflac-dev libflac++-dev libmodplug-dev libmpg123-dev libmng-dev libturbojpeg libtheora-dev
 
-#RUN apt-get install -y cmake luajit liblua5.1-0-dev
 RUN ln -s /usr/bin/make /usr/bin/gmake
 
-RUN apt-get install -y libcurl4-openssl-dev
+RUN apt-get install -y cmake libcurl4-openssl-dev
 
 # Installs OpenSSL to /usr/local/ssl
 COPY openssl-1.0.2l.tar.gz openssl-1.0.2l.tar.gz
