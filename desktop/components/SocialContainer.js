@@ -39,7 +39,7 @@ const STYLES_LOGGED_OUT = css`
 `;
 
 const STYLES_LOGIN_ACTION = css`
-  color: ${Constants.colors.action};
+  color: ${Constants.colors.brand2};
   text-decoration: underline;
   cursor: pointer;
 `;
