@@ -109,7 +109,7 @@ const STYLES_MESSAGE_MENTION = css`
   }
 
   animation: color-change 200ms;
-  animation-iteration-count: 10;
+  animation-iteration-count: 30;
 `;
 
 const STYLES_MESSAGE_ELEMENT = css`
