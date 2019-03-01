@@ -59,5 +59,7 @@ void Logs::logInternal(std::string str, bool isLua) {
   j["logs"] = str;
   j["is_lua"] = isLua;
 
+  std::cout << str << std::endl;
+
   spdlog::info(j.dump());
 }

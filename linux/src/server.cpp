@@ -3,6 +3,7 @@
 #include "logs.h"
 #include "lua.h"
 #include "timer.h"
+#include "json/json.hpp"
 #include <SDL.h>
 #include <algorithm>
 #include <assert.h>
@@ -20,9 +21,12 @@
 #include <thread>
 #include <unistd.h>
 
+using json = nlohmann::json;
+
 #define GHOST_EXPORT extern "C" __attribute__((visibility("default")))
 #define DELAY_BEFORE_HEARTBEAT_TEST 30
 #define HEARTBEAT_MAX_INTERVAL 5
+#define CASTLE_AGENT_SERVER_PORT 3014
 
 static bool sShouldQuit = false;
 static std::string sCastleUrl;
@@ -35,11 +39,7 @@ static Timer sGameTimer;
 static Timer sHeartbeatTimer;
 
 GHOST_EXPORT void ghostSetIsAcceptingPlayers(bool isAcceptingPlayers) {
-  if (sIsAcceptingPlayers == isAcceptingPlayers) {
-    return;
-  }
-
-  // TODO: tell agent we aren't accepting any more players
+  sIsAcceptingPlayers = true;
 }
 
 GHOST_EXPORT void ghostHeartbeat(int numConnectedPeers) {
@@ -57,7 +57,7 @@ void quit() {
 
 void checkHeartbeat() {
   while (sCastleUrl.empty() && !sShouldQuit) {
-    sleep(100);
+    sleep(1);
   }
 
   while (!sShouldQuit) {
@@ -68,7 +68,7 @@ void checkHeartbeat() {
         quit();
       }
     }
-    sleep(100);
+    sleep(1);
   }
 }
 
@@ -90,6 +90,35 @@ static Lua::DoneAction runlove(int argc, char **argv, int &retval) {
   return sLua->execute(sCastleUrl, sPort, retval);
 }
 
+static json getAgentJSON() {
+  json j;
+  j["is_healthy"] = !sShouldQuit;
+  j["is_accepting_players"] = sIsAcceptingPlayers;
+  if (!sCastleUrl.empty()) {
+    j["game_url"] = sCastleUrl;
+  }
+  j["port"] = sPort;
+  return j;
+}
+
+static bool onSetUrl(std::string url) {
+  if (!sCastleUrl.empty()) {
+    sCastleLogs->log("Already have a url");
+    return false;
+  }
+
+  if (url.empty()) {
+    sCastleLogs->log("Game url is empty");
+    return false;
+  }
+
+  sGameTimer.start();
+  sCastleLogs->setUrl(url);
+  sCastleLogs->log("Castle url is: " + url);
+  sCastleUrl = url;
+  return true;
+}
+
 int main(int argc, char **argv) {
   char *portString = std::getenv("CASTLE_GAME_SERVER_PORT");
   if (portString == NULL) {
@@ -98,8 +127,10 @@ int main(int argc, char **argv) {
   }
   sPort = atoi(portString);
 
-  CastleHttpServer *httpServer = new CastleHttpServer(sPort);
-  httpServer->start();
+  CastleHttpServer *httpServer = new CastleHttpServer(CASTLE_AGENT_SERVER_PORT);
+  httpServer->registerPollingCallback(getAgentJSON);
+  httpServer->registerGameUrlCallback(onSetUrl);
+  std::thread httpServerThread = httpServer->start();
 
   std::string::size_type pos = std::string(argv[0]).find_last_of("\\/");
   sBinaryDirectory = std::string(argv[0]).substr(0, pos) + "/";
@@ -142,7 +173,9 @@ int main(int argc, char **argv) {
   sCastleLogs->log("Done running Lua");
 
   quit();
+  httpServer->stop();
   heartbeatThread.join();
+  httpServerThread.join();
 
   return retval;
 }
