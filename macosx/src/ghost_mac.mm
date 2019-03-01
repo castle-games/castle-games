@@ -265,7 +265,14 @@ bool ghostShowOpenProjectDialog(const char **projectFilePathChosen) {
   return false;
 }
 
-void ghostQuitMessageLoop() {}
+static bool applicationWillTerminateNotificationPosted = false;
+
+void ghostQuitMessageLoop() {
+  if (!applicationWillTerminateNotificationPosted) {
+    [[NSNotificationCenter defaultCenter] postNotificationName:NSApplicationWillTerminateNotification object:nil];
+    applicationWillTerminateNotificationPosted = true;
+  }
+}
 
 bool ghostGetPathToFileInAppBundle(const char *filename, const char **result) {
   NSString *_filename = [NSString stringWithCString:filename encoding:NSUTF8StringEncoding];
