@@ -82,7 +82,7 @@ void SimpleApp::OnContextInitialized() {
   CefBrowserSettings browser_settings;
   browser_settings.universal_access_from_file_urls = STATE_ENABLED;
   browser_settings.file_access_from_file_urls = STATE_ENABLED;
-  
+
   // Make it so we disable web security for http(s) and castle(s) requests on the initial URL
   // This will let us do arbitrary `fetch` requests, etc.
   CefAddCrossOriginWhitelistEntry(this->_initialUrl, "http", "", true);

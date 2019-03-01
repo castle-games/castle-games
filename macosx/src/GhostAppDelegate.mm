@@ -353,7 +353,8 @@ void Cocoa_DispatchEvent(NSEvent *theEvent);
   }
 }
 
-- (BOOL)userNotificationCenter:(NSUserNotificationCenter *)center shouldPresentNotification:(NSUserNotification *)notification {
+- (BOOL)userNotificationCenter:(NSUserNotificationCenter *)center
+     shouldPresentNotification:(NSUserNotification *)notification {
   return YES;
 }
 

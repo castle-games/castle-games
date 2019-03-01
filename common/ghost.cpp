@@ -28,11 +28,8 @@ inline bool fileExists(const char *path) {
   return false;
 }
 
-bool _ghostCreateFileFromTemplateAtPath(const char *path,
-                                        const char *filenameToRead,
-                                        const char *filenameToWrite,
-                                        const char **filePathCreated)
-{
+bool _ghostCreateFileFromTemplateAtPath(const char *path, const char *filenameToRead,
+                                        const char *filenameToWrite, const char **filePathCreated) {
   // read bundled file
   const char *pathToBundledFile;
   std::string fileContents;
@@ -40,15 +37,15 @@ bool _ghostCreateFileFromTemplateAtPath(const char *path,
   if (success) {
     std::ifstream fileContentsStream(pathToBundledFile);
     fileContents = std::string((std::istreambuf_iterator<char>(fileContentsStream)),
-                              std::istreambuf_iterator<char>());
+                               std::istreambuf_iterator<char>());
     std::free((void *)pathToBundledFile);
   }
-  
+
   // construct path to output file
   std::string outputFilePath(path);
   std::stringstream outputFilePathStream;
   outputFilePathStream << outputFilePath;
-  
+
 #if defined(WIN32) || defined(_WIN32)
   if (outputFilePath.back() != '\\') {
     outputFilePathStream << "\\";
@@ -60,17 +57,17 @@ bool _ghostCreateFileFromTemplateAtPath(const char *path,
 #endif
   outputFilePathStream << filenameToWrite;
   outputFilePath = outputFilePathStream.str();
-  
+
   // don't overwrite existing file
   if (fileExists(outputFilePath.c_str())) {
     return false;
   }
-  
+
   // write output file
   std::ofstream outfile(outputFilePath);
   outfile << fileContents << std::endl;
   outfile.close();
-  
+
   // check that we actually created the file
   bool didCreate = fileExists(outputFilePath.c_str());
   if (didCreate) {
