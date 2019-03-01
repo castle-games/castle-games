@@ -34,10 +34,5 @@ fi
 cd castle-releases
 echo "Pulling 'castle-releases'..."
 git pull origin master
-if [ ! -z "$CASTLE_SPARKLE_KEY" ]; then
-  echo "Adding Sparkle key to keychain..."
-  security unlock-keychain -p circle
-  security add-generic-password -a "ed25519" -s "https://sparkle-project.org" -w "$CASTLE_SPARKLE_KEY" -U login.keychain
-fi
 echo "Performing release..."
 ./castle-releases-macos mac ../Castle-$MACOS_VERSION.zip
