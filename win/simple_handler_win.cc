@@ -27,9 +27,9 @@ void AddMenus(HWND hwnd) {
   hMenubar = CreateMenu();
   hMenu = CreateMenu();
 
-  AppendMenuW(hMenu, MF_STRING, FILE_MENU_OPEN, L"&Open");
+  AppendMenu(hMenu, MF_STRING, FILE_MENU_OPEN, L"&Open Project...");
 
-  AppendMenuW(hMenubar, MF_POPUP, (UINT_PTR)hMenu, L"&File");
+  AppendMenu(hMenubar, MF_POPUP, (UINT_PTR)hMenu, L"&File");
   SetMenu(hwnd, hMenubar);
 }
 

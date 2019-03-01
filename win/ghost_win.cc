@@ -178,8 +178,48 @@ bool ghostChooseDirectoryWithDialog(const char *title, const char *message, cons
 }
 
 bool ghostShowOpenProjectDialog(const char **projectFilePathChosen) {
-  // TODO: implement
-  return false;
+  ATL::CComPtr<IFileOpenDialog> fileOpenDialog;
+  HRESULT hr = fileOpenDialog.CoCreateInstance(CLSID_FileOpenDialog);
+  if (FAILED(hr))
+    return false;
+
+  DWORD options = FOS_FORCEFILESYSTEM | FOS_FILEMUSTEXIST;
+  fileOpenDialog->SetOptions(options);
+
+  fileOpenDialog->SetTitle(L"Open a Castle Project");
+  fileOpenDialog->SetOkButtonLabel(L"Open Project");
+
+  hr = fileOpenDialog->Show(NULL);
+  if (FAILED(hr))
+    return false;
+
+  ATL::CComPtr<IShellItemArray> items;
+  hr = fileOpenDialog->GetResults(&items);
+  if (FAILED(hr))
+    return false;
+
+  ATL::CComPtr<IShellItem> item;
+  DWORD count = 0;
+  hr = items->GetCount(&count);
+  if (FAILED(hr))
+    return false;
+
+  hr = items->GetItemAt(count - 1, &item);
+  if (FAILED(hr))
+    return false;
+
+  wchar_t chosenFilename[MAX_PATH];
+  LPWSTR outFilename = NULL;
+  hr = item->GetDisplayName(SIGDN_FILESYSPATH, &outFilename);
+  if (FAILED(hr))
+    return false;
+  wcscpy_s(chosenFilename, MAX_PATH, outFilename);
+  ::CoTaskMemFree(outFilename);
+
+  _bstr_t filename_bstr(chosenFilename);
+  const char *filenameUTF8 = filename_bstr;
+  *projectFilePathChosen = strdup(filenameUTF8);
+  return true;
 }
 
 void ghostHandleOpenUri(const char *uri) {
