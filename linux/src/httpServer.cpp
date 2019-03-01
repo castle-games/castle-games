@@ -3,10 +3,12 @@
 thread CastleHttpServer::start() {
   mServer.config.port = mPort;
 
-  mServer.resource["^/set_url$"]["POST"] = [this](shared_ptr<HttpServer::Response> response,
-                                                  shared_ptr<HttpServer::Request> request) {
+  mServer.resource["^/start$"]["POST"] = [this](shared_ptr<HttpServer::Response> response,
+                                                shared_ptr<HttpServer::Request> request) {
     auto content = request->content.string();
-    if (mGameUrlCallback(content)) {
+    json body = json::parse(content);
+
+    if (mGameStartCallback(body)) {
       response->write("ok!");
     } else {
       response->write("error!");

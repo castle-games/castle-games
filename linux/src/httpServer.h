@@ -16,13 +16,13 @@ private:
   HttpServer mServer;
   int mPort;
   json (*mPollingCallback)();
-  bool (*mGameUrlCallback)(string);
+  bool (*mGameStartCallback)(json);
 
 public:
   CastleHttpServer(int port) { mPort = port; }
 
   void registerPollingCallback(json (*callback)()) { mPollingCallback = callback; };
-  void registerGameUrlCallback(bool (*callback)(string)) { mGameUrlCallback = callback; };
+  void registerGameStartCallback(bool (*callback)(json)) { mGameStartCallback = callback; };
   thread start();
   void stop() { mServer.stop(); }
 };

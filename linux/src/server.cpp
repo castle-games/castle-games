@@ -30,6 +30,7 @@ using json = nlohmann::json;
 
 static bool sShouldQuit = false;
 static std::string sCastleUrl;
+static std::string sSessionId;
 static std::string sBinaryDirectory;
 static int sPort = -1;
 static Lua *sLua;
@@ -97,11 +98,17 @@ static json getAgentJSON() {
   if (!sCastleUrl.empty()) {
     j["game_url"] = sCastleUrl;
   }
+  if (!sSessionId.empty()) {
+    j["session_id"] = sSessionId;
+  }
   j["port"] = sPort;
   return j;
 }
 
-static bool onSetUrl(std::string url) {
+static bool onStartGame(json params) {
+  std::string url = params["url"];
+  std::string sessionId = params["session_id"];
+
   if (!sCastleUrl.empty()) {
     sCastleLogs->log("Already have a url");
     return false;
@@ -115,7 +122,9 @@ static bool onSetUrl(std::string url) {
   sGameTimer.start();
   sCastleLogs->setUrl(url);
   sCastleLogs->log("Castle url is: " + url);
+  sCastleLogs->log("Session id is: " + sessionId);
   sCastleUrl = url;
+  sSessionId = sessionId;
   return true;
 }
 
@@ -129,7 +138,7 @@ int main(int argc, char **argv) {
 
   CastleHttpServer *httpServer = new CastleHttpServer(CASTLE_AGENT_SERVER_PORT);
   httpServer->registerPollingCallback(getAgentJSON);
-  httpServer->registerGameUrlCallback(onSetUrl);
+  httpServer->registerGameStartCallback(onStartGame);
   std::thread httpServerThread = httpServer->start();
 
   std::string::size_type pos = std::string(argv[0]).find_last_of("\\/");
