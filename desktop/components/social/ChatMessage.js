@@ -94,7 +94,7 @@ const STYLES_MESSAGE_HEADING_RIGHT = css`
 const STYLES_MESSAGE_MENTION = css`
   cursor: pointer;
   font-weight: 900;
-  color: ${Constants.colors.brand4};
+  color: ${Constants.colors.brand1};
 
   @keyframes color-change {
     0% {
@@ -108,7 +108,8 @@ const STYLES_MESSAGE_MENTION = css`
     }
   }
 
-  animation: color-change infinite 300ms;
+  animation: color-change 200ms;
+  animation-iteration-count: 10;
 `;
 
 const STYLES_MESSAGE_ELEMENT = css`
