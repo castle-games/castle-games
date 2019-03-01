@@ -1,7 +1,6 @@
 #ifndef __CASTLE_LOGS_H__
 #define __CASTLE_LOGS_H__
 
-#include "timer.h"
 #include <string>
 
 class Logs {

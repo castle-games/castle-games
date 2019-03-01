@@ -5,7 +5,7 @@ RUN apt-get update && apt-get install -y build-essential autotools-dev automake 
 
 RUN ln -s /usr/bin/make /usr/bin/gmake
 
-RUN apt-get install -y cmake libcurl4-openssl-dev
+RUN apt-get install -y cmake libcurl4-openssl-dev libboost-all-dev
 
 # Installs OpenSSL to /usr/local/ssl
 COPY openssl-1.0.2l.tar.gz openssl-1.0.2l.tar.gz

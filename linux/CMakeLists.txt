@@ -42,10 +42,12 @@ set(GHOST_SRCS
   src/timer.cpp
   src/logs.cpp
   src/server.cpp
+  src/httpServer.cpp
+  src/lua.cpp
 )
 
 add_executable(${GHOST_TARGET} ${GHOST_SRCS})
-target_link_libraries(${GHOST_TARGET} liblove ${CASTLE_LUA_LIBRARY} ${SERVERSDK_LIBRARIES} ${BOOST_LIBRARY_DATE_TIME} ${BOOST_LIBRARY_SYSTEM} ${BOOST_LIBRARY_RANDOM} -ldl -lpthread)
+target_link_libraries(${GHOST_TARGET} liblove ${CASTLE_LUA_LIBRARY} ${SERVERSDK_LIBRARIES} ${BOOST_LIBRARY_DATE_TIME} ${BOOST_LIBRARY_SYSTEM} ${BOOST_LIBRARY_RANDOM} -ldl -lpthread -lboost_system)
 include_directories(
   src
   ../common
@@ -58,6 +60,10 @@ target_link_libraries(${GHOST_TARGET} ${CASTLE_LINK_LIBRARIES} ${CASTLE_3P})
 find_package(OpenSSL REQUIRED)
 target_link_libraries(${GHOST_TARGET} OpenSSL::SSL)
 target_link_libraries(${GHOST_TARGET} curl)
+find_package(Boost REQUIRED)
+
+include_directories(${Boost_INCLUDE_DIR})
+target_link_libraries(${GHOST_TARGET} ${Boost_LIBRARIES})
 
 if(CASTLE_EXTRA_DEPENDECIES)
 	add_dependencies(${GHOST_TARGET} ${CASTLE_EXTRA_DEPENDECIES})
