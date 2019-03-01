@@ -1,35 +1,3 @@
-/**
- * Copyright (c) 2006-2018 LOVE Development Team
- *
- * This software is provided 'as-is', without any express or implied
- * warranty.  In no event will the authors be held liable for any damages
- * arising from the use of this software.
- *
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- *
- * 1. The origin of this software must not be misrepresented; you must not
- *    claim that you wrote the original software. If you use this software
- *    in a product, an acknowledgment in the product documentation would be
- *    appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- *    misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
- **/
-
-// This is just for the editor
-#ifndef GAMELIFT_USE_STD
-#define GAMELIFT_USE_STD 1
-#endif
-
-#include "aws.h"
-#include "aws/core/Aws.h"
-#include "aws/gamelift/GameLiftClient.h"
-#include "aws/gamelift/model/UpdateGameSessionRequest.h"
-#include "aws/gamelift/server/GameLiftServerAPI.h"
-#include "aws/gamelift/server/LogParameters.h"
-#include "aws/gamelift/server/ProcessParameters.h"
 #include "common/version.h"
 #include "logs.h"
 #include "modules/love/love.h"
@@ -56,46 +24,25 @@
 #define START_PORT 22122
 #define END_PORT 42122
 #define PORT_FILE "current_port.txt"
-// We pad the game session data with the string "castle" because otherwise aws sends us the content
-// of the url instead of the url string
-#define GAME_SESSION_DATA_PADDING 6
 #define DELAY_BEFORE_HEARTBEAT_TEST 30
 #define HEARTBEAT_MAX_INTERVAL 5
-
-using namespace Aws::GameLift::Server;
 
 static bool sShouldQuit = false;
 static std::string sCastleUrl;
 static std::string sBinaryDirectory;
 static std::string sGameSessionId;
-static int sPort = -1;
+static int sPort = atoi(std::getenv("CASTLE_GAME_SERVER_PORT"));
 static Logs *sCastleLogs;
-static Aws::GameLift::GameLiftClient *sGameLiftClient;
 static bool sIsAcceptingPlayers = true;
 static Timer sGameTimer;
 static Timer sHeartbeatTimer;
-
-const auto updateGameSessionResponse =
-    [](const Aws::GameLift::GameLiftClient *gameLiftClient,
-       const Aws::GameLift::Model::UpdateGameSessionRequest &updateGameSessionRequest,
-       const Aws::GameLift::Model::UpdateGameSessionOutcome &updateGameSessionOutcome,
-       const std::shared_ptr<const Aws::Client::AsyncCallerContext> &callerContext) {};
 
 GHOST_EXPORT void ghostSetIsAcceptingPlayers(bool isAcceptingPlayers) {
   if (sIsAcceptingPlayers == isAcceptingPlayers) {
     return;
   }
 
-  if (sGameLiftClient && !sGameSessionId.empty()) {
-    Aws::GameLift::Model::UpdateGameSessionRequest request =
-        Aws::GameLift::Model::UpdateGameSessionRequest();
-    request.SetGameSessionId(sGameSessionId.c_str());
-    // Use 2 to signal that there are open spots. 1 to signal that there aren't. You can't search
-    // using PlayerSessionCreationPolicy :/
-    request.SetMaximumPlayerSessionCount(isAcceptingPlayers ? 2 : 1);
-    sGameLiftClient->UpdateGameSessionAsync(request, updateGameSessionResponse);
-    sIsAcceptingPlayers = isAcceptingPlayers;
-  }
+  // TODO
 }
 
 GHOST_EXPORT void ghostHeartbeat(int numConnectedPeers) {
@@ -104,6 +51,7 @@ GHOST_EXPORT void ghostHeartbeat(int numConnectedPeers) {
   }
 }
 
+// TODO: move this out of lua loop
 void checkHeartbeat() {
   if (sGameTimer.elapsedTimeS() > DELAY_BEFORE_HEARTBEAT_TEST) {
     if (!sHeartbeatTimer.hasStarted() || sHeartbeatTimer.elapsedTimeS() > HEARTBEAT_MAX_INTERVAL) {
@@ -264,90 +212,11 @@ static DoneAction runlove(int argc, char **argv, int &retval) {
   return done;
 }
 
-const std::function<void(Model::GameSession)> onStartGameSession = [](Model::GameSession session) {
-  sCastleLogs->log("onStartGameSession");
-  std::string castleUrl = session.GetGameSessionData();
-  if (castleUrl.empty() || castleUrl.length() < GAME_SESSION_DATA_PADDING) {
-    sShouldQuit = true;
-    sCastleLogs->log("No GameSessionData");
-    return;
-  }
-
-  sGameTimer.start();
-  sGameSessionId = session.GetGameSessionId();
-  sGameLiftClient =
-      new Aws::GameLift::GameLiftClient(castleAwsCredentials(), castleAwsConfiguration());
-
-  // We should really call this from runlove(), but GameLift has some bug where it will terminate
-  // the session if this isn't called quickly
-  ActivateGameSession();
-
-  std::string url = castleUrl.substr(GAME_SESSION_DATA_PADDING);
-  sCastleLogs->log("Castle url is: " + url);
-  sCastleLogs->setUrl(url);
-  sCastleUrl = url;
-};
-
-const std::function<void()> onProcessTerminate = []() {
-  sCastleLogs->log("onProcessTerminate");
-  sShouldQuit = true;
-};
-
-const std::function<bool()> onHealthCheck = []() {
-  sCastleLogs->log("onHealthCheck");
-  return !sShouldQuit;
-};
-
-// PORT_FILE has the next available port. We grab a file lock before doing anything since GameLift
-// starts multiple of these same processes at the same time when a new instance is created.
-void findFreePort() {
-  std::string filename = sBinaryDirectory + PORT_FILE;
-  int fd = open(filename.c_str(), O_RDWR | O_CREAT, 0666);
-  int lock = -1;
-  // Probably don't actually need the while loop, but there are some edge case errors that this
-  // might catch
-  while (lock == -1) {
-    lock = flock(fd, LOCK_EX);
-    sleep(0);
-  }
-
-  // Read the 5 digit port
-  char port[5];
-  ssize_t bytesRead = read(fd, port, 5);
-
-  if (bytesRead != 5) {
-    sPort = START_PORT;
-    sCastleLogs->log("Port file doesn't exist. Using port %i", sPort);
-  } else {
-    sPort = std::stoi(port);
-    if (sPort > END_PORT) {
-      sPort = START_PORT;
-    }
-    sCastleLogs->log("Port file exists. Using port %i", sPort);
-  }
-
-  const char *newPort = std::to_string(sPort + 1).c_str();
-
-  lseek(fd, 0, SEEK_SET);
-  write(fd, newPort, strlen(newPort));
-
-  // Shouldn't be necessary but makes the logs cleaner
-  // sleep(3);
-
-  flock(fd, LOCK_UN);
-  close(fd);
-}
-
 int main(int argc, char **argv) {
-  Aws::SDKOptions options;
-  Aws::InitAPI(options);
-
   std::string::size_type pos = std::string(argv[0]).find_last_of("\\/");
   sBinaryDirectory = std::string(argv[0]).substr(0, pos) + "/";
 
   sCastleLogs = new Logs(sBinaryDirectory);
-
-  findFreePort();
 
   sCastleLogs->setPort(sPort);
 
@@ -371,14 +240,7 @@ int main(int argc, char **argv) {
   sigIntHandler.sa_flags = 0;
   sigaction(SIGINT, &sigIntHandler, NULL);
 
-  LogParameters logParameters;
-  ProcessParameters gameLiftParams(onStartGameSession, onProcessTerminate, onHealthCheck, sPort,
-                                   logParameters);
-
-  InitSDK();
-  ProcessReady(gameLiftParams);
-
-  sCastleLogs->log("Finished initializing GameLift");
+  sCastleLogs->log("Finished initializing");
 
   int retval = 0;
   DoneAction done = DONE_QUIT;
@@ -388,11 +250,8 @@ int main(int argc, char **argv) {
   } while (done != DONE_QUIT);
 
   sCastleLogs->log("Done running Lua");
-  Aws::ShutdownAPI(options);
 
   sShouldQuit = true;
-
-  ProcessEnding();
 
   return retval;
 }

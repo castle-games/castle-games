@@ -10,7 +10,7 @@ using json = nlohmann::json;
 
 Logs::Logs(std::string rootDirectory) {
   // Create a file rotating logger with 5mb size max and 3 rotated files
-  auto rotating_logger = spdlog::rotating_logger_mt("castle_gamelift_logger",
+  auto rotating_logger = spdlog::rotating_logger_mt("castle_game_server_logger",
                                                     rootDirectory + "castle.log", 1048576 * 5, 3);
   spdlog::set_default_logger(rotating_logger);
   spdlog::set_pattern("%v");

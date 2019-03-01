@@ -14,6 +14,10 @@ if(EXISTS ${MEGA_LOVE}/CMakeLists.txt)
 	message(STATUS "Configuring: love")
 	message(STATUS "-----------------------------------------------------")
 	#set(ARCHIVE_OUTPUT_DIRECTORY  "${CMAKE_CURRENT_BINARY_DIR}/$<CONFIGURATION>")
+  include_directories(
+    /usr/include/lua5.1/
+    /usr/include/SDL2/
+  )
 	add_subdirectory(${MEGA_LOVE} ${CMAKE_BINARY_DIR}/love)
 
 	# Turn off third-party warnings when building with LOVE.
@@ -41,7 +45,7 @@ set(GHOST_SRCS
 )
 
 add_executable(${GHOST_TARGET} ${GHOST_SRCS})
-target_link_libraries(${GHOST_TARGET} liblove ${CASTLE_LUA_LIBRARY} ${SERVERSDK_LIBRARIES} ${BOOST_LIBRARY_DATE_TIME} ${BOOST_LIBRARY_SYSTEM} ${BOOST_LIBRARY_RANDOM})
+target_link_libraries(${GHOST_TARGET} liblove ${CASTLE_LUA_LIBRARY} ${SERVERSDK_LIBRARIES} ${BOOST_LIBRARY_DATE_TIME} ${BOOST_LIBRARY_SYSTEM} ${BOOST_LIBRARY_RANDOM} -ldl -lpthread)
 include_directories(
   src
   ../common
