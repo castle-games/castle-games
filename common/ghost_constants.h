@@ -11,4 +11,6 @@ extern const char *kGhostOpenUrlEventName;
 extern const char *kGhostUpdateAvailableEventName;
 extern const char *kGhostUrlScheme;
 
+extern const char *kGhostMenuFileOpenAction;
+
 #endif

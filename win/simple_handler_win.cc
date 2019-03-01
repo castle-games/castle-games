@@ -2,6 +2,8 @@
 // reserved. Use of this source code is governed by a BSD-style license that
 // can be found in the LICENSE file.
 
+#include "ghost.h"
+#include "ghost_constants.h"
 #include "simple_handler.h"
 
 #include <CommCtrl.h>
@@ -12,19 +14,36 @@
 
 #define ICON_ID  1
 
+#define FILE_MENU_OPEN 1
+
 extern "C" {
 void ghostWinSetMainWindow(HWND window);
 }
 
-LRESULT CALLBACK GhostSubclassProc(HWND hwnd,
-  UINT msg,
-  WPARAM w_param,
-  LPARAM l_param,
-  UINT_PTR subclass_id,
-  DWORD_PTR ref_data) {
+void AddMenus(HWND hwnd) {
+  HMENU hMenubar;
+  HMENU hMenu;
+
+  hMenubar = CreateMenu();
+  hMenu = CreateMenu();
+
+  AppendMenuW(hMenu, MF_STRING, FILE_MENU_OPEN, L"&Open");
+
+  AppendMenuW(hMenubar, MF_POPUP, (UINT_PTR)hMenu, L"&File");
+  SetMenu(hwnd, hMenubar);
+}
+
+LRESULT CALLBACK GhostSubclassProc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM l_param, UINT_PTR subclass_id, DWORD_PTR ref_data) {
   switch (msg) {
-  case WM_CREATE:
-/// fucking windows
+  case WM_COMMAND:
+    // WM_COMMAND is sent when the user clicks on a menu
+    switch (LOWORD(w_param)) {
+    case FILE_MENU_OPEN:
+      std::stringstream params;
+      params << "{ action: \"" << kGhostMenuFileOpenAction << "\" }";
+      ghostSendJSEvent(kGhostNativeMenuSelectedEventName, params.str().c_str());
+      break;
+    }
     break;
   }
   UNREFERENCED_PARAMETER(ref_data);
@@ -44,4 +63,5 @@ void SimpleHandler::PlatformTitleChange(CefRefPtr<CefBrowser> browser, const Cef
 
 void SimpleHandler::SubclassWndProc(CefWindowHandle hwnd) {
   SetWindowSubclass(hwnd, GhostSubclassProc, 1, reinterpret_cast<DWORD_PTR>(this));
+  AddMenus(hwnd);
 }
