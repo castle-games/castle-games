@@ -60,6 +60,21 @@ const STYLES_ERROR_MESSAGE = css`
   color: ${Constants.colors.error};
 `;
 
+const STYLES_ACTION = css`
+  font-family: ${Constants.font.default};
+  font-size: 16px;
+  margin-top: 16px;
+  margin-bottom: 16px;
+  text-decoration: underline;
+  cursor: pointer;
+  color: ${Constants.colors.action};
+  transition: 200ms ease color;
+
+  :hover {
+    color: ${Constants.colors.actionHover};
+  }
+`;
+
 export default class LoginSignupScreen extends React.Component {
   static contextType = CurrentUserContext;
 
@@ -138,6 +153,24 @@ export default class LoginSignupScreen extends React.Component {
         return this._renderWho();
     }
   }
+
+  _handlePasswordReset = async (e) => {
+    if (!this.state.suggestedUser) {
+      console.error('No suggested user');
+      return;
+    }
+
+    if (!this.state.suggestedUser.userId) {
+      console.error('no userId');
+      return;
+    }
+
+    const response = await Actions.resetPassword({
+      userId: this.state.suggestedUser.userId,
+    });
+
+    console.log(response);
+  };
 
   _handleLoginAsync = async (e) => {
     e.preventDefault();
@@ -260,6 +293,9 @@ export default class LoginSignupScreen extends React.Component {
             />
             <div className={STYLES_SPACER} />
             <UIButton onClick={this._handleLoginAsync}>Sign in</UIButton>
+            <div className={STYLES_ACTION} onClick={this._handlePasswordReset}>
+              → Reset Your Password
+            </div>
           </form>
 
           <div className={STYLES_FOOTER}>

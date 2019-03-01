@@ -15,7 +15,8 @@ export const colors = {
   backgroundLeftContext: `#282828`,
   white: `#fff`,
   black: `#000`,
-  action: `blue`,
+  action: `#0530ad`,
+  actionHover: `#0062ff`,
   error: '#f00',
   userStatus: {
     online: `#62D96B`,

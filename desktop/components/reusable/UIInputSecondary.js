@@ -16,7 +16,8 @@ const STYLES_INPUT = css`
   border-radius: 4px;
   width: 100%;
   max-width: 480px;
-  border: 1px solid ${Constants.colors.black};
+  border: 2px solid transparent;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
   background: ${Constants.colors.white};
   color: ${Constants.colors.black};
   font-size: 16px;
@@ -25,7 +26,7 @@ const STYLES_INPUT = css`
 
   :focus {
     outline: 0;
-    border: 1px solid ${Constants.colors.action};
+    border: 2px solid ${Constants.colors.brand2};
   }
 `;
 

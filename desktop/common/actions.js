@@ -64,6 +64,19 @@ const GAME_ITEMS = `
   }
 `;
 
+export async function resetPassword({ userId }) {
+  const response = await API.graphqlAsync(
+    `
+      mutation($userId: ID!) {
+        sendResetPasswordEmail(userId: $userId)
+      }
+    `,
+    { userId }
+  );
+
+  return response;
+}
+
 export async function getHeadersAsync() {
   return await API.client._getRequestHeadersAsync();
 }
