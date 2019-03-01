@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as Actions from '~/common/actions';
 import * as Constants from '~/common/constants';
+import * as NativeUtil from '~/native/nativeutil';
 
 import { Value } from 'slate';
 import { css } from 'react-emotion';
@@ -19,7 +20,7 @@ const STYLES_CONTAINER = css`
 `;
 
 const STYLES_SECTION = css`
-  padding: 16px 16px 24px 16px;
+  padding: 32px 16px 24px 32px;
   width: 40%;
   min-width: 300px;
   max-width: 480px;
@@ -57,6 +58,12 @@ const STYLES_GAME_PREVIEW_ERROR_DETAIL = css`
 const STYLES_GAME_PREVIEW_URL = css`
   text-decoration: underline;
   cursor: default;
+`;
+
+const STYLES_LINK = css`
+  color: ${Constants.colors.action};
+  text-decoration: underline;
+  cursor: pointer;
 `;
 
 export default class RegisterGame extends React.Component {
@@ -138,6 +145,10 @@ export default class RegisterGame extends React.Component {
     }
   };
 
+  _handleClickHelp = () => {
+    NativeUtil.openExternalURL(`${Constants.WEB_HOST}/posts/@castle/adding-game-to-castle-profile`);
+  };
+
   _renderGamePreview = () => {
     if (this.state.previewedGame && this.state.previewedGame.slug) {
       return (
@@ -164,8 +175,19 @@ export default class RegisterGame extends React.Component {
       );
     } else if (this.state.isLoadingPreview) {
       return <div className={STYLES_HEADING}>Loading Game Preview...</div>;
+    } else {
+      return (
+        <div>
+          <div className={STYLES_HEADING}>Need Help?</div>
+          <div className={STYLES_PARAGRAPH}>
+            <span className={STYLES_LINK} onClick={this._handleClickHelp}>
+              Read our guide
+            </span>{' '}
+            on adding games to your profile.
+          </div>
+        </div>
+      );
     }
-    return null;
   };
 
   render() {
@@ -175,10 +197,7 @@ export default class RegisterGame extends React.Component {
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_SECTION}>
-          <div className={STYLES_HEADING}>Link a game to your Castle profile</div>
-          <div className={STYLES_PARAGRAPH}>
-            When you link a game to Castle, it appears on your Castle profile.
-          </div>
+          <div className={STYLES_HEADING}>Add a game to your Castle profile</div>
           <div className={STYLES_PARAGRAPH}>
             Enter the url of a .castle file you made, and we'll check for a game project at that
             url.
