@@ -5,16 +5,14 @@
 
 #include <string>
 
-NSString *const kNativeMenuFileOpenAction = @"file.open";
-
 @implementation NSApplication (Ghost)
 
 - (void)openProject:(__unused id)sender {
-  [self _sendJSNativeMenuEventWithAction:kNativeMenuFileOpenAction];
+  [self _sendJSNativeMenuEventWithAction:kGhostMenuFileOpenAction];
 }
 
-- (void)_sendJSNativeMenuEventWithAction:(NSString *)action {
-  NSString *params = [NSString stringWithFormat:@"{ action: \"%@\" }", action];
+- (void)_sendJSNativeMenuEventWithAction:(const char *)action {
+  NSString *params = [NSString stringWithFormat:@"{ action: \"%s\" }", action];
   ghostSendJSEvent(kGhostNativeMenuSelectedEventName,
                    [params cStringUsingEncoding:NSUTF8StringEncoding]);
 }

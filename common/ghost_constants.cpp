@@ -8,4 +8,4 @@ const char *kGhostOpenUrlEventName = "nativeOpenUrl";
 const char *kGhostUpdateAvailableEventName = "nativeUpdateAvailable";
 const char *kGhostUrlScheme = "castle";
 
-const char *kGhostMenuFileOpenAction = "file.open"; // TODO: use on macos
+const char *kGhostMenuFileOpenAction = "file.open";
