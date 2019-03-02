@@ -25,7 +25,11 @@ export default class Viewer extends React.Component {
         <UIAvatar
           src={avatarSrc}
           onClick={navigateToCurrentUserProfile}
-          style={{ borderRadius: 0, boxShadow: 'none', backgroundColor: 'magenta' }}
+          style={{
+            borderRadius: 0,
+            boxShadow: 'none',
+            backgroundColor: !avatarSrc ? 'magenta' : 'transparent',
+          }}
         />
       </div>
     );
