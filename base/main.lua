@@ -115,7 +115,7 @@ function main.update(dt)
     updateLogs()
 
     if home then
-        if not isMobile and C.ghostGetBackgrounded() then -- FFI `ghost*` calls are desktop-only
+        if not CASTLE_SERVER and not isMobile and C.ghostGetBackgrounded() then
             if home.globals.castle.backgroundupdate then
                 home:safeCall(home.globals.castle.backgroundupdate, dt)
             end
