@@ -581,20 +581,6 @@ void ghostStep() {
               fmin(fracScale * childHeight, currParentRect.bottom - currParentRect.top - newTop);
           SetWindowPos(child, NULL, newLeft, newTop, newWidth, newHeight, 0);
         }
-
-        // Automatic pausing when unfocused
-        // XXX: DISABLED for now...
-        // if (lovePaused && focused) { // Unpause?
-        //  // Step timer so that next frame's `dt` doesn't include the time spent paused
-        //  auto timer = love::Module::getInstance<love::timer::Timer>(love::Module::M_TIMER);
-        //  if (timer) {
-        //    timer->step();
-        //  }
-        //  lovePaused = false;
-        //}
-        // if (!lovePaused && !focused) { // Pause?
-        //  lovePaused = true;
-        //}
       }
 
       auto channel = love::thread::Channel::getChannel("FOCUS_ME");
