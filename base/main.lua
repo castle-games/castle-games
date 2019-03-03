@@ -255,6 +255,13 @@ function main.filedropped(file)
     end
 end
 
+function main.mousepressed(...)
+    love.thread.getChannel('FOCUS_ME'):push('PLEASE')
+    if home then
+        home:mousepressed(...)
+    end
+end
+
 function main.mousemoved(...)
     love.thread.getChannel('FOCUS_ME'):push('PLEASE')
     if home then
