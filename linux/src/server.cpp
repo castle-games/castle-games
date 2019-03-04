@@ -144,7 +144,7 @@ int main(int argc, char **argv) {
   std::string::size_type pos = std::string(argv[0]).find_last_of("\\/");
   sBinaryDirectory = std::string(argv[0]).substr(0, pos) + "/";
 
-  sCastleLogs = new Logs(sBinaryDirectory);
+  sCastleLogs = new Logs();
   sCastleLogs->setPort(sPort);
 
   sLua = new Lua(sBinaryDirectory, sCastleLogs);

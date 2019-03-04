@@ -11,7 +11,7 @@ private:
   void logInternal(std::string str, bool isLua);
 
 public:
-  Logs(std::string rootDirectory);
+  Logs();
   void log(const char *format, ...);
   void logLua(const char *format, ...);
   void log(std::string str);

@@ -643,7 +643,11 @@ export async function multiplayerJoinAsync(mediaUrl, sessionId) {
     result = await API.graphqlAsync(
       /* GraphQL */ `
         mutation($mediaUrl: String!, $sessionId: String) {
-          multiplayerJoin(mediaUrl: $mediaUrl, sessionId: $sessionId)
+          joinMultiplayerSession(mediaUrl: $mediaUrl, sessionId: $sessionId) {
+            sessionId
+            address
+            isNewSession
+          }
         }
       `,
       {
@@ -663,7 +667,7 @@ export async function multiplayerJoinAsync(mediaUrl, sessionId) {
     return false;
   }
 
-  return result.data.multiplayerJoin;
+  return result.data.joinMultiplayerSession;
 }
 
 export async function getAutocompleteAsync(text) {

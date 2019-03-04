@@ -8,10 +8,10 @@
 
 using json = nlohmann::json;
 
-Logs::Logs(std::string rootDirectory) {
+Logs::Logs() {
   // Create a file rotating logger with 5mb size max and 3 rotated files
-  auto rotating_logger = spdlog::rotating_logger_mt("castle_game_server_logger",
-                                                    rootDirectory + "castle.log", 1048576 * 5, 3);
+  auto rotating_logger = spdlog::rotating_logger_mt(
+      "castle_game_server_logger", "/local/game/log/game-server.log", 1048576 * 5, 3);
   spdlog::set_default_logger(rotating_logger);
   spdlog::set_pattern("%v");
 }
@@ -58,6 +58,7 @@ void Logs::logInternal(std::string str, bool isLua) {
   j["url"] = mUrl;
   j["logs"] = str;
   j["is_lua"] = isLua;
+  j["is_castle_game_server"] = true;
 
   std::cout << str << std::endl;
 
