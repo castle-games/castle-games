@@ -4,6 +4,7 @@ import * as Actions from '~/common/actions';
 import * as NativeUtil from '~/native/nativeutil';
 import * as Strings from '~/common/strings';
 import * as Urls from '~/common/urls';
+import * as Utilities from '~/common/utilities';
 import URL from 'url';
 
 function _validateMetadata(metadata, isRegistered) {
@@ -102,6 +103,9 @@ async function resolveGameAtUrlAsync(gameUrl) {
 
       parsedUrl.hash = null;
       game.url = URL.format(parsedUrl);
+      if (Utilities.isWindows()) {
+        game.url = Utilities.fixWindowsFilePath(game.url);
+      }
     } catch (e) {}
   }
 
