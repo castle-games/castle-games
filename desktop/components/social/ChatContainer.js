@@ -37,7 +37,7 @@ const STYLES_HEADER = css`
   flex-shrink: 0;
   display: flex;
   align-items: center;
-  padding: 0 16px 0 16px;
+  padding: 0 8px 0 8px;
 `;
 
 const ROOM_NAME = 'general';
@@ -281,7 +281,7 @@ class ChatContainer extends React.Component {
           return (
             <React.Fragment>
               <div className={STYLES_HEADER}>
-                <strong>Room</strong>&nbsp;╱&nbsp; {ROOM_NAME}
+                <strong>{ROOM_NAME}</strong>
               </div>
               <ChatMessagesList
                 messages={this.state.chatMessages}

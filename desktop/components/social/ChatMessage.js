@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
+import * as Strings from '~/common/strings';
 
 import { css } from 'react-emotion';
 import { SocialContext } from '~/contexts/SocialContext';
@@ -33,10 +34,6 @@ const STYLES_CHAT_ITEM = css`
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-
-  :hover {
-    background: ${HIGHLIGHT_COLOR};
-  }
 
   a {
     font-weight: 600;
@@ -89,6 +86,7 @@ const STYLES_MESSAGE_HEADING_RIGHT = css`
   font-family: ${Constants.font.mono};
   padding: 2px 0 0px 8px;
   font-weight: 400;
+  text-transform: uppercase;
   flex-shrink: 0;
   font-size: 10px;
   text-align: right;
@@ -111,7 +109,7 @@ const STYLES_MESSAGE_MENTION = css`
 
     0% {
       opacity: 0;
-      color: yellow;
+      color: #000;
 
       transform: scale3d(0.3, 0.3, 0.3);
     }
@@ -125,7 +123,6 @@ const STYLES_MESSAGE_MENTION = css`
     }
 
     60% {
-      color: yellow;
       opacity: 1;
       transform: scale3d(1.03, 1.03, 1.03);
     }
@@ -230,11 +227,9 @@ class ChatMessage extends React.Component {
         let yesterday = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
 
         if (this._areDatesSameDay(yesterday, date)) {
-          timeString = `Yesterday at ${timeString}`;
+          timeString = `Yesterday ${timeString}`;
         } else {
-          timeString = `${date.toLocaleString('en-us', {
-            month: 'short',
-          })} ${date.getDate()} at ${timeString}`;
+          timeString = `${Strings.toDate(date)} ${timeString}`;
         }
       }
 

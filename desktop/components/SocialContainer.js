@@ -52,7 +52,7 @@ const STYLES_HEADER = css`
   flex-shrink: 0;
   display: flex;
   align-items: center;
-  padding: 0 16px 0 16px;
+  padding: 0 8px 0 8px;
 `;
 
 class SocialContainer extends React.Component {
