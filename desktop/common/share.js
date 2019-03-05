@@ -24,7 +24,11 @@ class Share {
 
   _connectMultiplayerClientAsync = async (e) => {
     let mediaUrl = e.params.mediaUrl;
-    let response = await Actions.multiplayerJoinAsync(mediaUrl, this._sessionId);
+    let response = await Actions.multiplayerJoinAsync(
+      this._game ? this._game.gameId : null,
+      mediaUrl,
+      this._sessionId
+    );
 
     NativeUtil.sendLuaEvent('CASTLE_CONNECT_MULTIPLAYER_CLIENT_RESPONSE', {
       address: response.address,
