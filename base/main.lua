@@ -129,7 +129,7 @@ end
 
 local debugFont
 if love.graphics then
-    debugFont = love.graphics.newFont(12)
+    debugFont = love.graphics.newFont('assets/fonts/SFMono-Bold.otf', 12)
 end
 
 function main.draw()
@@ -142,16 +142,16 @@ function main.draw()
     do -- Debug overlay
         love.graphics.push('all')
         love.graphics.setFont(debugFont)
-        love.graphics.setColor(0.969, 0.816, 0)
+        love.graphics.setColor(1, 0, 1)
         -- Ongoing network requests on bottom of screen
         local fontH = love.graphics.getFont():getHeight()
-        local yStep = 1.2 * fontH
-        local y = love.graphics.getHeight()
+        local y = love.graphics.getHeight() - 8
         for _, req in ipairs(network.requests) do
-            y = y - yStep
-            local ms = math.floor(1000 * req.time)
-            love.graphics.print(req.url .. '    ' .. req.method .. '     ' .. tostring(ms),
-                yStep - fontH + 4, y)
+            local paddedMethod = req.method .. string.rep(' ', math.max(4 - #req.method, 0))
+            local ms = tostring(math.floor(1000 * req.time))
+            local paddedMs = ms .. string.rep(' ', math.max(4 - #ms, 0))
+            love.graphics.print(paddedMs .. '   ' .. paddedMethod .. '   ' .. req.url, 8, y - fontH)
+            y = y - fontH - 4
         end
         love.graphics.pop('all')
     end
