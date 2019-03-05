@@ -25,7 +25,7 @@ const STYLES_CONTAINER_HEADER = css`
   flex-shrink: 0;
   width: 100%;
   height: 48px;
-  background: #141414;
+  background: ${Constants.colors.backgroundNavigation};
 `;
 
 const STYLES_LOGGED_OUT = css`
@@ -33,15 +33,24 @@ const STYLES_LOGGED_OUT = css`
   height: 100%;
   align-items: center;
   justify-content: flex-start;
-  padding-top: 64px;
   flex-direction: column;
-  margin: 0 16px 0 16px;
 `;
 
 const STYLES_LOGIN_ACTION = css`
   color: ${Constants.colors.brand2};
   text-decoration: underline;
+  font-weight: 600;
   cursor: pointer;
+`;
+
+const STYLES_HEADER = css`
+  height: 48px;
+  width: 100%;
+  background: #2b2828;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 16px 0 16px;
 `;
 
 class SocialContainer extends React.Component {
@@ -53,13 +62,12 @@ class SocialContainer extends React.Component {
     } else {
       contentElement = (
         <div className={STYLES_LOGGED_OUT}>
-          <p>
-            Welcome to Castle!{' '}
+          <div className={STYLES_HEADER}>
             <span className={STYLES_LOGIN_ACTION} onClick={navigateToCurrentUserProfile}>
               Sign in
-            </span>{' '}
-            to chat with other Castlers.
-          </p>
+            </span>
+            &nbsp;to chat
+          </div>
         </div>
       );
     }

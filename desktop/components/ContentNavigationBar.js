@@ -11,7 +11,7 @@ import Viewer from '~/components/Viewer';
 const ENABLE_NOTIF_SCREEN = false; // feature flag notification item
 
 const STYLES_CONTAINER = css`
-  background: #141414;
+  background: ${Constants.colors.backgroundNavigation};
   height: 48px;
   flex-shrink: 0;
   width: 100%;

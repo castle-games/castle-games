@@ -31,6 +31,13 @@ const STYLES_CONNECTING = css`
   width: 100%;
 `;
 
+const STYLES_HEADER = css`
+  height: 48px;
+  width: 100%;
+  background: #181818;
+  flex-shrink: 0;
+`;
+
 const ROOM_NAME = 'general';
 const NOTIFICATIONS_USER_ID = -1;
 const TEST_MESSAGE = null;
@@ -307,11 +314,14 @@ export default class ChatContainerWithContext extends React.Component {
               {(social) => (
                 <NavigatorContext.Consumer>
                   {(navigator) => (
-                    <ChatContainer
-                      currentUserId={currentUserId}
-                      social={social}
-                      navigateToUserProfile={navigator.navigateToUserProfile}
-                    />
+                    <React.Fragment>
+                      <div className={STYLES_HEADER} />
+                      <ChatContainer
+                        currentUserId={currentUserId}
+                        social={social}
+                        navigateToUserProfile={navigator.navigateToUserProfile}
+                      />
+                    </React.Fragment>
                   )}
                 </NavigatorContext.Consumer>
               )}
