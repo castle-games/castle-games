@@ -1,10 +1,12 @@
 import * as React from 'react';
-import { css } from 'react-emotion';
-
-import ChatContainer from '~/components/social/ChatContainer';
 import * as Constants from '~/common/constants';
+
+import { css } from 'react-emotion';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigatorContext } from '~/contexts/NavigationContext';
+
+import ChatContainer from '~/components/social/ChatContainer';
+import Viewer from '~/components/Viewer';
 
 const STYLES_CONTAINER = css`
   font-family: ${Constants.font.default};
@@ -74,7 +76,9 @@ class SocialContainer extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
-        <div className={STYLES_CONTAINER_HEADER} />
+        <div className={STYLES_CONTAINER_HEADER}>
+          <Viewer />
+        </div>
         {contentElement}
       </div>
     );

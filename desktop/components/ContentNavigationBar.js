@@ -6,7 +6,6 @@ import { css } from 'react-emotion';
 import { NavigationContext, NavigatorContext } from '~/contexts/NavigationContext';
 
 import SearchInput from '~/components/SearchInput';
-import Viewer from '~/components/Viewer';
 
 const ENABLE_NOTIF_SCREEN = false; // feature flag notification item
 
@@ -87,7 +86,6 @@ class ContentNavigationBar extends React.Component {
           />
         </div>
         {this._renderTopNavigationItems()}
-        <Viewer />
       </div>
     );
   }

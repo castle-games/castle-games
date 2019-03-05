@@ -26,7 +26,6 @@ const STYLES_CONNECTING = css`
   height: 100%;
   align-items: center;
   justify-content: flex-start;
-  padding: 32px 16px 16px 16px;
   flex-direction: column;
   width: 100%;
 `;
@@ -34,8 +33,11 @@ const STYLES_CONNECTING = css`
 const STYLES_HEADER = css`
   height: 48px;
   width: 100%;
-  background: #181818;
+  background: #2b2828;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 16px 0 16px;
 `;
 
 const ROOM_NAME = 'general';
@@ -270,21 +272,32 @@ class ChatContainer extends React.Component {
         if (this.state.chatMessages.length == 0) {
           // TODO: this is a little buggy in that when the server is restarted there won't be any messages sent back
           // Fix this by actually requesting history every time chat opens
-          return <div className={STYLES_CONNECTING}>Loading messages...</div>;
+          return (
+            <div className={STYLES_CONNECTING}>
+              <div className={STYLES_HEADER}>Loading messages...</div>
+            </div>
+          );
         } else {
           return (
-            <ChatMessagesList
-              messages={this.state.chatMessages}
-              navigateToUserProfile={this.props.navigateToUserProfile}
-            />
+            <React.Fragment>
+              <div className={STYLES_HEADER}>Room: {ROOM_NAME}</div>
+              <ChatMessagesList
+                messages={this.state.chatMessages}
+                navigateToUserProfile={this.props.navigateToUserProfile}
+              />
+            </React.Fragment>
           );
         }
       case ConnectionStatus.CONNECTING:
-        return <div className={STYLES_CONNECTING}>Global chat is connecting...</div>;
+        return (
+          <div className={STYLES_CONNECTING}>
+            <div className={STYLES_HEADER}>Global chat is connecting...</div>
+          </div>
+        );
       case ConnectionStatus.DISCONNECTED:
         return (
           <div className={STYLES_CONNECTING}>
-            <p style={{ marginBottom: 16 }}>Global chat is not connected.</p>
+            <div className={STYLES_HEADER}>Global chat disconnected...</div>
             <UIButton onClick={this._onClickConnect}>Reconnect</UIButton>
           </div>
         );
@@ -314,14 +327,11 @@ export default class ChatContainerWithContext extends React.Component {
               {(social) => (
                 <NavigatorContext.Consumer>
                   {(navigator) => (
-                    <React.Fragment>
-                      <div className={STYLES_HEADER} />
-                      <ChatContainer
-                        currentUserId={currentUserId}
-                        social={social}
-                        navigateToUserProfile={navigator.navigateToUserProfile}
-                      />
-                    </React.Fragment>
+                    <ChatContainer
+                      currentUserId={currentUserId}
+                      social={social}
+                      navigateToUserProfile={navigator.navigateToUserProfile}
+                    />
                   )}
                 </NavigatorContext.Consumer>
               )}
