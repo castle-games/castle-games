@@ -39,14 +39,16 @@ const STYLES_CHAT_ITEM = css`
   }
 
   a {
-    color: #408bfc;
+    font-weight: 600;
+    transition: 200ms ease color;
+    color: ${Constants.colors.brand2};
 
     :hover {
-      color: #0062ff;
+      color: ${Constants.colors.brand3};
     }
 
     :visited {
-      color: #408bfc;
+      color: ${Constants.colors.brand2};
     }
   }
 `;
@@ -84,32 +86,63 @@ const STYLES_MESSAGE_HEADING_LEFT = css`
 
 const STYLES_MESSAGE_HEADING_RIGHT = css`
   color: ${TIMESTAMP_COLOR};
+  font-family: ${Constants.font.mono};
   padding: 2px 0 0px 8px;
   font-weight: 400;
   flex-shrink: 0;
-  font-size: 11px;
+  font-size: 10px;
   text-align: right;
 `;
 
 const STYLES_MESSAGE_MENTION = css`
   cursor: pointer;
+  display: inline-block;
   font-weight: 900;
-  color: ${Constants.colors.brand1};
-
+  color: cyan;
   @keyframes color-change {
+    from,
+    20%,
+    40%,
+    60%,
+    80%,
+    to {
+      animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+
     0% {
-      color: ${Constants.colors.brand4};
+      opacity: 0;
+      color: yellow;
+
+      transform: scale3d(0.3, 0.3, 0.3);
     }
-    50% {
-      color: ${Constants.colors.brand1};
+
+    20% {
+      transform: scale3d(1.1, 1.1, 1.1);
     }
-    100% {
-      color: ${Constants.colors.brand2};
+
+    40% {
+      transform: scale3d(0.9, 0.9, 0.9);
+    }
+
+    60% {
+      color: yellow;
+      opacity: 1;
+      transform: scale3d(1.03, 1.03, 1.03);
+    }
+
+    80% {
+      transform: scale3d(0.97, 0.97, 0.97);
+    }
+
+    to {
+      opacity: 1;
+      color: cyan;
+      transform: scale3d(1, 1, 1);
     }
   }
 
-  animation: color-change 200ms;
-  animation-iteration-count: 30;
+  animation: color-change 750ms;
+  animation-iteration-count: 1;
 `;
 
 const STYLES_MESSAGE_ELEMENT = css`

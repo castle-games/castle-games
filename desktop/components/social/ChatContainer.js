@@ -280,7 +280,9 @@ class ChatContainer extends React.Component {
         } else {
           return (
             <React.Fragment>
-              <div className={STYLES_HEADER}>Room: {ROOM_NAME}</div>
+              <div className={STYLES_HEADER}>
+                <strong>Room</strong>&nbsp;╱&nbsp; {ROOM_NAME}
+              </div>
               <ChatMessagesList
                 messages={this.state.chatMessages}
                 navigateToUserProfile={this.props.navigateToUserProfile}
@@ -298,7 +300,9 @@ class ChatContainer extends React.Component {
         return (
           <div className={STYLES_CONNECTING}>
             <div className={STYLES_HEADER}>Global chat disconnected...</div>
-            <UIButton onClick={this._onClickConnect}>Reconnect</UIButton>
+            <UIButton style={{ marginTop: 48 }} onClick={this._onClickConnect}>
+              Reconnect
+            </UIButton>
           </div>
         );
     }
