@@ -117,7 +117,11 @@ export default class GameActionsBar extends React.Component {
     // TODO: mute etc.
     return (
       <div className={STYLES_CONTAINER}>
-        <DevelopmentLogs logs={this.context.logs} onClearLogs={this.context.setters.clearLogs} />
+        <DevelopmentLogs
+          logs={this.context.logs}
+          onClearLogs={this.context.setters.clearLogs}
+          game={game}
+        />
       </div>
     );
   };

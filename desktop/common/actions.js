@@ -670,6 +670,35 @@ export async function multiplayerJoinAsync(gameId, entryPoint, sessionId) {
   return result.data.joinMultiplayerSession;
 }
 
+export async function gameServerLogsAsync(gameId, entryPoint) {
+  let result;
+  try {
+    result = await API.graphqlAsync(
+      /* GraphQL */ `
+        query($gameId: ID, $entryPoint: String) {
+          gameServerLogs(gameId: $gameId, entryPoint: $entryPoint)
+        }
+      `,
+      {
+        gameId,
+        entryPoint,
+      }
+    );
+  } catch (e) {
+    return false;
+  }
+
+  if (result.error) {
+    return false;
+  }
+
+  if (result.errors) {
+    return false;
+  }
+
+  return result.data.gameServerLogs;
+}
+
 export async function getAutocompleteAsync(text) {
   const result = await API(
     `
