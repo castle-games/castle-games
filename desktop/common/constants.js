@@ -33,7 +33,6 @@ export const colors = {
 export const logs = {
   default: colors.text,
   error: colors.error,
-  remote: `#00a55d`,
   system: brand.fuchsia,
 };
 

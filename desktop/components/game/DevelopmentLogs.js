@@ -1,10 +1,8 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
-import * as Window from '~/common/window';
 
 import { css } from 'react-emotion';
 
-import UIHeaderDismiss from '~/components/reusable/UIHeaderDismiss';
 import UILogItem from '~/components/reusable/UILogItem';
 
 const STYLES_FIXED_CONTAINER = css`
@@ -109,8 +107,6 @@ export default class DevelopmentLogs extends React.Component {
       return Constants.logs.error;
     } else if (log.type === 'system') {
       return Constants.logs.system;
-    } else if (log.type === 'remote') {
-      return Constants.logs.remote;
     }
     return Constants.logs.default;
   };
