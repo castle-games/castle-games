@@ -102,7 +102,7 @@ class ChatContainer extends React.Component {
     }
 
     this._castleChat = new CastleChat();
-    this._castleChat.init('http://chat.castle.games:5280/http-bind/', userId, token, [ROOM_NAME]);
+    this._castleChat.init('https://chat.castle.games:5285/http-bind/', userId, token, [ROOM_NAME]);
     this._castleChat.setOnMessagesHandler(this._handleMessagesAsync);
     this._castleChat.setOnPresenceHandler(this._handlePresenceAsync);
     this._castleChat.setConnectionStatusHandler((status) => {
