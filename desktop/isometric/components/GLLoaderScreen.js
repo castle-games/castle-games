@@ -10,10 +10,10 @@ const STYLES_LOADER_SCREEN = css``;
 const STYLES_CASTLE_TEXT = css`
   font-family: ${Constants.font.game};
   color: ${Constants.colors.white};
-  font-size: 24px;
+  font-size: 32px;
   letter-spacing: 0.1px;
   text-align: center;
-  padding-bottom: 48px;
+  padding-bottom: 56px;
 `;
 
 export default class GLLoaderScreen extends React.Component {

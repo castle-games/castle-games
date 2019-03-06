@@ -1,9 +1,9 @@
 import * as THREE from 'three';
 import * as Constants from '~/isometric/common/constants';
 
-const SIDE_COLOR_1 = `#ffffff`;
-const SIDE_COLOR_2 = `#c1bcbb`;
-const SIDE_COLOR_3 = `#8f8b8b`;
+const SIDE_COLOR_3 = Constants.colors.brand2;
+const SIDE_COLOR_1 = Constants.colors.brand1;
+const SIDE_COLOR_2 = Constants.colors.brand3;
 
 export default ({ node, textures }) => {
   const multiMaterial = [
@@ -11,43 +11,36 @@ export default ({ node, textures }) => {
     new THREE.MeshLambertMaterial({
       color: SIDE_COLOR_2,
       flatShading: true,
-      wireframe: true,
     }),
     // north east
     new THREE.MeshLambertMaterial({
       color: SIDE_COLOR_1,
       flatShading: true,
-      wireframe: true,
     }),
     // top
     new THREE.MeshLambertMaterial({
       color: SIDE_COLOR_3,
       flatShading: true,
-      wireframe: true,
     }),
     // ??
     new THREE.MeshLambertMaterial({
       color: SIDE_COLOR_3,
       flatShading: true,
-      wireframe: true,
     }),
     // side
     new THREE.MeshLambertMaterial({
       color: SIDE_COLOR_1,
       flatShading: true,
-      wireframe: true,
     }),
     // side
     new THREE.MeshLambertMaterial({
       color: SIDE_COLOR_2,
       flatShading: true,
-      wireframe: true,
     }),
     // ??
     new THREE.MeshLambertMaterial({
       color: SIDE_COLOR_3,
       flatShading: true,
-      wireframe: true,
     }),
   ];
 

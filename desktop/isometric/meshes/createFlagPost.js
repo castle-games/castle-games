@@ -4,10 +4,9 @@ import { cubeSize } from '~/isometric/common/constants';
 export default ({ node, textures }) => {
   const material = new THREE.MeshLambertMaterial({
     color: '#222',
-    opacity: 0.9,
     flatShading: true,
   });
-  const geometry = new THREE.BoxGeometry(4, 30, 4);
+  const geometry = new THREE.BoxGeometry(4, 60, 4);
 
   geometry.computeVertexNormals();
 

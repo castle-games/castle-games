@@ -7,8 +7,8 @@ import GLRenderer from '~/isometric/components/GLRenderer';
 const Logo = {
   id: 1,
   world: [
-    [['D', 'D', 'D'], ['D', '', 'D'], ['D', 'D', 'D']],
-    [['G', '', 'G'], ['', '', ''], ['G', '', 'G']],
+    [['', '', 'D'], ['', '', 'D'], ['D', 'D', 'D']],
+    [['', '', 'G'], ['', '', ''], ['G', '', 'G']],
     [['', '', ''], ['', '', ''], ['', '', 'F']],
     [['', '', ''], ['', '', ''], ['', '', 'S']],
   ],
@@ -22,7 +22,7 @@ const getSceneById = async (sceneId) => {
 
 export default class GLCastle extends React.Component {
   static defaultProps = {
-    size: 164,
+    size: 276,
   };
 
   state = {

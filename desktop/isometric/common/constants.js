@@ -1,4 +1,4 @@
-export const cubeSize = 15;
+export const cubeSize = 30;
 export const maxLoopLimit = 4000;
 export const maxJSValue = 9999999;
 export const directionChoices = ['NE', 'SE', 'SW', 'NW'];
