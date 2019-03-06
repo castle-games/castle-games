@@ -7,6 +7,7 @@ export const injectGlobalLoaderStyles = () => injectGlobal`
   #loader {
     background: ${Constants.colors.black};
     position: absolute;
+    height: 100vh;
     z-index: 100;
     display: flex;
     align-items: center;
@@ -16,11 +17,12 @@ export const injectGlobalLoaderStyles = () => injectGlobal`
     right: 0;
     bottom: 0;
     opacity: 1;
-    transition: 200ms ease all;
+    transition: 1000ms ease all;
   }
 
   #loader.loader--finished {
     opacity: 0;
+    transform: translateY(-256px);
     pointer-events: none;
   }
 

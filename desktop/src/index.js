@@ -6,16 +6,20 @@ import * as Network from '~/common/network';
 import * as Actions from '~/common/actions';
 
 import App from './App';
+import GLLoaderScreen from '~/isometric/components/GLLoaderScreen';
 
 import Storage from '~/common/storage';
-
-import { LOADER_STRING, injectGlobalLoaderStyles } from '~/components/primitives/loader';
 import { injectGlobal } from 'react-emotion';
+import { injectGlobalLoaderStyles } from '~/components/primitives/loader';
 
 const injectGlobalStyles = () => injectGlobal`
   @font-face {
     font-family: 'game-heading';
     src: url('static/Font-Logo-RTAliasBold.woff');
+  }
+  @font-face {
+    font-family: 'logo-heading';
+    src: url('static/Font-Logo2-RTAliasMedium.woff');
   }
   @font-face {
     font-family: 'sf-heading';
@@ -65,7 +69,7 @@ const injectGlobalScrollOverflowPreventionStyles = () => injectGlobal`
   html {
     overflow: hidden;
   }
-  
+
   body {
     overflow: auto;
     -webkit-overflow-scrolling: touch;
@@ -75,7 +79,6 @@ const injectGlobalScrollOverflowPreventionStyles = () => injectGlobal`
 const storage = new Storage('castle');
 
 const loader = document.createElement('div');
-loader.innerHTML = LOADER_STRING.trim();
 loader.id = 'loader';
 
 document.body.appendChild(loader);
@@ -90,11 +93,10 @@ const INITIAL_STATE_OFFLINE = {
 };
 
 const run = async () => {
+  ReactDOM.render(<GLLoaderScreen />, document.getElementById('loader'));
   const { allContent, featuredGames, viewer, isOffline } = await Network.getProductData();
 
-  await Actions.delay(300);
-
-  document.getElementById('loader').classList.add('loader--finished');
+  await Actions.delay(2000);
 
   let state = Object.assign({}, INITIAL_STATE_OFFLINE, {
     allContent,
@@ -105,14 +107,18 @@ const run = async () => {
   state.currentUser = { user: viewer };
   state.navigation = { contentMode: isOffline ? 'game' : 'home' };
 
-  ReactDOM.render(<App state={state} storage={storage} />, document.getElementById('root'));
+  document.getElementById('loader').classList.add('loader--finished');
 
-  await Actions.delay(300);
+  await Actions.delay(800);
+
+  ReactDOM.unmountComponentAtNode(document.getElementById('loader'));
+
+  ReactDOM.render(<App state={state} storage={storage} />, document.getElementById('root'));
 
   document.getElementById('loader').outerHTML = '';
 };
 
 injectGlobalStyles();
-injectGlobalLoaderStyles();
 injectGlobalScrollOverflowPreventionStyles();
+injectGlobalLoaderStyles();
 run();
