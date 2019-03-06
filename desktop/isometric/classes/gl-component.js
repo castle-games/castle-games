@@ -106,15 +106,15 @@ export default class GLComponent {
     this.state.scene.add(shadowLight);
     */
 
+    /*
     const hemisphereLight = new THREE.HemisphereLight(0xffffff, 0x888888, 0.9);
 
     this.state.scene.add(hemisphereLight);
+    */
 
-    /*
-    const ambientLight = new THREE.AmbientLight(0x888888, 0.7);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
 
     this.state.scene.add(ambientLight);
-    */
   }
 
   firstRender() {
