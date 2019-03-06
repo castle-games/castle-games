@@ -6,7 +6,7 @@ const STYLES_MESSAGES_CONTAINER = css`
   width: 100%;
   height: 100%;
   min-height: 25%;
-  padding: 8px 0 8px 0;
+  padding: 8px 0 0 0;
   overflow-y: scroll;
 
   ::-webkit-scrollbar {
