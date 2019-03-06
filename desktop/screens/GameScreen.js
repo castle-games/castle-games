@@ -8,8 +8,6 @@ import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import Logs from '~/common/logs';
 import { NavigationContext, NavigatorContext } from '~/contexts/NavigationContext';
 import * as NativeUtil from '~/native/nativeutil';
-import Share from '~/common/share';
-import UserStatus from '~/common/userstatus';
 import * as Utilities from '~/common/utilities';
 
 const STYLES_CONTAINER = css`
@@ -65,18 +63,11 @@ class GameScreen extends React.Component {
   _closeGame = async () => {
     // close window
     await GameWindow.close();
-    UserStatus.stop();
-    Share.removeEventListeners();
   };
 
   _openGame = async (url) => {
     Logs.system(`Loading game entry point: ${url}`);
-    amplitude.getInstance().logEvent('OPEN_LUA', {
-      url,
-    });
-    Share.addEventListeners(this.props.game);
-    UserStatus.startAsync(this.props.game);
-    await GameWindow.open(url);
+    await GameWindow.open(url, this.props.game);
 
     // Sync state for new Ghost instance
     NativeUtil.sendLuaEvent('CASTLE_SET_LOGGED_IN', this.props.isLoggedIn);

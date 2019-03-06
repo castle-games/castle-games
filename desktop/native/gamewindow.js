@@ -1,12 +1,19 @@
 import { NativeBinds } from '~/native/nativebinds';
+import UserStatus from '~/common/userstatus';
+import Share from '~/common/share';
 
 class GameWindow {
   _isOpen = false;
 
-  open = async (mediaUrl) => {
+  open = async (gameUrl, game) => {
     if (this._isOpen) return;
     this._isOpen = true;
-    await NativeBinds.openUri({ uri: mediaUrl });
+    amplitude.getInstance().logEvent('OPEN_LUA', {
+      gameUrl,
+    });
+    Share.addEventListeners(game);
+    UserStatus.startAsync(game);
+    await NativeBinds.openUri({ uri: gameUrl });
   };
 
   setVisible = async (isVisible) => {
@@ -26,6 +33,8 @@ class GameWindow {
 
   close = async () => {
     if (this._isOpen) {
+      UserStatus.stop();
+      Share.removeEventListeners();
       await NativeBinds.close();
       this._isOpen = false;
     }
