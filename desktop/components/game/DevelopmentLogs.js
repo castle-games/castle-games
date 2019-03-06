@@ -91,6 +91,7 @@ const STYLES_ACTION = css`
   text-transform: uppercase;
   text-decoration: underline;
   margin-bottom: 8px;
+  word-spacing: -0.2em;
 `;
 
 const LogMode = {
@@ -221,7 +222,7 @@ export default class DevelopmentLogs extends React.Component {
       case LogMode.LOCAL:
         return (
           <div className={STYLES_ACTION} onClick={this.props.onClearLogs}>
-            Clear
+            Clear Logs
           </div>
         );
       case LogMode.REMOTE:
@@ -235,8 +236,7 @@ export default class DevelopmentLogs extends React.Component {
 
   _renderLogModeSelector = () => {
     const { logMode } = this.state;
-    if (true) {
-      // TODO: isMultiplayer
+    if (this.props.game.metadata && !!this.props.game.metadata.multiplayer) {
       return (
         <div className={STYLES_MODE_SELECTOR}>
           <div
