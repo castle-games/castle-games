@@ -3,6 +3,7 @@ import * as React from 'react';
 import * as Actions from '~/common/actions';
 import * as Browser from '~/common/browser';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
+import GameWindow from '~/native/gamewindow';
 import Logs from '~/common/logs';
 import { SocialContext } from '~/contexts/SocialContext';
 import * as Strings from '~/common/strings';
@@ -40,6 +41,7 @@ const NavigatorContextDefaults = {
   navigateToUserProfile: async (user) => {},
   navigateToNotifications: () => {},
   reloadGame: (onlyIfVisible) => {},
+  clearCurrentGame: async () => {},
 };
 
 const NavigatorContext = React.createContext(NavigatorContextDefaults);
@@ -66,6 +68,7 @@ class NavigationContextManager extends React.Component {
         navigateToUserProfile: this.navigateToUserProfile,
         navigateToNotifications: this.navigateToNotifications,
         reloadGame: this.reloadGame,
+        clearCurrentGame: this.clearCurrentGame,
       },
     };
   }
@@ -213,6 +216,25 @@ class NavigationContextManager extends React.Component {
       this.navigateToGameUrl(this.state.navigation.game.url);
       this._reloadDebounceTimeout = null;
     }, 50);
+  };
+
+  clearCurrentGame = async () => {
+    await GameWindow.close();
+    this.setState((state) => {
+      const time = Date.now();
+      const newContentMode = state.contentMode === 'game' ? 'home' : state.contentMode;
+      return {
+        ...state,
+        navigation: {
+          ...this.state.navigation,
+          contentMode: newContentMode,
+          game: NavigationContextDefaults.game,
+          gameUrl: NavigationContextDefaults.gameUrl,
+          timeGameLoaded: time,
+          timeLastNavigated: time,
+        },
+      };
+    });
   };
 
   render() {
