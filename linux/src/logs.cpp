@@ -14,6 +14,7 @@ Logs::Logs() {
       "castle_game_server_logger", "/local/game/log/game-server.log", 1048576 * 5, 3);
   spdlog::set_default_logger(rotating_logger);
   spdlog::set_pattern("%v");
+  spdlog::flush_every(std::chrono::seconds(1));
 }
 
 void Logs::setUrl(std::string url) { mUrl = url; }
