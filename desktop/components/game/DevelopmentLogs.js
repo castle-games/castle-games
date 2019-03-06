@@ -10,9 +10,17 @@ const STYLES_FIXED_CONTAINER = css`
   position: relative;
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
 `;
 
-const STYLES_CONTAINER = css`
+const STYLES_LOGS_CONTAINER = css`
+  display: flex;
+  width: 100%;
+  height: 100%;
+`;
+
+const STYLES_SCROLLING_LOGS = css`
   width: 100%;
   height: 100%;
   overflow-y: scroll;
@@ -26,7 +34,7 @@ const STYLES_CONTAINER = css`
 `;
 
 const STYLES_LOGS = css`
-  padding: 16px 16px 16px 16px;
+  padding: 0 16px 0 16px;
 `;
 
 const STYLES_LOG = css`
@@ -51,46 +59,38 @@ const STYLES_LOG_RIGHT = css`
   overflow-wrap: break-word;
 `;
 
-const STYLES_FIXED_HEADER = css`
-  background: ${Constants.colors.white};
-  opacity: 0.8;
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
+const STYLES_MODE_SELECTOR = css`
+  background: ${Constants.colors.backgroundNavigation};
+  height: 32px;
+  flex-shrink: 0;
+`;
+
+const STYLES_SELECTOR_ITEM = css`
+  margin: 8px 16px 0 16px;
+  color: ${Constants.colors.white};
+  font-size: ${Constants.typescale.lvl6};
+  cursor: pointer;
+  display: inline-flex;
+  white-space: nowrap;
 `;
 
 const STYLES_SPACER = css`
+  height: 8px;
+`;
+
+const STYLES_BOTTOM_ACTIONS = css`
   height: 24px;
+  padding-left: 16px;
 `;
 
-const STYLES_CONTROL = css`
-  margin: 16px 16px 0 16px;
-  letter-spacing: 0.2px;
-  color: ${Constants.colors.action};
-  font-family: ${Constants.font.mono};
-  font-size: ${Constants.typescale.lvl7};
-  text-transform: uppercase;
+const STYLES_ACTION = css`
   cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  white-space: nowrap;
-`;
-
-const STYLES_CONTROL_SELECTED = css`
-  margin: 16px 16px 0 16px;
-  letter-spacing: 0.2px;
-  color: ${Constants.colors.action};
   font-family: ${Constants.font.mono};
+  color: ${Constants.colors.action};
   font-size: ${Constants.typescale.lvl7};
-  font-weight: 900;
-  color: black;
   text-transform: uppercase;
   text-decoration: underline;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  white-space: nowrap;
+  margin-bottom: 8px;
 `;
 
 const LogMode = {
@@ -100,7 +100,7 @@ const LogMode = {
 
 export default class DevelopmentLogs extends React.Component {
   _logs;
-  _container;
+  _scrollView;
 
   state = {
     logMode: LogMode.LOCAL,
@@ -109,7 +109,7 @@ export default class DevelopmentLogs extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const isBottom =
-      this._container.scrollHeight - this._container.scrollTop === this._container.clientHeight;
+      this._scrollView.scrollHeight - this._scrollView.scrollTop === this._scrollView.clientHeight;
     const newItems = nextProps.logs.length > this.props.logs.length;
 
     // NOTE(jim): Only scroll if you're at the bottom with new items.
@@ -216,37 +216,56 @@ export default class DevelopmentLogs extends React.Component {
     ];
   };
 
+  _renderBottomActions = () => {
+    switch (this.state.logMode) {
+      case LogMode.LOCAL:
+        return (
+          <div className={STYLES_ACTION} onClick={this.props.onClearLogs}>
+            Clear
+          </div>
+        );
+      case LogMode.REMOTE:
+        return (
+          <div className={STYLES_ACTION} onClick={this._fetchRemoteLogsAsync}>
+            Reload
+          </div>
+        );
+    }
+  };
+
+  _renderLogModeSelector = () => {
+    const { logMode } = this.state;
+    if (true) {
+      // TODO: isMultiplayer
+      return (
+        <div className={STYLES_MODE_SELECTOR}>
+          <div
+            className={STYLES_SELECTOR_ITEM}
+            style={logMode == LogMode.LOCAL ? { textDecoration: 'underline' } : null}
+            onClick={this._onSelectLocal}>
+            Local logs
+          </div>
+          <div
+            className={STYLES_SELECTOR_ITEM}
+            style={logMode == LogMode.REMOTE ? { textDecoration: 'underline' } : null}
+            onClick={this._onSelectRemote}>
+            Server logs
+          </div>
+        </div>
+      );
+    }
+  };
+
   render() {
     let { logMode } = this.state;
 
     return (
       <div className={STYLES_FIXED_CONTAINER}>
-        <div className={STYLES_FIXED_HEADER}>
-          <div
-            className={logMode == LogMode.LOCAL ? STYLES_CONTROL_SELECTED : STYLES_CONTROL}
-            onClick={this._onSelectLocal}>
-            Local logs
-          </div>
-          <div
-            className={logMode == LogMode.REMOTE ? STYLES_CONTROL_SELECTED : STYLES_CONTROL}
-            onClick={this._onSelectRemote}>
-            Game server logs
-          </div>
-          {logMode == LogMode.LOCAL && (
-            <div className={STYLES_CONTROL} onClick={this.props.onClearLogs}>
-              Clear local logs
-            </div>
-          )}
-          {logMode == LogMode.REMOTE && (
-            <div className={STYLES_CONTROL} onClick={this._fetchRemoteLogsAsync}>
-              Reload server logs
-            </div>
-          )}
-        </div>
+        {this._renderLogModeSelector()}
         <div
-          className={STYLES_CONTAINER}
+          className={STYLES_SCROLLING_LOGS}
           ref={(c) => {
-            this._container = c;
+            this._scrollView = c;
           }}>
           <div className={STYLES_SPACER} />
           <div className={STYLES_LOGS}>
@@ -259,6 +278,7 @@ export default class DevelopmentLogs extends React.Component {
             }}
           />
         </div>
+        <div className={STYLES_BOTTOM_ACTIONS}>{this._renderBottomActions()}</div>
       </div>
     );
   }

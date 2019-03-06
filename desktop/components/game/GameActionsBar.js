@@ -10,7 +10,7 @@ import * as Strings from '~/common/strings';
 
 const STYLES_CONTAINER = css`
   background: ${Constants.colors.background};
-  height: 144px;
+  height: 172px;
   min-height: 96px;
   width: 100%;
   display: flex;
