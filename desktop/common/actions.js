@@ -34,6 +34,7 @@ const FULL_USER_FIELDS = `
     userStatusId
     status
     isRecent
+    lastPing
     game {
       gameId
       name

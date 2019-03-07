@@ -37,6 +37,68 @@ class UserStatus {
       USERSTATUS_PING_INTERVAL_SEC * 1000
     );
   };
+
+  _isDateRecentEnough = (dateStr) => {
+    if (dateStr) {
+      let secondsElapsed = 0;
+      try {
+        const date = new Date(dateStr);
+        const recentTime = Math.floor(date.getTime() / 1000);
+        const currentTime = Math.floor(Date.now() / 1000);
+        secondsElapsed = currentTime - recentTime;
+      } catch (_) {
+        return false;
+      }
+      return secondsElapsed < 60 * 60 * 24;
+    }
+    return false;
+  };
+
+  _recentDateToString = (dateStr) => {
+    let secondsElapsed = 0;
+    try {
+      const date = new Date(dateStr);
+      const recentTime = Math.floor(date.getTime() / 1000);
+      const currentTime = Math.floor(Date.now() / 1000);
+      secondsElapsed = currentTime - recentTime;
+    } catch (_) {}
+    if (!secondsElapsed) {
+      return '';
+    } else if (secondsElapsed < 60 * 2) {
+      return 'just now';
+    } else if (secondsElapsed < 60 * 15) {
+      return `${Math.floor(secondsElapsed / 60)} minutes ago`;
+    } else if (secondsElapsed < 60 * 60) {
+      return 'less than an hour ago';
+    } else if (secondsElapsed < 60 * 60 * 2) {
+      return 'an hour ago';
+    } else if (secondsElapsed < 60 * 60 * 6) {
+      return `${Math.floor(secondsElapsed / 60 / 60)} hours ago`;
+    } else if (secondsElapsed < 60 * 60 * 24) {
+      return `in the last day`;
+    } else if (secondsElapsed < 60 * 60 * 24 * 2) {
+      return `a day ago`;
+    } else if (secondsElapsed < 60 * 60 * 24 * 7) {
+      return `${Math.floor(secondsElapsed / 60 / 60 / 24)} days ago`;
+    }
+    return 'over a week ago';
+  };
+
+  renderStatusText = (userStatus) => {
+    const { status, isRecent, lastPing, game } = userStatus;
+    const gameName = game ? game.name : 'an untitled game';
+    if (gameName.length > 24) {
+      gameName = `${gameName.substring(0, 21)}...`;
+    }
+    if (isRecent) {
+      const verb = status === 'make' ? 'Making' : 'Playing';
+      return `${verb} ${gameName}`;
+    } else if (this._isDateRecentEnough(userStatus.lastPing)) {
+      const verb = status === 'make' ? 'Last made' : 'Last played';
+      return `${verb}: ${gameName}`;
+    }
+    return null;
+  };
 }
 
 export default new UserStatus();

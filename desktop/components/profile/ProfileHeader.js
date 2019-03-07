@@ -6,6 +6,7 @@ import * as Urls from '~/common/urls';
 
 import { css } from 'react-emotion';
 import ContentEditor from '~/editor/ContentEditor';
+import UserStatus from '~/common/userstatus';
 
 import UIAvatar from '~/components/reusable/UIAvatar';
 import UIHeading from '~/components/reusable/UIHeading';
@@ -100,18 +101,21 @@ export default class ProfileHeader extends React.Component {
   _renderOnlineStatus = (creator) => {
     return (
       <div className={STYLES_STATUS}>
-        <UIUserStatusIndicator user={creator} onMediaSelect={this.props.onMediaSelect} />
+        <UIUserStatusIndicator user={creator} />
       </div>
     );
   };
 
   _renderTagline = (creator) => {
     let name = creator.username;
-    let origin = `Joined on ${Strings.toDate(creator.createdTime)}`;
+    let tagline = UserStatus.renderStatusText(creator.lastUserStatus);
+    if (!tagline) {
+      tagline = `Joined on ${Strings.toDate(creator.createdTime)}`;
+    }
 
     let components = [];
     if (name) components.push(name);
-    if (origin) components.push(origin);
+    if (tagline) components.push(tagline);
     return components.join(' // ');
   };
 
