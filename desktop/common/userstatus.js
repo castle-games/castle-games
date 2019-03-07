@@ -87,7 +87,7 @@ class UserStatus {
   renderStatusText = (userStatus) => {
     const { status, isRecent, lastPing, game } = userStatus;
     const gameName = game ? game.name : 'an untitled game';
-    if (gameName.length > 24) {
+    if (gameName && gameName.length > 24) {
       gameName = `${gameName.substring(0, 21)}...`;
     }
     if (isRecent) {
