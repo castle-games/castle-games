@@ -103,12 +103,12 @@ export default class ProfileSettings extends React.Component {
       <div className={STYLES_CONTAINER}>
         <h2 className={STYLES_HEADER}>Your notifications</h2>
 
-        <p className={STYLES_PARAGRAPH}>Configure when you want to notified.</p>
+        <p className={STYLES_PARAGRAPH}>Configure when you want to be notified.</p>
 
         <h3 className={STYLES_SECTION_TITLE}>E-mail notifications</h3>
 
         <Row
-          secondCol={<span>Everytime</span>}
+          secondCol={<span>Every Time</span>}
           thirdCol={<span>Daily</span>}
           firstCol={<span>Never</span>}
         />
@@ -160,7 +160,7 @@ export default class ProfileSettings extends React.Component {
 
         <h3 className={STYLES_SECTION_TITLE}>Desktop notifications</h3>
 
-        <Row secondCol={<span>Everytime</span>} firstCol={<span>Never</span>} />
+        <Row secondCol={<span>Every Time</span>} firstCol={<span>Never</span>} />
 
         {notifications.desktop.map((option) => {
           return (
