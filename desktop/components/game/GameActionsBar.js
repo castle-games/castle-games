@@ -1,7 +1,10 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
+import * as NativeUtil from '~/native/nativeutil';
 import * as SVG from '~/components/primitives/svg';
 import * as Strings from '~/common/strings';
+import * as Urls from '~/common/urls';
+import * as Utilities from '~/common/utilities';
 
 import { NativeBinds } from '~/native/nativebinds';
 import { css } from 'react-emotion';
@@ -133,6 +136,10 @@ export default class GameActionsBar extends React.Component {
     );
   };
 
+  _handleViewSource = (gameEntryPoint) => {
+    NativeUtil.openExternalURL(Urls.githubUserContentToRepoUrl(gameEntryPoint));
+  };
+
   _renderPlaying = (game, muteElement) => {
     let color;
     let backgroundColor;
@@ -167,20 +174,37 @@ export default class GameActionsBar extends React.Component {
       }
       publishedInfo = (
         <React.Fragment>
-          {username}&nbsp;╱&nbsp;{updated}
+          {username}
+          &nbsp;╱&nbsp;
+          {updated}
         </React.Fragment>
+      );
+    }
+
+    let maybeViewSource;
+    const entryPoint = Utilities.getLuaEntryPoint(game);
+    if (Urls.isOpenSource(entryPoint)) {
+      maybeViewSource = (
+        <UINavigationLink
+          style={{ marginRight: 24 }}
+          onClick={() => this._handleViewSource(entryPoint)}>
+          View Source
+        </UINavigationLink>
       );
     }
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_GAME_STRIP} style={{ backgroundColor }}>
           <div className={STYLES_GAME_STRIP_LEFT}>
-            {title}&nbsp;╱&nbsp;{publishedInfo}
+            {title}
+            &nbsp;╱&nbsp;
+            {publishedInfo}
           </div>
           <div className={STYLES_GAME_STRIP_RIGHT}>
             <UINavigationLink style={{ marginRight: 24 }} onClick={this._handleDescriptionToggle}>
               {this.state.isDescriptionVisible ? `Hide description` : `Show description`}
             </UINavigationLink>
+            {maybeViewSource}
             <UINavigationLink style={{ marginRight: 20 }} onClick={this.props.closeGame}>
               Close game
             </UINavigationLink>
