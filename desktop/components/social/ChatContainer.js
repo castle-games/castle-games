@@ -9,9 +9,11 @@ import { CastleChat, ConnectionStatus } from 'castle-chat-lib';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { SocialContext } from '~/contexts/SocialContext';
 import { NavigatorContext } from '~/contexts/NavigationContext';
+
 import ChatInput from '~/components/social/ChatInput';
 import ChatMessagesList from '~/components/social/ChatMessagesList';
 import UIButton from '~/components/reusable/UIButton';
+import UIHeaderBlock from '~/components/reusable/UIHeaderBlock';
 
 const STYLES_CONTAINER = css`
   display: flex;
@@ -28,16 +30,6 @@ const STYLES_CONNECTING = css`
   justify-content: flex-start;
   flex-direction: column;
   width: 100%;
-`;
-
-const STYLES_HEADER = css`
-  height: 32px;
-  width: 100%;
-  background: #2b2828;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  padding: 0 8px 0 8px;
 `;
 
 const STYLES_NOTIFICATIONS = css`
@@ -280,15 +272,15 @@ class ChatContainer extends React.Component {
           // Fix this by actually requesting history every time chat opens
           return (
             <div className={STYLES_CONNECTING}>
-              <div className={STYLES_HEADER}>Loading messages...</div>
+              <UIHeaderBlock>Loading messages...</UIHeaderBlock>
             </div>
           );
         } else {
           return (
             <React.Fragment>
-              <div className={STYLES_HEADER}>
+              <UIHeaderBlock>
                 <strong>{ROOM_NAME}</strong>
-              </div>
+              </UIHeaderBlock>
               <ChatMessagesList
                 messages={this.state.chatMessages}
                 navigateToUserProfile={this.props.navigateToUserProfile}
@@ -299,13 +291,13 @@ class ChatContainer extends React.Component {
       case ConnectionStatus.CONNECTING:
         return (
           <div className={STYLES_CONNECTING}>
-            <div className={STYLES_HEADER}>Global chat is connecting...</div>
+            <UIHeaderBlock>Global chat is connecting...</UIHeaderBlock>
           </div>
         );
       case ConnectionStatus.DISCONNECTED:
         return (
           <div className={STYLES_CONNECTING}>
-            <div className={STYLES_HEADER}>Global chat disconnected...</div>
+            <UIHeaderBlock>Global chat disconnected...</UIHeaderBlock>
             <UIButton style={{ marginTop: 48 }} onClick={this._onClickConnect}>
               Reconnect
             </UIButton>

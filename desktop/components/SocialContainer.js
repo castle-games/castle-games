@@ -8,6 +8,7 @@ import { NavigatorContext } from '~/contexts/NavigationContext';
 import ChatContainer from '~/components/social/ChatContainer';
 import Viewer from '~/components/Viewer';
 import UINavigationLink from '~/components/reusable/UINavigationLink';
+import UIHeaderBlock from '~/components/reusable/UIHeaderBlock';
 
 const STYLES_CONTAINER = css`
   font-family: ${Constants.font.default};
@@ -49,16 +50,6 @@ const STYLES_LOGIN_ACTION = css`
   cursor: pointer;
 `;
 
-const STYLES_HEADER = css`
-  height: 32px;
-  width: 100%;
-  background: #2b2828;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  padding: 0 8px 0 8px;
-`;
-
 class SocialContainer extends React.Component {
   state = {
     showNotifications: false,
@@ -76,12 +67,12 @@ class SocialContainer extends React.Component {
     } else {
       contentElement = (
         <div className={STYLES_LOGGED_OUT}>
-          <div className={STYLES_HEADER}>
+          <UIHeaderBlock>
             <span className={STYLES_LOGIN_ACTION} onClick={navigateToCurrentUserProfile}>
               Sign in
             </span>
             &nbsp;to chat
-          </div>
+          </UIHeaderBlock>
         </div>
       );
     }

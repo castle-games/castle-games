@@ -27,6 +27,7 @@ const STYLES_RELATIVE_CONTAINER = css`
 const STYLES_CONTAINER = css`
   width: 100%;
   background: ${CHAT_INPUT_BACKGROUND};
+  border-top: 1px solid #726e6e;
 `;
 
 const STYLES_INPUT = css`
