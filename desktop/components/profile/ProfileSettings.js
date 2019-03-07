@@ -103,16 +103,16 @@ export default class ProfileSettings extends React.Component {
         <h3 className={STYLES_SECTION_TITLE}>E-mail notifications</h3>
 
         <Row
-          firstCol={<span>Every</span>}
-          secondCol={<span>Daily</span>}
-          thirdCol={<span>Never</span>}
+          secondCol={<span>Every</span>}
+          thirdCol={<span>Daily</span>}
+          firstCol={<span>Never</span>}
         />
 
         {notifications.email.map((option) => {
           return (
             <Row
               key={`email-${option.type}`}
-              firstCol={
+              secondCol={
                 <UICheckbox
                   onClick={() =>
                     this._handleSaveNotificationChange({
@@ -124,7 +124,7 @@ export default class ProfileSettings extends React.Component {
                   value={option.frequency === 'every'}
                 />
               }
-              secondCol={
+              thirdCol={
                 <UICheckbox
                   onClick={() =>
                     this._handleSaveNotificationChange({
@@ -136,7 +136,7 @@ export default class ProfileSettings extends React.Component {
                   value={option.frequency === 'daily'}
                 />
               }
-              thirdCol={
+              firstCol={
                 <UICheckbox
                   onClick={() =>
                     this._handleSaveNotificationChange({
@@ -155,13 +155,13 @@ export default class ProfileSettings extends React.Component {
 
         <h3 className={STYLES_SECTION_TITLE}>Desktop notifications</h3>
 
-        <Row firstCol={<span>Every</span>} thirdCol={<span>Never</span>} />
+        <Row secondCol={<span>Every</span>} firstCol={<span>Never</span>} />
 
         {notifications.desktop.map((option) => {
           return (
             <Row
               key={`desktop-${option.type}`}
-              firstCol={
+              secondCol={
                 <UICheckbox
                   onClick={() =>
                     this._handleSaveNotificationChange({
@@ -173,7 +173,7 @@ export default class ProfileSettings extends React.Component {
                   value={option.frequency === 'every'}
                 />
               }
-              thirdCol={
+              firstCol={
                 <UICheckbox
                   onClick={() =>
                     this._handleSaveNotificationChange({
