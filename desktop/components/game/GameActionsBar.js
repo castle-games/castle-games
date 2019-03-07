@@ -1,17 +1,67 @@
 import * as React from 'react';
-import { css } from 'react-emotion';
-
 import * as Constants from '~/common/constants';
-import { DevelopmentContext } from '~/contexts/DevelopmentContext';
-import DevelopmentLogs from '~/components/game/DevelopmentLogs';
-import UIButtonDarkSmall from '~/components/reusable/UIButtonDarkSmall';
 import * as SVG from '~/components/primitives/svg';
 import * as Strings from '~/common/strings';
 
+import { NativeBinds } from '~/native/nativebinds';
+import { css } from 'react-emotion';
+import { DevelopmentContext } from '~/contexts/DevelopmentContext';
+
+import DevelopmentLogs from '~/components/game/DevelopmentLogs';
+import UIButtonDarkSmall from '~/components/reusable/UIButtonDarkSmall';
+import UINavigationLink from '~/components/reusable/UINavigationLink';
+
+const STYLES_BUTTON = css`
+  height: 32px;
+  width: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  svg {
+    transform: scale(1);
+    transition: 200ms ease transform;
+
+    :hover {
+      transform: scale(1.1);
+    }
+  }
+`;
+
+const STYLES_GAME_STRIP = css`
+  height: 32px;
+  width: 100%;
+  background-color: #272727;
+  color: ${Constants.colors.white};
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const STYLES_GAME_STRIP_LEFT = css`
+  font-family: ${Constants.font.mono};
+  min-width: 25%;
+  width: 100%;
+  padding: 0 0 0 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  font-size: 12px;
+  line-height: 12px;
+  text-transform: uppercase;
+`;
+
+const STYLES_GAME_STRIP_RIGHT = css`
+  flex-shrink: 0;
+  padding: 0 12px 0 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+`;
+
 const STYLES_CONTAINER = css`
   background: ${Constants.colors.background};
-  height: 172px;
-  min-height: 96px;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -27,6 +77,8 @@ const STYLES_LEFT_ACTIONS = css`
 
 const STYLES_METADATA = css`
   padding: 16px 16px 0 16px;
+  height: 172px;
+  min-height: 96px;
   overflow-y: scroll;
 
   ::-webkit-scrollbar {
@@ -35,29 +87,19 @@ const STYLES_METADATA = css`
   }
 `;
 
-const STYLES_TITLE_ROW = css`
-  color: ${Constants.colors.black};
-  font-size: ${Constants.typescale.lvl5};
-  line-height: ${Constants.linescale.lvl5};
-  display: flex;
-  width: 100%;
-  align-items: center;
-`;
-
-const STYLES_CREATOR_ROW = css`
-  display: flex;
-  width: 100%;
-  font-family: ${Constants.font.mono};
-  font-size: ${Constants.typescale.lvl7};
-  line-height: ${Constants.typescale.lvl7};
-  text-transform: uppercase;
-  margin-top: 8px;
-`;
-
 const STYLES_CREATOR_LINK = css`
   cursor: pointer;
-  color: ${Constants.colors.action};
-  text-decoration: underline;
+  font-weight: 600;
+  transition: 200ms ease color;
+  color: ${Constants.colors.brand2};
+
+  :hover {
+    color: ${Constants.colors.brand3};
+  }
+
+  :visited {
+    color: ${Constants.colors.brand2};
+  }
 `;
 
 const STYLES_DESCRIPTION = css`
@@ -69,17 +111,38 @@ const STYLES_DESCRIPTION = css`
 export default class GameActionsBar extends React.Component {
   static contextType = DevelopmentContext;
 
+  state = {
+    isDescriptionVisible: false,
+  };
+
+  _handleDescriptionToggle = () => {
+    this.setState(
+      {
+        isDescriptionVisible: !this.state.isDescriptionVisible,
+      },
+      this.props.onUpdateGameWindowFrame
+    );
+  };
+
   _renderPlaying = (game, muteElement) => {
+    let color;
+    let backgroundColor;
+    if (game.metadata && game.metadata.primaryColor) {
+      backgroundColor = `#${game.metadata.primaryColor}`;
+      color = Constants.colors.white;
+    }
+
     let title = 'Untitled';
-    let publishedInfo = 'By Anonymous';
+    let publishedInfo = 'Anonymous';
     let isRegistered = false;
     let description = '';
     if (game) {
       title = game.title ? game.title : title;
       isRegistered = !Strings.isEmpty(game.gameId);
       description = game.description ? game.description : description;
-      let username = 'Anonymous',
-        updated;
+
+      let username = 'Anonymous';
+      let updated;
       if (isRegistered) {
         username = (
           <span
@@ -94,21 +157,32 @@ export default class GameActionsBar extends React.Component {
         updated = 'in development';
       }
       publishedInfo = (
-        <div>
-          By {username} // {updated}
-        </div>
+        <React.Fragment>
+          {username}&nbsp;╱&nbsp;{updated}
+        </React.Fragment>
       );
     }
     return (
       <div className={STYLES_CONTAINER}>
-        <div className={STYLES_METADATA}>
-          <div className={STYLES_TITLE_ROW}>
-            {title}
-            <div className={STYLES_LEFT_ACTIONS}>{muteElement}</div>
+        <div className={STYLES_GAME_STRIP} style={{ backgroundColor }}>
+          <div className={STYLES_GAME_STRIP_LEFT}>
+            {title}&nbsp;╱&nbsp;{publishedInfo}
           </div>
-          <div className={STYLES_CREATOR_ROW}>{publishedInfo}</div>
-          <div className={STYLES_DESCRIPTION}>{description}</div>
+          <div className={STYLES_GAME_STRIP_RIGHT}>
+            <UINavigationLink style={{ marginRight: 24 }} onClick={this._handleDescriptionToggle}>
+              {this.state.isDescriptionVisible ? `Hide description` : `Show description`}
+            </UINavigationLink>
+            <UINavigationLink style={{ marginRight: 20 }} onClick={this.props.closeGame}>
+              Close game
+            </UINavigationLink>
+            {muteElement}
+          </div>
         </div>
+        {this.state.isDescriptionVisible ? (
+          <div className={STYLES_METADATA}>
+            <div className={STYLES_DESCRIPTION}>{description}</div>
+          </div>
+        ) : null}
       </div>
     );
   };
@@ -129,12 +203,11 @@ export default class GameActionsBar extends React.Component {
   render() {
     let muteIcon = this.props.isMuted ? <SVG.Mute height="14px" /> : <SVG.Audio height="14px" />;
     let muteElement = (
-      <UIButtonDarkSmall
-        icon={muteIcon}
-        onClick={this.props.onToggleMute}
-        style={{ background: Constants.colors.black }}
-      />
+      <span className={STYLES_BUTTON} onClick={this.props.onToggleMute}>
+        {muteIcon}
+      </span>
     );
+
     let { game } = this.props;
     if (this.context.isDeveloping) {
       return this._renderDeveloping(game, muteElement);

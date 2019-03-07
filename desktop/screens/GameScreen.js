@@ -126,6 +126,8 @@ class GameScreen extends React.Component {
           isMuted={this.state.isMuted}
           onToggleMute={this._toggleIsMuted}
           navigateToUserProfile={this.props.navigateToUserProfile}
+          closeGame={this.props.closeGame}
+          onUpdateGameWindowFrame={this._updateGameWindowFrame}
         />
       </div>
     );
@@ -146,6 +148,7 @@ export default class GameScreenWithContext extends React.Component {
                     timeGameLoaded={navigation.timeGameLoaded}
                     timeNavigatedToGame={navigation.timeLastNavigated}
                     navigateToUserProfile={navigator.navigateToUserProfile}
+                    closeGame={navigator.clearCurrentGame}
                     isLoggedIn={currentUser.user !== null}
                   />
                 )}
