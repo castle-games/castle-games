@@ -10,7 +10,7 @@ import Viewer from '~/components/Viewer';
 import UINavigationLink from '~/components/reusable/UINavigationLink';
 import UIHeaderBlock from '~/components/reusable/UIHeaderBlock';
 
-ENABLE_NOTIFICATIONS = false;
+const ENABLE_NOTIFICATIONS = false;
 
 const STYLES_CONTAINER = css`
   font-family: ${Constants.font.default};
