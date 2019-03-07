@@ -41,6 +41,11 @@ const STYLES_NOTIFICATIONS = css`
 const ROOM_NAME = 'general';
 const NOTIFICATIONS_USER_ID = -1;
 const TEST_MESSAGE = null;
+const NotificationLevel = {
+  NONE: 0,
+  TAG: 1,
+  EVERY: 2,
+};
 
 class ChatContainer extends React.Component {
   constructor(props) {
@@ -161,6 +166,27 @@ class ChatContainer extends React.Component {
     }
   };
 
+  _getNotificationLevel = () => {
+    let notifications = this.props.currentUserNotifications;
+    if (!notifications || !notifications.desktop) {
+      return NotificationLevel.NONE;
+    }
+
+    let result = NotificationLevel.NONE;
+    for (let i = 0; i < notifications.desktop.length; i++) {
+      let preference = notifications.desktop[i];
+      if (preference.type === 'chat_tagged' && preference.frequency === 'every') {
+        result = NotificationLevel.TAG;
+      }
+
+      if (preference.type === 'chat_all' && preference.frequency === 'every') {
+        return NotificationLevel.EVERY;
+      }
+    }
+
+    return result;
+  };
+
   _handleMessagesAsync = async (messages) => {
     if (TEST_MESSAGE) {
       messages.push({
@@ -176,6 +202,9 @@ class ChatContainer extends React.Component {
     // load all users first
     let userIdsToLoad = {};
     let localNotifications = [];
+    let notificationLevel = this._getNotificationLevel();
+    let { currentUserId } = this.props;
+
     for (let i = 0; i < messages.length; i++) {
       let fromUserId = messages[i].message.name;
       let fromUser = this._getUserForId(fromUserId);
@@ -193,11 +222,24 @@ class ChatContainer extends React.Component {
               userIdsToLoad[richMessagePart.userId] = true;
             }
 
-            if (richMessagePart.userId === this.props.currentUserId && !messages[i].message.delay) {
+            if (
+              notificationLevel === NotificationLevel.TAG &&
+              fromUserId !== currentUserId &&
+              !messages[i].message.delay &&
+              richMessagePart.userId === this.props.currentUserId
+            ) {
               localNotifications.push(messages[i]);
             }
           }
         }
+      }
+
+      if (
+        notificationLevel === NotificationLevel.EVERY &&
+        fromUserId !== currentUserId &&
+        !messages[i].message.delay
+      ) {
+        localNotifications.push(messages[i]);
       }
     }
 
@@ -331,6 +373,7 @@ export default class ChatContainerWithContext extends React.Component {
       <CurrentUserContext.Consumer>
         {(currentUser) => {
           const currentUserId = currentUser.user ? currentUser.user.userId : null;
+          const currentUserNotifications = currentUser.user ? currentUser.user.notifications : null;
           return (
             <SocialContext.Consumer>
               {(social) => (
@@ -338,6 +381,7 @@ export default class ChatContainerWithContext extends React.Component {
                   {(navigator) => (
                     <ChatContainer
                       currentUserId={currentUserId}
+                      currentUserNotifications={currentUserNotifications}
                       social={social}
                       navigateToUserProfile={navigator.navigateToUserProfile}
                       showNotifications={this.props.showNotifications}
