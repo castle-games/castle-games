@@ -6,12 +6,13 @@ import { css } from 'react-emotion';
 import { NavigationContext, NavigatorContext } from '~/contexts/NavigationContext';
 
 import SearchInput from '~/components/SearchInput';
+import UINavigationLink from '~/components/reusable/UINavigationLink';
 
 const ENABLE_NOTIF_SCREEN = false; // feature flag notification item
 
 const STYLES_CONTAINER = css`
   background: ${Constants.colors.backgroundNavigation};
-  height: 48px;
+  height: 32px;
   flex-shrink: 0;
   width: 100%;
   display: flex;
@@ -28,21 +29,6 @@ const STYLES_NAV_ITEMS = css`
   display: flex;
   justify-content: flex-end;
   flex-shrink: 0;
-  padding-left: 128px;
-
-  @media (max-width: 960px) {
-    padding-left: 0px;
-  }
-`;
-
-const STYLES_NAV_ITEM = css`
-  display: inline-flex;
-  color: ${Constants.colors.white};
-  cursor: pointer;
-  font-size: ${Constants.typescale.lvl6};
-  font-weight: 600;
-  text-decoration: none;
-  margin: 0 24px 0 0;
 `;
 
 class ContentNavigationBar extends React.Component {
@@ -51,25 +37,25 @@ class ContentNavigationBar extends React.Component {
     let maybePlayingItem, maybeNotifItem;
     if (game) {
       maybePlayingItem = (
-        <div className={STYLES_NAV_ITEM} onClick={navigator.navigateToCurrentGame}>
+        <UINavigationLink onClick={navigator.navigateToCurrentGame} style={{ marginRight: 24 }}>
           Playing
-        </div>
+        </UINavigationLink>
       );
     }
     if (ENABLE_NOTIF_SCREEN) {
       maybeNotifItem = (
-        <div className={STYLES_NAV_ITEM} onClick={navigator.navigateToNotifications}>
+        <UINavigationLink onClick={navigator.navigateToNotifications} style={{ marginRight: 24 }}>
           Notifications
-        </div>
+        </UINavigationLink>
       );
     }
     return (
       <div className={STYLES_NAV_ITEMS}>
         {maybePlayingItem}
         {maybeNotifItem}
-        <div className={STYLES_NAV_ITEM} onClick={navigator.navigateToHome}>
+        <UINavigationLink onClick={navigator.navigateToHome} style={{ marginRight: 24 }}>
           Home
-        </div>
+        </UINavigationLink>
       </div>
     );
   };

@@ -6,15 +6,16 @@ import * as SVG from '~/components/primitives/svg';
 import { css } from 'react-emotion';
 
 import ControlledInput from '~/components/primitives/ControlledInput';
+import UINavigationLink from '~/components/reusable/UINavigationLink';
 
 const STYLES_CONTAINER = css`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 48px;
+  height: 32px;
   min-width: 30%;
   width: 100%;
-  padding: 0 16px 0 16px;
+  padding: 0 24px 0 16px;
 `;
 
 const STYLES_CONTAINER_LEFT = css`
@@ -35,19 +36,11 @@ const STYLES_CONTAINER_MIDDLE = css`
   position: relative;
 `;
 
-const STYLES_CONTAINER_RIGHT = css`
-  flex-shrink: 0;
-  cursor: pointer;
-  color: ${Constants.colors.white};
-  display: flex;
-  align-items: center;
-`;
-
 const STYLES_INPUT = css`
   background: transparent;
   font-family: ${Constants.font.default};
   color: ${Constants.colors.white};
-  font-size: 16px;
+  font-size: 14px;
   min-width: 25%;
   width: 100%;
   border: 0;
@@ -62,7 +55,7 @@ const STYLES_INPUT = css`
 `;
 
 const STYLES_INPUT_READONLY = css`
-  font-size: 16px;
+  font-size: 14px;
   background: ${Constants.colors.background3};
   border-radius: 3px;
   padding: 4px 12px 4px 12px;
@@ -102,13 +95,11 @@ export default class SearchInput extends React.Component {
         <div
           className={STYLES_CONTAINER_LEFT}
           onClick={this.props.readOnly ? this.props.onSearchReset : this._handleFocusInput}>
-          <SVG.SearchBarIcon height="24px" />
+          <SVG.SearchBarIcon height="20px" />
         </div>
         <div className={STYLES_CONTAINER_MIDDLE}>{queryElement}</div>
         {!Strings.isEmpty(this.props.query) ? (
-          <div className={STYLES_CONTAINER_RIGHT} onClick={this.props.onSearchReset}>
-            <SVG.Dismiss height="16px" />
-          </div>
+          <UINavigationLink onClick={this.props.onSearchReset}>Dismiss Search</UINavigationLink>
         ) : null}
       </div>
     );

@@ -26,7 +26,7 @@ const STYLES_CONTAINER = css`
 const STYLES_CONTAINER_HEADER = css`
   flex-shrink: 0;
   width: 100%;
-  height: 48px;
+  height: 32px;
   background: ${Constants.colors.backgroundNavigation};
 `;
 
@@ -46,7 +46,7 @@ const STYLES_LOGIN_ACTION = css`
 `;
 
 const STYLES_HEADER = css`
-  height: 48px;
+  height: 32px;
   width: 100%;
   background: #2b2828;
   flex-shrink: 0;
