@@ -33,7 +33,8 @@ const STYLES_CHECKBOX = css`
   cursor: pointer;
   width: 24px;
   height: 24px;
-  border: 2px solid ${Constants.colors.border};
+  background: #000;
+  color: ${Constants.colors.white};
   border-radius: 4px;
 `;
 
@@ -43,7 +44,7 @@ export default class UICheckbox extends React.Component {
       <div className={STYLES_CONTAINER} style={this.props.style}>
         <span className={STYLES_LEFT}>
           <span className={STYLES_CHECKBOX} onClick={this.props.onClick}>
-            {this.props.value ? <SVG.Checkmark size="16px" /> : null}
+            {this.props.value ? <SVG.Checkmark height="16px" /> : null}
           </span>
         </span>
         <span className={STYLES_RIGHT}>{this.props.children}</span>
