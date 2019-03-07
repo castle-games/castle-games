@@ -67,6 +67,15 @@ const STYLES_CONTAINER = css`
   flex-direction: column;
 `;
 
+const STYLES_LOG_CONTAINER = css`
+  background: ${Constants.colors.background};
+  width: 100%;
+  display: flex;
+  height: 172px;
+  min-height: 96px;
+  flex-direction: column;
+`;
+
 const STYLES_LEFT_ACTIONS = css`
   padding-left: 16px;
   flex-shrink: 0;
@@ -190,7 +199,7 @@ export default class GameActionsBar extends React.Component {
   _renderDeveloping = (game, muteElement) => {
     // TODO: mute etc.
     return (
-      <div className={STYLES_CONTAINER}>
+      <div className={STYLES_LOG_CONTAINER}>
         <DevelopmentLogs
           logs={this.context.logs}
           onClearLogs={this.context.setters.clearLogs}

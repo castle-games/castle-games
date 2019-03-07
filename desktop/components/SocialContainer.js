@@ -10,6 +10,8 @@ import Viewer from '~/components/Viewer';
 import UINavigationLink from '~/components/reusable/UINavigationLink';
 import UIHeaderBlock from '~/components/reusable/UIHeaderBlock';
 
+ENABLE_NOTIFICATIONS = false;
+
 const STYLES_CONTAINER = css`
   font-family: ${Constants.font.default};
   position: relative;
@@ -86,9 +88,11 @@ class SocialContainer extends React.Component {
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_CONTAINER_HEADER}>
           <Viewer />{' '}
-          <UINavigationLink style={{ marginLeft: 24 }} onClick={this._handleToggleNotifications}>
-            Notifications
-          </UINavigationLink>
+          {ENABLE_NOTIFICATIONS ? (
+            <UINavigationLink style={{ marginLeft: 24 }} onClick={this._handleToggleNotifications}>
+              Notifications
+            </UINavigationLink>
+          ) : null}
         </div>
         {contentElement}
       </div>
