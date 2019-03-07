@@ -4,6 +4,7 @@ import * as Constants from '~/common/constants';
 import { css } from 'react-emotion';
 
 const STYLES_HEADER = css`
+  font-family: ${Constants.font.system};
   height: 32px;
   width: 100%;
   background: #2b2828;
@@ -11,6 +12,8 @@ const STYLES_HEADER = css`
   display: flex;
   align-items: center;
   font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.1px;
   padding: 0 8px 0 8px;
   border-top: 1px solid #595555;
 `;

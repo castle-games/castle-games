@@ -35,7 +35,7 @@ const STYLES_CONNECTING = css`
 const STYLES_NOTIFICATIONS = css`
   height: 360px;
   width: 100%;
-  background: #191919;
+  background: #141414;
 `;
 
 const ROOM_NAME = 'general';
@@ -311,7 +311,13 @@ class ChatContainer extends React.Component {
     const placeholder = readOnly ? '' : 'Type here to chat...';
     return (
       <React.Fragment>
-        {this.props.showNotifications ? <div className={STYLES_NOTIFICATIONS} /> : null}
+        {this.props.showNotifications ? (
+          <div className={STYLES_NOTIFICATIONS}>
+            <UIHeaderBlock>
+              <strong>Your notifications</strong>
+            </UIHeaderBlock>
+          </div>
+        ) : null}
         <div className={STYLES_CONTAINER}>{this._renderContent()}</div>
         <ChatInput onSubmit={this._onSubmit} readOnly={readOnly} placeholder={placeholder} />
       </React.Fragment>

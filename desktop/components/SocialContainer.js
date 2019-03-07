@@ -13,7 +13,7 @@ import UIHeaderBlock from '~/components/reusable/UIHeaderBlock';
 const STYLES_CONTAINER = css`
   font-family: ${Constants.font.default};
   position: relative;
-  background: ${Constants.colors.backgroundLeftContext};
+  background: #141414;
   color: ${Constants.colors.white};
   display: flex;
   flex-direction: column;
