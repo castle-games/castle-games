@@ -51,10 +51,12 @@ const STYLES_COLUMN_FLUID = css`
 `;
 
 const STYLES_COLUMN = css`
-  width: 88px;
+  width: 96px;
+  font-family: ${Constants.font.mono};
+  font-size: 12px;
+  text-transform: uppercase;
   flex-shrink: 0;
   color: ${Constants.colors.black};
-  font-size: ${Constants.typescale.base};
   line-height: ${Constants.linescale.base};
 `;
 
@@ -103,7 +105,7 @@ export default class ProfileSettings extends React.Component {
         <h3 className={STYLES_SECTION_TITLE}>E-mail notifications</h3>
 
         <Row
-          secondCol={<span>Every</span>}
+          secondCol={<span>Everytime</span>}
           thirdCol={<span>Daily</span>}
           firstCol={<span>Never</span>}
         />
@@ -155,7 +157,7 @@ export default class ProfileSettings extends React.Component {
 
         <h3 className={STYLES_SECTION_TITLE}>Desktop notifications</h3>
 
-        <Row secondCol={<span>Every</span>} firstCol={<span>Never</span>} />
+        <Row secondCol={<span>Everytime</span>} firstCol={<span>Never</span>} />
 
         {notifications.desktop.map((option) => {
           return (
