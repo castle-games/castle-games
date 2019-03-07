@@ -9,6 +9,7 @@ export const brand = {
 export const colors = {
   text: `#000`,
   text2: `#6e6e6e`,
+  border: `#000`,
   background: `#ffffff`,
   background3: `#f3f3f3`,
   background4: `#dcdcdc`,

@@ -258,6 +258,19 @@ export async function getViewer() {
         ${FULL_USER_FIELDS}
         ${GAME_ITEMS}
       }
+
+      getNotificationPreferences {
+        email {
+          type
+          description
+          frequency
+        }
+        desktop {
+          type
+          description
+          frequency
+        }
+      }
     }
   `);
 
@@ -268,6 +281,10 @@ export async function getViewer() {
 
   if (result.errors) {
     return false;
+  }
+
+  if (result && result.data) {
+    result.data.me.notifications = result.data.getNotificationPreferences;
   }
 
   return result.data.me;

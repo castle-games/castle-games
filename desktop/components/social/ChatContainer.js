@@ -279,7 +279,7 @@ class ChatContainer extends React.Component {
           return (
             <React.Fragment>
               <UIHeaderBlock>
-                <strong>Room:</strong>&nbsp;{ROOM_NAME}
+                <strong>Chat</strong>
               </UIHeaderBlock>
               <ChatMessagesList
                 messages={this.state.chatMessages}

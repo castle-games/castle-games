@@ -15,6 +15,7 @@ import UIGameGrid from '~/components/reusable/UIGameGrid';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigationContext, NavigatorContext } from '~/contexts/NavigationContext';
 import ProfileHeader from '~/components/profile/ProfileHeader';
+import ProfileSettings from '~/components/profile/ProfileSettings';
 import SignOut from '~/components/profile/SignOut';
 
 const STYLES_CONTAINER = css`
@@ -65,6 +66,8 @@ class ProfileScreen extends React.Component {
 
   _onShowSignOut = () => this.setState({ mode: 'sign-out' });
 
+  _onShowSettings = () => this.setState({ mode: 'settings' });
+
   _onSelectAddGame = () =>
     this.setState({
       mode: 'games',
@@ -82,6 +85,7 @@ class ProfileScreen extends React.Component {
 
     if (isOwnProfile) {
       navigationItems.push({ label: 'Edit Profile', key: 'edit-profile' });
+      navigationItems.push({ label: 'Settings', key: 'settings' });
       navigationItems.push({ label: 'Sign Out', key: 'sign-out' });
     }
 
@@ -93,7 +97,9 @@ class ProfileScreen extends React.Component {
       games: this._onShowGames,
       'edit-profile': this._onShowEditProfile,
       'sign-out': this._onShowSignOut,
+      settings: this._onShowSettings,
     };
+
     if (callbacks.hasOwnProperty(selectedKey)) {
       callbacks[selectedKey]();
     }
@@ -118,7 +124,7 @@ class ProfileScreen extends React.Component {
     } else {
       const gameListElement =
         creator.gameItems && creator.gameItems.length ? (
-          <div class={STYLES_GAME_GRID}>
+          <div className={STYLES_GAME_GRID}>
             <UIGameGrid
               viewer={viewer}
               creator={creator}
@@ -154,6 +160,12 @@ class ProfileScreen extends React.Component {
     return <EditProfile user={user} onAfterSave={this.props.onAfterSave} />;
   };
 
+  _renderSettings = (isOwnProfile, user) => {
+    if (!isOwnProfile) return null;
+
+    return <ProfileSettings user={user} />;
+  };
+
   _renderSignOutContent = (isOwnProfile) => {
     if (!isOwnProfile) return null;
     return <SignOut onSignOut={this.props.onSignOut} />;
@@ -165,10 +177,13 @@ class ProfileScreen extends React.Component {
 
     let profileContentElement;
     const { mode } = this.state;
+
     if (mode === 'edit-profile') {
       profileContentElement = this._renderEditProfileContent(isOwnProfile, viewer);
     } else if (mode === 'sign-out') {
       profileContentElement = this._renderSignOutContent(isOwnProfile);
+    } else if (mode === 'settings') {
+      profileContentElement = this._renderSettings(isOwnProfile, viewer);
     } else {
       profileContentElement = this._renderGameContent(isOwnProfile, viewer, creator);
     }
