@@ -63,7 +63,12 @@ class SocialContainer extends React.Component {
     let { isLoggedIn, navigateToCurrentUserProfile } = this.props;
     let contentElement;
     if (isLoggedIn) {
-      contentElement = <ChatContainer showNotifications={this.state.showNotifications} />;
+      contentElement = (
+        <ChatContainer
+          showNotifications={this.state.showNotifications}
+          onToggleNotifications={this._handleToggleNotifications}
+        />
+      );
     } else {
       contentElement = (
         <div className={STYLES_LOGGED_OUT}>

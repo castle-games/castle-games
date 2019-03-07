@@ -96,8 +96,6 @@ const run = async () => {
   ReactDOM.render(<GLLoaderScreen />, document.getElementById('loader'));
   const { allContent, featuredGames, viewer, isOffline } = await Network.getProductData();
 
-  await Actions.delay(2000);
-
   let state = Object.assign({}, INITIAL_STATE_OFFLINE, {
     allContent,
     featuredGames,

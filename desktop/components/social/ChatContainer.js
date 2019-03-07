@@ -279,7 +279,7 @@ class ChatContainer extends React.Component {
           return (
             <React.Fragment>
               <UIHeaderBlock>
-                <strong>{ROOM_NAME}</strong>
+                <strong>Room:</strong>&nbsp;{ROOM_NAME}
               </UIHeaderBlock>
               <ChatMessagesList
                 messages={this.state.chatMessages}
@@ -313,8 +313,8 @@ class ChatContainer extends React.Component {
       <React.Fragment>
         {this.props.showNotifications ? (
           <div className={STYLES_NOTIFICATIONS}>
-            <UIHeaderBlock>
-              <strong>Your notifications</strong>
+            <UIHeaderBlock onDismiss={this.props.onToggleNotifications}>
+              <strong>Notifications</strong>
             </UIHeaderBlock>
           </div>
         ) : null}
@@ -341,6 +341,7 @@ export default class ChatContainerWithContext extends React.Component {
                       social={social}
                       navigateToUserProfile={navigator.navigateToUserProfile}
                       showNotifications={this.props.showNotifications}
+                      onToggleNotifications={this.props.onToggleNotifications}
                     />
                   )}
                 </NavigatorContext.Consumer>
