@@ -7,6 +7,7 @@ import { NavigatorContext } from '~/contexts/NavigationContext';
 
 import ChatContainer from '~/components/social/ChatContainer';
 import Viewer from '~/components/Viewer';
+import UINavigationLink from '~/components/reusable/UINavigationLink';
 
 const STYLES_CONTAINER = css`
   font-family: ${Constants.font.default};
@@ -28,6 +29,9 @@ const STYLES_CONTAINER_HEADER = css`
   width: 100%;
   height: 32px;
   background: ${Constants.colors.backgroundNavigation};
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 `;
 
 const STYLES_LOGGED_OUT = css`
@@ -56,11 +60,19 @@ const STYLES_HEADER = css`
 `;
 
 class SocialContainer extends React.Component {
+  state = {
+    showNotifications: false,
+  };
+
+  _handleToggleNotifications = () => {
+    this.setState({ showNotifications: !this.state.showNotifications });
+  };
+
   render() {
     let { isLoggedIn, navigateToCurrentUserProfile } = this.props;
     let contentElement;
     if (isLoggedIn) {
-      contentElement = <ChatContainer />;
+      contentElement = <ChatContainer showNotifications={this.state.showNotifications} />;
     } else {
       contentElement = (
         <div className={STYLES_LOGGED_OUT}>
@@ -77,7 +89,10 @@ class SocialContainer extends React.Component {
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_CONTAINER_HEADER}>
-          <Viewer />
+          <Viewer />{' '}
+          <UINavigationLink style={{ marginLeft: 24 }} onClick={this._handleToggleNotifications}>
+            Notifications
+          </UINavigationLink>
         </div>
         {contentElement}
       </div>

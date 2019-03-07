@@ -46,7 +46,7 @@ const STYLES_INPUT = css`
   border: 0;
   outline: 0;
   margin: 0;
-  padding: 0;
+  padding: 0 0 2px 0;
 
   :focus {
     border: 0;

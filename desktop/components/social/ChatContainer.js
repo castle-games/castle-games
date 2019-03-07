@@ -40,6 +40,12 @@ const STYLES_HEADER = css`
   padding: 0 8px 0 8px;
 `;
 
+const STYLES_NOTIFICATIONS = css`
+  height: 360px;
+  width: 100%;
+  background: #191919;
+`;
+
 const ROOM_NAME = 'general';
 const NOTIFICATIONS_USER_ID = -1;
 const TEST_MESSAGE = null;
@@ -313,6 +319,7 @@ class ChatContainer extends React.Component {
     const placeholder = readOnly ? '' : 'Type here to chat...';
     return (
       <React.Fragment>
+        {this.props.showNotifications ? <div className={STYLES_NOTIFICATIONS} /> : null}
         <div className={STYLES_CONTAINER}>{this._renderContent()}</div>
         <ChatInput onSubmit={this._onSubmit} readOnly={readOnly} placeholder={placeholder} />
       </React.Fragment>
@@ -335,6 +342,7 @@ export default class ChatContainerWithContext extends React.Component {
                       currentUserId={currentUserId}
                       social={social}
                       navigateToUserProfile={navigator.navigateToUserProfile}
+                      showNotifications={this.props.showNotifications}
                     />
                   )}
                 </NavigatorContext.Consumer>
