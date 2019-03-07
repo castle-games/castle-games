@@ -12,6 +12,7 @@ import UICheckbox from '~/components/reusable/UICheckbox';
 const STYLES_CONTAINER = css`
   color: ${Constants.colors.black};
   padding: 32px;
+  max-width: 768px;
 `;
 
 const STYLES_HEADER = css`
@@ -32,6 +33,7 @@ const STYLES_SECTION_TITLE = css`
   font-family: ${Constants.font.heading};
   font-weight: 400;
   margin-top: 32px;
+  margin-bottom: 16px;
 `;
 
 const STYLES_ROW = css`
@@ -45,6 +47,7 @@ const STYLES_ROW = css`
 const STYLES_COLUMN_FLUID = css`
   min-width: 25%;
   width: 100%;
+  padding-right: 24px;
   color: ${Constants.colors.black};
   font-size: ${Constants.typescale.base};
   line-height: ${Constants.linescale.base};
