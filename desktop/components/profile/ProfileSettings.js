@@ -5,6 +5,7 @@ import * as Strings from '~/common/strings';
 import * as Utilities from '~/common/utilities';
 
 import { css } from 'react-emotion';
+import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 
 import UICheckbox from '~/components/reusable/UICheckbox';
 
@@ -69,6 +70,27 @@ const Row = (props) => {
 };
 
 export default class ProfileSettings extends React.Component {
+  static contextType = CurrentUserContext;
+
+  _handleSaveNotificationChange = async (options) => {
+    const { category, type, frequency } = options;
+
+    if (category === 'email') {
+      const response = await Actions.updateEmailPreference({ type, frequency });
+      const notifications = await Actions.getNotificationPreferences();
+
+      const user = { ...this.props.user, notifications };
+      this.context.setCurrentUser(user);
+      return;
+    }
+
+    const response = await Actions.updateDesktopPreference({ type, frequency });
+    const notifications = await Actions.getNotificationPreferences();
+
+    const user = { ...this.props.user, notifications };
+    this.context.setCurrentUser(user);
+  };
+
   render() {
     const { notifications } = this.props.user;
 
@@ -90,9 +112,42 @@ export default class ProfileSettings extends React.Component {
           return (
             <Row
               key={`email-${option.type}`}
-              firstCol={<UICheckbox value={option.frequency === 'every'} />}
-              secondCol={<UICheckbox value={option.frequency === 'daily'} />}
-              thirdCol={<UICheckbox value={option.frequency === 'never'} />}>
+              firstCol={
+                <UICheckbox
+                  onClick={() =>
+                    this._handleSaveNotificationChange({
+                      category: 'email',
+                      type: option.type,
+                      frequency: 'every',
+                    })
+                  }
+                  value={option.frequency === 'every'}
+                />
+              }
+              secondCol={
+                <UICheckbox
+                  onClick={() =>
+                    this._handleSaveNotificationChange({
+                      category: 'email',
+                      type: option.type,
+                      frequency: 'daily',
+                    })
+                  }
+                  value={option.frequency === 'daily'}
+                />
+              }
+              thirdCol={
+                <UICheckbox
+                  onClick={() =>
+                    this._handleSaveNotificationChange({
+                      category: 'email',
+                      type: option.type,
+                      frequency: 'never',
+                    })
+                  }
+                  value={option.frequency === 'never'}
+                />
+              }>
               {option.description}
             </Row>
           );
@@ -100,19 +155,36 @@ export default class ProfileSettings extends React.Component {
 
         <h3 className={STYLES_SECTION_TITLE}>Desktop notifications</h3>
 
-        <Row
-          firstCol={<span>Every</span>}
-          secondCol={<span>Daily</span>}
-          thirdCol={<span>Never</span>}
-        />
+        <Row firstCol={<span>Every</span>} thirdCol={<span>Never</span>} />
 
         {notifications.desktop.map((option) => {
           return (
             <Row
               key={`desktop-${option.type}`}
-              firstCol={<UICheckbox value={option.frequency === 'every'} />}
-              secondCol={<UICheckbox value={option.frequency === 'daily'} />}
-              thirdCol={<UICheckbox value={option.frequency === 'never'} />}>
+              firstCol={
+                <UICheckbox
+                  onClick={() =>
+                    this._handleSaveNotificationChange({
+                      category: 'desktop',
+                      type: option.type,
+                      frequency: 'every',
+                    })
+                  }
+                  value={option.frequency === 'every'}
+                />
+              }
+              thirdCol={
+                <UICheckbox
+                  onClick={() =>
+                    this._handleSaveNotificationChange({
+                      category: 'desktop',
+                      type: option.type,
+                      frequency: 'never',
+                    })
+                  }
+                  value={option.frequency === 'never'}
+                />
+              }>
               {option.description}
             </Row>
           );

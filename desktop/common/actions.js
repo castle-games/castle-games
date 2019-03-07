@@ -73,6 +73,45 @@ const GAME_ITEMS = `
   }
 `;
 
+export async function updateEmailPreference({ type, frequency }) {
+  const response = await API.graphqlAsync(
+    `
+      mutation($type: String!, $frequency: EmailNotificationFrequency!) {
+        updateEmailNotificationPreference(type: $type, frequency: $frequency) {
+          email {
+            type
+            frequency
+            description
+          }
+        }
+      }
+    `,
+    { type, frequency }
+  );
+
+  return response;
+}
+
+export async function updateDesktopPreference({ type, frequency }) {
+  const response = await API.graphqlAsync(
+    `
+      mutation($type: String!, $frequency: DesktopNotificationFrequency!) {
+        updateDesktopNotificationPreference(type: $type, frequency: $frequency) {
+          desktop {
+            type
+            type
+            frequency
+            description
+          }
+        }
+      }
+    `,
+    { type, frequency }
+  );
+
+  return response;
+}
+
 export async function resetPassword({ userId }) {
   const response = await API.graphqlAsync(
     `
@@ -249,6 +288,41 @@ export async function getUsers({ userIds }) {
   }
 
   return result.data.users;
+}
+
+export async function getNotificationPreferences() {
+  const result = await API(`
+    query {
+      getNotificationPreferences {
+        email {
+          type
+          description
+          frequency
+        }
+        desktop {
+          type
+          description
+          frequency
+        }
+      }
+    }
+  `);
+
+  // TOOD(jim): Write a global error handler.
+  if (result.error) {
+    return false;
+  }
+
+  if (result.errors) {
+    return false;
+  }
+
+  let notifications;
+  if (result && result.data) {
+    notifications = result.data.getNotificationPreferences;
+  }
+
+  return notifications;
 }
 
 export async function getViewer() {
