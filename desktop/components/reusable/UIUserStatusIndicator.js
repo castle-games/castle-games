@@ -26,21 +26,6 @@ const STYLES_MEDIA_NAME = css`
 
 // TODO: restore status
 class UIUserStatusIndicator extends React.Component {
-  _isRecent = (userplay) => {
-    // "recent" is anything newer than seven days
-    if (userplay) {
-      let secondsElapsed = 0;
-      try {
-        const date = new Date(dateStr);
-        const recentTime = Math.floor(date.getTime() / 1000);
-        const currentTime = Math.floor(Date.now() / 1000);
-        secondsElapsed = currentTime - recentTime;
-      } catch (_) {}
-      return secondsElapsed < 60 * 60 * 24 * 7;
-    }
-    return false;
-  };
-
   _recentDateToString = (dateStr) => {
     let secondsElapsed = 0;
     try {
@@ -87,32 +72,34 @@ class UIUserStatusIndicator extends React.Component {
 
   _renderStatus = () => {
     const { user } = this.props;
-    if (user.mostRecentUserplay) {
-      const { media, mediaUrl, active, imputedEndTime } = user.mostRecentUserplay;
-      const mediaName = media ? media.name : 'an untitled game';
-      if (mediaName.length > 24) {
-        mediaName = `${mediaName.substring(0, 21)}...`;
+    if (user.lastUserStatus) {
+      const { status, isRecent, game } = user.lastUserStatus;
+      const gameName = game ? game.name : 'an untitled game';
+      if (gameName.length > 24) {
+        gameName = `${gameName.substring(0, 21)}...`;
       }
-      let mediaElement;
-      if (media) {
-        mediaElement = (
+      let gameElement;
+      if (game) {
+        gameElement = (
           <span
             className={STYLES_MEDIA_NAME}
             onClick={() => {
-              this.props.onMediaSelect && this.props.onMediaSelect(media);
+              this.props.navigateToGame && this.props.navigateToGame(game);
             }}>
-            {mediaName}
+            {gameName}
           </span>
         );
       } else {
-        mediaElement = <span>{mediaName}</span>;
+        gameElement = <span>{gameName}</span>;
       }
-      if (active) {
-        return <div>Playing {mediaElement}</div>;
-      } else if (this._isRecent(user.mostRecentUserplay)) {
+      if (isRecent) {
+        const verb = (status === 'make') ? 'Making' : 'Playing';
+        return <div>{verb} {gameElement}</div>;
+      } else if (user.lastUserStatus.isRecent) {
+        // TODO: need a date field on status
         return (
           <div>
-            Last played {mediaElement} {this._recentDateToString(imputedEndTime)}
+            Last played {gameElement} {this._recentDateToString('')}
           </div>
         );
       }
@@ -122,11 +109,11 @@ class UIUserStatusIndicator extends React.Component {
 
   render() {
     let { user, hideIfNotRecent } = this.props;
-    if (hideIfNotRecent && !this._isRecent(user.mostRecentUserplay)) {
+    if (hideIfNotRecent && (!user.lastUserStatus || !user.lastUserStatus.isRecent)) {
       return null;
     }
     return (
-      <div className={STYLES_CONTAINER}>
+      <div className={STYLES_CONTAINER} style={{ ...this.props.style }}>
         {this._renderIndicator()}
         {/* <div className={STYLES_STATUS}>{this._renderStatus()}</div> */}
       </div>

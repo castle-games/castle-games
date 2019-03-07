@@ -30,6 +30,15 @@ const FULL_USER_FIELDS = `
   createdTime
   updatedTime
   about
+  lastUserStatus {
+    userStatusId
+    status
+    isRecent
+    game {
+      gameId
+      name
+    }
+  }
   photo {
     url
     imgixUrl
