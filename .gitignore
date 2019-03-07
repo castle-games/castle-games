@@ -17,10 +17,6 @@ megasource/build
 megasource/installer/build
 megasource/CastleSetup.exe
 
-linux/build
-linux/gamelift/GameLift-Cpp-ServerSDK/out
-linux/aws-sdk/aws-sdk-cpp
-
 ._*
 
 macosx/DerivedData-beta
