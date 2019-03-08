@@ -71,8 +71,15 @@ class ContentContainer extends React.Component {
   _handleSearchSubmit = async (e) => this._handleSearchChange(e);
 
   _handleUpdateGameWindowFrame = () => {
+    if (!this._game) {
+      return;
+    }
+
     const gameScreen = this._game.getScreen();
-    gameScreen._updateGameWindowFrame();
+
+    if (gameScreen) {
+      gameScreen._updateGameWindowFrame();
+    }
   }
 
   _renderContent = (mode) => {

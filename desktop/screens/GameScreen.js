@@ -139,7 +139,10 @@ export default class GameScreenWithContext extends React.Component {
   _game;
 
   getScreen = () => {
-    return this._game;
+    if (this._game) {
+      return this._game;
+    }
+    return null;
   }
 
   render() {

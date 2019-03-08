@@ -214,12 +214,14 @@ export default class NowPlayingBar extends React.Component {
             {title}&nbsp;╱&nbsp;{publishedInfo}
           </div>
           <div className={STYLES_GAME_STRIP_RIGHT}>
-            {this.props.mode !== 'game' ? <UINavigationLink style={{ marginRight: 24 }} onClick={this._handleNavigatePlaying}>
-              Return to playing
-            </UINavigationLink> : null}
             <UINavigationLink style={{ marginRight: 24 }} onClick={this._handleDescriptionToggle}>
               {this.state.isDescriptionVisible ? `Hide description` : `Show description`}
             </UINavigationLink>
+            {this.props.mode !== 'game' ? <UINavigationLink style={{ marginRight: 24 }} onClick={this._handleNavigatePlaying}>
+              Return to playing
+            </UINavigationLink> : <UINavigationLink style={{ marginRight: 24 }} onClick={this._handleNavigatePlaying}>
+              Go Home
+            </UINavigationLink>}
             <UINavigationLink style={{ marginRight: 20 }} onClick={this._handleCloseGame}>
               End game
             </UINavigationLink>
