@@ -42,13 +42,14 @@ const STYLES_GAME_STRIP_LEFT = css`
   font-family: ${Constants.font.mono};
   min-width: 25%;
   width: 100%;
-  padding: 0 0 0 16px;
+  padding: 0 24px 0 16px;
   display: inline-flex;
   align-items: center;
   justify-content: flex-start;
   font-size: 12px;
   line-height: 12px;
   text-transform: uppercase;
+  white-space: nowrap;
 `;
 
 const STYLES_GAME_STRIP_RIGHT = css`
@@ -215,11 +216,11 @@ export default class NowPlayingBar extends React.Component {
           </div>
           <div className={STYLES_GAME_STRIP_RIGHT}>
             <UINavigationLink style={{ marginRight: 24 }} onClick={this._handleDescriptionToggle}>
-              {this.state.isDescriptionVisible ? `Hide description` : `Show description`}
+              {this.state.isDescriptionVisible ? `Description` : `Description`}
             </UINavigationLink>
             {this.props.mode !== 'game' ? (
               <UINavigationLink style={{ marginRight: 24 }} onClick={this._handleNavigatePlaying}>
-                Return to playing
+                Now playing
               </UINavigationLink>
             ) : null}
             <UINavigationLink style={{ marginRight: 20 }} onClick={this._handleCloseGame}>
