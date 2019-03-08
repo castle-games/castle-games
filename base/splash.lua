@@ -6,16 +6,15 @@ splash = {
     _textYTimer = 0,
 }
 
-local imgMaskRooks = love.graphics.newImage('assets/loading-mask-rooks.png')
 local imgMaskText = love.graphics.newImage('assets/loading-mask-text.png')
-local imgSize = { width = 500, height = 250 }
+local imgSize = { width = 301, height = 78 }
 
 function splash:draw()
     local width, height = love.window.getMode()
     love.graphics.push('all')
     love.graphics.translate(width * 0.5, height * 0.5)
     love.graphics.scale(0.5, 0.5)
-    love.graphics.translate(-imgSize.width * 0.5, -imgSize.height * 0.5)
+    love.graphics.translate(-imgSize.width * 0.5, (-imgSize.height * 0.5) + self._textY)
     love.graphics.setColor(1, 1, 1, 0.7)
     love.graphics.rectangle('fill', 0, 0, imgSize.width, imgSize.height)
     if self._shineX > 18 and self._shineX < imgSize.width - 18 then
@@ -29,13 +28,6 @@ function splash:draw()
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.draw(
         imgMaskText,
-        0, 4 + self._textY,
-        0,
-        1, 1,
-        0, 0
-    )
-    love.graphics.draw(
-        imgMaskRooks,
         0, 0,
         0,
         1, 1,
@@ -58,7 +50,7 @@ function splash:update(dt)
     end
 
     self._textYTimer = self._textYTimer + dt
-    self._textY = math.sin(self._textYTimer * 4.0) * 4
+    self._textY = math.sin(self._textYTimer * 4.0) * 7
 end
 
 return splash
