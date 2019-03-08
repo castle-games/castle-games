@@ -126,7 +126,7 @@ class SocialContainer extends React.Component {
           </div>
 
           <div className={STYLES_CONTAINER_HEADER_RIGHT}>
-            <span className={STYLES_ACTION_BUTTON} onClick={navigator.navigateToHome}>
+            <span className={STYLES_ACTION_BUTTON} onClick={this.props.navigator.navigateToHome}>
               <SVG.Home height="16px" />
             </span>
           </div>
