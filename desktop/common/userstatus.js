@@ -95,7 +95,7 @@ class UserStatus {
       verb = status === 'make' ? 'Making' : 'Playing';
       statusString = `${verb} ${title}`;
     } else if (this._isDateRecentEnough(userStatus.lastPing)) {
-      verb = status === 'make' ? 'Last made:' : 'Last played:';
+      verb = status === 'make' ? 'Last made' : 'Last played';
       statusString = `${verb} ${title}`;
     }
     return {
