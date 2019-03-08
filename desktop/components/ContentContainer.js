@@ -7,6 +7,7 @@ import * as Constants from '~/common/constants';
 import * as Strings from '~/common/strings';
 import * as Urls from '~/common/urls';
 
+import GameWindow from '~/native/gamewindow';
 import GameScreen from '~/screens/GameScreen';
 import HomeScreen from '~/screens/HomeScreen';
 import ProfileScreen from '~/screens/ProfileScreen';
@@ -25,10 +26,13 @@ const STYLES_CONTAINER = css`
 `;
 
 class ContentContainer extends React.Component {
+  _game;
+
   static defaultProps = {
     mode: 'home',
     setIsDeveloping: () => {},
   };
+
   state = {
     searchQuery: '',
   };
@@ -66,9 +70,14 @@ class ContentContainer extends React.Component {
 
   _handleSearchSubmit = async (e) => this._handleSearchChange(e);
 
+  _handleUpdateGameWindowFrame = () => {
+    const gameScreen = this._game.getScreen();
+    gameScreen._updateGameWindowFrame();
+  }
+
   _renderContent = (mode) => {
     if (mode === 'game') {
-      return <GameScreen />;
+      return <GameScreen ref={(c) => {this._game = c;}} />;
     } else if (mode === 'home') {
       return (
         <HomeScreen
@@ -114,7 +123,7 @@ class ContentContainer extends React.Component {
           onSearchSubmit={this._handleSearchSubmit}
         />
         {contentElement}
-        {this.props.game ? <NowPlayingBar game={this.props.game} navigator={this.props.navigator} /> : null}
+        {this.props.game ? <NowPlayingBar onUpdateGameWindowFrame={this._handleUpdateGameWindowFrame} game={this.props.game} mode={this.props.mode} navigator={this.props.navigator} /> : null}
       </div>
     );
   }

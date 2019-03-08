@@ -136,6 +136,12 @@ class GameScreen extends React.Component {
 }
 
 export default class GameScreenWithContext extends React.Component {
+  _game;
+
+  getScreen = () => {
+    return this._game;
+  }
+
   render() {
     return (
       <NavigatorContext.Consumer>
@@ -145,6 +151,7 @@ export default class GameScreenWithContext extends React.Component {
               <CurrentUserContext.Consumer>
                 {(currentUser) => (
                   <GameScreen
+                    ref={c => {this._game = c;}}
                     game={navigation.game}
                     timeGameLoaded={navigation.timeGameLoaded}
                     timeNavigatedToGame={navigation.timeLastNavigated}

@@ -36,13 +36,6 @@ const STYLES_GAME_STRIP = css`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  cursor: pointer;
-  opacity: 0.95;
-  transition: 200ms ease opacity;
-
-  :hover {
-    opacity: 1;
-  }
 `;
 
 const STYLES_GAME_STRIP_LEFT = css`
@@ -139,7 +132,12 @@ export default class NowPlayingBar extends React.Component {
     e.preventDefault();
     e.stopPropagation();
 
-    this.props.navigator.navigateToCurrentGame();
+    if (this.props.mode !== 'game') {
+      this.props.navigator.navigateToCurrentGame();
+      return;
+    }
+
+    this.props.navigator.navigateToHome();
   }
 
   _handleCloseGame = (e) => {
@@ -193,7 +191,7 @@ export default class NowPlayingBar extends React.Component {
         username = (
           <span
             className={STYLES_CREATOR_LINK}
-            onClick={() => this.props.navigateToUserProfile(game.owner)}>
+            onClick={() => this.props.navigator.navigateToUserProfile(game.owner)}>
             {game.owner.username}
           </span>
         );
@@ -210,17 +208,20 @@ export default class NowPlayingBar extends React.Component {
     }
 
     return (
-      <div className={STYLES_CONTAINER} onClick={this._handleNavigatePlaying}>
+      <div className={STYLES_CONTAINER}>
         <div className={STYLES_GAME_STRIP} style={{ backgroundColor }}>
           <div className={STYLES_GAME_STRIP_LEFT}>
             {title}&nbsp;╱&nbsp;{publishedInfo}
           </div>
           <div className={STYLES_GAME_STRIP_RIGHT}>
+            {this.props.mode !== 'game' ? <UINavigationLink style={{ marginRight: 24 }} onClick={this._handleNavigatePlaying}>
+              Return to playing
+            </UINavigationLink> : null}
             <UINavigationLink style={{ marginRight: 24 }} onClick={this._handleDescriptionToggle}>
               {this.state.isDescriptionVisible ? `Hide description` : `Show description`}
             </UINavigationLink>
             <UINavigationLink style={{ marginRight: 20 }} onClick={this._handleCloseGame}>
-              Close game
+              End game
             </UINavigationLink>
             {muteElement}
           </div>
