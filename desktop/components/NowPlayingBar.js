@@ -126,7 +126,7 @@ export default class NowPlayingBar extends React.Component {
     e.stopPropagation();
 
     this.props.onToggleMute();
-  }
+  };
 
   _handleNavigatePlaying = (e) => {
     e.preventDefault();
@@ -138,14 +138,14 @@ export default class NowPlayingBar extends React.Component {
     }
 
     this.props.navigator.navigateToHome();
-  }
+  };
 
   _handleCloseGame = (e) => {
     e.preventDefault();
     e.stopPropagation();
 
     this.props.navigator.clearCurrentGame();
-  }
+  };
 
   _handleDescriptionToggle = (e) => {
     e.preventDefault();
@@ -217,11 +217,11 @@ export default class NowPlayingBar extends React.Component {
             <UINavigationLink style={{ marginRight: 24 }} onClick={this._handleDescriptionToggle}>
               {this.state.isDescriptionVisible ? `Hide description` : `Show description`}
             </UINavigationLink>
-            {this.props.mode !== 'game' ? <UINavigationLink style={{ marginRight: 24 }} onClick={this._handleNavigatePlaying}>
-              Return to playing
-            </UINavigationLink> : <UINavigationLink style={{ marginRight: 24 }} onClick={this._handleNavigatePlaying}>
-              Go Home
-            </UINavigationLink>}
+            {this.props.mode !== 'game' ? (
+              <UINavigationLink style={{ marginRight: 24 }} onClick={this._handleNavigatePlaying}>
+                Return to playing
+              </UINavigationLink>
+            ) : null}
             <UINavigationLink style={{ marginRight: 20 }} onClick={this._handleCloseGame}>
               End game
             </UINavigationLink>

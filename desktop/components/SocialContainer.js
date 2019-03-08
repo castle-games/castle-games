@@ -6,6 +6,7 @@ import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigatorContext } from '~/contexts/NavigationContext';
 
 import ChatContainer from '~/components/social/ChatContainer';
+import * as SVG from '~/components/primitives/svg';
 import Viewer from '~/components/Viewer';
 import UINavigationLink from '~/components/reusable/UINavigationLink';
 import UIHeaderBlock from '~/components/reusable/UIHeaderBlock';
@@ -34,7 +35,7 @@ const STYLES_CONTAINER_HEADER = css`
   background: ${Constants.colors.backgroundNavigation};
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
 `;
 
 const STYLES_LOGGED_OUT = css`
@@ -50,6 +51,32 @@ const STYLES_LOGIN_ACTION = css`
   text-decoration: underline;
   font-weight: 600;
   cursor: pointer;
+`;
+
+const STYLES_ACTION_BUTTON = css`
+  height: 32px;
+  width: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  color: ${Constants.colors.white};
+  cursor: pointer;
+
+  :hover {
+    color: magenta;
+  }
+`;
+
+const STYLES_CONTAINER_HEADER_LEFT = css`
+  min-width: 25%;
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+`;
+
+const STYLES_CONTAINER_HEADER_RIGHT = css`
+  flex-shrink: 0;
 `;
 
 class SocialContainer extends React.Component {
@@ -87,12 +114,22 @@ class SocialContainer extends React.Component {
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_CONTAINER_HEADER}>
-          <Viewer />{' '}
-          {ENABLE_NOTIFICATIONS ? (
-            <UINavigationLink style={{ marginLeft: 24 }} onClick={this._handleToggleNotifications}>
-              Notifications
-            </UINavigationLink>
-          ) : null}
+          <div className={STYLES_CONTAINER_HEADER_LEFT}>
+            <Viewer />{' '}
+            {ENABLE_NOTIFICATIONS ? (
+              <UINavigationLink
+                style={{ marginLeft: 24 }}
+                onClick={this._handleToggleNotifications}>
+                Notifications
+              </UINavigationLink>
+            ) : null}
+          </div>
+
+          <div className={STYLES_CONTAINER_HEADER_RIGHT}>
+            <span className={STYLES_ACTION_BUTTON} onClick={navigator.navigateToHome}>
+              <SVG.Home height="16px" />
+            </span>
+          </div>
         </div>
         {contentElement}
       </div>
@@ -110,6 +147,7 @@ export default class SocialContainerWithContext extends React.Component {
               <SocialContainer
                 isLoggedIn={!!currentUser.user}
                 navigateToCurrentUserProfile={navigator.navigateToCurrentUserProfile}
+                navigator={navigator}
               />
             )}
           </NavigatorContext.Consumer>
