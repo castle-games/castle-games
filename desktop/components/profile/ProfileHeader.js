@@ -93,6 +93,18 @@ const STYLES_CREATOR_IDENTITY = css`
   margin-bottom: 16px;
 `;
 
+const STYLES_STATUS_LINK = css`
+  color: ${Constants.colors.action};
+  word-spacing: -0.1rem;
+  text-decoration: underline;
+  cursor: pointer;
+`;
+
+const STYLES_STATUS_UNREGISTERED_TITLE = css`
+  word-spacing: -0.1rem;
+  color: ${Constants.colors.text2};
+`;
+
 export default class ProfileHeader extends React.Component {
   _handleClickCreatorLink = (url) => {
     NativeUtil.openExternalURL(url);
@@ -108,15 +120,42 @@ export default class ProfileHeader extends React.Component {
 
   _renderTagline = (creator) => {
     let name = creator.username;
-    let tagline = UserStatus.renderStatusText(creator.lastUserStatus);
-    if (!tagline) {
-      tagline = `Joined on ${Strings.toDate(creator.createdTime)}`;
+    let statusElement;
+    if (creator.lastUserStatus && creator.lastUserStatus.game) {
+      // show last status if it exists and is relevant
+      let status = UserStatus.renderStatusText(creator.lastUserStatus);
+      if (status.status) {
+        if (creator.lastUserStatus.game.gameId) {
+          // link to game if it's registered
+          statusElement = (
+            <React.Fragment>
+              {status.verb}{' '}
+              <span
+                className={STYLES_STATUS_LINK}
+                onClick={() => this.props.navigateToGameUrl(creator.lastUserStatus.game.url)}>
+                {status.title}
+              </span>
+            </React.Fragment>
+          );
+        } else {
+          statusElement = (
+            <React.Fragment>
+              {status.verb} <span className={STYLES_STATUS_UNREGISTERED_TITLE}>{status.title}</span>
+            </React.Fragment>
+          );
+        }
+      }
     }
-
-    let components = [];
-    if (name) components.push(name);
-    if (tagline) components.push(tagline);
-    return components.join(' // ');
+    if (!statusElement) {
+      // if no relevant or recent status, just show signed up date
+      statusElement = `Joined on ${Strings.toDate(creator.createdTime)}`;
+    }
+    return (
+      <React.Fragment>
+        {name ? `${name} // ` : ''}
+        {statusElement}
+      </React.Fragment>
+    );
   };
 
   _renderLinks = (creator) => {

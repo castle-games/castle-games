@@ -41,7 +41,8 @@ class ProfileScreen extends React.Component {
     creator: null,
     viewer: null,
     onAfterSave: () => {},
-    navigateToGame: (game) => {},
+    navigateToGame: async (game) => {},
+    navigateToGameUrl: async (url) => {},
     navigateToUserProfile: (user) => {},
   };
   state = {
@@ -193,7 +194,7 @@ class ProfileScreen extends React.Component {
         <ProfileHeader
           creator={creator}
           isOwnProfile={isOwnProfile}
-          onGameSelect={this.props.navigateToGame}
+          navigateToGameUrl={this.props.navigateToGameUrl}
         />
         <UIHorizontalNavigation
           items={this._getNavigationItems(isOwnProfile)}
@@ -211,6 +212,7 @@ export default class ProfileScreenWithContext extends React.Component {
     return (
       <ProfileScreen
         navigateToGame={navigator.navigateToGame}
+        navigateToGameUrl={navigator.navigateToGameUrl}
         navigateToUserProfile={navigator.navigateToUserProfile}
         viewer={currentUser.user}
         creator={navigation.userProfileShown}

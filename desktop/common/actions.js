@@ -38,6 +38,7 @@ const FULL_USER_FIELDS = `
     game {
       gameId
       name
+      url
     }
   }
   photo {

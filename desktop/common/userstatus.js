@@ -85,19 +85,24 @@ class UserStatus {
   };
 
   renderStatusText = (userStatus) => {
+    let verb, title, statusString;
     const { status, isRecent, lastPing, game } = userStatus;
-    let gameName = game && game.name ? game.name : 'an untitled game';
-    if (gameName && gameName.length > 32) {
-      gameName = `${gameName.substring(0, 29)}...`;
+    title = game && game.name ? game.name : 'an untitled game';
+    if (title && title.length > 32) {
+      title = `${title.substring(0, 29)}...`;
     }
     if (isRecent) {
-      const verb = status === 'make' ? 'Making' : 'Playing';
-      return `${verb} ${gameName}`;
+      verb = status === 'make' ? 'Making' : 'Playing';
+      statusString = `${verb} ${title}`;
     } else if (this._isDateRecentEnough(userStatus.lastPing)) {
-      const verb = status === 'make' ? 'Last made' : 'Last played';
-      return `${verb}: ${gameName}`;
+      verb = status === 'make' ? 'Last made:' : 'Last played:';
+      statusString = `${verb} ${title}`;
     }
-    return null;
+    return {
+      verb,
+      title,
+      status: statusString,
+    };
   };
 }
 
