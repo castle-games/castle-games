@@ -80,11 +80,17 @@ class ContentContainer extends React.Component {
     if (gameScreen) {
       gameScreen._updateGameWindowFrame();
     }
-  }
+  };
 
   _renderContent = (mode) => {
     if (mode === 'game') {
-      return <GameScreen ref={(c) => {this._game = c;}} />;
+      return (
+        <GameScreen
+          ref={(c) => {
+            this._game = c;
+          }}
+        />
+      );
     } else if (mode === 'home') {
       return (
         <HomeScreen
@@ -123,14 +129,23 @@ class ContentContainer extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
-        <ContentNavigationBar
-          searchQuery={this.state.searchQuery}
-          onSearchReset={this._handleSearchReset}
-          onSearchChange={this._handleSearchChange}
-          onSearchSubmit={this._handleSearchSubmit}
-        />
+        {this.props.mode === 'profile' || this.props.mode === 'home' ? (
+          <ContentNavigationBar
+            searchQuery={this.state.searchQuery}
+            onSearchReset={this._handleSearchReset}
+            onSearchChange={this._handleSearchChange}
+            onSearchSubmit={this._handleSearchSubmit}
+          />
+        ) : null}
         {contentElement}
-        {this.props.game ? <NowPlayingBar onUpdateGameWindowFrame={this._handleUpdateGameWindowFrame} game={this.props.game} mode={this.props.mode} navigator={this.props.navigator} /> : null}
+        {this.props.game ? (
+          <NowPlayingBar
+            onUpdateGameWindowFrame={this._handleUpdateGameWindowFrame}
+            game={this.props.game}
+            mode={this.props.mode}
+            navigator={this.props.navigator}
+          />
+        ) : null}
       </div>
     );
   }
@@ -142,23 +157,23 @@ export default class ContentContainerWithContext extends React.Component {
       <DevelopmentSetterContext.Consumer>
         {(development) => (
           <NavigationContext.Consumer>
-          {( navigation ) => {
-            return (
-              <NavigatorContext.Consumer>
-                {(navigator) => (
-                  <ContentContainer
-                    mode={navigation.contentMode}
-                    timeGameLoaded={navigation.timeGameLoaded}
-                    timeLastNavigated={navigation.timeLastNavigated}
-                    game={navigation.game}
-                    navigator={navigator}
-                    setIsDeveloping={development.setIsDeveloping}
-                    {...this.props}
-                  />
-                )}
-              </NavigatorContext.Consumer>
-            );
-          }}
+            {(navigation) => {
+              return (
+                <NavigatorContext.Consumer>
+                  {(navigator) => (
+                    <ContentContainer
+                      mode={navigation.contentMode}
+                      timeGameLoaded={navigation.timeGameLoaded}
+                      timeLastNavigated={navigation.timeLastNavigated}
+                      game={navigation.game}
+                      navigator={navigator}
+                      setIsDeveloping={development.setIsDeveloping}
+                      {...this.props}
+                    />
+                  )}
+                </NavigatorContext.Consumer>
+              );
+            }}
           </NavigationContext.Consumer>
         )}
       </DevelopmentSetterContext.Consumer>

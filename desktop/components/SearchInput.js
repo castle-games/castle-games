@@ -12,10 +12,11 @@ const STYLES_CONTAINER = css`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 32px;
-  min-width: 30%;
+  height: 64px;
+  min-width: 10%;
   width: 100%;
   padding: 0 24px 0 16px;
+  color: #2b2828;
 `;
 
 const STYLES_CONTAINER_LEFT = css`
@@ -40,13 +41,17 @@ const STYLES_INPUT = css`
   background: transparent;
   font-family: ${Constants.font.default};
   color: ${Constants.colors.white};
-  font-size: 14px;
+  font-size: 18px;
   min-width: 25%;
   width: 100%;
   border: 0;
   outline: 0;
   margin: 0;
   padding: 0 0 2px 0;
+
+  ::placeholder {
+    color: #e0dbda;
+  }
 
   :focus {
     border: 0;
@@ -55,7 +60,7 @@ const STYLES_INPUT = css`
 `;
 
 const STYLES_INPUT_READONLY = css`
-  font-size: 14px;
+  font-size: 18px;
   background: ${Constants.colors.background3};
   border-radius: 3px;
   padding: 4px 12px 4px 12px;

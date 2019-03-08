@@ -11,8 +11,8 @@ import UINavigationLink from '~/components/reusable/UINavigationLink';
 const ENABLE_NOTIF_SCREEN = false; // feature flag notification item
 
 const STYLES_CONTAINER = css`
-  background: ${Constants.colors.backgroundNavigation};
-  height: 32px;
+  background: #8f8b8b;
+  height: 56px;
   flex-shrink: 0;
   width: 100%;
   display: flex;
@@ -43,11 +43,7 @@ class ContentNavigationBar extends React.Component {
         </UINavigationLink>
       );
     }
-    return (
-      <div className={STYLES_NAV_ITEMS}>
-        {maybeNotifItem}
-      </div>
-    );
+    return <div className={STYLES_NAV_ITEMS}>{maybeNotifItem}</div>;
   };
 
   render() {
