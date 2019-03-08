@@ -18,6 +18,10 @@ const STYLES_BUTTON = css`
   justify-content: center;
   cursor: pointer;
 
+  :hover {
+    color: ${Constants.colors.brand2};
+  }
+
   svg {
     transform: scale(1);
     transition: 200ms ease transform;
@@ -100,14 +104,14 @@ const STYLES_CREATOR_LINK = css`
   cursor: pointer;
   font-weight: 600;
   transition: 200ms ease color;
-  color: ${Constants.colors.brand2};
+  color: ${Constants.colors.white};
 
   :hover {
-    color: ${Constants.colors.brand3};
+    color: ${Constants.colors.brand2};
   }
 
   :visited {
-    color: ${Constants.colors.brand2};
+    color: ${Constants.colors.white};
   }
 `;
 
