@@ -1,14 +1,15 @@
 import * as React from 'react';
-import { css } from 'react-emotion';
-
 import * as Constants from '~/common/constants';
-import GameActionsBar from '~/components/game/GameActionsBar';
-import GameWindow from '~/native/gamewindow';
-import { CurrentUserContext } from '~/contexts/CurrentUserContext';
-import Logs from '~/common/logs';
-import { NavigationContext, NavigatorContext } from '~/contexts/NavigationContext';
 import * as NativeUtil from '~/native/nativeutil';
 import * as Utilities from '~/common/utilities';
+
+import { css } from 'react-emotion';
+import { CurrentUserContext } from '~/contexts/CurrentUserContext';
+import { NavigationContext, NavigatorContext } from '~/contexts/NavigationContext';
+
+import GameActionsBar from '~/components/game/GameActionsBar';
+import GameWindow from '~/native/gamewindow';
+import Logs from '~/common/logs';
 
 const STYLES_CONTAINER = css`
   background: ${Constants.colors.black};

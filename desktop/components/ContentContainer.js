@@ -1,18 +1,20 @@
 import * as React from 'react';
 import { css } from 'react-emotion';
+import { DevelopmentSetterContext } from '~/contexts/DevelopmentContext';
+import { NavigationContext, NavigatorContext } from '~/contexts/NavigationContext';
 
 import * as Constants from '~/common/constants';
-import ContentNavigationBar from '~/components/ContentNavigationBar';
-import { DevelopmentSetterContext } from '~/contexts/DevelopmentContext';
+import * as Strings from '~/common/strings';
+import * as Urls from '~/common/urls';
+
 import GameScreen from '~/screens/GameScreen';
 import HomeScreen from '~/screens/HomeScreen';
 import ProfileScreen from '~/screens/ProfileScreen';
 import LoginSignupScreen from '~/screens/LoginSignupScreen';
 import NotificationScreen from '~/screens/NotificationScreen';
-import { NavigationContext } from '~/contexts/NavigationContext';
 import SearchScreen from '~/screens/SearchScreen';
-import * as Strings from '~/common/strings';
-import * as Urls from '~/common/urls';
+import ContentNavigationBar from '~/components/ContentNavigationBar';
+import NowPlayingBar from '~/components/NowPlayingBar';
 
 const STYLES_CONTAINER = css`
   font-family: ${Constants.font.default};
@@ -112,6 +114,7 @@ class ContentContainer extends React.Component {
           onSearchSubmit={this._handleSearchSubmit}
         />
         {contentElement}
+        {this.props.game ? <NowPlayingBar game={this.props.game} navigator={this.props.navigator} /> : null}
       </div>
     );
   }
@@ -123,16 +126,23 @@ export default class ContentContainerWithContext extends React.Component {
       <DevelopmentSetterContext.Consumer>
         {(development) => (
           <NavigationContext.Consumer>
-            {(navigation) => (
-              <ContentContainer
-                mode={navigation.contentMode}
-                timeGameLoaded={navigation.timeGameLoaded}
-                timeLastNavigated={navigation.timeLastNavigated}
-                game={navigation.game}
-                setIsDeveloping={development.setIsDeveloping}
-                {...this.props}
-              />
-            )}
+          {( navigation ) => {
+            return (
+              <NavigatorContext.Consumer>
+                {(navigator) => (
+                  <ContentContainer
+                    mode={navigation.contentMode}
+                    timeGameLoaded={navigation.timeGameLoaded}
+                    timeLastNavigated={navigation.timeLastNavigated}
+                    game={navigation.game}
+                    navigator={navigator}
+                    setIsDeveloping={development.setIsDeveloping}
+                    {...this.props}
+                  />
+                )}
+              </NavigatorContext.Consumer>
+            );
+          }}
           </NavigationContext.Consumer>
         )}
       </DevelopmentSetterContext.Consumer>

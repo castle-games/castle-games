@@ -34,14 +34,8 @@ const STYLES_NAV_ITEMS = css`
 class ContentNavigationBar extends React.Component {
   _renderTopNavigationItems = () => {
     let { game, navigator } = this.props;
-    let maybePlayingItem, maybeNotifItem;
-    if (game) {
-      maybePlayingItem = (
-        <UINavigationLink onClick={navigator.navigateToCurrentGame} style={{ marginRight: 24 }}>
-          Playing
-        </UINavigationLink>
-      );
-    }
+    let maybeNotifItem;
+
     if (ENABLE_NOTIF_SCREEN) {
       maybeNotifItem = (
         <UINavigationLink onClick={navigator.navigateToNotifications} style={{ marginRight: 24 }}>
@@ -51,11 +45,7 @@ class ContentNavigationBar extends React.Component {
     }
     return (
       <div className={STYLES_NAV_ITEMS}>
-        {maybePlayingItem}
         {maybeNotifItem}
-        <UINavigationLink onClick={navigator.navigateToHome} style={{ marginRight: 24 }}>
-          Home
-        </UINavigationLink>
       </div>
     );
   };

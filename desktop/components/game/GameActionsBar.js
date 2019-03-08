@@ -123,103 +123,6 @@ const STYLES_DESCRIPTION = css`
 export default class GameActionsBar extends React.Component {
   static contextType = DevelopmentContext;
 
-  state = {
-    isDescriptionVisible: false,
-  };
-
-  _handleDescriptionToggle = () => {
-    this.setState(
-      {
-        isDescriptionVisible: !this.state.isDescriptionVisible,
-      },
-      this.props.onUpdateGameWindowFrame
-    );
-  };
-
-  _handleViewSource = (gameEntryPoint) => {
-    NativeUtil.openExternalURL(Urls.githubUserContentToRepoUrl(gameEntryPoint));
-  };
-
-  _renderPlaying = (game, muteElement) => {
-    let color;
-    let backgroundColor;
-    if (game.metadata && game.metadata.primaryColor) {
-      backgroundColor = `#${game.metadata.primaryColor}`;
-      color = Constants.colors.white;
-    }
-
-    let title = 'Untitled';
-    let publishedInfo = 'Anonymous';
-    let isRegistered = false;
-    let description = '';
-    if (game) {
-      title = game.title ? game.title : title;
-      isRegistered = !Strings.isEmpty(game.gameId);
-      description = game.description ? game.description : description;
-
-      let username = 'Anonymous';
-      let updated;
-      if (isRegistered) {
-        username = (
-          <span
-            className={STYLES_CREATOR_LINK}
-            onClick={() => this.props.navigateToUserProfile(game.owner)}>
-            {game.owner.username}
-          </span>
-        );
-        updated = Strings.toDate(game.updatedTime);
-      } else {
-        username = game.owner ? game.owner : username;
-        updated = 'in development';
-      }
-      publishedInfo = (
-        <React.Fragment>
-          {username}
-          &nbsp;╱&nbsp;
-          {updated}
-        </React.Fragment>
-      );
-    }
-
-    let maybeViewSource;
-    const entryPoint = Utilities.getLuaEntryPoint(game);
-    if (Urls.isOpenSource(entryPoint)) {
-      maybeViewSource = (
-        <UINavigationLink
-          style={{ marginRight: 24 }}
-          onClick={() => this._handleViewSource(entryPoint)}>
-          View Source
-        </UINavigationLink>
-      );
-    }
-    return (
-      <div className={STYLES_CONTAINER}>
-        <div className={STYLES_GAME_STRIP} style={{ backgroundColor }}>
-          <div className={STYLES_GAME_STRIP_LEFT}>
-            {title}
-            &nbsp;╱&nbsp;
-            {publishedInfo}
-          </div>
-          <div className={STYLES_GAME_STRIP_RIGHT}>
-            <UINavigationLink style={{ marginRight: 24 }} onClick={this._handleDescriptionToggle}>
-              {this.state.isDescriptionVisible ? `Hide description` : `Show description`}
-            </UINavigationLink>
-            {maybeViewSource}
-            <UINavigationLink style={{ marginRight: 20 }} onClick={this.props.closeGame}>
-              Close game
-            </UINavigationLink>
-            {muteElement}
-          </div>
-        </div>
-        {this.state.isDescriptionVisible ? (
-          <div className={STYLES_METADATA}>
-            <div className={STYLES_DESCRIPTION}>{description}</div>
-          </div>
-        ) : null}
-      </div>
-    );
-  };
-
   _renderDeveloping = (game, muteElement) => {
     // TODO: mute etc.
     return (
@@ -244,8 +147,8 @@ export default class GameActionsBar extends React.Component {
     let { game } = this.props;
     if (this.context.isDeveloping) {
       return this._renderDeveloping(game, muteElement);
-    } else {
-      return this._renderPlaying(game, muteElement);
     }
+
+    return null;
   }
 }
