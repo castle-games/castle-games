@@ -46,6 +46,7 @@ class ContentContainer extends React.Component {
       // if we loaded a new game, auto-show logs for local urls
       const isLocal = Urls.isPrivateUrl(this.props.game.url);
       this.props.setIsDeveloping(isLocal);
+      this._handleUpdateGameWindowFrame();
     }
   }
 
@@ -80,6 +81,10 @@ class ContentContainer extends React.Component {
     if (gameScreen) {
       gameScreen._updateGameWindowFrame();
     }
+  };
+
+  updateGameWindowFrame = () => {
+    this._handleUpdateGameWindowFrame();
   };
 
   _renderContent = (mode) => {
@@ -152,6 +157,16 @@ class ContentContainer extends React.Component {
 }
 
 export default class ContentContainerWithContext extends React.Component {
+  _container;
+
+  updateGameWindowFrame = () => {
+    if (!this._container) {
+      return;
+    }
+
+    this._container.updateGameWindowFrame();
+  };
+
   render() {
     return (
       <DevelopmentSetterContext.Consumer>
@@ -162,6 +177,9 @@ export default class ContentContainerWithContext extends React.Component {
                 <NavigatorContext.Consumer>
                   {(navigator) => (
                     <ContentContainer
+                      ref={(c) => {
+                        this._container = c;
+                      }}
                       mode={navigation.contentMode}
                       timeGameLoaded={navigation.timeGameLoaded}
                       timeLastNavigated={navigation.timeLastNavigated}

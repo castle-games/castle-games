@@ -17,11 +17,26 @@ const STYLES_CONTAINER = css`
 `;
 
 export default class AppContainer extends React.Component {
+  _container;
+
+  updateGameWindowFrame = () => {
+    if (!this._container) {
+      return;
+    }
+
+    this._container.updateGameWindowFrame();
+  };
+
   render() {
     return (
       <div className={STYLES_CONTAINER}>
         <SocialContainer />
-        <ContentContainer {...this.props} />
+        <ContentContainer
+          ref={(c) => {
+            this._container = c;
+          }}
+          {...this.props}
+        />
       </div>
     );
   }

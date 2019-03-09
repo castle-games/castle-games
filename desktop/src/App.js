@@ -23,6 +23,7 @@ const NATIVE_CHANNELS_POLL_INTERVAL = 300;
 
 class App extends React.Component {
   _nativeChannelsPollTimeout;
+  _app;
 
   constructor(props) {
     super();
@@ -127,13 +128,22 @@ class App extends React.Component {
       return;
     }
     if (isDevelopmentHotkey(e)) {
-      return this.props.development.toggleIsDeveloping();
+      this.props.development.toggleIsDeveloping();
+      if (!this._app) {
+        return;
+      }
+
+      this._app.updateGameWindowFrame();
+      return;
     }
   };
 
   render() {
     return (
       <AppContainer
+        ref={(c) => {
+          this._app = c;
+        }}
         featuredGames={this.state.featuredGames}
         allContent={this.state.allContent}
         updateAvailable={this.state.updateAvailable}
