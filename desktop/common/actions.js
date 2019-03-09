@@ -1,6 +1,7 @@
 import CastleApiClient from 'castle-api-client';
 import * as Constants from '~/common/constants';
 import * as NativeUtil from '~/native/nativeutil';
+import * as Urls from '~/common/urls';
 
 export const API = CastleApiClient(Constants.API_HOST);
 
@@ -687,6 +688,18 @@ export async function recordUserStatus(status, isNewSession, game) {
 }
 
 async function _recordUserStatusUnregisteredGame(status, isNewSession, game) {
+  let coverImageUrl;
+  if (game.coverImage && game.coverImage.url) {
+    coverImageUrl = game.coverImage.url;
+  } else if (game.metadata && game.metadata.coverImage) {
+    if (!Urls.isPrivateUrl(game.metadata.coverImage)) {
+      coverImageUrl = game.metadata.coverImage;
+    }
+  } else if (game.metadata && game.metadata.coverImageUrl) { // coverImageUrl is deprecated
+    if (!Urls.isPrivateUrl(game.metadata.coverImageUrl)) {
+      coverImageUrl = game.metadata.coverImageUrl;
+    }
+  }
   const result = await API.graphqlAsync(
     /* GraphQL */ `
       mutation(
@@ -710,7 +723,7 @@ async function _recordUserStatusUnregisteredGame(status, isNewSession, game) {
       isNewSession,
       url: game.url,
       title: game.title ? game.title : game.name, // name is deprecated
-      coverImage: game.coverImage ? game.coverImage.url : null,
+      coverImage: coverImageUrl,
     }
   );
   return result;
