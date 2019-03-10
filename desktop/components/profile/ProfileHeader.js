@@ -9,6 +9,7 @@ import ContentEditor from '~/editor/ContentEditor';
 import UserStatus from '~/common/userstatus';
 
 import UIAvatar from '~/components/reusable/UIAvatar';
+import UICharacterCard from '~/components/reusable/UICharacterCard';
 import UIHeading from '~/components/reusable/UIHeading';
 import UIUserStatusIndicator from '~/components/reusable/UIUserStatusIndicator';
 
@@ -35,6 +36,7 @@ const STYLES_BODY_RIGHT = css`
 
 const STYLES_TOP = css`
   display: flex;
+  margin-bottom: 24px;
 `;
 
 const STYLES_TITLE = css`
@@ -91,6 +93,7 @@ const STYLES_STATUS = css`
 
 const STYLES_CREATOR_IDENTITY = css`
   margin-bottom: 16px;
+  padding-left: 24px;
 `;
 
 const STYLES_STATUS_LINK = css`
@@ -225,10 +228,7 @@ export default class ProfileHeader extends React.Component {
         <div className={STYLES_BODY}>
           <div className={STYLES_BODY_LEFT}>
             <div className={STYLES_TOP}>
-              <UIAvatar
-                src={avatarSrc}
-                style={{ width: 64, height: 64, marginRight: 24, marginTop: 6, borderRadius: 8 }}
-              />
+              <UICharacterCard user={this.props.creator} />
               <div className={STYLES_CREATOR_IDENTITY}>
                 <UIHeading style={{ marginBottom: 8 }}>{name}</UIHeading>
                 <div className={STYLES_META}>

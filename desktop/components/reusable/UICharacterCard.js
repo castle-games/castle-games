@@ -4,11 +4,14 @@ import * as Constants from '~/common/constants';
 import { css } from 'react-emotion';
 
 const STYLES_CARD = css`
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.175);
+  flex-shrink: 0;
 `;
 
 const STYLES_CARD_CONTENT = css`
-  background: black;
+  background: ${Constants.colors.black};
+  border: 1px solid ${Constants.colors.black};
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.175);
+  border-radius: 2px;
 `;
 
 const STYLES_CARD_IMAGE = css`
@@ -31,10 +34,10 @@ const STYLES_NAME_STRIP = css`
 `;
 
 const STYLES_STATS = css`
-  display: block;
-  color: ${Constants.colors.white};
-  font-size: 11px;
   font-family: ${Constants.font.monobold};
+  color: ${Constants.colors.white};
+  display: block;
+  font-size: 11px;
 `;
 
 const STYLES_STATS_ROW = css`
@@ -58,7 +61,6 @@ const STYLES_STATS_ROW_RIGHT = css`
 export default class UICharacterCard extends React.Component {
   render() {
     const { user } = this.props;
-    console.log(user);
 
     return (
       <span className={STYLES_CARD} onClick={this.props.onClick} style={this.props.style}>
@@ -73,13 +75,13 @@ export default class UICharacterCard extends React.Component {
           <div className={STYLES_NAME_STRIP}>@{user.username}</div>
           <div className={STYLES_STATS}>
             <div className={STYLES_STATS_ROW}>
-              <span className={STYLES_STATS_ROW_LEFT} style={{ color: 'magenta' }}>
+              <span className={STYLES_STATS_ROW_LEFT} style={{ color: Constants.colors.brand2 }}>
                 LVL
               </span>
               <span className={STYLES_STATS_ROW_RIGHT}>1</span>
             </div>
             <div className={STYLES_STATS_ROW}>
-              <span className={STYLES_STATS_ROW_LEFT} style={{ color: '#00eded' }}>
+              <span className={STYLES_STATS_ROW_LEFT} style={{ color: Constants.colors.darkcyan }}>
                 EXP
               </span>
               <span className={STYLES_STATS_ROW_RIGHT}>0</span>
