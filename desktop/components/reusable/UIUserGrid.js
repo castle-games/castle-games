@@ -3,29 +3,12 @@ import * as Constants from '~/common/constants';
 
 import { css } from 'react-emotion';
 import UIAvatar from '~/components/reusable/UIAvatar';
+import UICharacterCard from '~/components/reusable/UICharacterCard';
 
 const STYLES_CONTAINER = css`
   display: flex;
   flex-wrap: wrap;
-`;
-
-const STYLES_USER_CELL = css`
-  display: inline-flex;
-  margin-bottom: 16px;
-  margin-right: 16px;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  width: 180px;
-  height: 180px;
-  flex-shrink: 0;
-  cursor: pointer;
-  background: ${Constants.colors.background3};
-`;
-
-const STYLES_USER_NAME = css`
-  font-size: 12px;
-  margin-top: 8px;
+  max-width: 960px;
 `;
 
 class UIUserCell extends React.Component {
@@ -48,7 +31,14 @@ export default class UIUserGrid extends React.Component {
     return (
       <div className={STYLES_CONTAINER}>
         {users.map((u) => {
-          return <UIUserCell key={u.userId} user={u} onUserSelect={this.props.onUserSelect} />;
+          return (
+            <UICharacterCard
+              key={u.userId}
+              user={u}
+              style={{ margin: `0 16px 16px 0` }}
+              onAvatarClick={this.props.onUserSelect}
+            />
+          );
         })}
       </div>
     );

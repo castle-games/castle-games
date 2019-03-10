@@ -33,6 +33,10 @@ const injectGlobalStyles = () => injectGlobal`
     font-family: 'sf-mono';
     src: url('static/Font-Mono-SFMono.woff');
   }
+  @font-face {
+    font-family: 'sf-mono-bold';
+    src: url('static/SFMono-Bold.woff');
+  }
   html, body, div, span, applet, object, iframe,
   h1, h2, h3, h4, h5, h6, p, blockquote, pre,
   a, abbr, acronym, address, big, cite, code,

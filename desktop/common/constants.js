@@ -66,6 +66,7 @@ export const font = {
   default: `'sf-body', -apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica,  ubuntu, roboto, noto, segoe ui, arial, sans-serif`,
   heading: `'sf-heading', -apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica,  ubuntu, roboto, noto, segoe ui, arial, sans-serif`,
   mono: `'sf-mono', Consolas, monaco, monospace`,
+  monobold: `'sf-mono-bold', Consolas, monaco, monospace`,
 };
 
 export const TRANSPARENT_GIF_DATA_URL =
