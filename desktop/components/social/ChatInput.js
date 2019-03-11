@@ -37,7 +37,7 @@ const STYLES_INPUT = css`
   color: ${Constants.colors.white};
   overflow-wrap: break-word;
   box-sizing: border-box;
-  font-size: 16px;
+  font-size: 14px;
   min-width: 25%;
   height: 48px;
   width: 100%;
@@ -58,7 +58,7 @@ const STYLES_INPUT_READONLY = css`
   background: transparent;
   font-family: ${Constants.font.system};
   color: ${Constants.colors.white};
-  font-size: 16px;
+  font-size: 14px;
   min-width: 25%;
   height: 48px;
   width: 100%;
