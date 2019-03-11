@@ -102,7 +102,8 @@ const STYLES_METADATA = css`
 
 const STYLES_CREATOR_LINK = css`
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 400;
+  font-family: ${Constants.font.monobold};
   transition: 200ms ease color;
   color: ${Constants.colors.white};
 

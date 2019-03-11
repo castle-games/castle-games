@@ -79,6 +79,23 @@ const STYLES_CONTAINER_HEADER_RIGHT = css`
   flex-shrink: 0;
 `;
 
+const STYLES_STAT = css`
+  font-family: ${Constants.font.monobold};
+  margin-right: 16px;
+  font-size: 10px;
+  line-height: 9px;
+`;
+
+const STYLES_EXP_LABEL = css`
+  margin-right: 8px;
+  color: ${Constants.colors.darkcyan};
+`;
+
+const STYLES_LVL_LABEL = css`
+  margin-right: 8px;
+  color: ${Constants.colors.brand2};
+`;
+
 class SocialContainer extends React.Component {
   state = {
     showNotifications: false,
@@ -91,6 +108,7 @@ class SocialContainer extends React.Component {
   render() {
     let { isLoggedIn, navigateToCurrentUserProfile } = this.props;
     let contentElement;
+    let signInElement;
     if (isLoggedIn) {
       contentElement = (
         <ChatContainer
@@ -98,16 +116,32 @@ class SocialContainer extends React.Component {
           onToggleNotifications={this._handleToggleNotifications}
         />
       );
+
+      signInElement = (
+        <React.Fragment>
+          <span className={STYLES_STAT} style={{ marginLeft: 8 }}>
+            <span className={STYLES_LVL_LABEL}>LVL</span>1
+          </span>
+
+          <span className={STYLES_STAT}>
+            <span className={STYLES_EXP_LABEL}>EXP</span>0
+          </span>
+        </React.Fragment>
+      );
     } else {
       contentElement = (
         <div className={STYLES_LOGGED_OUT}>
-          <UIHeaderBlock>
-            <span className={STYLES_LOGIN_ACTION} onClick={navigateToCurrentUserProfile}>
-              Sign in
-            </span>
-            &nbsp;to chat
-          </UIHeaderBlock>
+          <UIHeaderBlock>You must be signed in to chat</UIHeaderBlock>
         </div>
+      );
+
+      signInElement = (
+        <UINavigationLink
+          style={{ marginLeft: 8 }}
+          className={STYLES_LOGIN_ACTION}
+          onClick={navigateToCurrentUserProfile}>
+          Sign in
+        </UINavigationLink>
       );
     }
 
@@ -115,17 +149,17 @@ class SocialContainer extends React.Component {
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_CONTAINER_HEADER}>
           <div className={STYLES_CONTAINER_HEADER_LEFT}>
-            <Viewer />{' '}
+            {isLoggedIn ? <Viewer /> : null} {signInElement}
+          </div>
+
+          <div className={STYLES_CONTAINER_HEADER_RIGHT}>
             {ENABLE_NOTIFICATIONS ? (
               <UINavigationLink
-                style={{ marginLeft: 24 }}
+                style={{ marginRight: 16 }}
                 onClick={this._handleToggleNotifications}>
                 Notifications
               </UINavigationLink>
             ) : null}
-          </div>
-
-          <div className={STYLES_CONTAINER_HEADER_RIGHT}>
             <span className={STYLES_ACTION_BUTTON} onClick={this.props.navigator.navigateToHome}>
               <SVG.Home height="16px" />
             </span>
@@ -145,6 +179,7 @@ export default class SocialContainerWithContext extends React.Component {
           <NavigatorContext.Consumer>
             {(navigator) => (
               <SocialContainer
+                viewer={currentUser ? currentUser.user : null}
                 isLoggedIn={!!currentUser.user}
                 navigateToCurrentUserProfile={navigator.navigateToCurrentUserProfile}
                 navigator={navigator}

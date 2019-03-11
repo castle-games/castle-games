@@ -122,7 +122,6 @@ export default class ProfileHeader extends React.Component {
   };
 
   _renderTagline = (creator) => {
-    let name = creator.username;
     let statusElement;
     if (creator.lastUserStatus && creator.lastUserStatus.game) {
       // show last status if it exists and is relevant
@@ -153,12 +152,7 @@ export default class ProfileHeader extends React.Component {
       // if no relevant or recent status, just show signed up date
       statusElement = `Joined on ${Strings.toDate(creator.createdTime)}`;
     }
-    return (
-      <React.Fragment>
-        {name ? `${name} // ` : ''}
-        {statusElement}
-      </React.Fragment>
-    );
+    return <React.Fragment>{statusElement}</React.Fragment>;
   };
 
   _renderLinks = (creator) => {

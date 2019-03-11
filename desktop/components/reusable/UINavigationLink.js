@@ -7,7 +7,7 @@ const STYLES_NAV_ITEM = css`
   flex-shrink: 0;
   display: inline-flex;
   user-select: none;
-  font-family: ${Constants.font.system};
+  font-family: ${Constants.font.mono};
   text-transform: uppercase;
   font-size: 11px;
   line-height: 10px;
