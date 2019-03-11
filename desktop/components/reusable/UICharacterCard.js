@@ -84,6 +84,10 @@ const getLevel = (exp) => {
   }
 
   if (exp < 32000) {
+    return 7;
+  }
+
+  if (exp < 64000) {
     return 'MAX';
   }
 };
@@ -101,8 +105,8 @@ export default class UICharacterCard extends React.Component {
       playCount = g.playCount + playCount;
     });
 
-    console.log(playCount);
-    console.log(gameCount);
+    const exp = getExp({ playCount, gameCount });
+    const level = getLevel(exp);
 
     return (
       <span className={STYLES_CARD} onClick={this.props.onClick} style={this.props.style}>
@@ -120,15 +124,13 @@ export default class UICharacterCard extends React.Component {
               <span className={STYLES_STATS_ROW_LEFT} style={{ color: Constants.colors.brand2 }}>
                 LVL
               </span>
-              <span className={STYLES_STATS_ROW_RIGHT}>
-                {getLevel(getExp({ playCount, gameCount }))}
-              </span>
+              <span className={STYLES_STATS_ROW_RIGHT}>{level}</span>
             </div>
             <div className={STYLES_STATS_ROW}>
               <span className={STYLES_STATS_ROW_LEFT} style={{ color: Constants.colors.darkcyan }}>
                 EXP
               </span>
-              <span className={STYLES_STATS_ROW_RIGHT}>{getExp({ playCount, gameCount })}</span>
+              <span className={STYLES_STATS_ROW_RIGHT}>{exp}</span>
             </div>
           </div>
         </div>
