@@ -58,9 +58,51 @@ const STYLES_STATS_ROW_RIGHT = css`
   padding-left: 8px;
 `;
 
+const getExp = ({ playCount, gameCount }) => {
+  return playCount * 5 + gameCount * 1500;
+};
+
+const getLevel = (exp) => {
+  if (exp < 1000) {
+    return 1;
+  }
+
+  if (exp < 2000) {
+    return 2;
+  }
+
+  if (exp < 4000) {
+    return 3;
+  }
+
+  if (exp < 8000) {
+    return 5;
+  }
+
+  if (exp < 16000) {
+    return 6;
+  }
+
+  if (exp < 32000) {
+    return 'MAX';
+  }
+};
+
 export default class UICharacterCard extends React.Component {
   render() {
     const { user } = this.props;
+
+    let playCount = 0;
+    let gameCount = 0;
+
+    user.gameItems.forEach((g) => {
+      gameCount = gameCount + 1;
+
+      playCount = g.playCount + playCount;
+    });
+
+    console.log(playCount);
+    console.log(gameCount);
 
     return (
       <span className={STYLES_CARD} onClick={this.props.onClick} style={this.props.style}>
@@ -78,13 +120,15 @@ export default class UICharacterCard extends React.Component {
               <span className={STYLES_STATS_ROW_LEFT} style={{ color: Constants.colors.brand2 }}>
                 LVL
               </span>
-              <span className={STYLES_STATS_ROW_RIGHT}>1</span>
+              <span className={STYLES_STATS_ROW_RIGHT}>
+                {getLevel(getExp({ playCount, gameCount }))}
+              </span>
             </div>
             <div className={STYLES_STATS_ROW}>
               <span className={STYLES_STATS_ROW_LEFT} style={{ color: Constants.colors.darkcyan }}>
                 EXP
               </span>
-              <span className={STYLES_STATS_ROW_RIGHT}>0</span>
+              <span className={STYLES_STATS_ROW_RIGHT}>{getExp({ playCount, gameCount })}</span>
             </div>
           </div>
         </div>

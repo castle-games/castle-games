@@ -61,6 +61,7 @@ const GAME_FIELDS = `
   metadata
   entryPoint
   sessionId
+  playCount
   coverImage {
     url
     imgixUrl
@@ -406,6 +407,7 @@ export async function getInitialData() {
         name
         username
         createdTime
+        ${GAME_ITEMS}
         photo {
           url
           imgixUrl
@@ -695,7 +697,8 @@ async function _recordUserStatusUnregisteredGame(status, isNewSession, game) {
     if (!Urls.isPrivateUrl(game.metadata.coverImage)) {
       coverImageUrl = game.metadata.coverImage;
     }
-  } else if (game.metadata && game.metadata.coverImageUrl) { // coverImageUrl is deprecated
+  } else if (game.metadata && game.metadata.coverImageUrl) {
+    // coverImageUrl is deprecated
     if (!Urls.isPrivateUrl(game.metadata.coverImageUrl)) {
       coverImageUrl = game.metadata.coverImageUrl;
     }
