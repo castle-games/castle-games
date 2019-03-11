@@ -36,7 +36,7 @@ export default class UIUserGrid extends React.Component {
               key={u.userId}
               user={u}
               style={{ margin: `0 16px 16px 0` }}
-              onAvatarClick={this.props.onUserSelect}
+              onAvatarClick={() => this.props.onUserSelect(u)}
             />
           );
         })}
