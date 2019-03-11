@@ -836,3 +836,32 @@ export async function getAutocompleteAsync(text) {
   }
   return result.data.autocomplete;
 }
+
+export async function getMultiplayerRegions() {
+  const result = await API(
+    `
+    query {
+      multiplayerRegions {
+        name
+        pingAddress
+      }
+    }`
+  );
+  if (result.error || result.errors) {
+    return false;
+  }
+  return result.data.multiplayerRegions;
+}
+
+export async function updatePings(pings) {
+  let result = await API.graphqlAsync(
+    /* GraphQL */ `
+      mutation($pings: [UserPing]!) {
+        updatePings(pings: $pings)
+      }
+    `,
+    {
+      pings,
+    }
+  );
+}
