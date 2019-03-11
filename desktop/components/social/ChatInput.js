@@ -27,7 +27,7 @@ const STYLES_RELATIVE_CONTAINER = css`
 const STYLES_CONTAINER = css`
   width: 100%;
   background: #141414;
-  border-top: 1px solid #444444;
+  border-top: 1px solid #232323;
 `;
 
 const STYLES_INPUT = css`
