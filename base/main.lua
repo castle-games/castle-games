@@ -145,7 +145,7 @@ function main.draw()
         love.graphics.setColor(1, 0, 1)
         -- Ongoing network requests on bottom of screen
         local fontH = love.graphics.getFont():getHeight()
-        local PADDING = 16
+        local PADDING = 14
         local y = love.graphics.getHeight() - PADDING
         for _, req in ipairs(network.requests) do
             local paddedMethod = req.method .. string.rep(' ', math.max(4 - #req.method, 0))
