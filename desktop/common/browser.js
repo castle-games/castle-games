@@ -71,7 +71,6 @@ async function resolveGameAtUrlAsync(gameUrl) {
   // always try to resolve from the server first
   try {
     game = await Actions.getGameByUrl(gameUrl);
-    game.metadata = _validateMetadata(game, !Strings.isEmpty(game.gameId));
   } catch (e) {
     game = null;
   }
