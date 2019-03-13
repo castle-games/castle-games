@@ -31,6 +31,8 @@ const FULL_USER_FIELDS = `
   createdTime
   updatedTime
   about
+  gamesCount
+  gamesSumPlayCount
   lastUserStatus {
     userStatusId
     status
@@ -407,7 +409,8 @@ export async function getInitialData() {
         name
         username
         createdTime
-        ${GAME_ITEMS}
+        gamesCount
+        gamesSumPlayCount
         photo {
           url
           imgixUrl

@@ -58,11 +58,11 @@ const STYLES_STATS_ROW_RIGHT = css`
   padding-left: 8px;
 `;
 
-const getExp = ({ playCount, gameCount }) => {
+export const getExp = ({ playCount, gameCount }) => {
   return playCount * 5 + gameCount * 1500;
 };
 
-const getLevel = (exp) => {
+export const getLevel = (exp) => {
   if (exp < 1000) {
     return 1;
   }
@@ -95,17 +95,9 @@ const getLevel = (exp) => {
 export default class UICharacterCard extends React.Component {
   render() {
     const { user } = this.props;
+    const { gamesCount, gamesSumPlayCount } = user;
 
-    let playCount = 0;
-    let gameCount = 0;
-
-    user.gameItems.forEach((g) => {
-      gameCount = gameCount + 1;
-
-      playCount = g.playCount + playCount;
-    });
-
-    const exp = getExp({ playCount, gameCount });
+    const exp = getExp({ playCount: gamesSumPlayCount, gameCount: gamesCount });
     const level = getLevel(exp);
 
     return (

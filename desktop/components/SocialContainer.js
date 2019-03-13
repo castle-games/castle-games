@@ -4,6 +4,7 @@ import * as Constants from '~/common/constants';
 import { css } from 'react-emotion';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigatorContext } from '~/contexts/NavigationContext';
+import { getLevel, getExp } from '~/components/reusable/UICharacterCard';
 
 import ChatContainer from '~/components/social/ChatContainer';
 import * as SVG from '~/components/primitives/svg';
@@ -106,7 +107,7 @@ class SocialContainer extends React.Component {
   };
 
   render() {
-    let { isLoggedIn, navigateToCurrentUserProfile } = this.props;
+    let { isLoggedIn, navigateToCurrentUserProfile, viewer } = this.props;
     let contentElement;
     let signInElement;
     if (isLoggedIn) {
@@ -117,14 +118,17 @@ class SocialContainer extends React.Component {
         />
       );
 
+    const exp = getExp({ playCount: viewer.gamesSumPlayCount, gameCount: viewer.gamesCount });
+    const level = getLevel(exp);
+
       signInElement = (
         <React.Fragment>
           <span className={STYLES_STAT} style={{ marginLeft: 8 }}>
-            <span className={STYLES_LVL_LABEL}>LVL</span>1
+            <span className={STYLES_LVL_LABEL}>LVL</span>{level}
           </span>
 
           <span className={STYLES_STAT}>
-            <span className={STYLES_EXP_LABEL}>EXP</span>0
+            <span className={STYLES_EXP_LABEL}>EXP</span>{exp}
           </span>
         </React.Fragment>
       );
