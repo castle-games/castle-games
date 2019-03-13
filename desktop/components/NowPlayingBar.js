@@ -2,6 +2,9 @@ import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as SVG from '~/components/primitives/svg';
 import * as Strings from '~/common/strings';
+import * as NativeUtil from '~/native/nativeutil';
+import * as Urls from '~/common/urls';
+import * as Utilities from '~/common/utilities';
 
 import { NativeBinds } from '~/native/nativebinds';
 import { css } from 'react-emotion';
@@ -50,8 +53,9 @@ const STYLES_GAME_STRIP_LEFT = css`
   display: inline-flex;
   align-items: center;
   justify-content: flex-start;
-  font-size: 12px;
-  line-height: 12px;
+  font-size: 11px;
+  line-height: 10px;
+  letter-spacing: 0.1px;
   text-transform: uppercase;
   white-space: nowrap;
 `;
@@ -67,8 +71,6 @@ const STYLES_GAME_STRIP_RIGHT = css`
 const STYLES_CONTAINER = css`
   background: ${Constants.colors.background};
   width: 100%;
-  display: flex;
-  flex-direction: column;
 `;
 
 const STYLES_LOG_CONTAINER = css`
@@ -125,6 +127,10 @@ const STYLES_DESCRIPTION = css`
 export default class NowPlayingBar extends React.Component {
   state = {
     isDescriptionVisible: false,
+  };
+
+  _handleViewSource = (gameEntryPoint) => {
+    NativeUtil.openExternalURL(Urls.githubUserContentToRepoUrl(gameEntryPoint));
   };
 
   _handleToggleMute = () => {
@@ -187,7 +193,11 @@ export default class NowPlayingBar extends React.Component {
     let isRegistered = false;
     let description = '';
     if (game) {
-      title = game.title ? game.title : title;
+      title = game.title ? (
+        <span onClick={this.props.navigator.navigateToCurrentGame}>{game.title}</span>
+      ) : (
+        <span onClick={this.props.navigator.navigateToCurrentGame}>{title}</span>
+      );
       isRegistered = !Strings.isEmpty(game.gameId);
       description = game.description ? game.description : description;
 
@@ -213,6 +223,18 @@ export default class NowPlayingBar extends React.Component {
       );
     }
 
+    let maybeViewSource;
+    const entryPoint = Utilities.getLuaEntryPoint(game);
+    if (Urls.isOpenSource(entryPoint)) {
+      maybeViewSource = (
+        <UINavigationLink
+          style={{ marginRight: 24 }}
+          onClick={() => this._handleViewSource(entryPoint)}>
+          View Source
+        </UINavigationLink>
+      );
+    }
+
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_GAME_STRIP} style={{ backgroundColor }}>
@@ -223,6 +245,7 @@ export default class NowPlayingBar extends React.Component {
             <UINavigationLink style={{ marginRight: 24 }} onClick={this._handleDescriptionToggle}>
               {this.state.isDescriptionVisible ? `Description` : `Description`}
             </UINavigationLink>
+            {maybeViewSource}
             {this.props.mode !== 'game' ? (
               <UINavigationLink style={{ marginRight: 24 }} onClick={this._handleNavigatePlaying}>
                 Now playing
