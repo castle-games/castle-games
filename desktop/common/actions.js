@@ -638,7 +638,7 @@ export async function previewGameAtUrl(url) {
       query PreviewGame($url: String!) {
         previewGame(url: $url) {
           slug,
-          name,
+          title,
           url,
           owner {
             name,
