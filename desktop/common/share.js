@@ -24,10 +24,14 @@ class Share {
 
   _connectMultiplayerClientAsync = async (e) => {
     let mediaUrl = e.params.mediaUrl;
+    let entryPoint = mediaUrl;
+    if (this._game && this._game.serverEntryPoint) {
+      entryPoint = this._game.serverEntryPoint;
+    }
+
     let response = await Actions.multiplayerJoinAsync(
       this._game ? this._game.gameId : null,
-      this._game,
-      mediaUrl,
+      entryPoint,
       this._sessionId
     );
 

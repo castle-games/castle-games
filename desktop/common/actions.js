@@ -62,6 +62,7 @@ const GAME_FIELDS = `
   description
   metadata
   entryPoint
+  serverEntryPoint
   sessionId
   playCount
   coverImage {
@@ -757,18 +758,13 @@ async function _recordUserStatusRegisteredGame(status, isNewSession, gameId) {
   return result;
 }
 
-export async function multiplayerJoinAsync(gameId, game, entryPoint, sessionId) {
+export async function multiplayerJoinAsync(gameId, entryPoint, sessionId) {
   let result;
   try {
     result = await API.graphqlAsync(
       /* GraphQL */ `
-        mutation($gameId: ID, $game: Json, $entryPoint: String, $sessionId: String) {
-          joinMultiplayerSession(
-            gameId: $gameId
-            game: $game
-            entryPoint: $entryPoint
-            sessionId: $sessionId
-          ) {
+        mutation($gameId: ID, $entryPoint: String, $sessionId: String) {
+          joinMultiplayerSession(gameId: $gameId, entryPoint: $entryPoint, sessionId: $sessionId) {
             sessionId
             address
             isNewSession
@@ -777,7 +773,6 @@ export async function multiplayerJoinAsync(gameId, game, entryPoint, sessionId) 
       `,
       {
         gameId,
-        game,
         entryPoint,
         sessionId,
       }

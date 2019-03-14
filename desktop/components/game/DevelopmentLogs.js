@@ -159,7 +159,10 @@ export default class DevelopmentLogs extends React.Component {
 
     let { game } = this.props;
     try {
-      let remoteLogs = await Actions.gameServerLogsAsync(game.gameId, game.entryPoint || game.url);
+      let remoteLogs = await Actions.gameServerLogsAsync(
+        game.gameId,
+        game.serverEntryPoint || game.url
+      );
       if (remoteLogs) {
         this.setState({
           remoteLogs,
