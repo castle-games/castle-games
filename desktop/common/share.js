@@ -26,6 +26,7 @@ class Share {
     let mediaUrl = e.params.mediaUrl;
     let response = await Actions.multiplayerJoinAsync(
       this._game ? this._game.gameId : null,
+      this._game,
       mediaUrl,
       this._sessionId
     );
