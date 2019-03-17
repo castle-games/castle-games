@@ -109,6 +109,12 @@ function portalMeta:setupLove()
             end
         end
         function newLove.window.updateMode() return true end
+
+        function newLove.window.getMode()
+            local w, h, flags = love.window.getMode()
+            local w, h = love.graphics.getDimensions() -- This accounts for `ghostGlobalScaling` properly
+            return w, h, flags
+        end
     end
 
     function newLove.filesystem.load(path)
