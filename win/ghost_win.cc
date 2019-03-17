@@ -68,6 +68,7 @@ static std::string initialUri = "";
 static lua_State *luaState = NULL;
 static int loveBootStackPos = 0;
 static bool lovePaused = false;
+static long frameCount = 0;
 
 static bool isFullscreen = false;
 
@@ -389,6 +390,9 @@ static void bootLove(const char *uri) {
   // Reset the previous window dimensions
   prevParentRect.right = 0;
   prevParentRect.left = 0;
+
+  // Reset frame counter
+  frameCount = 0;
 }
 
 void closeLua() {
@@ -430,6 +434,7 @@ GetScaleFactorForMonitor_Ptr pGetScaleFactorForMonitor = nullptr;
 void ghostStep() {
   auto child = ghostWinGetChildWindow();
 
+  // Load dynamically loaded Windows API functions
   if (!dllsLoaded) {
     auto shcore = SDL_LoadObject("SHCORE.DLL");
     if (shcore) {
@@ -438,6 +443,12 @@ void ghostStep() {
     }
 
     dllsLoaded = true;
+  }
+
+  // The Ghost window starts hidden. We show it after the first few frames are rendered to deal with
+  // initial frame size glitches...
+  if (++frameCount == 3) {
+    ShowWindow(child, SW_SHOW);
   }
 
   // Update global scale factor

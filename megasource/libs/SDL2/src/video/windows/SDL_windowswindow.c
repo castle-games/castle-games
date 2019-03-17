@@ -321,6 +321,7 @@ WIN_CreateWindow(_THIS, SDL_Window * window)
         parent = CreateWindow(SDL_Appname, TEXT(""), STYLE_BASIC, 0, 0, 32, 32, NULL, NULL, SDL_Instance, NULL);
     }
 
+    // XXX(Ghost): Use Ghost-provided parent window
     if (ghostWinMainWindow) {
       parent = ghostWinMainWindow;
     }
@@ -333,6 +334,10 @@ WIN_CreateWindow(_THIS, SDL_Window * window)
     hwnd =
         CreateWindow(SDL_Appname, TEXT(""), style, x, y, w, h, parent, NULL,
                      SDL_Instance, NULL);
+
+    // XXX(Ghost): Hide window to start and let Ghost show it later
+    ShowWindow(hwnd, SW_HIDE);
+
     if (!hwnd) {
         return WIN_SetError("Couldn't create window");
     }
@@ -562,6 +567,8 @@ WIN_GetWindowBordersSize(_THIS, SDL_Window * window, int *top, int *left, int *b
 void
 WIN_ShowWindow(_THIS, SDL_Window * window)
 {
+    // XXX(Ghost): Let Ghost handle showing/hiding...
+    return;
     HWND hwnd = ((SDL_WindowData *) window->driverdata)->hwnd;
     ShowWindow(hwnd, SW_SHOW);
 }
@@ -569,6 +576,8 @@ WIN_ShowWindow(_THIS, SDL_Window * window)
 void
 WIN_HideWindow(_THIS, SDL_Window * window)
 {
+    // XXX(Ghost): Let Ghost handle showing/hiding...
+    return;
     HWND hwnd = ((SDL_WindowData *) window->driverdata)->hwnd;
     ShowWindow(hwnd, SW_HIDE);
 }
