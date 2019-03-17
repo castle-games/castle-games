@@ -10,7 +10,7 @@ local imgMaskText = love.graphics.newImage('assets/loading-mask-text.png')
 local imgSize = { width = 301, height = 78 }
 
 function splash:draw()
-    local width, height = love.window.getMode()
+    local width, height = love.graphics.getDimensions()
     love.graphics.push('all')
     love.graphics.translate(width * 0.5, height * 0.5)
     love.graphics.scale(0.5, 0.5)
