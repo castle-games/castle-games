@@ -42,6 +42,8 @@ bool ghostCreateProjectAtPath(const char *path, const char **entryPoint);
 bool ghostGetPathToFileInAppBundle(const char *filename, const char **result);
 void ghostInstallUpdate();
 
+extern double ghostGlobalScaling;
+
 #ifdef __cplusplus
 }
 #endif

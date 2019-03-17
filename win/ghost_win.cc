@@ -428,6 +428,8 @@ typedef HRESULT(WINAPI *GetScaleFactorForMonitor_Ptr)(HMONITOR hMon, int *pScale
 GetScaleFactorForMonitor_Ptr pGetScaleFactorForMonitor = nullptr;
 
 void ghostStep() {
+  auto child = ghostWinGetChildWindow();
+
   if (!dllsLoaded) {
     auto shcore = SDL_LoadObject("SHCORE.DLL");
     if (shcore) {
@@ -436,6 +438,14 @@ void ghostStep() {
     }
 
     dllsLoaded = true;
+  }
+
+  // Update global scale factor
+  if (pGetScaleFactorForMonitor && child) {
+    auto monitor = MonitorFromWindow(child, MONITOR_DEFAULTTOPRIMARY);
+    int percentScale = 100;
+    pGetScaleFactorForMonitor(monitor, &percentScale);
+    ghostGlobalScaling = 0.01 * percentScale;
   }
 
   // Process messages
@@ -468,7 +478,6 @@ void ghostStep() {
       } break;
 
       case SET_CHILD_WINDOW_VISIBLE: {
-        auto child = ghostWinGetChildWindow();
         if (child) {
           ShowWindow(child, msg.body.setChildWindowVisible.visible ? SW_SHOW : SW_HIDE);
         }
@@ -480,7 +489,6 @@ void ghostStep() {
         static RECT oldRect = {100, 100, 1000, 1000};
 
         auto parent = ghostWinGetMainWindow();
-        auto child = ghostWinGetChildWindow();
 
         if (child) {
           if (msg.body.setChildWindowFullscreen.fullscreen) {
@@ -529,7 +537,6 @@ void ghostStep() {
       Sleep(100);
     }
 
-    auto child = ghostWinGetChildWindow();
     if (isFullscreen) {
       if (child) {
         auto parent = ghostWinGetMainWindow();
@@ -550,14 +557,6 @@ void ghostStep() {
             GetWindowRect(parent, &currParentRect);
           }
 
-          // Get the display scale factor
-          int percentScale = 100;
-          if (pGetScaleFactorForMonitor) {
-            auto monitor = MonitorFromWindow(child, MONITOR_DEFAULTTOPRIMARY);
-            pGetScaleFactorForMonitor(monitor, &percentScale);
-          }
-          auto fracScale = 0.01 * percentScale;
-
           // Check for parent window resizes at the native level and apply the delta
           {
             if (prevParentRect.right != prevParentRect.left) {
@@ -565,8 +564,8 @@ void ghostStep() {
                         (prevParentRect.right - prevParentRect.left);
               auto dy = (currParentRect.bottom - currParentRect.top) -
                         (prevParentRect.bottom - prevParentRect.top);
-              childWidth += dw / fracScale;
-              childHeight += dy / fracScale;
+              childWidth += dw / ghostGlobalScaling;
+              childHeight += dy / ghostGlobalScaling;
             }
 
             prevParentRect = currParentRect;
@@ -574,11 +573,11 @@ void ghostStep() {
 
           // Apply the size!
           // NOTE: This parent-window bounding doesn't actually seem to work in practice...
-          auto newLeft = fmax(0, fracScale * childLeft), newTop = fmax(0, fracScale * childTop);
+          auto newLeft = fmax(0, ghostGlobalScaling * childLeft), newTop = fmax(0, ghostGlobalScaling * childTop);
           auto newWidth =
-              fmin(fracScale * childWidth, currParentRect.right - currParentRect.left - newLeft);
+              fmin(ghostGlobalScaling * childWidth, currParentRect.right - currParentRect.left - newLeft);
           auto newHeight =
-              fmin(fracScale * childHeight, currParentRect.bottom - currParentRect.top - newTop);
+              fmin(ghostGlobalScaling * childHeight, currParentRect.bottom - currParentRect.top - newTop);
           SetWindowPos(child, NULL, newLeft, newTop, newWidth, newHeight, 0);
         }
       }
