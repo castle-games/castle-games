@@ -432,6 +432,7 @@ typedef HRESULT(WINAPI *GetScaleFactorForMonitor_Ptr)(HMONITOR hMon, int *pScale
 GetScaleFactorForMonitor_Ptr pGetScaleFactorForMonitor = nullptr;
 
 void ghostStep() {
+  auto parent = ghostWinGetMainWindow();
   auto child = ghostWinGetChildWindow();
 
   // Load dynamically loaded Windows API functions
@@ -499,8 +500,6 @@ void ghostStep() {
         static LONG oldExStyle = WS_OVERLAPPED;
         static RECT oldRect = {100, 100, 1000, 1000};
 
-        auto parent = ghostWinGetMainWindow();
-
         if (child) {
           if (msg.body.setChildWindowFullscreen.fullscreen) {
             isFullscreen = true;
@@ -550,7 +549,6 @@ void ghostStep() {
 
     if (isFullscreen) {
       if (child) {
-        auto parent = ghostWinGetMainWindow();
         if (parent && GetForegroundWindow() == parent) {
           SetFocus(child);
         }
@@ -563,7 +561,6 @@ void ghostStep() {
         // Handle window resizing if focused
         if (focused) {
           RECT currParentRect;
-          auto parent = ghostWinGetMainWindow();
           if (parent) {
             GetWindowRect(parent, &currParentRect);
           }
@@ -596,7 +593,6 @@ void ghostStep() {
       auto channel = love::thread::Channel::getChannel("FOCUS_ME");
       if (channel->getCount() > 0) {
         channel->clear();
-        auto parent = ghostWinGetMainWindow();
         if (parent && GetForegroundWindow() == parent) {
           SetFocus(child);
         }
@@ -605,6 +601,11 @@ void ghostStep() {
   } else {
     // If not running Love, sleep for longer per loop
     Sleep(100);
+  }
+
+  // If Ghost window was closed (eg. with Alt + F4) we should close the parent
+  if (ghostChildWindowCloseEventReceived) {
+    SendMessage(parent, WM_CLOSE, 0, 0);
   }
 }
 

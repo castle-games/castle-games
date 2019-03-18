@@ -44,6 +44,8 @@ void ghostInstallUpdate();
 
 extern double ghostGlobalScaling;
 
+extern bool ghostChildWindowCloseEventReceived;
+
 #ifdef __cplusplus
 }
 #endif
