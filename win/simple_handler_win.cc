@@ -139,7 +139,7 @@ static VOID CALLBACK beginUpdateCheck(HWND hwnd, UINT uMsg, UINT_PTR timerId, DW
   static auto firstCheck = true;
   if (firstCheck) {
     firstCheck = false;
-    SetTimer(hwnd, updateCheckTimerId, 5 * 1000, &beginUpdateCheck);
+    SetTimer(hwnd, updateCheckTimerId, 3600 * 1000, &beginUpdateCheck);
   }
 
   // Only run at most one check simultaneously
