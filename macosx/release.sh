@@ -2,6 +2,8 @@
 
 # Build and upload a new version of Castle for macOS
 
+set -e
+
 if [[ -n $(git status --porcelain) ]]; then
   echo "Tree is dirty, aborting"
   exit 1
