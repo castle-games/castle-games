@@ -3,5 +3,5 @@
 set -e
 
 rm -rf build/Release
-./run_cmake.sh
+./configure_cmake.sh
 cmake.exe --build build --config Release
