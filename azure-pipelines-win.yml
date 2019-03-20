@@ -1,0 +1,12 @@
+trigger:
+  - release/win
+
+pool:
+  vmImage: "vs2017-win2016"
+
+steps:
+  - task: DownloadSecureFile@1
+    inputs:
+      secureFile: "ci-secret-file.txt"
+  - bash: "./release.sh"
+    workingDirectory: "megasource"
