@@ -1,0 +1,8 @@
+version: 1.0.{build}
+
+branches:
+  only:
+    - release/win
+
+build:
+  - sh: 'cd megasource && ./build_release.sh && ./upload_release.sh'
