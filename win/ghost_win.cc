@@ -44,12 +44,9 @@ extern "C" {
 #include "simple_handler.h"
 #include "wintoastlib.h"
 
-using namespace WinToastLib;
+#include "ghost_win.h"
 
-extern "C" {
-HWND ghostWinGetMainWindow();
-HWND ghostWinGetChildWindow();
-}
+using namespace WinToastLib;
 
 // internal
 
@@ -624,7 +621,58 @@ void ghostOpenExternalUrl(const char *url) {
   ShellExecute(0, 0, ptr, 0, 0, SW_SHOW);
 }
 
-void ghostInstallUpdate() {}
+static HANDLE updateInstallWait;
+static PROCESS_INFORMATION updateInstallProcessInfo;
+
+static VOID NTAPI finishUpdateInstall(PVOID lpParameter, BOOLEAN timerOrWaitFired) {
+  // Full path to Squirrel's 'Castle.exe' ('../Castle.exe')
+  wchar_t castleCmd[MAX_PATH + 256];
+  GetModuleFileName(NULL, castleCmd, MAX_PATH);
+  *wcsrchr(castleCmd, L'\\') = L'\0';
+  wcscpy(wcsrchr(castleCmd, L'\\'), L"\\Castle.exe");
+
+  // Launch it
+  PROCESS_INFORMATION pInfo;
+  STARTUPINFO sInfo;
+  memset(&sInfo, 0, sizeof(sInfo));
+  memset(&pInfo, 0, sizeof(pInfo));
+  sInfo.cb = sizeof(sInfo);
+  if (CreateProcessW(nullptr, castleCmd, nullptr, nullptr, 0, 0, nullptr, nullptr, &sInfo, &pInfo)) {
+    // Quit self
+    SendMessage(ghostWinGetMainWindow(), WM_CLOSE, 0, 0);
+  }
+}
+
+void ghostInstallUpdate() {
+  // Only do this once in an app lifetime
+  static bool installingUpdate = false;
+  if (installingUpdate) {
+    return;
+  }
+  installingUpdate = true;
+
+  // Full path to Squirrel's 'Update.exe' ('../Update.exe')
+  wchar_t updateCmd[MAX_PATH + 256];
+  GetModuleFileName(NULL, updateCmd, MAX_PATH);
+  *wcsrchr(updateCmd, L'\\') = L'\0';
+  wcscpy(wcsrchr(updateCmd, L'\\'), L"\\Update.exe");
+
+  // Add the `--update` command
+  wcscat(updateCmd, L" --update " GHOST_WIN_UPDATES_URL);
+
+  // Call `CreateProcessW` and wait for it
+  STARTUPINFO sInfo;
+  memset(&sInfo, 0, sizeof(sInfo));
+  memset(&updateInstallProcessInfo, 0, sizeof(updateInstallProcessInfo));
+  sInfo.cb = sizeof(sInfo);
+  if (!CreateProcessW(nullptr, updateCmd, nullptr, nullptr, 0, 0, nullptr, nullptr, &sInfo,
+                      &updateInstallProcessInfo)) {
+    installingUpdate = false;
+    return;
+  }
+  RegisterWaitForSingleObject(&updateInstallWait, updateInstallProcessInfo.hProcess, &finishUpdateInstall,
+                              0, 60 * 1000, WT_EXECUTEONLYONCE);
+}
 
 class WinToastHandlerExample : public IWinToastHandler {
 public:

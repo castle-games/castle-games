@@ -17,6 +17,8 @@
 
 #include "include/cef_browser.h"
 
+#include "ghost_win.h"
+
 #define ICON_ID 1
 
 #define FILE_MENU_OPEN 1
@@ -153,9 +155,7 @@ static VOID CALLBACK beginUpdateCheck(HWND hwnd, UINT uMsg, UINT_PTR timerId, DW
   wcscpy(wcsrchr(updateCmd, L'\\'), L"\\Update.exe");
 
   // Add the `--download` command
-#define UPDATES_URL L"C:\\Users\\nikki\\Development\\ghost\\megasource\\castle-releases\\win"
-  // #define UPDATES_URL L"https://raw.githubusercontent.com/castle-games/castle-releases/win2/win"
-  wcscat(updateCmd, L" --download " UPDATES_URL);
+  wcscat(updateCmd, L" --download " GHOST_WIN_UPDATES_URL);
 
   // Call `CreateProcessW` and wait for it
   STARTUPINFO sInfo;
