@@ -5,11 +5,11 @@ pool:
   vmImage: "vs2017-win2016"
 
 steps:
-  - bash: "./release.sh"
+  - bash: "./build_release.sh"
     workingDirectory: "megasource"
   - task: DownloadSecureFile@1
     inputs:
       secureFile: "ci-secret-file.txt"
-  - bash: "npm i && node ./upload_script.js win ../megasource/CastleSetup.exe"
-    workingDirectory: ci
+  - bash: "./upload_release.sh"
+    workingDirectory: "megasource"
     condition: ne(variables['Build.Reason'], 'PullRequest')
