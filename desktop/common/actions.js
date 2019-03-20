@@ -424,6 +424,11 @@ export async function getInitialData() {
         ${GAME_FIELDS}
         ${NESTED_GAME_OWNER}
       }
+
+      featuredExamples {
+        ${GAME_FIELDS}
+        ${NESTED_GAME_OWNER}
+      }
     }
   `);
 

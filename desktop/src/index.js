@@ -93,16 +93,24 @@ const INITIAL_STATE_OFFLINE = {
     users: [],
   },
   featuredGames: [],
+  featuredExamples: [],
   isOffline: true,
 };
 
 const run = async () => {
   ReactDOM.render(<GLLoaderScreen />, document.getElementById('loader'));
-  const { allContent, featuredGames, viewer, isOffline } = await Network.getProductData();
+  const {
+    allContent,
+    featuredGames,
+    featuredExamples,
+    viewer,
+    isOffline,
+  } = await Network.getProductData();
 
   let state = Object.assign({}, INITIAL_STATE_OFFLINE, {
     allContent,
     featuredGames,
+    featuredExamples,
     isOffline,
   });
 

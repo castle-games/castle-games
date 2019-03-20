@@ -149,6 +149,7 @@ class App extends React.Component {
           this._app = c;
         }}
         featuredGames={this.state.featuredGames}
+        featuredExamples={this.state.featuredExamples}
         allContent={this.state.allContent}
         updateAvailable={this.state.updateAvailable}
         onNativeUpdateInstall={this._handleNativeUpdateInstall}

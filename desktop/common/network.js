@@ -3,6 +3,7 @@ import * as Actions from '~/common/actions';
 export const getProductData = async () => {
   let data;
   let featuredGames = [];
+  let featuredExamples = [];
   let allContent = {};
   let viewer;
   let isOffline = true;
@@ -10,7 +11,7 @@ export const getProductData = async () => {
   try {
     data = await Actions.getInitialData();
   } catch (e) {
-    console.log(e);
+    console.log(`Issue fetching initial Castle data: ${e}`);
   }
 
   if (data) {
@@ -18,8 +19,9 @@ export const getProductData = async () => {
     allContent.games = data.allGames ? data.allGames : [];
     allContent.users = data.allUsers ? data.allUsers : [];
     featuredGames = data.featuredGames ? data.featuredGames : [];
+    featuredExamples = data.featuredExamples ? data.featuredExamples : [];
     viewer = data.me;
   }
 
-  return { featuredGames, allContent, viewer, isOffline };
+  return { featuredGames, featuredExamples, allContent, viewer, isOffline };
 };
