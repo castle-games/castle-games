@@ -1,17 +1,23 @@
+# Upload an already-built Release build of Castle for Windows
+
 set -e
 
-cd ..
-
-if [ ! -d "ghost-releases" ]; then
-  git clone git@github.com:expo/ghost-releases.git
+if [ ! -d build/Release ]; then
+  echo "Need to build first, aborting"
+  exit 1
 fi
 
-GHOST_COMMIT_HASH="$(git rev-parse --short HEAD)"
+git fetch --tags --prune
+GIT_HASH=$(git rev-parse HEAD)
+WIN_BASE_VERSION=1
+WIN_VERSION=$WIN_BASE_VERSION.$(git rev-list release-root..HEAD --count)
 
-cd ghost-releases
+if [ ! -d castle-releases ]; then
+  echo "Cloning 'castle-releases'..."
+  git clone git@github.com:castle-games/castle-releases.git
+fi
+cd castle-releases
+echo "Pulling 'castle-releases'..."
 git pull origin master
-
-cp ../megasource/CastleSetup.exe .
-
-git commit -a -m "windows: new release from $GHOST_COMMIT_HASH"
-git push origin master
+echo "Performing release..."
+./castle-releases-win.exe win ../build/Release $WIN_VERSION ../extra/castle.ico
