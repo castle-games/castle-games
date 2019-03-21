@@ -7,7 +7,6 @@ if [ ! -d build/Release ]; then
   exit 1
 fi
 
-git fetch --tags --prune
 GIT_HASH=$(git rev-parse HEAD)
 WIN_BASE_VERSION=1
 WIN_VERSION=$WIN_BASE_VERSION.$(git rev-list release-root..HEAD --count)
