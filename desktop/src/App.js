@@ -33,6 +33,8 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    alert('new!!!!');
+
     window.addEventListener('nativeOpenUrl', this._handleNativeOpenUrlEvent);
     window.addEventListener('keydown', this._handleKeyDownEvent);
     window.addEventListener('CASTLE_SYSTEM_KEY_PRESSED', this._handleLuaSystemKeyDownEvent);
