@@ -33,7 +33,7 @@ export const colors = {
 };
 
 export const logs = {
-  default: colors.text,
+  default: colors.white,
   error: colors.error,
   system: brand.fuchsia,
 };

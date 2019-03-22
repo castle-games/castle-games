@@ -14,7 +14,7 @@ const STYLES_FIXED_CONTAINER = css`
   display: flex;
   flex-direction: column;
   background #020202;
-  color: #FFFFFF;
+  color: ${Constants.colors.white};
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
 
   @keyframes fade-in-up-dev {
@@ -53,6 +53,7 @@ const STYLES_LOGS = css`
 
 const STYLES_LOG = css`
   font-family: ${Constants.font.mono};
+  color: ${Constants.colors.white};
   font-size: 10px;
   margin-bottom: 2px;
   display: flex;
