@@ -22,9 +22,19 @@ const STYLES_LOG_CONTAINER = css`
 export default class GameActionsBar extends React.Component {
   static contextType = DevelopmentContext;
 
+  _lastDeveloperState = false;
+
   _handleViewSource = (gameEntryPoint) => {
     NativeUtil.openExternalURL(Urls.githubUserContentToRepoUrl(gameEntryPoint));
   };
+
+  componentDidUpdate(prevProps) {
+    if (this._lastDeveloperState !== this.context.isDeveloping) {
+      this.props.onUpdateGameWindowFrame();
+    }
+
+    this._lastDeveloperState = this.context.isDeveloping;
+  }
 
   render() {
     let { game } = this.props;
@@ -46,13 +56,14 @@ export default class GameActionsBar extends React.Component {
         <div
           className={STYLES_LOG_CONTAINER}
           style={
-            !this.props.isVisible
+            !this.props.isDeveloperPaneVisible
               ? {
                   opacity: 0,
                   position: 'absolute',
                   top: 0,
                   left: 0,
                   height: 1,
+                  minHeight: 0,
                   width: 1,
                   pointerEvents: 'none',
                 }

@@ -127,7 +127,7 @@ class GameScreen extends React.Component {
           navigateToUserProfile={this.props.navigateToUserProfile}
           closeGame={this.props.closeGame}
           onUpdateGameWindowFrame={this._updateGameWindowFrame}
-          isVisible={this.props.isDeveloperPaneVisible}
+          isDeveloperPaneVisible={this.props.isDeveloperPaneVisible}
         />
       </div>
     );
