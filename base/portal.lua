@@ -360,7 +360,7 @@ function portalMeta:newChild(path, args)
         child.globals.castle.startServer(GHOST_PORT)
     end
     if not CASTLE_SERVER and child.globals.castle.startClient then
-        castle.connectClient(path, function(address)
+        castle.multiplayer.connectClient(path, function(address)
             child.globals.castle.startClient(address)
             network.async(function()
                 loadLove()
