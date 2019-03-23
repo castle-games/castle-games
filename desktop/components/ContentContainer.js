@@ -105,6 +105,7 @@ class ContentContainer extends React.Component {
       return (
         <HomeScreen
           featuredGames={this.props.featuredGames}
+          featuredExamples={this.props.featuredExamples}
           updateAvailable={this.props.updateAvailable}
           onNativeUpdateInstall={this.props.onNativeUpdateInstall}
           timeLastNavigated={this.props.timeLastNavigated}

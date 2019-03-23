@@ -53,8 +53,8 @@ class HomeScreen extends React.Component {
 
   _getNavigationItems = () => {
     const navigationItems = [];
-    navigationItems.push({ label: 'Stuff we play', key: 'games' });
-    navigationItems.push({ label: 'Fun examples', key: 'examples' });
+    navigationItems.push({ label: 'Featured games', key: 'games' });
+    navigationItems.push({ label: 'Learning examples', key: 'examples' });
     navigationItems.push({ label: 'Your history', key: 'history' });
 
     return navigationItems;
