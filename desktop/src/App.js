@@ -23,6 +23,7 @@ import * as PingUtils from '~/common/pingutils';
 const isReloadHotkey = isKeyHotkey('mod+r');
 const isFullscreenHotkey = isKeyHotkey('mod+shift+f');
 const isDevelopmentHotkey = isKeyHotkey('mod+j');
+const isEscFullScreenHotkey = isKeyHotkey('esc');
 
 const NATIVE_CHANNELS_POLL_INTERVAL = 300;
 
@@ -139,6 +140,12 @@ class App extends React.Component {
       return this.props.navigator.reloadGame(true);
     }
 
+    if (isEscFullScreenHotkey(e)) {
+      e.preventDefault();
+
+      return this._handleFullScreenToggle();
+    }
+
     if (isFullscreenHotkey(e)) {
       e.preventDefault();
 
@@ -150,7 +157,7 @@ class App extends React.Component {
       })();
       */
 
-      this._handleFullScreenToggle();
+      return this._handleFullScreenToggle();
     }
 
     if (isDevelopmentHotkey(e)) {
