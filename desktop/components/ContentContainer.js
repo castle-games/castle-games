@@ -72,7 +72,26 @@ class ContentContainer extends React.Component {
     );
   };
 
-  _handleSearchSubmit = async (e) => this._handleSearchChange(e);
+  _handleSearchSubmit = async (e) => {
+    const isCandidate = Strings.isMaybeCastleURL(e.target.value);
+
+    if (!isCandidate) {
+      return this._handleSearchChange(e);
+    }
+
+    let url = e.target.value;
+    try {
+      url = url.slice(0).trim();
+      if (Urls.isPrivateUrl(url)) {
+        url = url.replace('castle://', 'http://');
+      }
+    } catch (_) {
+      //
+    }
+
+    this.props.navigator.navigateToGameUrl(url);
+    this._handleSearchReset();
+  };
 
   _handleUpdateGameWindowFrame = () => {
     if (!this._game) {

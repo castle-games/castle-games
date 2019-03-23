@@ -1,13 +1,14 @@
 import * as React from 'react';
+import * as Constants from '~/common/constants';
+import * as Strings from '~/common/strings';
+import * as Urls from '~/common/urls';
+
 import { css } from 'react-emotion';
 
-import * as Constants from '~/common/constants';
 import { NavigatorContext } from '~/contexts/NavigationContext';
-import * as Strings from '~/common/strings';
 import UIButtonSecondary from '~/components/reusable/UIButtonSecondary';
 import UIGameGrid from '~/components/reusable/UIGameGrid';
 import UIUserGrid from '~/components/reusable/UIUserGrid';
-import * as Urls from '~/common/urls';
 
 const STYLES_CONTAINER = css`
   width: 100%;
@@ -164,18 +165,8 @@ export default class SearchScreen extends React.Component {
     this.props.onSearchReset();
   };
 
-  _doesQueryLookLikeUrl = (query) => {
-    query = query.slice(0).trim();
-    return (
-      query.endsWith('.lua') ||
-      query.startsWith('castle:') ||
-      query.startsWith('http') ||
-      query.startsWith('file://')
-    );
-  };
-
   _renderNoResults = () => {
-    if (this.props.query && this._doesQueryLookLikeUrl(this.props.query)) {
+    if (this.props.query && Strings.isMaybeCastleURL(this.props.query)) {
       return (
         <React.Fragment>
           <div className={STYLES_SEARCH_RESPONSE}>
