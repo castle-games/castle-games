@@ -24,11 +24,17 @@ const STYLES_GAME = css`
   display: inline-block;
   padding: 24px 24px 24px 24px;
   position: relative;
+
+  :hover {
+    section {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
 `;
 
 const STYLES_GAME_ITEM = css`
   background: ${Constants.colors.white};
-  cursor: pointer;
   border-radius: 4px;
   padding: 8px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
@@ -63,6 +69,8 @@ const STYLES_AVATAR = css`
   border-radius: 4px;
   cursor: pointer;
   margin-right: 8px;
+  cursor: pointer;
+  flex-shrink: 0;
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
 `;
 
@@ -85,8 +93,7 @@ const STYLES_URL = css`
   font-size: 12px;
   font-weight: 600;
   font-family: ${Constants.font.system};
-  overflow-wrap: break-word;
-  max-width: 188px;
+  width: 100%;
 `;
 
 const STYLES_TAG = css`
@@ -106,50 +113,22 @@ const STYLES_TAG = css`
 `;
 
 const STYLES_GAME_POPOVER = css`
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.5);
-
-  @keyframes fade-in {
-    from {
-      opacity: 0;
-    }
-
-    to {
-      opacity: 1;
-    }
-  }
-
-  animation: fade-in 200ms ease;
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 256px;
+  z-index: 4;
+  pointer-events: none;
+  opacity: 0;
+  transition: 200ms ease opacity;
 `;
 
 const STYLES_POPOVER = css`
-  width: 480px;
-  min-height: 240px;
   padding: 16px;
   border-radius: 4px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
-
-  @keyframes fade-in-up {
-    from {
-      opacity: 0;
-      transform: translate3d(0, 30%, 0);
-    }
-
-    to {
-      opacity: 1;
-      transform: translate3d(0, 0, 0);
-    }
-  }
-
-  animation: fade-in-up 160ms ease;
+  display: flex;
+  flex-direction: column;
 `;
 
 const STYLES_POPOVER_INFO = css`
@@ -157,46 +136,36 @@ const STYLES_POPOVER_INFO = css`
   margin-top: 16px;
   align-items: flex-start;
   justify-content: space-between;
-`;
-
-const STYLES_POPOVER_SCREENSHOT = css`
-  width: 448px;
-  height: 252px;
-  flex-shrink: 0;
-  transition: 200ms ease all;
-  cursor: pointer;
-  background-size: cover;
-  background-position: 50% 50%;
-  background-color: rgba(0, 0, 0, 0.1);
-  margin-top: 8px;
+  overflow-wrap: break-word;
 `;
 
 const STYLES_POPOVER_TITLE = css`
   font-family: ${Constants.font.game};
-  font-size: 40px;
+  font-size: 18px;
   cursor: pointer;
 `;
 
 const STYLES_POPOVER_P = css`
   text-align: left;
-  padding: 24px 0 24px 24px;
+  padding: 0 0 0 16px;
   font-family: ${Constants.font.system};
-  font-size: 16px;
+  font-size: 14px;
   width: 100%;
   min-width: 25%;
-  line-height: 20px;
+  line-height: 18px;
 `;
 
 const STYLES_POPOVER_GAME_URL = css`
   font-family: ${Constants.font.mono};
   font-size: 10px;
+  margin-top: 4px;
   width: 100%;
-  padding: 8px;
+  overflow-wrap: break-word;
 `;
 
 const STYLES_POPOVER_ACTIONS = css`
   display: flex;
-  margin-top: 24px;
+  margin-top: 16px;
   align-items: center;
   justify-content: space-between;
 `;
@@ -239,7 +208,7 @@ class UIGameCell extends React.Component {
     let title = game.title ? game.title : 'Untitled';
 
     const backgroundColor =
-      game.metadata && game.metadata.primaryColor ? `#${game.metadata.primaryColor}` : '#2b2828';
+      game.metadata && game.metadata.primaryColor ? `#${game.metadata.primaryColor}` : '#3d3d3d';
     const textColor = Utilities.adjustTextColor(backgroundColor);
 
     let description;
@@ -280,6 +249,8 @@ class UIGameCell extends React.Component {
 
     const luaEntryPoint = Utilities.getLuaEntryPoint(game);
 
+    const popoverBackgroundColor = Utilities.shadeHex(backgroundColor, -0.1);
+
     return (
       <div className={STYLES_GAME}>
         <div className={STYLES_GAME_ITEM} style={{ color: textColor, backgroundColor }}>
@@ -293,64 +264,61 @@ class UIGameCell extends React.Component {
           </div>
         </div>
         {description}
-        {this.state.visible ? (
-          <div className={STYLES_GAME_POPOVER}>
-            <UIBoundary
-              onOutsideRectEvent={this._handleDismiss}
-              enabled={this.state.visible}
-              captureResize={false}
-              captureScroll={false}
-              className={STYLES_POPOVER}
-              style={{ color: textColor, backgroundColor }}>
-              <div className={STYLES_POPOVER_TITLE} onClick={() => this.props.onGameSelect(game)}>
-                {title}
-              </div>
-              <div
-                className={STYLES_POPOVER_SCREENSHOT}
-                onClick={() => this.props.onGameSelect(game)}
-                style={{ backgroundImage: this.props.src ? `url(${this.props.src})` : null }}
-              />
-              <div
-                className={STYLES_POPOVER_GAME_URL}
-                style={{ backgroundColor: Utilities.shadeHex(backgroundColor, -0.1) }}>
-                {game.url}
-              </div>
-              {gameDescription ? (
-                <div className={STYLES_POPOVER_INFO}>
-                  <UICharacterCard
-                    user={game.owner}
-                    onAvatarClick={() => this.props.onUserSelect(game.owner)}
-                  />
-                  <p className={STYLES_POPOVER_P}>{gameDescription}</p>
-                </div>
-              ) : null}
 
-              <div className={STYLES_POPOVER_ACTIONS}>
-                <div className={STYLES_POPOVER_ACTIONS_LEFT}>
-                  <UIPlayTextCTA
-                    background={backgroundColor}
-                    onClick={() => this.props.onGameSelect(game)}>
-                    Play now
-                  </UIPlayTextCTA>
-                </div>
-                <div className={STYLES_POPOVER_ACTIONS_RIGHT}>
-                  {this.props.onGameUpdate ? (
-                    <UINavigationLink
-                      onClick={() => this.props.onGameUpdate(game)}
-                      style={{ marginRight: 24, color: textColor }}>
-                      Sync data
-                    </UINavigationLink>
-                  ) : null}
-                  <UINavigationLink
-                    style={{ color: textColor }}
-                    onClick={() => this._handleViewSource(luaEntryPoint)}>
-                    View source
-                  </UINavigationLink>
-                </div>
+        <section className={STYLES_GAME_POPOVER}>
+          <div
+            className={STYLES_POPOVER}
+            style={{ color: textColor, backgroundColor: popoverBackgroundColor }}>
+            <div className={STYLES_POPOVER_TITLE} onClick={() => this.props.onGameSelect(game)}>
+              {title}
+            </div>
+            <div className={STYLES_POPOVER_GAME_URL}>{game.url}</div>
+            {gameDescription ? (
+              <div className={STYLES_POPOVER_INFO}>
+                <div
+                  className={STYLES_AVATAR}
+                  style={{
+                    cursor: 'pointer',
+                    height: 40,
+                    width: 40,
+                    marginRight: 0,
+                    backgroundImage:
+                      game.owner.photo && game.owner.photo.url
+                        ? `url(${game.owner.photo.url})`
+                        : null,
+                  }}
+                  onClick={() => this.props.onUserSelect(game.owner)}
+                />
+                <p className={STYLES_POPOVER_P}>{gameDescription}</p>
               </div>
-            </UIBoundary>
+            ) : null}
+
+            <UIPlayTextCTA
+              background={backgroundColor}
+              style={{ marginTop: 40 }}
+              onClick={() => this.props.onGameSelect(game)}>
+              Play
+            </UIPlayTextCTA>
+
+            <div className={STYLES_POPOVER_ACTIONS}>
+              <div className={STYLES_POPOVER_ACTIONS_LEFT}>
+                {this.props.onGameUpdate ? (
+                  <UINavigationLink
+                    onClick={() => this.props.onGameUpdate(game)}
+                    style={{ marginRight: 24, color: textColor }}>
+                    Sync data
+                  </UINavigationLink>
+                ) : null}
+                <UINavigationLink
+                  style={{ color: textColor }}
+                  onClick={() => this._handleViewSource(luaEntryPoint)}>
+                  View source
+                </UINavigationLink>
+              </div>
+              <div className={STYLES_POPOVER_ACTIONS_RIGHT} />
+            </div>
           </div>
-        ) : null}
+        </section>
       </div>
     );
   }
