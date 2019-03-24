@@ -49,7 +49,6 @@ const STYLES_GAME_STRIP_LEFT = css`
   font-family: ${Constants.font.mono};
   min-width: 25%;
   width: 100%;
-  padding: 0 24px 0 16px;
   display: inline-flex;
   align-items: center;
   justify-content: flex-start;
@@ -62,20 +61,9 @@ const STYLES_GAME_STRIP_LEFT = css`
 
 const STYLES_GAME_STRIP_RIGHT = css`
   flex-shrink: 0;
-  padding: 0 12px 0 16px;
   display: inline-flex;
   align-items: center;
   justify-content: flex-end;
-`;
-
-const STYLES_CONTAINER_FULL = css`
-  background: #232323;
-  width: 100%;
-  cursor: pointer;
-
-  :hover {
-    background: magenta;
-  }
 `;
 
 const STYLES_CONTAINER = css`
@@ -83,11 +71,12 @@ const STYLES_CONTAINER = css`
   width: 100%;
 `;
 
-const STYLES_DEVELOPER_PANE_CHOICE = css`
+const STYLES_EMPHASIS_CHOICE = css`
+  font-family: ${Constants.font.mono};
   background: #313131;
-  color: #fff;
-  height: 100%;
-  padding: 0 24px 0 24px;
+  flex-shrink: 0;
+  color: ${Constants.colors.white};
+  cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -140,7 +129,7 @@ export default class NowPlayingBar extends React.Component {
 
     let muteIcon = this.state.isMuted ? <SVG.Mute height="14px" /> : <SVG.Audio height="14px" />;
     let muteElement = (
-      <span className={STYLES_BUTTON} onClick={this._handleToggleMute}>
+      <span className={STYLES_BUTTON} style={{ marginLeft: 12 }} onClick={this._handleToggleMute}>
         {muteIcon}
       </span>
     );
@@ -159,9 +148,35 @@ export default class NowPlayingBar extends React.Component {
 
     if (this.props.mode !== 'game') {
       return (
-        <div className={STYLES_CONTAINER_FULL} onClick={this._handleNavigatePlaying}>
+        <div className={STYLES_CONTAINER}>
           <span className={STYLES_GAME_STRIP}>
-            <span className={STYLES_GAME_STRIP_LEFT}>► Return to {title}</span>
+            <span className={STYLES_GAME_STRIP_LEFT}>
+              <UINavigationLink
+                onClick={this._handleNavigatePlaying}
+                style={{
+                  width: '100%',
+                  paddingLeft: 24,
+                  height: 32,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                }}>
+                ► Return to {title}
+              </UINavigationLink>
+            </span>
+            <span className={STYLES_GAME_STRIP_RIGHT}>
+              <span className={STYLES_EMPHASIS_CHOICE}>
+                <UINavigationLink
+                  onClick={this._handleCloseGame}
+                  style={{
+                    padding: '0 24px 0 24px',
+                    height: 32,
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                  }}>
+                  End game
+                </UINavigationLink>
+              </span>
+            </span>
           </span>
         </div>
       );
@@ -185,17 +200,25 @@ export default class NowPlayingBar extends React.Component {
         }>
         <div className={STYLES_GAME_STRIP}>
           <div
-            className={STYLES_DEVELOPER_PANE_CHOICE}
+            className={STYLES_EMPHASIS_CHOICE}
             style={{ backgroundColor: this.context.isDeveloping ? `#020202` : null }}
             onClick={this._handleShowDeveloper}>
-            <UINavigationLink>{!this.context.isDeveloping ? `Develop` : `Close`}</UINavigationLink>
+            <UINavigationLink
+              style={{
+                padding: '0 24px 0 24px',
+                height: 32,
+                display: 'inline-flex',
+                alignItems: 'center',
+              }}>
+              {!this.context.isDeveloping ? `Develop` : `Close`}
+            </UINavigationLink>
           </div>
           <div className={STYLES_GAME_STRIP_LEFT}>{muteElement}</div>
           <div className={STYLES_GAME_STRIP_RIGHT}>
             <UINavigationLink style={{ marginRight: 24 }} onClick={this.props.onFullScreenToggle}>
               Theater Mode
             </UINavigationLink>
-            <UINavigationLink style={{ marginRight: 8 }} onClick={this._handleCloseGame}>
+            <UINavigationLink style={{ marginRight: 24 }} onClick={this._handleCloseGame}>
               End game
             </UINavigationLink>
           </div>
