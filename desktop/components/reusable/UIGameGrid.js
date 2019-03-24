@@ -94,6 +94,8 @@ const STYLES_URL = css`
   font-size: 12px;
   font-weight: 600;
   font-family: ${Constants.font.system};
+  overflow-wrap: break-word;
+  max-width: 204px;
   width: 100%;
 `;
 
