@@ -125,8 +125,6 @@ class ContentContainer extends React.Component {
         <HomeScreen
           featuredGames={this.props.featuredGames}
           featuredExamples={this.props.featuredExamples}
-          updateAvailable={this.props.updateAvailable}
-          onNativeUpdateInstall={this.props.onNativeUpdateInstall}
           timeLastNavigated={this.props.timeLastNavigated}
         />
       );
@@ -168,6 +166,7 @@ class ContentContainer extends React.Component {
             }
           />
         ) : null}
+
         {this.props.mode === 'profile' || this.props.mode === 'home' ? (
           <ContentNavigationBar
             searchQuery={this.state.searchQuery}

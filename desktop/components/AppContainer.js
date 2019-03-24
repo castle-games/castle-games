@@ -30,7 +30,11 @@ export default class AppContainer extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTAINER}>
-        <SocialContainer isVisible={!this.props.isFullScreen} />
+        <SocialContainer
+          isVisible={!this.props.isFullScreen}
+          updateAvailable={this.props.updateAvailable}
+          onNativeUpdateInstall={this.props.onNativeUpdateInstall}
+        />
         <ContentContainer
           isNowPlayingVisible={!this.props.isFullScreen}
           onFullScreenToggle={this.props.onFullScreenToggle}

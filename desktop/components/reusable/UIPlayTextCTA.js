@@ -11,7 +11,7 @@ const STYLES_BUTTON = css`
   justify-content: center;
   font-size: 16px;
   height: 40px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.7), inset 0 0.5px 0 rgba(255, 255, 255, 0.1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
   border-radius: 4px;
   line-height: 16px;
   outline: 0;

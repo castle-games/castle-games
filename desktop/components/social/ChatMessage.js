@@ -162,7 +162,7 @@ const STYLES_NOTIFICATION_ITEM_CONTENT = css`
   border-radius: 0;
   background-color: ${Constants.colors.brand4};
   color: ${Constants.colors.text};
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.7), inset 0 0.5px 0 rgba(255, 255, 255, 0.1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
   font-size: 14px;
   padding: 8px 8px 16px 8px;
 `;

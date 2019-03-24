@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
+import * as SVG from '~/components/primitives/svg';
 
 import { css } from 'react-emotion';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
@@ -7,10 +8,10 @@ import { NavigatorContext } from '~/contexts/NavigationContext';
 import { getLevel, getExp } from '~/components/reusable/UICharacterCard';
 
 import ChatContainer from '~/components/social/ChatContainer';
-import * as SVG from '~/components/primitives/svg';
 import Viewer from '~/components/Viewer';
 import UINavigationLink from '~/components/reusable/UINavigationLink';
 import UIHeaderBlock from '~/components/reusable/UIHeaderBlock';
+import HomeUpdateBanner from '~/components/home/HomeUpdateBanner';
 
 const ENABLE_NOTIFICATIONS = false;
 
@@ -106,6 +107,7 @@ class SocialContainer extends React.Component {
     let { isLoggedIn, navigateToCurrentUserProfile, viewer } = this.props;
     let contentElement;
     let signInElement;
+
     if (isLoggedIn) {
       contentElement = (
         <ChatContainer
@@ -147,6 +149,13 @@ class SocialContainer extends React.Component {
       );
     }
 
+    const updateElement = this.props.updateAvailable ? (
+      <HomeUpdateBanner
+        updateAvailable={this.props.updateAvailable}
+        onNativeUpdateInstall={this.props.onNativeUpdateInstall}
+      />
+    ) : null;
+
     return (
       <div
         className={STYLES_CONTAINER}
@@ -181,6 +190,7 @@ class SocialContainer extends React.Component {
             </span>
           </div>
         </div>
+        {updateElement}
         {contentElement}
       </div>
     );
@@ -200,6 +210,8 @@ export default class SocialContainerWithContext extends React.Component {
                 navigateToCurrentUserProfile={navigator.navigateToCurrentUserProfile}
                 navigator={navigator}
                 isVisible={this.props.isVisible}
+                updateAvailable={this.props.updateAvailable}
+                onNativeUpdateInstall={this.props.onNativeUpdateInstall}
               />
             )}
           </NavigatorContext.Consumer>

@@ -79,20 +79,12 @@ class HomeScreen extends React.Component {
         })
       : null;
 
-    const updateElement = this.props.updateAvailable ? (
-      <HomeUpdateBanner
-        updateAvailable={this.props.updateAvailable}
-        onNativeUpdateInstall={this.props.onNativeUpdateInstall}
-      />
-    ) : null;
-
     return (
       <div
         className={STYLES_CONTAINER}
         ref={(r) => {
           this._container = r;
         }}>
-        {updateElement}
         <UIHorizontalNavigation
           items={this._getNavigationItems()}
           selectedKey={this.state.mode}
