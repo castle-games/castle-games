@@ -149,7 +149,7 @@ const STYLES_MESSAGE_ELEMENT = css`
 `;
 
 const STYLES_NOTIFICATION_ITEM = css`
-  padding: 0px;
+  margin: 8px 0 8px 0;
 `;
 
 const STYLES_NOTIFICATION_HEADING = css`
@@ -164,7 +164,7 @@ const STYLES_NOTIFICATION_ITEM_CONTENT = css`
   color: ${Constants.colors.text};
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.7), inset 0 0.5px 0 rgba(255, 255, 255, 0.1);
   font-size: 14px;
-  padding: 8px;
+  padding: 8px 8px 16px 8px;
 `;
 
 class ChatMessage extends React.Component {
