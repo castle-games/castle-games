@@ -148,6 +148,25 @@ const STYLES_MESSAGE_ELEMENT = css`
   overflow-wrap: break-word;
 `;
 
+const STYLES_NOTIFICATION_ITEM = css`
+  padding: 0px;
+`;
+
+const STYLES_NOTIFICATION_HEADING = css`
+  font-family: ${Constants.font.heading};
+  font-weight: 400;
+  padding: 0px 0 8px 0;
+`;
+
+const STYLES_NOTIFICATION_ITEM_CONTENT = css`
+  border-radius: 0;
+  background-color: ${Constants.colors.brand4};
+  color: ${Constants.colors.text};
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.7), inset 0 0.5px 0 rgba(255, 255, 255, 0.1);
+  font-size: 14px;
+  padding: 8px;
+`;
+
 class ChatMessage extends React.Component {
   _renderChatMessage = (message) => {
     let result = [];
@@ -189,6 +208,8 @@ class ChatMessage extends React.Component {
   render() {
     const chatMessage = this.props.message;
     const userId = chatMessage.userId;
+    const isCastleNotification = userId === NOTIFICATIONS_USER_ID;
+
     let maybeAvatar;
     let maybeUsernameAndTimestamp;
 
@@ -199,7 +220,7 @@ class ChatMessage extends React.Component {
         username: chatMessage.userId,
       };
 
-      if (chatMessage.userId === NOTIFICATIONS_USER_ID) {
+      if (isCastleNotification) {
         user = { userId: NOTIFICATIONS_USER_ID, username: 'Castle' };
       }
 
@@ -239,6 +260,19 @@ class ChatMessage extends React.Component {
           onClick={isRealUser ? () => this.props.navigateToUserProfile(user) : null}>
           <span className={STYLES_MESSAGE_HEADING_LEFT}>{user.username}</span>
           <span className={STYLES_MESSAGE_HEADING_RIGHT}>{timeString}</span>
+        </div>
+      );
+    }
+
+    if (isCastleNotification) {
+      return (
+        <div className={STYLES_NOTIFICATION_ITEM}>
+          <div className={STYLES_NOTIFICATION_ITEM_CONTENT}>
+            <div className={STYLES_NOTIFICATION_HEADING}>🏰 Hey!</div>
+            <Linkify className={STYLES_MESSAGE_ELEMENT}>
+              {this._renderChatMessage(chatMessage.richMessage.message)}
+            </Linkify>
+          </div>
         </div>
       );
     }
