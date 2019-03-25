@@ -4,7 +4,7 @@ import * as SVG from '~/components/primitives/svg';
 
 import { css } from 'react-emotion';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
-import { NavigatorContext } from '~/contexts/NavigationContext';
+import { NavigationContext, NavigatorContext } from '~/contexts/NavigationContext';
 import { getLevel, getExp } from '~/components/reusable/UICharacterCard';
 
 import ChatContainer from '~/components/social/ChatContainer';
@@ -185,7 +185,10 @@ class SocialContainer extends React.Component {
                 Notifications
               </UINavigationLink>
             ) : null}
-            <span className={STYLES_ACTION_BUTTON} onClick={this.props.navigator.navigateToHome}>
+            <span
+              className={STYLES_ACTION_BUTTON}
+              style={{ color: this.props.mode === 'home' ? 'magenta' : null }}
+              onClick={this.props.navigator.navigateToHome}>
               <SVG.Home height="16px" />
             </span>
           </div>
@@ -202,19 +205,26 @@ export default class SocialContainerWithContext extends React.Component {
     return (
       <CurrentUserContext.Consumer>
         {(currentUser) => (
-          <NavigatorContext.Consumer>
-            {(navigator) => (
-              <SocialContainer
-                viewer={currentUser ? currentUser.user : null}
-                isLoggedIn={!!currentUser.user}
-                navigateToCurrentUserProfile={navigator.navigateToCurrentUserProfile}
-                navigator={navigator}
-                isVisible={this.props.isVisible}
-                updateAvailable={this.props.updateAvailable}
-                onNativeUpdateInstall={this.props.onNativeUpdateInstall}
-              />
-            )}
-          </NavigatorContext.Consumer>
+          <NavigationContext.Consumer>
+            {(navigation) => {
+              return (
+                <NavigatorContext.Consumer>
+                  {(navigator) => (
+                    <SocialContainer
+                      viewer={currentUser ? currentUser.user : null}
+                      isLoggedIn={!!currentUser.user}
+                      navigateToCurrentUserProfile={navigator.navigateToCurrentUserProfile}
+                      navigator={navigator}
+                      isVisible={this.props.isVisible}
+                      updateAvailable={this.props.updateAvailable}
+                      onNativeUpdateInstall={this.props.onNativeUpdateInstall}
+                      mode={navigation.contentMode}
+                    />
+                  )}
+                </NavigatorContext.Consumer>
+              );
+            }}
+          </NavigationContext.Consumer>
         )}
       </CurrentUserContext.Consumer>
     );
