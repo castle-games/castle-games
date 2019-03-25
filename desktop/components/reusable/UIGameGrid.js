@@ -221,12 +221,7 @@ class UIGameCell extends React.Component {
     let isPrivate = Urls.isPrivateUrl(game.url);
 
     if (isPrivate || !game.owner || !game.owner.name) {
-      // NOTE(jim): Local project doesn't provide descriptions.
-      description = (
-        <div className={STYLES_URL} onClick={() => this.props.onGameSelect(game)}>
-          {game.url}
-        </div>
-      );
+      description = <div className={STYLES_URL}>{game.url}</div>;
     }
 
     if (!this.props.renderCartridgeOnly && game.owner) {
@@ -255,6 +250,28 @@ class UIGameCell extends React.Component {
     const luaEntryPoint = Utilities.getLuaEntryPoint(game);
 
     const popoverBackgroundColor = Utilities.shadeHex(backgroundColor, -0.1);
+
+    const options = [];
+    if (this.props.onGameUpdate) {
+      options.push(
+        <UINavigationLink
+          key="actions-game-update"
+          onClick={() => this.props.onGameUpdate(game)}
+          style={{ marginRight: 24, color: textColor }}>
+          Sync data
+        </UINavigationLink>
+      );
+    }
+
+    if (Urls.isOpenSource(luaEntryPoint)) {
+      options.push(
+        <UINavigationLink
+          style={{ color: textColor }}
+          onClick={() => this._handleViewSource(luaEntryPoint)}>
+          View source
+        </UINavigationLink>
+      );
+    }
 
     return (
       <div className={STYLES_GAME}>
@@ -305,23 +322,12 @@ class UIGameCell extends React.Component {
               Play
             </UIPlayTextCTA>
 
-            <div className={STYLES_POPOVER_ACTIONS}>
-              <div className={STYLES_POPOVER_ACTIONS_LEFT}>
-                {this.props.onGameUpdate ? (
-                  <UINavigationLink
-                    onClick={() => this.props.onGameUpdate(game)}
-                    style={{ marginRight: 24, color: textColor }}>
-                    Sync data
-                  </UINavigationLink>
-                ) : null}
-                <UINavigationLink
-                  style={{ color: textColor }}
-                  onClick={() => this._handleViewSource(luaEntryPoint)}>
-                  View source
-                </UINavigationLink>
+            {options.length ? (
+              <div className={STYLES_POPOVER_ACTIONS}>
+                <div className={STYLES_POPOVER_ACTIONS_LEFT}>{options}</div>
+                <div className={STYLES_POPOVER_ACTIONS_RIGHT} />
               </div>
-              <div className={STYLES_POPOVER_ACTIONS_RIGHT} />
-            </div>
+            ) : null}
           </div>
         </section>
       </div>
