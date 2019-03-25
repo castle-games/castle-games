@@ -91,34 +91,34 @@ export default class HomeMakeBanner extends React.Component {
         await this.props.navigateToGameUrl(`file://${path}`);
       }
     } catch (_) {}
-  }
+  };
 
   render() {
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_ACTIONS}>
           <div className={STYLES_ACTION} onClick={this._handleCreateProject}>
-            <div className={STYLES_ACTION_HEADING}>Start new project</div>
+            <div className={STYLES_ACTION_HEADING}>New project</div>
             <div className={STYLES_ACTION_PARAGRAPH} style={{ color: Constants.colors.black }}>
-              Create from nothing or an example.
+              Create a new blank project.
             </div>
           </div>
           <div className={STYLES_ACTION} onClick={this._handleOpenProject}>
             <div className={STYLES_ACTION_HEADING}>Open project</div>
             <div className={STYLES_ACTION_PARAGRAPH} style={{ color: Constants.colors.black }}>
-              Open a project from your filesystem.
+              Open a project on your computer.
             </div>
           </div>
           <div className={STYLES_ACTION} onClick={this.props.navigateToCurrentUserProfile}>
             <div className={STYLES_ACTION_HEADING}>Add work to profile</div>
             <div className={STYLES_ACTION_PARAGRAPH} style={{ color: Constants.colors.black }}>
-              Share your work so everyone can see it!
+              Share so everyone can play your games.
             </div>
           </div>
           <div className={STYLES_ACTION} onClick={this._handleClickTutorial}>
-            <div className={STYLES_ACTION_HEADING}>Documentation!</div>
+            <div className={STYLES_ACTION_HEADING}>Documentation</div>
             <div className={STYLES_ACTION_PARAGRAPH} style={{ color: Constants.colors.black }}>
-              Learn more about creating on Castle.
+              Read tutorial's and examples.
             </div>
           </div>
         </div>
