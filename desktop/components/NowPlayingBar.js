@@ -210,7 +210,7 @@ export default class NowPlayingBar extends React.Component {
                 display: 'inline-flex',
                 alignItems: 'center',
               }}>
-              {!this.context.isDeveloping ? `Develop` : `Close`}
+              {!this.context.isDeveloping ? `Develop` : `Hide Development Console`}
             </UINavigationLink>
           </div>
           <div className={STYLES_GAME_STRIP_LEFT}>{muteElement}</div>

@@ -223,7 +223,7 @@ export default class DevelopmentLogs extends React.Component {
       case LogMode.LOCAL:
         return (
           <UINavigationLink style={{ marginRight: 24 }} onClick={this.props.onClearLogs}>
-            Clear
+            Clear logs
           </UINavigationLink>
         );
       case LogMode.REMOTE:
