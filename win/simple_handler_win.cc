@@ -188,5 +188,7 @@ void SimpleHandler::PlatformTitleChange(CefRefPtr<CefBrowser> browser, const Cef
 
 void SimpleHandler::SubclassWndProc(CefWindowHandle hwnd) {
   SetWindowSubclass(hwnd, GhostSubclassProc, 1, reinterpret_cast<DWORD_PTR>(this));
-  addMenus(hwnd);
+
+  // XXX(nikki): Disabling menus on Windows...
+  // addMenus(hwnd);
 }
