@@ -83,6 +83,16 @@ export default class HomeMakeBanner extends React.Component {
       }
     }
   };
+
+  _handleOpenProject = async () => {
+    try {
+      const path = await NativeUtil.chooseOpenProjectPathWithDialogAsync();
+      if (path) {
+        await this.props.navigateToGameUrl(`file://${path}`);
+      }
+    } catch (_) {}
+  }
+
   render() {
     return (
       <div className={STYLES_CONTAINER}>
@@ -91,6 +101,12 @@ export default class HomeMakeBanner extends React.Component {
             <div className={STYLES_ACTION_HEADING}>Start new project</div>
             <div className={STYLES_ACTION_PARAGRAPH} style={{ color: Constants.colors.black }}>
               Create from nothing or an example.
+            </div>
+          </div>
+          <div className={STYLES_ACTION} onClick={this._handleOpenProject}>
+            <div className={STYLES_ACTION_HEADING}>Open project</div>
+            <div className={STYLES_ACTION_PARAGRAPH} style={{ color: Constants.colors.black }}>
+              Open a project from your filesystem.
             </div>
           </div>
           <div className={STYLES_ACTION} onClick={this.props.navigateToCurrentUserProfile}>
@@ -102,7 +118,7 @@ export default class HomeMakeBanner extends React.Component {
           <div className={STYLES_ACTION} onClick={this._handleClickTutorial}>
             <div className={STYLES_ACTION_HEADING}>Documentation!</div>
             <div className={STYLES_ACTION_PARAGRAPH} style={{ color: Constants.colors.black }}>
-              Learn more about creating on Castle
+              Learn more about creating on Castle.
             </div>
           </div>
         </div>
