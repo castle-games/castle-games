@@ -157,7 +157,7 @@ class ContentContainer extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
-        {this.props.mode === 'home' || this.props.mode === 'profile' ? (
+        {this.props.mode === 'home' ? (
           <HomeMakeBanner
             navigator={this.props.navigator}
             navigateToGameUrl={this.props.navigator.navigateToGameUrl}

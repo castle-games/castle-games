@@ -109,12 +109,6 @@ export default class HomeMakeBanner extends React.Component {
               Open a project on your computer.
             </div>
           </div>
-          <div className={STYLES_ACTION} onClick={this.props.navigateToCurrentUserProfile}>
-            <div className={STYLES_ACTION_HEADING}>Add work to profile</div>
-            <div className={STYLES_ACTION_PARAGRAPH} style={{ color: Constants.colors.black }}>
-              Share so everyone can play your games.
-            </div>
-          </div>
           <div className={STYLES_ACTION} onClick={this._handleClickTutorial}>
             <div className={STYLES_ACTION_HEADING}>Documentation</div>
             <div className={STYLES_ACTION_PARAGRAPH} style={{ color: Constants.colors.black }}>

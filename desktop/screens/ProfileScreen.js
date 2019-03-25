@@ -63,7 +63,7 @@ class ProfileScreen extends React.Component {
   }
 
   _onShowGames = () => this.setState({ mode: 'games' });
-  _onShowAddGame = () => this.setState({ mode: 'add-games' });
+  _onShowAddGame = () => this.setState({ mode: 'add-game' });
   _onShowEditProfile = () => this.setState({ mode: 'edit-profile' });
   _onShowSignOut = () => this.setState({ mode: 'sign-out' });
   _onShowSettings = () => this.setState({ mode: 'settings' });
