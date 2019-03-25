@@ -162,7 +162,7 @@ class ContentContainer extends React.Component {
             navigator={this.props.navigator}
             navigateToGameUrl={this.props.navigator.navigateToGameUrl}
             navigateToCurrentUserProfile={() =>
-              this.props.navigator.navigateToCurrentUserProfile({ isAddingGame: true })
+              this.props.navigator.navigateToCurrentUserProfile({ mode: 'add-game' })
             }
           />
         ) : null}

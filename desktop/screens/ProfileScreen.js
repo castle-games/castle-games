@@ -44,8 +44,7 @@ class ProfileScreen extends React.Component {
     navigateToUserProfile: (user) => {},
   };
   state = {
-    mode: 'games',
-    isAddingGame: this.props.isAddingGame,
+    mode: this.props.options.mode,
   };
 
   componentWillReceiveProps(nextProps) {
@@ -58,25 +57,16 @@ class ProfileScreen extends React.Component {
       this._onShowGames();
     }
 
-    // TODO(jim): Probably could treat adding a game as a tab.
-    if (nextProps.isAddingGame) {
-      this.setState({ mode: 'games', isAddingGame: true });
+    if (nextProps.options && nextProps.options.mode) {
+      this.setState({ mode: nextProps.options.mode });
     }
   }
 
-  _onShowGames = () => this.setState({ mode: 'games', isAddingGame: false });
-
-  _onShowEditProfile = () => this.setState({ mode: 'edit-profile', isAddingGame: false });
-
-  _onShowSignOut = () => this.setState({ mode: 'sign-out', isAddingGame: false });
-
-  _onShowSettings = () => this.setState({ mode: 'settings', isAddingGame: false });
-
-  _onSelectAddGame = () =>
-    this.setState({
-      mode: 'games',
-      isAddingGame: true,
-    });
+  _onShowGames = () => this.setState({ mode: 'games' });
+  _onShowAddGame = () => this.setState({ mode: 'add-games' });
+  _onShowEditProfile = () => this.setState({ mode: 'edit-profile' });
+  _onShowSignOut = () => this.setState({ mode: 'sign-out' });
+  _onShowSettings = () => this.setState({ mode: 'settings' });
 
   _onAfterAddGame = () => {
     // after adding a game, back out to the full list of games
@@ -88,6 +78,7 @@ class ProfileScreen extends React.Component {
     let navigationItems = [{ label: 'Games', key: 'games' }];
 
     if (isOwnProfile) {
+      navigationItems.push({ label: 'Add game', key: 'add-game' });
       navigationItems.push({ label: 'Edit Profile', key: 'edit-profile' });
       navigationItems.push({ label: 'Settings', key: 'settings' });
       navigationItems.push({ label: 'Sign Out', key: 'sign-out' });
@@ -99,6 +90,7 @@ class ProfileScreen extends React.Component {
   _onNavigationChange = (selectedKey) => {
     const callbacks = {
       games: this._onShowGames,
+      'add-game': this._onShowAddGame,
       'edit-profile': this._onShowEditProfile,
       'sign-out': this._onShowSignOut,
       settings: this._onShowSettings,
@@ -122,32 +114,30 @@ class ProfileScreen extends React.Component {
   };
 
   _renderGameContent = (isOwnProfile, viewer, creator) => {
-    const { isAddingGame } = this.state;
-    if (isAddingGame) {
-      return <RegisterGame onAfterSave={this._onAfterAddGame} />;
-    } else {
-      const gameListElement =
-        creator.gameItems && creator.gameItems.length ? (
-          <div className={STYLES_GAME_GRID}>
-            <UIGameGrid
-              renderCartridgeOnly
-              viewer={viewer}
-              creator={creator}
-              gameItems={creator.gameItems}
-              onGameSelect={this.props.navigateToGame}
-              onGameUpdate={isOwnProfile ? this._updateGame : null}
-            />
-          </div>
-        ) : (
-          <UIEmptyState title="No games yet">
-            {isOwnProfile
-              ? 'You have not added any games to your profile yet.'
-              : 'This user has not added any games to their profile yet.'}
-          </UIEmptyState>
-        );
+    return creator.gameItems && creator.gameItems.length ? (
+      <div className={STYLES_GAME_GRID}>
+        <UIGameGrid
+          renderCartridgeOnly
+          viewer={viewer}
+          creator={creator}
+          gameItems={creator.gameItems}
+          onGameSelect={this.props.navigateToGame}
+          onGameUpdate={isOwnProfile ? this._updateGame : null}
+        />
+      </div>
+    ) : (
+      <UIEmptyState title="No games yet">
+        {isOwnProfile
+          ? 'You have not added any games to your profile yet.'
+          : 'This user has not added any games to their profile yet.'}
+      </UIEmptyState>
+    );
+  };
 
-      return <div>{gameListElement}</div>;
-    }
+  _renderAddGame = (isOwnProfile) => {
+    if (!isOwnProfile) return null;
+
+    return <RegisterGame onAfterSave={this._onAfterAddGame} />;
   };
 
   _renderEditProfileContent = (isOwnProfile, user) => {
@@ -176,6 +166,8 @@ class ProfileScreen extends React.Component {
 
     if (mode === 'edit-profile') {
       profileContentElement = this._renderEditProfileContent(isOwnProfile, viewer);
+    } else if (mode === 'add-game') {
+      profileContentElement = this._renderAddGame(isOwnProfile);
     } else if (mode === 'sign-out') {
       profileContentElement = this._renderSignOutContent(isOwnProfile);
     } else if (mode === 'settings') {
@@ -211,7 +203,7 @@ export default class ProfileScreenWithContext extends React.Component {
         navigateToUserProfile={navigator.navigateToUserProfile}
         viewer={currentUser.user}
         creator={navigation.userProfileShown}
-        isAddingGame={navigation.options ? navigation.options.isAddingGame : false}
+        options={navigation.options ? navigation.options : { mode: 'games' }}
         onSignOut={currentUser.clearCurrentUser}
         onAfterSave={currentUser.refreshCurrentUser}
       />
