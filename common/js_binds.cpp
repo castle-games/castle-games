@@ -48,6 +48,11 @@ JS_BIND_DEFINE(downloadFile) {
   ghostDownloadFile(url.c_str());
 }
 
+JS_BIND_DEFINE(cancelDownload) {
+  const unsigned int downloadId = arg["downloadId"];
+  ghostCancelDownload(downloadId);
+}
+
 JS_BIND_DEFINE(unzip) {
   const std::string zipPath = arg["zipPath"];
   const std::string toDirectory = arg["toDirectory"];

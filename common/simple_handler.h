@@ -52,6 +52,7 @@ public:
   virtual void OnDownloadUpdated(CefRefPtr<CefBrowser> browser,
                                  CefRefPtr<CefDownloadItem> download_item,
                                  CefRefPtr<CefDownloadItemCallback> callback) OVERRIDE;
+  bool SetDownloadCanceled(uint32 download_id);
 
   // CefLifeSpanHandler methods:
   virtual void OnAfterCreated(CefRefPtr<CefBrowser> browser) OVERRIDE;

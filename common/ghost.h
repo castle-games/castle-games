@@ -26,6 +26,11 @@ GHOST_EXPORT void ghostSendJSEvent(const char *eventName, const char *serialized
 // download project files to the specified path.
 void ghostDownloadFile(const char *fromUrl);
 
+// cancel a file download initiated by `ghostDownloadFile()`.
+// the download id is given in a JS event named kGhostFileDownloadEventName after the download has
+// started.
+bool ghostCancelDownload(unsigned int downloadId);
+
 // unzip an archive at `zipPath` and write its contents to `toDirectory`.
 // `toDirectory` will contain the zip contents, i.e. `.../toDirectory/unzipped.file` will be
 // created. this method will attempt to create `toDirectory` if it doesn't exist already.

@@ -25,6 +25,10 @@ void ghostDownloadFile(const char *fromUrl) {
   browser->GetHost()->StartDownload(CefString(fromUrl));
 }
 
+bool ghostCancelDownload(unsigned int downloadId) {
+  return SimpleHandler::GetInstance()->SetDownloadCanceled(downloadId);
+}
+
 inline bool fileExists(const char *path) {
   if (FILE *file = fopen(path, "r")) {
     fclose(file);
