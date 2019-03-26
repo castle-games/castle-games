@@ -91,31 +91,31 @@ class HomeScreen extends React.Component {
           onChange={this._handleNavigationChange}
         />
         {this.state.mode === 'games' ? (
-          <div>
-            <UIGameGrid
-              gameItems={this.props.featuredGames}
-              onUserSelect={this.props.navigateToUserProfile}
-              onGameSelect={this.props.navigateToGame}
-            />
-          </div>
+          <UIGameGrid
+            viewer={this.props.viewer}
+            gameItems={this.props.featuredGames}
+            onUserSelect={this.props.navigateToUserProfile}
+            onGameSelect={this.props.navigateToGame}
+            onSignInSelect={this.props.navigateToSignIn}
+          />
         ) : null}
         {this.state.mode === 'examples' ? (
-          <div>
-            <UIGameGrid
-              gameItems={this.props.featuredExamples}
-              onUserSelect={this.props.navigateToUserProfile}
-              onGameSelect={this.props.navigateToGame}
-            />
-          </div>
+          <UIGameGrid
+            viewer={this.props.viewer}
+            gameItems={this.props.featuredExamples}
+            onUserSelect={this.props.navigateToUserProfile}
+            onGameSelect={this.props.navigateToGame}
+            onSignInSelect={this.props.navigateToSignIn}
+          />
         ) : null}
         {this.state.mode === 'history' ? (
-          <div>
-            <UIGameGrid
-              gameItems={recentGames}
-              onUserSelect={this.props.navigateToUserProfile}
-              onGameSelect={this.props.navigateToGame}
-            />
-          </div>
+          <UIGameGrid
+            gameItems={recentGames}
+            viewer={this.props.viewer}
+            onUserSelect={this.props.navigateToUserProfile}
+            onGameSelect={this.props.navigateToGame}
+            onSignInSelect={this.props.navigateToSignIn}
+          />
         ) : null}
       </div>
     );
@@ -130,9 +130,11 @@ export default class HomeScreenWithContext extends React.Component {
           <CurrentUserContext.Consumer>
             {(currentUser) => (
               <HomeScreen
+                viewer={currentUser ? currentUser.user : null}
                 navigateToUserProfile={navigator.navigateToUserProfile}
                 navigateToGame={navigator.navigateToGame}
                 navigateToGameUrl={navigator.navigateToGameUrl}
+                navigateToSignIn={navigator.navigateToSignIn}
                 history={currentUser.userStatusHistory}
                 refreshHistory={currentUser.refreshCurrentUser}
                 {...this.props}

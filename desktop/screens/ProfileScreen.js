@@ -121,6 +121,7 @@ class ProfileScreen extends React.Component {
           viewer={viewer}
           creator={creator}
           gameItems={creator.gameItems}
+          onSignInSelect={this.props.navigateToSignIn}
           onGameSelect={this.props.navigateToGame}
           onGameUpdate={isOwnProfile ? this._updateGame : null}
         />
@@ -201,6 +202,7 @@ export default class ProfileScreenWithContext extends React.Component {
         navigateToGame={navigator.navigateToGame}
         navigateToGameUrl={navigator.navigateToGameUrl}
         navigateToUserProfile={navigator.navigateToUserProfile}
+        navigateToSignIn={navigator.navigateToSignIn}
         viewer={currentUser.user}
         creator={navigation.userProfileShown}
         options={navigation.options ? navigation.options : { mode: 'games' }}

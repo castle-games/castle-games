@@ -229,6 +229,7 @@ class UIGameCell extends React.Component {
         <div className={STYLES_BYLINE}>
           <div
             className={STYLES_AVATAR}
+            onClick={() => this.props.onUserSelect(game.owner)}
             style={{
               backgroundImage:
                 game.owner.photo && game.owner.photo.url ? `url(${game.owner.photo.url})` : null,
@@ -266,10 +267,33 @@ class UIGameCell extends React.Component {
     if (Urls.isOpenSource(luaEntryPoint)) {
       options.push(
         <UINavigationLink
+          key="actions-view-source"
           style={{ color: textColor }}
           onClick={() => this._handleViewSource(luaEntryPoint)}>
           View source
         </UINavigationLink>
+      );
+    }
+
+    const isMultiplayer = game.metadata && !!game.metadata.multiplayer;
+
+    let playCTAElement = (
+      <UIPlayTextCTA
+        background={backgroundColor}
+        style={{ marginTop: 40 }}
+        onClick={() => this.props.onGameSelect(game)}>
+        Play
+      </UIPlayTextCTA>
+    );
+
+    if (isMultiplayer && !this.props.viewer) {
+      playCTAElement = (
+        <UIPlayTextCTA
+          background={backgroundColor}
+          style={{ marginTop: 40 }}
+          onClick={this.props.onSignInSelect}>
+          Sign in to play
+        </UIPlayTextCTA>
       );
     }
 
@@ -315,12 +339,7 @@ class UIGameCell extends React.Component {
               </div>
             ) : null}
 
-            <UIPlayTextCTA
-              background={backgroundColor}
-              style={{ marginTop: 40 }}
-              onClick={() => this.props.onGameSelect(game)}>
-              Play
-            </UIPlayTextCTA>
+            {playCTAElement}
 
             {options.length ? (
               <div className={STYLES_POPOVER_ACTIONS}>
@@ -349,8 +368,10 @@ export default class UIGameGrid extends React.Component {
               onGameSelect={this.props.onGameSelect}
               onGameUpdate={this.props.onGameUpdate}
               onUserSelect={this.props.onUserSelect}
+              onSignInSelect={this.props.onSignInSelect}
               src={m.coverImage && m.coverImage.imgixUrl}
               game={m}
+              viewer={this.props.viewer}
             />
           );
         })}

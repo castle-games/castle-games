@@ -39,6 +39,7 @@ const NavigatorContextDefaults = {
   navigateToGameUrl: async (url) => {},
   navigateToGame: async (game) => {},
   navigateToCurrentGame: () => {},
+  navigateToSignIn: () => {},
   navigateToCurrentUserProfile: (options) => {},
   navigateToUserProfile: async (user) => {},
   navigateToNotifications: () => {},
@@ -70,6 +71,7 @@ class NavigationContextManager extends React.Component {
         navigateToGame: this.navigateToGame,
         navigateToCurrentGame: this.navigateToCurrentGame,
         navigateToCurrentUserProfile: this.navigateToCurrentUserProfile,
+        navigateToSignIn: this.navigateToSignIn,
         navigateToUserProfile: this.navigateToUserProfile,
         navigateToNotifications: this.navigateToNotifications,
         navigateToCreate: this.navigateToCreate,
@@ -149,6 +151,8 @@ class NavigationContextManager extends React.Component {
   };
 
   navigateToHome = () => this._navigateToContentMode('home');
+
+  navigateToSignIn = () => this._navigateToContentMode('signin');
 
   navigateToNotifications = () => this._navigateToContentMode('notifications');
 

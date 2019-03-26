@@ -2,6 +2,7 @@ import * as React from 'react';
 import { css } from 'react-emotion';
 import { DevelopmentSetterContext } from '~/contexts/DevelopmentContext';
 import { NavigationContext, NavigatorContext } from '~/contexts/NavigationContext';
+import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 
 import * as Constants from '~/common/constants';
 import * as Strings from '~/common/strings';
@@ -146,6 +147,7 @@ class ContentContainer extends React.Component {
         query={this.state.searchQuery}
         allContent={this.props.allContent}
         onSearchReset={this._handleSearchReset}
+        viewer={this.props.viewer}
       />
     );
   };
@@ -209,33 +211,38 @@ export default class ContentContainerWithContext extends React.Component {
 
   render() {
     return (
-      <DevelopmentSetterContext.Consumer>
-        {(development) => (
-          <NavigationContext.Consumer>
-            {(navigation) => {
-              return (
-                <NavigatorContext.Consumer>
-                  {(navigator) => (
-                    <ContentContainer
-                      ref={(c) => {
-                        this._container = c;
-                      }}
-                      mode={navigation.contentMode}
-                      timeGameLoaded={navigation.timeGameLoaded}
-                      timeLastNavigated={navigation.timeLastNavigated}
-                      game={navigation.game}
-                      navigator={navigator}
-                      setIsDeveloping={development.setIsDeveloping}
-                      isNowPlayingVisible={this.props.isNowPlayingVisible}
-                      {...this.props}
-                    />
-                  )}
-                </NavigatorContext.Consumer>
-              );
-            }}
-          </NavigationContext.Consumer>
+      <CurrentUserContext.Consumer>
+        {(currentUser) => (
+          <DevelopmentSetterContext.Consumer>
+            {(development) => (
+              <NavigationContext.Consumer>
+                {(navigation) => {
+                  return (
+                    <NavigatorContext.Consumer>
+                      {(navigator) => (
+                        <ContentContainer
+                          ref={(c) => {
+                            this._container = c;
+                          }}
+                          viewer={currentUser ? currentUser.user : null}
+                          mode={navigation.contentMode}
+                          timeGameLoaded={navigation.timeGameLoaded}
+                          timeLastNavigated={navigation.timeLastNavigated}
+                          game={navigation.game}
+                          navigator={navigator}
+                          setIsDeveloping={development.setIsDeveloping}
+                          isNowPlayingVisible={this.props.isNowPlayingVisible}
+                          {...this.props}
+                        />
+                      )}
+                    </NavigatorContext.Consumer>
+                  );
+                }}
+              </NavigationContext.Consumer>
+            )}
+          </DevelopmentSetterContext.Consumer>
         )}
-      </DevelopmentSetterContext.Consumer>
+      </CurrentUserContext.Consumer>
     );
   }
 }

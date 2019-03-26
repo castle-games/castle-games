@@ -165,6 +165,11 @@ export default class SearchScreen extends React.Component {
     this.props.onSearchReset();
   };
 
+  _navigateToSignIn = async () => {
+    await this.context.navigateToSignIn();
+    this.props.onSearchReset();
+  };
+
   _renderNoResults = () => {
     if (this.props.query && Strings.isMaybeCastleURL(this.props.query)) {
       return (
@@ -199,13 +204,19 @@ export default class SearchScreen extends React.Component {
           gameItems={this.state.results.games}
           onUserSelect={this._navigateToUserProfile}
           onGameSelect={this._navigateToGame}
+          onSignInSelect={this._navigateToSignIn}
+          viewer={this.props.viewer}
         />
       );
     }
 
     if (this.state.results.users && this.state.results.users.length) {
       maybeUserResults = (
-        <UIUserGrid users={this.state.results.users} onUserSelect={this._navigateToUserProfile} />
+        <UIUserGrid
+          users={this.state.results.users}
+          onUserSelect={this._navigateToUserProfile}
+          viewer={this.props.viewer}
+        />
       );
     }
 

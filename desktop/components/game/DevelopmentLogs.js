@@ -237,7 +237,9 @@ export default class DevelopmentLogs extends React.Component {
 
   _renderLogModeSelector = () => {
     const { logMode } = this.state;
-    if (this.props.game.metadata && !!this.props.game.metadata.multiplayer) {
+    const isMultiplayer = this.props.game.metadata && !!this.props.game.metadata.multiplayer;
+
+    if (isMultiplayer) {
       return (
         <React.Fragment>
           <UINavigationLink

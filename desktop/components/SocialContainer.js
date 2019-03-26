@@ -214,6 +214,7 @@ export default class SocialContainerWithContext extends React.Component {
                       viewer={currentUser ? currentUser.user : null}
                       isLoggedIn={!!currentUser.user}
                       navigateToCurrentUserProfile={navigator.navigateToCurrentUserProfile}
+                      navigateToSignIn={navigator.navigateToSignIn}
                       navigator={navigator}
                       isVisible={this.props.isVisible}
                       updateAvailable={this.props.updateAvailable}
