@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { css } from 'react-emotion';
+
 import * as Urls from '~/common/urls';
 import * as NativeUtil from '~/native/nativeutil';
 import * as Project from '~/common/project';
@@ -8,6 +10,17 @@ import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 
 import Downloads from '~/native/downloads';
 
+const STYLES_CONTAINER = css`
+  display: flex;
+  padding: 8px;
+`;
+
+const STYLES_CANCEL = css`
+  cursor: pointer;
+  text-decoration: underline;
+  margin-left: 16px;
+`;
+
 class CreateProjectProgressIndicator extends React.Component {
   static defaultProps = {
     fromTemplate: null,
@@ -15,40 +28,65 @@ class CreateProjectProgressIndicator extends React.Component {
     projectName: 'my-new-project',
     projectOwner: null,
     onFinished: (createdProjectUrl) => {},
+    onCancel: () => {},
   };
 
   state = {
     status: 'pending', // pending | downloading | ...
     download: null,
+    isCancelVisible: false,
   };
 
+  _mounted = false;
   _downloadProgressInterval = null;
+  _cancelVisibleTimeout = null;
   _url = null;
+  _downloadId = null;
 
   componentDidMount() {
+    this._mounted = true;
     if (this.props.fromTemplate) {
       this._url = Urls.githubUserContentToArchiveUrl(this.props.fromTemplate.entryPoint);
       Downloads.start(this._url);
       this._downloadProgressInterval = setInterval(this._pollDownload, 50);
+      this._cancelVisibleTimeout = setTimeout(() => this.setState({ isCancelVisible: true }), 5000);
     }
   }
 
   componentWillUnmount() {
+    this._stop();
+    this._mounted = false;
+  }
+
+  _stop = () => {
     if (this._downloadProgressInterval) {
       clearInterval(this._downloadProgressInterval);
+      this._downloadProgressInterval = null;
     }
-  }
+    if (this._cancelVisibleTimeout) {
+      clearTimeout(this._cancelVisibleTimeout);
+      this._cancelVisibleTimeout = null;
+    }
+    if (this._downloadId) {
+      Downloads.cancel(this._downloadId);
+      this._downloadId = null;
+    }
+  };
 
   _pollDownload = () => {
     const download = Downloads.getInfo(this._url);
     let status = 'pending';
     if (download && download.status !== 'pending') {
       if (download.status === 'finished') {
+        this._downloadId = null;
         status = 'extracting';
         clearInterval(this._downloadProgressInterval);
         this._downloadProgressInterval = null;
-        this._extractDownloadedProject(download.path);
+        if (this._mounted) {
+          this._extractDownloadedProject(download.path);
+        }
       } else {
+        this._downloadId = download.id;
         status = 'downloading';
       }
     }
@@ -64,16 +102,18 @@ class CreateProjectProgressIndicator extends React.Component {
     if (this.props.toDirectory) {
       success = await NativeUtil.unzipAsync(path, this.props.toDirectory);
     }
-    if (success) {
-      status = 'configuring';
-      this._configureNewProject(this.props.toDirectory);
-    } else {
-      // TODO: real error
-      status = 'error';
+    if (this._mounted) {
+      if (success) {
+        status = 'configuring';
+        this._configureNewProject(this.props.toDirectory);
+      } else {
+        // TODO: real error
+        status = 'error';
+      }
+      this.setState({
+        status,
+      });
     }
-    this.setState({
-      status,
-    });
   };
 
   _configureNewProject = async (path) => {
@@ -89,20 +129,35 @@ class CreateProjectProgressIndicator extends React.Component {
     } catch (_) {
       // TODO: show error
     }
-    this.setState(
-      {
-        status: 'finished',
-      },
-      () => {
-        // TODO: windows
-        const createdProjectUrl = `file://${path}/${projectFilename}`;
-        this.props.onFinished(createdProjectUrl);
-      }
-    );
+    if (this._mounted) {
+      this.setState(
+        {
+          status: 'finished',
+        },
+        () => {
+          // TODO: windows
+          const createdProjectUrl = `file://${path}/${projectFilename}`;
+          this.props.onFinished(createdProjectUrl);
+        }
+      );
+    }
+  };
+
+  _handleCancel = async () => {
+    this._stop();
+    this.props.onCancel();
   };
 
   render() {
     let statusText;
+    let maybeCancelElement;
+    if (this.state.isCancelVisible) {
+      maybeCancelElement = (
+        <div className={STYLES_CANCEL} onClick={this.props.onCancel}>
+          Cancel
+        </div>
+      );
+    }
     switch (this.state.status) {
       case 'pending':
         statusText = 'Downloading project template files...';
@@ -124,7 +179,12 @@ class CreateProjectProgressIndicator extends React.Component {
         statusText = 'Error';
         break;
     }
-    return <div>{statusText}</div>;
+    return (
+      <div className={STYLES_CONTAINER}>
+        <div>{statusText}</div>
+        {maybeCancelElement}
+      </div>
+    );
   }
 }
 

@@ -132,6 +132,15 @@ class CreateProjectScreen extends React.Component {
     });
   };
 
+  // called if the user presses 'cancel' during the download/extract/configure phase.
+  // CreateProjectProgressIndicator will clean up partial state when unmounted.
+  _handleCancelCreatingProject = () => {
+    this.setState({
+      step: 'configure-project',
+      createdProjectUrl: null,
+    });
+  };
+
   _handleNavigateToProject = async (projectUrl) => {
     await this.props.navigateToGameUrl(projectUrl);
     Logs.system('Welcome to Castle!');
@@ -203,6 +212,7 @@ class CreateProjectScreen extends React.Component {
           fromTemplate={this.state.selectedTemplate}
           toDirectory={this._getFinalProjectPath()}
           onFinished={this._handleProjectFinishedCreating}
+          onCancel={this._handleCancelCreatingProject}
         />
       </React.Fragment>
     );

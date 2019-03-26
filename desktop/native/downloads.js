@@ -17,6 +17,7 @@ class Downloads {
         const { id, url } = params;
         this._urlToDownloadId[url] = id;
         this._downloads[id] = {
+          id,
           status: 'running',
           progress: 0,
         };
@@ -31,6 +32,7 @@ class Downloads {
           progressNumber = 0;
         }
         this._downloads[id] = {
+          id,
           status: 'running',
           progress: progressNumber,
         };
@@ -39,6 +41,7 @@ class Downloads {
       case 'finish': {
         const { id, path } = params;
         this._downloads[id] = {
+          id,
           status: 'finished',
           progress: 1,
           path,
@@ -73,6 +76,8 @@ class Downloads {
       return this._downloads[downloadId];
     }
   };
+
+  cancel = (downloadId) => NativeBinds.cancelDownload({ downloadId });
 }
 
 export default new Downloads();
