@@ -36,12 +36,12 @@ const STYLES_ACTION = css`
 
 const STYLES_ACTION_HEADING = css`
   font-family: ${Constants.font.heading};
-  font-size: 16px;
+  font-size: 14px;
 `;
 
 const STYLES_ACTION_PARAGRAPH = css`
-  line-height: 18px;
-  font-size: 14px;
+  line-height: 1.5;
+  font-size: 12px;
   margin-top: 4px;
 `;
 
@@ -123,7 +123,7 @@ export default class HomeMakeBanner extends React.Component {
           <div className={STYLES_ACTION} onClick={this._handleClickTutorial}>
             <div className={STYLES_ACTION_HEADING}>Documentation</div>
             <div className={STYLES_ACTION_PARAGRAPH} style={{ color: Constants.colors.black }}>
-              Read tutorial's and examples.
+              Read tutorials and examples.
             </div>
           </div>
         </div>
