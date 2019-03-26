@@ -29,7 +29,7 @@ const STYLES_GAME = css`
     section {
       opacity: 1;
       pointer-events: auto;
-      transform: translateY(0px);
+      transform: translateY(0px) translateX(0px);
     }
   }
 `;
@@ -123,7 +123,7 @@ const STYLES_GAME_POPOVER = css`
   z-index: 4;
   pointer-events: none;
   opacity: 0;
-  transform: translateY(-8px);
+  transform: translateY(-24px) translateX(-24px);
   transition: 200ms ease all;
   transition-property: transform, opacity;
 `;
