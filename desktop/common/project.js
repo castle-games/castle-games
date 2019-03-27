@@ -3,18 +3,15 @@ let yaml = require('yaml');
 
 import * as NativeUtil from '~/native/nativeutil';
 
-// TODO: do a better job surfacing errors
+// TODO: correct windows paths in this method
 export const rewriteCastleFileAsync = async ({
   containingFolder,
   newFilename,
   newOwner,
   newTitle,
 }) => {
-  let existingPath;
   let castleFilename = await NativeUtil.getProjectFilenameAtPathAsync(containingFolder);
-  if (castleFilename) {
-    existingPath = `${containingFolder}/${castleFilename}`;
-  }
+  let existingPath = `${containingFolder}/${castleFilename}`;
   let finalMetadata = {};
 
   // read existing metadata
@@ -28,7 +25,7 @@ export const rewriteCastleFileAsync = async ({
         }
       );
       if (errors && errors.length) {
-        throw new Error(`Error reading existing: ${errors.join(',')}`);
+        throw new Error(`Unable to read project file: ${errors.join(',')}`);
       }
       finalMetadata = metadata;
     } catch (e) {
@@ -61,7 +58,7 @@ export const rewriteCastleFileAsync = async ({
   await NativeUtil.writeCastleFile(outputPath, fileContents);
 
   // remove old project file
-  if (existingPath) {
+  if (existingPath && existingPath !== outputPath) {
     await NativeUtil.removeCastleFile(existingPath);
   }
 

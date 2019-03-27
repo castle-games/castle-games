@@ -32,7 +32,7 @@ class CreateProjectProgressIndicator extends React.Component {
   };
 
   state = {
-    status: 'pending', // pending | downloading | ...
+    status: 'pending', // pending | downloading | extracting | configuring | finished
     download: null,
     isCancelVisible: false,
     error: '',
@@ -76,11 +76,13 @@ class CreateProjectProgressIndicator extends React.Component {
 
   _handleError = (message) => {
     this._stop();
-    this.setState({
-      status: 'error',
-      error: message,
-      isCancelVisible: true,
-    });
+    if (this._mounted) {
+      this.setState({
+        status: 'error',
+        error: message,
+        isCancelVisible: true,
+      });
+    }
   };
 
   _pollDownload = () => {
@@ -141,8 +143,9 @@ class CreateProjectProgressIndicator extends React.Component {
         newOwner: this.props.projectOwner ? this.props.projectOwner.username : null,
         newTitle: this.props.projectName ? this.props.projectName : 'my-new-project',
       });
-    } catch (_) {
-      // TODO: show error
+    } catch (e) {
+      this._handleError(`We encountered a problem while setting up your project: ${e.message}`);
+      return;
     }
     if (this._mounted) {
       this.setState(

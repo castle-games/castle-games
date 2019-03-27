@@ -122,12 +122,14 @@ JS_BIND_DEFINE(createProjectAtPath) {
 JS_BIND_DEFINE(getProjectFilenameAtPath) {
   std::string path = arg["path"];
   const char *filename;
-  bool result = ghostGetProjectFilenameAtPath(path.c_str(), &filename);
+  const char *error;
+  bool result = ghostGetProjectFilenameAtPath(path.c_str(), &filename, &error);
   if (result) {
     success(filename);
     std::free((void *)filename);
   } else {
-    failure("Unable to find a project file at this path");
+    failure(error);
+    std::free((void *)error);
   }
 }
 
@@ -238,6 +240,7 @@ bool hasEnding(std::string const &fullString, std::string const &ending) {
 JS_BIND_DEFINE(writeCastleFile) {
   std::string filepath = arg["filepath"];
   std::string contents = arg["contents"];
+  std::stringstream error;
   if (hasEnding(filepath, ".castle")) {
     std::ofstream t;
     t.open(filepath);
@@ -245,14 +248,16 @@ JS_BIND_DEFINE(writeCastleFile) {
       t << contents << "\n";
       t.close();
       if (t.bad()) {
-        failure("unable to write file");
+        error << "Failed to write Castle file at path " << filepath;
+        failure(error.str());
       } else {
         success("success");
       }
       return;
     }
   }
-  failure("unable to open file");
+  error << "Failed to open Castle file at path " << filepath;
+  failure(error.str());
 }
 
 JS_BIND_DEFINE(removeCastleFile) {
@@ -264,7 +269,9 @@ JS_BIND_DEFINE(removeCastleFile) {
       return;
     }
   }
-  failure("unable to remove file");
+  std::stringstream error;
+  error << "Failed to remove Castle file at path " << filepath;
+  failure(error.str());
 }
 
 JS_BIND_DEFINE(showDesktopNotification) {

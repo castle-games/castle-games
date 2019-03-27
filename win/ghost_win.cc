@@ -685,7 +685,7 @@ bool ghostUnzip(const char *zipPath, const char *toDirectory, const char *error)
   return false;
 }
 
-bool ghostGetProjectFilenameAtPath(const char *path, const char **result) {
+bool ghostGetProjectFilenameAtPath(const char *path, const char **result, const char **error) {
   // TODO: impl
   return false;
 }
