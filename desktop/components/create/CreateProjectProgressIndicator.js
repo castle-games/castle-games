@@ -35,6 +35,7 @@ class CreateProjectProgressIndicator extends React.Component {
     status: 'pending', // pending | downloading | ...
     download: null,
     isCancelVisible: false,
+    error: '',
   };
 
   _mounted = false;
@@ -73,6 +74,15 @@ class CreateProjectProgressIndicator extends React.Component {
     }
   };
 
+  _handleError = (message) => {
+    this._stop();
+    this.setState({
+      status: 'error',
+      error: message,
+      isCancelVisible: true,
+    });
+  };
+
   _pollDownload = () => {
     const download = Downloads.getInfo(this._url);
     let status = 'pending';
@@ -98,21 +108,26 @@ class CreateProjectProgressIndicator extends React.Component {
 
   _extractDownloadedProject = async (path) => {
     let success = false;
+    let error = null;
     let status;
     if (this.props.toDirectory) {
-      success = await NativeUtil.unzipAsync(path, this.props.toDirectory);
+      try {
+        await NativeUtil.unzipAsync(path, this.props.toDirectory);
+        success = true;
+      } catch (e) {
+        error = e.message;
+      }
     }
     if (this._mounted) {
       if (success) {
         status = 'configuring';
         this._configureNewProject(this.props.toDirectory);
+        this.setState({
+          status,
+        });
       } else {
-        // TODO: real error
-        status = 'error';
+        this._handleError(error);
       }
-      this.setState({
-        status,
-      });
     }
   };
 
@@ -176,7 +191,7 @@ class CreateProjectProgressIndicator extends React.Component {
         statusText = 'Finished';
         break;
       case 'error':
-        statusText = 'Error';
+        statusText = `Sorry, there was an error creating your project: ${this.state.error}`;
         break;
     }
     return (

@@ -56,11 +56,13 @@ JS_BIND_DEFINE(cancelDownload) {
 JS_BIND_DEFINE(unzip) {
   const std::string zipPath = arg["zipPath"];
   const std::string toDirectory = arg["toDirectory"];
-  bool result = ghostUnzip(zipPath.c_str(), toDirectory.c_str());
+  const char *error;
+  bool result = ghostUnzip(zipPath.c_str(), toDirectory.c_str(), &error);
   if (result) {
     success("success");
   } else {
-    failure("Unable to unzip");
+    failure(error);
+    std::free((void *)error);
   }
 }
 

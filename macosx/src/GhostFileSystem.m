@@ -2,6 +2,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+NSString *const kGhostFileSystemErrorDomain = @"GhostFileSystemErrorDomain";
+
 @implementation GhostFileSystem
 
 /**
@@ -58,7 +60,7 @@
   return nil;
 }
 
-+ (void)unzip:(NSString *)zipPath toDirectory:(NSString *)toDirectory {
++ (void)unzip:(NSString *)zipPath toDirectory:(NSString *)toDirectory error:(NSError **)error {
   // `unzip` will always create a new directory,
   // so we run `unzip` from the zip's original directory and then move the resulting child.
   NSString *parentDirectory = [toDirectory stringByDeletingLastPathComponent];
@@ -72,8 +74,11 @@
                                                attributes:nil
                                                     error:&err];
     if (err) {
-      NSLog(@"%s: The containing directory '%@' does not exist and we cannot create it", __func__,
-            parentDirectory);
+      *error = [self
+          _fileSystemErrorWithMessage:[NSString
+                                          stringWithFormat:@"The containing directory '%@' does "
+                                                           @"not exist and we cannot create it",
+                                                           parentDirectory]];
       return;
     }
   }
@@ -88,6 +93,15 @@
   [unzipTask launch];
   [unzipTask waitUntilExit];
 
+  if (unzipTask.terminationStatus != 0) {
+    *error = [self
+        _fileSystemErrorWithMessage:
+            [NSString
+                stringWithFormat:@"Failed to extract project files: `unzip` exited with code %d",
+                                 unzipTask.terminationStatus]];
+    return;
+  }
+
   // `unzip` will always create a new directory named after the archive's filename
   // so we want to correct that to be the path actually specified by `toDirectory`.
   NSString *createdDirectoryName = [zipFilename stringByDeletingPathExtension];
@@ -98,6 +112,13 @@
   [[NSFileManager defaultManager] moveItemAtPath:createdDirectoryPath
                                           toPath:toDirectory
                                            error:&err];
+  if (err) {
+    *error = [self
+        _fileSystemErrorWithMessage:
+            [NSString stringWithFormat:@"Unable to move project files to selected directory %@",
+                                       toDirectory]];
+  }
+  return;
 }
 
 + (NSString *)projectFilenameAtPath:(NSString *)path {
@@ -108,6 +129,12 @@
     return castleFiles.firstObject;
   }
   return nil;
+}
+
++ (NSError *)_fileSystemErrorWithMessage:(NSString *)message {
+  return [NSError errorWithDomain:kGhostFileSystemErrorDomain
+                             code:0
+                         userInfo:@{NSLocalizedDescriptionKey : message}];
 }
 
 @end

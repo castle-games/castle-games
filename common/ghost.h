@@ -34,7 +34,7 @@ bool ghostCancelDownload(unsigned int downloadId);
 // unzip an archive at `zipPath` and write its contents to `toDirectory`.
 // `toDirectory` will contain the zip contents, i.e. `.../toDirectory/unzipped.file` will be
 // created. this method will attempt to create `toDirectory` if it doesn't exist already.
-bool ghostUnzip(const char *zipPath, const char *toDirectory);
+bool ghostUnzip(const char *zipPath, const char *toDirectory, const char **error);
 
 void ghostQuitMessageLoop();
 void ghostClose();
