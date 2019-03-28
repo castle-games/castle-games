@@ -96,6 +96,10 @@ bool ghostCreateProjectAtPath(const char *path, const char **entryPoint) {
   return _ghostCreateFileFromTemplateAtPath(path, "blank.castle", "project.castle", entryPoint);
 }
 
+#ifdef _MSC_VER
+#define pclose _pclose
+#endif
+
 const char *ghostExecNode(const char *input) {
 #ifdef _MSC_VER
   wchar_t nodeExe[MAX_PATH + 256];
