@@ -26,7 +26,7 @@ jsEvents.listen('CASTLE_SET_ME', function(theMe)
     me = theMe
 end)
 
-function castle.user.me()
+function castle.user.getMe()
     return me
 end
 
