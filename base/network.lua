@@ -113,6 +113,10 @@ db:exec[[
 
 -- Whether `url` is safe to cache (never expires)
 local function isCacheable(url)
+    do -- Content-addressed asset (eg. user profile photo) on our CDN
+        local hash = url:match('https://d1vkcv80qw9qqp.cloudfront.net/([a-f0-9]*)')
+        return hash and #hash == 32
+    end
     do -- Github SHA
         local sha = url:match('^https://raw.githubusercontent.com/[^/]*/[^/]*/([a-f0-9]*)/')
         return sha and #sha == 40
