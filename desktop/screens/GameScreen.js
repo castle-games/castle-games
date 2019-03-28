@@ -71,8 +71,16 @@ class GameScreen extends React.Component {
     await GameWindow.open(url, this.props.game);
 
     // Sync state for new Ghost instance
-    NativeUtil.sendLuaEvent('CASTLE_SET_IS_LOGGED_IN', this.props.isLoggedIn);
     NativeUtil.sendLuaEvent('CASTLE_SET_VOLUME', this.state.isMuted ? 0 : 1);
+    NativeUtil.sendLuaEvent('CASTLE_SET_IS_LOGGED_IN', this.props.isLoggedIn);
+    if (this.props.isLoggedIn) {
+      const me = this.props.me;
+      NativeUtil.sendLuaEvent('CASTLE_SET_ME', {
+        username: me.username,
+        name: me.name,
+        photoUrl: me.photo.url,
+      });
+    }
   };
 
   _updateGameWindow = async (prevProps, prevState) => {
@@ -163,6 +171,7 @@ export default class GameScreenWithContext extends React.Component {
                     isDeveloperPaneVisible={this.props.isDeveloperPaneVisible}
                     closeGame={navigator.clearCurrentGame}
                     isLoggedIn={currentUser.user !== null}
+                    me={currentUser.user}
                   />
                 )}
               </CurrentUserContext.Consumer>

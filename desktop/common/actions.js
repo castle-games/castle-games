@@ -242,7 +242,6 @@ export async function login({ userId, password }) {
     return response;
   }
 
-  NativeUtil.sendLuaEvent('CASTLE_SET_IS_LOGGED_IN', !!response.data.login);
   await API.client.setTokenAsync(response.data.login.token);
   return response.data.login;
 }
@@ -468,7 +467,8 @@ export async function logout() {
     return false;
   }
 
-  NativeUtil.sendLuaEvent('CASTLE_SET_IS_LOGGED_IN', false);
+  NativeUtil.sendLuaEvent('CASTLE_SET_IS_LOGGED_IN', false); // This event also clears everything else on the Lua side
+
   await API.client.setTokenAsync(null);
   return true;
 }

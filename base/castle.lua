@@ -11,10 +11,24 @@ local castle = {}
 
 castle.user = {}
 
+local me
+
 jsEvents.listen('CASTLE_SET_IS_LOGGED_IN', function(isLoggedIn)
     castle.user.isLoggedIn = isLoggedIn
     castle.isLoggedIn = isLoggedIn --- XXX: Backwards compat...
+
+    if not isLoggedIn then
+        me = nil
+    end
 end)
+
+jsEvents.listen('CASTLE_SET_ME', function(theMe)
+    me = theMe
+end)
+
+function castle.user.me()
+    return me
+end
 
 
 -- multiplayer
