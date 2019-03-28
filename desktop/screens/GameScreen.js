@@ -76,6 +76,7 @@ class GameScreen extends React.Component {
     if (this.props.isLoggedIn) {
       const me = this.props.me;
       NativeUtil.sendLuaEvent('CASTLE_SET_ME', {
+        userId: me.userId,
         username: me.username,
         name: me.name,
         photoUrl: me.photo.url,
