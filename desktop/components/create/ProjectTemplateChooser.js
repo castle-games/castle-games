@@ -2,6 +2,7 @@ import * as React from 'react';
 import { css } from 'react-emotion';
 
 import * as Constants from '~/common/constants';
+import * as Project from '~/common/project';
 
 const STYLES_CONTAINER = css`
   display: flex;
@@ -40,6 +41,20 @@ export default class ProjectTemplateChooser extends React.Component {
     onSelectTemplate: (template) => {},
   };
 
+  _renderBlankTemplate = () => {
+    return (
+      <div
+        key={Project.BLANK_TEMPLATE_ID}
+        className={STYLES_TEMPLATE_CONTAINER}
+        onClick={() =>
+          this.props.onSelectTemplate({ gameId: Project.BLANK_TEMPLATE_ID, title: 'blank' })
+        }>
+        <div className={STYLES_GAME_COVER} style={{ backgroundColor: 'black' }} />
+        <div className={STYLES_GAME_TITLE}>blank</div>
+      </div>
+    );
+  };
+
   _renderTemplate = (game) => {
     const coverSrc = game.coverImage ? game.coverImage.imgixUrl : null;
     let styles =
@@ -64,7 +79,8 @@ export default class ProjectTemplateChooser extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTAINER}>
-        {this.props.templates.slice(0, 9).map((game) => this._renderTemplate(game))}
+        {this._renderBlankTemplate()}
+        {this.props.templates.slice(0, 8).map((game) => this._renderTemplate(game))}
       </div>
     );
   }

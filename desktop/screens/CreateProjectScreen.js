@@ -4,6 +4,7 @@ import { css } from 'react-emotion';
 import * as Constants from '~/common/constants';
 import * as NativeUtil from '~/native/nativeutil';
 import * as Strings from '~/common/strings';
+import * as Project from '~/common/project';
 
 import CreateProjectProgressIndicator from '~/components/create/CreateProjectProgressIndicator';
 import Logs from '~/common/logs';
@@ -13,6 +14,7 @@ import ProjectTemplatePreview from '~/components/create/ProjectTemplatePreview';
 import UIButton from '~/components/reusable/UIButton';
 import UIHeading from '~/components/reusable/UIHeading';
 
+import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigatorContext } from '~/contexts/NavigationContext';
 
 const STYLES_CONTAINER = css`
@@ -119,10 +121,25 @@ class CreateProjectScreen extends React.Component {
     });
   };
 
-  _handleCreateProject = () => {
-    this.setState({
-      step: 'create-project',
-    });
+  _handleCreateProject = async () => {
+    if (this.state.selectedTemplate.gameId === Project.BLANK_TEMPLATE_ID) {
+      // if blank, use embedded blank template, then set status finished
+      let createdProjectUrl;
+      try {
+        // TODO: switch to _getFinalProjectPath() once this method can create dirs.
+        createdProjectUrl = await NativeUtil.createProjectAtPathAsync(
+          this.state.selectedProjectParentDirectoryPath
+        );
+        createdProjectUrl = await this._handleConfigureProjectAtPath(
+          this.state.selectedProjectParentDirectoryPath
+        );
+      } catch (_) {}
+      this._handleProjectFinishedCreating(createdProjectUrl);
+    } else {
+      this.setState({
+        step: 'create-project',
+      });
+    }
   };
 
   _handleProjectFinishedCreating = (createdProjectUrl) => {
@@ -147,6 +164,20 @@ class CreateProjectScreen extends React.Component {
     Logs.system(`We created your project at ${projectUrl}.`);
     Logs.system(`Open that file in your favorite text editor to get started.`);
     Logs.system(`Need help? Check out ${Constants.WEB_HOST}/documentation`);
+  };
+
+  _handleConfigureProjectAtPath = async (path) => {
+    let projectName = this.state.selectedProjectName;
+    let projectFilename = `${Strings.toDirectoryName(projectName)}.castle`;
+    await Project.rewriteCastleFileAsync({
+      containingFolder: path,
+      newFilename: projectFilename,
+      newOwner: this.props.projectOwner ? this.props.projectOwner.username : null,
+      newTitle: projectName ? projectName : 'my-new-project',
+    });
+    // TODO: windows
+    const createdProjectUrl = `file://${path}/${projectFilename}`;
+    return createdProjectUrl;
   };
 
   _renderChooseTemplate = () => {
@@ -211,6 +242,7 @@ class CreateProjectScreen extends React.Component {
           projectName={this.state.selectedProjectName}
           fromTemplate={this.state.selectedTemplate}
           toDirectory={this._getFinalProjectPath()}
+          configureProject={this._handleConfigureProjectAtPath}
           onFinished={this._handleProjectFinishedCreating}
           onCancel={this._handleCancelCreatingProject}
         />
@@ -265,11 +297,16 @@ export default class CreateProjectScreenWithContext extends React.Component {
     return (
       <NavigatorContext.Consumer>
         {(navigator) => (
-          <CreateProjectScreen
-            navigateToHome={navigator.navigateToHome}
-            navigateToGameUrl={navigator.navigateToGameUrl}
-            {...this.props}
-          />
+          <CurrentUserContext.Consumer>
+            {(currentUser) => (
+              <CreateProjectScreen
+                navigateToHome={navigator.navigateToHome}
+                navigateToGameUrl={navigator.navigateToGameUrl}
+                projectOwner={currentUser.user}
+                {...this.props}
+              />
+            )}
+          </CurrentUserContext.Consumer>
         )}
       </NavigatorContext.Consumer>
     );

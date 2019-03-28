@@ -36,6 +36,7 @@ const STYLES_PARAGRAPH = css`
 `;
 
 const STYLES_GAME_COVER = css`
+  background-color: black;
   background-size: cover;
   background-position: 50% 50%;
   height: 108px;

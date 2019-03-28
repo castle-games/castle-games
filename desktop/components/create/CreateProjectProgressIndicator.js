@@ -3,10 +3,6 @@ import { css } from 'react-emotion';
 
 import * as Urls from '~/common/urls';
 import * as NativeUtil from '~/native/nativeutil';
-import * as Project from '~/common/project';
-import * as Strings from '~/common/strings';
-
-import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 
 import Downloads from '~/native/downloads';
 
@@ -21,14 +17,13 @@ const STYLES_CANCEL = css`
   margin-left: 16px;
 `;
 
-class CreateProjectProgressIndicator extends React.Component {
+export default class CreateProjectProgressIndicator extends React.Component {
   static defaultProps = {
     fromTemplate: null,
     toDirectory: null,
-    projectName: 'my-new-project',
-    projectOwner: null,
     onFinished: (createdProjectUrl) => {},
     onCancel: () => {},
+    configureProject: async (path) => {},
   };
 
   state = {
@@ -139,26 +134,19 @@ class CreateProjectProgressIndicator extends React.Component {
 
   _configureNewProject = async (path) => {
     let success = false;
-    let projectFilename = `${Strings.toDirectoryName(this.props.projectName)}.castle`;
+    let createdProjectUrl;
     try {
-      await Project.rewriteCastleFileAsync({
-        containingFolder: path,
-        newFilename: projectFilename,
-        newOwner: this.props.projectOwner ? this.props.projectOwner.username : null,
-        newTitle: this.props.projectName ? this.props.projectName : 'my-new-project',
-      });
+      createdProjectUrl = await this.props.configureProject(path);
+      success = true;
     } catch (e) {
       this._handleError(`We encountered a problem while setting up your project: ${e.message}`);
-      return;
     }
-    if (this._mounted) {
+    if (success && this._mounted) {
       this.setState(
         {
           status: 'finished',
         },
         () => {
-          // TODO: windows
-          const createdProjectUrl = `file://${path}/${projectFilename}`;
           this.props.onFinished(createdProjectUrl);
         }
       );
@@ -206,18 +194,6 @@ class CreateProjectProgressIndicator extends React.Component {
         <div>{statusText}</div>
         {maybeCancelElement}
       </div>
-    );
-  }
-}
-
-export default class CreateProjectProgressIndicatorWithContext extends React.Component {
-  render() {
-    return (
-      <CurrentUserContext.Consumer>
-        {(currentUser) => (
-          <CreateProjectProgressIndicator projectOwner={currentUser.user} {...this.props} />
-        )}
-      </CurrentUserContext.Consumer>
     );
   }
 }

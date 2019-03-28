@@ -3,6 +3,8 @@ let yaml = require('yaml');
 
 import * as NativeUtil from '~/native/nativeutil';
 
+export const BLANK_TEMPLATE_ID = 'BLANK';
+
 // TODO: correct windows paths in this method
 export const rewriteCastleFileAsync = async ({
   containingFolder,
