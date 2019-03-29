@@ -6,6 +6,15 @@ import * as NativeUtil from '~/native/nativeutil';
 
 export const BLANK_TEMPLATE_ID = 'BLANK';
 
+export const getDefaultUserProjectsPathAsync = async () => {
+  let nativeResult = await NativeUtil.getDocumentsPathAsync();
+  if (nativeResult) {
+    // if we have this, it's more accurate
+    return nativeResult;
+  }
+  return ExecNode.getHomeDirAsync();
+};
+
 // TODO: correct windows paths in this method
 export const rewriteCastleFileAsync = async ({
   containingFolder,

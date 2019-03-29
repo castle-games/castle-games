@@ -85,7 +85,7 @@ class CreateProjectScreen extends React.Component {
 
   _setDefaultProjectDirectory = async () => {
     const defaultName = 'My Castle Project';
-    const directory = await NativeUtil.getDocumentsPathAsync();
+    const directory = await Project.getDefaultUserProjectsPathAsync();
     this.setState({
       selectedProjectParentDirectoryPath: directory,
       selectedProjectName: defaultName,

@@ -676,17 +676,6 @@ void ghostInstallUpdate() {
 }
 
 bool ghostGetDocumentsPath(const char **result) {
-  // TODO: impl
-  return false;
-}
-
-bool ghostUnzip(const char *zipPath, const char *toDirectory, const char **error) {
-  // TODO: impl
-  return false;
-}
-
-bool ghostGetProjectFilenameAtPath(const char *path, const char **result, const char **error) {
-  // TODO: impl
   return false;
 }
 

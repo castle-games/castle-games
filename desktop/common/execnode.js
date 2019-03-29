@@ -5,6 +5,8 @@ import * as Actions from '~/common/actions';
 export const extractAsync = async (zipPath, toDirectory) =>
   execNodeAsync('extract', { zipPath, toDirectory });
 
+export const getHomeDirAsync = async () => execNodeAsync('getHomeDir', {});
+
 export const getProjectFilenameAtPathAsync = async (path) =>
   execNodeAsync('getProjectFilenameAtPath', { path });
 
