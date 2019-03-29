@@ -121,32 +121,6 @@ NSString *const kGhostFileSystemErrorDomain = @"GhostFileSystemErrorDomain";
   return;
 }
 
-+ (NSString *)projectFilenameAtPath:(NSString *)path error:(NSError **)error {
-  NSError *err;
-  NSArray *dirFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:&err];
-  if (err) {
-    *error = [self
-        _fileSystemErrorWithMessage:[NSString
-                                        stringWithFormat:@"Can't configure the project at `%@`: "
-                                                         @"Unable to list files at this path",
-                                                         path]];
-    return nil;
-  }
-
-  NSArray *castleFiles = [dirFiles
-      filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self ENDSWITH '.castle'"]];
-  if (castleFiles.count) {
-    return castleFiles.firstObject;
-  } else {
-    *error = [self
-        _fileSystemErrorWithMessage:[NSString
-                                        stringWithFormat:@"Can't configure the project at `%@`: No "
-                                                         @"project file found at this path",
-                                                         path]];
-    return nil;
-  }
-}
-
 + (NSError *)_fileSystemErrorWithMessage:(NSString *)message {
   return [NSError errorWithDomain:kGhostFileSystemErrorDomain
                              code:0

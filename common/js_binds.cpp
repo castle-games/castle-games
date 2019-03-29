@@ -119,20 +119,6 @@ JS_BIND_DEFINE(createProjectAtPath) {
   }
 }
 
-JS_BIND_DEFINE(getProjectFilenameAtPath) {
-  std::string path = arg["path"];
-  const char *filename;
-  const char *error;
-  bool result = ghostGetProjectFilenameAtPath(path.c_str(), &filename, &error);
-  if (result) {
-    success(filename);
-    std::free((void *)filename);
-  } else {
-    failure(error);
-    std::free((void *)error);
-  }
-}
-
 JS_BIND_DEFINE(openUri) {
   std::string uri = arg["uri"];
   ghostOpenLoveUri(uri.c_str());

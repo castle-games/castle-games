@@ -2,6 +2,9 @@ import { NativeBinds } from '~/native/nativebinds';
 import * as Constants from '~/common/constants';
 import * as Actions from '~/common/actions';
 
+export const getProjectFilenameAtPathAsync = async (path) =>
+  execNodeAsync('getProjectFilenameAtPath', { path });
+
 let publishPreviousHashes = {};
 
 export async function publishProjectAsync(dir) {

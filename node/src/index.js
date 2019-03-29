@@ -1,4 +1,7 @@
-const actions = [require('./actions/publishProject')];
+const actions = [
+  require('./actions/getProjectFilenameAtPath'),
+  require('./actions/publishProject'),
+];
 
 async function runAsync() {
   let unbase64;

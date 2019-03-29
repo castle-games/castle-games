@@ -1,6 +1,7 @@
 import metadatalib from 'castle-metadata';
 let yaml = require('yaml');
 
+import * as ExecNode from '~/common/execnode';
 import * as NativeUtil from '~/native/nativeutil';
 
 export const BLANK_TEMPLATE_ID = 'BLANK';
@@ -12,7 +13,12 @@ export const rewriteCastleFileAsync = async ({
   newOwner,
   newTitle,
 }) => {
-  let castleFilename = await NativeUtil.getProjectFilenameAtPathAsync(containingFolder);
+  let castleFilename = await ExecNode.getProjectFilenameAtPathAsync(containingFolder);
+  if (!castleFilename) {
+    throw new Error(
+      `Can't configure project at ${containingFolder}: No project file found at this path`
+    );
+  }
   let existingPath = `${containingFolder}/${castleFilename}`;
   let finalMetadata = {};
 

@@ -338,23 +338,3 @@ bool ghostUnzip(const char *zipPathCStr, const char *toDirectoryCStr, const char
   }
   return true;
 }
-
-bool ghostGetProjectFilenameAtPath(const char *pathCStr, const char **result, const char **error) {
-  NSString *path = [NSString stringWithCString:pathCStr encoding:NSUTF8StringEncoding];
-  NSError *err;
-  NSString *projectFilename = [GhostFileSystem projectFilenameAtPath:path error:&err];
-  const char *filenameStr = NULL;
-  if (projectFilename) {
-    filenameStr = [projectFilename cStringUsingEncoding:NSUTF8StringEncoding];
-    if (filenameStr) {
-      *result = strdup(filenameStr);
-      return true;
-    }
-  } else {
-    if (err) {
-      const char *errorStr = [err.localizedDescription cStringUsingEncoding:NSUTF8StringEncoding];
-      *error = strdup(errorStr);
-    }
-  }
-  return false;
-}
