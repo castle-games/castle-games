@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View, TextInput, TouchableOpacity } from 'react-native';
 
-import { apolloClient, gql, Mutation } from './Conn';
+import { apolloClient, gql, Mutation, initAsync } from './Conn';
 
 const textInputStyle = {
   width: '100%',
@@ -30,42 +30,50 @@ export default class SignInScreen extends React.Component {
           textContentType="password"
           onChangeText={password => this.setState({ password })}
         />
-        <Mutation
-          mutation={gql`
-            mutation($who: String!, $password: String!) {
-              login(who: $who, password: $password) {
-                userId
-              }
-            }
-          `}>
-          {(signIn, { data }) => {
-            if (data && data.login && data.login.userId) {
-              apolloClient.clearStore();
-              setTimeout(() => this.props.navigation.navigate('GameScreen'));
-            }
-
-            return (
-              <TouchableOpacity
-                style={{
-                  backgroundColor: '#ddd',
-                  borderRadius: 4,
-                  padding: 4,
-                  margin: 4,
-                  alignItems: 'center',
-                }}
-                onPress={() =>
-                  signIn({
-                    variables: {
-                      who: this.state.who,
-                      password: this.state.password,
-                    },
-                  })}>
-                <Text>Sign In</Text>
-              </TouchableOpacity>
-            );
+        <TouchableOpacity
+          style={{
+            backgroundColor: '#ddd',
+            borderRadius: 4,
+            padding: 4,
+            margin: 4,
+            alignItems: 'center',
           }}
-        </Mutation>
+          onPress={this._onPressSignIn}>
+          <Text>Sign In</Text>
+        </TouchableOpacity>
       </View>
     );
+  }
+
+  _onPressSignIn = async () => {
+    const { data: { userForLoginInput: { userId } } } = await apolloClient.query({
+      query: gql`
+        query($who: String!) {
+          userForLoginInput(who: $who) {
+            userId
+          }
+        }
+      `,
+      variables: { who: this.state.who },
+    });
+    console.log('got `userId`: ' + userId);
+
+    const result = await apolloClient.mutate({
+      mutation: gql`
+        mutation($userId: ID!, $password: String!) {
+          login(userId: $userId, password: $password) {
+            userId
+            token
+          }
+        }
+      `,
+      variables: { userId, password: this.state.password },
+    });
+
+    if (result && result.data && result.data.login && result.data.login.userId) {
+      apolloClient.clearStore();
+      await initAsync(result.data.login.token);
+      setTimeout(() => this.props.navigation.navigate('GameScreen'), 200);
+    }
   }
 }
