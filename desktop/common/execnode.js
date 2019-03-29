@@ -7,7 +7,7 @@ let publishPreviousHashes = {};
 export async function publishProjectAsync(dir) {
   try {
     let token = await Actions.getAccessTokenAsync();
-    let result = await ExecNode.execNodeAsync('publishProject', {
+    let result = await execNodeAsync('publishProject', {
       dir,
       apiHost: Constants.API_HOST,
       token,

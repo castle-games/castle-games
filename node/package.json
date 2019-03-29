@@ -9,6 +9,12 @@
   "scripts": {
     "build": "pkg . --targets node10-macos-x64,node10-win-x64"
   },
+  "pkg": {
+    "scripts": [
+      "src/**/*.js",
+      "node_modules/castle-api-client/storage/FileSystemStorage.js"
+    ]
+  },
   "dependencies": {
     "castle-api-client": "^6.0.0",
     "form-data": "^2.3.3",
