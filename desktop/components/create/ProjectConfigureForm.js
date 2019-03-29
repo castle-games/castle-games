@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { css } from 'react-emotion';
+let path = require('path');
 
 import * as Constants from '~/common/constants';
 import * as NativeUtil from '~/native/nativeutil';
@@ -95,7 +96,10 @@ export default class ProjectConfigureForm extends React.Component {
           <div className={STYLES_PROJECT_PATH_PREVIEW}>
             <span className={STYLES_PROJECT_DIRECTORY}>{projectParentDirectoryPath}</span>
             <span className={STYLES_PROJECT_FILENAME}>
-              /{projectDirectoryName}/{projectFileName}
+              {path.sep}
+              {projectDirectoryName}
+              {path.sep}
+              {projectFileName}
             </span>
           </div>
           <div className={STYLES_ACTION} onClick={this._handleChangeDirectory}>

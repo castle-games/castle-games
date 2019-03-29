@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { css } from 'react-emotion';
+let path = require('path');
 
 import * as Constants from '~/common/constants';
 import * as NativeUtil from '~/native/nativeutil';
@@ -166,17 +167,16 @@ class CreateProjectScreen extends React.Component {
     Logs.system(`Need help? Check out ${Constants.WEB_HOST}/documentation`);
   };
 
-  _handleConfigureProjectAtPath = async (path) => {
+  _handleConfigureProjectAtPath = async (projectPath) => {
     let projectName = this.state.selectedProjectName;
     let projectFilename = `${Strings.toDirectoryName(projectName)}.castle`;
     await Project.rewriteCastleFileAsync({
-      containingFolder: path,
+      containingFolder: projectPath,
       newFilename: projectFilename,
       newOwner: this.props.projectOwner ? this.props.projectOwner.username : null,
       newTitle: projectName ? projectName : 'my-new-project',
     });
-    // TODO: windows
-    const createdProjectUrl = `file://${path}/${projectFilename}`;
+    const createdProjectUrl = `file://${path.join(projectPath, projectFilename)}`;
     return createdProjectUrl;
   };
 
@@ -228,10 +228,10 @@ class CreateProjectScreen extends React.Component {
   };
 
   _getFinalProjectPath = () => {
-    // TODO: windows
-    return `${this.state.selectedProjectParentDirectoryPath}/${
+    return path.join(
+      this.state.selectedProjectParentDirectoryPath,
       this.state.selectedProjectDirectoryName
-    }`;
+    );
   };
 
   _renderCreatingProject = () => {

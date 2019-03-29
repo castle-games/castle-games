@@ -1,4 +1,5 @@
 import metadatalib from 'castle-metadata';
+let path = require('path');
 let yaml = require('yaml');
 
 import * as ExecNode from '~/common/execnode';
@@ -15,7 +16,6 @@ export const getDefaultUserProjectsPathAsync = async () => {
   return ExecNode.getHomeDirAsync();
 };
 
-// TODO: correct windows paths in this method
 export const rewriteCastleFileAsync = async ({
   containingFolder,
   newFilename,
@@ -28,7 +28,7 @@ export const rewriteCastleFileAsync = async ({
       `Can't configure project at ${containingFolder}: No project file found at this path`
     );
   }
-  let existingPath = `${containingFolder}/${castleFilename}`;
+  let existingPath = path.join(containingFolder, castleFilename);
   let finalMetadata = {};
 
   // read existing metadata
@@ -71,7 +71,7 @@ export const rewriteCastleFileAsync = async ({
 
   // write new project file
   const fileContents = yaml.stringify(finalMetadata);
-  const outputPath = `${containingFolder}/${newFilename}`;
+  const outputPath = path.join(containingFolder, newFilename);
   await NativeUtil.writeCastleFile(outputPath, fileContents);
 
   // remove old project file
