@@ -17,8 +17,13 @@ network.requests = {}
 local tasks = limit.new(10)
 local coros = setmetatable({}, { __mode = 'k' })
 
+-- Return whether the given coroutine is a network coroutine (top-level module code, `love.load` or `network.async` blocks)
+function network.isNetworkCoroutine(coro)
+    return not not coros[coro]
+end
+
 local function ensureCoro(uri)
-    if not coros[coroutine.running()] then -- avoid `assert` to skip concats in the happy case
+    if not network.isNetworkCoroutine(coroutine.running()) then -- avoid `assert` to skip concats in the happy case
         error("attempted a network call for '" .. uri
                 .. "' in a non-network coroutine -- ensure that resource loading "
                 .. "(eg. `network.fetch`, `require`, `love.image.newImage` etc.) happens only in "
@@ -26,10 +31,6 @@ local function ensureCoro(uri)
                 .. "blocks) and not elsewhere (eg. `love.update`, `love.draw` or other events)")
     end
 end
-
--- Database for persistent storage.
-love.filesystem.write('dummy', '') -- Create a dummy file to make sure the save directory exists
-local db = sqlite3.open(love.filesystem.getSaveDirectory() .. '/ghost_network.db')
 
 -- Run `foo` asynchronously with the caller. Runs it as a coroutine, so that
 -- network requests inside it will appear to 'block' inside that coroutine,
@@ -100,6 +101,10 @@ function network.request(firstArg, ...)
 
     return after(http.request(firstArg, ...))
 end
+
+-- Database for persistent storage.
+love.filesystem.write('dummy', '') -- Create a dummy file to make sure the save directory exists
+local db = sqlite3.open(love.filesystem.getSaveDirectory() .. '/ghost_network.db')
 
 -- Create persistent fetch cache
 db:exec[[
