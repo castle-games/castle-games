@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { css } from 'react-emotion';
 
-import * as Urls from '~/common/urls';
+import * as ExecNode from '~/common/execnode';
 import * as NativeUtil from '~/native/nativeutil';
+import * as Urls from '~/common/urls';
 
 import Downloads from '~/native/downloads';
 
@@ -113,8 +114,9 @@ export default class CreateProjectProgressIndicator extends React.Component {
     let status;
     if (this.props.toDirectory) {
       try {
-        await NativeUtil.unzipAsync(path, this.props.toDirectory);
-        success = true;
+        let result = await ExecNode.extractAsync(path, this.props.toDirectory);
+        success = result.success;
+        error = result.error;
       } catch (e) {
         error = e.message;
       }

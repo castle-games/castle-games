@@ -1,4 +1,5 @@
 const actions = [
+  require('./actions/extract'),
   require('./actions/getProjectFilenameAtPath'),
   require('./actions/publishProject'),
 ];

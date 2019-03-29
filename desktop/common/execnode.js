@@ -2,6 +2,9 @@ import { NativeBinds } from '~/native/nativebinds';
 import * as Constants from '~/common/constants';
 import * as Actions from '~/common/actions';
 
+export const extractAsync = async (zipPath, toDirectory) =>
+  execNodeAsync('extract', { zipPath, toDirectory });
+
 export const getProjectFilenameAtPathAsync = async (path) =>
   execNodeAsync('getProjectFilenameAtPath', { path });
 

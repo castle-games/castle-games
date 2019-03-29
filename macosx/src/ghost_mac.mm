@@ -324,17 +324,3 @@ void ghostShowDesktopNotification(const char *title, const char *body) {
     [center deliverNotification:notification];
   });
 }
-
-bool ghostUnzip(const char *zipPathCStr, const char *toDirectoryCStr, const char **error) {
-  NSString *zipPath = [NSString stringWithCString:zipPathCStr encoding:NSUTF8StringEncoding];
-  NSString *toDirectory =
-      [NSString stringWithCString:toDirectoryCStr encoding:NSUTF8StringEncoding];
-  NSError *err;
-  [GhostFileSystem unzip:zipPath toDirectory:toDirectory error:&err];
-  if (err) {
-    const char *errorStr = [err.localizedDescription cStringUsingEncoding:NSUTF8StringEncoding];
-    *error = strdup(errorStr);
-    return false;
-  }
-  return true;
-}

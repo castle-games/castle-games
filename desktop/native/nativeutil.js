@@ -37,9 +37,6 @@ export const getDocumentsPathAsync = async () => {
   return directory;
 };
 
-export const unzipAsync = async (zipPath, toDirectory) =>
-  NativeBinds.unzip({ zipPath, toDirectory });
-
 export const chooseDirectoryWithDialogAsync = async ({ title, message, action }) => {
   let chosenDirectory;
   try {

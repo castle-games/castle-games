@@ -53,19 +53,6 @@ JS_BIND_DEFINE(cancelDownload) {
   ghostCancelDownload(downloadId);
 }
 
-JS_BIND_DEFINE(unzip) {
-  const std::string zipPath = arg["zipPath"];
-  const std::string toDirectory = arg["toDirectory"];
-  const char *error;
-  bool result = ghostUnzip(zipPath.c_str(), toDirectory.c_str(), &error);
-  if (result) {
-    success("success");
-  } else {
-    failure(error);
-    std::free((void *)error);
-  }
-}
-
 JS_BIND_DEFINE(chooseDirectoryWithDialog) {
   const char *result;
 
