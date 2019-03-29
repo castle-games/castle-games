@@ -62,9 +62,6 @@ export const chooseOpenProjectPathWithDialogAsync = async () => {
 
 export const createProjectAtPathAsync = async (path) => NativeBinds.createProjectAtPath({ path });
 
-export const getProjectFilenameAtPathAsync = async (path) =>
-  NativeBinds.getProjectFilenameAtPath({ path });
-
 export const setMultiplayerSessionInfo = async (info) => {
   await NativeBinds.writeChannels({
     channelData: {
