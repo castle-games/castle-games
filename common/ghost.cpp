@@ -100,6 +100,7 @@ bool ghostCreateProjectAtPath(const char *path, const char **entryPoint) {
 #define pclose _pclose
 #endif
 
+static std::string execNodeResult = "";
 const char *ghostExecNode(const char *input) {
 #ifdef _MSC_VER
   wchar_t nodeExe[MAX_PATH + 256];
@@ -111,10 +112,10 @@ const char *ghostExecNode(const char *input) {
   if (!ghostGetPathToFileInAppBundle("castle-desktop-node-macos", &pathToBundledFile)) {
     return NULL;
   }
-  char command[1024];
-  snprintf(command, sizeof(command), "%s %s", pathToBundledFile, input);
-
-  FILE *pipe = popen(command, "r");
+  std::string command = pathToBundledFile;
+  command += " ";
+  command += input;
+  FILE *pipe = popen(command.c_str(), "r");
 #endif
 
   if (!pipe) {
@@ -124,10 +125,10 @@ const char *ghostExecNode(const char *input) {
   // TODO: handle failure
 
   char buffer[128];
-  static std::string result = "";
+  execNodeResult = "";
   try {
     while (fgets(buffer, sizeof buffer, pipe) != NULL) {
-      result += buffer;
+      execNodeResult += buffer;
     }
   } catch (...) {
     pclose(pipe);
@@ -135,5 +136,5 @@ const char *ghostExecNode(const char *input) {
   }
   pclose(pipe);
 
-  return result.c_str();
+  return execNodeResult.c_str();
 }

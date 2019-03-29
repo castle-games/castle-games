@@ -17,9 +17,11 @@ export async function publishProjectAsync(dir) {
       previousHashes: publishPreviousHashes,
     });
 
-    for (let i = 0; i < result.length; i++) {
-      publishPreviousHashes[result[i]] = true;
+    for (let i = 0; i < result.hashes.length; i++) {
+      publishPreviousHashes[result.hashes[i]] = true;
     }
+
+    return result.devUrl;
   } catch (e) {
     throw new Error(`failed to publish: ${e}`);
   }
@@ -35,5 +37,9 @@ export async function execNodeAsync(action, args) {
     ),
   });
 
-  return JSON.parse(result);
+  try {
+    return JSON.parse(result);
+  } catch (e) {
+    throw new Error(`Error parsing as JSON: ${result}`);
+  }
 }

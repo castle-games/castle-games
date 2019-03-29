@@ -40,12 +40,29 @@ async function publishHostedGame(API, { gameFiles }) {
     variables,
   });
 
-  // TODO(jim): Write a global error handler.
   if (result.error || result.errors || !result.data) {
-    return false;
+    throw new Error('failed to publish game');
   }
 
   return result.data.publishHostedGame;
+}
+
+async function testHostedGameHashes(API, { hashes }) {
+  const variables = { hashes };
+  const result = await API.graphqlAsync({
+    query: `
+      query($hashes: [String]!) {
+        testHostedGameHashes(hashes: $hashes)
+      }
+    `,
+    variables,
+  });
+
+  if (result.error || result.errors || !result.data) {
+    return {};
+  }
+
+  return result.data.testHostedGameHashes;
 }
 
 async function publishProjectAsync(args) {
@@ -58,6 +75,10 @@ async function publishProjectAsync(args) {
   await API.client.setTokenAsync(token);
 
   let files = await listOfFilesAsync(dir);
+  if (files.length === 0) {
+    throw new Error('no files in directory');
+  }
+
   let filesToHashes = {};
   await Promise.all(
     files.map(async (filename) => {
@@ -65,13 +86,37 @@ async function publishProjectAsync(args) {
     })
   );
 
+  let countCached = 0;
+  let countTotal = files.length;
+  let unseenHashes = [];
+  for (let i = 0; i < files.length; i++) {
+    let hash = filesToHashes[files[i]];
+    if (previousHashes[hash]) {
+      countCached++;
+    } else {
+      unseenHashes.push(hash);
+    }
+  }
+
+  // this is a heuristic for when we should check with the server to see if these files are already uploaded
+  // we don't want to do this check every time because it's an extra round trip, but if there are a lot of
+  // uncached files it's worth it to check so we don't upload a bunch of unnecessary stuff.
+  // right now it checks if less than 70% of the files are known to be cached.
+  let serverHashes = {};
+  if (countCached / countTotal < 0.7) {
+    serverHashes = await testHostedGameHashes(API, {
+      hashes: unseenHashes,
+    });
+  }
+
   return await publishHostedGame(API, {
     gameFiles: files.map((filename) => {
-      if (previousHashes[filesToHashes[filename]]) {
+      let hash = filesToHashes[filename];
+      if (previousHashes[hash] || serverHashes[hash]) {
         // we know server has already seen this file. don't upload
         return {
           path: filename,
-          hash: filesToHashes[filename],
+          hash,
         };
       } else {
         return {

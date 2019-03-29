@@ -5,6 +5,7 @@ import * as NativeUtil from '~/native/nativeutil';
 import * as Strings from '~/common/strings';
 import * as Urls from '~/common/urls';
 import * as Utilities from '~/common/utilities';
+import * as ExecNode from '~/common/execnode';
 import URL from 'url';
 
 function _validateMetadata(metadata, isRegistered) {
@@ -67,6 +68,17 @@ async function _readGameFromMetadataUrlAsync(url) {
 
 async function resolveGameAtUrlAsync(gameUrl) {
   let game;
+
+  /*
+  // TODO: add ui for enabling this
+  try {
+    gameUrl = await ExecNode.publishProjectAsync(
+      '/Users/jesseruder/ghost/projects/procjam-tower-defense'
+    );
+  } catch (e) {
+    console.log(e);
+  }
+  */
 
   // always try to resolve from the server first
   try {
