@@ -177,13 +177,14 @@ do
     end
 end
 
--- Save a result to the persistent fetch cache
+-- Save a result to the persistent fetch cache, updating an existing entry if it exists
 local persistFetchResult
 do
     local stmt = db:prepare[[
         insert into fetch_cache (url, method, response, httpCode, headers, status)
             values (?, ?, ?, ?, ?, ?)
             on conflict (url, method) do update set
+                timestamp = current_timestamp,
                 response = excluded.response,
                 httpCode = excluded.httpCode,
                 headers = excluded.headers,
@@ -204,20 +205,27 @@ do
     end
 end
 
--- Find a result in the persistent fetch cache, `nil` if not found
+-- Find a result in the persistent fetch cache, `nil` if not found; updates the timestamp of the entry
 local findPersistedFetchResult
 do
-    local stmt = db:prepare[[
+    local updateStmt = db:prepare[[
+        update fetch_cache set timestamp = current_timestamp
+            where url = ? and method = ?;
+    ]]
+    local selectStmt = db:prepare[[
         select response, httpCode, headers, status from fetch_cache
             where url = ? and method = ?;
     ]]
     findPersistedFetchResult = function(url, method)
+        updateStmt:bind_values(url, method)
+        updateStmt:step()
+        updateStmt:reset()
         local result
-        stmt:bind_values(url, method)
-        for response, httpCode, headers, status in stmt:urows() do
+        selectStmt:bind_values(url, method)
+        for response, httpCode, headers, status in selectStmt:urows() do
             result = { response, httpCode, load(headers)(), status }
         end
-        stmt:reset()
+        selectStmt:reset()
         return result
     end
 end
