@@ -1,6 +1,6 @@
 import { AppLoading } from 'expo';
 import React from 'react';
-import { View, StatusBar } from 'react-native';
+import { View, StatusBar, AsyncStorage } from 'react-native';
 import { ApolloProvider } from 'react-apollo';
 
 import './js/AutoUpdates';
@@ -26,7 +26,8 @@ export default class App extends React.Component {
     };
 
     (async () => {
-      await Conn.initAsync();
+      const authToken = await AsyncStorage.getItem('authToken');
+      await Conn.initAsync(authToken);
 
       this.setState({
         apolloClient: Conn.apolloClient,

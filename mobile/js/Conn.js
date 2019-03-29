@@ -1,3 +1,4 @@
+import { AsyncStorage } from 'react-native';
 import ApolloClient, { gql } from 'apollo-boost';
 export { ApolloConsumer, Query, Mutation } from 'react-apollo';
 
@@ -7,7 +8,15 @@ export { gql };
 
 export let apolloClient = null;
 
+export let authToken = null;
+
 export async function initAsync(token) {
+  authToken = token;
+
+  if (token) {
+    await AsyncStorage.setItem('authToken', token);
+  }
+
   apolloClient = new ApolloClient({
     uri: 'https://api.castle.games/graphql',
     headers: token ? {
@@ -17,21 +26,6 @@ export async function initAsync(token) {
   onApolloClientChanged(apolloClient);
 }
 
-export async function isSignedInAsync() {
-  return false;
-
-  if (apolloClient === null) {
-    return false;
-  }
-
-  const { data: { me } } = await apolloClient.query({
-    query: gql`
-      query {
-        me {
-          userId
-        }
-      }
-    `,
-  });
-  return !!me;
+export function isSignedInAsync() {
+  return !!authToken;
 }
