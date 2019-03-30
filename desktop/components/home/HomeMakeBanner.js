@@ -6,8 +6,9 @@ import Logs from '~/common/logs';
 import * as NativeUtil from '~/native/nativeutil';
 import UIButton from '~/components/reusable/UIButton';
 import UIHeading from '~/components/reusable/UIHeading';
+import * as Utilities from '~/common/utilities';
 
-const _ENABLE_NEW_CREATE_PROJECT_FLOW = false;
+const _ENABLE_NEW_CREATE_PROJECT_FLOW = !Utilities.isWindows();
 
 const STYLES_CONTAINER = css`
   background: #c1bcbb;
