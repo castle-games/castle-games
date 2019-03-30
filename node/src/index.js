@@ -1,4 +1,5 @@
 const actions = [
+  require('./actions/createDirectory'),
   require('./actions/extract'),
   require('./actions/getHomeDir'),
   require('./actions/getProjectFilenameAtPath'),

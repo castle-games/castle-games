@@ -2,6 +2,8 @@ import { NativeBinds } from '~/native/nativebinds';
 import * as Constants from '~/common/constants';
 import * as Actions from '~/common/actions';
 
+export const createDirectoryAsync = async (path) => execNodeAsync('createDirectory', { path });
+
 export const extractAsync = async (zipPath, toDirectory) =>
   execNodeAsync('extract', { zipPath, toDirectory });
 

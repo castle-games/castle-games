@@ -3,6 +3,7 @@ import { css } from 'react-emotion';
 let path = require('path');
 
 import * as Constants from '~/common/constants';
+import * as ExecNode from '~/common/execnode';
 import * as NativeUtil from '~/native/nativeutil';
 import * as Strings from '~/common/strings';
 import * as Project from '~/common/project';
@@ -127,13 +128,10 @@ class CreateProjectScreen extends React.Component {
       // if blank, use embedded blank template, then set status finished
       let createdProjectUrl;
       try {
-        // TODO: switch to _getFinalProjectPath() once this method can create dirs.
-        createdProjectUrl = await NativeUtil.createProjectAtPathAsync(
-          this.state.selectedProjectParentDirectoryPath
-        );
-        createdProjectUrl = await this._handleConfigureProjectAtPath(
-          this.state.selectedProjectParentDirectoryPath
-        );
+        const projectPath = this._getFinalProjectPath();
+        await ExecNode.createDirectoryAsync(projectPath);
+        createdProjectUrl = await NativeUtil.createProjectAtPathAsync(projectPath);
+        createdProjectUrl = await this._handleConfigureProjectAtPath(projectPath);
       } catch (_) {}
       this._handleProjectFinishedCreating(createdProjectUrl);
     } else {
