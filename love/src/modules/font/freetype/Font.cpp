@@ -59,9 +59,12 @@ Rasterizer *Font::newRasterizer(love::filesystem::FileData *data)
 Rasterizer *Font::newTrueTypeRasterizer(love::Data *data, int size, TrueTypeRasterizer::Hinting hinting)
 {
 	float dpiscale = 1.0f;
+	// XXX(Ghost): On Windows we dpi-scale the window, but we should leave fonts alone (they get upscaled during draw anyway)
+#ifndef LOVE_WINDOWS
 	auto window = Module::getInstance<window::Window>(Module::M_WINDOW);
 	if (window != nullptr)
 		dpiscale = window->getDPIScale();
+#endif
 
 	return newTrueTypeRasterizer(data, size, dpiscale, hinting);
 }
