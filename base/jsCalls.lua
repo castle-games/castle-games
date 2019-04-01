@@ -1,9 +1,9 @@
 local copas = require 'copas'
 local jsEvents = require 'jsEvents'
+local uuid = require 'uuid'
 
 
 -- Keep track of calls we've sent to JS and are waiting on for a response
-local nextCallId = 1
 local waitingCalls = {} 
 
 
@@ -20,8 +20,7 @@ local function call(methodName, arg)
     end
 
     -- Save to `waitingCalls`
-    local id = nextCallId
-    nextCallId = nextCallId + 1
+    local id = uuid() -- Using a UUID is overkill here but it's easy...
     local waitingCall = {
         coro = coro,
     }
