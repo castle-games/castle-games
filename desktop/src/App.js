@@ -19,6 +19,7 @@ import * as NativeUtil from '~/native/nativeutil';
 import { linkify } from 'react-linkify';
 import * as Urls from '~/common/urls';
 import * as PingUtils from '~/common/pingutils';
+import * as LuaCalls from '~/common/luacalls';
 
 const isReloadHotkey = isKeyHotkey('mod+r');
 const isFullscreenHotkey = isKeyHotkey('mod+shift+f');
@@ -44,6 +45,7 @@ class App extends React.Component {
     window.addEventListener('nativeUpdateAvailable', this._handleNativeUpdateAvailableEvent);
     window.addEventListener('nativeMenuSelected', this._handleNativeMenuSelectedEvent);
     window.addEventListener('online', PingUtils.reportPingsAsync);
+    LuaCalls.addEventListeners();
     PingUtils.reportPingsAsync();
 
     NativeUtil.setBrowserReady(() => {
@@ -71,6 +73,7 @@ class App extends React.Component {
     window.removeEventListener('CASTLE_SYSTEM_KEY_PRESSED', this._handleLuaSystemKeyDownEvent);
     window.removeEventListener('nativeMenuSelected', this._handleNativeMenuSelectedEvent);
     window.removeEventListener('online', PingUtils.reportPingsAsync);
+    LuaCalls.removeEventListeners();
     window.clearTimeout(this._nativeChannelsPollTimeout);
   }
 
