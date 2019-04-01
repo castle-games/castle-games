@@ -4,6 +4,7 @@ const actions = [
   require('./actions/getHomeDir'),
   require('./actions/getProjectFilenameAtPath'),
   require('./actions/publishProject'),
+  require('./actions/test'),
 ];
 
 async function runAsync() {
@@ -32,7 +33,7 @@ async function runAsync() {
     }
   }
 
-  throw new Error('no matching action');
+  throw new Error(`no matching action for ${input.action}`);
 }
 
 runAsync()

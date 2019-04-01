@@ -16,7 +16,9 @@
 
 #include "ghost.h"
 
+#include <atlstr.h>
 #include <windows.h>
+#include <algorithm>
 
 #include <ShellApi.h>
 
@@ -121,8 +123,9 @@ bool ghostGetPathToFileInAppBundle(const char *filename, const char **result) {
 
 // TODO: move to utility file
 inline wchar_t *convertCharArrayToLPCWSTR(const char *charArray) {
-  wchar_t *wString = new wchar_t[4096];
-  MultiByteToWideChar(CP_ACP, 0, charArray, -1, wString, 4096);
+  int length = strlen(charArray) + 1;
+  wchar_t *wString = new wchar_t[length];
+  MultiByteToWideChar(CP_ACP, 0, charArray, -1, wString, length);
   return wString;
 }
 
@@ -578,11 +581,12 @@ void ghostStep() {
 
           // Apply the size!
           // NOTE: This parent-window bounding doesn't actually seem to work in practice...
-          auto newLeft = fmax(0, ghostGlobalScaling * childLeft), newTop = fmax(0, ghostGlobalScaling * childTop);
-          auto newWidth =
-              fmin(ghostGlobalScaling * childWidth, currParentRect.right - currParentRect.left - newLeft);
-          auto newHeight =
-              fmin(ghostGlobalScaling * childHeight, currParentRect.bottom - currParentRect.top - newTop);
+          auto newLeft = fmax(0, ghostGlobalScaling * childLeft),
+               newTop = fmax(0, ghostGlobalScaling * childTop);
+          auto newWidth = fmin(ghostGlobalScaling * childWidth,
+                               currParentRect.right - currParentRect.left - newLeft);
+          auto newHeight = fmin(ghostGlobalScaling * childHeight,
+                                currParentRect.bottom - currParentRect.top - newTop);
           SetWindowPos(child, NULL, newLeft, newTop, newWidth, newHeight, 0);
         }
       }
@@ -621,7 +625,6 @@ void ghostOpenExternalUrl(const char *url) {
   ShellExecute(0, 0, ptr, 0, 0, SW_SHOW);
 }
 
-
 static HANDLE updateInstallWait;
 static PROCESS_INFORMATION updateInstallProcessInfo;
 
@@ -638,7 +641,8 @@ static VOID NTAPI finishUpdateInstall(PVOID lpParameter, BOOLEAN timerOrWaitFire
   memset(&sInfo, 0, sizeof(sInfo));
   memset(&pInfo, 0, sizeof(pInfo));
   sInfo.cb = sizeof(sInfo);
-  if (CreateProcessW(nullptr, castleCmd, nullptr, nullptr, 0, 0, nullptr, nullptr, &sInfo, &pInfo)) {
+  if (CreateProcessW(nullptr, castleCmd, nullptr, nullptr, 0, 0, nullptr, nullptr, &sInfo,
+                     &pInfo)) {
     // Quit self
     SendMessage(ghostWinGetMainWindow(), WM_CLOSE, 0, 0);
   }
@@ -671,13 +675,11 @@ void ghostInstallUpdate() {
     installingUpdate = false;
     return;
   }
-  RegisterWaitForSingleObject(&updateInstallWait, updateInstallProcessInfo.hProcess, &finishUpdateInstall,
-                              0, 60 * 1000, WT_EXECUTEONLYONCE);
+  RegisterWaitForSingleObject(&updateInstallWait, updateInstallProcessInfo.hProcess,
+                              &finishUpdateInstall, 0, 60 * 1000, WT_EXECUTEONLYONCE);
 }
 
-bool ghostGetDocumentsPath(const char **result) {
-  return false;
-}
+bool ghostGetDocumentsPath(const char **result) { return false; }
 
 class WinToastHandlerExample : public IWinToastHandler {
 public:
@@ -708,4 +710,92 @@ void ghostShowDesktopNotification(const char *title, const char *body) {
   templ.setTextField(convertCharArrayToLPCWSTR(body), WinToastTemplate::SecondLine);
 
   WinToast::instance()->showToast(templ, handler);
+}
+
+//
+// Execute a command and get the results. (Only standard output)
+// From: https://stackoverflow.com/a/35658917
+//
+static CStringA strResult;
+CStringA ExecCmd(const wchar_t *cmd // [in] command to execute
+) {
+  strResult = "";
+  HANDLE hPipeRead, hPipeWrite;
+
+  SECURITY_ATTRIBUTES saAttr = {sizeof(SECURITY_ATTRIBUTES)};
+  saAttr.bInheritHandle = TRUE; // Pipe handles are inherited by child process.
+  saAttr.lpSecurityDescriptor = NULL;
+
+  // Create a pipe to get results from child's stdout.
+  if (!CreatePipe(&hPipeRead, &hPipeWrite, &saAttr, 0))
+    return strResult;
+
+  STARTUPINFOW si = {sizeof(STARTUPINFOW)};
+  si.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
+  si.hStdOutput = hPipeWrite;
+  si.hStdError = hPipeWrite;
+  si.wShowWindow = SW_HIDE; // Prevents cmd window from flashing.
+                            // Requires STARTF_USESHOWWINDOW in dwFlags.
+
+  PROCESS_INFORMATION pi = {0};
+
+  BOOL fSuccess =
+      CreateProcessW(NULL, (LPWSTR)cmd, NULL, NULL, TRUE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);
+  if (!fSuccess) {
+    CloseHandle(hPipeWrite);
+    CloseHandle(hPipeRead);
+    return strResult;
+  }
+
+  bool bProcessEnded = false;
+  for (; !bProcessEnded;) {
+    // Give some timeslice (50 ms), so we won't waste 100% CPU.
+    bProcessEnded = WaitForSingleObject(pi.hProcess, 50) == WAIT_OBJECT_0;
+
+    // Even if process exited - we continue reading, if
+    // there is some data available over pipe.
+    for (;;) {
+      char buf[1024];
+      DWORD dwRead = 0;
+      DWORD dwAvail = 0;
+
+      if (!::PeekNamedPipe(hPipeRead, NULL, 0, NULL, &dwAvail, NULL))
+        break;
+
+      if (!dwAvail) // No data available, return
+        break;
+
+      if (!::ReadFile(hPipeRead, buf, std::min(sizeof(buf) - (long) 1, dwAvail + 0), &dwRead, NULL) || !dwRead)
+        // Error, the child process might ended
+        break;
+
+      buf[dwRead] = 0;
+      strResult += buf;
+    }
+  } // for
+
+  CloseHandle(hPipeWrite);
+  CloseHandle(hPipeRead);
+  CloseHandle(pi.hProcess);
+  CloseHandle(pi.hThread);
+  return strResult;
+} // ExecCmd
+
+const char *ghostExecNode(const char *input) {
+  CHAR buffer[MAX_PATH];
+  GetModuleFileNameA(NULL, buffer, MAX_PATH);
+  std::string::size_type pos = std::string(buffer).find_last_of("\\/");
+  std::string exeDir = std::string(buffer).substr(0, pos);
+
+  #ifdef _DEBUG
+  std::string nodeExe = exeDir + "/../../../node/castle-desktop-node-win.exe";
+#else
+  std::string nodeExe = exeDir + "/castle-desktop-node-win.exe";
+#endif
+
+  std::wstring command(convertCharArrayToLPCWSTR(nodeExe.c_str()));
+  command += std::wstring(convertCharArrayToLPCWSTR(" "));
+  command += std::wstring(convertCharArrayToLPCWSTR(input));
+
+  return (const char *)ExecCmd(command.c_str());
 }

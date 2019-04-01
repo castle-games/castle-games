@@ -243,12 +243,11 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmd
   std::string::size_type pos = std::string(buffer).find_last_of("\\/");
   std::string exeDir = std::string(buffer).substr(0, pos);
 
-  // NOTE(nikki): Alway using '/web/index.html' now so I can debug from the install location...
-// #ifdef _DEBUG
-//   std::string url = exeDir + "/../../../web/index.html";
-// #else
+#ifdef _DEBUG
+   std::string url = exeDir + "/../../../web/index.html";
+#else
   std::string url = exeDir + "/web/index.html";
-// #endif
+#endif
 
   // url = "http://localhost:3000/index.html";
 

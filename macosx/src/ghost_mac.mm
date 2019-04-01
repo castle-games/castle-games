@@ -324,3 +324,36 @@ void ghostShowDesktopNotification(const char *title, const char *body) {
     [center deliverNotification:notification];
   });
 }
+
+// TODO: don't use static
+static std::string execNodeResult = "";
+const char *ghostExecNode(const char *input) {
+  const char *pathToBundledFile;
+  if (!ghostGetPathToFileInAppBundle("castle-desktop-node-macos", &pathToBundledFile)) {
+    return NULL;
+  }
+  std::string command = pathToBundledFile;
+  command += " ";
+  command += input;
+  FILE *pipe = popen(command.c_str(), "r");
+
+  if (!pipe) {
+    return nullptr;
+  }
+
+  // TODO: handle failure
+
+  char buffer[128];
+  execNodeResult = "";
+  try {
+    while (fgets(buffer, sizeof buffer, pipe) != NULL) {
+      execNodeResult += buffer;
+    }
+  } catch (...) {
+    pclose(pipe);
+    return nullptr;
+  }
+  pclose(pipe);
+
+  return execNodeResult.c_str();
+}
