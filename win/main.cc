@@ -227,6 +227,7 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmd
   // Specify CEF global settings here.
   CefSettings settings;
   settings.multi_threaded_message_loop = true;
+  settings.remote_debugging_port = 8080;
 
   std::wstringstream cacheDir;
   cacheDir << appDataPath << L"/Castle/CEFCache";
