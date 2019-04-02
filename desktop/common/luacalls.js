@@ -1,6 +1,7 @@
 import Logs from '~/common/logs';
 import * as Actions from '~/common/actions';
 import * as NativeUtil from '~/native/nativeutil';
+import GameWindow from '~/native/gamewindow';
 
 // Methods callable as `jsCall.<methodName>(arg)` from Lua. Can be `async `. Should be called from
 // a network coroutine in Lua. Blocks the coroutine till a response (return value, error thrown,
@@ -16,6 +17,43 @@ const methods = {
       Logs.system(`throwing an error in 2 seconds...`);
       await Actions.delay(2000);
       throw new Error("'l' not allowed!");
+    }
+  },
+
+  // Storage
+
+  async storageGetGlobal({ key }) {
+    const currentGame = GameWindow.getCurrentGame();
+    if (!currentGame) {
+      throw new Error('Global storage needs a running game!');
+    }
+    const gameId = currentGame.gameId;
+    if (!gameId) {
+      throw new Error('Global storage needs a published game!');
+    }
+
+    const result = await Actions.getGameGlobalStorageValueAsync({ gameId, key });
+    return result ? result.value : null;
+  },
+
+  async storageSetGlobal({ key, value }) {
+    const currentGame = GameWindow.getCurrentGame();
+    if (!currentGame) {
+      throw new Error('Global storage needs a running game!');
+    }
+    const gameId = currentGame.gameId;
+    if (!gameId) {
+      throw new Error('Global storage needs a published game!');
+    }
+
+    let result;
+    if (value !== undefined && value !== null) {
+      result = await Actions.upsertGameGlobalStorageAsync({ gameId, key, value });
+    } else {
+      result = await Actions.deleteGameGlobalStorageAsync({ gameId, key });
+    }
+    if (!result) {
+      throw new Error('Global storage write failed!');
     }
   },
 };

@@ -878,3 +878,57 @@ export async function updatePings(pings) {
     }
   );
 }
+
+export async function getGameGlobalStorageValueAsync({ gameId, key }) {
+  const result = await API.graphqlAsync(
+    `
+      query($gameId: ID!, $key: String!) {
+        gameGlobalStorage(gameId: $gameId, key: $key) {
+          value
+        }
+      }
+    `,
+    { gameId, key }
+  );
+
+  if (result.errors && result.errors.length) {
+    throw new Error(`\`getGameGlobalStorageValueAsync\`: ${result.errors[0].message}`);
+  }
+
+  return result.data.gameGlobalStorage;
+}
+
+
+export async function upsertGameGlobalStorageAsync({ gameId, key, value }) {
+  const result = await API.graphqlAsync(
+    `
+      mutation($gameId: ID!, $key: String!, $value: String!) {
+        upsertGameGlobalStorage(gameId: $gameId, key: $key, value: $value)
+      }
+    `,
+    { gameId, key, value }
+  );
+
+  if (result.errors && result.errors.length) {
+    throw new Error(`\`upsertGameGlobalStorageAsync\`: ${result.errors[0].message}`);
+  }
+
+  return result.data.upsertGameGlobalStorage;
+}
+
+export async function deleteGameGlobalStorageAsync({ gameId, key }) {
+  const result = await API.graphqlAsync(
+    `
+      mutation($gameId: ID!, $key: String!) {
+        deleteGameGlobalStorage(gameId: $gameId, key: $key)
+      }
+    `,
+    { gameId, key }
+  );
+
+  if (result.errors && result.errors.length) {
+    throw new Error(`\`deleteGameGlobalStorageAsync\`: ${result.errors[0].message}`);
+  }
+
+  return result.data.deleteGameGlobalStorage;
+}
