@@ -216,6 +216,14 @@ class NavigationContextManager extends React.Component {
         // fall back to whatever we were given
         fullUser = user;
       }
+    } else {
+      // async refresh this user but don't block
+      (async () => {
+        try {
+          const updatedUser = await Actions.getUser({ userId: user.userId });
+          this.props.social.addUser(updatedUser);
+        } catch (_) {}
+      })();
     }
     this.setState({
       navigation: {
