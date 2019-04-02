@@ -2,13 +2,9 @@ import * as React from 'react';
 import { css } from 'react-emotion';
 
 import * as Constants from '~/common/constants';
-import Logs from '~/common/logs';
 import * as NativeUtil from '~/native/nativeutil';
 import UIButton from '~/components/reusable/UIButton';
 import UIHeading from '~/components/reusable/UIHeading';
-import * as Utilities from '~/common/utilities';
-
-const _ENABLE_NEW_CREATE_PROJECT_FLOW = !Utilities.isWindows();
 
 const STYLES_CONTAINER = css`
   background: #c1bcbb;
@@ -70,29 +66,6 @@ export default class HomeMakeBanner extends React.Component {
     this.props.navigateToCreate();
   };
 
-  // TODO: remove this, unflag newer method
-  _legacyHandleCreateProject = async () => {
-    const newProjectDirectory = await NativeUtil.chooseDirectoryWithDialogAsync({
-      title: 'Create a New Castle Project',
-      message: 'Choose a folder where the project will be created.',
-      action: 'Create Project',
-    });
-    if (newProjectDirectory) {
-      let entryPointFilePath;
-      try {
-        entryPointFilePath = await NativeUtil.createProjectAtPathAsync(newProjectDirectory);
-      } catch (_) {}
-      if (entryPointFilePath) {
-        const gameUrl = `file://${entryPointFilePath}`;
-        await this.props.navigateToGameUrl(gameUrl);
-        Logs.system('Welcome to Castle!');
-        Logs.system(`We created your project at ${gameUrl}.`);
-        Logs.system(`Open that file in your favorite text editor to get started.`);
-        Logs.system(`Need help? Check out ${Constants.WEB_HOST}/documentation`);
-      }
-    }
-  };
-
   _handleOpenProject = async () => {
     try {
       const path = await NativeUtil.chooseOpenProjectPathWithDialogAsync();
@@ -103,13 +76,10 @@ export default class HomeMakeBanner extends React.Component {
   };
 
   render() {
-    const createProjectHandler = _ENABLE_NEW_CREATE_PROJECT_FLOW
-      ? this._handleCreateProject
-      : this._legacyHandleCreateProject;
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_ACTIONS}>
-          <div className={STYLES_ACTION} onClick={createProjectHandler}>
+          <div className={STYLES_ACTION} onClick={this._handleCreateProject}>
             <div className={STYLES_ACTION_HEADING}>New project</div>
             <div className={STYLES_ACTION_PARAGRAPH} style={{ color: Constants.colors.black }}>
               Create a new blank project.
