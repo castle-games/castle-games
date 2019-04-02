@@ -310,8 +310,19 @@ void SimpleHandler::SendDownloadProgressEvent(uint32 download_id, int progress) 
   ghostSendJSEvent(kGhostFileDownloadEventName, params.str().c_str());
 }
 
+// https://stackoverflow.com/questions/2896600/how-to-replace-all-occurrences-of-a-character-in-string
+std::string ReplaceAll(std::string str, const std::string& from, const std::string& to) {
+  size_t start_pos = 0;
+  while ((start_pos = str.find(from, start_pos)) != std::string::npos) {
+    str.replace(start_pos, from.length(), to);
+    start_pos += to.length(); // Handles case where 'to' is a substring of 'from'
+  }
+  return str;
+}
+
 void SimpleHandler::SendDownloadFinishEvent(uint32 download_id, std::string path) {
   std::stringstream params;
+  path = ReplaceAll(path, "\\", "\\\\"); // double escape in order to preserve correct value in json
   params << "{"
          << " id: \"" << download_id << "\", "
          << " status: \"finish\","
