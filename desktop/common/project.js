@@ -1,9 +1,11 @@
 import metadatalib from 'castle-metadata';
-let path = require('path');
 let yaml = require('yaml');
 
 import * as ExecNode from '~/common/execnode';
 import * as NativeUtil from '~/native/nativeutil';
+import * as Utilities from '~/common/utilities';
+
+const path = Utilities.path();
 
 export const BLANK_TEMPLATE_ID = 'BLANK';
 

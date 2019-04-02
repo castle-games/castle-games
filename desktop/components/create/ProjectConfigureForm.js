@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { css } from 'react-emotion';
-let path = require('path');
 
 import * as Constants from '~/common/constants';
 import * as NativeUtil from '~/native/nativeutil';
+import * as Utilities from '~/common/utilities';
+
+const path = Utilities.path();
 
 import CreateProjectInput from '~/components/create/CreateProjectInput';
 

@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { css } from 'react-emotion';
-let path = require('path');
 
 import * as Constants from '~/common/constants';
 import * as ExecNode from '~/common/execnode';
 import * as NativeUtil from '~/native/nativeutil';
 import * as Strings from '~/common/strings';
 import * as Project from '~/common/project';
+import * as Utilities from '~/common/utilities';
 
 import CreateProjectProgressIndicator from '~/components/create/CreateProjectProgressIndicator';
 import Logs from '~/common/logs';
@@ -18,6 +18,8 @@ import UIHeading from '~/components/reusable/UIHeading';
 
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigatorContext } from '~/contexts/NavigationContext';
+
+const path = Utilities.path();
 
 const STYLES_CONTAINER = css`
   background: ${Constants.colors.background};

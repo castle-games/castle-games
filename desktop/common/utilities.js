@@ -1,6 +1,9 @@
 import platform from 'platform';
 import url from 'url';
 
+const pathposix = require('path-posix');
+const pathwin32 = require('path-win32');
+
 const LUMINOSITY_THEME_BREAKPOINT = 0.62;
 
 export const shadeHex = (color, percent) => {
@@ -54,6 +57,16 @@ export const getRandomInt = (min, max) => {
 export function isWindows() {
   const os = platform.os.toString();
   return os.toLowerCase().includes('windows');
+}
+
+export function path() {
+  // cannot use npm 'path' module because it uses the 'process' module
+  // to determine the current OS, which does not give the correct value on WSL.
+  if (isWindows()) {
+    return pathwin32;
+  } else {
+    return pathposix;
+  }
 }
 
 function _splitRemoveEmpty(str, sep) {
