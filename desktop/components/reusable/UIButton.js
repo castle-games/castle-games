@@ -6,7 +6,6 @@ import { css } from 'react-emotion';
 const STYLES_BUTTON = css`
   display: inline-flex;
   background: ${Constants.colors.black};
-  color: ${Constants.colors.white};
   border-radius: 4px;
   height: 48px;
   text-align: center;
@@ -16,8 +15,17 @@ const STYLES_BUTTON = css`
   font-size: ${Constants.typescale.lvl6};
   font-family: ${Constants.font.system};
   font-weight: 700;
-  cursor: pointer;
   opacity: 1;
+
+  :enabled {
+    color: ${Constants.colors.white};
+    cursor: pointer;
+  }
+
+  :disabled {
+    color: ${Constants.colors.background};
+    background: ${Constants.colors.background4};
+  }
 `;
 
 export default class UIButton extends React.Component {
@@ -32,6 +40,7 @@ export default class UIButton extends React.Component {
         type={this.props.type}
         style={this.props.style}
         onClick={this.props.onClick}
+        disabled={this.props.disabled}
         value={this.props.value ? this.props.value : this.props.children}
       />
     );

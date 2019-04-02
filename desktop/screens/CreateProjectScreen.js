@@ -80,6 +80,7 @@ class CreateProjectScreen extends React.Component {
     selectedProjectName: null,
     selectedProjectParentDirectoryPath: null,
     selectedProjectDirectoryName: null,
+    isProjectValidToCreate: true,
     createdProjectUrl: null,
   };
 
@@ -113,15 +114,26 @@ class CreateProjectScreen extends React.Component {
 
   _handleChangeProjectName = (e) => {
     const projectName = e.target.value;
+    const selectedProjectDirectoryName = Strings.toDirectoryName(projectName);
+    const isProjectValidToCreate = this._isProjectPathValid(
+      this.state.selectedProjectParentDirectoryPath,
+      selectedProjectDirectoryName
+    );
     this.setState({
       selectedProjectName: projectName,
-      selectedProjectDirectoryName: Strings.toDirectoryName(projectName),
+      selectedProjectDirectoryName,
+      isProjectValidToCreate,
     });
   };
 
   _handleSelectDirectory = (directory) => {
+    const isProjectValidToCreate = this._isProjectPathValid(
+      directory,
+      this.state.selectedProjectDirectoryName
+    );
     this.setState({
       selectedProjectParentDirectoryPath: directory,
+      isProjectValidToCreate,
     });
   };
 
@@ -221,9 +233,19 @@ class CreateProjectScreen extends React.Component {
           <div className={STYLES_BACK} onClick={this._handleBackToTemplate}>
             Choose a different template
           </div>
-          <UIButton onClick={this._handleCreateProject}>Create Project</UIButton>
+          <UIButton
+            disabled={!this.state.isProjectValidToCreate}
+            onClick={this._handleCreateProject}>
+            Create Project
+          </UIButton>
         </div>
       </React.Fragment>
+    );
+  };
+
+  _isProjectPathValid = (parentDirectoryPath, directoryName) => {
+    return (
+      parentDirectoryPath && directoryName && parentDirectoryPath.length && directoryName.length
     );
   };
 

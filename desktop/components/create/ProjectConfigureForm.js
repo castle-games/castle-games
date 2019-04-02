@@ -84,7 +84,7 @@ export default class ProjectConfigureForm extends React.Component {
   render() {
     let projectParentDirectoryPath = this.props.selectedParentDirectoryPath;
     let projectDirectoryName = this.props.selectedDirectoryName;
-    let projectFileName = `${projectDirectoryName}.castle`;
+    let projectFileName = projectDirectoryName ? `${projectDirectoryName}.castle` : '';
     return (
       <div className={STYLES_PROJECT_INPUT_CONTAINER}>
         <CreateProjectInput
