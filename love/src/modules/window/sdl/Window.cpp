@@ -827,7 +827,7 @@ void Window::getPosition(int &x, int &y, int &displayindex)
 
 bool Window::isOpen() const
 {
-	return open;
+	return open && (SDL_GetWindowFlags(window) & SDL_WINDOW_SHOWN);
 }
 
 void Window::setWindowTitle(const std::string &title)
