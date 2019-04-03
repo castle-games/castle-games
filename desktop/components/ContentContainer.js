@@ -107,8 +107,6 @@ class ContentContainer extends React.Component {
       return <CreateProjectScreen templates={this.props.featuredExamples} />;
     } else if (mode === 'profile') {
       return <ProfileScreen />;
-    } else if (mode === 'signin') {
-      return <LoginSignupScreen />;
     } else if (mode === 'notifications') {
       return <NotificationScreen />;
     }

@@ -133,20 +133,8 @@ class SocialContainer extends React.Component {
         </React.Fragment>
       );
     } else {
-      contentElement = (
-        <div className={STYLES_LOGGED_OUT}>
-          <UIHeaderBlock>You must be signed in to chat</UIHeaderBlock>
-        </div>
-      );
-
-      signInElement = (
-        <UINavigationLink
-          style={{ marginLeft: 8 }}
-          className={STYLES_LOGIN_ACTION}
-          onClick={navigateToCurrentUserProfile}>
-          Sign in
-        </UINavigationLink>
-      );
+      contentElement = <div>Hello World</div>;
+      signInElement = null;
     }
 
     const updateElement = this.props.updateAvailable ? (
