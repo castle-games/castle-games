@@ -121,6 +121,19 @@ class GameScreen extends React.Component {
   };
 
   render() {
+    let actionsBarElement;
+    if (!this.props.isFullScreen) {
+      actionsBarElement = (
+        <GameActionsBar
+          game={this.props.game}
+          timeGameLoaded={this.props.timeGameLoaded}
+          navigateToUserProfile={this.props.navigateToUserProfile}
+          clearCurrentGame={this.props.clearCurrentGame}
+          onFullScreenToggle={() => this.props.setIsFullScreen(!this.props.isFullScreen)}
+          onUpdateGameWindowFrame={this._updateGameWindowFrame}
+        />
+      );
+    }
     return (
       <div className={STYLES_CONTAINER}>
         <div
@@ -130,29 +143,13 @@ class GameScreen extends React.Component {
             this._updateGameWindowFrame();
           }}
         />
-        <GameActionsBar
-          game={this.props.game}
-          timeGameLoaded={this.props.timeGameLoaded}
-          navigateToUserProfile={this.props.navigateToUserProfile}
-          closeGame={this.props.closeGame}
-          onUpdateGameWindowFrame={this._updateGameWindowFrame}
-          isDeveloperPaneVisible={this.props.isDeveloperPaneVisible}
-        />
+        {actionsBarElement}
       </div>
     );
   }
 }
 
 export default class GameScreenWithContext extends React.Component {
-  _game;
-
-  getScreen = () => {
-    if (this._game) {
-      return this._game;
-    }
-    return null;
-  };
-
   render() {
     return (
       <NavigatorContext.Consumer>
@@ -162,17 +159,16 @@ export default class GameScreenWithContext extends React.Component {
               <CurrentUserContext.Consumer>
                 {(currentUser) => (
                   <GameScreen
-                    ref={(c) => {
-                      this._game = c;
-                    }}
                     game={navigation.game}
                     timeGameLoaded={navigation.timeGameLoaded}
                     timeNavigatedToGame={navigation.timeLastNavigated}
                     navigateToUserProfile={navigator.navigateToUserProfile}
-                    isDeveloperPaneVisible={this.props.isDeveloperPaneVisible}
-                    closeGame={navigator.clearCurrentGame}
+                    isFullScreen={navigation.isFullScreen}
+                    setIsFullScreen={navigator.setIsFullScreen}
+                    clearCurrentGame={navigator.clearCurrentGame}
                     isLoggedIn={currentUser.user !== null}
                     me={currentUser.user}
+                    {...this.props}
                   />
                 )}
               </CurrentUserContext.Consumer>

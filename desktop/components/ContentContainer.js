@@ -30,8 +30,6 @@ const STYLES_CONTAINER = css`
 `;
 
 class ContentContainer extends React.Component {
-  _game;
-
   static defaultProps = {
     mode: 'home',
     setIsDeveloping: () => {},
@@ -51,7 +49,6 @@ class ContentContainer extends React.Component {
       // if we loaded a new game, auto-show logs for local urls
       const isLocal = Urls.isPrivateUrl(this.props.game.url);
       this.props.setIsDeveloping(isLocal);
-      this._handleUpdateGameWindowFrame();
     }
   }
 
@@ -95,33 +92,9 @@ class ContentContainer extends React.Component {
     this._handleSearchReset();
   };
 
-  _handleUpdateGameWindowFrame = () => {
-    if (!this._game) {
-      return;
-    }
-
-    const gameScreen = this._game.getScreen();
-
-    if (gameScreen) {
-      gameScreen._updateGameWindowFrame();
-    }
-  };
-
-  updateGameWindowFrame = () => {
-    this._handleUpdateGameWindowFrame();
-  };
-
   _renderContent = (mode) => {
     if (mode === 'game') {
-      return (
-        <GameScreen
-          ref={(c) => {
-            this._game = c;
-          }}
-          isDeveloperPaneVisible={this.props.isNowPlayingVisible}
-          onFullScreenToggle={this.props.onFullScreenToggle}
-        />
-      );
+      return <GameScreen isFullScreen={this.props.isFullScreen} />;
     } else if (mode === 'home') {
       return (
         <HomeScreen
@@ -160,6 +133,11 @@ class ContentContainer extends React.Component {
       contentElement = this._renderSearch();
     }
 
+    let nowPlayingElement;
+    if (this.props.game && this.props.mode !== 'game') {
+      nowPlayingElement = <NowPlayingBar game={this.props.game} navigator={this.props.navigator} />;
+    }
+
     return (
       <div className={STYLES_CONTAINER}>
         {this.props.mode === 'home' ? (
@@ -182,33 +160,13 @@ class ContentContainer extends React.Component {
           />
         ) : null}
         {contentElement}
-        {this.props.game ? (
-          <NowPlayingBar
-            isVisible={this.props.isNowPlayingVisible}
-            onUpdateGameWindowFrame={this._handleUpdateGameWindowFrame}
-            onSetDeveloper={this.props.setIsDeveloping}
-            onFullScreenToggle={this.props.onFullScreenToggle}
-            game={this.props.game}
-            mode={this.props.mode}
-            navigator={this.props.navigator}
-          />
-        ) : null}
+        {nowPlayingElement}
       </div>
     );
   }
 }
 
 export default class ContentContainerWithContext extends React.Component {
-  _container;
-
-  updateGameWindowFrame = () => {
-    if (!this._container) {
-      return;
-    }
-
-    this._container.updateGameWindowFrame();
-  };
-
   render() {
     return (
       <CurrentUserContext.Consumer>
@@ -221,9 +179,6 @@ export default class ContentContainerWithContext extends React.Component {
                     <NavigatorContext.Consumer>
                       {(navigator) => (
                         <ContentContainer
-                          ref={(c) => {
-                            this._container = c;
-                          }}
                           viewer={currentUser ? currentUser.user : null}
                           mode={navigation.contentMode}
                           timeGameLoaded={navigation.timeGameLoaded}
@@ -231,7 +186,6 @@ export default class ContentContainerWithContext extends React.Component {
                           game={navigation.game}
                           navigator={navigator}
                           setIsDeveloping={development.setIsDeveloping}
-                          isNowPlayingVisible={this.props.isNowPlayingVisible}
                           {...this.props}
                         />
                       )}

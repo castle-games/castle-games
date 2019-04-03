@@ -46,7 +46,7 @@ const NavigatorContextDefaults = {
   navigateToCreate: () => {},
   reloadGame: (onlyIfVisible) => {},
   clearCurrentGame: async () => {},
-  setNavigationState: () => {},
+  setIsFullScreen: (isFullScreen) => {},
 };
 
 const NavigatorContext = React.createContext(NavigatorContextDefaults);
@@ -65,7 +65,6 @@ class NavigationContextManager extends React.Component {
       navigator: {
         ...NavigatorContextDefaults,
         ...props.value.navigator,
-        setNavigationState: this.setNavigationState,
         navigateToHome: this.navigateToHome,
         navigateToGameUrl: this.navigateToGameUrl,
         navigateToGame: this.navigateToGame,
@@ -77,6 +76,7 @@ class NavigationContextManager extends React.Component {
         navigateToCreate: this.navigateToCreate,
         reloadGame: this.reloadGame,
         clearCurrentGame: this.clearCurrentGame,
+        setIsFullScreen: this.setIsFullScreen,
       },
     };
   }
@@ -138,16 +138,13 @@ class NavigationContextManager extends React.Component {
     });
   };
 
-  setNavigationState = (updates, callback) => {
-    this.setState(
-      {
-        navigation: {
-          ...this.state.navigation,
-          ...updates,
-        },
+  setIsFullScreen = (isFullScreen) => {
+    this.setState({
+      navigation: {
+        ...this.state.navigation,
+        isFullScreen,
       },
-      callback
-    );
+    });
   };
 
   navigateToHome = () => this._navigateToContentMode('home');

@@ -28,7 +28,6 @@ const isEscFullScreenHotkey = isKeyHotkey('esc');
 
 class App extends React.Component {
   _nativeChannelsPollTimeout;
-  _app;
 
   constructor(props) {
     super();
@@ -121,12 +120,7 @@ class App extends React.Component {
   };
 
   _handleFullScreenToggle = () => {
-    this.props.navigator.setNavigationState(
-      {
-        isFullScreen: !this.props.navigation.isFullScreen,
-      },
-      this._app.updateGameWindowFrame
-    );
+    this.props.navigator.setIsFullScreen(!this.props.navigation.isFullScreen);
   };
 
   _handleKeyDownEvent = (e) => {
@@ -158,11 +152,6 @@ class App extends React.Component {
     if (isDevelopmentHotkey(e)) {
       e.preventDefault();
       this.props.development.toggleIsDeveloping();
-      if (!this._app) {
-        return;
-      }
-
-      this._app.updateGameWindowFrame();
       return;
     }
   };
@@ -187,16 +176,12 @@ class App extends React.Component {
   render() {
     return (
       <AppContainer
-        ref={(c) => {
-          this._app = c;
-        }}
         featuredGames={this.state.featuredGames}
         featuredExamples={this.state.featuredExamples}
         allContent={this.state.allContent}
         updateAvailable={this.state.updateAvailable}
         isFullScreen={this.props.navigation.isFullScreen}
         onNativeUpdateInstall={this._handleNativeUpdateInstall}
-        onFullScreenToggle={this._handleFullScreenToggle}
       />
     );
   }

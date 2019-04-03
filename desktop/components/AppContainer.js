@@ -17,16 +17,6 @@ const STYLES_CONTAINER = css`
 `;
 
 export default class AppContainer extends React.Component {
-  _container;
-
-  updateGameWindowFrame = () => {
-    if (!this._container) {
-      return;
-    }
-
-    this._container.updateGameWindowFrame();
-  };
-
   render() {
     return (
       <div className={STYLES_CONTAINER}>
@@ -35,14 +25,7 @@ export default class AppContainer extends React.Component {
           updateAvailable={this.props.updateAvailable}
           onNativeUpdateInstall={this.props.onNativeUpdateInstall}
         />
-        <ContentContainer
-          isNowPlayingVisible={!this.props.isFullScreen}
-          onFullScreenToggle={this.props.onFullScreenToggle}
-          ref={(c) => {
-            this._container = c;
-          }}
-          {...this.props}
-        />
+        <ContentContainer {...this.props} />
       </div>
     );
   }
