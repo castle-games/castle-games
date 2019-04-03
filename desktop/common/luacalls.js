@@ -3,6 +3,19 @@ import * as Actions from '~/common/actions';
 import * as NativeUtil from '~/native/nativeutil';
 import GameWindow from '~/native/gamewindow';
 
+// Utility: get the `storageId` for a registered game or generate one if unregistered
+const storageIdForCurrentGame = () => {
+  const currentGame = GameWindow.getCurrentGame();
+  if (!currentGame) {
+    throw new Error('Global storage needs a running game');
+  }
+  const storageId = currentGame.storageId;
+  if (!storageId) {
+    throw new Error("Storage for unregistered games is currently not implemented"); // TODO(nikki): Implement!
+  }
+  return storageId;
+};
+
 // Methods callable as `jsCall.<methodName>(arg)` from Lua. Can be `async `. Should be called from
 // a network coroutine in Lua. Blocks the coroutine till a response (return value, error thrown,
 // promise resolution or rejection) is received.
@@ -23,37 +36,38 @@ const methods = {
   // Storage
 
   async storageGetGlobal({ key }) {
-    const currentGame = GameWindow.getCurrentGame();
-    if (!currentGame) {
-      throw new Error('Global storage needs a running game!');
-    }
-    const gameId = currentGame.gameId;
-    if (!gameId) {
-      throw new Error('Global storage needs a published game!');
-    }
-
-    const result = await Actions.getGameGlobalStorageValueAsync({ gameId, key });
+    const storageId = storageIdForCurrentGame();
+    const result = await Actions.getGameGlobalStorageValueAsync({ storageId, key });
     return result ? result.value : null;
   },
 
   async storageSetGlobal({ key, value }) {
-    const currentGame = GameWindow.getCurrentGame();
-    if (!currentGame) {
-      throw new Error('Global storage needs a running game!');
-    }
-    const gameId = currentGame.gameId;
-    if (!gameId) {
-      throw new Error('Global storage needs a published game!');
-    }
-
-    let result;
-    if (value !== undefined && value !== null) {
-      result = await Actions.upsertGameGlobalStorageAsync({ gameId, key, value });
-    } else {
-      result = await Actions.deleteGameGlobalStorageAsync({ gameId, key });
-    }
+    const storageId = storageIdForCurrentGame();
+    const result = await Actions.setGameGlobalStorageAsync({
+      storageId,
+      key,
+      value: value === undefined ? null : value, // Normalize to `null` for deletes
+    });
     if (!result) {
       throw new Error('Global storage write failed!');
+    }
+  },
+
+  async storageGetUser({ key }) {
+    const storageId = storageIdForCurrentGame();
+    const result = await Actions.getGameUserStorageValueAsync({ storageId, key });
+    return result ? result.value : null;
+  },
+
+  async storageSetUser({ key, value }) {
+    const storageId = storageIdForCurrentGame();
+    const result = await Actions.setGameUserStorageAsync({
+      storageId,
+      key,
+      value: value === undefined ? null : value, // Normalize to `null` for deletes
+    });
+    if (!result) {
+      throw new Error('User storage write failed!');
     }
   },
 };

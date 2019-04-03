@@ -73,6 +73,7 @@ const GAME_FIELDS = `
     height
     width
   }
+  storageId
 `;
 
 const GAME_ITEMS = `
@@ -879,16 +880,16 @@ export async function updatePings(pings) {
   );
 }
 
-export async function getGameGlobalStorageValueAsync({ gameId, key }) {
+export async function getGameGlobalStorageValueAsync({ storageId, key }) {
   const result = await API.graphqlAsync(
     `
-      query($gameId: ID!, $key: String!) {
-        gameGlobalStorage(gameId: $gameId, key: $key) {
+      query($storageId: String!, $key: String!) {
+        gameGlobalStorage(storageId: $storageId, key: $key) {
           value
         }
       }
     `,
-    { gameId, key }
+    { storageId, key }
   );
 
   if (result.errors && result.errors.length) {
@@ -899,36 +900,56 @@ export async function getGameGlobalStorageValueAsync({ gameId, key }) {
 }
 
 
-export async function upsertGameGlobalStorageAsync({ gameId, key, value }) {
+export async function setGameGlobalStorageAsync({ storageId, key, value }) {
   const result = await API.graphqlAsync(
     `
-      mutation($gameId: ID!, $key: String!, $value: String!) {
-        upsertGameGlobalStorage(gameId: $gameId, key: $key, value: $value)
+      mutation($storageId: String!, $key: String!, $value: String) {
+        setGameGlobalStorage(storageId: $storageId, key: $key, value: $value)
       }
     `,
-    { gameId, key, value }
+    { storageId, key, value }
   );
 
   if (result.errors && result.errors.length) {
-    throw new Error(`\`upsertGameGlobalStorageAsync\`: ${result.errors[0].message}`);
+    throw new Error(`\`setGameGlobalStorageAsync\`: ${result.errors[0].message}`);
   }
 
-  return result.data.upsertGameGlobalStorage;
+  return result.data.setGameGlobalStorage;
 }
 
-export async function deleteGameGlobalStorageAsync({ gameId, key }) {
+export async function getGameUserStorageValueAsync({ storageId, key }) {
   const result = await API.graphqlAsync(
     `
-      mutation($gameId: ID!, $key: String!) {
-        deleteGameGlobalStorage(gameId: $gameId, key: $key)
+      query($storageId: String!, $key: String!) {
+        gameUserStorage(storageId: $storageId, key: $key) {
+          value
+        }
       }
     `,
-    { gameId, key }
+    { storageId, key }
   );
 
   if (result.errors && result.errors.length) {
-    throw new Error(`\`deleteGameGlobalStorageAsync\`: ${result.errors[0].message}`);
+    throw new Error(`\`getGameUserStorageValueAsync\`: ${result.errors[0].message}`);
   }
 
-  return result.data.deleteGameGlobalStorage;
+  return result.data.gameUserStorage;
+}
+
+
+export async function setGameUserStorageAsync({ storageId, key, value }) {
+  const result = await API.graphqlAsync(
+    `
+      mutation($storageId: String!, $key: String!, $value: String) {
+        setGameUserStorage(storageId: $storageId, key: $key, value: $value)
+      }
+    `,
+    { storageId, key, value }
+  );
+
+  if (result.errors && result.errors.length) {
+    throw new Error(`\`setGameUserStorageAsync\`: ${result.errors[0].message}`);
+  }
+
+  return result.data.setGameUserStorage;
 }
