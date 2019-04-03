@@ -119,6 +119,24 @@ export default class GameActionsBar extends React.Component {
   _renderDeveloping = () => {
     let { game } = this.props;
 
+    return (
+      <div className={STYLES_LOG_CONTAINER}>
+        <DevelopmentLogs
+          logs={this.context.logs}
+          onClearLogs={this.context.setters.clearLogs}
+          game={game}
+        />
+      </div>
+    );
+  };
+
+  render() {
+    let { game } = this.props;
+
+    let developerPanelElement;
+    if (this.context.isDeveloping) {
+      developerPanelElement = this._renderDeveloping();
+    }
     let maybeViewSourceElement;
     const entryPoint = Utilities.getLuaEntryPoint(game);
     if (Urls.isOpenSource(entryPoint)) {
@@ -129,23 +147,6 @@ export default class GameActionsBar extends React.Component {
           View Source
         </UINavigationLink>
       );
-    }
-    return (
-      <div className={STYLES_LOG_CONTAINER}>
-        <DevelopmentLogs
-          logs={this.context.logs}
-          onClearLogs={this.context.setters.clearLogs}
-          viewSourceElement={maybeViewSourceElement}
-          game={game}
-        />
-      </div>
-    );
-  };
-
-  render() {
-    let developerPanelElement;
-    if (this.context.isDeveloping) {
-      developerPanelElement = this._renderDeveloping();
     }
     let muteIcon = this.state.isMuted ? <SVG.Mute height="14px" /> : <SVG.Audio height="14px" />;
     let muteElement = (
@@ -174,6 +175,7 @@ export default class GameActionsBar extends React.Component {
           </div>
           <div className={STYLES_GAME_STRIP_LEFT}>{muteElement}</div>
           <div className={STYLES_GAME_STRIP_RIGHT}>
+            {maybeViewSourceElement}
             <UINavigationLink style={{ marginRight: 24 }} onClick={this.props.onFullScreenToggle}>
               Theater Mode
             </UINavigationLink>

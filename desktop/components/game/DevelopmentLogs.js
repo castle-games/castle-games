@@ -277,8 +277,7 @@ export default class DevelopmentLogs extends React.Component {
     return (
       <div className={STYLES_FIXED_CONTAINER}>
         <div className={STYLES_ACTIONS}>
-          {this._renderBottomActions()} {this.props.viewSourceElement}{' '}
-          {this._renderLogModeSelector()}
+          {this._renderBottomActions()} {this._renderLogModeSelector()}
         </div>
         <div
           className={STYLES_SCROLLING_LOGS}
