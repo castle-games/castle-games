@@ -35,19 +35,19 @@ do
     local oldPrint = print -- Save original print function to call later
     function print(...)
         oldPrint(...)
-        local json = cjson.encode({ ... })
-        love.thread.getChannel('PRINT'):push(json)
+        local array = { ... }
+        jsEvents.send('GHOST_PRINT', array)
         if not isMobile then
-            collectedPrints[#collectedPrints + 1] = json
+            collectedPrints[#collectedPrints + 1] = cjson.encode(array)
         end
     end
 
     local errors = {}
     function DEFAULT_ERROR_HANDLER(err, stack) -- Referenced in 'network.lua'
         oldPrint(stack)
-        local json = cjson.encode({ error = err, stacktrace = stack })
-        love.thread.getChannel('ERROR'):push(json)
-        love.filesystem.append(ERRORS_FILE_NAME, json .. '\n')
+        local obj = { error = err, stacktrace = stack }
+        jsEvents.send('GHOST_ERROR', obj)
+        love.filesystem.append(ERRORS_FILE_NAME, cjson.encode(obj) .. '\n')
     end
 
     function root.onError(err, portal, stack)
@@ -258,6 +258,7 @@ function main.filedropped(file)
 end
 
 function main.mousepressed(...)
+    love.thread.getChannel('FOCUS_ME'):clear()
     love.thread.getChannel('FOCUS_ME'):push('PLEASE')
     if home then
         home:mousepressed(...)
@@ -265,6 +266,7 @@ function main.mousepressed(...)
 end
 
 function main.mousemoved(...)
+    love.thread.getChannel('FOCUS_ME'):clear()
     love.thread.getChannel('FOCUS_ME'):push('PLEASE')
     if home then
         home:mousemoved(...)

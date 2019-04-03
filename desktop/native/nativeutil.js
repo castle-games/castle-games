@@ -7,26 +7,6 @@ export const installUpdate = async () => {
   await NativeBinds.installUpdate();
 };
 
-export const readLogChannelsAsync = async () => {
-  const channelsJson = await NativeBinds.readChannels({ channelNames: ['PRINT', 'ERROR'] });
-  const channels = JSON.parse(channelsJson);
-
-  channels.PRINT.map((json) => {
-    const params = JSON.parse(json);
-    let logText;
-    if (params && Array.isArray(params)) {
-      logText = params.join(' ');
-    } else {
-      logText = '(nil)';
-    }
-    Logs.print(logText);
-  });
-  channels.ERROR.map((json) => {
-    const { error, stacktrace } = JSON.parse(json);
-    Logs.error(error, stacktrace);
-  });
-};
-
 export const getDocumentsPathAsync = async () => {
   let directory;
   try {
@@ -58,17 +38,6 @@ export const chooseOpenProjectPathWithDialogAsync = async () => {
 };
 
 export const createProjectAtPathAsync = async (path) => NativeBinds.createProjectAtPath({ path });
-
-export const setMultiplayerSessionInfo = async (info) => {
-  await NativeBinds.writeChannels({
-    channelData: {
-      MULTIPLAYER_SESSION_INFO: [
-        // This name must match channel name query in Lua code
-        JSON.stringify(info),
-      ],
-    },
-  });
-};
 
 export const setBrowserReady = async (callback) => {
   await NativeBinds.browserReady();

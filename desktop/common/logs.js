@@ -12,6 +12,7 @@ class Logs {
       text,
       id: this._logId++,
     });
+    this._handleDirty();
   };
 
   error = (error, stacktrace) => {
@@ -21,6 +22,7 @@ class Logs {
       details: stacktrace,
       id: this._logId++,
     });
+    this._handleDirty();
   };
 
   system = (text) => {
@@ -29,6 +31,7 @@ class Logs {
       text,
       id: this._logId++,
     });
+    this._handleDirty();
   };
 
   consume = () => {
@@ -50,6 +53,24 @@ class Logs {
     }
     return {};
   };
+
+  _logsFlushCallback = null;
+
+  onFlushLogs = (callback) => {
+    this._logsFlushCallback = callback;
+  };
+
+  _flushScheduled = false;
+
+  _handleDirty = () => {
+    if (!this._flushScheduled) {
+      this._flushScheduled = true;
+      setTimeout(() => {
+        this._logsFlushCallback();
+        this._flushScheduled = false;
+      });
+    }
+  }
 }
 
 export default new Logs();

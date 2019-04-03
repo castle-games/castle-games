@@ -142,27 +142,6 @@ JS_BIND_DEFINE(getWindowFrameFullscreen) {
   success(ghostGetChildWindowFullscreen() ? "true" : "false");
 }
 
-JS_BIND_DEFINE(readChannels) {
-  static lua_State *conversionLuaState = lua_open();
-
-  auto response = json::object();
-
-  for (const std::string &channelName : arg["channelNames"]) {
-    response[channelName] = json::array();
-    auto channel = love::thread::Channel::getChannel(channelName);
-    love::Variant var;
-    while (channel->pop(&var)) {
-      assert(var.getType() == love::Variant::STRING || var.getType() == love::Variant::SMALLSTRING);
-      var.toLua(conversionLuaState);
-      std::string str(luaL_checkstring(conversionLuaState, -1));
-      response[channelName].push_back(str);
-      lua_pop(conversionLuaState, 1);
-    }
-  }
-
-  success(response.dump());
-}
-
 JS_BIND_DEFINE(browserReady) {
   ghostSetBrowserReady();
   success("success");
@@ -172,18 +151,6 @@ JS_BIND_DEFINE(openExternalUrl) {
   std::string url = arg["url"];
   ghostOpenExternalUrl(url.c_str());
   success("success");
-}
-
-JS_BIND_DEFINE(writeChannels) {
-  auto channelData = arg["channelData"];
-  for (auto it = channelData.begin(); it != channelData.end(); ++it) {
-    std::string name = it.key();
-    auto channel = love::thread::Channel::getChannel(name);
-    for (std::string val : it.value()) {
-      // Explicitly pass `.length()` because `val` may be in UTF-8
-      channel->push(love::Variant(val.c_str(), val.length()));
-    }
-  }
 }
 
 JS_BIND_DEFINE(sendLuaEvent) {

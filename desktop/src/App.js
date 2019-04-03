@@ -26,8 +26,6 @@ const isFullscreenHotkey = isKeyHotkey('mod+shift+f');
 const isDevelopmentHotkey = isKeyHotkey('mod+j');
 const isEscFullScreenHotkey = isKeyHotkey('esc');
 
-const NATIVE_CHANNELS_POLL_INTERVAL = 300;
-
 class App extends React.Component {
   _nativeChannelsPollTimeout;
   _app;
@@ -45,12 +43,12 @@ class App extends React.Component {
     window.addEventListener('nativeUpdateAvailable', this._handleNativeUpdateAvailableEvent);
     window.addEventListener('nativeMenuSelected', this._handleNativeMenuSelectedEvent);
     window.addEventListener('online', PingUtils.reportPingsAsync);
+    window.addEventListener('GHOST_PRINT', this._handleLuaPrintEvent);
+    window.addEventListener('GHOST_ERROR', this._handleLuaErrorEvent);
     LuaCalls.addEventListeners();
     PingUtils.reportPingsAsync();
 
-    NativeUtil.setBrowserReady(() => {
-      this._processNativeChannels();
-    });
+    NativeUtil.setBrowserReady(() => {});
 
     linkify.add('castle:', 'http:').add('castles:', 'https:');
     window.onclick = (e) => {
@@ -65,6 +63,13 @@ class App extends React.Component {
         }
       }
     };
+
+    Logs.onFlushLogs(() => {
+      const logs = Logs.consume();
+      if (logs && logs.length) {
+        this.props.development.addLogs(logs);
+      }
+    });
   }
 
   componentWillUnmount() {
@@ -73,24 +78,11 @@ class App extends React.Component {
     window.removeEventListener('CASTLE_SYSTEM_KEY_PRESSED', this._handleLuaSystemKeyDownEvent);
     window.removeEventListener('nativeMenuSelected', this._handleNativeMenuSelectedEvent);
     window.removeEventListener('online', PingUtils.reportPingsAsync);
+    window.removeEventListener('GHOST_PRINT', this._handleLuaPrintEvent);
+    window.removeEventListener('GHOST_ERROR', this._handleLuaErrorEvent);
     LuaCalls.removeEventListeners();
     window.clearTimeout(this._nativeChannelsPollTimeout);
   }
-
-  // interface with lua channels
-  _processNativeChannels = async () => {
-    await NativeUtil.readLogChannelsAsync();
-    const logs = Logs.consume();
-
-    if (logs && logs.length) {
-      this.props.development.addLogs(logs);
-    }
-
-    this._nativeChannelsPollTimeout = window.setTimeout(
-      this._processNativeChannels,
-      NATIVE_CHANNELS_POLL_INTERVAL
-    );
-  };
 
   // event listeners
   _handleNativeOpenUrlEvent = (e) => {
@@ -173,6 +165,23 @@ class App extends React.Component {
       this._app.updateGameWindowFrame();
       return;
     }
+  };
+
+  _handleLuaPrintEvent = (e) => {
+    const params = e.params;
+
+    let logText;
+    if (params && Array.isArray(params)) {
+      logText = params.join(' ');
+    } else {
+      logText = '(nil)';
+    }
+    Logs.print(logText);
+  };
+
+  _handleLuaErrorEvent = (e) => {
+    const { error, stacktrace } = e.params;
+    Logs.error(error, stacktrace);
   };
 
   render() {
