@@ -42,8 +42,20 @@ const STYLES_SCROLLING_LOGS = css`
   overflow-y: scroll;
 
   ::-webkit-scrollbar {
-    display: none;
-    width: 1px;
+    width: 8px;
+    height: 100%;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: black;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: white;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: magenta;
   }
 `;
 
@@ -107,8 +119,10 @@ export default class DevelopmentLogs extends React.Component {
   };
 
   componentWillReceiveProps(nextProps) {
+    // NOTE(jim): We give some offset to not force the scroll position to be perfect.
     const isBottom =
-      this._scrollView.scrollHeight - this._scrollView.scrollTop === this._scrollView.clientHeight;
+      this._scrollView.scrollHeight - this._scrollView.scrollTop - 48 <=
+      this._scrollView.clientHeight;
     const newItems = nextProps.logs.length > this.props.logs.length;
 
     // NOTE(jim): Only scroll if you're at the bottom with new items.
