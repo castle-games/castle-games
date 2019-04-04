@@ -56,6 +56,7 @@ const char *ghostExecNode(const char *input);
 void ghostInstallUpdate();
 
 extern double ghostGlobalScaling;
+extern bool ghostApplyGlobalScaling;
 
 extern bool ghostChildWindowCloseEventReceived;
 

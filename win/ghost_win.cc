@@ -16,9 +16,9 @@
 
 #include "ghost.h"
 
+#include <algorithm>
 #include <atlstr.h>
 #include <windows.h>
-#include <algorithm>
 
 #include <ShellApi.h>
 
@@ -589,13 +589,14 @@ void ghostStep() {
                                 currParentRect.bottom - currParentRect.top - newTop);
           SetWindowPos(child, NULL, newLeft, newTop, newWidth, newHeight, 0);
         }
-      }
 
-      auto channel = love::thread::Channel::getChannel("FOCUS_ME");
-      if (channel->getCount() > 0) {
-        channel->clear();
-        if (parent && GetForegroundWindow() == parent) {
-          SetFocus(child);
+        // Satisfy Lua requests for window focus
+        auto channel = love::thread::Channel::getChannel("FOCUS_ME");
+        if (channel->getCount() > 0) {
+          channel->clear();
+          if (parent && GetForegroundWindow() == parent) {
+            SetFocus(child);
+          }
         }
       }
     }
@@ -765,7 +766,9 @@ CStringA ExecCmd(const wchar_t *cmd // [in] command to execute
       if (!dwAvail) // No data available, return
         break;
 
-      if (!::ReadFile(hPipeRead, buf, std::min(sizeof(buf) - (long) 1, dwAvail + 0), &dwRead, NULL) || !dwRead)
+      if (!::ReadFile(hPipeRead, buf, std::min(sizeof(buf) - (long)1, dwAvail + 0), &dwRead,
+                      NULL) ||
+          !dwRead)
         // Error, the child process might ended
         break;
 
@@ -787,7 +790,7 @@ const char *ghostExecNode(const char *input) {
   std::string::size_type pos = std::string(buffer).find_last_of("\\/");
   std::string exeDir = std::string(buffer).substr(0, pos);
 
-  #ifdef _DEBUG
+#ifdef _DEBUG
   std::string nodeExe = exeDir + "/../../../node/castle-desktop-node-win.exe";
 #else
   std::string nodeExe = exeDir + "/castle-desktop-node-win.exe";
