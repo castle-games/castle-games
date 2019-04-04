@@ -63,16 +63,23 @@ export default class SearchScreen extends React.Component {
     },
   };
 
-  componentDidUpdate(prevProps, prevState) {
-    const oldQuery = prevProps && prevProps.query ? prevProps.query : null;
-    const newQuery = this.props.query;
-    if (oldQuery !== newQuery) {
-      this._updateResults();
+  // NOTE(jim): Since we've organized this component in a unique way.
+  // Mount needs to trigger an updateResults to support the first search character.
+  componentDidMount() {
+    this._updateResults(this.props);
+  }
+
+  // NOTE(jim): Set state is called outside of this component, and therefore we need
+  // to check if the query has changed before its reflected at the end of the update
+  // cycle
+  componentWillUpdate(nextProps, nextState) {
+    if (this.props.query !== nextProps.query) {
+      this._updateResults(nextProps);
     }
   }
 
-  _updateResults = () => {
-    if (Strings.isEmpty(this.props.query)) {
+  _updateResults = ({ query }) => {
+    if (Strings.isEmpty(query)) {
       this.setState({
         results: {
           games: [],
@@ -82,8 +89,12 @@ export default class SearchScreen extends React.Component {
     } else {
       this.setState({
         results: {
-          games: this.props.allContent.games.filter(this._filterGameWithSearchState),
-          users: this.props.allContent.users.filter(this._filterUserWithSearchState),
+          games: this.props.allContent.games.filter((m) =>
+            this._filterGameWithSearchState(m, query)
+          ),
+          users: this.props.allContent.users.filter((u) =>
+            this._filterUserWithSearchState(u, query)
+          ),
         },
       });
     }
@@ -101,16 +112,17 @@ export default class SearchScreen extends React.Component {
     return this._stringAsSearchInvariant(s).includes(query);
   };
 
-  _filterGameWithSearchState = (m) => {
+  _filterGameWithSearchState = (m, originalQuery) => {
     if (!m) {
       return false;
     }
+
     const query = this._stringAsSearchInvariant(this.props.query);
     if (this._stringIncludesSearchQuery(m.name, query)) {
       return true;
     }
 
-    if (Strings.isEmpty(m.name) && this._stringIncludesSearchQuery(m.url, query)) {
+    if (Strings.isEmpty(m.name) && this._stringIncludesSearchQuery(m.url, originalQuery)) {
       return true;
     }
 
@@ -126,17 +138,19 @@ export default class SearchScreen extends React.Component {
     return false;
   };
 
-  _filterUserWithSearchState = (u) => {
+  _filterUserWithSearchState = (u, originalQuery) => {
     if (!u) {
       return false;
     }
-    const query = this._stringAsSearchInvariant(this.props.query);
+
+    const query = this._stringAsSearchInvariant(originalQuery);
     if (this._stringIncludesSearchQuery(u.name, query)) {
       return true;
     }
     if (this._stringIncludesSearchQuery(u.username, query)) {
       return true;
     }
+
     return false;
   };
 
