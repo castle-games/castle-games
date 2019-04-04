@@ -104,15 +104,26 @@ export function getLuaEntryPoint(game) {
     // if the server knows about this game, just use the value given by the server
     return game.entryPoint;
   }
-  if (!game.url) {
-    throw new Error(`Can't resolve lua entry point against this game url: ${game.url}`);
+
+  let urlToResolve;
+  if (game.hostedUrl) {
+    // this field was possibly populated by auto-upload code in `publishProjectAsync`.
+    // if it exists, we prefer to load the code from the hosted url rather than
+    // the local url.
+    urlToResolve = game.hostedUrl;
+  } else {
+    urlToResolve = game.url;
+  }
+
+  if (!urlToResolve) {
+    throw new Error(`Can't resolve lua entry point against this game url: ${urlToResolve}`);
   }
   let entryPoint;
   if (game.metadata && game.metadata.main) {
-    entryPoint = url.resolve(game.url, game.metadata.main);
+    entryPoint = url.resolve(urlToResolve, game.metadata.main);
     entryPoint = decodeURIComponent(entryPoint);
   } else {
-    entryPoint = game.url;
+    entryPoint = urlToResolve;
   }
   if (isWindows() && entryPoint) {
     entryPoint = fixWindowsFilePath(entryPoint);

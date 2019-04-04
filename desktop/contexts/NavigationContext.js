@@ -167,20 +167,12 @@ class NavigationContextManager extends React.Component {
   };
 
   navigateToGameUrl = async (gameUrl) => {
-    if (this.props.development.isMultiplayerCodeUploadEnabled) {
-      if (Urls.isPrivateUrl(gameUrl)) {
-        try {
-          gameUrl = await ExecNode.publishProjectAsync(gameUrl);
-        } catch (e) {
-          Logs.error(`Unable to perform multiplayer auto upload: ${e.message}`);
-          return;
-        }
-      }
-    }
     gameUrl = gameUrl.replace('castle://', 'http://');
     let game;
     try {
-      game = await Browser.resolveGameAtUrlAsync(gameUrl);
+      game = await Browser.resolveGameAtUrlAsync(gameUrl, {
+        upload: this.props.development.isMultiplayerCodeUploadEnabled,
+      });
     } catch (e) {
       // forward this error to the user
       Logs.error(e.message);

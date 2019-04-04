@@ -66,19 +66,12 @@ async function _readGameFromMetadataUrlAsync(url) {
   return game;
 }
 
-async function resolveGameAtUrlAsync(gameUrl) {
+/**
+ *  opts.upload: if true, for a local gameUrl, upload the project at this gameUrl to
+ *               a temporary castle hosted url.
+ */
+async function resolveGameAtUrlAsync(gameUrl, opts = {}) {
   let game;
-
-  /*
-  // TODO: add ui for enabling this
-  try {
-    gameUrl = await ExecNode.publishProjectAsync(
-      '/Users/jesseruder/ghost/projects/procjam-tower-defense'
-    );
-  } catch (e) {
-    console.log(e);
-  }
-  */
 
   // always try to resolve from the server first
   try {
@@ -118,6 +111,21 @@ async function resolveGameAtUrlAsync(gameUrl) {
         game.url = Utilities.fixWindowsFilePath(game.url);
       }
     } catch (e) {}
+  }
+
+  if (opts && opts.upload) {
+    let hostedUrl;
+    if (Urls.isPrivateUrl(gameUrl)) {
+      try {
+        hostedUrl = await ExecNode.publishProjectAsync(gameUrl);
+      } catch (e) {
+        throw new Error(`Unable to perform multiplayer auto upload: ${e.message}`);
+      }
+    }
+    // `hostedUrl` will be considered when resolving the lua entry point for this game.
+    // we do not want to override the original `game.url` field, because we'll forget
+    // where the game originally was opened from and be unable to reload properly.
+    game.hostedUrl = hostedUrl;
   }
 
   return game;
