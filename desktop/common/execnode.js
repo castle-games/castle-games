@@ -33,7 +33,7 @@ export async function publishProjectAsync(projectUrl) {
     localProjectPath = localProjectPath.replace('file://', '');
     let token = await Actions.getAccessTokenAsync();
     let result = await execNodeAsync('publishProject', {
-      localProjectPath,
+      dir: localProjectPath,
       apiHost: Constants.API_HOST,
       token,
       previousHashes: publishPreviousHashes,
@@ -62,6 +62,6 @@ export async function execNodeAsync(action, args) {
   try {
     return JSON.parse(result);
   } catch (e) {
-    throw new Error(`Error parsing as JSON: ${result}`);
+    throw new Error(`Error parsing as JSON: ${result}. Error: ${e}`);
   }
 }

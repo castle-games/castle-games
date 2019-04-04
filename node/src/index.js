@@ -38,7 +38,7 @@ async function runAsync() {
 
 runAsync()
   .catch((e) => {
-    console.error(e.toString());
+    console.log(e.toString());
   })
   .then(() => {
     process.exit(0);
