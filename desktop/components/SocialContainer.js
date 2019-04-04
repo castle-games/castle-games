@@ -12,6 +12,7 @@ import Viewer from '~/components/Viewer';
 import UINavigationLink from '~/components/reusable/UINavigationLink';
 import UIHeaderBlock from '~/components/reusable/UIHeaderBlock';
 import HomeUpdateBanner from '~/components/home/HomeUpdateBanner';
+import LoginSignupControl from '~/components/LoginSignupControl';
 
 const ENABLE_NOTIFICATIONS = false;
 
@@ -133,7 +134,7 @@ class SocialContainer extends React.Component {
         </React.Fragment>
       );
     } else {
-      contentElement = <div>Hello World</div>;
+      contentElement = <LoginSignupControl />;
       signInElement = null;
     }
 

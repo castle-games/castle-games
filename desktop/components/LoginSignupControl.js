@@ -8,8 +8,6 @@ import * as Strings from '~/common/strings';
 
 import UIInputSecondary from '~/components/reusable/UIInputSecondary';
 import UIButton from '~/components/reusable/UIButton';
-import UIHeading from '~/components/reusable/UIHeading';
-import UILink from '~/components/reusable/UILink';
 import UIUserPreview from '~/components/reusable/UIUserPreview';
 
 const STYLES_CONTAINER = css`
@@ -19,13 +17,8 @@ const STYLES_CONTAINER = css`
   flex-direction: column;
   width: 100%;
   height: 100%;
-  overflow-y: scroll;
-  color: ${Constants.colors.black};
-
-  ::-webkit-scrollbar {
-    display: none;
-    width: 1px;
-  }
+  font-family: ${Constants.font.system};
+  background: rgb(47, 47, 47);
 `;
 
 const STYLES_CONTENTS = css`
@@ -38,10 +31,18 @@ const STYLES_SPACER = css`
   height: 16px;
 `;
 
+const STYLES_HEADING = css`
+  font-size: 24px;
+  color: ${Constants.colors.white};
+  font-family: ${Constants.font.heading};
+  margin-bottom: 16px;
+`;
+
 const STYLES_PARAGRAPH = css`
-  color: ${Constants.colors.black};
-  font-size: ${Constants.typescale.base};
+  color: ${Constants.colors.white};
+  font-size: 14px;
   line-height: ${Constants.linescale.base};
+  font-weight: 400;
   margin-top: 16px;
   margin-bottom: 12px;
 `;
@@ -53,27 +54,32 @@ const STYLES_FOOTER = css`
   margin-top: 24px;
 `;
 
-const STYLES_ERROR_MESSAGE = css`
-  flex-shrink: 0;
-  display: block;
-  padding-bottom: 24px;
-  color: ${Constants.colors.error};
-`;
-
 const STYLES_ACTION = css`
   font-family: ${Constants.font.default};
-  font-size: 16px;
-  margin-top: 16px;
-  margin-bottom: 16px;
   text-decoration: underline;
   cursor: pointer;
-  color: ${Constants.colors.action};
+  color: ${Constants.colors.brand1};
   transition: 200ms ease color;
 
   :hover {
-    color: ${Constants.colors.actionHover};
+    color: ${Constants.colors.brand2};
   }
 `;
+
+const STYLES_ERROR_MESSAGE = css`
+  flex-shrink: 0;
+  display: flex;
+  padding: 16px;
+  background: ${Constants.colors.error};
+  color: ${Constants.colors.white};
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  margin: 16px 0 16px 0;
+`;
+
+const ErrorMessage = (props) => {
+  return <h5 className={STYLES_ERROR_MESSAGE}>{props.children}</h5>;
+};
 
 export default class LoginSignupScreen extends React.Component {
   static contextType = CurrentUserContext;
@@ -293,15 +299,24 @@ export default class LoginSignupScreen extends React.Component {
             />
             <div className={STYLES_SPACER} />
             <UIButton onClick={this._handleLoginAsync}>Sign in</UIButton>
-            <div className={STYLES_ACTION} onClick={this._handlePasswordReset}>
+            <div
+              style={{ margin: `16px 0 16px 0` }}
+              className={STYLES_ACTION}
+              onClick={this._handlePasswordReset}>
               → Reset Your Password
             </div>
           </form>
 
           <div className={STYLES_FOOTER}>
             Not {this.state.suggestedUser.name || '@' + this.state.suggestedUser.username}?{' '}
-            <UILink onClick={this._goToWho}>Sign in</UILink> as someone else or{' '}
-            <UILink onClick={this._goToSignup}>create a new account</UILink>.
+            <span className={STYLES_ACTION} onClick={this._goToWho}>
+              Sign in
+            </span>{' '}
+            as someone else or{' '}
+            <span className={STYLES_ACTION} onClick={this._goToSignup}>
+              create a new account
+            </span>
+            .
           </div>
         </div>
       </div>
@@ -318,7 +333,7 @@ export default class LoginSignupScreen extends React.Component {
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_CONTENTS}>
           <form onSubmit={this._handleSignUpAsync}>
-            <UIHeading>Create a Castle account</UIHeading>
+            <div className={STYLES_HEADING}>Create a Castle account</div>
             {maybeErrorNode}
             <UIInputSecondary
               autoFocus
@@ -361,7 +376,11 @@ export default class LoginSignupScreen extends React.Component {
           </form>
 
           <div className={STYLES_FOOTER}>
-            Already have an account? <UILink onClick={this._goToWho}>Sign in</UILink> instead.
+            Already have an account?{' '}
+            <span className={STYLES_ACTION} onClick={this._goToWho}>
+              Sign in
+            </span>{' '}
+            instead.
           </div>
         </div>
       </div>
@@ -373,7 +392,7 @@ export default class LoginSignupScreen extends React.Component {
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_CONTENTS}>
           <form onSubmit={this._handleSubmitEmailAsync}>
-            <UIHeading>Sign in or create account</UIHeading>
+            <div className={STYLES_HEADING}>Sign in or create account</div>
             <div className={STYLES_PARAGRAPH}>
               Sign in or register with Castle to share and play games with the Castle community.
             </div>
