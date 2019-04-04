@@ -6,6 +6,7 @@ import * as React from 'react';
  */
 const DevelopmentContextDefaults = {
   isDeveloping: false,
+  isMultiplayerCodeUploadEnabled: false,
   logs: [],
 };
 
@@ -16,6 +17,7 @@ const DevelopmentContextDefaults = {
 const DevelopmentSetterContextDefaults = {
   setIsDeveloping: (isDeveloping) => {},
   toggleIsDeveloping: () => {},
+  setIsMultiplayerCodeUploadEnabled: (isEnabled) => {},
   addLogs: (logs) => {},
   clearLogs: () => {},
 };
@@ -37,6 +39,7 @@ class DevelopmentContextProvider extends React.Component {
         ...DevelopmentSetterContextDefaults,
         setIsDeveloping: this.setIsDeveloping,
         toggleIsDeveloping: this.toggleIsDeveloping,
+        setIsMultiplayerCodeUploadEnabled: this.setIsMultiplayerCodeUploadEnabled,
         addLogs: this.addLogs,
         clearLogs: this.clearLogs,
       },
@@ -44,13 +47,25 @@ class DevelopmentContextProvider extends React.Component {
   }
 
   setIsDeveloping = (isDeveloping) => {
-    this.setState({
-      isDeveloping,
-    });
+    if (isDeveloping != this.state.isDeveloping) {
+      this.setState({
+        isDeveloping,
+        isMultiplayerCodeUploadEnabled: false, // always reset this
+      });
+    }
   };
 
   toggleIsDeveloping = () => {
     this.setIsDeveloping(!this.state.isDeveloping);
+  };
+
+  setIsMultiplayerCodeUploadEnabled = (isMultiplayerCodeUploadEnabled) => {
+    if (!this.state.isDeveloping && isMultiplayerCodeUploadEnabled) {
+      throw new Error(`Cannot enable multiplayer code upload without enabling developer mode`);
+    }
+    this.setState({
+      isMultiplayerCodeUploadEnabled,
+    });
   };
 
   addLogs = (logs) => {

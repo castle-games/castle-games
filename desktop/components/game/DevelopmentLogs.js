@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as Actions from '~/common/actions';
+import * as Utilities from '~/common/utilities';
 
 import { css } from 'react-emotion';
 
@@ -210,41 +211,44 @@ export default class DevelopmentLogs extends React.Component {
   };
 
   _renderBottomActions = () => {
+    let logActionElement;
     switch (this.state.logMode) {
       case LogMode.LOCAL:
-        return (
+        logActionElement = (
           <UINavigationLink style={{ marginRight: 24 }} onClick={this.props.onClearLogs}>
-            Clear logs
+            Clear Logs
           </UINavigationLink>
         );
+        break;
       case LogMode.REMOTE:
-        return (
+        logActionElement = (
           <UINavigationLink style={{ marginRight: 24 }} onClick={this._fetchRemoteLogsAsync}>
-            Reload
+            Reload Logs
           </UINavigationLink>
         );
+        break;
     }
+    return (
+      <div className={STYLES_ACTIONS}>
+        {logActionElement}
+        {this._renderLogModeSelector()}
+      </div>
+    );
   };
 
   _renderLogModeSelector = () => {
     const { logMode } = this.state;
-    const isMultiplayer = this.props.game.metadata && !!this.props.game.metadata.multiplayer;
 
-    if (isMultiplayer) {
-      return (
-        <div className={STYLES_ACTIONS}>
-          <UINavigationLink
-            style={{ color: logMode == LogMode.LOCAL ? 'magenta' : null, marginRight: 24 }}
-            onClick={this._onSelectLocal}>
-            Local logs
-          </UINavigationLink>
-          <UINavigationLink
-            style={{ color: logMode == LogMode.REMOTE ? 'magenta' : null, marginRight: 24 }}
-            onClick={this._onSelectRemote}>
-            Server logs
-          </UINavigationLink>
-        </div>
-      );
+    if (Utilities.isMultiplayer(this.props.game)) {
+      let buttonTitle, onButtonClick;
+      if (logMode == LogMode.LOCAL) {
+        buttonTitle = 'Switch to Server Logs';
+        onButtonClick = this._onSelectRemote;
+      } else {
+        buttonTitle = 'Switch to Local Logs';
+        onButtonClick = this._onSelectLocal;
+      }
+      return <UINavigationLink onClick={onButtonClick}>{buttonTitle}</UINavigationLink>;
     }
   };
 
@@ -253,7 +257,6 @@ export default class DevelopmentLogs extends React.Component {
 
     return (
       <div className={STYLES_FIXED_CONTAINER}>
-        {this._renderLogModeSelector()}
         <div
           className={STYLES_SCROLLING_LOGS}
           ref={(c) => {
@@ -270,7 +273,7 @@ export default class DevelopmentLogs extends React.Component {
             }}
           />
         </div>
-        <div className={STYLES_ACTIONS}>{this._renderBottomActions()}</div>
+        {this._renderBottomActions()}
       </div>
     );
   }

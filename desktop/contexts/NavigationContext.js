@@ -3,10 +3,13 @@ import * as React from 'react';
 import * as Actions from '~/common/actions';
 import * as Browser from '~/common/browser';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
+import { DevelopmentContext } from '~/contexts/DevelopmentContext';
+import * as ExecNode from '~/common/execnode';
 import GameWindow from '~/native/gamewindow';
 import Logs from '~/common/logs';
 import { SocialContext } from '~/contexts/SocialContext';
 import * as Strings from '~/common/strings';
+import * as Urls from '~/common/urls';
 
 /**
  *  NavigationContext is the state of where the app is currently navigated,
@@ -164,6 +167,16 @@ class NavigationContextManager extends React.Component {
   };
 
   navigateToGameUrl = async (gameUrl) => {
+    if (this.props.development.isMultiplayerCodeUploadEnabled) {
+      if (Urls.isPrivateUrl(gameUrl)) {
+        try {
+          gameUrl = await ExecNode.publishProjectAsync(gameUrl);
+        } catch (e) {
+          Logs.error(`Unable to perform multiplayer auto upload: ${e.message}`);
+          return;
+        }
+      }
+    }
     gameUrl = gameUrl.replace('castle://', 'http://');
     let game;
     try {
@@ -286,7 +299,16 @@ class NavigationContextProvider extends React.Component {
         {(social) => (
           <CurrentUserContext.Consumer>
             {(currentUser) => (
-              <NavigationContextManager social={social} currentUser={currentUser} {...this.props} />
+              <DevelopmentContext.Consumer>
+                {(development) => (
+                  <NavigationContextManager
+                    social={social}
+                    currentUser={currentUser}
+                    development={development}
+                    {...this.props}
+                  />
+                )}
+              </DevelopmentContext.Consumer>
             )}
           </CurrentUserContext.Consumer>
         )}

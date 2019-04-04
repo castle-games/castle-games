@@ -119,3 +119,7 @@ export function getLuaEntryPoint(game) {
   }
   return entryPoint;
 }
+
+export function isMultiplayer(game) {
+  return game.metadata && !!game.metadata.multiplayer;
+}

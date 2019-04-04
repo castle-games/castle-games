@@ -1,6 +1,11 @@
 import { NativeBinds } from '~/native/nativebinds';
 import * as Constants from '~/common/constants';
 import * as Actions from '~/common/actions';
+import * as Strings from '~/common/strings';
+import * as Urls from '~/common/urls';
+import * as Utilities from '~/common/utilities';
+
+const path = Utilities.path();
 
 export const createDirectoryAsync = async (path) => execNodeAsync('createDirectory', { path });
 
@@ -14,11 +19,21 @@ export const getProjectFilenameAtPathAsync = async (path) =>
 
 let publishPreviousHashes = {};
 
-export async function publishProjectAsync(dir) {
+export async function publishProjectAsync(projectUrl) {
+  if (!Urls.isPrivateUrl(projectUrl)) {
+    throw new Error(`Failed to upload project from ${projectUrl}: Only local urls are supported`);
+  }
+  let localProjectPath;
   try {
+    if (!Strings.isEmpty(path.extname(projectUrl))) {
+      localProjectPath = path.dirname(projectUrl);
+    } else {
+      localProjectPath = projectUrl;
+    }
+    localProjectPath = localProjectPath.replace('file://', '');
     let token = await Actions.getAccessTokenAsync();
     let result = await execNodeAsync('publishProject', {
-      dir,
+      localProjectPath,
       apiHost: Constants.API_HOST,
       token,
       previousHashes: publishPreviousHashes,
@@ -30,7 +45,7 @@ export async function publishProjectAsync(dir) {
 
     return result.devUrl;
   } catch (e) {
-    throw new Error(`failed to publish: ${e}`);
+    throw new Error(`Failed to upload project at ${localProjectPath}: ${e}`);
   }
 }
 

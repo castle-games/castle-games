@@ -2,6 +2,8 @@ import * as React from 'react';
 import { css } from 'react-emotion';
 
 import * as Constants from '~/common/constants';
+import * as Urls from '~/common/urls';
+import * as Utilities from '~/common/utilities';
 
 import { DevelopmentContext } from '~/contexts/DevelopmentContext';
 import DevelopmentLogs from '~/components/game/DevelopmentLogs';
@@ -54,6 +56,7 @@ const STYLES_GAME_URL = css`
   color: rgba(200, 200, 200, 1);
   text-decoration: underline;
   cursor: default;
+  margin-bottom: 24px;
 `;
 
 const STYLES_LABEL_ACTION = css`
@@ -62,8 +65,54 @@ const STYLES_LABEL_ACTION = css`
   text-transform: uppercase;
 `;
 
+const STYLES_PARAGRAPH = css`
+  font-size: ${Constants.typescale.lvl7};
+  color: rgba(200, 200, 200, 1);
+  cursor: default;
+`;
+
 export default class DevelopmentConsole extends React.Component {
   static contextType = DevelopmentContext;
+
+  _renderMultiplayerUploadStatus = () => {
+    if (this.context.isMultiplayerCodeUploadEnabled) {
+      return (
+        <React.Fragment>
+          <div className={STYLES_LABEL_ACTION}>Multiplayer auto upload is enabled</div>
+          <div className={STYLES_PARAGRAPH}>
+            When you Reload, Castle uploads a copy of your project's code to a temporary public url,
+            and loads it from there.
+          </div>
+        </React.Fragment>
+      );
+    }
+    return null;
+  };
+
+  _renderBottomActions = () => {
+    let multiplayerHostingControl;
+    if (Utilities.isMultiplayer(this.props.game) && Urls.isPrivateUrl(this.props.game.url)) {
+      const { isMultiplayerCodeUploadEnabled } = this.context;
+      multiplayerHostingControl = (
+        <UINavigationLink
+          onClick={() =>
+            this.context.setters.setIsMultiplayerCodeUploadEnabled(!isMultiplayerCodeUploadEnabled)
+          }>
+          {isMultiplayerCodeUploadEnabled
+            ? 'Disable Multiplayer Auto Upload'
+            : 'Enable Multiplayer Auto Upload'}
+        </UINavigationLink>
+      );
+    }
+    return (
+      <div className={STYLES_CONTROLS_BOTTOM}>
+        <UINavigationLink style={{ marginRight: 24 }} onClick={this.props.reloadGame}>
+          Reload Project
+        </UINavigationLink>
+        {multiplayerHostingControl}
+      </div>
+    );
+  };
 
   render() {
     const { game } = this.props;
@@ -74,10 +123,9 @@ export default class DevelopmentConsole extends React.Component {
           <div className={STYLES_CONTROLS_TOP}>
             <div className={STYLES_LABEL_ACTION}>Project Url</div>
             <div className={STYLES_GAME_URL}>{game.url}</div>
+            {this._renderMultiplayerUploadStatus()}
           </div>
-          <div className={STYLES_CONTROLS_BOTTOM}>
-            <UINavigationLink onClick={this.props.reloadGame}>Reload</UINavigationLink>
-          </div>
+          {this._renderBottomActions()}
         </div>
         <div className={STYLES_HALF}>
           <DevelopmentLogs
