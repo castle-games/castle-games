@@ -38,6 +38,7 @@ const STYLES_GAME_STRIP_RIGHT = css`
 `;
 
 const STYLES_CONTAINER = css`
+  background: #232323;
   width: 100%;
 `;
 
