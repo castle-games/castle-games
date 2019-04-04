@@ -18,7 +18,7 @@ const STYLES_CONTAINER = css`
   width: 100%;
   height: 100%;
   font-family: ${Constants.font.system};
-  background: rgb(47, 47, 47);
+  background: rgb(39, 39, 39);
 `;
 
 const STYLES_CONTENTS = css`
