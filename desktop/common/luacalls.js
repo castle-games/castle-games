@@ -1,7 +1,19 @@
+import * as uuid from 'uuid/v4';
+import md5 from 'md5';
+
 import Logs from '~/common/logs';
 import * as Actions from '~/common/actions';
 import * as NativeUtil from '~/native/nativeutil';
 import GameWindow from '~/native/gamewindow';
+import Storage from '~/common/storage';
+import * as Urls from '~/common/urls';
+
+const storage = new Storage('castle');
+let localStorageKey = storage.getItem('localStorageKey');
+if (!localStorageKey) {
+  localStorageKey = uuid();
+  storage.setItem('localStorageKey', localStorageKey);
+}
 
 // Utility: get the `storageId` for a registered game or generate one if unregistered
 const storageIdForCurrentGame = () => {
@@ -9,11 +21,16 @@ const storageIdForCurrentGame = () => {
   if (!currentGame) {
     throw new Error('Global storage needs a running game');
   }
-  const storageId = currentGame.storageId;
-  if (!storageId) {
-    throw new Error("Storage for unregistered games is currently not implemented"); // TODO(nikki): Implement!
+  if (currentGame.storageId) {
+    return currentGame.storageId;
+  } else {
+    const url = currentGame.url;
+    if (Urls.isPrivateUrl(url)) {
+      return md5(localStorageKey + url);
+    } else {
+      return md5(url);
+    }
   }
-  return storageId;
 };
 
 // Methods callable as `jsCall.<methodName>(arg)` from Lua. Can be `async `. Should be called from
