@@ -123,6 +123,7 @@ const STYLES_GAME_POPOVER = css`
   z-index: 4;
   pointer-events: none;
   opacity: 0;
+  font-family: ${Constants.font.system};
   transform: translateY(-24px) translateX(-24px);
   transition: 200ms ease all;
   transition-property: transform, opacity;
@@ -158,6 +159,13 @@ const STYLES_POPOVER_P = css`
   width: 100%;
   min-width: 25%;
   line-height: 18px;
+`;
+
+const STYLES_POPOVER_PROMPT = css`
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  text-align: center;
 `;
 
 const STYLES_POPOVER_GAME_URL = css`
@@ -288,12 +296,9 @@ class UIGameCell extends React.Component {
 
     if (isMultiplayer && !this.props.viewer) {
       playCTAElement = (
-        <UIPlayTextCTA
-          background={backgroundColor}
-          style={{ marginTop: 40 }}
-          onClick={this.props.onSignInSelect}>
+        <p className={STYLES_POPOVER_PROMPT} background={backgroundColor} style={{ marginTop: 40 }}>
           Sign in to play
-        </UIPlayTextCTA>
+        </p>
       );
     }
 
