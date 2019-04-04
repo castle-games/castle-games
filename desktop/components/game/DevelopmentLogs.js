@@ -8,36 +8,15 @@ import UILogItem from '~/components/reusable/UILogItem';
 import UINavigationLink from '~/components/reusable/UINavigationLink';
 
 const STYLES_FIXED_CONTAINER = css`
-  position: relative;
-  width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
-  background #020202;
+  background: #020202;
   color: ${Constants.colors.white};
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
-
-  @keyframes fade-in-up-dev {
-    from {
-      opacity: 0;
-    }
-
-    to {
-      opacity: 1;
-    }
-  }
-
-  animation: fade-in-up-dev 200ms ease;
-`;
-
-const STYLES_LOGS_CONTAINER = css`
-  display: flex;
-  width: 100%;
-  height: 100%;
 `;
 
 const STYLES_SCROLLING_LOGS = css`
-  width: 100%;
   height: 100%;
   overflow-y: scroll;
 
@@ -97,11 +76,9 @@ const STYLES_SPACER = css`
 `;
 
 const STYLES_ACTIONS = css`
-  height: 34px;
   display: flex;
   align-items: center;
-  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.07);
-  padding: 0 24px 0 24px;
+  padding: 8px 24px 12px 24px;
 `;
 
 const LogMode = {
@@ -212,10 +189,10 @@ export default class DevelopmentLogs extends React.Component {
           className={STYLES_LOG}
           style={{ color: l.is_lua ? Constants.logs.default : Constants.logs.system }}
           key={`remote-log-${l.id}`}>
-          <span className={STYLES_LOG_LEFT}>
-            {l.is_lua ? 'Lua' : 'System'} {l.timestamp}
-          </span>
-          <div className={STYLES_LOG_RIGHT}>{text}</div>
+          <span className={STYLES_LOG_LEFT}>{l.is_lua ? 'Print' : 'System'}</span>
+          <div className={STYLES_LOG_RIGHT}>
+            {l.timestamp} {text}
+          </div>
         </div>
       );
     });
@@ -255,18 +232,18 @@ export default class DevelopmentLogs extends React.Component {
 
     if (isMultiplayer) {
       return (
-        <React.Fragment>
+        <div className={STYLES_ACTIONS}>
           <UINavigationLink
             style={{ color: logMode == LogMode.LOCAL ? 'magenta' : null, marginRight: 24 }}
             onClick={this._onSelectLocal}>
-            View local logs
+            Local logs
           </UINavigationLink>
           <UINavigationLink
             style={{ color: logMode == LogMode.REMOTE ? 'magenta' : null, marginRight: 24 }}
             onClick={this._onSelectRemote}>
-            View server logs
+            Server logs
           </UINavigationLink>
-        </React.Fragment>
+        </div>
       );
     }
   };
@@ -276,9 +253,7 @@ export default class DevelopmentLogs extends React.Component {
 
     return (
       <div className={STYLES_FIXED_CONTAINER}>
-        <div className={STYLES_ACTIONS}>
-          {this._renderBottomActions()} {this._renderLogModeSelector()}
-        </div>
+        {this._renderLogModeSelector()}
         <div
           className={STYLES_SCROLLING_LOGS}
           ref={(c) => {
@@ -295,6 +270,7 @@ export default class DevelopmentLogs extends React.Component {
             }}
           />
         </div>
+        <div className={STYLES_ACTIONS}>{this._renderBottomActions()}</div>
       </div>
     );
   }

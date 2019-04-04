@@ -130,6 +130,7 @@ class GameScreen extends React.Component {
           navigateToUserProfile={this.props.navigateToUserProfile}
           clearCurrentGame={this.props.clearCurrentGame}
           onFullScreenToggle={() => this.props.setIsFullScreen(!this.props.isFullScreen)}
+          reloadGame={this.props.reloadGame}
           onUpdateGameWindowFrame={this._updateGameWindowFrame}
         />
       );
@@ -165,6 +166,7 @@ export default class GameScreenWithContext extends React.Component {
                     navigateToUserProfile={navigator.navigateToUserProfile}
                     isFullScreen={navigation.isFullScreen}
                     setIsFullScreen={navigator.setIsFullScreen}
+                    reloadGame={navigator.reloadGame}
                     clearCurrentGame={navigator.clearCurrentGame}
                     isLoggedIn={currentUser.user !== null}
                     me={currentUser.user}

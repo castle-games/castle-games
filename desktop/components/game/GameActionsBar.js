@@ -8,7 +8,7 @@ import * as Utilities from '~/common/utilities';
 import { css } from 'react-emotion';
 import { DevelopmentContext } from '~/contexts/DevelopmentContext';
 
-import DevelopmentLogs from '~/components/game/DevelopmentLogs';
+import DevelopmentConsole from '~/components/game/DevelopmentConsole';
 import UINavigationLink from '~/components/reusable/UINavigationLink';
 
 const STYLES_CONTAINER = css`
@@ -78,15 +78,6 @@ const STYLES_EMPHASIS_CHOICE = css`
   justify-content: center;
 `;
 
-const STYLES_LOG_CONTAINER = css`
-  background: #020202;
-  width: 100%;
-  display: flex;
-  height: 172px;
-  min-height: 96px;
-  flex-direction: column;
-`;
-
 export default class GameActionsBar extends React.Component {
   static contextType = DevelopmentContext;
   state = {
@@ -116,26 +107,12 @@ export default class GameActionsBar extends React.Component {
     this._lastDeveloperState = this.context.isDeveloping;
   }
 
-  _renderDeveloping = () => {
-    let { game } = this.props;
-
-    return (
-      <div className={STYLES_LOG_CONTAINER}>
-        <DevelopmentLogs
-          logs={this.context.logs}
-          onClearLogs={this.context.setters.clearLogs}
-          game={game}
-        />
-      </div>
-    );
-  };
-
   render() {
     let { game } = this.props;
 
     let developerPanelElement;
     if (this.context.isDeveloping) {
-      developerPanelElement = this._renderDeveloping();
+      developerPanelElement = <DevelopmentConsole game={game} reloadGame={this.props.reloadGame} />;
     }
     let maybeViewSourceElement;
     const entryPoint = Utilities.getLuaEntryPoint(game);
@@ -157,7 +134,6 @@ export default class GameActionsBar extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
-        {developerPanelElement}
         <div className={STYLES_GAME_STRIP}>
           <div
             className={STYLES_EMPHASIS_CHOICE}
@@ -184,6 +160,7 @@ export default class GameActionsBar extends React.Component {
             </UINavigationLink>
           </div>
         </div>
+        {developerPanelElement}
       </div>
     );
   }
