@@ -265,14 +265,6 @@ function main.mousepressed(...)
     end
 end
 
-function main.mousemoved(...)
-    love.thread.getChannel('FOCUS_ME'):clear()
-    love.thread.getChannel('FOCUS_ME'):push('PLEASE')
-    if home then
-        home:mousemoved(...)
-    end
-end
-
 function main.quit(...)
     updateLogs(true)
 
