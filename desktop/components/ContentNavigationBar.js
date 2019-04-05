@@ -49,7 +49,6 @@ class ContentNavigationBar extends React.Component {
     return (
       <div className={STYLES_CONTAINER}>
         <HomeHeader
-            navigator={this.props.navigator}
             navigateToCreate={this.props.navigator.navigateToCreate}
             navigateToHome={this.props.navigator.navigateToHome}
             navigateToGameUrl={this.props.navigator.navigateToGameUrl}

@@ -43,11 +43,12 @@ const STYLES_INPUT = css`
   color: ${Constants.colors.black};
   font-size: 20px;
   min-width: 25%;
-  width: 94%;
+  width: 100%;
   border: 0;
+  box-sizing: border-box;
   outline: 0;
   margin: 0;
-  padding: 0 0 2px 0;
+  padding: 0 40px 0 0;
 
   :focus {
     border: 0;
