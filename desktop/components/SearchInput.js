@@ -14,10 +14,9 @@ const STYLES_CONTAINER = css`
   justify-content: space-between;
   min-width: 10%;
   width: 100%;
-  padding: 13px;
-  color: black;
-  background: white;
-  border-radius:50px;
+  padding: 8px;
+  color: ${Constants.colors.black};
+  background: ${Constants.colors.white};
 `;
 
 const STYLES_CONTAINER_LEFT = css`
@@ -32,7 +31,7 @@ const STYLES_CONTAINER_LEFT = css`
 const STYLES_CONTAINER_MIDDLE = css`
   min-width: 25%;
   width: 100%;
-  padding-right: 10px;
+  padding-right: 8px;
   display: flex;
   align-items: center;
   position: relative;
@@ -86,7 +85,7 @@ export default class SearchInput extends React.Component {
           className={STYLES_INPUT}
           value={this.props.query}
           name={this.props.name}
-          placeholder="Search Castle or Enter URL"
+          placeholder="Search Castle or enter URL"
           onSubmit={this.props.onSubmit}
           onChange={this.props.onChange}
         />
