@@ -47,7 +47,7 @@ class ContentContainer extends React.Component {
     ) {
       // if we loaded a new game, auto-show logs for local urls
       const isLocal = Urls.isPrivateUrl(this.props.game.url);
-      this.props.setIsDeveloping(isLocal);
+      this.props.setIsDeveloping(isLocal, { onlyEnable: true });
     }
   }
 

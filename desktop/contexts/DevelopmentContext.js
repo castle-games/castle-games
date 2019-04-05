@@ -46,7 +46,11 @@ class DevelopmentContextProvider extends React.Component {
     };
   }
 
-  setIsDeveloping = (isDeveloping) => {
+  // opts.onlyEnable: don't turn off development if it is already on
+  setIsDeveloping = (isDeveloping, opts = {}) => {
+    if (opts && opts.onlyEnable && this.state.isDeveloping) {
+      return;
+    }
     if (isDeveloping != this.state.isDeveloping) {
       this.setState({
         isDeveloping,
