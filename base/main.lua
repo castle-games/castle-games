@@ -133,7 +133,7 @@ if love.graphics then
 end
 
 function main.draw()
-    if home then
+    if home and home.loaded then
         home:draw()
     elseif not CASTLE_SERVER then
         splash:draw()
