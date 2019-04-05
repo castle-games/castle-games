@@ -24,11 +24,10 @@ const path = Utilities.path();
 const STYLES_CONTAINER = css`
   background: ${Constants.colors.background};
   display: flex;
-  align-items: center;
-  justify-content: center;
   width: 100%;
   height: 100%;
   overflow-y: scroll;
+  padding: 24px;
 
   ::-webkit-scrollbar {
     display: none;
@@ -37,7 +36,22 @@ const STYLES_CONTAINER = css`
 `;
 
 const STYLES_CONTENT = css`
-  width: 650px;
+`;
+
+const STYLES_CHOOSE_TEMPLATE = css`
+  display: flex;
+`;
+
+const STYLES_PRIMARY_CONTENT = css`
+  padding-right: 40px;
+`;
+
+const STYLES_SECONDARY_CONTENT = css`
+`;
+
+const STYLES_SECTION = css`
+  cursor: pointer;
+  width: 256px;
 `;
 
 const STYLES_BOLD = css`
@@ -192,22 +206,54 @@ class CreateProjectScreen extends React.Component {
     return createdProjectUrl;
   };
 
+  _handleClickTutorial = () => {
+    NativeUtil.openExternalURL(`${Constants.WEB_HOST}/documentation`);
+  };
+
+  _handleOpenProject = async () => {
+    try {
+      const path = await NativeUtil.chooseOpenProjectPathWithDialogAsync();
+      if (path) {
+        await this.props.navigateToGameUrl(`file://${path}`);
+      }
+    } catch (_) {}
+  };
+
   _renderChooseTemplate = () => {
     return (
       <React.Fragment>
-        <UIHeading>Choose a starter project</UIHeading>
-        <div className={STYLES_PARAGRAPH}>
-          Castle will download some starter files for your new game. Choose the starter project that
-          best fits.
-        </div>
-        <ProjectTemplateChooser
-          templates={this.props.templates}
-          selectedTemplate={this.state.selectedTemplate}
-          onSelectTemplate={this._handleSelectTemplate}
-        />
-        <div className={STYLES_ACTIONS}>
-          <div className={STYLES_BACK} onClick={this.props.navigateToHome}>
-            Cancel
+        <div className={STYLES_CHOOSE_TEMPLATE}>
+          <div className={STYLES_PRIMARY_CONTENT}>
+            <UIHeading>Choose a starter project</UIHeading>
+            <div className={STYLES_PARAGRAPH}>
+              Castle will download some starter files for your new game. Choose the starter project that
+              best fits.
+            </div>
+            <ProjectTemplateChooser
+              templates={this.props.templates}
+              selectedTemplate={this.state.selectedTemplate}
+              onSelectTemplate={this._handleSelectTemplate}
+            />
+            <div className={STYLES_ACTIONS}>
+              <div className={STYLES_BACK} onClick={this.props.navigateToHome}>
+                Cancel
+              </div>
+            </div>
+          </div>
+          <div className={STYLES_SECONDARY_CONTENT}>
+            <UIHeading>Help</UIHeading>
+            <div className={STYLES_SECTION} onClick={this._handleClickTutorial}>
+              <div className={STYLES_PARAGRAPH}>
+                <strong className={STYLES_BOLD}>Documentation</strong><br />
+                Read tutorials and examples.
+              </div>
+            </div>
+            <div className={STYLES_SECTION}>
+              <div className={STYLES_PARAGRAPH} onClick={this._handleOpenProject}>
+                <strong className={STYLES_BOLD}>Open project</strong><br />
+                Open a project from your computer.
+              </div>
+            </div>
           </div>
         </div>
       </React.Fragment>

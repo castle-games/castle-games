@@ -12,7 +12,7 @@ const STYLES_CONTAINER = css`
 
 const STYLES_TEMPLATE_CONTAINER = css`
   display: inline-block;
-  padding: 16px;
+  padding: 0 16px 16px 0;
   width: 192px;
   cursor: pointer;
 `;
