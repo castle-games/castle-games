@@ -7,21 +7,21 @@ import { NavigationContext, NavigatorContext } from '~/contexts/NavigationContex
 
 import SearchInput from '~/components/SearchInput';
 import UINavigationLink from '~/components/reusable/UINavigationLink';
+import HomeHeader from '~/components/home/HomeHeader';
 
 const ENABLE_NOTIF_SCREEN = false; // feature flag notification item
 
 const STYLES_CONTAINER = css`
-  background: #8f8b8b;
   flex-shrink: 0;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  background-color: white;
 `;
 
 const STYLES_SEARCH_SECTION = css`
-  width: 100%;
-  min-width: 25%;
+  flex-grow:1;
 `;
 
 const STYLES_NAV_ITEMS = css`
@@ -48,6 +48,15 @@ class ContentNavigationBar extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTAINER}>
+        <HomeHeader
+            navigator={this.props.navigator}
+            navigateToCreate={this.props.navigator.navigateToCreate}
+            navigateToHome={this.props.navigator.navigateToHome}
+            navigateToGameUrl={this.props.navigator.navigateToGameUrl}
+            navigateToCurrentUserProfile={() =>
+              this.props.navigator.navigateToCurrentUserProfile({ mode: 'add-game' })
+            }
+        />
         <div className={STYLES_SEARCH_SECTION}>
           <SearchInput
             query={this.props.searchQuery}

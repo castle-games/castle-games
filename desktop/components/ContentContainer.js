@@ -17,7 +17,6 @@ import NotificationScreen from '~/screens/NotificationScreen';
 import SearchScreen from '~/screens/SearchScreen';
 import ContentNavigationBar from '~/components/ContentNavigationBar';
 import NowPlayingBar from '~/components/NowPlayingBar';
-import HomeMakeBanner from '~/components/home/HomeMakeBanner';
 import HomeUpdateBanner from '~/components/home/HomeUpdateBanner';
 
 const STYLES_CONTAINER = css`
@@ -137,18 +136,7 @@ class ContentContainer extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
-        {this.props.mode === 'home' ? (
-          <HomeMakeBanner
-            navigator={this.props.navigator}
-            navigateToCreate={this.props.navigator.navigateToCreate}
-            navigateToGameUrl={this.props.navigator.navigateToGameUrl}
-            navigateToCurrentUserProfile={() =>
-              this.props.navigator.navigateToCurrentUserProfile({ mode: 'add-game' })
-            }
-          />
-        ) : null}
-
-        {this.props.mode === 'profile' || this.props.mode === 'home' ? (
+        {this.props.mode === 'profile' || this.props.mode === 'home'  || this.props.mode === 'create' ? (
           <ContentNavigationBar
             searchQuery={this.state.searchQuery}
             onSearchReset={this._handleSearchReset}

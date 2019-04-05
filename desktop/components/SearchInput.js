@@ -14,9 +14,10 @@ const STYLES_CONTAINER = css`
   justify-content: space-between;
   min-width: 10%;
   width: 100%;
-  padding: 24px;
-  color: white;
-  background: magenta;
+  padding: 13px;
+  color: black;
+  background: white;
+  border-radius:50px;
 `;
 
 const STYLES_CONTAINER_LEFT = css`
@@ -25,13 +26,13 @@ const STYLES_CONTAINER_LEFT = css`
   align-items: center;
   cursor: pointer;
   color: ${Constants.colors.white};
-  padding-right: 16px;
+  padding-right: 8px;
 `;
 
 const STYLES_CONTAINER_MIDDLE = css`
   min-width: 25%;
   width: 100%;
-  padding-right: 16px;
+  padding-right: 10px;
   display: flex;
   align-items: center;
   position: relative;
@@ -40,18 +41,14 @@ const STYLES_CONTAINER_MIDDLE = css`
 const STYLES_INPUT = css`
   background: transparent;
   font-family: ${Constants.font.default};
-  color: ${Constants.colors.white};
-  font-size: 24px;
+  color: ${Constants.colors.black};
+  font-size: 20px;
   min-width: 25%;
-  width: 100%;
+  width: 94%;
   border: 0;
   outline: 0;
   margin: 0;
   padding: 0 0 2px 0;
-
-  ::placeholder {
-    color: white;
-  }
 
   :focus {
     border: 0;
@@ -89,7 +86,7 @@ export default class SearchInput extends React.Component {
           className={STYLES_INPUT}
           value={this.props.query}
           name={this.props.name}
-          placeholder="Search for games and people..."
+          placeholder="Search Castle or Enter URL"
           onSubmit={this.props.onSubmit}
           onChange={this.props.onChange}
         />
@@ -100,13 +97,13 @@ export default class SearchInput extends React.Component {
         <div
           className={STYLES_CONTAINER_LEFT}
           onClick={this.props.readOnly ? this.props.onSearchReset : this._handleFocusInput}>
-          <SVG.SearchBarIcon height="32px" />
+          <SVG.SearchBarIcon height="32px" color="#c1bcbb" />
         </div>
         <div className={STYLES_CONTAINER_MIDDLE}>{queryElement}</div>
         {!Strings.isEmpty(this.props.query) ? (
           <SVG.Dismiss
             onClick={this.props.onSearchReset}
-            style={{ cursor: 'pointer' }}
+            style={{ cursor: 'pointer', position: 'absolute', right: '20px' }}
             height="24px"
           />
         ) : null}
