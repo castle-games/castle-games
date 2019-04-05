@@ -14,7 +14,6 @@ const STYLES_FIXED_CONTAINER = css`
   flex-direction: column;
   background: #020202;
   color: ${Constants.colors.white};
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
 `;
 
 const STYLES_SCROLLING_LOGS = css`

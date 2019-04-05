@@ -15,7 +15,7 @@ const STYLES_CONTAINER = css`
   display: flex;
   height: 196px;
   min-height: 96px;
-  border-top: 1px solid rgba(255, 255, 255, 0.5);
+  border-top: 1px solid ${Constants.colors.background4};
 
   @keyframes fade-in-up-dev {
     from {
@@ -35,7 +35,7 @@ const STYLES_GAME_CONTROLS = css`
   width: 50%;
   min-width: 196px;
   color: ${Constants.colors.white};
-  border-right: 1px solid rgba(255, 255, 255, 0.5);
+  border-right: 1px solid ${Constants.colors.background4};
   display: flex;
   flex-direction: column;
 `;
