@@ -115,6 +115,11 @@ export default class DevelopmentLogs extends React.Component {
 
   scroll = () => {
     window.setTimeout(() => {
+      // NOTE(jim): Noop if component is not mounted.
+      if (!this._logs) {
+        return;
+      }
+
       this._logs.scrollIntoView(false);
     });
   };
