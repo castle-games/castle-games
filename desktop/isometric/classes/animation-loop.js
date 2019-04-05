@@ -6,6 +6,7 @@ export default class AnimationLoop {
   _loopId = null;
   _timeNow = null;
   _timeThen = null;
+  _running = false;
 
   loop = () => {
     this._timeNow = Date.now();
@@ -18,10 +19,13 @@ export default class AnimationLoop {
       });
     }
 
-    this._loopID = window.requestAnimationFrame(this.loop);
+    if (this._running) {
+      this._loopID = window.requestAnimationFrame(this.loop);
+    }
   };
 
   start() {
+    this._running = true;
     this._timeThen = Date.now();
     if (!this._loopID) {
       this.loop();
@@ -29,6 +33,7 @@ export default class AnimationLoop {
   }
 
   stop() {
+    this._running = false;
     this._timeThen = null;
     this._timeNow = null;
     window.cancelAnimationFrame(this._loopId);
