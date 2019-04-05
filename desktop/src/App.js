@@ -25,6 +25,7 @@ const isReloadHotkey = isKeyHotkey('mod+r');
 const isFullscreenHotkey = isKeyHotkey('mod+shift+f');
 const isDevelopmentHotkey = isKeyHotkey('mod+j');
 const isEscFullScreenHotkey = isKeyHotkey('esc');
+const isEndGameHotkey = isKeyHotkey('mod+w');
 
 class App extends React.Component {
   _nativeChannelsPollTimeout;
@@ -153,6 +154,11 @@ class App extends React.Component {
       e.preventDefault();
       this.props.development.toggleIsDeveloping();
       return;
+    }
+
+    if (isEndGameHotkey(e)) {
+      e.preventDefault();
+      return this.props.navigator.clearCurrentGame();
     }
   };
 
