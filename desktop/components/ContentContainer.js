@@ -142,6 +142,7 @@ class ContentContainer extends React.Component {
             onSearchReset={this._handleSearchReset}
             onSearchChange={this._handleSearchChange}
             onSearchSubmit={this._handleSearchSubmit}
+            mode={this.props.mode}
           />
         ) : null}
         {contentElement}

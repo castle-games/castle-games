@@ -15,7 +15,7 @@ import UIUserStatusIndicator from '~/components/reusable/UIUserStatusIndicator';
 
 const STYLES_CONTAINER = css`
   padding: 24px 16px 0 24px;
-  background: #c1bcbb;
+  background: ${Constants.colors.white};
 `;
 
 const STYLES_BODY = css`

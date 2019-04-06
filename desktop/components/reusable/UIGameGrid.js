@@ -24,14 +24,6 @@ const STYLES_GAME = css`
   display: inline-block;
   padding: 24px 24px 24px 24px;
   position: relative;
-
-  :hover {
-    section {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translateY(0px) translateX(0px);
-    }
-  }
 `;
 
 const STYLES_GAME_ITEM = css`
@@ -60,6 +52,31 @@ const STYLES_TITLE = css`
   font-size: 18px;
   width: 188px;
   height: 56px;
+`;
+
+const STYLES_INFO = css`
+  color: ${Constants.colors.text2};
+  text-align: right;
+  margin-top: -16px;
+  font-family: ${Constants.font.default};
+  font-size: 1rem;
+  cursor: pointer;
+  width: 16px;
+  opacity: 0.6;
+
+  ::before {
+    content: "ⓘ";
+  }
+
+  :hover {
+    color: ${Constants.colors.text};
+    opacity: 1;
+    section {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0px) translateX(0px);
+    }
+  }
 `;
 
 const STYLES_AVATAR = css`
@@ -124,6 +141,8 @@ const STYLES_GAME_POPOVER = css`
   pointer-events: none;
   opacity: 0;
   font-family: ${Constants.font.system};
+  text-align:left;
+  cursor: default;
   transform: translateY(-24px) translateX(-24px);
   transition: 200ms ease all;
   transition-property: transform, opacity;
@@ -153,7 +172,6 @@ const STYLES_POPOVER_TITLE = css`
 
 const STYLES_POPOVER_P = css`
   text-align: left;
-  padding: 0 0 0 16px;
   font-family: ${Constants.font.system};
   font-size: 14px;
   width: 100%;
@@ -288,7 +306,7 @@ class UIGameCell extends React.Component {
     let playCTAElement = (
       <UIPlayTextCTA
         background={backgroundColor}
-        style={{ marginTop: 40 }}
+        style={{ marginTop: 16 }}
         onClick={() => this.props.onGameSelect(game)}>
         Play
       </UIPlayTextCTA>
@@ -311,49 +329,40 @@ class UIGameCell extends React.Component {
             style={{ backgroundImage: this.props.src ? `url(${this.props.src})` : null }}
           />
           <div className={STYLES_TITLE} onClick={onGameClick}>
-            {title} {isPrivate ? <Tag>Local</Tag> : null}
+            {title} {isPrivate ? <Tag>Local</Tag> : null} <br />
           </div>
+
+          {!isPrivate ? (
+          <div className={STYLES_INFO}  style={{ color: textColor }}>
+            <section className={STYLES_GAME_POPOVER}>
+              <div
+                className={STYLES_POPOVER}
+                style={{ color: textColor, backgroundColor: popoverBackgroundColor }}>
+                <div className={STYLES_POPOVER_TITLE} onClick={() => this.props.onGameSelect(game)}>
+                  {title}
+                </div>
+                <div className={STYLES_POPOVER_GAME_URL}>{game.url}</div>
+                {gameDescription ? (
+                  <div className={STYLES_POPOVER_INFO}>
+                    <p className={STYLES_POPOVER_P}>{gameDescription}</p>
+                  </div>
+                ) : null}
+
+                {playCTAElement}
+
+                {options.length ? (
+                  <div className={STYLES_POPOVER_ACTIONS}>
+                    <div className={STYLES_POPOVER_ACTIONS_LEFT}>{options}</div>
+                    <div className={STYLES_POPOVER_ACTIONS_RIGHT} />
+                  </div>
+                ) : null}
+              </div>
+            </section>
+          </div>
+          ) : null}
+
         </div>
         {description}
-
-        <section className={STYLES_GAME_POPOVER}>
-          <div
-            className={STYLES_POPOVER}
-            style={{ color: textColor, backgroundColor: popoverBackgroundColor }}>
-            <div className={STYLES_POPOVER_TITLE} onClick={() => this.props.onGameSelect(game)}>
-              {title}
-            </div>
-            <div className={STYLES_POPOVER_GAME_URL}>{game.url}</div>
-            {gameDescription ? (
-              <div className={STYLES_POPOVER_INFO}>
-                <div
-                  className={STYLES_AVATAR}
-                  style={{
-                    cursor: 'pointer',
-                    height: 40,
-                    width: 40,
-                    marginRight: 0,
-                    backgroundImage:
-                      game.owner.photo && game.owner.photo.url
-                        ? `url(${game.owner.photo.url})`
-                        : null,
-                  }}
-                  onClick={() => this.props.onUserSelect(game.owner)}
-                />
-                <p className={STYLES_POPOVER_P}>{gameDescription}</p>
-              </div>
-            ) : null}
-
-            {playCTAElement}
-
-            {options.length ? (
-              <div className={STYLES_POPOVER_ACTIONS}>
-                <div className={STYLES_POPOVER_ACTIONS_LEFT}>{options}</div>
-                <div className={STYLES_POPOVER_ACTIONS_RIGHT} />
-              </div>
-            ) : null}
-          </div>
-        </section>
       </div>
     );
   }

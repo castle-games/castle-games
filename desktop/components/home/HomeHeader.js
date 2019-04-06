@@ -62,10 +62,10 @@ export default class HomeHeader extends React.Component {
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_ACTIONS}>
           <div className={STYLES_ACTION} onClick={this._handleHome}>
-            <div className={STYLES_ACTION_HEADING}>Play</div>
+            <div className={STYLES_ACTION_HEADING} style={{ color: this.props.mode === 'home' ? 'magenta' : null }}>Play</div>
           </div>
           <div className={STYLES_ACTION} onClick={this._handleCreateProject}>
-            <div className={STYLES_ACTION_HEADING}>Create Game</div>
+            <div className={STYLES_ACTION_HEADING} style={{ color: this.props.mode === 'create' ? 'magenta' : null }}>Create Game</div>
           </div>
         </div>
       </div>

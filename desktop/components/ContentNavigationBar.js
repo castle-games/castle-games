@@ -55,6 +55,7 @@ class ContentNavigationBar extends React.Component {
             navigateToCurrentUserProfile={() =>
               this.props.navigator.navigateToCurrentUserProfile({ mode: 'add-game' })
             }
+            mode={this.props.mode}
         />
         <div className={STYLES_SEARCH_SECTION}>
           <SearchInput
