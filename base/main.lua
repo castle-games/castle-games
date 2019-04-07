@@ -36,7 +36,11 @@ do
     function print(...)
         oldPrint(...)
         local array = { ... }
-        jsEvents.send('GHOST_PRINT', array)
+        if castle.system.isDesktop() then
+            jsEvents.send('GHOST_PRINT', array)
+        else
+            love.thread.getChannel('PRINT'):push(json)
+        end
         if not isMobile then
             collectedPrints[#collectedPrints + 1] = cjson.encode(array)
         end
@@ -46,7 +50,11 @@ do
     function DEFAULT_ERROR_HANDLER(err, stack) -- Referenced in 'network.lua'
         oldPrint(stack)
         local obj = { error = err, stacktrace = stack }
-        jsEvents.send('GHOST_ERROR', obj)
+        if castle.system.isDesktop() then
+            jsEvents.send('GHOST_ERROR', obj)
+        else
+            love.thread.getChannel('ERROR'):push(json)
+        end
         love.filesystem.append(ERRORS_FILE_NAME, cjson.encode(obj) .. '\n')
     end
 
