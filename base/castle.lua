@@ -11,6 +11,32 @@ local C = ffi.C
 local castle = {}
 
 
+-- system
+
+local theOS = love.system.getOS()
+local isMobile = theOS == 'Android' or theOS == 'iOS'
+local isDesktop = not (isMobile or CASTLE_SERVER)
+
+castle.system = {}
+
+function castle.system.isMobile()
+    return isMobile
+end
+
+function castle.system.isDesktop()
+    return isDesktop
+end
+
+ffi.cdef 'double ghostGetGlobalScaling();'
+function castle.system.getGlobalScaling()
+    if isDesktop then
+        return C.ghostGetGlobalScaling()
+    else
+        return 1
+    end
+end
+
+
 -- user
 
 castle.user = {}

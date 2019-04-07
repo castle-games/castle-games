@@ -95,3 +95,7 @@ bool ghostCreateProjectAtPath(const char *path, const char **entryPoint) {
   std::free((void *)mainFileCreated);
   return _ghostCreateFileFromTemplateAtPath(path, "blank.castle", "project.castle", entryPoint);
 }
+
+GHOST_EXPORT double ghostGetGlobalScaling() {
+  return ghostGlobalScaling;
+}
