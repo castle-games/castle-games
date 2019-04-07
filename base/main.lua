@@ -36,11 +36,7 @@ do
     function print(...)
         oldPrint(...)
         local array = { ... }
-        if CASTLE_SERVER or isMobile then
-            love.thread.getChannel('PRINT'):push(json)
-        else
-            jsEvents.send('GHOST_PRINT', array)
-        end
+        jsEvents.send('GHOST_PRINT', array)
         if not isMobile then
             collectedPrints[#collectedPrints + 1] = cjson.encode(array)
         end
@@ -50,11 +46,7 @@ do
     function DEFAULT_ERROR_HANDLER(err, stack) -- Referenced in 'network.lua'
         oldPrint(stack)
         local obj = { error = err, stacktrace = stack }
-        if CASTLE_SERVER or isMobile then
-            love.thread.getChannel('ERROR'):push(json)
-        else
-            jsEvents.send('GHOST_ERROR', array)
-        end
+        jsEvents.send('GHOST_ERROR', obj)
         love.filesystem.append(ERRORS_FILE_NAME, cjson.encode(obj) .. '\n')
     end
 
