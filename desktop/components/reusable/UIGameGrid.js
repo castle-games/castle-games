@@ -4,6 +4,7 @@ import * as Utilities from '~/common/utilities';
 import * as Strings from '~/common/strings';
 import * as Urls from '~/common/urls';
 import * as NativeUtil from '~/native/nativeutil';
+import * as SVG from '~/components/primitives/svg';
 
 import { css } from 'react-emotion';
 
@@ -58,11 +59,11 @@ const STYLES_TITLE = css`
 const STYLES_INFO = css`
   color: ${Constants.colors.text2};
   font-family: ${Constants.font.default};
-  margin-top: 16px;
-  font-size: 1rem;
   cursor: pointer;
-  width: 16px;
-  opacity: 0.6;
+  display: flex;
+  width: 100%;
+  height: 16px;
+  opacity: 0.8;
 `;
 
 const STYLES_INFO_CTA = css`
@@ -335,7 +336,7 @@ class UIGameCell extends React.Component {
             className={STYLES_INFO}
             style={{ color: textColor }}
             onClick={this._handleToggleVisibility}>
-            ⓘ
+            <SVG.Info height="16px" />
           </span>
 
           {this.state.visible ? (
