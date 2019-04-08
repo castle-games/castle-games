@@ -51,6 +51,13 @@ class GameScreen extends React.Component {
     }
   }
 
+  componentDidMount() {
+    // Once the game screen mounts, ensure an update call.
+    if (this.props.game) {
+      this._updateGameWindow(null, null);
+    }
+  }
+
   componentDidUpdate(prevProps, prevState) {
     this._updateGameWindow(prevProps, prevState);
   }
