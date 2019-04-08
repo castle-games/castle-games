@@ -108,8 +108,6 @@ if not CASTLE_SERVER then -- We're in the JS client, use the JS client's API cal
         return jsCalls.storageSetUser { key = key, value = encoded }
     end
 else -- We're on the game server, do the GraphQL HTTP requests ourselves
-    STORAGE_ID = 'e486b038-883c-420a-be97-36e25f24fcf4' -- TODO(nikki): Um we should get this from the game...
-
     local function graphql(query, variables)
         local source = cjson.encode({
             query = query,
@@ -131,7 +129,17 @@ else -- We're on the game server, do the GraphQL HTTP requests ourselves
         return cjson.decode(table.concat(sink))
     end
 
+    -- Get `storageId` from game database model
+    local storageId
+    if CASTLE_GAME_INFO then
+        decodedGameInfo = cjson.decode(CASTLE_GAME_INFO)
+        if decodedGameInfo.storageId then
+            storageId = decodedGameInfo.storageId
+        end
+    end
+
     function castle.storage.getGlobal(key)
+        assert(storageId, '`castle.storage.getGlobal` needs a `storageId`')
         assert(type(key) == 'string', '`castle.storage.getGlobal` needs a string `key`')
 
         local result = graphql([[
@@ -141,7 +149,7 @@ else -- We're on the game server, do the GraphQL HTTP requests ourselves
                 }
             }
         ]], {
-            storageId = STORAGE_ID,
+            storageId = storageId,
             key = key,
         })
 
@@ -165,6 +173,7 @@ else -- We're on the game server, do the GraphQL HTTP requests ourselves
     end
 
     function castle.storage.setGlobal(key, value)
+        assert(storageId, '`castle.storage.getGlobal` needs a `storageId`')
         assert(type(key) == 'string', '`castle.storage.setGlobal` needs a string `key`')
 
         local encoded = cjson.null
@@ -177,7 +186,7 @@ else -- We're on the game server, do the GraphQL HTTP requests ourselves
                 setGameGlobalStorage(storageId: $storageId, key: $key, value: $value)
             }
         ]], {
-            storageId = STORAGE_ID,
+            storageId = storageId,
             key = key,
             value = encoded,
         })
@@ -199,11 +208,11 @@ else -- We're on the game server, do the GraphQL HTTP requests ourselves
     end
 
     function castle.storage.get(key)
-        error('`castle.storage.get`: attempted to use user storage on the server')
+        error('`castle.storage.get`: user storage access is not allowed on remote servers')
     end
 
     function castle.storage.set(key, value)
-        error('`castle.storage.set`: attempted to use user storage on the server')
+        error('`castle.storage.set`: user storage access is not allowed on remote servers')
     end
 end
 
