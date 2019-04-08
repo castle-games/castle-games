@@ -52,31 +52,21 @@ const STYLES_TITLE = css`
   font-size: 18px;
   width: 188px;
   height: 56px;
+  cursor: pointer;
 `;
 
 const STYLES_INFO = css`
   color: ${Constants.colors.text2};
-  text-align: right;
-  margin-top: -16px;
   font-family: ${Constants.font.default};
+  margin-top: 16px;
   font-size: 1rem;
   cursor: pointer;
   width: 16px;
   opacity: 0.6;
+`;
 
-  ::before {
-    content: "ⓘ";
-  }
-
-  :hover {
-    color: ${Constants.colors.text};
-    opacity: 1;
-    section {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translateY(0px) translateX(0px);
-    }
-  }
+const STYLES_INFO_CTA = css`
+  display: inline-flex;
 `;
 
 const STYLES_AVATAR = css`
@@ -138,14 +128,23 @@ const STYLES_GAME_POPOVER = css`
   left: 8px;
   width: 256px;
   z-index: 4;
-  pointer-events: none;
-  opacity: 0;
   font-family: ${Constants.font.system};
-  text-align:left;
+  text-align: left;
   cursor: default;
-  transform: translateY(-24px) translateX(-24px);
-  transition: 200ms ease all;
-  transition-property: transform, opacity;
+
+  @keyframes fade-in-popover {
+    from {
+      opacity: 0;
+      transform: translateY(-16px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0px);
+    }
+  }
+
+  animation: fade-in-popover 180ms ease;
 `;
 
 const STYLES_POPOVER = css`
@@ -333,8 +332,19 @@ class UIGameCell extends React.Component {
           </div>
 
           {!isPrivate ? (
-          <div className={STYLES_INFO}  style={{ color: textColor }}>
-            <section className={STYLES_GAME_POPOVER}>
+            <span
+              className={STYLES_INFO}
+              style={{ color: textColor }}
+              onClick={this._handleToggleVisibility}>
+              ⓘ
+            </span>
+          ) : null}
+
+          {this.state.visible ? (
+            <UIBoundary
+              className={STYLES_GAME_POPOVER}
+              enabled={this.state.visible}
+              onOutsideRectEvent={this._handleDismiss}>
               <div
                 className={STYLES_POPOVER}
                 style={{ color: textColor, backgroundColor: popoverBackgroundColor }}>
@@ -357,10 +367,8 @@ class UIGameCell extends React.Component {
                   </div>
                 ) : null}
               </div>
-            </section>
-          </div>
+            </UIBoundary>
           ) : null}
-
         </div>
         {description}
       </div>
