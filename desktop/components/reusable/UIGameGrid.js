@@ -60,9 +60,9 @@ const STYLES_INFO = css`
   color: ${Constants.colors.text2};
   font-family: ${Constants.font.default};
   cursor: pointer;
-  display: flex;
-  width: 100%;
-  height: 16px;
+  position: absolute;
+  bottom: 4px;
+  left: 8px;
   opacity: 0.8;
 `;
 
