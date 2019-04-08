@@ -80,7 +80,7 @@ export default class ProjectTemplateChooser extends React.Component {
     return (
       <div className={STYLES_CONTAINER}>
         {this._renderBlankTemplate()}
-        {this.props.templates.slice(0, 8).map((game) => this._renderTemplate(game))}
+        {this.props.templates.map((game) => this._renderTemplate(game))}
       </div>
     );
   }
