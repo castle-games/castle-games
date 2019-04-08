@@ -54,6 +54,32 @@ const STYLES_EMPHASIS_CHOICE = css`
 `;
 
 export default class NowPlayingBar extends React.Component {
+  state = {
+    toggleUIColor: false,
+  };
+  _toggleUIColorInterval = null;
+
+  componentDidMount() {
+    this._mounted = true;
+    this._toggleUIColorInterval = setInterval(this._toggleColor, 300);
+  }
+
+  componentWillUnmount() {
+    if (this._toggleUIColorInterval) {
+      clearInterval(this._toggleUIColorInterval);
+      this._toggleUIColorInterval = null;
+    }
+    this._mounted = false;
+  }
+
+  _toggleColor = () => {
+    if (this._mounted) {
+      this.setState((state) => {
+        return { ...state, toggleUIColor: !state.toggleUIColor };
+      });
+    }
+  };
+
   _handleNavigatePlaying = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -82,6 +108,11 @@ export default class NowPlayingBar extends React.Component {
       title = game.title ? `${game.title}` : title;
     }
 
+    let toggleColorStyles;
+    if (this.state.toggleUIColor) {
+      toggleColorStyles = { color: Constants.brand.fuchsia };
+    }
+
     return (
       <div className={STYLES_CONTAINER}>
         <span className={STYLES_GAME_STRIP}>
@@ -94,6 +125,7 @@ export default class NowPlayingBar extends React.Component {
                 height: 32,
                 display: 'inline-flex',
                 alignItems: 'center',
+                ...toggleColorStyles,
               }}>
               ► Return to {title}
             </UINavigationLink>
