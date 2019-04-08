@@ -95,7 +95,7 @@ export default class SearchInput extends React.Component {
           placeholder="Search Castle or enter URL"
           onSubmit={this.props.onSubmit}
           onChange={this.props.onChange}
-          style={{ paddingRight: !Strings.isEmpty(this.props.query) ? 32 : 0 }}
+          style={{ paddingRight: 32 }}
         />
       );
     }
