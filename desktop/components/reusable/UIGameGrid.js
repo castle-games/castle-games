@@ -325,10 +325,10 @@ class UIGameCell extends React.Component {
         <div className={STYLES_GAME_ITEM} style={{ color: textColor, backgroundColor }}>
           <div
             className={STYLES_GAME_SCREENSHOT}
-            onClick={onGameClick}
+            onClick={() => this.props.onGameSelect(game)}
             style={{ backgroundImage: this.props.src ? `url(${this.props.src})` : null }}
           />
-          <div className={STYLES_TITLE} onClick={onGameClick}>
+          <div className={STYLES_TITLE} onClick={() => this.props.onGameSelect(game)}>
             {title} {isPrivate ? <Tag>Local</Tag> : null} <br />
           </div>
 
