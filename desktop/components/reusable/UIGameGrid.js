@@ -331,14 +331,12 @@ class UIGameCell extends React.Component {
             {title} {isPrivate ? <Tag>Local</Tag> : null} <br />
           </div>
 
-          {!isPrivate ? (
-            <span
-              className={STYLES_INFO}
-              style={{ color: textColor }}
-              onClick={this._handleToggleVisibility}>
-              ⓘ
-            </span>
-          ) : null}
+          <span
+            className={STYLES_INFO}
+            style={{ color: textColor }}
+            onClick={this._handleToggleVisibility}>
+            ⓘ
+          </span>
 
           {this.state.visible ? (
             <UIBoundary
