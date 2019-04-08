@@ -88,6 +88,7 @@ export default class ControlledInput extends React.Component {
         value={this.props.value}
         name={this.props.name}
         type={this.props.type}
+        style={this.props.style}
       />
     );
   }
