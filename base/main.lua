@@ -28,8 +28,10 @@ do
 
     local ERRORS_FILE_NAME, PRINTS_FILE_NAME = 'castle_errors.log', 'castle_prints.log'
 
-    love.filesystem.write(ERRORS_FILE_NAME, '')
-    love.filesystem.write(PRINTS_FILE_NAME, '')
+    if castle.system.isDesktop() then
+        love.filesystem.write(ERRORS_FILE_NAME, '')
+        love.filesystem.write(PRINTS_FILE_NAME, '')
+    end
 
     local collectedPrints = {} -- Stash prints and flush them to the '.log' file once in a while
     local oldPrint = print -- Save original print function to call later
@@ -38,11 +40,9 @@ do
         local array = { ... }
         if castle.system.isDesktop() then
             jsEvents.send('GHOST_PRINT', array)
-        else
-            love.thread.getChannel('PRINT'):push(json)
-        end
-        if not isMobile then
             collectedPrints[#collectedPrints + 1] = cjson.encode(array)
+        else
+            love.thread.getChannel('PRINT'):push(cjson.encode(array))
         end
     end
 
@@ -52,10 +52,10 @@ do
         local obj = { error = err, stacktrace = stack }
         if castle.system.isDesktop() then
             jsEvents.send('GHOST_ERROR', obj)
+            love.filesystem.append(ERRORS_FILE_NAME, cjson.encode(obj) .. '\n')
         else
-            love.thread.getChannel('ERROR'):push(json)
+            love.thread.getChannel('ERROR'):push(cjson.encode(obj))
         end
-        love.filesystem.append(ERRORS_FILE_NAME, cjson.encode(obj) .. '\n')
     end
 
     function root.onError(err, portal, stack)
@@ -65,7 +65,7 @@ do
     local lastPrintDumpTime
     function updateLogs(isQuitting)
         -- Flush stashed prints to '.log' file once in a while
-        if not isMobile then
+        if castle.system.isDesktop() then
             local now = love.timer.getTime()
             if isQuitting or not lastPrintDumpTime or now - lastPrintDumpTime > 0.5 then
                 lastPrintDumpTime = now
@@ -123,7 +123,7 @@ function main.update(dt)
     updateLogs()
 
     if home then
-        if not CASTLE_SERVER and not isMobile and C.ghostGetBackgrounded() then
+        if castle.system.isDesktop() and C.ghostGetBackgrounded() then
             if home.globals.castle.backgroundupdate then
                 home:safeCall(home.globals.castle.backgroundupdate, dt)
             end
@@ -228,7 +228,7 @@ end
 
 function main.keypressed(key, ...)
     -- Intercept system hotkeys
-    if not isMobile then
+    if castle.system.isDesktop() then
         local ctrl = love.keyboard.isDown('lctrl') or love.keyboard.isDown('rctrl')
         local gui = love.keyboard.isDown('lgui') or love.keyboard.isDown('rgui')
         local shift = love.keyboard.isDown('lshift') or love.keyboard.isDown('rshift')
