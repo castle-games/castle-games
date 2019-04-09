@@ -38,6 +38,8 @@ extern "C" {
 
 #include <SDL.h>
 
+#include <boost/algorithm/string.hpp>
+
 #include "modules/love/love.h"
 #include "modules/thread/Channel.h"
 #include "modules/timer/Timer.h"
@@ -53,6 +55,7 @@ using namespace WinToastLib;
 // internal
 
 static void _ghostSendNativeOpenUrlEvent(std::string uri) {
+  boost::replace_all(uri, "\\", "\\\\"); // escape in order to preserve correct value in json
   std::string params = "{ url: '" + uri + "' }";
   ghostSendJSEvent(kGhostOpenUrlEventName, params.c_str());
 }

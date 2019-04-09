@@ -94,7 +94,11 @@ class App extends React.Component {
 
   // event listeners
   _handleNativeOpenUrlEvent = (e) => {
-    this.props.navigator.navigateToGameUrl(e.params.url);
+    let url = e.params.url;
+    if (url && url.indexOf('://') === -1) {
+      url = `file://${url}`;
+    }
+    this.props.navigator.navigateToGameUrl(url);
   };
 
   _handleNativeMenuSelectedEvent = async (e) => {
