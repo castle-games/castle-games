@@ -3,18 +3,19 @@ import { isKeyHotkey } from 'is-hotkey';
 
 import * as Actions from '~/common/actions';
 import AppContainer from '~/components/AppContainer';
-import { CurrentUserContextProvider } from '~/contexts/CurrentUserContext';
+import { CurrentUserContext, CurrentUserContextProvider } from '~/contexts/CurrentUserContext';
 import {
   DevelopmentSetterContext,
   DevelopmentContextProvider,
 } from '~/contexts/DevelopmentContext';
-import { SocialContextProvider } from '~/contexts/SocialContext';
+import { SocialContext, SocialContextProvider } from '~/contexts/SocialContext';
 import Logs from '~/common/logs';
 import {
   NavigatorContext,
   NavigationContext,
   NavigationContextProvider,
 } from '~/contexts/NavigationContext';
+import { ChatContext, ChatContextProvider } from '~/contexts/ChatContext';
 import * as NativeUtil from '~/native/nativeutil';
 import { linkify } from 'react-linkify';
 import * as Urls from '~/common/urls';
@@ -239,7 +240,21 @@ export default class AppWithProvider extends React.Component {
         <SocialContextProvider>
           <DevelopmentContextProvider>
             <NavigationContextProvider value={{ navigation }}>
-              <AppWithContext {...this.props} />
+              <CurrentUserContext.Consumer>
+                {({ user }) => {
+                  return (
+                    <SocialContext.Consumer>
+                      {(social) => {
+                        return (
+                          <ChatContextProvider social={social} currentUser={user}>
+                            <AppWithContext {...this.props} />
+                          </ChatContextProvider>
+                        );
+                      }}
+                    </SocialContext.Consumer>
+                  );
+                }}
+              </CurrentUserContext.Consumer>
             </NavigationContextProvider>
           </DevelopmentContextProvider>
         </SocialContextProvider>
