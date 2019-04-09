@@ -218,64 +218,58 @@ const Tag = (props) => {
 };
 
 class UIGameCell extends React.Component {
+  static defaultProps = {
+    game: null,
+    onGameSelect: () => {},
+    onUserSelect: () => {},
+    onGameUpdate: () => {},
+    isPreview: false,
+    renderCartridgeOnly: false,
+  };
+
   state = {
-    visible: false,
+    isPopoverVisible: false,
   };
 
   _handleToggleVisibility = () => {
-    this.setState({ visible: !this.state.visible });
+    this.setState({ isPopoverVisible: !this.state.isPopoverVisible });
   };
 
   _handleDismiss = () => {
-    this.setState({ visible: false });
+    this.setState({ isPopoverVisible: false });
   };
 
   _handleViewSource = (gameEntryPoint) => {
     NativeUtil.openExternalURL(Urls.githubUserContentToRepoUrl(gameEntryPoint));
   };
 
-  render() {
-    let { game } = this.props;
-    let title = game.title ? game.title : 'Untitled';
-
-    const backgroundColor =
-      game.metadata && game.metadata.primaryColor ? `#${game.metadata.primaryColor}` : '#3d3d3d';
-    const textColor = Utilities.adjustTextColor(backgroundColor);
-
-    let description;
-    let gameDescription = !Strings.isEmpty(game.description) ? game.description : null;
-    let isPrivate = Urls.isPrivateUrl(game.url);
-
-    if (isPrivate || !game.owner || !game.owner.name) {
-      description = <div className={STYLES_URL}>{game.url}</div>;
+  _handleGameSelect = () => {
+    if (this.props.isPreview) {
+      return;
     }
+    this.props.onGameSelect(this.props.game);
+  };
 
-    if (!this.props.renderCartridgeOnly && game.owner) {
-      description = (
-        <div className={STYLES_BYLINE}>
-          <div
-            className={STYLES_AVATAR}
-            onClick={() => this.props.onUserSelect(game.owner)}
-            style={{
-              backgroundImage:
-                game.owner.photo && game.owner.photo.url ? `url(${game.owner.photo.url})` : null,
-            }}
-          />
-          <div
-            className={STYLES_AVATAR_CREATOR}
-            onClick={() => this.props.onUserSelect(game.owner)}>
-            {game.owner.name}
-          </div>
+  _renderCreator = (game) => {
+    return (
+      <div className={STYLES_BYLINE}>
+        <div
+          className={STYLES_AVATAR}
+          onClick={() => this.props.onUserSelect(game.owner)}
+          style={{
+            backgroundImage:
+              game.owner.photo && game.owner.photo.url ? `url(${game.owner.photo.url})` : null,
+          }}
+        />
+        <div className={STYLES_AVATAR_CREATOR} onClick={() => this.props.onUserSelect(game.owner)}>
+          {game.owner.name}
         </div>
-      );
-    }
+      </div>
+    );
+  };
 
-    const onGameClick = isPrivate
-      ? () => this.props.onGameSelect(game)
-      : this._handleToggleVisibility;
-
-    const luaEntryPoint = Utilities.getLuaEntryPoint(game);
-
+  _renderPopover = (game, title, textColor, backgroundColor) => {
+    let gameDescription = !Strings.isEmpty(game.description) ? game.description : null;
     const popoverBackgroundColor = Utilities.shadeHex(backgroundColor, -0.1);
 
     const options = [];
@@ -290,6 +284,7 @@ class UIGameCell extends React.Component {
       );
     }
 
+    const luaEntryPoint = Utilities.getLuaEntryPoint(game);
     if (Urls.isOpenSource(luaEntryPoint)) {
       options.push(
         <UINavigationLink
@@ -301,18 +296,16 @@ class UIGameCell extends React.Component {
       );
     }
 
-    const isMultiplayer = game.metadata && !!game.metadata.multiplayer;
-
     let playCTAElement = (
       <UIPlayTextCTA
         background={backgroundColor}
         style={{ marginTop: 16 }}
-        onClick={() => this.props.onGameSelect(game)}>
+        onClick={this._handleGameSelect}>
         Play
       </UIPlayTextCTA>
     );
 
-    if (isMultiplayer && !this.props.viewer) {
+    if (Utilities.isMultiplayer(game) && !this.props.viewer) {
       playCTAElement = (
         <p className={STYLES_POPOVER_PROMPT} background={backgroundColor} style={{ marginTop: 40 }}>
           Sign in to play
@@ -321,53 +314,81 @@ class UIGameCell extends React.Component {
     }
 
     return (
+      <UIBoundary
+        className={STYLES_GAME_POPOVER}
+        enabled={this.state.isPopoverVisible}
+        onOutsideRectEvent={this._handleDismiss}>
+        <div
+          className={STYLES_POPOVER}
+          style={{ color: textColor, backgroundColor: popoverBackgroundColor }}>
+          <div className={STYLES_POPOVER_TITLE} onClick={this._handleGameSelect}>
+            {title}
+          </div>
+          <div className={STYLES_POPOVER_GAME_URL}>{game.url}</div>
+          {gameDescription ? (
+            <div className={STYLES_POPOVER_INFO}>
+              <p className={STYLES_POPOVER_P}>{gameDescription}</p>
+            </div>
+          ) : null}
+
+          {playCTAElement}
+
+          {options.length ? (
+            <div className={STYLES_POPOVER_ACTIONS}>
+              <div className={STYLES_POPOVER_ACTIONS_LEFT}>{options}</div>
+              <div className={STYLES_POPOVER_ACTIONS_RIGHT} />
+            </div>
+          ) : null}
+        </div>
+      </UIBoundary>
+    );
+  };
+
+  render() {
+    let { game } = this.props;
+    let title = game.title ? game.title : 'Untitled';
+
+    const backgroundColor =
+      game.metadata && game.metadata.primaryColor ? `#${game.metadata.primaryColor}` : '#3d3d3d';
+    const textColor = Utilities.adjustTextColor(backgroundColor);
+
+    let description;
+    let isPrivate = Urls.isPrivateUrl(game.url);
+
+    if (isPrivate || !game.owner || !game.owner.name) {
+      description = <div className={STYLES_URL}>{game.url}</div>;
+    }
+
+    if (!this.props.renderCartridgeOnly && game.owner) {
+      description = this._renderCreator(game);
+    }
+
+    let maybePopoverElement = this.state.isPopoverVisible
+      ? this._renderPopover(game, title, textColor, backgroundColor)
+      : null;
+
+    let maybeInfoButton = this.props.isPreview ? null : (
+      <span
+        className={STYLES_INFO}
+        style={{ color: textColor }}
+        onClick={this._handleToggleVisibility}>
+        <SVG.Info height="16px" />
+      </span>
+    );
+
+    return (
       <div className={STYLES_GAME}>
         <div className={STYLES_GAME_ITEM} style={{ color: textColor, backgroundColor }}>
           <div
             className={STYLES_GAME_SCREENSHOT}
-            onClick={() => this.props.onGameSelect(game)}
+            onClick={this._handleGameSelect}
             style={{ backgroundImage: this.props.src ? `url(${this.props.src})` : null }}
           />
-          <div className={STYLES_TITLE} onClick={() => this.props.onGameSelect(game)}>
+          <div className={STYLES_TITLE} onClick={this._handleGameSelect}>
             {title} {isPrivate ? <Tag>Local</Tag> : null} <br />
           </div>
-
-          <span
-            className={STYLES_INFO}
-            style={{ color: textColor }}
-            onClick={this._handleToggleVisibility}>
-            <SVG.Info height="16px" />
-          </span>
-
-          {this.state.visible ? (
-            <UIBoundary
-              className={STYLES_GAME_POPOVER}
-              enabled={this.state.visible}
-              onOutsideRectEvent={this._handleDismiss}>
-              <div
-                className={STYLES_POPOVER}
-                style={{ color: textColor, backgroundColor: popoverBackgroundColor }}>
-                <div className={STYLES_POPOVER_TITLE} onClick={() => this.props.onGameSelect(game)}>
-                  {title}
-                </div>
-                <div className={STYLES_POPOVER_GAME_URL}>{game.url}</div>
-                {gameDescription ? (
-                  <div className={STYLES_POPOVER_INFO}>
-                    <p className={STYLES_POPOVER_P}>{gameDescription}</p>
-                  </div>
-                ) : null}
-
-                {playCTAElement}
-
-                {options.length ? (
-                  <div className={STYLES_POPOVER_ACTIONS}>
-                    <div className={STYLES_POPOVER_ACTIONS_LEFT}>{options}</div>
-                    <div className={STYLES_POPOVER_ACTIONS_RIGHT} />
-                  </div>
-                ) : null}
-              </div>
-            </UIBoundary>
-          ) : null}
+          {maybeInfoButton}
+          {maybePopoverElement}
         </div>
         {description}
       </div>

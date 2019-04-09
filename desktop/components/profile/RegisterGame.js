@@ -154,7 +154,7 @@ export default class RegisterGame extends React.Component {
       return (
         <div>
           <div className={STYLES_HEADING}>Game Preview</div>
-          <UIGameGrid gameItems={[this.state.previewedGame]} onGameSelect={() => {}} />
+          <UIGameGrid gameItems={[this.state.previewedGame]} isPreview={true} />
           <div className={STYLES_PARAGRAPH}>
             Your Castle url will be{' '}
             <span className={STYLES_GAME_PREVIEW_URL}>
