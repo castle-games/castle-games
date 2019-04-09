@@ -414,6 +414,7 @@ export default class UIGameGrid extends React.Component {
               src={m.coverImage && m.coverImage.imgixUrl}
               game={m}
               viewer={this.props.viewer}
+              isPreview={this.props.isPreview}
             />
           );
         })}
