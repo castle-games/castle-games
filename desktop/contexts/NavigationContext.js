@@ -258,11 +258,12 @@ class NavigationContextManager extends React.Component {
     await GameWindow.close();
     this.setState((state) => {
       const time = Date.now();
-      const newContentMode = state.contentMode === 'game' ? 'home' : state.contentMode;
+      const newContentMode =
+        state.navigation.contentMode === 'game' ? 'home' : state.navigation.contentMode;
       return {
         ...state,
         navigation: {
-          ...this.state.navigation,
+          ...state.navigation,
           contentMode: newContentMode,
           game: NavigationContextDefaults.game,
           gameUrl: NavigationContextDefaults.gameUrl,
