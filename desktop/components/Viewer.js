@@ -15,11 +15,8 @@ const STYLES_CONTAINER = css`
 
 export default class Viewer extends React.Component {
   _renderViewer = (navigateToCurrentUserProfile, currentUser) => {
-    // NOTE(jim): Not used, so I took it out
-    // const name = currentUser.user ? currentUser.user.username[0].toUpperCase() : 'Log In';
-
     const avatarSrc =
-      currentUser.user && currentUser.user.photo ? currentUser.user.photo.imgixUrl : null;
+      currentUser.user && currentUser.user.photo ? currentUser.user.photo.url : null;
     return (
       <div className={STYLES_CONTAINER}>
         <UIAvatar

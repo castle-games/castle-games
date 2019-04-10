@@ -15,7 +15,6 @@ const NESTED_GAME_OWNER = `
     gamesSumPlayCount
     photo {
       url
-      imgixUrl
       height
       width
     }
@@ -48,7 +47,6 @@ const FULL_USER_FIELDS = `
   }
   photo {
     url
-    imgixUrl
     height
     width
   }
@@ -69,7 +67,6 @@ const GAME_FIELDS = `
   playCount
   coverImage {
     url
-    imgixUrl
     height
     width
   }
@@ -163,7 +160,6 @@ export async function getExistingUser({ who }) {
           username
           photo {
             url
-            imgixUrl
             height
             width
           }
@@ -416,7 +412,6 @@ export async function getInitialData() {
         gamesSumPlayCount
         photo {
           url
-          imgixUrl
           height
           width
         }
@@ -517,7 +512,6 @@ export async function uploadImageAsync({ file }) {
           height
           originUrl
           url
-          imgixUrl
         }
       }
     `,
@@ -547,7 +541,6 @@ export async function setUserPhotoAsync({ userId, fileId }) {
          userId
          photo {
            url
-           imgixUrl
          }
        }
       }

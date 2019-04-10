@@ -211,7 +211,7 @@ export default class ProfileHeader extends React.Component {
     const linksElement = this._renderLinks(this.props.creator);
 
     const avatarSrc =
-      this.props.creator && this.props.creator.photo ? this.props.creator.photo.imgixUrl : null;
+      this.props.creator && this.props.creator.photo ? this.props.creator.photo.url : null;
 
     const name =
       this.props.creator && this.props.creator.name

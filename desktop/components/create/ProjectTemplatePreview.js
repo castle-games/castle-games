@@ -52,7 +52,7 @@ export default class ProjectTemplatePreview extends React.Component {
 
   render() {
     const { template } = this.props;
-    const coverSrc = template.coverImage ? template.coverImage.imgixUrl : null;
+    const coverSrc = template.coverImage ? template.coverImage.url : null;
     return (
       <div className={STYLES_CONTAINER}>
         <div

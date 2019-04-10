@@ -179,10 +179,10 @@ export default class EditProfile extends React.Component {
       avatarSrc = null;
     } else if (this.state.uploadedAvatarFile) {
       // display pending avatar change.
-      avatarSrc = this.state.uploadedAvatarFile.imgixUrl;
+      avatarSrc = this.state.uploadedAvatarFile.url;
     } else {
       // display existing creator avatar.
-      avatarSrc = this.props.user && this.props.user.photo ? this.props.user.photo.imgixUrl : null;
+      avatarSrc = this.props.user && this.props.user.photo ? this.props.user.photo.url : null;
     }
 
     let avatarLoadingElement;

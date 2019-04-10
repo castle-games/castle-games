@@ -411,7 +411,7 @@ export default class UIGameGrid extends React.Component {
               onGameUpdate={this.props.onGameUpdate}
               onUserSelect={this.props.onUserSelect}
               onSignInSelect={this.props.onSignInSelect}
-              src={m.coverImage && m.coverImage.imgixUrl}
+              src={m.coverImage && m.coverImage.url}
               game={m}
               viewer={this.props.viewer}
               isPreview={this.props.isPreview}

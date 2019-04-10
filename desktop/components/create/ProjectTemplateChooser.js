@@ -56,7 +56,7 @@ export default class ProjectTemplateChooser extends React.Component {
   };
 
   _renderTemplate = (game) => {
-    const coverSrc = game.coverImage ? game.coverImage.imgixUrl : null;
+    const coverSrc = game.coverImage ? game.coverImage.url : null;
     let styles =
       this.props.selectedTemplate && game.gameId == this.props.selectedTemplate.gameId
         ? { backgroundColor: Constants.colors.background4 }
