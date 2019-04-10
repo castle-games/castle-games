@@ -222,7 +222,7 @@ class UIGameCell extends React.Component {
     game: null,
     onGameSelect: () => {},
     onUserSelect: () => {},
-    onGameUpdate: () => {},
+    onGameUpdate: null,
     isPreview: false,
     renderCartridgeOnly: false,
   };
