@@ -17,6 +17,7 @@ import { NavigationContext, NavigatorContext } from '~/contexts/NavigationContex
 import ProfileHeader from '~/components/profile/ProfileHeader';
 import ProfileSettings from '~/components/profile/ProfileSettings';
 import SignOut from '~/components/profile/SignOut';
+import UpdateGame from '~/components/profile/UpdateGame';
 
 const STYLES_CONTAINER = css`
   width: 100%;
@@ -45,6 +46,7 @@ class ProfileScreen extends React.Component {
   };
   state = {
     mode: this.props.options.mode,
+    gameToUpdate: null, // if mode === 'update-game'
   };
 
   componentWillReceiveProps(nextProps) {
@@ -55,6 +57,19 @@ class ProfileScreen extends React.Component {
     if (nextUserId != existingUserId) {
       // we're rendering a new profile, reset state.
       this._onShowGames();
+    } else {
+      // if updating a game, pass down any new updates to that game.
+      if (this.state.gameToUpdate) {
+        if (nextProps.creator && nextProps.creator.gameItems) {
+          for (let ii = 0, nn = nextProps.creator.gameItems.length; ii < nn; ii++) {
+            const game = nextProps.creator.gameItems[ii];
+            if (game.gameId === this.state.gameToUpdate.gameId) {
+              this.setState({ gameToUpdate: game });
+              break;
+            }
+          }
+        }
+      }
     }
 
     if (nextProps.options && nextProps.options.mode) {
@@ -62,11 +77,12 @@ class ProfileScreen extends React.Component {
     }
   }
 
-  _onShowGames = () => this.setState({ mode: 'games' });
+  _onShowGames = () => this.setState({ mode: 'games', gameToUpdate: null });
   _onShowAddGame = () => this.setState({ mode: 'add-game' });
   _onShowEditProfile = () => this.setState({ mode: 'edit-profile' });
   _onShowSignOut = () => this.setState({ mode: 'sign-out' });
   _onShowSettings = () => this.setState({ mode: 'settings' });
+  _onShowUpdateGame = (game) => this.setState({ mode: 'update-game', gameToUpdate: game });
 
   _onAfterAddGame = () => {
     // after adding a game, back out to the full list of games
@@ -101,18 +117,6 @@ class ProfileScreen extends React.Component {
     }
   };
 
-  _updateGame = async (game) => {
-    let updatedGame;
-    try {
-      updatedGame = await Actions.updateGameAtUrl(game.url);
-    } catch (e) {
-      updatedGame = {};
-    }
-    if (updatedGame && updatedGame.gameId) {
-      this.props.onAfterSave();
-    }
-  };
-
   _renderGameContent = (isOwnProfile, viewer, creator) => {
     return creator.gameItems && creator.gameItems.length ? (
       <div className={STYLES_GAME_GRID}>
@@ -123,7 +127,7 @@ class ProfileScreen extends React.Component {
           gameItems={creator.gameItems}
           onSignInSelect={this.props.navigateToSignIn}
           onGameSelect={this.props.navigateToGame}
-          onGameUpdate={isOwnProfile ? this._updateGame : null}
+          onGameUpdate={isOwnProfile ? this._onShowUpdateGame : null}
         />
       </div>
     ) : (
@@ -139,6 +143,10 @@ class ProfileScreen extends React.Component {
     if (!isOwnProfile) return null;
 
     return <RegisterGame onAfterSave={this._onAfterAddGame} />;
+  };
+
+  _renderUpdateGame = (game) => {
+    return <UpdateGame game={this.state.gameToUpdate} onAfterSave={this.props.onAfterSave} />;
   };
 
   _renderEditProfileContent = (isOwnProfile, user) => {
@@ -169,6 +177,8 @@ class ProfileScreen extends React.Component {
       profileContentElement = this._renderEditProfileContent(isOwnProfile, viewer);
     } else if (mode === 'add-game') {
       profileContentElement = this._renderAddGame(isOwnProfile);
+    } else if (mode === 'update-game') {
+      profileContentElement = this._renderUpdateGame(this.state.gameToUpdate);
     } else if (mode === 'sign-out') {
       profileContentElement = this._renderSignOutContent(isOwnProfile);
     } else if (mode === 'settings') {

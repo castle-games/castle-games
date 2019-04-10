@@ -279,7 +279,7 @@ class UIGameCell extends React.Component {
           key="actions-game-update"
           onClick={() => this.props.onGameUpdate(game)}
           style={{ marginRight: 24, color: textColor }}>
-          Sync data
+          Update...
         </UINavigationLink>
       );
     }
