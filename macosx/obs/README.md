@@ -9,5 +9,3 @@ cmake .. -DDISABLE_UI=true -DENABLE_SCRIPTING=false -DCMAKE_INSTALL_PREFIX=PATH_
 make
 sudo make install
 ```
-
-run `fix_dylib_paths.sh` from this directory
