@@ -946,3 +946,29 @@ export async function setGameUserStorageAsync({ storageId, key, value }) {
 
   return result.data.setGameUserStorage;
 }
+
+export async function createPostAsync({ sourceGameId, message, mediaFileId, data }) {
+  const result = await API.graphqlAsync(
+    `
+      mutation($sourceGameId: ID, $message: Json, $mediaFileId: ID, $data: String) {
+        createPost(
+          postInput: {
+            sourceGameId: $sourceGameId
+            message: $message
+            mediaFileId: $mediaFileId
+            data: $data
+          }
+        ) {
+          postId
+        }
+      }
+    `,
+    { sourceGameId, message, mediaFileId, data }
+  );
+
+  if (result.errors && result.errors.length) {
+    throw new Error(`\`createPostAsync\`: ${result.errors[0].message}`);
+  }
+
+  return result.data.createPost.postId;
+}

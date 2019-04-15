@@ -217,6 +217,24 @@ else -- We're on the game server, do the GraphQL HTTP requests ourselves
 end
 
 
+-- storage
+
+castle.post = {}
+
+function castle.post.create(options)
+    local message = options.message or 'Say something!'
+    local encodedData = nil
+    if options.data ~= nil then
+        encodedData = cjson.encode(options.data)
+    end
+
+    return jsCalls.postCreate {
+        message = message,
+        data = encodedData,
+    }
+end
+
+
 -- multiplayer
 
 castle.multiplayer = {}

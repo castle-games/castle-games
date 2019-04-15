@@ -87,6 +87,34 @@ const methods = {
       throw new Error('User storage write failed!');
     }
   },
+
+  // Post
+
+  async postCreate({ message, data }) {
+    // Get the current game and make sure it has a `.gameId` (is registered)
+    const currentGame = GameWindow.getCurrentGame();
+    if (!currentGame) {
+      throw new Error('Post creation needs a running game');
+    }
+    if (!currentGame.gameId) {
+      throw new Error(
+        'Post creation needs the running game to have a `gameId` -- is it registered?'
+      );
+    }
+
+    // Let user edit the message and confirm posting, or cancel
+    message = prompt(`Create a post from '${currentGame.title}'`, message);
+    if (message === null) {
+      return null;
+    }
+
+    // Create the post!
+    return await Actions.createPostAsync({
+      sourceGameId: currentGame.gameId,
+      message,
+      data
+    });
+  },
 };
 
 const onReceiveRequest = async (e) => {
