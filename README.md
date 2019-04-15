@@ -1,5 +1,13 @@
 # Castle
 
+## Releases
+
+See [Desktop Client Release Process](https://github.com/castle-games/ghost/wiki/Desktop-client-release-process).
+
+## Code Style
+
+Run `format.sh` after making changes to native code.
+
 ## Run on macOS
 
 ### Prereqs
