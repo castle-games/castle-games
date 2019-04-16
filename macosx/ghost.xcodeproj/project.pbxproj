@@ -30,6 +30,18 @@
 		91CF43B721484A3A002024DA /* Chromium Embedded Framework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5A0404221483BA5007A6CC1 /* Chromium Embedded Framework.framework */; };
 		91CF43B921485687002024DA /* liblibcef_dll_wrapper.a in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 91FDEBD521475159008FFB60 /* liblibcef_dll_wrapper.a */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		91CF43BD21485694002024DA /* liblibcef_dll_wrapper.a in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 91FDEBD521475159008FFB60 /* liblibcef_dll_wrapper.a */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		91D4785522615255002636A5 /* libswscale.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 91D4784922615255002636A5 /* libswscale.5.dylib */; };
+		91D4785622615255002636A5 /* libswresample.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 91D4784A22615255002636A5 /* libswresample.3.dylib */; };
+		91D4785722615255002636A5 /* libavformat.58.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 91D4784B22615255002636A5 /* libavformat.58.dylib */; };
+		91D4785822615255002636A5 /* libavutil.56.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 91D4784C22615255002636A5 /* libavutil.56.dylib */; };
+		91D4785922615255002636A5 /* libz.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 91D4784D22615255002636A5 /* libz.1.dylib */; };
+		91D4785A22615255002636A5 /* libavcodec.58.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 91D4784E22615255002636A5 /* libavcodec.58.dylib */; };
+		91D4785B22615265002636A5 /* libswscale.5.dylib in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 91D4784922615255002636A5 /* libswscale.5.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		91D4785C22615265002636A5 /* libswresample.3.dylib in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 91D4784A22615255002636A5 /* libswresample.3.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		91D4785D22615265002636A5 /* libavformat.58.dylib in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 91D4784B22615255002636A5 /* libavformat.58.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		91D4785E22615265002636A5 /* libavutil.56.dylib in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 91D4784C22615255002636A5 /* libavutil.56.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		91D4785F22615265002636A5 /* libz.1.dylib in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 91D4784D22615255002636A5 /* libz.1.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		91D4786022615265002636A5 /* libavcodec.58.dylib in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 91D4784E22615255002636A5 /* libavcodec.58.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		A18221D021ACB2FE0018B6DD /* js_binds.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A18221C821ACB2FE0018B6DD /* js_binds.cpp */; };
 		A18221D121ACB2FE0018B6DD /* js_binds.h in Headers */ = {isa = PBXBuildFile; fileRef = A18221CF21ACB2FE0018B6DD /* js_binds.h */; };
 		A1887D5122162F59008F50E3 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1887D4A22162F59008F50E3 /* Sparkle.framework */; };
@@ -218,8 +230,11 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				91D4785D22615265002636A5 /* libavformat.58.dylib in Copy Frameworks */,
+				91D4785E22615265002636A5 /* libavutil.56.dylib in Copy Frameworks */,
 				A1887D5222162FCF008F50E3 /* Sparkle.framework in Copy Frameworks */,
 				B5256F62211A555500891B27 /* love.framework in Copy Frameworks */,
+				91D4785C22615265002636A5 /* libswresample.3.dylib in Copy Frameworks */,
 				B5E9FC4B211B6E610068BEB9 /* ghost_extensions_macos.framework in Copy Frameworks */,
 				91543A6822557959001B2E4A /* libobsglad.0.dylib in Copy Frameworks */,
 				B5256F64211A555500891B27 /* theora.framework in Copy Frameworks */,
@@ -227,6 +242,8 @@
 				91543A6722557959001B2E4A /* libobs.dylib in Copy Frameworks */,
 				91543A6622557959001B2E4A /* libobsglad.dylib in Copy Frameworks */,
 				A1ED98EA211DFA0700CBC701 /* SDL2.framework in Copy Frameworks */,
+				91D4786022615265002636A5 /* libavcodec.58.dylib in Copy Frameworks */,
+				91D4785B22615265002636A5 /* libswscale.5.dylib in Copy Frameworks */,
 				B5256F66211A555500891B27 /* freetype.framework in Copy Frameworks */,
 				91CF43BD21485694002024DA /* liblibcef_dll_wrapper.a in Copy Frameworks */,
 				91543A6522557959001B2E4A /* libobs.0.dylib in Copy Frameworks */,
@@ -235,6 +252,7 @@
 				B5256F69211A555500891B27 /* ogg.framework in Copy Frameworks */,
 				B5A0404621483D2C007A6CC1 /* Chromium Embedded Framework.framework in Copy Frameworks */,
 				B5256F6A211A555500891B27 /* vorbis.framework in Copy Frameworks */,
+				91D4785F22615265002636A5 /* libz.1.dylib in Copy Frameworks */,
 				B5256F6B211A555500891B27 /* Lua.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
@@ -268,6 +286,12 @@
 		91CF43B321484A26002024DA /* US_W-2_2017.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "US_W-2_2017.pdf"; sourceTree = "<group>"; };
 		91CF43B421484A26002024DA /* move in todos.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "move in todos.txt"; sourceTree = "<group>"; };
 		91CF43B621484A26002024DA /* full extreme tenor solo.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "full extreme tenor solo.m4a"; sourceTree = "<group>"; };
+		91D4784922615255002636A5 /* libswscale.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libswscale.5.dylib; sourceTree = "<group>"; };
+		91D4784A22615255002636A5 /* libswresample.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libswresample.3.dylib; sourceTree = "<group>"; };
+		91D4784B22615255002636A5 /* libavformat.58.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libavformat.58.dylib; sourceTree = "<group>"; };
+		91D4784C22615255002636A5 /* libavutil.56.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libavutil.56.dylib; sourceTree = "<group>"; };
+		91D4784D22615255002636A5 /* libz.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libz.1.dylib; sourceTree = "<group>"; };
+		91D4784E22615255002636A5 /* libavcodec.58.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libavcodec.58.dylib; sourceTree = "<group>"; };
 		A18221C821ACB2FE0018B6DD /* js_binds.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = js_binds.cpp; sourceTree = "<group>"; };
 		A18221CF21ACB2FE0018B6DD /* js_binds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = js_binds.h; sourceTree = "<group>"; };
 		A1887D4A22162F59008F50E3 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Frameworks/Sparkle.framework; sourceTree = "<group>"; };
@@ -338,6 +362,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				91D4785522615255002636A5 /* libswscale.5.dylib in Frameworks */,
 				91CF4339214841CC002024DA /* liblibcef_dll_wrapper.a in Frameworks */,
 				B5A0404321483BA5007A6CC1 /* Chromium Embedded Framework.framework in Frameworks */,
 				91543A8822558AD4001B2E4A /* libboost_filesystem.a in Frameworks */,
@@ -346,13 +371,18 @@
 				91543A5F22557915001B2E4A /* libobsglad.dylib in Frameworks */,
 				91543A5E22557915001B2E4A /* libobs.0.dylib in Frameworks */,
 				91543A6022557915001B2E4A /* libobs.dylib in Frameworks */,
+				91D4785A22615255002636A5 /* libavcodec.58.dylib in Frameworks */,
+				91D4785622615255002636A5 /* libswresample.3.dylib in Frameworks */,
+				91D4785922615255002636A5 /* libz.1.dylib in Frameworks */,
 				B5256F6F211A555500891B27 /* love.framework in Frameworks */,
 				91543A8722558AD4001B2E4A /* libboost_system.a in Frameworks */,
+				91D4785722615255002636A5 /* libavformat.58.dylib in Frameworks */,
 				A1887D5122162F59008F50E3 /* Sparkle.framework in Frameworks */,
 				B5256F70211A555500891B27 /* Cocoa.framework in Frameworks */,
 				A1ED98E9211DFA0700CBC701 /* SDL2.framework in Frameworks */,
 				B5256F71211A555500891B27 /* Lua.framework in Frameworks */,
 				B5256F72211A555500891B27 /* theora.framework in Frameworks */,
+				91D4785822615255002636A5 /* libavutil.56.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -426,6 +456,7 @@
 		91543A57225578F0001B2E4A /* obs */ = {
 			isa = PBXGroup;
 			children = (
+				91D4784822615255002636A5 /* libs */,
 				91543A6322557943001B2E4A /* obs */,
 				91543A5822557915001B2E4A /* bin */,
 			);
@@ -502,6 +533,20 @@
 			);
 			path = Zoom;
 			sourceTree = "<group>";
+		};
+		91D4784822615255002636A5 /* libs */ = {
+			isa = PBXGroup;
+			children = (
+				91D4784922615255002636A5 /* libswscale.5.dylib */,
+				91D4784A22615255002636A5 /* libswresample.3.dylib */,
+				91D4784B22615255002636A5 /* libavformat.58.dylib */,
+				91D4784C22615255002636A5 /* libavutil.56.dylib */,
+				91D4784D22615255002636A5 /* libz.1.dylib */,
+				91D4784E22615255002636A5 /* libavcodec.58.dylib */,
+			);
+			name = libs;
+			path = obs/libs;
+			sourceTree = SOURCE_ROOT;
 		};
 		A194C6BB211CD1D50093B328 /* Products */ = {
 			isa = PBXGroup;
@@ -1144,6 +1189,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/obs/bin",
 					"$(PROJECT_DIR)/boost/build/lib",
+					"$(PROJECT_DIR)/obs/libs",
 				);
 				LLVM_LTO = NO;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
@@ -1182,6 +1228,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/obs/bin",
 					"$(PROJECT_DIR)/boost/build/lib",
+					"$(PROJECT_DIR)/obs/libs",
 				);
 				LLVM_LTO = NO;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
@@ -1220,6 +1267,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/obs/bin",
 					"$(PROJECT_DIR)/boost/build/lib",
+					"$(PROJECT_DIR)/obs/libs",
 				);
 				LLVM_LTO = NO;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
