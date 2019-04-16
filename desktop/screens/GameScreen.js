@@ -37,9 +37,11 @@ class GameScreen extends React.Component {
     isLoggedIn: false,
     navigateToUserProfile: null,
   };
+
   state = {
     isMuted: false,
   };
+
   _gameContainerReference = null;
 
   constructor(props) {
@@ -47,15 +49,12 @@ class GameScreen extends React.Component {
     this._updateGameWindow(null, null);
     // This resize happens at the native level but Windows still needs some adjustment
     if (Utilities.isWindows()) {
-      window.addEventListener('resize', this._updateGameWindowFrame);
+      window.addEventListener('resize', this.updateGameWindowFrame);
     }
   }
 
   componentDidMount() {
-    // Once the game screen mounts, ensure an update call.
-    if (this.props.game) {
-      this._updateGameWindow(null, null);
-    }
+    this.updateGameWindowFrame();
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -65,7 +64,7 @@ class GameScreen extends React.Component {
   componentWillUnmount() {
     // don't call GameWindow.close(), because we might just be hiding the game.
     GameWindow.setVisible(false);
-    window.removeEventListener('resize', this._updateGameWindowFrame);
+    window.removeEventListener('resize', this.updateGameWindowFrame);
   }
 
   _closeGame = async () => {
@@ -110,10 +109,10 @@ class GameScreen extends React.Component {
       await this._closeGame();
       await this._openGame(oldUrl);
     }
-    this._updateGameWindowFrame();
+    this.updateGameWindowFrame();
   };
 
-  _updateGameWindowFrame = () => {
+  updateGameWindowFrame = () => {
     if (this._gameContainerReference) {
       const rect = this._gameContainerReference.getBoundingClientRect();
       GameWindow.updateFrame(rect);
@@ -138,7 +137,7 @@ class GameScreen extends React.Component {
           clearCurrentGame={this.props.clearCurrentGame}
           onFullScreenToggle={() => this.props.setIsFullScreen(!this.props.isFullScreen)}
           reloadGame={this.props.reloadGame}
-          onUpdateGameWindowFrame={this._updateGameWindowFrame}
+          onUpdateGameWindowFrame={this.updateGameWindowFrame}
         />
       );
     }
@@ -148,7 +147,7 @@ class GameScreen extends React.Component {
           className={STYLES_GAME_CONTAINER}
           ref={(ref) => {
             this._gameContainerReference = ref;
-            this._updateGameWindowFrame();
+            this.updateGameWindowFrame();
           }}
         />
         {actionsBarElement}
