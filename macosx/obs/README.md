@@ -10,4 +10,4 @@ make
 sudo make install
 ```
 
-run `fix_dylib_paths.sh` from this directory
+run `fix_dylib_paths.js` from this directory
