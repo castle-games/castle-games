@@ -4,6 +4,8 @@ import * as Constants from '~/common/constants';
 import * as SVG from '~/components/primitives/svg';
 
 import { css } from 'react-emotion';
+import { CurrentUserContext } from '~/contexts/CurrentUserContext';
+import { NavigationContext, NavigatorContext } from '~/contexts/NavigationContext';
 
 import UIButton from '~/components/reusable/UIButton';
 import UIHorizontalNavigation from '~/components/reusable/UIHorizontalNavigation';
@@ -12,8 +14,6 @@ import UIEmptyState from '~/components/reusable/UIEmptyState';
 import EditProfile from '~/components/profile/EditProfile';
 import RegisterGame from '~/components/profile/RegisterGame';
 import UIGameGrid from '~/components/reusable/UIGameGrid';
-import { CurrentUserContext } from '~/contexts/CurrentUserContext';
-import { NavigationContext, NavigatorContext } from '~/contexts/NavigationContext';
 import ProfileHeader from '~/components/profile/ProfileHeader';
 import ProfileSettings from '~/components/profile/ProfileSettings';
 import SignOut from '~/components/profile/SignOut';

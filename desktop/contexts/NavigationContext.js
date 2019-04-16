@@ -1,15 +1,16 @@
 import * as React from 'react';
-
 import * as Actions from '~/common/actions';
 import * as Browser from '~/common/browser';
-import { CurrentUserContext } from '~/contexts/CurrentUserContext';
-import { DevelopmentContext } from '~/contexts/DevelopmentContext';
 import * as ExecNode from '~/common/execnode';
-import GameWindow from '~/native/gamewindow';
-import Logs from '~/common/logs';
-import { SocialContext } from '~/contexts/SocialContext';
 import * as Strings from '~/common/strings';
 import * as Urls from '~/common/urls';
+
+import { CurrentUserContext } from '~/contexts/CurrentUserContext';
+import { DevelopmentContext } from '~/contexts/DevelopmentContext';
+import { SocialContext } from '~/contexts/SocialContext';
+
+import GameWindow from '~/native/gamewindow';
+import Logs from '~/common/logs';
 
 /**
  *  NavigationContext is the state of where the app is currently navigated,

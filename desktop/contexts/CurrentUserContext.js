@@ -1,5 +1,4 @@
 import * as React from 'react';
-
 import * as Actions from '~/common/actions';
 
 const CurrentUserContextDefaults = {

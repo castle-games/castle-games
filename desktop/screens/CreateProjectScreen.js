@@ -1,12 +1,14 @@
 import * as React from 'react';
-import { css } from 'react-emotion';
-
 import * as Constants from '~/common/constants';
 import * as ExecNode from '~/common/execnode';
 import * as NativeUtil from '~/native/nativeutil';
 import * as Strings from '~/common/strings';
 import * as Project from '~/common/project';
 import * as Utilities from '~/common/utilities';
+
+import { css } from 'react-emotion';
+import { CurrentUserContext } from '~/contexts/CurrentUserContext';
+import { NavigatorContext } from '~/contexts/NavigationContext';
 
 import CreateProjectProgressIndicator from '~/components/create/CreateProjectProgressIndicator';
 import Logs from '~/common/logs';
@@ -15,9 +17,6 @@ import ProjectTemplateChooser from '~/components/create/ProjectTemplateChooser';
 import ProjectTemplatePreview from '~/components/create/ProjectTemplatePreview';
 import UIButton from '~/components/reusable/UIButton';
 import UIHeading from '~/components/reusable/UIHeading';
-
-import { CurrentUserContext } from '~/contexts/CurrentUserContext';
-import { NavigatorContext } from '~/contexts/NavigationContext';
 
 const path = Utilities.path();
 

@@ -1,8 +1,8 @@
-import { css } from 'react-emotion';
-
 import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as Utilities from '~/common/utilities';
+
+import { css } from 'react-emotion';
 
 const STYLES_BUTTON = css`
   font-family: ${Constants.font.heading};

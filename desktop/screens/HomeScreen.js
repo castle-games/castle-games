@@ -1,14 +1,13 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
+
 import { css } from 'react-emotion';
+import { CurrentUserContext } from '~/contexts/CurrentUserContext';
+import { NavigatorContext } from '~/contexts/NavigationContext';
 
 import UIGameGrid from '~/components/reusable/UIGameGrid';
 import UIHeading from '~/components/reusable/UIHeading';
 import UIHorizontalNavigation from '~/components/reusable/UIHorizontalNavigation';
-
-import { CurrentUserContext } from '~/contexts/CurrentUserContext';
-import { NavigatorContext } from '~/contexts/NavigationContext';
-
 import HomeUpdateBanner from '~/components/home/HomeUpdateBanner';
 
 const STYLES_CONTAINER = css`

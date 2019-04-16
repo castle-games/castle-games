@@ -1,7 +1,8 @@
 import * as React from 'react';
+import * as Constants from '~/common/constants';
+
 import { css } from 'react-emotion';
 
-import * as Constants from '~/common/constants';
 import ContentContainer from '~/components/ContentContainer.js';
 import SocialContainer from '~/components/SocialContainer.js';
 

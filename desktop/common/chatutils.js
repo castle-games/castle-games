@@ -1,5 +1,6 @@
-import { isEmoji, emojiToString } from '~/common/emojis';
 import * as Actions from '~/common/actions';
+
+import { isEmoji, emojiToString } from '~/common/emojis';
 
 async function _getAutocompleteUserAsync(text) {
   let autocompleteResults = await Actions.getAutocompleteAsync(text);

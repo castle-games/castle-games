@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+
 import { cubeSize } from '~/isometric/common/constants';
 
 export default ({ node, textures }) => {

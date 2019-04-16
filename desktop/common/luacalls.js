@@ -1,12 +1,12 @@
 import * as uuid from 'uuid/v4';
-import md5 from 'md5';
-
-import Logs from '~/common/logs';
 import * as Actions from '~/common/actions';
 import * as NativeUtil from '~/native/nativeutil';
+import * as Urls from '~/common/urls';
+
+import md5 from 'md5';
+import Logs from '~/common/logs';
 import GameWindow from '~/native/gamewindow';
 import Storage from '~/common/storage';
-import * as Urls from '~/common/urls';
 
 const storage = new Storage('castle');
 let localStorageKey = storage.getItem('localStorageKey');

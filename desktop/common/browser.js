@@ -1,12 +1,12 @@
-import metadatalib from 'castle-metadata';
-
 import * as Actions from '~/common/actions';
 import * as NativeUtil from '~/native/nativeutil';
 import * as Strings from '~/common/strings';
 import * as Urls from '~/common/urls';
 import * as Utilities from '~/common/utilities';
 import * as ExecNode from '~/common/execnode';
+
 import URL from 'url';
+import metadatalib from 'castle-metadata';
 
 function _validateMetadata(metadata, isRegistered) {
   if (!metadata) {

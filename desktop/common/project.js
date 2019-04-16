@@ -1,9 +1,9 @@
-import metadatalib from 'castle-metadata';
-let yaml = require('yaml');
-
 import * as ExecNode from '~/common/execnode';
 import * as NativeUtil from '~/native/nativeutil';
 import * as Utilities from '~/common/utilities';
+
+import metadatalib from 'castle-metadata';
+let yaml = require('yaml');
 
 const path = Utilities.path();
 

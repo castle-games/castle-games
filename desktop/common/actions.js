@@ -1,7 +1,8 @@
-import CastleApiClient from 'castle-api-client';
 import * as Constants from '~/common/constants';
 import * as NativeUtil from '~/native/nativeutil';
 import * as Urls from '~/common/urls';
+
+import CastleApiClient from 'castle-api-client';
 
 export const API = CastleApiClient(Constants.API_HOST);
 

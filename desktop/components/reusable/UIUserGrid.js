@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as Constants from '~/common/constants';
 
 import { css } from 'react-emotion';
+
 import UIAvatar from '~/components/reusable/UIAvatar';
 import UICharacterCard from '~/components/reusable/UICharacterCard';
 

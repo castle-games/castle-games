@@ -1,16 +1,15 @@
-import ReactDOM from 'react-dom';
-
 import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as Network from '~/common/network';
 import * as Actions from '~/common/actions';
 
-import App from './App';
-import GLLoaderScreen from '~/isometric/components/GLLoaderScreen';
-
-import Storage from '~/common/storage';
 import { injectGlobal } from 'react-emotion';
 import { injectGlobalLoaderStyles } from '~/components/primitives/loader';
+
+import ReactDOM from 'react-dom';
+import App from './App';
+import GLLoaderScreen from '~/isometric/components/GLLoaderScreen';
+import Storage from '~/common/storage';
 
 const injectGlobalStyles = () => injectGlobal`
   @font-face {

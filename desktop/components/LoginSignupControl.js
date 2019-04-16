@@ -1,10 +1,10 @@
-import React from 'react';
-import { css } from 'react-emotion';
-
+import * as React from 'react';
 import * as Actions from '~/common/actions';
 import * as Constants from '~/common/constants';
-import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import * as Strings from '~/common/strings';
+
+import { css } from 'react-emotion';
+import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 
 import UIInputSecondary from '~/components/reusable/UIInputSecondary';
 import UIButton from '~/components/reusable/UIButton';

@@ -1,12 +1,12 @@
 import * as React from 'react';
+import * as Constants from '~/common/constants';
+import * as Strings from '~/common/strings';
+import * as Urls from '~/common/urls';
+
 import { css } from 'react-emotion';
 import { DevelopmentSetterContext } from '~/contexts/DevelopmentContext';
 import { NavigationContext, NavigatorContext } from '~/contexts/NavigationContext';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
-
-import * as Constants from '~/common/constants';
-import * as Strings from '~/common/strings';
-import * as Urls from '~/common/urls';
 
 import CreateProjectScreen from '~/screens/CreateProjectScreen';
 import GameWindow from '~/native/gamewindow';

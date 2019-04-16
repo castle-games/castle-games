@@ -4,8 +4,8 @@ import * as Strings from '~/common/strings';
 import * as Urls from '~/common/urls';
 
 import { css } from 'react-emotion';
-
 import { NavigatorContext } from '~/contexts/NavigationContext';
+
 import UIButtonSecondary from '~/components/reusable/UIButtonSecondary';
 import UIGameGrid from '~/components/reusable/UIGameGrid';
 import UIUserGrid from '~/components/reusable/UIUserGrid';

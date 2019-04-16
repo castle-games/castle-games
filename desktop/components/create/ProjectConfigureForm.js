@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { css } from 'react-emotion';
-
 import * as Constants from '~/common/constants';
 import * as NativeUtil from '~/native/nativeutil';
 import * as Utilities from '~/common/utilities';
+
+import { css } from 'react-emotion';
 
 const path = Utilities.path();
 

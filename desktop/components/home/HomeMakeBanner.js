@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { css } from 'react-emotion';
-
 import * as Constants from '~/common/constants';
 import * as NativeUtil from '~/native/nativeutil';
+
+import { css } from 'react-emotion';
+
 import UIButton from '~/components/reusable/UIButton';
 import UIHeading from '~/components/reusable/UIHeading';
 

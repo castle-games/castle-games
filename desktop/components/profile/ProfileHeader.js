@@ -5,9 +5,9 @@ import * as Strings from '~/common/strings';
 import * as Urls from '~/common/urls';
 
 import { css } from 'react-emotion';
+
 import ContentEditor from '~/editor/ContentEditor';
 import UserStatus from '~/common/userstatus';
-
 import UIAvatar from '~/components/reusable/UIAvatar';
 import UICharacterCard from '~/components/reusable/UICharacterCard';
 import UIHeading from '~/components/reusable/UIHeading';

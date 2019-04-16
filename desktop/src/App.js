@@ -1,8 +1,17 @@
 import * as React from 'react';
+import * as Actions from '~/common/actions';
+import * as NativeUtil from '~/native/nativeutil';
+import * as Urls from '~/common/urls';
+import * as PingUtils from '~/common/pingutils';
+import * as LuaCalls from '~/common/luacalls';
+import * as ScreenCapture from '~/common/screencapture';
+import * as ExecNode from '~/common/execnode';
+
 import { isKeyHotkey } from 'is-hotkey';
 
-import * as Actions from '~/common/actions';
 import AppContainer from '~/components/AppContainer';
+
+import { linkify } from 'react-linkify';
 import { CurrentUserContext, CurrentUserContextProvider } from '~/contexts/CurrentUserContext';
 import {
   DevelopmentSetterContext,
@@ -16,13 +25,6 @@ import {
   NavigationContextProvider,
 } from '~/contexts/NavigationContext';
 import { ChatContext, ChatContextProvider } from '~/contexts/ChatContext';
-import * as NativeUtil from '~/native/nativeutil';
-import { linkify } from 'react-linkify';
-import * as Urls from '~/common/urls';
-import * as PingUtils from '~/common/pingutils';
-import * as LuaCalls from '~/common/luacalls';
-import * as ScreenCapture from '~/common/screencapture';
-import * as ExecNode from '~/common/execnode';
 
 const isReloadHotkey = isKeyHotkey('mod+r');
 const isFullscreenHotkey = isKeyHotkey('mod+shift+f');

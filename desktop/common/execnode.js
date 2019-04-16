@@ -1,9 +1,10 @@
-import { NativeBinds } from '~/native/nativebinds';
 import * as Constants from '~/common/constants';
 import * as Actions from '~/common/actions';
 import * as Strings from '~/common/strings';
 import * as Urls from '~/common/urls';
 import * as Utilities from '~/common/utilities';
+
+import { NativeBinds } from '~/native/nativebinds';
 
 const path = Utilities.path();
 

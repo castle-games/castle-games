@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { css } from 'react-emotion';
-
 import * as Constants from '~/common/constants';
 import * as Project from '~/common/project';
+
+import { css } from 'react-emotion';
 
 const STYLES_CONTAINER = css`
   display: flex;

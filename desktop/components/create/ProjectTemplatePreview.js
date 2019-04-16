@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { css } from 'react-emotion';
-
 import * as Constants from '~/common/constants';
+
+import { css } from 'react-emotion';
 
 const STYLES_CONTAINER = css`
   background-color: ${Constants.colors.background3};

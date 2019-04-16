@@ -1,4 +1,5 @@
 import { Value } from 'slate';
+
 import Plain from 'slate-plain-serializer';
 
 export const isMaybeCastleURL = (query) => {

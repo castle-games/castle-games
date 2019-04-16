@@ -1,5 +1,6 @@
-import { NativeBinds } from '~/native/nativebinds';
 import * as ExecNode from '~/common/execnode';
+
+import { NativeBinds } from '~/native/nativebinds';
 
 export async function takeScreenCaptureAsync() {
   try {

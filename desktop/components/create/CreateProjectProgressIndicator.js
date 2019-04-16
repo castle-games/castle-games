@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { css } from 'react-emotion';
-
 import * as ExecNode from '~/common/execnode';
 import * as NativeUtil from '~/native/nativeutil';
 import * as Urls from '~/common/urls';
+
+import { css } from 'react-emotion';
 
 import Downloads from '~/native/downloads';
 

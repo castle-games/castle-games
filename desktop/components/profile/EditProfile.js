@@ -4,9 +4,9 @@ import * as Constants from '~/common/constants';
 import * as Strings from '~/common/strings';
 import * as Utilities from '~/common/utilities';
 
-import Plain from 'slate-plain-serializer';
 import { css } from 'react-emotion';
 
+import Plain from 'slate-plain-serializer';
 import UIAvatar from '~/components/reusable/UIAvatar';
 import UIInputSecondary from '~/components/reusable/UIInputSecondary';
 import UISubmitButton from '~/components/reusable/UISubmitButton';
