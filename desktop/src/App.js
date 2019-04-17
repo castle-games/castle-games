@@ -8,9 +8,6 @@ import * as ScreenCapture from '~/common/screencapture';
 import * as ExecNode from '~/common/execnode';
 
 import { isKeyHotkey } from 'is-hotkey';
-
-import AppContainer from '~/components/AppContainer';
-
 import { linkify } from 'react-linkify';
 import { CurrentUserContext, CurrentUserContextProvider } from '~/contexts/CurrentUserContext';
 import {
@@ -18,13 +15,15 @@ import {
   DevelopmentContextProvider,
 } from '~/contexts/DevelopmentContext';
 import { SocialContext, SocialContextProvider } from '~/contexts/SocialContext';
-import Logs from '~/common/logs';
 import {
   NavigatorContext,
   NavigationContext,
   NavigationContextProvider,
 } from '~/contexts/NavigationContext';
 import { ChatContext, ChatContextProvider } from '~/contexts/ChatContext';
+
+import Logs from '~/common/logs';
+import AppContainer from '~/components/AppContainer';
 
 const isReloadHotkey = isKeyHotkey('mod+r');
 const isFullscreenHotkey = isKeyHotkey('mod+shift+f');
@@ -53,24 +52,13 @@ class App extends React.Component {
     window.addEventListener('GHOST_ERROR', this._handleLuaErrorEvent);
     window.addEventListener('nativeScreenCaptureReady', ScreenCapture.screenCaptureReadyEvent);
     window.addEventListener('nativeExecNodeComplete', ExecNode.execNodeCompleteEvent);
+    window.addEventListener('click', this._handleAnchorClick);
+
     LuaCalls.addEventListeners();
     PingUtils.reportPingsAsync();
-
     NativeUtil.setBrowserReady(() => {});
 
     linkify.add('castle:', 'http:').add('castles:', 'https:');
-    window.onclick = (e) => {
-      if (e.target.localName == 'a') {
-        e.preventDefault();
-
-        let url = e.target.href;
-        if (Urls.isGameUrl(url)) {
-          this.props.navigator.navigateToGameUrl(url);
-        } else {
-          NativeUtil.openExternalURL(url);
-        }
-      }
-    };
 
     Logs.onFlushLogs(() => {
       const logs = Logs.consume();
@@ -90,11 +78,25 @@ class App extends React.Component {
     window.removeEventListener('GHOST_ERROR', this._handleLuaErrorEvent);
     window.removeEventListener('nativeScreenCaptureReady', ScreenCapture.screenCaptureReadyEvent);
     window.removeEventListener('nativeExecNodeComplete', ExecNode.execNodeCompleteEvent);
+    window.removeEventLIstener('click', this._handleAnchorClick);
+
     LuaCalls.removeEventListeners();
     window.clearTimeout(this._nativeChannelsPollTimeout);
   }
 
-  // event listeners
+  _handleAnchorClick = (e) => {
+    if (e.target.localName == 'a') {
+      e.preventDefault();
+
+      let url = e.target.href;
+      if (Urls.isGameUrl(url)) {
+        this.props.navigator.navigateToGameUrl(url);
+      } else {
+        NativeUtil.openExternalURL(url);
+      }
+    }
+  };
+
   _handleNativeOpenUrlEvent = (e) => {
     let url = e.params.url;
     if (url && url.indexOf('://') === -1) {
