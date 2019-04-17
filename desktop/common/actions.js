@@ -973,3 +973,35 @@ export async function createPostAsync({ sourceGameId, message, mediaFileId, data
 
   return result.data.createPost.postId;
 }
+
+export async function allPostsAsync({ pageSize = 20, pageAfterPostId } = {}) {
+  const result = await API.graphqlAsync(
+    `
+      query($pageSize: Int, $pageAfterPostId: ID) {
+        allPosts(pageSize: $pageSize, pageAfterPostId: $pageAfterPostId) {
+          postId
+          creator {
+            userId
+            name
+            photo {
+              url
+            }
+          }
+          sourceGame {
+            gameId
+            title
+            metadata
+          }
+          message
+        }
+      }
+    `,
+    { pageSize, pageAfterPostId },
+  );
+
+  if (result.errors && result.errors.length) {
+    throw new Error(`\`allPostsAsync\`: ${result.errors[0].message}`);
+  }
+
+  return result.data.allPosts;
+}

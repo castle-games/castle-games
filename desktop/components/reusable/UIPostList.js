@@ -1,18 +1,9 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
-import * as Utilities from '~/common/utilities';
-import * as Strings from '~/common/strings';
-import * as Urls from '~/common/urls';
-import * as NativeUtil from '~/native/nativeutil';
-import * as SVG from '~/components/primitives/svg';
+import * as Actions from '~/common/actions';
 
 import { css } from 'react-emotion';
-
-import UIAvatar from '~/components/reusable/UIAvatar';
-import UICharacterCard from '~/components/reusable/UICharacterCard';
-import UIBoundary from '~/components/reusable/UIBoundary';
-import UINavigationLink from '~/components/reusable/UINavigationLink';
-import UIPlayTextCTA from '~/components/reusable/UIPlayTextCTA';
+import { getEmojiComponent } from '~/common/emojis';
 
 const STYLES_CONTAINER = css`
   display: flex;
@@ -20,7 +11,6 @@ const STYLES_CONTAINER = css`
   flex-direction: column;
 `;
 
-//  box-shadow: inset 0 0 0 1px red;
 const STYLES_POST = css`
   width: 80%;
   max-width: 600px;
@@ -119,11 +109,54 @@ const STYLES_POST_BODY = css`
   border-radius: 4px;
 `;
 
-const STYLES_POST_MESSAGE = css`
-  color: ${Constants.colors.black};
-  font-size: ${Constants.typescale.lvl6};
-  line-height: ${Constants.linescale.lvl6};
-  margin-bottom: 16px;
+const STYLES_MESSAGE_MENTION = css`
+  cursor: pointer;
+  display: inline-block;
+  font-weight: 900;
+  color: cyan;
+  @keyframes color-change {
+    from,
+    20%,
+    40%,
+    60%,
+    80%,
+    to {
+      animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+
+    0% {
+      opacity: 0;
+      color: #000;
+
+      transform: scale3d(0.3, 0.3, 0.3);
+    }
+
+    20% {
+      transform: scale3d(1.1, 1.1, 1.1);
+    }
+
+    40% {
+      transform: scale3d(0.9, 0.9, 0.9);
+    }
+
+    60% {
+      opacity: 1;
+      transform: scale3d(1.03, 1.03, 1.03);
+    }
+
+    80% {
+      transform: scale3d(0.97, 0.97, 0.97);
+    }
+
+    to {
+      opacity: 1;
+      color: cyan;
+      transform: scale3d(1, 1, 1);
+    }
+  }
+
+  animation: color-change 750ms;
+  animation-iteration-count: 1;
 `;
 
 const STYLES_TAG = css`
@@ -154,26 +187,83 @@ class UIPostCell extends React.Component {
     isPreview: false,
   };
 
-  _handleViewSource = (gameEntryPoint) => {
-    NativeUtil.openExternalURL(Urls.githubUserContentToRepoUrl(gameEntryPoint));
+  _handleGameSelect = () => {
+    this.props.onGameSelect(this.props.post.sourceGame);
   };
 
-  _handleGameSelect = () => {
-    if (this.props.isPreview) {
-      return;
+  _handleUserSelect = () => {
+    this.props.onUserSelect(this.props.post.creator);
+  };
+
+  _renderGameContainer = (sourceGame) => {
+    const sourceGamePrimaryColor =
+      sourceGame.metadata && sourceGame.metadata.primaryColor
+        ? `#${sourceGame.metadata.primaryColor}`
+        : '#3d3d3d';
+
+    return (
+      <div className={STYLES_GAME_CONTAINER} style={{ sourceGamePrimaryColor }}>
+        <div
+          className={STYLES_GAME_BACKGROUND_LIGTHENER}
+          style={{ borderColor: sourceGamePrimaryColor }}>
+          <div
+            className={STYLES_GAME_COVER_IMAGE}
+            onClick={this._handleGameSelect}
+            style={{
+              backgroundImage: this.props.coverImageUrl ? `url(${this.props.coverImageUrl})` : null,
+            }}
+          />
+          <div className={STYLES_GAME_TITLE} onClick={this._handleGameSelect}>
+            {sourceGame.title}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  _renderChatMessage = (message) => {
+    let result = [];
+    for (let i = 0; i < message.length; i++) {
+      let messagePart = message[i];
+      if (messagePart.text) {
+        result.push(<span key={i}>{messagePart.text}</span>);
+      } else if (messagePart.userId) {
+        let isRealUser = !!this.props.social.userIdToUser[messagePart.userId];
+        let user = this.props.social.userIdToUser[messagePart.userId] || {
+          userId: messagePart.userId,
+          username: messagePart.userId,
+        };
+
+        result.push(
+          <span
+            key={i}
+            className={STYLES_MESSAGE_MENTION}
+            onClick={isRealUser ? () => this.props.navigateToUserProfile(user) : null}>{`@${
+            user.username
+          }`}</span>
+        );
+      } else if (messagePart.emoji) {
+        result.push(<span key={i}>{getEmojiComponent(messagePart.emoji, 16)}</span>);
+      }
     }
-    this.props.onGameSelect(this.props.game);
+
+    return result;
   };
 
   render() {
-    let { game } = this.props;
-    let title = game.title ? game.title : 'Untitled';
+    const { post } = this.props;
 
-    const backgroundColor =
-      game.metadata && game.metadata.primaryColor ? `#${game.metadata.primaryColor}` : '#3d3d3d';
-    const textColor = Utilities.adjustTextColor(backgroundColor);
+    const { sourceGame, creator, message } = post;
 
-    const user = game.owner;
+    let maybeGameContainer = null;
+    if (sourceGame) {
+      maybeGameContainer = this._renderGameContainer(sourceGame);
+    }
+
+    let maybeMessageContainer = null;
+    if (message) {
+      maybeMessageContainer = this._renderChatMessage(message.message);
+    }
 
     return (
       <div className={STYLES_POST}>
@@ -182,35 +272,19 @@ class UIPostCell extends React.Component {
             <div className={STYLES_USER_CONTAINER}>
               <div
                 className={STYLES_USER_PHOTO}
-                onClick={() => this.props.onUserSelect(user)}
+                onClick={this._handleUserSelect}
                 style={{
-                  backgroundImage: user.photo && user.photo.url ? `url(${user.photo.url})` : null,
+                  backgroundImage:
+                    creator.photo && creator.photo.url ? `url(${creator.photo.url})` : null,
                 }}
               />
-              <div className={STYLES_USER_NAME} onClick={() => this.props.onUserSelect(user)}>
-                {user.name}
+              <div className={STYLES_USER_NAME} onClick={this._handleUserSelect}>
+                {creator.name}
               </div>
             </div>
-            <div className={STYLES_GAME_CONTAINER} style={{ backgroundColor }}>
-              <div className={STYLES_GAME_BACKGROUND_LIGTHENER} style={{ borderColor: backgroundColor }}>
-                <div
-                  className={STYLES_GAME_COVER_IMAGE}
-                  onClick={this._handleGameSelect}
-                  style={{
-                    backgroundImage: this.props.coverImageUrl
-                      ? `url(${this.props.coverImageUrl})`
-                      : null,
-                  }}
-                />
-                <div className={STYLES_GAME_TITLE} onClick={this._handleGameSelect}>
-                  {title}
-                </div>
-              </div>
-            </div>
+            {maybeGameContainer}
           </div>
-          <div className={STYLES_POST_BODY}>
-            <div className={STYLES_POST_MESSAGE}>hello, world</div>
-          </div>
+          <div className={STYLES_POST_BODY}>{maybeMessageContainer}</div>
         </div>
       </div>
     );
@@ -218,26 +292,41 @@ class UIPostCell extends React.Component {
 }
 
 export default class UIPostList extends React.Component {
+  state = {
+    posts: null,
+  };
+
+  componentDidMount() {
+    // TODO: This logic should be... Better.
+    this._loadPostsAsync();
+    setTimeout(this._loadPostsAsync, 1000);
+  }
+
   render() {
-    const { gameItems } = this.props;
-    return (
+    const { posts } = this.state;
+    return !posts ? (
       <div className={STYLES_CONTAINER}>
-        {gameItems.map((m) => {
-          const key = m.key ? m.key : m.gameId ? m.gameId : m.url;
+        <div className={STYLES_POST}>Loading...</div>
+      </div>
+    ) : (
+      <div className={STYLES_CONTAINER}>
+        {posts.map((post) => {
           return (
             <UIPostCell
-              key={key}
+              key={post.postId}
               onGameSelect={this.props.onGameSelect}
               onUserSelect={this.props.onUserSelect}
-              onSignInSelect={this.props.onSignInSelect}
-              coverImageUrl={m.coverImage && m.coverImage.url}
-              game={m}
-              viewer={this.props.viewer}
-              isPreview={this.props.isPreview}
+              post={post}
             />
           );
         })}
       </div>
     );
+  }
+
+  async _loadPostsAsync() {
+    this.setState({
+      posts: await Actions.allPostsAsync(), // This call supports pagination, we're just not using it...
+    });
   }
 }
