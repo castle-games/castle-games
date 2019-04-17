@@ -34,6 +34,7 @@ const STYLES_GAME_CONTROLS = css`
   padding: 8px 24px 8px 24px;
   width: 50%;
   min-width: 196px;
+  max-width: 50%;
   color: ${Constants.colors.white};
   border-right: 1px solid ${Constants.colors.background4};
   display: flex;
@@ -48,6 +49,7 @@ const STYLES_CONTROLS_BOTTOM = css``;
 
 const STYLES_HALF = css`
   width: 50%;
+  max-width: 50%;
 `;
 
 const STYLES_GAME_URL = css`
@@ -57,6 +59,7 @@ const STYLES_GAME_URL = css`
   text-decoration: underline;
   cursor: default;
   margin-bottom: 24px;
+  word-break: break-word;
 `;
 
 const STYLES_LABEL_ACTION = css`
