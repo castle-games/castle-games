@@ -9,6 +9,7 @@ import UIGameGrid from '~/components/reusable/UIGameGrid';
 import UIHeading from '~/components/reusable/UIHeading';
 import UIHorizontalNavigation from '~/components/reusable/UIHorizontalNavigation';
 import HomeUpdateBanner from '~/components/home/HomeUpdateBanner';
+import UIPostList from '~/components/reusable/UIPostList';
 
 const STYLES_CONTAINER = css`
   width: 100%;
@@ -32,7 +33,7 @@ class HomeScreen extends React.Component {
   };
 
   state = {
-    mode: 'games', // history | games
+    mode: 'posts', // posts | games | examples | history
   };
 
   _container;
@@ -52,6 +53,7 @@ class HomeScreen extends React.Component {
 
   _getNavigationItems = () => {
     const navigationItems = [];
+    navigationItems.push({ label: 'Posts', key: 'posts' });
     navigationItems.push({ label: 'Featured games', key: 'games' });
     navigationItems.push({ label: 'Learning examples', key: 'examples' });
     navigationItems.push({ label: 'Your history', key: 'history' });
@@ -89,6 +91,15 @@ class HomeScreen extends React.Component {
           selectedKey={this.state.mode}
           onChange={this._handleNavigationChange}
         />
+        {this.state.mode === 'posts' ? (
+          <UIPostList
+            viewer={this.props.viewer}
+            gameItems={this.props.featuredGames}
+            onUserSelect={this.props.navigateToUserProfile}
+            onGameSelect={this.props.navigateToGame}
+            onSignInSelect={this.props.navigateToSignIn}
+          />
+        ) : null}
         {this.state.mode === 'games' ? (
           <UIGameGrid
             viewer={this.props.viewer}
