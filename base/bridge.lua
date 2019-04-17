@@ -89,6 +89,7 @@ bridge.js = setmetatable({}, {
 -- resolution or rejection of the `Promise`.
 bridge.lua = {}
 
+
 -- Example JS-exposed Lua method just for testing
 function bridge.lua.sayHello(arg)
     local name = arg.name
@@ -99,6 +100,27 @@ function bridge.lua.sayHello(arg)
         error("lua: 'l' not allowed!")
     end
 end
+
+
+-- Screenshots
+
+function bridge.lua.captureScreenshot(arg)
+    local result
+    local coro = coroutine.running()
+    love.graphics.captureScreenshot(function(imageData)
+        local filename = 'shot-' .. uuid() .. '.png'
+        imageData:encode('png', filename)
+        result = {
+            path = love.filesystem.getSaveDirectory() .. '/' .. filename,
+            width = imageData:getWidth(),
+            height = imageData:getHeight(),
+        }
+        copas.wakeup(coro)
+    end)
+    copas.sleep(-1)
+    return result
+end
+
 
 -- Listen for Lua call requests from JS
 jsEvents.listen('LUA_CALL_REQUEST', function(request)
