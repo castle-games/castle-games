@@ -22,45 +22,79 @@ const STYLES_CONTAINER = css`
 
 //  box-shadow: inset 0 0 0 1px red;
 const STYLES_POST = css`
+  width: 80%;
+  max-width: 600px;
   display: inline-block;
   padding: 24px 24px 24px 24px;
   position: relative;
 `;
 
-const STYLES_GAME_PART = css`
+const STYLES_POST_CARD = css`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
   background: ${Constants.colors.white};
   border-radius: 4px;
   padding: 8px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+`;
+
+const STYLES_POST_HEADER = css`
+  display: flex;
+  flex-direction: row;
   position: relative;
+  justify-content: space-between;
+  margin-bottom: 8px;
+`;
+
+const STYLES_GAME_CONTAINER = css`
+  display: flex;
+  justify-content: flex-start;
+  cursor: pointer;
+  padding: 0px;
+  border-radius: 4px;
+`;
+
+const STYLES_GAME_BACKGROUND_LIGTHENER = css`
+  background-color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  justify-content: flex-start;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  border: 2px solid black;
 `;
 
 const STYLES_GAME_COVER_IMAGE = css`
-  width: 188px;
-  height: 106px;
+  background-size: cover;
+  background-position: 50% 50%;
+  height: 16px;
+  width: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 6px;
+  cursor: pointer;
   flex-shrink: 0;
-  transition: 200ms ease all;
-  cursor: pointer;
-  background-size: cover;
-  background-position: 50% 50%;
-  background-color: rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
 `;
 
-const STYLES_TITLE = css`
-  text-align: right;
-  margin-top: 8px;
+const STYLES_GAME_TITLE = css`
   font-family: ${Constants.font.game};
-  font-size: 18px;
-  width: 188px;
-  height: 56px;
+  font-size: 13px;
+`;
+
+const STYLES_USER_CONTAINER = css`
+  display: flex;
+  justify-content: flex-start;
   cursor: pointer;
 `;
 
-const STYLES_AVATAR = css`
+const STYLES_USER_PHOTO = css`
   background-size: cover;
   background-position: 50% 50%;
-  height: 24px;
-  width: 24px;
+  height: 32px;
+  width: 32px;
   border-radius: 4px;
   cursor: pointer;
   margin-right: 8px;
@@ -69,28 +103,25 @@ const STYLES_AVATAR = css`
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
 `;
 
-const STYLES_AVATAR_CREATOR = css`
+const STYLES_USER_NAME = css`
   font-family: ${Constants.font.system};
   font-weight: 700;
-  color: ${Constants.colors.black};
 `;
 
-const STYLES_BYLINE = css`
-  margin-top: 8px;
+const STYLES_POST_BODY = css`
   display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  cursor: pointer;
+  position: relative;
+  flex-direction: column;
+  padding: 4px;
+  background: ${Constants.colors.white};
+  border-radius: 4px;
 `;
 
-const STYLES_URL = css`
-  margin-top: 8px;
-  font-size: 12px;
-  font-weight: 600;
-  font-family: ${Constants.font.system};
-  overflow-wrap: break-word;
-  max-width: 204px;
-  width: 100%;
+const STYLES_POST_MESSAGE = css`
+  color: ${Constants.colors.black};
+  font-size: ${Constants.typescale.lvl6};
+  line-height: ${Constants.linescale.lvl6};
+  margin-bottom: 16px;
 `;
 
 const STYLES_TAG = css`
@@ -118,9 +149,7 @@ class UIPostCell extends React.Component {
     game: null,
     onGameSelect: () => {},
     onUserSelect: () => {},
-    onGameUpdate: null,
     isPreview: false,
-    renderCartridgeOnly: false,
   };
 
   _handleViewSource = (gameEntryPoint) => {
@@ -134,24 +163,6 @@ class UIPostCell extends React.Component {
     this.props.onGameSelect(this.props.game);
   };
 
-  _renderCreator = (game) => {
-    return (
-      <div className={STYLES_BYLINE}>
-        <div
-          className={STYLES_AVATAR}
-          onClick={() => this.props.onUserSelect(game.owner)}
-          style={{
-            backgroundImage:
-              game.owner.photo && game.owner.photo.url ? `url(${game.owner.photo.url})` : null,
-          }}
-        />
-        <div className={STYLES_AVATAR_CREATOR} onClick={() => this.props.onUserSelect(game.owner)}>
-          {game.owner.name}
-        </div>
-      </div>
-    );
-  };
-
   render() {
     let { game } = this.props;
     let title = game.title ? game.title : 'Untitled';
@@ -160,30 +171,45 @@ class UIPostCell extends React.Component {
       game.metadata && game.metadata.primaryColor ? `#${game.metadata.primaryColor}` : '#3d3d3d';
     const textColor = Utilities.adjustTextColor(backgroundColor);
 
-    let description;
-    let isPrivate = Urls.isPrivateUrl(game.url);
-
-    if (isPrivate || !game.owner || !game.owner.name) {
-      description = <div className={STYLES_URL}>{game.url}</div>;
-    }
-
-    if (!this.props.renderCartridgeOnly && game.owner) {
-      description = this._renderCreator(game);
-    }
+    const user = game.owner;
 
     return (
       <div className={STYLES_POST}>
-        <div className={STYLES_GAME_PART} style={{ color: textColor, backgroundColor }}>
-          <div
-            className={STYLES_GAME_COVER_IMAGE}
-            onClick={this._handleGameSelect}
-            style={{ backgroundImage: this.props.coverImageUrl ? `url(${this.props.coverImageUrl})` : null }}
-          />
-          <div className={STYLES_TITLE} onClick={this._handleGameSelect}>
-            {title} {isPrivate ? <Tag>Local</Tag> : null} <br />
+        <div className={STYLES_POST_CARD}>
+          <div className={STYLES_POST_HEADER}>
+            <div className={STYLES_USER_CONTAINER}>
+              <div
+                className={STYLES_USER_PHOTO}
+                onClick={() => this.props.onUserSelect(user)}
+                style={{
+                  backgroundImage: user.photo && user.photo.url ? `url(${user.photo.url})` : null,
+                }}
+              />
+              <div className={STYLES_USER_NAME} onClick={() => this.props.onUserSelect(user)}>
+                {user.name}
+              </div>
+            </div>
+            <div className={STYLES_GAME_CONTAINER} style={{ backgroundColor }}>
+              <div className={STYLES_GAME_BACKGROUND_LIGTHENER} style={{ borderColor: backgroundColor }}>
+                <div
+                  className={STYLES_GAME_COVER_IMAGE}
+                  onClick={this._handleGameSelect}
+                  style={{
+                    backgroundImage: this.props.coverImageUrl
+                      ? `url(${this.props.coverImageUrl})`
+                      : null,
+                  }}
+                />
+                <div className={STYLES_GAME_TITLE} onClick={this._handleGameSelect}>
+                  {title}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className={STYLES_POST_BODY}>
+            <div className={STYLES_POST_MESSAGE}>hello, world</div>
           </div>
         </div>
-        {description}
       </div>
     );
   }
@@ -199,9 +225,7 @@ export default class UIPostList extends React.Component {
           return (
             <UIPostCell
               key={key}
-              renderCartridgeOnly={this.props.renderCartridgeOnly}
               onGameSelect={this.props.onGameSelect}
-              onGameUpdate={this.props.onGameUpdate}
               onUserSelect={this.props.onUserSelect}
               onSignInSelect={this.props.onSignInSelect}
               coverImageUrl={m.coverImage && m.coverImage.url}
