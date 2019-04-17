@@ -155,14 +155,6 @@ class App extends React.Component {
     if (isFullscreenHotkey(e)) {
       e.preventDefault();
 
-      // NOTE(jim): I stubbed this out because you don't need to make the
-      // lua experience full screen anymore when the UI can be toggled.
-      /*
-      (async () => {
-        NativeUtil.setWindowFrameFullscreen(!(await NativeUtil.getWindowFrameFullscreen()));
-      })();
-      */
-
       return this._handleFullScreenToggle();
     }
 
