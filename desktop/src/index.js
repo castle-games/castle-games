@@ -116,13 +116,13 @@ const run = async () => {
   state.currentUser = { user: viewer };
   state.navigation = { contentMode: isOffline ? 'game' : 'home' };
 
+  ReactDOM.render(<App state={state} storage={storage} />, document.getElementById('root'));
+
   document.getElementById('loader').classList.add('loader--finished');
 
-  await Actions.delay(800);
+  await Actions.delay(1000);
 
   ReactDOM.unmountComponentAtNode(document.getElementById('loader'));
-
-  ReactDOM.render(<App state={state} storage={storage} />, document.getElementById('root'));
 
   document.getElementById('loader').outerHTML = '';
 };
