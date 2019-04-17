@@ -16,10 +16,11 @@
 
 ```
 
-## React File Structure
+## React File Semantics
 
-* We use prettier and that covers most cases.
-* This example snippet reveals how your file should be organized for the other cases.
+* We use prettier to enforce most of our stylistic preferences.
+* This example snippet reveals how your file should be organized for some other cases.
+* Feel free to add/remove ideas.
 
 ```js
 import * as React from 'react';
