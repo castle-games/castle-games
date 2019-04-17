@@ -54,6 +54,7 @@ const STYLES_GAME_CONTAINER = css`
   cursor: pointer;
   padding: 0px;
   border-radius: 4px;
+  align-self: flex-start;
 `;
 
 const STYLES_GAME_BACKGROUND_LIGTHENER = css`
@@ -93,8 +94,8 @@ const STYLES_USER_CONTAINER = css`
 const STYLES_USER_PHOTO = css`
   background-size: cover;
   background-position: 50% 50%;
-  height: 32px;
-  width: 32px;
+  height: 28px;
+  width: 28px;
   border-radius: 4px;
   cursor: pointer;
   margin-right: 8px;
@@ -106,6 +107,7 @@ const STYLES_USER_PHOTO = css`
 const STYLES_USER_NAME = css`
   font-family: ${Constants.font.system};
   font-weight: 700;
+  align-self: center;
 `;
 
 const STYLES_POST_BODY = css`
