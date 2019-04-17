@@ -1,5 +1,5 @@
 local jsEvents = require 'jsEvents'
-local jsCalls = require 'jsCalls'
+local bridge = require 'bridge'
 local cjson = require 'cjson'
 local ltn12 = require 'ltn12'
 local http = require 'copas.http'
@@ -69,7 +69,7 @@ if not CASTLE_SERVER then -- We're in the JS client, use the JS client's API cal
     function castle.storage.getGlobal(key)
         assert(type(key) == 'string', '`castle.storage.getGlobal` needs a string `key`')
 
-        local json = jsCalls.storageGetGlobal { key = key }
+        local json = bridge.js.storageGetGlobal { key = key }
         if type(json) == 'string' then
             return cjson.decode(json)
         else
@@ -84,13 +84,13 @@ if not CASTLE_SERVER then -- We're in the JS client, use the JS client's API cal
         if value ~= nil then
             encoded = cjson.encode(value)
         end
-        return jsCalls.storageSetGlobal { key = key, value = encoded }
+        return bridge.js.storageSetGlobal { key = key, value = encoded }
     end
 
     function castle.storage.get(key)
         assert(type(key) == 'string', '`castle.storage.get` needs a string `key`')
 
-        local json = jsCalls.storageGetUser { key = key }
+        local json = bridge.js.storageGetUser { key = key }
         if type(json) == 'string' then
             return cjson.decode(json)
         else
@@ -105,7 +105,7 @@ if not CASTLE_SERVER then -- We're in the JS client, use the JS client's API cal
         if value ~= nil then
             encoded = cjson.encode(value)
         end
-        return jsCalls.storageSetUser { key = key, value = encoded }
+        return bridge.js.storageSetUser { key = key, value = encoded }
     end
 else -- We're on the game server, do the GraphQL HTTP requests ourselves
     local function graphql(query, variables)
@@ -228,7 +228,7 @@ function castle.post.create(options)
         encodedData = cjson.encode(options.data)
     end
 
-    return jsCalls.postCreate {
+    return bridge.js.postCreate {
         message = message,
         data = encodedData,
     }

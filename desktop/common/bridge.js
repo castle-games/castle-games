@@ -8,6 +8,11 @@ import Logs from '~/common/logs';
 import GameWindow from '~/native/gamewindow';
 import Storage from '~/common/storage';
 
+
+///
+/// LUA -> JS -> LUA
+///
+
 const storage = new Storage('castle');
 let localStorageKey = storage.getItem('localStorageKey');
 if (!localStorageKey) {
@@ -36,7 +41,7 @@ const storageIdForCurrentGame = () => {
 // Methods callable as `jsCall.<methodName>(arg)` from Lua. Can be `async `. Should be called from
 // a network coroutine in Lua. Blocks the coroutine till a response (return value, error thrown,
 // promise resolution or rejection) is received.
-const methods = {
+const jsMethods = {
   // Test method called by 'ghost-tests'
   async sayHello({ name }) {
     if (name !== 'l') {
@@ -117,11 +122,11 @@ const methods = {
   },
 };
 
-const onReceiveRequest = async (e) => {
+const onReceiveJSCallRequest = async (e) => {
   const response = { id: e.params.id };
   try {
     const methodName = e.params.methodName;
-    const method = methods[methodName];
+    const method = jsMethods[methodName];
     if (!method) {
       throw new Error(`Unknown method '${methodName}'`);
     }
@@ -133,9 +138,14 @@ const onReceiveRequest = async (e) => {
 };
 
 export const addEventListeners = () => {
-  window.addEventListener('JS_CALL_REQUEST', onReceiveRequest);
+  window.addEventListener('JS_CALL_REQUEST', onReceiveJSCallRequest);
 };
 
 export const removeEventListeners = () => {
-  window.removeEventListener('JS_CALL_REQUEST', onReceiveRequest);
+  window.removeEventListener('JS_CALL_REQUEST', onReceiveJSCallRequest);
 };
+
+
+///
+/// JS -> LUA -> JS
+///

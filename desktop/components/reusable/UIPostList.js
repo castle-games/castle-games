@@ -324,7 +324,7 @@ export default class UIPostList extends React.Component {
     );
   }
 
-  async _loadPostsAsync() {
+  _loadPostsAsync = async () => {
     this.setState({
       posts: await Actions.allPostsAsync(), // This call supports pagination, we're just not using it...
     });

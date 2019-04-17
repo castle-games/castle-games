@@ -988,9 +988,7 @@ export async function allPostsAsync({ pageSize = 20, pageAfterPostId } = {}) {
             }
           }
           sourceGame {
-            gameId
-            title
-            metadata
+            ${GAME_FIELDS}
           }
           message
         }

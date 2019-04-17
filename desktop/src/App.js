@@ -3,7 +3,7 @@ import * as Actions from '~/common/actions';
 import * as NativeUtil from '~/native/nativeutil';
 import * as Urls from '~/common/urls';
 import * as PingUtils from '~/common/pingutils';
-import * as LuaCalls from '~/common/luacalls';
+import * as Bridge from '~/common/bridge';
 import * as ScreenCapture from '~/common/screencapture';
 import * as ExecNode from '~/common/execnode';
 
@@ -53,8 +53,7 @@ class App extends React.Component {
     window.addEventListener('nativeScreenCaptureReady', ScreenCapture.screenCaptureReadyEvent);
     window.addEventListener('nativeExecNodeComplete', ExecNode.execNodeCompleteEvent);
     window.addEventListener('click', this._handleAnchorClick);
-
-    LuaCalls.addEventListeners();
+    Bridge.addEventListeners();
     PingUtils.reportPingsAsync();
     NativeUtil.setBrowserReady(() => {});
 
@@ -79,8 +78,7 @@ class App extends React.Component {
     window.removeEventListener('nativeScreenCaptureReady', ScreenCapture.screenCaptureReadyEvent);
     window.removeEventListener('nativeExecNodeComplete', ExecNode.execNodeCompleteEvent);
     window.removeEventLIstener('click', this._handleAnchorClick);
-
-    LuaCalls.removeEventListeners();
+    Bridge.removeEventListeners();
     window.clearTimeout(this._nativeChannelsPollTimeout);
   }
 
