@@ -18,7 +18,7 @@
 
 ## React File Semantics
 
-* We use prettier to enforce most of our stylistic preferences.
+* We use prettier to enforce most of our stylistic preferences. Either use an editor with `prettier` integrated already, or alternatively run `npm run prettier` after staging files for commit.
 * This example snippet reveals how your file should be organized for some other cases.
 * Feel free to add/remove ideas.
 
@@ -93,7 +93,3 @@ npm run build
 `npm run build` will write the bundled files that Castle uses by default.
 
 If you want to point Castle at your local webserver without repeatedly building, on macOS you can edit `ghost-env.plist` to use `CastleUseCustomWebUrl`: `YES` and `CastleCustomWebUrl`: `http://localhost:3000`. Don't commit this change.
-
-### Code Style
-
-Either use an editor with `prettier` integrated already, or alternatively run `npm run prettier` after staging files for commit.
