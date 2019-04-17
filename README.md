@@ -1,12 +1,33 @@
 # Castle
 
+## Project Structure
+
+```
+  |-- base              # Lua source for the Ghost engine
+  |-- cef               # CEF lib for macOS and Windows
+  |-- ci                # continuous integration for automatic Castle builds and releases
+  |-- common            # crossplatform native code
+  |-- desktop           # Castle's React UI source code
+  |-- ghost-extensions  # supporting libraries for the Ghost engine
+  |-- love              # Love2d source
+  |-- macosx            # macOS-specific native code
+  |-- megasource        # windows build stuff
+  |-- mobile            # mobile source
+  |-- node              # Embedded node server for running some cross-platform operations
+  |-- openssl           # openssl lib for Ghost engine
+  |-- shared-assets     # static assets that need to be included crossplatform
+  |-- web               # built JS bundles for Castle's React UI
+  |-- win               # Windows-specific native code
+```
+
 ## Releases
 
 See [Desktop Client Release Process](https://github.com/castle-games/ghost/wiki/Desktop-client-release-process).
 
 ## Code Style
 
-Run `format.sh` after making changes to native code.
+- Run `format.sh` after making changes to native code.
+- For JS code in the desktop UI, see [desktop/README.md](desktop/README.md).
 
 ## Run on macOS
 
