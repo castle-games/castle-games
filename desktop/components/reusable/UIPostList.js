@@ -159,26 +159,6 @@ const STYLES_MESSAGE_MENTION = css`
   animation-iteration-count: 1;
 `;
 
-const STYLES_TAG = css`
-  position: absolute;
-  top: 4px;
-  left: 4px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: ${Constants.colors.text};
-  border-radius: 4px;
-  padding: 0 8px 0 8px;
-  height: 24px;
-  font-family: ${Constants.font.monobold};
-  color: white;
-  font-size: 10px;
-`;
-
-const Tag = (props) => {
-  return <span className={STYLES_TAG}>{props.children}</span>;
-};
-
 class UIPostCell extends React.Component {
   static defaultProps = {
     game: null,

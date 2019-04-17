@@ -13,7 +13,7 @@ local uuid = require 'uuid'
 -- Keep track of calls we've sent to JS and are waiting on for a response
 local waitingJSCalls = {} 
 
--- Make a JS call to `methods.<methodName>(arg)` in 'bridge.js', blocking the current coroutine (must be a
+-- Make a JS call to `bridge.js.<methodName>(arg)` in 'bridge.js', blocking the current coroutine (must be a
 -- network coroutine) till a response is received. Returns the result or throws the error from the response.
 local function jsCall(methodName, arg)
     -- Get the coroutine we're running in and make sure it's a network coroutine
@@ -68,7 +68,7 @@ jsEvents.listen('JS_CALL_RESPONSE', function(response)
     end
 end)
 
--- Convenience table so you can just do `jsCall.<methodName>(arg)`
+-- Convenience table so you can just do `bridge.js.<methodName>(arg)`
 bridge.js = setmetatable({}, {
     __index = function(t, k)
         local wrapper = function(arg)
@@ -84,6 +84,46 @@ bridge.js = setmetatable({}, {
 --- JS -> LUA -> JS
 ---
 
+-- Methods callable as `Bridge.Lua.<methodName>(arg)` from JS. Can network-block (are called in a
+-- network coroutine). Can throw errors. The return value or error is relayed back to JS, as a
+-- resolution or rejection of the `Promise`.
+bridge.lua = {}
+
+-- Example JS-exposed Lua method just for testing
+function bridge.lua.sayHello(arg)
+    local name = arg.name
+    if name ~= 'l' then
+        copas.sleep(2)
+        return 'lua: hello, ' .. name
+    else
+        error("lua: 'l' not allowed!")
+    end
+end
+
+-- Listen for Lua call requests from JS
+jsEvents.listen('LUA_CALL_REQUEST', function(request)
+    network.async(function()
+        local function sendError(msg)
+            jsEvents.send('LUA_CALL_RESPONSE', {
+                id = request.id,
+                error = msg,
+            })
+        end
+        copas.setErrorHandler(sendError)
+        local result
+        local success, err = pcall(function()
+            result = bridge.lua[request.methodName](request.arg)
+        end)
+        if success then
+            jsEvents.send('LUA_CALL_RESPONSE', {
+                id = request.id,
+                result = result
+            })
+        else
+            sendError(err)
+        end
+    end)
+end)
 
 
 return bridge

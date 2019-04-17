@@ -8,7 +8,6 @@ import Logs from '~/common/logs';
 import GameWindow from '~/native/gamewindow';
 import Storage from '~/common/storage';
 
-
 ///
 /// LUA -> JS -> LUA
 ///
@@ -38,20 +37,20 @@ const storageIdForCurrentGame = () => {
   }
 };
 
-// Methods callable as `jsCall.<methodName>(arg)` from Lua. Can be `async `. Should be called from
+// Methods callable as `bridge.js.<methodName>(arg)` from Lua. Can be `async `. Should be called from
 // a network coroutine in Lua. Blocks the coroutine till a response (return value, error thrown,
 // promise resolution or rejection) is received.
-const jsMethods = {
+export const JS = {
   // Test method called by 'ghost-tests'
   async sayHello({ name }) {
     if (name !== 'l') {
       Logs.system(`responding 'hello, ${name}' in 2 seconds...`);
       await Actions.delay(2000);
-      return `hello, ${name}!`;
+      return `js: hello, ${name}!`;
     } else {
       Logs.system(`throwing an error in 2 seconds...`);
       await Actions.delay(2000);
-      throw new Error("'l' not allowed!");
+      throw new Error("js: 'l' not allowed!");
     }
   },
 
@@ -117,16 +116,17 @@ const jsMethods = {
     return await Actions.createPostAsync({
       sourceGameId: currentGame.gameId,
       message,
-      data
+      data,
     });
   },
 };
 
+// Listen for JS call requests from Lua
 const onReceiveJSCallRequest = async (e) => {
   const response = { id: e.params.id };
   try {
     const methodName = e.params.methodName;
-    const method = jsMethods[methodName];
+    const method = JS[methodName];
     if (!method) {
       throw new Error(`Unknown method '${methodName}'`);
     }
@@ -137,15 +137,64 @@ const onReceiveJSCallRequest = async (e) => {
   NativeUtil.sendLuaEvent('JS_CALL_RESPONSE', response);
 };
 
+///
+/// JS -> LUA -> JS
+///
+
+// Keep track of calls we've sent to Lua and are waiting on for a response
+let nextLuaCallId = 1;
+const waitingLuaCalls = {};
+
+// Make a Lua call to `bridge.lua.<methodName>(arg)` in 'bridge.lua', awaiting a return value or error
+const luaCall = async (methodName, arg) => {
+  return new Promise((resolve, reject) => {
+    const id = nextLuaCallId++;
+    waitingLuaCalls[id] = { resolve, reject };
+    NativeUtil.sendLuaEvent('LUA_CALL_REQUEST', { id, methodName, arg });
+  });
+};
+
+// Convenience object so you can just do `Bridge.Lua.<methodName>(arg)`
+export const Lua = new Proxy(
+  {},
+  {
+    get(self, name) {
+      if (name in self) {
+        // Memoize
+        return self[name];
+      } else {
+        const wrapper = async (arg) => await luaCall(name, arg);
+        self[name] = wrapper;
+        return wrapper;
+      }
+    },
+  }
+);
+
+// Listen for Lua call responses from Lua
+const onReceiveLuaCallResponse = async (e) => {
+  const response = e.params;
+  const waitingCall = waitingLuaCalls[response.id];
+  delete waitingLuaCalls[response.id];
+  if (waitingCall) {
+    if (response.error) {
+      waitingCall.reject(response.error);
+    } else {
+      waitingCall.resolve(response.result);
+    }
+  }
+};
+
+///
+/// Bind handlers
+///
+
 export const addEventListeners = () => {
   window.addEventListener('JS_CALL_REQUEST', onReceiveJSCallRequest);
+  window.addEventListener('LUA_CALL_RESPONSE', onReceiveLuaCallResponse);
 };
 
 export const removeEventListeners = () => {
   window.removeEventListener('JS_CALL_REQUEST', onReceiveJSCallRequest);
+  window.removeEventListener('LUA_CALL_RESPONSE', onReceiveLuaCallResponse);
 };
-
-
-///
-/// JS -> LUA -> JS
-///
