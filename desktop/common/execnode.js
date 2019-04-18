@@ -61,7 +61,22 @@ export async function uploadScreenCaptureAsync(path) {
 
     return result;
   } catch (e) {
-    throw new Error(`failed to upload: ${e}`);
+    throw new Error(`Failed to upload screen capture: ${e}`);
+  }
+}
+
+export async function uploadFileAsync(path) {
+  try {
+    let token = await Actions.getAccessTokenAsync();
+    let result = await execNodeAsync('uploadFile', {
+      path,
+      apiHost: Constants.API_HOST,
+      token,
+    });
+
+    return result;
+  } catch (e) {
+    throw new Error(`Failed to upload file: ${e}`);
   }
 }
 

@@ -6,6 +6,7 @@ const actions = [
   require('./actions/publishProject'),
   require('./actions/test'),
   require('./actions/uploadScreenCapture'),
+  require('./actions/uploadFile'),
 ];
 
 async function runAsync() {
