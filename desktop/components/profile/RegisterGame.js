@@ -1,7 +1,10 @@
 import * as React from 'react';
 import * as Actions from '~/common/actions';
+import * as Browser from '~/common/browser';
+import * as ExecNode from '~/common/execnode';
 import * as Constants from '~/common/constants';
 import * as NativeUtil from '~/native/nativeutil';
+import * as Urls from '~/common/urls';
 
 import { css } from 'react-emotion';
 
@@ -104,13 +107,41 @@ export default class RegisterGame extends React.Component {
   };
 
   _updateGamePreview = async () => {
+    const { externalUrlInputValue, directoryInputValue } = this.state;
     this._debouncePreviewTimeout = null;
     let previewedGame = {};
     let previewError = null;
-    if (this.state.externalUrlInputValue && this.state.externalUrlInputValue.length) {
+    if (externalUrlInputValue && externalUrlInputValue.length) {
       await this.setState({ isLoadingPreview: true });
       try {
         previewedGame = await Actions.previewGameAtUrl(this.state.externalUrlInputValue);
+      } catch (e) {
+        previewedGame = {};
+        previewError = e.message;
+      }
+    } else if (directoryInputValue && directoryInputValue.length) {
+      try {
+        let projectFilename = await ExecNode.getProjectFilenameAtPathAsync(directoryInputValue);
+        if (!projectFilename) {
+          throw new Error(
+            'Unable to find a Castle project in this folder. Make sure to choose a folder that contains a .castle file.'
+          );
+        }
+        previewedGame = await Browser.resolveGameAtUrlAsync(
+          `file://${directoryInputValue}/${projectFilename}`
+        );
+        previewedGame.slug = 'TODO';
+        if (!previewedGame.coverImage) {
+          if (
+            previewedGame.metadata &&
+            previewedGame.metadata.coverImage &&
+            Urls.isPrivateUrl(previewedGame.metadata.coverImage)
+          ) {
+            previewedGame.coverImage = {
+              url: `file://${directoryInputValue}/${previewedGame.metadata.coverImage}`,
+            };
+          }
+        }
       } catch (e) {
         previewedGame = {};
         previewError = e.message;
@@ -129,7 +160,12 @@ export default class RegisterGame extends React.Component {
   };
 
   _handleChangeDirectory = (directoryInputValue) => {
-    this.setState({ directoryInputValue });
+    this.setState({ directoryInputValue }, () => {
+      if (this._debouncePreviewTimeout) {
+        clearTimeout(this._debouncePreviewTimeout);
+      }
+      this._updateGamePreview();
+    });
   };
 
   _isFormSubmittable = () => {
@@ -236,7 +272,7 @@ export default class RegisterGame extends React.Component {
           style={{ marginBottom: 8 }}
         />
         <div className={STYLES_PARAGRAPH}>
-          Enter the url of a .castle file, and we'll check for a game project at that url.
+          Enter the url of a .castle file, and we'll check for a game at that url.
         </div>
       </React.Fragment>
     );
