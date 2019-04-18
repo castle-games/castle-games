@@ -3,15 +3,12 @@ import * as Actions from '~/common/actions';
 import * as Constants from '~/common/constants';
 import * as NativeUtil from '~/native/nativeutil';
 
-import { Value } from 'slate';
 import { css } from 'react-emotion';
 
+import UIDirectoryChooser from '~/components/reusable/UIDirectoryChooser';
 import UIGameGrid from '~/components/reusable/UIGameGrid';
 import UIInputSecondary from '~/components/reusable/UIInputSecondary';
 import UISubmitButton from '~/components/reusable/UISubmitButton';
-
-import ContentEditor from '~/editor/ContentEditor';
-import DefaultState from '~/editor/default.json';
 
 const STYLES_CONTAINER = css`
   display: flex;
@@ -20,13 +17,14 @@ const STYLES_CONTAINER = css`
 
 const STYLES_SECTION = css`
   padding: 24px 24px 24px 24px;
-  width: 40%;
+  width: 50%;
   min-width: 300px;
-  max-width: 480px;
+  max-width: 50%;
 `;
 
 const STYLES_FORM_ACTIONS = css`
   display: flex;
+  justify-content: space-between;
   margin-top: 12px;
 `;
 
@@ -34,6 +32,16 @@ const STYLES_HEADING = css`
   font-family: ${Constants.font.heading};
   font-size: ${Constants.typescale.lvl5};
   margin-bottom: 16px;
+`;
+
+const STYLES_SECONDARY_ACTION = css`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: underline;
+  font-size: ${Constants.typescale.lvl6};
+  color: ${Constants.colors.text};
+  cursor: pointer;
 `;
 
 const STYLES_PARAGRAPH = css`
@@ -67,7 +75,9 @@ const STYLES_LINK = css`
 
 export default class RegisterGame extends React.Component {
   state = {
-    urlInputValue: '',
+    hostingType: 'castle', // castle (upload to castle) or external (host elsewhere)
+    directoryInputValue: '',
+    externalUrlInputValue: '',
     previewedGame: {
       slug: null,
     },
@@ -82,7 +92,9 @@ export default class RegisterGame extends React.Component {
 
   _resetForm = () => {
     this.setState({
-      urlInputValue: '',
+      hostingType: 'castle',
+      directoryInputValue: '',
+      externalUrlInputValue: '',
       previewedGame: {
         slug: null,
       },
@@ -95,10 +107,10 @@ export default class RegisterGame extends React.Component {
     this._debouncePreviewTimeout = null;
     let previewedGame = {};
     let previewError = null;
-    if (this.state.urlInputValue && this.state.urlInputValue.length) {
+    if (this.state.externalUrlInputValue && this.state.externalUrlInputValue.length) {
       await this.setState({ isLoadingPreview: true });
       try {
-        previewedGame = await Actions.previewGameAtUrl(this.state.urlInputValue);
+        previewedGame = await Actions.previewGameAtUrl(this.state.externalUrlInputValue);
       } catch (e) {
         previewedGame = {};
         previewError = e.message;
@@ -107,13 +119,17 @@ export default class RegisterGame extends React.Component {
     this.setState({ previewedGame, previewError, isLoadingPreview: false });
   };
 
-  _handleChangeUrl = (e) => {
-    this.setState({ urlInputValue: e.target.value }, () => {
+  _handleChangeExternalUrl = (e) => {
+    this.setState({ externalUrlInputValue: e.target.value }, () => {
       if (this._debouncePreviewTimeout) {
         clearTimeout(this._debouncePreviewTimeout);
       }
       this._debouncePreviewTimeout = setTimeout(this._updateGamePreview, 300);
     });
+  };
+
+  _handleChangeDirectory = (directoryInputValue) => {
+    this.setState({ directoryInputValue });
   };
 
   _isFormSubmittable = () => {
@@ -124,11 +140,18 @@ export default class RegisterGame extends React.Component {
     );
   };
 
+  _handleToggleHostingType = () => {
+    this.setState((state) => {
+      let hostingType = state.hostingType === 'castle' ? 'external' : 'castle';
+      return { ...state, hostingType };
+    });
+  };
+
   _handleSubmitForm = async () => {
     let addedGame, previewError;
-    if (this.state.urlInputValue && this.state.urlInputValue.length) {
+    if (this.state.externalUrlInputValue && this.state.externalUrlInputValue.length) {
       try {
-        addedGame = await Actions.registerGameAtUrl(this.state.urlInputValue);
+        addedGame = await Actions.registerGameAtUrl(this.state.externalUrlInputValue);
       } catch (e) {
         addedGame = {};
         previewError = e.message;
@@ -189,29 +212,60 @@ export default class RegisterGame extends React.Component {
     }
   };
 
+  _renderUploadForm = () => {
+    return (
+      <React.Fragment>
+        <UIDirectoryChooser
+          value={this.state.directoryInputValue}
+          placeholder="Choose a game folder to upload..."
+          onChange={this._handleChangeDirectory}
+        />
+        <div className={STYLES_PARAGRAPH} />
+      </React.Fragment>
+    );
+  };
+
+  _renderExternalUrlForm = () => {
+    return (
+      <React.Fragment>
+        <UIInputSecondary
+          value={this.state.externalUrlInputValue}
+          name="externalUrlInputValue"
+          label="URL to a .castle file"
+          onChange={this._handleChangeExternalUrl}
+          style={{ marginBottom: 8 }}
+        />
+        <div className={STYLES_PARAGRAPH}>
+          Enter the url of a .castle file, and we'll check for a game project at that url.
+        </div>
+      </React.Fragment>
+    );
+  };
+
   render() {
     const isSubmitEnabled = this._isFormSubmittable();
-    const formAction = 'Add';
+    const formAction = 'Publish';
     const gamePreviewElement = this._renderGamePreview();
+    let formElement, secondaryAction;
+    if (this.state.hostingType === 'castle') {
+      formElement = this._renderUploadForm();
+      secondaryAction = 'My game is already hosted somewhere else';
+    } else {
+      formElement = this._renderExternalUrlForm();
+      secondaryAction = 'I prefer to upload a game from my computer';
+    }
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_SECTION}>
-          <div className={STYLES_HEADING}>Add a game to your Castle profile</div>
-          <div className={STYLES_PARAGRAPH}>
-            Enter the url of a .castle file you made, and we'll check for a game project at that
-            url.
-          </div>
-          <UIInputSecondary
-            value={this.state.urlInputValue}
-            name="urlInputValue"
-            label="URL to a .castle file"
-            onChange={this._handleChangeUrl}
-            style={{ marginBottom: 8 }}
-          />
+          <div className={STYLES_HEADING}>Publish a game to your Castle profile</div>
+          {formElement}
           <div className={STYLES_FORM_ACTIONS}>
             <UISubmitButton disabled={!isSubmitEnabled} onClick={this._handleSubmitForm}>
               {formAction}
             </UISubmitButton>
+            <div className={STYLES_SECONDARY_ACTION} onClick={this._handleToggleHostingType}>
+              {secondaryAction}
+            </div>
           </div>
         </div>
         <div className={STYLES_SECTION}>{gamePreviewElement}</div>
