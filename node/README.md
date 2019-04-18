@@ -1,3 +1,3 @@
 ### Build changes
 
-`npm build`
+`npm run build`
