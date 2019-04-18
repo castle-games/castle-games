@@ -179,15 +179,25 @@ export default class RegisterGame extends React.Component {
   _handleToggleHostingType = () => {
     this.setState((state) => {
       let hostingType = state.hostingType === 'castle' ? 'external' : 'castle';
-      return { ...state, hostingType };
+      return { ...state, hostingType, directoryInputValue: '', externalUrlInputValue: '' };
     });
   };
 
   _handleSubmitForm = async () => {
+    const { externalUrlInputValue, directoryInputValue } = this.state;
     let addedGame, previewError;
-    if (this.state.externalUrlInputValue && this.state.externalUrlInputValue.length) {
+    if (externalUrlInputValue && externalUrlInputValue.length) {
       try {
         addedGame = await Actions.registerGameAtUrl(this.state.externalUrlInputValue);
+      } catch (e) {
+        addedGame = {};
+        previewError = e.message;
+      }
+    } else if (directoryInputValue && directoryInputValue.length) {
+      try {
+        let projectUrl = `file://${directoryInputValue}`;
+        let uploadedUrl = await ExecNode.publishProjectAsync(projectUrl);
+        addedGame = await Actions.registerGameAtUrl(uploadedUrl);
       } catch (e) {
         addedGame = {};
         previewError = e.message;
