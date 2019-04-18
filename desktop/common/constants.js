@@ -1,3 +1,7 @@
+export const featureFlags = {
+  posts: false,
+}
+
 export const API_HOST = 'https://api.castle.games';
 export const WEB_HOST = 'https://castle.games';
 

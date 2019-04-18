@@ -33,7 +33,7 @@ class HomeScreen extends React.Component {
   };
 
   state = {
-    mode: 'posts', // posts | games | examples | history
+    mode: Constants.featureFlags.posts ? 'posts' : 'games', // posts | games | examples | history
   };
 
   _container;
@@ -53,7 +53,9 @@ class HomeScreen extends React.Component {
 
   _getNavigationItems = () => {
     const navigationItems = [];
-    navigationItems.push({ label: 'Posts', key: 'posts' });
+    if (Constants.featureFlags.posts) {
+      navigationItems.push({ label: 'Posts', key: 'posts' });
+    }
     navigationItems.push({ label: 'Featured games', key: 'games' });
     navigationItems.push({ label: 'Learning examples', key: 'examples' });
     navigationItems.push({ label: 'Your history', key: 'history' });
