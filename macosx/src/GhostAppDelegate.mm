@@ -99,7 +99,7 @@ NSArray *enumerate_windows(void)
   self.loveStepping = NO;
   self.windowEventsSubscribed = NO;
   
-  ghostInitObs([[NSString stringWithFormat:@"%@/obs", [[NSBundle mainBundle] resourcePath]] UTF8String], [[[NSBundle mainBundle] pathForResource:@"ffmpeg" ofType:@""] UTF8String]);
+  // ghostInitObs([[NSString stringWithFormat:@"%@/obs", [[NSBundle mainBundle] resourcePath]] UTF8String], [[[NSBundle mainBundle] pathForResource:@"ffmpeg" ofType:@""] UTF8String]);
 }
 
 - (NSApplicationTerminateReply)applicationShouldTerminate:(__unused NSApplication *)sender {
@@ -230,7 +230,7 @@ NSArray *enumerate_windows(void)
                        ghostResizeChildWindow(1, 1);
                        
                        // TODO (jesse): this should actually start after the castle loading screen goes away
-                       ghostStartObs();
+                       // ghostStartObs();
                      });
     }
   }
@@ -271,7 +271,7 @@ NSArray *enumerate_windows(void)
     [self stepLove];
     [self closeLua];
     
-    ghostStopObs();
+    // ghostStopObs();
   }
   self.loveStepping = NO;
 }
