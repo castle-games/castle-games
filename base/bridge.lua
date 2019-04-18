@@ -108,10 +108,10 @@ function bridge.lua.captureScreenshot(arg)
     local result
     local coro = coroutine.running()
     love.graphics.captureScreenshot(function(imageData)
-        local filename = 'shot-' .. uuid() .. '.png'
-        imageData:encode('png', filename)
+        local savePath = CASTLE_TMP_DIR_NAME .. '/' .. 'shot-' .. uuid() .. '.png'
+        imageData:encode('png', savePath)
         result = {
-            path = love.filesystem.getSaveDirectory() .. '/' .. filename,
+            path = love.filesystem.getSaveDirectory() .. '/' .. savePath,
             width = imageData:getWidth(),
             height = imageData:getHeight(),
         }

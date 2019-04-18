@@ -7,6 +7,15 @@ local theOS = love.system.getOS()
 local isMobile = theOS == 'Android' or theOS == 'iOS'
 
 
+-- Make a directory for temporary files
+
+CASTLE_TMP_DIR_NAME = 'tmp'
+love.filesystem.createDirectory(CASTLE_TMP_DIR_NAME)
+for _, filename in pairs(love.filesystem.getDirectoryItems(CASTLE_TMP_DIR_NAME)) do
+    love.filesystem.remove(CASTLE_TMP_DIR_NAME .. '/' .. filename)
+end
+
+
 -- Built-in libraries
 
 network = require 'network'
