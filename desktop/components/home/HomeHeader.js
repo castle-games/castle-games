@@ -5,7 +5,6 @@ import * as NativeUtil from '~/native/nativeutil';
 import { css } from 'react-emotion';
 
 import UIButton from '~/components/reusable/UIButton';
-import UIHeading from '~/components/reusable/UIHeading';
 
 const STYLES_CONTAINER = css`
   flex-grow: 1;

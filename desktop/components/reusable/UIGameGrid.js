@@ -8,8 +8,6 @@ import * as SVG from '~/components/primitives/svg';
 
 import { css } from 'react-emotion';
 
-import UIAvatar from '~/components/reusable/UIAvatar';
-import UICharacterCard from '~/components/reusable/UICharacterCard';
 import UIBoundary from '~/components/reusable/UIBoundary';
 import UINavigationLink from '~/components/reusable/UINavigationLink';
 import UIPlayTextCTA from '~/components/reusable/UIPlayTextCTA';

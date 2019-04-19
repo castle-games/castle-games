@@ -7,7 +7,6 @@ import { SocialContext } from '~/contexts/SocialContext';
 import { getEmojiComponent } from '~/common/emojis';
 
 import Linkify from 'react-linkify';
-import UIAvatar from '~/components/reusable/UIAvatar';
 
 // NOTE(jim): experiment.
 const HIGHLIGHT_COLOR = `#3d3d3d`;

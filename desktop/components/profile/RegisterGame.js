@@ -8,7 +8,6 @@ import { css } from 'react-emotion';
 
 import UIGameGrid from '~/components/reusable/UIGameGrid';
 import UIInputSecondary from '~/components/reusable/UIInputSecondary';
-import UITextArea from '~/components/reusable/UITextArea';
 import UISubmitButton from '~/components/reusable/UISubmitButton';
 
 import ContentEditor from '~/editor/ContentEditor';

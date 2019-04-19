@@ -25,7 +25,7 @@ const STYLES_BUTTON = css`
   }
 `;
 
-export default class UIButton extends React.Component {
+export default class UISubmitButton extends React.Component {
   static defaultProps = {
     type: 'submit',
   };

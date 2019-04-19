@@ -6,7 +6,6 @@ import * as SVG from '~/components/primitives/svg';
 import { css } from 'react-emotion';
 
 import ControlledInput from '~/components/primitives/ControlledInput';
-import UINavigationLink from '~/components/reusable/UINavigationLink';
 
 const STYLES_CONTAINER = css`
   color: ${Constants.colors.black};

@@ -6,9 +6,7 @@ import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigatorContext } from '~/contexts/NavigationContext';
 
 import UIGameGrid from '~/components/reusable/UIGameGrid';
-import UIHeading from '~/components/reusable/UIHeading';
 import UIHorizontalNavigation from '~/components/reusable/UIHorizontalNavigation';
-import HomeUpdateBanner from '~/components/home/HomeUpdateBanner';
 import UIPostList from '~/components/reusable/UIPostList';
 
 const STYLES_CONTAINER = css`

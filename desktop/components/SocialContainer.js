@@ -10,7 +10,6 @@ import { getLevel, getExp } from '~/components/reusable/UICharacterCard';
 import ChatContainer from '~/components/social/ChatContainer';
 import Viewer from '~/components/Viewer';
 import UINavigationLink from '~/components/reusable/UINavigationLink';
-import UIHeaderBlock from '~/components/reusable/UIHeaderBlock';
 import HomeUpdateBanner from '~/components/home/HomeUpdateBanner';
 import LoginSignupControl from '~/components/LoginSignupControl';
 
