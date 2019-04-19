@@ -71,7 +71,17 @@ async function publishProjectAsync(args) {
   let token = args.token;
   let previousHashes = args.previousHashes;
 
-  let API = CastleApiClient(apiHost);
+  let API = CastleApiClient(apiHost, {
+    // XXX: We should factor this into some common thing for all actions...
+    storage: {
+      setAsync(k, v) {
+        this[k] = v;
+      },
+      getAsync(k) {
+        return this[k];
+      },
+    },
+  });
   await API.client.setTokenAsync(token);
 
   let files = await listOfFilesAsync(dir);
