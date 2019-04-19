@@ -19,7 +19,7 @@ const STYLES_INPUT = css`
   width: 100%;
   max-width: 480px;
   border: 2px solid transparent;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
   font-size: 16px;
   height: 64px;
   margin: 0 0 0 0;
