@@ -991,6 +991,11 @@ export async function allPostsAsync({ pageSize = 20, pageAfterPostId } = {}) {
             ${GAME_FIELDS}
           }
           message
+          media {
+            url
+            width
+            height
+          }
         }
       }
     `,

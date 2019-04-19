@@ -159,6 +159,19 @@ const STYLES_MESSAGE_MENTION = css`
   animation-iteration-count: 1;
 `;
 
+const STYLES_MEDIA_CONTAINER = css`
+  padding-top: 4px;
+`;
+
+const STYLES_MEDIA_IMAGE = css`
+  background-color: ${Constants.colors.black};
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  width: 100%;
+  padding: 40%;
+`;
+
 class UIPostCell extends React.Component {
   static defaultProps = {
     game: null,
@@ -176,22 +189,20 @@ class UIPostCell extends React.Component {
   };
 
   _renderGameContainer = (sourceGame) => {
-    const sourceGamePrimaryColor =
+    const primaryColor =
       sourceGame.metadata && sourceGame.metadata.primaryColor
         ? `#${sourceGame.metadata.primaryColor}`
         : '#3d3d3d';
 
+    const coverImageUrl = sourceGame.coverImage && sourceGame.coverImage.url;
+
     return (
-      <div className={STYLES_GAME_CONTAINER} style={{ sourceGamePrimaryColor }}>
-        <div
-          className={STYLES_GAME_BACKGROUND_LIGTHENER}
-          style={{ borderColor: sourceGamePrimaryColor }}>
+      <div className={STYLES_GAME_CONTAINER} style={{ backgroundColor: primaryColor }}>
+        <div className={STYLES_GAME_BACKGROUND_LIGTHENER} style={{ borderColor: primaryColor }}>
           <div
             className={STYLES_GAME_COVER_IMAGE}
             onClick={this._handleGameSelect}
-            style={{
-              backgroundImage: this.props.coverImageUrl ? `url(${this.props.coverImageUrl})` : null,
-            }}
+            style={{ backgroundImage: coverImageUrl ? `url(${coverImageUrl})` : null }}
           />
           <div className={STYLES_GAME_TITLE} onClick={this._handleGameSelect}>
             {sourceGame.title}
@@ -201,7 +212,7 @@ class UIPostCell extends React.Component {
     );
   };
 
-  _renderChatMessage = (message) => {
+  _renderMessage = (message) => {
     let result = [];
     for (let i = 0; i < message.length; i++) {
       let messagePart = message[i];
@@ -230,10 +241,23 @@ class UIPostCell extends React.Component {
     return result;
   };
 
+  _renderMedia = (media) => {
+    return (
+      <div className={STYLES_MEDIA_CONTAINER}>
+        <div
+          className={STYLES_MEDIA_IMAGE}
+          style={{
+            backgroundImage: `url(${media.url})`,
+          }}
+        />
+      </div>
+    );
+  };
+
   render() {
     const { post } = this.props;
 
-    const { sourceGame, creator, message } = post;
+    const { sourceGame, creator, message, media } = post;
 
     let maybeGameContainer = null;
     if (sourceGame) {
@@ -242,7 +266,12 @@ class UIPostCell extends React.Component {
 
     let maybeMessageContainer = null;
     if (message) {
-      maybeMessageContainer = this._renderChatMessage(message.message);
+      maybeMessageContainer = this._renderMessage(message.message);
+    }
+
+    let maybeMediaContainer = null;
+    if (media) {
+      maybeMediaContainer = this._renderMedia(media);
     }
 
     return (
@@ -264,7 +293,10 @@ class UIPostCell extends React.Component {
             </div>
             {maybeGameContainer}
           </div>
-          <div className={STYLES_POST_BODY}>{maybeMessageContainer}</div>
+          <div className={STYLES_POST_BODY}>
+            {maybeMessageContainer}
+            {maybeMediaContainer}
+          </div>
         </div>
       </div>
     );
