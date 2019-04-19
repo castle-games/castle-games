@@ -2,6 +2,7 @@ import * as uuid from 'uuid/v4';
 import * as Actions from '~/common/actions';
 import * as NativeUtil from '~/native/nativeutil';
 import * as Urls from '~/common/urls';
+import * as ExecNode from '~/common/execnode';
 
 import md5 from 'md5';
 import Logs from '~/common/logs';
@@ -94,7 +95,7 @@ export const JS = {
 
   // Post
 
-  async postCreate({ message, data }) {
+  async postCreate({ message, mediaPath, data }) {
     // Get the current game and make sure it has a `.gameId` (is registered)
     const currentGame = GameWindow.getCurrentGame();
     if (!currentGame) {
@@ -112,10 +113,17 @@ export const JS = {
       return null;
     }
 
+    // Upload the media
+    let mediaFileId;
+    if (mediaPath) {
+      mediaFileId = (await ExecNode.uploadFileAsync(mediaPath)).fileId;
+    }
+
     // Create the post!
     return await Actions.createPostAsync({
       sourceGameId: currentGame.gameId,
       message,
+      mediaFileId,
       data,
     });
   },
