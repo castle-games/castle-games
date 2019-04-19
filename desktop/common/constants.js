@@ -1,6 +1,6 @@
 export const featureFlags = {
   posts: false,
-}
+};
 
 export const API_HOST = 'https://api.castle.games';
 export const WEB_HOST = 'https://castle.games';
@@ -23,6 +23,7 @@ export const colors = {
   black: `#000`,
   action: `#0530ad`,
   actionHover: `#0062ff`,
+  searchEmphasis: `#0062ff`,
   error: '#f00',
   userStatus: {
     online: `#62D96B`,
@@ -31,9 +32,9 @@ export const colors = {
   },
   brand1: `#00ffff`, // cyan
   darkcyan: `#00eded`,
-  brand2: `#ff00ff`, // magenta
+  brand2: brand.fuchsia, // fuschsia
   brand3: '#8F79D8', // violet
-  brand4: '#ffff00', // yellow
+  brand4: brand.yellow, // yellow
 };
 
 export const logs = {

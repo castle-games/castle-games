@@ -25,7 +25,7 @@ const STYLES_ACTION = css`
   transition: 200ms ease all;
 
   :hover {
-    color: magenta;
+    color: ${Constants.colors.brand2};
   }
 `;
 

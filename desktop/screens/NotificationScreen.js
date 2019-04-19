@@ -4,9 +4,9 @@ import * as Constants from '~/common/constants';
 import { css } from 'react-emotion';
 
 const STYLES_CONTAINER = css`
+  background: ${Constants.colors.background};
   width: 100%;
   height: 100%;
-  background: ${Constants.colors.background};
   overflow-y: scroll;
 
   ::-webkit-scrollbar {

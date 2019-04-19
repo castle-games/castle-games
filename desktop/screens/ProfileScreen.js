@@ -20,12 +20,12 @@ import SignOut from '~/components/profile/SignOut';
 import UpdateGame from '~/components/profile/UpdateGame';
 
 const STYLES_CONTAINER = css`
+  color: ${Constants.colors.text};
+  background: ${Constants.colors.background};
   width: 100%;
   min-width: 25%;
   height: 100%;
   overflow-y: scroll;
-  color: ${Constants.colors.text};
-  background: ${Constants.colors.background};
 
   ::-webkit-scrollbar {
     display: none;

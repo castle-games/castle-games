@@ -49,7 +49,7 @@ export default class ProjectTemplateChooser extends React.Component {
         onClick={() =>
           this.props.onSelectTemplate({ gameId: Project.BLANK_TEMPLATE_ID, title: 'blank' })
         }>
-        <div className={STYLES_GAME_COVER} style={{ backgroundColor: 'black' }} />
+        <div className={STYLES_GAME_COVER} style={{ backgroundColor: Constants.colors.black }} />
         <div className={STYLES_GAME_TITLE}>blank</div>
       </div>
     );

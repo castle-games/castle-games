@@ -12,9 +12,9 @@ import HomeUpdateBanner from '~/components/home/HomeUpdateBanner';
 import UIPostList from '~/components/reusable/UIPostList';
 
 const STYLES_CONTAINER = css`
+  background: ${Constants.colors.background};
   width: 100%;
   height: 100%;
-  background: ${Constants.colors.background};
   overflow-y: scroll;
   padding-bottom: 64px;
 

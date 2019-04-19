@@ -11,12 +11,12 @@ import UIGameGrid from '~/components/reusable/UIGameGrid';
 import UIUserGrid from '~/components/reusable/UIUserGrid';
 
 const STYLES_CONTAINER = css`
+  background: ${Constants.colors.background};
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
-  background: ${Constants.colors.background};
 
   ::-webkit-scrollbar {
     display: none;
@@ -25,19 +25,19 @@ const STYLES_CONTAINER = css`
 `;
 
 const STYLES_SEARCH_RESPONSE = css`
+  color: ${Constants.colors.black};
   font-size: 48px;
   line-height: 56px;
   padding: 24px;
   max-width: 640px;
-  color: ${Constants.colors.black};
 `;
 
 const STYLES_SEARCH_RESPONSE_ACTION = css`
+  color: ${Constants.colors.black};
   font-size: 48px;
   line-height: 56px;
   padding: 24px;
   max-width: 640px;
-  color: ${Constants.colors.black};
 
   :hover {
     cursor: pointer;
@@ -190,13 +190,14 @@ export default class SearchScreen extends React.Component {
         <React.Fragment>
           <div className={STYLES_SEARCH_RESPONSE}>
             We did not find find anything matching{' '}
-            <strong style={{ color: `#0062ff` }}>"{this.props.query}"</strong>, but it looks like a
-            game URL.
+            <strong style={{ color: Constants.colors.searchEmphasis }}>"{this.props.query}"</strong>
+            , but it looks like a game URL.
           </div>
           <div
             className={STYLES_SEARCH_RESPONSE_ACTION}
             onClick={() => this._maybeNavigateToUrl(this.props.query)}>
-            Open <strong style={{ color: `#0062ff` }}>{this.props.query}</strong>
+            Open{' '}
+            <strong style={{ color: Constants.colors.searchEmphasis }}>{this.props.query}</strong>
           </div>
         </React.Fragment>
       );
@@ -204,7 +205,7 @@ export default class SearchScreen extends React.Component {
       return (
         <div className={STYLES_SEARCH_RESPONSE}>
           We did not find find anything matching{' '}
-          <strong style={{ color: `#0062ff` }}>"{this.props.query}"</strong>.
+          <strong style={{ color: Constants.colors.searchEmphasis }}>"{this.props.query}"</strong>.
         </div>
       );
     }

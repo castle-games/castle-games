@@ -36,9 +36,9 @@ const STYLES_CHAT_ITEM = css`
   justify-content: space-between;
 
   a {
+    color: ${Constants.colors.brand2};
     font-weight: 600;
     transition: 200ms ease color;
-    color: ${Constants.colors.brand2};
 
     :hover {
       color: ${Constants.colors.brand3};
@@ -104,9 +104,8 @@ const STYLES_MESSAGE_MENTION = css`
     }
 
     0% {
+      color: ${Constants.colors.text};
       opacity: 0;
-      color: #000;
-
       transform: scale3d(0.3, 0.3, 0.3);
     }
 
@@ -128,16 +127,16 @@ const STYLES_MESSAGE_MENTION = css`
     }
 
     to {
+      color: ${Constants.colors.brand1};
       opacity: 1;
-      color: cyan;
       transform: scale3d(1, 1, 1);
     }
   }
 
+  color: ${Constants.colors.brand1};
   cursor: pointer;
   display: inline-block;
   font-weight: 900;
-  color: cyan;
   animation: color-change 750ms;
   animation-iteration-count: 1;
 `;
