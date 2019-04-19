@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as ChatUtils from '~/common/chatutils';
+import * as ChatUtilities from '~/common/chat-utilities';
 import * as Actions from '~/common/actions';
 import * as Strings from '~/common/strings';
 
@@ -123,7 +123,7 @@ class ChatContextProvider extends React.Component {
 
       NativeBinds.showDesktopNotification({
         title,
-        body: ChatUtils.messageToString(message, this.props.social),
+        body: ChatUtilities.messageToString(message, this.props.social),
       });
     }
   };
@@ -237,7 +237,7 @@ class ChatContextProvider extends React.Component {
         userIdsToLoad[fromUserId] = true;
       }
 
-      messages[i].richMessage = ChatUtils.convertToRichMessage(messages[i].message.body);
+      messages[i].richMessage = ChatUtilities.convertToRichMessage(messages[i].message.body);
       if (messages[i].richMessage.message) {
         for (let j = 0; j < messages[i].richMessage.message.length; j++) {
           let richMessagePart = messages[i].richMessage.message[j];

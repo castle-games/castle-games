@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 
 import * as React from 'react';
 import * as Constants from '~/common/constants';
-import * as ChatUtils from '~/common/chatutils';
+import * as ChatUtilities from '~/common/chat-utilities';
 
 import { css } from 'react-emotion';
 import { isKeyHotkey } from 'is-hotkey';
@@ -173,7 +173,7 @@ export default class ChatInput extends React.Component {
       return;
     }
 
-    let formattedMessage = await ChatUtils.formatMessageAsync(
+    let formattedMessage = await ChatUtilities.formatMessageAsync(
       this.state.inputValue,
       this._autocompleteCache
     );
