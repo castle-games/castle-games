@@ -15,11 +15,11 @@ const STYLES_CONTAINER = css`
 `;
 
 const STYLES_INNER_CONTAINER = css`
+  border: 1px solid ${Constants.colors.black};
+  background: ${Constants.colors.white};
   position: absolute;
   bottom: 2px;
   width: 100%;
-  border: 1px solid ${Constants.colors.black};
-  background: ${Constants.colors.white};
   font-size: 12px;
   width: 100%;
 `;
@@ -31,21 +31,21 @@ const STYLES_HEADING = css`
 `;
 
 const STYLE_RESULT_ROW = css`
+  color: ${Constants.colors.black};
   cursor: pointer;
   padding: 8px;
   width: 100%;
-  color: ${Constants.colors.black};
   letter-spacing: 0.2px;
   font-weight: 800;
 `;
 
 const STYLE_RESULT_ROW_SELECTED = css`
+  color: ${Constants.colors.action};
+  background: ${Constants.colors.background3};
   cursor: pointer;
   padding: 8px;
   border-radius: 0px;
   width: 100%;
-  color: ${Constants.colors.action};
-  background: ${Constants.colors.background3};
   letter-spacing: 0.2px;
   font-weight: 100;
 `;

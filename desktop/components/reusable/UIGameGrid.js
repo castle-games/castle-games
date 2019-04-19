@@ -47,9 +47,9 @@ const STYLES_GAME_SCREENSHOT = css`
 `;
 
 const STYLES_TITLE = css`
+  font-family: ${Constants.font.game};
   text-align: right;
   margin-top: 8px;
-  font-family: ${Constants.font.game};
   font-size: 18px;
   width: 188px;
   height: 56px;
@@ -85,8 +85,8 @@ const STYLES_AVATAR = css`
 
 const STYLES_AVATAR_CREATOR = css`
   font-family: ${Constants.font.system};
-  font-weight: 700;
   color: ${Constants.colors.black};
+  font-weight: 700;
 `;
 
 const STYLES_BYLINE = css`
@@ -98,38 +98,38 @@ const STYLES_BYLINE = css`
 `;
 
 const STYLES_URL = css`
+  font-family: ${Constants.font.system};
   margin-top: 8px;
   font-size: 12px;
   font-weight: 600;
-  font-family: ${Constants.font.system};
   overflow-wrap: break-word;
   max-width: 204px;
   width: 100%;
 `;
 
 const STYLES_TAG = css`
+  background: ${Constants.colors.text};
+  font-family: ${Constants.font.monobold};
   position: absolute;
   top: 4px;
   left: 4px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: ${Constants.colors.text};
   border-radius: 4px;
   padding: 0 8px 0 8px;
   height: 24px;
-  font-family: ${Constants.font.monobold};
   color: white;
   font-size: 10px;
 `;
 
 const STYLES_GAME_POPOVER = css`
+  font-family: ${Constants.font.system};
   position: absolute;
   top: 8px;
   left: 8px;
   width: 256px;
   z-index: 4;
-  font-family: ${Constants.font.system};
   text-align: left;
   cursor: default;
 
@@ -171,8 +171,8 @@ const STYLES_POPOVER_TITLE = css`
 `;
 
 const STYLES_POPOVER_P = css`
-  text-align: left;
   font-family: ${Constants.font.system};
+  text-align: left;
   font-size: 14px;
   width: 100%;
   min-width: 25%;

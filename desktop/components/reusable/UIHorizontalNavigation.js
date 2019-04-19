@@ -10,10 +10,10 @@ const STYLES_ROW = css`
 
 const STYLES_NAVIGATION_ITEM = css`
   font-family: ${Constants.font.heading};
+  font-size: ${Constants.typescale.base};
   user-select: none;
   padding: 16px;
   cursor: pointer;
-  font-size: ${Constants.typescale.base};
 `;
 
 class UINavigationItem extends React.Component {

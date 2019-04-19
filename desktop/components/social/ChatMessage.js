@@ -69,12 +69,12 @@ const STYLES_MESSAGE_HEADING = css`
 `;
 
 const STYLES_MESSAGE_HEADING_LEFT = css`
+  font-family: ${Constants.font.system};
   width: 100%;
   min-width: 96px;
   font-weight: 700;
   cursor: pointer;
   overflow-wrap: break-word;
-  font-family: ${Constants.font.system};
 
   @media (max-width: 960px) {
     min-width: 24px;
@@ -93,10 +93,6 @@ const STYLES_MESSAGE_HEADING_RIGHT = css`
 `;
 
 const STYLES_MESSAGE_MENTION = css`
-  cursor: pointer;
-  display: inline-block;
-  font-weight: 900;
-  color: cyan;
   @keyframes color-change {
     from,
     20%,
@@ -138,6 +134,10 @@ const STYLES_MESSAGE_MENTION = css`
     }
   }
 
+  cursor: pointer;
+  display: inline-block;
+  font-weight: 900;
+  color: cyan;
   animation: color-change 750ms;
   animation-iteration-count: 1;
 `;
@@ -159,9 +159,9 @@ const STYLES_NOTIFICATION_HEADING = css`
 `;
 
 const STYLES_NOTIFICATION_ITEM_CONTENT = css`
-  border-radius: 0;
   background-color: ${Constants.colors.brand4};
   color: ${Constants.colors.text};
+  border-radius: 0;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
   font-size: 14px;
   padding: 8px 8px 16px 8px;

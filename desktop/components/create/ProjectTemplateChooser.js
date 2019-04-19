@@ -26,10 +26,10 @@ const STYLES_GAME_COVER = css`
 `;
 
 const STYLES_GAME_TITLE = css`
-  display: inline-flex;
-  width: 100%;
   font-size: ${Constants.typescale.lvl6};
   line-height: ${Constants.linescale.lvl6};
+  display: inline-flex;
+  width: 100%;
   align-items: center;
   justify-content: center;
 `;

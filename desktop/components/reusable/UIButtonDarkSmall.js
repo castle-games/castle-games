@@ -4,11 +4,11 @@ import * as Constants from '~/common/constants';
 import { css } from 'react-emotion';
 
 const STYLES_CONTROL = css`
+  color: ${Constants.colors.white};
+  background: ${Constants.colors.foreground};
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: ${Constants.colors.white};
-  background: ${Constants.colors.foreground};
   height: 28px;
   width: 28px;
   transition: 200ms ease opacity;

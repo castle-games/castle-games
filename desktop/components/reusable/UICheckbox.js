@@ -27,6 +27,7 @@ const STYLES_RIGHT = css`
 `;
 
 const STYLES_CHECKBOX = css`
+  color: ${Constants.colors.white};
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -34,7 +35,6 @@ const STYLES_CHECKBOX = css`
   width: 24px;
   height: 24px;
   background: #000;
-  color: ${Constants.colors.white};
   border-radius: 4px;
 `;
 

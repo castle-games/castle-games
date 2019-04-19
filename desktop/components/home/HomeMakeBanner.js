@@ -17,14 +17,14 @@ const STYLES_ACTIONS = css`
 `;
 
 const STYLES_ACTION = css`
+  font-family: ${Constants.font.system};
+  color: ${Constants.colors.black};
   border-right: 1px solid #c1bcbb;
   background-color: #ffffff;
   flex-shrink: 0;
   padding: 16px 32px 16px 24px;
   cursor: pointer;
   transition: 200ms ease all;
-  font-family: ${Constants.font.system};
-  color: ${Constants.colors.black};
 
   :hover {
     color: magenta;

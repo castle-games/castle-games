@@ -45,22 +45,22 @@ const STYLES_ROW = css`
 `;
 
 const STYLES_COLUMN_FLUID = css`
-  min-width: 25%;
-  width: 100%;
-  padding-right: 24px;
   color: ${Constants.colors.black};
   font-size: ${Constants.typescale.base};
   line-height: ${Constants.linescale.base};
+  min-width: 25%;
+  width: 100%;
+  padding-right: 24px;
 `;
 
 const STYLES_COLUMN = css`
-  width: 96px;
   font-family: ${Constants.font.mono};
+  color: ${Constants.colors.black};
+  line-height: ${Constants.linescale.base};
+  width: 96px;
   font-size: 12px;
   text-transform: uppercase;
   flex-shrink: 0;
-  color: ${Constants.colors.black};
-  line-height: ${Constants.linescale.base};
 `;
 
 const Row = (props) => {

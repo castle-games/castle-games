@@ -23,9 +23,9 @@ const STYLES_LOADER_BAR = css`
 		}
 	}
 
+	background: ${Constants.colors.green};
 	animation: animation-url-loader 800ms cubic-bezier(0.4, 0.7, 1, 0.1) infinite;
 	display: block;
-	background: ${Constants.colors.green};
 	height: 2px;
 	position: absolute;
 `;

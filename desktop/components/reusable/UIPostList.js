@@ -20,11 +20,11 @@ const STYLES_POST = css`
 `;
 
 const STYLES_POST_CARD = css`
+  background: ${Constants.colors.white};
   flex: 1;
   display: flex;
   flex-direction: column;
   position: relative;
-  background: ${Constants.colors.white};
   border-radius: 4px;
   padding: 8px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
@@ -101,19 +101,15 @@ const STYLES_USER_NAME = css`
 `;
 
 const STYLES_POST_BODY = css`
+  background: ${Constants.colors.white};
   display: flex;
   position: relative;
   flex-direction: column;
   padding: 4px;
-  background: ${Constants.colors.white};
   border-radius: 4px;
 `;
 
 const STYLES_MESSAGE_MENTION = css`
-  cursor: pointer;
-  display: inline-block;
-  font-weight: 900;
-  color: cyan;
   @keyframes color-change {
     from,
     20%,
@@ -155,6 +151,10 @@ const STYLES_MESSAGE_MENTION = css`
     }
   }
 
+  cursor: pointer;
+  display: inline-block;
+  font-weight: 900;
+  color: cyan;
   animation: color-change 750ms;
   animation-iteration-count: 1;
 `;
@@ -308,5 +308,5 @@ export default class UIPostList extends React.Component {
     this.setState({
       posts: await Actions.allPostsAsync(), // This call supports pagination, we're just not using it...
     });
-  }
+  };
 }

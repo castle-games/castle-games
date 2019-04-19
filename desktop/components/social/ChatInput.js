@@ -31,10 +31,10 @@ const STYLES_CONTAINER = css`
 `;
 
 const STYLES_INPUT = css`
-  display: block;
-  background: transparent;
   font-family: ${Constants.font.system};
   color: ${Constants.colors.white};
+  display: block;
+  background: transparent;
   overflow-wrap: break-word;
   box-sizing: border-box;
   font-size: 14px;
@@ -54,10 +54,10 @@ const STYLES_INPUT = css`
 `;
 
 const STYLES_INPUT_READONLY = css`
-  display: block;
-  background: transparent;
   font-family: ${Constants.font.system};
   color: ${Constants.colors.white};
+  display: block;
+  background: transparent;
   font-size: 14px;
   min-width: 25%;
   height: 48px;

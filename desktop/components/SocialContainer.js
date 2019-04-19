@@ -18,9 +18,9 @@ const ENABLE_NOTIFICATIONS = false;
 
 const STYLES_CONTAINER = css`
   font-family: ${Constants.font.default};
+  color: ${Constants.colors.white};
   position: relative;
   background: #141414;
-  color: ${Constants.colors.white};
   display: flex;
   flex-direction: column;
   width: 288px;
@@ -28,10 +28,10 @@ const STYLES_CONTAINER = css`
 `;
 
 const STYLES_CONTAINER_HEADER = css`
+  background: ${Constants.colors.backgroundNavigation};
   flex-shrink: 0;
   width: 100%;
   height: 32px;
-  background: ${Constants.colors.backgroundNavigation};
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -53,12 +53,12 @@ const STYLES_LOGIN_ACTION = css`
 `;
 
 const STYLES_ACTION_BUTTON = css`
+  color: ${Constants.colors.white};
   height: 32px;
   width: 32px;
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
-  color: ${Constants.colors.white};
   cursor: pointer;
 
   :hover {
@@ -86,13 +86,13 @@ const STYLES_STAT = css`
 `;
 
 const STYLES_EXP_LABEL = css`
-  margin-right: 8px;
   color: ${Constants.colors.darkcyan};
+  margin-right: 8px;
 `;
 
 const STYLES_LVL_LABEL = css`
-  margin-right: 8px;
   color: ${Constants.colors.brand2};
+  margin-right: 8px;
 `;
 
 class SocialContainer extends React.Component {

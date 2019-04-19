@@ -5,35 +5,35 @@ import * as NativeUtil from '~/native/nativeutil';
 import { css } from 'react-emotion';
 
 const STYLES_CONTAINER = css`
-  display: flex;
   border: 1px solid ${Constants.colors.background4};
+  display: flex;
   border-radius: 4px;
 `;
 
 const STYLES_PROJECT_PATH_PREVIEW = css`
+  font-size: ${Constants.typescale.lvl7};
+  line-height: ${Constants.linescale.lvl5};
   cursor: default;
   width: 100%;
   padding: 8px;
-  font-size: ${Constants.typescale.lvl7};
-  line-height: ${Constants.linescale.lvl5};
 `;
 
 const STYLES_PROJECT_DIRECTORY = css`
-  font-weight: 700;
   color: ${Constants.colors.text};
+  font-weight: 700;
 `;
 
 const STYLES_ACTION = css`
-  display: flex;
-  align-items: center;
-  justify-content: center;
   border-left: 1px solid ${Constants.colors.background4};
-  padding: 8px;
-  flex-shrink: 0;
   font-size: ${Constants.typescale.lvl7};
   line-height: ${Constants.linescale.lvl5};
   color: ${Constants.colors.action};
   font-family: ${Constants.font.mono};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  flex-shrink: 0;
   text-decoration: underline;
   text-transform: uppercase;
   word-spacing: -0.2rem;

@@ -10,12 +10,12 @@ import DevelopmentLogs from '~/components/game/DevelopmentLogs';
 import UINavigationLink from '~/components/reusable/UINavigationLink';
 
 const STYLES_CONTAINER = css`
+  border-top: 1px solid ${Constants.colors.background4};
   background: #020202;
   width: 100%;
   display: flex;
   height: 196px;
   min-height: 96px;
-  border-top: 1px solid ${Constants.colors.background4};
 
   @keyframes fade-in-up-dev {
     from {
@@ -31,12 +31,12 @@ const STYLES_CONTAINER = css`
 `;
 
 const STYLES_GAME_CONTROLS = css`
+  color: ${Constants.colors.white};
+  border-right: 1px solid ${Constants.colors.background4};
   padding: 8px 24px 8px 24px;
   width: 50%;
   min-width: 196px;
   max-width: 50%;
-  color: ${Constants.colors.white};
-  border-right: 1px solid ${Constants.colors.background4};
   display: flex;
   flex-direction: column;
 `;

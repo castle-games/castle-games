@@ -9,11 +9,11 @@ import UILogItem from '~/components/reusable/UILogItem';
 import UINavigationLink from '~/components/reusable/UINavigationLink';
 
 const STYLES_FIXED_CONTAINER = css`
+  color: ${Constants.colors.white};
   height: 100%;
   display: flex;
   flex-direction: column;
   background: #020202;
-  color: ${Constants.colors.white};
 `;
 
 const STYLES_SCROLLING_LOGS = css`

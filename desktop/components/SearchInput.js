@@ -9,22 +9,22 @@ import ControlledInput from '~/components/primitives/ControlledInput';
 import UINavigationLink from '~/components/reusable/UINavigationLink';
 
 const STYLES_CONTAINER = css`
+  color: ${Constants.colors.black};
+  background: ${Constants.colors.white};
   display: flex;
   align-items: center;
   justify-content: space-between;
   min-width: 10%;
   width: 100%;
   padding: 8px;
-  color: ${Constants.colors.black};
-  background: ${Constants.colors.white};
 `;
 
 const STYLES_CONTAINER_LEFT = css`
+  color: ${Constants.colors.white};
   flex-shrink: 0;
   display: flex;
   align-items: center;
   cursor: pointer;
-  color: ${Constants.colors.white};
   padding-right: 8px;
 `;
 
@@ -63,8 +63,8 @@ const STYLES_INPUT = css`
 `;
 
 const STYLES_INPUT_READONLY = css`
-  font-size: 24px;
   background: ${Constants.colors.background3};
+  font-size: 24px;
   border-radius: 3px;
   padding: 4px 12px 4px 12px;
   cursor: default;

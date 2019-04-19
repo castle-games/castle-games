@@ -15,13 +15,13 @@ const STYLES_DETAIL = css`
 
 const STYLES_EXPAND = css`
   font-family: ${Constants.font.default};
+  color: ${Constants.colors.white};
   font-weight: 600;
   margin-top: 2px;
   font-size: 10px;
   display: flex;
   justify-content: flex-end;
   text-transform: uppercase;
-  color: ${Constants.colors.white};
 `;
 
 export default class UILogItem extends React.Component {
@@ -31,18 +31,14 @@ export default class UILogItem extends React.Component {
 
   _onClick = () => {
     this.setState({ expanded: !this.state.expanded });
-  }
-  
+  };
+
   render() {
     const { log } = this.props;
     let maybeDetailsElement;
     if (log.details) {
       if (this.state.expanded) {
-        maybeDetailsElement = (
-          <div className={STYLES_DETAIL}>
-            {log.details}
-          </div>
-        );
+        maybeDetailsElement = <div className={STYLES_DETAIL}>{log.details}</div>;
       } else {
         maybeDetailsElement = (
           <div className={STYLES_EXPAND}>
@@ -53,9 +49,7 @@ export default class UILogItem extends React.Component {
     }
     return (
       <div className={STYLES_LOG} onClick={this._onClick}>
-        <div>
-          {log.text}
-        </div>
+        <div>{log.text}</div>
         {maybeDetailsElement}
       </div>
     );

@@ -47,9 +47,9 @@ const STYLES_GAME_PREVIEW_ERROR = css`
 
 const STYLES_GAME_PREVIEW_ERROR_DETAIL = css`
   font-size: ${Constants.typescale.lvl6};
+  border-left: 3px solid ${Constants.colors.background4};
   margin-bottom: 16px;
   padding-left: 16px;
-  border-left: 3px solid ${Constants.colors.background4};
 `;
 
 const STYLES_GAME_PREVIEW_URL = css`
@@ -68,9 +68,9 @@ const STYLES_GAME_SOURCE_URL = css`
 
 const STYLES_UPDATE_STATUS = css`
   color: ${Constants.colors.text2};
-  text-transform: uppercase;
   font-size: ${Constants.typescale.lvl7};
   line-height: ${Constants.linescale.lvl7};
+  text-transform: uppercase;
   margin: 8px 0;
 `;
 

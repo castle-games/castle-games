@@ -10,14 +10,14 @@ const STYLES_CONTAINER = css`
 `;
 
 const STYLES_INPUT = css`
+  background: ${Constants.colors.white};
+  color: ${Constants.colors.black};
   display: block;
   box-sizing: border-box;
   padding: 16px 8px 0 8px;
   border-radius: 4px;
   width: 100%;
   border: 2px solid transparent;
-  background: ${Constants.colors.white};
-  color: ${Constants.colors.black};
   font-size: 16px;
   height: 64px;
   margin: 0 0 0 0;

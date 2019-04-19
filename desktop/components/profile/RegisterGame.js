@@ -50,9 +50,9 @@ const STYLES_GAME_PREVIEW_ERROR = css`
 
 const STYLES_GAME_PREVIEW_ERROR_DETAIL = css`
   font-size: ${Constants.typescale.lvl6};
+  border-left: 3px solid ${Constants.colors.background4};
   margin-bottom: 16px;
   padding-left: 16px;
-  border-left: 3px solid ${Constants.colors.background4};
 `;
 
 const STYLES_GAME_PREVIEW_URL = css`

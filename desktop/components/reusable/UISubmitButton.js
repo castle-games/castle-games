@@ -6,13 +6,13 @@ import { css } from 'react-emotion';
 const STYLES_BUTTON = css`
   background: ${Constants.colors.black};
   font-family: ${Constants.font.heading};
+  font-size: ${Constants.typescale.lvl6};
   border-radius: 4px;
   height: 34px;
   text-align: center;
   padding: 0 24px 0 24px;
   outline: 0;
   border: 0;
-  font-size: ${Constants.typescale.lvl6};
 
   :enabled {
     color: ${Constants.colors.white};

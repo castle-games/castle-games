@@ -14,8 +14,8 @@ import UIHeading from '~/components/reusable/UIHeading';
 import UIUserStatusIndicator from '~/components/reusable/UIUserStatusIndicator';
 
 const STYLES_CONTAINER = css`
-  padding: 24px 16px 0 24px;
   background: ${Constants.colors.white};
+  padding: 24px 16px 0 24px;
 `;
 
 const STYLES_BODY = css`
@@ -26,8 +26,8 @@ const STYLES_BODY = css`
 `;
 
 const STYLES_BODY_LEFT = css`
-  min-width: 25%;
   color: ${Constants.colors.text};
+  min-width: 25%;
 `;
 
 const STYLES_BODY_RIGHT = css`
@@ -46,10 +46,10 @@ const STYLES_TITLE = css`
 `;
 
 const STYLES_META = css`
+  font-family: ${Constants.font.monobold};
   margin: 4px 0 4px 0;
   font-size: 12px;
   text-transform: uppercase;
-  font-family: ${Constants.font.monobold};
 `;
 
 const STYLES_ABOUT = css`

@@ -27,9 +27,9 @@ const STYLES_LEFT = css`
 `;
 
 const STYLES_RIGHT = css`
+  color: ${Constants.colors.white};
   flex-shrink: 0;
   padding: 0 8px 0 8px;
-  color: ${Constants.colors.white};
   cursor: pointer;
   display: inline-flex;
   align-items: center;

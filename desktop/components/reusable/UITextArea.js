@@ -11,15 +11,15 @@ const STYLES_CONTAINER = css`
 `;
 
 const STYLES_INPUT = css`
+  border: 1px solid ${Constants.colors.black};
+  background: ${Constants.colors.white};
+  color: ${Constants.colors.black};
   display: block;
   box-sizing: border-box;
   padding: 32px 8px 16px 8px;
   min-height: 112px;
   border-radius: 4px;
   width: 100%;
-  border: 1px solid ${Constants.colors.black};
-  background: ${Constants.colors.white};
-  color: ${Constants.colors.black};
   font-size: 16px;
   font-weight: 300;
   margin: 0 0 0 0;

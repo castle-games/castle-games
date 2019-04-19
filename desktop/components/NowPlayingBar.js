@@ -8,9 +8,9 @@ import { css } from 'react-emotion';
 import UINavigationLink from '~/components/reusable/UINavigationLink';
 
 const STYLES_GAME_STRIP = css`
+  color: ${Constants.colors.white};
   height: 32px;
   width: 100%;
-  color: ${Constants.colors.white};
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -44,9 +44,9 @@ const STYLES_CONTAINER = css`
 
 const STYLES_EMPHASIS_CHOICE = css`
   font-family: ${Constants.font.mono};
+  color: ${Constants.colors.white};
   background: #313131;
   flex-shrink: 0;
-  color: ${Constants.colors.white};
   cursor: pointer;
   display: inline-flex;
   align-items: center;

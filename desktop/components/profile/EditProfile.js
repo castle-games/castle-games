@@ -54,10 +54,6 @@ const STYLES_FILE_INPUT = css`
   display: inline-flex;
 `;
 
-// NOTE: using `display: inline-flex` here causes
-// windows client to become unresponsive.
-const STYLES_FILE_INPUT_WIN = css``;
-
 const STYLES_GENERIC_INPUT = css`
   margin-bottom: 16px;
   margin-right: 16px;
@@ -192,7 +188,7 @@ export default class EditProfile extends React.Component {
       isAvatarUploadEnabled = false;
     }
 
-    const inputClass = Utilities.isWindows() ? STYLES_FILE_INPUT_WIN : STYLES_FILE_INPUT;
+    const inputClass = Utilities.isWindows() ? null : STYLES_FILE_INPUT;
     return (
       <div className={STYLES_SECTION_CONTENT}>
         <UIAvatar src={avatarSrc} style={{ width: 128, height: 128, marginRight: 16 }} />

@@ -4,16 +4,16 @@ import * as Constants from '~/common/constants';
 import { css } from 'react-emotion';
 
 const STYLES_BUTTON = css`
-  display: inline-flex;
+  font-size: ${Constants.typescale.lvl6};
+  font-family: ${Constants.font.system};
   background: ${Constants.colors.black};
+  display: inline-flex;
   border-radius: 4px;
   height: 48px;
   text-align: center;
   padding: 0 24px 0 24px;
   outline: 0;
   border: 0;
-  font-size: ${Constants.typescale.lvl6};
-  font-family: ${Constants.font.system};
   font-weight: 700;
   opacity: 1;
 

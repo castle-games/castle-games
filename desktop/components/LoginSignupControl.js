@@ -11,13 +11,13 @@ import UIButton from '~/components/reusable/UIButton';
 import UIUserPreview from '~/components/reusable/UIUserPreview';
 
 const STYLES_CONTAINER = css`
+  font-family: ${Constants.font.system};
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   width: 100%;
   height: 100%;
-  font-family: ${Constants.font.system};
   background: rgb(39, 39, 39);
 `;
 
@@ -32,16 +32,16 @@ const STYLES_SPACER = css`
 `;
 
 const STYLES_HEADING = css`
-  font-size: 24px;
   color: ${Constants.colors.white};
   font-family: ${Constants.font.heading};
+  font-size: 24px;
   margin-bottom: 16px;
 `;
 
 const STYLES_PARAGRAPH = css`
   color: ${Constants.colors.white};
-  font-size: 14px;
   line-height: ${Constants.linescale.base};
+  font-size: 14px;
   font-weight: 400;
   margin-top: 16px;
   margin-bottom: 12px;
@@ -56,9 +56,9 @@ const STYLES_FOOTER = css`
 
 const STYLES_ACTION = css`
   font-family: ${Constants.font.default};
+  color: ${Constants.colors.brand1};
   text-decoration: underline;
   cursor: pointer;
-  color: ${Constants.colors.brand1};
   transition: 200ms ease color;
 
   :hover {
@@ -67,11 +67,11 @@ const STYLES_ACTION = css`
 `;
 
 const STYLES_ERROR_MESSAGE = css`
+  background: ${Constants.colors.error};
+  color: ${Constants.colors.white};
   flex-shrink: 0;
   display: flex;
   padding: 16px;
-  background: ${Constants.colors.error};
-  color: ${Constants.colors.white};
   border-radius: 4px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
   margin: 16px 0 16px 0;

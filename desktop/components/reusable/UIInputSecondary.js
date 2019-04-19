@@ -10,6 +10,8 @@ const STYLES_CONTAINER = css`
 `;
 
 const STYLES_INPUT = css`
+  background: ${Constants.colors.white};
+  color: ${Constants.colors.black};
   display: block;
   box-sizing: border-box;
   padding: 16px 8px 0 8px;
@@ -18,8 +20,6 @@ const STYLES_INPUT = css`
   max-width: 480px;
   border: 2px solid transparent;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-  background: ${Constants.colors.white};
-  color: ${Constants.colors.black};
   font-size: 16px;
   height: 64px;
   margin: 0 0 0 0;
