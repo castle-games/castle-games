@@ -3,6 +3,7 @@ local bridge = require 'bridge'
 local cjson = require 'cjson'
 local ltn12 = require 'ltn12'
 local http = require 'copas.http'
+local uuid = require 'uuid'
 
 local ffi = require 'ffi'
 local C = ffi.C
@@ -223,13 +224,24 @@ castle.post = {}
 
 function castle.post.create(options)
     local message = options.message or 'Say something!'
+
+    local mediaPath = nil
+    local media = options.media
+    if type(media) == 'userdata' and media.typeOf and media:typeOf('ImageData') then
+        local savePath = CASTLE_TMP_DIR_NAME .. '/' .. 'img-' .. uuid() .. '.png'
+        media:encode('png', savePath)
+        mediaPath = love.filesystem.getSaveDirectory() .. '/' .. savePath
+    end
+
     local encodedData = nil
-    if options.data ~= nil then
-        encodedData = cjson.encode(options.data)
+    local data = options.data
+    if data ~= nil then
+        encodedData = cjson.encode(data)
     end
 
     return bridge.js.postCreate {
         message = message,
+        mediaPath = mediaPath,
         data = encodedData,
     }
 end
