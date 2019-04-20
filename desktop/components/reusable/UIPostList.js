@@ -165,7 +165,9 @@ const STYLES_MEDIA_CONTAINER = css`
 
 const STYLES_MEDIA_IMAGE = css`
   background-color: ${Constants.colors.black};
+  object-fit: contain;
   width: 100%;
+  max-height: 500px;
 `;
 
 class UIPostCell extends React.Component {
