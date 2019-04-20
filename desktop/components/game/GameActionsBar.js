@@ -4,6 +4,7 @@ import * as NativeUtil from '~/native/nativeutil';
 import * as Urls from '~/common/urls';
 import * as SVG from '~/components/primitives/svg';
 import * as Utilities from '~/common/utilities';
+import * as Bridge from '~/common/bridge';
 
 import { css } from 'react-emotion';
 import { DevelopmentContext } from '~/contexts/DevelopmentContext';
@@ -99,6 +100,14 @@ export default class GameActionsBar extends React.Component {
     NativeUtil.openExternalURL(Urls.githubUserContentToRepoUrl(gameEntryPoint));
   };
 
+  _handlePostScreenshot = async () => {
+    const { path } = await Bridge.Lua.captureScreenshot();
+    await Bridge.JS.postCreate({
+      message: 'I took a screenshot!',
+      mediaPath: path,
+    });
+  };
+
   componentDidUpdate(prevProps) {
     if (this._lastDeveloperState !== this.context.isDeveloping) {
       this.props.onUpdateGameWindowFrame();
@@ -132,6 +141,15 @@ export default class GameActionsBar extends React.Component {
       </span>
     );
 
+    let maybePostScreenshotElement;
+    if (Constants.featureFlags.posts) {
+      maybePostScreenshotElement = (
+        <UINavigationLink style={{ marginRight: 24 }} onClick={this._handlePostScreenshot}>
+          Post screenshot
+        </UINavigationLink>
+      );
+    }
+
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_GAME_STRIP}>
@@ -152,6 +170,7 @@ export default class GameActionsBar extends React.Component {
           <div className={STYLES_GAME_STRIP_LEFT}>{muteElement}</div>
           <div className={STYLES_GAME_STRIP_RIGHT}>
             {maybeViewSourceElement}
+            {maybePostScreenshotElement}
             <UINavigationLink style={{ marginRight: 24 }} onClick={this.props.onFullScreenToggle}>
               Theater Mode (ESC)
             </UINavigationLink>
