@@ -11,12 +11,12 @@ function getBlobForFilename(filename) {
   return f;
 }
 
-async function uploadFile(API, { file }) {
-  const variables = { file };
+async function uploadFile(API, { file, params }) {
+  const variables = { file, params };
   const result = await API.graphqlAsync({
     query: `
-      mutation($file: Upload!) {
-        uploadFile(file: $file) {
+      mutation($file: Upload!, $params: UploadFileParams) {
+        uploadFile(file: $file, params: $params) {
           fileId
           width
           height
@@ -38,6 +38,7 @@ async function uploadFileAsync(args) {
   let path = args.path;
   let apiHost = args.apiHost;
   let token = args.token;
+  let params = args.params;
 
   let API = CastleApiClient(apiHost, {
     // XXX: We should factor this into some common thing for all actions...
@@ -54,6 +55,7 @@ async function uploadFileAsync(args) {
 
   return await uploadFile(API, {
     file: getBlobForFilename(path),
+    params: params,
   });
 }
 
