@@ -23,6 +23,7 @@ require = require 'require'
 castle = require 'castle'
 local root = require 'portal'
 local jsEvents = require 'jsEvents'
+local cjson = require 'cjson'
 
 if not CASTLE_SERVER then
     splash = require 'splash'
@@ -33,8 +34,6 @@ end
 
 local updateLogs
 do
-    local cjson = require 'cjson'
-
     local ERRORS_FILE_NAME, PRINTS_FILE_NAME = 'castle_errors.log', 'castle_prints.log'
 
     if castle.system.isDesktop() then
@@ -122,6 +121,11 @@ function main.load(arg)
     end)
 end
 
+local pendingPostOpens = {} -- Keep track of post open requests
+jsEvents.listen('CASTLE_POST_OPENED', function(postOpen)
+    table.insert(pendingPostOpens, postOpen)
+end)
+
 ffi.cdef 'bool ghostGetBackgrounded();'
 
 function main.update(dt)
@@ -132,6 +136,21 @@ function main.update(dt)
     updateLogs()
 
     if home then
+        -- If has a `castle.postopened` handler, notify of post opens
+        if home.loaded and home.globals.castle.postopened then
+            for _, postOpen in ipairs(pendingPostOpens) do
+                local decodedData
+                pcall(function()
+                    decodedData = cjson.decode(postOpen.data)
+                end)
+                home:safeCall(home.globals.castle.postopened, {
+                    mediaUrl = postOpen.mediaUrl,
+                    data = decodedData,
+                })
+            end
+            pendingPostOpens = {}
+        end
+
         if castle.system.isDesktop() and C.ghostGetBackgrounded() then
             if home.globals.castle.backgroundupdate then
                 home:safeCall(home.globals.castle.backgroundupdate, dt)

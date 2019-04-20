@@ -996,6 +996,7 @@ export async function allPostsAsync({ pageSize = 20, pageAfterPostId } = {}) {
             width
             height
           }
+          hasData
         }
       }
     `,
@@ -1007,4 +1008,23 @@ export async function allPostsAsync({ pageSize = 20, pageAfterPostId } = {}) {
   }
 
   return result.data.allPosts;
+}
+
+export async function postDataAsync({ postId }) {
+  const result = await API.graphqlAsync(
+    `
+      query($postId: ID!) {
+        post(postId: $postId) {
+          data
+        }
+      }
+    `,
+    { postId },
+  );
+
+  if (result.errors && result.errors.length) {
+    throw new Error(`\`postDataAsync\`: ${result.errors[0].message}`);
+  }
+
+  return result.data.post.data;
 }

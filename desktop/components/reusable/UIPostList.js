@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as Actions from '~/common/actions';
+import * as NativeUtil from '~/native/nativeutil';
 
 import { css } from 'react-emotion';
 import { getEmojiComponent } from '~/common/emojis';
@@ -40,11 +41,24 @@ const STYLES_POST_HEADER = css`
 
 const STYLES_GAME_CONTAINER = css`
   display: flex;
+  flex-direction: row;
+`;
+
+const STYLES_OPEN_DATA_BUTTON = css`
+  display: flex;
   justify-content: flex-start;
   cursor: pointer;
   padding: 0px;
   border-radius: 4px;
-  align-self: flex-start;
+  margin-right: 4px;
+`;
+
+const STYLES_GAME_BUTTON = css`
+  display: flex;
+  justify-content: flex-start;
+  cursor: pointer;
+  padding: 0px;
+  border-radius: 4px;
 `;
 
 const STYLES_GAME_BACKGROUND_LIGTHENER = css`
@@ -178,6 +192,15 @@ class UIPostCell extends React.Component {
     isPreview: false,
   };
 
+  _handleOpenData = async () => {
+    const { postId, sourceGame, media } = this.props.post;
+    this.props.onGameSelect(sourceGame);
+    NativeUtil.sendLuaEvent('CASTLE_POST_OPENED', {
+      ...(media ? { mediaUrl: media.url } : {}),
+      data: await Actions.postDataAsync({ postId }),
+    });
+  };
+
   _handleGameSelect = () => {
     this.props.onGameSelect(this.props.post.sourceGame);
   };
@@ -186,7 +209,7 @@ class UIPostCell extends React.Component {
     this.props.onUserSelect(this.props.post.creator);
   };
 
-  _renderGameContainer = (sourceGame) => {
+  _renderGameContainer = ({ sourceGame, hasData }) => {
     const primaryColor =
       sourceGame.metadata && sourceGame.metadata.primaryColor
         ? `#${sourceGame.metadata.primaryColor}`
@@ -194,16 +217,32 @@ class UIPostCell extends React.Component {
 
     const coverImageUrl = sourceGame.coverImage && sourceGame.coverImage.url;
 
+    let maybeOpenDataButton;
+    if (hasData) {
+      maybeOpenDataButton = (
+        <div className={STYLES_OPEN_DATA_BUTTON} style={{ backgroundColor: primaryColor }}>
+          <div className={STYLES_GAME_BACKGROUND_LIGTHENER} style={{ borderColor: primaryColor }}>
+            <div className={STYLES_GAME_TITLE} onClick={this._handleOpenData}>
+              Open Data
+            </div>
+          </div>
+        </div>
+      );
+    }
+
     return (
-      <div className={STYLES_GAME_CONTAINER} style={{ backgroundColor: primaryColor }}>
-        <div className={STYLES_GAME_BACKGROUND_LIGTHENER} style={{ borderColor: primaryColor }}>
-          <div
-            className={STYLES_GAME_COVER_IMAGE}
-            onClick={this._handleGameSelect}
-            style={{ backgroundImage: coverImageUrl ? `url(${coverImageUrl})` : null }}
-          />
-          <div className={STYLES_GAME_TITLE} onClick={this._handleGameSelect}>
-            {sourceGame.title}
+      <div className={STYLES_GAME_CONTAINER}>
+        {maybeOpenDataButton}
+        <div className={STYLES_GAME_BUTTON} style={{ backgroundColor: primaryColor }}>
+          <div className={STYLES_GAME_BACKGROUND_LIGTHENER} style={{ borderColor: primaryColor }}>
+            <div
+              className={STYLES_GAME_COVER_IMAGE}
+              onClick={this._handleGameSelect}
+              style={{ backgroundImage: coverImageUrl ? `url(${coverImageUrl})` : null }}
+            />
+            <div className={STYLES_GAME_TITLE} onClick={this._handleGameSelect}>
+              {sourceGame.title}
+            </div>
           </div>
         </div>
       </div>
@@ -250,11 +289,11 @@ class UIPostCell extends React.Component {
   render() {
     const { post } = this.props;
 
-    const { sourceGame, creator, message, media } = post;
+    const { sourceGame, creator, message, media, hasData } = post;
 
     let maybeGameContainer = null;
     if (sourceGame) {
-      maybeGameContainer = this._renderGameContainer(sourceGame);
+      maybeGameContainer = this._renderGameContainer({ sourceGame, hasData });
     }
 
     let maybeMessageContainer = null;
