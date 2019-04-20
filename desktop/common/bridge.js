@@ -95,7 +95,7 @@ export const JS = {
 
   // Post
 
-  async postCreate({ message, mediaPath, data }) {
+  async postCreate({ message, mediaPath, mediaUploadParams, data }) {
     // Get the current game and make sure it has a `.gameId` (is registered)
     const currentGame = GameWindow.getCurrentGame();
     if (!currentGame) {
@@ -116,7 +116,7 @@ export const JS = {
     // Upload the media
     let mediaFileId;
     if (mediaPath) {
-      mediaFileId = (await ExecNode.uploadFileAsync(mediaPath)).fileId;
+      mediaFileId = (await ExecNode.uploadFileAsync(mediaPath, mediaUploadParams)).fileId;
     }
 
     // Create the post!

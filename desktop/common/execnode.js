@@ -65,13 +65,14 @@ export async function uploadScreenCaptureAsync(path) {
   }
 }
 
-export async function uploadFileAsync(path) {
+export async function uploadFileAsync(path, params) {
   try {
     let token = await Actions.getAccessTokenAsync();
     let result = await execNodeAsync('uploadFile', {
       path,
       apiHost: Constants.API_HOST,
       token,
+      params,
     });
 
     return result;

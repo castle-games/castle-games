@@ -165,11 +165,7 @@ const STYLES_MEDIA_CONTAINER = css`
 
 const STYLES_MEDIA_IMAGE = css`
   background-color: ${Constants.colors.black};
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: 50%;
   width: 100%;
-  padding: 40%;
 `;
 
 class UIPostCell extends React.Component {
@@ -244,12 +240,7 @@ class UIPostCell extends React.Component {
   _renderMedia = (media) => {
     return (
       <div className={STYLES_MEDIA_CONTAINER}>
-        <div
-          className={STYLES_MEDIA_IMAGE}
-          style={{
-            backgroundImage: `url(${media.url})`,
-          }}
-        />
+        <img className={STYLES_MEDIA_IMAGE} src={media.url} />
       </div>
     );
   };

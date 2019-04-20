@@ -105,6 +105,7 @@ export default class GameActionsBar extends React.Component {
     await Bridge.JS.postCreate({
       message: 'I took a screenshot!',
       mediaPath: path,
+      mediaUploadParams: { autoCrop: true },
     });
   };
 
