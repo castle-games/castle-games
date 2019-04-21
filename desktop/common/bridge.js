@@ -95,7 +95,7 @@ export const JS = {
 
   // Post
 
-  async postCreate({ message, mediaPath, mediaUploadParams, data }) {
+  async postCreate({ message, mediaType, mediaPath, mediaUploadParams, data }) {
     // Get the current game and make sure it has a `.gameId` (is registered)
     const currentGame = GameWindow.getCurrentGame();
     if (!currentGame) {
@@ -105,6 +105,13 @@ export const JS = {
       throw new Error(
         'Post creation needs the running game to have a `gameId` -- is it registered?'
       );
+    }
+
+    // Is a capture requested?
+    if (mediaType === 'capture') {
+      ({ path: mediaPath } = await Lua.captureScreenshot());
+      mediaUploadParams = mediaUploadParams || {};
+      mediaUploadParams.autoCrop = true;
     }
 
     // Let user edit the message and confirm posting, or cancel

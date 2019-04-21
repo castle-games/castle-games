@@ -101,10 +101,9 @@ export default class GameActionsBar extends React.Component {
   };
 
   _handlePostScreenshot = async () => {
-    const { path } = await Bridge.Lua.captureScreenshot();
     await Bridge.JS.postCreate({
       message: 'I took a screenshot!',
-      mediaPath: path,
+      mediaType: 'capture',
       mediaUploadParams: { autoCrop: true },
     });
   };

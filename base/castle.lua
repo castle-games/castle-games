@@ -225,12 +225,19 @@ castle.post = {}
 function castle.post.create(options)
     local message = options.message or 'Say something!'
 
+    local mediaType = nil
     local mediaPath = nil
     local media = options.media
-    if type(media) == 'userdata' and media.typeOf and media:typeOf('ImageData') then
-        local savePath = CASTLE_TMP_DIR_NAME .. '/' .. 'img-' .. uuid() .. '.png'
-        media:encode('png', savePath)
-        mediaPath = love.filesystem.getSaveDirectory() .. '/' .. savePath
+    if type(media) == 'string' then
+        if media == 'capture' then
+            mediaType = 'capture'
+        end
+    elseif type(media) == 'userdata' then
+        if media.typeOf and media:typeOf('ImageData') then
+            local savePath = CASTLE_TMP_DIR_NAME .. '/' .. 'img-' .. uuid() .. '.png'
+            media:encode('png', savePath)
+            mediaPath = love.filesystem.getSaveDirectory() .. '/' .. savePath
+        end
     end
 
     local encodedData = nil
@@ -241,6 +248,7 @@ function castle.post.create(options)
 
     return bridge.js.postCreate {
         message = message,
+        mediaType = mediaType,
         mediaPath = mediaPath,
         data = encodedData,
     }
