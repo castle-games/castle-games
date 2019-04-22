@@ -218,7 +218,7 @@ else -- We're on the game server, do the GraphQL HTTP requests ourselves
 end
 
 
--- storage
+-- post
 
 castle.post = {}
 
