@@ -762,13 +762,18 @@ async function _recordUserStatusRegisteredGame(status, isNewSession, gameId) {
   return result;
 }
 
-export async function multiplayerJoinAsync(gameId, entryPoint, sessionId) {
+export async function multiplayerJoinAsync(gameId, castleFileUrl, entryPoint, sessionId) {
   let result;
   try {
     result = await API.graphqlAsync(
       /* GraphQL */ `
-        mutation($gameId: ID, $entryPoint: String, $sessionId: String) {
-          joinMultiplayerSession(gameId: $gameId, entryPoint: $entryPoint, sessionId: $sessionId) {
+        mutation($gameId: ID, $castleFileUrl: String, $entryPoint: String, $sessionId: String) {
+          joinMultiplayerSession(
+            gameId: $gameId
+            castleFileUrl: $castleFileUrl
+            entryPoint: $entryPoint
+            sessionId: $sessionId
+          ) {
             sessionId
             address
             isNewSession
@@ -777,6 +782,7 @@ export async function multiplayerJoinAsync(gameId, entryPoint, sessionId) {
       `,
       {
         gameId,
+        castleFileUrl,
         entryPoint,
         sessionId,
       }
@@ -893,7 +899,6 @@ export async function getGameGlobalStorageValueAsync({ storageId, key }) {
   return result.data.gameGlobalStorage;
 }
 
-
 export async function setGameGlobalStorageAsync({ storageId, key, value }) {
   const result = await API.graphqlAsync(
     `
@@ -929,7 +934,6 @@ export async function getGameUserStorageValueAsync({ storageId, key }) {
 
   return result.data.gameUserStorage;
 }
-
 
 export async function setGameUserStorageAsync({ storageId, key, value }) {
   const result = await API.graphqlAsync(
@@ -1000,7 +1004,7 @@ export async function allPostsAsync({ pageSize = 20, pageAfterPostId } = {}) {
         }
       }
     `,
-    { pageSize, pageAfterPostId },
+    { pageSize, pageAfterPostId }
   );
 
   if (result.errors && result.errors.length) {
@@ -1019,7 +1023,7 @@ export async function postDataAsync({ postId }) {
         }
       }
     `,
-    { postId },
+    { postId }
   );
 
   if (result.errors && result.errors.length) {
