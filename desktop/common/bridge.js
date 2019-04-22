@@ -98,7 +98,8 @@ export const JS = {
   async postCreate({ message, mediaType, mediaPath, mediaUploadParams, data }) {
     // Get the current game and make sure it has a `.gameId` (is registered)
     const currentGame = GameWindow.getCurrentGame();
-    if (!currentGame) {
+    const navigations = GameWindow.getNavigations();
+    if (!currentGame || !navigations) {
       throw new Error('Post creation needs a running game');
     }
     if (!currentGame.gameId) {
@@ -115,8 +116,31 @@ export const JS = {
     }
 
     // Let user edit the message and confirm posting, or cancel
-    message = prompt(`Create a post from '${currentGame.title}'`, message);
-    if (message === null) {
+    let cancelled = false;
+    let resolved = false;
+    await new Promise((resolve, reject) =>
+      navigations.navigateToEditPost({
+        editPost: {
+          message,
+          mediaPath,
+        },
+        onSubmit: (editPost) => {
+          if (!resolved) {
+            resolved = true;
+            ({ message, mediaPath } = editPost);
+            resolve();
+          }
+        },
+        onCancel: () => {
+          if (!resolved) {
+            resolved = true;
+            cancelled = true;
+            resolve();
+          }
+        },
+      })
+    );
+    if (cancelled) {
       return null;
     }
 

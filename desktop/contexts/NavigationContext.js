@@ -20,7 +20,7 @@ import Logs from '~/common/logs';
  *  should have an effect on values here.
  */
 const NavigationContextDefaults = {
-  contentMode: 'home', // game | profile | home | signin | notifications | create
+  contentMode: 'home', // game | profile | home | signin | notifications | create | edit_post
   timeLastNavigated: 0,
   gameUrl: '',
   game: null,
@@ -48,6 +48,7 @@ const NavigatorContextDefaults = {
   navigateToUserProfile: async (user) => {},
   navigateToNotifications: () => {},
   navigateToCreate: () => {},
+  navigateToEditPost: () => {},
   reloadGame: (onlyIfVisible) => {},
   clearCurrentGame: async () => {},
   setIsFullScreen: (isFullScreen) => {},
@@ -78,6 +79,7 @@ class NavigationContextManager extends React.Component {
         navigateToUserProfile: this.navigateToUserProfile,
         navigateToNotifications: this.navigateToNotifications,
         navigateToCreate: this.navigateToCreate,
+        navigateToEditPost: this.navigateToEditPost,
         reloadGame: this.reloadGame,
         clearCurrentGame: this.clearCurrentGame,
         setIsFullScreen: this.setIsFullScreen,
@@ -160,9 +162,22 @@ class NavigationContextManager extends React.Component {
 
   navigateToCreate = () => this._navigateToContentMode('create');
 
+  navigateToEditPost = (params) => {
+    this.setState({
+      navigation: {
+        ...this.state.navigation,
+        contentMode: 'edit_post',
+        params,
+      },
+    });
+  };
+
   navigateToCurrentGame = () => {
     if (!this.state.navigation.game) {
       throw new Error(`Cannot navigate to current game because there is no current game.`);
+    }
+    if (this.state.navigation.contentMode === 'edit_post') {
+      this.state.navigation.params.onCancel();
     }
     this._navigateToContentMode('game');
   };
@@ -259,8 +274,9 @@ class NavigationContextManager extends React.Component {
     await GameWindow.close();
     this.setState((state) => {
       const time = Date.now();
+      const oldContentMode = state.navigation.contentMode;
       const newContentMode =
-        state.navigation.contentMode === 'game' ? 'home' : state.navigation.contentMode;
+        oldContentMode === 'game' || oldContentMode === 'edit_post' ? 'home' : oldContentMode;
       return {
         ...state,
         navigation: {

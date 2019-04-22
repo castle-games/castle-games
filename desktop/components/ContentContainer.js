@@ -17,6 +17,7 @@ import NotificationScreen from '~/screens/NotificationScreen';
 import SearchScreen from '~/screens/SearchScreen';
 import ContentNavigationBar from '~/components/ContentNavigationBar';
 import NowPlayingBar from '~/components/NowPlayingBar';
+import EditPostScreen from '~/screens/EditPostScreen';
 
 const STYLES_CONTAINER = css`
   font-family: ${Constants.font.default};
@@ -106,6 +107,8 @@ class ContentContainer extends React.Component {
       return <ProfileScreen />;
     } else if (mode === 'notifications') {
       return <NotificationScreen />;
+    } else if (mode === 'edit_post') {
+      return <EditPostScreen />;
     }
   };
 

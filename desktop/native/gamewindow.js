@@ -5,11 +5,13 @@ import Share from '~/common/share';
 class GameWindow {
   _isOpen = false;
   _currentGame = null;
+  _navigations = null;
 
-  open = async (gameUrl, game) => {
+  open = async ({ gameUrl, game, navigations }) => {
     if (this._isOpen) return;
     this._isOpen = true;
     this._currentGame = game;
+    this._navigations = navigations;
     amplitude.getInstance().logEvent('OPEN_LUA', {
       gameUrl,
     });
@@ -40,11 +42,16 @@ class GameWindow {
       await NativeBinds.close();
       this._isOpen = false;
       this._currentGame = null;
+      this._navigations = null;
     }
   };
 
   getCurrentGame = () => {
     return this._isOpen ? this._currentGame : null;
+  }
+
+  getNavigations = () => {
+    return this._navigations;
   }
 }
 

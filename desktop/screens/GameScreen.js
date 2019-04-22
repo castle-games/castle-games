@@ -74,7 +74,13 @@ class GameScreen extends React.Component {
 
   _openGame = async (url) => {
     Logs.system(`Loading game entry point: ${url}`);
-    await GameWindow.open(url, this.props.game);
+    await GameWindow.open({
+      gameUrl: url,
+      game: this.props.game,
+      navigations: {
+        navigateToEditPost: this.props.navigateToEditPost,
+      },
+    });
 
     // Sync state for new Ghost instance
     NativeUtil.sendLuaEvent('CASTLE_SET_VOLUME', this.state.isMuted ? 0 : 1);
@@ -170,6 +176,7 @@ export default class GameScreenWithContext extends React.Component {
                     timeGameLoaded={navigation.timeGameLoaded}
                     timeNavigatedToGame={navigation.timeLastNavigated}
                     navigateToUserProfile={navigator.navigateToUserProfile}
+                    navigateToEditPost={navigator.navigateToEditPost}
                     isFullScreen={navigation.isFullScreen}
                     setIsFullScreen={navigator.setIsFullScreen}
                     reloadGame={navigator.reloadGame}
