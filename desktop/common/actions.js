@@ -1,6 +1,7 @@
 import * as Constants from '~/common/constants';
 import * as NativeUtil from '~/native/nativeutil';
 import * as Urls from '~/common/urls';
+import * as url from 'url';
 
 import CastleApiClient from 'castle-api-client';
 
@@ -702,8 +703,9 @@ async function _recordUserStatusUnregisteredGame(status, isNewSession, game) {
   if (game.coverImage && game.coverImage.url) {
     coverImageUrl = game.coverImage.url;
   } else if (game.metadata && game.metadata.coverImage) {
-    if (!Urls.isPrivateUrl(game.metadata.coverImage)) {
-      coverImageUrl = game.metadata.coverImage;
+    let resolvedUrl = url.resolve(game.url, game.metadata.coverImage);
+    if (!Urls.isPrivateUrl(resolvedUrl)) {
+      coverImageUrl = resolvedUrl;
     }
   } else if (game.metadata && game.metadata.coverImageUrl) {
     // coverImageUrl is deprecated
