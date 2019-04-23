@@ -1,10 +1,7 @@
 import * as React from 'react';
-import * as Actions from '~/common/actions';
-import * as Browser from '~/common/browser';
-import * as ExecNode from '~/common/execnode';
 import * as Constants from '~/common/constants';
 import * as NativeUtil from '~/native/nativeutil';
-import * as Urls from '~/common/urls';
+import * as PublishMockActions from '~/common/publish-mock-actions';
 
 import { css } from 'react-emotion';
 
@@ -114,34 +111,14 @@ export default class RegisterGame extends React.Component {
     if (externalUrlInputValue && externalUrlInputValue.length) {
       await this.setState({ isLoadingPreview: true });
       try {
-        previewedGame = await Actions.previewGameAtUrl(this.state.externalUrlInputValue);
+        // TODO: previewedGame = await PublishMockActions.previewGameAtUrl(externalUrlInputValue);
       } catch (e) {
         previewedGame = {};
         previewError = e.message;
       }
     } else if (directoryInputValue && directoryInputValue.length) {
       try {
-        let projectFilename = await ExecNode.getProjectFilenameAtPathAsync(directoryInputValue);
-        if (!projectFilename) {
-          throw new Error(
-            'Unable to find a Castle project in this folder. Make sure to choose a folder that contains a .castle file.'
-          );
-        }
-        previewedGame = await Browser.resolveGameAtUrlAsync(
-          `file://${directoryInputValue}/${projectFilename}`
-        );
-        previewedGame.slug = 'TODO';
-        if (!previewedGame.coverImage) {
-          if (
-            previewedGame.metadata &&
-            previewedGame.metadata.coverImage &&
-            Urls.isPrivateUrl(previewedGame.metadata.coverImage)
-          ) {
-            previewedGame.coverImage = {
-              url: `file://${directoryInputValue}/${previewedGame.metadata.coverImage}`,
-            };
-          }
-        }
+        // TOOD: previewedGame = await PublishMockActions.previewLocalGame(directoryInputValue);
       } catch (e) {
         previewedGame = {};
         previewError = e.message;
@@ -188,16 +165,15 @@ export default class RegisterGame extends React.Component {
     let addedGame, previewError;
     if (externalUrlInputValue && externalUrlInputValue.length) {
       try {
-        addedGame = await Actions.registerGameAtUrl(this.state.externalUrlInputValue);
+        // TODO: addedGame = await PublishMockActions.publishGame(externalUrlInputValue);
       } catch (e) {
         addedGame = {};
         previewError = e.message;
       }
     } else if (directoryInputValue && directoryInputValue.length) {
       try {
-        let projectUrl = `file://${directoryInputValue}`;
-        let uploadedUrl = await ExecNode.publishProjectAsync(projectUrl);
-        addedGame = await Actions.registerGameAtUrl(uploadedUrl);
+        // TODO: let uploadedUrl = await PublishMockActions.uploadGame(directoryInputValue);
+        // TODO: addedGame = await PublishMockActions.publishGame(uploadedUrl);
       } catch (e) {
         addedGame = {};
         previewError = e.message;
@@ -260,14 +236,11 @@ export default class RegisterGame extends React.Component {
 
   _renderUploadForm = () => {
     return (
-      <React.Fragment>
-        <UIDirectoryChooser
-          value={this.state.directoryInputValue}
-          placeholder="Choose a game folder to upload..."
-          onChange={this._handleChangeDirectory}
-        />
-        <div className={STYLES_PARAGRAPH} />
-      </React.Fragment>
+      <UIDirectoryChooser
+        value={this.state.directoryInputValue}
+        placeholder="Choose a game folder to upload..."
+        onChange={this._handleChangeDirectory}
+      />
     );
   };
 
