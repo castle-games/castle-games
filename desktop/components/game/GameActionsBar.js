@@ -5,6 +5,7 @@ import * as Urls from '~/common/urls';
 import * as SVG from '~/components/primitives/svg';
 import * as Utilities from '~/common/utilities';
 import * as Bridge from '~/common/bridge';
+import * as ExperimentalFeatures from '~/common/experimental-features';
 
 import { css } from 'react-emotion';
 import { DevelopmentContext } from '~/contexts/DevelopmentContext';
@@ -142,7 +143,7 @@ export default class GameActionsBar extends React.Component {
     );
 
     let maybePostScreenshotElement;
-    if (Constants.featureFlags.posts) {
+    if (ExperimentalFeatures.isEnabled('posts')) {
       maybePostScreenshotElement = (
         <UINavigationLink style={{ marginRight: 24 }} onClick={this._handlePostScreenshot}>
           Post screenshot

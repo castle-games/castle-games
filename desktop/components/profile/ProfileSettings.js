@@ -3,6 +3,7 @@ import * as Actions from '~/common/actions';
 import * as Constants from '~/common/constants';
 import * as Strings from '~/common/strings';
 import * as Utilities from '~/common/utilities';
+import * as ExperimentalFeatures from '~/common/experimental-features';
 
 import { css } from 'react-emotion';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
@@ -63,6 +64,14 @@ const STYLES_COLUMN = css`
   flex-shrink: 0;
 `;
 
+const STYLES_HEADER_SPACER = css`
+  height: 20px;
+`;
+
+const STYLES_ROW_SPACER = css`
+  height: 8px;
+`;
+
 const Row = (props) => {
   return (
     <div className={STYLES_ROW}>
@@ -76,6 +85,12 @@ const Row = (props) => {
 
 export default class ProfileSettings extends React.Component {
   static contextType = CurrentUserContext;
+
+  state = {
+    experimentalFeatureEnabled: {
+      posts: ExperimentalFeatures.isEnabled('posts'),
+    },
+  };
 
   _handleSaveNotificationChange = async (options) => {
     const { category, type, frequency } = options;
@@ -94,6 +109,15 @@ export default class ProfileSettings extends React.Component {
 
     const user = { ...this.props.user, notifications };
     this.context.setCurrentUser(user);
+  };
+
+  _handleToggleExperimentalFeature = (featureName) => {
+    ExperimentalFeatures.setEnabled(featureName, !this.state.experimentalFeatureEnabled[featureName]);
+    this.setState({
+      experimentalFeatureEnabled: {
+        [featureName]: ExperimentalFeatures.isEnabled(featureName),
+      },
+    });
   };
 
   render() {
@@ -194,6 +218,24 @@ export default class ProfileSettings extends React.Component {
             </Row>
           );
         })}
+
+        <div className={STYLES_HEADER_SPACER} />
+
+        <h2 className={STYLES_HEADER}>Experimental features</h2>
+
+        <p className={STYLES_PARAGRAPH}>Configure experimental features that you want to try.</p>
+
+        <div className={STYLES_ROW_SPACER} />
+
+        <Row
+          secondCol={
+            <UICheckbox
+              onClick={() => this._handleToggleExperimentalFeature('posts')}
+              value={this.state.experimentalFeatureEnabled.posts}
+            />
+          }>
+          Posts
+        </Row>
       </div>
     );
   }

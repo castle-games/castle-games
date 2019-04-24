@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
+import * as ExperimentalFeatures from '~/common/experimental-features';
 
 import { css } from 'react-emotion';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
@@ -31,7 +32,7 @@ class HomeScreen extends React.Component {
   };
 
   state = {
-    mode: Constants.featureFlags.posts ? 'posts' : 'games', // posts | games | examples | history
+    mode: ExperimentalFeatures.isEnabled('posts') ? 'posts' : 'games', // [posts] | games | examples | history
   };
 
   _container;
@@ -51,7 +52,7 @@ class HomeScreen extends React.Component {
 
   _getNavigationItems = () => {
     const navigationItems = [];
-    if (Constants.featureFlags.posts) {
+    if (ExperimentalFeatures.isEnabled('posts')) {
       navigationItems.push({ label: 'Posts', key: 'posts' });
     }
     navigationItems.push({ label: 'Featured games', key: 'games' });
