@@ -1,7 +1,9 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as Actions from '~/common/actions';
+import * as Strings from '~/common/strings';
 import * as NativeUtil from '~/native/nativeutil';
+import * as Utilities from '~/common/utilities';
 
 import { css } from 'react-emotion';
 import { getEmojiComponent } from '~/common/emojis';
@@ -27,7 +29,7 @@ const STYLES_POST_CARD = css`
   flex-direction: column;
   position: relative;
   border-radius: 4px;
-  padding: 8px;
+  padding: 16px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
 `;
 
@@ -57,36 +59,29 @@ const STYLES_GAME_BUTTON = css`
   display: flex;
   justify-content: flex-start;
   cursor: pointer;
-  padding: 0px;
   border-radius: 4px;
-`;
-
-const STYLES_GAME_BACKGROUND_LIGTHENER = css`
-  background-color: rgba(255, 255, 255, 0.8);
-  display: flex;
-  justify-content: flex-start;
-  cursor: pointer;
-  padding: 4px;
-  border-radius: 4px;
-  border: 2px solid black;
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
 `;
 
 const STYLES_GAME_COVER_IMAGE = css`
   background-size: cover;
   background-position: 50% 50%;
-  height: 16px;
-  width: 16px;
-  border-radius: 4px;
+  height: 28px;
+  width: 28px;
+  border-radius: 4px 0 0 4px;
   cursor: pointer;
-  margin-right: 6px;
   cursor: pointer;
   flex-shrink: 0;
-  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
 `;
 
 const STYLES_GAME_TITLE = css`
-  font-family: ${Constants.font.game};
-  font-size: 13px;
+  font-family: ${Constants.font.system};
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 0 12px 0 12px;
+  display: inline-flex;
+  align-items: center;
 `;
 
 const STYLES_USER_CONTAINER = css`
@@ -115,12 +110,11 @@ const STYLES_USER_NAME = css`
 `;
 
 const STYLES_POST_BODY = css`
-  background: ${Constants.colors.white};
   display: flex;
   position: relative;
   flex-direction: column;
-  padding: 4px;
-  border-radius: 4px;
+  font-size: 16px;
+  margin: 24px 0 0 0;
 `;
 
 const STYLES_MESSAGE_MENTION = css`
@@ -174,7 +168,7 @@ const STYLES_MESSAGE_MENTION = css`
 `;
 
 const STYLES_MEDIA_CONTAINER = css`
-  padding-top: 4px;
+  margin-top: 16px;
 `;
 
 const STYLES_MEDIA_IMAGE = css`
@@ -213,18 +207,19 @@ class UIPostCell extends React.Component {
     const primaryColor =
       sourceGame.metadata && sourceGame.metadata.primaryColor
         ? `#${sourceGame.metadata.primaryColor}`
-        : '#3d3d3d';
+        : Constants.colors.backgroundLeftContext;
 
     const coverImageUrl = sourceGame.coverImage && sourceGame.coverImage.url;
-
+    const textColor = Utilities.adjustTextColor(primaryColor);
     let maybeOpenDataButton;
     if (hasData) {
       maybeOpenDataButton = (
         <div className={STYLES_OPEN_DATA_BUTTON} style={{ backgroundColor: primaryColor }}>
-          <div className={STYLES_GAME_BACKGROUND_LIGTHENER} style={{ borderColor: primaryColor }}>
-            <div className={STYLES_GAME_TITLE} onClick={this._handleOpenData}>
-              Open Data
-            </div>
+          <div
+            className={STYLES_GAME_TITLE}
+            onClick={this._handleOpenData}
+            style={{ color: textColor }}>
+            Open Data
           </div>
         </div>
       );
@@ -234,15 +229,20 @@ class UIPostCell extends React.Component {
       <div className={STYLES_GAME_CONTAINER}>
         {maybeOpenDataButton}
         <div className={STYLES_GAME_BUTTON} style={{ backgroundColor: primaryColor }}>
-          <div className={STYLES_GAME_BACKGROUND_LIGTHENER} style={{ borderColor: primaryColor }}>
+          {!Strings.isEmpty(coverImageUrl) ? (
             <div
               className={STYLES_GAME_COVER_IMAGE}
               onClick={this._handleGameSelect}
-              style={{ backgroundImage: coverImageUrl ? `url(${coverImageUrl})` : null }}
+              style={{
+                backgroundImage: `url(${coverImageUrl})`,
+              }}
             />
-            <div className={STYLES_GAME_TITLE} onClick={this._handleGameSelect}>
-              {sourceGame.title}
-            </div>
+          ) : null}
+          <div
+            className={STYLES_GAME_TITLE}
+            onClick={this._handleGameSelect}
+            style={{ color: textColor }}>
+            {sourceGame.title}
           </div>
         </div>
       </div>
