@@ -13,8 +13,8 @@ const STYLES_CONTAINER = css`
 `;
 
 const STYLES_POST = css`
-  width: 80%;
-  max-width: 600px;
+  width: 100%;
+  max-width: 568px;
   display: inline-block;
   padding: 24px 24px 24px 24px;
   position: relative;
