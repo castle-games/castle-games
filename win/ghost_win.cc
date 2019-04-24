@@ -498,6 +498,9 @@ void ghostStep() {
       case SET_CHILD_WINDOW_VISIBLE: {
         if (child) {
           ShowWindow(child, msg.body.setChildWindowVisible.visible ? SW_SHOW : SW_HIDE);
+          if (msg.body.setChildWindowVisible.visible) {
+            SetFocus(child);
+          }
         }
       } break;
 
