@@ -8,8 +8,11 @@ import * as Utilities from '~/common/utilities';
 import { css } from 'react-emotion';
 import { getEmojiComponent } from '~/common/emojis';
 
+import UIButton from '~/components/reusable/UIButton';
+
 const STYLES_CONTAINER = css`
   display: flex;
+  margin-top: 16px;
   align-items: center;
   flex-direction: column;
 `;
@@ -338,13 +341,44 @@ class UIPostCell extends React.Component {
 export default class UIPostList extends React.Component {
   state = {
     posts: null,
+    firstPage: false,
   };
 
+  _loadingPosts = false;
+
   componentDidMount() {
-    // TODO: This logic should be... Better.
     this._loadPostsAsync();
-    setTimeout(this._loadPostsAsync, 1000);
   }
+
+  _loadPostsAsync = async ({ pageAfterPostId } = {}) => {
+    if (!this._loadingPosts) {
+      this._loadingPosts = true;
+      try {
+        this.setState({
+          posts: await Actions.allPostsAsync({ pageAfterPostId }),
+          firstPage: pageAfterPostId === null || pageAfterPostId === undefined,
+        });
+      } finally {
+        this._loadingPosts = false;
+      }
+    }
+  };
+
+  _handleFirstPage = () => {
+    this.setState({ posts: null });
+    this._loadPostsAsync();
+  };
+
+  _handleNextPage = () => {
+    let lastPostId;
+    if (this.state.posts.length > 0) {
+      lastPostId = this.state.posts[this.state.posts.length - 1].postId;
+    }
+    this.setState({ posts: null });
+    this._loadPostsAsync({
+      pageAfterPostId: lastPostId,
+    });
+  };
 
   render() {
     const { posts } = this.state;
@@ -354,6 +388,9 @@ export default class UIPostList extends React.Component {
       </div>
     ) : (
       <div className={STYLES_CONTAINER}>
+        <UIButton onClick={this._handleFirstPage}>
+          {this.state.firstPage ? 'Refresh' : '◄ First page'}
+        </UIButton>
         {posts.map((post) => {
           return (
             <UIPostCell
@@ -364,13 +401,8 @@ export default class UIPostList extends React.Component {
             />
           );
         })}
+        <UIButton onClick={this._handleNextPage}>Next page ►</UIButton>
       </div>
     );
   }
-
-  _loadPostsAsync = async () => {
-    this.setState({
-      posts: await Actions.allPostsAsync(), // This call supports pagination, we're just not using it...
-    });
-  };
 }
