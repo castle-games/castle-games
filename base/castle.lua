@@ -16,7 +16,8 @@ local castle = {}
 
 local theOS = love.system.getOS()
 local isMobile = theOS == 'Android' or theOS == 'iOS'
-local isDesktop = not (isMobile or CASTLE_SERVER)
+local isRemoteServer = not not CASTLE_SERVER
+local isDesktop = not (isMobile or isRemoteServer)
 
 castle.system = {}
 
@@ -26,6 +27,10 @@ end
 
 function castle.system.isDesktop()
     return isDesktop
+end
+
+function castle.system.isRemoteServer()
+    return isRemoteServer
 end
 
 ffi.cdef 'double ghostGetGlobalScaling();'
