@@ -5,21 +5,26 @@ import * as PublishMockActions from '~/common/publish-mock-actions';
 
 import { css } from 'react-emotion';
 
+import PublishGamePreview from '~/components/profile/PublishGamePreview';
 import UIDirectoryChooser from '~/components/reusable/UIDirectoryChooser';
-import UIGameGrid from '~/components/reusable/UIGameGrid';
 import UIInputSecondary from '~/components/reusable/UIInputSecondary';
 import UISubmitButton from '~/components/reusable/UISubmitButton';
 
 const STYLES_CONTAINER = css`
   display: flex;
-  flex-wrap: wrap;
+  padding-top: 24px;
 `;
 
-const STYLES_SECTION = css`
-  padding: 24px 24px 24px 24px;
-  width: 50%;
+const STYLES_CONTENT = css`
+  padding: 0 40px 0 24px;
+  width: 100%;
   min-width: 300px;
-  max-width: 50%;
+`;
+
+const STYLES_HELP = css`
+  width: 256px;
+  flex-shrink: 0;
+  padding-right: 24px;
 `;
 
 const STYLES_FORM_ACTIONS = css`
@@ -30,7 +35,7 @@ const STYLES_FORM_ACTIONS = css`
 
 const STYLES_HEADING = css`
   font-family: ${Constants.font.heading};
-  font-size: ${Constants.typescale.lvl5};
+  font-size: ${Constants.typescale.lvl4};
   margin-bottom: 16px;
 `;
 
@@ -48,23 +53,6 @@ const STYLES_PARAGRAPH = css`
   font-size: ${Constants.typescale.lvl6};
   line-height: ${Constants.linescale.lvl6};
   margin-bottom: 16px;
-`;
-
-const STYLES_GAME_PREVIEW_ERROR = css`
-  color: ${Constants.colors.red};
-  margin: 16px 0 16px 0;
-`;
-
-const STYLES_GAME_PREVIEW_ERROR_DETAIL = css`
-  font-size: ${Constants.typescale.lvl6};
-  border-left: 3px solid ${Constants.colors.background4};
-  margin-bottom: 16px;
-  padding-left: 16px;
-`;
-
-const STYLES_GAME_PREVIEW_URL = css`
-  text-decoration: underline;
-  cursor: default;
 `;
 
 const STYLES_LINK = css`
@@ -179,7 +167,14 @@ export default class RegisterGame extends React.Component {
     this.setState((state) => {
       let { directoryInputValue, externalUrlInputValue } = this._getDefaultValues();
       let hostingType = state.hostingType === 'castle' ? 'external' : 'castle';
-      return { ...state, hostingType, directoryInputValue, externalUrlInputValue };
+      return {
+        ...state,
+        hostingType,
+        directoryInputValue,
+        externalUrlInputValue,
+        previewedGame: { slug: null },
+        previewError: null,
+      };
     });
   };
 
@@ -218,44 +213,32 @@ export default class RegisterGame extends React.Component {
   };
 
   _renderGamePreview = () => {
-    if (this.state.previewedGame && this.state.previewedGame.slug) {
-      return (
-        <div>
-          <div className={STYLES_HEADING}>Game Preview</div>
-          <UIGameGrid gameItems={[this.state.previewedGame]} isPreview={true} />
-          <div className={STYLES_PARAGRAPH}>
-            Your Castle url will be{' '}
-            <span className={STYLES_GAME_PREVIEW_URL}>
-              {Constants.WEB_HOST}/{this.state.previewedGame.slug}
-            </span>
-          </div>
+    let instructions =
+      this.state.hostingType === 'castle'
+        ? `Choose a folder to preview the game in that folder.`
+        : `Enter the url of a .castle file, and we'll check for a game at that url.`;
+    return (
+      <PublishGamePreview
+        game={this.state.previewedGame}
+        error={this.state.previewError}
+        isLoading={this.state.isLoadingPreview}
+        instructions={instructions}
+      />
+    );
+  };
+
+  _renderHelp = () => {
+    return (
+      <React.Fragment>
+        <div className={STYLES_HEADING}>Help</div>
+        <div className={STYLES_PARAGRAPH}>
+          <span className={STYLES_LINK} onClick={this._handleClickHelp}>
+            Read our guide
+          </span>{' '}
+          on adding games to your profile.
         </div>
-      );
-    } else if (this.state.previewError) {
-      return (
-        <div>
-          <div className={STYLES_HEADING}>Game Preview Failed</div>
-          <div className={STYLES_GAME_PREVIEW_ERROR}>
-            There was a problem previewing the game at that url.
-          </div>
-          <div className={STYLES_GAME_PREVIEW_ERROR_DETAIL}>{this.state.previewError}</div>
-        </div>
-      );
-    } else if (this.state.isLoadingPreview) {
-      return <div className={STYLES_HEADING}>Loading Game Preview...</div>;
-    } else {
-      return (
-        <div>
-          <div className={STYLES_HEADING}>Need Help?</div>
-          <div className={STYLES_PARAGRAPH}>
-            <span className={STYLES_LINK} onClick={this._handleClickHelp}>
-              Read our guide
-            </span>{' '}
-            on adding games to your profile.
-          </div>
-        </div>
-      );
-    }
+      </React.Fragment>
+    );
   };
 
   _renderUploadForm = () => {
@@ -270,18 +253,13 @@ export default class RegisterGame extends React.Component {
 
   _renderExternalUrlForm = () => {
     return (
-      <React.Fragment>
-        <UIInputSecondary
-          value={this.state.externalUrlInputValue}
-          name="externalUrlInputValue"
-          label="URL to a .castle file"
-          onChange={this._handleChangeExternalUrl}
-          style={{ marginBottom: 8 }}
-        />
-        <div className={STYLES_PARAGRAPH}>
-          Enter the url of a .castle file, and we'll check for a game at that url.
-        </div>
-      </React.Fragment>
+      <UIInputSecondary
+        value={this.state.externalUrlInputValue}
+        name="externalUrlInputValue"
+        label="URL to a .castle file"
+        onChange={this._handleChangeExternalUrl}
+        style={{ marginBottom: 8 }}
+      />
     );
   };
 
@@ -289,22 +267,23 @@ export default class RegisterGame extends React.Component {
     const isSubmitEnabled = this._isFormSubmittable();
     const heading = this.props.game
       ? `Publish an update to ${this.props.game.title}`
-      : 'Publish a game to your Castle profile';
+      : 'Publish a Game';
     const formAction = this.props.game ? 'Update' : 'Publish';
     const gamePreviewElement = this._renderGamePreview();
     let formElement, secondaryAction;
     if (this.state.hostingType === 'castle') {
       formElement = this._renderUploadForm();
-      secondaryAction = 'My game is already hosted somewhere else';
+      secondaryAction = 'My game is already hosted online';
     } else {
       formElement = this._renderExternalUrlForm();
       secondaryAction = 'I prefer to upload a game from my computer';
     }
     return (
       <div className={STYLES_CONTAINER}>
-        <div className={STYLES_SECTION}>
+        <div className={STYLES_CONTENT}>
           <div className={STYLES_HEADING}>{heading}</div>
           {formElement}
+          {gamePreviewElement}
           <div className={STYLES_FORM_ACTIONS}>
             <UISubmitButton disabled={!isSubmitEnabled} onClick={this._handleSubmitForm}>
               {formAction}
@@ -314,7 +293,7 @@ export default class RegisterGame extends React.Component {
             </div>
           </div>
         </div>
-        <div className={STYLES_SECTION}>{gamePreviewElement}</div>
+        <div className={STYLES_HELP}>{this._renderHelp()}</div>
       </div>
     );
   }
