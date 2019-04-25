@@ -611,6 +611,7 @@ function _validateRegisterGameResult(result) {
   return true;
 }
 
+// TODO: BEN
 export async function registerGameAtUrl(url) {
   const variables = {
     url,
@@ -631,18 +632,16 @@ export async function registerGameAtUrl(url) {
   return result.data.registerGame;
 }
 
+// TODO: BEN
 export async function previewGameAtUrl(url) {
-  const variables = {
-    url,
-  };
-
   const result = await API.graphqlAsync({
     query: `
-      query PreviewGame($url: String!) {
-        previewGame(url: $url) {
+      query PreviewGameAtUrl($url: String!) {
+        previewGameAtUrl(url: $url) {
           slug
           title
           url
+          sourceUrl
           owner {
             name
             username
@@ -651,7 +650,6 @@ export async function previewGameAtUrl(url) {
           },
           coverImage {
             url
-            imgixUrl
             height
             width
           },
@@ -661,33 +659,16 @@ export async function previewGameAtUrl(url) {
         }
       }
     `,
-    variables,
+    variables: { url },
   });
 
   _validateRegisterGameResult(result);
-  return result.data.previewGame;
+  return result.data.previewGameAtUrl;
 }
 
 export async function updateGameAtUrl(url) {
-  const variables = {
-    url,
-  };
-
-  const result = await API.graphqlAsync({
-    query: `
-      mutation UpdateGame($url: String!) {
-        updateGame(url: $url) {
-          gameId
-          slug
-          name
-        }
-      }
-    `,
-    variables,
-  });
-
-  _validateRegisterGameResult(result);
-  return result.data.updateGame;
+  // TODO: BEN: remove
+  throw new Error(`DELETE ME`);
 }
 
 export async function recordUserStatus(status, isNewSession, game) {

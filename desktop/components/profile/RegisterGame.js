@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as Actions from '~/common/actions';
 import * as Constants from '~/common/constants';
 import * as NativeUtil from '~/native/nativeutil';
 import * as PublishMockActions from '~/common/publish-mock-actions';
@@ -130,7 +131,8 @@ export default class RegisterGame extends React.Component {
     if (externalUrlInputValue && externalUrlInputValue.length) {
       await this.setState({ isLoadingPreview: true });
       try {
-        previewedGame = await PublishMockActions.previewGameAtUrl(externalUrlInputValue, gameId);
+        previewedGame = await Actions.previewGameAtUrl(externalUrlInputValue, gameId);
+        console.log(`ben: previewGameAtUrl: ${JSON.stringify(previewedGame, null, 2)}`);
       } catch (e) {
         previewedGame = {};
         previewError = e.message;
@@ -264,13 +266,7 @@ export default class RegisterGame extends React.Component {
   };
 
   render() {
-    const isSubmitEnabled = this._isFormSubmittable();
-    const heading = this.props.game
-      ? `Publish an update to ${this.props.game.title}`
-      : 'Publish a Game';
-    const formAction = this.props.game ? 'Update' : 'Publish';
-    const gamePreviewElement = this._renderGamePreview();
-    let formElement, secondaryAction;
+    let heading, formAction, formElement, secondaryAction;
     if (this.state.hostingType === 'castle') {
       formElement = this._renderUploadForm();
       secondaryAction = 'My game is already hosted online';
@@ -278,6 +274,15 @@ export default class RegisterGame extends React.Component {
       formElement = this._renderExternalUrlForm();
       secondaryAction = 'I prefer to upload a game from my computer';
     }
+    if (this.props.game) {
+      heading = `Publish an update to ${this.props.game.title}`;
+      formAction = 'Update';
+    } else {
+      heading = 'Publish a Game';
+      formAction = 'Publish';
+    }
+    const isSubmitEnabled = this._isFormSubmittable();
+    const gamePreviewElement = this._renderGamePreview();
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_CONTENT}>

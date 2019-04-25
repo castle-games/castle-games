@@ -1,4 +1,4 @@
-export const API_HOST = 'https://api.castle.games';
+export const API_HOST = 'https://staging.api.castle.games';
 export const WEB_HOST = 'https://castle.games';
 
 export const brand = {

@@ -45,10 +45,7 @@ export default class PublishGamePreview extends React.Component {
         <div className={STYLES_GAME_PREVIEW}>
           <UIGameGrid gameItems={[game]} isPreview={true} />
           <div className={STYLES_PARAGRAPH}>
-            Your Castle url will be{' '}
-            <span className={STYLES_GAME_PREVIEW_URL}>
-              {Constants.WEB_HOST}/{game.slug}
-            </span>
+            Your Castle url will be <span className={STYLES_GAME_PREVIEW_URL}>{game.url}</span>
           </div>
         </div>
       );
