@@ -17,7 +17,6 @@ import UIGameGrid from '~/components/reusable/UIGameGrid';
 import ProfileHeader from '~/components/profile/ProfileHeader';
 import ProfileSettings from '~/components/profile/ProfileSettings';
 import SignOut from '~/components/profile/SignOut';
-import UpdateGame from '~/components/profile/UpdateGame';
 
 const STYLES_CONTAINER = css`
   color: ${Constants.colors.text};
@@ -146,7 +145,7 @@ class ProfileScreen extends React.Component {
   };
 
   _renderUpdateGame = (game) => {
-    return <UpdateGame game={this.state.gameToUpdate} onAfterSave={this.props.onAfterSave} />;
+    return <RegisterGame game={this.state.gameToUpdate} onAfterSave={this._onAfterAddGame} />;
   };
 
   _renderEditProfileContent = (isOwnProfile, user) => {

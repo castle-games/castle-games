@@ -74,6 +74,11 @@ const STYLES_LINK = css`
 `;
 
 export default class RegisterGame extends React.Component {
+  static defaultProps = {
+    game: null,
+    onAfterSave: null,
+  };
+
   state = {
     hostingType: 'castle', // castle (upload to castle) or external (host elsewhere)
     directoryInputValue: '',
@@ -86,39 +91,66 @@ export default class RegisterGame extends React.Component {
   };
   _debouncePreviewTimeout = null;
 
-  componentWillReceiveProps(nextProps) {
-    this._resetForm();
+  componentDidUpdate(prevProps) {
+    if (this.props.game !== prevProps.game) {
+      this._resetForm();
+    }
   }
 
+  _getDefaultValues = () => {
+    const { game } = this.props;
+    return {
+      directoryInputValue: game ? '' : '', // TODO: look up from history
+      externalUrlInputValue: game ? '' : '', // TODO: need this data from the api
+    };
+  };
+
   _resetForm = () => {
+    let defaults = this._getDefaultValues();
     this.setState({
       hostingType: 'castle',
-      directoryInputValue: '',
-      externalUrlInputValue: '',
+      directoryInputValue: defaults.directoryInputValue,
+      externalUrlInputValue: defaults.externalUrlInputValue,
       previewedGame: {
         slug: null,
       },
       previewError: null,
       isLoadingPreview: false,
     });
+    if (this.props.game) {
+      this._debounceUpdateGamePreview();
+    }
+  };
+
+  _debounceUpdateGamePreview = () => {
+    if (this._debouncePreviewTimeout) {
+      clearTimeout(this._debouncePreviewTimeout);
+    }
+    this._debouncePreviewTimeout = setTimeout(this._updateGamePreview, 300);
   };
 
   _updateGamePreview = async () => {
-    const { externalUrlInputValue, directoryInputValue } = this.state;
+    if (this._debouncePreviewTimeout) {
+      clearTimeout(this._debouncePreviewTimeout);
+    }
     this._debouncePreviewTimeout = null;
+
+    const { externalUrlInputValue, directoryInputValue } = this.state;
+    const gameId = this.props.game ? this.props.game.gameId : null;
     let previewedGame = {};
     let previewError = null;
     if (externalUrlInputValue && externalUrlInputValue.length) {
       await this.setState({ isLoadingPreview: true });
       try {
-        // TODO: previewedGame = await PublishMockActions.previewGameAtUrl(externalUrlInputValue);
+        previewedGame = await PublishMockActions.previewGameAtUrl(externalUrlInputValue, gameId);
       } catch (e) {
         previewedGame = {};
         previewError = e.message;
       }
     } else if (directoryInputValue && directoryInputValue.length) {
+      await this.setState({ isLoadingPreview: true });
       try {
-        // TOOD: previewedGame = await PublishMockActions.previewLocalGame(directoryInputValue);
+        previewedGame = await PublishMockActions.previewLocalGame(directoryInputValue, gameId);
       } catch (e) {
         previewedGame = {};
         previewError = e.message;
@@ -128,21 +160,11 @@ export default class RegisterGame extends React.Component {
   };
 
   _handleChangeExternalUrl = (e) => {
-    this.setState({ externalUrlInputValue: e.target.value }, () => {
-      if (this._debouncePreviewTimeout) {
-        clearTimeout(this._debouncePreviewTimeout);
-      }
-      this._debouncePreviewTimeout = setTimeout(this._updateGamePreview, 300);
-    });
+    this.setState({ externalUrlInputValue: e.target.value }, this._debounceUpdateGamePreview);
   };
 
   _handleChangeDirectory = (directoryInputValue) => {
-    this.setState({ directoryInputValue }, () => {
-      if (this._debouncePreviewTimeout) {
-        clearTimeout(this._debouncePreviewTimeout);
-      }
-      this._updateGamePreview();
-    });
+    this.setState({ directoryInputValue }, this._debounceUpdateGamePreview);
   };
 
   _isFormSubmittable = () => {
@@ -155,25 +177,27 @@ export default class RegisterGame extends React.Component {
 
   _handleToggleHostingType = () => {
     this.setState((state) => {
+      let { directoryInputValue, externalUrlInputValue } = this._getDefaultValues();
       let hostingType = state.hostingType === 'castle' ? 'external' : 'castle';
-      return { ...state, hostingType, directoryInputValue: '', externalUrlInputValue: '' };
+      return { ...state, hostingType, directoryInputValue, externalUrlInputValue };
     });
   };
 
   _handleSubmitForm = async () => {
     const { externalUrlInputValue, directoryInputValue } = this.state;
+    const gameId = this.props.game ? this.props.game.gameId : null;
     let addedGame, previewError;
     if (externalUrlInputValue && externalUrlInputValue.length) {
       try {
-        // TODO: addedGame = await PublishMockActions.publishGame(externalUrlInputValue);
+        addedGame = await PublishMockActions.publishGame(externalUrlInputValue, gameId);
       } catch (e) {
         addedGame = {};
         previewError = e.message;
       }
     } else if (directoryInputValue && directoryInputValue.length) {
       try {
-        // TODO: let uploadedUrl = await PublishMockActions.uploadGame(directoryInputValue);
-        // TODO: addedGame = await PublishMockActions.publishGame(uploadedUrl);
+        let uploadedUrl = await PublishMockActions.uploadGame(directoryInputValue);
+        addedGame = await PublishMockActions.publishGame(uploadedUrl, gameId);
       } catch (e) {
         addedGame = {};
         previewError = e.message;
@@ -263,7 +287,10 @@ export default class RegisterGame extends React.Component {
 
   render() {
     const isSubmitEnabled = this._isFormSubmittable();
-    const formAction = 'Publish';
+    const heading = this.props.game
+      ? `Publish an update to ${this.props.game.title}`
+      : 'Publish a game to your Castle profile';
+    const formAction = this.props.game ? 'Update' : 'Publish';
     const gamePreviewElement = this._renderGamePreview();
     let formElement, secondaryAction;
     if (this.state.hostingType === 'castle') {
@@ -276,7 +303,7 @@ export default class RegisterGame extends React.Component {
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_SECTION}>
-          <div className={STYLES_HEADING}>Publish a game to your Castle profile</div>
+          <div className={STYLES_HEADING}>{heading}</div>
           {formElement}
           <div className={STYLES_FORM_ACTIONS}>
             <UISubmitButton disabled={!isSubmitEnabled} onClick={this._handleSubmitForm}>
