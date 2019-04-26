@@ -61,9 +61,19 @@ class ChatContainer extends React.Component {
   _renderContent() {
     const { messages, users, status } = this.props.chat;
 
+    // TODO jim chat postIds
+    let postId = null;
+    let filteredMessages = messages.filter((message) => {
+      if (postId) {
+        return message.richMessage && message.richMessage.postId === postId;
+      } else {
+        return !message.richMessage || !message.richMessage.postId;
+      }
+    });
+
     switch (status) {
       case ConnectionStatus.CONNECTED:
-        if (messages && messages.length == 0) {
+        if (filteredMessages && filteredMessages.length == 0) {
           // TODO: this is a little buggy in that when the server is restarted there won't be any messages sent back
           // Fix this by actually requesting history every time chat opens
           return (
@@ -78,7 +88,7 @@ class ChatContainer extends React.Component {
                 <strong>Chat ({users.length})</strong>
               </UIHeaderBlock>
               <ChatMessagesList
-                messages={messages}
+                messages={filteredMessages}
                 navigateToUserProfile={this.props.navigateToUserProfile}
               />
             </React.Fragment>

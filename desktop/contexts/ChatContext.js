@@ -189,7 +189,9 @@ class ChatContextProvider extends React.Component {
 
   _handleSubmit = async (message) => {
     if (this._chat) {
-      this._chat.sendMessageAsync(ROOM_NAME, message);
+      // TODO jim chat postIds
+      let postId = null;
+      this._chat.sendMessageAsync(ROOM_NAME, message, postId);
     }
   };
 
