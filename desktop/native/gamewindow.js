@@ -26,7 +26,7 @@ class GameWindow {
   };
 
   updateFrame = async (rect) => {
-    if (!this._isOpen) return;
+    // NOTE: Don't need `this._isOpen` to be true here -- native keeps track of early updates...
     await NativeBinds.setChildWindowFrame({
       left: rect.left,
       top: rect.top,
