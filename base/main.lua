@@ -144,6 +144,7 @@ function main.update(dt)
                     decodedData = cjson.decode(postOpen.data)
                 end)
                 home:safeCall(home.globals.castle.postopened, {
+                    postId = postOpen.postId,
                     mediaUrl = postOpen.mediaUrl,
                     data = decodedData,
                 })
