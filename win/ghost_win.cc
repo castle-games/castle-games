@@ -802,7 +802,7 @@ const char *ghostGetCachePath() {
   SHGetKnownFolderPath(FOLDERID_RoamingAppData, 0, NULL, &appDataPath);
   std::wstringstream cacheDir;
   cacheDir << appDataPath << L"/Castle";
-  return (const char *) cacheDir.str().c_str();
+  return (const char *)cacheDir.str().c_str();
 }
 
-void ghostTakeScreenCapture() { }
+void ghostTakeScreenCapture() {}
