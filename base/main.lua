@@ -126,6 +126,13 @@ jsEvents.listen('CASTLE_POST_OPENED', function(postOpen)
     table.insert(pendingPostOpens, postOpen)
 end)
 
+local pendingJoystickAdds = {} -- Keep track of joystick opens before `home` is ready
+function main.joystickadded(joystick)
+    if not (home and home.loaded) then
+        table.insert(pendingJoystickAdds, joystick)
+    end
+end
+
 ffi.cdef 'bool ghostGetBackgrounded();'
 
 function main.update(dt)
@@ -150,6 +157,16 @@ function main.update(dt)
                 })
             end
             pendingPostOpens = {}
+        end
+
+        -- Notify of joystick adds
+        if home.loaded and #pendingJoystickAdds > 0 then
+            if home.joystickadded then
+                for _, joystick in ipairs(pendingJoystickAdds) do
+                    home:joystickadded(joystick)
+                end
+            end
+            pendingJoystickAdds = {}
         end
 
         if castle.system.isDesktop() and C.ghostGetBackgrounded() then

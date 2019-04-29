@@ -319,6 +319,10 @@ void ghostRunMessageLoop();
 RECT prevParentRect = {0, 0, 0, 0};
 
 static void bootLove(const char *uri) {
+  // Our child window setup seems to need this to get joystick events.
+  // Found at: https://stackoverflow.com/a/35048971
+  SDL_SetHint(SDL_HINT_JOYSTICK_ALLOW_BACKGROUND_EVENTS, "1");
+
   // Create the virtual machine.
   lua_State *L = luaL_newstate();
   luaL_openlibs(L);
