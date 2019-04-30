@@ -49,21 +49,18 @@ castle.user = {}
 
 local me
 
-jsEvents.listen('CASTLE_SET_IS_LOGGED_IN', function(isLoggedIn)
+if CASTLE_INITIAL_DATA then
+    local isLoggedIn = not not (CASTLE_INITIAL_DATA.user and CASTLE_INITIAL_DATA.user.isLoggedIn)
     castle.user.isLoggedIn = isLoggedIn
     castle.isLoggedIn = isLoggedIn --- XXX: Backwards compat...
-
-    if not isLoggedIn then
-        me = nil
-    end
-end)
-
-jsEvents.listen('CASTLE_SET_ME', function(theMe)
-    me = theMe
-end)
+end
 
 function castle.user.getMe()
-    return me
+    if castle.user.isLoggedIn then
+        return CASTLE_INITIAL_DATA.user.me
+    else
+        return nil
+    end
 end
 
 

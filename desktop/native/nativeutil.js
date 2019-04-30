@@ -88,3 +88,7 @@ export const readFileUrl = async (fileUrl) => {
   let result = await NativeBinds.readFile({ filepath });
   return result;
 };
+
+export const putInitialData = async (initialData) => {
+  return await NativeBinds.putInitialData({ initialData: JSON.stringify(initialData) });
+}

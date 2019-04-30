@@ -158,6 +158,7 @@ JS_BIND_DEFINE(sendLuaEvent) {
   auto channel = love::thread::Channel::getChannel("JS_EVENTS");
   // Explicitly pass `.length()` because `val` may be in UTF-8
   channel->push(love::Variant(jsonified.c_str(), jsonified.length()));
+  success("success");
 }
 
 JS_BIND_DEFINE(readFile) {
@@ -230,5 +231,14 @@ JS_BIND_DEFINE(execNode) {
 
 JS_BIND_DEFINE(takeScreenCapture) {
   ghostTakeScreenCapture();
+  success("success");
+}
+
+JS_BIND_DEFINE(putInitialData) {
+  std::string initialData = arg["initialData"];
+  auto channel = love::thread::Channel::getChannel("INITIAL_DATA");
+  channel->clear();
+  // Explicitly pass `.length()` because `val` may be in UTF-8
+  channel->push(love::Variant(initialData.c_str(), initialData.length()));
   success("success");
 }

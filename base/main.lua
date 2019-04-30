@@ -1,10 +1,25 @@
 local ffi = require 'ffi'
 local C = ffi.C
+local cjson = require 'cjson'
+
 
 math.randomseed(10000 * require('socket').gettime())
 
 local theOS = love.system.getOS()
 local isMobile = theOS == 'Android' or theOS == 'iOS'
+
+
+-- Consume initial data
+
+do
+    local channel = love.thread.getChannel('INITIAL_DATA')
+    if channel:getCount() > 0 then
+        pcall(function()
+            CASTLE_INITIAL_DATA = cjson.decode(channel:pop())
+        end)
+        channel:clear()
+    end
+end
 
 
 -- Make a directory for temporary files
@@ -23,7 +38,6 @@ require = require 'require'
 castle = require 'castle'
 local root = require 'portal'
 local jsEvents = require 'jsEvents'
-local cjson = require 'cjson'
 
 if not CASTLE_SERVER then
     splash = require 'splash'

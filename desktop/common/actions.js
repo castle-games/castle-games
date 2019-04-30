@@ -465,8 +465,6 @@ export async function logout() {
     return false;
   }
 
-  NativeUtil.sendLuaEvent('CASTLE_SET_IS_LOGGED_IN', false); // This event also clears everything else on the Lua side
-
   await API.client.setTokenAsync(null);
   return true;
 }

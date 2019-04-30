@@ -74,6 +74,25 @@ class GameScreen extends React.Component {
 
   _openGame = async (url) => {
     Logs.system(`Loading game entry point: ${url}`);
+
+    // Set initial data (read at various points in Lua code from `CASTLE_INITIAL_DATA`), then launch the game.
+    // Make sure to `await` setting initial data before calling `.open`!
+    await NativeUtil.putInitialData({
+      audio: {
+        volume: this.state.isMuted ? 0 : 1,
+      },
+      user: {
+        isLoggedIn: this.props.isLoggedIn,
+        me: this.props.isLoggedIn
+          ? {
+              userId: this.props.me.userId,
+              username: this.props.me.username,
+              name: this.props.me.name,
+              photoUrl: this.props.me.photo.url,
+            }
+          : undefined,
+      },
+    });
     await GameWindow.open({
       gameUrl: url,
       game: this.props.game,
@@ -81,19 +100,6 @@ class GameScreen extends React.Component {
         navigateToEditPost: this.props.navigateToEditPost,
       },
     });
-
-    // Sync state for new Ghost instance
-    NativeUtil.sendLuaEvent('CASTLE_SET_VOLUME', this.state.isMuted ? 0 : 1);
-    NativeUtil.sendLuaEvent('CASTLE_SET_IS_LOGGED_IN', this.props.isLoggedIn);
-    if (this.props.isLoggedIn) {
-      const me = this.props.me;
-      NativeUtil.sendLuaEvent('CASTLE_SET_ME', {
-        userId: me.userId,
-        username: me.username,
-        name: me.name,
-        photoUrl: me.photo.url,
-      });
-    }
   };
 
   _updateGameWindow = async (prevProps, prevState) => {

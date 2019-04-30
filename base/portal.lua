@@ -46,10 +46,14 @@ local loveCallbacks = {
 
 -- Maintaining outer master volume / listening for requests to change it
 local outerVolume, innerVolume = 1, 1
-jsEvents.listen('CASTLE_SET_VOLUME', function(volume)
+local function setCastleVolume(volume)
     outerVolume = volume
     love.audio.setVolume(outerVolume * innerVolume)
-end)
+end
+jsEvents.listen('CASTLE_SET_VOLUME', setCastleVolume)
+if CASTLE_INITIAL_DATA and CASTLE_INITIAL_DATA.audio and CASTLE_INITIAL_DATA.audio.volume then
+    setCastleVolume(CASTLE_INITIAL_DATA.audio.volume)
+end
 
 -- Metatable of portal instances
 local portalMeta = {}
