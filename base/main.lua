@@ -152,6 +152,7 @@ function main.update(dt)
                 end)
                 home:safeCall(home.globals.castle.postopened, {
                     postId = postOpen.postId,
+                    creator = postOpen.creator,
                     mediaUrl = postOpen.mediaUrl,
                     data = decodedData,
                 })

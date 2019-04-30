@@ -988,6 +988,7 @@ export async function allPostsAsync({ pageSize = 20, pageAfterPostId } = {}) {
           postId
           creator {
             userId
+            username
             name
             photo {
               url

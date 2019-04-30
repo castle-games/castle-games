@@ -190,10 +190,16 @@ class UIPostCell extends React.Component {
   };
 
   _handleOpenData = async () => {
-    const { postId, sourceGame, media } = this.props.post;
+    const { postId, creator, sourceGame, media } = this.props.post;
     this.props.onGameSelect(sourceGame);
     NativeUtil.sendLuaEvent('CASTLE_POST_OPENED', {
       postId,
+      creator: {
+        userId: creator.userId,
+        username: creator.username,
+        name: creator.name,
+        photoUrl: creator.photo.url,
+      },
       ...(media ? { mediaUrl: media.url } : {}),
       data: await Actions.postDataAsync({ postId }),
     });
