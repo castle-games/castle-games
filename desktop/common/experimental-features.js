@@ -3,9 +3,7 @@ import Storage from '~/common/storage';
 const storage = new Storage('experimental-features');
 
 export function isEnabled(featureName) {
-  const ret = storage.getItem(featureName) === 'yes';
-  console.log(`ret is ${ret}`);
-  return ret;
+  return storage.getItem(featureName) === 'yes';
 }
 
 export function setEnabled(featureName, isEnabled) {
