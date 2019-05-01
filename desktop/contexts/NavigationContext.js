@@ -24,6 +24,7 @@ const NavigationContextDefaults = {
   timeLastNavigated: 0,
   gameUrl: '',
   game: null,
+  post: null,
   timeGameLoaded: 0,
   userProfileShown: null,
   isFullScreen: false,
@@ -115,7 +116,7 @@ class NavigationContextManager extends React.Component {
   }
 
   // load game
-  _loadGameAsync = async (game) => {
+  _loadGameAsync = async (game, { post = null } = {}) => {
     let { url } = game;
     if (Strings.isEmpty(url)) {
       return;
@@ -129,6 +130,7 @@ class NavigationContextManager extends React.Component {
         gameUrl: url,
         timeGameLoaded: time,
         timeLastNavigated: time,
+        post,
       },
     });
   };
@@ -182,7 +184,7 @@ class NavigationContextManager extends React.Component {
     this._navigateToContentMode('game');
   };
 
-  navigateToGameUrl = async (gameUrl) => {
+  navigateToGameUrl = async (gameUrl, options) => {
     gameUrl = gameUrl.replace('castle://', 'http://');
     let game;
     try {
@@ -196,22 +198,22 @@ class NavigationContextManager extends React.Component {
     }
 
     if (game && game.url) {
-      this._loadGameAsync(game);
+      this._loadGameAsync(game, options);
     } else {
       Logs.error(`There was a problem opening the game at this url: ${gameUrl}`);
     }
   };
 
-  navigateToGame = (game) => {
+  navigateToGame = (game, options) => {
     if (!game || Strings.isEmpty(game.url)) {
       return;
     }
     if (game.gameId) {
       // this is a known game object, not an abstract url request
-      this._loadGameAsync(game);
+      this._loadGameAsync(game, options);
     } else {
       // this is an incomplete game object, so try to resolve it before loading
-      this.navigateToGameUrl(game.url);
+      this.navigateToGameUrl(game.url, options);
     }
   };
 
@@ -283,6 +285,7 @@ class NavigationContextManager extends React.Component {
           ...state.navigation,
           contentMode: newContentMode,
           game: NavigationContextDefaults.game,
+          post: NavigationContextDefaults.post,
           gameUrl: NavigationContextDefaults.gameUrl,
           timeGameLoaded: time,
           timeLastNavigated: time,

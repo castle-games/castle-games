@@ -47,8 +47,6 @@ end
 
 castle.user = {}
 
-local me
-
 if CASTLE_INITIAL_DATA then
     local isLoggedIn = not not (CASTLE_INITIAL_DATA.user and CASTLE_INITIAL_DATA.user.isLoggedIn)
     castle.user.isLoggedIn = isLoggedIn
@@ -223,6 +221,34 @@ end
 -- post
 
 castle.post = {}
+
+function castle.post._decodePost(encodedPost)
+    local decodedData
+    pcall(function()
+        decodedData = cjson.decode(encodedPost.data)
+    end)
+    return {
+        postId = encodedPost.postId,
+        creator = encodedPost.creator,
+        mediaUrl = encodedPost.mediaUrl,
+        data = decodedData,
+    }
+end
+
+do
+    local decodedInitialPost -- Memoize to prevent decoding JSON multiple times
+
+    function castle.post.getInitialPost()
+        if decodedInitialPost then
+            return decodedInitialPost
+        end
+        if CASTLE_INITIAL_DATA and CASTLE_INITIAL_DATA.initialPost then
+            decodedInitialPost = castle.post._decodePost(CASTLE_INITIAL_DATA.initialPost)
+            return decodedInitialPost
+        end
+        return nil
+    end
+end
 
 function castle.post.create(options)
     local message = options.message or 'Say something!'

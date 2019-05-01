@@ -160,16 +160,7 @@ function main.update(dt)
         -- If has a `castle.postopened` handler, notify of post opens
         if home.loaded and home.globals.castle.postopened then
             for _, postOpen in ipairs(pendingPostOpens) do
-                local decodedData
-                pcall(function()
-                    decodedData = cjson.decode(postOpen.data)
-                end)
-                home:safeCall(home.globals.castle.postopened, {
-                    postId = postOpen.postId,
-                    creator = postOpen.creator,
-                    mediaUrl = postOpen.mediaUrl,
-                    data = decodedData,
-                })
+                home:safeCall(home.globals.castle.postopened, castle.post._decodePost(postOpen))
             end
             pendingPostOpens = {}
         end

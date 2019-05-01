@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as NativeUtil from '~/native/nativeutil';
 import * as Utilities from '~/common/utilities';
+import * as Actions from '~/common/actions';
 
 import { css } from 'react-emotion';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
@@ -29,6 +30,20 @@ const STYLES_GAME_CONTAINER = css`
   justify-content: center;
   display: flex;
 `;
+
+const jsUserToLuaUser = async (user) => ({
+  userId: user.userId,
+  username: user.username,
+  name: user.name,
+  photoUrl: user.photo.url,
+});
+
+const jsPostToLuaPost = async ({ postId, creator, media }) => ({
+  postId,
+  creator: await jsUserToLuaUser(creator),
+  ...(media ? { mediaUrl: media.url } : {}),
+  data: await Actions.postDataAsync({ postId }),
+});
 
 class GameScreen extends React.Component {
   static defaultProps = {
@@ -75,6 +90,9 @@ class GameScreen extends React.Component {
   _openGame = async (url) => {
     Logs.system(`Loading game entry point: ${url}`);
 
+    // Prepare the Lua format of the post
+    const luaPost = this.props.post ? await jsPostToLuaPost(this.props.post) : undefined;
+
     // Set initial data (read at various points in Lua code from `CASTLE_INITIAL_DATA`), then launch the game.
     // Make sure to `await` setting initial data before calling `.open`!
     await NativeUtil.putInitialData({
@@ -83,15 +101,9 @@ class GameScreen extends React.Component {
       },
       user: {
         isLoggedIn: this.props.isLoggedIn,
-        me: this.props.isLoggedIn
-          ? {
-              userId: this.props.me.userId,
-              username: this.props.me.username,
-              name: this.props.me.name,
-              photoUrl: this.props.me.photo.url,
-            }
-          : undefined,
+        me: this.props.isLoggedIn ? await jsUserToLuaUser(this.props.me) : undefined,
       },
+      initialPost: luaPost,
     });
     await GameWindow.open({
       gameUrl: url,
@@ -100,6 +112,11 @@ class GameScreen extends React.Component {
         navigateToEditPost: this.props.navigateToEditPost,
       },
     });
+
+    // Triger the `castle.postopened` event afterward
+    if (luaPost) {
+      NativeUtil.sendLuaEvent('CASTLE_POST_OPENED', luaPost);
+    }
   };
 
   _updateGameWindow = async (prevProps, prevState) => {
@@ -179,6 +196,7 @@ export default class GameScreenWithContext extends React.Component {
                 {(currentUser) => (
                   <GameScreen
                     game={navigation.game}
+                    post={navigation.post}
                     timeGameLoaded={navigation.timeGameLoaded}
                     timeNavigatedToGame={navigation.timeLastNavigated}
                     navigateToUserProfile={navigator.navigateToUserProfile}
