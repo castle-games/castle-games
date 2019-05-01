@@ -43,6 +43,33 @@ function castle.system.getGlobalScaling()
 end
 
 
+-- game
+
+castle.game = {}
+
+do
+    local decodedInitialParams
+
+    function castle.game.getInitialParams()
+        if decodedInitialParams then
+            return decodedInitialParams
+        end
+        if CASTLE_INITIAL_DATA and CASTLE_INITIAL_DATA.initialParams then
+            decodedInitialParams = cjson.decode(CASTLE_INITIAL_DATA.initialParams)
+            return decodedInitialParams
+        end
+        return nil
+    end
+end
+
+function castle.game.load(gameIdOrUrl, params)
+    bridge.js.gameLoad {
+        gameIdOrUrl = gameIdOrUrl,
+        params = cjson.encode(params),
+    }
+end
+
+
 -- user
 
 castle.user = {}

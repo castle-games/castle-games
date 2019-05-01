@@ -490,6 +490,27 @@ export async function getGameByUrl(url) {
   return result.data.game;
 }
 
+export async function getGameByGameId(gameId) {
+  const variables = { gameId };
+
+  let result = await API.graphqlAsync({
+    query: `
+    query GetGame($gameId: ID!) {
+      game(gameId: $gameId) {
+        ${GAME_FIELDS}
+        ${NESTED_GAME_OWNER}
+      }
+    }
+    `,
+    variables,
+  });
+
+  if (result.errors && result.errors.length) {
+    throw new Error(`\`getGameByGameId\`: ${result.errors[0].message}`);
+  }
+  return result.data.game;
+}
+
 export async function uploadImageAsync({ file }) {
   const variables = { file };
   const result = await API.graphqlAsync({

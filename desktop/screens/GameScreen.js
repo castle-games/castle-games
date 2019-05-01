@@ -104,12 +104,15 @@ class GameScreen extends React.Component {
         me: this.props.isLoggedIn ? await jsUserToLuaUser(this.props.me) : undefined,
       },
       initialPost: luaPost,
+      initialParams: this.props.gameParams ? this.props.gameParams : undefined
     });
     await GameWindow.open({
       gameUrl: url,
       game: this.props.game,
       navigations: {
         navigateToEditPost: this.props.navigateToEditPost,
+        navigateToGameUrl: this.props.navigateToGameUrl,
+        navigateToGame: this.props.navigateToGame,
       },
     });
 
@@ -197,10 +200,13 @@ export default class GameScreenWithContext extends React.Component {
                   <GameScreen
                     game={navigation.game}
                     post={navigation.post}
+                    gameParams={navigation.gameParams}
                     timeGameLoaded={navigation.timeGameLoaded}
                     timeNavigatedToGame={navigation.timeLastNavigated}
                     navigateToUserProfile={navigator.navigateToUserProfile}
                     navigateToEditPost={navigator.navigateToEditPost}
+                    navigateToGameUrl={navigator.navigateToGameUrl}
+                    navigateToGame={navigator.navigateToGame}
                     isFullScreen={navigation.isFullScreen}
                     setIsFullScreen={navigator.setIsFullScreen}
                     reloadGame={navigator.reloadGame}

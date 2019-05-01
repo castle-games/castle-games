@@ -55,6 +55,18 @@ export const JS = {
     }
   },
 
+  // Game
+
+  async gameLoad({ gameIdOrUrl, params }) {
+    const navigations = GameWindow.getNavigations();
+    if (gameIdOrUrl.includes('://')) {
+      navigations.navigateToGameUrl(gameIdOrUrl, { gameParams: params });
+    } else {
+      const game = await Actions.getGameByGameId(gameIdOrUrl);
+      navigations.navigateToGame(game, { gameParams: params });
+    }
+  },
+
   // Storage
 
   async storageGetGlobal({ key }) {
