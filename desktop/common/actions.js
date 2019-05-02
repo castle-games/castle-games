@@ -1035,3 +1035,24 @@ export async function postDataAsync({ postId }) {
 
   return result.data.post.data;
 }
+
+export async function search(query) {
+  const result = await API.graphqlAsync(
+    `query($text: String!) {
+      search(text: $text) {
+        users {
+          ${FULL_USER_FIELDS}
+        }
+        games {
+          ${GAME_FIELDS}
+          ${NESTED_GAME_OWNER}
+        }
+      }
+    }`,
+    { text: query }
+  );
+  if (result.errors && result.errors.length) {
+    return false;
+  }
+  return result.data.search;
+}

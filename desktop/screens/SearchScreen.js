@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as Actions from '~/common/actions';
 import * as Constants from '~/common/constants';
 import * as Strings from '~/common/strings';
 import * as Urls from '~/common/urls';
@@ -6,9 +7,13 @@ import * as Urls from '~/common/urls';
 import { css } from 'react-emotion';
 import { NavigatorContext } from '~/contexts/NavigationContext';
 
+import _ from 'lodash';
 import UIButtonSecondary from '~/components/reusable/UIButtonSecondary';
 import UIGameGrid from '~/components/reusable/UIGameGrid';
 import UIUserGrid from '~/components/reusable/UIUserGrid';
+
+const SEARCH_DEBOUNCE_MS = 50;
+const SEARCH_DEBOUNCE_MAX_MS = 150;
 
 const STYLES_CONTAINER = css`
   background: ${Constants.colors.background};
@@ -64,22 +69,26 @@ export default class SearchScreen extends React.Component {
     },
   };
 
-  // NOTE(jim): Since we've organized this component in a unique way.
+  constructor(props) {
+    super(props);
+    this._updateResultsDebounce = _.debounce(this._updateResults, SEARCH_DEBOUNCE_MS, {
+      maxWait: SEARCH_DEBOUNCE_MAX_MS,
+    });
+  }
+
   // Mount needs to trigger an updateResults to support the first search character.
   componentDidMount() {
     this._updateResults(this.props);
   }
 
-  // NOTE(jim): Set state is called outside of this component, and therefore we need
-  // to check if the query has changed before its reflected at the end of the update
-  // cycle
-  componentWillUpdate(nextProps, nextState) {
+  componentWillUpdate(nextProps) {
     if (this.props.query !== nextProps.query) {
-      this._updateResults(nextProps);
+      this._updateResultsDebounce(nextProps);
     }
   }
 
-  _updateResults = ({ query }) => {
+  _updateResults = async ({ query }) => {
+    query = this._stringAsSearchInvariant(query);
     if (Strings.isEmpty(query)) {
       this.setState({
         results: {
@@ -88,71 +97,15 @@ export default class SearchScreen extends React.Component {
         },
       });
     } else {
+      const results = await Actions.search(query);
       this.setState({
-        results: {
-          games: this.props.allContent.games.filter((m) =>
-            this._filterGameWithSearchState(m, query)
-          ),
-          users: this.props.allContent.users.filter((u) =>
-            this._filterUserWithSearchState(u, query)
-          ),
-        },
+        results,
       });
     }
   };
 
   _stringAsSearchInvariant = (s) => {
     return s.toLowerCase().trim();
-  };
-
-  _stringIncludesSearchQuery = (s, query) => {
-    if (Strings.isEmpty(s)) {
-      return false;
-    }
-
-    return this._stringAsSearchInvariant(s).includes(query);
-  };
-
-  _filterGameWithSearchState = (m, originalQuery) => {
-    if (!m) {
-      return false;
-    }
-
-    const query = this._stringAsSearchInvariant(this.props.query);
-    if (this._stringIncludesSearchQuery(m.name, query)) {
-      return true;
-    }
-
-    if (Strings.isEmpty(m.name) && this._stringIncludesSearchQuery(m.url, originalQuery)) {
-      return true;
-    }
-
-    if (m.user) {
-      if (this._stringIncludesSearchQuery(m.user.name, query)) {
-        return true;
-      }
-      if (this._stringIncludesSearchQuery(m.user.username, query)) {
-        return true;
-      }
-    }
-
-    return false;
-  };
-
-  _filterUserWithSearchState = (u, originalQuery) => {
-    if (!u) {
-      return false;
-    }
-
-    const query = this._stringAsSearchInvariant(originalQuery);
-    if (this._stringIncludesSearchQuery(u.name, query)) {
-      return true;
-    }
-    if (this._stringIncludesSearchQuery(u.username, query)) {
-      return true;
-    }
-
-    return false;
   };
 
   _maybeNavigateToUrl = (url) => {
