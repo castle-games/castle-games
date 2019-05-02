@@ -62,6 +62,13 @@ do
     end
 end
 
+function castle.game.getReferrer()
+    if CASTLE_INITIAL_DATA and CASTLE_INITIAL_DATA.referrerGame then
+        return CASTLE_INITIAL_DATA.referrerGame
+    end
+    return nil
+end
+
 function castle.game.load(gameIdOrUrl, params)
     bridge.js.gameLoad {
         gameIdOrUrl = gameIdOrUrl,
@@ -83,9 +90,8 @@ end
 function castle.user.getMe()
     if castle.user.isLoggedIn then
         return CASTLE_INITIAL_DATA.user.me
-    else
-        return nil
     end
+    return nil
 end
 
 

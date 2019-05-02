@@ -26,6 +26,7 @@ const NavigationContextDefaults = {
   game: null,
   post: null,
   gameParams: null,
+  referrerGame: null,
   timeGameLoaded: 0,
   userProfileShown: null,
   isFullScreen: false,
@@ -117,7 +118,7 @@ class NavigationContextManager extends React.Component {
   }
 
   // load game
-  _loadGameAsync = async (game, { post = null, gameParams = null } = {}) => {
+  _loadGameAsync = async (game, { post = null, gameParams = null, referrerGame = null } = {}) => {
     let { url } = game;
     if (Strings.isEmpty(url)) {
       return;
@@ -133,6 +134,7 @@ class NavigationContextManager extends React.Component {
         timeLastNavigated: time,
         post,
         gameParams,
+        referrerGame,
       },
     });
   };
@@ -289,6 +291,7 @@ class NavigationContextManager extends React.Component {
           game: NavigationContextDefaults.game,
           post: NavigationContextDefaults.post,
           gameParams: NavigationContextDefaults.gameParams,
+          referrerGame: NavigationContextDefaults.referrerGame,
           gameUrl: NavigationContextDefaults.gameUrl,
           timeGameLoaded: time,
           timeLastNavigated: time,

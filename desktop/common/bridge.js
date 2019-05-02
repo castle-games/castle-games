@@ -58,12 +58,16 @@ export const JS = {
   // Game
 
   async gameLoad({ gameIdOrUrl, params }) {
+    const currentGame = GameWindow.getCurrentGame();
     const navigations = GameWindow.getNavigations();
+
+    const options = { gameParams: params, referrerGame: currentGame };
+
     if (gameIdOrUrl.includes('://')) {
-      navigations.navigateToGameUrl(gameIdOrUrl, { gameParams: params });
+      navigations.navigateToGameUrl(gameIdOrUrl, options);
     } else {
       const game = await Actions.getGameByGameId(gameIdOrUrl);
-      navigations.navigateToGame(game, { gameParams: params });
+      navigations.navigateToGame(game, options);
     }
   },
 

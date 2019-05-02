@@ -41,8 +41,16 @@ const jsUserToLuaUser = async (user) => ({
 const jsPostToLuaPost = async ({ postId, creator, media }) => ({
   postId,
   creator: await jsUserToLuaUser(creator),
-  ...(media ? { mediaUrl: media.url } : {}),
+  mediaUrl: media ? media.url : undefined,
   data: await Actions.postDataAsync({ postId }),
+});
+
+const jsGameToLuaGame = async ({ gameId, owner, title, url, description }) => ({
+  gameId,
+  owner: owner ? await jsUserToLuaUser(owner) : undefined,
+  title,
+  url,
+  description,
 });
 
 class GameScreen extends React.Component {
@@ -104,7 +112,8 @@ class GameScreen extends React.Component {
         me: this.props.isLoggedIn ? await jsUserToLuaUser(this.props.me) : undefined,
       },
       initialPost: luaPost,
-      initialParams: this.props.gameParams ? this.props.gameParams : undefined
+      initialParams: this.props.gameParams ? this.props.gameParams : undefined,
+      referrerGame: this.props.referrerGame ? await jsGameToLuaGame(this.props.referrerGame) : undefined,
     });
     await GameWindow.open({
       gameUrl: url,
@@ -201,6 +210,7 @@ export default class GameScreenWithContext extends React.Component {
                     game={navigation.game}
                     post={navigation.post}
                     gameParams={navigation.gameParams}
+                    referrerGame={navigation.referrerGame}
                     timeGameLoaded={navigation.timeGameLoaded}
                     timeNavigatedToGame={navigation.timeLastNavigated}
                     navigateToUserProfile={navigator.navigateToUserProfile}
