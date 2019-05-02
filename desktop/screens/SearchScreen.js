@@ -53,16 +53,20 @@ const STYLES_SECTION = css`
   padding-bottom: 64px;
 `;
 
+const STYLES_LOADING = css`
+  padding: 24px;
+  color: ${Constants.colors.text2};
+  font-size: ${Constants.typescale.lvl4};
+`;
+
 export default class SearchScreen extends React.Component {
   static contextType = NavigatorContext;
   static defaultProps = {
-    // TODO: remove
-    allContent: {
-      games: [],
-      users: [],
-    },
+    query: '',
   };
+
   state = {
+    isLoading: false,
     results: {
       games: [],
       users: [],
@@ -96,15 +100,18 @@ export default class SearchScreen extends React.Component {
     query = this._stringAsSearchInvariant(query);
     if (Strings.isEmpty(query)) {
       this.setState({
+        isLoading: false,
         results: {
           games: [],
           users: [],
         },
       });
     } else {
+      this.setState({ isLoading: true });
       const results = await Actions.search(query);
       if (this._mounted && results && results.query === this.props.query) {
         this.setState({
+          isLoading: false,
           results,
         });
       }
@@ -172,7 +179,7 @@ export default class SearchScreen extends React.Component {
     }
   };
 
-  render() {
+  _renderResults = () => {
     let maybeGameResults, maybeUserResults, maybeNoResults;
     if (this.state.results.games && this.state.results.games.length) {
       maybeGameResults = (
@@ -201,12 +208,24 @@ export default class SearchScreen extends React.Component {
     }
 
     return (
+      <React.Fragment>
+        {maybeGameResults}
+        {maybeUserResults}
+        {maybeNoResults}
+      </React.Fragment>
+    );
+  };
+  render() {
+    let content;
+    const { isLoading } = this.state;
+    if (isLoading) {
+      content = <div className={STYLES_LOADING}>Loading search results...</div>;
+    } else {
+      content = this._renderResults();
+    }
+    return (
       <div className={STYLES_CONTAINER}>
-        <div className={STYLES_SECTION}>
-          {maybeGameResults}
-          {maybeUserResults}
-          {maybeNoResults}
-        </div>
+        <div className={STYLES_SECTION}>{content}</div>
       </div>
     );
   }
