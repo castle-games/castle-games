@@ -196,7 +196,6 @@ class App extends React.Component {
       <AppContainer
         featuredGames={this.state.featuredGames}
         featuredExamples={this.state.featuredExamples}
-        allContent={this.state.allContent}
         updateAvailable={this.state.updateAvailable}
         isFullScreen={this.props.navigation.isFullScreen}
         onNativeUpdateInstall={this._handleNativeUpdateInstall}

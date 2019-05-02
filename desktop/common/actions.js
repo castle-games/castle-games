@@ -400,25 +400,6 @@ export async function getInitialData() {
         ${GAME_ITEMS}
       }
 
-      allGames {
-        ${GAME_FIELDS}
-        ${NESTED_GAME_OWNER}
-      }
-
-      allUsers {
-        userId
-        name
-        username
-        createdTime
-        gamesCount
-        gamesSumPlayCount
-        photo {
-          url
-          height
-          width
-        }
-      }
-
       featuredGames {
         ${GAME_FIELDS}
         ${NESTED_GAME_OWNER}

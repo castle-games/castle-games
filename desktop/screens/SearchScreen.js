@@ -51,6 +51,7 @@ const STYLES_SECTION = css`
 export default class SearchScreen extends React.Component {
   static contextType = NavigatorContext;
   static defaultProps = {
+    // TODO: remove
     allContent: {
       games: [],
       users: [],

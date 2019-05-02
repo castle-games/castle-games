@@ -116,7 +116,6 @@ class ContentContainer extends React.Component {
     return (
       <SearchScreen
         query={this.state.searchQuery}
-        allContent={this.props.allContent}
         onSearchReset={this._handleSearchReset}
         viewer={this.props.viewer}
       />

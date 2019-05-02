@@ -87,10 +87,6 @@ loader.id = 'loader';
 document.body.appendChild(loader);
 
 const INITIAL_STATE_OFFLINE = {
-  allContent: {
-    games: [],
-    users: [],
-  },
   featuredGames: [],
   featuredExamples: [],
   isOffline: true,
@@ -98,16 +94,9 @@ const INITIAL_STATE_OFFLINE = {
 
 const run = async () => {
   ReactDOM.render(<GLLoaderScreen />, document.getElementById('loader'));
-  const {
-    allContent,
-    featuredGames,
-    featuredExamples,
-    viewer,
-    isOffline,
-  } = await Network.getProductData();
+  const { featuredGames, featuredExamples, viewer, isOffline } = await Network.getProductData();
 
   let state = Object.assign({}, INITIAL_STATE_OFFLINE, {
-    allContent,
     featuredGames,
     featuredExamples,
     isOffline,

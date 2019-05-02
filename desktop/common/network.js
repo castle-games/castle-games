@@ -4,7 +4,6 @@ export const getProductData = async () => {
   let data;
   let featuredGames = [];
   let featuredExamples = [];
-  let allContent = {};
   let viewer;
   let isOffline = true;
 
@@ -16,12 +15,10 @@ export const getProductData = async () => {
 
   if (data) {
     isOffline = false;
-    allContent.games = data.allGames ? data.allGames : [];
-    allContent.users = data.allUsers ? data.allUsers : [];
     featuredGames = data.featuredGames ? data.featuredGames : [];
     featuredExamples = data.featuredExamples ? data.featuredExamples : [];
     viewer = data.me;
   }
 
-  return { featuredGames, featuredExamples, allContent, viewer, isOffline };
+  return { featuredGames, featuredExamples, viewer, isOffline };
 };
