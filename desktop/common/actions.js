@@ -1054,5 +1054,8 @@ export async function search(query) {
   if (result.errors && result.errors.length) {
     return false;
   }
-  return result.data.search;
+  return {
+    query,
+    ...result.data.search,
+  };
 }

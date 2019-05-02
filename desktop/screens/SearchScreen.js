@@ -78,13 +78,18 @@ export default class SearchScreen extends React.Component {
 
   // Mount needs to trigger an updateResults to support the first search character.
   componentDidMount() {
+    this._mounted = true;
     this._updateResults(this.props);
   }
 
-  componentWillUpdate(nextProps) {
-    if (this.props.query !== nextProps.query) {
-      this._updateResultsDebounce(nextProps);
+  componentDidUpdate(prevProps) {
+    if (this.props.query !== prevProps.query) {
+      this._updateResultsDebounce(this.props);
     }
+  }
+
+  componentWillUnmount() {
+    this._mounted = false;
   }
 
   _updateResults = async ({ query }) => {
@@ -98,9 +103,11 @@ export default class SearchScreen extends React.Component {
       });
     } else {
       const results = await Actions.search(query);
-      this.setState({
-        results,
-      });
+      if (this._mounted && results && results.query === this.props.query) {
+        this.setState({
+          results,
+        });
+      }
     }
   };
 
