@@ -70,10 +70,12 @@ function castle.game.getReferrer()
 end
 
 function castle.game.load(gameIdOrUrl, params)
-    bridge.js.gameLoad {
-        gameIdOrUrl = gameIdOrUrl,
-        params = cjson.encode(params),
-    }
+    network.async(function()
+        bridge.js.gameLoad {
+            gameIdOrUrl = gameIdOrUrl,
+            params = cjson.encode(params),
+        }
+    end)
 end
 
 
