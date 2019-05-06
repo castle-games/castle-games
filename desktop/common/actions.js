@@ -58,6 +58,7 @@ const GAME_FIELDS = `
   gameId
   title
   url
+  sourceUrl
   slug
   createdTime
   updatedTime
