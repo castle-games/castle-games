@@ -35,7 +35,7 @@ const jsUserToLuaUser = async (user) => ({
   userId: user.userId,
   username: user.username,
   name: user.name,
-  photoUrl: user.photo.url,
+  photoUrl: (user.photo) ? user.photo.url : undefined,
 });
 
 const jsPostToLuaPost = async ({ postId, creator, media }) => ({
