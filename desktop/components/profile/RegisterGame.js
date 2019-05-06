@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as Actions from '~/common/actions';
 import * as Constants from '~/common/constants';
+import * as ExecNode from '~/common/execnode';
 import * as NativeUtil from '~/native/nativeutil';
 import * as PublishMockActions from '~/common/publish-mock-actions';
 
@@ -118,6 +119,18 @@ export default class RegisterGame extends React.Component {
     this._debouncePreviewTimeout = setTimeout(this._updateGamePreview, 300);
   };
 
+  _previewGameAtLocalPath = async (path, gameId) => {
+    let previewedGame;
+    let projectFilename = await ExecNode.getProjectFilenameAtPathAsync(path);
+    if (!projectFilename) {
+      throw new Error(
+        'Unable to find a Castle project in this folder. Make sure to choose a folder that contains a .castle file.'
+      );
+    }
+    const castleFileContents = await NativeUtil.readFile(`${path}/${projectFilename}`);
+    return Actions.previewLocalGame(castleFileContents, gameId);
+  };
+
   _updateGamePreview = async () => {
     if (this._debouncePreviewTimeout) {
       clearTimeout(this._debouncePreviewTimeout);
@@ -132,7 +145,6 @@ export default class RegisterGame extends React.Component {
       await this.setState({ isLoadingPreview: true });
       try {
         previewedGame = await Actions.previewGameAtUrl(externalUrlInputValue, gameId);
-        console.log(`ben: previewGameAtUrl: ${JSON.stringify(previewedGame, null, 2)}`);
       } catch (e) {
         previewedGame = {};
         previewError = e.message;
@@ -140,7 +152,7 @@ export default class RegisterGame extends React.Component {
     } else if (directoryInputValue && directoryInputValue.length) {
       await this.setState({ isLoadingPreview: true });
       try {
-        previewedGame = await PublishMockActions.previewLocalGame(directoryInputValue, gameId);
+        previewedGame = await this._previewGameAtLocalPath(directoryInputValue, gameId);
       } catch (e) {
         previewedGame = {};
         previewError = e.message;

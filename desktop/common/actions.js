@@ -601,7 +601,11 @@ function _validateRegisterGameResult(result) {
     } else if (code === 'REGISTER_GAME_DUPLICATE_SLUG') {
       throw new Error(`You have already added a game with this name.`);
     } else if (code === 'REGISTER_GAME_INVALID_CASTLE_FILE') {
-      throw new Error(`The file at this url doesn't look like a valid Castle project file.`);
+      if (error.message == 'Owner must not be empty') {
+        throw new Error(`The given Castle project file is missing the 'owner' field.`);
+      } else {
+        throw new Error(`The file at this url doesn't look like a valid Castle project file.`);
+      }
     } else if (code === 'REGISTER_GAME_INVALID_USERNAME') {
       throw new Error(`The \`owner\` given at this url does not match your username.`);
     } else {
@@ -632,34 +636,37 @@ export async function registerGameAtUrl(url) {
   return result.data.registerGame;
 }
 
-// TODO: BEN
-export async function previewGameAtUrl(url) {
+export async function previewLocalGame(castleFileContents, gameId = null) {
   const result = await API.graphqlAsync({
     query: `
-      query PreviewGameAtUrl($url: String!) {
-        previewGameAtUrl(url: $url) {
-          slug
-          title
-          url
-          sourceUrl
-          owner {
-            name
-            username
-            gamesCount
-            gamesSumPlayCount
-          },
-          coverImage {
-            url
-            height
-            width
-          },
-          description
-          createdTime
-          updatedTime
+      query PreviewLocalGame($castleFile: String!, $gameId: ID) {
+        previewLocalGame(castleFile: $castleFile, gameId: $gameId) {
+          ${GAME_FIELDS}
+          ${NESTED_GAME_OWNER}
         }
       }
     `,
-    variables: { url },
+    variables: {
+      castleFile: castleFileContents,
+      gameId,
+    },
+  });
+
+  _validateRegisterGameResult(result);
+  return result.data.previewLocalGame;
+}
+
+export async function previewGameAtUrl(url, gameId = null) {
+  const result = await API.graphqlAsync({
+    query: `
+      query PreviewGameAtUrl($url: String!, $gameId: ID) {
+        previewGameAtUrl(url: $url, gameId: $gameId) {
+          ${GAME_FIELDS}
+          ${NESTED_GAME_OWNER}
+        }
+      }
+    `,
+    variables: { url, gameId },
   });
 
   _validateRegisterGameResult(result);
