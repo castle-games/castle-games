@@ -7,7 +7,6 @@ import { NavigationContext, NavigatorContext } from '~/contexts/NavigationContex
 import UIButton from '~/components/reusable/UIButton';
 import UIHeading from '~/components/reusable/UIHeading';
 import ControlledInput from '~/components/primitives/ControlledInput';
-import Logs from '~/common/logs';
 
 const STYLES_CONTAINER = css`
   flex: 1
@@ -96,6 +95,10 @@ class EditPostScreen extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this._autoCrop();
+  }
+
   _handleChangeMessage = (e) => {
     this.setState({
       message: e.target.value,
@@ -117,10 +120,10 @@ class EditPostScreen extends React.Component {
   _handleSubmit = () => {
     if (this._isValidForSubmit()) {
       if (this.props.onSubmit) {
-        const { message, mediaPath } = this.state;
+        const { message, editedMediaBlob } = this.state;
         this.props.onSubmit({
           message,
-          mediaPath,
+          editedMediaBlob,
         });
       }
       this.props.navigateToCurrentGame && this.props.navigateToCurrentGame();
@@ -135,12 +138,101 @@ class EditPostScreen extends React.Component {
     }
   };
 
+  _autoCrop = () => {
+    // Start loading image
+    const img = document.createElement('img');
+    img.src = this.state.mediaPath;
+
+    // Draw original image to this (to read)
+    const inputCanvas = document.createElement('canvas');
+    const inputCtx = inputCanvas.getContext('2d');
+
+    // Draw edited image to this (to export)
+    const outputCanvas = document.createElement('canvas');
+    const outputCtx = outputCanvas.getContext('2d');
+
+    img.onload = () => {
+      // Draw whole image to `inputCanvas`
+      inputCanvas.width = img.width;
+      inputCanvas.height = img.height;
+      inputCtx.drawImage(img, 0, 0, img.width, img.height);
+
+      // Read `ImageData`
+      const inputImageData = inputCtx.getImageData(0, 0, inputCanvas.width, inputCanvas.height);
+      const inputBuf32 = new Uint32Array(inputImageData.data.buffer); // To allow whole-pixel comparisons
+      const inputPix = (x, y) => inputBuf32[inputCanvas.width * y + x];
+
+      // NOTE: This could be expanded into an interactive image editor cuz it's a canvas...
+
+      // Top, left
+      let top, left;
+      const topLeftPix = inputPix(0, 0);
+      topLoop: for (let y = 0; y < inputCanvas.height; ++y) {
+        for (let x = 0; x < inputCanvas.width; ++x) {
+          if (inputPix(x, y) !== topLeftPix) {
+            top = y;
+            break topLoop;
+          }
+        }
+      }
+      leftLoop: for (let x = 0; x < inputCanvas.width; ++x) {
+        for (let y = 0; y < inputCanvas.height; ++y) {
+          if (inputPix(x, y) !== topLeftPix) {
+            left = x;
+            break leftLoop;
+          }
+        }
+      }
+
+      // Bottom, right
+      let bottom, right;
+      const bottomRightPix = inputPix(inputCanvas.width - 1, inputCanvas.height - 1);
+      bottomLoop: for (let y = inputCanvas.height - 1; y >= 0; --y) {
+        for (let x = 0; x < inputCanvas.width; ++x) {
+          if (inputPix(x, y) !== bottomRightPix) {
+            bottom = y;
+            break bottomLoop;
+          }
+        }
+      }
+      rightLoop: for (let x = inputCanvas.width - 1; x >= 0; --x) {
+        for (let y = 0; y < inputCanvas.height; ++y) {
+          if (inputPix(x, y) !== bottomRightPix) {
+            right = x;
+            break rightLoop;
+          }
+        }
+      }
+
+      // Draw to cropped canvas
+      outputCanvas.width = right - left + 1;
+      outputCanvas.height = bottom - top + 1;
+      outputCtx.drawImage(
+        img,
+        left,
+        top,
+        outputCanvas.width,
+        outputCanvas.height,
+        0,
+        0,
+        outputCanvas.width,
+        outputCanvas.height
+      );
+
+      // Export!
+      outputCanvas.toBlob((editedMediaBlob) => {
+        const editedMediaObjUrl = URL.createObjectURL(editedMediaBlob);
+        this.setState({ editedMediaBlob, editedMediaObjUrl });
+      });
+    };
+  };
+
   render() {
     let maybeMediaContainer;
-    if (this.state.mediaPath) {
+    if (this.state.editedMediaObjUrl) {
       maybeMediaContainer = (
         <div className={STYLES_MEDIA_CONTAINER}>
-          <img className={STYLES_MEDIA_IMAGE} src={this.state.mediaPath} />
+          <img className={STYLES_MEDIA_IMAGE} src={this.state.editedMediaObjUrl} />
         </div>
       );
     }
@@ -184,6 +276,15 @@ export default class EditPostScreenWithContext extends React.Component {
           <NavigationContext.Consumer>
             {(navigation) => {
               const { editPost, onSubmit, onCancel } = navigation.params;
+
+              // Mock data for testing
+              // const editPost = {
+              //   message: 'hello, world',
+              //   mediaPath: '/static/test.png',
+              // };
+              // const onSubmit = (...args) => console.log('onSubmit', ...args);
+              // const onCancel = (...args) => console.log('onCancel', ...args);
+
               return (
                 <EditPostScreen
                   {...this.props}

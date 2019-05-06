@@ -127,13 +127,12 @@ export const JS = {
     // Is a capture requested?
     if (mediaType === 'capture') {
       ({ path: mediaPath } = await Lua.captureScreenshot());
-      mediaUploadParams = mediaUploadParams || {};
-      mediaUploadParams.autoCrop = true;
     }
 
     // Let user edit the message and confirm posting, or cancel
     let cancelled = false;
     let resolved = false;
+    let editedMediaBlob;
     await new Promise((resolve, reject) =>
       navigations.navigateToEditPost({
         editPost: {
@@ -143,7 +142,7 @@ export const JS = {
         onSubmit: (editPost) => {
           if (!resolved) {
             resolved = true;
-            ({ message, mediaPath } = editPost);
+            ({ message, mediaPath, editedMediaBlob } = editPost);
             resolve();
           }
         },
@@ -162,7 +161,9 @@ export const JS = {
 
     // Upload the media
     let mediaFileId;
-    if (mediaPath) {
+    if (editedMediaBlob) {
+      mediaFileId = (await Actions.uploadImageAsync({ file: editedMediaBlob })).fileId;
+    } else if (mediaPath) {
       mediaFileId = (await ExecNode.uploadFileAsync(mediaPath, mediaUploadParams)).fileId;
     }
 
