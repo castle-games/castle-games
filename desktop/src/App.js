@@ -77,7 +77,7 @@ class App extends React.Component {
     window.removeEventListener('GHOST_ERROR', this._handleLuaErrorEvent);
     window.removeEventListener('nativeScreenCaptureReady', ScreenCapture.screenCaptureReadyEvent);
     window.removeEventListener('nativeExecNodeComplete', ExecNode.execNodeCompleteEvent);
-    window.removeEventLIstener('click', this._handleAnchorClick);
+    window.removeEventListener('click', this._handleAnchorClick);
     Bridge.removeEventListeners();
     window.clearTimeout(this._nativeChannelsPollTimeout);
   }
