@@ -79,7 +79,7 @@ class HomeScreen extends React.Component {
       ? this.props.history.map((historyItem) => {
           return { ...historyItem.game, key: historyItem.userStatusId };
         })
-      : null;
+      : [];
 
     return (
       <div

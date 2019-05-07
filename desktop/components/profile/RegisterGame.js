@@ -69,6 +69,7 @@ export default class RegisterGame extends React.Component {
   static defaultProps = {
     game: null,
     onAfterSave: null,
+    history: null, // read this to suggest an upload directory when updating games.
   };
 
   state = {
@@ -83,6 +84,10 @@ export default class RegisterGame extends React.Component {
   };
   _debouncePreviewTimeout = null;
 
+  componentDidMount() {
+    this._resetForm();
+  }
+
   componentDidUpdate(prevProps) {
     if (this.props.game !== prevProps.game) {
       this._resetForm();
@@ -90,10 +95,19 @@ export default class RegisterGame extends React.Component {
   }
 
   _getDefaultValues = () => {
-    const { game } = this.props;
+    const { game, history } = this.props;
+    let lastRunDirectoryForGame;
+    if (game && history) {
+      for (let ii = 0, nn = history.length; ii < nn; ii++) {
+        const gameOpened = history[ii].game;
+        if (gameOpened && gameOpened.gameId === game.gameId) {
+          break;
+        }
+      }
+    }
     return {
-      directoryInputValue: game ? '' : '', // TODO: look up from history
-      externalUrlInputValue: game ? '' : '', // TODO: need this data from the api
+      directoryInputValue: game ? lastRunDirectoryForGame : '',
+      externalUrlInputValue: game ? game.sourceUrl : '',
     };
   };
 
