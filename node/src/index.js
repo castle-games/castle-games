@@ -3,7 +3,7 @@ const actions = [
   require('./actions/extract'),
   require('./actions/getHomeDir'),
   require('./actions/getProjectFilenameAtPath'),
-  require('./actions/publishProject'),
+  require('./actions/uploadGame'),
   require('./actions/test'),
   require('./actions/uploadScreenCapture'),
   require('./actions/uploadFile'),

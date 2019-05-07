@@ -29,22 +29,27 @@ async function listOfFilesAsync(dir) {
   return await packlist({ path: dir });
 }
 
-async function publishHostedGame(API, { gameFiles }) {
+async function _uploadGame(API, { gameFiles }) {
   const variables = { gameFiles };
   const result = await API.graphqlAsync({
     query: `
       mutation($gameFiles: [GameFile]!) {
-        publishHostedGame(gameFiles: $gameFiles)
+        uploadGame(gameFiles: $gameFiles)
       }
     `,
     variables,
   });
 
   if (!result || result.error || result.errors || !result.data) {
-    throw new Error('failed to publish game');
+    const message = result.error
+      ? result.error.message
+      : result.errors && result.errors.length
+      ? result.errors[0].message
+      : null;
+    throw new Error(`failed to upload game: ${message}`);
   }
 
-  return result.data.publishHostedGame;
+  return result.data.uploadGame;
 }
 
 async function testHostedGameHashes(API, { hashes }) {
@@ -65,7 +70,7 @@ async function testHostedGameHashes(API, { hashes }) {
   return result.data.testHostedGameHashes;
 }
 
-async function publishProjectAsync(args) {
+async function uploadGameAsync(args) {
   let dir = args.dir;
   let apiHost = args.apiHost;
   let token = args.token;
@@ -119,7 +124,7 @@ async function publishProjectAsync(args) {
     });
   }
 
-  return await publishHostedGame(API, {
+  return await _uploadGame(API, {
     gameFiles: files.map((filename) => {
       let hash = filesToHashes[filename];
       if (previousHashes[hash] || serverHashes[hash]) {
@@ -139,6 +144,6 @@ async function publishProjectAsync(args) {
 }
 
 module.exports = {
-  name: 'publishProject',
-  fn: publishProjectAsync,
+  name: 'uploadGame',
+  fn: uploadGameAsync,
 };
