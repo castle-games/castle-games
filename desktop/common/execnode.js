@@ -18,9 +18,9 @@ export const getHomeDirAsync = async () => execNodeAsync('getHomeDir', {});
 export const getProjectFilenameAtPathAsync = async (path) =>
   execNodeAsync('getProjectFilenameAtPath', { path });
 
-let publishPreviousHashes = {};
+let uploadPreviousHashes = {};
 
-export async function publishProjectAsync(projectUrl) {
+export async function uploadGameAsync(projectUrl) {
   if (!Urls.isPrivateUrl(projectUrl)) {
     throw new Error(`Failed to upload project from ${projectUrl}: Only local urls are supported`);
   }
@@ -33,15 +33,15 @@ export async function publishProjectAsync(projectUrl) {
     }
     localProjectPath = localProjectPath.replace('file://', '');
     let token = await Actions.getAccessTokenAsync();
-    let result = await execNodeAsync('publishProject', {
+    let result = await execNodeAsync('uploadGame', {
       dir: localProjectPath,
       apiHost: Constants.API_HOST,
       token,
-      previousHashes: publishPreviousHashes,
+      previousHashes: uploadPreviousHashes,
     });
 
     for (let i = 0; i < result.hashes.length; i++) {
-      publishPreviousHashes[result.hashes[i]] = true;
+      uploadPreviousHashes[result.hashes[i]] = true;
     }
 
     return result.devUrl;

@@ -593,7 +593,7 @@ export async function updateUserAsync({ userId, user }) {
   return result.data.updateUser;
 }
 
-function _validateRegisterGameResult(result) {
+function _validatePublishGameResult(result) {
   if (result.errors && result.errors.length) {
     const error = result.errors[0];
     const code = error.extensions ? error.extensions.code : '';
@@ -616,25 +616,25 @@ function _validateRegisterGameResult(result) {
   return true;
 }
 
-// TODO: BEN
-export async function registerGameAtUrl(url) {
-  const variables = {
-    url,
-  };
-
+// read the game at this source url and try to publish it to my account.
+// optional gameId means we intend to update an existing game.
+export async function publishGame(sourceUrl, gameId = null) {
   const result = await API.graphqlAsync({
     query: `
-      mutation RegisterGame($url: String!) {
-        registerGame(url: $url) {
+      mutation($url: String!, $gameId: ID) {
+        publishGame(url: $url, gameId: $gameId) {
           ${GAME_FIELDS}
         }
       }
     `,
-    variables,
+    variables: {
+      url: sourceUrl,
+      gameId,
+    },
   });
 
-  _validateRegisterGameResult(result);
-  return result.data.registerGame;
+  _validatePublishGameResult(result);
+  return result.data.publishGame;
 }
 
 export async function previewLocalGame(castleFileContents, gameId = null) {
@@ -653,7 +653,7 @@ export async function previewLocalGame(castleFileContents, gameId = null) {
     },
   });
 
-  _validateRegisterGameResult(result);
+  _validatePublishGameResult(result);
   return result.data.previewLocalGame;
 }
 
@@ -670,7 +670,7 @@ export async function previewGameAtUrl(url, gameId = null) {
     variables: { url, gameId },
   });
 
-  _validateRegisterGameResult(result);
+  _validatePublishGameResult(result);
   return result.data.previewGameAtUrl;
 }
 

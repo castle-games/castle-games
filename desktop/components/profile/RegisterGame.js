@@ -3,7 +3,7 @@ import * as Actions from '~/common/actions';
 import * as Constants from '~/common/constants';
 import * as ExecNode from '~/common/execnode';
 import * as NativeUtil from '~/native/nativeutil';
-import * as PublishMockActions from '~/common/publish-mock-actions';
+import * as Utilities from '~/common/utilities';
 
 import { css } from 'react-emotion';
 
@@ -11,6 +11,8 @@ import PublishGamePreview from '~/components/profile/PublishGamePreview';
 import UIDirectoryChooser from '~/components/reusable/UIDirectoryChooser';
 import UIInputSecondary from '~/components/reusable/UIInputSecondary';
 import UISubmitButton from '~/components/reusable/UISubmitButton';
+
+const path = Utilities.path();
 
 const STYLES_CONTAINER = css`
   display: flex;
@@ -119,15 +121,15 @@ export default class RegisterGame extends React.Component {
     this._debouncePreviewTimeout = setTimeout(this._updateGamePreview, 300);
   };
 
-  _previewGameAtLocalPath = async (path, gameId) => {
+  _previewGameAtLocalPath = async (localPath, gameId) => {
     let previewedGame;
-    let projectFilename = await ExecNode.getProjectFilenameAtPathAsync(path);
+    let projectFilename = await ExecNode.getProjectFilenameAtPathAsync(localPath);
     if (!projectFilename) {
       throw new Error(
         'Unable to find a Castle project in this folder. Make sure to choose a folder that contains a .castle file.'
       );
     }
-    const castleFileContents = await NativeUtil.readFile(`${path}/${projectFilename}`);
+    const castleFileContents = await NativeUtil.readFile(path.join(localPath, projectFilename));
     return Actions.previewLocalGame(castleFileContents, gameId);
   };
 
@@ -198,15 +200,16 @@ export default class RegisterGame extends React.Component {
     let addedGame, previewError;
     if (externalUrlInputValue && externalUrlInputValue.length) {
       try {
-        addedGame = await PublishMockActions.publishGame(externalUrlInputValue, gameId);
+        addedGame = await Actions.publishGame(externalUrlInputValue, gameId);
       } catch (e) {
         addedGame = {};
         previewError = e.message;
       }
     } else if (directoryInputValue && directoryInputValue.length) {
       try {
-        let uploadedUrl = await PublishMockActions.uploadGame(directoryInputValue);
-        addedGame = await PublishMockActions.publishGame(uploadedUrl, gameId);
+        let projectUrl = `file://${directoryInputValue}`;
+        let uploadedUrl = await ExecNode.uploadGameAsync(projectUrl);
+        addedGame = await Actions.publishGame(uploadedUrl, gameId);
       } catch (e) {
         addedGame = {};
         previewError = e.message;

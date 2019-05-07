@@ -117,7 +117,7 @@ async function resolveGameAtUrlAsync(gameUrl, opts = {}) {
     let hostedUrl;
     if (Urls.isPrivateUrl(gameUrl)) {
       try {
-        hostedUrl = await ExecNode.publishProjectAsync(gameUrl);
+        hostedUrl = await ExecNode.uploadGameAsync(gameUrl);
       } catch (e) {
         throw new Error(`Unable to perform multiplayer auto upload: ${e.message}`);
       }
