@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
+import * as NativeUtil from '~/native/nativeutil';
 
 import { css } from 'react-emotion';
 
@@ -29,11 +30,6 @@ const STYLES_GAME_PREVIEW_INFO = css`
   width: 100%;
 `;
 
-const STYLES_GAME_PREVIEW_URL = css`
-  text-decoration: underline;
-  cursor: default;
-`;
-
 const STYLES_GAME_COVER = css`
   background-color: black;
   background-size: cover;
@@ -44,31 +40,48 @@ const STYLES_GAME_COVER = css`
   margin-right: 16px;
 `;
 
-const STYLES_GAME_TITLE = css`
-  font-size: ${Constants.typescale.lvl6};
-  line-height ${Constants.typescale.lvl6};
-  color: ${Constants.colors.text};
-  font-weight: 700;
-  margin-bottom: 16px;
-`;
-
 const STYLES_URL_PLACEHOLDER = css`
   color: ${Constants.colors.text2};
 `;
 
-const STYLES_PARAGRAPH = css`
-  line-height: ${Constants.linescale.lvl3};
+const STYLES_GAME_PREVIEW_ITEM_CONTAINER = css`
+  margin-bottom: 16px;
+  cursor: default;
+`;
+
+const STYLES_GAME_PREVIEW_ITEM_NAME = css`
+  font-size: ${Constants.typescale.lvl7};
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 4px;
+`;
+
+const STYLES_GAME_PREVIEW_ITEM_DESC = css`
+  padding-left: 8px;
+  color: ${Constants.colors.text};
+`;
+
+const STYLES_GAME_PREVIEW_ITEM_EMPTY = css`
+  padding-left: 8px;
+  color: ${Constants.colors.text2};
+`;
+
+const STYLES_POINTER = css`
+  cursor: pointer;
+  text-decoration: underline;
 `;
 
 export default class PublishGamePreview extends React.Component {
   static defaultProps = {
+    existingGameId: null,
     game: null,
     error: null,
     isLoading: false,
     instructions: '',
+    isCastleHosted: false,
   };
 
-  _renderPreviewUrl = (url) => {
+  _formatPreviewUrl = (url, existingGameId) => {
     const placeholders = ['[GAME ID]', '[PUBLISH ID]'];
     let prefix = url,
       suffix;
@@ -81,20 +94,57 @@ export default class PublishGamePreview extends React.Component {
         break;
       }
     }
-    if (prefix.startsWith('https://')) {
-      prefix = prefix.substr(8);
+    let containerClassName, onClickLink;
+    if (existingGameId) {
+      containerClassName = STYLES_POINTER;
+      onClickLink = () => NativeUtil.openExternalURL(url);
     }
     if (suffix) {
       return (
-        <span>
+        <span className={containerClassName} onClick={onClickLink}>
           {prefix}
           <span className={STYLES_URL_PLACEHOLDER}>id</span>
           {suffix}
         </span>
       );
     } else {
-      return <span>{prefix}</span>;
+      return (
+        <span className={containerClassName} onClick={onClickLink}>
+          {prefix}
+        </span>
+      );
     }
+  };
+
+  _renderPreviewInfoItem = (name, info, style) => {
+    let infoElement;
+    if (info) {
+      infoElement = <div className={STYLES_GAME_PREVIEW_ITEM_DESC}>{info}</div>;
+    } else {
+      infoElement = <div className={STYLES_GAME_PREVIEW_ITEM_EMPTY}>Empty</div>;
+    }
+    return (
+      <div className={STYLES_GAME_PREVIEW_ITEM_CONTAINER} style={style}>
+        <div className={STYLES_GAME_PREVIEW_ITEM_NAME}>{name}</div>
+        {infoElement}
+      </div>
+    );
+  };
+
+  _renderPreviewInfo = () => {
+    const { game, existingGameId } = this.props;
+    return (
+      <React.Fragment>
+        {this._renderPreviewInfoItem('Title', game.title)}
+        {this._renderPreviewInfoItem('Description', game.description)}
+        {this._renderPreviewInfoItem('Uploaded source url', this._formatPreviewUrl(game.sourceUrl))}
+        {this._renderPreviewInfoItem(
+          'Published url',
+          this._formatPreviewUrl(game.url, existingGameId),
+          { marginBottom: 0 }
+        )}
+      </React.Fragment>
+    );
   };
 
   render() {
@@ -108,17 +158,7 @@ export default class PublishGamePreview extends React.Component {
               className={STYLES_GAME_COVER}
               style={{ backgroundImage: coverSrc ? `url(${coverSrc})` : null }}
             />
-            <div className={STYLES_GAME_PREVIEW_INFO}>
-              <div className={STYLES_GAME_TITLE}>{game.title}</div>
-              <div className={STYLES_PARAGRAPH}>
-                Castle will upload your game files to{' '}
-                <span className={STYLES_GAME_PREVIEW_URL}>
-                  {this._renderPreviewUrl(game.sourceUrl)}
-                </span>{' '}
-                and create a url you can play at{' '}
-                <span className={STYLES_GAME_PREVIEW_URL}>{this._renderPreviewUrl(game.url)}</span>.
-              </div>
-            </div>
+            <div className={STYLES_GAME_PREVIEW_INFO}>{this._renderPreviewInfo()}</div>
           </div>
         </div>
       );

@@ -58,7 +58,7 @@ const STYLES_SECONDARY_ACTION = css`
 const STYLES_PARAGRAPH = css`
   font-size: ${Constants.typescale.lvl6};
   line-height: ${Constants.linescale.lvl6};
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 `;
 
 const STYLES_LINK = css`
@@ -103,6 +103,7 @@ export default class RegisterGame extends React.Component {
       lastUploadDirectoryForGame = history ? history.localPath : null;
     }
     return {
+      hostingType: game && !game.isCastleHosted ? 'external' : 'castle',
       directoryInputValue: game && game.isCastleHosted ? lastUploadDirectoryForGame : '',
       externalUrlInputValue: game && !game.isCastleHosted ? game.sourceUrl : '',
     };
@@ -111,7 +112,7 @@ export default class RegisterGame extends React.Component {
   _resetForm = () => {
     let defaults = this._getDefaultValues();
     this.setState({
-      hostingType: 'castle',
+      hostingType: defaults.hostingType,
       directoryInputValue: defaults.directoryInputValue,
       externalUrlInputValue: defaults.externalUrlInputValue,
       previewedGame: {
@@ -248,7 +249,9 @@ export default class RegisterGame extends React.Component {
         : `Enter the url of a .castle file, and we'll check for a game at that url.`;
     return (
       <PublishGamePreview
+        existingGameId={this.props.game && this.props.game.gameId}
         game={this.state.previewedGame}
+        isCastleHosted={this.state.hostingType === 'castle'}
         error={this.state.previewError}
         isLoading={this.state.isLoadingPreview}
         instructions={instructions}
@@ -285,7 +288,7 @@ export default class RegisterGame extends React.Component {
       <UIInputSecondary
         value={this.state.externalUrlInputValue}
         name="externalUrlInputValue"
-        label="URL to a .castle file"
+        label="Online .castle file url"
         onChange={this._handleChangeExternalUrl}
         style={{ marginBottom: 8 }}
       />
@@ -306,7 +309,7 @@ export default class RegisterGame extends React.Component {
       formAction = 'Update';
     } else {
       heading = 'Publish a Game';
-      formAction = 'Publish';
+      formAction = this.state.hostingType === 'castle' ? 'Upload and Publish' : 'Publish';
     }
     const isSubmitEnabled = this._isFormSubmittable();
     const gamePreviewElement = this._renderGamePreview();
