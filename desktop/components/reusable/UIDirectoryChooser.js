@@ -21,6 +21,7 @@ const STYLES_PROJECT_PATH_PREVIEW = css`
 const STYLES_PROJECT_DIRECTORY = css`
   color: ${Constants.colors.text};
   font-weight: 700;
+  line-height: ${Constants.linescale.lvl3};
 `;
 
 const STYLES_ACTION = css`

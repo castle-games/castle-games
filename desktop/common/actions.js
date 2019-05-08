@@ -59,6 +59,7 @@ const GAME_FIELDS = `
   title
   url
   sourceUrl
+  isCastleHosted
   slug
   createdTime
   updatedTime
@@ -610,7 +611,7 @@ function _validatePublishGameResult(result) {
     } else if (code === 'REGISTER_GAME_INVALID_USERNAME') {
       throw new Error(`The \`owner\` given at this url does not match your username.`);
     } else {
-      throw new Error(error.message);
+      throw new Error(`The Castle server returned an error: ${error.message}`);
     }
   }
   return true;

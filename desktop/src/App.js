@@ -22,9 +22,10 @@ import {
 } from '~/contexts/NavigationContext';
 import { ChatContext, ChatContextProvider } from '~/contexts/ChatContext';
 
-import Logs from '~/common/logs';
 import AppContainer from '~/components/AppContainer';
 import ChatInput from '~/components/social/ChatInput';
+import Logs from '~/common/logs';
+import PublishHistory from '~/common/publish-history';
 
 const isReloadHotkey = isKeyHotkey('mod+r');
 const isFullscreenHotkey = isKeyHotkey('mod+shift+f');
@@ -41,6 +42,7 @@ class App extends React.Component {
     super();
     this.state = props.state;
     this.state.updateAvailable = null;
+    PublishHistory.setStorage(props.storage);
   }
 
   componentDidMount() {

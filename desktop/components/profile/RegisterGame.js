@@ -12,6 +12,8 @@ import UIDirectoryChooser from '~/components/reusable/UIDirectoryChooser';
 import UIInputSecondary from '~/components/reusable/UIInputSecondary';
 import UISubmitButton from '~/components/reusable/UISubmitButton';
 
+import PublishHistory from '~/common/publish-history';
+
 const path = Utilities.path();
 
 const STYLES_CONTAINER = css`
@@ -69,7 +71,6 @@ export default class RegisterGame extends React.Component {
   static defaultProps = {
     game: null,
     onAfterSave: null,
-    history: null, // read this to suggest an upload directory when updating games.
   };
 
   state = {
@@ -95,19 +96,15 @@ export default class RegisterGame extends React.Component {
   }
 
   _getDefaultValues = () => {
-    const { game, history } = this.props;
-    let lastRunDirectoryForGame;
-    if (game && history) {
-      for (let ii = 0, nn = history.length; ii < nn; ii++) {
-        const gameOpened = history[ii].game;
-        if (gameOpened && gameOpened.gameId === game.gameId) {
-          break;
-        }
-      }
+    const { game } = this.props;
+    let lastUploadDirectoryForGame;
+    if (game) {
+      let history = PublishHistory.getItem(game.gameId);
+      lastUploadDirectoryForGame = history ? history.localPath : null;
     }
     return {
-      directoryInputValue: game ? lastRunDirectoryForGame : '',
-      externalUrlInputValue: game ? game.sourceUrl : '',
+      directoryInputValue: game && game.isCastleHosted ? lastUploadDirectoryForGame : '',
+      externalUrlInputValue: game && !game.isCastleHosted ? game.sourceUrl : '',
     };
   };
 
@@ -224,6 +221,7 @@ export default class RegisterGame extends React.Component {
         let projectUrl = `file://${directoryInputValue}`;
         let uploadedUrl = await ExecNode.uploadGameAsync(projectUrl);
         addedGame = await Actions.publishGame(uploadedUrl, gameId);
+        PublishHistory.addItem(addedGame.gameId, directoryInputValue);
       } catch (e) {
         addedGame = {};
         previewError = e.message;

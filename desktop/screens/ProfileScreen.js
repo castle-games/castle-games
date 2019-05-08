@@ -38,7 +38,6 @@ class ProfileScreen extends React.Component {
   static defaultProps = {
     creator: null,
     viewer: null,
-    history: null,
     onAfterSave: () => {},
     navigateToGame: async (game) => {},
     navigateToGameUrl: async (url) => {},
@@ -146,14 +145,7 @@ class ProfileScreen extends React.Component {
   };
 
   _renderUpdateGame = (game) => {
-    console.log(`render update game with history: ${!!this.props.history}`);
-    return (
-      <RegisterGame
-        game={this.state.gameToUpdate}
-        onAfterSave={this._onAfterAddGame}
-        history={this.props.history}
-      />
-    );
+    return <RegisterGame game={this.state.gameToUpdate} onAfterSave={this._onAfterAddGame} />;
   };
 
   _renderEditProfileContent = (isOwnProfile, user) => {
@@ -221,7 +213,6 @@ export default class ProfileScreenWithContext extends React.Component {
         navigateToUserProfile={navigator.navigateToUserProfile}
         navigateToSignIn={navigator.navigateToSignIn}
         viewer={currentUser.user}
-        history={currentUser.userStatusHistory}
         creator={navigation.userProfileShown}
         options={navigation.options ? navigation.options : { mode: 'games' }}
         onSignOut={currentUser.clearCurrentUser}
