@@ -7,6 +7,7 @@ splash = {
 }
 
 local imgMaskText = love.graphics.newImage('assets/loading-mask-text.png')
+imgMaskText:setFilter('nearest', 'nearest')
 local imgSize = { width = 301, height = 78 }
 
 function splash:draw()
