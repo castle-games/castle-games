@@ -498,7 +498,7 @@ void ghostStep() {
 
   // The Ghost window starts hidden. We show it after the first few frames are rendered to deal with
   // initial frame size glitches...
-  if (++frameCount == 2) {
+  if (++frameCount == 5) {
     ShowWindow(child, SW_SHOW);
     if (parent && GetForegroundWindow() == parent) {
       SetFocus(child);
