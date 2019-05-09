@@ -256,10 +256,10 @@ export default class RegisterGame extends React.Component {
       <PublishGamePreview
         existingGameId={this.props.game && this.props.game.gameId}
         game={this.state.previewedGame}
-        isCastleHosted={this.state.hostingType === 'castle'}
         error={this.state.previewError}
         isLoading={this.state.isLoadingPreview}
         instructions={instructions}
+        localGamePath={this.state.directoryInputValue}
       />
     );
   };

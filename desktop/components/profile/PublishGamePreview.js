@@ -1,8 +1,11 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as NativeUtil from '~/native/nativeutil';
+import * as Utilities from '~/common/utilities';
 
 import { css } from 'react-emotion';
+
+const path = Utilities.path();
 
 const STYLES_CONTAINER = css`
   margin-top: 16px;
@@ -78,7 +81,24 @@ export default class PublishGamePreview extends React.Component {
     error: null,
     isLoading: false,
     instructions: '',
-    isCastleHosted: false,
+    localGamePath: null,
+  };
+
+  _deriveCoverImage = (game, localGamePath) => {
+    let coverSrc;
+    if (game.coverImage) {
+      coverSrc = game.coverImage.url;
+    } else if (localGamePath && game.metadata && game.metadata.coverImage) {
+      if (
+        game.metadata.coverImage.startsWith('http://') ||
+        game.metadata.coverImage.startsWith('https://')
+      ) {
+        coverSrc = game.metadata.coverImage;
+      } else {
+        coverSrc = path.join(localGamePath, game.metadata.coverImage);
+      }
+    }
+    return coverSrc;
   };
 
   _formatPreviewUrl = (url, existingGameId) => {
@@ -148,9 +168,9 @@ export default class PublishGamePreview extends React.Component {
   };
 
   render() {
-    const { game, error, isLoading, instructions } = this.props;
+    const { game, error, isLoading, instructions, localGamePath } = this.props;
     if (game && game.slug) {
-      const coverSrc = game.coverImage ? game.coverImage.url : null;
+      let coverSrc = this._deriveCoverImage(game, localGamePath);
       return (
         <div className={STYLES_CONTAINER}>
           <div className={STYLES_GAME_PREVIEW}>
