@@ -39,6 +39,7 @@ castle = require 'castle'
 local root = require 'portal'
 local jsEvents = require 'jsEvents'
 
+local splash
 if not CASTLE_SERVER then
     splash = require 'splash'
 end
