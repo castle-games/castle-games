@@ -227,6 +227,10 @@ void ghostSetBrowserReady() {
   }
 }
 
+GHOST_EXPORT void ghostFocusChat() {}
+
+void ghostFocusGame() {}
+
 bool ghostChooseDirectoryWithDialog(const char *title, const char *message, const char *action,
                                     const char **result) {
   const char *chosenPathCStr = NULL;

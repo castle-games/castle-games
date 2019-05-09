@@ -92,3 +92,7 @@ export const readFileUrl = async (fileUrl) => {
 export const putInitialData = async (initialData) => {
   return await NativeBinds.putInitialData({ initialData: JSON.stringify(initialData) });
 }
+
+export const focusGame = async () => {
+  return await NativeBinds.focusGame();
+}

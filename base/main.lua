@@ -278,6 +278,8 @@ local function softReload()
     end
 end
 
+ffi.cdef 'bool ghostFocusChat();'
+
 function main.keypressed(key, ...)
     -- Intercept system hotkeys
     if castle.system.isDesktop() then
@@ -294,6 +296,11 @@ function main.keypressed(key, ...)
             })
             return
         end
+    end
+
+    -- Chat focus
+    if key == 'tab' then
+        C.ghostFocusChat()
     end
 
     -- F12: Soft-reload

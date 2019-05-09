@@ -312,6 +312,21 @@ GHOST_EXPORT bool ghostGetBackgrounded() {
   return !(foregroundWindow == child || foregroundWindow == ghostWinGetMainWindow());
 }
 
+GHOST_EXPORT void ghostFocusChat() {
+  auto parent = ghostWinGetMainWindow();
+  if (parent) {
+    SetFocus(parent);
+    ghostSendJSEvent("nativeFocusChat", "{}");
+  }
+}
+
+void ghostFocusGame() {
+  auto child = ghostWinGetChildWindow();
+  if (child) {
+    SetFocus(child);
+  }
+}
+
 extern "C" {
 void ghostRunMessageLoop();
 }

@@ -242,3 +242,8 @@ JS_BIND_DEFINE(putInitialData) {
   channel->push(love::Variant(initialData.c_str(), initialData.length()));
   success("success");
 }
+
+JS_BIND_DEFINE(focusGame) {
+  ghostFocusGame();
+  success("success");
+}

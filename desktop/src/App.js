@@ -24,6 +24,7 @@ import { ChatContext, ChatContextProvider } from '~/contexts/ChatContext';
 
 import Logs from '~/common/logs';
 import AppContainer from '~/components/AppContainer';
+import ChatInput from '~/components/social/ChatInput';
 
 const isReloadHotkey = isKeyHotkey('mod+r');
 const isFullscreenHotkey = isKeyHotkey('mod+shift+f');
@@ -31,6 +32,7 @@ const isDevelopmentHotkey = isKeyHotkey('mod+j');
 const isEscFullScreenHotkey = isKeyHotkey('esc');
 const isEndGameHotkey = isKeyHotkey('mod+w');
 const isScreenCaputureHotkey = isKeyHotkey('mod+x');
+const isFocusGameHotkey = isKeyHotkey('tab');
 
 class App extends React.Component {
   _nativeChannelsPollTimeout;
@@ -53,6 +55,7 @@ class App extends React.Component {
     window.addEventListener('nativeScreenCaptureReady', ScreenCapture.screenCaptureReadyEvent);
     window.addEventListener('nativeExecNodeComplete', ExecNode.execNodeCompleteEvent);
     window.addEventListener('click', this._handleAnchorClick);
+    window.addEventListener('nativeFocusChat', this._handleNativeFocusChat);
     Bridge.addEventListeners();
     PingUtils.reportPingsAsync();
     NativeUtil.setBrowserReady(() => {});
@@ -172,6 +175,10 @@ class App extends React.Component {
 
       ScreenCapture.takeScreenCaptureAsync();
     }
+
+    if (isFocusGameHotkey(e)) {
+      NativeUtil.focusGame();
+    }
   };
 
   _handleLuaPrintEvent = (e) => {
@@ -189,6 +196,11 @@ class App extends React.Component {
   _handleLuaErrorEvent = (e) => {
     const { error, stacktrace } = e.params;
     Logs.error(error, stacktrace);
+  };
+
+  _handleNativeFocusChat = async () => {
+    await Actions.delay(80);
+    ChatInput.focusInstance();
   };
 
   render() {

@@ -44,6 +44,8 @@ bool ghostGetChildWindowFullscreen();
 void ghostSetBrowserReady();
 void ghostShowDesktopNotification(const char *title, const char *body);
 GHOST_EXPORT bool ghostGetBackgrounded();
+GHOST_EXPORT void ghostFocusChat();
+void ghostFocusGame();
 
 bool ghostChooseDirectoryWithDialog(const char *title, const char *message, const char *action,
                                     const char **result);

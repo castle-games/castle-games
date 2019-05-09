@@ -82,6 +82,16 @@ export default class ChatInput extends React.Component {
     onSubmit: () => {},
   };
 
+  static _instance = null;
+
+  componentDidMount() {
+    ChatInput._instance = this;
+  }
+
+  componentWillUnmount() {
+    ChatInput._instance = null;
+  }
+
   state = {
     focus: false,
     inputValue: '',
@@ -98,6 +108,18 @@ export default class ChatInput extends React.Component {
       users: {},
       games: {},
     };
+  }
+
+  _focus = () => {
+    const element = ReactDOM.findDOMNode(this._controllerInput);
+    element.focus();
+    return element;
+  };
+
+  static focusInstance = () => {
+    if (ChatInput._instance) {
+      ChatInput._instance._focus();
+    }
   }
 
   _onFetchAutocomplete = (results) => {
@@ -141,9 +163,7 @@ export default class ChatInput extends React.Component {
       };
     });
 
-    const element = ReactDOM.findDOMNode(this._controllerInput);
-    element.focus();
-    element.setSelectionRange(cursorPosition, cursorPosition);
+    this._focus().setSelectionRange(cursorPosition, cursorPosition);
   };
 
   _onChangeInput = (event) => {
