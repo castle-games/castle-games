@@ -31,11 +31,19 @@ const STYLES_GAME_CONTAINER = css`
   display: flex;
 `;
 
+const STYLES_LOADING_IMAGE = css`
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-crisp-edges;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  opacity: 0.7;
+`;
+
 const jsUserToLuaUser = async (user) => ({
   userId: user.userId,
   username: user.username,
   name: user.name,
-  photoUrl: (user.photo) ? user.photo.url : undefined,
+  photoUrl: user.photo ? user.photo.url : undefined,
 });
 
 const jsPostToLuaPost = async ({ postId, creator, media }) => ({
@@ -113,7 +121,9 @@ class GameScreen extends React.Component {
       },
       initialPost: luaPost,
       initialParams: this.props.gameParams ? this.props.gameParams : undefined,
-      referrerGame: this.props.referrerGame ? await jsGameToLuaGame(this.props.referrerGame) : undefined,
+      referrerGame: this.props.referrerGame
+        ? await jsGameToLuaGame(this.props.referrerGame)
+        : undefined,
     });
     await GameWindow.open({
       gameUrl: url,
@@ -182,6 +192,17 @@ class GameScreen extends React.Component {
         />
       );
     }
+
+    let dpr = window.devicePixelRatio;
+    if (Utilities.isWindows()) {
+      dpr = dpr * dpr;
+      dpr = dpr * dpr;
+    }
+    const loadingImageStyle = {
+      width: 301 / dpr,
+      height: 78 / dpr,
+    };
+
     return (
       <div className={STYLES_CONTAINER}>
         <div
@@ -189,8 +210,13 @@ class GameScreen extends React.Component {
           ref={(ref) => {
             this._gameContainerReference = ref;
             this.updateGameWindowFrame();
-          }}
-        />
+          }}>
+          <img
+            className={STYLES_LOADING_IMAGE}
+            style={loadingImageStyle}
+            src="/static/game-loading.png"
+          />
+        </div>
         {actionsBarElement}
       </div>
     );
