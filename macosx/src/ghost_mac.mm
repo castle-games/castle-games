@@ -161,15 +161,16 @@ void ghostSetChildWindowFrame(float left, float top, float width, float height) 
       [ghostMacChildWindow setFrame:frame display:NO];
 
       // Focus-follows-mouse
-      NSPoint mouse = [NSEvent mouseLocation];
-      if (frame.origin.x <= mouse.x && mouse.x <= frame.origin.x + width &&
-          frame.origin.y <= mouse.y && mouse.y <= frame.origin.y + height) {
-        if (![ghostMacChildWindow isKeyWindow]) {
-          [ghostMacChildWindow makeKeyWindow];
-        }
-      } else if (![ghostMacMainWindow isKeyWindow]) {
-        [ghostMacMainWindow makeKeyWindow];
-      }
+      // NOTE: Disabling this for now?
+//      NSPoint mouse = [NSEvent mouseLocation];
+//      if (frame.origin.x <= mouse.x && mouse.x <= frame.origin.x + width &&
+//          frame.origin.y <= mouse.y && mouse.y <= frame.origin.y + height) {
+//        if (![ghostMacChildWindow isKeyWindow]) {
+//          [ghostMacChildWindow makeKeyWindow];
+//        }
+//      } else if (![ghostMacMainWindow isKeyWindow]) {
+//        [ghostMacMainWindow makeKeyWindow];
+//      }
     } else if (![ghostMacMainWindow isKeyWindow] && !ghostIsShowingNativeModal) {
       [ghostMacMainWindow makeKeyWindow];
     }
@@ -227,9 +228,18 @@ void ghostSetBrowserReady() {
   }
 }
 
-GHOST_EXPORT void ghostFocusChat() {}
+GHOST_EXPORT void ghostFocusChat() {
+  if (ghostMacMainWindow) {
+    [ghostMacMainWindow makeKeyWindow];
+    ghostSendJSEvent("nativeFocusChat", "{}");
+  }
+}
 
-void ghostFocusGame() {}
+void ghostFocusGame() {
+  if (ghostMacChildWindow) {
+    [ghostMacChildWindow makeKeyWindow];
+  }
+}
 
 bool ghostChooseDirectoryWithDialog(const char *title, const char *message, const char *action,
                                     const char **result) {
