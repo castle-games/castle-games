@@ -52,6 +52,12 @@ extern "C" {
 
 using namespace WinToastLib;
 
+// Added to SDL windows source code
+
+extern "C" {
+void ghostWinSetChildWindowRect(RECT rect);
+}
+
 // internal
 
 static void _ghostSendNativeOpenUrlEvent(std::string uri) {
@@ -63,6 +69,28 @@ static void _ghostSendNativeOpenUrlEvent(std::string uri) {
 // win implementation of 'ghost.h'
 
 static float childLeft = 0, childTop = 0, childWidth = 200, childHeight = 200;
+
+static void _updateChildWindowRect(RECT currParentRect) {
+  auto child = ghostWinGetChildWindow();
+  if (!child) {
+    return;
+  }
+
+  auto newLeft = fmax(0, ghostGlobalScaling * childLeft),
+       newTop = fmax(0, ghostGlobalScaling * childTop);
+  auto newWidth =
+      fmin(ghostGlobalScaling * childWidth, currParentRect.right - currParentRect.left - newLeft);
+  auto newHeight =
+      fmin(ghostGlobalScaling * childHeight, currParentRect.bottom - currParentRect.top - newTop);
+  SetWindowPos(child, NULL, newLeft, newTop, newWidth, newHeight, 0);
+
+  RECT newChildRect;
+  newChildRect.left = newLeft;
+  newChildRect.top = newTop;
+  newChildRect.right = newLeft + newWidth;
+  newChildRect.bottom = newTop + newHeight;
+  ghostWinSetChildWindowRect(newChildRect);
+}
 
 static bool browserReady = false;
 static std::string initialUri = "";
@@ -470,7 +498,7 @@ void ghostStep() {
 
   // The Ghost window starts hidden. We show it after the first few frames are rendered to deal with
   // initial frame size glitches...
-  if (++frameCount == 3) {
+  if (++frameCount == 2) {
     ShowWindow(child, SW_SHOW);
     if (parent && GetForegroundWindow() == parent) {
       SetFocus(child);
@@ -512,6 +540,12 @@ void ghostStep() {
         childTop = msg.body.setChildWindowFrame.top;
         childWidth = msg.body.setChildWindowFrame.width;
         childHeight = msg.body.setChildWindowFrame.height;
+
+        RECT currParentRect = { 0, 0, 10000, 10000 };
+        if (parent) {
+          GetWindowRect(parent, &currParentRect);
+        }
+        _updateChildWindowRect(currParentRect);
       } break;
 
       case SET_CHILD_WINDOW_VISIBLE: {
@@ -608,14 +642,7 @@ void ghostStep() {
           }
 
           // Apply the size!
-          // NOTE: This parent-window bounding doesn't actually seem to work in practice...
-          auto newLeft = fmax(0, ghostGlobalScaling * childLeft),
-               newTop = fmax(0, ghostGlobalScaling * childTop);
-          auto newWidth = fmin(ghostGlobalScaling * childWidth,
-                               currParentRect.right - currParentRect.left - newLeft);
-          auto newHeight = fmin(ghostGlobalScaling * childHeight,
-                                currParentRect.bottom - currParentRect.top - newTop);
-          SetWindowPos(child, NULL, newLeft, newTop, newWidth, newHeight, 0);
+          _updateChildWindowRect(currParentRect);
         }
 
         // Satisfy Lua requests for window focus

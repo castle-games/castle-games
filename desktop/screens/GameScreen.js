@@ -214,7 +214,7 @@ class GameScreen extends React.Component {
           <img
             className={STYLES_LOADING_IMAGE}
             style={loadingImageStyle}
-            src="/static/game-loading.png"
+            src={Constants.GAME_LOADING_IMAGE_DATA_URL}
           />
         </div>
         {actionsBarElement}

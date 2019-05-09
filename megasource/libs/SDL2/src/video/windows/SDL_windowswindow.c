@@ -101,9 +101,22 @@ GetWindowStyle(SDL_Window * window)
     return WS_CHILD;
 }
 
+static RECT ghostWinChildWindowRect = { 0, 0, 200, 200 };
+
+__declspec(dllexport) void ghostWinSetChildWindowRect(RECT rect) {
+	ghostWinChildWindowRect = rect;
+}
+
 static void
 WIN_AdjustWindowRectWithStyle(SDL_Window *window, DWORD style, BOOL menu, int *x, int *y, int *width, int *height, SDL_bool use_current)
 {
+    // XXX(Ghost): Override with Ghost's settings...
+    *x = ghostWinChildWindowRect.left;
+    *y = ghostWinChildWindowRect.right;
+    *width = ghostWinChildWindowRect.right - ghostWinChildWindowRect.left;
+    *height = ghostWinChildWindowRect.bottom - ghostWinChildWindowRect.top;
+    return;
+
     RECT rect;
 
     rect.left = 0;
