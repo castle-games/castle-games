@@ -804,17 +804,18 @@ export async function multiplayerJoinAsync(gameId, castleFileUrl, entryPoint, se
   return result.data.joinMultiplayerSession;
 }
 
-export async function gameServerLogsAsync(gameId, entryPoint) {
+export async function gameServerLogsAsync(gameId, castleFileUrl, entryPoint) {
   let result;
   try {
     result = await API.graphqlAsync(
       /* GraphQL */ `
-        query($gameId: ID, $entryPoint: String) {
-          gameServerLogs(gameId: $gameId, entryPoint: $entryPoint)
+        query($gameId: ID, $castleFileUrl: String, $entryPoint: String) {
+          gameServerLogs(gameId: $gameId, castleFileUrl: $castleFileUrl, entryPoint: $entryPoint)
         }
       `,
       {
         gameId,
+        castleFileUrl,
         entryPoint,
       }
     );
