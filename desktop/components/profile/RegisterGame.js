@@ -82,6 +82,7 @@ export default class RegisterGame extends React.Component {
     },
     previewError: null,
     isLoadingPreview: false,
+    isLoadingSubmit: false,
   };
   _debouncePreviewTimeout = null;
 
@@ -185,6 +186,8 @@ export default class RegisterGame extends React.Component {
 
   _isFormSubmittable = () => {
     return (
+      !this.state.isLoadingSubmit &&
+      !this.state.isLoadingPreview &&
       this.state.previewedGame &&
       this.state.previewedGame.slug &&
       this.state.previewedGame.slug.length > 0
@@ -210,6 +213,7 @@ export default class RegisterGame extends React.Component {
     const { externalUrlInputValue, directoryInputValue } = this.state;
     const gameId = this.props.game ? this.props.game.gameId : null;
     let addedGame, previewError;
+    await this.setState({ isLoadingSubmit: true });
     if (externalUrlInputValue && externalUrlInputValue.length) {
       try {
         addedGame = await Actions.publishGame(externalUrlInputValue, gameId);
@@ -230,8 +234,9 @@ export default class RegisterGame extends React.Component {
     }
 
     if (previewError) {
-      this.setState({ previewError });
+      this.setState({ previewError, isLoadingSubmit: false });
     } else {
+      await this.setState({ isLoadingSubmit: false });
       if (this.props.onAfterSave) {
         this.props.onAfterSave();
       }
@@ -321,7 +326,7 @@ export default class RegisterGame extends React.Component {
           {gamePreviewElement}
           <div className={STYLES_FORM_ACTIONS}>
             <UISubmitButton disabled={!isSubmitEnabled} onClick={this._handleSubmitForm}>
-              {formAction}
+              {this.state.isLoadingSubmit ? 'Loading...' : formAction}
             </UISubmitButton>
             <div className={STYLES_SECONDARY_ACTION} onClick={this._handleToggleHostingType}>
               {secondaryAction}
