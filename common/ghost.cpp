@@ -139,6 +139,48 @@ GHOST_EXPORT double ghostGetScreenScaling() {
   return ghostScreenScaling;
 }
 
+void ghostGetGameFrame(float frameLeft, float frameTop, float frameWidth, float frameHeight,
+                       float *gameLeft, float *gameTop, float *gameWidth, float *gameHeight) {
+  float W, H;
+  ghostGetDimensions(&W, &H);
+  if (W == 0 && H == 0) { // Full dimensions
+    *gameLeft = frameLeft;
+    *gameTop = frameTop;
+    *gameWidth = frameWidth;
+    *gameHeight = frameHeight;
+  } else { // Fixed dimensions
+    int up, down;
+    ghostGetScalingModes(&up, &down);
+    
+    if (frameWidth < W || frameHeight < H) { // Down
+      if (down == GHOST_SCALING_OFF) {
+        ghostScreenScaling = 1;
+      } else if (down == GHOST_SCALING_ON) {
+        ghostScreenScaling = fmin(frameWidth / W, frameHeight / H);
+      } else if (down == GHOST_SCALING_STEP) {
+        auto scale = fmin(frameWidth / W, frameHeight / H);
+        ghostScreenScaling = 1;
+        while (ghostScreenScaling > 0.125 && ghostScreenScaling > scale) {
+          ghostScreenScaling *= 0.5;
+        }
+      }
+    } else { // Up
+      if (up == GHOST_SCALING_OFF) {
+        ghostScreenScaling = 1;
+      } else if (up == GHOST_SCALING_ON) {
+        ghostScreenScaling = fmin(frameWidth / W, frameHeight / H);
+      } else if (up == GHOST_SCALING_STEP) {
+        ghostScreenScaling = floor(fmin(frameWidth / W, frameHeight / H));
+      }
+    }
+    
+    *gameWidth = fmin(ghostScreenScaling * W, frameWidth);
+    *gameHeight = fmin(ghostScreenScaling * H, frameHeight);
+    *gameLeft = frameLeft + fmax(0, 0.5 * (frameWidth - *gameWidth));
+    *gameTop = frameTop + fmax(0, 0.5 * (frameHeight - *gameHeight));
+  }
+}
+
 static std::string execNodeInput;
 static int execNodeExecId;
 static std::string execNodeResult;

@@ -149,6 +149,9 @@ void ghostSetChildWindowFrame(float left, float top, float width, float height) 
 
   if (ghostMacMainWindow) {
     if (ghostMacChildWindow) {
+      ghostGetGameFrame(childLeft, childTop, childWidth, childHeight,
+                        &left, &top, &width, &height);
+
       width = fmin(width, ghostMacMainWindow.contentLayoutRect.size.width - left);
       height = fmin(height, ghostMacMainWindow.contentLayoutRect.size.height - top);
 
