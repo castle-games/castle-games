@@ -110,7 +110,7 @@ class GameScreen extends React.Component {
     const luaPost = this.props.post ? await jsPostToLuaPost(this.props.post) : undefined;
 
     // Set screen settings
-    const { dimensions, scaling, upscaling, downscaling } = this.props.game.metadata;
+    const { dimensions, scaling, upscaling, downscaling } = this.props.game.metadata || {};
     const screenSettings = {
       width: 800,
       height: 450,
