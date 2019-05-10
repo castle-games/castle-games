@@ -83,53 +83,14 @@ static void _updateChildWindowRect(RECT currParentRect) {
   auto frameHeight =
       fmin(ghostGlobalScaling * childHeight, currParentRect.bottom - currParentRect.top - frameTop);
       
-  // NOTE: This is the 'Screen dimensions spec v2' implementation for Windows
-  float W, H;
-  ghostGetDimensions(&W, &H);
-  float newLeft, newTop, newWidth, newHeight;
-  if (W == 0 && H == 0) { // Full dimensions
-    newLeft = frameLeft;
-    newTop = frameTop;
-    newWidth = frameWidth;
-    newHeight = frameHeight;
-  } else { // Fixed dimensions
-    int up, down;
-    ghostGetScalingModes(&up, &down);
-
-    if (frameWidth < W || frameHeight < H) { // Down
-      if (down == GHOST_SCALING_OFF) {
-        ghostScreenScaling = 1;
-      } else if (down == GHOST_SCALING_ON) {
-        ghostScreenScaling = fmin(frameWidth / W, frameHeight / H);
-      } else if (down == GHOST_SCALING_STEP) {
-        auto scale = fmin(frameWidth / W, frameHeight / H);
-        ghostScreenScaling = 1;
-        while (ghostScreenScaling > 0.125 && ghostScreenScaling > scale) {
-          ghostScreenScaling *= 0.5;
-        }
-      }
-    } else { // Up
-      if (up == GHOST_SCALING_OFF) {
-        ghostScreenScaling = 1;
-      } else if (up == GHOST_SCALING_ON) {
-        ghostScreenScaling = fmin(frameWidth / W, frameHeight / H);
-      } else if (up == GHOST_SCALING_STEP) {
-        ghostScreenScaling = floor(fmin(frameWidth / W, frameHeight / H));
-      }
-    }
-
-    newWidth = fmin(ghostScreenScaling * W, frameWidth);
-    newHeight = fmin(ghostScreenScaling * H, frameHeight);
-    newLeft = frameLeft + fmax(0, 0.5 * (frameWidth - newWidth));
-    newTop = frameTop + fmax(0, 0.5 * (frameHeight - newHeight));
-  }
-
-  SetWindowPos(child, NULL, newLeft, newTop, newWidth, newHeight, 0);
+  float gameLeft, gameTop, gameWidth, gameHeight;
+  ghostGetGameFrame(frameLeft, frameTop, frameWidth, frameHeight, &gameLeft, &gameTop, &gameWidth, &gameHeight);
+  SetWindowPos(child, NULL, gameLeft, gameTop, gameWidth, gameHeight, 0);
   RECT newChildRect;
-  newChildRect.left = newLeft;
-  newChildRect.top = newTop;
-  newChildRect.right = newLeft + newWidth;
-  newChildRect.bottom = newTop + newHeight;
+  newChildRect.left = gameLeft;
+  newChildRect.top = gameTop;
+  newChildRect.right = gameLeft + gameWidth;
+  newChildRect.bottom = gameTop + gameHeight;
   ghostWinSetChildWindowRect(newChildRect);
 }
 
