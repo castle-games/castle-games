@@ -60,6 +60,7 @@ Use either Git Bash or WSL to run commands in.
 - Make sure `git lfs` is initialized.
 - In 'megasource/', run `sh configure_cmake.sh`. You don't need to do this every time, but you need to do it at least on your first time, and whenever installer resources change.
 - Again in 'megasource/', run `cmake.exe --build build --config Debug`.
+- Run `./build/Debug/Castle.exe` to launch the Castle binary that was built.
 
 - Open and build the 'ALL_BUILD.vcxproj' file inside of 'megasource/build/'.
 - Run the application at 'megasourse/build/Debug/Castle.exe'.
