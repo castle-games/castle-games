@@ -31,6 +31,33 @@ for _, filename in pairs(love.filesystem.getDirectoryItems(CASTLE_TMP_DIR_NAME))
 end
 
 
+-- We need to maintain modifier key state ourselves because if SDL is quit when a modifier is held down,
+-- it keeps thinking the key is held down when SDL is next initialized even if the key was released in
+-- between (seems maybe a Windows-only issue?)... :/
+
+CASTLE_MODIFIER_KEYS = {
+    rshift = false,
+    lshift = false,
+    rctrl = false,
+    lctrl = false,
+    ralt = false,
+    lalt = false,
+    rgui = false,
+    lgui = false,
+}
+
+do
+    local oldKeyboardIsDown = love.keyboard.isDown
+    function love.keyboard.isDown(key)
+        if CASTLE_MODIFIER_KEYS[key] ~= nil then
+            return CASTLE_MODIFIER_KEYS[key]
+        else
+            return oldKeyboardIsDown(key)
+        end
+    end
+end
+
+
 -- Built-in libraries
 
 network = require 'network'
@@ -157,6 +184,12 @@ function main.update(dt)
 
     updateLogs()
 
+    if castle.system.isDesktop() and C.ghostGetBackgrounded() then
+        for key in pairs(CASTLE_MODIFIER_KEYS) do
+            CASTLE_MODIFIER_KEYS[key] = false
+        end
+    end
+
     if home then
         -- If has a `castle.postopened` handler, notify of post opens
         if home.loaded and home.globals.castle.postopened then
@@ -282,11 +315,15 @@ end
 ffi.cdef 'bool ghostFocusChat();'
 
 function main.keypressed(key, ...)
+    if CASTLE_MODIFIER_KEYS[key] ~= nil then
+        CASTLE_MODIFIER_KEYS[key] = true
+    end
+
     -- Intercept system hotkeys
     if castle.system.isDesktop() then
-        local ctrl = love.keyboard.isDown('lctrl') or love.keyboard.isDown('rctrl')
-        local gui = love.keyboard.isDown('lgui') or love.keyboard.isDown('rgui')
-        local shift = love.keyboard.isDown('lshift') or love.keyboard.isDown('rshift')
+        local ctrl = CASTLE_MODIFIER_KEYS.lctrl or CASTLE_MODIFIER_KEYS.rctrl
+        local gui = CASTLE_MODIFIER_KEYS.lgui or CASTLE_MODIFIER_KEYS.rgui
+        local shift = CASTLE_MODIFIER_KEYS.lshift or CASTLE_MODIFIER_KEYS.rshift
         if (key == 'escape') or ((ctrl or gui or shift) and (key == 'j' or key == 'r' or key == 'f' or key == 'w' or key == 'x')) then
             jsEvents.send('CASTLE_SYSTEM_KEY_PRESSED', {
                 ctrlKey = ctrl,
@@ -310,6 +347,16 @@ function main.keypressed(key, ...)
             softReload()
         end)
         return
+    end
+
+    if home then
+        home:keypressed(key, ...)
+    end
+end
+
+function main.keyreleased(key, ...)
+    if CASTLE_MODIFIER_KEYS[key] ~= nil then
+        CASTLE_MODIFIER_KEYS[key] = false
     end
 
     if home then
