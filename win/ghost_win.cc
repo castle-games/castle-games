@@ -100,8 +100,6 @@ static std::string initialUri = "";
 static lua_State *luaState = NULL;
 static int loveBootStackPos = 0;
 static bool lovePaused = false;
-static long frameCount = 0;
-
 static bool isFullscreen = false;
 
 static bool shouldRunMessageLoop = true;
@@ -352,7 +350,7 @@ GHOST_EXPORT void ghostFocusChat() {
 
 void ghostFocusGame() {
   auto child = ghostWinGetChildWindow();
-  if (child) {
+  if (child && GetForegroundWindow() == ghostWinGetMainWindow()) {
     SetFocus(child);
   }
 }
@@ -442,9 +440,6 @@ static void bootLove(const char *uri) {
   // Reset the previous window dimensions
   prevParentRect.right = 0;
   prevParentRect.left = 0;
-
-  // Reset frame counter
-  frameCount = 0;
 }
 
 void closeLua() {
@@ -498,15 +493,6 @@ void ghostStep() {
     dllsLoaded = true;
   }
 
-  // The Ghost window starts hidden. We show it after the first few frames are rendered to deal with
-  // initial frame size glitches...
-  if (++frameCount == 5) {
-    ShowWindow(child, SW_SHOW);
-    if (parent && GetForegroundWindow() == parent) {
-      SetFocus(child);
-    }
-  }
-
   // Update global scale factor
   if (pGetScaleFactorForMonitor && child) {
     auto monitor = MonitorFromWindow(child, MONITOR_DEFAULTTOPRIMARY);
@@ -553,7 +539,7 @@ void ghostStep() {
       case SET_CHILD_WINDOW_VISIBLE: {
         if (child) {
           ShowWindow(child, msg.body.setChildWindowVisible.visible ? SW_SHOW : SW_HIDE);
-          if (msg.body.setChildWindowVisible.visible) {
+          if (GetForegroundWindow() == ghostWinGetMainWindow() && msg.body.setChildWindowVisible.visible) {
             SetFocus(child);
           }
         }
