@@ -115,7 +115,7 @@ function portalMeta:setupLove()
         function newLove.window.updateMode() return true end
 
         function newLove.window.getMode()
-            local w, h, flags = newLove.window.getMode()
+            local w, h, flags = love.window.getMode()
             local w, h = newLove.graphics.getDimensions() -- Use our dimensions system
             return w, h, flags
         end
