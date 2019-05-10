@@ -76,14 +76,55 @@ static void _updateChildWindowRect(RECT currParentRect) {
     return;
   }
 
-  auto newLeft = fmax(0, ghostGlobalScaling * childLeft),
-       newTop = fmax(0, ghostGlobalScaling * childTop);
-  auto newWidth =
-      fmin(ghostGlobalScaling * childWidth, currParentRect.right - currParentRect.left - newLeft);
-  auto newHeight =
-      fmin(ghostGlobalScaling * childHeight, currParentRect.bottom - currParentRect.top - newTop);
-  SetWindowPos(child, NULL, newLeft, newTop, newWidth, newHeight, 0);
+  auto frameLeft = fmax(0, ghostGlobalScaling * childLeft),
+       frameTop = fmax(0, ghostGlobalScaling * childTop);
+  auto frameWidth =
+      fmin(ghostGlobalScaling * childWidth, currParentRect.right - currParentRect.left - frameLeft);
+  auto frameHeight =
+      fmin(ghostGlobalScaling * childHeight, currParentRect.bottom - currParentRect.top - frameTop);
+      
+  // NOTE: This is the 'Screen dimensions spec v2' implementation for Windows
+  float W, H;
+  ghostGetDimensions(&W, &H);
+  float newLeft, newTop, newWidth, newHeight;
+  if (W == 0 && H == 0) { // Full dimensions
+    newLeft = frameLeft;
+    newTop = frameTop;
+    newWidth = frameWidth;
+    newHeight = frameHeight;
+  } else { // Fixed dimensions
+    int up, down;
+    ghostGetScalingModes(&up, &down);
 
+    if (frameWidth < W || frameHeight < H) { // Down
+      if (down == GHOST_SCALING_OFF) {
+        ghostScreenScaling = 1;
+      } else if (down == GHOST_SCALING_ON) {
+        ghostScreenScaling = fmin(frameWidth / W, frameHeight / H);
+      } else if (down == GHOST_SCALING_STEP) {
+        auto scale = fmin(frameWidth / W, frameHeight / H);
+        ghostScreenScaling = 1;
+        while (ghostScreenScaling > 0.125 && ghostScreenScaling > scale) {
+          ghostScreenScaling *= 0.5;
+        }
+      }
+    } else { // Up
+      if (up == GHOST_SCALING_OFF) {
+        ghostScreenScaling = 1;
+      } else if (up == GHOST_SCALING_ON) {
+        ghostScreenScaling = fmin(frameWidth / W, frameHeight / H);
+      } else if (up == GHOST_SCALING_STEP) {
+        ghostScreenScaling = floor(fmin(frameWidth / W, frameHeight / H));
+      }
+    }
+
+    newWidth = fmin(ghostScreenScaling * W, frameWidth);
+    newHeight = fmin(ghostScreenScaling * H, frameHeight);
+    newLeft = frameLeft + fmax(0, 0.5 * (frameWidth - newWidth));
+    newTop = frameTop + fmax(0, 0.5 * (frameHeight - newHeight));
+  }
+
+  SetWindowPos(child, NULL, newLeft, newTop, newWidth, newHeight, 0);
   RECT newChildRect;
   newChildRect.left = newLeft;
   newChildRect.top = newTop;
@@ -580,9 +621,16 @@ void ghostStep() {
             SetWindowPos(parent, 0, monitorInfo.rcMonitor.left, monitorInfo.rcMonitor.top,
                          monitorInfo.rcMonitor.right - monitorInfo.rcMonitor.left,
                          monitorInfo.rcMonitor.bottom - monitorInfo.rcMonitor.top, SWP_SHOWWINDOW);
-            SetWindowPos(child, 0, monitorInfo.rcMonitor.left, monitorInfo.rcMonitor.top,
-                         monitorInfo.rcMonitor.right - monitorInfo.rcMonitor.left,
-                         monitorInfo.rcMonitor.bottom - monitorInfo.rcMonitor.top, SWP_SHOWWINDOW);
+
+            childLeft = monitorInfo.rcMonitor.left;
+            childTop = monitorInfo.rcMonitor.top;
+            childWidth = monitorInfo.rcMonitor.right - monitorInfo.rcMonitor.left;
+            childHeight = monitorInfo.rcMonitor.bottom - monitorInfo.rcMonitor.top;
+            RECT currParentRect = { 0, 0, 10000, 10000 };
+            if (parent) {
+              GetWindowRect(parent, &currParentRect);
+            }
+            _updateChildWindowRect(currParentRect);
           } else {
             isFullscreen = false;
 
