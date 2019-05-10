@@ -93,13 +93,13 @@ class GameScreen extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     this._updateGameWindow(prevProps, prevState);
-    window.removeEventListener('CASTLE_GAME_LOADED', this._gameLoaded);
   }
 
   componentWillUnmount() {
     // don't call GameWindow.close(), because we might just be hiding the game.
     GameWindow.setVisible(false);
     window.removeEventListener('resize', this.updateGameWindowFrame);
+    window.removeEventListener('CASTLE_GAME_LOADED', this._gameLoaded);
   }
 
   _gameLoaded = () => {
@@ -114,6 +114,8 @@ class GameScreen extends React.Component {
   };
 
   _openGame = async (url) => {
+    this.setState({ loaded: false });
+
     Logs.system(`Loading game entry point: ${url}`);
 
     // Prepare the Lua format of the post
