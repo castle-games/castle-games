@@ -159,7 +159,7 @@ export default class PublishGamePreview extends React.Component {
         {this._renderPreviewInfoItem('Description', game.description)}
         {this._renderPreviewInfoItem('Uploaded source url', this._formatPreviewUrl(game.sourceUrl))}
         {this._renderPreviewInfoItem(
-          'Published url',
+          'Playable url',
           this._formatPreviewUrl(game.url, existingGameId),
           { marginBottom: 0 }
         )}
@@ -186,7 +186,7 @@ export default class PublishGamePreview extends React.Component {
       return (
         <div className={STYLES_CONTAINER}>
           <div className={STYLES_GAME_PREVIEW_ERROR}>
-            There was a problem previewing the game to publish:
+            There was a problem previewing the game to add:
           </div>
           <div className={STYLES_GAME_PREVIEW_ERROR_DETAIL}>{error}</div>
         </div>

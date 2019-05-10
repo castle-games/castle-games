@@ -310,11 +310,11 @@ export default class RegisterGame extends React.Component {
       secondaryAction = 'I prefer to upload a game from my computer';
     }
     if (this.props.game) {
-      heading = `Publish an update to ${this.props.game.title}`;
+      heading = `Update ${this.props.game.title}`;
       formAction = 'Update';
     } else {
-      heading = 'Publish a Game';
-      formAction = this.state.hostingType === 'castle' ? 'Upload and Publish' : 'Publish';
+      heading = 'Add a Game';
+      formAction = this.state.hostingType === 'castle' ? 'Upload and Add Game' : 'Add Game';
     }
     const isSubmitEnabled = this._isFormSubmittable();
     const gamePreviewElement = this._renderGamePreview();
