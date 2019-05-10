@@ -96,3 +96,7 @@ export const putInitialData = async (initialData) => {
 export const focusGame = async () => {
   return await NativeBinds.focusGame();
 }
+
+export const setScreenSettings = async (settings) => {
+  return await NativeBinds.setScreenSettings(settings);
+}

@@ -979,9 +979,11 @@ bool Window::isMouseGrabbed() const
 }
 
 
-// XXX(Ghost): Maintain a global scaling factor that Ghost can affect
+// XXX(Ghost): Maintain scaling factors that Ghost can affect
 extern "C" double ghostGlobalScaling = 1.0f;
 extern "C" bool ghostApplyGlobalScaling = false;
+extern "C" double ghostScreenScaling = 1.0f;
+extern "C" bool ghostApplyScreenScaling = true;
 
 int Window::getWidth() const
 {
@@ -1060,8 +1062,10 @@ double Window::getDPIScale() const
 #ifdef LOVE_ANDROID
 	return love::android::getScreenScale();
 #else
-	// XXX(Ghost): Apply global scaling factor
-	return (ghostApplyGlobalScaling ? ghostGlobalScaling : 1) * (double) pixelHeight / (double) windowHeight;
+	// XXX(Ghost): Apply scaling factors
+	auto screenScaling = (ghostApplyScreenScaling ? ghostScreenScaling : 1);
+	auto globalScaling = (ghostApplyGlobalScaling ? ghostGlobalScaling : 1);
+	return screenScaling * globalScaling * (double) pixelHeight / (double) windowHeight;
 #endif
 }
 

@@ -109,9 +109,43 @@ class GameScreen extends React.Component {
     // Prepare the Lua format of the post
     const luaPost = this.props.post ? await jsPostToLuaPost(this.props.post) : undefined;
 
+    // Set screen settings
+    const { dimensions, scaling, upscaling, downscaling } = this.props.game.metadata;
+    const screenSettings = {
+      width: 800,
+      height: 450,
+      upscaling: 'on',
+      downscaling: 'on',
+    };
+    if (dimensions) {
+      if (dimensions === 'full') {
+        screenSettings.width = 0;
+        screenSettings.height = 0;
+      } else {
+        const [widthStr, heightStr] = dimensions.split('x');
+        screenSettings.width = parseInt(widthStr) || 800;
+        screenSettings.height = parseInt(heightStr) || 450;
+      }
+    }
+    if (scaling) {
+      screenSettings.upscaling = scaling;
+      screenSettings.downscaling = scaling;
+    }
+    if (upscaling) {
+      screenSettings.upscaling = upscaling;
+    }
+    if (downscaling) {
+      screenSettings.downscaling = downscaling;
+    }
+    await NativeUtil.setScreenSettings(screenSettings); // Make sure to `await`!
+
     // Set initial data (read at various points in Lua code from `CASTLE_INITIAL_DATA`), then launch the game.
     // Make sure to `await` setting initial data before calling `.open`!
     await NativeUtil.putInitialData({
+      graphics: {
+        width: screenSettings.width,
+        height: screenSettings.height,
+      },
       audio: {
         volume: this.state.isMuted ? 0 : 1,
       },
@@ -125,6 +159,8 @@ class GameScreen extends React.Component {
         ? await jsGameToLuaGame(this.props.referrerGame)
         : undefined,
     });
+
+    // Launch the game window -- make sure to do all of the above first!
     await GameWindow.open({
       gameUrl: url,
       game: this.props.game,
@@ -194,10 +230,6 @@ class GameScreen extends React.Component {
     }
 
     let dpr = window.devicePixelRatio;
-    if (Utilities.isWindows()) {
-      dpr = dpr * dpr;
-      dpr = dpr * dpr;
-    }
     const loadingImageStyle = {
       width: 301 / dpr,
       height: 78 / dpr,

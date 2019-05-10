@@ -35,6 +35,8 @@ bool ghostCancelDownload(unsigned int downloadId);
 
 void ghostQuitMessageLoop();
 void ghostClose();
+void ghostSetDimensions(float width, float height);
+void ghostGetDimensions(float *width, float *height);
 void ghostUpdateChildWindowFrame();
 void ghostResizeChildWindow(float dw, float dh);
 void ghostSetChildWindowFrame(float left, float top, float width, float height);
@@ -46,6 +48,15 @@ void ghostShowDesktopNotification(const char *title, const char *body);
 GHOST_EXPORT bool ghostGetBackgrounded();
 GHOST_EXPORT void ghostFocusChat();
 void ghostFocusGame();
+
+enum {
+    GHOST_SCALING_OFF = 0,
+    GHOST_SCALING_ON = 1,
+    GHOST_SCALING_STEP = 2,
+};
+
+void ghostSetScalingModes(int up, int down);
+void ghostGetScalingModes(int *up, int *down);
 
 bool ghostChooseDirectoryWithDialog(const char *title, const char *message, const char *action,
                                     const char **result);
@@ -61,7 +72,9 @@ void ghostTakeScreenCapture();
 const char *ghostGetCachePath();
 
 extern double ghostGlobalScaling;
+extern double ghostScreenScaling;
 GHOST_EXPORT double ghostGetGlobalScaling();
+GHOST_EXPORT double ghostGetScreenScaling();
 extern bool ghostApplyGlobalScaling;
 
 extern bool ghostChildWindowCloseEventReceived;

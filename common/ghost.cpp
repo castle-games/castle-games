@@ -107,8 +107,36 @@ bool ghostCreateProjectAtPath(const char *path, const char **entryPoint) {
   return _ghostCreateFileFromTemplateAtPath(path, "blank.castle", "project.castle", entryPoint);
 }
 
+static float ghostWidth = 800, ghostHeight = 450;
+
+void ghostSetDimensions(float width, float height) {
+  ghostWidth = width;
+  ghostHeight = height;
+}
+
+void ghostGetDimensions(float *width, float *height) {
+  *width = ghostWidth;
+  *height = ghostHeight;
+}
+
+static int ghostUpScaling = GHOST_SCALING_ON, ghostDownScaling = GHOST_SCALING_ON;
+
+void ghostSetScalingModes(int up, int down) {
+  ghostUpScaling = up;
+  ghostDownScaling = down;
+}
+
+void ghostGetScalingModes(int *up, int *down) {
+  *up = ghostUpScaling;
+  *down = ghostDownScaling;
+}
+
 GHOST_EXPORT double ghostGetGlobalScaling() {
   return ghostGlobalScaling;
+}
+
+GHOST_EXPORT double ghostGetScreenScaling() {
+  return ghostScreenScaling;
 }
 
 static std::string execNodeInput;

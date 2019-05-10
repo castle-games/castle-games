@@ -247,3 +247,27 @@ JS_BIND_DEFINE(focusGame) {
   ghostFocusGame();
   success("success");
 }
+
+JS_BIND_DEFINE(setScreenSettings) {
+  ghostSetDimensions(arg["width"], arg["height"]);
+
+  int up = GHOST_SCALING_ON, down = GHOST_SCALING_ON;
+  std::string upscaling = arg["upscaling"];
+  std::string downscaling = arg["downscaling"];
+  if (upscaling == "on") {
+    up = GHOST_SCALING_ON;
+  } else if (upscaling == "off") {
+    up = GHOST_SCALING_OFF;
+  } else if (upscaling == "step") {
+    up = GHOST_SCALING_STEP;
+  }
+  if (downscaling == "on") {
+    down = GHOST_SCALING_ON;
+  } else if (downscaling == "off") {
+    down = GHOST_SCALING_OFF;
+  } else if (downscaling == "step") {
+    down = GHOST_SCALING_STEP;
+  }
+  ghostSetScalingModes(up, down);
+  success("success");
+}

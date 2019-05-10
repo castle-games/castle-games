@@ -42,6 +42,15 @@ function castle.system.getGlobalScaling()
     end
 end
 
+ffi.cdef 'double ghostGetScreenScaling();'
+function castle.system.getScreenScaling()
+    if isDesktop then
+        return C.ghostGetScreenScaling()
+    else
+        return 1
+    end
+end
+
 
 -- game
 

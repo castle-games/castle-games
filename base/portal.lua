@@ -115,8 +115,8 @@ function portalMeta:setupLove()
         function newLove.window.updateMode() return true end
 
         function newLove.window.getMode()
-            local w, h, flags = love.window.getMode()
-            local w, h = love.graphics.getDimensions() -- This accounts for `ghostGlobalScaling` properly
+            local w, h, flags = newLove.window.getMode()
+            local w, h = newLove.graphics.getDimensions() -- Use our dimensions system
             return w, h, flags
         end
     end
@@ -132,6 +132,24 @@ function portalMeta:setupLove()
     end
 
     if newLove.graphics then -- Unavailable in non-main thread
+        function newLove.graphics.getWidth()
+            if CASTLE_INITIAL_DATA.graphics.width ~= 0 then
+                return CASTLE_INITIAL_DATA.graphics.width
+            else
+                return love.graphics.getWidth()
+            end
+        end
+        function newLove.graphics.getHeight()
+            if CASTLE_INITIAL_DATA.graphics.height ~= 0 then
+                return CASTLE_INITIAL_DATA.graphics.height
+            else
+                return love.graphics.getHeight()
+            end
+        end
+        function newLove.graphics.getDimensions()
+            return newLove.graphics.getWidth(), newLove.graphics.getHeight()
+        end
+
         function newLove.graphics.newFont(...)
             local nArgs = select('#', ...)
             if nArgs == 0 then return love.graphics.newFont() end
