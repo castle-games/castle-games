@@ -66,11 +66,6 @@ castle = require 'castle'
 local root = require 'portal'
 local jsEvents = require 'jsEvents'
 
-local splash
-if not CASTLE_SERVER then
-    splash = require 'splash'
-end
-
 
 -- Forward `print` and errors to JS, write them to '.log' files on desktop
 
@@ -156,6 +151,9 @@ function main.load(arg)
         end
 
         home = root:newChild(homeUrl, { noConf = true })
+        jsEvents.send('CASTLE_GAME_LOADED', {})
+        print('GAME LOADED')
+        io.flush()
         if initialFileDropped then
             home:filedropped(initialFileDropped)
             initialFileDropped = nil
@@ -216,8 +214,6 @@ function main.update(dt)
         else
             home:update(dt)
         end
-    elseif not CASTLE_SERVER then
-        splash:update(dt)
     end
 end
 
@@ -229,8 +225,6 @@ end
 function main.draw()
     if home and home.loaded then
         home:draw()
-    elseif not CASTLE_SERVER then
-        splash:draw()
     end
 
     do -- Debug overlay

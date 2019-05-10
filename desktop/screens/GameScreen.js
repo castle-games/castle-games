@@ -11,6 +11,7 @@ import { NavigationContext, NavigatorContext } from '~/contexts/NavigationContex
 import GameActionsBar from '~/components/game/GameActionsBar';
 import GameWindow from '~/native/gamewindow';
 import Logs from '~/common/logs';
+import GLLoaderScreen from '~/isometric/components/GLLoaderScreen';
 
 const STYLES_CONTAINER = css`
   background: ${Constants.colors.black};
@@ -71,6 +72,7 @@ class GameScreen extends React.Component {
 
   state = {
     isMuted: false,
+    loaded: false,
   };
 
   _gameContainerReference = null;
@@ -86,10 +88,12 @@ class GameScreen extends React.Component {
 
   componentDidMount() {
     this.updateGameWindowFrame();
+    window.addEventListener('CASTLE_GAME_LOADED', this._gameLoaded);
   }
 
   componentDidUpdate(prevProps, prevState) {
     this._updateGameWindow(prevProps, prevState);
+    window.removeEventListener('CASTLE_GAME_LOADED', this._gameLoaded);
   }
 
   componentWillUnmount() {
@@ -97,6 +101,12 @@ class GameScreen extends React.Component {
     GameWindow.setVisible(false);
     window.removeEventListener('resize', this.updateGameWindowFrame);
   }
+
+  _gameLoaded = () => {
+    console.log(`JS: Game '${this.props.game.url}' loaded`);
+    GameWindow.setVisible(true);
+    this.setState({ loaded: true });
+  };
 
   _closeGame = async () => {
     // close window
@@ -203,7 +213,9 @@ class GameScreen extends React.Component {
     if (this._gameContainerReference) {
       const rect = this._gameContainerReference.getBoundingClientRect();
       GameWindow.updateFrame(rect);
-      GameWindow.setVisible(true);
+      if (this.state.loaded) {
+        GameWindow.setVisible(true);
+      }
     }
   };
 
@@ -235,6 +247,11 @@ class GameScreen extends React.Component {
       height: 78 / dpr,
     };
 
+    let maybeLoadingAnimation;
+    if (!this.state.loaded) {
+      maybeLoadingAnimation = <GLLoaderScreen />;
+    }
+
     return (
       <div className={STYLES_CONTAINER}>
         <div
@@ -243,11 +260,7 @@ class GameScreen extends React.Component {
             this._gameContainerReference = ref;
             this.updateGameWindowFrame();
           }}>
-          <img
-            className={STYLES_LOADING_IMAGE}
-            style={loadingImageStyle}
-            src={Constants.GAME_LOADING_IMAGE_DATA_URL}
-          />
+          {maybeLoadingAnimation}
         </div>
         {actionsBarElement}
       </div>
