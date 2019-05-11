@@ -59,7 +59,7 @@ Use either Git Bash or WSL to run commands in.
 
 - Make sure Git LFS is initialized.
 - Go into the 'megasource/' directory.
-- Run `sh configure_cmake.sh`. You don't need to do this every time, but you need to do it at least on your first time.
+- Run `sh configure_cmake.sh`. You don't need to do this every time, but you need to do it at least on the first build.
 - Run `cmake.exe --build build --config Debug`. If the build succeeds but is unable to write 'Castle.exe', make sure any existing Castle processes are terminated and try again. On WSL, `sh kill_castle.sh` under 'megasource/' works for terminating Castle processes.
 - Run `./build/Debug/Castle.exe` to launch the Castle binary that was built.
 
