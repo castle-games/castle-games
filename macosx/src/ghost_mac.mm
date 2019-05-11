@@ -76,6 +76,9 @@ void ghostSetChildWindowVisible(bool visible) {
       if (visible) {
         [ghostMacMainWindow addChildWindow:ghostMacChildWindow ordered:NSWindowAbove];
         [ghostMacChildWindow setIsVisible:YES];
+        if ([ghostMacMainWindow isKeyWindow]) {
+          [ghostMacChildWindow makeKeyWindow];
+        }
       } else {
         [ghostMacChildWindow setIsVisible:NO];
       }

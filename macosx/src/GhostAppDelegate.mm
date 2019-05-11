@@ -218,17 +218,17 @@ NSArray *enumerate_windows(void)
     bool prevChild = !!ghostMacChildWindow;
     [self stepLove];                         // Actually run Love for one step
     if (!prevChild && ghostMacChildWindow) { // New child window!
-      // Add as child, make visible and focus
       ghostResizeChildWindow(0, 0);
-      ghostSetChildWindowVisible(true);
-      [ghostMacChildWindow makeKeyWindow];
+      // NOTE: Note making it visible here because this will happen after loading!
+//      ghostSetChildWindowVisible(true);
+//      [ghostMacChildWindow makeKeyWindow];
 
       // Force resize after small delay to fix a weird issue on Mojave
       dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 80 * NSEC_PER_MSEC),
                      dispatch_get_main_queue(), ^{
                        ghostResizeChildWindow(-1, -1);
                        ghostResizeChildWindow(1, 1);
-                       [ghostMacChildWindow makeKeyWindow];
+//                       [ghostMacChildWindow makeKeyWindow];
                        
                        // TODO (jesse): this should actually start after the castle loading screen goes away
                        // ghostStartObs();
