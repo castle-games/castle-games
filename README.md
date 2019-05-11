@@ -57,15 +57,11 @@ See [Desktop Client Release Process](https://github.com/castle-games/ghost/wiki/
 
 Use either Git Bash or WSL to run commands in.
 
-- Make sure `git lfs` is initialized.
-- In 'megasource/', run `sh configure_cmake.sh`. You don't need to do this every time, but you need to do it at least on your first time, and whenever installer resources change.
-- Again in 'megasource/', run `cmake.exe --build build --config Debug`.
+- Make sure Git LFS is initialized.
+- Go into the 'megasource/' directory.
+- Run `sh configure_cmake.sh`. You don't need to do this every time, but you need to do it at least on your first time.
+- Run `cmake.exe --build build --config Debug`. If the build succeeds but is unable to write 'Castle.exe', make sure any existing Castle processes are terminated and try again. On WSL, `sh kill_castle.sh` under 'megasource/' works for terminating Castle processes.
 - Run `./build/Debug/Castle.exe` to launch the Castle binary that was built.
-
-- Open and build the 'ALL_BUILD.vcxproj' file inside of 'megasource/build/'.
-- Run the application at 'megasourse/build/Debug/Castle.exe'.
-- If the build succeeds but is unable to write Castle.exe, make sure any existing Castle processes are terminated and try again.
-- If you're using WSL, `sh kill_castle.sh` under 'megasource/' works for terminating Castle processes.
 
 ## Run on Linux
 
