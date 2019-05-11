@@ -72,7 +72,7 @@ class GameScreen extends React.Component {
 
   state = {
     isMuted: false,
-    loaded: false,
+    loaded: true,
   };
 
   _gameContainerReference = null;
@@ -114,7 +114,7 @@ class GameScreen extends React.Component {
   };
 
   _openGame = async (url) => {
-    this.setState({ loaded: false });
+    await new Promise((resolve) => this.setState({ loaded: false }, resolve));
 
     Logs.system(`Loading game entry point: ${url}`);
 
