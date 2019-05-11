@@ -157,7 +157,9 @@ class GameScreen extends React.Component {
   };
 
   _openGame = async (url) => {
-    await new Promise((resolve) => this.setState({ loaded: false, loadingPhase: 'initializing' }, resolve));
+    await new Promise((resolve) =>
+      this.setState({ loaded: false, loadingPhase: 'initializing' }, resolve)
+    );
 
     Logs.system(`Loading game entry point: ${url}`);
 
