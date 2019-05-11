@@ -133,14 +133,14 @@ function portalMeta:setupLove()
 
     if newLove.graphics then -- Unavailable in non-main thread
         function newLove.graphics.getWidth()
-            if CASTLE_INITIAL_DATA.graphics.width ~= 0 then
+            if CASTLE_INITIAL_DATA and CASTLE_INITIAL_DATA.graphics.width ~= 0 then
                 return CASTLE_INITIAL_DATA.graphics.width
             else
                 return love.graphics.getWidth()
             end
         end
         function newLove.graphics.getHeight()
-            if CASTLE_INITIAL_DATA.graphics.height ~= 0 then
+            if CASTLE_INITIAL_DATA and CASTLE_INITIAL_DATA.graphics.height ~= 0 then
                 return CASTLE_INITIAL_DATA.graphics.height
             else
                 return love.graphics.getHeight()

@@ -10,9 +10,9 @@ local sqlite3 = require 'lsqlite3'
 local serpent = require 'serpent'
 local ltn12 = require 'ltn12'
 
-local network = {}
+local jsEvents = require 'jsEvents'
 
-network.requests = {}
+local network = {}
 
 local tasks = limit.new(10)
 local coros = setmetatable({}, { __mode = 'k' })
@@ -57,6 +57,8 @@ function network.async(foo, onError)
     end)
 end
 
+local nextRequestId = 1
+
 -- Same interface as http://w3.impa.br/~diego/software/luasocket/http.html#request -- but is
 -- async, tracks ongoing requests for debugging, and logs requests
 function network.request(firstArg, ...)
@@ -73,28 +75,32 @@ function network.request(firstArg, ...)
     -- Ensure we're in a network coroutine
     ensureCoro(url)
 
-    -- Add entry in `network.requests` table
-    local id = {} -- Cheap UUID ^_^
-    table.insert(network.requests, {
+    -- Generate an `id`
+    local id = nextRequestId
+    nextRequestId = nextRequestId + 1
+
+    -- Send JS event
+    jsEvents.send('GHOST_NETWORK_REQUEST', {
+        type = 'start',
         id = id,
         url = url,
         method = method,
-        time = 0,
     })
 
-    -- Function that will run after -- log time taken and remove from `network.requests`. We use a
+    -- Function that will run after -- log time taken and send JS event. We use a
     -- function so that we can use '...' parameters to forward all return values
     local startTime = love.timer.getTime()
     function after(...)
         local ms = math.floor(1000 * (love.timer.getTime() - startTime))
         print(ms .. 'ms', method, url)
 
-        for i = 1, #network.requests do
-            if network.requests[i].id == id then
-                table.remove(network.requests, i)
-                break
-            end
-        end
+        -- Send JS event
+        jsEvents.send('GHOST_NETWORK_REQUEST', {
+            type = 'stop',
+            id = id,
+            url = url,
+            method = method,
+        })
 
         return ...
     end
@@ -400,10 +406,6 @@ end
 -- Perform any updates the network system has to do -- this is run by base automatically and you
 -- shouldn't have to call it...
 function network.update(dt)
-    for _, req in ipairs(network.requests) do
-        req.time = req.time + dt
-    end
-
     copas.step(0)
 end
 

@@ -32,12 +32,21 @@ const STYLES_GAME_CONTAINER = css`
   display: flex;
 `;
 
-const STYLES_LOADING_IMAGE = css`
-  image-rendering: -moz-crisp-edges;
-  image-rendering: -webkit-crisp-edges;
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
-  opacity: 0.7;
+const STYLES_LOADING_OVERLAY_CONTAINER = css`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 14px;
+`;
+
+const STYLES_LOADING_OVERLAY_ELEMENT = css`
+  font-family: ${Constants.font.mono};
+  color: ${Constants.logs.system};
+  font-size: 10px;
 `;
 
 const jsUserToLuaUser = async (user) => ({
@@ -73,6 +82,20 @@ class GameScreen extends React.Component {
   state = {
     isMuted: false,
     loaded: true,
+    luaNetworkRequests: [
+      // Some example data to test with in the browser
+      // {
+      //   method: 'GET',
+      //   url: 'https://github.com/schazers/badboxart/commits/master',
+      //   id: 1,
+      // },
+      // {
+      //   method: 'GET',
+      //   url: 'https://github.com/schazers/badboxart/commits/kek',
+      //   id: 2,
+      // },
+    ],
+    loadingPhase: 'initializing',
   };
 
   _gameContainerReference = null;
@@ -88,7 +111,8 @@ class GameScreen extends React.Component {
 
   componentDidMount() {
     this.updateGameWindowFrame();
-    window.addEventListener('CASTLE_GAME_LOADED', this._gameLoaded);
+    window.addEventListener('CASTLE_GAME_LOADED', this._handleGameLoaded);
+    window.addEventListener('GHOST_NETWORK_REQUEST', this._handleLuaNetworkRequest);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -99,13 +123,32 @@ class GameScreen extends React.Component {
     // don't call GameWindow.close(), because we might just be hiding the game.
     GameWindow.setVisible(false);
     window.removeEventListener('resize', this.updateGameWindowFrame);
-    window.removeEventListener('CASTLE_GAME_LOADED', this._gameLoaded);
+    window.removeEventListener('CASTLE_GAME_LOADED', this._handleGameLoaded);
+    window.removeEventListener('GHOST_NETWORK_REQUEST', this._handleLuaNetworkRequest);
   }
 
-  _gameLoaded = () => {
+  _handleGameLoaded = () => {
     console.log(`JS: Game '${this.props.game.url}' loaded`);
     GameWindow.setVisible(true);
     this.setState({ loaded: true });
+  };
+
+  _handleLuaNetworkRequest = async (e) => {
+    console.log(JSON.stringify(e.params, null, 2));
+    const { type, id, url, method } = e.params;
+    if (type == 'start') {
+      this.setState(({ luaNetworkRequests }) => ({
+        luaNetworkRequests: !luaNetworkRequests.find((req) => req.url == url)
+          ? [...luaNetworkRequests, { id, url, method }]
+          : luaNetworkRequests,
+        loadingPhase: 'loading',
+      }));
+    } else if (type == 'stop') {
+      await Actions.delay(60);
+      this.setState(({ luaNetworkRequests }) => ({
+        luaNetworkRequests: luaNetworkRequests.filter((req) => req.id !== id),
+      }));
+    }
   };
 
   _closeGame = async () => {
@@ -114,7 +157,7 @@ class GameScreen extends React.Component {
   };
 
   _openGame = async (url) => {
-    await new Promise((resolve) => this.setState({ loaded: false }, resolve));
+    await new Promise((resolve) => this.setState({ loaded: false, loadingPhase: 'initializing' }, resolve));
 
     Logs.system(`Loading game entry point: ${url}`);
 
@@ -151,28 +194,7 @@ class GameScreen extends React.Component {
     }
     await NativeUtil.setScreenSettings(screenSettings); // Make sure to `await`!
 
-    // Set initial data (read at various points in Lua code from `CASTLE_INITIAL_DATA`), then launch the game.
-    // Make sure to `await` setting initial data before calling `.open`!
-    await NativeUtil.putInitialData({
-      graphics: {
-        width: screenSettings.width,
-        height: screenSettings.height,
-      },
-      audio: {
-        volume: this.state.isMuted ? 0 : 1,
-      },
-      user: {
-        isLoggedIn: this.props.isLoggedIn,
-        me: this.props.isLoggedIn ? await jsUserToLuaUser(this.props.me) : undefined,
-      },
-      initialPost: luaPost,
-      initialParams: this.props.gameParams ? this.props.gameParams : undefined,
-      referrerGame: this.props.referrerGame
-        ? await jsGameToLuaGame(this.props.referrerGame)
-        : undefined,
-    });
-
-    // Launch the game window -- make sure to do all of the above first!
+    // Launch the game window, passing all of the initial settings
     await GameWindow.open({
       gameUrl: url,
       game: this.props.game,
@@ -180,6 +202,24 @@ class GameScreen extends React.Component {
         navigateToEditPost: this.props.navigateToEditPost,
         navigateToGameUrl: this.props.navigateToGameUrl,
         navigateToGame: this.props.navigateToGame,
+      },
+      initialData: {
+        graphics: {
+          width: screenSettings.width,
+          height: screenSettings.height,
+        },
+        audio: {
+          volume: this.state.isMuted ? 0 : 1,
+        },
+        user: {
+          isLoggedIn: this.props.isLoggedIn,
+          me: this.props.isLoggedIn ? await jsUserToLuaUser(this.props.me) : undefined,
+        },
+        initialPost: luaPost,
+        initialParams: this.props.gameParams ? this.props.gameParams : undefined,
+        referrerGame: this.props.referrerGame
+          ? await jsGameToLuaGame(this.props.referrerGame)
+          : undefined,
       },
     });
 
@@ -243,15 +283,24 @@ class GameScreen extends React.Component {
       );
     }
 
-    let dpr = window.devicePixelRatio;
-    const loadingImageStyle = {
-      width: 301 / dpr,
-      height: 78 / dpr,
-    };
-
-    let maybeLoadingAnimation;
+    let maybeLoadingAnimation, maybeLoadingOverlay;
     if (!this.state.loaded) {
       maybeLoadingAnimation = <GLLoaderScreen />;
+
+      const { luaNetworkRequests, loadingPhase } = this.state;
+      maybeLoadingOverlay = (
+        <div className={STYLES_LOADING_OVERLAY_CONTAINER}>
+          {luaNetworkRequests.length > 0 ? (
+            luaNetworkRequests.map(({ url }) => (
+              <div className={STYLES_LOADING_OVERLAY_ELEMENT}>Fetching {url}...</div>
+            ))
+          ) : loadingPhase === 'initializing' ? (
+            <div className={STYLES_LOADING_OVERLAY_ELEMENT}>Initializing system...</div>
+          ) : (
+            <div className={STYLES_LOADING_OVERLAY_ELEMENT}>Starting game...</div>
+          )}
+        </div>
+      );
     }
 
     return (
@@ -263,6 +312,7 @@ class GameScreen extends React.Component {
             this.updateGameWindowFrame();
           }}>
           {maybeLoadingAnimation}
+          {maybeLoadingOverlay}
         </div>
         {actionsBarElement}
       </div>

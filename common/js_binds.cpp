@@ -107,6 +107,14 @@ JS_BIND_DEFINE(createProjectAtPath) {
 }
 
 JS_BIND_DEFINE(openUri) {
+  // Post initial data
+  std::string initialData = arg["initialData"];
+  auto channel = love::thread::Channel::getChannel("INITIAL_DATA");
+  channel->clear();
+  // Explicitly pass `.length()` because `val` may be in UTF-8
+  channel->push(love::Variant(initialData.c_str(), initialData.length()));
+
+  // Open
   std::string uri = arg["uri"];
   ghostOpenLoveUri(uri.c_str());
   success("success");
@@ -235,11 +243,6 @@ JS_BIND_DEFINE(takeScreenCapture) {
 }
 
 JS_BIND_DEFINE(putInitialData) {
-  std::string initialData = arg["initialData"];
-  auto channel = love::thread::Channel::getChannel("INITIAL_DATA");
-  channel->clear();
-  // Explicitly pass `.length()` because `val` may be in UTF-8
-  channel->push(love::Variant(initialData.c_str(), initialData.length()));
   success("success");
 }
 

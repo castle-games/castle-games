@@ -7,7 +7,7 @@ class GameWindow {
   _currentGame = null;
   _navigations = null;
 
-  open = async ({ gameUrl, game, navigations }) => {
+  open = async ({ gameUrl, game, initialData, navigations }) => {
     if (this._isOpen) return;
     this._isOpen = true;
     this._currentGame = game;
@@ -17,7 +17,7 @@ class GameWindow {
     });
     Share.addEventListeners(game);
     UserStatus.startAsync(game);
-    await NativeBinds.openUri({ uri: gameUrl });
+    await NativeBinds.openUri({ uri: gameUrl, initialData: JSON.stringify(initialData) });
   };
 
   setVisible = async (isVisible) => {
@@ -48,11 +48,11 @@ class GameWindow {
 
   getCurrentGame = () => {
     return this._isOpen ? this._currentGame : null;
-  }
+  };
 
   getNavigations = () => {
     return this._navigations;
-  }
+  };
 }
 
 export default new GameWindow();
