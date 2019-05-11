@@ -354,7 +354,7 @@ function main.keyreleased(key, ...)
     end
 
     if home then
-        home:keypressed(key, ...)
+        home:keyreleased(key, ...)
     end
 end
 
