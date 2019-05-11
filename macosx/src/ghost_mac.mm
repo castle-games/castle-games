@@ -166,17 +166,20 @@ void ghostSetChildWindowFrame(float left, float top, float width, float height) 
       frame.size.height = height;
       [ghostMacChildWindow setFrame:frame display:NO];
 
-      // Focus-follows-mouse
-      // NOTE: Disabling this for now?
-//      NSPoint mouse = [NSEvent mouseLocation];
-//      if (frame.origin.x <= mouse.x && mouse.x <= frame.origin.x + width &&
-//          frame.origin.y <= mouse.y && mouse.y <= frame.origin.y + height) {
-//        if (![ghostMacChildWindow isKeyWindow]) {
-//          [ghostMacChildWindow makeKeyWindow];
-//        }
-//      } else if (![ghostMacMainWindow isKeyWindow]) {
-//        [ghostMacMainWindow makeKeyWindow];
-//      }
+      // Focus-follows-mouse (only on mouse move)
+      static NSPoint lastMouse = { 0, 0 };
+      NSPoint mouse = [NSEvent mouseLocation];
+      if (mouse.x != lastMouse.x || mouse.y != lastMouse.y) {
+        if (frame.origin.x <= mouse.x && mouse.x <= frame.origin.x + width &&
+            frame.origin.y <= mouse.y && mouse.y <= frame.origin.y + height) {
+          if (![ghostMacChildWindow isKeyWindow]) {
+            [ghostMacChildWindow makeKeyWindow];
+          }
+        } else if (![ghostMacMainWindow isKeyWindow]) {
+          [ghostMacMainWindow makeKeyWindow];
+        }
+      }
+      lastMouse = mouse;
     } else if (![ghostMacMainWindow isKeyWindow] && !ghostIsShowingNativeModal) {
       [ghostMacMainWindow makeKeyWindow];
     }
