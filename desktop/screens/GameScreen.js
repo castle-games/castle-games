@@ -134,7 +134,6 @@ class GameScreen extends React.Component {
   };
 
   _handleLuaNetworkRequest = async (e) => {
-    console.log(JSON.stringify(e.params, null, 2));
     const { type, id, url, method } = e.params;
     if (type == 'start') {
       this.setState(({ luaNetworkRequests }) => ({
