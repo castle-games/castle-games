@@ -9,6 +9,7 @@ local limit = require 'copas.limit'
 local sqlite3 = require 'lsqlite3'
 local serpent = require 'serpent'
 local ltn12 = require 'ltn12'
+local cjson = require 'cjson'
 
 local jsEvents = require 'jsEvents'
 
@@ -122,6 +123,13 @@ db:exec[[
     );
 ]]
 
+-- Create ETag cache
+db:exec[[
+    create table if not exists etag_cache (
+        url primary key, response, etag
+    );
+]]
+
 -- Whether `url` is safe to cache (never expires)
 local function isCacheable(url)
     do -- Content-addressed asset (eg. user profile photo) on our CDN
@@ -139,6 +147,42 @@ local function isCacheable(url)
     return false
 end
 
+-- Save a result to the ETag cache
+local persisteETag
+do
+    local stmt = db:prepare[[
+        insert into etag_cache (url, response, etag)
+            values (?, ?, ?)
+            on conflict (url) do update set
+                response = excluded.response,
+                etag = excluded.etag;
+    ]]
+    persisteETag = function(url, response, etag)
+        stmt:bind(1, url)
+        stmt:bind(2, response)
+        stmt:bind_blob(3, etag)
+        stmt:step()
+        stmt:reset()
+    end
+end
+
+-- Find a result in the ETag cache, `nil` if not found
+local findETag
+do
+    local selectStmt = db:prepare[[
+        select response, etag from etag_cache where url = ?;
+    ]]
+    findETag = function(url)
+        local response, etag
+        selectStmt:bind_values(url)
+        for iresponse, ietag in selectStmt:urows() do
+            response, etag = iresponse, ietag
+        end
+        selectStmt:reset()
+        return response, etag
+    end
+end
+
 -- Return a cache-friendly version of `url` if there is one, else just return `url`
 local mapToCacheable
 do
@@ -150,8 +194,33 @@ do
             if user and repo and branch then
                 if not (branch:match('^[a-f0-9]*$') and #branch == 40) then -- Ensure not a SHA
                     local sha = githubBranchShas[user .. '/' .. repo .. '/' .. branch] -- Cached?
-                    if not sha then
-                        -- Read it out of HTML page because API is rate-limited...
+                    if not sha then -- First try against the REST API, which is rate limited
+                        local apiUrl = 'https://api.github.com/repos/' .. user .. '/' .. repo
+                                .. '/git/refs/heads/' .. branch
+                        local sendHeaders = {}
+                        local response, etag = findETag(apiUrl)
+                        if etag then
+                            sendHeaders['if-none-match'] = etag
+                        end
+                        local sink = {}
+                        local _, httpCode, headers = network.request {
+                            url = apiUrl,
+                            protocol = 'tlsv1_2',
+                            headers = sendHeaders,
+                            sink = ltn12.sink.table(sink),
+                        }
+                        if httpCode ~= 304 then
+                            response = table.concat(sink)
+                            persisteETag(apiUrl, response, headers['etag'])
+                        end
+                        print(headers['x-ratelimit-remaining'])
+                        local decoded = cjson.decode(response)
+                        if decoded and decoded.object and decoded.object.sha then
+                            sha = decoded.object.sha
+                            githubBranchShas[user .. '/' .. repo .. '/' .. branch] = sha -- Cache
+                        end
+                    end
+                    if not sha then -- If the above failed it may be due to rate limit, try HTML
                         local commitsPageUrl = 'https://github.com/' .. user .. '/' .. repo
                                 .. '/commits/' .. branch
                         local sink = {}
