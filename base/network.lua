@@ -213,7 +213,6 @@ do
                             response = table.concat(sink)
                             persisteETag(apiUrl, response, headers['etag'])
                         end
-                        print(headers['x-ratelimit-remaining'])
                         local decoded = cjson.decode(response)
                         if decoded and decoded.object and decoded.object.sha then
                             sha = decoded.object.sha
