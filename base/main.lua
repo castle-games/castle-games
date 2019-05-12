@@ -344,6 +344,20 @@ function main.mousepressed(...)
     end
 end
 
+do
+    -- Wrap this to account for our own dimensions stuff
+    local oldW, oldH
+    function main.resize()
+        if home and CASTLE_INITIAL_DATA.graphics.width == 0 then -- Only send resize events in 'full' case
+            local w, h = home.globals.love.graphics.getDimensions()
+            if w ~= oldW or h ~= oldH then
+                home:resize(w, h)
+            end
+            oldW, oldH = w, h
+        end
+    end
+end
+
 function main.quit(...)
     updateLogs(true)
 
