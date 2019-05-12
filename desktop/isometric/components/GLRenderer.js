@@ -19,7 +19,6 @@ const STYLES_GL_RENDERER = css`
   display: block;
   margin: 0 auto 0 auto;
   animation: fade-in 200ms ease;
-  cursor: move;
 `;
 
 export default class GLRenderer extends React.Component {
