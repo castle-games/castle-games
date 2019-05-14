@@ -128,7 +128,6 @@ class GameScreen extends React.Component {
   }
 
   _handleGameLoaded = () => {
-    console.log(`JS: Game '${this.props.game.url}' loaded`);
     GameWindow.setVisible(true);
     this.setState({ loaded: true });
   };
