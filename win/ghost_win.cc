@@ -82,9 +82,10 @@ static void _updateChildWindowRect(RECT currParentRect) {
       fmin(ghostGlobalScaling * childWidth, currParentRect.right - currParentRect.left - frameLeft);
   auto frameHeight =
       fmin(ghostGlobalScaling * childHeight, currParentRect.bottom - currParentRect.top - frameTop);
-      
+
   float gameLeft, gameTop, gameWidth, gameHeight;
-  ghostGetGameFrame(frameLeft, frameTop, frameWidth, frameHeight, &gameLeft, &gameTop, &gameWidth, &gameHeight);
+  ghostGetGameFrame(frameLeft, frameTop, frameWidth, frameHeight, &gameLeft, &gameTop, &gameWidth,
+                    &gameHeight);
   SetWindowPos(child, NULL, gameLeft, gameTop, gameWidth, gameHeight, 0);
   RECT newChildRect;
   newChildRect.left = gameLeft;
@@ -529,7 +530,7 @@ void ghostStep() {
         childWidth = msg.body.setChildWindowFrame.width;
         childHeight = msg.body.setChildWindowFrame.height;
 
-        RECT currParentRect = { 0, 0, 10000, 10000 };
+        RECT currParentRect = {0, 0, 10000, 10000};
         if (parent) {
           GetWindowRect(parent, &currParentRect);
         }
@@ -539,7 +540,8 @@ void ghostStep() {
       case SET_CHILD_WINDOW_VISIBLE: {
         if (child) {
           ShowWindow(child, msg.body.setChildWindowVisible.visible ? SW_SHOW : SW_HIDE);
-          if (GetForegroundWindow() == ghostWinGetMainWindow() && msg.body.setChildWindowVisible.visible) {
+          if (GetForegroundWindow() == ghostWinGetMainWindow() &&
+              msg.body.setChildWindowVisible.visible) {
             SetFocus(child);
           }
         }
@@ -573,7 +575,7 @@ void ghostStep() {
             childTop = monitorInfo.rcMonitor.top;
             childWidth = monitorInfo.rcMonitor.right - monitorInfo.rcMonitor.left;
             childHeight = monitorInfo.rcMonitor.bottom - monitorInfo.rcMonitor.top;
-            RECT currParentRect = { 0, 0, 10000, 10000 };
+            RECT currParentRect = {0, 0, 10000, 10000};
             if (parent) {
               GetWindowRect(parent, &currParentRect);
             }
