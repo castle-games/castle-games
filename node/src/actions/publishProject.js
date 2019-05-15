@@ -40,7 +40,7 @@ async function publishHostedGame(API, { gameFiles }) {
     variables,
   });
 
-  if (result.error || result.errors || !result.data) {
+  if (!result || result.error || result.errors || !result.data) {
     throw new Error('failed to publish game');
   }
 
@@ -58,7 +58,7 @@ async function testHostedGameHashes(API, { hashes }) {
     variables,
   });
 
-  if (result.error || result.errors || !result.data) {
+  if (!result || result.error || result.errors || !result.data) {
     return {};
   }
 

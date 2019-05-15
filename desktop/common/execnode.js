@@ -104,13 +104,17 @@ export async function execNodeAsync(action, args) {
     await sleep(100);
   }
 
+  let unparsedResult = execResults[execId];
+  delete execResults[execId];
+
+  let result;
   try {
-    let result = execResults[execId];
-    delete execResults[execId];
-    return JSON.parse(atob(result));
+    result = JSON.parse(atob(unparsedResult));
   } catch (e) {
-    throw new Error(`Error parsing as JSON: ${result}. Error: ${e}`);
+    throw new Error(`Error parsing as JSON: ${unparsedResult}. Error: ${e}`);
   }
+
+  return result;
 }
 
 export async function execNodeCompleteEvent(e) {
