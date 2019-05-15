@@ -279,6 +279,8 @@ class GameScreen extends React.Component {
           onFullScreenToggle={() => this.props.setIsFullScreen(!this.props.isFullScreen)}
           reloadGame={this.props.reloadGame}
           onUpdateGameWindowFrame={this.updateGameWindowFrame}
+          isMuted={this.state.isMuted}
+          onToggleMute={this._toggleIsMuted}
         />
       );
     }

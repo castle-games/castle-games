@@ -82,19 +82,13 @@ const STYLES_EMPHASIS_CHOICE = css`
 
 export default class GameActionsBar extends React.Component {
   static contextType = DevelopmentContext;
-  state = {
-    isMuted: false,
-  };
 
   _lastDeveloperState = false;
 
   _handleToggleMute = (e) => {
     e.preventDefault();
     e.stopPropagation();
-
-    const isMuted = !this.state.isMuted;
-    NativeUtil.sendLuaEvent('CASTLE_SET_VOLUME', isMuted ? 0 : 1);
-    this.setState({ isMuted });
+    this.props.onToggleMute();
   };
 
   _handleViewSource = (gameEntryPoint) => {
@@ -118,7 +112,7 @@ export default class GameActionsBar extends React.Component {
   }
 
   render() {
-    let { game } = this.props;
+    let { game, isMuted } = this.props;
 
     let developerPanelElement;
     if (this.context.isDeveloping) {
@@ -135,7 +129,7 @@ export default class GameActionsBar extends React.Component {
         </UINavigationLink>
       );
     }
-    let muteIcon = this.state.isMuted ? <SVG.Mute height="14px" /> : <SVG.Audio height="14px" />;
+    let muteIcon = isMuted ? <SVG.Mute height="14px" /> : <SVG.Audio height="14px" />;
     let muteElement = (
       <span className={STYLES_BUTTON} style={{ marginLeft: 12 }} onClick={this._handleToggleMute}>
         {muteIcon}
