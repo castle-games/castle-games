@@ -342,6 +342,9 @@ function network.fetch(url, method, skipCache)
                 url = url:gsub('^http://0.0.0.0', 'http://127.0.0.1')
                 url = url:gsub('^https://0.0.0.0', 'https://127.0.0.1')
 
+                -- Handle spaces
+                url = url:gsub(' ', '%%20')
+
                 if method == 'GET' then
                     response, httpCode, headers, status = network.request(url)
                     if response == nil or httpCode ~= 200 then
