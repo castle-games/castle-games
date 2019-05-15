@@ -42,7 +42,7 @@ static void addMenus(HWND hwnd) {
   SetMenu(hwnd, hMenubar);
 }
 
-static bool shouldTryFocusingChild = false;
+static bool childWasFocusedOnInactivate = false;
 
 LRESULT CALLBACK GhostSubclassProc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM l_param,
                                    UINT_PTR subclass_id, DWORD_PTR ref_data) {
@@ -59,14 +59,9 @@ LRESULT CALLBACK GhostSubclassProc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM l
     break;
   case WM_ACTIVATE:
     if (w_param == WA_INACTIVE) {
-      auto child = ghostWinGetChildWindow();
-      shouldTryFocusingChild = !child || GetFocus() == child;
-      // printf("Should focus: %s\n", shouldTryFocusingChild ? "yes" : "no");
-      // fflush(stdout);
+      childWasFocusedOnInactivate = GetFocus() == ghostWinGetChildWindow();
     } else {
-      if (shouldTryFocusingChild) {
-        // printf("Focusing: %s\n", shouldTryFocusingChild ? "yes" : "no");
-        // fflush(stdout);
+      if (childWasFocusedOnInactivate || ghostWinPendingChildFocus) {
         auto child = ghostWinGetChildWindow();
         if (child) {
           if (IsWindowVisible(child)) {

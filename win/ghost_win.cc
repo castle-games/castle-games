@@ -66,11 +66,13 @@ static void _ghostSendNativeOpenUrlEvent(std::string uri) {
   ghostSendJSEvent(kGhostOpenUrlEventName, params.c_str());
 }
 
-static void _focusWindow(HWND window) {
+void ghostWinFocusWindow(HWND window) {
   SetActiveWindow(window);
   SetForegroundWindow(window);
   SetFocus(window);
 }
+
+bool ghostWinPendingChildFocus = false;
 
 // win implementation of 'ghost.h'
 
@@ -350,7 +352,7 @@ GHOST_EXPORT bool ghostGetBackgrounded() {
 GHOST_EXPORT void ghostFocusChat() {
   auto parent = ghostWinGetMainWindow();
   if (parent) {
-    _focusWindow(parent);
+    ghostWinFocusWindow(parent);
     ghostSendJSEvent("nativeFocusChat", "{}");
   }
 }
@@ -358,7 +360,7 @@ GHOST_EXPORT void ghostFocusChat() {
 void ghostFocusGame() {
   auto child = ghostWinGetChildWindow();
   if (child && GetForegroundWindow() == ghostWinGetMainWindow()) {
-    _focusWindow(child);
+    ghostWinFocusWindow(child);
   }
 }
 
@@ -369,6 +371,9 @@ void ghostRunMessageLoop();
 RECT prevParentRect = {0, 0, 0, 0};
 
 static void bootLove(const char *uri) {
+  // Reset this flag till actual use
+  ghostWinPendingChildFocus = false;
+
   // Our child window setup seems to need this to get joystick events.
   // Found at: https://stackoverflow.com/a/35048971
   SDL_SetHint(SDL_HINT_JOYSTICK_ALLOW_BACKGROUND_EVENTS, "1");
@@ -470,6 +475,7 @@ void stepLove() {
 }
 
 void stopLove() {
+  ghostWinPendingChildFocus = false;
   if (luaState) {
     SDL_Event quitEvent;
     quitEvent.type = SDL_QUIT;
@@ -545,10 +551,19 @@ void ghostStep() {
 
       case SET_CHILD_WINDOW_VISIBLE: {
         if (child) {
-          ShowWindow(child, msg.body.setChildWindowVisible.visible ? SW_SHOW : SW_HIDE);
-          if (GetForegroundWindow() == ghostWinGetMainWindow() &&
-              msg.body.setChildWindowVisible.visible) {
-                _focusWindow(child);
+          if (msg.body.setChildWindowVisible.visible) {
+            if (!IsWindowVisible(child)) {
+              ShowWindow(child, SW_SHOW);
+              if (GetForegroundWindow() == ghostWinGetMainWindow()) {
+                ghostWinFocusWindow(child);
+                ghostWinPendingChildFocus = false;
+              } else {
+                ghostWinPendingChildFocus = true;
+              }
+            }
+          } else {
+            ShowWindow(child, SW_HIDE);
+            ghostWinPendingChildFocus = false;
           }
         }
       } break;
@@ -615,7 +630,7 @@ void ghostStep() {
     if (isFullscreen) {
       if (child) {
         if (parent && GetForegroundWindow() == parent) {
-          _focusWindow(child);
+          ghostWinFocusWindow(child);
         }
       }
     } else {
@@ -653,7 +668,7 @@ void ghostStep() {
         if (channel->getCount() > 0) {
           channel->clear();
           if (parent && GetForegroundWindow() == parent) {
-            _focusWindow(child);
+            ghostWinFocusWindow(child);
           }
         }
       }
