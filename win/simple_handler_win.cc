@@ -42,6 +42,8 @@ static void addMenus(HWND hwnd) {
   SetMenu(hwnd, hMenubar);
 }
 
+static bool shouldTryFocusingChild = false;
+
 LRESULT CALLBACK GhostSubclassProc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM l_param,
                                    UINT_PTR subclass_id, DWORD_PTR ref_data) {
   switch (msg) {
@@ -53,6 +55,26 @@ LRESULT CALLBACK GhostSubclassProc(HWND hwnd, UINT msg, WPARAM w_param, LPARAM l
       params << "{ action: \"" << kGhostMenuFileOpenAction << "\" }";
       ghostSendJSEvent(kGhostNativeMenuSelectedEventName, params.str().c_str());
       break;
+    }
+    break;
+  case WM_ACTIVATE:
+    if (w_param == WA_INACTIVE) {
+      auto child = ghostWinGetChildWindow();
+      shouldTryFocusingChild = !child || GetFocus() == child;
+      // printf("Should focus: %s\n", shouldTryFocusingChild ? "yes" : "no");
+      // fflush(stdout);
+    } else {
+      if (shouldTryFocusingChild) {
+        // printf("Focusing: %s\n", shouldTryFocusingChild ? "yes" : "no");
+        // fflush(stdout);
+        auto child = ghostWinGetChildWindow();
+        if (child) {
+          if (IsWindowVisible(child)) {
+            ghostSetChildWindowVisible(false);
+            ghostSetChildWindowVisible(true);
+          }
+        }
+      }
     }
     break;
   }

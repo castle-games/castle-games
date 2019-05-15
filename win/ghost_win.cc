@@ -66,6 +66,12 @@ static void _ghostSendNativeOpenUrlEvent(std::string uri) {
   ghostSendJSEvent(kGhostOpenUrlEventName, params.c_str());
 }
 
+static void _focusWindow(HWND window) {
+  SetActiveWindow(window);
+  SetForegroundWindow(window);
+  SetFocus(window);
+}
+
 // win implementation of 'ghost.h'
 
 static float childLeft = 0, childTop = 0, childWidth = 200, childHeight = 200;
@@ -344,7 +350,7 @@ GHOST_EXPORT bool ghostGetBackgrounded() {
 GHOST_EXPORT void ghostFocusChat() {
   auto parent = ghostWinGetMainWindow();
   if (parent) {
-    SetFocus(parent);
+    _focusWindow(parent);
     ghostSendJSEvent("nativeFocusChat", "{}");
   }
 }
@@ -352,7 +358,7 @@ GHOST_EXPORT void ghostFocusChat() {
 void ghostFocusGame() {
   auto child = ghostWinGetChildWindow();
   if (child && GetForegroundWindow() == ghostWinGetMainWindow()) {
-    SetFocus(child);
+    _focusWindow(child);
   }
 }
 
@@ -542,7 +548,7 @@ void ghostStep() {
           ShowWindow(child, msg.body.setChildWindowVisible.visible ? SW_SHOW : SW_HIDE);
           if (GetForegroundWindow() == ghostWinGetMainWindow() &&
               msg.body.setChildWindowVisible.visible) {
-            SetFocus(child);
+                _focusWindow(child);
           }
         }
       } break;
@@ -609,7 +615,7 @@ void ghostStep() {
     if (isFullscreen) {
       if (child) {
         if (parent && GetForegroundWindow() == parent) {
-          SetFocus(child);
+          _focusWindow(child);
         }
       }
     } else {
@@ -647,7 +653,7 @@ void ghostStep() {
         if (channel->getCount() > 0) {
           channel->clear();
           if (parent && GetForegroundWindow() == parent) {
-            SetFocus(child);
+            _focusWindow(child);
           }
         }
       }

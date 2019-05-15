@@ -775,6 +775,8 @@ WIN_SetWindowGrab(_THIS, SDL_Window * window, SDL_bool grabbed)
 void
 WIN_DestroyWindow(_THIS, SDL_Window * window)
 {
+    ghostWinChildWindow = NULL;
+
     SDL_WindowData *data = (SDL_WindowData *) window->driverdata;
 
     if (data) {
