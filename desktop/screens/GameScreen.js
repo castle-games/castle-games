@@ -12,6 +12,7 @@ import GameActionsBar from '~/components/game/GameActionsBar';
 import GameWindow from '~/native/gamewindow';
 import Logs from '~/common/logs';
 import GLLoaderScreen from '~/isometric/components/GLLoaderScreen';
+import Tools from '~/components/game/Tools';
 
 const STYLES_CONTAINER = css`
   background: ${Constants.colors.black};
@@ -23,10 +24,17 @@ const STYLES_CONTAINER = css`
   justify-content: space-between;
 `;
 
-const STYLES_GAME_CONTAINER = css`
+const STYLES_GAME_AND_TOOLS_CONTAINER = css`
+  position: relative;
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: row;
+`;
+
+const STYLES_GAME_CONTAINER = css`
   position: relative;
+  flex: 1;
   align-items: center;
   justify-content: center;
   display: flex;
@@ -307,14 +315,17 @@ class GameScreen extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
-        <div
-          className={STYLES_GAME_CONTAINER}
-          ref={(ref) => {
-            this._gameContainerReference = ref;
-            this.updateGameWindowFrame();
-          }}>
-          {maybeLoadingAnimation}
-          {maybeLoadingOverlay}
+        <div className={STYLES_GAME_AND_TOOLS_CONTAINER}>
+          <div
+            className={STYLES_GAME_CONTAINER}
+            ref={(ref) => {
+              this._gameContainerReference = ref;
+              this.updateGameWindowFrame();
+            }}>
+            {maybeLoadingAnimation}
+            {maybeLoadingOverlay}
+          </div>
+          <Tools />
         </div>
         {actionsBarElement}
       </div>
