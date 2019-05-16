@@ -71,6 +71,70 @@ export const font = {
   monobold: `'sf-mono-bold', Consolas, monaco, monospace`,
 };
 
+export const toolsTheme = {
+  global: {
+    colors: {
+      active: 'rgba(102,102,102,0.5)',
+      background: '#020202',
+      black: '#000000',
+      brand: colors.brand2,
+      control: {
+        dark: colors.brand4,
+        light: '#403216',
+      },
+      focus: colors.brand4,
+      icon: {
+        dark: '#f8f8f8',
+        light: '#666666',
+      },
+      placeholder: '#AAAAAA',
+      text: {
+        dark: '#eeeeee',
+        light: '#444444',
+      },
+      white: '#FFFFFF',
+      'accent-1': colors.brand2,
+      'accent-2': colors.brand1,
+      'accent-3': colors.brand3,
+      'accent-4': colors.brand4,
+      'neutral-1': '#EB6060',
+      'neutral-2': '#01C781',
+      'neutral-3': '#6095EB',
+      'neutral-4': '#FFB200',
+      'status-critical': '#FF3333',
+      'status-error': '#FF3333',
+      'status-warning': '#F7E464',
+      'status-ok': '#7DD892',
+      'status-unknown': '#a8a8a8',
+      'status-disabled': '#a8a8a8',
+    },
+    drop: {
+      background: '#333333',
+    },
+    focus: {
+      border: {
+        color: [null, ';'],
+        width: '2px',
+      },
+    },
+    font: {
+      family: font.mono,
+    },
+    input: {
+      weight: 700,
+    },
+  },
+  anchor: {
+    color: 'control',
+  },
+  layer: {
+    background: '#111111',
+    overlay: {
+      background: 'rgba(48,48,48,0.5)',
+    },
+  },
+};
+
 export const TRANSPARENT_GIF_DATA_URL =
   'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 
