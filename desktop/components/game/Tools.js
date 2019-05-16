@@ -3,7 +3,17 @@ import * as Constants from '~/common/constants';
 import * as NativeUtil from '~/native/nativeutil';
 
 import { css } from 'react-emotion';
-import { Grommet, Box, Heading, Markdown, Paragraph, Text, Button } from 'grommet';
+import {
+  Grommet,
+  Box,
+  Heading,
+  Markdown,
+  Paragraph,
+  Text,
+  Button,
+  FormField,
+  TextInput,
+} from 'grommet';
 
 import Logs from '~/common/logs';
 
@@ -29,13 +39,13 @@ const orderedChildren = (element) => {
   if (!element.children) {
     return [];
   }
-  return Object.values(element.children)
-    .filter((element) => typeof element === 'object')
-    .sort((a, b) => a.order - b.order);
+  return Object.entries(element.children)
+    .filter(([key, child]) => typeof child === 'object')
+    .sort(([keyA, childA], [keyB, childB]) => childA.order - childB.order);
 };
 
 const renderChildren = (element) =>
-  orderedChildren(element).map((childElement) => <Tool element={childElement} />);
+  orderedChildren(element).map(([key, child]) => <Tool key={key} element={child} />);
 
 class ToolBox extends React.PureComponent {
   render() {
@@ -81,17 +91,39 @@ class ToolButton extends React.PureComponent {
   render() {
     const { element } = this.props;
     return (
-      <Button {...element.props} onClick={this._handleClick}>
+      <Button {...element.props} onClick={() => sendEvent(element.pathId, { type: 'onClick' })}>
         {element.props.button}
       </Button>
     );
   }
-
-  _handleClick = () => {
-    sendEvent(this.props.element.pathId, { type: 'click' });
-  }
 }
 elementTypes['button'] = ToolButton;
+
+const renderLabelled = (label, inside) =>
+  label ? <FormField label={label}>{inside}</FormField> : inside;
+
+class ToolTextInput extends React.PureComponent {
+  state = {
+    value: this.props.element.props.value,
+  };
+
+  render() {
+    const { element } = this.props;
+    return renderLabelled(
+      element.props.label,
+      <TextInput
+        {...element.props}
+        value={this.state.value}
+        onChange={(event) => {
+          this.setState({ value: event.target.value });
+          sendEvent(element.pathId, { type: 'onChange', value: event.target.value });
+        }}>
+        {element.props.button}
+      </TextInput>
+    );
+  }
+}
+elementTypes['textInput'] = ToolTextInput;
 
 class ToolPane extends React.PureComponent {
   render() {
@@ -181,13 +213,15 @@ export default class Tools extends React.PureComponent {
   };
 
   render() {
-    Logs.system(JSON.stringify(this.state.root, null, 2));
+    console.log(`render: ${JSON.stringify(this.state.root, null, 2)}`);
 
     return (
       <div className={STYLES_CONTAINER}>
         <Grommet theme={Constants.toolsTheme}>
           {this.state.root.panes ? (
-            Object.values(this.state.root.panes).map((element) => <ToolPane element={element} />)
+            Object.values(this.state.root.panes).map((element) => (
+              <ToolPane key={element.props.name} element={element} />
+            ))
           ) : (
             <Box pad="small">
               <Text>No tools...</Text>
