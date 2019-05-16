@@ -8,25 +8,20 @@ import * as Bridge from '~/common/bridge';
 import * as ExperimentalFeatures from '~/common/experimental-features';
 
 import { css } from 'react-emotion';
-import { Box, Button, Grommet } from 'grommet';
-
-const STYLES_CONTAINER = css`
-  width: 300px;
-  background-color: #ff0000;
-`;
+import { Box, Button, RangeInput, Grommet } from 'grommet';
 
 const theme = {
   global: {
     colors: {
       active: 'rgba(102,102,102,0.5)',
-      background: '#111111',
+      background: '#020202',
       black: '#000000',
-      brand: '#FD6FFF',
+      brand: Constants.colors.brand2,
       control: {
-        dark: '#FFCA58',
+        dark: Constants.colors.brand4,
         light: '#403216',
       },
-      focus: '#FFCA58',
+      focus: Constants.colors.brand4,
       icon: {
         dark: '#f8f8f8',
         light: '#666666',
@@ -37,10 +32,10 @@ const theme = {
         light: '#444444',
       },
       white: '#FFFFFF',
-      'accent-1': '#FD6FFF',
-      'accent-2': '#60EB9F',
-      'accent-3': '#60EBE1',
-      'accent-4': '#FFCA58',
+      'accent-1': Constants.colors.brand2,
+      'accent-2': Constants.colors.brand1,
+      'accent-3': Constants.colors.brand3,
+      'accent-4': Constants.colors.brand4,
       'neutral-1': '#EB6060',
       'neutral-2': '#01C781',
       'neutral-3': '#6095EB',
@@ -62,7 +57,7 @@ const theme = {
       },
     },
     font: {
-      family: 'Arial',
+      family: Constants.font.mono,
     },
     input: {
       weight: 700,
@@ -79,22 +74,21 @@ const theme = {
   },
 };
 
+const STYLES_CONTAINER = css`
+  width: 300px;
+  background-color: ${theme.global.colors.background};
+`;
+
 export default class Tools extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTAINER}>
         <Grommet theme={theme}>
-          <Box align="center" pad="medium">
+          <Box pad="small">
             <Button label="Default" onClick={() => {}} />
           </Box>
-          <Box align="center" pad="medium">
-            <Button label="Anchor" href="#" />
-          </Box>
-          <Box align="center" pad="medium">
-            <Button disabled label="Disabled" onClick={() => {}} />
-          </Box>
-          <Box align="center" pad="medium">
-            <Button primary label="Primary" onClick={() => {}} />
+          <Box pad="small">
+            <RangeInput />
           </Box>
         </Grommet>
       </div>
