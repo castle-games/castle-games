@@ -1,10 +1,15 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
+import * as NativeUtil from '~/native/nativeutil';
 
 import { css } from 'react-emotion';
-import { Grommet, Box, Heading, Markdown, Paragraph, Text } from 'grommet';
+import { Grommet, Box, Heading, Markdown, Paragraph, Text, Button } from 'grommet';
 
 import Logs from '~/common/logs';
+
+const sendEvent = (pathId, event) => {
+  NativeUtil.sendLuaEvent('CASTLE_TOOL_EVENT', { pathId, event });
+};
 
 const elementTypes = {};
 
@@ -71,6 +76,22 @@ class ToolText extends React.PureComponent {
   }
 }
 elementTypes['text'] = ToolText;
+
+class ToolButton extends React.PureComponent {
+  render() {
+    const { element } = this.props;
+    return (
+      <Button {...element.props} onClick={this._handleClick}>
+        {element.props.button}
+      </Button>
+    );
+  }
+
+  _handleClick = () => {
+    sendEvent(this.props.element.pathId, { type: 'click' });
+  }
+}
+elementTypes['button'] = ToolButton;
 
 class ToolPane extends React.PureComponent {
   render() {
