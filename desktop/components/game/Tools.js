@@ -32,6 +32,14 @@ const orderedChildren = (element) => {
 const renderChildren = (element) =>
   orderedChildren(element).map((childElement) => <Tool element={childElement} />);
 
+class ToolBox extends React.PureComponent {
+  render() {
+    const { element } = this.props;
+    return <Box {...element.props}>{renderChildren(element)}</Box>;
+  }
+}
+elementTypes['box'] = ToolBox;
+
 class ToolHeading extends React.PureComponent {
   render() {
     const { element } = this.props;
