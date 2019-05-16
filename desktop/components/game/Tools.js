@@ -17,8 +17,11 @@ import {
 
 import Logs from '~/common/logs';
 
+let nextEventId = 1;
 const sendEvent = (pathId, event) => {
-  NativeUtil.sendLuaEvent('CASTLE_TOOL_EVENT', { pathId, event });
+  const eventId = nextEventId++;
+  NativeUtil.sendLuaEvent('CASTLE_TOOL_EVENT', { pathId, event: { ...event, eventId } });
+  return eventId;
 };
 
 const elementTypes = {};
@@ -105,7 +108,20 @@ const renderLabelled = (label, inside) =>
 class ToolTextInput extends React.PureComponent {
   state = {
     value: this.props.element.props.value,
+    this: this,
   };
+
+  static getDerivedStateFromProps(props, state) {
+    if (
+      props.element.props.value !== state.value &&
+      props.element.lastReportedEventId >= state.this._lastSentEventId
+    ) {
+      return {
+        value: props.element.props.value,
+      };
+    }
+    return null;
+  }
 
   render() {
     const { element } = this.props;
@@ -116,7 +132,10 @@ class ToolTextInput extends React.PureComponent {
         value={this.state.value}
         onChange={(event) => {
           this.setState({ value: event.target.value });
-          sendEvent(element.pathId, { type: 'onChange', value: event.target.value });
+          this._lastSentEventId = sendEvent(element.pathId, {
+            type: 'onChange',
+            value: event.target.value,
+          });
         }}>
         {element.props.button}
       </TextInput>
@@ -213,7 +232,7 @@ export default class Tools extends React.PureComponent {
   };
 
   render() {
-    console.log(`render: ${JSON.stringify(this.state.root, null, 2)}`);
+    // console.log(`render: ${JSON.stringify(this.state.root, null, 2)}`);
 
     return (
       <div className={STYLES_CONTAINER}>
