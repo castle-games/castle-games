@@ -79,6 +79,7 @@ extern double ghostScreenScaling;
 GHOST_EXPORT double ghostGetGlobalScaling();
 GHOST_EXPORT double ghostGetScreenScaling();
 extern bool ghostApplyGlobalScaling;
+extern bool ghostApplyScreenScaling;
 
 extern bool ghostChildWindowCloseEventReceived;
 

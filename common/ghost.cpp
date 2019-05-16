@@ -144,11 +144,15 @@ void ghostGetGameFrame(float frameLeft, float frameTop, float frameWidth, float 
   float W, H;
   ghostGetDimensions(&W, &H);
   if (W == 0 && H == 0) { // Full dimensions
+    ghostScreenScaling = 1;
+    ghostApplyScreenScaling = false;
     *gameLeft = frameLeft;
     *gameTop = frameTop;
     *gameWidth = frameWidth;
     *gameHeight = frameHeight;
   } else { // Fixed dimensions
+    ghostApplyScreenScaling = true;
+
     int up, down;
     ghostGetScalingModes(&up, &down);
     
