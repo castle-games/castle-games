@@ -110,6 +110,8 @@ class ToolSection extends React.PureComponent {
     const { element } = this.props;
     return (
       <Accordion
+        animate={false}
+        activeIndex={element.props.active ? [0] : []}
         onActive={(arr) => sendEvent(element.pathId, { type: 'onActive', value: arr.length > 0 })}>
         <AccordionPanel {...element.props}>
           <Box pad={{ left: 'small', top: 'small', bottom: 'small' }}>
