@@ -42,13 +42,24 @@ const orderedChildren = (element) => {
   if (!element.children) {
     return [];
   }
-  return Object.entries(element.children)
-    .filter(([key, child]) => typeof child === 'object')
-    .sort(([keyA, childA], [keyB, childB]) => childA.order - childB.order);
+  if (element.children.count === 0) {
+    return [];
+  }
+  const result = [];
+  let id = element.children.lastId;
+  while (id !== undefined && id !== null) {
+    const child = element.children[id];
+    if (!child) {
+      break; // This shouldn't really happen...
+    }
+    result.push({ id, child });
+    id = element.children[id].prevId;
+  }
+  return result.reverse();
 };
 
 const renderChildren = (element) =>
-  orderedChildren(element).map(([key, child]) => <Tool key={key} element={child} />);
+  orderedChildren(element).map(({ id, child }) => <Tool key={id} element={child} />);
 
 class ToolBox extends React.PureComponent {
   render() {
@@ -108,13 +119,13 @@ const renderLabelled = (label, inside) =>
 class ToolTextInput extends React.PureComponent {
   state = {
     value: this.props.element.props.value,
-    this: this,
+    lastSentEventId: null,
   };
 
   static getDerivedStateFromProps(props, state) {
     if (
-      props.element.props.value !== state.value &&
-      props.element.lastReportedEventId >= state.this._lastSentEventId
+      state.lastSentEventId === null ||
+      props.element.lastReportedEventId >= state.lastSentEventId
     ) {
       return {
         value: props.element.props.value,
@@ -131,10 +142,12 @@ class ToolTextInput extends React.PureComponent {
         {...element.props}
         value={this.state.value}
         onChange={(event) => {
-          this.setState({ value: event.target.value });
-          this._lastSentEventId = sendEvent(element.pathId, {
-            type: 'onChange',
+          this.setState({
             value: event.target.value,
+            lastSentEventId: sendEvent(element.pathId, {
+              type: 'onChange',
+              value: event.target.value,
+            }),
           });
         }}>
         {element.props.button}
