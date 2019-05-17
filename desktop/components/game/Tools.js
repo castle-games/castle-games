@@ -15,6 +15,8 @@ import {
   TextInput,
   Accordion,
   AccordionPanel,
+  Tabs,
+  Tab,
 } from 'grommet';
 
 import Logs from '~/common/logs';
@@ -131,6 +133,39 @@ class ToolButton extends React.PureComponent {
   }
 }
 elementTypes['button'] = ToolButton;
+
+class ToolTabs extends React.PureComponent {
+  componentDidMount() {
+    const { element } = this.props;
+    const children = orderedChildren(element).filter(({ id, child }) => child.type == 'tab');
+    if (children[0]) {
+      sendEvent(children[0].child.pathId, { type: 'onActive', value: true });
+    }
+  }
+
+  render() {
+    const { element } = this.props;
+
+    const children = orderedChildren(element).filter(({ id, child }) => child.type == 'tab');
+
+    return (
+      <Tabs
+        {...element.props}
+        onActive={(activeIndex) =>
+          children.forEach(({ id, child }, childIndex) =>
+            sendEvent(child.pathId, { type: 'onActive', value: childIndex === activeIndex })
+          )
+        }>
+        {children.map(({ id, child }) => (
+          <Tab key={id} {...child.props}>
+            {renderChildren(child)}
+          </Tab>
+        ))}
+      </Tabs>
+    );
+  }
+}
+elementTypes['tabs'] = ToolTabs;
 
 const renderLabelled = (label, inside) =>
   label ? <FormField label={label}>{inside}</FormField> : inside;
@@ -262,6 +297,7 @@ export default class Tools extends React.PureComponent {
 
   _handleUpdate = (e) => {
     const diff = JSON.parse(e.params);
+    // console.log(`diff: ${JSON.stringify(diff, null, 2)}`);
     this.setState(({ root }) => ({ root: applyDiff(root, diff) }));
   };
 
