@@ -13,6 +13,8 @@ import {
   Button,
   FormField,
   TextInput,
+  Accordion,
+  AccordionPanel,
 } from 'grommet';
 
 import Logs from '~/common/logs';
@@ -100,6 +102,19 @@ class ToolText extends React.PureComponent {
   }
 }
 elementTypes['text'] = ToolText;
+
+class ToolSection extends React.PureComponent {
+  render() {
+    const { element } = this.props;
+    return (
+      <Accordion
+        onActive={(arr) => sendEvent(element.pathId, { type: 'onActive', value: arr.length > 0 })}>
+        <AccordionPanel {...element.props}>{renderChildren(element)}</AccordionPanel>
+      </Accordion>
+    );
+  }
+}
+elementTypes['section'] = ToolSection;
 
 class ToolButton extends React.PureComponent {
   render() {
