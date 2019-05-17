@@ -125,7 +125,7 @@ class ToolTextInput extends React.PureComponent {
   static getDerivedStateFromProps(props, state) {
     if (
       state.lastSentEventId === null ||
-      props.element.lastReportedEventId >= state.lastSentEventId
+      props.element.lastReportedEventId == state.lastSentEventId
     ) {
       return {
         value: props.element.props.value,
@@ -227,9 +227,11 @@ const STYLES_CONTAINER = css`
 `;
 
 export default class Tools extends React.PureComponent {
-  state = {
+  static initialState = {
     root: {},
   };
+
+  state = Tools.initialState;
 
   componentDidMount() {
     window.addEventListener('CASTLE_TOOLS_UPDATE', this._handleUpdate);
@@ -243,6 +245,10 @@ export default class Tools extends React.PureComponent {
     const diff = JSON.parse(e.params);
     this.setState(({ root }) => ({ root: applyDiff(root, diff) }));
   };
+
+  clearState() {
+    this.setState(Tools.initialState);
+  }
 
   render() {
     // console.log(`render: ${JSON.stringify(this.state.root, null, 2)}`);

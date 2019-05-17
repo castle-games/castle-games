@@ -158,6 +158,10 @@ class GameScreen extends React.Component {
   };
 
   _closeGame = async () => {
+    if (this._toolsReference) {
+      this._toolsReference.clearState();
+    }
+
     // close window
     await GameWindow.close();
   };
@@ -166,6 +170,10 @@ class GameScreen extends React.Component {
     await new Promise((resolve) =>
       this.setState({ loaded: false, loadingPhase: 'initializing' }, resolve)
     );
+
+    if (this._toolsReference) {
+      this._toolsReference.clearState();
+    }
 
     Logs.system(`Loading game entry point: ${url}`);
 
@@ -325,7 +333,7 @@ class GameScreen extends React.Component {
             {maybeLoadingAnimation}
             {maybeLoadingOverlay}
           </div>
-          <Tools />
+          <Tools ref={(ref) => (this._toolsReference = ref)} />
         </div>
         {actionsBarElement}
       </div>
