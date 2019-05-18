@@ -111,7 +111,7 @@ class ToolSection extends React.PureComponent {
     return (
       <Accordion
         animate={false}
-        activeIndex={element.props.active ? [0] : []}
+        activeIndex={element.active ? [0] : []}
         onActive={(arr) => sendEvent(element.pathId, { type: 'onActive', value: arr.length > 0 })}>
         <AccordionPanel {...element.props}>
           <Box pad={{ left: 'small', top: 'small', bottom: 'small' }}>
@@ -299,7 +299,7 @@ export default class Tools extends React.PureComponent {
 
   _handleUpdate = (e) => {
     const diff = JSON.parse(e.params);
-    // console.log(`diff: ${JSON.stringify(diff, null, 2)}`);
+    console.log(`diff: ${JSON.stringify(diff, null, 2)}`);
     this.setState(({ root }) => ({ root: applyDiff(root, diff) }));
   };
 
@@ -314,8 +314,8 @@ export default class Tools extends React.PureComponent {
       <div className={STYLES_CONTAINER}>
         <Grommet theme={Constants.toolsTheme}>
           {this.state.root.panes ? (
-            Object.values(this.state.root.panes).map((element) => (
-              <ToolPane key={element.props.name} element={element} />
+            Object.values(this.state.root.panes).map((element, i) => (
+              <ToolPane key={(element.props && element.props.name) || i} element={element} />
             ))
           ) : (
             <Box pad="small">
