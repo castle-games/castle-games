@@ -299,7 +299,7 @@ export default class Tools extends React.PureComponent {
 
   _handleUpdate = (e) => {
     const diff = JSON.parse(e.params);
-    console.log(`diff: ${JSON.stringify(diff, null, 2)}`);
+    // console.log(`diff: ${JSON.stringify(diff, null, 2)}`);
     this.setState(({ root }) => ({ root: applyDiff(root, diff) }));
   };
 
@@ -310,20 +310,14 @@ export default class Tools extends React.PureComponent {
   render() {
     // console.log(`render: ${JSON.stringify(this.state.root, null, 2)}`);
 
-    return (
+    return this.state.root.panes ? (
       <div className={STYLES_CONTAINER}>
         <Grommet theme={Constants.toolsTheme}>
-          {this.state.root.panes ? (
-            Object.values(this.state.root.panes).map((element, i) => (
-              <ToolPane key={(element.props && element.props.name) || i} element={element} />
-            ))
-          ) : (
-            <Box pad="small">
-              <Text>No tools...</Text>
-            </Box>
-          )}
+          {Object.values(this.state.root.panes).map((element, i) => (
+            <ToolPane key={(element.props && element.props.name) || i} element={element} />
+          ))}
         </Grommet>
       </div>
-    );
+    ) : null;
   }
 }
