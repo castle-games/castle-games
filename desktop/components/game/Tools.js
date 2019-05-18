@@ -18,6 +18,7 @@ import {
   Tabs,
   Tab,
   CheckBox,
+  MaskedInput,
 } from 'grommet';
 
 import Logs from '~/common/logs';
@@ -212,6 +213,53 @@ elementTypes['checkBox'] = ToolCheckBox;
 
 const renderFormField = (label, inside) =>
   label ? <FormField label={label}>{inside}</FormField> : inside;
+
+class ToolMaskedInput extends React.PureComponent {
+  state = {
+    value: this.props.element.props.value,
+    lastSentEventId: null,
+  };
+
+  static getDerivedStateFromProps(props, state) {
+    if (
+      state.lastSentEventId === null ||
+      props.element.lastReportedEventId == state.lastSentEventId
+    ) {
+      return {
+        value: props.element.props.value,
+      };
+    }
+    return null;
+  }
+
+  render() {
+    const { element } = this.props;
+
+    return renderFormField(
+      element.props.label,
+      <MaskedInput
+        {...element.props}
+        mask={
+          Array.isArray(element.props.mask)
+            ? element.props.mask.map((o) => (o.regexp ? { ...o, regexp: new RegExp(o.regexp) } : o))
+            : element.props.mask
+        }
+        value={this.state.value}
+        onChange={(event) => {
+          this.setState({
+            value: event.target.value,
+            lastSentEventId: sendEvent(element.pathId, {
+              type: 'onChange',
+              value: event.target.value,
+            }),
+          });
+        }}>
+        {element.props.button}
+      </MaskedInput>
+    );
+  }
+}
+elementTypes['maskedInput'] = ToolMaskedInput;
 
 class ToolTextInput extends React.PureComponent {
   state = {
