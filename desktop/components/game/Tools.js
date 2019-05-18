@@ -17,6 +17,7 @@ import {
   AccordionPanel,
   Tabs,
   Tab,
+  CheckBox,
 } from 'grommet';
 
 import Logs from '~/common/logs';
@@ -169,7 +170,47 @@ class ToolTabs extends React.PureComponent {
 }
 elementTypes['tabs'] = ToolTabs;
 
-const renderLabelled = (label, inside) =>
+class ToolCheckBox extends React.PureComponent {
+  state = {
+    checked: this.props.element.props.checked,
+    lastSentEventId: null,
+  };
+
+  static getDerivedStateFromProps(props, state) {
+    if (
+      state.lastSentEventId === null ||
+      props.element.lastReportedEventId == state.lastSentEventId
+    ) {
+      return {
+        checked: props.element.props.checked,
+      };
+    }
+    return null;
+  }
+
+  render() {
+    const { element } = this.props;
+    return (
+      <CheckBox
+        {...element.props}
+        checked={this.state.checked}
+        onChange={(event) => {
+          this.setState({
+            checked: event.target.checked,
+            lastSentEventId: sendEvent(element.pathId, {
+              type: 'onChange',
+              checked: event.target.checked,
+            }),
+          });
+        }}>
+        {element.props.button}
+      </CheckBox>
+    );
+  }
+}
+elementTypes['checkBox'] = ToolCheckBox;
+
+const renderFormField = (label, inside) =>
   label ? <FormField label={label}>{inside}</FormField> : inside;
 
 class ToolTextInput extends React.PureComponent {
@@ -192,7 +233,7 @@ class ToolTextInput extends React.PureComponent {
 
   render() {
     const { element } = this.props;
-    return renderLabelled(
+    return renderFormField(
       element.props.label,
       <TextInput
         {...element.props}
@@ -299,7 +340,7 @@ export default class Tools extends React.PureComponent {
 
   _handleUpdate = (e) => {
     const diff = JSON.parse(e.params);
-    // console.log(`diff: ${JSON.stringify(diff, null, 2)}`);
+    console.log(`diff: ${JSON.stringify(diff, null, 2)}`);
     this.setState(({ root }) => ({ root: applyDiff(root, diff) }));
   };
 
