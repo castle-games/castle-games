@@ -179,6 +179,8 @@ function main.update(dt)
 
     jsEvents.update()
 
+    castle.ui.update()
+
     updateLogs()
 
     if castle.system.isDesktop() and C.ghostGetBackgrounded() then
@@ -295,6 +297,12 @@ function main.quit(...)
 
     if home then
         home:quit(...)
+    end
+end
+
+function castle.uiupdate()
+    if home and home.globals.castle.uiupdate and home.globals.castle.uiupdate ~= castle.uiupdate then
+        home:safeCall(home.globals.castle.uiupdate)
     end
 end
 

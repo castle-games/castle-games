@@ -333,7 +333,10 @@ class GameScreen extends React.Component {
             {maybeLoadingAnimation}
             {maybeLoadingOverlay}
           </div>
-          <Tools ref={(ref) => (this._toolsReference = ref)} />
+          <Tools
+            ref={(ref) => (this._toolsReference = ref)}
+            onLayoutChange={this.updateGameWindowFrame}
+          />
         </div>
         {actionsBarElement}
       </div>

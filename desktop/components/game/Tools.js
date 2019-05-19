@@ -458,6 +458,7 @@ const STYLES_CONTAINER = css`
 export default class Tools extends React.PureComponent {
   static initialState = {
     root: {},
+    visible: false,
   };
 
   state = Tools.initialState;
@@ -473,7 +474,24 @@ export default class Tools extends React.PureComponent {
   _handleUpdate = (e) => {
     const diff = JSON.parse(e.params);
     console.log(`diff: ${JSON.stringify(diff, null, 2)}`);
-    this.setState(({ root }) => ({ root: applyDiff(root, diff) }));
+
+    const prevVisible = this.state.visible;
+    this.setState(
+      ({ root }) => {
+        const newRoot = applyDiff(root, diff);
+        const newVisible =
+          newRoot.panes &&
+          Object.values(newRoot.panes).find(
+            (element) => element.children && element.children.count > 0
+          );
+        return { root: newRoot, visible: newVisible };
+      },
+      () => {
+        if (prevVisible !== this.state.visible) {
+          this.props.onLayoutChange && this.props.onLayoutChange();
+        }
+      }
+    );
   };
 
   clearState() {
@@ -483,7 +501,7 @@ export default class Tools extends React.PureComponent {
   render() {
     // console.log(`render: ${JSON.stringify(this.state.root, null, 2)}`);
 
-    return this.state.root.panes ? (
+    return this.state.visible ? (
       <div className={STYLES_CONTAINER}>
         <Grommet theme={Constants.toolsTheme}>
           {Object.values(this.state.root.panes).map((element, i) => (

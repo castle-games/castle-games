@@ -358,4 +358,9 @@ end
 castle.setIsAcceptingClients = castle.multiplayer.setIsAcceptingClients -- XXX: Backwards compat...
 
 
+-- ui
+
+castle.ui = require 'ui'
+
+
 return castle
