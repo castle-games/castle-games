@@ -19,6 +19,7 @@ import {
   Tab,
   CheckBox,
   MaskedInput,
+  RadioButtonGroup,
 } from 'grommet';
 
 import Logs from '~/common/logs';
@@ -260,6 +261,48 @@ class ToolMaskedInput extends React.PureComponent {
   }
 }
 elementTypes['maskedInput'] = ToolMaskedInput;
+
+class ToolRadioButtonGroup extends React.PureComponent {
+  state = {
+    value: this.props.element.props.value,
+    lastSentEventId: null,
+  };
+
+  static getDerivedStateFromProps(props, state) {
+    if (
+      state.lastSentEventId === null ||
+      props.element.lastReportedEventId == state.lastSentEventId
+    ) {
+      return {
+        value: props.element.props.value,
+      };
+    }
+    return null;
+  }
+
+  render() {
+    const { element } = this.props;
+    return renderFormField(
+      element.props.label,
+      <RadioButtonGroup
+        {...element.props}
+        name={element.props && element.props.name ? element.props.name : element.pathId}
+        value={this.state.value}
+        onChange={(event) => {
+          this.setState({
+            value: event.target.value,
+            lastSentEventId: sendEvent(element.pathId, {
+              type: 'onChange',
+              value: event.target.value,
+            }),
+          });
+        }}>
+        {element.props.button}
+      </RadioButtonGroup>
+    );
+  }
+}
+elementTypes['radioButtonGroup'] = ToolRadioButtonGroup;
 
 class ToolTextInput extends React.PureComponent {
   state = {
