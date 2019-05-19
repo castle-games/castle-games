@@ -282,8 +282,7 @@ class ToolRadioButtonGroup extends React.PureComponent {
 
   render() {
     const { element } = this.props;
-    return renderFormField(
-      element.props.label,
+    return (
       <RadioButtonGroup
         {...element.props}
         name={element.props && element.props.name ? element.props.name : element.pathId}
