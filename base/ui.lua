@@ -42,6 +42,12 @@ jsEvents.listen('CASTLE_TOOL_EVENT', function(params)
 end)
 
 
+local needsSync = false
+jsEvents.listen('CASTLE_TOOLS_NEEDS_SYNC', function()
+    needsSync = true
+end)
+
+
 local function hash(s)
     if #s <= 22 then
         return s
@@ -590,7 +596,7 @@ function ui.update()
         pop()
         pendingEvents = {}
 
-        local diff = root:__diff(0)
+        local diff = root:__diff(0, needsSync) -- Exact diff if `needsSync`
         if diff ~= nil then
             local diffJson = cjson.encode(diff)
             jsEvents.send('CASTLE_TOOLS_UPDATE', diffJson)
@@ -599,6 +605,7 @@ function ui.update()
             -- io.flush()
         end
         root:__flush()
+        needsSync = false
     end
 end
 

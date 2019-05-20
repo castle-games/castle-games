@@ -542,6 +542,7 @@ export default class Tools extends React.PureComponent {
 
   componentDidMount() {
     window.addEventListener('CASTLE_TOOLS_UPDATE', this._handleUpdate);
+    NativeUtil.sendLuaEvent('CASTLE_TOOLS_NEEDS_SYNC', {});
   }
 
   componentWillUnmount() {
