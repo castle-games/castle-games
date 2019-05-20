@@ -62,8 +62,6 @@ class App extends React.Component {
 
     linkify.add('castle:', 'http:').add('castles:', 'https:');
 
-    this.props.navigator.navigateToGameUrl('file://C:/Users/nikki/Development/ghost-tests/ui/main.lua');
-
     Logs.onFlushLogs(() => {
       const logs = Logs.consume();
       if (logs && logs.length) {
