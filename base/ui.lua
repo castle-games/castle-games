@@ -360,27 +360,27 @@ function ui.checkBox(...)
     return newChecked
 end
 
--- newValue = ui.maskedInput(label, value, props)
+-- newValue = ui.maskedInput(id, value, props)
 -- newValue = ui.maskedInput(value, props)
--- newValue = ui.maskedInput(label, value)
+-- newValue = ui.maskedInput(id, value)
 -- newValue = ui.maskedInput(props)
 function ui.maskedInput(...)
-    local label, value, props
+    local id, value, props
     local nArgs = select('#', ...)
     if nArgs == 3 then
-        label, value, props = ...
+        id, value, props = ...
     elseif nArgs == 2 then
         local arg1, arg2 = ...
         if type(arg2) == 'table' then
             value, props = arg1, arg2
         else
-            label, value = arg1, arg2
+            id, value = arg1, arg2
         end
     elseif nArgs == 1 then
         props = ...
     end
 
-    local c = addChild('maskedInput', label, without(merge({ label = label, value = value }, props), 'onChange'), true)
+    local c = addChild('maskedInput', id, without(merge({ value = value }, props), 'onChange'), true)
 
     local newValue = value
     local es = pendingEvents[c.pathId]
@@ -440,7 +440,7 @@ function ui.rangeInput(...)
         props = ...
     end
 
-    local c = addChild('rangeInput', label, without(merge({ value = value, min = min, max = max, step = step }, props), 'onChange'), true)
+    local c = addChild('rangeInput', id, without(merge({ value = value, min = min, max = max, step = step }, props), 'onChange'), true)
 
     local newValue = value
     local es = pendingEvents[c.pathId]
@@ -488,22 +488,22 @@ function ui.select(...)
     return newValue
 end
 
--- newValue = ui.textInput(label, value, props)
+-- newValue = ui.textInput(id, value, props)
 -- newValue = ui.textInput(value, props)
--- newValue = ui.textInput(label, value)
+-- newValue = ui.textInput(id, value)
 -- newValue = ui.textInput(value)
 -- newValue = ui.textInput(props)
 function ui.textInput(...)
-    local label, value, props
+    local id, value, props
     local nArgs = select('#', ...)
     if nArgs == 3 then
-        label, value, props = ...
+        id, value, props = ...
     elseif nArgs == 2 then
         local arg1, arg2 = ...
         if type(arg2) == 'table' then
             value, props = arg1, arg2
         else
-            label, value = arg1, arg2
+            id, value = arg1, arg2
         end
     elseif nArgs == 1 then
         local arg = ...
@@ -514,7 +514,7 @@ function ui.textInput(...)
         end
     end
 
-    local c = addChild('textInput', label, without(merge({ label = label, value = value }, props), 'onChange'), true)
+    local c = addChild('textInput', id, without(merge({ value = value }, props), 'onChange'), true)
 
     local newValue = value
     local es = pendingEvents[c.pathId]
@@ -532,22 +532,22 @@ function ui.textInput(...)
     return newValue
 end
 
--- newValue = ui.textArea(label, value, props)
+-- newValue = ui.textArea(id, value, props)
 -- newValue = ui.textArea(value, props)
--- newValue = ui.textArea(label, value)
+-- newValue = ui.textArea(id, value)
 -- newValue = ui.textArea(value)
 -- newValue = ui.textArea(props)
 function ui.textArea(...)
-    local label, value, props
+    local id, value, props
     local nArgs = select('#', ...)
     if nArgs == 3 then
-        label, value, props = ...
+        id, value, props = ...
     elseif nArgs == 2 then
         local arg1, arg2 = ...
         if type(arg2) == 'table' then
             value, props = arg1, arg2
         else
-            label, value = arg1, arg2
+            id, value = arg1, arg2
         end
     elseif nArgs == 1 then
         local arg = ...
@@ -558,7 +558,7 @@ function ui.textArea(...)
         end
     end
 
-    local c = addChild('textArea', label, without(merge({ label = label, value = value }, props), 'onChange'), true)
+    local c = addChild('textArea', id, without(merge({ value = value }, props), 'onChange'), true)
 
     local newValue = value
     local es = pendingEvents[c.pathId]
