@@ -315,7 +315,9 @@ static HWND ghostWinMainWindow = NULL;
 static HWND ghostWinChildWindow = NULL;
 
 __declspec(dllexport) void ghostWinSetMainWindow(HWND window) {
-	ghostWinMainWindow = window;
+    if (!ghostWinMainWindow) {
+        ghostWinMainWindow = window;
+    }
 }
 
 __declspec(dllexport) HWND ghostWinGetMainWindow() { return ghostWinMainWindow; }
