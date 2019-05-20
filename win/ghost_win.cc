@@ -635,34 +635,6 @@ void ghostStep() {
       }
     } else {
       if (child) {
-        auto foregroundWindow = GetForegroundWindow();
-        auto focused = foregroundWindow == ghostWinGetMainWindow() || foregroundWindow == child;
-
-        // Handle window resizing if focused
-        if (focused) {
-          RECT currParentRect;
-          if (parent) {
-            GetWindowRect(parent, &currParentRect);
-          }
-
-          // Check for parent window resizes at the native level and apply the delta
-          {
-            if (prevParentRect.right != prevParentRect.left) {
-              auto dw = (currParentRect.right - currParentRect.left) -
-                        (prevParentRect.right - prevParentRect.left);
-              auto dy = (currParentRect.bottom - currParentRect.top) -
-                        (prevParentRect.bottom - prevParentRect.top);
-              childWidth += dw / ghostGlobalScaling;
-              childHeight += dy / ghostGlobalScaling;
-            }
-
-            prevParentRect = currParentRect;
-          }
-
-          // Apply the size!
-          _updateChildWindowRect(currParentRect);
-        }
-
         // Satisfy Lua requests for window focus
         auto channel = love::thread::Channel::getChannel("FOCUS_ME");
         if (channel->getCount() > 0) {
