@@ -11,7 +11,6 @@ import {
   Paragraph,
   Text,
   Button,
-  FormField,
   TextInput,
   Accordion,
   AccordionPanel,
@@ -19,7 +18,7 @@ import {
   Tab,
   CheckBox,
   MaskedInput,
-  RadioButtonGroup,
+  RadioButton,
   RangeInput,
   Select,
   TextArea,
@@ -278,20 +277,27 @@ class ToolRadioButtonGroup extends React.PureComponent {
   render() {
     const { element } = this.props;
     return (
-      <RadioButtonGroup
-        {...element.props}
-        name={element.props && element.props.name ? element.props.name : element.pathId}
-        value={this.state.value}
-        onChange={(event) => {
-          this.setState({
-            value: event.target.value,
-            lastSentEventId: sendEvent(element.pathId, {
-              type: 'onChange',
-              value: event.target.value,
-            }),
-          });
-        }}
-      />
+      <Box gap="small" {...element.props}>
+        {element.props && element.props.options
+          ? element.props.options.map((option) => (
+              <RadioButton
+                label={option}
+                checked={this.state.value === option}
+                onChange={(event) => {
+                  if (event.target.checked) {
+                    this.setState({
+                      value: option,
+                      lastSentEventId: sendEvent(element.pathId, {
+                        type: 'onChange',
+                        value: option,
+                      }),
+                    });
+                  }
+                }}
+              />
+            ))
+          : null}
+      </Box>
     );
   }
 }
