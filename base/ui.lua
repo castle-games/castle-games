@@ -458,6 +458,36 @@ function ui.rangeInput(...)
     return newValue
 end
 
+-- newValue = ui.select(id, value, options)
+-- newValue = ui.select(id, value, options, props)
+-- newValue = ui.select(props)
+function ui.select(...)
+    local id, value, options, props
+    local nArgs = select('#', ...)
+    if nArgs >= 3 then
+        id, value, options, props = ...
+    elseif nArgs == 1 then
+        props = ...
+    end
+
+    local c = addChild('select', id, without(merge({ value = value, options = options }, props), 'onChange'), true)
+
+    local newValue = value
+    local es = pendingEvents[c.pathId]
+    if es then
+        for _, e in ipairs(es) do
+            if e.type == 'onChange' then
+                if props and props.onChange then
+                    newValue = props.onChange(e.value) or e.value
+                else
+                    newValue = e.value
+                end
+            end
+        end
+    end
+    return newValue
+end
+
 -- newValue = ui.textInput(label, value, props)
 -- newValue = ui.textInput(value, props)
 -- newValue = ui.textInput(label, value)

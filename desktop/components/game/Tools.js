@@ -21,6 +21,7 @@ import {
   MaskedInput,
   RadioButtonGroup,
   RangeInput,
+  Select,
 } from 'grommet';
 
 import Logs from '~/common/logs';
@@ -132,9 +133,7 @@ class ToolButton extends React.PureComponent {
   render() {
     const { element } = this.props;
     return (
-      <Button {...element.props} onClick={() => sendEvent(element.pathId, { type: 'onClick' })}>
-        {element.props.button}
-      </Button>
+      <Button {...element.props} onClick={() => sendEvent(element.pathId, { type: 'onClick' })} />
     );
   }
 }
@@ -205,9 +204,8 @@ class ToolCheckBox extends React.PureComponent {
               checked: event.target.checked,
             }),
           });
-        }}>
-        {element.props.button}
-      </CheckBox>
+        }}
+      />
     );
   }
 }
@@ -255,9 +253,8 @@ class ToolMaskedInput extends React.PureComponent {
               value: event.target.value,
             }),
           });
-        }}>
-        {element.props.button}
-      </MaskedInput>
+        }}
+      />
     );
   }
 }
@@ -296,9 +293,8 @@ class ToolRadioButtonGroup extends React.PureComponent {
               value: event.target.value,
             }),
           });
-        }}>
-        {element.props.button}
-      </RadioButtonGroup>
+        }}
+      />
     );
   }
 }
@@ -337,13 +333,51 @@ class ToolRangeInput extends React.PureComponent {
               value: event.target.value,
             }),
           });
-        }}>
-        {element.props.button}
-      </RangeInput>
+        }}
+      />
     );
   }
 }
 elementTypes['rangeInput'] = ToolRangeInput;
+
+class ToolSelect extends React.PureComponent {
+  state = {
+    value: this.props.element.props.value,
+    lastSentEventId: null,
+  };
+
+  static getDerivedStateFromProps(props, state) {
+    if (
+      state.lastSentEventId === null ||
+      props.element.lastReportedEventId == state.lastSentEventId
+    ) {
+      return {
+        value: props.element.props.value,
+      };
+    }
+    return null;
+  }
+
+  render() {
+    const { element } = this.props;
+    return (
+      <Select
+        {...element.props}
+        value={this.state.value}
+        onChange={({ option }) => {
+          this.setState({
+            value: option,
+            lastSentEventId: sendEvent(element.pathId, {
+              type: 'onChange',
+              value: option,
+            }),
+          });
+        }}
+      />
+    );
+  }
+}
+elementTypes['select'] = ToolSelect;
 
 class ToolTextInput extends React.PureComponent {
   state = {
@@ -378,9 +412,8 @@ class ToolTextInput extends React.PureComponent {
               value: event.target.value,
             }),
           });
-        }}>
-        {element.props.button}
-      </TextInput>
+        }}
+      />
     );
   }
 }
@@ -473,7 +506,7 @@ export default class Tools extends React.PureComponent {
 
   _handleUpdate = (e) => {
     const diff = JSON.parse(e.params);
-    console.log(`diff: ${JSON.stringify(diff, null, 2)}`);
+    // console.log(`diff: ${JSON.stringify(diff, null, 2)}`);
 
     const prevVisible = this.state.visible;
     this.setState(
