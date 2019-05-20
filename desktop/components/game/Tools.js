@@ -22,6 +22,7 @@ import {
   RadioButtonGroup,
   RangeInput,
   Select,
+  TextArea,
 } from 'grommet';
 
 import Logs from '~/common/logs';
@@ -211,9 +212,6 @@ class ToolCheckBox extends React.PureComponent {
 }
 elementTypes['checkBox'] = ToolCheckBox;
 
-const renderFormField = (label, inside) =>
-  label ? <FormField label={label}>{inside}</FormField> : inside;
-
 class ToolMaskedInput extends React.PureComponent {
   state = {
     value: this.props.element.props.value,
@@ -235,8 +233,7 @@ class ToolMaskedInput extends React.PureComponent {
   render() {
     const { element } = this.props;
 
-    return renderFormField(
-      element.props.label,
+    return (
       <MaskedInput
         {...element.props}
         mask={
@@ -320,8 +317,7 @@ class ToolRangeInput extends React.PureComponent {
 
   render() {
     const { element } = this.props;
-    return renderFormField(
-      element.props.label,
+    return (
       <RangeInput
         {...element.props}
         value={this.state.value}
@@ -399,8 +395,7 @@ class ToolTextInput extends React.PureComponent {
 
   render() {
     const { element } = this.props;
-    return renderFormField(
-      element.props.label,
+    return (
       <TextInput
         {...element.props}
         value={this.state.value}
@@ -418,6 +413,47 @@ class ToolTextInput extends React.PureComponent {
   }
 }
 elementTypes['textInput'] = ToolTextInput;
+
+class ToolTextArea extends React.PureComponent {
+  state = {
+    value: this.props.element.props.value,
+    lastSentEventId: null,
+  };
+
+  static getDerivedStateFromProps(props, state) {
+    if (
+      state.lastSentEventId === null ||
+      props.element.lastReportedEventId == state.lastSentEventId
+    ) {
+      return {
+        value: props.element.props.value,
+      };
+    }
+    return null;
+  }
+
+  render() {
+    const { element } = this.props;
+    return (
+      <TextArea
+        style={{ height: 150 }}
+        resize="vertical"
+        {...element.props}
+        value={this.state.value}
+        onChange={(event) => {
+          this.setState({
+            value: event.target.value,
+            lastSentEventId: sendEvent(element.pathId, {
+              type: 'onChange',
+              value: event.target.value,
+            }),
+          });
+        }}
+      />
+    );
+  }
+}
+elementTypes['textArea'] = ToolTextArea;
 
 class ToolPane extends React.PureComponent {
   render() {

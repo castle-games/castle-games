@@ -532,6 +532,50 @@ function ui.textInput(...)
     return newValue
 end
 
+-- newValue = ui.textArea(label, value, props)
+-- newValue = ui.textArea(value, props)
+-- newValue = ui.textArea(label, value)
+-- newValue = ui.textArea(value)
+-- newValue = ui.textArea(props)
+function ui.textArea(...)
+    local label, value, props
+    local nArgs = select('#', ...)
+    if nArgs == 3 then
+        label, value, props = ...
+    elseif nArgs == 2 then
+        local arg1, arg2 = ...
+        if type(arg2) == 'table' then
+            value, props = arg1, arg2
+        else
+            label, value = arg1, arg2
+        end
+    elseif nArgs == 1 then
+        local arg = ...
+        if type(arg) == 'table' then
+            props = arg
+        else
+            value = arg
+        end
+    end
+
+    local c = addChild('textArea', label, without(merge({ label = label, value = value }, props), 'onChange'), true)
+
+    local newValue = value
+    local es = pendingEvents[c.pathId]
+    if es then
+        for _, e in ipairs(es) do
+            if e.type == 'onChange' then
+                if props and props.onChange then
+                    newValue = props.onChange(e.value) or e.value
+                else
+                    newValue = e.value
+                end
+            end
+        end
+    end
+    return newValue
+end
+
 
 local lastUpdateTime
 function ui.update()
