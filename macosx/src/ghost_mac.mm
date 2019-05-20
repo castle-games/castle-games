@@ -14,7 +14,11 @@ extern __weak NSWindow *ghostMacChildWindow;
 
 extern "C" NSWindow *ghostMacGetMainWindow() { return ghostMacMainWindow; }
 
-extern "C" void ghostMacSetMainWindow(NSWindow *window) { ghostMacMainWindow = window; }
+extern "C" void ghostMacSetMainWindow(NSWindow *window) {
+  if (!ghostMacMainWindow) {
+    ghostMacMainWindow = window;
+  }
+}
 
 static void _ghostSendNativeOpenUrlEvent(const char *uri) {
   std::stringstream params;
