@@ -13,8 +13,6 @@ import UINavigationLink from '~/components/reusable/UINavigationLink';
 import HomeUpdateBanner from '~/components/home/HomeUpdateBanner';
 import LoginSignupControl from '~/components/LoginSignupControl';
 
-const ENABLE_NOTIFICATIONS = false;
-
 const STYLES_CONTAINER = css`
   font-family: ${Constants.font.default};
   color: ${Constants.colors.white};
@@ -166,13 +164,6 @@ class SocialContainer extends React.Component {
           </div>
 
           <div className={STYLES_CONTAINER_HEADER_RIGHT}>
-            {ENABLE_NOTIFICATIONS ? (
-              <UINavigationLink
-                style={{ marginRight: 16 }}
-                onClick={this._handleToggleNotifications}>
-                Notifications
-              </UINavigationLink>
-            ) : null}
             <span
               className={STYLES_ACTION_BUTTON}
               style={{ color: this.props.mode === 'home' ? 'magenta' : null }}
