@@ -45,7 +45,7 @@ class ProfileScreen extends React.Component {
     navigateToUserProfile: (user) => {},
   };
   state = {
-    mode: this.props.options.mode,
+    mode: this.props.options.mode ? this.props.options.mode : 'games',
     gameToUpdate: null, // if mode === 'update-game'
   };
 
