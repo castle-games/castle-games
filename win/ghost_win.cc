@@ -635,6 +635,11 @@ void ghostStep() {
       }
     } else {
       if (child) {
+        // Keep child window on top
+        if (IsWindowVisible(child)) {
+          BringWindowToTop(child);
+        }
+
         // Satisfy Lua requests for window focus
         auto channel = love::thread::Channel::getChannel("FOCUS_ME");
         if (channel->getCount() > 0) {
