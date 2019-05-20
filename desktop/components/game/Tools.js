@@ -26,6 +26,21 @@ import {
 
 import Logs from '~/common/logs';
 
+const STYLES_NO_FOCUS_BORDER = css`
+  > circle,
+  > ellipse,
+  > line,
+  > path,
+  > polygon,
+  > polyline,
+  > rect {
+    outline: none !important;
+  }
+  border: 0 !important;
+  border-color: rgba(0, 0, 0, 0) !important;
+  box-shadow: none !important;
+`;
+
 let nextEventId = 1;
 const sendEvent = (pathId, event) => {
   const eventId = nextEventId++;
@@ -327,6 +342,7 @@ class ToolRangeInput extends React.PureComponent {
     const { element } = this.props;
     return (
       <RangeInput
+        className={STYLES_NO_FOCUS_BORDER}
         {...element.props}
         value={this.state.value}
         onChange={(event) => {
