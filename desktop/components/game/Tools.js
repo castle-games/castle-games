@@ -279,8 +279,10 @@ class ToolRadioButtonGroup extends React.PureComponent {
     return (
       <Box gap="small" {...element.props}>
         {element.props && element.props.options
-          ? element.props.options.map((option) => (
+          ? element.props.options.map((option, i) => (
               <RadioButton
+                key={i}
+                name={element.pathId}
                 label={option}
                 checked={this.state.value === option}
                 onChange={(event) => {
