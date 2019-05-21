@@ -52,12 +52,14 @@ class HomeScreen extends React.Component {
 
   _getNavigationItems = () => {
     const navigationItems = [];
-    if (ExperimentalFeatures.isEnabled('posts')) {
+    if (ExperimentalFeatures.isEnabled('posts') && this.props.viewer) {
       navigationItems.push({ label: 'Posts', key: 'posts' });
     }
     navigationItems.push({ label: 'Featured games', key: 'games' });
-    navigationItems.push({ label: 'Learning examples', key: 'examples' });
-    navigationItems.push({ label: 'Your history', key: 'history' });
+    navigationItems.push({ label: 'Examples', key: 'examples' });
+    if (this.props.viewer) {
+      navigationItems.push({ label: 'Your history', key: 'history' });
+    }
 
     return navigationItems;
   };
