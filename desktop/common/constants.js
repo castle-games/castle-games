@@ -1,6 +1,24 @@
 export const API_HOST = 'https://api.castle.games';
 export const WEB_HOST = 'https://castle.games';
 
+// TODO(jim): Delete old colors constants after full refactor.
+export const REFACTOR_COLORS = {
+  elements: {
+    servers: `#dcdcdc`,
+    channels: `#ececec`,
+    body: `#ffffff`,
+    border: '#ececec',
+  },
+  text: `#282828`,
+  online: '#3dbb61',
+};
+
+// TODO(jim): Delete old fonts constants after full refactor.
+export const REFACTOR_FONTS = {
+  system:
+    '-apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica, sans-serif',
+};
+
 export const brand = {
   fuchsia: `#ff00ff`,
   yellow: `#feff00`,

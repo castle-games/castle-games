@@ -13,6 +13,12 @@ import UINavigationLink from '~/components/reusable/UINavigationLink';
 import HomeUpdateBanner from '~/components/home/HomeUpdateBanner';
 import LoginSignupControl from '~/components/LoginSignupControl';
 
+// NOTE(jim): Feature flags
+const FEATURE_FLAG_VERSION_TWO = false;
+
+// NOTE(jim): In transit, ChatContainer -> ChatSidebar
+import ChatSidebar from '~/components/chat/ChatSidebar';
+
 const STYLES_CONTAINER = css`
   font-family: ${Constants.font.default};
   color: ${Constants.colors.white};
@@ -102,6 +108,12 @@ class SocialContainer extends React.Component {
   };
 
   render() {
+    // NOTE(jim): WARNING WARNING WARNING
+    // CHAT SIDEBAR REFACTOR IN PROGRESS.
+    if (FEATURE_FLAG_VERSION_TWO) {
+      return <ChatSidebar />;
+    }
+
     let { isLoggedIn, navigateToCurrentUserProfile, viewer } = this.props;
     let contentElement;
     let signInElement;
