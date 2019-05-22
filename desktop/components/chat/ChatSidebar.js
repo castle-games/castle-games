@@ -53,6 +53,10 @@ const STYLES_FIXED_CHAT = css`
 `;
 
 class ChatSidebar extends React.Component {
+  state = {
+    value: '',
+  };
+
   _handleSignIn = () => {
     alert('Should switch the pane to sign in.');
   };
@@ -130,6 +134,17 @@ class ChatSidebar extends React.Component {
     alert('Should update the settings on a direct message');
   };
 
+  _handleChange = (e) => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
+
+  _handleKeyDown = (e) => {
+    if (e.which === 13) {
+      alert(`Should submit ${this.state.value}`);
+      this.setState({ value: '' });
+    }
+  };
+
   render() {
     const { currentUser, navigator, navigation, social, chat } = this.props;
 
@@ -166,7 +181,13 @@ class ChatSidebar extends React.Component {
         <div className={navigation.contentMode !== 'game' ? STYLES_CHAT : STYLES_FIXED_CHAT}>
           <ChatHeader />
           <ChatMessages />
-          <ChatInput />
+          <ChatInput
+            value={this.state.value}
+            name="value"
+            placeholder="Type a message"
+            onChange={this._handleChange}
+            onKeyDown={this._handleKeyDown}
+          />
         </div>
       </React.Fragment>
     );
