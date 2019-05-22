@@ -37,10 +37,11 @@ end
 -- network requests inside it will appear to 'block' inside that coroutine,
 -- while code outside the coroutine still runs. If `onError` is given, calls it
 -- with the error as the only argument when an error occurs during the
--- asynchronous call.
-function network.async(foo, onError)
+-- asynchronous call. Forwards the rest of the arguments to `foo` when it is
+-- called.
+function network.async(foo, onError, ...)
     local outerPortal = getfenv(2).portal
-    tasks:addthread(function()
+    tasks:addthread(function(...)
         coros[coroutine.running()] = true
         copas.setErrorHandler(function(msg, co, skt)
             local stack = debug.traceback(msg)
@@ -54,8 +55,8 @@ function network.async(foo, onError)
                 print('uncaught async error:', msg, co, skt, debug.traceback(co))
             end
         end)
-        foo()
-    end)
+        foo(...)
+    end, ...)
 end
 
 local nextRequestId = 1
