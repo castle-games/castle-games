@@ -168,7 +168,7 @@ class GameScreen extends React.Component {
 
   _openGame = async (url) => {
     await new Promise((resolve) =>
-      this.setState({ loaded: false, loadingPhase: 'initializing' }, resolve)
+      this.setState({ loaded: false, luaNetworkRequests: [], loadingPhase: 'initializing' }, resolve)
     );
 
     if (this._toolsReference) {
