@@ -44,8 +44,9 @@ const STYLES_CHAT = css`
 `;
 
 const STYLES_FIXED_CHAT = css`
-  width: 320px;
+  width: 420px;
   height: 100vh;
+  flex-shrink: 0;
   background: ${Constants.REFACTOR_COLORS.elements.body};
   display: flex;
   flex-direction: column;
