@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
+import * as LayoutUtilities from '~/common/layout-utilities';
 
 import { css } from 'react-emotion';
 
@@ -147,8 +148,10 @@ class ChatSidebar extends React.Component {
 
   render() {
     const { currentUser, navigator, navigation, social, chat } = this.props;
-
+    // TODO(jim): Development only
     console.log({ currentUser, navigator, navigation, social, chat });
+
+    const layoutMode = LayoutUtilities.getLayoutMode(navigation.contentMode);
 
     return (
       <React.Fragment>
@@ -178,7 +181,7 @@ class ChatSidebar extends React.Component {
             onUpdateDirectMessage={this._handleUpdateDirectMessage}
           />
         </div>
-        <div className={navigation.contentMode !== 'game' ? STYLES_CHAT : STYLES_FIXED_CHAT}>
+        <div className={layoutMode === 'FLUID_CHAT' ? STYLES_CHAT : STYLES_FIXED_CHAT}>
           <ChatHeader />
           <ChatMessages />
           <ChatInput

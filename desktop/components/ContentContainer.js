@@ -3,6 +3,7 @@ import * as Constants from '~/common/constants';
 import * as Strings from '~/common/strings';
 import * as Urls from '~/common/urls';
 import * as FeatureFlags from '~/common/feature-flags';
+import * as LayoutUtilities from '~/common/layout-utilities';
 
 import { css } from 'react-emotion';
 import { DevelopmentSetterContext } from '~/contexts/DevelopmentContext';
@@ -20,7 +21,8 @@ import ContentNavigationBar from '~/components/ContentNavigationBar';
 import NowPlayingBar from '~/components/NowPlayingBar';
 import EditPostScreen from '~/screens/EditPostScreen';
 
-const STYLES_CONTAINER = css`
+// TODO(jim): Delete this after refactor.
+const LEGACY_STYLES_CONTAINER = css`
   font-family: ${Constants.font.default};
   background: ${Constants.colors.default};
   width: 100%;
@@ -28,7 +30,16 @@ const STYLES_CONTAINER = css`
   flex-direction: column;
 `;
 
-const STYLES_CONTAINER_REFACTORED = css`
+const STYLES_CONTAINER_FLUID = css`
+  font-family: ${Constants.font.default};
+  background: ${Constants.colors.default};
+  border-left: 1px solid ${Constants.REFACTOR_COLORS.elements.border};
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+`;
+
+const STYLES_CONTAINER_FIXED_WITH_BORDER = css`
   width: 480px;
   flex-shrink: 0;
   border-left: 1px solid ${Constants.REFACTOR_COLORS.elements.border};
@@ -143,11 +154,12 @@ class ContentContainer extends React.Component {
     }
 
     // NOTE(jim): For some cases the right sidebars content has to expand to be fluid.
-    let rootLevelClassName = STYLES_CONTAINER;
+    let rootLevelClassName = LEGACY_STYLES_CONTAINER;
     if (FeatureFlags.VERSION_TWO) {
-      rootLevelClassName = STYLES_CONTAINER_REFACTORED;
-      if (this.props.mode === 'game') {
-        rootLevelClassName = STYLES_CONTAINER;
+      rootLevelClassName = STYLES_CONTAINER_FLUID;
+
+      if (LayoutUtilities.getLayoutMode(this.props.mode) === 'FLUID_CHAT') {
+        rootLevelClassName = STYLES_CONTAINER_FIXED_WITH_BORDER;
       }
     }
 
