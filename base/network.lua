@@ -477,7 +477,13 @@ end
 -- Perform any updates the network system has to do -- this is run by base automatically and you
 -- shouldn't have to call it...
 function network.update(dt)
+    if network.resume then
+        network.resume()
+    end
     copas.step(0)
+    if network.pause then
+        network.pause()
+    end
 end
 
 -- Expose `fetchEntries` for use in soft-reloading in `'main'`
