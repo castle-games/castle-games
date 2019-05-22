@@ -142,8 +142,17 @@ class ContentContainer extends React.Component {
       nowPlayingElement = <NowPlayingBar game={this.props.game} navigator={this.props.navigator} />;
     }
 
+    // NOTE(jim): For some cases the right sidebars content has to expand to be fluid.
+    let rootLevelClassName = STYLES_CONTAINER;
+    if (FeatureFlags.VERSION_TWO) {
+      rootLevelClassName = STYLES_CONTAINER_REFACTORED;
+      if (this.props.mode === 'game') {
+        rootLevelClassName = STYLES_CONTAINER;
+      }
+    }
+
     return (
-      <div className={FeatureFlags.VERSION_TWO ? STYLES_CONTAINER_REFACTORED : STYLES_CONTAINER}>
+      <div className={rootLevelClassName}>
         {this.props.mode === 'profile' ||
         this.props.mode === 'home' ||
         this.props.mode === 'create' ? (

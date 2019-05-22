@@ -6,7 +6,7 @@ import { css } from 'react-emotion';
 import { ConnectionStatus } from 'castle-chat-lib';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { SocialContext } from '~/contexts/SocialContext';
-import { NavigatorContext } from '~/contexts/NavigationContext';
+import { NavigatorContext, NavigationContext } from '~/contexts/NavigationContext';
 import { ChatContext } from '~/contexts/ChatContext';
 
 import ChatHeader from '~/components/chat/ChatHeader';
@@ -19,7 +19,7 @@ import ChatSidebarDirectMessages from '~/components/chat/ChatSidebarDirectMessag
 import ChatSidebarNavigation from '~/components/chat/ChatSidebarNavigation';
 
 const STYLES_SIDEBAR = css`
-  width: 228px;
+  width: 188px;
   height: 100vh;
   flex-shrink: 0;
   background: ${Constants.REFACTOR_COLORS.elements.channels};
@@ -34,6 +34,16 @@ const STYLES_SIDEBAR = css`
 const STYLES_CHAT = css`
   min-width: 25%;
   width: 100%;
+  height: 100vh;
+  background: ${Constants.REFACTOR_COLORS.elements.body};
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+`;
+
+const STYLES_FIXED_CHAT = css`
+  width: 320px;
   height: 100vh;
   background: ${Constants.REFACTOR_COLORS.elements.body};
   display: flex;
@@ -121,9 +131,9 @@ class ChatSidebar extends React.Component {
   };
 
   render() {
-    const { currentUser, navigator, social, chat } = this.props;
+    const { currentUser, navigator, navigation, social, chat } = this.props;
 
-    console.log({ currentUser, navigator, social, chat });
+    console.log({ currentUser, navigator, navigation, social, chat });
 
     return (
       <React.Fragment>
@@ -153,7 +163,7 @@ class ChatSidebar extends React.Component {
             onUpdateDirectMessage={this._handleUpdateDirectMessage}
           />
         </div>
-        <div className={STYLES_CHAT}>
+        <div className={navigation.contentMode !== 'game' ? STYLES_CHAT : STYLES_FIXED_CHAT}>
           <ChatHeader />
           <ChatMessages />
           <ChatInput />
@@ -175,16 +185,23 @@ export default class ChatSidebarWithContext extends React.Component {
                   <ChatContext.Consumer>
                     {(chat) => {
                       return (
-                        <NavigatorContext.Consumer>
-                          {(navigator) => (
-                            <ChatSidebar
-                              currentUser={currentUser}
-                              navigator={navigator}
-                              social={social}
-                              chat={chat}
-                            />
-                          )}
-                        </NavigatorContext.Consumer>
+                        <NavigationContext.Consumer>
+                          {(navigation) => {
+                            return (
+                              <NavigatorContext.Consumer>
+                                {(navigator) => (
+                                  <ChatSidebar
+                                    currentUser={currentUser}
+                                    navigator={navigator}
+                                    navigation={navigation}
+                                    social={social}
+                                    chat={chat}
+                                  />
+                                )}
+                              </NavigatorContext.Consumer>
+                            );
+                          }}
+                        </NavigationContext.Consumer>
                       );
                     }}
                   </ChatContext.Consumer>
