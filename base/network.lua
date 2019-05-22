@@ -478,12 +478,12 @@ end
 -- Perform any updates the network system has to do -- this is run by base automatically and you
 -- shouldn't have to call it...
 function network.update(dt)
-    if network.resume then
-        network.resume()
+    if network.resumed then
+        network.resumed()
     end
     copas.step(0)
-    if network.pause then
-        network.pause()
+    if network.paused then
+        network.paused()
     end
 end
 
