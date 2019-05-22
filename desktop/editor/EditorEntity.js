@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { Editor } from 'slate-react';
 
-export default class EntityEntity extends React.Component {
+export default class EditorEntity extends React.Component {
   render() {
     return (
       <Editor
