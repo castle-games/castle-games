@@ -9,21 +9,157 @@ import { SocialContext } from '~/contexts/SocialContext';
 import { NavigatorContext } from '~/contexts/NavigationContext';
 import { ChatContext } from '~/contexts/ChatContext';
 
-const STYLES_CONTAINER = css`
-  flex-shrink: 0;
+import ChatHeader from '~/components/chat/ChatHeader';
+import ChatMessages from '~/components/chat/ChatMessages';
+import ChatInput from '~/components/chat/ChatInput';
+
+import ChatSidebarHeader from '~/components/chat/ChatSidebarHeader';
+import ChatSidebarChannels from '~/components/chat/ChatSidebarChannels';
+import ChatSidebarDirectMessages from '~/components/chat/ChatSidebarDirectMessages';
+import ChatSidebarNavigation from '~/components/chat/ChatSidebarNavigation';
+
+const STYLES_SIDEBAR = css`
+  width: 228px;
   height: 100vh;
-  font-family: ${Constants.REFACTOR_FONTS.system};
+  flex-shrink: 0;
   background: ${Constants.REFACTOR_COLORS.elements.channels};
-  color: ${Constants.REFACTOR_COLORS.text};
+  overflow-y: scroll;
+  overflow-wrap: break-word;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+const STYLES_CHAT = css`
+  min-width: 25%;
+  width: 100%;
+  height: 100vh;
+  background: ${Constants.REFACTOR_COLORS.elements.body};
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
 `;
 
 class ChatSidebar extends React.Component {
+  _handleSignIn = () => {
+    alert('Should switch the pane to sign in.');
+  };
+
+  _handleSignOut = () => {
+    alert('Should sign the user out');
+  };
+
+  _handleNavigateToMakeGame = () => {
+    alert('Should navigate to making a game');
+  };
+
+  _handleNavigateToFeaturedGames = () => {
+    alert('Should navigate to featured games');
+  };
+
+  _handleNavigateToAllPosts = () => {
+    alert('Should navigate to all posts');
+  };
+
+  _handleNavigateToHistory = () => {
+    alert('Should navigate to history');
+  };
+
+  _handleOpenBrowserForDocumentation = () => {
+    alert('Should open a browser window to view documentation');
+  };
+
+  _handleHideOptions = () => {
+    alert('Should hide options');
+  };
+
+  _handleShowChannelOptions = () => {
+    alert('Should show options available to the user when they click channel options');
+  };
+
+  _handleShowDirectMessageOptions = () => {
+    alert('Should show direct message options to the user when they click direct message options');
+  };
+
+  _handleAddChannel = () => {
+    alert('Should add a new channel if you have the privileges');
+  };
+
+  _handleHideChannel = () => {
+    alert('Should hide the channel from the list on the left');
+  };
+
+  // NOTE(jim): Castle admin only for now.
+  _handleDeleteChannel = () => {
+    alert('Should delete channels');
+  };
+
+  // NOTE(jim): Castle admin only for now.
+  _handleUpdateChannel = () => {
+    alert('Should update the settings on a channel');
+  };
+
+  _handleAddDirectMessage = () => {
+    alert('Should start new direct messages with a user');
+  };
+
+  _handleHideDirectMessages = () => {
+    alert('Should hide direct messages from the sidebar');
+  };
+
+  // NOTE(jim): Any member of a direct message should be able to permanently delete
+  // a DM.
+  _handleDeleteDirectMessage = () => {
+    alert('Should permanently delete direct message');
+  };
+
+  // NOTE(jim): Any member of a direct message should be able to update the settings of a DM.
+  _handleUpdateDirectMessage = () => {
+    alert('Should update the settings on a direct message');
+  };
+
   render() {
     const { currentUser, navigator, social, chat } = this.props;
 
     console.log({ currentUser, navigator, social, chat });
 
-    return <div className={STYLES_CONTAINER}>.</div>;
+    return (
+      <React.Fragment>
+        <div className={STYLES_SIDEBAR}>
+          <ChatSidebarHeader onLogIn={this._handleSignIn} onSignOut={this._handleSignOut} />
+          <ChatSidebarNavigation
+            onNavigateToMakeGame={this._handleNavigateToMakeGame}
+            onNavigateToFeaturedGames={this._handleNavigateToFeaturedGames}
+            onNavigateToAllPosts={this._handleNavigateToAllPosts}
+            onNavigateToHistory={this._handleNavigateToHistory}
+            onOpenBrowserForDocumentation={this._handleOpenBrowserForDocumentation}
+          />
+          <ChatSidebarChannels
+            onHideOptions={this._handleHideOptions}
+            onShowOptions={this._handleShowChannelOptions}
+            onAddChannel={this._handleAddChannel}
+            onHideChannel={this._handleHideChannel}
+            onDeleteChannel={this._handleDeleteChannel}
+            onUpdateChannel={this._handleUpdateChannel}
+          />
+          <ChatSidebarDirectMessages
+            onHideOptions={this._handleHideOptions}
+            onShowOptions={this._handleShowDirectMessageOptions}
+            onAddDirectMessage={this._handleAddDirectMessage}
+            onHideDirectMessage={this._handleHideDirectMessages}
+            onDeleteDirectMessage={this._handleDeleteDirectMessage}
+            onUpdateDirectMessage={this._handleUpdateDirectMessage}
+          />
+        </div>
+        <div className={STYLES_CHAT}>
+          <ChatHeader />
+          <ChatMessages />
+          <ChatInput />
+        </div>
+      </React.Fragment>
+    );
   }
 }
 

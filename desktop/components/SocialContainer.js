@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as SVG from '~/components/primitives/svg';
+import * as FeatureFlags from '~/common/feature-flags';
 
 import { css } from 'react-emotion';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
@@ -12,9 +13,6 @@ import Viewer from '~/components/Viewer';
 import UINavigationLink from '~/components/reusable/UINavigationLink';
 import HomeUpdateBanner from '~/components/home/HomeUpdateBanner';
 import LoginSignupControl from '~/components/LoginSignupControl';
-
-// NOTE(jim): Feature flags
-const FEATURE_FLAG_VERSION_TWO = false;
 
 // NOTE(jim): In transit, ChatContainer -> ChatSidebar
 import ChatSidebar from '~/components/chat/ChatSidebar';
@@ -110,7 +108,7 @@ class SocialContainer extends React.Component {
   render() {
     // NOTE(jim): WARNING WARNING WARNING
     // CHAT SIDEBAR REFACTOR IN PROGRESS.
-    if (FEATURE_FLAG_VERSION_TWO) {
+    if (FeatureFlags.VERSION_TWO) {
       return <ChatSidebar />;
     }
 

@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as Strings from '~/common/strings';
 import * as Urls from '~/common/urls';
+import * as FeatureFlags from '~/common/feature-flags';
 
 import { css } from 'react-emotion';
 import { DevelopmentSetterContext } from '~/contexts/DevelopmentContext';
@@ -25,6 +26,12 @@ const STYLES_CONTAINER = css`
   width: 100%;
   display: flex;
   flex-direction: column;
+`;
+
+const STYLES_CONTAINER_REFACTORED = css`
+  width: 480px;
+  flex-shrink: 0;
+  border-left: 1px solid ${Constants.REFACTOR_COLORS.elements.border};
 `;
 
 class ContentContainer extends React.Component {
@@ -136,7 +143,7 @@ class ContentContainer extends React.Component {
     }
 
     return (
-      <div className={STYLES_CONTAINER}>
+      <div className={FeatureFlags.VERSION_TWO ? STYLES_CONTAINER_REFACTORED : STYLES_CONTAINER}>
         {this.props.mode === 'profile' ||
         this.props.mode === 'home' ||
         this.props.mode === 'create' ? (
