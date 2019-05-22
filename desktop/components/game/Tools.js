@@ -3,43 +3,19 @@ import * as Constants from '~/common/constants';
 import * as NativeUtil from '~/native/nativeutil';
 
 import { css } from 'react-emotion';
-import {
-  Grommet,
-  Box,
-  Heading,
-  Markdown,
-  Paragraph,
-  Text,
-  Button,
-  TextInput,
-  Accordion,
-  AccordionPanel,
-  Tabs,
-  Tab,
-  CheckBox,
-  MaskedInput,
-  RadioButton,
-  RangeInput,
-  Select,
-  TextArea,
-} from 'grommet';
 
 import Logs from '~/common/logs';
 
-const STYLES_NO_FOCUS_BORDER = css`
-  > circle,
-  > ellipse,
-  > line,
-  > path,
-  > polygon,
-  > polyline,
-  > rect {
-    outline: none !important;
-  }
-  border: 0 !important;
-  border-color: rgba(0, 0, 0, 0) !important;
-  box-shadow: none !important;
-`;
+import {
+  Box,
+  Grommet,
+  TextInput,
+} from 'grommet';
+
+
+//
+// Infrastructure
+//
 
 let nextEventId = 1;
 const sendEvent = (pathId, event) => {
@@ -85,319 +61,49 @@ const orderedChildren = (element) => {
 const renderChildren = (element) =>
   orderedChildren(element).map(({ id, child }) => <Tool key={id} element={child} />);
 
-class ToolBox extends React.PureComponent {
-  render() {
-    const { element } = this.props;
-    return <Box {...element.props}>{renderChildren(element)}</Box>;
-  }
-}
-elementTypes['box'] = ToolBox;
-
-class ToolHeading extends React.PureComponent {
-  render() {
-    const { element } = this.props;
-    return <Heading {...element.props}>{element.props.text}</Heading>;
-  }
-}
-elementTypes['heading'] = ToolHeading;
-
-class ToolMarkdown extends React.PureComponent {
-  render() {
-    const { element } = this.props;
-    return <Markdown {...element.props}>{element.props.text}</Markdown>;
-  }
-}
-elementTypes['markdown'] = ToolMarkdown;
-
-class ToolParagraph extends React.PureComponent {
-  render() {
-    const { element } = this.props;
-    return <Paragraph {...element.props}>{element.props.text}</Paragraph>;
-  }
-}
-elementTypes['paragraph'] = ToolParagraph;
-
-class ToolText extends React.PureComponent {
-  render() {
-    const { element } = this.props;
-    return <Text {...element.props}>{element.props.text}</Text>;
-  }
-}
-elementTypes['text'] = ToolText;
-
-class ToolSection extends React.PureComponent {
+class ToolPane extends React.PureComponent {
   render() {
     const { element } = this.props;
     return (
-      <Accordion
-        animate={false}
-        activeIndex={element.active ? [0] : []}
-        onActive={(arr) => sendEvent(element.pathId, { type: 'onActive', value: arr.length > 0 })}>
-        <AccordionPanel {...element.props}>
-          <Box pad={{ left: 'small', top: 'small', bottom: 'small' }}>
-            {renderChildren(element)}
-          </Box>
-        </AccordionPanel>
-      </Accordion>
-    );
-  }
-}
-elementTypes['section'] = ToolSection;
-
-class ToolButton extends React.PureComponent {
-  render() {
-    const { element } = this.props;
-    return (
-      <Button {...element.props} onClick={() => sendEvent(element.pathId, { type: 'onClick' })} />
-    );
-  }
-}
-elementTypes['button'] = ToolButton;
-
-class ToolTabs extends React.PureComponent {
-  componentDidMount() {
-    const { element } = this.props;
-    const children = orderedChildren(element).filter(({ id, child }) => child.type == 'tab');
-    if (children[0]) {
-      sendEvent(children[0].child.pathId, { type: 'onActive', value: true });
-    }
-  }
-
-  render() {
-    const { element } = this.props;
-
-    const children = orderedChildren(element).filter(({ id, child }) => child.type == 'tab');
-
-    return (
-      <Tabs
-        {...element.props}
-        onActive={(activeIndex) =>
-          children.forEach(({ id, child }, childIndex) =>
-            sendEvent(child.pathId, { type: 'onActive', value: childIndex === activeIndex })
-          )
-        }>
-        {children.map(({ id, child }) => (
-          <Tab key={id} {...child.props}>
-            {renderChildren(child)}
-          </Tab>
-        ))}
-      </Tabs>
-    );
-  }
-}
-elementTypes['tabs'] = ToolTabs;
-
-class ToolCheckBox extends React.PureComponent {
-  state = {
-    checked: this.props.element.props.checked,
-    lastSentEventId: null,
-  };
-
-  static getDerivedStateFromProps(props, state) {
-    if (
-      state.lastSentEventId === null ||
-      props.element.lastReportedEventId == state.lastSentEventId
-    ) {
-      return {
-        checked: props.element.props.checked,
-      };
-    }
-    return null;
-  }
-
-  render() {
-    const { element } = this.props;
-    return (
-      <CheckBox
-        {...element.props}
-        checked={this.state.checked}
-        onChange={(event) => {
-          this.setState({
-            checked: event.target.checked,
-            lastSentEventId: sendEvent(element.pathId, {
-              type: 'onChange',
-              checked: event.target.checked,
-            }),
-          });
-        }}
-      />
-    );
-  }
-}
-elementTypes['checkBox'] = ToolCheckBox;
-
-class ToolMaskedInput extends React.PureComponent {
-  state = {
-    value: this.props.element.props.value,
-    lastSentEventId: null,
-  };
-
-  static getDerivedStateFromProps(props, state) {
-    if (
-      state.lastSentEventId === null ||
-      props.element.lastReportedEventId == state.lastSentEventId
-    ) {
-      return {
-        value: props.element.props.value,
-      };
-    }
-    return null;
-  }
-
-  render() {
-    const { element } = this.props;
-
-    return (
-      <MaskedInput
-        {...element.props}
-        mask={
-          Array.isArray(element.props.mask)
-            ? element.props.mask.map((o) => (o.regexp ? { ...o, regexp: new RegExp(o.regexp) } : o))
-            : element.props.mask
-        }
-        value={this.state.value}
-        onChange={(event) => {
-          this.setState({
-            value: event.target.value,
-            lastSentEventId: sendEvent(element.pathId, {
-              type: 'onChange',
-              value: event.target.value,
-            }),
-          });
-        }}
-      />
-    );
-  }
-}
-elementTypes['maskedInput'] = ToolMaskedInput;
-
-class ToolRadioButtonGroup extends React.PureComponent {
-  state = {
-    value: this.props.element.props.value,
-    lastSentEventId: null,
-  };
-
-  static getDerivedStateFromProps(props, state) {
-    if (
-      state.lastSentEventId === null ||
-      props.element.lastReportedEventId == state.lastSentEventId
-    ) {
-      return {
-        value: props.element.props.value,
-      };
-    }
-    return null;
-  }
-
-  render() {
-    const { element } = this.props;
-    return (
-      <Box gap="small" {...element.props}>
-        {element.props && element.props.options
-          ? element.props.options.map((option, i) => (
-              <RadioButton
-                key={i}
-                name={element.pathId}
-                label={option}
-                checked={this.state.value === option}
-                onChange={(event) => {
-                  if (event.target.checked) {
-                    this.setState({
-                      value: option,
-                      lastSentEventId: sendEvent(element.pathId, {
-                        type: 'onChange',
-                        value: option,
-                      }),
-                    });
-                  }
-                }}
-              />
-            ))
-          : null}
+      <Box pad="small" {...element.props}>
+        {renderChildren(element)}
       </Box>
     );
   }
 }
-elementTypes['radioButtonGroup'] = ToolRadioButtonGroup;
+elementTypes['pane'] = ToolPane;
 
-class ToolRangeInput extends React.PureComponent {
-  state = {
-    value: this.props.element.props.value,
-    lastSentEventId: null,
-  };
 
-  static getDerivedStateFromProps(props, state) {
-    if (
-      state.lastSentEventId === null ||
-      props.element.lastReportedEventId == state.lastSentEventId
-    ) {
-      return {
-        value: props.element.props.value,
-      };
-    }
-    return null;
-  }
+//
+// Components
+//
 
-  render() {
-    const { element } = this.props;
-    return (
-      <RangeInput
-        className={STYLES_NO_FOCUS_BORDER}
-        {...element.props}
-        value={this.state.value}
-        onChange={(event) => {
-          this.setState({
-            value: event.target.value,
-            lastSentEventId: sendEvent(element.pathId, {
-              type: 'onChange',
-              value: event.target.value,
-            }),
-          });
-        }}
-      />
-    );
-  }
-}
-elementTypes['rangeInput'] = ToolRangeInput;
+// class ToolBox extends React.PureComponent {
+//   render() {
+//     const { element } = this.props;
+//     return <Box {...element.props}>{renderChildren(element)}</Box>;
+//   }
+// }
+// elementTypes['box'] = ToolBox;
 
-class ToolSelect extends React.PureComponent {
-  state = {
-    value: this.props.element.props.value,
-    lastSentEventId: null,
-  };
-
-  static getDerivedStateFromProps(props, state) {
-    if (
-      state.lastSentEventId === null ||
-      props.element.lastReportedEventId == state.lastSentEventId
-    ) {
-      return {
-        value: props.element.props.value,
-      };
-    }
-    return null;
-  }
-
-  render() {
-    const { element } = this.props;
-    return (
-      <Select
-        {...element.props}
-        value={this.state.value}
-        onChange={({ option }) => {
-          this.setState({
-            value: option,
-            lastSentEventId: sendEvent(element.pathId, {
-              type: 'onChange',
-              value: option,
-            }),
-          });
-        }}
-      />
-    );
-  }
-}
-elementTypes['select'] = ToolSelect;
+// class ToolSection extends React.PureComponent {
+//   render() {
+//     const { element } = this.props;
+//     return (
+//       <Accordion
+//         animate={false}
+//         activeIndex={element.active ? [0] : []}
+//         onActive={(arr) => sendEvent(element.pathId, { type: 'onActive', value: arr.length > 0 })}>
+//         <AccordionPanel {...element.props}>
+//           <Box pad={{ left: 'small', top: 'small', bottom: 'small' }}>
+//             {renderChildren(element)}
+//           </Box>
+//         </AccordionPanel>
+//       </Accordion>
+//     );
+//   }
+// }
+// elementTypes['section'] = ToolSection;
 
 class ToolTextInput extends React.PureComponent {
   state = {
@@ -438,58 +144,10 @@ class ToolTextInput extends React.PureComponent {
 }
 elementTypes['textInput'] = ToolTextInput;
 
-class ToolTextArea extends React.PureComponent {
-  state = {
-    value: this.props.element.props.value,
-    lastSentEventId: null,
-  };
 
-  static getDerivedStateFromProps(props, state) {
-    if (
-      state.lastSentEventId === null ||
-      props.element.lastReportedEventId == state.lastSentEventId
-    ) {
-      return {
-        value: props.element.props.value,
-      };
-    }
-    return null;
-  }
-
-  render() {
-    const { element } = this.props;
-    return (
-      <TextArea
-        style={{ height: 150 }}
-        resize="vertical"
-        {...element.props}
-        value={this.state.value}
-        onChange={(event) => {
-          this.setState({
-            value: event.target.value,
-            lastSentEventId: sendEvent(element.pathId, {
-              type: 'onChange',
-              value: event.target.value,
-            }),
-          });
-        }}
-      />
-    );
-  }
-}
-elementTypes['textArea'] = ToolTextArea;
-
-class ToolPane extends React.PureComponent {
-  render() {
-    const { element } = this.props;
-    return (
-      <Box pad="small" {...element.props}>
-        {renderChildren(element)}
-      </Box>
-    );
-  }
-}
-elementTypes['pane'] = ToolPane;
+//
+// Container
+//
 
 const applyDiff = (t, diff) => {
   if (diff == null) {
