@@ -20,7 +20,7 @@ const STYLES_HEADING = css`
   font-size: 16px;
   font-weight: 600;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   cursor: pointer;
 
   :hover {
@@ -68,8 +68,8 @@ export default class ChatSidebarHeader extends React.Component {
   render() {
     return (
       <header className={STYLES_HEADER}>
-        <h2 className={STYLES_HEADING}>
-          [bind server name] <SVG.Menu size="14px" style={{ margin: '0 0 0 6px' }} />
+        <h2 className={STYLES_HEADING} onClick={this.props.onShowOptions}>
+          [bind server name] <SVG.Menu size="14px" style={{ margin: '3px 0 0 6px' }} />
         </h2>
         <div className={STYLES_AUTH}>
           <span className={STYLES_AVATAR} />

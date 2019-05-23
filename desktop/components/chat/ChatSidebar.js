@@ -57,6 +57,7 @@ const STYLES_FIXED_CHAT = css`
 class ChatSidebar extends React.Component {
   state = {
     value: '',
+    mode: 'CHAT',
   };
 
   _handleSignIn = () => {
@@ -87,9 +88,9 @@ class ChatSidebar extends React.Component {
     alert('Should open a browser window to view documentation');
   };
 
-  _handleHideOptions = () => {
-    alert('Should hide options');
-  };
+  _handleShowOptions = () => this.setState({ mode: 'OPTIONS' });
+
+  _handleHideOptions = () => this.setState({ mode: 'CHAT' });
 
   _handleShowChannelOptions = () => {
     alert('Should show options available to the user when they click channel options');
@@ -147,6 +148,49 @@ class ChatSidebar extends React.Component {
     }
   };
 
+  _renderRootSidebar = () => {
+    return (
+      <div className={STYLES_SIDEBAR}>
+        <ChatSidebarHeader
+          onShowOptions={this._handleShowOptions}
+          onLogIn={this._handleSignIn}
+          onSignOut={this._handleSignOut}
+        />
+        <ChatSidebarNavigation
+          onNavigateToMakeGame={this._handleNavigateToMakeGame}
+          onNavigateToFeaturedGames={this._handleNavigateToFeaturedGames}
+          onNavigateToAllPosts={this._handleNavigateToAllPosts}
+          onNavigateToHistory={this._handleNavigateToHistory}
+          onOpenBrowserForDocumentation={this._handleOpenBrowserForDocumentation}
+        />
+        <ChatSidebarChannels
+          onHideOptions={this._handleHideOptions}
+          onShowOptions={this._handleShowChannelOptions}
+          onAddChannel={this._handleAddChannel}
+          onHideChannel={this._handleHideChannel}
+          onDeleteChannel={this._handleDeleteChannel}
+          onUpdateChannel={this._handleUpdateChannel}
+        />
+        <ChatSidebarDirectMessages
+          onHideOptions={this._handleHideOptions}
+          onShowOptions={this._handleShowDirectMessageOptions}
+          onAddDirectMessage={this._handleAddDirectMessage}
+          onHideDirectMessage={this._handleHideDirectMessages}
+          onDeleteDirectMessage={this._handleDeleteDirectMessage}
+          onUpdateDirectMessage={this._handleUpdateDirectMessage}
+        />
+      </div>
+    );
+  };
+
+  _renderOptions = () => {
+    return (
+      <div className={STYLES_SIDEBAR} onClick={this._handleHideOptions}>
+        Go back
+      </div>
+    );
+  };
+
   render() {
     const { currentUser, navigator, navigation, social, chat } = this.props;
     // TODO(jim): Development only
@@ -154,34 +198,14 @@ class ChatSidebar extends React.Component {
 
     const layoutMode = LayoutUtilities.getLayoutMode(navigation.contentMode);
 
+    let sidebarElement = this._renderRootSidebar();
+    if (this.state.mode === 'OPTIONS') {
+      sidebarElement = this._renderOptions();
+    }
+
     return (
       <React.Fragment>
-        <div className={STYLES_SIDEBAR}>
-          <ChatSidebarHeader onLogIn={this._handleSignIn} onSignOut={this._handleSignOut} />
-          <ChatSidebarNavigation
-            onNavigateToMakeGame={this._handleNavigateToMakeGame}
-            onNavigateToFeaturedGames={this._handleNavigateToFeaturedGames}
-            onNavigateToAllPosts={this._handleNavigateToAllPosts}
-            onNavigateToHistory={this._handleNavigateToHistory}
-            onOpenBrowserForDocumentation={this._handleOpenBrowserForDocumentation}
-          />
-          <ChatSidebarChannels
-            onHideOptions={this._handleHideOptions}
-            onShowOptions={this._handleShowChannelOptions}
-            onAddChannel={this._handleAddChannel}
-            onHideChannel={this._handleHideChannel}
-            onDeleteChannel={this._handleDeleteChannel}
-            onUpdateChannel={this._handleUpdateChannel}
-          />
-          <ChatSidebarDirectMessages
-            onHideOptions={this._handleHideOptions}
-            onShowOptions={this._handleShowDirectMessageOptions}
-            onAddDirectMessage={this._handleAddDirectMessage}
-            onHideDirectMessage={this._handleHideDirectMessages}
-            onDeleteDirectMessage={this._handleDeleteDirectMessage}
-            onUpdateDirectMessage={this._handleUpdateDirectMessage}
-          />
-        </div>
+        {sidebarElement}
         <div className={layoutMode === 'FLUID_CHAT' ? STYLES_CHAT : STYLES_FIXED_CHAT}>
           <ChatHeader />
           <ChatMessages />
