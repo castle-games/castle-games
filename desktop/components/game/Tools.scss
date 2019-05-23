@@ -1,55 +1,18 @@
+//
+// Colors
+//
+
 @import '@carbon/elements/scss/themes/theme-maps';
 
-/// Default font size
-/// @type Number
-/// @access public
-/// @group @carbon/layout
-$carbon--base-font-size: 16px !default;
-
-/// Convert a given px unit to a rem unit
-/// @param {Number} $px - Number with px unit
-/// @return {Number} Number with rem unit
-/// @access public
-/// @group @carbon/layout
-@function carbon--rem($px) {
-  @return ($px / $carbon--base-font-size) * 1rem;
-}
-
-/// Compute the type size for the given type scale step
-/// @param {Number} $step
-/// @return {Number} In px
-/// @access public
-/// @group @carbon/type
-@function carbon--get-type-size($step) {
-  @if $step == 1 {
-    @return 12px;
-  }
-  // Yn = Yn-1 + {INT[(n-2)/4] + 1} * 2
-  @return carbon--get-type-size($step - 1) + (floor(($step - 2) / 4) + 1) * 2;
-}
-
-/// Type scole follows a custom formula for determining each step size and supports sizes from 12px to 92px
-/// @type Map
-/// @access public
-/// @group @carbon/type
-$carbon--type-scale: ();
-@for $i from 1 through 23 {
-  $carbon--type-scale: append(
-    $carbon--type-scale,
-    carbon--rem(carbon--get-type-size($i))
-  );
-}
-
-/// Get the value of a specific step in the typescale
-/// @param {Number} $step
-/// @return {Number} In rem
-/// @access public
-/// @group @carbon/type
-@function carbon--type-scale($step) {
-  @return nth($carbon--type-scale, $step);
-}
-
 $carbon--theme: $carbon--theme--g100;
+
+
+//
+// Type
+//
+
+@import '@carbon/type/scss/font-family';
+@import '@carbon/type/scss/scale';
 
 $castle--font-family: unquote("'sf-mono', Consolas, monaco, monospace");
 
@@ -57,7 +20,7 @@ $castle--font-family: unquote("'sf-mono', Consolas, monaco, monospace");
 $caption-01: (
   font-family: $castle--font-family,
   font-size: carbon--type-scale(1),
-  font-weight: 400,
+  font-weight: carbon--font-weight('regular'),
   line-height: carbon--rem(16px),
   letter-spacing: 0.32px,
 ) !default;
@@ -65,7 +28,7 @@ $caption-01: (
 $label-01: (
   font-family: $castle--font-family,
   font-size: carbon--type-scale(1),
-  font-weight: 400,
+  font-weight: carbon--font-weight('regular'),
   line-height: carbon--rem(16px),
   letter-spacing: 0.32px,
 ) !default;
@@ -81,7 +44,7 @@ $helper-text-01: (
 $body-short-01: (
   font-family: $castle--font-family,
   font-size: carbon--type-scale(2),
-  font-weight: 400,
+  font-weight: carbon--font-weight('regular'),
   line-height: carbon--rem(18px),
   letter-spacing: 0.16px,
 ) !default;
@@ -89,7 +52,7 @@ $body-short-01: (
 $body-long-01: (
   font-family: $castle--font-family,
   font-size: carbon--type-scale(2),
-  font-weight: 400,
+  font-weight: carbon--font-weight('regular'),
   line-height: carbon--rem(20px),
   letter-spacing: 0.16px,
 ) !default;
@@ -97,7 +60,7 @@ $body-long-01: (
 $body-short-02: (
   font-family: $castle--font-family,
   font-size: carbon--type-scale(3),
-  font-weight: 400,
+  font-weight: carbon--font-weight('regular'),
   line-height: carbon--rem(22px),
   letter-spacing: 0,
 ) !default;
@@ -105,7 +68,7 @@ $body-short-02: (
 $body-long-02: (
   font-family: $castle--font-family,
   font-size: carbon--type-scale(3),
-  font-weight: 400,
+  font-weight: carbon--font-weight('regular'),
   line-height: carbon--rem(24px),
   letter-spacing: 0,
 ) !default;
@@ -113,7 +76,7 @@ $body-long-02: (
 $code-01: (
   font-family: $castle--font-family,
   font-size: carbon--type-scale(1),
-  font-weight: 400,
+  font-weight: carbon--font-weight('regular'),
   line-height: carbon--rem(16px),
   letter-spacing: 0.32px,
 ) !default;
@@ -121,7 +84,7 @@ $code-01: (
 $code-02: (
   font-family: $castle--font-family,
   font-size: carbon--type-scale(2),
-  font-weight: 400,
+  font-weight: carbon--font-weight('regular'),
   line-height: carbon--rem(20px),
   letter-spacing: 0.32px,
 ) !default;
@@ -129,7 +92,7 @@ $code-02: (
 $heading-01: (
   font-family: $castle--font-family,
   font-size: carbon--type-scale(2),
-  font-weight: 600,
+  font-weight: carbon--font-weight('semibold'),
   line-height: carbon--rem(18px),
   letter-spacing: 0.16px,
 ) !default;
@@ -137,7 +100,7 @@ $heading-01: (
 $heading-02: (
   font-family: $castle--font-family,
   font-size: carbon--type-scale(3),
-  font-weight: 600,
+  font-weight: carbon--font-weight('semibold'),
   line-height: carbon--rem(22px),
   letter-spacing: 0,
 ) !default;
@@ -146,7 +109,7 @@ $heading-02: (
 $productive-heading-03: (
   font-family: $castle--font-family,
   font-size: carbon--type-scale(5),
-  font-weight: 400,
+  font-weight: carbon--font-weight('regular'),
   line-height: carbon--rem(26px),
   letter-spacing: 0,
 ) !default;
@@ -154,7 +117,7 @@ $productive-heading-03: (
 $productive-heading-04: (
   font-family: $castle--font-family,
   font-size: carbon--type-scale(7),
-  font-weight: 400,
+  font-weight: carbon--font-weight('regular'),
   line-height: carbon--rem(36px),
   letter-spacing: 0,
 ) !default;
@@ -162,7 +125,7 @@ $productive-heading-04: (
 $productive-heading-05: (
   font-family: $castle--font-family,
   font-size: carbon--type-scale(8),
-  font-weight: 400,
+  font-weight: carbon--font-weight('regular'),
   line-height: carbon--rem(40px),
   letter-spacing: 0,
 ) !default;
@@ -171,7 +134,7 @@ $productive-heading-05: (
 $expressive-heading-03: (
   font-family: $castle--font-family,
   font-size: carbon--type-scale(5),
-  font-weight: 400,
+  font-weight: carbon--font-weight('regular'),
   line-height: 130%,
   letter-spacing: 0,
   breakpoints: (
@@ -188,7 +151,7 @@ $expressive-heading-03: (
 $expressive-heading-04: (
   font-family: $castle--font-family,
   font-size: carbon--type-scale(7),
-  font-weight: 400,
+  font-weight: carbon--font-weight('regular'),
   line-height: 129%,
   letter-spacing: 0,
   breakpoints: (
@@ -205,7 +168,7 @@ $expressive-heading-04: (
 $expressive-heading-05: (
   font-family: $castle--font-family,
   font-size: carbon--type-scale(8),
-  font-weight: 400,
+  font-weight: carbon--font-weight('regular'),
   line-height: 125%,
   letter-spacing: 0,
   breakpoints: (
@@ -230,7 +193,7 @@ $expressive-heading-05: (
 $expressive-heading-06: (
   font-family: $castle--font-family,
   font-size: carbon--type-scale(8),
-  font-weight: 600,
+  font-weight: carbon--font-weight('semibold'),
   line-height: 125%,
   letter-spacing: 0,
   breakpoints: (
@@ -255,7 +218,7 @@ $expressive-heading-06: (
 $expressive-paragraph-01: (
   font-family: $castle--font-family,
   font-size: carbon--type-scale(6),
-  font-weight: 300,
+  font-weight: carbon--font-weight('light'),
   line-height: 125%,
   letter-spacing: 0,
   breakpoints: (
@@ -274,7 +237,7 @@ $expressive-paragraph-01: (
 $quotation-01: (
   font-family: $castle--font-family,
   font-size: carbon--type-scale(5),
-  font-weight: 400,
+  font-weight: carbon--font-weight('regular'),
   line-height: 130%,
   letter-spacing: 0,
   breakpoints: (
@@ -299,7 +262,7 @@ $quotation-01: (
 $quotation-02: (
   font-family: $castle--font-family,
   font-size: carbon--type-scale(8),
-  font-weight: 300,
+  font-weight: carbon--font-weight('light'),
   line-height: 125%,
   letter-spacing: 0,
   breakpoints: (
@@ -324,7 +287,7 @@ $quotation-02: (
 $display-01: (
   font-family: $castle--font-family,
   font-size: carbon--type-scale(10),
-  font-weight: 300,
+  font-weight: carbon--font-weight('light'),
   line-height: 119%,
   letter-spacing: 0,
   breakpoints: (
@@ -348,7 +311,7 @@ $display-01: (
 $display-02: (
   font-family: $castle--font-family,
   font-size: carbon--type-scale(10),
-  font-weight: 600,
+  font-weight: carbon--font-weight('semibold'),
   line-height: 119%,
   letter-spacing: 0,
   breakpoints: (
@@ -372,7 +335,7 @@ $display-02: (
 $display-03: (
   font-family: $castle--font-family,
   font-size: carbon--type-scale(10),
-  font-weight: 300,
+  font-weight: carbon--font-weight('light'),
   line-height: 119%,
   letter-spacing: 0,
   breakpoints: (
@@ -401,7 +364,7 @@ $display-03: (
 $display-04: (
   font-family: $castle--font-family,
   font-size: carbon--type-scale(10),
-  font-weight: 600,
+  font-weight: carbon--font-weight('semibold'),
   line-height: 119%,
   letter-spacing: 0,
   breakpoints: (
@@ -427,6 +390,12 @@ $display-04: (
   ),
 ) !default;
 
+
+//
+// Import styles
+//
+
+// Wrap in `#tools-container` to confine to the tools section of Castle UI
 #tools-container {
     @import 'carbon-components/scss/globals/scss/styles.scss';
 }
