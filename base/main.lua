@@ -138,6 +138,8 @@ local home -- Portal to the home experience
 
 local main = {}
 
+local defaultFont
+
 function main.load(arg)
     network.async(function()
         if GHOST_ROOT_URI then -- Global `GHOST_ROOT_URI` set by native code? Just use that.
@@ -151,7 +153,10 @@ function main.load(arg)
             end
         end
 
-        copas.sleep(0.08) -- Sleep a little to let screen dimensions settings synchronize
+        -- Sleep a little to let screen dimensions settings synchronize, then create the default
+        -- font, so that it has the updated DPI
+        copas.sleep(0.08)
+        defaultFont = love.graphics.newFont(14)
 
         home = root:newChild(homeUrl, { noConf = true })
         jsEvents.send('CASTLE_GAME_LOADED', {})
@@ -219,6 +224,17 @@ function main.update(dt)
             home:update(dt)
         end
     end
+end
+
+function main.draw(...)
+    love.graphics.push('all')
+    if defaultFont then
+        love.graphics.setFont(defaultFont)
+    end
+    if home then
+        home:draw(...)
+    end
+    love.graphics.pop()
 end
 
 ffi.cdef 'bool ghostFocusChat();'
