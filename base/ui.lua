@@ -87,7 +87,7 @@ local function addChild(typ, id, props, needsPathId)
     top.newChildren.count = top.newChildren.count + 1
 
     -- Canonicalize id, dedup'ing if exists in new
-    id = id or (props and props.id)
+    id = (props and props.id) or id
     id = hash(typ .. (((type(id) == 'string' and id) or (type(id) == 'number' and tostring(id))) or ''))
     if top.newChildren[id] then
         id = hash(id .. top.newChildren.count)
