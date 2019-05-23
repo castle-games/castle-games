@@ -122,7 +122,8 @@ const isGameUrl = (urlStr) => {
   return (
     parsedUrl.protocol.startsWith('castle') ||
     parsedUrl.pathname.endsWith('.castle') ||
-    (parsedUrl.hostname === 'castle.games' && parsedUrl.pathname.startsWith('/@'))
+    (parsedUrl.hostname === 'castle.games' &&
+      (parsedUrl.pathname.startsWith('/@') || parsedUrl.pathname.startsWith('/+')))
   );
 };
 
