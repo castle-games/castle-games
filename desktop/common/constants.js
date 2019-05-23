@@ -10,6 +10,7 @@ export const REFACTOR_COLORS = {
     border: '#ececec',
   },
   text: `#282828`,
+  subdued: `#8c8c8c`,
   online: '#3dbb61',
 };
 

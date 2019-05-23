@@ -11,7 +11,7 @@ const STYLES_CONTAINER = css`
   justify-content: space-between;
   flex-shrink: 0;
   width: 100%;
-  padding: 8px 16px 8px 16px;
+  padding: 8px 48px 8px 16px;
 `;
 
 const STYLES_LEFT = css`
