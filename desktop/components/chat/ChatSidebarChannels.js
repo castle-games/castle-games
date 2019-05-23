@@ -17,6 +17,10 @@ export default class ChatSidebarChannels extends React.Component {
     return (
       <div className={STYLES_CONTAINER}>
         <ChatSidebarGroupHeader>Channels</ChatSidebarGroupHeader>
+        <ChatSidebarChannelItem data={{ game: true, active: false, name: 'Game #1', pending: 0 }} />
+        <ChatSidebarChannelItem
+          data={{ game: true, active: false, name: 'Game #2', pending: 20 }}
+        />
         <ChatSidebarChannelItem data={{ active: true, name: 'Channel #1', pending: 50 }} />
         <ChatSidebarChannelItem data={{ active: false, name: 'Channel #2', pending: 20 }} />
         <ChatSidebarChannelItem data={{ active: false, name: 'Channel #3', pending: 10 }} />
