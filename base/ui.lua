@@ -284,22 +284,9 @@ end
 --     return active
 -- end
 
--- newValue = ui.textInput(labelText, value, props)
--- newValue = ui.textInput(labelText, value)
--- newValue = ui.textInput(props)
-function ui.textInput(...)
-    local labelText, value, props
-    local nArgs = select('#', ...)
-    if nArgs == 3 then
-        labelText, value, props = ...
-    elseif nArgs == 2 then
-        labelText, value = ...
-    elseif nArgs == 1 then
-        props = ...
-        labelText, value = props.labelText, props.value
-    end
-
+function ui.textInput(labelText, value, props)
     assert(labelText, '`ui.textInput` needs `labelText`')
+    assert(value, '`ui.textInput` needs `value`')
 
     local c = addChild('textInput', labelText, without(merge({ labelText = labelText, value = value }, props), 'onChange'), true)
 
