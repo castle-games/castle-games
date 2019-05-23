@@ -8,7 +8,7 @@ const STYLES_CONTAINER = css`
   font-family: ${Constants.REFACTOR_FONTS.system};
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   padding: 0 16px 0 16px;
   cursor: pointer;
   font-size: 16px;
@@ -28,7 +28,7 @@ const STYLES_CONTAINER_LEFT = css`
 
 const STYLES_CONTAINER_RIGHT = css`
   flex-shrink: 0;
-  margin-top: 4px;
+  padding-top: 1px;
   cursor: pointer;
 `;
 

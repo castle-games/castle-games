@@ -4,12 +4,12 @@ import * as SVG from '~/common/svg';
 
 import { css } from 'react-emotion';
 
-const STYLES_USER = css`
+const STYLES_CHANNEL = css`
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   font-size: 12px;
-  margin: 8px 0 12px 0;
+  margin: 8px 0 8px 0;
   padding: 0 16px 0 16px;
   cursor: pointer;
   transition: 200ms ease color;
@@ -42,31 +42,18 @@ const STYLES_NAME = css`
   padding: 1px 8px 0 8px;
 `;
 
-const STYLES_INDICATOR = css`
+const STYLES_SYMBOL = css`
   margin-top: 2px;
-  height: 12px;
-  width: 12px;
-  border-radius: 16px;
   flex-shrink: 0;
 `;
 
 export default ({ data }) => {
   return (
-    <div className={STYLES_USER}>
-      {data.online ? (
-        <span
-          className={STYLES_INDICATOR}
-          style={{ background: Constants.REFACTOR_COLORS.online }}
-        />
-      ) : (
-        <span
-          className={STYLES_INDICATOR}
-          style={{ background: Constants.REFACTOR_COLORS.elements.servers }}
-        />
-      )}
-      <span
-        className={STYLES_NAME}
-        style={{ color: data.online ? null : Constants.REFACTOR_COLORS.subdued }}>
+    <div className={STYLES_CHANNEL} style={{ color: data.active ? 'magenta' : null }}>
+      <span className={STYLES_SYMBOL}>
+        <SVG.HashTag size="14px" />
+      </span>
+      <span className={STYLES_NAME} style={{ fontWeight: data.active ? '700' : null }}>
         {data.name}
       </span>
       {data.pending ? <span className={STYLES_NOTIFICATION}>{data.pending}</span> : null}

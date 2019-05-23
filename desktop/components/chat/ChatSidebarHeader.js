@@ -8,6 +8,7 @@ import { css } from 'react-emotion';
 
 const STYLES_HEADER = css`
   padding: 16px 16px 16px 16px;
+  margin-bottom: 8px;
   min-height: 64px;
   width: 100%;
   flex-shrink: 0;

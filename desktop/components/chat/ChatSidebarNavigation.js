@@ -8,7 +8,7 @@ import { css } from 'react-emotion';
 import ChatSidebarNavigationItem from '~/components/chat/ChatSidebarNavigationItem';
 
 const STYLES_CONTAINER = css`
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 `;
 
 export default class ChatSidebarNavigation extends React.Component {

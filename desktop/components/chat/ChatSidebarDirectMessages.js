@@ -9,7 +9,7 @@ import ChatSidebarGroupHeader from '~/components/chat/ChatSidebarGroupHeader';
 import ChatSidebarDirectMessageItem from '~/components/chat/ChatSidebarDirectMessageItem';
 
 const STYLES_CONTAINER = css`
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 `;
 
 export default class ChatSidebarDirectMessages extends React.Component {
