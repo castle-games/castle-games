@@ -35,6 +35,7 @@ See [Desktop Client Release Process](https://github.com/castle-games/ghost/wiki/
 
 - [Homebrew](https://brew.sh/)
 - Git LFS (`brew install git-lfs`, Then run `git lfs install` in this repo)
+- `git lfs pull`
 
 ### Run from Xcode
 
