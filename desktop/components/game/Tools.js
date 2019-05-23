@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as Constants from '~/common/constants';
 import * as NativeUtil from '~/native/nativeutil';
 
 import { css } from 'react-emotion';
