@@ -175,7 +175,6 @@ const STYLES_CONTAINER = css`
   height: 100%;
 
   background-color: #171717;
-  border-left: 1px solid ${Constants.colors.background4};
 
   padding: 8px;
 
