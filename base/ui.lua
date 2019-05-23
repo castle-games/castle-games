@@ -222,67 +222,23 @@ end
 -- Components
 --
 
--- ui.box(inner)
--- ui.box(props)
--- ui.box(props, inner)
--- ui.box(id, props, inner)
--- function ui.box(...)
---     local id, props, inner
---     local nArgs = select('#', ...)
---     if nArgs == 1 then
---         local arg = ...
---         if type(arg) == 'function' then
---             inner = arg
---         else
---             props = arg
---         end
---     elseif nArgs == 2 then
---         props, inner = ...
---     elseif nArgs == 3 then
---         id, props, inner = ...
---     end
---
---     local c, newId = addChild('box', id, props)
---
---     enter(c, newId, inner)
--- end
+function ui.button(labelText, props)
+    local c = addChild('button', labelText, without(merge({ labelText = labelText }, props), 'onClick'), true)
 
--- active = ui.section(label, inner)
--- active = ui.section(label, props, inner)
--- function ui.section(...)
---     local label, props, inner
---     local nArgs = select('#', ...)
---     if nArgs == 2 then
---         label, inner = ...
---     elseif nArgs == 3 then
---         label, props, inner = ...
---     end
---
---     local c, newId = addChild('section', label, merge({ label = label }, props), true)
---
---     local active = store[c].active == true
---     local es = pendingEvents[c.pathId]
---     if es then
---         for _, e in ipairs(es) do
---             if e.type == 'onActive' then
---                 active = e.value
---             end
---         end
---     end
---     store[c].active = active
-----
---     if c.props.active ~= nil then
---         c.active = c.props.active
---     else
---         c.active = active
---     end
---
---     if c.active then
---         enter(c, newId, inner)
---     end
---
---     return active
--- end
+    local clicked = false
+    local es = pendingEvents[c.pathId]
+    if es then
+        for _, e in ipairs(es) do
+            if e.type == 'onClick' then
+                if props and props.onClick then
+                    props.onClick()
+                end
+                clicked = true
+            end
+        end
+    end
+    return clicked
+end
 
 function ui.textInput(labelText, value, props)
     assert(labelText, '`ui.textInput` needs `labelText`')

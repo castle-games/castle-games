@@ -7,7 +7,7 @@ import { css } from 'react-emotion';
 import Logs from '~/common/logs';
 
 import '~/components/game/Tools.css';
-import { TextInput } from 'carbon-components-react';
+import { Button, TextInput } from 'carbon-components-react';
 
 //
 // Infrastructure
@@ -65,7 +65,13 @@ const STYLES_PANE_CONTAINER = css`
 class ToolPane extends React.PureComponent {
   render() {
     const { element } = this.props;
-    return <div className={STYLES_PANE_CONTAINER}>{renderChildren(element)}</div>;
+    return (
+      <div className={STYLES_PANE_CONTAINER}>
+        {renderChildren(element).map((c) => (
+          <div style={{ margin: '4px' }}>{c}</div>
+        ))}
+      </div>
+    );
   }
 }
 elementTypes['pane'] = ToolPane;
@@ -74,32 +80,20 @@ elementTypes['pane'] = ToolPane;
 // Components
 //
 
-// class ToolBox extends React.PureComponent {
-//   render() {
-//     const { element } = this.props;
-//     return <Box {...element.props}>{renderChildren(element)}</Box>;
-//   }
-// }
-// elementTypes['box'] = ToolBox;
-
-// class ToolSection extends React.PureComponent {
-//   render() {
-//     const { element } = this.props;
-//     return (
-//       <Accordion
-//         animate={false}
-//         activeIndex={element.active ? [0] : []}
-//         onActive={(arr) => sendEvent(element.pathId, { type: 'onActive', value: arr.length > 0 })}>
-//         <AccordionPanel {...element.props}>
-//           <Box pad={{ left: 'small', top: 'small', bottom: 'small' }}>
-//             {renderChildren(element)}
-//           </Box>
-//         </AccordionPanel>
-//       </Accordion>
-//     );
-//   }
-// }
-// elementTypes['section'] = ToolSection;
+class ToolButton extends React.PureComponent {
+  render() {
+    const { element } = this.props;
+    return (
+      <Button
+        small
+        {...element.props}
+        onClick={() => sendEvent(element.pathId, { type: 'onClick' })}>
+        {element.props.labelText}
+      </Button>
+    );
+  }
+}
+elementTypes['button'] = ToolButton;
 
 class ToolTextInput extends React.PureComponent {
   state = {
@@ -216,14 +210,22 @@ export default class Tools extends React.PureComponent {
       //       name: 'DEFAULT',
       //     },
       //     children: {
-      //       textInputstr: {
+      //       textInputstr2: {
       //         type: 'textInput',
       //         pathId: 'DEFAULTtextInputstr',
       //         props: {
       //           value: 'hello, world',
       //         },
       //       },
-      //       count: 1,
+      //       textInputstr: {
+      //         type: 'textInput',
+      //         pathId: 'DEFAULTtextInputstr',
+      //         props: {
+      //           value: 'hello, world',
+      //         },
+      //         prevId: 'textInputstr2'
+      //       },
+      //       count: 2,
       //       lastId: 'textInputstr',
       //     },
       //   },
