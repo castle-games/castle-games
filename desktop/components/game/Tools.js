@@ -84,8 +84,9 @@ class ToolButton extends React.PureComponent {
     const { element } = this.props;
     return (
       <Button
-        small
         {...element.props}
+        small={!(element.props && element.props.big)}
+        kind={(element.props && element.props.kind) || 'secondary'}
         onClick={() => sendEvent(element.pathId, { type: 'onClick' })}>
         {element.props.labelText}
       </Button>
