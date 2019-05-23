@@ -6,7 +6,7 @@ import { css } from 'react-emotion';
 
 import Logs from '~/common/logs';
 
-import 'carbon-components/css/carbon-components.css';
+import '~/components/game/Tools.css';
 import { TextInput } from 'carbon-components-react';
 
 //
@@ -270,7 +270,7 @@ export default class Tools extends React.PureComponent {
     // console.log(`render: ${JSON.stringify(this.state.root, null, 2)}`);
 
     return this.state.visible ? (
-      <div className={STYLES_CONTAINER}>
+      <div id="tools-container" className={STYLES_CONTAINER}>
         {Object.values(this.state.root.panes).map((element, i) => (
           <ToolPane key={(element.props && element.props.name) || i} element={element} />
         ))}
