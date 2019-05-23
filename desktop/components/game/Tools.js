@@ -6,6 +6,8 @@ import { css } from 'react-emotion';
 
 import Logs from '~/common/logs';
 
+import 'carbon-components/css/carbon-components.css';
+import { TextInput } from 'carbon-components-react';
 
 //
 // Infrastructure
@@ -63,15 +65,10 @@ const STYLES_PANE_CONTAINER = css`
 class ToolPane extends React.PureComponent {
   render() {
     const { element } = this.props;
-    return (
-      <div className={STYLES_PANE_CONTAINER}>
-        {renderChildren(element)}
-      </div>
-    );
+    return <div className={STYLES_PANE_CONTAINER}>{renderChildren(element)}</div>;
   }
 }
 elementTypes['pane'] = ToolPane;
-
 
 //
 // Components
@@ -127,6 +124,7 @@ class ToolTextInput extends React.PureComponent {
     return (
       <TextInput
         {...element.props}
+        id={element.pathId}
         value={this.state.value}
         onChange={(event) => {
           this.setState({
@@ -142,7 +140,6 @@ class ToolTextInput extends React.PureComponent {
   }
 }
 elementTypes['textInput'] = ToolTextInput;
-
 
 //
 // Container
@@ -206,8 +203,29 @@ const STYLES_CONTAINER = css`
 
 export default class Tools extends React.PureComponent {
   static initialState = {
-    root: {},
-    visible: true,
+    root: {
+      // Some example data to test with in the browser
+      // panes: {
+      //   DEFAULT: {
+      //     type: 'pane',
+      //     props: {
+      //       name: 'DEFAULT',
+      //     },
+      //     children: {
+      //       textInputstr: {
+      //         type: 'textInput',
+      //         pathId: 'DEFAULTtextInputstr',
+      //         props: {
+      //           value: 'hello, world',
+      //         },
+      //       },
+      //       count: 1,
+      //       lastId: 'textInputstr',
+      //     },
+      //   },
+      // },
+    },
+    visible: false,
   };
 
   state = Tools.initialState;
@@ -251,14 +269,11 @@ export default class Tools extends React.PureComponent {
   render() {
     // console.log(`render: ${JSON.stringify(this.state.root, null, 2)}`);
 
-        // <Grommet theme={Constants.toolsTheme}>
-        //   {Object.values(this.state.root.panes).map((element, i) => (
-        //     <ToolPane key={(element.props && element.props.name) || i} element={element} />
-        //   ))}
-        // </Grommet>
-
     return this.state.visible ? (
       <div className={STYLES_CONTAINER}>
+        {Object.values(this.state.root.panes).map((element, i) => (
+          <ToolPane key={(element.props && element.props.name) || i} element={element} />
+        ))}
       </div>
     ) : null;
   }
