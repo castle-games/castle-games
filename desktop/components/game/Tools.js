@@ -6,12 +6,6 @@ import { css } from 'react-emotion';
 
 import Logs from '~/common/logs';
 
-import {
-  Box,
-  Grommet,
-  TextInput,
-} from 'grommet';
-
 
 //
 // Infrastructure
@@ -61,13 +55,18 @@ const orderedChildren = (element) => {
 const renderChildren = (element) =>
   orderedChildren(element).map(({ id, child }) => <Tool key={id} element={child} />);
 
+const STYLES_PANE_CONTAINER = css`
+  display: flex;
+  flex-direction: column;
+`;
+
 class ToolPane extends React.PureComponent {
   render() {
     const { element } = this.props;
     return (
-      <Box pad="small" {...element.props}>
+      <div className={STYLES_PANE_CONTAINER}>
         {renderChildren(element)}
-      </Box>
+      </div>
     );
   }
 }
@@ -183,7 +182,6 @@ const STYLES_CONTAINER = css`
   width: 300px;
   height: 100%;
 
-  background-color: ${Constants.toolsTheme.global.colors.background};
   border-left: 1px solid ${Constants.colors.background4};
 
   overflow-y: scroll;
@@ -209,7 +207,7 @@ const STYLES_CONTAINER = css`
 export default class Tools extends React.PureComponent {
   static initialState = {
     root: {},
-    visible: false,
+    visible: true,
   };
 
   state = Tools.initialState;
@@ -253,13 +251,14 @@ export default class Tools extends React.PureComponent {
   render() {
     // console.log(`render: ${JSON.stringify(this.state.root, null, 2)}`);
 
+        // <Grommet theme={Constants.toolsTheme}>
+        //   {Object.values(this.state.root.panes).map((element, i) => (
+        //     <ToolPane key={(element.props && element.props.name) || i} element={element} />
+        //   ))}
+        // </Grommet>
+
     return this.state.visible ? (
       <div className={STYLES_CONTAINER}>
-        <Grommet theme={Constants.toolsTheme}>
-          {Object.values(this.state.root.panes).map((element, i) => (
-            <ToolPane key={(element.props && element.props.name) || i} element={element} />
-          ))}
-        </Grommet>
       </div>
     ) : null;
   }
