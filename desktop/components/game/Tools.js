@@ -6,7 +6,7 @@ import { css } from 'react-emotion';
 import Logs from '~/common/logs';
 
 import '~/components/game/Tools.css';
-import { Button, TextInput } from 'carbon-components-react';
+import { Button, Checkbox, TextInput } from 'carbon-components-react';
 
 //
 // Infrastructure
@@ -95,6 +95,47 @@ class ToolButton extends React.PureComponent {
 }
 elementTypes['button'] = ToolButton;
 
+class ToolCheckbox extends React.PureComponent {
+  state = {
+    checked: this.props.element.props.checked,
+    lastSentEventId: null,
+  };
+
+  static getDerivedStateFromProps(props, state) {
+    if (
+      state.lastSentEventId === null ||
+      props.element.lastReportedEventId == state.lastSentEventId
+    ) {
+      return {
+        checked: props.element.props.checked,
+      };
+    }
+    return null;
+  }
+
+  render() {
+    const { element } = this.props;
+    return (
+      <Checkbox
+        labelText=""
+        {...element.props}
+        id={element.pathId}
+        checked={this.state.checked}
+        onChange={(checked) => {
+          this.setState({
+            checked,
+            lastSentEventId: sendEvent(element.pathId, {
+              type: 'onChange',
+              checked,
+            }),
+          });
+        }}
+      />
+    );
+  }
+}
+elementTypes['checkbox'] = ToolCheckbox;
+
 class ToolTextInput extends React.PureComponent {
   state = {
     value: this.props.element.props.value,
@@ -174,6 +215,8 @@ const STYLES_CONTAINER = css`
   width: 300px;
   height: 100%;
 
+  /* Based on the 'g90' theme (https://www.carbondesignsystem.com/guidelines/themes/) which 'Tools.scss' uses */
+  color: #f3f3f3;
   background-color: #171717;
 
   padding: 8px;
