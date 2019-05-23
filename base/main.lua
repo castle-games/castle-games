@@ -1,6 +1,7 @@
 local ffi = require 'ffi'
 local C = ffi.C
 local cjson = require 'cjson'
+local copas = require 'copas'
 
 
 math.randomseed(10000 * require('socket').gettime())
@@ -149,6 +150,8 @@ function main.load(arg)
                 homeUrl = localHomeUrl
             end
         end
+
+        copas.sleep(0.08) -- Sleep a little to let screen dimensions settings synchronize
 
         home = root:newChild(homeUrl, { noConf = true })
         jsEvents.send('CASTLE_GAME_LOADED', {})
