@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
+import * as SVG from '~/common/svg';
 
 import { css } from 'react-emotion';
 
@@ -28,29 +29,53 @@ const STYLES_HEADER_RIGHT = css`
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  transition: 200ms ease color;
+
+  :hover {
+    color: magenta;
+  }
 `;
 
 const STYLES_H2 = css`
   font-size: 16px;
+  transition: 200ms ease color;
+  cursor: pointer;
+
+  :hover {
+    color: magenta;
+  }
 `;
 
 const STYLES_P = css`
   margin-top: 4px;
   font-size: 12px;
-  cursor: pointer;
+
+  strong {
+    cursor: pointer;
+    transition: 200ms ease color;
+
+    :hover {
+      color: magenta;
+    }
+  }
 `;
 
-export default class ClientChatWindow extends React.Component {
+export default class ChatHeader extends React.Component {
   render() {
     return (
       <header className={STYLES_HEADER}>
         <div className={STYLES_HEADER_LEFT}>
-          <h2 className={STYLES_H2}>#[bind-channel-name]</h2>
+          <h2 className={STYLES_H2}>
+            <SVG.HashTag size="12px" style={{ marginRight: 4 }} />
+            [bind-channel-name]
+          </h2>
           <p className={STYLES_P}>
-            <strong style={{ cursor: 'pointer' }}>[bind-member-count] online</strong>
+            <strong>[bind-member-count] online</strong>
           </p>
         </div>
-        <div className={STYLES_HEADER_RIGHT}>Test</div>
+        <div className={STYLES_HEADER_RIGHT}>
+          <SVG.Settings size="20px" />
+        </div>
       </header>
     );
   }
