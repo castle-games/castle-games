@@ -1,0 +1,7 @@
+@import 'carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/themes/theme-maps';
+
+$carbon--theme: $carbon--theme--g100;
+
+#tools-container {
+    @import 'carbon-components/scss/globals/scss/styles.scss';
+}

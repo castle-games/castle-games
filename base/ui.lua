@@ -284,33 +284,24 @@ end
 --     return active
 -- end
 
--- newValue = ui.textInput(id, value, props)
--- newValue = ui.textInput(value, props)
--- newValue = ui.textInput(id, value)
--- newValue = ui.textInput(value)
+-- newValue = ui.textInput(labelText, value, props)
+-- newValue = ui.textInput(labelText, value)
 -- newValue = ui.textInput(props)
 function ui.textInput(...)
-    local id, value, props
+    local labelText, value, props
     local nArgs = select('#', ...)
     if nArgs == 3 then
-        id, value, props = ...
+        labelText, value, props = ...
     elseif nArgs == 2 then
-        local arg1, arg2 = ...
-        if type(arg2) == 'table' then
-            value, props = arg1, arg2
-        else
-            id, value = arg1, arg2
-        end
+        labelText, value = ...
     elseif nArgs == 1 then
-        local arg = ...
-        if type(arg) == 'table' then
-            props = arg
-        else
-            value = arg
-        end
+        props = ...
+        labelText, value = props.labelText, props.value
     end
 
-    local c = addChild('textInput', id, without(merge({ value = value }, props), 'onChange'), true)
+    assert(labelText, '`ui.textInput` needs `labelText`')
+
+    local c = addChild('textInput', labelText, without(merge({ labelText = labelText, value = value }, props), 'onChange'), true)
 
     local newValue = value
     local es = pendingEvents[c.pathId]

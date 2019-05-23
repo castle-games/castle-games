@@ -123,6 +123,7 @@ class ToolTextInput extends React.PureComponent {
     const { element } = this.props;
     return (
       <TextInput
+        labelText=""
         {...element.props}
         id={element.pathId}
         value={this.state.value}
@@ -179,7 +180,10 @@ const STYLES_CONTAINER = css`
   width: 300px;
   height: 100%;
 
+  background-color: #171717;
   border-left: 1px solid ${Constants.colors.background4};
+
+  padding: 8px;
 
   overflow-y: scroll;
 
