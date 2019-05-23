@@ -6,7 +6,7 @@
     "start": "webpack-dev-server --mode development",
     "build": "webpack --mode production",
     "prettier": "pretty-quick --staged",
-    "build-tools-css": "node-sass components/game/Tools.scss components/game/Tools.css --include-path node_modules/"
+    "build-tools-css": "node-sass components/game/Tools.scss components/game/Tools.css --include-path node_modules/ --include-path node_modules/carbon-components/scss/globals/scss/vendor/"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",

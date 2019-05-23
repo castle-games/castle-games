@@ -1,6 +1,431 @@
-@import 'carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/themes/theme-maps';
+@import '@carbon/elements/scss/themes/theme-maps';
+
+/// Default font size
+/// @type Number
+/// @access public
+/// @group @carbon/layout
+$carbon--base-font-size: 16px !default;
+
+/// Convert a given px unit to a rem unit
+/// @param {Number} $px - Number with px unit
+/// @return {Number} Number with rem unit
+/// @access public
+/// @group @carbon/layout
+@function carbon--rem($px) {
+  @return ($px / $carbon--base-font-size) * 1rem;
+}
+
+/// Compute the type size for the given type scale step
+/// @param {Number} $step
+/// @return {Number} In px
+/// @access public
+/// @group @carbon/type
+@function carbon--get-type-size($step) {
+  @if $step == 1 {
+    @return 12px;
+  }
+  // Yn = Yn-1 + {INT[(n-2)/4] + 1} * 2
+  @return carbon--get-type-size($step - 1) + (floor(($step - 2) / 4) + 1) * 2;
+}
+
+/// Type scole follows a custom formula for determining each step size and supports sizes from 12px to 92px
+/// @type Map
+/// @access public
+/// @group @carbon/type
+$carbon--type-scale: ();
+@for $i from 1 through 23 {
+  $carbon--type-scale: append(
+    $carbon--type-scale,
+    carbon--rem(carbon--get-type-size($i))
+  );
+}
+
+/// Get the value of a specific step in the typescale
+/// @param {Number} $step
+/// @return {Number} In rem
+/// @access public
+/// @group @carbon/type
+@function carbon--type-scale($step) {
+  @return nth($carbon--type-scale, $step);
+}
 
 $carbon--theme: $carbon--theme--g100;
+
+$castle--font-family: unquote("'sf-mono', Consolas, monaco, monospace");
+
+// Universal
+$caption-01: (
+  font-family: $castle--font-family,
+  font-size: carbon--type-scale(1),
+  font-weight: 400,
+  line-height: carbon--rem(16px),
+  letter-spacing: 0.32px,
+) !default;
+
+$label-01: (
+  font-family: $castle--font-family,
+  font-size: carbon--type-scale(1),
+  font-weight: 400,
+  line-height: carbon--rem(16px),
+  letter-spacing: 0.32px,
+) !default;
+
+$helper-text-01: (
+  font-family: $castle--font-family,
+  font-size: carbon--type-scale(1),
+  font-style: italic,
+  line-height: carbon--rem(16px),
+  letter-spacing: 0.32px,
+) !default;
+
+$body-short-01: (
+  font-family: $castle--font-family,
+  font-size: carbon--type-scale(2),
+  font-weight: 400,
+  line-height: carbon--rem(18px),
+  letter-spacing: 0.16px,
+) !default;
+
+$body-long-01: (
+  font-family: $castle--font-family,
+  font-size: carbon--type-scale(2),
+  font-weight: 400,
+  line-height: carbon--rem(20px),
+  letter-spacing: 0.16px,
+) !default;
+
+$body-short-02: (
+  font-family: $castle--font-family,
+  font-size: carbon--type-scale(3),
+  font-weight: 400,
+  line-height: carbon--rem(22px),
+  letter-spacing: 0,
+) !default;
+
+$body-long-02: (
+  font-family: $castle--font-family,
+  font-size: carbon--type-scale(3),
+  font-weight: 400,
+  line-height: carbon--rem(24px),
+  letter-spacing: 0,
+) !default;
+
+$code-01: (
+  font-family: $castle--font-family,
+  font-size: carbon--type-scale(1),
+  font-weight: 400,
+  line-height: carbon--rem(16px),
+  letter-spacing: 0.32px,
+) !default;
+
+$code-02: (
+  font-family: $castle--font-family,
+  font-size: carbon--type-scale(2),
+  font-weight: 400,
+  line-height: carbon--rem(20px),
+  letter-spacing: 0.32px,
+) !default;
+
+$heading-01: (
+  font-family: $castle--font-family,
+  font-size: carbon--type-scale(2),
+  font-weight: 600,
+  line-height: carbon--rem(18px),
+  letter-spacing: 0.16px,
+) !default;
+
+$heading-02: (
+  font-family: $castle--font-family,
+  font-size: carbon--type-scale(3),
+  font-weight: 600,
+  line-height: carbon--rem(22px),
+  letter-spacing: 0,
+) !default;
+
+// Productive
+$productive-heading-03: (
+  font-family: $castle--font-family,
+  font-size: carbon--type-scale(5),
+  font-weight: 400,
+  line-height: carbon--rem(26px),
+  letter-spacing: 0,
+) !default;
+
+$productive-heading-04: (
+  font-family: $castle--font-family,
+  font-size: carbon--type-scale(7),
+  font-weight: 400,
+  line-height: carbon--rem(36px),
+  letter-spacing: 0,
+) !default;
+
+$productive-heading-05: (
+  font-family: $castle--font-family,
+  font-size: carbon--type-scale(8),
+  font-weight: 400,
+  line-height: carbon--rem(40px),
+  letter-spacing: 0,
+) !default;
+
+// Expressive
+$expressive-heading-03: (
+  font-family: $castle--font-family,
+  font-size: carbon--type-scale(5),
+  font-weight: 400,
+  line-height: 130%,
+  letter-spacing: 0,
+  breakpoints: (
+    xlg: (
+      font-size: carbon--type-scale(5),
+      line-height: 125%,
+    ),
+    max: (
+      font-size: carbon--type-scale(6),
+    ),
+  ),
+) !default;
+
+$expressive-heading-04: (
+  font-family: $castle--font-family,
+  font-size: carbon--type-scale(7),
+  font-weight: 400,
+  line-height: 129%,
+  letter-spacing: 0,
+  breakpoints: (
+    xlg: (
+      font-size: carbon--type-scale(7),
+      line-height: 125%,
+    ),
+    max: (
+      font-size: carbon--type-scale(8),
+    ),
+  ),
+) !default;
+
+$expressive-heading-05: (
+  font-family: $castle--font-family,
+  font-size: carbon--type-scale(8),
+  font-weight: 400,
+  line-height: 125%,
+  letter-spacing: 0,
+  breakpoints: (
+    md: (
+      font-size: carbon--type-scale(9),
+      line-height: 122%,
+    ),
+    lg: (
+      font-size: carbon--type-scale(10),
+      line-height: 119%,
+    ),
+    xlg: (
+      font-size: carbon--type-scale(11),
+      line-height: 117%,
+    ),
+    max: (
+      font-size: carbon--type-scale(13),
+    ),
+  ),
+) !default;
+
+$expressive-heading-06: (
+  font-family: $castle--font-family,
+  font-size: carbon--type-scale(8),
+  font-weight: 600,
+  line-height: 125%,
+  letter-spacing: 0,
+  breakpoints: (
+    md: (
+      font-size: carbon--type-scale(9),
+      line-height: 122%,
+    ),
+    lg: (
+      font-size: carbon--type-scale(10),
+      line-height: 119%,
+    ),
+    xlg: (
+      font-size: carbon--type-scale(11),
+      line-height: 117%,
+    ),
+    max: (
+      font-size: carbon--type-scale(13),
+    ),
+  ),
+) !default;
+
+$expressive-paragraph-01: (
+  font-family: $castle--font-family,
+  font-size: carbon--type-scale(6),
+  font-weight: 300,
+  line-height: 125%,
+  letter-spacing: 0,
+  breakpoints: (
+    lg: (
+      font-size: carbon--type-scale(7),
+      line-height: 129%,
+    ),
+    max: (
+      font-size: carbon--type-scale(8),
+      line-height: 125%,
+    ),
+  ),
+);
+
+// Additional styles
+$quotation-01: (
+  font-family: $castle--font-family,
+  font-size: carbon--type-scale(5),
+  font-weight: 400,
+  line-height: 130%,
+  letter-spacing: 0,
+  breakpoints: (
+    md: (
+      font-size: carbon--type-scale(5),
+    ),
+    lg: (
+      font-size: carbon--type-scale(6),
+      line-height: 125%,
+    ),
+    xlg: (
+      font-size: carbon--type-scale(7),
+      line-height: 129%,
+    ),
+    max: (
+      font-size: carbon--type-scale(8),
+      line-height: 125%,
+    ),
+  ),
+) !default;
+
+$quotation-02: (
+  font-family: $castle--font-family,
+  font-size: carbon--type-scale(8),
+  font-weight: 300,
+  line-height: 125%,
+  letter-spacing: 0,
+  breakpoints: (
+    md: (
+      font-size: carbon--type-scale(9),
+      line-height: 122%,
+    ),
+    lg: (
+      font-size: carbon--type-scale(10),
+      line-height: 119%,
+    ),
+    xlg: (
+      font-size: carbon--type-scale(11),
+      line-height: 117%,
+    ),
+    max: (
+      font-size: carbon--type-scale(13),
+    ),
+  ),
+) !default;
+
+$display-01: (
+  font-family: $castle--font-family,
+  font-size: carbon--type-scale(10),
+  font-weight: 300,
+  line-height: 119%,
+  letter-spacing: 0,
+  breakpoints: (
+    md: (
+      font-size: carbon--type-scale(10),
+    ),
+    lg: (
+      font-size: carbon--type-scale(12),
+    ),
+    xlg: (
+      font-size: carbon--type-scale(13),
+      line-height: 117%,
+    ),
+    max: (
+      font-size: carbon--type-scale(15),
+      line-height: 113%,
+    ),
+  ),
+) !default;
+
+$display-02: (
+  font-family: $castle--font-family,
+  font-size: carbon--type-scale(10),
+  font-weight: 600,
+  line-height: 119%,
+  letter-spacing: 0,
+  breakpoints: (
+    md: (
+      font-size: carbon--type-scale(10),
+    ),
+    lg: (
+      font-size: carbon--type-scale(12),
+    ),
+    xlg: (
+      font-size: carbon--type-scale(13),
+      line-height: 116%,
+    ),
+    max: (
+      font-size: carbon--type-scale(15),
+      line-height: 113%,
+    ),
+  ),
+) !default;
+
+$display-03: (
+  font-family: $castle--font-family,
+  font-size: carbon--type-scale(10),
+  font-weight: 300,
+  line-height: 119%,
+  letter-spacing: 0,
+  breakpoints: (
+    md: (
+      font-size: carbon--type-scale(14),
+      line-height: 115%,
+    ),
+    lg: (
+      font-size: carbon--type-scale(17),
+      line-height: 111%,
+      letter-spacing: -0.64px,
+    ),
+    xlg: (
+      font-size: carbon--type-scale(20),
+      line-height: 107%,
+      letter-spacing: -0.64px,
+    ),
+    max: (
+      font-size: carbon--type-scale(23),
+      line-height: 105%,
+      letter-spacing: -0.96px,
+    ),
+  ),
+) !default;
+
+$display-04: (
+  font-family: $castle--font-family,
+  font-size: carbon--type-scale(10),
+  font-weight: 600,
+  line-height: 119%,
+  letter-spacing: 0,
+  breakpoints: (
+    md: (
+      font-size: carbon--type-scale(14),
+      line-height: 115%,
+    ),
+    lg: (
+      font-size: carbon--type-scale(17),
+      line-height: 111%,
+      letter-spacing: -0.64px,
+    ),
+    xlg: (
+      font-size: carbon--type-scale(20),
+      line-height: 107%,
+      letter-spacing: -0.64px,
+    ),
+    max: (
+      font-size: carbon--type-scale(23),
+      line-height: 105%,
+      letter-spacing: -0.96px,
+    ),
+  ),
+) !default;
 
 #tools-container {
     @import 'carbon-components/scss/globals/scss/styles.scss';
