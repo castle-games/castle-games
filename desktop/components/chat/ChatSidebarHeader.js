@@ -71,9 +71,7 @@ export default class ChatSidebarHeader extends React.Component {
     if (!viewer) {
       return (
         <header className={STYLES_HEADER}>
-          <h2 className={STYLES_HEADING} onClick={this.props.onShowOptions}>
-            [bind server name] <SVG.Menu size="14px" style={{ margin: '3px 0 0 6px' }} />
-          </h2>
+          <h2 className={STYLES_HEADING}>[bind server name]</h2>
           <div className={STYLES_AUTH}>
             <span className={STYLES_BYLINE}>
               <strong style={{ cursor: 'pointer' }}>Sign in</strong>

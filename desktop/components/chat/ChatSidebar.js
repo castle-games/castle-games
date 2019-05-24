@@ -75,7 +75,8 @@ class ChatSidebar extends React.Component {
   };
 
   _handleSignOut = () => {
-    alert('_handleSignOut');
+    this.props.currentUser.clearCurrentUser();
+    this.setState({ mode: 'DEFAULT', chatMode: 'MESSAGES' });
   };
 
   _handleNavigateToMakeGame = () => {
@@ -200,7 +201,7 @@ class ChatSidebar extends React.Component {
   _renderOptions = () => {
     return (
       <div className={STYLES_SIDEBAR}>
-        <ChatSidebarOptions onDismiss={this._handleHideOptions} />
+        <ChatSidebarOptions onDismiss={this._handleHideOptions} onSignOut={this._handleSignOut} />
       </div>
     );
   };
@@ -314,6 +315,7 @@ export default class ChatSidebarWithContext extends React.Component {
                                 {(navigator) => (
                                   <ChatSidebar
                                     viewer={currentUser.user}
+                                    currentUser={currentUser}
                                     navigator={navigator}
                                     navigation={navigation}
                                     social={social}

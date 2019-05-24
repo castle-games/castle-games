@@ -65,9 +65,9 @@ export default class ChatSidebarOptions extends React.Component {
             <SVG.Dismiss size="16px" />
           </div>
         </header>
-        <div className={STYLES_OPTION}>Option #1</div>
-        <div className={STYLES_OPTION}>Option #2</div>
-        <div className={STYLES_OPTION}>Option #3</div>
+        <div className={STYLES_OPTION} onClick={this.props.onSignOut}>
+          Sign Out
+        </div>
       </React.Fragment>
     );
   }
