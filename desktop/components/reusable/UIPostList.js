@@ -203,13 +203,15 @@ class UIPostCell extends React.Component {
   };
 
   _renderGameContainer = ({ sourceGame, hasData }) => {
-    const primaryColor =
+    let primaryColor =
       sourceGame.metadata && sourceGame.metadata.primaryColor
         ? `#${sourceGame.metadata.primaryColor}`
         : Constants.colors.backgroundLeftContext;
 
     const coverImageUrl = sourceGame.coverImage && sourceGame.coverImage.url;
+
     const textColor = Utilities.adjustTextColor(primaryColor);
+
     let maybeOpenDataButton;
     if (hasData) {
       maybeOpenDataButton = (

@@ -1,5 +1,6 @@
 import platform from 'platform';
 import url from 'url';
+import * as Strings from '~/common/strings';
 
 const pathposix = require('path-posix');
 const pathwin32 = require('path-win32');
@@ -39,6 +40,10 @@ export const getLuminosityOfHex = (hex) => {
 };
 
 export const adjustTextColor = (hex) => {
+  if (Strings.isEmpty(hex) || hex.length < 7) {
+    hex = '#FFFFFF';
+  }
+
   const luminosity = hex ? getLuminosityOfHex(hex) : LUMINOSITY_THEME_BREAKPOINT;
   return luminosity > LUMINOSITY_THEME_BREAKPOINT
     ? 'rgba(0, 0, 0, 0.8)'
