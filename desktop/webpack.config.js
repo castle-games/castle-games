@@ -1,7 +1,15 @@
+const webpack = require('webpack');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 const MiniCSSExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const path = require('path');
+const developmentConfig = require('./config/development.json');
+const productionConfig = require('./config/production.json');
+
+// we should change this so isProduction is only true if NODE_ENV='production'
+// leaving it like this for now because we're used to prod being the default
+// and it'd be easy to accidentally release a dev build
+const isProduction = process.env.NODE_ENV !== 'development';
 
 module.exports = {
   devServer: {
@@ -52,6 +60,10 @@ module.exports = {
     new CopyWebpackPlugin([
       { from: path.join(__dirname, 'static', '**/*'), to: path.join(__dirname, '../web') },
     ]),
+    // inject some config variables into the bundle
+    new webpack.DefinePlugin({
+      config: JSON.stringify(isProduction ? productionConfig : developmentConfig),
+    }),
   ],
   output: {
     path: path.join(__dirname, '../web'),

@@ -17,7 +17,7 @@ const logAmplitudeEvent = (eventType, eventData) => {
 // initializes the analytics systems necessary for the tracking events below
 export const initialize = () => {
   // initialize amplitude
-  amplitude.getInstance().init('591ee71e30cca807f0d3857ca05b8311');
+  amplitude.getInstance().init(config.AMPLITUDE_API_KEY);
   amplitude.getInstance().setUserProperties({
     userAgent: navigator.userAgent,
   });
