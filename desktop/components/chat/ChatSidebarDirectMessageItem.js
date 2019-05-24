@@ -43,26 +43,44 @@ const STYLES_NAME = css`
 `;
 
 const STYLES_INDICATOR = css`
-  margin-top: 2px;
   height: 12px;
   width: 12px;
   border-radius: 16px;
   flex-shrink: 0;
+  position: absolute;
+  right: -4px;
+  bottom: -4px;
+  border: 2px solid ${Constants.REFACTOR_COLORS.elements.channels};
+`;
+
+const STYLES_AVATAR = css`
+  flex-shrink: 0;
+  background-size: cover;
+  background-position: 50% 50%;
+  height: 20px;
+  width: 20px;
+  position: relative;
+  border-radius: 4px;
+  background: magenta;
 `;
 
 export default ({ data }) => {
   return (
     <div className={STYLES_USER}>
       {data.online ? (
-        <span
-          className={STYLES_INDICATOR}
-          style={{ background: Constants.REFACTOR_COLORS.online }}
-        />
+        <figure className={STYLES_AVATAR}>
+          <span
+            className={STYLES_INDICATOR}
+            style={{ background: Constants.REFACTOR_COLORS.online }}
+          />
+        </figure>
       ) : (
-        <span
-          className={STYLES_INDICATOR}
-          style={{ background: Constants.REFACTOR_COLORS.elements.servers }}
-        />
+        <figure className={STYLES_AVATAR}>
+          <span
+            className={STYLES_INDICATOR}
+            style={{ background: Constants.REFACTOR_COLORS.elements.servers }}
+          />
+        </figure>
       )}
       <span
         className={STYLES_NAME}
