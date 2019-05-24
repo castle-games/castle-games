@@ -44,10 +44,10 @@ const STYLES_AVATAR = css`
   background-color: magenta;
   border-radius: 4px;
   cursor: pointer;
+  margin-right: 8px;
 `;
 
 const STYLES_BYLINE = css`
-  padding-left: 8px;
   min-width: 10%;
   width: 100%;
   font-size: 12px;
@@ -66,15 +66,37 @@ const STYLES_BYLINE = css`
 
 export default class ChatSidebarHeader extends React.Component {
   render() {
+    const { navigator, viewer } = this.props;
+
+    if (!viewer) {
+      return (
+        <header className={STYLES_HEADER}>
+          <h2 className={STYLES_HEADING} onClick={this.props.onShowOptions}>
+            [bind server name] <SVG.Menu size="14px" style={{ margin: '3px 0 0 6px' }} />
+          </h2>
+          <div className={STYLES_AUTH}>
+            <span className={STYLES_BYLINE}>
+              <strong style={{ cursor: 'pointer' }}>Sign in</strong>
+            </span>
+          </div>
+        </header>
+      );
+    }
+
+    let url;
+    if (viewer && viewer.photo) {
+      url = this.props.viewer.photo.url;
+    }
+
     return (
       <header className={STYLES_HEADER}>
         <h2 className={STYLES_HEADING} onClick={this.props.onShowOptions}>
           [bind server name] <SVG.Menu size="14px" style={{ margin: '3px 0 0 6px' }} />
         </h2>
         <div className={STYLES_AUTH}>
-          <span className={STYLES_AVATAR} />
-          <span className={STYLES_BYLINE}>
-            Signed in as <strong style={{ cursor: 'pointer' }}>[bind current user]</strong>
+          <span className={STYLES_AVATAR} style={{ backgroundImage: `url('${url}')` }} />
+          <span className={STYLES_BYLINE} onClick={() => navigator.navigateToUserProfile(viewer)}>
+            Signed in as <strong style={{ cursor: 'pointer' }}>{viewer.username}</strong>
           </span>
         </div>
       </header>

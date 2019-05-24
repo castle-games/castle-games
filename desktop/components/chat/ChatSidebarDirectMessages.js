@@ -14,6 +14,10 @@ const STYLES_CONTAINER = css`
 
 export default class ChatSidebarDirectMessages extends React.Component {
   render() {
+    if (!this.props.viewer) {
+      return null;
+    }
+
     return (
       <div className={STYLES_CONTAINER}>
         <ChatSidebarGroupHeader onShowOptions={this.props.onShowOptions}>

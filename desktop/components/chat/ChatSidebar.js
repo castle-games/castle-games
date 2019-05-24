@@ -163,11 +163,14 @@ class ChatSidebar extends React.Component {
     return (
       <div className={STYLES_SIDEBAR}>
         <ChatSidebarHeader
+          viewer={this.props.viewer}
+          navigator={this.props.navigator}
           onShowOptions={this._handleShowOptions}
           onLogIn={this._handleSignIn}
           onSignOut={this._handleSignOut}
         />
         <ChatSidebarNavigation
+          viewer={this.props.viewer}
           onNavigateToMakeGame={this._handleNavigateToMakeGame}
           onNavigateToFeaturedGames={this._handleNavigateToFeaturedGames}
           onNavigateToAllPosts={this._handleNavigateToAllPosts}
@@ -182,6 +185,7 @@ class ChatSidebar extends React.Component {
           onUpdateChannel={this._handleUpdateChannel}
         />
         <ChatSidebarDirectMessages
+          viewer={this.props.viewer}
           onShowOptions={this._handleShowDirectMessageOptions}
           onAddDirectMessage={this._handleAddDirectMessage}
           onHideDirectMessage={this._handleHideDirectMessages}
@@ -217,11 +221,12 @@ class ChatSidebar extends React.Component {
   };
 
   _renderChat = () => {
+    const { chatMode } = this.state;
     const { navigation } = this.props;
     const layoutMode = LayoutUtilities.getLayoutMode(navigation.contentMode);
     const className = layoutMode === 'FLUID_CHAT' ? STYLES_CHAT : STYLES_FIXED_CHAT;
 
-    if (this.state.chatMode === 'OPTIONS') {
+    if (chatMode === 'OPTIONS') {
       return (
         <div className={className}>
           <ChatHeaderActive onDismiss={this._handleResetChatWindow}>
@@ -232,7 +237,7 @@ class ChatSidebar extends React.Component {
       );
     }
 
-    if (this.state.chatMode === 'MEMBERS') {
+    if (chatMode === 'MEMBERS') {
       return (
         <div className={className}>
           <ChatHeaderActive onDismiss={this._handleResetChatWindow}>
@@ -243,7 +248,7 @@ class ChatSidebar extends React.Component {
       );
     }
 
-    if (this.state.chatMode === 'MESSAGES') {
+    if (chatMode === 'MESSAGES') {
       return (
         <div className={className}>
           <ChatHeader
@@ -264,18 +269,19 @@ class ChatSidebar extends React.Component {
   };
 
   render() {
+    const { mode } = this.state;
     const chatElement = this._renderChat();
 
     let sidebarElement = this._renderRootSidebar();
-    if (this.state.mode === 'OPTIONS') {
+    if (mode === 'OPTIONS') {
       sidebarElement = this._renderOptions();
     }
 
-    if (this.state.mode === 'OPTIONS_CHANNELS') {
+    if (mode === 'OPTIONS_CHANNELS') {
       sidebarElement = this._renderChannelOptions();
     }
 
-    if (this.state.mode === 'OPTIONS_MESSAGES') {
+    if (mode === 'OPTIONS_MESSAGES') {
       sidebarElement = this._renderMessageOptions();
     }
 
@@ -306,7 +312,7 @@ export default class ChatSidebarWithContext extends React.Component {
                               <NavigatorContext.Consumer>
                                 {(navigator) => (
                                   <ChatSidebar
-                                    currentUser={currentUser}
+                                    viewer={currentUser.user}
                                     navigator={navigator}
                                     navigation={navigation}
                                     social={social}

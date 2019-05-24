@@ -36,13 +36,15 @@ export default class ChatSidebarNavigation extends React.Component {
             onClick: this.props.onNavigateToAllPosts,
           }}
         />
-        <ChatSidebarNavigationItem
-          data={{
-            name: 'History',
-            svg: 'history',
-            onClick: this.props.onNavigateToHistory,
-          }}
-        />
+        {this.props.viewer ? (
+          <ChatSidebarNavigationItem
+            data={{
+              name: 'History',
+              svg: 'history',
+              onClick: this.props.onNavigateToHistory,
+            }}
+          />
+        ) : null}
         <ChatSidebarNavigationItem
           data={{
             name: 'Documentation',
