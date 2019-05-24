@@ -67,7 +67,7 @@ const STYLES_LINK = css`
   cursor: pointer;
 `;
 
-export default class RegisterGame extends React.Component {
+export default class AddGame extends React.Component {
   static defaultProps = {
     game: null,
     onAfterSave: null,

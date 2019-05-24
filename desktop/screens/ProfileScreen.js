@@ -12,7 +12,7 @@ import UIHorizontalNavigation from '~/components/reusable/UIHorizontalNavigation
 import UIEmptyState from '~/components/reusable/UIEmptyState';
 
 import EditProfile from '~/components/profile/EditProfile';
-import RegisterGame from '~/components/profile/RegisterGame';
+import AddGame from '~/components/profile/AddGame';
 import UIGameGrid from '~/components/reusable/UIGameGrid';
 import ProfileHeader from '~/components/profile/ProfileHeader';
 import ProfileSettings from '~/components/profile/ProfileSettings';
@@ -141,11 +141,11 @@ class ProfileScreen extends React.Component {
   _renderAddGame = (isOwnProfile) => {
     if (!isOwnProfile) return null;
 
-    return <RegisterGame onAfterSave={this._onAfterAddGame} />;
+    return <AddGame onAfterSave={this._onAfterAddGame} />;
   };
 
   _renderUpdateGame = (game) => {
-    return <RegisterGame game={this.state.gameToUpdate} onAfterSave={this._onAfterAddGame} />;
+    return <AddGame game={this.state.gameToUpdate} onAfterSave={this._onAfterAddGame} />;
   };
 
   _renderEditProfileContent = (isOwnProfile, user) => {
