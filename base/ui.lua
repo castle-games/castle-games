@@ -291,5 +291,33 @@ function ui.textInput(labelText, value, props)
     return newValue
 end
 
+function ui.toggle(labelA, labelB, toggled, props)
+    assert(type(labelA) == 'string', '`ui.toggle` needs a string `labelA`')
+    assert(type(labelB) == 'string', '`ui.toggle` needs a string `labelB`')
+    assert(type(toggled) == 'boolean', '`ui.toggle` needs a boolean `toggled`')
+
+    local c = addChild('toggle', labelA .. labelB, without(merge({ labelA = labelA, labelB = labelB, toggled = toggled }, props), 'onToggle'), true)
+
+    local newToggled = toggled
+    local es = pendingEvents[c.pathId]
+    if es then
+        for _, e in ipairs(es) do
+            if e.type == 'onToggle' then
+                if props and props.onToggle then
+                    local r = props.onToggle(e.toggled)
+                    if r ~= nil then
+                        newToggled = r
+                    else
+                        newToggled = e.toggled
+                    end
+                else
+                    newToggled = e.toggled
+                end
+            end
+        end
+    end
+    return newToggled
+end
+
 
 return ui

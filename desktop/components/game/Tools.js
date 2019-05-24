@@ -6,7 +6,7 @@ import { css } from 'react-emotion';
 import Logs from '~/common/logs';
 
 import '~/components/game/Tools.css';
-import { Button, Checkbox, TextInput } from 'carbon-components-react';
+import { Button, Checkbox, TextInput, Toggle } from 'carbon-components-react';
 
 //
 // Infrastructure
@@ -67,7 +67,9 @@ class ToolPane extends React.PureComponent {
     return (
       <div className={STYLES_PANE_CONTAINER}>
         {renderChildren(element).map((c) => (
-          <div style={{ margin: '4px' }}>{c}</div>
+          <div key={c.key} style={{ margin: '4px' }}>
+            {c}
+          </div>
         ))}
       </div>
     );
@@ -117,7 +119,6 @@ class ToolCheckbox extends React.PureComponent {
     const { element } = this.props;
     return (
       <Checkbox
-        labelText=""
         {...element.props}
         id={element.pathId}
         checked={this.state.checked}
@@ -158,7 +159,6 @@ class ToolTextInput extends React.PureComponent {
     const { element } = this.props;
     return (
       <TextInput
-        labelText=""
         {...element.props}
         id={element.pathId}
         value={this.state.value}
@@ -176,6 +176,46 @@ class ToolTextInput extends React.PureComponent {
   }
 }
 elementTypes['textInput'] = ToolTextInput;
+
+class ToolToggle extends React.PureComponent {
+  state = {
+    toggled: this.props.element.props.toggled,
+    lastSentEventId: null,
+  };
+
+  static getDerivedStateFromProps(props, state) {
+    if (
+      state.lastSentEventId === null ||
+      props.element.lastReportedEventId == state.lastSentEventId
+    ) {
+      return {
+        toggled: props.element.props.toggled,
+      };
+    }
+    return null;
+  }
+
+  render() {
+    const { element } = this.props;
+    return (
+      <Toggle
+        {...element.props}
+        id={element.pathId}
+        toggled={this.state.toggled}
+        onToggle={(toggled) => {
+          this.setState({
+            toggled,
+            lastSentEventId: sendEvent(element.pathId, {
+              type: 'onToggle',
+              toggled,
+            }),
+          });
+        }}
+      />
+    );
+  }
+}
+elementTypes['toggle'] = ToolToggle;
 
 //
 // Container
