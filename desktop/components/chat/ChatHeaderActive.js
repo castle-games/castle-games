@@ -10,7 +10,7 @@ const STYLES_HEADER = css`
   font-family: ${Constants.REFACTOR_FONTS.system};
   width: 100%;
   flex-shrink: 0;
-  padding: 16px 16px 8px 16px;
+  padding: 8px 8px 0px 16px;
   overflow: hidden;
   min-height: 64px;
   display: flex;
@@ -28,8 +28,9 @@ const STYLES_HEADER_RIGHT = css`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
   transition: 200ms ease color;
+  cursor: pointer;
+  padding: 8px;
 
   :hover {
     color: magenta;
@@ -38,42 +39,18 @@ const STYLES_HEADER_RIGHT = css`
 
 const STYLES_H2 = css`
   font-size: 16px;
-  transition: 200ms ease color;
-  cursor: pointer;
-
-  :hover {
-    color: magenta;
-  }
 `;
 
-const STYLES_P = css`
-  margin-top: 4px;
-  font-size: 12px;
-
-  strong {
-    cursor: pointer;
-    transition: 200ms ease color;
-
-    :hover {
-      color: magenta;
-    }
-  }
-`;
-
-export default class ChatHeader extends React.Component {
+export default class ChatHeaderActive extends React.Component {
   render() {
     return (
       <header className={STYLES_HEADER}>
         <div className={STYLES_HEADER_LEFT}>
-          <h2 className={STYLES_H2} onClick={this.props.onSettingsClick}>
-            <SVG.HashTag size="12px" style={{ marginRight: 4 }} />
-            [bind-channel-name]
-          </h2>
-          <p className={STYLES_P} onClick={this.props.onMembersClick}>
-            <strong>[bind-member-count] online</strong>
-          </p>
+          <h2 className={STYLES_H2}>{this.props.children}</h2>
         </div>
-        <div className={STYLES_HEADER_RIGHT} />
+        <div className={STYLES_HEADER_RIGHT} onClick={this.props.onDismiss}>
+          <SVG.Dismiss size="16px" />
+        </div>
       </header>
     );
   }

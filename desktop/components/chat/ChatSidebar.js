@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as SVG from '~/common/svg';
 import * as Constants from '~/common/constants';
 import * as LayoutUtilities from '~/common/layout-utilities';
 
@@ -11,8 +12,11 @@ import { NavigatorContext, NavigationContext } from '~/contexts/NavigationContex
 import { ChatContext } from '~/contexts/ChatContext';
 
 import ChatHeader from '~/components/chat/ChatHeader';
+import ChatHeaderActive from '~/components/chat/ChatHeaderActive';
 import ChatMessages from '~/components/chat/ChatMessages';
+import ChatMembers from '~/components/chat/ChatMembers';
 import ChatInput from '~/components/chat/ChatInput';
+import ChatOptions from '~/components/chat/ChatOptions';
 
 import ChatSidebarOptions from '~/components/chat/ChatSidebarOptions';
 import ChatSidebarOptionsChannels from '~/components/chat/ChatSidebarOptionsChannels';
@@ -61,36 +65,41 @@ const STYLES_FIXED_CHAT = css`
 class ChatSidebar extends React.Component {
   state = {
     value: '',
-    mode: 'CHAT',
+    mode: 'DEFAULT',
+    chatMode: 'MESSAGES',
   };
 
   _handleSignIn = () => {
-    alert('Should switch the pane to sign in.');
+    alert('_handleSignIn');
   };
 
   _handleSignOut = () => {
-    alert('Should sign the user out');
+    alert('_handleSignOut');
   };
 
   _handleNavigateToMakeGame = () => {
-    alert('Should navigate to making a game');
+    alert('_handleNavigateToMakeGame');
   };
 
   _handleNavigateToFeaturedGames = () => {
-    alert('Should navigate to featured games');
+    alert('_handleNavigateToFeaturedGames');
   };
 
   _handleNavigateToAllPosts = () => {
-    alert('Should navigate to all posts');
+    alert('_handleNavigateToAllPosts');
   };
 
   _handleNavigateToHistory = () => {
-    alert('Should navigate to history');
+    alert('_handleNavigateToHistory');
   };
 
   _handleOpenBrowserForDocumentation = () => {
-    alert('Should open a browser window to view documentation');
+    alert('_handleOpenBrowserForDocumentation');
   };
+
+  _handleShowSingleChannelMembers = () => this.setState({ chatMode: 'MEMBERS' });
+
+  _handleShowSingleChannelOptions = () => this.setState({ chatMode: 'OPTIONS' });
 
   _handleShowOptions = () => this.setState({ mode: 'OPTIONS' });
 
@@ -98,43 +107,45 @@ class ChatSidebar extends React.Component {
 
   _handleShowDirectMessageOptions = () => this.setState({ mode: 'OPTIONS_MESSAGES' });
 
-  _handleHideOptions = () => this.setState({ mode: 'CHAT' });
+  _handleHideOptions = () => this.setState({ mode: 'DEFAULT' });
+
+  _handleResetChatWindow = () => this.setState({ chatMode: 'MESSAGES' });
 
   _handleAddChannel = () => {
-    alert('Should add a new channel if you have the privileges');
+    alert('_handleAddChannel');
   };
 
   _handleHideChannel = () => {
-    alert('Should hide the channel from the list on the left');
+    alert('_handleHideChannel');
   };
 
   // NOTE(jim): Castle admin only for now.
   _handleDeleteChannel = () => {
-    alert('Should delete channels');
+    alert('_handleDeleteChannel');
   };
 
   // NOTE(jim): Castle admin only for now.
   _handleUpdateChannel = () => {
-    alert('Should update the settings on a channel');
+    alert('_handleUpdateChannel');
   };
 
   _handleAddDirectMessage = () => {
-    alert('Should start new direct messages with a user');
+    alert('_handleAddDirectMessage');
   };
 
   _handleHideDirectMessages = () => {
-    alert('Should hide direct messages from the sidebar');
+    alert('_handleHideDirectMessage');
   };
 
   // NOTE(jim): Any member of a direct message should be able to permanently delete
   // a DM.
   _handleDeleteDirectMessage = () => {
-    alert('Should permanently delete direct message');
+    alert('_handleDeleteDirectMessage');
   };
 
   // NOTE(jim): Any member of a direct message should be able to update the settings of a DM.
   _handleUpdateDirectMessage = () => {
-    alert('Should update the settings on a direct message');
+    alert('_handleUpdateDirectMessage');
   };
 
   _handleChange = (e) => {
@@ -205,11 +216,57 @@ class ChatSidebar extends React.Component {
     );
   };
 
+  _renderChat = () => {
+    const { navigation } = this.props;
+    const layoutMode = LayoutUtilities.getLayoutMode(navigation.contentMode);
+    const className = layoutMode === 'FLUID_CHAT' ? STYLES_CHAT : STYLES_FIXED_CHAT;
+
+    if (this.state.chatMode === 'OPTIONS') {
+      return (
+        <div className={className}>
+          <ChatHeaderActive onDismiss={this._handleResetChatWindow}>
+            Channel Settings
+          </ChatHeaderActive>
+          <ChatOptions />
+        </div>
+      );
+    }
+
+    if (this.state.chatMode === 'MEMBERS') {
+      return (
+        <div className={className}>
+          <ChatHeaderActive onDismiss={this._handleResetChatWindow}>
+            Channel Members
+          </ChatHeaderActive>
+          <ChatMembers />
+        </div>
+      );
+    }
+
+    if (this.state.chatMode === 'MESSAGES') {
+      return (
+        <div className={className}>
+          <ChatHeader
+            onSettingsClick={this._handleShowSingleChannelOptions}
+            onMembersClick={this._handleShowSingleChannelMembers}
+          />
+          <ChatMessages />
+          <ChatInput
+            value={this.state.value}
+            name="value"
+            placeholder="Type a message"
+            onChange={this._handleChange}
+            onKeyDown={this._handleKeyDown}
+          />
+        </div>
+      );
+    }
+  };
+
   render() {
     const { currentUser, navigator, navigation, social, chat } = this.props;
-    // TODO(jim): Development only
-    console.log({ currentUser, navigator, navigation, social, chat });
 
+    const chatElement = this._renderChat();
     const layoutMode = LayoutUtilities.getLayoutMode(navigation.contentMode);
 
     let sidebarElement = this._renderRootSidebar();
@@ -228,17 +285,7 @@ class ChatSidebar extends React.Component {
     return (
       <React.Fragment>
         {sidebarElement}
-        <div className={layoutMode === 'FLUID_CHAT' ? STYLES_CHAT : STYLES_FIXED_CHAT}>
-          <ChatHeader />
-          <ChatMessages />
-          <ChatInput
-            value={this.state.value}
-            name="value"
-            placeholder="Type a message"
-            onChange={this._handleChange}
-            onKeyDown={this._handleKeyDown}
-          />
-        </div>
+        {chatElement}
       </React.Fragment>
     );
   }
