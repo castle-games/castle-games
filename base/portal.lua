@@ -2,6 +2,17 @@
 
 local jsEvents = require 'jsEvents'
 
+local theOS = love.system.getOS()
+local isMobile = theOS == 'Android' or theOS == 'iOS'
+
+-- C FFI definitions that are used on desktop
+local ffi = require 'ffi'
+local C = ffi.C
+ffi.cdef [[
+float ghostGetWidth();
+float ghostGetHeight();
+]]
+
 -- The root `_G`
 local GG = _G
 
@@ -133,18 +144,22 @@ function portalMeta:setupLove()
 
     if newLove.graphics then -- Unavailable in non-main thread
         function newLove.graphics.getWidth()
-            if CASTLE_INITIAL_DATA and CASTLE_INITIAL_DATA.graphics.width ~= 0 then
-                return CASTLE_INITIAL_DATA.graphics.width
-            else
-                return love.graphics.getWidth()
+            if castle.system.isDesktop() then
+                local ghostWidth = C.ghostGetWidth()
+                if ghostWidth ~= 0 then -- 0 if 'full'
+                    return ghostWidth
+                end
             end
+            return love.graphics.getWidth()
         end
         function newLove.graphics.getHeight()
-            if CASTLE_INITIAL_DATA and CASTLE_INITIAL_DATA.graphics.height ~= 0 then
-                return CASTLE_INITIAL_DATA.graphics.height
-            else
-                return love.graphics.getHeight()
+            if castle.system.isDesktop() then
+                local ghostHeight = C.ghostGetHeight()
+                if ghostHeight ~= 0 then -- 0 if 'full'
+                    return ghostHeight
+                end
             end
+            return love.graphics.getHeight()
         end
         function newLove.graphics.getDimensions()
             return newLove.graphics.getWidth(), newLove.graphics.getHeight()

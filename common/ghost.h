@@ -35,8 +35,6 @@ bool ghostCancelDownload(unsigned int downloadId);
 
 void ghostQuitMessageLoop();
 void ghostClose();
-void ghostSetDimensions(float width, float height);
-void ghostGetDimensions(float *width, float *height);
 void ghostUpdateChildWindowFrame();
 void ghostResizeChildWindow(float dw, float dh);
 void ghostSetChildWindowFrame(float left, float top, float width, float height);
@@ -55,7 +53,12 @@ enum {
     GHOST_SCALING_STEP = 2,
 };
 
-void ghostSetScalingModes(int up, int down);
+extern bool ghostScreenSettingsDirty;
+GHOST_EXPORT void ghostSetDimensions(float width, float height);
+void ghostGetDimensions(float *width, float *height);
+GHOST_EXPORT float ghostGetWidth();
+GHOST_EXPORT float ghostGetHeight();
+GHOST_EXPORT void ghostSetScalingModes(int up, int down);
 void ghostGetScalingModes(int *up, int *down);
   
 void ghostGetGameFrame(float frameLeft, float frameTop, float frameWidth, float frameHeight,

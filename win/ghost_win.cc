@@ -78,11 +78,20 @@ bool ghostWinPendingChildFocus = false;
 
 static float childLeft = 0, childTop = 0, childWidth = 200, childHeight = 200;
 
-static void _updateChildWindowRect(RECT currParentRect) {
+static void _updateChildWindowRect() {
+  ghostScreenSettingsDirty = false;
+
   auto child = ghostWinGetChildWindow();
   if (!child) {
     return;
   }
+
+  RECT currParentRect = {0, 0, 10000, 10000};
+  auto parent = ghostWinGetMainWindow();
+  if (!parent) {
+    return;
+  }
+  GetWindowRect(parent, &currParentRect);
 
   auto frameLeft = fmax(0, ghostGlobalScaling * childLeft),
        frameTop = fmax(0, ghostGlobalScaling * childTop);
@@ -542,11 +551,7 @@ void ghostStep() {
         childWidth = msg.body.setChildWindowFrame.width;
         childHeight = msg.body.setChildWindowFrame.height;
 
-        RECT currParentRect = {0, 0, 10000, 10000};
-        if (parent) {
-          GetWindowRect(parent, &currParentRect);
-        }
-        _updateChildWindowRect(currParentRect);
+        _updateChildWindowRect();
       } break;
 
       case SET_CHILD_WINDOW_VISIBLE: {
@@ -596,11 +601,7 @@ void ghostStep() {
             childTop = monitorInfo.rcMonitor.top;
             childWidth = monitorInfo.rcMonitor.right - monitorInfo.rcMonitor.left;
             childHeight = monitorInfo.rcMonitor.bottom - monitorInfo.rcMonitor.top;
-            RECT currParentRect = {0, 0, 10000, 10000};
-            if (parent) {
-              GetWindowRect(parent, &currParentRect);
-            }
-            _updateChildWindowRect(currParentRect);
+            _updateChildWindowRect();
           } else {
             isFullscreen = false;
 
@@ -618,6 +619,10 @@ void ghostStep() {
       } break;
       }
     }
+  }
+
+  if (ghostScreenSettingsDirty) {
+    _updateChildWindowRect();
   }
 
   if (luaState) {

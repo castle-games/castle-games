@@ -107,11 +107,14 @@ bool ghostCreateProjectAtPath(const char *path, const char **entryPoint) {
   return _ghostCreateFileFromTemplateAtPath(path, "blank.castle", "project.castle", entryPoint);
 }
 
+extern "C" bool ghostScreenSettingsDirty = false;
+
 static float ghostWidth = 800, ghostHeight = 450;
 
-void ghostSetDimensions(float width, float height) {
+GHOST_EXPORT void ghostSetDimensions(float width, float height) {
   ghostWidth = width;
   ghostHeight = height;
+  ghostScreenSettingsDirty = true;
 }
 
 void ghostGetDimensions(float *width, float *height) {
@@ -119,11 +122,20 @@ void ghostGetDimensions(float *width, float *height) {
   *height = ghostHeight;
 }
 
+GHOST_EXPORT float ghostGetWidth() {
+  return ghostWidth;
+}
+
+GHOST_EXPORT float ghostGetHeight() {
+  return ghostHeight;
+}
+
 static int ghostUpScaling = GHOST_SCALING_ON, ghostDownScaling = GHOST_SCALING_ON;
 
-void ghostSetScalingModes(int up, int down) {
+GHOST_EXPORT void ghostSetScalingModes(int up, int down) {
   ghostUpScaling = up;
   ghostDownScaling = down;
+  ghostScreenSettingsDirty = true;
 }
 
 void ghostGetScalingModes(int *up, int *down) {

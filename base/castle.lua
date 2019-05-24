@@ -51,6 +51,47 @@ function castle.system.getScreenScaling()
     end
 end
 
+ffi.cdef 'void ghostSetDimensions(float width, float height);'
+function castle.system.setDimensions(width, height)
+    if width == nil then
+        width, height = 800, 450
+    end
+    if isDesktop then
+        if width == 'full' then
+            C.ghostSetDimensions(0, 0)
+        else
+            C.ghostSetDimensions(width, height)
+        end
+    end
+end
+
+ffi.cdef 'void ghostSetScalingModes(int up, int down);'
+function castle.system.setScalingModes(up, down)
+    if down == nil then
+        down = up
+    end
+
+    local upNumber, downNumber = 1, 1
+    if up == 'off' then
+        upNumber = 0
+    elseif up == 'on' then
+        upNumber = 1
+    elseif up == 'step' then
+        upNumber = 2
+    end
+    if down == 'off' then
+        downNumber = 0
+    elseif down == 'on' then
+        downNumber = 1
+    elseif down == 'step' then
+        downNumber = 2
+    end
+
+    if isDesktop then
+        C.ghostSetScalingModes(upNumber, downNumber)
+    end
+end
+
 
 -- game
 
