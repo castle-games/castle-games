@@ -81,6 +81,9 @@ export async function uploadFileAsync(path, params) {
   }
 }
 
+export const writeCastleIdFileAsync = async (projectDirectory, gameId) =>
+  execNodeAsync('writeCastleIdFile', { projectDirectory, gameId });
+
 async function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }

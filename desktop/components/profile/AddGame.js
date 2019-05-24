@@ -231,6 +231,10 @@ export default class AddGame extends React.Component {
         addedGame = {};
         previewError = e.message;
       }
+      // don't block if this fails
+      try {
+        await ExecNode.writeCastleIdFileAsync(directoryInputValue, gameId);
+      } catch (_) {}
     }
 
     if (previewError) {
