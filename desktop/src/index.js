@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as Network from '~/common/network';
 import * as Actions from '~/common/actions';
+import * as Analytics from '~/common/analytics';
 
 import { injectGlobal } from 'react-emotion';
 import { injectGlobalLoaderStyles } from '~/components/primitives/loader';
@@ -116,6 +117,7 @@ const run = async () => {
   document.getElementById('loader').outerHTML = '';
 };
 
+Analytics.initialize();
 injectGlobalStyles();
 injectGlobalScrollOverflowPreventionStyles();
 injectGlobalLoaderStyles();

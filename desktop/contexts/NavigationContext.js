@@ -4,6 +4,7 @@ import * as Browser from '~/common/browser';
 import * as ExecNode from '~/common/execnode';
 import * as Strings from '~/common/strings';
 import * as Urls from '~/common/urls';
+import * as Analytics from '~/common/analytics';
 
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { DevelopmentContext } from '~/contexts/DevelopmentContext';
@@ -118,12 +119,22 @@ class NavigationContextManager extends React.Component {
   }
 
   // load game
-  _loadGameAsync = async (game, { post = null, gameParams = null, referrerGame = null } = {}) => {
+  _loadGameAsync = async (
+    game,
+    { post = null, gameParams = null, referrerGame = null, launchSource = null } = {}
+  ) => {
     let { url } = game;
     if (Strings.isEmpty(url)) {
       return;
     }
     const time = Date.now();
+    // track game launches
+    Analytics.trackGameLaunch({ game, launchSource });
+    // navigate to the game
+    Analytics.trackNavigation({
+      prevContentMode: this.state.navigation.contentMode,
+      nextContentMode: 'game',
+    });
     this.setState({
       navigation: {
         ...this.state.navigation,
@@ -140,13 +151,18 @@ class NavigationContextManager extends React.Component {
   };
 
   // navigator actions
-  _navigateToContentMode = (mode) => {
+  _navigateToContentMode = (mode, navigationParams) => {
+    Analytics.trackNavigation({
+      prevContentMode: this.state.navigation.contentMode,
+      nextContentMode: mode,
+    });
     this.setState({
       navigation: {
         ...this.state.navigation,
         contentMode: mode,
         userProfileShown: null,
         timeLastNavigated: Date.now(),
+        ...navigationParams,
       },
     });
   };
@@ -168,15 +184,7 @@ class NavigationContextManager extends React.Component {
 
   navigateToCreate = () => this._navigateToContentMode('create');
 
-  navigateToEditPost = (params) => {
-    this.setState({
-      navigation: {
-        ...this.state.navigation,
-        contentMode: 'edit_post',
-        params,
-      },
-    });
-  };
+  navigateToEditPost = (params) => this._navigateToContentMode('edit-post', { params });
 
   navigateToCurrentGame = () => {
     if (!this.state.navigation.game) {
@@ -250,15 +258,7 @@ class NavigationContextManager extends React.Component {
         } catch (_) {}
       })();
     }
-    this.setState({
-      navigation: {
-        ...this.state.navigation,
-        contentMode: 'profile',
-        userProfileShown: fullUser,
-        timeLastNavigated: Date.now(),
-        options,
-      },
-    });
+    this._navigateToContentMode('profile', { userProfileShown: fullUser, options });
   };
 
   reloadGame = (onlyIfVisible) => {
@@ -283,6 +283,13 @@ class NavigationContextManager extends React.Component {
       const oldContentMode = state.navigation.contentMode;
       const newContentMode =
         oldContentMode === 'game' || oldContentMode === 'edit_post' ? 'home' : oldContentMode;
+      // navigate away from the game
+      Analytics.trackNavigation({
+        prevContentMode: oldContentMode,
+        nextContentMode: newContentMode,
+      });
+      // track the fact that a game was ended
+      Analytics.trackGameEnd({ game: state.navigation.game });
       return {
         ...state,
         navigation: {

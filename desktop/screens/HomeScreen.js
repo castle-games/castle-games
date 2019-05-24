@@ -76,6 +76,10 @@ class HomeScreen extends React.Component {
     });
   };
 
+  _navigateToGame = (game, options) => {
+    return this.props.navigateToGame(game, { launchSource: `home-${this.state.mode}`, ...options });
+  };
+
   render() {
     const recentGames = this.props.history
       ? this.props.history.map((historyItem) => {
@@ -99,7 +103,7 @@ class HomeScreen extends React.Component {
             viewer={this.props.viewer}
             gameItems={this.props.featuredGames}
             onUserSelect={this.props.navigateToUserProfile}
-            onGameSelect={this.props.navigateToGame}
+            onGameSelect={this._navigateToGame}
             onSignInSelect={this.props.navigateToSignIn}
           />
         ) : null}
@@ -108,7 +112,7 @@ class HomeScreen extends React.Component {
             viewer={this.props.viewer}
             gameItems={this.props.featuredGames}
             onUserSelect={this.props.navigateToUserProfile}
-            onGameSelect={this.props.navigateToGame}
+            onGameSelect={this._navigateToGame}
             onSignInSelect={this.props.navigateToSignIn}
           />
         ) : null}
@@ -117,7 +121,7 @@ class HomeScreen extends React.Component {
             viewer={this.props.viewer}
             gameItems={this.props.featuredExamples}
             onUserSelect={this.props.navigateToUserProfile}
-            onGameSelect={this.props.navigateToGame}
+            onGameSelect={this._navigateToGame}
             onSignInSelect={this.props.navigateToSignIn}
           />
         ) : null}
@@ -126,7 +130,7 @@ class HomeScreen extends React.Component {
             gameItems={recentGames}
             viewer={this.props.viewer}
             onUserSelect={this.props.navigateToUserProfile}
-            onGameSelect={this.props.navigateToGame}
+            onGameSelect={this._navigateToGame}
             onSignInSelect={this.props.navigateToSignIn}
           />
         ) : null}

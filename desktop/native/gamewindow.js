@@ -12,9 +12,6 @@ class GameWindow {
     this._isOpen = true;
     this._currentGame = game;
     this._navigations = navigations;
-    amplitude.getInstance().logEvent('OPEN_LUA', {
-      gameUrl,
-    });
     Share.addEventListeners(game);
     UserStatus.startAsync(game);
     await NativeBinds.openUri({ uri: gameUrl, initialData: JSON.stringify(initialData) });
