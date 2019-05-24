@@ -7,6 +7,7 @@ const actions = [
   require('./actions/test'),
   require('./actions/uploadScreenCapture'),
   require('./actions/uploadFile'),
+  require('./actions/writeCastleIdFile'),
 ];
 
 async function runAsync() {
