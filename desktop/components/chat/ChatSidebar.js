@@ -317,6 +317,11 @@ class ChatSidebar extends React.Component {
   render() {
     const { mode } = this.state;
     const { navigation } = this.props;
+
+    if (navigation.isFullScreen) {
+      return null;
+    }
+
     const chatElement = this._renderChat();
     const layoutMode = LayoutUtilities.getLayoutMode(navigation.contentMode);
     const dynamicStyles = {
