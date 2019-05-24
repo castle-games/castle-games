@@ -254,7 +254,12 @@ function ui.checkbox(labelText, checked, props)
         for _, e in ipairs(es) do
             if e.type == 'onChange' then
                 if props and props.onChange then
-                    newChecked = props.onChange(e.checked) or e.checked
+                    local r = props.onChange(e.checked)
+                    if r ~= nil then
+                        newChecked = r
+                    else
+                        newChecked = e.checked
+                    end
                 else
                     newChecked = e.checked
                 end
