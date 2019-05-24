@@ -36,7 +36,7 @@ export default (props) => {
   return (
     <div className={STYLES_CONTAINER}>
       <div className={STYLES_CONTAINER_LEFT}>{props.children}</div>
-      <div className={STYLES_CONTAINER_RIGHT}>
+      <div className={STYLES_CONTAINER_RIGHT} onClick={props.onShowOptions}>
         <SVG.Add size="16px" />
       </div>
     </div>

@@ -38,24 +38,7 @@ const STYLES_HEADER_RIGHT = css`
   }
 `;
 
-const STYLES_OPTION = css`
-  font-family: ${Constants.REFACTOR_FONTS.system};
-  user-select: none;
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 16px;
-  text-align: right;
-  padding: 0 16px 0 16px;
-  width: 100%;
-  cursor: pointer;
-  transition: color 200ms ease;
-
-  :hover {
-    color: magenta;
-  }
-`;
-
-export default class ChatSidebarOptions extends React.Component {
+export default class ChatSidebarOptionsMessages extends React.Component {
   render() {
     return (
       <React.Fragment>
@@ -65,9 +48,6 @@ export default class ChatSidebarOptions extends React.Component {
             <SVG.Dismiss size="16px" />
           </div>
         </header>
-        <div className={STYLES_OPTION}>Option #1</div>
-        <div className={STYLES_OPTION}>Option #2</div>
-        <div className={STYLES_OPTION}>Option #3</div>
       </React.Fragment>
     );
   }

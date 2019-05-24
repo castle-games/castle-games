@@ -16,7 +16,9 @@ export default class ChatSidebarDirectMessages extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTAINER}>
-        <ChatSidebarGroupHeader>Direct Messages</ChatSidebarGroupHeader>
+        <ChatSidebarGroupHeader onShowOptions={this.props.onShowOptions}>
+          Direct Messages
+        </ChatSidebarGroupHeader>
         <ChatSidebarDirectMessageItem data={{ online: true, name: 'Person #1', pending: 50 }} />
         <ChatSidebarDirectMessageItem data={{ online: true, name: 'Person #2', pending: 40 }} />
         <ChatSidebarDirectMessageItem data={{ online: true, name: 'Person #3', pending: 20 }} />

@@ -15,6 +15,9 @@ import ChatMessages from '~/components/chat/ChatMessages';
 import ChatInput from '~/components/chat/ChatInput';
 
 import ChatSidebarOptions from '~/components/chat/ChatSidebarOptions';
+import ChatSidebarOptionsChannels from '~/components/chat/ChatSidebarOptionsChannels';
+import ChatSidebarOptionsMessages from '~/components/chat/ChatSidebarOptionsMessages';
+
 import ChatSidebarHeader from '~/components/chat/ChatSidebarHeader';
 import ChatSidebarChannels from '~/components/chat/ChatSidebarChannels';
 import ChatSidebarDirectMessages from '~/components/chat/ChatSidebarDirectMessages';
@@ -91,15 +94,11 @@ class ChatSidebar extends React.Component {
 
   _handleShowOptions = () => this.setState({ mode: 'OPTIONS' });
 
+  _handleShowChannelOptions = () => this.setState({ mode: 'OPTIONS_CHANNELS' });
+
+  _handleShowDirectMessageOptions = () => this.setState({ mode: 'OPTIONS_MESSAGES' });
+
   _handleHideOptions = () => this.setState({ mode: 'CHAT' });
-
-  _handleShowChannelOptions = () => {
-    alert('Should show options available to the user when they click channel options');
-  };
-
-  _handleShowDirectMessageOptions = () => {
-    alert('Should show direct message options to the user when they click direct message options');
-  };
 
   _handleAddChannel = () => {
     alert('Should add a new channel if you have the privileges');
@@ -165,7 +164,6 @@ class ChatSidebar extends React.Component {
           onOpenBrowserForDocumentation={this._handleOpenBrowserForDocumentation}
         />
         <ChatSidebarChannels
-          onHideOptions={this._handleHideOptions}
           onShowOptions={this._handleShowChannelOptions}
           onAddChannel={this._handleAddChannel}
           onHideChannel={this._handleHideChannel}
@@ -173,7 +171,6 @@ class ChatSidebar extends React.Component {
           onUpdateChannel={this._handleUpdateChannel}
         />
         <ChatSidebarDirectMessages
-          onHideOptions={this._handleHideOptions}
           onShowOptions={this._handleShowDirectMessageOptions}
           onAddDirectMessage={this._handleAddDirectMessage}
           onHideDirectMessage={this._handleHideDirectMessages}
@@ -186,8 +183,24 @@ class ChatSidebar extends React.Component {
 
   _renderOptions = () => {
     return (
-      <div className={STYLES_SIDEBAR} onClick={this._handleHideOptions}>
-        <ChatSidebarOptions />
+      <div className={STYLES_SIDEBAR}>
+        <ChatSidebarOptions onDismiss={this._handleHideOptions} />
+      </div>
+    );
+  };
+
+  _renderMessageOptions = () => {
+    return (
+      <div className={STYLES_SIDEBAR}>
+        <ChatSidebarOptionsMessages onDismiss={this._handleHideOptions} />
+      </div>
+    );
+  };
+
+  _renderChannelOptions = () => {
+    return (
+      <div className={STYLES_SIDEBAR}>
+        <ChatSidebarOptionsChannels onDismiss={this._handleHideOptions} />
       </div>
     );
   };
@@ -202,6 +215,14 @@ class ChatSidebar extends React.Component {
     let sidebarElement = this._renderRootSidebar();
     if (this.state.mode === 'OPTIONS') {
       sidebarElement = this._renderOptions();
+    }
+
+    if (this.state.mode === 'OPTIONS_CHANNELS') {
+      sidebarElement = this._renderChannelOptions();
+    }
+
+    if (this.state.mode === 'OPTIONS_MESSAGES') {
+      sidebarElement = this._renderMessageOptions();
     }
 
     return (
