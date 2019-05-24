@@ -243,8 +243,12 @@ export default class AddGame extends React.Component {
     }
   };
 
-  _handleClickHelp = () => {
+  _handleClickAddHelp = () => {
     NativeUtil.openExternalURL(`${Constants.WEB_HOST}/posts/@castle/adding-game-to-castle-profile`);
+  };
+
+  _handleClickHostingHelp = () => {
+    NativeUtil.openExternalURL(`${Constants.WEB_HOST}/posts/@castle/hosting-your-own-games`);
   };
 
   _renderGamePreview = () => {
@@ -265,15 +269,29 @@ export default class AddGame extends React.Component {
   };
 
   _renderHelp = () => {
+    let maybeHostingLink;
+    if (this.state.hostingType === 'external') {
+      maybeHostingLink = (
+        <div className={STYLES_PARAGRAPH}>
+          Also, learn about{' '}
+          <span className={STYLES_LINK} onClick={this._handleClickHostingHelp}>
+            hosting your own games
+          </span>
+          .
+        </div>
+      );
+    }
     return (
       <React.Fragment>
         <div className={STYLES_HEADING}>Help</div>
         <div className={STYLES_PARAGRAPH}>
-          <span className={STYLES_LINK} onClick={this._handleClickHelp}>
-            Read our guide
-          </span>{' '}
-          on adding games to your profile.
+          Read our guide on{' '}
+          <span className={STYLES_LINK} onClick={this._handleClickAddHelp}>
+            adding games to your profile
+          </span>
+          .
         </div>
+        {maybeHostingLink}
       </React.Fragment>
     );
   };
