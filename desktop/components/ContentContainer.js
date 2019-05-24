@@ -34,7 +34,6 @@ const LEGACY_STYLES_CONTAINER = css`
 const STYLES_CONTAINER_FLUID = css`
   font-family: ${Constants.font.default};
   background: ${Constants.colors.default};
-  border-left: 1px solid ${Constants.REFACTOR_COLORS.elements.border};
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -43,7 +42,6 @@ const STYLES_CONTAINER_FLUID = css`
 const STYLES_CONTAINER_FIXED_WITH_BORDER = css`
   width: 480px;
   flex-shrink: 0;
-  border-left: 1px solid ${Constants.REFACTOR_COLORS.elements.border};
 `;
 
 class ContentContainer extends React.Component {

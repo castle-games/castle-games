@@ -38,6 +38,7 @@ const STYLES_CONTAINER = css`
   width: 100%;
   min-width: 10%;
   height: 100vh;
+  transition: 200ms ease width;
 `;
 
 const STYLES_TOP = css`
@@ -67,6 +68,7 @@ const STYLES_SIDEBAR = css`
   background: ${Constants.REFACTOR_COLORS.elements.channels};
   overflow-y: scroll;
   overflow-wrap: break-word;
+  transition: 200ms ease width;
 
   ::-webkit-scrollbar {
     display: none;
@@ -81,6 +83,7 @@ const STYLES_CHAT = css`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  transition: 200ms ease width;
   align-items: flex-start;
 `;
 

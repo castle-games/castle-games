@@ -67,6 +67,7 @@ const STYLES_ACTION = css`
 
 const STYLES_ERROR_MESSAGE = css`
   background: ${Constants.colors.error};
+  color: ${Constants.colors.white};
   flex-shrink: 0;
   display: flex;
   padding: 16px;
