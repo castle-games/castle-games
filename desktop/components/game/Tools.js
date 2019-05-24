@@ -1,12 +1,13 @@
 import * as React from 'react';
 import * as NativeUtil from '~/native/nativeutil';
+import * as Constants from '~/common/constants';
 
 import { css } from 'react-emotion';
 
 import Logs from '~/common/logs';
 
 import '~/components/game/Tools.css';
-import { Button, Checkbox, NumberInput, TextInput, Toggle } from 'carbon-components-react';
+import { Button, Checkbox, NumberInput, Slider, TextInput, Toggle } from 'carbon-components-react';
 
 //
 // Infrastructure
@@ -178,6 +179,48 @@ class ToolNumberInput extends React.PureComponent {
 }
 elementTypes['numberInput'] = ToolNumberInput;
 
+class ToolSlider extends React.PureComponent {
+  state = {
+    value: this.props.element.props.value,
+    lastSentEventId: null,
+  };
+
+  static getDerivedStateFromProps(props, state) {
+    if (
+      state.lastSentEventId === null ||
+      props.element.lastReportedEventId == state.lastSentEventId
+    ) {
+      return {
+        value: props.element.props.value,
+      };
+    }
+    return null;
+  }
+
+  render() {
+    const { element } = this.props;
+    return (
+      <Slider
+        {...element.props}
+        id={element.pathId}
+        labelText={element.props && element.props.label}
+        value={this.state.value}
+        onChange={({ value }) => {
+          value = typeof value === 'number' ? value : Number.parseFloat(value);
+          this.setState({
+            value,
+            lastSentEventId: sendEvent(element.pathId, {
+              type: 'onChange',
+              value,
+            }),
+          });
+        }}
+      />
+    );
+  }
+}
+elementTypes['slider'] = ToolSlider;
+
 class ToolTextInput extends React.PureComponent {
   state = {
     value: this.props.element.props.value,
@@ -301,16 +344,33 @@ const STYLES_CONTAINER = css`
   color: #f3f3f3;
   background-color: #171717;
 
-  /* Inputs seem to not properly hide the spinner buttons, so do this */
-  input[type=number]::-webkit-inner-spin-button,
-  input[type=number]::-webkit-outer-spin-button {
+  /* Inputs seem to not properly hide the spinner buttons */
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
+  }
+
+  /* Make input elements stretch to width of container */
+  .bx--form-item {
+    align-items: stretch !important;
+  }
+
+  /* Sliders are too wide by default */
+  .bx--slider {
+    min-width: 0 !important;
+    flex: 1;
+  }
+
+  /* Fix number input fonts */
+  input[type='number'] {
+    font-family: ${Constants.font.mono} !important;
   }
 
   padding: 8px;
 
   overflow-y: scroll;
+  overflow-x: hidden;
 
   ::-webkit-scrollbar {
     width: 8px;
@@ -330,39 +390,81 @@ const STYLES_CONTAINER = css`
   }
 `;
 
+const DEBUG_PREPOPULATED = false;
+
 export default class Tools extends React.PureComponent {
   static initialState = {
-    root: {
-      // Some example data to test with in the browser
-      // panes: {
-      //   DEFAULT: {
-      //     type: 'pane',
-      //     props: {
-      //       name: 'DEFAULT',
-      //     },
-      //     children: {
-      //       textInputstr2: {
-      //         type: 'textInput',
-      //         pathId: 'DEFAULTtextInputstr',
-      //         props: {
-      //           value: 'hello, world',
-      //         },
-      //       },
-      //       textInputstr: {
-      //         type: 'textInput',
-      //         pathId: 'DEFAULTtextInputstr',
-      //         props: {
-      //           value: 'hello, world',
-      //         },
-      //         prevId: 'textInputstr2'
-      //       },
-      //       count: 2,
-      //       lastId: 'textInputstr',
-      //     },
-      //   },
-      // },
-    },
-    visible: false,
+    root: DEBUG_PREPOPULATED ? {
+      panes: {
+        DEFAULT: {
+          type: 'pane',
+          props: {
+            name: 'DEFAULT',
+          },
+          children: {
+            lastId: 'buttonWoah!',
+            slidernumber2: {
+              type: 'slider',
+              prevId: 'numberInputnumber',
+              pathId: 'DEFAULTslidernumber2',
+              props: {
+                max: 100,
+                label: 'number2',
+                min: 0,
+                value: 50,
+              },
+            },
+            checkboxboolean: {
+              type: 'checkbox',
+              prevId: 'textInputstring',
+              pathId: 'DEFAULTcheckboxboolean',
+              props: {
+                label: 'boolean',
+                checked: true,
+              },
+            },
+            textInputstring: {
+              type: 'textInput',
+              pathId: 'DEFAULTtextInputstring',
+              props: {
+                value: 'hello, world',
+                label: 'string',
+                helperText: 'Enter a string here!',
+              },
+            },
+            'buttonWoah!': {
+              type: 'button',
+              prevId: 'slidernumber2',
+              pathId: 'DEFAULTbuttonWoah!',
+              props: {
+                label: 'Woah!',
+              },
+            },
+            count: 6,
+            'DMY1bkDr5VQ1PDd5OjQYiw==': {
+              type: 'toggle',
+              prevId: 'checkboxboolean',
+              pathId: 'e2835Rmh7HzdMi5y+ym0Ig==',
+              props: {
+                labelA: 'boolean2 on',
+                labelB: 'boolean2 off',
+                toggled: true,
+              },
+            },
+            numberInputnumber: {
+              type: 'numberInput',
+              prevId: 'DMY1bkDr5VQ1PDd5OjQYiw==',
+              pathId: 'nkFHCZGdpD+imjvmXhuS1A==',
+              props: {
+                label: 'number',
+                value: 50,
+              },
+            },
+          },
+        },
+      },
+    } : {},
+    visible: DEBUG_PREPOPULATED,
   };
 
   state = Tools.initialState;
