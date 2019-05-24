@@ -14,6 +14,7 @@ import ChatHeader from '~/components/chat/ChatHeader';
 import ChatMessages from '~/components/chat/ChatMessages';
 import ChatInput from '~/components/chat/ChatInput';
 
+import ChatSidebarOptions from '~/components/chat/ChatSidebarOptions';
 import ChatSidebarHeader from '~/components/chat/ChatSidebarHeader';
 import ChatSidebarChannels from '~/components/chat/ChatSidebarChannels';
 import ChatSidebarDirectMessages from '~/components/chat/ChatSidebarDirectMessages';
@@ -186,7 +187,7 @@ class ChatSidebar extends React.Component {
   _renderOptions = () => {
     return (
       <div className={STYLES_SIDEBAR} onClick={this._handleHideOptions}>
-        Go back
+        <ChatSidebarOptions />
       </div>
     );
   };
