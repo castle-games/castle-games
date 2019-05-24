@@ -90,7 +90,7 @@ class ToolButton extends React.PureComponent {
         small={!(element.props && element.props.big)}
         kind={(element.props && element.props.kind) || 'secondary'}
         onClick={() => sendEvent(element.pathId, { type: 'onClick' })}>
-        {element.props.labelText}
+        {element.props.label}
       </Button>
     );
   }
@@ -121,6 +121,7 @@ class ToolCheckbox extends React.PureComponent {
       <Checkbox
         {...element.props}
         id={element.pathId}
+        labelText={element.props && element.props.label}
         checked={this.state.checked}
         onChange={(checked) => {
           this.setState({
@@ -201,6 +202,7 @@ class ToolTextInput extends React.PureComponent {
       <TextInput
         {...element.props}
         id={element.pathId}
+        labelText={element.props && element.props.label}
         value={this.state.value}
         onChange={(event) => {
           this.setState({

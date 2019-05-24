@@ -222,10 +222,10 @@ end
 -- Components
 --
 
-function ui.button(labelText, props)
-    assert(type(labelText) == 'string', '`ui.button` needs a string `labelText`')
+function ui.button(label, props)
+    assert(type(label) == 'string', '`ui.button` needs a string `label`')
 
-    local c = addChild('button', labelText, without(merge({ labelText = labelText }, props), 'onClick'), true)
+    local c = addChild('button', label, without(merge({ label = label }, props), 'onClick'), true)
 
     local clicked = false
     local es = pendingEvents[c.pathId]
@@ -242,11 +242,11 @@ function ui.button(labelText, props)
     return clicked
 end
 
-function ui.checkbox(labelText, checked, props)
-    assert(type(labelText) == 'string', '`ui.checkbox` needs a string `labelText`')
+function ui.checkbox(label, checked, props)
+    assert(type(label) == 'string', '`ui.checkbox` needs a string `label`')
     assert(type(checked) == 'boolean', '`ui.checkbox` needs a boolean `checked`')
 
-    local c = addChild('checkbox', labelText, without(merge({ labelText = labelText, checked = checked }, props), 'onChange'), true)
+    local c = addChild('checkbox', label, without(merge({ label = label, checked = checked }, props), 'onChange'), true)
 
     local newChecked = checked
     local es = pendingEvents[c.pathId]
@@ -291,11 +291,11 @@ function ui.numberInput(label, value, props)
     return newValue
 end
 
-function ui.textInput(labelText, value, props)
-    assert(type(labelText) == 'string', '`ui.textInput` needs a string `labelText`')
+function ui.textInput(label, value, props)
+    assert(type(label) == 'string', '`ui.textInput` needs a string `label`')
     assert(type(value) == 'string', '`ui.textInput` needs a string `value`')
 
-    local c = addChild('textInput', labelText, without(merge({ labelText = labelText, value = value }, props), 'onChange'), true)
+    local c = addChild('textInput', label, without(merge({ label = label, value = value }, props), 'onChange'), true)
 
     local newValue = value
     local es = pendingEvents[c.pathId]
