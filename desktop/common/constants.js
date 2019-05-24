@@ -8,6 +8,7 @@ export const REFACTOR_COLORS = {
     channels: `#ececec`,
     body: `#ffffff`,
     border: '#ececec',
+    bottomBar: `#171717`,
   },
   text: `#282828`,
   subdued: `#8c8c8c`,

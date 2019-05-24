@@ -28,9 +28,41 @@ import ChatSidebarChannels from '~/components/chat/ChatSidebarChannels';
 import ChatSidebarDirectMessages from '~/components/chat/ChatSidebarDirectMessages';
 import ChatSidebarNavigation from '~/components/chat/ChatSidebarNavigation';
 
+import UINavigationLink from '~/components/reusable/UINavigationLink';
+
+const STYLES_CONTAINER = css`
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-direction: column;
+  width: 100%;
+  min-width: 10%;
+  height: 100vh;
+`;
+
+const STYLES_TOP = css`
+  min-height: 10%;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+`;
+
+const STYLES_BOTTOM = css`
+  flex-shrink: 0;
+  height: 32px;
+  width: 100%;
+  background: ${Constants.REFACTOR_COLORS.elements.bottomBar};
+  display: flex;
+  align-items: center;
+  padding: 0 16px 0 16px;
+`;
+
 const STYLES_SIDEBAR = css`
   width: 188px;
-  height: 100vh;
+  height: 100%;
   flex-shrink: 0;
   background: ${Constants.REFACTOR_COLORS.elements.channels};
   overflow-y: scroll;
@@ -44,7 +76,7 @@ const STYLES_SIDEBAR = css`
 const STYLES_CHAT = css`
   min-width: 25%;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   background: ${Constants.REFACTOR_COLORS.elements.body};
   display: flex;
   flex-direction: column;
@@ -52,22 +84,36 @@ const STYLES_CHAT = css`
   align-items: flex-start;
 `;
 
-const STYLES_FIXED_CHAT = css`
-  width: 420px;
-  height: 100vh;
-  flex-shrink: 0;
-  background: ${Constants.REFACTOR_COLORS.elements.body};
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
-`;
+const getContainerWidth = ({ chat, sidebar }) => {
+  if (sidebar && !chat) {
+    return `248px`;
+  }
+
+  return `480px`;
+};
+
+const getSidebarStyles = ({ chat, sidebar }) => {
+  return { width: sidebar && !chat ? '100%' : null };
+};
 
 class ChatSidebar extends React.Component {
   state = {
     value: '',
     mode: 'DEFAULT',
     chatMode: 'MESSAGES',
+    chat: true,
+    sidebar: true,
+  };
+
+  _handleToggleChat = () => {
+    this.setState({ chat: !this.state.chat, sidebar: this.state.chat ? true : this.state.sidebar });
+  };
+
+  _handleToggleSidebar = () => {
+    this.setState({
+      sidebar: !this.state.sidebar,
+      chat: this.state.sidebar ? true : this.state.chat,
+    });
   };
 
   _handleSignIn = () => {
@@ -163,13 +209,14 @@ class ChatSidebar extends React.Component {
 
   _renderRootSidebar = () => {
     return (
-      <div className={STYLES_SIDEBAR}>
+      <div className={STYLES_SIDEBAR} style={getSidebarStyles(this.state)}>
         <ChatSidebarHeader
           viewer={this.props.viewer}
           navigator={this.props.navigator}
           onShowOptions={this._handleShowOptions}
           onSignIn={this._handleSignIn}
           onSignOut={this._handleSignOut}
+          onHideSidebar={this._handleHideSidebar}
         />
         <ChatSidebarNavigation
           viewer={this.props.viewer}
@@ -200,7 +247,7 @@ class ChatSidebar extends React.Component {
 
   _renderOptions = () => {
     return (
-      <div className={STYLES_SIDEBAR}>
+      <div className={STYLES_SIDEBAR} style={getSidebarStyles(this.state)}>
         <ChatSidebarOptions onDismiss={this._handleHideOptions} onSignOut={this._handleSignOut} />
       </div>
     );
@@ -208,7 +255,7 @@ class ChatSidebar extends React.Component {
 
   _renderMessageOptions = () => {
     return (
-      <div className={STYLES_SIDEBAR}>
+      <div className={STYLES_SIDEBAR} style={getSidebarStyles(this.state)}>
         <ChatSidebarOptionsMessages onDismiss={this._handleHideOptions} />
       </div>
     );
@@ -216,7 +263,7 @@ class ChatSidebar extends React.Component {
 
   _renderChannelOptions = () => {
     return (
-      <div className={STYLES_SIDEBAR}>
+      <div className={STYLES_SIDEBAR} style={getSidebarStyles(this.state)}>
         <ChatSidebarOptionsChannels onDismiss={this._handleHideOptions} />
       </div>
     );
@@ -224,13 +271,10 @@ class ChatSidebar extends React.Component {
 
   _renderChat = () => {
     const { chatMode } = this.state;
-    const { navigation } = this.props;
-    const layoutMode = LayoutUtilities.getLayoutMode(navigation.contentMode);
-    const className = layoutMode === 'FLUID_CHAT' ? STYLES_CHAT : STYLES_FIXED_CHAT;
 
     if (chatMode === 'OPTIONS') {
       return (
-        <div className={className}>
+        <div className={STYLES_CHAT}>
           <ChatHeaderActive onDismiss={this._handleResetChatWindow}>
             Channel Settings
           </ChatHeaderActive>
@@ -241,7 +285,7 @@ class ChatSidebar extends React.Component {
 
     if (chatMode === 'MEMBERS') {
       return (
-        <div className={className}>
+        <div className={STYLES_CHAT}>
           <ChatHeaderActive onDismiss={this._handleResetChatWindow}>
             Channel Members
           </ChatHeaderActive>
@@ -252,7 +296,7 @@ class ChatSidebar extends React.Component {
 
     if (chatMode === 'MESSAGES') {
       return (
-        <div className={className}>
+        <div className={STYLES_CHAT}>
           <ChatHeader
             onSettingsClick={this._handleShowSingleChannelOptions}
             onMembersClick={this._handleShowSingleChannelMembers}
@@ -272,7 +316,12 @@ class ChatSidebar extends React.Component {
 
   render() {
     const { mode } = this.state;
+    const { navigation } = this.props;
     const chatElement = this._renderChat();
+    const layoutMode = LayoutUtilities.getLayoutMode(navigation.contentMode);
+    const dynamicStyles = {
+      maxWidth: layoutMode !== 'FLUID_CHAT' ? getContainerWidth(this.state) : null,
+    };
 
     let sidebarElement = this._renderRootSidebar();
     if (mode === 'OPTIONS') {
@@ -287,11 +336,39 @@ class ChatSidebar extends React.Component {
       sidebarElement = this._renderMessageOptions();
     }
 
+    const shouldRenderSidebar = navigation.contentMode !== 'game' || this.state.sidebar;
+    const shouldRenderChat = navigation.contentMode !== 'game' || this.state.chat;
+    const shouldRenderBottomBar = navigation.contentMode === 'game';
+
     return (
-      <React.Fragment>
-        {sidebarElement}
-        {chatElement}
-      </React.Fragment>
+      <div className={STYLES_CONTAINER} style={dynamicStyles}>
+        <div className={STYLES_TOP}>
+          {shouldRenderSidebar ? sidebarElement : null}
+          {shouldRenderChat || this.state.chat ? chatElement : null}
+        </div>
+        {shouldRenderBottomBar ? (
+          <div className={STYLES_BOTTOM}>
+            {this.state.sidebar ? (
+              <UINavigationLink style={{ marginRight: 24 }} onClick={this._handleToggleSidebar}>
+                Hide Sidebar
+              </UINavigationLink>
+            ) : (
+              <UINavigationLink style={{ marginRight: 24 }} onClick={this._handleToggleSidebar}>
+                Show Sidebar
+              </UINavigationLink>
+            )}
+            {this.state.chat ? (
+              <UINavigationLink style={{ marginRight: 24 }} onClick={this._handleToggleChat}>
+                Hide Chat
+              </UINavigationLink>
+            ) : (
+              <UINavigationLink style={{ marginRight: 24 }} onClick={this._handleToggleChat}>
+                Show Chat
+              </UINavigationLink>
+            )}
+          </div>
+        ) : null}
+      </div>
     );
   }
 }
