@@ -18,6 +18,7 @@ const STYLES_CONTAINER = css`
   flex-direction: column;
   width: 100%;
   height: 100%;
+  color: ${Constants.colors.white};
   background: rgb(39, 39, 39);
 `;
 
@@ -32,14 +33,12 @@ const STYLES_SPACER = css`
 `;
 
 const STYLES_HEADING = css`
-  color: ${Constants.colors.white};
   font-family: ${Constants.font.heading};
   font-size: 24px;
   margin-bottom: 16px;
 `;
 
 const STYLES_PARAGRAPH = css`
-  color: ${Constants.colors.white};
   line-height: ${Constants.linescale.base};
   font-size: 14px;
   font-weight: 400;
@@ -68,7 +67,6 @@ const STYLES_ACTION = css`
 
 const STYLES_ERROR_MESSAGE = css`
   background: ${Constants.colors.error};
-  color: ${Constants.colors.white};
   flex-shrink: 0;
   display: flex;
   padding: 16px;
@@ -142,6 +140,11 @@ export default class LoginSignupScreen extends React.Component {
   _goToSuccess = () => {
     this.setState({ step: 'SUCCESS' }, () => {
       this.context.setCurrentUser(this.state.localViewer);
+
+      // NOTE(jim): Only happens in Version 2.
+      if (this.props.navigator) {
+        this.props.navigator.navigateToHome();
+      }
     });
   };
 
@@ -280,7 +283,7 @@ export default class LoginSignupScreen extends React.Component {
     }
 
     return (
-      <div className={STYLES_CONTAINER}>
+      <div className={STYLES_CONTAINER} style={this.props.style}>
         <div className={STYLES_CONTENTS}>
           <form onSubmit={this._handleLoginAsync}>
             <UIUserPreview user={this.state.suggestedUser} />
@@ -330,7 +333,7 @@ export default class LoginSignupScreen extends React.Component {
     }
 
     return (
-      <div className={STYLES_CONTAINER}>
+      <div className={STYLES_CONTAINER} style={this.props.style}>
         <div className={STYLES_CONTENTS}>
           <form onSubmit={this._handleSignUpAsync}>
             <div className={STYLES_HEADING}>Create a Castle account</div>
@@ -389,7 +392,7 @@ export default class LoginSignupScreen extends React.Component {
 
   _renderWho = () => {
     return (
-      <div className={STYLES_CONTAINER}>
+      <div className={STYLES_CONTAINER} style={this.props.style}>
         <div className={STYLES_CONTENTS}>
           <form onSubmit={this._handleSubmitEmailAsync}>
             <div className={STYLES_HEADING}>Sign in or create account</div>

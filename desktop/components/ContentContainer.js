@@ -20,6 +20,7 @@ import SearchScreen from '~/screens/SearchScreen';
 import ContentNavigationBar from '~/components/ContentNavigationBar';
 import NowPlayingBar from '~/components/NowPlayingBar';
 import EditPostScreen from '~/screens/EditPostScreen';
+import SignInScreen from '~/screens/SignInScreen';
 
 // TODO(jim): Delete this after refactor.
 const LEGACY_STYLES_CONTAINER = css`
@@ -127,6 +128,8 @@ class ContentContainer extends React.Component {
       return <NotificationScreen />;
     } else if (mode === 'edit_post') {
       return <EditPostScreen />;
+    } else if (mode === 'signin') {
+      return <SignInScreen navigator={this.props.navigator} />;
     }
   };
 
@@ -162,6 +165,8 @@ class ContentContainer extends React.Component {
         rootLevelClassName = STYLES_CONTAINER_FIXED_WITH_BORDER;
       }
     }
+
+    console.log(this.props.mode);
 
     return (
       <div className={rootLevelClassName}>

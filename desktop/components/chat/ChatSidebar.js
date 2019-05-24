@@ -168,7 +168,7 @@ class ChatSidebar extends React.Component {
           viewer={this.props.viewer}
           navigator={this.props.navigator}
           onShowOptions={this._handleShowOptions}
-          onLogIn={this._handleSignIn}
+          onSignIn={this._handleSignIn}
           onSignOut={this._handleSignOut}
         />
         <ChatSidebarNavigation

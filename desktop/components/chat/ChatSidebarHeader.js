@@ -73,7 +73,7 @@ export default class ChatSidebarHeader extends React.Component {
         <header className={STYLES_HEADER}>
           <h2 className={STYLES_HEADING}>[bind server name]</h2>
           <div className={STYLES_AUTH}>
-            <span className={STYLES_BYLINE}>
+            <span className={STYLES_BYLINE} onClick={this.props.onSignIn}>
               <strong style={{ cursor: 'pointer' }}>Sign in</strong>
             </span>
           </div>

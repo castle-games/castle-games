@@ -1,5 +1,3 @@
-import ReactDOM from 'react-dom';
-
 import * as React from 'react';
 import * as Constants from '~/common/constants';
 
