@@ -6,7 +6,7 @@ import { css } from 'react-emotion';
 import Logs from '~/common/logs';
 
 import '~/components/game/Tools.css';
-import { Button, Checkbox, TextInput, Toggle } from 'carbon-components-react';
+import { Button, Checkbox, NumberInput, TextInput, Toggle } from 'carbon-components-react';
 
 //
 // Infrastructure
@@ -137,6 +137,46 @@ class ToolCheckbox extends React.PureComponent {
 }
 elementTypes['checkbox'] = ToolCheckbox;
 
+class ToolNumberInput extends React.PureComponent {
+  state = {
+    value: this.props.element.props.value,
+    lastSentEventId: null,
+  };
+
+  static getDerivedStateFromProps(props, state) {
+    if (
+      state.lastSentEventId === null ||
+      props.element.lastReportedEventId == state.lastSentEventId
+    ) {
+      return {
+        value: props.element.props.value,
+      };
+    }
+    return null;
+  }
+
+  render() {
+    const { element } = this.props;
+    return (
+      <NumberInput
+        {...element.props}
+        id={element.pathId}
+        value={this.state.value}
+        onChange={(event) => {
+          this.setState({
+            value: event.imaginaryTarget.valueAsNumber,
+            lastSentEventId: sendEvent(element.pathId, {
+              type: 'onChange',
+              value: event.imaginaryTarget.valueAsNumber,
+            }),
+          });
+        }}
+      />
+    );
+  }
+}
+elementTypes['numberInput'] = ToolNumberInput;
+
 class ToolTextInput extends React.PureComponent {
   state = {
     value: this.props.element.props.value,
@@ -258,6 +298,13 @@ const STYLES_CONTAINER = css`
   /* Based on the 'g90' theme (https://www.carbondesignsystem.com/guidelines/themes/) which 'Tools.scss' uses */
   color: #f3f3f3;
   background-color: #171717;
+
+  /* Inputs seem to not properly hide the spinner buttons, so do this */
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 
   padding: 8px;
 

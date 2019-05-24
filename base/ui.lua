@@ -223,7 +223,7 @@ end
 --
 
 function ui.button(labelText, props)
-    assert(type(labelText) == 'string', '`ui.checkbox` needs a string `labelText`')
+    assert(type(labelText) == 'string', '`ui.button` needs a string `labelText`')
 
     local c = addChild('button', labelText, without(merge({ labelText = labelText }, props), 'onClick'), true)
 
@@ -269,9 +269,31 @@ function ui.checkbox(labelText, checked, props)
     return newChecked
 end
 
+function ui.numberInput(label, value, props)
+    assert(type(label) == 'string', '`ui.numberInput` needs a string `label`')
+    assert(type(value) == 'number', '`ui.numberInput` needs a number `value`')
+
+    local c = addChild('numberInput', label, without(merge({ label = label, value = value }, props), 'onChange'), true)
+
+    local newValue = value
+    local es = pendingEvents[c.pathId]
+    if es then
+        for _, e in ipairs(es) do
+            if e.type == 'onChange' then
+                if props and props.onChange then
+                    newValue = props.onChange(e.value) or e.value
+                else
+                    newValue = e.value
+                end
+            end
+        end
+    end
+    return newValue
+end
+
 function ui.textInput(labelText, value, props)
-    assert(type(labelText) == 'string', '`ui.checkbox` needs a string `labelText`')
-    assert(type(value) == 'string', '`ui.checkbox` needs a string `value`')
+    assert(type(labelText) == 'string', '`ui.textInput` needs a string `labelText`')
+    assert(type(value) == 'string', '`ui.textInput` needs a string `value`')
 
     local c = addChild('textInput', labelText, without(merge({ labelText = labelText, value = value }, props), 'onChange'), true)
 
