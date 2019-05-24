@@ -70,7 +70,7 @@ class ChatSidebar extends React.Component {
   };
 
   _handleSignIn = () => {
-    alert('_handleSignIn');
+    return this.props.navigator.navigateToSignIn();
   };
 
   _handleSignOut = () => {
@@ -78,19 +78,19 @@ class ChatSidebar extends React.Component {
   };
 
   _handleNavigateToMakeGame = () => {
-    alert('_handleNavigateToMakeGame');
+    return this.props.navigator.navigateToCreate();
   };
 
   _handleNavigateToFeaturedGames = () => {
-    alert('_handleNavigateToFeaturedGames');
+    return this.props.navigator.navigateToHome();
   };
 
   _handleNavigateToAllPosts = () => {
-    alert('_handleNavigateToAllPosts');
+    return this.props.navigator.navigateToHome();
   };
 
   _handleNavigateToHistory = () => {
-    alert('_handleNavigateToHistory');
+    return this.props.navigator.navigateToNotifications();
   };
 
   _handleOpenBrowserForDocumentation = () => {
@@ -264,10 +264,7 @@ class ChatSidebar extends React.Component {
   };
 
   render() {
-    const { currentUser, navigator, navigation, social, chat } = this.props;
-
     const chatElement = this._renderChat();
-    const layoutMode = LayoutUtilities.getLayoutMode(navigation.contentMode);
 
     let sidebarElement = this._renderRootSidebar();
     if (this.state.mode === 'OPTIONS') {

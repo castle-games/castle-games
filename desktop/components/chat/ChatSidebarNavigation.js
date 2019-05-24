@@ -19,30 +19,35 @@ export default class ChatSidebarNavigation extends React.Component {
           data={{
             name: 'Make a game',
             svg: 'make',
+            onClick: this.props.onNavigateToMakeGame,
           }}
         />
         <ChatSidebarNavigationItem
           data={{
             name: 'Featured games',
             svg: 'featured',
+            onClick: this.props.onNavigateToFeaturedGames,
           }}
         />
         <ChatSidebarNavigationItem
           data={{
             name: 'Posts',
             svg: 'posts',
+            onClick: this.props.onNavigateToAllPosts,
           }}
         />
         <ChatSidebarNavigationItem
           data={{
             name: 'History',
             svg: 'history',
+            onClick: this.props.onNavigateToHistory,
           }}
         />
         <ChatSidebarNavigationItem
           data={{
             name: 'Documentation',
             svg: 'documentation',
+            onClick: this.props.onOpenBrowserForDocumentation,
           }}
         />
       </div>
