@@ -17,8 +17,9 @@ const STYLES_HEADER = css`
 `;
 
 const STYLES_HEADING = css`
+  font-family: 'game-heading';
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 400;
   display: flex;
   align-items: flex-start;
   cursor: pointer;
@@ -64,6 +65,7 @@ const STYLES_BYLINE = css`
   }
 `;
 
+// TODO(jim): Bind dynamic server name instead of hardcoded Castle.
 export default class ChatSidebarHeader extends React.Component {
   render() {
     const { navigator, viewer } = this.props;
@@ -71,7 +73,7 @@ export default class ChatSidebarHeader extends React.Component {
     if (!viewer) {
       return (
         <header className={STYLES_HEADER}>
-          <h2 className={STYLES_HEADING}>[bind server name]</h2>
+          <h2 className={STYLES_HEADING}>Castle</h2>
           <div className={STYLES_AUTH}>
             <span className={STYLES_BYLINE} onClick={this.props.onSignIn}>
               <strong style={{ cursor: 'pointer' }}>Sign in</strong>
@@ -89,7 +91,7 @@ export default class ChatSidebarHeader extends React.Component {
     return (
       <header className={STYLES_HEADER}>
         <h2 className={STYLES_HEADING} onClick={this.props.onShowOptions}>
-          [bind server name] <SVG.Menu size="14px" style={{ margin: '3px 0 0 6px' }} />
+          Castle <SVG.Menu size="14px" style={{ margin: '3px 0 0 6px' }} />
         </h2>
         <div className={STYLES_AUTH}>
           <span className={STYLES_AVATAR} style={{ backgroundImage: `url('${url}')` }} />

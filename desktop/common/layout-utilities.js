@@ -24,5 +24,9 @@ export const getLayoutMode = (mode) => {
     return states[1];
   }
 
+  if (mode === 'signin') {
+    return states[1];
+  }
+
   return states[2];
 };
