@@ -337,6 +337,41 @@ function ui.radioButtonGroup(label, value, items, props)
     return newValue
 end
 
+function ui.section(...)
+    local label, props, inner
+    local nArgs = select('#', ...)
+    if nArgs == 2 then
+        label, inner = ...
+    elseif nArgs == 3 then
+        label, props, inner = ...
+    end
+
+    local c, newId = addChild('section', label, merge({ label = label }, props), true)
+
+    local open = store[c].open
+    if c.props.open ~= nil then
+        open = c.props.open
+    else
+        open = open
+    end
+
+    c.open = open
+    if open then
+        enter(c, newId, inner)
+    end
+
+    local es = pendingEvents[c.pathId]
+    if es then
+        for _, e in ipairs(es) do
+            if e.type == 'onChange' then
+                open = e.open
+            end
+        end
+    end
+    store[c].open = open
+    return open
+end
+
 function ui.slider(label, value, min, max, props)
     assert(type(label) == 'string', '`ui.slider` needs a string `label`')
     assert(type(value) == 'number', '`ui.slider` needs a number `value`')

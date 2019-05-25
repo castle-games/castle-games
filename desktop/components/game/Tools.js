@@ -8,6 +8,8 @@ import Logs from '~/common/logs';
 
 import '~/components/game/Tools.css';
 import {
+  Accordion,
+  AccordionItem,
   Button,
   Checkbox,
   Dropdown,
@@ -316,6 +318,30 @@ class ToolRadioButtonGroup extends React.PureComponent {
 }
 elementTypes['radioButtonGroup'] = ToolRadioButtonGroup;
 
+class ToolSection extends React.PureComponent {
+  render() {
+    const { element } = this.props;
+    return (
+      <Accordion>
+        <AccordionItem
+          {...element.props}
+          ref={(r) => (this._accordionItemRef = r)}
+          title={element.props && element.props.label}
+          open={element.open}
+          onHeadingClick={({ isOpen }) => {
+            sendEvent(element.pathId, { type: 'onChange', open: isOpen });
+            // Make it listen to our `element.open` state...
+            this._accordionItemRef &&
+              this._accordionItemRef.setState({ open: element.open, prevOpen: element.open });
+          }}>
+          {renderChildren(element)}
+        </AccordionItem>
+      </Accordion>
+    );
+  }
+}
+elementTypes['section'] = ToolSection;
+
 class ToolSlider extends React.PureComponent {
   state = {
     value: this.props.element.props.value,
@@ -504,9 +530,15 @@ const STYLES_CONTAINER = css`
     font-family: ${Constants.font.mono} !important;
   }
 
-  /* More carbon hilarity... */
+  /* Justify radio button labels to left */
   .bx--radio-button-group--vertical .bx--radio-button__label {
     justify-content: flex-start !important;
+  }
+
+  /* Make accordion children stretch */
+  .bx--accordion__content {
+    padding-left: 1rem !important;
+    padding-right: 0.8rem !important;
   }
 
   padding: 8px;
@@ -545,25 +577,26 @@ export default class Tools extends React.PureComponent {
                 name: 'DEFAULT',
               },
               children: {
-                lastId: 'buttonWoah!',
-                radioButtonGroupradio: {
-                  type: 'radioButtonGroup',
-                  prevId: 'dropdowndrop',
-                  pathId: 'wBvaeF6UMYqdYu9SLNnJfw==',
+                slidernumber2: {
+                  type: 'slider',
+                  prevId: 'numberInputnumber',
+                  pathId: 'DEFAULTslidernumber2',
                   props: {
-                    value: 'alpha',
-                    items: ['alpha', 'beta', 'gamma'],
-                    label: 'radio',
-                    helperText: 'Choose a thing!',
+                    max: 100,
+                    label: 'number2',
+                    min: 0,
+                    value: 50,
                   },
                 },
-                textInputstring: {
-                  type: 'textInput',
-                  pathId: 'DEFAULTtextInputstring',
+                lastId: 'buttonWoah!',
+                'DMY1bkDr5VQ1PDd5OjQYiw==': {
+                  type: 'toggle',
+                  prevId: 'checkboxboolean',
+                  pathId: 'e2835Rmh7HzdMi5y+ym0Ig==',
                   props: {
-                    value: 'hello, world',
-                    label: 'string',
-                    helperText: 'Enter a string here!',
+                    labelA: 'boolean2 on',
+                    labelB: 'boolean2 off',
+                    toggled: true,
                   },
                 },
                 dropdowndrop: {
@@ -578,43 +611,14 @@ export default class Tools extends React.PureComponent {
                     invalidText: "I don't like this value... :(",
                   },
                 },
-                checkboxboolean: {
-                  type: 'checkbox',
-                  prevId: 'textInputstring',
-                  pathId: 'DEFAULTcheckboxboolean',
+                textInputstring: {
+                  type: 'textInput',
+                  prevId: 'sectionAnother section',
+                  pathId: 'DEFAULTtextInputstring',
                   props: {
-                    label: 'boolean',
-                    checked: true,
-                  },
-                },
-                slidernumber2: {
-                  type: 'slider',
-                  prevId: 'numberInputnumber',
-                  pathId: 'DEFAULTslidernumber2',
-                  props: {
-                    max: 100,
-                    label: 'number2',
-                    min: 0,
-                    value: 50,
-                  },
-                },
-                'buttonWoah!': {
-                  type: 'button',
-                  prevId: 'radioButtonGroupradio',
-                  pathId: 'DEFAULTbuttonWoah!',
-                  props: {
-                    label: 'Woah!',
-                  },
-                },
-                count: 8,
-                'DMY1bkDr5VQ1PDd5OjQYiw==': {
-                  type: 'toggle',
-                  prevId: 'checkboxboolean',
-                  pathId: 'e2835Rmh7HzdMi5y+ym0Ig==',
-                  props: {
-                    labelA: 'boolean2 on',
-                    labelB: 'boolean2 off',
-                    toggled: true,
+                    value: 'hello, world',
+                    label: 'string',
+                    helperText: 'Enter a string here!',
                   },
                 },
                 numberInputnumber: {
@@ -627,6 +631,78 @@ export default class Tools extends React.PureComponent {
                     label: 'number',
                     value: 50,
                   },
+                },
+                checkboxboolean: {
+                  type: 'checkbox',
+                  prevId: 'textInputstring',
+                  pathId: 'DEFAULTcheckboxboolean',
+                  props: {
+                    label: 'boolean',
+                    checked: true,
+                  },
+                },
+                'buttonWoah!': {
+                  type: 'button',
+                  prevId: 'radioButtonGroupradio',
+                  pathId: 'DEFAULTbuttonWoah!',
+                  props: {
+                    label: 'Woah!',
+                  },
+                },
+                count: 10,
+                radioButtonGroupradio: {
+                  type: 'radioButtonGroup',
+                  prevId: 'dropdowndrop',
+                  pathId: 'wBvaeF6UMYqdYu9SLNnJfw==',
+                  props: {
+                    hideLabel: true,
+                    items: ['alpha', 'beta', 'gamma'],
+                    label: 'radio',
+                    value: 'alpha',
+                  },
+                },
+                'sectionAnother section': {
+                  prevId: 'sectionA section',
+                  type: 'section',
+                  pathId: 'Sw/BUTd8kDYNHCeGCdmzdA==',
+                  props: {
+                    label: 'Another section',
+                  },
+                  children: {
+                    lastId: 'tlLGAz4MqWwLW/tnjsPyDQ==',
+                    count: 1,
+                    'tlLGAz4MqWwLW/tnjsPyDQ==': {
+                      type: 'textInput',
+                      pathId: 'CbGcq06f+luyV4uOTv00sA==',
+                      props: {
+                        label: 'stuff inside other section',
+                        value: '',
+                      },
+                    },
+                  },
+                  open: true,
+                  lastReportedEventId: 3,
+                },
+                'sectionA section': {
+                  type: 'section',
+                  pathId: 'CB2r1SJ7nok8b514Bn4whw==',
+                  props: {
+                    label: 'A section',
+                  },
+                  children: {
+                    lastId: 'Y8miTTdDUibz9xrKivPr6g==',
+                    count: 1,
+                    'Y8miTTdDUibz9xrKivPr6g==': {
+                      type: 'textInput',
+                      pathId: 'c5e0hDcFQlr35Qd24QyeCQ==',
+                      props: {
+                        label: 'stuff inside section',
+                        value: '',
+                      },
+                    },
+                  },
+                  open: true,
+                  lastReportedEventId: 4,
                 },
               },
             },
