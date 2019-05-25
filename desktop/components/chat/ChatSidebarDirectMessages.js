@@ -23,12 +23,24 @@ export default class ChatSidebarDirectMessages extends React.Component {
         <ChatSidebarGroupHeader onShowOptions={this.props.onShowOptions}>
           Direct Messages
         </ChatSidebarGroupHeader>
-        <ChatSidebarDirectMessageItem data={{ online: true, name: 'Person #1', pending: 50 }} />
-        <ChatSidebarDirectMessageItem data={{ online: true, name: 'Person #2', pending: 40 }} />
-        <ChatSidebarDirectMessageItem data={{ online: true, name: 'Person #3', pending: 20 }} />
-        <ChatSidebarDirectMessageItem data={{ online: false, name: 'Person #4', pending: 0 }} />
-        <ChatSidebarDirectMessageItem data={{ online: false, name: 'Person #5', pending: 0 }} />
-        <ChatSidebarDirectMessageItem data={{ online: false, name: 'Person #6', pending: 0 }} />
+        <ChatSidebarDirectMessageItem
+          data={{ online: true, name: 'Person #1', status: 'Is playing Blast Flocks', pending: 50 }}
+        />
+        <ChatSidebarDirectMessageItem
+          data={{ online: true, name: 'Person #2', status: 'Is playing Blast Flocks', pending: 40 }}
+        />
+        <ChatSidebarDirectMessageItem
+          data={{ online: true, name: 'Person #3', status: 'Is playing Blast Flocks', pending: 20 }}
+        />
+        <ChatSidebarDirectMessageItem
+          data={{ online: false, name: 'Person #4', status: 'Is playing Blast Flocks', pending: 0 }}
+        />
+        <ChatSidebarDirectMessageItem
+          data={{ online: false, name: 'Person #5', status: 'Is playing Blast Flocks', pending: 0 }}
+        />
+        <ChatSidebarDirectMessageItem
+          data={{ online: false, name: 'Person #6', status: 'Is playing Blast Flocks', pending: 0 }}
+        />
       </div>
     );
   }

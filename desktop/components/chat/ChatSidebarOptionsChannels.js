@@ -67,7 +67,7 @@ export default class ChatSidebarOptionsChannels extends React.Component {
         </header>
         {this.props.viewer ? (
           <div className={STYLES_OPTION} onClick={this.props.onAddChannel}>
-            Add Channel
+            Add channel
           </div>
         ) : null}
       </React.Fragment>

@@ -67,7 +67,7 @@ export default class ChatSidebarOptionsMessages extends React.Component {
         </header>
         {this.props.viewer ? (
           <div className={STYLES_OPTION} onClick={this.props.onStartDirectMessage}>
-            Message a user
+            Message an user
           </div>
         ) : null}
       </React.Fragment>
