@@ -314,6 +314,29 @@ function ui.numberInput(label, value, props)
     return newValue
 end
 
+function ui.radioButtonGroup(label, value, items, props)
+    assert(type(label) == 'string', '`ui.radioButtonGroup` needs a string `label`')
+    assert(type(value) == 'string', '`ui.radioButtonGroup` needs a string `value`')
+    assert(type(items) == 'table', '`ui.radioButtonGroup` needs a table `items`')
+
+    local c = addChild('radioButtonGroup', label, without(merge({ label = label, value = value, items = items }, props), 'onChange'), true)
+
+    local newValue = value
+    local es = pendingEvents[c.pathId]
+    if es then
+        for _, e in ipairs(es) do
+            if e.type == 'onChange' then
+                if props and props.onChange then
+                    newValue = props.onChange(e.value) or e.value
+                else
+                    newValue = e.value
+                end
+            end
+        end
+    end
+    return newValue
+end
+
 function ui.slider(label, value, min, max, props)
     assert(type(label) == 'string', '`ui.slider` needs a string `label`')
     assert(type(value) == 'number', '`ui.slider` needs a number `value`')

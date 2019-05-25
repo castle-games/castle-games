@@ -13,6 +13,7 @@ import {
   Dropdown,
   NumberInput,
   Slider,
+  RadioButton,
   TextInput,
   Toggle,
 } from 'carbon-components-react';
@@ -147,6 +148,52 @@ class ToolCheckbox extends React.PureComponent {
 }
 elementTypes['checkbox'] = ToolCheckbox;
 
+class ToolDropdown extends React.PureComponent {
+  state = {
+    value: this.props.element.props.value,
+    lastSentEventId: null,
+  };
+
+  static getDerivedStateFromProps(props, state) {
+    if (
+      state.lastSentEventId === null ||
+      props.element.lastReportedEventId == state.lastSentEventId
+    ) {
+      return {
+        value: props.element.props.value,
+      };
+    }
+    return null;
+  }
+
+  render() {
+    const { element } = this.props;
+    return (
+      <Dropdown
+        {...element.props}
+        id={element.pathId}
+        selectedItem={this.state.value}
+        titleText={element.props && !element.props.hideLabel ? element.props.label : null}
+        label={
+          element.props && element.props.placeholder
+            ? element.props.placeholder
+            : 'Select an option...'
+        }
+        onChange={({ selectedItem }) => {
+          this.setState({
+            value: selectedItem,
+            lastSentEventId: sendEvent(element.pathId, {
+              type: 'onChange',
+              value: selectedItem,
+            }),
+          });
+        }}
+      />
+    );
+  }
+}
+elementTypes['dropdown'] = ToolDropdown;
+
 class ToolNumberInput extends React.PureComponent {
   state = {
     value: this.props.element.props.value,
@@ -187,7 +234,7 @@ class ToolNumberInput extends React.PureComponent {
 }
 elementTypes['numberInput'] = ToolNumberInput;
 
-class ToolDropdown extends React.PureComponent {
+class ToolRadioButtonGroup extends React.PureComponent {
   state = {
     value: this.props.element.props.value,
     lastSentEventId: null,
@@ -207,27 +254,67 @@ class ToolDropdown extends React.PureComponent {
 
   render() {
     const { element } = this.props;
+
+    let maybeLabel = null;
+    if (element.props && element.props.label && !element.props.hideLabel) {
+      maybeLabel = (
+        <label
+          htmlFor={element.pathId}
+          className={`bx--label${element.props.disabled ? `  bx--label--disabled` : ''}`}>
+          {element.props.label}
+        </label>
+      );
+    }
+
+    let maybeHelperText = null;
+    if (element.props && element.props.helperText) {
+      maybeHelperText = (
+        <helperText
+          htmlFor={element.pathId}
+          className={`bx--form__helper-text${
+            element.props.disabled ? `  bx--form__helper-text--disabled` : ''
+          }`}>
+          {element.props.helperText}
+        </helperText>
+      );
+    }
+
     return (
-      <Dropdown
-        {...element.props}
-        id={element.pathId}
-        selectedItem={this.state.value}
-        titleText={element.props && !element.props.hideLabel ? element.props.label : null}
-        label={element.props && element.props.placeholder ? element.props.placeholder : 'Select an option...'}
-        onChange={({ selectedItem }) => {
-          this.setState({
-            value: selectedItem,
-            lastSentEventId: sendEvent(element.pathId, {
-              type: 'onChange',
-              value: selectedItem,
-            }),
-          });
-        }}
-      />
+      <div className="bx--form-item">
+        {maybeLabel}
+        {maybeHelperText}
+        <div
+          className={
+            element.props && element.props.horizontal
+              ? 'bx--radio-button-group'
+              : 'bx--radio-button-group--vertical'
+          }>
+          {((element.props && element.props.items) || []).map((item) => (
+            <RadioButton
+              key={item}
+              item={item}
+              labelText={item}
+              checked={this.state.value == item}
+              disabled={element.props && element.props.disabled}
+              onChange={(value, name, event) => {
+                if (event.target.checked) {
+                  this.setState({
+                    value: item,
+                    lastSentEventId: sendEvent(element.pathId, {
+                      type: 'onChange',
+                      value: item,
+                    }),
+                  });
+                }
+              }}
+            />
+          ))}
+        </div>
+      </div>
     );
   }
 }
-elementTypes['dropdown'] = ToolDropdown;
+elementTypes['radioButtonGroup'] = ToolRadioButtonGroup;
 
 class ToolSlider extends React.PureComponent {
   state = {
@@ -417,6 +504,11 @@ const STYLES_CONTAINER = css`
     font-family: ${Constants.font.mono} !important;
   }
 
+  /* More carbon hilarity... */
+  .bx--radio-button-group--vertical .bx--radio-button__label {
+    justify-content: flex-start !important;
+  }
+
   padding: 8px;
 
   overflow-y: scroll;
@@ -454,24 +546,15 @@ export default class Tools extends React.PureComponent {
               },
               children: {
                 lastId: 'buttonWoah!',
-                slidernumber2: {
-                  type: 'slider',
-                  prevId: 'numberInputnumber',
-                  pathId: 'DEFAULTslidernumber2',
+                radioButtonGroupradio: {
+                  type: 'radioButtonGroup',
+                  prevId: 'dropdowndrop',
+                  pathId: 'wBvaeF6UMYqdYu9SLNnJfw==',
                   props: {
-                    max: 100,
-                    label: 'number2',
-                    min: 0,
-                    value: 50,
-                  },
-                },
-                checkboxboolean: {
-                  type: 'checkbox',
-                  prevId: 'textInputstring',
-                  pathId: 'DEFAULTcheckboxboolean',
-                  props: {
-                    label: 'boolean',
-                    checked: true,
+                    value: 'alpha',
+                    items: ['alpha', 'beta', 'gamma'],
+                    label: 'radio',
+                    helperText: 'Choose a thing!',
                   },
                 },
                 textInputstring: {
@@ -483,15 +566,47 @@ export default class Tools extends React.PureComponent {
                     helperText: 'Enter a string here!',
                   },
                 },
+                dropdowndrop: {
+                  type: 'dropdown',
+                  prevId: 'slidernumber2',
+                  pathId: 'DEFAULTdropdowndrop',
+                  props: {
+                    items: ['alpha', 'beta', 'gamma', 'delta', 'epsilon', 'zeta'],
+                    label: 'drop',
+                    helperText: 'Choose a thing!',
+                    invalid: false,
+                    invalidText: "I don't like this value... :(",
+                  },
+                },
+                checkboxboolean: {
+                  type: 'checkbox',
+                  prevId: 'textInputstring',
+                  pathId: 'DEFAULTcheckboxboolean',
+                  props: {
+                    label: 'boolean',
+                    checked: true,
+                  },
+                },
+                slidernumber2: {
+                  type: 'slider',
+                  prevId: 'numberInputnumber',
+                  pathId: 'DEFAULTslidernumber2',
+                  props: {
+                    max: 100,
+                    label: 'number2',
+                    min: 0,
+                    value: 50,
+                  },
+                },
                 'buttonWoah!': {
                   type: 'button',
-                  prevId: 'slidernumber2',
+                  prevId: 'radioButtonGroupradio',
                   pathId: 'DEFAULTbuttonWoah!',
                   props: {
                     label: 'Woah!',
                   },
                 },
-                count: 6,
+                count: 8,
                 'DMY1bkDr5VQ1PDd5OjQYiw==': {
                   type: 'toggle',
                   prevId: 'checkboxboolean',
@@ -507,6 +622,8 @@ export default class Tools extends React.PureComponent {
                   prevId: 'DMY1bkDr5VQ1PDd5OjQYiw==',
                   pathId: 'nkFHCZGdpD+imjvmXhuS1A==',
                   props: {
+                    invalid: false,
+                    invalidText: "Just kidding, you actually can't go above 50!",
                     label: 'number',
                     value: 50,
                   },
