@@ -76,15 +76,7 @@ const STYLES_PANE_CONTAINER = css`
 class ToolPane extends React.PureComponent {
   render() {
     const { element } = this.props;
-    return (
-      <div className={STYLES_PANE_CONTAINER}>
-        {renderChildren(element).map((c) => (
-          <div key={c.key} style={{ margin: '4px' }}>
-            {c}
-          </div>
-        ))}
-      </div>
-    );
+    return <div className={STYLES_PANE_CONTAINER}>{renderChildren(element)}</div>;
   }
 }
 elementTypes['pane'] = ToolPane;
@@ -536,12 +528,25 @@ const STYLES_CONTAINER = css`
   }
 
   /* Make accordion children stretch */
-  .bx--accordion__content {
+  .bx--accordion__item--active .bx--accordion__content {
     padding-left: 1rem !important;
     padding-right: 0.8rem !important;
+    padding-bottom: 0.8rem !important;
   }
 
-  padding: 8px;
+  /* Add some general bottom margin */
+  .bx--number,
+  .bx--text-input__field-wrapper,
+  .bx--dropdown,
+  .bx--radio-button-group--vertical,
+  .bx--slider-container,
+  .bx--accordion,
+  .bx--toggle__label,
+  .bx--btn {
+    margin-bottom: 14px !important;
+  }
+
+  padding: 14px;
 
   overflow-y: scroll;
   overflow-x: hidden;
@@ -568,147 +573,7 @@ const DEBUG_PREPOPULATED = false;
 
 export default class Tools extends React.PureComponent {
   static initialState = {
-    root: DEBUG_PREPOPULATED
-      ? {
-          panes: {
-            DEFAULT: {
-              type: 'pane',
-              props: {
-                name: 'DEFAULT',
-              },
-              children: {
-                slidernumber2: {
-                  type: 'slider',
-                  prevId: 'numberInputnumber',
-                  pathId: 'DEFAULTslidernumber2',
-                  props: {
-                    max: 100,
-                    label: 'number2',
-                    min: 0,
-                    value: 50,
-                  },
-                },
-                lastId: 'buttonWoah!',
-                'DMY1bkDr5VQ1PDd5OjQYiw==': {
-                  type: 'toggle',
-                  prevId: 'checkboxboolean',
-                  pathId: 'e2835Rmh7HzdMi5y+ym0Ig==',
-                  props: {
-                    labelA: 'boolean2 on',
-                    labelB: 'boolean2 off',
-                    toggled: true,
-                  },
-                },
-                dropdowndrop: {
-                  type: 'dropdown',
-                  prevId: 'slidernumber2',
-                  pathId: 'DEFAULTdropdowndrop',
-                  props: {
-                    items: ['alpha', 'beta', 'gamma', 'delta', 'epsilon', 'zeta'],
-                    label: 'drop',
-                    helperText: 'Choose a thing!',
-                    invalid: false,
-                    invalidText: "I don't like this value... :(",
-                  },
-                },
-                textInputstring: {
-                  type: 'textInput',
-                  prevId: 'sectionAnother section',
-                  pathId: 'DEFAULTtextInputstring',
-                  props: {
-                    value: 'hello, world',
-                    label: 'string',
-                    helperText: 'Enter a string here!',
-                  },
-                },
-                numberInputnumber: {
-                  type: 'numberInput',
-                  prevId: 'DMY1bkDr5VQ1PDd5OjQYiw==',
-                  pathId: 'nkFHCZGdpD+imjvmXhuS1A==',
-                  props: {
-                    invalid: false,
-                    invalidText: "Just kidding, you actually can't go above 50!",
-                    label: 'number',
-                    value: 50,
-                  },
-                },
-                checkboxboolean: {
-                  type: 'checkbox',
-                  prevId: 'textInputstring',
-                  pathId: 'DEFAULTcheckboxboolean',
-                  props: {
-                    label: 'boolean',
-                    checked: true,
-                  },
-                },
-                'buttonWoah!': {
-                  type: 'button',
-                  prevId: 'radioButtonGroupradio',
-                  pathId: 'DEFAULTbuttonWoah!',
-                  props: {
-                    label: 'Woah!',
-                  },
-                },
-                count: 10,
-                radioButtonGroupradio: {
-                  type: 'radioButtonGroup',
-                  prevId: 'dropdowndrop',
-                  pathId: 'wBvaeF6UMYqdYu9SLNnJfw==',
-                  props: {
-                    hideLabel: true,
-                    items: ['alpha', 'beta', 'gamma'],
-                    label: 'radio',
-                    value: 'alpha',
-                  },
-                },
-                'sectionAnother section': {
-                  prevId: 'sectionA section',
-                  type: 'section',
-                  pathId: 'Sw/BUTd8kDYNHCeGCdmzdA==',
-                  props: {
-                    label: 'Another section',
-                  },
-                  children: {
-                    lastId: 'tlLGAz4MqWwLW/tnjsPyDQ==',
-                    count: 1,
-                    'tlLGAz4MqWwLW/tnjsPyDQ==': {
-                      type: 'textInput',
-                      pathId: 'CbGcq06f+luyV4uOTv00sA==',
-                      props: {
-                        label: 'stuff inside other section',
-                        value: '',
-                      },
-                    },
-                  },
-                  open: true,
-                  lastReportedEventId: 3,
-                },
-                'sectionA section': {
-                  type: 'section',
-                  pathId: 'CB2r1SJ7nok8b514Bn4whw==',
-                  props: {
-                    label: 'A section',
-                  },
-                  children: {
-                    lastId: 'Y8miTTdDUibz9xrKivPr6g==',
-                    count: 1,
-                    'Y8miTTdDUibz9xrKivPr6g==': {
-                      type: 'textInput',
-                      pathId: 'c5e0hDcFQlr35Qd24QyeCQ==',
-                      props: {
-                        label: 'stuff inside section',
-                        value: '',
-                      },
-                    },
-                  },
-                  open: true,
-                  lastReportedEventId: 4,
-                },
-              },
-            },
-          },
-        }
-      : {},
+    root: DEBUG_PREPOPULATED ? {} : {},
     visible: DEBUG_PREPOPULATED,
   };
 
