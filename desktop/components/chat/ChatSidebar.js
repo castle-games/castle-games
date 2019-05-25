@@ -107,13 +107,15 @@ class ChatSidebar extends React.Component {
   };
 
   _handleToggleChat = () => {
-    this.setState({ chat: !this.state.chat, sidebar: this.state.chat ? true : this.state.sidebar });
+    const next = !this.state.chat;
+    this.setState({ chat: next, sidebar: next ? this.state.sidebar : true });
   };
 
   _handleToggleSidebar = () => {
+    const next = !this.state.sidebar;
     this.setState({
-      sidebar: !this.state.sidebar,
-      chat: this.state.sidebar ? true : this.state.chat,
+      sidebar: next,
+      chat: next ? this.state.chat : true,
     });
   };
 
@@ -180,30 +182,31 @@ class ChatSidebar extends React.Component {
   };
 
   _renderRootSidebar = () => {
+    const { navigation, navigator, viewer } = this.props;
+
     return (
-      <div className={STYLES_SIDEBAR} style={getSidebarStyles(this.state)}>
+      <div
+        className={STYLES_SIDEBAR}
+        style={navigation.contentMode === 'game' ? getSidebarStyles(this.state) : null}>
         <ChatSidebarHeader
-          viewer={this.props.viewer}
-          navigator={this.props.navigator}
+          viewer={viewer}
+          navigator={navigator}
           onShowOptions={this._handleShowOptions}
           onSignIn={this._handleSignIn}
           onSignOut={this._handleSignOut}
           onHideSidebar={this._handleHideSidebar}
         />
         <ChatSidebarNavigation
-          viewer={this.props.viewer}
+          viewer={viewer}
           onNavigateToMakeGame={this._handleNavigateToMakeGame}
           onNavigateToFeaturedGames={this._handleNavigateToFeaturedGames}
           onNavigateToAllPosts={this._handleNavigateToAllPosts}
           onNavigateToHistory={this._handleNavigateToHistory}
           onOpenBrowserForDocumentation={this._handleOpenBrowserForDocumentation}
         />
-        <ChatSidebarChannels
-          viewer={this.props.viewer}
-          onShowOptions={this._handleShowChannelOptions}
-        />
+        <ChatSidebarChannels viewer={viewer} onShowOptions={this._handleShowChannelOptions} />
         <ChatSidebarDirectMessages
-          viewer={this.props.viewer}
+          viewer={viewer}
           onShowOptions={this._handleShowDirectMessageOptions}
         />
       </div>
@@ -211,10 +214,14 @@ class ChatSidebar extends React.Component {
   };
 
   _renderOptions = () => {
+    const { navigation, viewer } = this.props;
+
     return (
-      <div className={STYLES_SIDEBAR} style={getSidebarStyles(this.state)}>
+      <div
+        className={STYLES_SIDEBAR}
+        style={navigation.contentMode === 'game' ? getSidebarStyles(this.state) : null}>
         <ChatSidebarOptions
-          viewer={this.props.viewer}
+          viewer={viewer}
           onDismiss={this._handleHideOptions}
           onSignOut={this._handleSignOut}
         />
@@ -223,10 +230,14 @@ class ChatSidebar extends React.Component {
   };
 
   _renderMessageOptions = () => {
+    const { navigation, viewer } = this.props;
+
     return (
-      <div className={STYLES_SIDEBAR} style={getSidebarStyles(this.state)}>
+      <div
+        className={STYLES_SIDEBAR}
+        style={navigation.contentMode === 'game' ? getSidebarStyles(this.state) : null}>
         <ChatSidebarOptionsMessages
-          viewer={this.props.viewer}
+          viewer={viewer}
           onDismiss={this._handleHideOptions}
           onStartDirectMessage={this._handleStartDirectMessage}
         />
@@ -235,10 +246,14 @@ class ChatSidebar extends React.Component {
   };
 
   _renderChannelOptions = () => {
+    const { navigation, viewer } = this.props;
+
     return (
-      <div className={STYLES_SIDEBAR} style={getSidebarStyles(this.state)}>
+      <div
+        className={STYLES_SIDEBAR}
+        style={navigation.contentMode === 'game' ? getSidebarStyles(this.state) : null}>
         <ChatSidebarOptionsChannels
-          viewer={this.props.viewer}
+          viewer={viewer}
           onDismiss={this._handleHideOptions}
           onAddChannel={this._handleAddChannel}
         />
@@ -271,24 +286,22 @@ class ChatSidebar extends React.Component {
       );
     }
 
-    if (chatMode === 'MESSAGES') {
-      return (
-        <div className={STYLES_CHAT}>
-          <ChatHeader
-            onSettingsClick={this._handleShowSingleChannelOptions}
-            onMembersClick={this._handleShowSingleChannelMembers}
-          />
-          <ChatMessages />
-          <ChatInput
-            value={this.state.value}
-            name="value"
-            placeholder="Type a message"
-            onChange={this._handleChange}
-            onKeyDown={this._handleKeyDown}
-          />
-        </div>
-      );
-    }
+    return (
+      <div className={STYLES_CHAT}>
+        <ChatHeader
+          onSettingsClick={this._handleShowSingleChannelOptions}
+          onMembersClick={this._handleShowSingleChannelMembers}
+        />
+        <ChatMessages />
+        <ChatInput
+          value={this.state.value}
+          name="value"
+          placeholder="Type a message"
+          onChange={this._handleChange}
+          onKeyDown={this._handleKeyDown}
+        />
+      </div>
+    );
   };
 
   render() {
@@ -318,15 +331,25 @@ class ChatSidebar extends React.Component {
       sidebarElement = this._renderMessageOptions();
     }
 
-    const shouldRenderSidebar = navigation.contentMode !== 'game' || this.state.sidebar;
-    const shouldRenderChat = navigation.contentMode !== 'game' || this.state.chat;
+    console.log(navigation.contentMode);
+
+    let shouldRenderSidebar = true;
+    if (navigation.contentMode === 'game') {
+      shouldRenderSidebar = this.state.sidebar;
+    }
+
+    let shouldRenderChat = true;
+    if (navigation.contentMode === 'game') {
+      shouldRenderChat = this.state.chat;
+    }
+
     const shouldRenderBottomBar = navigation.contentMode === 'game';
 
     return (
       <div className={STYLES_CONTAINER} style={dynamicStyles}>
         <div className={STYLES_TOP}>
           {shouldRenderSidebar ? sidebarElement : null}
-          {shouldRenderChat || this.state.chat ? chatElement : null}
+          {shouldRenderChat ? chatElement : null}
         </div>
         {shouldRenderBottomBar ? (
           <div className={STYLES_BOTTOM}>
