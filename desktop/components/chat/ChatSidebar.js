@@ -166,6 +166,10 @@ class ChatSidebar extends React.Component {
     alert('_handleAddChannel');
   };
 
+  _handleLeaveChannel = () => {
+    alert('_handleLeaveChannel');
+  };
+
   _handleStartDirectMessage = () => {
     alert('_handleStartDirectMessage');
   };
@@ -270,7 +274,7 @@ class ChatSidebar extends React.Component {
           <ChatHeaderActive onDismiss={this._handleResetChatWindow}>
             Channel Settings
           </ChatHeaderActive>
-          <ChatOptions />
+          <ChatOptions onLeaveChannel={this._handleLeaveChannel} />
         </div>
       );
     }
