@@ -7,7 +7,15 @@ import { css } from 'react-emotion';
 import Logs from '~/common/logs';
 
 import '~/components/game/Tools.css';
-import { Button, Checkbox, NumberInput, Slider, TextInput, Toggle } from 'carbon-components-react';
+import {
+  Button,
+  Checkbox,
+  Dropdown,
+  NumberInput,
+  Slider,
+  TextInput,
+  Toggle,
+} from 'carbon-components-react';
 
 //
 // Infrastructure
@@ -178,6 +186,48 @@ class ToolNumberInput extends React.PureComponent {
   }
 }
 elementTypes['numberInput'] = ToolNumberInput;
+
+class ToolDropdown extends React.PureComponent {
+  state = {
+    value: this.props.element.props.value,
+    lastSentEventId: null,
+  };
+
+  static getDerivedStateFromProps(props, state) {
+    if (
+      state.lastSentEventId === null ||
+      props.element.lastReportedEventId == state.lastSentEventId
+    ) {
+      return {
+        value: props.element.props.value,
+      };
+    }
+    return null;
+  }
+
+  render() {
+    const { element } = this.props;
+    return (
+      <Dropdown
+        {...element.props}
+        id={element.pathId}
+        selectedItem={this.state.value}
+        titleText={element.props && !element.props.hideLabel ? element.props.label : null}
+        label={element.props && element.props.placeholder ? element.props.placeholder : 'Select an option...'}
+        onChange={({ selectedItem }) => {
+          this.setState({
+            value: selectedItem,
+            lastSentEventId: sendEvent(element.pathId, {
+              type: 'onChange',
+              value: selectedItem,
+            }),
+          });
+        }}
+      />
+    );
+  }
+}
+elementTypes['dropdown'] = ToolDropdown;
 
 class ToolSlider extends React.PureComponent {
   state = {
@@ -394,76 +444,78 @@ const DEBUG_PREPOPULATED = false;
 
 export default class Tools extends React.PureComponent {
   static initialState = {
-    root: DEBUG_PREPOPULATED ? {
-      panes: {
-        DEFAULT: {
-          type: 'pane',
-          props: {
-            name: 'DEFAULT',
+    root: DEBUG_PREPOPULATED
+      ? {
+          panes: {
+            DEFAULT: {
+              type: 'pane',
+              props: {
+                name: 'DEFAULT',
+              },
+              children: {
+                lastId: 'buttonWoah!',
+                slidernumber2: {
+                  type: 'slider',
+                  prevId: 'numberInputnumber',
+                  pathId: 'DEFAULTslidernumber2',
+                  props: {
+                    max: 100,
+                    label: 'number2',
+                    min: 0,
+                    value: 50,
+                  },
+                },
+                checkboxboolean: {
+                  type: 'checkbox',
+                  prevId: 'textInputstring',
+                  pathId: 'DEFAULTcheckboxboolean',
+                  props: {
+                    label: 'boolean',
+                    checked: true,
+                  },
+                },
+                textInputstring: {
+                  type: 'textInput',
+                  pathId: 'DEFAULTtextInputstring',
+                  props: {
+                    value: 'hello, world',
+                    label: 'string',
+                    helperText: 'Enter a string here!',
+                  },
+                },
+                'buttonWoah!': {
+                  type: 'button',
+                  prevId: 'slidernumber2',
+                  pathId: 'DEFAULTbuttonWoah!',
+                  props: {
+                    label: 'Woah!',
+                  },
+                },
+                count: 6,
+                'DMY1bkDr5VQ1PDd5OjQYiw==': {
+                  type: 'toggle',
+                  prevId: 'checkboxboolean',
+                  pathId: 'e2835Rmh7HzdMi5y+ym0Ig==',
+                  props: {
+                    labelA: 'boolean2 on',
+                    labelB: 'boolean2 off',
+                    toggled: true,
+                  },
+                },
+                numberInputnumber: {
+                  type: 'numberInput',
+                  prevId: 'DMY1bkDr5VQ1PDd5OjQYiw==',
+                  pathId: 'nkFHCZGdpD+imjvmXhuS1A==',
+                  props: {
+                    label: 'number',
+                    value: 50,
+                  },
+                },
+              },
+            },
           },
-          children: {
-            lastId: 'buttonWoah!',
-            slidernumber2: {
-              type: 'slider',
-              prevId: 'numberInputnumber',
-              pathId: 'DEFAULTslidernumber2',
-              props: {
-                max: 100,
-                label: 'number2',
-                min: 0,
-                value: 50,
-              },
-            },
-            checkboxboolean: {
-              type: 'checkbox',
-              prevId: 'textInputstring',
-              pathId: 'DEFAULTcheckboxboolean',
-              props: {
-                label: 'boolean',
-                checked: true,
-              },
-            },
-            textInputstring: {
-              type: 'textInput',
-              pathId: 'DEFAULTtextInputstring',
-              props: {
-                value: 'hello, world',
-                label: 'string',
-                helperText: 'Enter a string here!',
-              },
-            },
-            'buttonWoah!': {
-              type: 'button',
-              prevId: 'slidernumber2',
-              pathId: 'DEFAULTbuttonWoah!',
-              props: {
-                label: 'Woah!',
-              },
-            },
-            count: 6,
-            'DMY1bkDr5VQ1PDd5OjQYiw==': {
-              type: 'toggle',
-              prevId: 'checkboxboolean',
-              pathId: 'e2835Rmh7HzdMi5y+ym0Ig==',
-              props: {
-                labelA: 'boolean2 on',
-                labelB: 'boolean2 off',
-                toggled: true,
-              },
-            },
-            numberInputnumber: {
-              type: 'numberInput',
-              prevId: 'DMY1bkDr5VQ1PDd5OjQYiw==',
-              pathId: 'nkFHCZGdpD+imjvmXhuS1A==',
-              props: {
-                label: 'number',
-                value: 50,
-              },
-            },
-          },
-        },
-      },
-    } : {},
+        }
+      : {},
     visible: DEBUG_PREPOPULATED,
   };
 

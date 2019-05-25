@@ -269,6 +269,29 @@ function ui.checkbox(label, checked, props)
     return newChecked
 end
 
+function ui.dropdown(label, value, items, props)
+    assert(type(label) == 'string', '`ui.dropdown` needs a string `label`')
+    assert(type(value) == 'string' or type(value) == 'nil', '`ui.dropdown` needs a string or nil `value`')
+    assert(type(items) == 'table', '`ui.dropdown` needs a table `items`')
+
+    local c = addChild('dropdown', label, without(merge({ label = label, value = value, items = items }, props), 'onChange'), true)
+
+    local newValue = value
+    local es = pendingEvents[c.pathId]
+    if es then
+        for _, e in ipairs(es) do
+            if e.type == 'onChange' then
+                if props and props.onChange then
+                    newValue = props.onChange(e.value) or e.value
+                else
+                    newValue = e.value
+                end
+            end
+        end
+    end
+    return newValue
+end
+
 function ui.numberInput(label, value, props)
     assert(type(label) == 'string', '`ui.numberInput` needs a string `label`')
     assert(type(value) == 'number', '`ui.numberInput` needs a number `value`')
