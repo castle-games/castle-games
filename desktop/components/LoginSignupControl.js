@@ -178,8 +178,6 @@ export default class LoginSignupScreen extends React.Component {
     const response = await Actions.resetPassword({
       userId: this.state.suggestedUser.userId,
     });
-
-    console.log(response);
   };
 
   _handleLoginAsync = async (e) => {

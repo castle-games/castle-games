@@ -164,8 +164,6 @@ class ContentContainer extends React.Component {
       }
     }
 
-    console.log(this.props.mode);
-
     return (
       <div className={rootLevelClassName}>
         {this.props.mode === 'profile' ||

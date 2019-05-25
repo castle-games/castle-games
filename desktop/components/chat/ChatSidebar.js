@@ -331,8 +331,6 @@ class ChatSidebar extends React.Component {
       sidebarElement = this._renderMessageOptions();
     }
 
-    console.log(navigation.contentMode);
-
     let shouldRenderSidebar = true;
     if (navigation.contentMode === 'game') {
       shouldRenderSidebar = this.state.sidebar;
