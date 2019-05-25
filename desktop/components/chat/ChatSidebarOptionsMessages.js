@@ -38,6 +38,23 @@ const STYLES_HEADER_RIGHT = css`
   }
 `;
 
+const STYLES_OPTION = css`
+  font-family: ${Constants.REFACTOR_FONTS.system};
+  user-select: none;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  text-align: right;
+  padding: 0 16px 0 16px;
+  width: 100%;
+  cursor: pointer;
+  transition: color 200ms ease;
+
+  :hover {
+    color: magenta;
+  }
+`;
+
 export default class ChatSidebarOptionsMessages extends React.Component {
   render() {
     return (
@@ -48,6 +65,11 @@ export default class ChatSidebarOptionsMessages extends React.Component {
             <SVG.Dismiss size="16px" />
           </div>
         </header>
+        {this.props.viewer ? (
+          <div className={STYLES_OPTION} onClick={this.props.onStartDirectMessage}>
+            Message a user
+          </div>
+        ) : null}
       </React.Fragment>
     );
   }

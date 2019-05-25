@@ -68,7 +68,6 @@ const STYLES_SIDEBAR = css`
   background: ${Constants.REFACTOR_COLORS.elements.channels};
   overflow-y: scroll;
   overflow-wrap: break-word;
-  transition: 200ms ease width;
 
   ::-webkit-scrollbar {
     display: none;
@@ -83,13 +82,12 @@ const STYLES_CHAT = css`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: 200ms ease width;
   align-items: flex-start;
 `;
 
 const getContainerWidth = ({ chat, sidebar }) => {
   if (sidebar && !chat) {
-    return `248px`;
+    return `224px`;
   }
 
   return `480px`;
@@ -166,37 +164,8 @@ class ChatSidebar extends React.Component {
     alert('_handleAddChannel');
   };
 
-  _handleHideChannel = () => {
-    alert('_handleHideChannel');
-  };
-
-  // NOTE(jim): Castle admin only for now.
-  _handleDeleteChannel = () => {
-    alert('_handleDeleteChannel');
-  };
-
-  // NOTE(jim): Castle admin only for now.
-  _handleUpdateChannel = () => {
-    alert('_handleUpdateChannel');
-  };
-
-  _handleAddDirectMessage = () => {
-    alert('_handleAddDirectMessage');
-  };
-
-  _handleHideDirectMessages = () => {
-    alert('_handleHideDirectMessage');
-  };
-
-  // NOTE(jim): Any member of a direct message should be able to permanently delete
-  // a DM.
-  _handleDeleteDirectMessage = () => {
-    alert('_handleDeleteDirectMessage');
-  };
-
-  // NOTE(jim): Any member of a direct message should be able to update the settings of a DM.
-  _handleUpdateDirectMessage = () => {
-    alert('_handleUpdateDirectMessage');
+  _handleStartDirectMessage = () => {
+    alert('_handleStartDirectMessage');
   };
 
   _handleChange = (e) => {
@@ -230,19 +199,12 @@ class ChatSidebar extends React.Component {
           onOpenBrowserForDocumentation={this._handleOpenBrowserForDocumentation}
         />
         <ChatSidebarChannels
+          viewer={this.props.viewer}
           onShowOptions={this._handleShowChannelOptions}
-          onAddChannel={this._handleAddChannel}
-          onHideChannel={this._handleHideChannel}
-          onDeleteChannel={this._handleDeleteChannel}
-          onUpdateChannel={this._handleUpdateChannel}
         />
         <ChatSidebarDirectMessages
           viewer={this.props.viewer}
           onShowOptions={this._handleShowDirectMessageOptions}
-          onAddDirectMessage={this._handleAddDirectMessage}
-          onHideDirectMessage={this._handleHideDirectMessages}
-          onDeleteDirectMessage={this._handleDeleteDirectMessage}
-          onUpdateDirectMessage={this._handleUpdateDirectMessage}
         />
       </div>
     );
@@ -251,7 +213,11 @@ class ChatSidebar extends React.Component {
   _renderOptions = () => {
     return (
       <div className={STYLES_SIDEBAR} style={getSidebarStyles(this.state)}>
-        <ChatSidebarOptions onDismiss={this._handleHideOptions} onSignOut={this._handleSignOut} />
+        <ChatSidebarOptions
+          viewer={this.props.viewer}
+          onDismiss={this._handleHideOptions}
+          onSignOut={this._handleSignOut}
+        />
       </div>
     );
   };
@@ -259,7 +225,11 @@ class ChatSidebar extends React.Component {
   _renderMessageOptions = () => {
     return (
       <div className={STYLES_SIDEBAR} style={getSidebarStyles(this.state)}>
-        <ChatSidebarOptionsMessages onDismiss={this._handleHideOptions} />
+        <ChatSidebarOptionsMessages
+          viewer={this.props.viewer}
+          onDismiss={this._handleHideOptions}
+          onStartDirectMessage={this._handleStartDirectMessage}
+        />
       </div>
     );
   };
@@ -267,7 +237,11 @@ class ChatSidebar extends React.Component {
   _renderChannelOptions = () => {
     return (
       <div className={STYLES_SIDEBAR} style={getSidebarStyles(this.state)}>
-        <ChatSidebarOptionsChannels onDismiss={this._handleHideOptions} />
+        <ChatSidebarOptionsChannels
+          viewer={this.props.viewer}
+          onDismiss={this._handleHideOptions}
+          onAddChannel={this._handleAddChannel}
+        />
       </div>
     );
   };
