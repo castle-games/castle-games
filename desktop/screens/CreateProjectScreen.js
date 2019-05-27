@@ -185,7 +185,7 @@ class CreateProjectScreen extends React.Component {
   };
 
   _handleNavigateToProject = async (projectUrl) => {
-    await this.props.navigateToGameUrl(projectUrl);
+    await this.props.navigateToGameUrl(projectUrl, { launchSource: 'create-project' });
     Logs.system('Welcome to Castle!');
     Logs.system(`We created your project at ${projectUrl}.`);
     Logs.system(`Open that file in your favorite text editor to get started.`);
@@ -213,7 +213,7 @@ class CreateProjectScreen extends React.Component {
     try {
       const path = await NativeUtil.chooseOpenProjectPathWithDialogAsync();
       if (path) {
-        await this.props.navigateToGameUrl(`file://${path}`);
+        await this.props.navigateToGameUrl(`file://${path}`, { launchSource: 'create-project' });
       }
     } catch (_) {}
   };

@@ -93,7 +93,7 @@ class App extends React.Component {
 
       let url = e.target.href;
       if (Urls.isGameUrl(url)) {
-        this.props.navigator.navigateToGameUrl(url);
+        this.props.navigator.navigateToGameUrl(url, { launchSource: 'link' });
       } else {
         NativeUtil.openExternalURL(url);
       }
@@ -105,7 +105,7 @@ class App extends React.Component {
     if (url && url.indexOf('://') === -1) {
       url = `file://${url}`;
     }
-    this.props.navigator.navigateToGameUrl(url);
+    this.props.navigator.navigateToGameUrl(url, { launchSource: 'external-link' });
   };
 
   _handleNativeMenuSelectedEvent = async (e) => {
@@ -114,7 +114,7 @@ class App extends React.Component {
       const openProjectPath = await NativeUtil.chooseOpenProjectPathWithDialogAsync();
       if (openProjectPath) {
         const gameUrl = `file://${openProjectPath}`;
-        return this.props.navigator.navigateToGameUrl(gameUrl);
+        return this.props.navigator.navigateToGameUrl(gameUrl, { launchSource: 'native-menu' });
       }
     }
   };

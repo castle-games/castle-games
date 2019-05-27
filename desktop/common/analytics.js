@@ -4,7 +4,8 @@
   for other event tracking and analytics as well.
 */
 
-let timeLastNavigated;
+let contentMode = 'home';
+let timeLastNavigated = Date.now();
 let lastGameLaunched;
 let timeGameLaunched;
 let timeWithGameInFocus;
@@ -25,17 +26,21 @@ export const initialize = () => {
 
 // should be called whenever the user navigates from one content mode to another
 export const trackNavigation = ({ prevContentMode, nextContentMode, time = Date.now() }) => {
-  // whenever we navigate away from the game, update the timer keeping track of how long it's been in focus
-  if (lastGameLaunched && prevContentMode === 'game' && timeLastNavigated) {
-    timeWithGameInFocus += time - timeLastNavigated;
+  // whenever we navigate away from a game, update the timer keeping track of how long it's been in focus
+  if (lastGameLaunched && prevContentMode === 'game') {
+    timeWithGameInFocus += time - Math.max(timeLastNavigated, timeGameLaunched);
   }
   // update the timer of when the last navigation occurred
   timeLastNavigated = time;
-  // track the event in amplitude
-  logAmplitudeEvent('Navigation', {
-    prevContentMode,
-    nextContentMode,
-  });
+  // track the event in amplitude (ignoring events where the user navigates to a page they're already on)
+  if (contentMode !== nextContentMode || nextContentMode !== prevContentMode) {
+    logAmplitudeEvent('Navigation', {
+      prevContentMode,
+      nextContentMode,
+    });
+  }
+  // update the last content mode we've seen
+  contentMode = nextContentMode;
 };
 
 // should be called whenever the user attempts to launch a game
@@ -66,7 +71,10 @@ export const trackGameEnd = ({ game, time = Date.now() }) => {
   let timeWithThisGameInFocus;
   if (lastGameLaunched && lastGameLaunched.gameId === gameId) {
     timeSinceLaunch = time - timeGameLaunched;
-    timeWithThisGameInFocus = timeWithGameInFocus;
+    timeWithThisGameInFocus = timeWithGameInFocus || 0;
+    if (contentMode === 'game') {
+      timeWithThisGameInFocus += time - Math.max(timeLastNavigated, timeGameLaunched);
+    }
   }
   // track the event in amplitude
   logAmplitudeEvent('Game Ended', {

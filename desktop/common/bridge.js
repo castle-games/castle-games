@@ -61,7 +61,7 @@ export const JS = {
     const currentGame = GameWindow.getCurrentGame();
     const navigations = GameWindow.getNavigations();
 
-    const options = { gameParams: params, referrerGame: currentGame };
+    const options = { gameParams: params, referrerGame: currentGame, launchSource: 'game' };
 
     if (gameIdOrUrl.includes('://')) {
       navigations.navigateToGameUrl(gameIdOrUrl, options);

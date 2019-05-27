@@ -133,12 +133,12 @@ export default class SearchScreen extends React.Component {
       return;
     }
 
-    this.context.navigateToGameUrl(url);
+    this.context.navigateToGameUrl(url, { launchSource: 'search' });
     this.props.onSearchReset();
   };
 
   _navigateToGame = async (game) => {
-    await this.context.navigateToGame(game);
+    await this.context.navigateToGame(game, { launchSource: 'search' });
     this.props.onSearchReset();
   };
 

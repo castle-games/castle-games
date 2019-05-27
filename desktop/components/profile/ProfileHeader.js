@@ -134,7 +134,11 @@ export default class ProfileHeader extends React.Component {
               {status.verb}{' '}
               <span
                 className={STYLES_STATUS_LINK}
-                onClick={() => this.props.navigateToGameUrl(creator.lastUserStatus.game.url)}>
+                onClick={() =>
+                  this.props.navigateToGameUrl(creator.lastUserStatus.game.url, {
+                    launchSource: 'profile',
+                  })
+                }>
                 {status.title}
               </span>
             </React.Fragment>

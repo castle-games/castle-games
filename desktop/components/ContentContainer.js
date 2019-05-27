@@ -103,7 +103,7 @@ class ContentContainer extends React.Component {
       //
     }
 
-    this.props.navigator.navigateToGameUrl(url);
+    this.props.navigator.navigateToGameUrl(url, { launchSource: 'search' });
     this._handleSearchReset();
   };
 

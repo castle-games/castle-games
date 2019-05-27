@@ -116,6 +116,10 @@ class ProfileScreen extends React.Component {
     }
   };
 
+  _navigateToGame = async (game, options) => {
+    await this.props.navigateToGame(game, { ...options, launchSource: 'profile' });
+  };
+
   _renderGameContent = (isOwnProfile, viewer, creator) => {
     return creator.gameItems && creator.gameItems.length ? (
       <div className={STYLES_GAME_GRID}>
@@ -125,7 +129,7 @@ class ProfileScreen extends React.Component {
           creator={creator}
           gameItems={creator.gameItems}
           onSignInSelect={this.props.navigateToSignIn}
-          onGameSelect={this.props.navigateToGame}
+          onGameSelect={this._navigateToGame}
           onGameUpdate={isOwnProfile ? this._onShowUpdateGame : null}
         />
       </div>

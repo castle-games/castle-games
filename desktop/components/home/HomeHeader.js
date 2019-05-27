@@ -52,7 +52,7 @@ export default class HomeHeader extends React.Component {
     try {
       const path = await NativeUtil.chooseOpenProjectPathWithDialogAsync();
       if (path) {
-        await this.props.navigateToGameUrl(`file://${path}`);
+        await this.props.navigateToGameUrl(`file://${path}`, { launchSource: 'home-header' });
       }
     } catch (_) {}
   };
