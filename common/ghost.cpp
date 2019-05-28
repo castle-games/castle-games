@@ -5,9 +5,9 @@
 #include <fstream>
 #include <iostream>
 
+#include <boost/algorithm/string.hpp>
 #include <boost/asio.hpp>
 #include <boost/process.hpp>
-#include <boost/algorithm/string.hpp>
 
 #ifdef _MSC_VER
 #include <boost/process/windows.hpp>
@@ -122,13 +122,9 @@ void ghostGetDimensions(float *width, float *height) {
   *height = ghostHeight;
 }
 
-GHOST_EXPORT float ghostGetWidth() {
-  return ghostWidth;
-}
+GHOST_EXPORT float ghostGetWidth() { return ghostWidth; }
 
-GHOST_EXPORT float ghostGetHeight() {
-  return ghostHeight;
-}
+GHOST_EXPORT float ghostGetHeight() { return ghostHeight; }
 
 static int ghostUpScaling = GHOST_SCALING_ON, ghostDownScaling = GHOST_SCALING_ON;
 
@@ -143,13 +139,9 @@ void ghostGetScalingModes(int *up, int *down) {
   *down = ghostDownScaling;
 }
 
-GHOST_EXPORT double ghostGetGlobalScaling() {
-  return ghostGlobalScaling;
-}
+GHOST_EXPORT double ghostGetGlobalScaling() { return ghostGlobalScaling; }
 
-GHOST_EXPORT double ghostGetScreenScaling() {
-  return ghostScreenScaling;
-}
+GHOST_EXPORT double ghostGetScreenScaling() { return ghostScreenScaling; }
 
 void ghostGetGameFrame(float frameLeft, float frameTop, float frameWidth, float frameHeight,
                        float *gameLeft, float *gameTop, float *gameWidth, float *gameHeight) {
@@ -167,7 +159,7 @@ void ghostGetGameFrame(float frameLeft, float frameTop, float frameWidth, float 
 
     int up, down;
     ghostGetScalingModes(&up, &down);
-    
+
     if (frameWidth < W || frameHeight < H) { // Down
       if (down == GHOST_SCALING_OFF) {
         ghostScreenScaling = 1;
@@ -189,7 +181,7 @@ void ghostGetGameFrame(float frameLeft, float frameTop, float frameWidth, float 
         ghostScreenScaling = floor(fmin(frameWidth / W, frameHeight / H));
       }
     }
-    
+
     *gameWidth = fmin(ghostScreenScaling * W, frameWidth);
     *gameHeight = fmin(ghostScreenScaling * H, frameHeight);
     *gameLeft = frameLeft + fmax(0, 0.5 * (frameWidth - *gameWidth));
@@ -204,14 +196,14 @@ void ghostExecNode(const char *input, int execId) {
   execNodeInput = input;
   execNodeExecId = execId;
 
-  std::thread t([&](){
+  std::thread t([&]() {
     auto callback = [&](std::string result) {
       trim(result);
       std::stringstream params;
       params << "{"
-      << " execId: " << execNodeExecId << ", "
-      << " result: \"" << result << "\", "
-      << "}";
+             << " execId: " << execNodeExecId << ", "
+             << " result: \"" << result << "\", "
+             << "}";
       ghostSendJSEvent(kGhostExecNodeComplete, params.str().c_str());
     };
 
@@ -239,13 +231,12 @@ void ghostExecNode(const char *input, int execId) {
     std::future<std::string> data;
 
 #if defined(WIN32) || defined(_WIN32)
-    process::child c(std::string(pathToBundledFile),
-                     process::args({execNodeInput}),
-                     process::std_out > data, process::std_err > process::null, ios, process::windows::hide);
+    process::child c(std::string(pathToBundledFile), process::args({execNodeInput}),
+                     process::std_out > data, process::std_err > process::null, ios,
+                     process::windows::hide);
 #else
-	process::child c(std::string(pathToBundledFile),
-		process::args({ execNodeInput }),
-		process::std_out > data, process::std_err > process::null, ios);
+    process::child c(std::string(pathToBundledFile), process::args({execNodeInput}),
+                     process::std_out > data, process::std_err > process::null, ios);
 #endif
 
     ios.run();

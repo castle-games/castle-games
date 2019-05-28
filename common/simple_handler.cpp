@@ -9,7 +9,6 @@
 
 #include <boost/algorithm/string.hpp>
 
-
 #include "include/base/cef_bind.h"
 #include "include/cef_app.h"
 #include "include/views/cef_browser_view.h"

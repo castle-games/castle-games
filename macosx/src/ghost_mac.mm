@@ -156,8 +156,7 @@ void ghostSetChildWindowFrame(float left, float top, float width, float height) 
 
   if (ghostMacMainWindow) {
     if (ghostMacChildWindow) {
-      ghostGetGameFrame(childLeft, childTop, childWidth, childHeight,
-                        &left, &top, &width, &height);
+      ghostGetGameFrame(childLeft, childTop, childWidth, childHeight, &left, &top, &width, &height);
 
       width = fmin(width, ghostMacMainWindow.contentLayoutRect.size.width - left);
       height = fmin(height, ghostMacMainWindow.contentLayoutRect.size.height - top);
@@ -171,7 +170,7 @@ void ghostSetChildWindowFrame(float left, float top, float width, float height) 
       [ghostMacChildWindow setFrame:frame display:NO];
 
       // Focus-follows-mouse (only on mouse move)
-      static NSPoint lastMouse = { 0, 0 };
+      static NSPoint lastMouse = {0, 0};
       NSPoint mouse = [NSEvent mouseLocation];
       if (mouse.x != lastMouse.x || mouse.y != lastMouse.y) {
         if (frame.origin.x <= mouse.x && mouse.x <= frame.origin.x + width &&
@@ -332,7 +331,8 @@ bool ghostGetDocumentsPath(const char **result) {
 }
 
 bool ghostGetVersion(const char **result) {
-  NSString *version = (NSString *)[[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString *)kCFBundleVersionKey];
+  NSString *version = (NSString *)[[NSBundle mainBundle]
+      objectForInfoDictionaryKey:(NSString *)kCFBundleVersionKey];
   const char *versionStr = NULL;
   if (version) {
     versionStr = [version cStringUsingEncoding:NSUTF8StringEncoding];

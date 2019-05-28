@@ -51,9 +51,10 @@ string ghostPreprocessVideo(string unprocessedVideoPath) {
   // Get crop bounds
   boost::asio::io_service ch1Ios;
   std::future<std::string> ch1Data;
-  process::child ch1(ghostFFmpegPath,
-                     process::args({"-i", unprocessedVideoPath, "-vf", "cropdetect=24:16:0", "-f", "null", "-"}),
-                     process::std_out > process::null, process::std_err > ch1Data, ch1Ios);
+  process::child ch1(
+      ghostFFmpegPath,
+      process::args({"-i", unprocessedVideoPath, "-vf", "cropdetect=24:16:0", "-f", "null", "-"}),
+      process::std_out > process::null, process::std_err > ch1Data, ch1Ios);
 
   ch1Ios.run();
   string ch1Output = ch1Data.get();
@@ -66,14 +67,14 @@ string ghostPreprocessVideo(string unprocessedVideoPath) {
 
     boost::asio::io_service ch2Ios;
     std::future<std::string> ch2Data;
-    
+
     std::ostringstream timeArg;
     timeArg << "-" << RECORD_TIME_SECONDS;
-    
-    process::child ch2(
-        ghostFFmpegPath,
-        process::args({"-sseof", timeArg.str(), "-i", unprocessedVideoPath, "-filter_complex", "[0:v] crop=" + cropAmount, outPath}),
-        process::std_out > process::null, process::std_err > ch2Data, ch2Ios);
+
+    process::child ch2(ghostFFmpegPath,
+                       process::args({"-sseof", timeArg.str(), "-i", unprocessedVideoPath,
+                                      "-filter_complex", "[0:v] crop=" + cropAmount, outPath}),
+                       process::std_out > process::null, process::std_err > ch2Data, ch2Ios);
     ch2Ios.run();
     string ch2Output = ch2Data.get();
     if (_debug) {

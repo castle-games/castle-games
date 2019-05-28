@@ -41,18 +41,14 @@ extern __weak NSWindow *ghostMacChildWindow;
 
 @end
 
-#define WINDOW_NAME   ((NSString*)kCGWindowName)
-#define WINDOW_NUMBER ((NSString*)kCGWindowNumber)
-#define OWNER_NAME    ((NSString*)kCGWindowOwnerName)
-#define OWNER_PID     ((NSNumber*)kCGWindowOwnerPID)
+#define WINDOW_NAME ((NSString *)kCGWindowName)
+#define WINDOW_NUMBER ((NSString *)kCGWindowNumber)
+#define OWNER_NAME ((NSString *)kCGWindowOwnerName)
+#define OWNER_PID ((NSNumber *)kCGWindowOwnerPID)
 
-NSArray *enumerate_windows(void)
-{
-  return (__bridge NSArray*)CGWindowListCopyWindowInfo(
-                                                       kCGWindowListOptionOnScreenOnly,
-                                                       kCGNullWindowID);
-  
-  
+NSArray *enumerate_windows(void) {
+  return (__bridge NSArray *)CGWindowListCopyWindowInfo(kCGWindowListOptionOnScreenOnly,
+                                                        kCGNullWindowID);
 }
 
 @implementation GhostAppDelegate
@@ -98,8 +94,9 @@ NSArray *enumerate_windows(void)
   self.lovePaused = NO;
   self.loveStepping = NO;
   self.windowEventsSubscribed = NO;
-  
-  // ghostInitObs([[NSString stringWithFormat:@"%@/obs", [[NSBundle mainBundle] resourcePath]] UTF8String], [[[NSBundle mainBundle] pathForResource:@"ffmpeg" ofType:@""] UTF8String]);
+
+  // ghostInitObs([[NSString stringWithFormat:@"%@/obs", [[NSBundle mainBundle] resourcePath]]
+  // UTF8String], [[[NSBundle mainBundle] pathForResource:@"ffmpeg" ofType:@""] UTF8String]);
 }
 
 - (NSApplicationTerminateReply)applicationShouldTerminate:(__unused NSApplication *)sender {
@@ -220,18 +217,18 @@ NSArray *enumerate_windows(void)
     if (!prevChild && ghostMacChildWindow) { // New child window!
       ghostResizeChildWindow(0, 0);
       // NOTE: Note making it visible here because this will happen after loading!
-//      ghostSetChildWindowVisible(true);
-//      [ghostMacChildWindow makeKeyWindow];
+      //      ghostSetChildWindowVisible(true);
+      //      [ghostMacChildWindow makeKeyWindow];
 
       // Force resize after small delay to fix a weird issue on Mojave
       dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 80 * NSEC_PER_MSEC),
                      dispatch_get_main_queue(), ^{
                        ghostResizeChildWindow(-1, -1);
                        ghostResizeChildWindow(1, 1);
-//                       [ghostMacChildWindow makeKeyWindow];
-                       
-                       // TODO (jesse): this should actually start after the castle loading screen goes away
-                       // ghostStartObs();
+                       //                       [ghostMacChildWindow makeKeyWindow];
+
+                       // TODO (jesse): this should actually start after the castle loading screen
+                       // goes away ghostStartObs();
                      });
     }
   }
@@ -263,7 +260,7 @@ NSArray *enumerate_windows(void)
 }
 
 - (void)stopLove {
-  
+
   ghostSetChildWindowFullscreen(false);
   if (self.luaState) {
     SDL_Event quitEvent;
@@ -271,7 +268,7 @@ NSArray *enumerate_windows(void)
     SDL_PushEvent(&quitEvent);
     [self stepLove];
     [self closeLua];
-    
+
     // ghostStopObs();
   }
   self.loveStepping = NO;

@@ -48,9 +48,9 @@ GHOST_EXPORT void ghostFocusChat();
 void ghostFocusGame();
 
 enum {
-    GHOST_SCALING_OFF = 0,
-    GHOST_SCALING_ON = 1,
-    GHOST_SCALING_STEP = 2,
+  GHOST_SCALING_OFF = 0,
+  GHOST_SCALING_ON = 1,
+  GHOST_SCALING_STEP = 2,
 };
 
 extern bool ghostScreenSettingsDirty;
@@ -60,7 +60,7 @@ GHOST_EXPORT float ghostGetWidth();
 GHOST_EXPORT float ghostGetHeight();
 GHOST_EXPORT void ghostSetScalingModes(int up, int down);
 void ghostGetScalingModes(int *up, int *down);
-  
+
 void ghostGetGameFrame(float frameLeft, float frameTop, float frameWidth, float frameHeight,
                        float *gameLeft, float *gameTop, float *gameWidth, float *gameHeight);
 

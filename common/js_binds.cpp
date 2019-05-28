@@ -84,7 +84,7 @@ JS_BIND_DEFINE(chooseOpenProjectPathWithDialog) {
 
 JS_BIND_DEFINE(getVersion) {
   const char *result;
-  
+
   bool didFindVersion = ghostGetVersion(&result);
   if (didFindVersion) {
     success(result);
@@ -254,9 +254,7 @@ JS_BIND_DEFINE(takeScreenCapture) {
   success("success");
 }
 
-JS_BIND_DEFINE(putInitialData) {
-  success("success");
-}
+JS_BIND_DEFINE(putInitialData) { success("success"); }
 
 JS_BIND_DEFINE(focusGame) {
   ghostFocusGame();
