@@ -46,6 +46,7 @@ const STYLES_NAME = css`
   font-family: ${Constants.REFACTOR_FONTS.system};
   font-weight: 600;
   font-size: 12px;
+  margin-top: 1px;
 `;
 
 const STYLES_STATUS = css`
@@ -98,7 +99,6 @@ export default ({ data }) => {
           style={{ color: data.online ? null : Constants.REFACTOR_COLORS.subdued }}>
           {data.name}
         </h3>
-        <div className={STYLES_STATUS}>{data.status}</div>
       </div>
       {data.pending ? <span className={STYLES_NOTIFICATION}>{data.pending}</span> : null}
     </div>

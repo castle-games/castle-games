@@ -98,7 +98,6 @@ export default ({ data }) => {
           style={{ color: data.online ? null : Constants.REFACTOR_COLORS.subdued }}>
           {data.name}
         </h2>
-        <p className={STYLES_DESCRIPTION}>{data.status}</p>
       </div>
     </div>
   );
