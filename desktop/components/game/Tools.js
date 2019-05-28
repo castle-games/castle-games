@@ -16,6 +16,7 @@ import {
   NumberInput,
   Slider,
   RadioButton,
+  TextArea,
   TextInput,
   Toggle,
 } from 'carbon-components-react';
@@ -376,6 +377,47 @@ class ToolSlider extends React.PureComponent {
 }
 elementTypes['slider'] = ToolSlider;
 
+class ToolTextArea extends React.PureComponent {
+  state = {
+    value: this.props.element.props.value,
+    lastSentEventId: null,
+  };
+
+  static getDerivedStateFromProps(props, state) {
+    if (
+      state.lastSentEventId === null ||
+      props.element.lastReportedEventId == state.lastSentEventId
+    ) {
+      return {
+        value: props.element.props.value,
+      };
+    }
+    return null;
+  }
+
+  render() {
+    const { element } = this.props;
+    return (
+      <TextArea
+        {...element.props}
+        id={element.pathId}
+        labelText={element.props && element.props.label}
+        value={this.state.value}
+        onChange={(event) => {
+          this.setState({
+            value: event.target.value,
+            lastSentEventId: sendEvent(element.pathId, {
+              type: 'onChange',
+              value: event.target.value,
+            }),
+          });
+        }}
+      />
+    );
+  }
+}
+elementTypes['textArea'] = ToolTextArea;
+
 class ToolTextInput extends React.PureComponent {
   state = {
     value: this.props.element.props.value,
@@ -537,6 +579,7 @@ const STYLES_CONTAINER = css`
   /* Add some general bottom margin */
   .bx--number,
   .bx--text-input__field-wrapper,
+  .bx--text-area__wrapper,
   .bx--dropdown,
   .bx--radio-button-group--vertical,
   .bx--slider-container,

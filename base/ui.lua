@@ -396,6 +396,28 @@ function ui.slider(label, value, min, max, props)
     return newValue
 end
 
+function ui.textArea(label, value, props)
+    assert(type(label) == 'string', '`ui.textArea` needs a string `label`')
+    assert(type(value) == 'string', '`ui.textArea` needs a string `value`')
+
+    local c = addChild('textArea', label, without(merge({ label = label, value = value }, props), 'onChange'), true)
+
+    local newValue = value
+    local es = pendingEvents[c.pathId]
+    if es then
+        for _, e in ipairs(es) do
+            if e.type == 'onChange' then
+                if props and props.onChange then
+                    newValue = props.onChange(e.value) or e.value
+                else
+                    newValue = e.value
+                end
+            end
+        end
+    end
+    return newValue
+end
+
 function ui.textInput(label, value, props)
     assert(type(label) == 'string', '`ui.textInput` needs a string `label`')
     assert(type(value) == 'string', '`ui.textInput` needs a string `value`')
