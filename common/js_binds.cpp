@@ -82,6 +82,18 @@ JS_BIND_DEFINE(chooseOpenProjectPathWithDialog) {
   }
 }
 
+JS_BIND_DEFINE(getVersion) {
+  const char *result;
+  
+  bool didFindVersion = ghostGetVersion(&result);
+  if (didFindVersion) {
+    success(result);
+    std::free((void *)result);
+  } else {
+    failure("Unable to get version");
+  }
+}
+
 JS_BIND_DEFINE(getDocumentsPath) {
   const char *result;
 

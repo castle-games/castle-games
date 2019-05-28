@@ -331,6 +331,19 @@ bool ghostGetDocumentsPath(const char **result) {
   return false;
 }
 
+bool ghostGetVersion(const char **result) {
+  NSString *version = (NSString *)[[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString *)kCFBundleVersionKey];
+  const char *versionStr = NULL;
+  if (version) {
+    versionStr = [version cStringUsingEncoding:NSUTF8StringEncoding];
+  }
+  if (versionStr) {
+    *result = strdup(versionStr);
+    return true;
+  }
+  return false;
+}
+
 void ghostInstallUpdate() {
   GhostAppDelegate *delegate = (GhostAppDelegate *)([NSApplication sharedApplication].delegate);
   [delegate installUpdate];

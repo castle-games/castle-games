@@ -737,6 +737,8 @@ void ghostInstallUpdate() {
 
 bool ghostGetDocumentsPath(const char **result) { return false; }
 
+bool ghostGetVersion(const char **result) { return false; }
+
 class WinToastHandlerExample : public IWinToastHandler {
 public:
   WinToastHandlerExample(){};

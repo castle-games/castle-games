@@ -17,6 +17,16 @@ export const getDocumentsPathAsync = async () => {
   return directory;
 };
 
+export const getVersionAsync = async () => {
+  let version;
+  try {
+    version = await NativeBinds.getVersion();
+  } catch (e) {
+    return null;
+  }
+  return version;
+};
+
 export const chooseDirectoryWithDialogAsync = async ({ title, message, action }) => {
   let chosenDirectory;
   try {

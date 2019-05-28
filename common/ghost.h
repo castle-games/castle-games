@@ -70,6 +70,7 @@ bool ghostShowOpenProjectDialog(const char **projectFilePathChosen);
 bool ghostCreateProjectAtPath(const char *path, const char **entryPoint);
 bool ghostGetPathToFileInAppBundle(const char *filename, const char **result);
 bool ghostGetDocumentsPath(const char **result);
+bool ghostGetVersion(const char **result);
 void ghostExecNode(const char *input, int execId);
 
 void ghostInstallUpdate();
