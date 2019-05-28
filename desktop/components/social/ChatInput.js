@@ -120,7 +120,7 @@ export default class ChatInput extends React.Component {
     if (ChatInput._instance) {
       ChatInput._instance._focus();
     }
-  }
+  };
 
   _onFetchAutocomplete = (results) => {
     results.users.forEach((user) => {
@@ -192,12 +192,12 @@ export default class ChatInput extends React.Component {
     if (this.state.ignoreSubmitUntil && new Date() < this.state.ignoreSubmitUntil) {
       return;
     }
-
+    const rawMessage = this.state.inputValue;
     let formattedMessage = await ChatUtilities.formatMessageAsync(
-      this.state.inputValue,
+      rawMessage,
       this._autocompleteCache
     );
-    this.props.onSubmit(formattedMessage);
+    this.props.onSubmit({ formattedMessage, rawMessage });
     this.setState({ inputValue: '' });
   };
 

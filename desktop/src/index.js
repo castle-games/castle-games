@@ -94,8 +94,17 @@ const INITIAL_STATE_OFFLINE = {
 };
 
 const run = async () => {
+  // initialize analytics
+  await Analytics.initialize();
+  Analytics.trackCastleLaunch();
+
   ReactDOM.render(<GLLoaderScreen />, document.getElementById('loader'));
   const { featuredGames, featuredExamples, viewer, isOffline } = await Network.getProductData();
+
+  // if the user was automatically logged in when starting Castle, track that
+  if (viewer) {
+    Analytics.trackLogin({ user: viewer, isAutoLogin: true });
+  }
 
   let state = Object.assign({}, INITIAL_STATE_OFFLINE, {
     featuredGames,
@@ -117,7 +126,6 @@ const run = async () => {
   document.getElementById('loader').outerHTML = '';
 };
 
-Analytics.initialize();
 injectGlobalStyles();
 injectGlobalScrollOverflowPreventionStyles();
 injectGlobalLoaderStyles();

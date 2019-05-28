@@ -2,6 +2,8 @@ import * as React from 'react';
 
 import { css } from 'react-emotion';
 
+import * as Analytics from '~/common/analytics';
+
 import { ConnectionStatus } from 'castle-chat-lib';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { SocialContext } from '~/contexts/SocialContext';
@@ -50,8 +52,9 @@ class ChatContainer extends React.Component {
     chat: {},
   };
 
-  _onSubmit = (message) => {
-    this.props.chat.send(message);
+  _onSubmit = ({ formattedMessage, rawMessage }) => {
+    Analytics.trackChatMessage({ message: rawMessage });
+    this.props.chat.send(formattedMessage);
   };
 
   _onClickConnect = () => {

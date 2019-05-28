@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as Actions from '~/common/actions';
 import * as Constants from '~/common/constants';
 import * as Strings from '~/common/strings';
+import * as Analytics from '~/common/analytics';
 
 import { css } from 'react-emotion';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
@@ -209,6 +210,8 @@ export default class LoginSignupScreen extends React.Component {
       return;
     }
 
+    Analytics.trackLogin({ user });
+
     this.setState({ localViewer: user }, this._goToSuccess);
   };
 
@@ -260,6 +263,7 @@ export default class LoginSignupScreen extends React.Component {
 
       if (response && response.data && response.data.signup) {
         localViewer = response.data.signup;
+        Analytics.trackSignUp({ user: localViewer });
         this.setState({ localViewer, signupError: null }, this._goToSuccess);
         return;
       }
