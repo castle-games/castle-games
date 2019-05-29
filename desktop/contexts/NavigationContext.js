@@ -184,7 +184,7 @@ class NavigationContextManager extends React.Component {
 
   navigateToCreate = () => this._navigateToContentMode('create');
 
-  navigateToEditPost = (params) => this._navigateToContentMode('edit-post', { params });
+  navigateToEditPost = (params) => this._navigateToContentMode('edit_post', { params });
 
   navigateToCurrentGame = () => {
     if (!this.state.navigation.game) {
