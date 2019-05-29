@@ -221,7 +221,6 @@ class UIGameCell extends React.Component {
     onGameSelect: () => {},
     onUserSelect: () => {},
     onGameUpdate: null,
-    isPreview: false,
     renderCartridgeOnly: false,
   };
 
@@ -242,9 +241,6 @@ class UIGameCell extends React.Component {
   };
 
   _handleGameSelect = () => {
-    if (this.props.isPreview) {
-      return;
-    }
     this.props.onGameSelect(this.props.game);
   };
 
@@ -365,15 +361,6 @@ class UIGameCell extends React.Component {
       ? this._renderPopover(game, title, textColor, backgroundColor)
       : null;
 
-    let maybeInfoButton = this.props.isPreview ? null : (
-      <span
-        className={STYLES_INFO}
-        style={{ color: textColor }}
-        onClick={this._handleToggleVisibility}>
-        <SVG.Info height="16px" />
-      </span>
-    );
-
     return (
       <div className={STYLES_GAME}>
         <div className={STYLES_GAME_ITEM} style={{ color: textColor, backgroundColor }}>
@@ -385,7 +372,12 @@ class UIGameCell extends React.Component {
           <div className={STYLES_TITLE} onClick={this._handleGameSelect}>
             {title} {isPrivate ? <Tag>Local</Tag> : null} <br />
           </div>
-          {maybeInfoButton}
+          <span
+            className={STYLES_INFO}
+            style={{ color: textColor }}
+            onClick={this._handleToggleVisibility}>
+            <SVG.Info height="16px" />
+          </span>
           {maybePopoverElement}
         </div>
         {description}
@@ -412,7 +404,6 @@ export default class UIGameGrid extends React.Component {
               src={m.coverImage && m.coverImage.url}
               game={m}
               viewer={this.props.viewer}
-              isPreview={this.props.isPreview}
             />
           );
         })}
