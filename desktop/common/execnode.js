@@ -31,7 +31,8 @@ export async function uploadGameAsync(projectUrl) {
     } else {
       localProjectPath = projectUrl;
     }
-    localProjectPath = localProjectPath.replace('file://', '');
+    localProjectPath = localProjectPath.replace('file://', '').replace(/\%20/g, ' ');
+
     let token = await Actions.getAccessTokenAsync();
     let result = await execNodeAsync('uploadGame', {
       dir: localProjectPath,
@@ -110,11 +111,18 @@ export async function execNodeAsync(action, args) {
   let unparsedResult = execResults[execId];
   delete execResults[execId];
 
+  let unbase64Result;
+  try {
+    unbase64Result = atob(unparsedResult);
+  } catch (e) {
+    throw new Error(`Error parsing Base64: ${unparsedResult}. Error: ${e}`);
+  }
+
   let result;
   try {
-    result = JSON.parse(atob(unparsedResult));
+    result = JSON.parse(unbase64Result);
   } catch (e) {
-    throw new Error(`Error parsing as JSON: ${unparsedResult}. Error: ${e}`);
+    throw new Error(`Error parsing as JSON: ${unbase64Result}. Error: ${e}`);
   }
 
   return result;
