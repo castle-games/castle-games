@@ -159,6 +159,9 @@ do
                 etag = excluded.etag;
     ]]
     persisteETag = function(url, response, etag)
+        if not etag then
+            return
+        end
         stmt:bind(1, url)
         stmt:bind(2, response)
         stmt:bind_blob(3, etag)
