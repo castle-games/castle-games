@@ -6,6 +6,7 @@ import * as Constants from '~/common/constants';
 import { css } from 'react-emotion';
 
 import ChatMessageElement from '~/components/chat/ChatMessageElement';
+import ChatPost from '~/components/chat/ChatPost';
 
 const STYLES_CONTAINER = css`
   height: 100%;
@@ -23,15 +24,18 @@ export default class ChatMessages extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTAINER}>
+        <ChatPost />
         <ChatMessageElement />
         <ChatMessageElement />
         <ChatMessageElement />
         <ChatMessageElement />
         <ChatMessageElement />
+        <ChatPost />
         <ChatMessageElement />
         <ChatMessageElement />
         <ChatMessageElement />
         <ChatMessageElement />
+        <ChatPost />
         <ChatMessageElement />
         <ChatMessageElement />
         <ChatMessageElement />
