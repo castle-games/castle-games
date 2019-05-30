@@ -28,6 +28,7 @@ const STYLES_CONTAINER = css`
   min-width: 10%;
   height: 100vh;
   transition: 200ms ease width;
+  background: ${Constants.colors.white};
 `;
 
 class ChatScreen extends React.Component {

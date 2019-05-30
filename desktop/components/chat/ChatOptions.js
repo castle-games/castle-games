@@ -43,6 +43,12 @@ const STYLES_CHANNEL_PARAGRAPH = css`
   line-height: 1.5;
 `;
 
+const STYLES_COLUMN = css`
+  max-width: 672px;
+  margin: 88px auto 0 auto;
+  padding: 0 24px 72px 24px;
+`;
+
 const ChannelOptionItem = (props) => {
   return (
     <div className={STYLES_CHANNEL_OPTION} onClick={props.onClick}>
@@ -56,10 +62,12 @@ export default class ChatOptions extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTAINER}>
-        <ChannelOptionItem onClick={this.props.onLeaveChannel} title="Leave channel">
-          When you leave this channel, it will be removed from your sidebar and you will no longer
-          receive notifications.
-        </ChannelOptionItem>
+        <div className={STYLES_COLUMN}>
+          <ChannelOptionItem onClick={this.props.onLeaveChannel} title="Leave channel">
+            When you leave this channel, it will be removed from your sidebar and you will no longer
+            receive notifications.
+          </ChannelOptionItem>
+        </div>
       </div>
     );
   }
