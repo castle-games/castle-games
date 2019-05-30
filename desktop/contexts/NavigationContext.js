@@ -43,6 +43,7 @@ const NavigationContextDefaults = {
  *  the state but never read from it.
  */
 const NavigatorContextDefaults = {
+  navigateToChat: (id) => {},
   navigateToHome: () => {},
   navigateToGameUrl: async (url) => {},
   navigateToGame: async (game) => {},
@@ -74,6 +75,7 @@ class NavigationContextManager extends React.Component {
       navigator: {
         ...NavigatorContextDefaults,
         ...props.value.navigator,
+        navigateToChat: this.navigateToChat,
         navigateToHome: this.navigateToHome,
         navigateToGameUrl: this.navigateToGameUrl,
         navigateToGame: this.navigateToGame,
@@ -175,6 +177,8 @@ class NavigationContextManager extends React.Component {
       },
     });
   };
+
+  navigateToChat = () => this._navigateToContentMode('chat');
 
   navigateToHome = () => this._navigateToContentMode('home');
 

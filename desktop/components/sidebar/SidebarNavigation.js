@@ -5,31 +5,31 @@ import * as Constants from '~/common/constants';
 
 import { css } from 'react-emotion';
 
-import ChatSidebarNavigationItem from '~/components/chat/ChatSidebarNavigationItem';
+import SidebarNavigationItem from '~/components/sidebar/SidebarNavigationItem';
 
 const STYLES_CONTAINER = css`
   margin-bottom: 24px;
 `;
 
-export default class ChatSidebarNavigation extends React.Component {
+export default class SidebarNavigation extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTAINER}>
-        <ChatSidebarNavigationItem
+        <SidebarNavigationItem
           data={{
             name: 'Make a game',
             svg: 'make',
             onClick: this.props.onNavigateToMakeGame,
           }}
         />
-        <ChatSidebarNavigationItem
+        <SidebarNavigationItem
           data={{
             name: 'Featured games',
             svg: 'featured',
             onClick: this.props.onNavigateToFeaturedGames,
           }}
         />
-        <ChatSidebarNavigationItem
+        <SidebarNavigationItem
           data={{
             name: 'Posts',
             svg: 'posts',
@@ -37,7 +37,7 @@ export default class ChatSidebarNavigation extends React.Component {
           }}
         />
         {this.props.viewer ? (
-          <ChatSidebarNavigationItem
+          <SidebarNavigationItem
             data={{
               name: 'History',
               svg: 'history',
@@ -45,7 +45,7 @@ export default class ChatSidebarNavigation extends React.Component {
             }}
           />
         ) : null}
-        <ChatSidebarNavigationItem
+        <SidebarNavigationItem
           data={{
             name: 'Documentation',
             svg: 'documentation',

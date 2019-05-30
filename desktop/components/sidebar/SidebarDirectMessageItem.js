@@ -75,9 +75,9 @@ const STYLES_AVATAR = css`
   background: magenta;
 `;
 
-export default ({ data }) => {
+export default ({ data, onClick }) => {
   return (
-    <div className={STYLES_USER}>
+    <div className={STYLES_USER} onClick={onClick}>
       {data.online ? (
         <figure className={STYLES_AVATAR}>
           <span

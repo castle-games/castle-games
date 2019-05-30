@@ -55,7 +55,7 @@ const STYLES_OPTION = css`
   }
 `;
 
-export default class ChatSidebarOptionsChannels extends React.Component {
+export default class SidebarOptions extends React.Component {
   render() {
     return (
       <React.Fragment>
@@ -65,11 +65,9 @@ export default class ChatSidebarOptionsChannels extends React.Component {
             <SVG.Dismiss size="16px" />
           </div>
         </header>
-        {this.props.viewer ? (
-          <div className={STYLES_OPTION} onClick={this.props.onAddChannel}>
-            Add channel
-          </div>
-        ) : null}
+        <div className={STYLES_OPTION} onClick={this.props.onSignOut}>
+          Sign Out
+        </div>
       </React.Fragment>
     );
   }

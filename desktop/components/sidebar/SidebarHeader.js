@@ -66,7 +66,7 @@ const STYLES_BYLINE = css`
 `;
 
 // TODO(jim): Bind dynamic server name instead of hardcoded Castle.
-export default class ChatSidebarHeader extends React.Component {
+export default class SidebarHeader extends React.Component {
   render() {
     const { navigator, viewer } = this.props;
 

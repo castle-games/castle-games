@@ -5,14 +5,14 @@ import * as Constants from '~/common/constants';
 
 import { css } from 'react-emotion';
 
-import ChatSidebarGroupHeader from '~/components/chat/ChatSidebarGroupHeader';
-import ChatSidebarDirectMessageItem from '~/components/chat/ChatSidebarDirectMessageItem';
+import SidebarGroupHeader from '~/components/sidebar/SidebarGroupHeader';
+import SidebarDirectMessageItem from '~/components/sidebar/SidebarDirectMessageItem';
 
 const STYLES_CONTAINER = css`
   margin-bottom: 24px;
 `;
 
-export default class ChatSidebarDirectMessages extends React.Component {
+export default class SidebarDirectMessages extends React.Component {
   render() {
     if (!this.props.viewer) {
       return null;
@@ -20,25 +20,31 @@ export default class ChatSidebarDirectMessages extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
-        <ChatSidebarGroupHeader onShowOptions={this.props.onShowOptions}>
+        <SidebarGroupHeader onClick={this.props.onChat} onShowOptions={this.props.onShowOptions}>
           Direct Messages
-        </ChatSidebarGroupHeader>
-        <ChatSidebarDirectMessageItem
+        </SidebarGroupHeader>
+        <SidebarDirectMessageItem
+          onClick={this.props.onChat}
           data={{ online: true, name: 'Person #1', status: 'Is playing Blast Flocks', pending: 50 }}
         />
-        <ChatSidebarDirectMessageItem
+        <SidebarDirectMessageItem
+          onClick={this.props.onChat}
           data={{ online: true, name: 'Person #2', status: 'Is playing Blast Flocks', pending: 40 }}
         />
-        <ChatSidebarDirectMessageItem
+        <SidebarDirectMessageItem
+          onClick={this.props.onChat}
           data={{ online: true, name: 'Person #3', status: 'Is playing Blast Flocks', pending: 20 }}
         />
-        <ChatSidebarDirectMessageItem
+        <SidebarDirectMessageItem
+          onClick={this.props.onChat}
           data={{ online: false, name: 'Person #4', status: 'Is playing Blast Flocks', pending: 0 }}
         />
-        <ChatSidebarDirectMessageItem
+        <SidebarDirectMessageItem
+          onClick={this.props.onChat}
           data={{ online: false, name: 'Person #5', status: 'Is playing Blast Flocks', pending: 0 }}
         />
-        <ChatSidebarDirectMessageItem
+        <SidebarDirectMessageItem
+          onClick={this.props.onChat}
           data={{ online: false, name: 'Person #6', status: 'Is playing Blast Flocks', pending: 0 }}
         />
       </div>

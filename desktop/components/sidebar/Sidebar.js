@@ -6,29 +6,19 @@ import * as NativeUtil from '~/native/nativeutil';
 
 import { css } from 'react-emotion';
 
-import { ConnectionStatus } from 'castle-chat-lib';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { SocialContext } from '~/contexts/SocialContext';
 import { NavigatorContext, NavigationContext } from '~/contexts/NavigationContext';
 import { ChatContext } from '~/contexts/ChatContext';
 
-import ChatHeader from '~/components/chat/ChatHeader';
-import ChatHeaderActive from '~/components/chat/ChatHeaderActive';
-import ChatMessages from '~/components/chat/ChatMessages';
-import ChatMembers from '~/components/chat/ChatMembers';
-import ChatInput from '~/components/chat/ChatInput';
-import ChatOptions from '~/components/chat/ChatOptions';
+import SidebarOptions from '~/components/sidebar/SidebarOptions';
+import SidebarOptionsChannels from '~/components/sidebar/SidebarOptionsChannels';
+import SidebarOptionsMessages from '~/components/sidebar/SidebarOptionsMessages';
 
-import ChatSidebarOptions from '~/components/chat/ChatSidebarOptions';
-import ChatSidebarOptionsChannels from '~/components/chat/ChatSidebarOptionsChannels';
-import ChatSidebarOptionsMessages from '~/components/chat/ChatSidebarOptionsMessages';
-
-import ChatSidebarHeader from '~/components/chat/ChatSidebarHeader';
-import ChatSidebarChannels from '~/components/chat/ChatSidebarChannels';
-import ChatSidebarDirectMessages from '~/components/chat/ChatSidebarDirectMessages';
-import ChatSidebarNavigation from '~/components/chat/ChatSidebarNavigation';
-
-import UINavigationLink from '~/components/reusable/UINavigationLink';
+import SidebarHeader from '~/components/sidebar/SidebarHeader';
+import SidebarChannels from '~/components/sidebar/SidebarChannels';
+import SidebarDirectMessages from '~/components/sidebar/SidebarDirectMessages';
+import SidebarNavigation from '~/components/sidebar/SidebarNavigation';
 
 const STYLES_CONTAINER = css`
   display: flex;
@@ -54,11 +44,10 @@ const STYLES_SIDEBAR = css`
   }
 `;
 
-class ChatSidebar extends React.Component {
+class Sidebar extends React.Component {
   state = {
     value: '',
     mode: 'DEFAULT',
-    chatMode: 'MESSAGES',
   };
 
   _handleSignIn = () => {
@@ -67,7 +56,13 @@ class ChatSidebar extends React.Component {
 
   _handleSignOut = () => {
     this.props.currentUser.clearCurrentUser();
-    this.setState({ mode: 'DEFAULT', chatMode: 'MESSAGES' });
+    this.setState({ mode: 'DEFAULT' });
+  };
+
+  // TODO(jim): There will be some integration that has to happen here.
+  _handleNavigateToChat = (id) => {
+    console.log(id);
+    return this.props.navigator.navigateToChat();
   };
 
   _handleNavigateToMakeGame = () => {
@@ -90,10 +85,6 @@ class ChatSidebar extends React.Component {
     return NativeUtil.openExternalURL(`${Constants.WEB_HOST}/documentation`);
   };
 
-  _handleShowSingleChannelMembers = () => this.setState({ chatMode: 'MEMBERS' });
-
-  _handleShowSingleChannelOptions = () => this.setState({ chatMode: 'OPTIONS' });
-
   _handleShowOptions = () => this.setState({ mode: 'OPTIONS' });
 
   _handleShowChannelOptions = () => this.setState({ mode: 'OPTIONS_CHANNELS' });
@@ -101,8 +92,6 @@ class ChatSidebar extends React.Component {
   _handleShowDirectMessageOptions = () => this.setState({ mode: 'OPTIONS_MESSAGES' });
 
   _handleHideOptions = () => this.setState({ mode: 'DEFAULT' });
-
-  _handleResetChatWindow = () => this.setState({ chatMode: 'MESSAGES' });
 
   _handleAddChannel = () => {
     alert('_handleAddChannel');
@@ -116,23 +105,12 @@ class ChatSidebar extends React.Component {
     alert('_handleStartDirectMessage');
   };
 
-  _handleChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value });
-  };
-
-  _handleKeyDown = (e) => {
-    if (e.which === 13) {
-      alert(`Should submit ${this.state.value}`);
-      this.setState({ value: '' });
-    }
-  };
-
   _renderRootSidebar = () => {
     const { navigation, navigator, viewer } = this.props;
 
     return (
       <div className={STYLES_SIDEBAR}>
-        <ChatSidebarHeader
+        <SidebarHeader
           viewer={viewer}
           navigator={navigator}
           onShowOptions={this._handleShowOptions}
@@ -140,7 +118,7 @@ class ChatSidebar extends React.Component {
           onSignOut={this._handleSignOut}
           onHideSidebar={this._handleHideSidebar}
         />
-        <ChatSidebarNavigation
+        <SidebarNavigation
           viewer={viewer}
           onNavigateToMakeGame={this._handleNavigateToMakeGame}
           onNavigateToFeaturedGames={this._handleNavigateToFeaturedGames}
@@ -148,10 +126,15 @@ class ChatSidebar extends React.Component {
           onNavigateToHistory={this._handleNavigateToHistory}
           onOpenBrowserForDocumentation={this._handleOpenBrowserForDocumentation}
         />
-        <ChatSidebarChannels viewer={viewer} onShowOptions={this._handleShowChannelOptions} />
-        <ChatSidebarDirectMessages
+        <SidebarChannels
+          viewer={viewer}
+          onShowOptions={this._handleShowChannelOptions}
+          onChat={this._handleNavigateToChat}
+        />
+        <SidebarDirectMessages
           viewer={viewer}
           onShowOptions={this._handleShowDirectMessageOptions}
+          onChat={this._handleNavigateToChat}
         />
       </div>
     );
@@ -162,7 +145,7 @@ class ChatSidebar extends React.Component {
 
     return (
       <div className={STYLES_SIDEBAR}>
-        <ChatSidebarOptions
+        <SidebarOptions
           viewer={viewer}
           onDismiss={this._handleHideOptions}
           onSignOut={this._handleSignOut}
@@ -176,7 +159,7 @@ class ChatSidebar extends React.Component {
 
     return (
       <div className={STYLES_SIDEBAR}>
-        <ChatSidebarOptionsMessages
+        <SidebarOptionsMessages
           viewer={viewer}
           onDismiss={this._handleHideOptions}
           onStartDirectMessage={this._handleStartDirectMessage}
@@ -190,7 +173,7 @@ class ChatSidebar extends React.Component {
 
     return (
       <div className={STYLES_SIDEBAR}>
-        <ChatSidebarOptionsChannels
+        <SidebarOptionsChannels
           viewer={viewer}
           onDismiss={this._handleHideOptions}
           onAddChannel={this._handleAddChannel}
@@ -228,7 +211,7 @@ class ChatSidebar extends React.Component {
   }
 }
 
-export default class ChatSidebarWithContext extends React.Component {
+export default class SidebarWithContext extends React.Component {
   render() {
     return (
       <CurrentUserContext.Consumer>
@@ -245,7 +228,7 @@ export default class ChatSidebarWithContext extends React.Component {
                             return (
                               <NavigatorContext.Consumer>
                                 {(navigator) => (
-                                  <ChatSidebar
+                                  <Sidebar
                                     viewer={currentUser.user}
                                     currentUser={currentUser}
                                     navigator={navigator}

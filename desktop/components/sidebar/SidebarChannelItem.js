@@ -47,9 +47,12 @@ const STYLES_SYMBOL = css`
   flex-shrink: 0;
 `;
 
-export default ({ data }) => {
+export default ({ data, onClick }) => {
   return (
-    <div className={STYLES_CHANNEL} style={{ color: data.active ? 'magenta' : null }}>
+    <div
+      className={STYLES_CHANNEL}
+      style={{ color: data.active ? 'magenta' : null }}
+      onClick={onClick}>
       <span className={STYLES_SYMBOL}>
         {data.game ? <SVG.SidebarFeaturedGames size="14px" /> : <SVG.HashTag size="14px" />}
       </span>

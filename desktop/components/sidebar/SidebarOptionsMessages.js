@@ -55,7 +55,7 @@ const STYLES_OPTION = css`
   }
 `;
 
-export default class ChatSidebarOptionsMessages extends React.Component {
+export default class SidebarOptionsMessages extends React.Component {
   render() {
     return (
       <React.Fragment>

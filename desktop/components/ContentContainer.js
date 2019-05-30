@@ -12,6 +12,7 @@ import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 
 import CreateProjectScreen from '~/screens/CreateProjectScreen';
 import GameWindow from '~/native/gamewindow';
+import ChatScreen from '~/screens/ChatScreen';
 import GameScreen from '~/screens/GameScreen';
 import HomeScreen from '~/screens/HomeScreen';
 import ProfileScreen from '~/screens/ProfileScreen';
@@ -109,6 +110,8 @@ class ContentContainer extends React.Component {
           timeLastNavigated={this.props.timeLastNavigated}
         />
       );
+    } else if (mode === 'chat') {
+      return <ChatScreen />;
     } else if (mode === 'create') {
       return <CreateProjectScreen templates={this.props.featuredExamples} />;
     } else if (mode === 'profile') {
