@@ -22,15 +22,6 @@ import NowPlayingBar from '~/components/NowPlayingBar';
 import EditPostScreen from '~/screens/EditPostScreen';
 import SignInScreen from '~/screens/SignInScreen';
 
-// TODO(jim): Delete this after refactor.
-const LEGACY_STYLES_CONTAINER = css`
-  font-family: ${Constants.font.default};
-  background: ${Constants.colors.default};
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-`;
-
 const STYLES_CONTAINER_FLUID = css`
   font-family: ${Constants.font.default};
   background: ${Constants.colors.default};
@@ -154,18 +145,8 @@ class ContentContainer extends React.Component {
       nowPlayingElement = <NowPlayingBar game={this.props.game} navigator={this.props.navigator} />;
     }
 
-    // NOTE(jim): For some cases the right sidebars content has to expand to be fluid.
-    let rootLevelClassName = LEGACY_STYLES_CONTAINER;
-    if (FeatureFlags.VERSION_TWO) {
-      rootLevelClassName = STYLES_CONTAINER_FLUID;
-
-      if (LayoutUtilities.getLayoutMode(this.props.mode) === 'FLUID_CHAT') {
-        rootLevelClassName = STYLES_CONTAINER_FIXED_WITH_BORDER;
-      }
-    }
-
     return (
-      <div className={rootLevelClassName}>
+      <div className={STYLES_CONTAINER_FLUID}>
         {this.props.mode === 'profile' ||
         this.props.mode === 'home' ||
         this.props.mode === 'create' ? (

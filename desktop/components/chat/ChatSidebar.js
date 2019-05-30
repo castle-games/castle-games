@@ -35,34 +35,14 @@ const STYLES_CONTAINER = css`
   align-items: flex-start;
   justify-content: space-between;
   flex-direction: column;
-  width: 100%;
+  width: 228px;
   min-width: 10%;
   height: 100vh;
   transition: 200ms ease width;
 `;
 
-const STYLES_TOP = css`
-  min-height: 10%;
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: space-between;
-`;
-
-const STYLES_BOTTOM = css`
-  flex-shrink: 0;
-  height: 32px;
-  width: 100%;
-  background: ${Constants.REFACTOR_COLORS.elements.bottomBar};
-  display: flex;
-  align-items: center;
-  padding: 0 16px 0 16px;
-`;
-
 const STYLES_SIDEBAR = css`
-  width: 188px;
+  width: 100%;
   height: 100%;
   flex-shrink: 0;
   background: ${Constants.REFACTOR_COLORS.elements.channels};
@@ -74,49 +54,11 @@ const STYLES_SIDEBAR = css`
   }
 `;
 
-const STYLES_CHAT = css`
-  min-width: 25%;
-  width: 100%;
-  height: 100%;
-  background: ${Constants.REFACTOR_COLORS.elements.body};
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
-`;
-
-const getContainerWidth = ({ chat, sidebar }) => {
-  if (sidebar && !chat) {
-    return `224px`;
-  }
-
-  return `480px`;
-};
-
-const getSidebarStyles = ({ chat, sidebar }) => {
-  return { width: sidebar && !chat ? '100%' : null };
-};
-
 class ChatSidebar extends React.Component {
   state = {
     value: '',
     mode: 'DEFAULT',
     chatMode: 'MESSAGES',
-    chat: true,
-    sidebar: true,
-  };
-
-  _handleToggleChat = () => {
-    const next = !this.state.chat;
-    this.setState({ chat: next, sidebar: next ? this.state.sidebar : true });
-  };
-
-  _handleToggleSidebar = () => {
-    const next = !this.state.sidebar;
-    this.setState({
-      sidebar: next,
-      chat: next ? this.state.chat : true,
-    });
   };
 
   _handleSignIn = () => {
@@ -189,9 +131,7 @@ class ChatSidebar extends React.Component {
     const { navigation, navigator, viewer } = this.props;
 
     return (
-      <div
-        className={STYLES_SIDEBAR}
-        style={navigation.contentMode === 'game' ? getSidebarStyles(this.state) : null}>
+      <div className={STYLES_SIDEBAR}>
         <ChatSidebarHeader
           viewer={viewer}
           navigator={navigator}
@@ -221,9 +161,7 @@ class ChatSidebar extends React.Component {
     const { navigation, viewer } = this.props;
 
     return (
-      <div
-        className={STYLES_SIDEBAR}
-        style={navigation.contentMode === 'game' ? getSidebarStyles(this.state) : null}>
+      <div className={STYLES_SIDEBAR}>
         <ChatSidebarOptions
           viewer={viewer}
           onDismiss={this._handleHideOptions}
@@ -237,9 +175,7 @@ class ChatSidebar extends React.Component {
     const { navigation, viewer } = this.props;
 
     return (
-      <div
-        className={STYLES_SIDEBAR}
-        style={navigation.contentMode === 'game' ? getSidebarStyles(this.state) : null}>
+      <div className={STYLES_SIDEBAR}>
         <ChatSidebarOptionsMessages
           viewer={viewer}
           onDismiss={this._handleHideOptions}
@@ -253,56 +189,11 @@ class ChatSidebar extends React.Component {
     const { navigation, viewer } = this.props;
 
     return (
-      <div
-        className={STYLES_SIDEBAR}
-        style={navigation.contentMode === 'game' ? getSidebarStyles(this.state) : null}>
+      <div className={STYLES_SIDEBAR}>
         <ChatSidebarOptionsChannels
           viewer={viewer}
           onDismiss={this._handleHideOptions}
           onAddChannel={this._handleAddChannel}
-        />
-      </div>
-    );
-  };
-
-  _renderChat = () => {
-    const { chatMode } = this.state;
-
-    if (chatMode === 'OPTIONS') {
-      return (
-        <div className={STYLES_CHAT}>
-          <ChatHeaderActive onDismiss={this._handleResetChatWindow}>
-            Channel Settings
-          </ChatHeaderActive>
-          <ChatOptions onLeaveChannel={this._handleLeaveChannel} />
-        </div>
-      );
-    }
-
-    if (chatMode === 'MEMBERS') {
-      return (
-        <div className={STYLES_CHAT}>
-          <ChatHeaderActive onDismiss={this._handleResetChatWindow}>
-            Channel Members
-          </ChatHeaderActive>
-          <ChatMembers />
-        </div>
-      );
-    }
-
-    return (
-      <div className={STYLES_CHAT}>
-        <ChatHeader
-          onSettingsClick={this._handleShowSingleChannelOptions}
-          onMembersClick={this._handleShowSingleChannelMembers}
-        />
-        <ChatMessages />
-        <ChatInput
-          value={this.state.value}
-          name="value"
-          placeholder="Type a message"
-          onChange={this._handleChange}
-          onKeyDown={this._handleKeyDown}
         />
       </div>
     );
@@ -315,12 +206,6 @@ class ChatSidebar extends React.Component {
     if (navigation.isFullScreen) {
       return null;
     }
-
-    const chatElement = this._renderChat();
-    const layoutMode = LayoutUtilities.getLayoutMode(navigation.contentMode);
-    const dynamicStyles = {
-      maxWidth: layoutMode !== 'FLUID_CHAT' ? getContainerWidth(this.state) : null,
-    };
 
     let sidebarElement = this._renderRootSidebar();
     if (mode === 'OPTIONS') {
@@ -335,48 +220,11 @@ class ChatSidebar extends React.Component {
       sidebarElement = this._renderMessageOptions();
     }
 
-    let shouldRenderSidebar = true;
     if (navigation.contentMode === 'game') {
-      shouldRenderSidebar = this.state.sidebar;
+      return null;
     }
 
-    let shouldRenderChat = true;
-    if (navigation.contentMode === 'game') {
-      shouldRenderChat = this.state.chat;
-    }
-
-    const shouldRenderBottomBar = navigation.contentMode === 'game';
-
-    return (
-      <div className={STYLES_CONTAINER} style={dynamicStyles}>
-        <div className={STYLES_TOP}>
-          {shouldRenderSidebar ? sidebarElement : null}
-          {shouldRenderChat ? chatElement : null}
-        </div>
-        {shouldRenderBottomBar ? (
-          <div className={STYLES_BOTTOM}>
-            {this.state.sidebar ? (
-              <UINavigationLink style={{ marginRight: 24 }} onClick={this._handleToggleSidebar}>
-                Hide Sidebar
-              </UINavigationLink>
-            ) : (
-              <UINavigationLink style={{ marginRight: 24 }} onClick={this._handleToggleSidebar}>
-                Show Sidebar
-              </UINavigationLink>
-            )}
-            {this.state.chat ? (
-              <UINavigationLink style={{ marginRight: 24 }} onClick={this._handleToggleChat}>
-                Hide Chat
-              </UINavigationLink>
-            ) : (
-              <UINavigationLink style={{ marginRight: 24 }} onClick={this._handleToggleChat}>
-                Show Chat
-              </UINavigationLink>
-            )}
-          </div>
-        ) : null}
-      </div>
-    );
+    return <div className={STYLES_CONTAINER}>{sidebarElement}</div>;
   }
 }
 
