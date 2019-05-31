@@ -345,7 +345,7 @@ function ui.section(...)
     elseif nArgs == 3 then
         label, props, inner = ...
     end
-    assert(type(label) == 'string', '`ui.textArea` needs a string `label`')
+    assert(type(label) == 'string', '`ui.section` needs a string `label`')
 
     local c, newId = addChild('section', label, merge({ label = label }, props), true)
 
