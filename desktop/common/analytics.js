@@ -88,10 +88,11 @@ export const trackChatMessage = async ({ message }) => {
 
 // should be called whenever the user attempts to launch a game
 export const trackGameLaunch = async ({ game, launchSource, time = Date.now() }) => {
-  const { gameId, url: gameUrl, sessionId: gameSessionId } = game;
+  const { gameId, url: gameUrl, title: gameTitle, sessionId: gameSessionId } = game;
+  const gameOwnerId = game.owner && game.owner.userId;
   // if a game is currently running, track the fact that it's now ending
   if (lastGameLaunched) {
-    trackGameEnd({ game: lastGameLaunched });
+    trackGameEnd({ game: lastGameLaunched, time });
   }
   // keep track of the last game the user launched
   lastGameLaunched = game;
@@ -101,14 +102,17 @@ export const trackGameLaunch = async ({ game, launchSource, time = Date.now() })
   logAmplitudeEvent('Launched Game', {
     gameId,
     gameUrl,
+    gameTitle,
     gameSessionId,
+    gameOwnerId,
     launchSource,
   });
 };
 
 // should be called whenever a game ends
 export const trackGameEnd = async ({ game, time = Date.now() }) => {
-  const { gameId, url: gameUrl, sessionId: gameSessionId } = game;
+  const { gameId, url: gameUrl, title: gameTitle, sessionId: gameSessionId } = game;
+  const gameOwnerId = game.owner && game.owner.userId;
   // figure out how long the game's been launched and in focus
   let timeSinceLaunch;
   let timeWithThisGameInFocus;
@@ -123,7 +127,9 @@ export const trackGameEnd = async ({ game, time = Date.now() }) => {
   logAmplitudeEvent('Ended Game', {
     gameId,
     gameUrl,
+    gameTitle,
     gameSessionId,
+    gameOwnerId,
     timeSinceLaunch,
     timeWithGameInFocus: timeWithThisGameInFocus,
   });
