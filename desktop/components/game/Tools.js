@@ -16,6 +16,8 @@ import {
   NumberInput,
   Slider,
   RadioButton,
+  Tab,
+  Tabs,
   TextArea,
   TextInput,
   Toggle,
@@ -377,6 +379,41 @@ class ToolSlider extends React.PureComponent {
 }
 elementTypes['slider'] = ToolSlider;
 
+class ToolTabs extends React.PureComponent {
+  componentDidMount() {
+    const { element } = this.props;
+    const children = orderedChildren(element).filter(({ id, child }) => child.type == 'tab');
+    if (children[0]) {
+      sendEvent(children[0].child.pathId, { type: 'onActive', value: true });
+    }
+  }
+
+  render() {
+    const { element } = this.props;
+
+    const children = orderedChildren(element).filter(({ id, child }) => child.type == 'tab');
+
+    return (
+      <div className="castle--tabs-container">
+        <Tabs
+          {...element.props}
+          onSelectionChange={(activeIndex) =>
+            children.forEach(({ id, child }, childIndex) =>
+              sendEvent(child.pathId, { type: 'onActive', value: childIndex === activeIndex })
+            )
+          }>
+          {children.map(({ id, child }) => (
+            <Tab key={id} {...child.props} href="javascript:void(0);">
+              {renderChildren(child)}
+            </Tab>
+          ))}
+        </Tabs>
+      </div>
+    );
+  }
+}
+elementTypes['tabs'] = ToolTabs;
+
 class ToolTextArea extends React.PureComponent {
   state = {
     value: this.props.element.props.value,
@@ -576,6 +613,31 @@ const STYLES_CONTAINER = css`
     padding-bottom: 0.8rem !important;
   }
 
+  /* Make tab headers fit */
+  .bx--tabs__nav {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: row !important;
+  }
+  .bx--tabs__nav-item {
+    display: flex !important;
+    flex: 1 !important;
+    width: auto !important;
+  }
+  a.bx--tabs__nav-link,
+  a.bx--tabs__nav-link:focus,
+  a.bx--tabs__nav-link:active {
+    display: flex !important;
+    flex: 1 !important;
+    width: auto !important;
+  }
+
+  /* Add border around tabs container */
+  .castle--tabs-container {
+    border-bottom: 1px solid #3d3d3d !important;
+    padding-bottom: 0.6rem !important;
+  }
+
   /* Add some general bottom margin */
   .bx--number,
   .bx--text-input__field-wrapper,
@@ -585,7 +647,8 @@ const STYLES_CONTAINER = css`
   .bx--slider-container,
   .bx--accordion,
   .bx--toggle__label,
-  .bx--btn {
+  .bx--btn,
+  .castle--tabs-container {
     margin-bottom: 14px !important;
   }
 
@@ -616,7 +679,193 @@ const DEBUG_PREPOPULATED = false;
 
 export default class Tools extends React.PureComponent {
   static initialState = {
-    root: DEBUG_PREPOPULATED ? {} : {},
+    root: DEBUG_PREPOPULATED
+      ? {
+          panes: {
+            DEFAULT: {
+              type: 'pane',
+              props: {
+                name: 'DEFAULT',
+              },
+              children: {
+                slidernumber2: {
+                  type: 'slider',
+                  prevId: 'numberInputnumber',
+                  pathId: 'DEFAULTslidernumber2',
+                  props: {
+                    max: 100,
+                    label: 'number2',
+                    min: 0,
+                    value: 50,
+                  },
+                },
+                textInputstring: {
+                  type: 'textInput',
+                  prevId: 'tabstabs1',
+                  pathId: 'DEFAULTtextInputstring',
+                  props: {
+                    value: 'hello, world',
+                    label: 'string',
+                    helperText: 'Enter a string here!',
+                  },
+                },
+                dropdowndrop: {
+                  type: 'dropdown',
+                  prevId: 'slidernumber2',
+                  pathId: 'DEFAULTdropdowndrop',
+                  props: {
+                    items: ['alpha', 'beta', 'gamma', 'delta', 'epsilon', 'zeta'],
+                    label: 'drop',
+                    helperText: 'Choose a thing!',
+                    invalid: false,
+                    invalidText: "I don't like this value... :(",
+                  },
+                },
+                lastId: 'buttonWoah!',
+                'DMY1bkDr5VQ1PDd5OjQYiw==': {
+                  type: 'toggle',
+                  prevId: 'checkboxboolean',
+                  pathId: 'e2835Rmh7HzdMi5y+ym0Ig==',
+                  props: {
+                    labelA: 'boolean2 on',
+                    labelB: 'boolean2 off',
+                    toggled: true,
+                  },
+                },
+                radioButtonGroupradio: {
+                  type: 'radioButtonGroup',
+                  prevId: 'dropdowndrop',
+                  pathId: 'wBvaeF6UMYqdYu9SLNnJfw==',
+                  props: {
+                    items: ['alpha', 'beta', 'gamma'],
+                    label: 'radio',
+                    value: 'alpha',
+                  },
+                },
+                textAreastring2: {
+                  type: 'textArea',
+                  prevId: 'radioButtonGroupradio',
+                  pathId: 'DEFAULTtextAreastring2',
+                  props: {
+                    label: 'string2',
+                    rows: 10,
+                    value:
+                      'This is a longer piece of text! Have fun editing this one. :)\n\nOh and this is a new paragraph!\n',
+                  },
+                },
+                checkboxboolean: {
+                  type: 'checkbox',
+                  prevId: 'textInputstring',
+                  pathId: 'DEFAULTcheckboxboolean',
+                  props: {
+                    label: 'boolean',
+                    checked: true,
+                  },
+                },
+                'sectionAnother section': {
+                  type: 'section',
+                  prevId: 'sectionA section',
+                  pathId: 'Sw/BUTd8kDYNHCeGCdmzdA==',
+                  props: {
+                    label: 'Another section',
+                  },
+                },
+                'buttonWoah!': {
+                  type: 'button',
+                  prevId: 'textAreastring2',
+                  pathId: 'DEFAULTbuttonWoah!',
+                  props: {
+                    label: 'Woah!',
+                  },
+                },
+                count: 12,
+                'sectionA section': {
+                  pathId: 'CB2r1SJ7nok8b514Bn4whw==',
+                  props: {
+                    label: 'A section',
+                    open: true,
+                  },
+                  children: {
+                    lastId: 'Y8miTTdDUibz9xrKivPr6g==',
+                    'Y8miTTdDUibz9xrKivPr6g==': {
+                      type: 'textInput',
+                      pathId: 'c5e0hDcFQlr35Qd24QyeCQ==',
+                      props: {
+                        label: 'stuff inside section',
+                        value: 'hello, world',
+                      },
+                    },
+                    count: 1,
+                  },
+                  type: 'section',
+                  open: true,
+                },
+                numberInputnumber: {
+                  type: 'numberInput',
+                  prevId: 'DMY1bkDr5VQ1PDd5OjQYiw==',
+                  pathId: 'nkFHCZGdpD+imjvmXhuS1A==',
+                  props: {
+                    invalid: false,
+                    invalidText: "Just kidding, you actually can't go above 50!",
+                    label: 'number',
+                    value: 50,
+                  },
+                },
+                tabstabs1: {
+                  prevId: 'sectionAnother section',
+                  type: 'tabs',
+                  props: {},
+                  pathId: 'DEFAULTtabstabs1',
+                  children: {
+                    lastId: 'tabTab 2',
+                    count: 2,
+                    'tabTab 2': {
+                      prevId: 'tabTab 1',
+                      type: 'tab',
+                      props: {
+                        label: 'Tab 2',
+                      },
+                      pathId: 'gOSSKLUBS8fzEIMxGFatjA==',
+                      children: {
+                        '6pjZuv/Fe5b1baaHiR3iBg==': {
+                          type: 'textInput',
+                          pathId: 'khVweAX7DnLZZLLUEUWdng==',
+                          props: {
+                            label: 'stuff inside tab 2',
+                            value: 'hello, world',
+                          },
+                        },
+                        count: 1,
+                        lastId: '6pjZuv/Fe5b1baaHiR3iBg==',
+                      },
+                    },
+                    'tabTab 1': {
+                      type: 'tab',
+                      children: {
+                        lastId: '5LmNPiEjwg0g9VFCUokVEQ==',
+                        count: 1,
+                        '5LmNPiEjwg0g9VFCUokVEQ==': {
+                          type: 'textInput',
+                          pathId: 'voUIBFnr5MnzFfvLh/jiVQ==',
+                          props: {
+                            label: 'stuff inside tab 1',
+                            value: 'hello, world',
+                          },
+                        },
+                      },
+                      props: {
+                        label: 'Tab 1',
+                      },
+                      pathId: 'ocpes3AdldHdH8ZqIAjTlA==',
+                      lastReportedEventId: 1,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        }
+      : {},
     visible: DEBUG_PREPOPULATED,
   };
 

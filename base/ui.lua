@@ -83,6 +83,8 @@ end
 
 -- Create a new element and add it as a child of the current element on the top of the stack
 local function addChild(typ, id, props, needsPathId)
+    assert(type(props) == 'table' or type(props) == 'nil', '`props` must be a table or `nil`')
+
     local top = stack[#stack]
     top.newChildren.count = top.newChildren.count + 1
 
@@ -133,9 +135,7 @@ end
 -- error-tolerant -- if `inner` throws an error, the pop still occurs then the error is resurfaced
 -- after.
 local function enter(element, id, inner)
-    if type(inner) ~= 'function' then
-        return
-    end
+    assert(type(inner) == 'function', '`inner` should be a function')
     push(element, id)
     local succeeded, err = pcall(inner)
     pop()
@@ -345,6 +345,7 @@ function ui.section(...)
     elseif nArgs == 3 then
         label, props, inner = ...
     end
+    assert(type(label) == 'string', '`ui.textArea` needs a string `label`')
 
     local c, newId = addChild('section', label, merge({ label = label }, props), true)
 
@@ -394,6 +395,48 @@ function ui.slider(label, value, min, max, props)
         end
     end
     return newValue
+end
+
+function ui.tab(...)
+    local label, props, inner
+    local nArgs = select('#', ...)
+    if nArgs == 2 then
+        label, inner = ...
+    elseif nArgs == 3 then
+        label, props, inner = ...
+    end
+    assert(type(label) == 'string', '`ui.tab` needs a string `label`')
+
+    local c, newId = addChild('tab', label, merge({ label = label }, props), true)
+
+    local active = store[c].active == true
+    local es = pendingEvents[c.pathId]
+    if es then
+        for _, e in ipairs(es) do
+            if e.type == 'onActive' then
+                active = e.value
+            end
+        end
+    end
+    store[c].active = active
+
+    enter(c, newId, inner)
+
+    return active
+end
+
+function ui.tabs(...)
+    local id, props, inner
+    local nArgs = select('#', ...)
+    if nArgs == 2 then
+        id, inner = ...
+    elseif nArgs == 3 then
+        id, props, inner = ...
+    end
+    assert(type(id) == 'string', '`ui.tabs` needs a string `id`')
+
+    local c, newId = addChild('tabs', id, props or {}, true)
+    enter(c, newId, inner)
 end
 
 function ui.textArea(label, value, props)
