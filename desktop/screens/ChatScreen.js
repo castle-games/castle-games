@@ -1,7 +1,6 @@
 import * as React from 'react';
 import * as SVG from '~/common/svg';
 import * as Constants from '~/common/constants';
-import * as LayoutUtilities from '~/common/layout-utilities';
 import * as NativeUtil from '~/native/nativeutil';
 
 import { css } from 'react-emotion';
