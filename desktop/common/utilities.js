@@ -104,6 +104,37 @@ export function fixWindowsFilePath(path) {
   return path;
 }
 
+export function getScreenSettings(game) {
+  const { dimensions, scaling, upscaling, downscaling } = game.metadata || {};
+  const screenSettings = {
+    width: 800,
+    height: 450,
+    upscaling: 'on',
+    downscaling: 'on',
+  };
+  if (dimensions) {
+    if (dimensions === 'full') {
+      screenSettings.width = 0;
+      screenSettings.height = 0;
+    } else {
+      const [widthStr, heightStr] = dimensions.split('x');
+      screenSettings.width = parseInt(widthStr) || 800;
+      screenSettings.height = parseInt(heightStr) || 450;
+    }
+  }
+  if (scaling) {
+    screenSettings.upscaling = scaling;
+    screenSettings.downscaling = scaling;
+  }
+  if (upscaling) {
+    screenSettings.upscaling = upscaling;
+  }
+  if (downscaling) {
+    screenSettings.downscaling = downscaling;
+  }
+  return screenSettings;
+}
+
 export function getLuaEntryPoint(game) {
   if (game.entryPoint) {
     // if the server knows about this game, just use the value given by the server

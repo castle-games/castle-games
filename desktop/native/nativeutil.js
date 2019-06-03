@@ -101,8 +101,4 @@ export const readFileUrl = async (fileUrl) => {
 
 export const focusGame = async () => {
   return await NativeBinds.focusGame();
-}
-
-export const setScreenSettings = async (settings) => {
-  return await NativeBinds.setScreenSettings(settings);
-}
+};

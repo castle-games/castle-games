@@ -138,6 +138,30 @@ class GameScreen extends React.Component {
     window.removeEventListener('GHOST_NETWORK_REQUEST', this._handleLuaNetworkRequest);
   }
 
+  _prepareInitialGameData = async (screenSettings) => {
+    // Prepare the Lua format of the post
+    const luaPost = this.props.post ? await jsPostToLuaPost(this.props.post) : undefined;
+
+    return {
+      graphics: {
+        width: screenSettings.width,
+        height: screenSettings.height,
+      },
+      audio: {
+        volume: this.state.isMuted ? 0 : 1,
+      },
+      user: {
+        isLoggedIn: this.props.isLoggedIn,
+        me: await jsUserToLuaUser(this.props.me),
+      },
+      initialPost: luaPost,
+      initialParams: this.props.gameParams ? this.props.gameParams : undefined,
+      referrerGame: this.props.referrerGame
+        ? await jsGameToLuaGame(this.props.referrerGame)
+        : undefined,
+    };
+  };
+
   _handleGameLoaded = () => {
     GameWindow.setVisible(true);
     this.setState({ loaded: true });
@@ -169,7 +193,7 @@ class GameScreen extends React.Component {
     await GameWindow.close();
   };
 
-  _openGame = async (url) => {
+  _openGame = async (url, game) => {
     await new Promise((resolve) =>
       this.setState(
         { loaded: false, luaNetworkRequests: [], loadingPhase: 'initializing' },
@@ -182,72 +206,25 @@ class GameScreen extends React.Component {
     }
 
     Logs.system(`Loading game entry point: ${url}`);
-
-    // Prepare the Lua format of the post
-    const luaPost = this.props.post ? await jsPostToLuaPost(this.props.post) : undefined;
-
-    // Set screen settings
-    const { dimensions, scaling, upscaling, downscaling } = this.props.game.metadata || {};
-    const screenSettings = {
-      width: 800,
-      height: 450,
-      upscaling: 'on',
-      downscaling: 'on',
-    };
-    if (dimensions) {
-      if (dimensions === 'full') {
-        screenSettings.width = 0;
-        screenSettings.height = 0;
-      } else {
-        const [widthStr, heightStr] = dimensions.split('x');
-        screenSettings.width = parseInt(widthStr) || 800;
-        screenSettings.height = parseInt(heightStr) || 450;
-      }
-    }
-    if (scaling) {
-      screenSettings.upscaling = scaling;
-      screenSettings.downscaling = scaling;
-    }
-    if (upscaling) {
-      screenSettings.upscaling = upscaling;
-    }
-    if (downscaling) {
-      screenSettings.downscaling = downscaling;
-    }
-    await NativeUtil.setScreenSettings(screenSettings); // Make sure to `await`!
+    const screenSettings = Utilities.getScreenSettings(game);
+    const initialData = await this._prepareInitialGameData(screenSettings);
 
     // Launch the game window, passing all of the initial settings
     await GameWindow.open({
       gameUrl: url,
-      game: this.props.game,
+      game: game,
       navigations: {
         navigateToEditPost: this.props.navigateToEditPost,
         navigateToGameUrl: this.props.navigateToGameUrl,
         navigateToGame: this.props.navigateToGame,
       },
-      initialData: {
-        graphics: {
-          width: screenSettings.width,
-          height: screenSettings.height,
-        },
-        audio: {
-          volume: this.state.isMuted ? 0 : 1,
-        },
-        user: {
-          isLoggedIn: this.props.isLoggedIn,
-          me: await jsUserToLuaUser(this.props.me),
-        },
-        initialPost: luaPost,
-        initialParams: this.props.gameParams ? this.props.gameParams : undefined,
-        referrerGame: this.props.referrerGame
-          ? await jsGameToLuaGame(this.props.referrerGame)
-          : undefined,
-      },
+      initialData,
+      screenSettings,
     });
 
     // Triger the `castle.postopened` event afterward
-    if (luaPost) {
-      NativeUtil.sendLuaEvent('CASTLE_POST_OPENED', luaPost);
+    if (initialData.initialPost) {
+      NativeUtil.sendLuaEvent('CASTLE_POST_OPENED', initialData.initialPost);
     }
   };
 
@@ -264,11 +241,11 @@ class GameScreen extends React.Component {
     } else if (newUrl !== oldUrl) {
       // close game and open new
       await this._closeGame();
-      await this._openGame(newUrl);
+      await this._openGame(newUrl, this.props.game);
     } else if (newUrl === oldUrl && this.props.timeGameLoaded !== prevProps.timeGameLoaded) {
       // reload
       await this._closeGame();
-      await this._openGame(oldUrl);
+      await this._openGame(oldUrl, prevProps.game);
     }
     this.updateGameWindowFrame();
   };

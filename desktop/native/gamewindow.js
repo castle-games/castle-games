@@ -7,13 +7,16 @@ class GameWindow {
   _currentGame = null;
   _navigations = null;
 
-  open = async ({ gameUrl, game, initialData, navigations }) => {
+  open = async ({ gameUrl, game, initialData, navigations, screenSettings }) => {
     if (this._isOpen) return;
     this._isOpen = true;
     this._currentGame = game;
     this._navigations = navigations;
     Share.addEventListeners(game);
     UserStatus.startAsync(game);
+    if (screenSettings) {
+      await NativeBinds.setScreenSettings(screenSettings);
+    }
     await NativeBinds.openUri({ uri: gameUrl, initialData: JSON.stringify(initialData) });
   };
 
