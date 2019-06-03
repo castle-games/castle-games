@@ -36,6 +36,30 @@ class ChatScreen extends React.Component {
     mode: 'MESSAGES',
   };
 
+  /*
+  componentDidMount() {
+    this._update(this.props.chat.channel);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (!prevProps.chat.channel) {
+      return;
+    }
+
+    if (!this.props.chat.channel) {
+      return;
+    }
+
+    if (prevProps.chat.channel.channelId !== this.props.chat.channelId) {
+      this._update(this.props.chat.channel);
+    }
+  }
+
+  _update = (channel) => {
+    console.log('Channel:', channel);
+  };
+  */
+
   _handleResetChatWindow = () => this.setState({ mode: 'MESSAGES' });
 
   _handleShowSingleChannelMembers = () => this.setState({ mode: 'MEMBERS' });
@@ -48,15 +72,13 @@ class ChatScreen extends React.Component {
 
   _handleKeyDown = (e) => {
     if (e.which === 13) {
-      alert(`Should submit ${this.state.value}`);
+      this.props.chat.handleSendChannelMessage(this.state.value);
       this.setState({ value: '' });
     }
   };
 
   render() {
     const { mode } = this.state;
-
-    console.log('in context', this.props.chat);
 
     if (mode === 'OPTIONS') {
       return (
@@ -80,6 +102,11 @@ class ChatScreen extends React.Component {
       );
     }
 
+    let messages = [];
+    if (this.props.chat.channel && this.props.chat.messages[this.props.chat.channel.channelId]) {
+      messages = this.props.chat.messages[this.props.chat.channel.channelId];
+    }
+
     return (
       <div className={STYLES_CONTAINER}>
         <ChatHeader
@@ -87,7 +114,7 @@ class ChatScreen extends React.Component {
           onSettingsClick={this._handleShowSingleChannelOptions}
           onMembersClick={this._handleShowSingleChannelMembers}
         />
-        <ChatMessages messages={this.props.chat.messages} />
+        <ChatMessages messages={messages} />
         <ChatInput
           value={this.state.value}
           name="value"

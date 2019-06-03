@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as ChatUtilities from '~/common/chat-utilities';
 import * as Actions from '~/common/actions';
 import * as Strings from '~/common/strings';
+import * as FeatureFlags from '~/common/feature-flags';
 
 import { CastleChat, ConnectionStatus } from 'castle-chat-lib';
 import { NativeBinds } from '~/native/nativebinds';
@@ -154,6 +155,10 @@ class ChatContextProvider extends React.Component {
   };
 
   startChatService = async (userId) => {
+    if (FeatureFlags.VERSION_TWO) {
+      return;
+    }
+
     if (Strings.isEmpty(userId)) {
       console.error('Cannot start chat without a logged in user.');
       return;
@@ -167,7 +172,6 @@ class ChatContextProvider extends React.Component {
 
     this._chat = new CastleChat();
     this._chat.init(CHAT_SERVICE_URL, userId, token, [ROOM_NAME]);
-
     this._chat.setOnMessagesHandler(this._handleMessagesAsync);
     this._chat.setOnPresenceHandler(this._handlePresenceAsync);
     this._chat.setConnectionStatusHandler((status) => {

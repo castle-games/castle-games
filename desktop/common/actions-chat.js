@@ -22,7 +22,34 @@ export const createChatChannel = async ({ name }) => {
   return response;
 };
 
-export const joinChatChannel = async ({ channelId }) => {};
+export const joinChatChannel = async ({ channelId }) => {
+  const response = await API.graphqlAsync(
+    `
+      mutation($channelId: ID!) {
+        joinChatChannel(channelId: $channelId) {
+          channelId
+        }
+      }
+    `,
+    { channelId }
+  );
+
+  return response;
+};
+
 export const leaveChatChannel = async ({ channelId }) => {};
-export const sendChannelChatMessage = async ({ message, channelId }) => {};
+
+export const sendChannelChatMessage = async ({ message, channelId }) => {
+  const response = await API.graphqlAsync(
+    `
+      mutation($message: String!, $channelId: ID!) {
+        sendChannelChatMessage(message: $message, channelId: $channelId)
+      }
+    `,
+    { message, channelId }
+  );
+
+  return response;
+};
+
 export const sendUserChatMessage = async ({ message, otherUserId }) => {};

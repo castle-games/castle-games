@@ -55,12 +55,13 @@ class Sidebar extends React.Component {
 
   _handleSignOut = () => {
     this.props.currentUser.clearCurrentUser();
+
     this.setState({ mode: 'DEFAULT' });
   };
 
   _handleNavigateToChat = (channel) => {
-    console.log('_handleNavigateToChat', channel);
     this.props.chat.handleConnect(channel);
+
     return this.props.navigator.navigateToChat();
   };
 
@@ -92,18 +93,6 @@ class Sidebar extends React.Component {
 
   _handleHideOptions = () => this.setState({ mode: 'DEFAULT' });
 
-  _handleAddChannel = () => {
-    alert('_handleAddChannel');
-  };
-
-  _handleLeaveChannel = () => {
-    alert('_handleLeaveChannel');
-  };
-
-  _handleStartDirectMessage = () => {
-    alert('_handleStartDirectMessage');
-  };
-
   _renderRootSidebar = () => {
     const { navigation, navigator, viewer, social } = this.props;
 
@@ -127,15 +116,16 @@ class Sidebar extends React.Component {
         />
         <SidebarChannels
           viewer={viewer}
-          onShowOptions={this._handleShowChannelOptions}
           channels={social.allChatChannels}
           onSelectChannel={this._handleNavigateToChat}
         />
-        <SidebarDirectMessages
-          viewer={viewer}
-          onShowOptions={this._handleShowDirectMessageOptions}
-          onChat={this._handleNavigateToChat}
-        />
+        {this.props.social.allMessageChannels ? (
+          <SidebarDirectMessages
+            viewer={viewer}
+            onShowOptions={this._handleShowDirectMessageOptions}
+            onChat={this._handleNavigateToChat}
+          />
+        ) : null}
       </div>
     );
   };
@@ -159,11 +149,7 @@ class Sidebar extends React.Component {
 
     return (
       <div className={STYLES_SIDEBAR}>
-        <SidebarOptionsMessages
-          viewer={viewer}
-          onDismiss={this._handleHideOptions}
-          onStartDirectMessage={this._handleStartDirectMessage}
-        />
+        <SidebarOptionsMessages viewer={viewer} onDismiss={this._handleHideOptions} />
       </div>
     );
   };
@@ -173,11 +159,7 @@ class Sidebar extends React.Component {
 
     return (
       <div className={STYLES_SIDEBAR}>
-        <SidebarOptionsChannels
-          viewer={viewer}
-          onDismiss={this._handleHideOptions}
-          onAddChannel={this._handleAddChannel}
-        />
+        <SidebarOptionsChannels viewer={viewer} onDismiss={this._handleHideOptions} />
       </div>
     );
   };

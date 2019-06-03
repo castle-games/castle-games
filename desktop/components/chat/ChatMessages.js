@@ -22,26 +22,13 @@ const STYLES_CONTAINER = css`
 
 export default class ChatMessages extends React.Component {
   render() {
-    console.log('chat messages', this.props.messages);
+    console.log('render all of the messages', this.props.messages);
+
     return (
       <div className={STYLES_CONTAINER}>
-        <ChatPost />
-        <ChatMessageElement />
-        <ChatMessageElement />
-        <ChatMessageElement />
-        <ChatMessageElement />
-        <ChatMessageElement />
-        <ChatPost />
-        <ChatMessageElement />
-        <ChatMessageElement />
-        <ChatMessageElement />
-        <ChatMessageElement />
-        <ChatPost />
-        <ChatMessageElement />
-        <ChatMessageElement />
-        <ChatMessageElement />
-        <ChatMessageElement />
-        <ChatMessageElement />
+        {this.props.messages.map((m) => (
+          <ChatMessageElement message={m} />
+        ))}
       </div>
     );
   }
