@@ -57,12 +57,15 @@ const STYLES_LOADING_OVERLAY_ELEMENT = css`
   font-size: 10px;
 `;
 
-const jsUserToLuaUser = async (user) => ({
-  userId: user.userId,
-  username: user.username,
-  name: user.name,
-  photoUrl: user.photo ? user.photo.url : undefined,
-});
+const jsUserToLuaUser = async (user) =>
+  user
+    ? {
+        userId: user.userId,
+        username: user.username,
+        name: user.name,
+        photoUrl: user.photo ? user.photo.url : undefined,
+      }
+    : undefined;
 
 const jsPostToLuaPost = async ({ postId, creator, media }) => ({
   postId,
@@ -73,7 +76,7 @@ const jsPostToLuaPost = async ({ postId, creator, media }) => ({
 
 const jsGameToLuaGame = async ({ gameId, owner, title, url, description }) => ({
   gameId,
-  owner: owner ? await jsUserToLuaUser(owner) : undefined,
+  owner: await jsUserToLuaUser(owner),
   title,
   url,
   description,
@@ -168,7 +171,10 @@ class GameScreen extends React.Component {
 
   _openGame = async (url) => {
     await new Promise((resolve) =>
-      this.setState({ loaded: false, luaNetworkRequests: [], loadingPhase: 'initializing' }, resolve)
+      this.setState(
+        { loaded: false, luaNetworkRequests: [], loadingPhase: 'initializing' },
+        resolve
+      )
     );
 
     if (this._toolsReference) {
@@ -229,7 +235,7 @@ class GameScreen extends React.Component {
         },
         user: {
           isLoggedIn: this.props.isLoggedIn,
-          me: this.props.isLoggedIn ? await jsUserToLuaUser(this.props.me) : undefined,
+          me: await jsUserToLuaUser(this.props.me),
         },
         initialPost: luaPost,
         initialParams: this.props.gameParams ? this.props.gameParams : undefined,
