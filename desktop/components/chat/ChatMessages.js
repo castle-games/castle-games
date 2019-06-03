@@ -22,13 +22,21 @@ const STYLES_CONTAINER = css`
 
 export default class ChatMessages extends React.Component {
   render() {
-    console.log('render all of the messages', this.props.messages);
+    const { social, navigator } = this.props;
 
     return (
       <div className={STYLES_CONTAINER}>
-        {this.props.messages.map((m) => (
-          <ChatMessageElement message={m} />
-        ))}
+        {this.props.messages.map((m) => {
+          const user = this.props.social.userIdToUser[m.fromUserId];
+          return (
+            <ChatMessageElement
+              key={m.chatMessageId}
+              message={m}
+              user={user}
+              onNavigateToUserProfile={this.props.navigator.navigateToUserProfile}
+            />
+          );
+        })}
       </div>
     );
   }

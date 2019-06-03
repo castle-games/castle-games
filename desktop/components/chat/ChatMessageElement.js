@@ -4,6 +4,8 @@ import * as Strings from '~/common/strings';
 
 import { css, styled } from 'react-emotion';
 
+import StringReplace from 'react-string-replace';
+
 const STYLES_CONTAINER = css`
   font-family: ${Constants.REFACTOR_FONTS.system};
   display: flex;
@@ -54,24 +56,78 @@ const STYLES_AUTHOR_MESSAGE = css`
   color: ${Constants.REFACTOR_COLORS.text};
 `;
 
+const STYLES_MENTION = css`
+  font-weight: 600;
+  color: #00d7d7;
+  cursor: pointer;
+
+  :hover {
+    color: magenta;
+  }
+`;
+
+const STYLES_CHANNEL = css`
+  font-weight: 600;
+  cursor: pointer;
+`;
+
 export default class ChatMessageElement extends React.Component {
+  static defaultProps = {
+    user: {
+      name: 'Anonymous',
+      photo: {
+        url: null,
+      },
+    },
+  };
+
   render() {
+    let text = '';
+    if (!Strings.isEmpty(this.props.message.body.message[0].text)) {
+      text = this.props.message.body.message[0].text;
+      text = StringReplace(text, /@(\w+)/g, (match, i) => (
+        <span
+          className={STYLES_MENTION}
+          key={match + i}
+          onClick={() => this.props.onNavigateToUserProfile({ username: match })}>
+          @{match}
+        </span>
+      ));
+    }
+
+    text = StringReplace(text, /#(\w+)/g, (match, i) => (
+      <span className={STYLES_CHANNEL} key={match + i}>
+        #{match}
+      </span>
+    ));
+
     return (
       <div className={STYLES_CONTAINER}>
-        <span className={STYLES_LEFT} onClick={this.props.onUserClick} />
+        <span
+          className={STYLES_LEFT}
+          onClick={
+            this.props.user.username
+              ? () => this.props.onNavigateToUserProfile(this.props.user)
+              : () => {}
+          }
+          style={{ backgroundImage: this.props.user ? `url(${this.props.user.photo.url})` : `` }}
+        />
         <span className={STYLES_RIGHT}>
-          <div className={STYLES_AUTHOR_NAME} onClick={this.props.onUserClick}>
-            Lao-tzu
-            <span className={STYLES_TIMESTAMP}>8:30 PM</span>
+          <div
+            className={STYLES_AUTHOR_NAME}
+            onClick={
+              this.props.user.username
+                ? () => this.props.onNavigateToUserProfile(this.props.user)
+                : () => {}
+            }>
+            {Strings.isEmpty(this.props.user.name)
+              ? this.props.user.username
+              : this.props.user.name}
+            <span className={STYLES_TIMESTAMP}>
+              {Strings.toChatDate(this.props.message.timestamp)}
+            </span>
           </div>
-          <div className={STYLES_AUTHOR_MESSAGE}>
-            So it is that existence and non-existence give birth the one to (the idea of) the other;
-            that difficulty and ease produce the one (the idea of) the other; that length and
-            shortness fashion out the one the figure of the other; that (the ideas of) height and
-            lowness arise from the contrast of the one with the other; that the musical notes and
-            tones become harmonious through the relation of one with another; and that being before
-            and behind give the idea of one following another.
-          </div>
+          <div className={STYLES_AUTHOR_MESSAGE}>{text}</div>
         </span>
       </div>
     );

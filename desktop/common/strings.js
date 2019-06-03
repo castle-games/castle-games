@@ -38,6 +38,35 @@ export const toDirectoryName = (str) => {
   return null;
 };
 
+const areDatesSameDay = (date1, date2) => {
+  return (
+    date1.getDate() === date2.getDate() &&
+    date1.getMonth() === date2.getMonth() &&
+    date1.getFullYear() === date2.getFullYear()
+  );
+};
+
+export const toChatDate = (timestamp) => {
+  let date = new Date(timestamp);
+  let timeString = date.toLocaleString('en-US', {
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true,
+  });
+
+  if (!areDatesSameDay(new Date(), date)) {
+    let yesterday = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
+
+    if (areDatesSameDay(yesterday, date)) {
+      timeString = `Yesterday ${timeString}`;
+    } else {
+      timeString = `${toDate(date)} ${timeString}`;
+    }
+  }
+
+  return timeString;
+};
+
 export const toDate = (dateString) => {
   let date = dateString;
   if (typeof dateString !== 'object') {

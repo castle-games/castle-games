@@ -114,7 +114,11 @@ class ChatScreen extends React.Component {
           onSettingsClick={this._handleShowSingleChannelOptions}
           onMembersClick={this._handleShowSingleChannelMembers}
         />
-        <ChatMessages messages={messages} />
+        <ChatMessages
+          messages={messages}
+          navigator={this.props.navigator}
+          social={this.props.social}
+        />
         <ChatInput
           value={this.state.value}
           name="value"

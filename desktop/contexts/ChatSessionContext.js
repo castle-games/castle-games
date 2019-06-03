@@ -79,7 +79,7 @@ class ChatSessionContextProvider extends React.Component {
         messages[m.channelId] = [];
       }
 
-      messages[m.channelId].push(m);
+      messages[m.channelId].unshift(m);
     });
 
     this.setState({ messages });
