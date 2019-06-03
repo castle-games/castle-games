@@ -88,7 +88,7 @@ class ChatContainer extends React.Component {
           return (
             <React.Fragment>
               <UIHeaderBlock>
-                <strong>Chat ({users.length})</strong>
+                <strong>Chat</strong>
               </UIHeaderBlock>
               <ChatMessagesList
                 messages={filteredMessages}

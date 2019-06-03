@@ -3,11 +3,12 @@ import * as ChatUtilities from '~/common/chat-utilities';
 import * as Actions from '~/common/actions';
 import * as Strings from '~/common/strings';
 import * as FeatureFlags from '~/common/feature-flags';
+import * as Constants from '~/common/constants';
 
 import { CastleChat, ConnectionStatus } from 'castle-chat-lib';
 import { NativeBinds } from '~/native/nativebinds';
 
-const CHAT_SERVICE_URL = 'https://chat.castle.games:5285/http-bind/';
+const CHAT_SERVICE_URL = 'https://castle-chat.onrender.com';
 const ROOM_NAME = 'general';
 const NOTIFICATIONS_USER_ID = -1;
 const TEST_MESSAGE = null;
@@ -171,7 +172,7 @@ class ChatContextProvider extends React.Component {
     }
 
     this._chat = new CastleChat();
-    this._chat.init(CHAT_SERVICE_URL, userId, token, [ROOM_NAME]);
+    this._chat.init(CHAT_SERVICE_URL, Constants.API_HOST, token);
     this._chat.setOnMessagesHandler(this._handleMessagesAsync);
     this._chat.setOnPresenceHandler(this._handlePresenceAsync);
     this._chat.setConnectionStatusHandler((status) => {
@@ -206,16 +207,11 @@ class ChatContextProvider extends React.Component {
   };
 
   _handlePresenceAsync = async (event) => {
-    if (event.roomName === ROOM_NAME) {
-      this.setState({ users: event.roster.map((user) => user.name) });
-
-      let onlineUsersMap = {};
-      event.roster.forEach((user) => {
-        onlineUsersMap[user.name] = true;
-      });
-
-      this.props.social.setOnlineUserIds(onlineUsersMap);
+    if (!event.user_ids) {
+      return;
     }
+
+    this.props.social.setOnlineUserIds(event.user_ids);
   };
 
   _handleMessagesAsync = async (messages) => {

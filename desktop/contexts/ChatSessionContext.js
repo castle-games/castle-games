@@ -6,7 +6,7 @@ import * as Constants from '~/common/constants';
 
 import { CastleChat, ConnectionStatus } from 'castle-chat-lib';
 
-const CHAT_SERVICE_URL = 'https://chat.castle.games:5285/http-bind/';
+const CHAT_SERVICE_URL = 'https://castle-chat.onrender.com';
 
 const sleep = async (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -68,14 +68,7 @@ class ChatSessionContextProvider extends React.Component {
   };
 
   _handleConnectStatus = async (status) => {
-    this.setState({ users: event.roster.map((user) => user.name) });
-
-    let onlineUsersMap = {};
-    event.roster.forEach((user) => {
-      onlineUsersMap[user.name] = true;
-    });
-
-    this.props.social.setOnlineUserIds(onlineUsersMap);
+    // console.log('status', status);
   };
 
   _handleMessagesAsync = async (allMessages) => {
@@ -88,7 +81,7 @@ class ChatSessionContextProvider extends React.Component {
       }
 
       userIds[m.fromUserId] = true;
-      messages[m.channelId].unshift(m);
+      messages[m.channelId].push(m);
     });
 
     try {
@@ -100,7 +93,11 @@ class ChatSessionContextProvider extends React.Component {
   };
 
   _handlePresenceAsync = async (event) => {
-    console.log('event', event);
+    if (!event.user_ids) {
+      return;
+    }
+
+    this.props.social.setOnlineUserIds(event.user_ids);
   };
 
   render() {

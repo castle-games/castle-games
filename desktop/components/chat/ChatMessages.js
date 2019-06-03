@@ -24,21 +24,20 @@ export default class ChatMessages extends React.Component {
   render() {
     const { social, navigator } = this.props;
 
-    return (
-      <div className={STYLES_CONTAINER}>
-        {this.props.messages.map((m) => {
-          const user = this.props.social.userIdToUser[m.fromUserId];
-          return (
-            <ChatMessageElement
-              key={m.chatMessageId}
-              message={m}
-              user={user}
-              social={this.props.social}
-              onNavigateToUserProfile={this.props.navigator.navigateToUserProfile}
-            />
-          );
-        })}
-      </div>
-    );
+    let messages = [];
+    this.props.messages.forEach((m) => {
+      const user = this.props.social.userIdToUser[m.fromUserId];
+      messages.unshift(
+        <ChatMessageElement
+          key={m.chatMessageId}
+          message={m}
+          user={user}
+          social={this.props.social}
+          onNavigateToUserProfile={this.props.navigator.navigateToUserProfile}
+        />
+      );
+    });
+
+    return <div className={STYLES_CONTAINER}>{messages}</div>;
   }
 }
