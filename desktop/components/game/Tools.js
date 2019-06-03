@@ -3,10 +3,6 @@ import * as NativeUtil from '~/native/nativeutil';
 import * as Constants from '~/common/constants';
 
 import { css } from 'react-emotion';
-
-import Logs from '~/common/logs';
-
-import '~/components/game/Tools.css';
 import {
   Accordion,
   AccordionItem,
@@ -22,6 +18,11 @@ import {
   TextInput,
   Toggle,
 } from 'carbon-components-react';
+
+import Logs from '~/common/logs';
+import ToolMarkdown from '~/components/game/ToolMarkdown';
+
+import '~/components/game/Tools.min.css';
 
 //
 // Infrastructure
@@ -84,6 +85,12 @@ class ToolPane extends React.PureComponent {
 }
 elementTypes['pane'] = ToolPane;
 
+class Carbon extends React.PureComponent {
+  render() {
+    return <div className="carbon">{this.props.children}</div>;
+  }
+}
+
 //
 // Components
 //
@@ -92,13 +99,15 @@ class ToolButton extends React.PureComponent {
   render() {
     const { element } = this.props;
     return (
-      <Button
-        {...element.props}
-        small={!(element.props && element.props.big)}
-        kind={(element.props && element.props.kind) || 'secondary'}
-        onClick={() => sendEvent(element.pathId, { type: 'onClick' })}>
-        {element.props.label}
-      </Button>
+      <Carbon>
+        <Button
+          {...element.props}
+          small={!(element.props && element.props.big)}
+          kind={(element.props && element.props.kind) || 'secondary'}
+          onClick={() => sendEvent(element.pathId, { type: 'onClick' })}>
+          {element.props.label}
+        </Button>
+      </Carbon>
     );
   }
 }
@@ -125,21 +134,23 @@ class ToolCheckbox extends React.PureComponent {
   render() {
     const { element } = this.props;
     return (
-      <Checkbox
-        {...element.props}
-        id={element.pathId}
-        labelText={element.props && element.props.label}
-        checked={this.state.checked}
-        onChange={(checked) => {
-          this.setState({
-            checked,
-            lastSentEventId: sendEvent(element.pathId, {
-              type: 'onChange',
+      <Carbon>
+        <Checkbox
+          {...element.props}
+          id={element.pathId}
+          labelText={element.props && element.props.label}
+          checked={this.state.checked}
+          onChange={(checked) => {
+            this.setState({
               checked,
-            }),
-          });
-        }}
-      />
+              lastSentEventId: sendEvent(element.pathId, {
+                type: 'onChange',
+                checked,
+              }),
+            });
+          }}
+        />
+      </Carbon>
     );
   }
 }
@@ -166,30 +177,34 @@ class ToolDropdown extends React.PureComponent {
   render() {
     const { element } = this.props;
     return (
-      <Dropdown
-        {...element.props}
-        id={element.pathId}
-        selectedItem={this.state.value}
-        titleText={element.props && !element.props.hideLabel ? element.props.label : null}
-        label={
-          element.props && element.props.placeholder
-            ? element.props.placeholder
-            : 'Select an option...'
-        }
-        onChange={({ selectedItem }) => {
-          this.setState({
-            value: selectedItem,
-            lastSentEventId: sendEvent(element.pathId, {
-              type: 'onChange',
+      <Carbon>
+        <Dropdown
+          {...element.props}
+          id={element.pathId}
+          selectedItem={this.state.value}
+          titleText={element.props && !element.props.hideLabel ? element.props.label : null}
+          label={
+            element.props && element.props.placeholder
+              ? element.props.placeholder
+              : 'Select an option...'
+          }
+          onChange={({ selectedItem }) => {
+            this.setState({
               value: selectedItem,
-            }),
-          });
-        }}
-      />
+              lastSentEventId: sendEvent(element.pathId, {
+                type: 'onChange',
+                value: selectedItem,
+              }),
+            });
+          }}
+        />
+      </Carbon>
     );
   }
 }
 elementTypes['dropdown'] = ToolDropdown;
+
+elementTypes['markdown'] = ToolMarkdown;
 
 class ToolNumberInput extends React.PureComponent {
   state = {
@@ -212,20 +227,22 @@ class ToolNumberInput extends React.PureComponent {
   render() {
     const { element } = this.props;
     return (
-      <NumberInput
-        {...element.props}
-        id={element.pathId}
-        value={this.state.value}
-        onChange={(event) => {
-          this.setState({
-            value: event.imaginaryTarget.valueAsNumber,
-            lastSentEventId: sendEvent(element.pathId, {
-              type: 'onChange',
+      <Carbon>
+        <NumberInput
+          {...element.props}
+          id={element.pathId}
+          value={this.state.value}
+          onChange={(event) => {
+            this.setState({
               value: event.imaginaryTarget.valueAsNumber,
-            }),
-          });
-        }}
-      />
+              lastSentEventId: sendEvent(element.pathId, {
+                type: 'onChange',
+                value: event.imaginaryTarget.valueAsNumber,
+              }),
+            });
+          }}
+        />
+      </Carbon>
     );
   }
 }
@@ -277,37 +294,39 @@ class ToolRadioButtonGroup extends React.PureComponent {
     }
 
     return (
-      <div className="bx--form-item">
-        {maybeLabel}
-        {maybeHelperText}
-        <div
-          className={
-            element.props && element.props.horizontal
-              ? 'bx--radio-button-group'
-              : 'bx--radio-button-group--vertical'
-          }>
-          {((element.props && element.props.items) || []).map((item) => (
-            <RadioButton
-              key={item}
-              item={item}
-              labelText={item}
-              checked={this.state.value == item}
-              disabled={element.props && element.props.disabled}
-              onChange={(value, name, event) => {
-                if (event.target.checked) {
-                  this.setState({
-                    value: item,
-                    lastSentEventId: sendEvent(element.pathId, {
-                      type: 'onChange',
+      <Carbon>
+        <div className="bx--form-item">
+          {maybeLabel}
+          {maybeHelperText}
+          <div
+            className={
+              element.props && element.props.horizontal
+                ? 'bx--radio-button-group'
+                : 'bx--radio-button-group--vertical'
+            }>
+            {((element.props && element.props.items) || []).map((item) => (
+              <RadioButton
+                key={item}
+                item={item}
+                labelText={item}
+                checked={this.state.value == item}
+                disabled={element.props && element.props.disabled}
+                onChange={(value, name, event) => {
+                  if (event.target.checked) {
+                    this.setState({
                       value: item,
-                    }),
-                  });
-                }
-              }}
-            />
-          ))}
+                      lastSentEventId: sendEvent(element.pathId, {
+                        type: 'onChange',
+                        value: item,
+                      }),
+                    });
+                  }
+                }}
+              />
+            ))}
+          </div>
         </div>
-      </div>
+      </Carbon>
     );
   }
 }
@@ -317,21 +336,23 @@ class ToolSection extends React.PureComponent {
   render() {
     const { element } = this.props;
     return (
-      <Accordion>
-        <AccordionItem
-          {...element.props}
-          ref={(r) => (this._accordionItemRef = r)}
-          title={element.props && element.props.label}
-          open={element.open}
-          onHeadingClick={({ isOpen }) => {
-            sendEvent(element.pathId, { type: 'onChange', open: isOpen });
-            // Make it listen to our `element.open` state...
-            this._accordionItemRef &&
-              this._accordionItemRef.setState({ open: element.open, prevOpen: element.open });
-          }}>
-          {renderChildren(element)}
-        </AccordionItem>
-      </Accordion>
+      <Carbon>
+        <Accordion>
+          <AccordionItem
+            {...element.props}
+            ref={(r) => (this._accordionItemRef = r)}
+            title={element.props && element.props.label}
+            open={element.open}
+            onHeadingClick={({ isOpen }) => {
+              sendEvent(element.pathId, { type: 'onChange', open: isOpen });
+              // Make it listen to our `element.open` state...
+              this._accordionItemRef &&
+                this._accordionItemRef.setState({ open: element.open, prevOpen: element.open });
+            }}>
+            {renderChildren(element)}
+          </AccordionItem>
+        </Accordion>
+      </Carbon>
     );
   }
 }
@@ -358,22 +379,24 @@ class ToolSlider extends React.PureComponent {
   render() {
     const { element } = this.props;
     return (
-      <Slider
-        {...element.props}
-        id={element.pathId}
-        labelText={element.props && element.props.label}
-        value={this.state.value}
-        onChange={({ value }) => {
-          value = typeof value === 'number' ? value : Number.parseFloat(value);
-          this.setState({
-            value,
-            lastSentEventId: sendEvent(element.pathId, {
-              type: 'onChange',
+      <Carbon>
+        <Slider
+          {...element.props}
+          id={element.pathId}
+          labelText={element.props && element.props.label}
+          value={this.state.value}
+          onChange={({ value }) => {
+            value = typeof value === 'number' ? value : Number.parseFloat(value);
+            this.setState({
               value,
-            }),
-          });
-        }}
-      />
+              lastSentEventId: sendEvent(element.pathId, {
+                type: 'onChange',
+                value,
+              }),
+            });
+          }}
+        />
+      </Carbon>
     );
   }
 }
@@ -394,21 +417,23 @@ class ToolTabs extends React.PureComponent {
     const children = orderedChildren(element).filter(({ id, child }) => child.type == 'tab');
 
     return (
-      <div className="castle--tabs-container">
-        <Tabs
-          {...element.props}
-          onSelectionChange={(activeIndex) =>
-            children.forEach(({ id, child }, childIndex) =>
-              sendEvent(child.pathId, { type: 'onActive', value: childIndex === activeIndex })
-            )
-          }>
-          {children.map(({ id, child }) => (
-            <Tab key={id} {...child.props} href="javascript:void(0);">
-              {renderChildren(child)}
-            </Tab>
-          ))}
-        </Tabs>
-      </div>
+      <Carbon>
+        <div className="tabs-container">
+          <Tabs
+            {...element.props}
+            onSelectionChange={(activeIndex) =>
+              children.forEach(({ id, child }, childIndex) =>
+                sendEvent(child.pathId, { type: 'onActive', value: childIndex === activeIndex })
+              )
+            }>
+            {children.map(({ id, child }) => (
+              <Tab key={id} {...child.props} href="javascript:void(0);">
+                {renderChildren(child)}
+              </Tab>
+            ))}
+          </Tabs>
+        </div>
+      </Carbon>
     );
   }
 }
@@ -435,21 +460,23 @@ class ToolTextArea extends React.PureComponent {
   render() {
     const { element } = this.props;
     return (
-      <TextArea
-        {...element.props}
-        id={element.pathId}
-        labelText={element.props && element.props.label}
-        value={this.state.value}
-        onChange={(event) => {
-          this.setState({
-            value: event.target.value,
-            lastSentEventId: sendEvent(element.pathId, {
-              type: 'onChange',
+      <Carbon>
+        <TextArea
+          {...element.props}
+          id={element.pathId}
+          labelText={element.props && element.props.label}
+          value={this.state.value}
+          onChange={(event) => {
+            this.setState({
               value: event.target.value,
-            }),
-          });
-        }}
-      />
+              lastSentEventId: sendEvent(element.pathId, {
+                type: 'onChange',
+                value: event.target.value,
+              }),
+            });
+          }}
+        />
+      </Carbon>
     );
   }
 }
@@ -476,21 +503,23 @@ class ToolTextInput extends React.PureComponent {
   render() {
     const { element } = this.props;
     return (
-      <TextInput
-        {...element.props}
-        id={element.pathId}
-        labelText={element.props && element.props.label}
-        value={this.state.value}
-        onChange={(event) => {
-          this.setState({
-            value: event.target.value,
-            lastSentEventId: sendEvent(element.pathId, {
-              type: 'onChange',
+      <Carbon>
+        <TextInput
+          {...element.props}
+          id={element.pathId}
+          labelText={element.props && element.props.label}
+          value={this.state.value}
+          onChange={(event) => {
+            this.setState({
               value: event.target.value,
-            }),
-          });
-        }}
-      />
+              lastSentEventId: sendEvent(element.pathId, {
+                type: 'onChange',
+                value: event.target.value,
+              }),
+            });
+          }}
+        />
+      </Carbon>
     );
   }
 }
@@ -517,20 +546,22 @@ class ToolToggle extends React.PureComponent {
   render() {
     const { element } = this.props;
     return (
-      <Toggle
-        {...element.props}
-        id={element.pathId}
-        toggled={this.state.toggled}
-        onToggle={(toggled) => {
-          this.setState({
-            toggled,
-            lastSentEventId: sendEvent(element.pathId, {
-              type: 'onToggle',
+      <Carbon>
+        <Toggle
+          {...element.props}
+          id={element.pathId}
+          toggled={this.state.toggled}
+          onToggle={(toggled) => {
+            this.setState({
               toggled,
-            }),
-          });
-        }}
-      />
+              lastSentEventId: sendEvent(element.pathId, {
+                type: 'onToggle',
+                toggled,
+              }),
+            });
+          }}
+        />
+      </Carbon>
     );
   }
 }
@@ -573,6 +604,8 @@ const applyDiff = (t, diff) => {
 const STYLES_CONTAINER = css`
   width: 300px;
   height: 100%;
+
+  font-family: ${Constants.font.mono} !important;
 
   /* Based on the 'g90' theme (https://www.carbondesignsystem.com/guidelines/themes/) which 'Tools.scss' uses */
   color: #f3f3f3;
@@ -633,7 +666,7 @@ const STYLES_CONTAINER = css`
   }
 
   /* Add border around tabs container */
-  .castle--tabs-container {
+  .tabs-container {
     border-bottom: 1px solid #3d3d3d !important;
     padding-bottom: 0.6rem !important;
   }
@@ -648,7 +681,7 @@ const STYLES_CONTAINER = css`
   .bx--accordion,
   .bx--toggle__label,
   .bx--btn,
-  .castle--tabs-container {
+  .tabs-container {
     margin-bottom: 14px !important;
   }
 
@@ -679,193 +712,7 @@ const DEBUG_PREPOPULATED = false;
 
 export default class Tools extends React.PureComponent {
   static initialState = {
-    root: DEBUG_PREPOPULATED
-      ? {
-          panes: {
-            DEFAULT: {
-              type: 'pane',
-              props: {
-                name: 'DEFAULT',
-              },
-              children: {
-                slidernumber2: {
-                  type: 'slider',
-                  prevId: 'numberInputnumber',
-                  pathId: 'DEFAULTslidernumber2',
-                  props: {
-                    max: 100,
-                    label: 'number2',
-                    min: 0,
-                    value: 50,
-                  },
-                },
-                textInputstring: {
-                  type: 'textInput',
-                  prevId: 'tabstabs1',
-                  pathId: 'DEFAULTtextInputstring',
-                  props: {
-                    value: 'hello, world',
-                    label: 'string',
-                    helperText: 'Enter a string here!',
-                  },
-                },
-                dropdowndrop: {
-                  type: 'dropdown',
-                  prevId: 'slidernumber2',
-                  pathId: 'DEFAULTdropdowndrop',
-                  props: {
-                    items: ['alpha', 'beta', 'gamma', 'delta', 'epsilon', 'zeta'],
-                    label: 'drop',
-                    helperText: 'Choose a thing!',
-                    invalid: false,
-                    invalidText: "I don't like this value... :(",
-                  },
-                },
-                lastId: 'buttonWoah!',
-                'DMY1bkDr5VQ1PDd5OjQYiw==': {
-                  type: 'toggle',
-                  prevId: 'checkboxboolean',
-                  pathId: 'e2835Rmh7HzdMi5y+ym0Ig==',
-                  props: {
-                    labelA: 'boolean2 on',
-                    labelB: 'boolean2 off',
-                    toggled: true,
-                  },
-                },
-                radioButtonGroupradio: {
-                  type: 'radioButtonGroup',
-                  prevId: 'dropdowndrop',
-                  pathId: 'wBvaeF6UMYqdYu9SLNnJfw==',
-                  props: {
-                    items: ['alpha', 'beta', 'gamma'],
-                    label: 'radio',
-                    value: 'alpha',
-                  },
-                },
-                textAreastring2: {
-                  type: 'textArea',
-                  prevId: 'radioButtonGroupradio',
-                  pathId: 'DEFAULTtextAreastring2',
-                  props: {
-                    label: 'string2',
-                    rows: 10,
-                    value:
-                      'This is a longer piece of text! Have fun editing this one. :)\n\nOh and this is a new paragraph!\n',
-                  },
-                },
-                checkboxboolean: {
-                  type: 'checkbox',
-                  prevId: 'textInputstring',
-                  pathId: 'DEFAULTcheckboxboolean',
-                  props: {
-                    label: 'boolean',
-                    checked: true,
-                  },
-                },
-                'sectionAnother section': {
-                  type: 'section',
-                  prevId: 'sectionA section',
-                  pathId: 'Sw/BUTd8kDYNHCeGCdmzdA==',
-                  props: {
-                    label: 'Another section',
-                  },
-                },
-                'buttonWoah!': {
-                  type: 'button',
-                  prevId: 'textAreastring2',
-                  pathId: 'DEFAULTbuttonWoah!',
-                  props: {
-                    label: 'Woah!',
-                  },
-                },
-                count: 12,
-                'sectionA section': {
-                  pathId: 'CB2r1SJ7nok8b514Bn4whw==',
-                  props: {
-                    label: 'A section',
-                    open: true,
-                  },
-                  children: {
-                    lastId: 'Y8miTTdDUibz9xrKivPr6g==',
-                    'Y8miTTdDUibz9xrKivPr6g==': {
-                      type: 'textInput',
-                      pathId: 'c5e0hDcFQlr35Qd24QyeCQ==',
-                      props: {
-                        label: 'stuff inside section',
-                        value: 'hello, world',
-                      },
-                    },
-                    count: 1,
-                  },
-                  type: 'section',
-                  open: true,
-                },
-                numberInputnumber: {
-                  type: 'numberInput',
-                  prevId: 'DMY1bkDr5VQ1PDd5OjQYiw==',
-                  pathId: 'nkFHCZGdpD+imjvmXhuS1A==',
-                  props: {
-                    invalid: false,
-                    invalidText: "Just kidding, you actually can't go above 50!",
-                    label: 'number',
-                    value: 50,
-                  },
-                },
-                tabstabs1: {
-                  prevId: 'sectionAnother section',
-                  type: 'tabs',
-                  props: {},
-                  pathId: 'DEFAULTtabstabs1',
-                  children: {
-                    lastId: 'tabTab 2',
-                    count: 2,
-                    'tabTab 2': {
-                      prevId: 'tabTab 1',
-                      type: 'tab',
-                      props: {
-                        label: 'Tab 2',
-                      },
-                      pathId: 'gOSSKLUBS8fzEIMxGFatjA==',
-                      children: {
-                        '6pjZuv/Fe5b1baaHiR3iBg==': {
-                          type: 'textInput',
-                          pathId: 'khVweAX7DnLZZLLUEUWdng==',
-                          props: {
-                            label: 'stuff inside tab 2',
-                            value: 'hello, world',
-                          },
-                        },
-                        count: 1,
-                        lastId: '6pjZuv/Fe5b1baaHiR3iBg==',
-                      },
-                    },
-                    'tabTab 1': {
-                      type: 'tab',
-                      children: {
-                        lastId: '5LmNPiEjwg0g9VFCUokVEQ==',
-                        count: 1,
-                        '5LmNPiEjwg0g9VFCUokVEQ==': {
-                          type: 'textInput',
-                          pathId: 'voUIBFnr5MnzFfvLh/jiVQ==',
-                          props: {
-                            label: 'stuff inside tab 1',
-                            value: 'hello, world',
-                          },
-                        },
-                      },
-                      props: {
-                        label: 'Tab 1',
-                      },
-                      pathId: 'ocpes3AdldHdH8ZqIAjTlA==',
-                      lastReportedEventId: 1,
-                    },
-                  },
-                },
-              },
-            },
-          },
-        }
-      : {},
+    root: DEBUG_PREPOPULATED ? {} : {},
     visible: DEBUG_PREPOPULATED,
   };
 
@@ -911,7 +758,7 @@ export default class Tools extends React.PureComponent {
     // console.log(`render: ${JSON.stringify(this.state.root, null, 2)}`);
 
     return this.state.visible ? (
-      <div id="tools-container" className={STYLES_CONTAINER}>
+      <div className={STYLES_CONTAINER}>
         {Object.values(this.state.root.panes).map((element, i) => (
           <ToolPane key={(element.props && element.props.name) || i} element={element} />
         ))}

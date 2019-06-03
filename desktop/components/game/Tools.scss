@@ -408,7 +408,7 @@ $display-04: (
 // Import styles
 //
 
-// Wrap in `#tools-container` to confine to the tools section of Castle UI
-#tools-container {
+// Wrap in `div.carbon` to confine to Carbon-designated `<div>`s
+div.carbon {
     @import 'carbon-components/scss/globals/scss/styles.scss';
 }

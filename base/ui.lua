@@ -292,6 +292,11 @@ function ui.dropdown(label, value, items, props)
     return newValue
 end
 
+function ui.markdown(source, props)
+    assert(type(source) == 'string', '`ui.markdown` needs a string `source`')
+    addChild('markdown', source, merge({ source = source }, props), false)
+end
+
 function ui.numberInput(label, value, props)
     assert(type(label) == 'string', '`ui.numberInput` needs a string `label`')
     assert(type(value) == 'number', '`ui.numberInput` needs a number `value`')
