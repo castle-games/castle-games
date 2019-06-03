@@ -89,7 +89,11 @@ export default class ChatMessageElement extends React.Component {
         <span
           className={STYLES_MENTION}
           key={match + i}
-          onClick={() => this.props.onNavigateToUserProfile({ username: match })}>
+          onClick={
+            this.props.social.usernameToUser[match]
+              ? () => this.props.onNavigateToUserProfile(this.props.social.usernameToUser[match])
+              : () => {}
+          }>
           @{match}
         </span>
       ));

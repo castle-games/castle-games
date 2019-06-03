@@ -2,6 +2,7 @@ import * as React from 'react';
 
 const SocialContextDefaults = {
   userIdToUser: {},
+  usernameToUser: {},
   onlineUserIds: {},
   addUser: (user) => {},
   addUsers: (users) => {},
@@ -28,9 +29,11 @@ class SocialContextProvider extends React.Component {
   addUser = (user) => {
     this.setState((state) => {
       state.userIdToUser[user.userId] = user;
+      state.usernameToUser[user.username] = user;
       return {
         ...state,
         userIdToUser: state.userIdToUser,
+        usernameToUser: state.usernameToUser,
       };
     });
   };
@@ -39,11 +42,13 @@ class SocialContextProvider extends React.Component {
     return this.setState((state) => {
       users.forEach((user) => {
         state.userIdToUser[user.userId] = user;
+        state.usernameToUser[user.username] = user;
       });
 
       return {
         ...state,
         userIdToUser: state.userIdToUser,
+        usernameToUser: state.usernameToUser,
       };
     });
   };

@@ -33,6 +33,7 @@ export default class ChatMessages extends React.Component {
               key={m.chatMessageId}
               message={m}
               user={user}
+              social={this.props.social}
               onNavigateToUserProfile={this.props.navigator.navigateToUserProfile}
             />
           );

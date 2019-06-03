@@ -255,27 +255,27 @@ export default class AppWithProvider extends React.Component {
             subscribedChatChannels: this.props.state.subscribedChatChannels,
             allChatChannels: this.props.state.allChatChannels,
           }}>
-          <ChatSessionContextProvider>
-            <DevelopmentContextProvider>
-              <NavigationContextProvider value={{ navigation }}>
-                <CurrentUserContext.Consumer>
-                  {({ user }) => {
-                    return (
-                      <SocialContext.Consumer>
-                        {(social) => {
-                          return (
+          <DevelopmentContextProvider>
+            <NavigationContextProvider value={{ navigation }}>
+              <CurrentUserContext.Consumer>
+                {({ user }) => {
+                  return (
+                    <SocialContext.Consumer>
+                      {(social) => {
+                        return (
+                          <ChatSessionContextProvider social={social} currentUser={user}>
                             <ChatContextProvider social={social} currentUser={user}>
                               <AppWithContext {...this.props} />
                             </ChatContextProvider>
-                          );
-                        }}
-                      </SocialContext.Consumer>
-                    );
-                  }}
-                </CurrentUserContext.Consumer>
-              </NavigationContextProvider>
-            </DevelopmentContextProvider>
-          </ChatSessionContextProvider>
+                          </ChatSessionContextProvider>
+                        );
+                      }}
+                    </SocialContext.Consumer>
+                  );
+                }}
+              </CurrentUserContext.Consumer>
+            </NavigationContextProvider>
+          </DevelopmentContextProvider>
         </SocialContextProvider>
       </CurrentUserContextProvider>
     );

@@ -68,7 +68,14 @@ class ChatSessionContextProvider extends React.Component {
   };
 
   _handleConnectStatus = async (status) => {
-    console.log('status', status);
+    this.setState({ users: event.roster.map((user) => user.name) });
+
+    let onlineUsersMap = {};
+    event.roster.forEach((user) => {
+      onlineUsersMap[user.name] = true;
+    });
+
+    this.props.social.setOnlineUserIds(onlineUsersMap);
   };
 
   _handleMessagesAsync = async (allMessages) => {
