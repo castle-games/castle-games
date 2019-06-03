@@ -37,30 +37,6 @@ class ChatScreen extends React.Component {
     mode: 'MESSAGES',
   };
 
-  /*
-  componentDidMount() {
-    this._update(this.props.chat.channel);
-  }
-
-  componentDidUpdate(prevProps) {
-    if (!prevProps.chat.channel) {
-      return;
-    }
-
-    if (!this.props.chat.channel) {
-      return;
-    }
-
-    if (prevProps.chat.channel.channelId !== this.props.chat.channelId) {
-      this._update(this.props.chat.channel);
-    }
-  }
-
-  _update = (channel) => {
-    console.log('Channel:', channel);
-  };
-  */
-
   _handleLeaveChannel = async () => {
     await ChatActions.leaveChatChannel({ channelId: this.props.chat.channel.channelId });
     this.props.navigator.navigateToHome();

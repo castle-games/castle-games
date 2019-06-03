@@ -80,14 +80,21 @@ class ChatSessionContextProvider extends React.Component {
 
   _handleMessagesAsync = async (allMessages) => {
     const messages = this.state.messages;
+    let userIds = {};
 
     allMessages.forEach((m) => {
       if (!messages[m.channelId]) {
         messages[m.channelId] = [];
       }
 
+      userIds[m.fromUserId] = true;
       messages[m.channelId].unshift(m);
     });
+
+    try {
+      let users = await Actions.getUsers({ userIds: Object.keys(userIds) });
+      await this.props.social.addUsers(users);
+    } catch (e) {}
 
     this.setState({ messages });
   };
