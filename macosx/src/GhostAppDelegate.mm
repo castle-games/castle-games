@@ -1,4 +1,5 @@
 #import "GhostAppDelegate.h"
+#import "GhostCpuMonitor.h"
 #import "GhostEnv.h"
 #import "GhostMainMenu.h"
 #import "ghost.h"
@@ -35,6 +36,7 @@ extern __weak NSWindow *ghostMacChildWindow;
 @property(nonatomic, assign) BOOL loveStepping;
 
 @property(nonatomic, strong) NSTimer *mainLoopTimer;
+@property(nonatomic, strong) GhostCpuMonitor *cpuMonitor;
 
 @property(nonatomic, assign) BOOL windowEventsSubscribed;
 @property(nonatomic, assign) CGRect prevWindowFrame;
@@ -97,6 +99,16 @@ NSArray *enumerate_windows(void) {
 
   // ghostInitObs([[NSString stringWithFormat:@"%@/obs", [[NSBundle mainBundle] resourcePath]]
   // UTF8String], [[[NSBundle mainBundle] pathForResource:@"ffmpeg" ofType:@""] UTF8String]);
+}
+
+- (void)applicationDidFinishLaunching:(__unused NSNotification *)notification {
+  // TODO: if we want to measure CPU usage
+  /* _cpuMonitor = [[GhostCpuMonitor alloc] init];
+  [_cpuMonitor start:^(unsigned numCpus, float *usage) {
+    for (unsigned ii = 0; ii < numCpus; ii++) {
+      NSLog(@"Usage %u: %f", ii, usage[ii]);
+    }
+  }]; */
 }
 
 - (NSApplicationTerminateReply)applicationShouldTerminate:(__unused NSApplication *)sender {

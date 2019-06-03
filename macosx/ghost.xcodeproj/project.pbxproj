@@ -153,6 +153,8 @@
 		B5BAE39E215ABAA2001354F9 /* process_helper_mac.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B5BAE388215ABA89001354F9 /* process_helper_mac.cpp */; };
 		B5CC96732225F90D00F5C4AC /* NSApplication+Ghost.h in Headers */ = {isa = PBXBuildFile; fileRef = B5CC96712225F90D00F5C4AC /* NSApplication+Ghost.h */; };
 		B5CC96742225F90D00F5C4AC /* NSApplication+Ghost.mm in Sources */ = {isa = PBXBuildFile; fileRef = B5CC96722225F90D00F5C4AC /* NSApplication+Ghost.mm */; };
+		B5DCCFEF22A5DE1900CA3FA6 /* GhostCpuMonitor.h in Headers */ = {isa = PBXBuildFile; fileRef = B5DCCFED22A5DE1900CA3FA6 /* GhostCpuMonitor.h */; };
+		B5DCCFF022A5DE1900CA3FA6 /* GhostCpuMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = B5DCCFEE22A5DE1900CA3FA6 /* GhostCpuMonitor.m */; };
 		B5E9FC48211B6C190068BEB9 /* ghost_extensions_macos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5E9FC43211B6BA00068BEB9 /* ghost_extensions_macos.framework */; };
 		B5E9FC4B211B6E610068BEB9 /* ghost_extensions_macos.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = B5E9FC43211B6BA00068BEB9 /* ghost_extensions_macos.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -455,6 +457,8 @@
 		B5BAE39C215ABA9A001354F9 /* main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
 		B5CC96712225F90D00F5C4AC /* NSApplication+Ghost.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSApplication+Ghost.h"; sourceTree = "<group>"; };
 		B5CC96722225F90D00F5C4AC /* NSApplication+Ghost.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSApplication+Ghost.mm"; sourceTree = "<group>"; };
+		B5DCCFED22A5DE1900CA3FA6 /* GhostCpuMonitor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GhostCpuMonitor.h; sourceTree = "<group>"; };
+		B5DCCFEE22A5DE1900CA3FA6 /* GhostCpuMonitor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GhostCpuMonitor.m; sourceTree = "<group>"; };
 		B5E9FC3B211B6B9F0068BEB9 /* ghost-extensions.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "ghost-extensions.xcodeproj"; path = "../ghost-extensions/ghost-extensions.xcodeproj"; sourceTree = "<group>"; };
 		CE73F7FF1EEB64150052DAB3 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
 		FA08F69116C765A200F007B5 /* love.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = love.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -798,6 +802,8 @@
 				B5BAE383215ABA89001354F9 /* json.hpp */,
 				B5BAE38D215ABA89001354F9 /* GhostAppDelegate.h */,
 				B5BAE38C215ABA89001354F9 /* GhostAppDelegate.mm */,
+				B5DCCFED22A5DE1900CA3FA6 /* GhostCpuMonitor.h */,
+				B5DCCFEE22A5DE1900CA3FA6 /* GhostCpuMonitor.m */,
 				B5000231215AEBED00CD2309 /* GhostEnv.h */,
 				B5000232215AEBED00CD2309 /* GhostEnv.m */,
 				B5BAE38B215ABA89001354F9 /* GhostFileSystem.h */,
@@ -876,6 +882,7 @@
 				B53E72AC2152F8D2003C8616 /* ghost_constants.h in Headers */,
 				B5BAE390215ABA89001354F9 /* json.hpp in Headers */,
 				B5BAE397215ABA89001354F9 /* GhostFileSystem.h in Headers */,
+				B5DCCFEF22A5DE1900CA3FA6 /* GhostCpuMonitor.h in Headers */,
 				B5B06A4A2151A8EB001C4382 /* ghost.h in Headers */,
 				B5CC96732225F90D00F5C4AC /* NSApplication+Ghost.h in Headers */,
 				A1F9225521EFFB1100D8F23D /* debug_utils.h in Headers */,
@@ -1156,6 +1163,7 @@
 				B57FCFB62166834A00D661B2 /* ghost_mac.mm in Sources */,
 				B5BAE398215ABA89001354F9 /* GhostAppDelegate.mm in Sources */,
 				B5BAE396215ABA89001354F9 /* simple_handler_mac.mm in Sources */,
+				B5DCCFF022A5DE1900CA3FA6 /* GhostCpuMonitor.m in Sources */,
 				B5BAE39D215ABA9A001354F9 /* main.mm in Sources */,
 				B53E72AD2152F8D2003C8616 /* ghost_constants.cpp in Sources */,
 				A18221D021ACB2FE0018B6DD /* js_binds.cpp in Sources */,
