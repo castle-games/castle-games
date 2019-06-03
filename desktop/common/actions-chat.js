@@ -65,4 +65,15 @@ export const sendChannelChatMessage = async ({ message, channelId }) => {
   return response;
 };
 
-export const sendUserChatMessage = async ({ message, otherUserId }) => {};
+export const sendUserChatMessage = async ({ message, otherUserId }) => {
+  const response = await API.graphqlAsync(
+    `
+      mutation($message: String!, $otherUserId: ID!) {
+        sendUserChatMessage(message: $message, otherUserId: $otherUserId)
+      }
+    `,
+    { message, otherUserId }
+  );
+
+  return response;
+};
