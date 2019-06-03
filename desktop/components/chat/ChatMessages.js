@@ -22,6 +22,7 @@ const STYLES_CONTAINER = css`
 
 export default class ChatMessages extends React.Component {
   render() {
+    console.log('chat messages', this.props.messages);
     return (
       <div className={STYLES_CONTAINER}>
         <ChatPost />

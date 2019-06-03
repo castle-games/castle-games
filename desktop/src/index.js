@@ -99,7 +99,15 @@ const run = async () => {
   Analytics.trackCastleLaunch();
 
   ReactDOM.render(<GLLoaderScreen />, document.getElementById('loader'));
-  const { featuredGames, featuredExamples, viewer, isOffline } = await Network.getProductData();
+  const {
+    featuredGames,
+    featuredExamples,
+    viewer,
+    isOffline,
+    recentChatMessages,
+    subscribedChatChannels,
+    allChatChannels,
+  } = await Network.getProductData();
 
   // if the user was automatically logged in when starting Castle, track that
   if (viewer) {
@@ -110,6 +118,9 @@ const run = async () => {
     featuredGames,
     featuredExamples,
     isOffline,
+    recentChatMessages,
+    subscribedChatChannels,
+    allChatChannels,
   });
 
   state.currentUser = { user: viewer };

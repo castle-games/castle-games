@@ -21,6 +21,7 @@ import {
   NavigationContextProvider,
 } from '~/contexts/NavigationContext';
 import { ChatContext, ChatContextProvider } from '~/contexts/ChatContext';
+import { ChatSessionContextProvider } from '~/contexts/ChatSessionContext';
 
 import AppContainer from '~/components/AppContainer';
 import ChatInput from '~/components/social/ChatInput';
@@ -248,26 +249,33 @@ export default class AppWithProvider extends React.Component {
     let { currentUser, navigation } = this.props.state;
     return (
       <CurrentUserContextProvider value={currentUser}>
-        <SocialContextProvider>
-          <DevelopmentContextProvider>
-            <NavigationContextProvider value={{ navigation }}>
-              <CurrentUserContext.Consumer>
-                {({ user }) => {
-                  return (
-                    <SocialContext.Consumer>
-                      {(social) => {
-                        return (
-                          <ChatContextProvider social={social} currentUser={user}>
-                            <AppWithContext {...this.props} />
-                          </ChatContextProvider>
-                        );
-                      }}
-                    </SocialContext.Consumer>
-                  );
-                }}
-              </CurrentUserContext.Consumer>
-            </NavigationContextProvider>
-          </DevelopmentContextProvider>
+        <SocialContextProvider
+          value={{
+            recentChatMessages: this.props.state.recentChatMessages,
+            subscribedChatChannels: this.props.state.subscribedChatChannels,
+            allChatChannels: this.props.state.allChatChannels,
+          }}>
+          <ChatSessionContextProvider>
+            <DevelopmentContextProvider>
+              <NavigationContextProvider value={{ navigation }}>
+                <CurrentUserContext.Consumer>
+                  {({ user }) => {
+                    return (
+                      <SocialContext.Consumer>
+                        {(social) => {
+                          return (
+                            <ChatContextProvider social={social} currentUser={user}>
+                              <AppWithContext {...this.props} />
+                            </ChatContextProvider>
+                          );
+                        }}
+                      </SocialContext.Consumer>
+                    );
+                  }}
+                </CurrentUserContext.Consumer>
+              </NavigationContextProvider>
+            </DevelopmentContextProvider>
+          </ChatSessionContextProvider>
         </SocialContextProvider>
       </CurrentUserContextProvider>
     );

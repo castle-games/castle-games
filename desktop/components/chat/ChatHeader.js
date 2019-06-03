@@ -67,11 +67,13 @@ export default class ChatHeader extends React.Component {
         <div className={STYLES_HEADER_LEFT}>
           <h2 className={STYLES_H2} onClick={this.props.onSettingsClick}>
             <SVG.HashTag size="12px" style={{ marginRight: 4 }} />
-            [bind-channel-name]
+            {this.props.channel.name}
           </h2>
-          <p className={STYLES_P} onClick={this.props.onMembersClick}>
-            <strong>[bind-member-count] online</strong>
-          </p>
+          {this.props.channel.members && this.props.channel.members.length ? (
+            <p className={STYLES_P} onClick={this.props.onMembersClick}>
+              <strong>{this.props.channel.members.length} online</strong>
+            </p>
+          ) : null}
         </div>
         <div className={STYLES_HEADER_RIGHT} />
       </header>

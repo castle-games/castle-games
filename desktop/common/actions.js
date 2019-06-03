@@ -84,21 +84,6 @@ const GAME_ITEMS = `
   }
 `;
 
-export async function createChatChannel({ name }) {
-  const response = await API.graphqlAsync(
-    `
-      mutation($name: String!) {
-        createChatChannel(name: $name) {
-          channelId
-        }
-      }
-    `,
-    { name }
-  );
-
-  return response;
-}
-
 export async function updateEmailPreference({ type, frequency }) {
   const response = await API.graphqlAsync(
     `
@@ -425,6 +410,32 @@ export async function getInitialData() {
       featuredExamples {
         ${GAME_FIELDS}
         ${NESTED_GAME_OWNER}
+      }
+
+      recentChatMessages {
+        chatMessageId
+        channelId
+        fromUserId
+        body
+        createdTime
+      }
+
+      subscribedChatChannels {
+        channelId
+        name
+        type
+        createdTime
+        updatedTime
+        otherUserId
+      }
+
+      allChatChannels {
+        channelId
+        name
+        type
+        createdTime
+        updatedTime
+        otherUserId
       }
     }
   `);

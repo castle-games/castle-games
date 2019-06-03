@@ -8,7 +8,7 @@ import { css } from 'react-emotion';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { SocialContext } from '~/contexts/SocialContext';
 import { NavigatorContext, NavigationContext } from '~/contexts/NavigationContext';
-import { ChatContext } from '~/contexts/ChatContext';
+import { ChatSessionContext } from '~/contexts/ChatSessionContext';
 
 import SidebarOptions from '~/components/sidebar/SidebarOptions';
 import SidebarOptionsChannels from '~/components/sidebar/SidebarOptionsChannels';
@@ -58,9 +58,9 @@ class Sidebar extends React.Component {
     this.setState({ mode: 'DEFAULT' });
   };
 
-  // TODO(jim): There will be some integration that has to happen here.
-  _handleNavigateToChat = (id) => {
-    console.log(id);
+  _handleNavigateToChat = (channel) => {
+    console.log('_handleNavigateToChat', channel);
+    this.props.chat.handleConnect(channel);
     return this.props.navigator.navigateToChat();
   };
 
@@ -105,7 +105,7 @@ class Sidebar extends React.Component {
   };
 
   _renderRootSidebar = () => {
-    const { navigation, navigator, viewer } = this.props;
+    const { navigation, navigator, viewer, social } = this.props;
 
     return (
       <div className={STYLES_SIDEBAR}>
@@ -128,7 +128,8 @@ class Sidebar extends React.Component {
         <SidebarChannels
           viewer={viewer}
           onShowOptions={this._handleShowChannelOptions}
-          onChat={this._handleNavigateToChat}
+          channels={social.allChatChannels}
+          onSelectChannel={this._handleNavigateToChat}
         />
         <SidebarDirectMessages
           viewer={viewer}
@@ -219,7 +220,7 @@ export default class SidebarWithContext extends React.Component {
             <SocialContext.Consumer>
               {(social) => {
                 return (
-                  <ChatContext.Consumer>
+                  <ChatSessionContext.Consumer>
                     {(chat) => {
                       return (
                         <NavigationContext.Consumer>
@@ -242,7 +243,7 @@ export default class SidebarWithContext extends React.Component {
                         </NavigationContext.Consumer>
                       );
                     }}
-                  </ChatContext.Consumer>
+                  </ChatSessionContext.Consumer>
                 );
               }}
             </SocialContext.Consumer>

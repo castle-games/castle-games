@@ -6,6 +6,9 @@ const SocialContextDefaults = {
   addUser: (user) => {},
   addUsers: (users) => {},
   setOnlineUserIds: (userIds) => {},
+  recentChatMessages: [],
+  subscribedChatChannels: [],
+  allChatChannels: [],
 };
 
 const SocialContext = React.createContext(SocialContextDefaults);

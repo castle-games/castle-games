@@ -9,7 +9,7 @@ import { ConnectionStatus } from 'castle-chat-lib';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { SocialContext } from '~/contexts/SocialContext';
 import { NavigatorContext, NavigationContext } from '~/contexts/NavigationContext';
-import { ChatContext } from '~/contexts/ChatContext';
+import { ChatSessionContext } from '~/contexts/ChatSessionContext';
 
 import ChatHeader from '~/components/chat/ChatHeader';
 import ChatHeaderActive from '~/components/chat/ChatHeaderActive';
@@ -56,6 +56,8 @@ class ChatScreen extends React.Component {
   render() {
     const { mode } = this.state;
 
+    console.log('in context', this.props.chat);
+
     if (mode === 'OPTIONS') {
       return (
         <div className={STYLES_CONTAINER}>
@@ -81,10 +83,11 @@ class ChatScreen extends React.Component {
     return (
       <div className={STYLES_CONTAINER}>
         <ChatHeader
+          channel={this.props.chat.channel}
           onSettingsClick={this._handleShowSingleChannelOptions}
           onMembersClick={this._handleShowSingleChannelMembers}
         />
-        <ChatMessages />
+        <ChatMessages messages={this.props.chat.messages} />
         <ChatInput
           value={this.state.value}
           name="value"
@@ -106,7 +109,7 @@ export default class ChatScreenWithContext extends React.Component {
             <SocialContext.Consumer>
               {(social) => {
                 return (
-                  <ChatContext.Consumer>
+                  <ChatSessionContext.Consumer>
                     {(chat) => {
                       return (
                         <NavigationContext.Consumer>
@@ -129,7 +132,7 @@ export default class ChatScreenWithContext extends React.Component {
                         </NavigationContext.Consumer>
                       );
                     }}
-                  </ChatContext.Consumer>
+                  </ChatSessionContext.Consumer>
                 );
               }}
             </SocialContext.Consumer>
