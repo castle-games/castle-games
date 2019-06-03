@@ -124,7 +124,7 @@ const run = async () => {
   });
 
   state.currentUser = { user: viewer };
-  state.navigation = { contentMode: isOffline ? 'game' : 'home' };
+  state.navigation = 'home';
 
   ReactDOM.render(<App state={state} storage={storage} />, document.getElementById('root'));
 

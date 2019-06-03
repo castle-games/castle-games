@@ -17,7 +17,6 @@ export const getProductData = async () => {
   }
 
   if (data) {
-    console.log(data);
     isOffline = false;
     featuredGames = data.featuredGames ? data.featuredGames : [];
     featuredExamples = data.featuredExamples ? data.featuredExamples : [];
