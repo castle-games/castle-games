@@ -84,6 +84,21 @@ const GAME_ITEMS = `
   }
 `;
 
+export async function createChatChannel({ name }) {
+  const response = await API.graphqlAsync(
+    `
+      mutation($name: String!) {
+        createChatChannel(name: $name) {
+          channelId
+        }
+      }
+    `,
+    { name }
+  );
+
+  return response;
+}
+
 export async function updateEmailPreference({ type, frequency }) {
   const response = await API.graphqlAsync(
     `
