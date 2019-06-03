@@ -37,7 +37,20 @@ export const joinChatChannel = async ({ channelId }) => {
   return response;
 };
 
-export const leaveChatChannel = async ({ channelId }) => {};
+export const leaveChatChannel = async ({ channelId }) => {
+  const response = await API.graphqlAsync(
+    `
+      mutation($channelId: ID!) {
+        leaveChatChannel(channelId: $channelId) {
+          channelId
+        }
+      }
+    `,
+    { channelId }
+  );
+
+  return response;
+};
 
 export const sendChannelChatMessage = async ({ message, channelId }) => {
   const response = await API.graphqlAsync(

@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as SVG from '~/common/svg';
 import * as Constants from '~/common/constants';
 import * as NativeUtil from '~/native/nativeutil';
+import * as ChatActions from '~/common/actions-chat';
 
 import { css } from 'react-emotion';
 
@@ -59,6 +60,11 @@ class ChatScreen extends React.Component {
     console.log('Channel:', channel);
   };
   */
+
+  _handleLeaveChannel = async () => {
+    await ChatActions.leaveChatChannel({ channelId: this.props.chat.channel.channelId });
+    this.props.navigator.navigateToHome();
+  };
 
   _handleResetChatWindow = () => this.setState({ mode: 'MESSAGES' });
 
