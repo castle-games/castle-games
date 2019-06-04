@@ -41,13 +41,13 @@ const STYLES_CONTAINER = css`
 const STYLES_CONTAINER_LEAVING = css`
   ${STYLES_CONTAINER_BASE};
   opacity: 0;
-  transform: translateX(-48px) scale(0.85);
+  transform: translateX(-24px) scale(0.9);
 `;
 
 const STYLES_CONTAINER_ENTERING = css`
   ${STYLES_CONTAINER_BASE};
   opacity: 0;
-  transform: translateX(240px);
+  transform: translateX(24px);
 `;
 
 class ChatScreen extends React.Component {
