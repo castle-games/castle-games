@@ -2,7 +2,6 @@ import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as Strings from '~/common/strings';
 import * as Urls from '~/common/urls';
-import * as FeatureFlags from '~/common/feature-flags';
 
 import { css } from 'react-emotion';
 import { DevelopmentSetterContext } from '~/contexts/DevelopmentContext';

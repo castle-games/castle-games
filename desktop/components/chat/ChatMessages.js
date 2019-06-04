@@ -27,7 +27,7 @@ export default class ChatMessages extends React.Component {
     let messages = [];
     this.props.messages.forEach((m) => {
       const user = this.props.social.userIdToUser[m.fromUserId];
-      messages.unshift(
+      messages.push(
         <ChatMessageElement
           key={m.chatMessageId}
           message={m}
