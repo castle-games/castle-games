@@ -7,7 +7,6 @@ import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigatorContext } from '~/contexts/NavigationContext';
 
 import UIGameGrid from '~/components/reusable/UIGameGrid';
-import UIHorizontalNavigation from '~/components/reusable/UIHorizontalNavigation';
 import UIPostList from '~/components/reusable/UIPostList';
 
 const STYLES_CONTAINER = css`
@@ -29,38 +28,12 @@ class HomeScreen extends React.Component {
     featuredExamples: [],
     history: [],
     refreshHistory: async () => {},
-  };
-
-  state = {
     mode: ExperimentalFeatures.isEnabled('posts') ? 'posts' : 'games', // [posts] | games | examples | history
   };
-
-  _container;
 
   componentDidMount() {
     this.props.refreshHistory();
   }
-
-  componentDidUpdate(prevProps) {
-    if (
-      prevProps.timeLastNavigated !== this.props.timeLastNavigated &&
-      this.props.mode !== 'games'
-    ) {
-      this._setModeAndScrollToTop('games');
-    }
-  }
-
-  _handleNavigationChange = (selectedKey) => {
-    this.setState({ mode: selectedKey });
-  };
-
-  _setModeAndScrollToTop = (mode) => {
-    this.setState({ mode: mode }, () => {
-      if (this._container) {
-        this._container.scroll({ top: 0 });
-      }
-    });
-  };
 
   _navigateToGame = (game, options) => {
     return this.props.navigateToGame(game, { launchSource: `home-${this.state.mode}`, ...options });
@@ -75,11 +48,7 @@ class HomeScreen extends React.Component {
       : [];
 
     return (
-      <div
-        className={STYLES_CONTAINER}
-        ref={(r) => {
-          this._container = r;
-        }}>
+      <div className={STYLES_CONTAINER}>
         {mode === 'posts' ? (
           <UIPostList
             viewer={this.props.viewer}

@@ -7,7 +7,6 @@ import { NavigationContext, NavigatorContext } from '~/contexts/NavigationContex
 
 import SearchInput from '~/components/SearchInput';
 import UINavigationLink from '~/components/reusable/UINavigationLink';
-import HomeHeader from '~/components/home/HomeHeader';
 
 const ENABLE_NOTIF_SCREEN = false; // feature flag notification item
 
@@ -48,15 +47,6 @@ class ContentNavigationBar extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTAINER}>
-        <HomeHeader
-          navigateToCreate={this.props.navigator.navigateToCreate}
-          navigateToHome={this.props.navigator.navigateToHome}
-          navigateToGameUrl={this.props.navigator.navigateToGameUrl}
-          navigateToCurrentUserProfile={() =>
-            this.props.navigator.navigateToCurrentUserProfile({ mode: 'add-game' })
-          }
-          mode={this.props.mode}
-        />
         <div className={STYLES_SEARCH_SECTION}>
           <SearchInput
             query={this.props.searchQuery}

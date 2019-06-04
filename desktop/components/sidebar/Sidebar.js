@@ -69,11 +69,11 @@ class Sidebar extends React.Component {
   };
 
   _handleNavigateToFeaturedGames = () => {
-    return this.props.navigator.navigateToHome();
+    return this.props.navigator.navigateToHome('games');
   };
 
   _handleNavigateToAllPosts = () => {
-    return this.props.navigator.navigateToHome();
+    return this.props.navigator.navigateToHome('posts');
   };
 
   _handleNavigateToHistory = () => {

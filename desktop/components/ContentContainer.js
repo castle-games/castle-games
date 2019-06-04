@@ -100,19 +100,13 @@ class ContentContainer extends React.Component {
   _renderContent = (mode) => {
     if (mode === 'game') {
       return <GameScreen isFullScreen={this.props.isFullScreen} />;
-    } else if (
-      mode === 'home' ||
-      mode === 'featured' ||
-      mode === 'history' ||
-      mode === 'posts' ||
-      mode === 'examples'
-    ) {
+    } else if (mode === 'home') {
       return (
         <HomeScreen
           featuredGames={this.props.featuredGames}
           featuredExamples={this.props.featuredExamples}
           timeLastNavigated={this.props.timeLastNavigated}
-          mode={mode}
+          mode={this.props.homeMode}
         />
       );
     } else if (mode === 'chat') {
@@ -188,6 +182,7 @@ export default class ContentContainerWithContext extends React.Component {
                         <ContentContainer
                           viewer={currentUser ? currentUser.user : null}
                           mode={navigation.contentMode}
+                          homeMode={navigation.homeMode}
                           timeGameLoaded={navigation.timeGameLoaded}
                           timeLastNavigated={navigation.timeLastNavigated}
                           game={navigation.game}
