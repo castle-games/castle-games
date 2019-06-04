@@ -244,15 +244,6 @@ class AppWithContext extends React.Component {
   }
 }
 
-/* TODO(jim): Add this back in after the deploy
-// June 3rd, 2019
-  <ChatSessionContextProvider social={social} currentUser={user}>
-    <ChatContextProvider social={social} currentUser={user}>
-      <AppWithContext {...this.props} />
-    </ChatContextProvider>
-  </ChatSessionContextProvider>
-*/
-
 export default class AppWithProvider extends React.Component {
   render() {
     let { currentUser, navigation } = this.props.state;

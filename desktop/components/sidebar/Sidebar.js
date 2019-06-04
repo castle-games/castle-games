@@ -94,7 +94,7 @@ class Sidebar extends React.Component {
   _handleHideOptions = () => this.setState({ mode: 'DEFAULT' });
 
   _renderRootSidebar = () => {
-    const { navigation, navigator, viewer, social } = this.props;
+    const { navigation, navigator, viewer, social, chat } = this.props;
 
     return (
       <div className={STYLES_SIDEBAR}>
@@ -115,6 +115,7 @@ class Sidebar extends React.Component {
           onOpenBrowserForDocumentation={this._handleOpenBrowserForDocumentation}
         />
         <SidebarChannels
+          selectedChannelId={chat.channel ? chat.channel.channelId : null}
           viewer={viewer}
           channels={social.allChatChannels}
           onSelectChannel={this._handleNavigateToChat}

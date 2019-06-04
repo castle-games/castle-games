@@ -8,6 +8,7 @@ const STYLES_CHANNEL = css`
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
+  user-select: none;
   font-size: 12px;
   margin: 8px 0 8px 0;
   padding: 0 16px 0 16px;
@@ -52,7 +53,7 @@ export default ({ data, onClick }) => {
     <div
       className={STYLES_CHANNEL}
       style={{ color: data.active ? 'magenta' : null }}
-      onClick={onClick}>
+      onClick={onClick ? onClick : null}>
       <span className={STYLES_SYMBOL}>
         {data.game ? <SVG.SidebarFeaturedGames size="14px" /> : <SVG.HashTag size="14px" />}
       </span>

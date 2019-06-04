@@ -22,12 +22,14 @@ export default class SidebarChannels extends React.Component {
       <div className={STYLES_CONTAINER}>
         <SidebarGroupHeader onShowOptions={this.props.onShowOptions}>Channels</SidebarGroupHeader>
         {this.props.channels.map((c) => {
+          const active = c.channelId === this.props.selectedChannelId;
+
           return (
             <SidebarChannelItem
               key={`channel-${c.channelId}`}
-              onClick={() => this.props.onSelectChannel({ ...c })}
+              onClick={!active ? () => this.props.onSelectChannel({ ...c }) : null}
               data={{
-                active: c.channelId === this.props.selectedChannelId,
+                active,
                 name: c.name,
                 pending: 0,
               }}
