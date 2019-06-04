@@ -117,6 +117,7 @@ class Sidebar extends React.Component {
         <SidebarChannels
           selectedChannelId={chat.channel ? chat.channel.channelId : null}
           viewer={viewer}
+          contentMode={navigation.contentMode}
           isChatVisible={isChatVisible}
           channels={social.allChatChannels}
           onSelectChannel={this._handleNavigateToChat}
