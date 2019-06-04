@@ -28,7 +28,6 @@ class HomeScreen extends React.Component {
     featuredExamples: [],
     history: [],
     refreshHistory: async () => {},
-    mode: ExperimentalFeatures.isEnabled('posts') ? 'posts' : 'games', // [posts] | games | examples | history
   };
 
   componentDidMount() {
@@ -58,7 +57,7 @@ class HomeScreen extends React.Component {
             onSignInSelect={this.props.navigateToSignIn}
           />
         ) : null}
-        {mode === 'games' ? (
+        {mode === 'featured' ? (
           <UIGameGrid
             viewer={this.props.viewer}
             gameItems={this.props.featuredGames}
