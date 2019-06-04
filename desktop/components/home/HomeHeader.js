@@ -58,6 +58,8 @@ export default class HomeHeader extends React.Component {
   };
 
   render() {
+    return null;
+
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_ACTIONS}>

@@ -25,6 +25,7 @@ const STYLES_CONTAINER_LEFT = css`
   align-items: center;
   cursor: pointer;
   padding-right: 8px;
+  padding-left: 10px;
 `;
 
 const STYLES_CONTAINER_MIDDLE = css`

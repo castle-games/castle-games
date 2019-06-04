@@ -44,25 +44,11 @@ class HomeScreen extends React.Component {
   componentDidUpdate(prevProps) {
     if (
       prevProps.timeLastNavigated !== this.props.timeLastNavigated &&
-      this.state.mode !== 'games'
+      this.props.mode !== 'games'
     ) {
       this._setModeAndScrollToTop('games');
     }
   }
-
-  _getNavigationItems = () => {
-    const navigationItems = [];
-    if (ExperimentalFeatures.isEnabled('posts') && this.props.viewer) {
-      navigationItems.push({ label: 'Posts', key: 'posts' });
-    }
-    navigationItems.push({ label: 'Featured games', key: 'games' });
-    navigationItems.push({ label: 'Examples', key: 'examples' });
-    if (this.props.viewer) {
-      navigationItems.push({ label: 'Your history', key: 'history' });
-    }
-
-    return navigationItems;
-  };
 
   _handleNavigationChange = (selectedKey) => {
     this.setState({ mode: selectedKey });
@@ -81,6 +67,7 @@ class HomeScreen extends React.Component {
   };
 
   render() {
+    const { mode } = this.props;
     const recentGames = this.props.history
       ? this.props.history.map((historyItem) => {
           return { ...historyItem.game, key: historyItem.userStatusId };
@@ -93,12 +80,7 @@ class HomeScreen extends React.Component {
         ref={(r) => {
           this._container = r;
         }}>
-        <UIHorizontalNavigation
-          items={this._getNavigationItems()}
-          selectedKey={this.state.mode}
-          onChange={this._handleNavigationChange}
-        />
-        {this.state.mode === 'posts' ? (
+        {mode === 'posts' ? (
           <UIPostList
             viewer={this.props.viewer}
             gameItems={this.props.featuredGames}
@@ -107,7 +89,7 @@ class HomeScreen extends React.Component {
             onSignInSelect={this.props.navigateToSignIn}
           />
         ) : null}
-        {this.state.mode === 'games' ? (
+        {mode === 'games' ? (
           <UIGameGrid
             viewer={this.props.viewer}
             gameItems={this.props.featuredGames}
@@ -116,7 +98,7 @@ class HomeScreen extends React.Component {
             onSignInSelect={this.props.navigateToSignIn}
           />
         ) : null}
-        {this.state.mode === 'examples' ? (
+        {mode === 'examples' ? (
           <UIGameGrid
             viewer={this.props.viewer}
             gameItems={this.props.featuredExamples}
@@ -125,7 +107,7 @@ class HomeScreen extends React.Component {
             onSignInSelect={this.props.navigateToSignIn}
           />
         ) : null}
-        {this.state.mode === 'history' ? (
+        {mode === 'history' ? (
           <UIGameGrid
             gameItems={recentGames}
             viewer={this.props.viewer}

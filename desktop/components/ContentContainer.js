@@ -100,12 +100,19 @@ class ContentContainer extends React.Component {
   _renderContent = (mode) => {
     if (mode === 'game') {
       return <GameScreen isFullScreen={this.props.isFullScreen} />;
-    } else if (mode === 'home') {
+    } else if (
+      mode === 'home' ||
+      mode === 'featured' ||
+      mode === 'history' ||
+      mode === 'posts' ||
+      mode === 'examples'
+    ) {
       return (
         <HomeScreen
           featuredGames={this.props.featuredGames}
           featuredExamples={this.props.featuredExamples}
           timeLastNavigated={this.props.timeLastNavigated}
+          mode={mode}
         />
       );
     } else if (mode === 'chat') {
