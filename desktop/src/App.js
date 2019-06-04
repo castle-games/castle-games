@@ -272,9 +272,9 @@ export default class AppWithProvider extends React.Component {
                     <SocialContext.Consumer>
                       {(social) => {
                         return (
-                          <ChatContextProvider social={social} currentUser={user}>
+                          <ChatSessionContextProvider social={social} currentUser={user}>
                             <AppWithContext {...this.props} />
-                          </ChatContextProvider>
+                          </ChatSessionContextProvider>
                         );
                       }}
                     </SocialContext.Consumer>
