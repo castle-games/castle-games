@@ -35,6 +35,22 @@ const NavigationContextDefaults = {
   options: {},
 };
 
+// NOTE(jim): Easy way to enforce signed in routes.
+const AUTHENTICATED_ONLY_MODES = {
+  chat: true,
+  edit_post: true,
+  create: true,
+  notifications: true,
+  history: true,
+  posts: false,
+  examples: false,
+  game: false,
+  profile: false,
+  featured: false,
+  home: false,
+  signin: false,
+};
+
 /**
  *  NavigatorContext contains methods for changing the navigation state of the app.
  *  this is the "write" side of NavigationContext, i.e. methods here should have
@@ -157,10 +173,21 @@ class NavigationContextManager extends React.Component {
 
   // navigator actions
   _navigateToContentMode = (mode, navigationParams) => {
-    Analytics.trackNavigation({
-      prevContentMode: this.state.navigation.contentMode,
-      nextContentMode: mode,
-    });
+    // NOTE(jim): Added this prevent the possibilty of an exception
+    // throwing in an unforseen failure case.
+    try {
+      Analytics.trackNavigation({
+        prevContentMode: this.state.navigation.contentMode,
+        nextContentMode: mode,
+      });
+    } catch (e) {}
+
+    if (!this.props.currentUser.user) {
+      if (AUTHENTICATED_ONLY_MODES[mode]) {
+        mode = 'signin';
+      }
+    }
+
     this.setState({
       navigation: {
         ...this.state.navigation,
