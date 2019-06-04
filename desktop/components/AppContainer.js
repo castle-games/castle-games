@@ -4,7 +4,7 @@ import * as Constants from '~/common/constants';
 import { css } from 'react-emotion';
 
 import ContentContainer from '~/components/ContentContainer.js';
-import SocialContainer from '~/components/SocialContainer.js';
+import Sidebar from '~/components/sidebar/Sidebar';
 
 const STYLES_CONTAINER = css`
   font-family: ${Constants.font.default};
@@ -21,7 +21,7 @@ export default class AppContainer extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTAINER}>
-        <SocialContainer
+        <Sidebar
           isVisible={!this.props.isFullScreen}
           updateAvailable={this.props.updateAvailable}
           onNativeUpdateInstall={this.props.onNativeUpdateInstall}

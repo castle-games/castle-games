@@ -61,7 +61,6 @@ class Sidebar extends React.Component {
 
   _handleNavigateToChat = (channel) => {
     this.props.chat.handleConnect(channel);
-
     return this.props.navigator.navigateToChat();
   };
 
@@ -95,6 +94,7 @@ class Sidebar extends React.Component {
 
   _renderRootSidebar = () => {
     const { navigation, navigator, viewer, social, chat } = this.props;
+    const isChatVisible = navigation.contentMode === 'chat';
 
     return (
       <div className={STYLES_SIDEBAR}>
@@ -117,12 +117,14 @@ class Sidebar extends React.Component {
         <SidebarChannels
           selectedChannelId={chat.channel ? chat.channel.channelId : null}
           viewer={viewer}
+          isChatVisible={isChatVisible}
           channels={social.allChatChannels}
           onSelectChannel={this._handleNavigateToChat}
         />
         {this.props.social.allMessageChannels ? (
           <SidebarDirectMessages
             viewer={viewer}
+            isChatVisible={isChatVisible}
             onShowOptions={this._handleShowDirectMessageOptions}
             onChat={this._handleNavigateToChat}
           />

@@ -43,7 +43,7 @@ const NavigationContextDefaults = {
  *  the state but never read from it.
  */
 const NavigatorContextDefaults = {
-  navigateToChat: (id) => {},
+  navigateToChat: () => {},
   navigateToHome: () => {},
   navigateToGameUrl: async (url) => {},
   navigateToGame: async (game) => {},
