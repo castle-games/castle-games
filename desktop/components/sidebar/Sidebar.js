@@ -108,6 +108,7 @@ class Sidebar extends React.Component {
         />
         <SidebarNavigation
           viewer={viewer}
+          contentMode={navigation.contentMode}
           onNavigateToMakeGame={this._handleNavigateToMakeGame}
           onNavigateToFeaturedGames={this._handleNavigateToFeaturedGames}
           onNavigateToAllPosts={this._handleNavigateToAllPosts}

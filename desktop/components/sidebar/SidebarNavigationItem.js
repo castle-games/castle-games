@@ -41,7 +41,10 @@ const STYLES_SYMBOL = css`
 
 export default ({ data }) => {
   return (
-    <div className={STYLES_ITEM} onClick={data.onClick}>
+    <div
+      className={STYLES_ITEM}
+      style={{ color: data.active ? 'magenta' : null }}
+      onClick={data.active ? () => {} : data.onClick}>
       <span className={STYLES_SYMBOL}>{SVG_ICON[data.svg]}</span>
       <span className={STYLES_NAME}>{data.name}</span>
     </div>

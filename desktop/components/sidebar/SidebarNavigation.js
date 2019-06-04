@@ -17,9 +17,10 @@ export default class SidebarNavigation extends React.Component {
       <div className={STYLES_CONTAINER}>
         <SidebarNavigationItem
           data={{
-            name: 'Make a game',
+            name: 'Create game',
             svg: 'make',
             onClick: this.props.onNavigateToMakeGame,
+            active: this.props.contentMode === 'create',
           }}
         />
         <SidebarNavigationItem
@@ -27,6 +28,7 @@ export default class SidebarNavigation extends React.Component {
             name: 'Featured games',
             svg: 'featured',
             onClick: this.props.onNavigateToFeaturedGames,
+            active: this.props.contentMode === 'featured',
           }}
         />
         <SidebarNavigationItem
@@ -34,6 +36,7 @@ export default class SidebarNavigation extends React.Component {
             name: 'Posts',
             svg: 'posts',
             onClick: this.props.onNavigateToAllPosts,
+            active: this.props.contentMode === 'posts',
           }}
         />
         {this.props.viewer ? (
@@ -42,6 +45,7 @@ export default class SidebarNavigation extends React.Component {
               name: 'History',
               svg: 'history',
               onClick: this.props.onNavigateToHistory,
+              active: this.props.contentMode === 'history',
             }}
           />
         ) : null}
