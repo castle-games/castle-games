@@ -28,7 +28,7 @@ const STYLES_LEFT = css`
 `;
 
 const STYLES_RIGHT = css`
-  padding-left: 12px;
+  padding-left: 6px;
   min-width: 15%;
   width: 100%;
 `;

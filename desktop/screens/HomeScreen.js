@@ -57,7 +57,7 @@ class HomeScreen extends React.Component {
             onSignInSelect={this.props.navigateToSignIn}
           />
         ) : null}
-        {mode === 'featured' ? (
+        {mode === 'featured' || mode === 'home' ? (
           <UIGameGrid
             viewer={this.props.viewer}
             gameItems={this.props.featuredGames}
