@@ -17,17 +17,20 @@ const ChatSessionContext = React.createContext({
   channel: null,
   handleConnect: (channel) => {},
   handleSendChannelMessage: (text) => {},
+  animating: 2,
 });
 
 class ChatSessionContextProvider extends React.Component {
   _chat;
   _firstLoad = false;
+  _unlockAnimation = true;
 
   constructor(props) {
     super(props);
     this.state = {
       messages: {},
       channel: null,
+      animating: 2,
       handleConnect: this._handleConnect,
       handleSendChannelMessage: this._handleSendChannelMessage,
     };
@@ -38,11 +41,24 @@ class ChatSessionContextProvider extends React.Component {
   }
 
   _handleConnect = async (channel) => {
-    this.setState({ channel });
-    const response = await ChatActions.joinChatChannel({ channelId: channel.channelId });
+    if (!this._unlockAnimation) {
+      return;
+    }
 
-    // TODO(jim): Not seeing loadRecentMessagesAsync.
+    const response = await ChatActions.joinChatChannel({ channelId: channel.channelId });
     await this._chat.loadRecentMessagesAsync();
+    this._unlockAnimation = false;
+
+    if (this.state.channel) {
+      this.setState({ animating: 3 });
+      await sleep(200);
+    }
+
+    this.setState({ animating: 1, channel }, async () => {
+      await sleep(200);
+      this.setState({ animating: 2 });
+      this._unlockAnimation = true;
+    });
   };
 
   start = async () => {

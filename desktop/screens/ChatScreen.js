@@ -19,7 +19,7 @@ import ChatMembers from '~/components/chat/ChatMembers';
 import ChatInput from '~/components/chat/ChatInput';
 import ChatOptions from '~/components/chat/ChatOptions';
 
-const STYLES_CONTAINER = css`
+const STYLES_CONTAINER_BASE = `
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -27,8 +27,27 @@ const STYLES_CONTAINER = css`
   width: 100%;
   min-width: 10%;
   height: 100vh;
-  transition: 200ms ease width;
+  transition: 180ms ease all;
+  transition-property: transform, opacity;
   background: ${Constants.colors.white};
+`;
+
+const STYLES_CONTAINER = css`
+  ${STYLES_CONTAINER_BASE};
+  transform: translateX(0px);
+  opacity: 1;
+`;
+
+const STYLES_CONTAINER_LEAVING = css`
+  ${STYLES_CONTAINER_BASE};
+  opacity: 0;
+  transform: translateX(-48px) scale(0.85);
+`;
+
+const STYLES_CONTAINER_ENTERING = css`
+  ${STYLES_CONTAINER_BASE};
+  opacity: 0;
+  transform: translateX(240px);
 `;
 
 class ChatScreen extends React.Component {
@@ -62,9 +81,22 @@ class ChatScreen extends React.Component {
   render() {
     const { mode } = this.state;
 
+    let className = STYLES_CONTAINER;
+    if (this.props.chat.animating === 3) {
+      className = STYLES_CONTAINER_LEAVING;
+    }
+
+    if (this.props.chat.animating === 1) {
+      className = STYLES_CONTAINER_ENTERING;
+    }
+
+    if (!this.props.chat.channel) {
+      return null;
+    }
+
     if (mode === 'OPTIONS') {
       return (
-        <div className={STYLES_CONTAINER}>
+        <div className={className}>
           <ChatHeaderActive onDismiss={this._handleResetChatWindow}>
             Channel Settings
           </ChatHeaderActive>
@@ -75,7 +107,7 @@ class ChatScreen extends React.Component {
 
     if (mode === 'MEMBERS') {
       return (
-        <div className={STYLES_CONTAINER}>
+        <div className={className}>
           <ChatHeaderActive onDismiss={this._handleResetChatWindow}>
             Channel Members
           </ChatHeaderActive>
@@ -90,7 +122,7 @@ class ChatScreen extends React.Component {
     }
 
     return (
-      <div className={STYLES_CONTAINER}>
+      <div className={className}>
         <ChatHeader
           channel={this.props.chat.channel}
           onSettingsClick={this._handleShowSingleChannelOptions}

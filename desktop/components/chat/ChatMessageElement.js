@@ -84,12 +84,12 @@ export default class ChatMessageElement extends React.Component {
   render() {
     let text = '';
     if (this.props.message.body === 2) {
-      console.log(this.props.message);
+      console.log('type 2', this.props.message);
       return null;
     }
 
     if (this.props.message.body === 1) {
-      console.log(this.props.message);
+      console.log('type 1', this.props.message);
       return null;
     }
 
