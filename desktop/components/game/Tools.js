@@ -332,11 +332,179 @@ class ToolRadioButtonGroup extends React.PureComponent {
 }
 elementTypes['radioButtonGroup'] = ToolRadioButtonGroup;
 
+// Copied from Carbon CSS, so that we can apply only to Accordion itself but not its children
+const STYLES_SECTION_CONTAINER = css`
+  .bx--accordion {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font-family: inherit;
+    vertical-align: baseline;
+    list-style: none;
+    width: 100%;
+  }
+  .bx--accordion > *,
+  .bx--accordion > *:before,
+  .bx--accordion > *:after {
+    box-sizing: inherit;
+  }
+  .bx--accordion__item {
+    transition: all 110ms cubic-bezier(0.2, 0, 0.38, 0.9);
+    border-top: 1px solid #3d3d3d;
+    overflow: visible;
+  }
+  .bx--accordion__item:last-child {
+    border-bottom: 1px solid #3d3d3d;
+  }
+  .bx--accordion__heading {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font-family: inherit;
+    vertical-align: baseline;
+    display: inline-block;
+    background: none;
+    appearance: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    width: 100%;
+    color: #f3f3f3;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    cursor: pointer;
+    padding: 0.375rem 0;
+    flex-direction: row-reverse;
+    position: relative;
+    width: 100%;
+    margin: 0;
+    transition: background-color cubic-bezier(0.2, 0, 0.38, 0.9) 110ms;
+  }
+  .bx--accordion__heading > *,
+  .bx--accordion__heading > *:before,
+  .bx--accordion__heading > *:after {
+    box-sizing: inherit;
+  }
+  .bx--accordion__heading::-moz-focus-inner {
+    border: 0;
+  }
+  .bx--accordion__heading:hover:before,
+  .bx--accordion__heading:focus:before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 0;
+    width: 100%;
+    height: calc(100% + 2px);
+  }
+  .bx--accordion__heading:hover:before {
+    background-color: #353535;
+  }
+  .bx--accordion__heading:focus {
+    outline: none;
+  }
+  .bx--accordion__heading:focus:before {
+    border: 2px solid #ff00ff;
+    box-sizing: border-box;
+  }
+  .bx--accordion__arrow {
+    outline: 2px solid transparent;
+    outline-offset: -2px;
+    flex: 0 0 1rem;
+    width: 1rem;
+    height: 1rem;
+    margin: 0 1rem 0 0;
+    fill: #f3f3f3;
+    transform: rotate(90deg);
+    transition: all 110ms cubic-bezier(0.2, 0, 0.38, 0.9);
+  }
+  .bx--accordion__title {
+    font-family: 'sf-mono', Consolas, monaco, monospace;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.25rem;
+    letter-spacing: 0.16px;
+    margin: 0 0 0 1rem;
+    width: 100%;
+    text-align: left;
+    z-index: 0;
+  }
+  .bx--accordion__content {
+    transition: height cubic-bezier(0.2, 0, 0.38, 0.9) 110ms,
+      padding cubic-bezier(0.2, 0, 0.38, 0.9) 110ms;
+    padding-left: 1rem;
+    padding-right: 25%;
+    height: 0;
+    visibility: hidden;
+    opacity: 0;
+  }
+  @media (max-width: 42rem) {
+    .bx--accordion__content {
+      padding-right: 3rem;
+    }
+  }
+  .bx--accordion__content p {
+    font-family: 'sf-mono', Consolas, monaco, monospace;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.25rem;
+    letter-spacing: 0.16px;
+  }
+  .bx--accordion__item--active {
+    overflow: visible;
+  }
+  .bx--accordion__item--active .bx--accordion__content {
+    padding-bottom: 1.5rem;
+    padding-top: 0.5rem;
+    height: auto;
+    visibility: visible;
+    opacity: 1;
+    transition: height cubic-bezier(0, 0, 0.38, 0.9) 110ms,
+      padding-top cubic-bezier(0, 0, 0.38, 0.9) 110ms,
+      padding-bottom cubic-bezier(0, 0, 0.38, 0.9) 110ms;
+  }
+  .bx--accordion__item--active .bx--accordion__arrow {
+    /*rtl:ignore*/
+    transform: rotate(-90deg);
+    fill: #f3f3f3;
+  }
+  .bx--accordion.bx--skeleton .bx--accordion__heading,
+  .bx--accordion.bx--skeleton .bx--accordion__button {
+    cursor: default;
+  }
+  .bx--accordion.bx--skeleton .bx--accordion__arrow {
+    pointer-events: none;
+    fill: #f3f3f3;
+    cursor: default;
+  }
+  .bx--accordion.bx--skeleton .bx--accordion__arrow:hover,
+  .bx--accordion.bx--skeleton .bx--accordion__arrow:focus,
+  .bx--accordion.bx--skeleton .bx--accordion__arrow:active {
+    border: none;
+    outline: none;
+    cursor: default;
+  }
+  .bx--skeleton .bx--accordion__heading:focus .bx--accordion__arrow {
+    border: none;
+    outline: none;
+    cursor: default;
+  }
+  .bx--accordion__title.bx--skeleton__text {
+    margin-bottom: 0;
+  }
+`;
+
 class ToolSection extends React.PureComponent {
   render() {
     const { element } = this.props;
+
     return (
-      <Carbon>
+      <div className={STYLES_SECTION_CONTAINER}>
         <Accordion>
           <AccordionItem
             {...element.props}
@@ -352,7 +520,7 @@ class ToolSection extends React.PureComponent {
             {renderChildren(element)}
           </AccordionItem>
         </Accordion>
-      </Carbon>
+      </div>
     );
   }
 }
