@@ -25,6 +25,14 @@ export default class SidebarNavigation extends React.Component {
         />
         <SidebarNavigationItem
           data={{
+            name: 'Examples',
+            svg: 'examples',
+            onClick: this.props.onNavigateToExamples,
+            active: this.props.contentMode === 'examples',
+          }}
+        />
+        <SidebarNavigationItem
+          data={{
             name: 'Featured games',
             svg: 'featured',
             onClick: this.props.onNavigateToFeaturedGames,
