@@ -21,6 +21,7 @@ const ChatSessionContext = React.createContext({
 
 class ChatSessionContextProvider extends React.Component {
   _chat;
+  _firstLoad = false;
 
   constructor(props) {
     super(props);
@@ -81,7 +82,15 @@ class ChatSessionContextProvider extends React.Component {
       }
 
       userIds[m.fromUserId] = true;
-      messages[m.channelId].push(m);
+
+      // NOTE(jim): This is an unfortunate complication. On the first load you want to push elements
+      // into the array, on the second load you want to perform an unshift. I'll need to ping Jesse
+      // about this at some point.
+      if (this._firstLoad !== false) {
+        messages[m.channelId].push(m);
+      } else {
+        messages[m.channelId].unshift(m);
+      }
     });
 
     try {
@@ -89,6 +98,7 @@ class ChatSessionContextProvider extends React.Component {
       await this.props.social.addUsers(users);
     } catch (e) {}
 
+    this._firstLoad = true;
     this.setState({ messages });
   };
 

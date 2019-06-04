@@ -22,7 +22,7 @@ const STYLES_LEFT = css`
   background-position: 50% 50%;
   height: 40px;
   width: 40px;
-  background-color: magenta;
+  background-color: #f3f3f3;
   cursor: pointer;
   border-radius: 4px;
 `;
@@ -83,6 +83,16 @@ export default class ChatMessageElement extends React.Component {
 
   render() {
     let text = '';
+    if (this.props.message.body === 2) {
+      console.log(this.props.message);
+      return null;
+    }
+
+    if (this.props.message.body === 1) {
+      console.log(this.props.message);
+      return null;
+    }
+
     if (!Strings.isEmpty(this.props.message.body.message[0].text)) {
       text = this.props.message.body.message[0].text;
       text = StringReplace(text, /@(\w+)/g, (match, i) => (

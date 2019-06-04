@@ -20,14 +20,42 @@ const STYLES_CONTAINER = css`
   }
 `;
 
+const STYLES_BOTTOM = css`
+  height: 8px;
+`;
+
 export default class ChatMessages extends React.Component {
+  _container;
+  _containerBottom;
+
+  componentDidUpdate(prevProps) {
+    const isBottom =
+      this._container.scrollHeight - this._container.scrollTop === this._container.clientHeight;
+    const hasMoreMessages = prevProps.messages.length < this.props.messages.length;
+
+    if (isBottom && hasMoreMessages) {
+      this.scroll();
+    }
+  }
+
+  componentDidMount() {
+    this.scroll();
+  }
+
+  scroll = () => {
+    window.setTimeout(() => {
+      if (this._containerBottom) {
+        this._containerBottom.scrollIntoView(false);
+      }
+    });
+  };
+
   render() {
     const { social, navigator } = this.props;
 
-    let messages = [];
-    this.props.messages.forEach((m) => {
+    let messages = this.props.messages.map((m) => {
       const user = this.props.social.userIdToUser[m.fromUserId];
-      messages.push(
+      return (
         <ChatMessageElement
           key={m.chatMessageId}
           message={m}
@@ -38,6 +66,21 @@ export default class ChatMessages extends React.Component {
       );
     });
 
-    return <div className={STYLES_CONTAINER}>{messages}</div>;
+    return (
+      <div
+        className={STYLES_CONTAINER}
+        ref={(c) => {
+          this._container = c;
+        }}>
+        {messages}
+        <div
+          className={STYLES_BOTTOM}
+          ref={(c) => {
+            this._containerBottom = c;
+            this.scroll();
+          }}
+        />
+      </div>
+    );
   }
 }
