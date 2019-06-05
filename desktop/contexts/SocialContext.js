@@ -29,6 +29,7 @@ class SocialContextProvider extends React.Component {
       setOnlineUserIds: this.setOnlineUserIds,
       refreshChannelData: this.refreshChannelData,
       newUserJoinChannels: this.newUserJoinChannels,
+      findSubscribedChannel: this.findSubscribedChannel,
       findChannel: this.findChannel,
     };
   }
@@ -92,6 +93,18 @@ class SocialContextProvider extends React.Component {
       const channel = this.state.allChatChannels[i];
 
       if (channel.name === name.toLowerCase()) {
+        return channel;
+      }
+    }
+
+    return null;
+  };
+
+  findSubscribedChannel = ({ channelId }) => {
+    for (let i = 0; i < this.state.subscribedChatChannels.length; i++) {
+      const channel = this.state.subscribedChatChannels[i];
+
+      if (channel.channelId === channelId) {
         return channel;
       }
     }

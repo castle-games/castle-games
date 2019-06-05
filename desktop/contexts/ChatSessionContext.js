@@ -55,8 +55,13 @@ class ChatSessionContextProvider extends React.Component {
       await sleep(200);
     }
 
-    const response = await ChatActions.joinChatChannel({ channelId: channel.channelId });
-    await this._chat.loadRecentMessagesAsync();
+    const existingChannel = this.props.social.findSubscribedChannel({
+      channelId: channel.channelId,
+    });
+    if (!existingChannel) {
+      const response = await ChatActions.joinChatChannel({ channelId: channel.channelId });
+      await this._chat.loadRecentMessagesAsync();
+    }
 
     this._unlockAnimation = false;
 
@@ -82,6 +87,7 @@ class ChatSessionContextProvider extends React.Component {
     this._chat.setOnPresenceHandler(this._handlePresenceAsync);
     this._chat.setConnectionStatusHandler(this._handleConnectStatus);
     this._chat.connect();
+    await this._chat.loadRecentMessagesAsync();
   };
 
   destroy = () => {
