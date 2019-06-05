@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as NativeUtil from '~/native/nativeutil';
 import * as Constants from '~/common/constants';
 
-import { css } from 'react-emotion';
+import { css, injectGlobal } from 'react-emotion';
 import {
   Accordion,
   AccordionItem,
@@ -19,11 +19,14 @@ import {
   Toggle,
 } from 'carbon-components-react';
 import { space, color, border, layout, flexbox } from 'styled-system';
+import ColorPicker from 'rc-color-picker';
+import tinycolor from 'tinycolor2';
 
 import styled from 'styled-components';
 import Logs from '~/common/logs';
 import ToolMarkdown from '~/components/game/ToolMarkdown';
 
+import 'rc-color-picker/assets/index.css';
 import '~/components/game/Tools.min.css';
 
 //
@@ -181,6 +184,138 @@ class ToolCheckbox extends React.PureComponent {
   }
 }
 elementTypes['checkbox'] = ToolCheckbox;
+
+const STYLES_COLOR_PICKER_CONTAINER = css`
+  font-family: 'sf-mono', Consolas, monaco, monospace;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.125rem;
+  letter-spacing: 0.16px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  align-items: flex-start;
+  margin-bottom: 14px;
+`;
+
+injectGlobal`
+  .rc-color-picker-panel {
+    background-color: #282828 !important;
+  }
+
+  .rc-color-picker-panel {
+    border-radius: 0px !important;
+    border: none !important;
+  }
+
+  .rc-color-picker-panel-inner {
+    box-shadow: none !important;
+    border-radius: 0px !important;
+    border: 1px solid #3d3d3d !important;
+    border-bottom: 1px solid #6f6f6f !important;
+    padding-top: 2px !important;
+  }
+
+  .rc-color-picker-panel-params-lable {
+    color: #fff !important;
+  }
+
+  .rc-color-picker-panel-params-lable-number:hover {
+    color: #000 !important;
+  }
+
+  .rc-color-picker-panel-params input {
+    border: 1px solid #cacaca !important;
+    font-family: ${Constants.font.mono} !important;
+  }
+`;
+
+class ToolColorPicker extends React.PureComponent {
+  state = {
+    value: this.props.element.props.value,
+    lastSentEventId: null,
+  };
+
+  static getDerivedStateFromProps(props, state) {
+    if (
+      state.lastSentEventId === null ||
+      props.element.lastReportedEventId == state.lastSentEventId
+    ) {
+      return {
+        value: props.element.props.value,
+      };
+    }
+    return null;
+  }
+
+  render() {
+    const { element } = this.props;
+
+    let maybeLabel = null;
+    if (element.props && element.props.label && !element.props.hideLabel) {
+      maybeLabel = (
+        <label
+          htmlFor={element.pathId}
+          className={`bx--label${element.props.disabled ? `  bx--label--disabled` : ''}`}>
+          {element.props.label}
+        </label>
+      );
+    }
+
+    let maybeHelperText = null;
+    if (element.props && element.props.helperText) {
+      maybeHelperText = (
+        <helperText
+          htmlFor={element.pathId}
+          className={`bx--form__helper-text${
+            element.props.disabled ? `  bx--form__helper-text--disabled` : ''
+          }`}>
+          {element.props.helperText}
+        </helperText>
+      );
+    }
+
+    const value = this.state.value;
+    const hex = tinycolor({
+      r: 255 * value.r,
+      g: 255 * value.g,
+      b: 255 * value.b,
+    }).toHexString();
+    const alpha = 100 * value.a;
+
+    return (
+      <div className={STYLES_COLOR_PICKER_CONTAINER}>
+        <Carbon>
+          {maybeLabel}
+          {maybeHelperText}
+        </Carbon>
+        <ColorPicker
+          color={hex}
+          alpha={alpha}
+          enableAlpha={element.props && element.props.enableAlpha}
+          mode={element.props && element.props.mode}
+          onChange={({ color, alpha }) => {
+            const rgb = tinycolor(color).toRgb();
+            const value = {
+              r: rgb.r / 255,
+              g: rgb.g / 255,
+              b: rgb.b / 255,
+              a: alpha / 100,
+            };
+            this.setState({
+              value,
+              lastSentEventId: sendEvent(this.props.element.pathId, {
+                type: 'onChange',
+                value,
+              }),
+            });
+          }}
+        />
+      </div>
+    );
+  }
+}
+elementTypes['colorPicker'] = ToolColorPicker;
 
 class ToolDropdown extends React.PureComponent {
   state = {
@@ -941,7 +1076,35 @@ const DEBUG_PREPOPULATED = false;
 
 export default class Tools extends React.PureComponent {
   static initialState = {
-    root: DEBUG_PREPOPULATED ? {} : {},
+    root: DEBUG_PREPOPULATED
+      ? {
+          panes: {
+            DEFAULT: {
+              type: 'pane',
+              props: {
+                name: 'DEFAULT',
+              },
+              children: {
+                lastId: 'colorPickercolor',
+                count: 1,
+                colorPickercolor: {
+                  type: 'colorPicker',
+                  pathId: '9OQ2eEk9Y9sTP0+vei+oeQ==',
+                  props: {
+                    label: 'color',
+                    value: {
+                      r: 1,
+                      b: 1,
+                      a: 1,
+                      g: 0,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        }
+      : {},
     visible: DEBUG_PREPOPULATED,
   };
 

@@ -283,6 +283,28 @@ function ui.checkbox(label, checked, props)
     return newChecked
 end
 
+function ui.colorPicker(label, value, props)
+    assert(type(label) == 'string', '`ui.colorPicker` needs a string `label`')
+    assert(type(value) == 'table', '`ui.colorPicker` needs a table `value`')
+
+    local c = addChild('colorPicker', label, without(merge({ label = label, value = value }, props), 'onChange'), true)
+
+    local newValue = value
+    local es = pendingEvents[c.pathId]
+    if es then
+        for _, e in ipairs(es) do
+            if e.type == 'onChange' then
+                if props and props.onChange then
+                    newValue = props.onChange(e.value) or e.value
+                else
+                    newValue = e.value
+                end
+            end
+        end
+    end
+    return newValue
+end
+
 function ui.dropdown(label, value, items, props)
     assert(type(label) == 'string', '`ui.dropdown` needs a string `label`')
     assert(type(value) == 'string' or type(value) == 'nil', '`ui.dropdown` needs a string or nil `value`')
