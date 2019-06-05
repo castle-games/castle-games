@@ -60,6 +60,7 @@ class Sidebar extends React.Component {
 
   _handleSignOut = () => {
     this.props.currentUser.clearCurrentUser();
+    this.props.chat.destroy();
 
     this.setState({ mode: 'DEFAULT' });
   };

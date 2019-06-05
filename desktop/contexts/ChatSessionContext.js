@@ -35,6 +35,7 @@ class ChatSessionContextProvider extends React.Component {
       handleConnect: this._handleConnect,
       start: this.start,
       handleSendChannelMessage: this._handleSendChannelMessage,
+      destroy: this.destroy,
     };
   }
 
@@ -76,6 +77,11 @@ class ChatSessionContextProvider extends React.Component {
     this._chat.setOnPresenceHandler(this._handlePresenceAsync);
     this._chat.setConnectionStatusHandler(this._handleConnectStatus);
     this._chat.connect();
+  };
+
+  destroy = () => {
+    // NOTE(jim): We need a way to kill chat on sign out.
+    this._chat = null;
   };
 
   _handleSendChannelMessage = async (message) => {
