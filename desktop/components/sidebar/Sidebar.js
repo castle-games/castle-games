@@ -21,6 +21,9 @@ import SidebarChannels from '~/components/sidebar/SidebarChannels';
 import SidebarDirectMessages from '~/components/sidebar/SidebarDirectMessages';
 import SidebarNavigation from '~/components/sidebar/SidebarNavigation';
 
+// NOTE(jim): Legacy.
+import HomeUpdateBanner from '~/components/HomeUpdateBanner';
+
 const STYLES_CONTAINER = css`
   display: flex;
   align-items: flex-start;
@@ -118,12 +121,22 @@ class Sidebar extends React.Component {
     }
   };
 
+  _renderUpdateBanner = () => {
+    return this.props.updateAvailable ? (
+      <HomeUpdateBanner
+        updateAvailable={this.props.updateAvailable}
+        onNativeUpdateInstall={this.props.onNativeUpdateInstall}
+      />
+    ) : null;
+  };
+
   _renderRootSidebar = () => {
     const { navigation, navigator, viewer, social, chat } = this.props;
     const isChatVisible = navigation.contentMode === 'chat';
 
     return (
       <div className={STYLES_SIDEBAR}>
+        {this._renderUpdateBanner()}
         <SidebarHeader
           viewer={viewer}
           navigator={navigator}
@@ -257,6 +270,8 @@ export default class SidebarWithContext extends React.Component {
                                     navigation={navigation}
                                     social={social}
                                     chat={chat}
+                                    updateAvailable={this.props.updateAvailable}
+                                    onNativeUpdateInstall={this.props.onNativeUpdateInstall}
                                   />
                                 )}
                               </NavigatorContext.Consumer>
