@@ -23,7 +23,7 @@ const ChatSessionContext = React.createContext({
 
 class ChatSessionContextProvider extends React.Component {
   _chat;
-  _firstLoad = false;
+  _firstLoadComplete = false;
   _unlockAnimation = true;
 
   constructor(props) {
@@ -93,6 +93,8 @@ class ChatSessionContextProvider extends React.Component {
   destroy = () => {
     this._chat.disconnect();
     this._chat = null;
+    this.setState({ messages: {}, channel: null });
+    this._firstLoadComplete = false;
   };
 
   _handleSendChannelMessage = async (message) => {
@@ -121,7 +123,7 @@ class ChatSessionContextProvider extends React.Component {
       // NOTE(jim): This is an unfortunate complication. On the first load you want to push elements
       // into the array, on the second load you want to perform an unshift. I'll need to ping Jesse
       // about this at some point.
-      if (this._firstLoad !== false) {
+      if (this._firstLoadComplete !== false) {
         messages[m.channelId].push(m);
       } else {
         messages[m.channelId].unshift(m);
@@ -133,7 +135,7 @@ class ChatSessionContextProvider extends React.Component {
       await this.props.social.addUsers(users);
     } catch (e) {}
 
-    this._firstLoad = true;
+    this._firstLoadComplete = true;
     this.setState({ messages });
   };
 
