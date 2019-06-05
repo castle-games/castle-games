@@ -283,9 +283,14 @@ function ui.checkbox(label, checked, props)
     return newChecked
 end
 
-function ui.colorPicker(label, value, props)
+function ui.colorPicker(label, r, g, b, a, props)
     assert(type(label) == 'string', '`ui.colorPicker` needs a string `label`')
-    assert(type(value) == 'table', '`ui.colorPicker` needs a table `value`')
+    assert(type(r) == 'number', '`ui.colorPicker` needs a number `r`')
+    assert(type(g) == 'number', '`ui.colorPicker` needs a number `g`')
+    assert(type(b) == 'number', '`ui.colorPicker` needs a number `b`')
+    assert(type(a) == 'number', '`ui.colorPicker` needs a number `a`')
+
+    local value = { r = r, g = g, b = b, a = a }
 
     local c = addChild('colorPicker', label, without(merge({ label = label, value = value }, props), 'onChange'), true)
 
@@ -302,7 +307,7 @@ function ui.colorPicker(label, value, props)
             end
         end
     end
-    return newValue
+    return newValue.r, newValue.g, newValue.b, newValue.a
 end
 
 function ui.dropdown(label, value, items, props)
