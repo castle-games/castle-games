@@ -120,15 +120,17 @@ class Sidebar extends React.Component {
           onNavigateToHistory={this._handleNavigateToHistory}
           onOpenBrowserForDocumentation={this._handleOpenBrowserForDocumentation}
         />
-        <SidebarChannels
-          selectedChannelId={chat.channel ? chat.channel.channelId : null}
-          viewer={viewer}
-          contentMode={navigation.contentMode}
-          isChatVisible={isChatVisible}
-          channels={social.allChatChannels}
-          onSelectChannel={this._handleNavigateToChat}
-        />
-        {this.props.social.allMessageChannels ? (
+        {viewer ? (
+          <SidebarChannels
+            selectedChannelId={chat.channel ? chat.channel.channelId : null}
+            viewer={viewer}
+            contentMode={navigation.contentMode}
+            isChatVisible={isChatVisible}
+            channels={social.allChatChannels}
+            onSelectChannel={this._handleNavigateToChat}
+          />
+        ) : null}
+        {viewer && this.props.social.allMessageChannels ? (
           <SidebarDirectMessages
             viewer={viewer}
             isChatVisible={isChatVisible}
