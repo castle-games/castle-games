@@ -23,6 +23,7 @@ const STYLES_ITEM = css`
   margin: 8px 0 8px 0;
   padding: 0 16px 0 16px;
   transition: 200ms ease color;
+  user-select: none;
 
   :hover {
     color: magenta;

@@ -48,17 +48,22 @@ class ChatSessionContextProvider extends React.Component {
       return;
     }
 
-    const response = await ChatActions.joinChatChannel({ channelId: channel.channelId });
-    await this._chat.loadRecentMessagesAsync();
-    this._unlockAnimation = false;
-
+    let showEntryAnimation = false;
     if (this.state.channel) {
+      showEntryAnimation = true;
       this.setState({ animating: 3 });
       await sleep(200);
     }
 
+    const response = await ChatActions.joinChatChannel({ channelId: channel.channelId });
+    await this._chat.loadRecentMessagesAsync();
+
+    this._unlockAnimation = false;
+
     this.setState({ animating: 1, channel }, async () => {
-      await sleep(200);
+      if (showEntryAnimation) {
+        await sleep(200);
+      }
       this.setState({ animating: 2 });
       this._unlockAnimation = true;
     });

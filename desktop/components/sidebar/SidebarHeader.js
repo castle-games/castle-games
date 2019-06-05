@@ -54,6 +54,7 @@ const STYLES_BYLINE = css`
   font-size: 12px;
   font-weight: 400;
   margin-top: 10px;
+  user-select: none;
 
   strong {
     cursor: pointer;
