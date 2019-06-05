@@ -8,6 +8,7 @@ const SocialContextDefaults = {
   addUser: (user) => {},
   addUsers: (users) => {},
   setOnlineUserIds: (userIds) => {},
+  findChannel: (channel) => {},
   refreshChannelData: () => {},
   newUserJoinChannels: () => {},
   recentChatMessages: [],
@@ -28,6 +29,7 @@ class SocialContextProvider extends React.Component {
       setOnlineUserIds: this.setOnlineUserIds,
       refreshChannelData: this.refreshChannelData,
       newUserJoinChannels: this.newUserJoinChannels,
+      findChannel: this.findChannel,
     };
   }
 
@@ -83,6 +85,18 @@ class SocialContextProvider extends React.Component {
         usernameToUser: state.usernameToUser,
       };
     });
+  };
+
+  findChannel = ({ name }) => {
+    for (let i = 0; i < this.state.allChatChannels.length; i++) {
+      const channel = this.state.allChatChannels[i];
+
+      if (channel.name === name.toLowerCase()) {
+        return channel;
+      }
+    }
+
+    return null;
   };
 
   setOnlineUserIds = (userIds) => {

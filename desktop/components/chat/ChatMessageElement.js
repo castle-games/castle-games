@@ -84,13 +84,25 @@ export default class ChatMessageElement extends React.Component {
     },
   };
 
+  _handleNavigateToChannel = async ({ name }) => {
+    const channel = this.props.social.findChannel({ name });
+
+    if (channel) {
+      await this.props.chat.handleConnect(channel);
+      this.props.navigator.navigateToChat();
+    }
+  };
+
   render() {
     let text = '';
+
+    // TODO(jim): Figure out what to do with this.
     if (this.props.message.body === 2) {
       console.log('type 2', this.props.message);
       return null;
     }
 
+    // TODO(jim): Figure out what to do with this.
     if (this.props.message.body === 1) {
       console.log('type 1', this.props.message);
       return null;
@@ -98,6 +110,8 @@ export default class ChatMessageElement extends React.Component {
 
     if (!Strings.isEmpty(this.props.message.body.message[0].text)) {
       text = this.props.message.body.message[0].text;
+
+      // NOTE(jim): Capture all mention groups.
       text = StringReplace(text, /@(\w+)/g, (match, i) => (
         <span
           className={STYLES_MENTION}
@@ -110,13 +124,17 @@ export default class ChatMessageElement extends React.Component {
           @{match}
         </span>
       ));
-    }
 
-    text = StringReplace(text, /#(\w+)/g, (match, i) => (
-      <span className={STYLES_CHANNEL} key={match + i}>
-        #{match}
-      </span>
-    ));
+      // NOTE(jim): Capture all channel groups.
+      text = StringReplace(text, /#(\w+)/g, (match, i) => (
+        <span
+          className={STYLES_CHANNEL}
+          key={match + i}
+          onClick={() => this._handleNavigateToChannel({ name: match })}>
+          #{match}
+        </span>
+      ));
+    }
 
     return (
       <div className={STYLES_CONTAINER}>

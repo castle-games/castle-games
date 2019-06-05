@@ -131,6 +131,7 @@ class ChatScreen extends React.Component {
         />
         <ChatMessages
           messages={messages}
+          chat={this.props.chat}
           navigator={this.props.navigator}
           social={this.props.social}
         />

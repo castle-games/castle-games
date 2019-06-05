@@ -18,7 +18,7 @@ const STYLES_ITEM = css`
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 600;
   margin: 8px 0 8px 0;
   padding: 0 16px 0 16px;
@@ -37,7 +37,7 @@ const STYLES_NAME = css`
 `;
 
 const STYLES_SYMBOL = css`
-  padding-top: 2px;
+  padding-top: 0px;
   flex-shrink: 0;
 `;
 

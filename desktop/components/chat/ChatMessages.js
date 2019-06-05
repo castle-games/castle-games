@@ -52,7 +52,7 @@ export default class ChatMessages extends React.Component {
   };
 
   render() {
-    const { social, navigator } = this.props;
+    const { social, navigator, chat } = this.props;
 
     let messages = this.props.messages.map((m) => {
       const user = this.props.social.userIdToUser[m.fromUserId];
@@ -62,6 +62,8 @@ export default class ChatMessages extends React.Component {
           message={m}
           user={user}
           social={this.props.social}
+          navigator={this.props.navigator}
+          chat={this.props.chat}
           onNavigateToUserProfile={this.props.navigator.navigateToUserProfile}
         />
       );
