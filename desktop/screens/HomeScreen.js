@@ -1,6 +1,5 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
-import * as ExperimentalFeatures from '~/common/experimental-features';
 
 import { css } from 'react-emotion';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
