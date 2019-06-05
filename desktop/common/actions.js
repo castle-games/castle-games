@@ -154,6 +154,30 @@ export const delay = (ms) =>
     window.setTimeout(resolve, ms);
   });
 
+export async function getUserByUsername({ username }) {
+  const response = await API.graphqlAsync(
+    `
+      query($who: String!) {
+        userForLoginInput(who: $who) {
+          ${FULL_USER_FIELDS}
+        }
+      }
+    `,
+    { who: username }
+  );
+
+  // TOOD(jim): Write a global error handler.
+  if (response.error) {
+    return false;
+  }
+
+  if (response.errors) {
+    return false;
+  }
+
+  return response.data.userForLoginInput;
+}
+
 export async function getExistingUser({ who }) {
   const response = await API.graphqlAsync(
     `

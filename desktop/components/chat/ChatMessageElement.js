@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as Strings from '~/common/strings';
+import * as Actions from '~/common/actions';
 
 import { css, styled } from 'react-emotion';
 
@@ -84,6 +85,22 @@ export default class ChatMessageElement extends React.Component {
     },
   };
 
+  _handleNavigateToUser = async ({ username }) => {
+    let user = this.props.social.usernameToUser[username];
+
+    if (!user) {
+      let response = await Actions.getUserByUsername({ username });
+
+      if (!response) {
+        return;
+      }
+
+      user = response;
+    }
+
+    this.props.onNavigateToUserProfile(user);
+  };
+
   _handleNavigateToChannel = async ({ name }) => {
     const channel = this.props.social.findChannel({ name });
 
@@ -112,21 +129,17 @@ export default class ChatMessageElement extends React.Component {
       text = this.props.message.body.message[0].text;
 
       // NOTE(jim): Capture all mention groups.
-      text = StringReplace(text, /@(\w+)/g, (match, i) => (
+      text = StringReplace(text, /@([a-zA-Z0-9_-]+)/g, (match, i) => (
         <span
           className={STYLES_MENTION}
           key={match + i}
-          onClick={
-            this.props.social.usernameToUser[match]
-              ? () => this.props.onNavigateToUserProfile(this.props.social.usernameToUser[match])
-              : () => {}
-          }>
+          onClick={() => this._handleNavigateToUser({ username: match })}>
           @{match}
         </span>
       ));
 
       // NOTE(jim): Capture all channel groups.
-      text = StringReplace(text, /#(\w+)/g, (match, i) => (
+      text = StringReplace(text, /#([a-zA-Z0-9_-]+)/g, (match, i) => (
         <span
           className={STYLES_CHANNEL}
           key={match + i}
