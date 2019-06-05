@@ -129,7 +129,7 @@ class ContentContainer extends React.Component {
     } else if (mode === 'edit_post') {
       return <EditPostScreen />;
     } else if (mode === 'signin') {
-      return <SignInScreen navigator={this.props.navigator} />;
+      return <SignInScreen />;
     }
   };
 

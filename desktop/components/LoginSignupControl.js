@@ -152,11 +152,6 @@ export default class LoginSignupScreen extends React.Component {
       if (this.props.social) {
         await this.props.social.newUserJoinChannels();
       }
-
-      // NOTE(jim): Only happens in Version 2.
-      if (this.props.navigator) {
-        this.props.navigator.navigateToHome();
-      }
     });
   };
 

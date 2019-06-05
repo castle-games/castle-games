@@ -112,9 +112,23 @@ class NavigationContextManager extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // NOTE(jim): Only on log out, navigate to home.
+    // user logged out
     if (prevProps.currentUser.user && !this.props.currentUser.user) {
       this.navigateToHome();
+    }
+    // user logged in
+    if (!prevProps.currentUser.user && this.props.currentUser.user) {
+      if (this.state.navigation.deferredNavigationState) {
+        const { mode, params } = this.state.navigation.deferredNavigationState;
+        if (params.gameUrl) {
+          // re-resolve the game in case anything changed since they last tried to load it.
+          this.navigateToGameUrl(params.gameUrl);
+        } else {
+          this._navigateToContentMode(mode, params);
+        }
+      } else {
+        this.navigateToHome();
+      }
     }
 
     if (
@@ -147,26 +161,19 @@ class NavigationContextManager extends React.Component {
     if (Strings.isEmpty(url)) {
       return;
     }
-    const time = Date.now();
+
     // track game launches
     Analytics.trackGameLaunch({ game, launchSource });
     // navigate to the game
-    Analytics.trackNavigation({
-      prevContentMode: this.state.navigation.contentMode,
-      nextContentMode: 'game',
-    });
-    this.setState({
-      navigation: {
-        ...this.state.navigation,
-        contentMode: 'game',
-        game,
-        gameUrl: url,
-        timeGameLoaded: time,
-        timeLastNavigated: time,
-        post,
-        gameParams,
-        referrerGame,
-      },
+    const time = Date.now();
+    this._navigateToContentMode('game', {
+      game,
+      gameUrl: url,
+      timeGameLoaded: time,
+      timeLastNavigated: time,
+      post,
+      gameParams,
+      referrerGame,
     });
   };
 
@@ -183,13 +190,16 @@ class NavigationContextManager extends React.Component {
 
     if (!this.props.currentUser.user) {
       // NOTE(jim): All routes will be blocked unless a user is signed in.
+      // can condition on AUTHENTICATED_ONLY_MODES if we want to only disallow certain routes.
+      navigationParams = navigationParams || {};
+      const originalParams = Object.assign({}, navigationParams);
+      navigationParams = {
+        deferredNavigationState: {
+          mode,
+          params: originalParams,
+        },
+      };
       mode = 'signin';
-
-      /* NOTE(jim): If you want to allow some routes. Uncomment this.
-      if (AUTHENTICATED_ONLY_MODES[mode]) {
-        mode = 'signin';
-      }
-      */
     }
 
     this.setState({
@@ -198,6 +208,7 @@ class NavigationContextManager extends React.Component {
         contentMode: mode,
         userProfileShown: null,
         timeLastNavigated: Date.now(),
+        deferredNavigationState: null,
         ...navigationParams,
       },
     });
@@ -246,13 +257,13 @@ class NavigationContextManager extends React.Component {
     } catch (e) {
       // forward this error to the user
       Logs.error(e.message);
-      return;
     }
 
     if (game && game.url) {
       this._loadGameAsync(game, options);
     } else {
       Logs.error(`There was a problem opening the game at this url: ${gameUrl}`);
+      this.navigateToHome();
     }
   };
 

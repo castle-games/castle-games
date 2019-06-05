@@ -16,13 +16,7 @@ export default class SignInScreen extends React.Component {
           return (
             <ChatSessionContext.Consumer>
               {(chat) => {
-                return (
-                  <LoginSignupControl
-                    chat={chat}
-                    social={social}
-                    navigator={this.props.navigator}
-                  />
-                );
+                return <LoginSignupControl chat={chat} social={social} />;
               }}
             </ChatSessionContext.Consumer>
           );
