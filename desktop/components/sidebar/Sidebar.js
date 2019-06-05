@@ -8,8 +8,8 @@ import * as ChatActions from '~/common/actions-chat';
 import { css } from 'react-emotion';
 
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
-import { SocialContext } from '~/contexts/SocialContext';
 import { NavigatorContext, NavigationContext } from '~/contexts/NavigationContext';
+import { SocialContext } from '~/contexts/SocialContext';
 import { ChatSessionContext } from '~/contexts/ChatSessionContext';
 
 import SidebarOptions from '~/components/sidebar/SidebarOptions';
@@ -63,8 +63,8 @@ class Sidebar extends React.Component {
 
   _handleNavigateToChat = async (channel) => {
     await this.props.chat.handleConnect(channel);
-    this.props.navigator.navigateToChat();
     this.props.social.refreshChannelData();
+    this.props.navigator.navigateToChat();
     return this.setState({ mode: 'DEFAULT' });
   };
 

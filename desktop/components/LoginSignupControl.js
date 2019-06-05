@@ -19,8 +19,8 @@ const STYLES_CONTAINER = css`
   flex-direction: column;
   width: 100%;
   height: 100%;
-  color: ${Constants.colors.white};
-  background: rgb(39, 39, 39);
+  background: ${Constants.colors.background};
+  color: ${Constants.colors.text};
 `;
 
 const STYLES_CONTENTS = css`
@@ -56,7 +56,7 @@ const STYLES_FOOTER = css`
 
 const STYLES_ACTION = css`
   font-family: ${Constants.font.default};
-  color: ${Constants.colors.brand1};
+  color: #0069ff;
   text-decoration: underline;
   cursor: pointer;
   transition: 200ms ease color;
@@ -140,8 +140,18 @@ export default class LoginSignupScreen extends React.Component {
   };
 
   _goToSuccess = () => {
-    this.setState({ step: 'SUCCESS' }, () => {
-      this.context.setCurrentUser(this.state.localViewer);
+    this.context.setCurrentUser(this.state.localViewer);
+
+    this.setState({ step: 'SUCCESS' }, async () => {
+      // NOTE(jim): Need to spin up chat.
+      if (this.props.chat) {
+        await this.props.chat.start(this.state.localViewer.userId);
+      }
+
+      // NOTE(jim): When users signup they automatically join two channels.
+      if (this.props.social) {
+        await this.props.social.newUserJoinChannels();
+      }
 
       // NOTE(jim): Only happens in Version 2.
       if (this.props.navigator) {

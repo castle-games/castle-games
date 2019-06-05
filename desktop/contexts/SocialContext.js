@@ -9,6 +9,7 @@ const SocialContextDefaults = {
   addUsers: (users) => {},
   setOnlineUserIds: (userIds) => {},
   refreshChannelData: () => {},
+  newUserJoinChannels: () => {},
   recentChatMessages: [],
   subscribedChatChannels: [],
   allChatChannels: [],
@@ -26,6 +27,7 @@ class SocialContextProvider extends React.Component {
       addUsers: this.addUsers,
       setOnlineUserIds: this.setOnlineUserIds,
       refreshChannelData: this.refreshChannelData,
+      newUserJoinChannels: this.newUserJoinChannels,
     };
   }
 
@@ -40,6 +42,20 @@ class SocialContextProvider extends React.Component {
         }
       }
     }
+  };
+
+  newUserJoinChannels = async () => {
+    // NOTE(jim): General
+    await ChatActions.joinChatChannel({
+      channelId: 'channel-79c91814-c73e-4d07-8bc6-6829fad03d72',
+    });
+
+    // NOTE(jim): Random
+    await ChatActions.joinChatChannel({
+      channelId: 'channel-37c0532e-31a1-4558-9f3e-200337523859',
+    });
+
+    await this.refreshChannelData();
   };
 
   addUser = (user) => {

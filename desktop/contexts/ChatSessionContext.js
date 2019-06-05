@@ -18,6 +18,7 @@ const ChatSessionContext = React.createContext({
   handleConnect: (channel) => {},
   handleSendChannelMessage: (text) => {},
   animating: 2,
+  start: () => {},
 });
 
 class ChatSessionContextProvider extends React.Component {
@@ -32,6 +33,7 @@ class ChatSessionContextProvider extends React.Component {
       channel: null,
       animating: 2,
       handleConnect: this._handleConnect,
+      start: this.start,
       handleSendChannelMessage: this._handleSendChannelMessage,
     };
   }
