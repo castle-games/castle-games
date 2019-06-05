@@ -54,11 +54,11 @@ export default class ChatMessages extends React.Component {
   render() {
     const { social, navigator, chat } = this.props;
 
-    let messages = this.props.messages.map((m) => {
+    let messages = this.props.messages.map((m, i) => {
       const user = this.props.social.userIdToUser[m.fromUserId];
       return (
         <ChatMessageElement
-          key={m.chatMessageId}
+          key={`chat-${m.fromUserId}-${m.chatMessageId}-${i}`}
           message={m}
           user={user}
           social={this.props.social}
