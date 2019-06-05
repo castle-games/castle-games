@@ -7,12 +7,45 @@ import CastleApiClient from 'castle-api-client';
 
 export const API = CastleApiClient(Constants.API_HOST);
 
+export const getAllChat = async () => {
+  const response = await API.graphqlAsync(
+    `
+      query {
+        subscribedChatChannels {
+          channelId
+          name
+          type
+          createdTime
+          updatedTime
+          otherUserId
+        }
+
+        allChatChannels {
+          channelId
+          name
+          type
+          createdTime
+          updatedTime
+          otherUserId
+        }
+      }
+    `
+  );
+
+  return response;
+};
+
 export const createChatChannel = async ({ name }) => {
   const response = await API.graphqlAsync(
     `
       mutation($name: String!) {
         createChatChannel(name: $name) {
           channelId
+          name
+          type
+          createdTime
+          updatedTime
+          otherUserId
         }
       }
     `,

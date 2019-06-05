@@ -1,7 +1,9 @@
 import * as React from 'react';
 import * as SVG from '~/common/svg';
+import * as Strings from '~/common/strings';
 import * as Constants from '~/common/constants';
 import * as NativeUtil from '~/native/nativeutil';
+import * as ChatActions from '~/common/actions-chat';
 
 import { css } from 'react-emotion';
 
@@ -97,6 +99,24 @@ class Sidebar extends React.Component {
 
   _handleHideOptions = () => this.setState({ mode: 'DEFAULT' });
 
+  _handleCreateChannel = async (name) => {
+    if (Strings.isEmpty(name)) {
+      alert('You must provide a channel name.');
+      return;
+    }
+
+    const response = await ChatActions.createChatChannel({ name });
+    if (!response || response.errors) {
+      alert('We were unable to create a channel with this name.');
+      return;
+    }
+
+    if (response.data && response.data.createChatChannel) {
+      this._handleNavigateToChat(response.data.createChatChannel);
+      this.props.social.refreshChannelData();
+    }
+  };
+
   _renderRootSidebar = () => {
     const { navigation, navigator, viewer, social, chat } = this.props;
     const isChatVisible = navigation.contentMode === 'chat';
@@ -177,6 +197,7 @@ class Sidebar extends React.Component {
           channels={social.allChatChannels}
           onDismiss={this._handleHideOptions}
           onSelectChannel={this._handleNavigateToChat}
+          onCreateChannel={this._handleCreateChannel}
         />
       </div>
     );

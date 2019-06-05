@@ -4,6 +4,8 @@ import * as SVG from '~/common/svg';
 
 import { css } from 'react-emotion';
 
+import UISidebarInput from '~/components/reusable/UISidebarInput';
+
 const STYLES_HEADER = css`
   border-bottom: 1px solid ${Constants.REFACTOR_COLORS.elements.border};
   color: ${Constants.REFACTOR_COLORS.text};
@@ -66,9 +68,21 @@ const STYLES_TITLE = css`
   margin-bottom: 8px;
 `;
 
+const STYLES_FORM = css`
+  padding: 0 16px 0 16px;
+`;
+
 export default class SidebarOptionsChannels extends React.Component {
-  _handleSubmitChannel = () => {
-    this.props.onAddChannel();
+  state = {
+    name: '',
+  };
+
+  _handleChange = (e) => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
+
+  _handleCreateChannel = () => {
+    this.props.onCreateChannel(this.state.name);
   };
 
   render() {
@@ -81,13 +95,31 @@ export default class SidebarOptionsChannels extends React.Component {
           </div>
         </header>
         {this.props.viewer ? <div className={STYLES_TITLE}>Add channel</div> : null}
-        {this.props.viewer ? <div className={STYLES_TITLE}>Find a channel</div> : null}
+
+        <div className={STYLES_FORM}>
+          <UISidebarInput
+            label="name"
+            name="name"
+            onChange={this._handleChange}
+            value={this.state.name}
+            style={{ marginBottom: 16 }}
+          />
+        </div>
+
+        <div className={STYLES_OPTION} onClick={this._handleCreateChannel}>
+          Create
+        </div>
+
+        {this.props.viewer ? (
+          <div className={STYLES_TITLE} style={{ marginTop: 40 }}>
+            Find a channel
+          </div>
+        ) : null}
         <div>
           {this.props.channels.map((c) => {
-            console.log(c);
             return (
               <div
-                key={`sidebar-options-${c.id}`}
+                key={`sidebar-options-${c.channelId}`}
                 className={STYLES_OPTION}
                 style={{ marginBottom: 8 }}
                 onClick={() => this.props.onSelectChannel(c)}>

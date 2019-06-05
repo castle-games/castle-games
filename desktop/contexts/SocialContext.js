@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as ChatActions from '~/common/actions-chat';
 
 const SocialContextDefaults = {
   userIdToUser: {},
@@ -7,6 +8,7 @@ const SocialContextDefaults = {
   addUser: (user) => {},
   addUsers: (users) => {},
   setOnlineUserIds: (userIds) => {},
+  refreshChannelData: () => {},
   recentChatMessages: [],
   subscribedChatChannels: [],
   allChatChannels: [],
@@ -23,8 +25,23 @@ class SocialContextProvider extends React.Component {
       addUser: this.addUser,
       addUsers: this.addUsers,
       setOnlineUserIds: this.setOnlineUserIds,
+      refreshChannelData: this.refreshChannelData,
     };
   }
+
+  refreshChannelData = async () => {
+    const response = await ChatActions.getAllChat();
+    if (response) {
+      if (response.data) {
+        console.log(response.data);
+        if (response.data.subscribedChatChannels && response.data.allChatChannels) {
+          this.setState({
+            ...response.data,
+          });
+        }
+      }
+    }
+  };
 
   addUser = (user) => {
     this.setState((state) => {
