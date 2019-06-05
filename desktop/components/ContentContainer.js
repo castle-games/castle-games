@@ -42,7 +42,6 @@ class ContentContainer extends React.Component {
 
   state = {
     searchQuery: '',
-    isAddingGame: false,
   };
 
   componentDidUpdate(prevProps) {
@@ -54,6 +53,10 @@ class ContentContainer extends React.Component {
       // if we loaded a new game, auto-show logs for local urls
       const isLocal = Urls.isPrivateUrl(this.props.game.url);
       this.props.setIsDeveloping(isLocal, { onlyEnable: true });
+    }
+
+    if (this.props.mode !== prevProps.mode) {
+      this.setState({ searchQuery: '' });
     }
   }
 
