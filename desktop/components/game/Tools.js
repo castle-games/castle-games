@@ -18,7 +18,9 @@ import {
   TextInput,
   Toggle,
 } from 'carbon-components-react';
+import { space, color, border, layout, flexbox } from 'styled-system';
 
+import styled from 'styled-components';
 import Logs from '~/common/logs';
 import ToolMarkdown from '~/components/game/ToolMarkdown';
 
@@ -91,9 +93,32 @@ class Carbon extends React.PureComponent {
   }
 }
 
+const Box = styled.div(
+  {
+    boxSizing: 'border-box',
+    minWidth: 0,
+    display: 'flex',
+    overflow: 'hidden',
+  },
+  space,
+  color,
+  border,
+  layout,
+  flexbox
+);
+
 //
 // Components
 //
+
+class ToolBox extends React.PureComponent {
+  render() {
+    const { element } = this.props;
+
+    return <Box {...element.props}>{renderChildren(element)}</Box>;
+  }
+}
+elementTypes['box'] = ToolBox;
 
 class ToolButton extends React.PureComponent {
   render() {

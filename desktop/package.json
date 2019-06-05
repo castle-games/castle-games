@@ -65,6 +65,8 @@
     "slate": "^0.41.2",
     "slate-plain-serializer": "^0.6.7",
     "slate-react": "^0.18.10",
+    "styled-components": "^4.2.1",
+    "styled-system": "^5.0.5",
     "three": "^0.87.1",
     "url": "^0.11.0",
     "uuid": "^3.3.2"
