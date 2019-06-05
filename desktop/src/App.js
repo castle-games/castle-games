@@ -20,7 +20,6 @@ import {
   NavigationContext,
   NavigationContextProvider,
 } from '~/contexts/NavigationContext';
-import { ChatContext, ChatContextProvider } from '~/contexts/ChatContext';
 import { ChatSessionContextProvider } from '~/contexts/ChatSessionContext';
 
 import AppContainer from '~/components/AppContainer';
