@@ -14,6 +14,7 @@ const STYLES_CONTAINER = css`
   width: 100%;
   overflow-y: scroll;
   overflow-wrap: break-word;
+  padding-top: 16px;
 
   ::-webkit-scrollbar {
     display: none;

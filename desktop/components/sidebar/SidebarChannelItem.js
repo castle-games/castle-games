@@ -9,7 +9,7 @@ const STYLES_CHANNEL = css`
   align-items: flex-start;
   justify-content: space-between;
   user-select: none;
-  font-size: 12px;
+  font-size: 14px;
   margin: 8px 0 8px 0;
   padding: 0 16px 0 16px;
   cursor: pointer;
@@ -40,11 +40,11 @@ const STYLES_NAME = css`
   font-family: ${Constants.REFACTOR_FONTS.system};
   min-width: 10%;
   width: 100%;
-  padding: 1px 8px 0 8px;
+  padding: 0 8px 0 8px;
 `;
 
 const STYLES_SYMBOL = css`
-  margin-top: 2px;
+  margin-top: 3px;
   flex-shrink: 0;
 `;
 
