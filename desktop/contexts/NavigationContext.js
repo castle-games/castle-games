@@ -183,9 +183,14 @@ class NavigationContextManager extends React.Component {
     } catch (e) {}
 
     if (!this.props.currentUser.user) {
+      // NOTE(jim): All routes will be blocked unless a user is signed in.
+      mode = 'signin';
+
+      /* NOTE(jim): If you want to allow some routes. Uncomment this.
       if (AUTHENTICATED_ONLY_MODES[mode]) {
         mode = 'signin';
       }
+      */
     }
 
     this.setState({

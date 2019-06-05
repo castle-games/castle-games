@@ -124,7 +124,10 @@ const run = async () => {
   });
 
   state.currentUser = { user: viewer };
-  state.navigation = 'home';
+
+  // NOTE(jim): You must be authenticated to use Castle.
+  // https://github.com/castle-games/ghost/issues/480
+  state.navigation = viewer ? { contentMode: 'home' } : { contentMode: 'signin' };
 
   ReactDOM.render(<App state={state} storage={storage} />, document.getElementById('root'));
 
