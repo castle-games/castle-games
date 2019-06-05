@@ -35,7 +35,7 @@ class HomeScreen extends React.Component {
   }
 
   _navigateToGame = (game, options) => {
-    return this.props.navigateToGame(game, { launchSource: `home-${this.state.mode}`, ...options });
+    return this.props.navigateToGame(game, { launchSource: `home-${this.props.mode}`, ...options });
   };
 
   render() {
