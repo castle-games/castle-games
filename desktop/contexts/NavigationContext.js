@@ -22,7 +22,6 @@ import Logs from '~/common/logs';
  */
 const NavigationContextDefaults = {
   contentMode: 'home', // chat | game | profile | home | signin | notifications | create | edit_post
-  homeMode: 'games',
   timeLastNavigated: 0,
   gameUrl: '',
   game: null,
@@ -61,7 +60,7 @@ const AUTHENTICATED_ONLY_MODES = {
  */
 const NavigatorContextDefaults = {
   navigateToChat: () => {},
-  navigateToHome: (homeMode) => {},
+  navigateToHome: () => {},
   navigateToGameUrl: async (url) => {},
   navigateToGame: async (game) => {},
   navigateToCurrentGame: () => {},
@@ -215,7 +214,7 @@ class NavigationContextManager extends React.Component {
 
   navigateToChat = () => this._navigateToContentMode('chat');
 
-  navigateToHome = (homeMode = 'games') => this._navigateToContentMode('home', { homeMode });
+  navigateToHome = () => this._navigateToContentMode('home');
 
   navigateToContentMode = (mode) => this._navigateToContentMode(mode);
 
