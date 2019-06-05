@@ -5,6 +5,8 @@ import * as Strings from '~/common/strings';
 import * as Constants from '~/common/constants';
 
 import { CastleChat, ConnectionStatus } from 'castle-chat-lib';
+import { CurrentUserContext } from '~/contexts/CurrentUserContext';
+import { SocialContext } from '~/contexts/SocialContext';
 
 const CHAT_SERVICE_URL = 'https://castle-chat.onrender.com';
 
@@ -13,15 +15,14 @@ const sleep = async (ms) => {
 };
 
 const ChatSessionContext = React.createContext({
-  messages: [],
+  messages: {},
   channel: null,
   handleConnect: (channel) => {},
   handleSendChannelMessage: (text) => {},
   animating: 2,
-  start: () => {},
 });
 
-class ChatSessionContextProvider extends React.Component {
+class ChatSessionContextManager extends React.Component {
   _chat;
   _firstLoadComplete = false;
   _unlockAnimation = true;
@@ -37,11 +38,25 @@ class ChatSessionContextProvider extends React.Component {
       handleSendChannelMessage: this._handleSendChannelMessage,
       destroy: this.destroy,
     };
+    this._update();
   }
 
-  componentDidMount() {
-    this.start();
+  componentDidUpdate(prevProps, prevState) {
+    this._update(prevProps, prevState);
   }
+
+  _update = async (prevProps, prevState) => {
+    const prevUser = prevProps && prevProps.currentUser ? prevProps.currentUser.user : null;
+    // user logged out
+    if (prevUser && !this.props.currentUser.user) {
+      this.destroy();
+    }
+    // user logged in
+    if (!prevUser && this.props.currentUser.user) {
+      await this.start();
+      await this.props.newUserJoinChannels();
+    }
+  };
 
   _handleConnect = async (channel) => {
     if (!this._unlockAnimation) {
@@ -55,7 +70,7 @@ class ChatSessionContextProvider extends React.Component {
       await sleep(200);
     }
 
-    const existingChannel = this.props.social.findSubscribedChannel({
+    const existingChannel = this.props.findSubscribedChannel({
       channelId: channel.channelId,
     });
     if (!existingChannel) {
@@ -132,7 +147,7 @@ class ChatSessionContextProvider extends React.Component {
 
     try {
       let users = await Actions.getUsers({ userIds: Object.keys(userIds) });
-      await this.props.social.addUsers(users);
+      await this.props.addUsersToSocial(users);
     } catch (e) {}
 
     this._firstLoadComplete = true;
@@ -144,7 +159,7 @@ class ChatSessionContextProvider extends React.Component {
       return;
     }
 
-    this.props.social.setOnlineUserIds(event.user_ids);
+    this.props.setOnlineUserIds(event.user_ids);
   };
 
   render() {
@@ -152,6 +167,29 @@ class ChatSessionContextProvider extends React.Component {
       <ChatSessionContext.Provider value={this.state}>
         {this.props.children}
       </ChatSessionContext.Provider>
+    );
+  }
+}
+
+class ChatSessionContextProvider extends React.Component {
+  render() {
+    return (
+      <CurrentUserContext.Consumer>
+        {(currentUser) => (
+          <SocialContext.Consumer>
+            {(social) => (
+              <ChatSessionContextManager
+                currentUser={currentUser}
+                findSubscribedChannel={social.findSubscribedChannel}
+                setOnlineUserIds={social.setOnlineUserIds}
+                addUsersToSocial={social.addUsers}
+                newUserJoinChannels={social.newUserJoinChannels}
+                {...this.props}
+              />
+            )}
+          </SocialContext.Consumer>
+        )}
+      </CurrentUserContext.Consumer>
     );
   }
 }

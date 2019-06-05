@@ -141,18 +141,7 @@ export default class LoginSignupScreen extends React.Component {
 
   _goToSuccess = () => {
     this.context.setCurrentUser(this.state.localViewer);
-
-    this.setState({ step: 'SUCCESS' }, async () => {
-      // NOTE(jim): Need to spin up chat.
-      if (this.props.chat) {
-        await this.props.chat.start(this.state.localViewer.userId);
-      }
-
-      // NOTE(jim): When users signup they automatically join two channels.
-      if (this.props.social) {
-        await this.props.social.newUserJoinChannels();
-      }
-    });
+    this.setState({ step: 'SUCCESS' });
   };
 
   render() {
@@ -164,7 +153,7 @@ export default class LoginSignupScreen extends React.Component {
       case 'SIGNUP':
         return this._renderSignup();
       case 'SUCCESS':
-        return <div />; // won't be seen because we redirect to profile
+        return <div />; // won't be seen because we redirect
       default:
         return this._renderWho();
     }

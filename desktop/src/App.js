@@ -14,7 +14,7 @@ import {
   DevelopmentSetterContext,
   DevelopmentContextProvider,
 } from '~/contexts/DevelopmentContext';
-import { SocialContext, SocialContextProvider } from '~/contexts/SocialContext';
+import { SocialContextProvider } from '~/contexts/SocialContext';
 import {
   NavigatorContext,
   NavigationContext,
@@ -256,21 +256,9 @@ export default class AppWithProvider extends React.Component {
           }}>
           <DevelopmentContextProvider>
             <NavigationContextProvider value={{ navigation }}>
-              <CurrentUserContext.Consumer>
-                {({ user }) => {
-                  return (
-                    <SocialContext.Consumer>
-                      {(social) => {
-                        return (
-                          <ChatSessionContextProvider social={social} currentUser={user}>
-                            <AppWithContext {...this.props} />
-                          </ChatSessionContextProvider>
-                        );
-                      }}
-                    </SocialContext.Consumer>
-                  );
-                }}
-              </CurrentUserContext.Consumer>
+              <ChatSessionContextProvider>
+                <AppWithContext {...this.props} />
+              </ChatSessionContextProvider>
             </NavigationContextProvider>
           </DevelopmentContextProvider>
         </SocialContextProvider>
