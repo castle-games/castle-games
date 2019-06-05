@@ -123,7 +123,7 @@ export default class SidebarOptionsChannels extends React.Component {
                 className={STYLES_OPTION}
                 style={{ marginBottom: 8 }}
                 onClick={() => this.props.onSelectChannel(c)}>
-                {c.name}
+                #{c.name}
               </div>
             );
           })}

@@ -58,17 +58,20 @@ const STYLES_AUTHOR_MESSAGE = css`
 
 const STYLES_MENTION = css`
   font-weight: 600;
-  color: #00d7d7;
+  color: #0062ff;
   cursor: pointer;
-
   :hover {
-    color: magenta;
+    text-decoration: underline;
   }
 `;
 
 const STYLES_CHANNEL = css`
   font-weight: 600;
+  color: magenta;
   cursor: pointer;
+  :hover {
+    text-decoration: underline;
+  }
 `;
 
 export default class ChatMessageElement extends React.Component {
