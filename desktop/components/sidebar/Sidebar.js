@@ -61,7 +61,8 @@ class Sidebar extends React.Component {
 
   _handleNavigateToChat = (channel) => {
     this.props.chat.handleConnect(channel);
-    return this.props.navigator.navigateToChat();
+    this.props.navigator.navigateToChat();
+    return this.setState({ mode: 'DEFAULT' });
   };
 
   _handleNavigateToMakeGame = () => {
@@ -136,7 +137,6 @@ class Sidebar extends React.Component {
             viewer={viewer}
             isChatVisible={isChatVisible}
             onShowOptions={this._handleShowDirectMessageOptions}
-            onChat={this._handleNavigateToChat}
           />
         ) : null}
       </div>
@@ -168,11 +168,16 @@ class Sidebar extends React.Component {
   };
 
   _renderChannelOptions = () => {
-    const { navigation, viewer } = this.props;
+    const { navigation, viewer, social } = this.props;
 
     return (
       <div className={STYLES_SIDEBAR}>
-        <SidebarOptionsChannels viewer={viewer} onDismiss={this._handleHideOptions} />
+        <SidebarOptionsChannels
+          viewer={viewer}
+          channels={social.allChatChannels}
+          onDismiss={this._handleHideOptions}
+          onSelectChannel={this._handleNavigateToChat}
+        />
       </div>
     );
   };

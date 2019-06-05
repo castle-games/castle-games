@@ -54,7 +54,23 @@ const STYLES_OPTION = css`
   }
 `;
 
+const STYLES_TITLE = css`
+  font-family: ${Constants.REFACTOR_FONTS.system};
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1px;
+  color: ${Constants.REFACTOR_COLORS.subdued};
+  text-align: right;
+  padding: 0 16px 0 16px;
+  margin-bottom: 8px;
+`;
+
 export default class SidebarOptionsChannels extends React.Component {
+  _handleSubmitChannel = () => {
+    this.props.onAddChannel();
+  };
+
   render() {
     return (
       <React.Fragment>
@@ -64,16 +80,22 @@ export default class SidebarOptionsChannels extends React.Component {
             <SVG.Dismiss size="16px" />
           </div>
         </header>
-        {this.props.viewer ? (
-          <div className={STYLES_OPTION} onClick={this.props.onAddChannel}>
-            Add channel
-          </div>
-        ) : null}
-        {this.props.viewer ? (
-          <div className={STYLES_OPTION} onClick={this.props.onJoinChannel}>
-            Join channel
-          </div>
-        ) : null}
+        {this.props.viewer ? <div className={STYLES_TITLE}>Add channel</div> : null}
+        {this.props.viewer ? <div className={STYLES_TITLE}>Find a channel</div> : null}
+        <div>
+          {this.props.channels.map((c) => {
+            console.log(c);
+            return (
+              <div
+                key={`sidebar-options-${c.id}`}
+                className={STYLES_OPTION}
+                style={{ marginBottom: 8 }}
+                onClick={() => this.props.onSelectChannel(c)}>
+                {c.name}
+              </div>
+            );
+          })}
+        </div>
       </React.Fragment>
     );
   }
