@@ -85,7 +85,7 @@ class ChatSessionContextProvider extends React.Component {
   };
 
   destroy = () => {
-    // NOTE(jim): We need a way to kill chat on sign out.
+    this._chat.disconnect();
     this._chat = null;
   };
 
