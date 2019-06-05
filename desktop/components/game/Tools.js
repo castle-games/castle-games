@@ -98,6 +98,7 @@ const Box = styled.div(
     boxSizing: 'border-box',
     minWidth: 0,
     display: 'flex',
+    flexDirection: 'column',
     overflow: 'hidden',
   },
   space,
@@ -356,6 +357,41 @@ class ToolRadioButtonGroup extends React.PureComponent {
   }
 }
 elementTypes['radioButtonGroup'] = ToolRadioButtonGroup;
+
+const STYLES_SCROLLBOX_CONTAINER = css`
+  overflow-y: scroll;
+  overflow-x: hidden;
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 100%;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: black;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: white;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: magenta;
+  }
+`;
+
+class ToolScrollBox extends React.PureComponent {
+  render() {
+    const { element } = this.props;
+
+    return (
+      <Box className={STYLES_SCROLLBOX_CONTAINER} {...element.props}>
+        {renderChildren(element)}
+      </Box>
+    );
+  }
+}
+elementTypes['scrollBox'] = ToolScrollBox;
 
 // Copied from Carbon CSS, so that we can apply only to Accordion itself but not its children
 const STYLES_SECTION_CONTAINER = css`

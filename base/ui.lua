@@ -392,6 +392,20 @@ function ui.section(...)
     return open
 end
 
+function ui.scrollBox(...)
+    local id, props, inner
+    local nArgs = select('#', ...)
+    if nArgs == 2 then
+        id, inner = ...
+    elseif nArgs == 3 then
+        id, props, inner = ...
+    end
+    assert(type(id) == 'string', '`ui.scrollBox` needs a string `id`')
+
+    local c, newId = addChild('scrollBox', id, props or {}, true)
+    enter(c, newId, inner)
+end
+
 function ui.slider(label, value, min, max, props)
     assert(type(label) == 'string', '`ui.slider` needs a string `label`')
     assert(type(value) == 'number', '`ui.slider` needs a number `value`')
