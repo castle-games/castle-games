@@ -13,7 +13,6 @@ const STYLES_HEADER = css`
   padding: 8px 8px 8px 8px;
   margin-bottom: 24px;
   overflow: hidden;
-  min-height: 64px;
   display: flex;
   align-items: center;
   justify-content: space-between;

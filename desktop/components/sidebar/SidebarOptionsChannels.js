@@ -13,7 +13,6 @@ const STYLES_HEADER = css`
   padding: 8px 8px 8px 8px;
   margin-bottom: 24px;
   overflow: hidden;
-  min-height: 64px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -68,6 +67,11 @@ export default class SidebarOptionsChannels extends React.Component {
         {this.props.viewer ? (
           <div className={STYLES_OPTION} onClick={this.props.onAddChannel}>
             Add channel
+          </div>
+        ) : null}
+        {this.props.viewer ? (
+          <div className={STYLES_OPTION} onClick={this.props.onJoinChannel}>
+            Join channel
           </div>
         ) : null}
       </React.Fragment>

@@ -127,6 +127,7 @@ class Sidebar extends React.Component {
             contentMode={navigation.contentMode}
             isChatVisible={isChatVisible}
             channels={social.allChatChannels}
+            onShowOptions={this._handleShowChannelOptions}
             onSelectChannel={this._handleNavigateToChat}
           />
         ) : null}
