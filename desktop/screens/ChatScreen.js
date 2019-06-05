@@ -58,6 +58,7 @@ class ChatScreen extends React.Component {
 
   _handleLeaveChannel = async () => {
     await ChatActions.leaveChatChannel({ channelId: this.props.chat.channel.channelId });
+    this.props.social.refreshChannelData();
     this.props.navigator.navigateToHome();
   };
 

@@ -33,7 +33,6 @@ class SocialContextProvider extends React.Component {
     const response = await ChatActions.getAllChat();
     if (response) {
       if (response.data) {
-        console.log(response.data);
         if (response.data.subscribedChatChannels && response.data.allChatChannels) {
           this.setState({
             ...response.data,

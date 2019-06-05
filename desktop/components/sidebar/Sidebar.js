@@ -61,9 +61,10 @@ class Sidebar extends React.Component {
     this.setState({ mode: 'DEFAULT' });
   };
 
-  _handleNavigateToChat = (channel) => {
-    this.props.chat.handleConnect(channel);
+  _handleNavigateToChat = async (channel) => {
+    await this.props.chat.handleConnect(channel);
     this.props.navigator.navigateToChat();
+    this.props.social.refreshChannelData();
     return this.setState({ mode: 'DEFAULT' });
   };
 
@@ -147,7 +148,7 @@ class Sidebar extends React.Component {
             viewer={viewer}
             contentMode={navigation.contentMode}
             isChatVisible={isChatVisible}
-            channels={social.allChatChannels}
+            channels={social.subscribedChatChannels}
             onShowOptions={this._handleShowChannelOptions}
             onSelectChannel={this._handleNavigateToChat}
           />
