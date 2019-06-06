@@ -7,6 +7,7 @@ import * as Analytics from '~/common/analytics';
 import { css } from 'react-emotion';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 
+import SignInPrompt from '~/components/SignInPrompt';
 import UIInputSecondary from '~/components/reusable/UIInputSecondary';
 import UIButton from '~/components/reusable/UIButton';
 import UIUserPreview from '~/components/reusable/UIUserPreview';
@@ -393,9 +394,7 @@ export default class LoginSignupScreen extends React.Component {
         <div className={STYLES_CONTENTS}>
           <form onSubmit={this._handleSubmitEmailAsync}>
             <div className={STYLES_HEADING}>Sign in or create account</div>
-            <div className={STYLES_PARAGRAPH}>
-              Sign in or register with Castle to share and play games with the Castle community.
-            </div>
+            <SignInPrompt />
             <UIInputSecondary
               value=""
               autoFocus

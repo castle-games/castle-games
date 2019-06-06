@@ -32,6 +32,7 @@ const NavigationContextDefaults = {
   userProfileShown: null,
   isFullScreen: false,
   options: {},
+  deferredNavigationState: null, // used when restoring navigation state after login
 };
 
 // NOTE(jim): Easy way to enforce signed in routes.
