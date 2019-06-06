@@ -28,6 +28,7 @@ const FULL_USER_FIELDS = `
   userId
   username
   name
+  email
   websiteUrl
   itchUsername
   twitterUsername

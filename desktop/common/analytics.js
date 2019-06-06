@@ -20,13 +20,17 @@ const logAmplitudeEvent = (eventType, eventData) => {
 
 // helper function to initialize the user with all the correct properties
 const initializeUser = (user) => {
-  const { userId, username, name } = user;
+  const { userId, username, name, email } = user;
   // set amplitude's user id to be equal to our user id
   amplitude.getInstance().setUserId(user.userId);
   // set some properties on the user
   let properties = { userAgent: navigator.userAgent };
   if (config.TRACK_IDENTIFYING_USER_INFO) {
-    properties = { ...properties, username, name };
+    properties = { ...properties, username, name, email };
+  }
+  // track whether the user is (probably) on the Castle team
+  if (email && email.endsWith('@castle.games')) {
+    properties.isCastleTeamMember = true;
   }
   amplitude.getInstance().setUserProperties(properties);
 };
