@@ -34,8 +34,7 @@ const STYLES_CONTAINER = css`
   }
 `;
 
-const STYLES_CONTENT = css`
-`;
+const STYLES_CONTENT = css``;
 
 const STYLES_CHOOSE_TEMPLATE = css`
   display: flex;
@@ -45,8 +44,7 @@ const STYLES_PRIMARY_CONTENT = css`
   padding-right: 40px;
 `;
 
-const STYLES_SECONDARY_CONTENT = css`
-`;
+const STYLES_SECONDARY_CONTENT = css``;
 
 const STYLES_SECTION = css`
   cursor: pointer;
@@ -223,10 +221,10 @@ class CreateProjectScreen extends React.Component {
       <React.Fragment>
         <div className={STYLES_CHOOSE_TEMPLATE}>
           <div className={STYLES_PRIMARY_CONTENT}>
-            <UIHeading>Choose a starter project</UIHeading>
+            <UIHeading>Create a game</UIHeading>
             <div className={STYLES_PARAGRAPH}>
-              Castle will download some starter files for your new game. Choose the starter project that
-              best fits.
+              Castle will download some starter files for your new game.{' '}
+              <span className={STYLES_BOLD}>Choose the starter template</span> that best fits.
             </div>
             <ProjectTemplateChooser
               templates={this.props.templates}
@@ -243,13 +241,15 @@ class CreateProjectScreen extends React.Component {
             <UIHeading>Help</UIHeading>
             <div className={STYLES_SECTION} onClick={this._handleClickTutorial}>
               <div className={STYLES_PARAGRAPH}>
-                <strong className={STYLES_BOLD}>Documentation</strong><br />
+                <strong className={STYLES_BOLD}>Documentation</strong>
+                <br />
                 Read tutorials and examples.
               </div>
             </div>
             <div className={STYLES_SECTION}>
               <div className={STYLES_PARAGRAPH} onClick={this._handleOpenProject}>
-                <strong className={STYLES_BOLD}>Open project</strong><br />
+                <strong className={STYLES_BOLD}>Open project</strong>
+                <br />
                 Open a project from your computer.
               </div>
             </div>

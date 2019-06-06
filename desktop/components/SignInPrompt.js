@@ -16,6 +16,10 @@ const STYLES_GAME_PREVIEW = css`
   margin-bottom: 12px;
 `;
 
+const STYLES_BOLD = css`
+  font-weight: 700;
+`;
+
 const STYLES_GAME_TITLE = css`
   white-space: nowrap;
   font-weight: 700;
@@ -39,7 +43,21 @@ class SignInPrompt extends React.Component {
   _renderDefaultPrompt = () => {
     return (
       <div className={STYLES_PARAGRAPH}>
-        Sign in or register with Castle to share and play games with the Castle community.
+        Sign in or register with Castle to play and create games with the Castle community.
+      </div>
+    );
+  };
+
+  _renderCreatePrompt = () => {
+    const coverSrc =
+      'https://raw.githubusercontent.com/bridgs/lil-adventure/master/cover-image.png';
+    return (
+      <div className={STYLES_GAME_PREVIEW}>
+        <div className={STYLES_GAME_COVER} style={{ backgroundImage: `url(${coverSrc})` }} />
+        <div className={STYLES_PARAGRAPH}>
+          Sign in or make a new account to{' '}
+          <span className={STYLES_BOLD}>start creating your first Castle game</span>.
+        </div>
       </div>
     );
   };
@@ -72,8 +90,15 @@ class SignInPrompt extends React.Component {
     let prompt;
     if (deferredNavigationState) {
       const { mode, params } = deferredNavigationState;
-      if (mode === 'game') {
-        prompt = this._renderGamePrompt(params);
+      switch (mode) {
+        case 'game':
+          prompt = this._renderGamePrompt(params);
+          break;
+        case 'create':
+          prompt = this._renderCreatePrompt();
+          break;
+        default:
+          break;
       }
     }
 
