@@ -8,12 +8,27 @@ const STYLES_PARAGRAPH = css`
   line-height: ${Constants.linescale.base};
   font-size: 14px;
   font-weight: 400;
-  margin-top: 16px;
   margin-bottom: 12px;
 `;
 
-const STYLES_BOLD = css`
+const STYLES_GAME_PREVIEW = css`
+  display: flex;
+  margin-bottom: 12px;
+`;
+
+const STYLES_GAME_TITLE = css`
+  white-space: nowrap;
   font-weight: 700;
+`;
+
+const STYLES_GAME_COVER = css`
+  background-color: black;
+  background-size: cover;
+  background-position: 50% 50%;
+  width: 96px;
+  height: 64px;
+  flex-shrink: 0;
+  margin-right: 16px;
 `;
 
 class SignInPrompt extends React.Component {
@@ -30,11 +45,24 @@ class SignInPrompt extends React.Component {
   };
 
   _renderGamePrompt = (params) => {
-    const title = params.game ? params.game.title : 'games';
+    const { game } = params;
+    let title, coverSrc;
+    if (game) {
+      title = game.title;
+      coverSrc = game.coverImage ? game.coverImage.url : null;
+    } else {
+      title = 'games';
+    }
     return (
-      <div className={STYLES_PARAGRAPH}>
-        Sign in or register with Castle to play <span className={STYLES_BOLD}>{title}</span> with
-        the Castle community.
+      <div className={STYLES_GAME_PREVIEW}>
+        <div
+          className={STYLES_GAME_COVER}
+          style={{ backgroundImage: coverSrc ? `url(${coverSrc})` : null }}
+        />
+        <div className={STYLES_PARAGRAPH}>
+          Sign in or register with Castle to play <span className={STYLES_GAME_TITLE}>{title}</span>{' '}
+          with the Castle community.
+        </div>
       </div>
     );
   };
