@@ -99,7 +99,6 @@ export default class HomeScreenWithContext extends React.Component {
                 viewer={currentUser ? currentUser.user : null}
                 navigateToUserProfile={navigator.navigateToUserProfile}
                 navigateToGame={navigator.navigateToGame}
-                navigateToGameUrl={navigator.navigateToGameUrl}
                 navigateToSignIn={navigator.navigateToSignIn}
                 history={currentUser.userStatusHistory}
                 refreshHistory={currentUser.refreshCurrentUser}

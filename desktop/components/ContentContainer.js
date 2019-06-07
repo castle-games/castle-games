@@ -92,11 +92,9 @@ class ContentContainer extends React.Component {
       if (Urls.isPrivateUrl(url)) {
         url = url.replace('castle://', 'http://');
       }
-    } catch (_) {
-      //
-    }
+    } catch (_) {}
 
-    this.props.navigator.navigateToGameUrl(url, { launchSource: 'search' });
+    this.props.navigator.openUrl(url, { launchSource: 'search' });
     this._handleSearchReset();
   };
 

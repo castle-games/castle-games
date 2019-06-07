@@ -95,28 +95,6 @@ const isMetadataFileUrl = (urlStr) => {
   return urlStr && urlStr.endsWith('.castle');
 };
 
-const parseIdFromCastleHostedUrl = (mediaUrl) => {
-  let username, slug;
-  try {
-    const components = url.parse(mediaUrl);
-    const pathComponents = components.pathname
-      .split('/')
-      .filter((pathComponent) => pathComponent.length > 0);
-    if (pathComponents[0].startsWith('@') && pathComponents.length >= 2) {
-      username = pathComponents[0].substring(1);
-      slug = pathComponents[1];
-    } else {
-      throw new Error(`${mediaUrl} is not a valid castle hosted url`);
-    }
-  } catch (e) {
-    throw new Error(`Unable to parse castle user/slug: ${e}`);
-  }
-  return {
-    username,
-    slug,
-  };
-};
-
 const isGameUrl = (urlStr) => {
   let parsedUrl = url.parse(urlStr);
   if (!parsedUrl) {
@@ -140,6 +118,5 @@ export {
   isLua,
   isOpenSource,
   isMetadataFileUrl,
-  parseIdFromCastleHostedUrl,
   isGameUrl,
 };

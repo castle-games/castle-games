@@ -90,13 +90,7 @@ class App extends React.Component {
   _handleAnchorClick = (e) => {
     if (e.target.localName == 'a') {
       e.preventDefault();
-
-      let url = e.target.href;
-      if (Urls.isGameUrl(url)) {
-        this.props.navigator.navigateToGameUrl(url, { launchSource: 'link' });
-      } else {
-        NativeUtil.openExternalURL(url);
-      }
+      this.props.navigator.openUrl(e.target.href, { launchSource: 'link' });
     }
   };
 
@@ -105,7 +99,7 @@ class App extends React.Component {
     if (url && url.indexOf('://') === -1) {
       url = `file://${url}`;
     }
-    this.props.navigator.navigateToGameUrl(url, { launchSource: 'external-link' });
+    this.props.navigator.openUrl(e.target.href, { launchSource: 'external-link' });
   };
 
   _handleNativeMenuSelectedEvent = async (e) => {

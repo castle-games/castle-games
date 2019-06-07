@@ -1,10 +1,11 @@
 import * as React from 'react';
 import * as Actions from '~/common/actions';
+import * as Analytics from '~/common/analytics';
 import * as Browser from '~/common/browser';
 import * as ExecNode from '~/common/execnode';
 import * as Strings from '~/common/strings';
+import * as NativeUtil from '~/native/nativeutil';
 import * as Urls from '~/common/urls';
-import * as Analytics from '~/common/analytics';
 
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { DevelopmentContext } from '~/contexts/DevelopmentContext';
@@ -60,6 +61,7 @@ const AUTHENTICATED_ONLY_MODES = {
  *  the state but never read from it.
  */
 const NavigatorContextDefaults = {
+  openUrl: async (url) => {},
   navigateToChat: () => {},
   navigateToHome: () => {},
   navigateToGameUrl: async (url) => {},
@@ -105,6 +107,7 @@ class NavigationContextManager extends React.Component {
         navigateToNotifications: this.navigateToNotifications,
         navigateToCreate: this.navigateToCreate,
         navigateToEditPost: this.navigateToEditPost,
+        openUrl: this.openUrl,
         reloadGame: this.reloadGame,
         clearCurrentGame: this.clearCurrentGame,
         setIsFullScreen: this.setIsFullScreen,
@@ -347,6 +350,19 @@ class NavigationContextManager extends React.Component {
         },
       };
     });
+  };
+
+  /**
+   *  Generic url handler.
+   *  If this is a url to a Castle game or a Castle post, opens the url inside Castle.
+   *  Otherwise, routes the url to the machine's browser.
+   */
+  openUrl = async (url, options) => {
+    if (Urls.isGameUrl(url)) {
+      this.navigateToGameUrl(url, options);
+    } else {
+      NativeUtil.openExternalURL(url);
+    }
   };
 
   _restoreDeferredState = () => {
