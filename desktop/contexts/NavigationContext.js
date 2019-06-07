@@ -119,17 +119,7 @@ class NavigationContextManager extends React.Component {
     }
     // user logged in
     if (!prevProps.currentUser.user && this.props.currentUser.user) {
-      if (this.state.navigation.deferredNavigationState) {
-        const { mode, params } = this.state.navigation.deferredNavigationState;
-        if (params.gameUrl) {
-          // re-resolve the game in case anything changed since they last tried to load it.
-          this.navigateToGameUrl(params.gameUrl);
-        } else {
-          this._navigateToContentMode(mode, params);
-        }
-      } else {
-        this.navigateToHome();
-      }
+      this._restoreDeferredState();
     }
 
     if (
@@ -357,6 +347,20 @@ class NavigationContextManager extends React.Component {
         },
       };
     });
+  };
+
+  _restoreDeferredState = () => {
+    if (this.state.navigation.deferredNavigationState) {
+      const { mode, params } = this.state.navigation.deferredNavigationState;
+      if (params.gameUrl) {
+        // re-resolve the game in case anything changed since they last tried to load it.
+        this.navigateToGameUrl(params.gameUrl);
+      } else {
+        this._navigateToContentMode(mode, params);
+      }
+    } else {
+      this.navigateToHome();
+    }
   };
 
   render() {
