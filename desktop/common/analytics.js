@@ -29,7 +29,7 @@ const initializeUser = (user) => {
     properties = { ...properties, username, name, email };
   }
   // track whether the user is (probably) on the Castle team
-  if (email && email.endsWith('@castle.games')) {
+  if (email && (email.endsWith('@castle.games') || email.endsWith('@expo.io'))) {
     properties.isCastleTeamMember = true;
   }
   amplitude.getInstance().setUserProperties(properties);
