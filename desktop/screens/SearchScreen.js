@@ -31,18 +31,18 @@ const STYLES_CONTAINER = css`
 
 const STYLES_SEARCH_RESPONSE = css`
   color: ${Constants.colors.black};
-  font-size: 48px;
-  line-height: 56px;
+  font-size: ${Constants.typescale.lvl4};
+  line-height: ${Constants.linescale.lvl4};
   padding: 24px;
-  max-width: 640px;
 `;
 
 const STYLES_SEARCH_RESPONSE_ACTION = css`
-  color: ${Constants.colors.black};
-  font-size: 48px;
-  line-height: 56px;
-  padding: 24px;
-  max-width: 640px;
+  color: ${Constants.colors.searchEmphasis};
+  font-size: ${Constants.typescale.lvl4};
+  line-height: ${Constants.linescale.lvl4};
+  padding: 12px;
+  margin-left: 12px;
+  text-decoration: underline;
 
   :hover {
     cursor: pointer;
@@ -98,7 +98,7 @@ export default class SearchScreen extends React.Component {
 
   _updateResults = async ({ query }) => {
     query = this._stringAsSearchInvariant(query);
-    if (Strings.isEmpty(query)) {
+    if (Strings.isEmpty(query) || Urls.isGameUrl(query)) {
       this.setState({
         isLoading: false,
         results: {
@@ -157,15 +157,12 @@ export default class SearchScreen extends React.Component {
       return (
         <React.Fragment>
           <div className={STYLES_SEARCH_RESPONSE}>
-            We did not find find anything matching{' '}
-            <strong style={{ color: Constants.colors.searchEmphasis }}>"{this.props.query}"</strong>
-            , but it looks like a game URL.
+            That looks like a game URL. Press Enter to open it, or click here:
           </div>
           <div
             className={STYLES_SEARCH_RESPONSE_ACTION}
             onClick={() => this._maybeNavigateToUrl(this.props.query)}>
-            Open{' '}
-            <strong style={{ color: Constants.colors.searchEmphasis }}>{this.props.query}</strong>
+            {this.props.query}
           </div>
         </React.Fragment>
       );
