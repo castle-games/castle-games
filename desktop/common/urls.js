@@ -119,9 +119,14 @@ const parseIdFromCastleHostedUrl = (mediaUrl) => {
 
 const isGameUrl = (urlStr) => {
   let parsedUrl = url.parse(urlStr);
+  if (!parsedUrl) {
+    return false;
+  }
   return (
-    parsedUrl.protocol.startsWith('castle') ||
-    parsedUrl.pathname.endsWith('.castle') ||
+    (parsedUrl.protocol &&
+      (parsedUrl.protocol.startsWith('castle') || parsedUrl.protocol.startsWith('file'))) ||
+    (parsedUrl.pathname &&
+      (parsedUrl.pathname.endsWith('.castle') || parsedUrl.pathname.endsWith('.lua'))) ||
     (parsedUrl.hostname === 'castle.games' &&
       (parsedUrl.pathname.startsWith('/@') || parsedUrl.pathname.startsWith('/+')))
   );

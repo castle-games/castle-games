@@ -2,20 +2,6 @@ import { Value } from 'slate';
 
 import Plain from 'slate-plain-serializer';
 
-export const isMaybeCastleURL = (query) => {
-  if (isEmpty(query)) {
-    return false;
-  }
-
-  query = query.slice(0).trim();
-  return (
-    query.endsWith('.lua') ||
-    query.startsWith('castle:') ||
-    query.startsWith('http') ||
-    query.startsWith('file://')
-  );
-};
-
 export const elide = (string, length = 140) => {
   if (isEmpty(string)) {
     return '...';

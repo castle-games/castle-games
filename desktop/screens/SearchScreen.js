@@ -153,7 +153,7 @@ export default class SearchScreen extends React.Component {
   };
 
   _renderNoResults = () => {
-    if (this.props.query && Strings.isMaybeCastleURL(this.props.query)) {
+    if (this.props.query && Urls.isGameUrl(this.props.query)) {
       return (
         <React.Fragment>
           <div className={STYLES_SEARCH_RESPONSE}>
