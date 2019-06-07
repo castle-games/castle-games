@@ -49,8 +49,6 @@ class HomeScreen extends React.Component {
       <div className={STYLES_CONTAINER}>
         {mode === 'posts' ? (
           <UIPostList
-            viewer={this.props.viewer}
-            gameItems={this.props.featuredGames}
             onUserSelect={this.props.navigateToUserProfile}
             onGameSelect={this._navigateToGame}
             onSignInSelect={this.props.navigateToSignIn}

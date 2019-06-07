@@ -95,28 +95,52 @@ const isMetadataFileUrl = (urlStr) => {
   return urlStr && urlStr.endsWith('.castle');
 };
 
-const isGameUrl = (urlStr) => {
+/**
+ *  @return { isCastleUrl, type }
+ *  type can be 'game' or 'post'
+ *  if type === post, result also includes `postId`
+ */
+const getCastleUrlInfo = (urlStr) => {
   let parsedUrl = url.parse(urlStr);
-  if (!parsedUrl) {
-    return false;
+  let isCastleUrl = false,
+    type = null,
+    data = {};
+  if (parsedUrl) {
+    if (
+      (parsedUrl.protocol &&
+        (parsedUrl.protocol.startsWith('castle') || parsedUrl.protocol.startsWith('file'))) ||
+      (parsedUrl.pathname &&
+        (parsedUrl.pathname.endsWith('.castle') || parsedUrl.pathname.endsWith('.lua')))
+    ) {
+      // local project
+      isCastleUrl = true;
+      type = 'game';
+    } else if (parsedUrl.hostname === 'castle.games') {
+      if (parsedUrl.pathname.startsWith('/@') || parsedUrl.pathname.startsWith('/+')) {
+        // published game
+        isCastleUrl = true;
+        type = 'game';
+      } else if (parsedUrl.pathname.startsWith('/p/')) {
+        // post
+        isCastleUrl = true;
+        type = 'post';
+        const components = parsedUrl.pathname.split('/');
+        if (components && components.length) {
+          data.postId = components[components.length - 1];
+        }
+      }
+    }
   }
-  return (
-    (parsedUrl.protocol &&
-      (parsedUrl.protocol.startsWith('castle') || parsedUrl.protocol.startsWith('file'))) ||
-    (parsedUrl.pathname &&
-      (parsedUrl.pathname.endsWith('.castle') || parsedUrl.pathname.endsWith('.lua'))) ||
-    (parsedUrl.hostname === 'castle.games' &&
-      (parsedUrl.pathname.startsWith('/@') || parsedUrl.pathname.startsWith('/+')))
-  );
+  return { isCastleUrl, type, ...data };
 };
 
 export {
   canonizeUserProvidedUrl,
+  getCastleUrlInfo,
   githubUserContentToRepoUrl,
   githubUserContentToArchiveUrl,
   isPrivateUrl,
   isLua,
   isOpenSource,
   isMetadataFileUrl,
-  isGameUrl,
 };

@@ -85,6 +85,25 @@ const GAME_ITEMS = `
   }
 `;
 
+const POST_FIELDS = `
+  postId
+  creator {
+    userId
+    username
+    name
+    photo {
+      url
+    }
+  }
+  message
+  media {
+    url
+    width
+    height
+  }
+  hasData
+`;
+
 export async function updateEmailPreference({ type, frequency }) {
   const response = await API.graphqlAsync(
     `
@@ -1027,25 +1046,10 @@ export async function allPostsAsync({ pageSize = 20, pageAfterPostId } = {}) {
     `
       query($pageSize: Int, $pageAfterPostId: ID) {
         allPosts(pageSize: $pageSize, pageAfterPostId: $pageAfterPostId) {
-          postId
-          creator {
-            userId
-            username
-            name
-            photo {
-              url
-            }
-          }
+          ${POST_FIELDS}
           sourceGame {
             ${GAME_FIELDS}
           }
-          message
-          media {
-            url
-            width
-            height
-          }
-          hasData
         }
       }
     `,
@@ -1076,6 +1080,28 @@ export async function postDataAsync({ postId }) {
   }
 
   return result.data.post.data;
+}
+
+export async function getPostById(postId) {
+  const result = await API.graphqlAsync(
+    `
+      query($postId: ID!) {
+        post(postId: $postId) {
+          ${POST_FIELDS}
+          sourceGame {
+            ${GAME_FIELDS}
+          }
+        }
+      }
+    `,
+    { postId }
+  );
+
+  if (result.errors && result.errors.length) {
+    return false;
+  }
+
+  return result.data.post;
 }
 
 export async function search(query) {

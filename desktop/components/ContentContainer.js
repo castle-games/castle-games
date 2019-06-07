@@ -80,9 +80,8 @@ class ContentContainer extends React.Component {
   };
 
   _handleSearchSubmit = async (e) => {
-    const isCandidate = Urls.isGameUrl(e.target.value);
-
-    if (!isCandidate) {
+    const { isCastleUrl } = Urls.getCastleUrlInfo(e.target.value);
+    if (!isCastleUrl) {
       return this._handleSearchChange(e);
     }
 

@@ -98,7 +98,8 @@ export default class SearchScreen extends React.Component {
 
   _updateResults = async ({ query }) => {
     query = this._stringAsSearchInvariant(query);
-    if (Strings.isEmpty(query) || Urls.isGameUrl(query)) {
+    const { isCastleUrl } = Urls.getCastleUrlInfo(query);
+    if (Strings.isEmpty(query) || isCastleUrl) {
       this.setState({
         isLoading: false,
         results: {
@@ -153,7 +154,8 @@ export default class SearchScreen extends React.Component {
   };
 
   _renderNoResults = () => {
-    if (this.props.query && Urls.isGameUrl(this.props.query)) {
+    const { isCastleUrl } = Urls.getCastleUrlInfo(this.props.query);
+    if (isCastleUrl) {
       return (
         <React.Fragment>
           <div className={STYLES_SEARCH_RESPONSE}>

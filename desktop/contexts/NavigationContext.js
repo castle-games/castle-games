@@ -64,8 +64,8 @@ const NavigatorContextDefaults = {
   openUrl: async (url) => {},
   navigateToChat: () => {},
   navigateToHome: () => {},
-  navigateToGameUrl: async (url) => {},
-  navigateToGame: async (game) => {},
+  navigateToGameUrl: async (url, options) => {},
+  navigateToGame: async (game, options) => {},
   navigateToCurrentGame: () => {},
   navigateToSignIn: () => {},
   navigateToCurrentUserProfile: (options) => {},
@@ -358,8 +358,14 @@ class NavigationContextManager extends React.Component {
    *  Otherwise, routes the url to the machine's browser.
    */
   openUrl = async (url, options) => {
-    if (Urls.isGameUrl(url)) {
-      this.navigateToGameUrl(url, options);
+    const { isCastleUrl, type, postId } = Urls.getCastleUrlInfo(url);
+    if (isCastleUrl) {
+      if (type === 'game') {
+        this.navigateToGameUrl(url, options);
+      } else if (type === 'post') {
+        const post = await Actions.getPostById(postId);
+        this._loadGameAsync(post.sourceGame, { post });
+      }
     } else {
       NativeUtil.openExternalURL(url);
     }
