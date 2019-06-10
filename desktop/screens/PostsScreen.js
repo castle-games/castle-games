@@ -39,8 +39,6 @@ class PostsScreen extends React.Component {
     isLoading: true,
   };
 
-  _pageBottomElement;
-
   componentDidMount() {
     this._mounted = true;
     this.props.reloadPosts();
@@ -74,11 +72,7 @@ class PostsScreen extends React.Component {
     if (this.state.isLoading) {
       maybeLoading = <div>Loading...</div>;
     }
-    return (
-      <div ref={(r) => (this._pageBottomElement = r)} className={STYLES_BOTTOM}>
-        {maybeLoading}
-      </div>
-    );
+    return <div className={STYLES_BOTTOM}>{maybeLoading}</div>;
   };
 
   render() {

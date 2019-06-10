@@ -1,7 +1,6 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as Strings from '~/common/strings';
-import * as NativeUtil from '~/native/nativeutil';
 import * as Utilities from '~/common/utilities';
 
 import { css } from 'react-emotion';
@@ -38,7 +37,6 @@ const STYLES_POST_HEADER = css`
   flex-direction: row;
   position: relative;
   justify-content: space-between;
-  margin-bottom: 8px;
 `;
 
 const STYLES_GAME_CONTAINER = css`
@@ -109,12 +107,22 @@ const STYLES_USER_NAME = css`
   align-self: center;
 `;
 
+const STYLES_TIMESTAMP = css`
+  font-weight: 400;
+  color: ${Constants.REFACTOR_COLORS.subdued};
+  margin-bottom: 8px;
+  font-size: 10px;
+  display: flex;
+  justify-content: flex-end;
+  cursor: default;
+`;
+
 const STYLES_POST_BODY = css`
   display: flex;
   position: relative;
   flex-direction: column;
   font-size: 16px;
-  margin: 24px 0 0 0;
+  margin: 8px 0 0 0;
 `;
 
 const STYLES_MESSAGE_MENTION = css`
@@ -183,7 +191,6 @@ class UIPostCell extends React.Component {
     game: null,
     onGameSelect: () => {},
     onUserSelect: () => {},
-    isPreview: false,
   };
 
   _handleOpenData = async () => {
@@ -284,10 +291,14 @@ class UIPostCell extends React.Component {
     );
   };
 
+  _renderCreatedTime = (createdTime) => {
+    return <div className={STYLES_TIMESTAMP}>{Strings.toChatDate(createdTime)}</div>;
+  };
+
   render() {
     const { post } = this.props;
 
-    const { sourceGame, creator, message, media, hasData } = post;
+    const { sourceGame, creator, message, media, hasData, createdTime } = post;
 
     let maybeGameContainer = null;
     if (sourceGame) {
@@ -324,6 +335,7 @@ class UIPostCell extends React.Component {
             {maybeGameContainer}
           </div>
           <div className={STYLES_POST_BODY}>
+            {this._renderCreatedTime(createdTime)}
             {maybeMessageContainer}
             {maybeMediaContainer}
           </div>
