@@ -69,8 +69,12 @@ class CurrentUserContextProvider extends React.Component {
     if (!this._loadingPosts) {
       this._loadingPosts = true;
       try {
-        const posts = await Actions.allPostsAsync({ pageAfterPostId });
+        let posts = await Actions.allPostsAsync({ pageAfterPostId });
         await this.setState((state) => {
+          if (pageAfterPostId !== null && pageAfterPostId !== undefined) {
+            let existingPosts = state.content.posts || [];
+            posts = existingPosts.concat(posts);
+          }
           return {
             ...state,
             content: {

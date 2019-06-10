@@ -5,7 +5,6 @@ import { css } from 'react-emotion';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigatorContext } from '~/contexts/NavigationContext';
 
-import UIButton from '~/components/reusable/UIButton';
 import UIPostList from '~/components/reusable/UIPostList';
 
 const STYLES_CONTAINER = css`
@@ -13,12 +12,19 @@ const STYLES_CONTAINER = css`
   width: 100%;
   height: 100%;
   overflow-y: scroll;
-  padding-bottom: 64px;
 
   ::-webkit-scrollbar {
     display: none;
     width: 1px;
   }
+`;
+
+const STYLES_BOTTOM = css`
+  width: 100%;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 class PostsScreen extends React.Component {
@@ -29,40 +35,70 @@ class PostsScreen extends React.Component {
     navigateToGame: () => {},
     navigateToUserProfile: () => {},
   };
+  state = {
+    isLoading: true,
+  };
+
+  _pageBottomElement;
 
   componentDidMount() {
+    this._mounted = true;
     this.props.reloadPosts();
   }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.posts !== prevProps.posts && this.state.isLoading) {
+      this.setState({ isLoading: false });
+    }
+  }
+
+  componentWillUnmount() {
+    this._mounted = false;
+  }
+
+  _handleScroll = (e) => {
+    if (!this._mounted) return;
+
+    const isBottom = e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
+    if (isBottom && !this.state.isLoading) {
+      this.setState({ isLoading: true }, this.props.loadMorePosts);
+    }
+  };
 
   _navigateToGame = (game, options) => {
     return this.props.navigateToGame(game, { launchSource: `posts`, ...options });
   };
 
-  _renderLoading = () => {
+  _renderBottom = () => {
+    let maybeLoading;
+    if (this.state.isLoading) {
+      maybeLoading = <div>Loading...</div>;
+    }
     return (
-      <div className={STYLES_CONTAINER}>
-        <div>Loading...</div>
+      <div ref={(r) => (this._pageBottomElement = r)} className={STYLES_BOTTOM}>
+        {maybeLoading}
       </div>
     );
   };
 
   render() {
     const { posts } = this.props;
+    let maybePostList;
     if (posts) {
-      return (
-        <div className={STYLES_CONTAINER}>
-          <UIButton onClick={this.props.reloadPosts}>Refresh</UIButton>
-          <UIPostList
-            posts={posts}
-            onUserSelect={this.props.navigateToUserProfile}
-            onGameSelect={this._navigateToGame}
-          />
-          <UIButton onClick={this.props.loadMorePosts}>Next page ►</UIButton>
-        </div>
+      maybePostList = (
+        <UIPostList
+          posts={posts}
+          onUserSelect={this.props.navigateToUserProfile}
+          onGameSelect={this._navigateToGame}
+        />
       );
-    } else {
-      return this._renderLoading();
     }
+    return (
+      <div className={STYLES_CONTAINER} onScroll={this._handleScroll}>
+        {maybePostList}
+        {this._renderBottom()}
+      </div>
+    );
   }
 }
 
