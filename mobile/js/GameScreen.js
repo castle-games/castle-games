@@ -8,11 +8,46 @@ import {
   Text,
   TouchableWithoutFeedback,
   Keyboard,
+  PanResponder,
 } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 
 import { gql, Query, isSignedInAsync } from './Conn';
 import { navigate } from './Navigation';
+import * as GhostChannels from './GhostChannels';
+
+// Keyboard keys overlay
+const Key = ({ left, top, right, bottom, width, height, theKey }) => {
+  const panResponder = PanResponder.create({
+    onStartShouldSetPanResponder: () => true,
+    onStartShouldSetPanResponderCapture: () => true,
+    onMoveShouldSetPanResponder: () => true,
+    onMoveShouldSetPanResponderCapture: () => true,
+    onPanResponderTerminationRequest: () => false,
+    onPanResponderGrant: () => GhostChannels.pushAsync('GHOST_MOBILE_KEY_PRESSED', theKey),
+    onPanResponderRelease: () => GhostChannels.pushAsync('GHOST_MOBILE_KEY_RELEASED', theKey),
+  });
+
+  return (
+    <View
+      {...panResponder.panHandlers}
+      style={{
+        position: 'absolute',
+        left,
+        top,
+        right,
+        bottom,
+        width: width || 40,
+        height: height || 40,
+        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        borderRadius: 8,
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
+      <Text>{theKey}</Text>
+    </View>
+  );
+};
 
 const DEFAULT_GAME_URI =
   'https://raw.githubusercontent.com/nikki93/procjam-oct-2018/69511b9ac7ec4631ec215a2dc8cd5b034cdd1b0d/main.lua';
@@ -99,8 +134,8 @@ export default class GameScreen extends React.Component {
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <View style={{ flex: 1 }} pointerEvents="box-none">
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false} pointerEvents="box-none">
           <View style={{ flexDirection: 'row' }}>
             <View
               style={{
@@ -194,6 +229,54 @@ export default class GameScreen extends React.Component {
               onPress={() => this._uriInput.blur()}
             />
           ) : null}
+        </View>
+
+        <View
+          pointerEvents="box-none"
+          style={{
+            position: 'absolute',
+            bottom: 20,
+            left: 20,
+            width: 140,
+            height: 100,
+            backgroundColor: 'transparent',
+          }}>
+          <Key left={50} top={5} theKey="up" />
+          <Key left={5} top={50} theKey="left" />
+          <Key left={50} top={50} theKey="down" />
+          <Key right={5} top={50} theKey="right" />
+        </View>
+
+        <View
+          pointerEvents="box-none"
+          style={{
+            position: 'absolute',
+            bottom: 20,
+            right: 20,
+            width: 140,
+            height: 100,
+            backgroundColor: 'transparent',
+          }}>
+          <Key right={5} top={5} width={80} theKey="return" />
+          <Key right={5} top={50} width={80} theKey="space" />
+        </View>
+
+        <View
+          pointerEvents="box-none"
+          style={{
+            position: 'absolute',
+            bottom: 120,
+            left: 25,
+            width: 140,
+            height: 50,
+            backgroundColor: 'transparent',
+          }}>
+          <Key left={0} top={5} theKey="1" />
+          <Key left={50} top={5} theKey="2" />
+          <Key left={100} top={5} theKey="3" />
+          <Key left={150} top={5} theKey="4" />
+          <Key left={200} top={5} theKey="5" />
+          <Key left={250} top={5} theKey="6" />
         </View>
       </View>
     );

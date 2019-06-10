@@ -126,6 +126,33 @@ do
 end
 
 
+-- Mobile keyboard event handling
+
+local updateMobileKeyboardEvents
+if isMobile then
+    local isKeyDown = {}
+
+    function updateMobileKeyboardEvents()
+        local pressed = love.thread.getChannel('GHOST_MOBILE_KEY_PRESSED')
+        local released = love.thread.getChannel('GHOST_MOBILE_KEY_RELEASED')
+        while pressed:getCount() > 0 do
+            local k = pressed:pop()
+            isKeyDown[k] = true
+            love.keypressed(k)
+        end
+        while released:getCount() > 0 do
+            local k = released:pop()
+            isKeyDown[k] = nil
+            love.keyreleased(k)
+        end
+    end
+
+    function love.keyboard.isDown(k)
+        return isKeyDown[k] ~= nil
+    end
+end
+
+
 -- Top-level Love callbacks
 
 local initialFileDropped -- In case a `love.filedropped` occurred before home experience is loaded
@@ -181,6 +208,10 @@ end
 ffi.cdef 'bool ghostGetBackgrounded();'
 
 function main.update(dt)
+    if isMobile then
+        updateMobileKeyboardEvents()
+    end
+
     network.update(dt)
 
     jsEvents.update()
