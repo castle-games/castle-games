@@ -8,6 +8,11 @@ const CurrentUserContextDefaults = {
   setCurrentUser: (user) => {},
   clearCurrentUser: async () => {},
   refreshCurrentUser: async () => {},
+  content: {
+    posts: null,
+  },
+  reloadPosts: () => {},
+  loadMorePosts: () => {},
 };
 
 const CurrentUserContext = React.createContext(CurrentUserContextDefaults);
@@ -21,6 +26,8 @@ class CurrentUserContextProvider extends React.Component {
       setCurrentUser: this.setCurrentUser,
       clearCurrentUser: this.clearCurrentUser,
       refreshCurrentUser: this.refreshCurrentUser,
+      reloadPosts: this.reloadPosts,
+      loadMorePosts: this.loadMorePosts,
     };
 
     if (props.value && props.value.user) {
@@ -41,6 +48,7 @@ class CurrentUserContextProvider extends React.Component {
       user: null,
       timeLastLoaded: 0,
       userStatusHistory: [],
+      content: CurrentUserContextDefaults.content,
     });
   };
 
@@ -55,6 +63,39 @@ class CurrentUserContextProvider extends React.Component {
       userStatusHistory,
       timeLastLoaded: Date.now(),
     });
+  };
+
+  _loadPosts = async ({ pageAfterPostId } = {}) => {
+    if (!this._loadingPosts) {
+      this._loadingPosts = true;
+      try {
+        const posts = await Actions.allPostsAsync({ pageAfterPostId });
+        await this.setState((state) => {
+          return {
+            ...state,
+            content: {
+              ...state.content,
+              posts,
+            },
+          };
+        });
+      } finally {
+        this._loadingPosts = false;
+      }
+    }
+  };
+
+  reloadPosts = () => {
+    this._loadPosts();
+  };
+
+  loadMorePosts = () => {
+    let lastPostId;
+    const { posts } = this.state.content;
+    if (posts && posts.length > 0) {
+      lastPostId = posts[posts.length - 1].postId;
+    }
+    this._loadPosts({ pageAfterPostId: lastPostId });
   };
 
   render() {

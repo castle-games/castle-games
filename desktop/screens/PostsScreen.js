@@ -1,8 +1,8 @@
 import * as React from 'react';
-import * as Actions from '~/common/actions';
 import * as Constants from '~/common/constants';
 
 import { css } from 'react-emotion';
+import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigatorContext } from '~/contexts/NavigationContext';
 
 import UIButton from '~/components/reusable/UIButton';
@@ -22,46 +22,17 @@ const STYLES_CONTAINER = css`
 `;
 
 class PostsScreen extends React.Component {
-  state = {
+  static defaultProps = {
     posts: null,
-    firstPage: false,
+    reloadPosts: () => {},
+    loadMorePosts: () => {},
+    navigateToGame: () => {},
+    navigateToUserProfile: () => {},
   };
-
-  _loadingPosts = false;
 
   componentDidMount() {
-    this._loadPostsAsync();
+    this.props.reloadPosts();
   }
-
-  _loadPostsAsync = async ({ pageAfterPostId } = {}) => {
-    if (!this._loadingPosts) {
-      this._loadingPosts = true;
-      try {
-        this.setState({
-          posts: await Actions.allPostsAsync({ pageAfterPostId }),
-          firstPage: pageAfterPostId === null || pageAfterPostId === undefined,
-        });
-      } finally {
-        this._loadingPosts = false;
-      }
-    }
-  };
-
-  _handleFirstPage = () => {
-    this.setState({ posts: null });
-    this._loadPostsAsync();
-  };
-
-  _handleNextPage = () => {
-    let lastPostId;
-    if (this.state.posts.length > 0) {
-      lastPostId = this.state.posts[this.state.posts.length - 1].postId;
-    }
-    this.setState({ posts: null });
-    this._loadPostsAsync({
-      pageAfterPostId: lastPostId,
-    });
-  };
 
   _navigateToGame = (game, options) => {
     return this.props.navigateToGame(game, { launchSource: `posts`, ...options });
@@ -76,19 +47,17 @@ class PostsScreen extends React.Component {
   };
 
   render() {
-    const { posts } = this.state;
+    const { posts } = this.props;
     if (posts) {
       return (
         <div className={STYLES_CONTAINER}>
-          <UIButton onClick={this._handleFirstPage}>
-            {this.state.firstPage ? 'Refresh' : '◄ First page'}
-          </UIButton>
+          <UIButton onClick={this.props.reloadPosts}>Refresh</UIButton>
           <UIPostList
             posts={posts}
             onUserSelect={this.props.navigateToUserProfile}
             onGameSelect={this._navigateToGame}
           />
-          <UIButton onClick={this._handleNextPage}>Next page ►</UIButton>
+          <UIButton onClick={this.props.loadMorePosts}>Next page ►</UIButton>
         </div>
       );
     } else {
@@ -102,11 +71,18 @@ export default class PostsScreenWithContext extends React.Component {
     return (
       <NavigatorContext.Consumer>
         {(navigator) => (
-          <PostsScreen
-            navigateToUserProfile={navigator.navigateToUserProfile}
-            navigateToGame={navigator.navigateToGame}
-            {...this.props}
-          />
+          <CurrentUserContext.Consumer>
+            {(currentUser) => (
+              <PostsScreen
+                navigateToUserProfile={navigator.navigateToUserProfile}
+                navigateToGame={navigator.navigateToGame}
+                posts={currentUser.content.posts}
+                reloadPosts={currentUser.reloadPosts}
+                loadMorePosts={currentUser.loadMorePosts}
+                {...this.props}
+              />
+            )}
+          </CurrentUserContext.Consumer>
         )}
       </NavigatorContext.Consumer>
     );
