@@ -6,7 +6,6 @@ import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigatorContext } from '~/contexts/NavigationContext';
 
 import UIGameGrid from '~/components/reusable/UIGameGrid';
-import UIPostList from '~/components/reusable/UIPostList';
 
 const STYLES_CONTAINER = css`
   background: ${Constants.colors.background};
@@ -47,13 +46,6 @@ class HomeScreen extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
-        {mode === 'posts' ? (
-          <UIPostList
-            onUserSelect={this.props.navigateToUserProfile}
-            onGameSelect={this._navigateToGame}
-            onSignInSelect={this.props.navigateToSignIn}
-          />
-        ) : null}
         {mode === 'featured' || mode === 'home' ? (
           <UIGameGrid
             viewer={this.props.viewer}
