@@ -9,8 +9,8 @@ import { getEmojiComponent } from '~/common/emojis';
 const STYLES_CONTAINER = css`
   display: flex;
   margin-top: 16px;
-  align-items: center;
-  flex-direction: column;
+  align-items: flex-start;
+  flex-wrap: wrap;
 `;
 
 const STYLES_POST = css`
