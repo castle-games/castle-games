@@ -39,47 +39,17 @@ const STYLES_POST_HEADER = css`
   justify-content: space-between;
 `;
 
-const STYLES_GAME_CONTAINER = css`
-  display: flex;
-  flex-direction: row;
+const STYLES_MESSAGE_CONTAINER = css``;
+
+const STYLES_PLAYING = css`
+  color: ${Constants.REFACTOR_COLORS.subdued};
+  white-space: nowrap;
+  padding-left: 8px;
 `;
 
-const STYLES_OPEN_DATA_BUTTON = css`
-  display: flex;
-  justify-content: flex-start;
+const STYLES_PLAYING_TITLE = css`
   cursor: pointer;
-  padding: 0px;
-  border-radius: 4px;
-  margin-right: 4px;
-`;
-
-const STYLES_GAME_BUTTON = css`
-  display: flex;
-  justify-content: flex-start;
-  cursor: pointer;
-  border-radius: 4px;
-  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
-`;
-
-const STYLES_GAME_COVER_IMAGE = css`
-  background-size: cover;
-  background-position: 50% 50%;
-  height: 28px;
-  width: 28px;
-  border-radius: 4px 0 0 4px;
-  cursor: pointer;
-  cursor: pointer;
-  flex-shrink: 0;
-`;
-
-const STYLES_GAME_TITLE = css`
-  font-family: ${Constants.font.system};
-  font-size: 12px;
-  font-weight: 700;
-  line-height: 1;
-  padding: 0 12px 0 12px;
-  display: inline-flex;
-  align-items: center;
+  color: ${Constants.colors.action};
 `;
 
 const STYLES_USER_CONTAINER = css`
@@ -206,54 +176,6 @@ class UIPostCell extends React.Component {
     this.props.onUserSelect(this.props.post.creator);
   };
 
-  _renderGameContainer = ({ sourceGame, hasData }) => {
-    let primaryColor =
-      sourceGame.metadata && sourceGame.metadata.primaryColor
-        ? `#${sourceGame.metadata.primaryColor}`
-        : Constants.colors.backgroundLeftContext;
-
-    const coverImageUrl = sourceGame.coverImage && sourceGame.coverImage.url;
-
-    const textColor = Utilities.adjustTextColor(primaryColor);
-
-    let maybeOpenDataButton;
-    if (hasData) {
-      maybeOpenDataButton = (
-        <div className={STYLES_OPEN_DATA_BUTTON} style={{ backgroundColor: primaryColor }}>
-          <div
-            className={STYLES_GAME_TITLE}
-            onClick={this._handleOpenData}
-            style={{ color: textColor }}>
-            Open Data
-          </div>
-        </div>
-      );
-    }
-
-    return (
-      <div className={STYLES_GAME_CONTAINER}>
-        {maybeOpenDataButton}
-        <div className={STYLES_GAME_BUTTON} style={{ backgroundColor: primaryColor }}>
-          {!Strings.isEmpty(coverImageUrl) ? (
-            <div
-              className={STYLES_GAME_COVER_IMAGE}
-              onClick={this._handleGameSelect}
-              style={{
-                backgroundImage: `url(${coverImageUrl})`,
-              }}
-            />
-          ) : null}
-          <div
-            className={STYLES_GAME_TITLE}
-            onClick={this._handleGameSelect}
-            style={{ color: textColor }}>
-            {sourceGame.title}
-          </div>
-        </div>
-      </div>
-    );
-  };
-
   _renderMessage = (message) => {
     let result = [];
     for (let i = 0; i < message.length; i++) {
@@ -282,11 +204,44 @@ class UIPostCell extends React.Component {
 
     return result;
   };
+  _renderMessageContainer = (message, game) => {
+    let richMessage = message ? this._renderMessage(message) : null;
+    let playing;
+    if (game) {
+      let maybeSeparator = richMessage ? '- ' : null;
+      playing = (
+        <span className={STYLES_PLAYING}>
+          {maybeSeparator}
+          Playing{' '}
+          <span className={STYLES_PLAYING_TITLE} onClick={this._handleGameSelect}>
+            {game.title}
+          </span>
+        </span>
+      );
+    }
+    return (
+      <div className={STYLES_MESSAGE_CONTAINER}>
+        {richMessage}
+        {playing}
+      </div>
+    );
+  };
 
-  _renderMedia = (media) => {
+  _renderMedia = (media, sourceGame, hasData) => {
+    let onClick = null;
+    if (hasData) {
+      onClick = this._handleOpenData;
+    } else if (sourceGame) {
+      onClick = this._handleGameSelect;
+    }
     return (
       <div className={STYLES_MEDIA_CONTAINER}>
-        <img className={STYLES_MEDIA_IMAGE} src={media.url} />
+        <img
+          className={STYLES_MEDIA_IMAGE}
+          src={media.url}
+          onClick={onClick}
+          style={onClick ? { cursor: 'pointer' } : null}
+        />
       </div>
     );
   };
@@ -300,19 +255,11 @@ class UIPostCell extends React.Component {
 
     const { sourceGame, creator, message, media, hasData, createdTime } = post;
 
-    let maybeGameContainer = null;
-    if (sourceGame) {
-      maybeGameContainer = this._renderGameContainer({ sourceGame, hasData });
-    }
-
-    let maybeMessageContainer = null;
-    if (message) {
-      maybeMessageContainer = this._renderMessage(message.message);
-    }
+    let messageContainer = this._renderMessageContainer(message.message, sourceGame);
 
     let maybeMediaContainer = null;
     if (media) {
-      maybeMediaContainer = this._renderMedia(media);
+      maybeMediaContainer = this._renderMedia(media, sourceGame, hasData);
     }
 
     return (
@@ -332,11 +279,10 @@ class UIPostCell extends React.Component {
                 {creator.name}
               </div>
             </div>
-            {maybeGameContainer}
+            {this._renderCreatedTime(createdTime)}
           </div>
           <div className={STYLES_POST_BODY}>
-            {this._renderCreatedTime(createdTime)}
-            {maybeMessageContainer}
+            {messageContainer}
             {maybeMediaContainer}
           </div>
         </div>
