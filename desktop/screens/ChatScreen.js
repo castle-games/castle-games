@@ -56,6 +56,12 @@ class ChatScreen extends React.Component {
     mode: 'MESSAGES',
   };
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.chat.channel.channelId !== this.props.chat.channel.channelId) {
+      this.setState({ mode: 'MESSAGES' });
+    }
+  }
+
   _handleLeaveChannel = async () => {
     await ChatActions.leaveChatChannel({ channelId: this.props.chat.channel.channelId });
     this.props.social.refreshChannelData();
