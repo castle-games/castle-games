@@ -7,6 +7,8 @@ import { NavigatorContext } from '~/contexts/NavigationContext';
 
 import UIPostList from '~/components/reusable/UIPostList';
 
+const SCROLL_BOTTOM_OFFSET = 20;
+
 const STYLES_CONTAINER = css`
   background: ${Constants.colors.background};
   width: 100%;
@@ -57,7 +59,7 @@ class PostsScreen extends React.Component {
   _handleScroll = (e) => {
     if (!this._mounted) return;
 
-    const isBottom = e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
+    const isBottom = e.target.scrollHeight - e.target.scrollTop <= e.target.clientHeight + SCROLL_BOTTOM_OFFSET;
     if (isBottom && !this.state.isLoading) {
       this.setState({ isLoading: true }, this.props.loadMorePosts);
     }
