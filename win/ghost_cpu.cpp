@@ -2,15 +2,37 @@
 #include <windows.h>
 #include "ghost_cpu.h"
 
+#define GHOST_CPU_POLL_MS 3000
+DWORD WINAPI GhostCpuMonitorThreadProc(LPVOID lpParam);
+
 GhostCpu::GhostCpu(void)
   :m_nCpuUsage(-1)
   , m_dwLastRun(0)
   , m_lRunCount(0)
+  , m_monitorThread(NULL)
 {
   ZeroMemory(&m_ftPrevSysKernel, sizeof(FILETIME));
   ZeroMemory(&m_ftPrevSysUser, sizeof(FILETIME));
   ZeroMemory(&m_ftPrevProcKernel, sizeof(FILETIME));
   ZeroMemory(&m_ftPrevProcUser, sizeof(FILETIME));
+}
+
+GhostCpu::~GhostCpu() {
+  StopMonitor();
+}
+
+void GhostCpu::StartMonitor() {
+  if (m_monitorThread) {
+    StopMonitor();
+  }
+  m_monitorThread = CreateThread(NULL, 0, GhostCpuMonitorThreadProc, (LPVOID) this, 0, NULL);
+}
+
+void GhostCpu::StopMonitor() {
+  if (m_monitorThread) {
+    CloseHandle(m_monitorThread);
+    m_monitorThread = NULL;
+  }
 }
 
 /**********************************************
@@ -21,16 +43,11 @@ GhostCpu::GhostCpu(void)
 * If the method is recalled to quickly, the previous value
 * is returned.
 ***********************************************/
-short GhostCpu::GetUsage()
-{
-  //create a local copy to protect against race conditions in setting the 
-  //member variable
+short GhostCpu::GetUsage() {
+  // create a local copy to protect against race conditions in setting the 
+  // member variable
   short nCpuCopy = m_nCpuUsage;
   if (::InterlockedIncrement(&m_lRunCount) == 1) {
-    /*
-    If this is called too often, the measurement itself will greatly
-    affect the results.
-    */
     if (!EnoughTimePassed()) {
       ::InterlockedDecrement(&m_lRunCount);
       return nCpuCopy;
@@ -99,4 +116,13 @@ bool GhostCpu::EnoughTimePassed() {
 
   ULONGLONG dwCurrentTickCount = GetTickCount64();
   return (dwCurrentTickCount - m_dwLastRun) > minElapsedMS;
+}
+
+DWORD WINAPI GhostCpuMonitorThreadProc(LPVOID lpParam) {
+  GhostCpu *usage = (GhostCpu *)lpParam;
+  while (true) {
+    short cpuUsage = usage->GetUsage();
+    // TODO: send usage to JS
+    Sleep(GHOST_CPU_POLL_MS);
+  }
 }
