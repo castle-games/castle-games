@@ -353,6 +353,7 @@ set(GHOST_SRCS
   ../win/main.cc
   ../win/ghost_win.cc
   ../win/simple_handler_win.cc
+  ../win/ghost_cpu.cpp
   ../win/json.hpp
   ../win/wintoastlib.cpp
   ../common/ghost.cpp
