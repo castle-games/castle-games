@@ -133,6 +133,12 @@ class Sidebar extends React.Component {
     const { navigation, navigator, viewer, social, chat } = this.props;
     const isChatVisible = navigation.contentMode === 'chat';
 
+    let directMessages = [];
+    let channels = [];
+    social.subscribedChatChannels.forEach((c) => {
+      c.otherUserId ? directMessages.push(c) : channels.push(c);
+    });
+
     return (
       <div className={STYLES_SIDEBAR}>
         {this._renderUpdateBanner()}
@@ -160,15 +166,17 @@ class Sidebar extends React.Component {
             viewer={viewer}
             contentMode={navigation.contentMode}
             isChatVisible={isChatVisible}
-            channels={social.subscribedChatChannels}
+            channels={channels}
             onShowOptions={this._handleShowChannelOptions}
             onSelectChannel={this._handleNavigateToChat}
           />
         ) : null}
-        {viewer && this.props.social.allMessageChannels ? (
+        {viewer ? (
           <SidebarDirectMessages
+            selectedChannelId={chat.channel ? chat.channel.channelId : null}
             viewer={viewer}
             isChatVisible={isChatVisible}
+            directMessages={directMessages}
             onShowOptions={this._handleShowDirectMessageOptions}
           />
         ) : null}

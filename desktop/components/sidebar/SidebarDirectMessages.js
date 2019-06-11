@@ -23,30 +23,14 @@ export default class SidebarDirectMessages extends React.Component {
         <SidebarGroupHeader onClick={this.props.onChat} onShowOptions={this.props.onShowOptions}>
           Direct Messages
         </SidebarGroupHeader>
-        <SidebarDirectMessageItem
-          onClick={this.props.onChat}
-          data={{ online: true, name: 'Person #1', status: 'Is playing Blast Flocks', pending: 50 }}
-        />
-        <SidebarDirectMessageItem
-          onClick={this.props.onChat}
-          data={{ online: true, name: 'Person #2', status: 'Is playing Blast Flocks', pending: 40 }}
-        />
-        <SidebarDirectMessageItem
-          onClick={this.props.onChat}
-          data={{ online: true, name: 'Person #3', status: 'Is playing Blast Flocks', pending: 20 }}
-        />
-        <SidebarDirectMessageItem
-          onClick={this.props.onChat}
-          data={{ online: false, name: 'Person #4', status: 'Is playing Blast Flocks', pending: 0 }}
-        />
-        <SidebarDirectMessageItem
-          onClick={this.props.onChat}
-          data={{ online: false, name: 'Person #5', status: 'Is playing Blast Flocks', pending: 0 }}
-        />
-        <SidebarDirectMessageItem
-          onClick={this.props.onChat}
-          data={{ online: false, name: 'Person #6', status: 'Is playing Blast Flocks', pending: 0 }}
-        />
+        {this.props.directMessages.map((c) => {
+          return (
+            <SidebarDirectMessageItem
+              key={`direct-message-${c.otherUserId}`}
+              data={{ name: c.name }}
+            />
+          );
+        })}
       </div>
     );
   }
