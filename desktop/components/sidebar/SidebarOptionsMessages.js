@@ -68,7 +68,7 @@ const STYLES_TITLE = css`
 
 export default class SidebarOptionsMessages extends React.Component {
   render() {
-    const { options } = this.props;
+    const { options, viewer } = this.props;
 
     const usernames = Object.keys(options);
 
@@ -82,6 +82,10 @@ export default class SidebarOptionsMessages extends React.Component {
         </header>
         <div className={STYLES_TITLE}>Send a message</div>
         {usernames.map((u) => {
+          if (u === viewer.username) {
+            return null;
+          }
+
           return (
             <div
               key={`username-${u}`}
