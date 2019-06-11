@@ -75,29 +75,40 @@ const STYLES_AVATAR = css`
   background: magenta;
 `;
 
-export default ({ data, onClick }) => {
+export default ({ data, onClick, user }) => {
+  if (!user) {
+    return null;
+  }
+
+  let color = null;
+  if (!data.online) {
+    color = Constants.REFACTOR_COLORS.subdued;
+  }
+
+  if (data.active) {
+    color = 'magenta';
+  }
+
   return (
-    <div className={STYLES_USER} onClick={onClick}>
+    <div className={STYLES_USER} onClick={!data.active ? onClick : () => {}}>
       {data.online ? (
-        <figure className={STYLES_AVATAR}>
+        <figure
+          className={STYLES_AVATAR}
+          style={{ backgroundImage: user.photo ? `url(${user.photo.url})` : `` }}>
           <span
             className={STYLES_INDICATOR}
             style={{ background: Constants.REFACTOR_COLORS.online }}
           />
         </figure>
       ) : (
-        <figure className={STYLES_AVATAR}>
-          <span
-            className={STYLES_INDICATOR}
-            style={{ background: Constants.REFACTOR_COLORS.elements.servers }}
-          />
-        </figure>
+        <figure
+          className={STYLES_AVATAR}
+          style={{ backgroundImage: user.photo ? `url(${user.photo.url})` : `` }}
+        />
       )}
       <div className={STYLES_TEXT}>
-        <h3
-          className={STYLES_NAME}
-          style={{ color: data.online ? null : Constants.REFACTOR_COLORS.subdued }}>
-          {data.name}
+        <h3 className={STYLES_NAME} style={{ color }}>
+          {user.name}
         </h3>
       </div>
       {data.pending ? <span className={STYLES_NOTIFICATION}>{data.pending}</span> : null}

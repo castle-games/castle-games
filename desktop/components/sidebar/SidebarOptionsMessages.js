@@ -42,7 +42,7 @@ const STYLES_OPTION = css`
   user-select: none;
   font-size: 14px;
   font-weight: 600;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
   text-align: right;
   padding: 0 16px 0 16px;
   width: 100%;
@@ -54,8 +54,24 @@ const STYLES_OPTION = css`
   }
 `;
 
+const STYLES_TITLE = css`
+  font-family: ${Constants.REFACTOR_FONTS.system};
+  color: ${Constants.REFACTOR_COLORS.subdued};
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1px;
+  text-align: right;
+  padding: 0 16px 0 16px;
+  margin-bottom: 8px;
+`;
+
 export default class SidebarOptionsMessages extends React.Component {
   render() {
+    const { options } = this.props;
+
+    const usernames = Object.keys(options);
+
     return (
       <React.Fragment>
         <header className={STYLES_HEADER}>
@@ -64,11 +80,17 @@ export default class SidebarOptionsMessages extends React.Component {
             <SVG.Dismiss size="16px" />
           </div>
         </header>
-        {this.props.viewer ? (
-          <div className={STYLES_OPTION} onClick={this.props.onStartDirectMessage}>
-            Message an user
-          </div>
-        ) : null}
+        <div className={STYLES_TITLE}>Send a message</div>
+        {usernames.map((u) => {
+          return (
+            <div
+              key={`username-${u}`}
+              className={STYLES_OPTION}
+              onClick={() => this.props.onSendMessage(options[u])}>
+              {u}
+            </div>
+          );
+        })}
       </React.Fragment>
     );
   }

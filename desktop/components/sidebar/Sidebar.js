@@ -102,6 +102,33 @@ class Sidebar extends React.Component {
 
   _handleHideOptions = () => this.setState({ mode: 'DEFAULT' });
 
+  _handleCreateDirectMessage = async (user) => {
+    const response = await ChatActions.sendUserChatMessage({
+      otherUserId: user.userId,
+      message: 'Hey there!',
+    });
+
+    if (!response || response.errors) {
+      alert(`We were unable to send ${user.username} a message.`);
+      return;
+    }
+
+    await this.props.social.refreshChannelData();
+
+    let newChannel;
+    this.props.social.subscribedChatChannels.forEach((c) => {
+      if (c.otherUserId === user.userId) {
+        newChannel = c;
+      }
+    });
+
+    if (!newChannel) {
+      return this.setState({ mode: 'DEFAULT' });
+    }
+
+    this._handleNavigateToChat(newChannel);
+  };
+
   _handleCreateChannel = async (name) => {
     if (Strings.isEmpty(name)) {
       alert('You must provide a channel name.');
@@ -175,8 +202,11 @@ class Sidebar extends React.Component {
           <SidebarDirectMessages
             selectedChannelId={chat.channel ? chat.channel.channelId : null}
             viewer={viewer}
+            social={social}
+            contentMode={navigation.contentMode}
             isChatVisible={isChatVisible}
             directMessages={directMessages}
+            onSelectChannel={this._handleNavigateToChat}
             onShowOptions={this._handleShowDirectMessageOptions}
           />
         ) : null}
@@ -199,11 +229,16 @@ class Sidebar extends React.Component {
   };
 
   _renderMessageOptions = () => {
-    const { navigation, viewer } = this.props;
+    const { navigation, viewer, social } = this.props;
 
     return (
       <div className={STYLES_SIDEBAR}>
-        <SidebarOptionsMessages viewer={viewer} onDismiss={this._handleHideOptions} />
+        <SidebarOptionsMessages
+          viewer={viewer}
+          options={social.usernameToUser}
+          onDismiss={this._handleHideOptions}
+          onSendMessage={this._handleCreateDirectMessage}
+        />
       </div>
     );
   };

@@ -20,14 +20,21 @@ export default class SidebarDirectMessages extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
-        <SidebarGroupHeader onClick={this.props.onChat} onShowOptions={this.props.onShowOptions}>
+        <SidebarGroupHeader onShowOptions={this.props.onShowOptions}>
           Direct Messages
         </SidebarGroupHeader>
         {this.props.directMessages.map((c) => {
+          const active =
+            c.channelId === this.props.selectedChannelId && this.props.contentMode === 'chat';
+
+          const user = this.props.social.userIdToUser[c.otherUserId];
+
           return (
             <SidebarDirectMessageItem
               key={`direct-message-${c.otherUserId}`}
-              data={{ name: c.name }}
+              data={{ name: c.name, active }}
+              user={user}
+              onClick={() => this.props.onSelectChannel(c)}
             />
           );
         })}
