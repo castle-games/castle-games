@@ -75,6 +75,18 @@ const STYLES_CHANNEL = css`
   }
 `;
 
+const STYLES_ANCHOR = css`
+  color: ${Constants.REFACTOR_COLORS.text};
+  font-weight: 600;
+  text-decoration: underline;
+  :hover {
+    color: ${Constants.REFACTOR_COLORS.text};
+  }
+  :visited {
+    color: ${Constants.REFACTOR_COLORS.text};
+  }
+`;
+
 export default class ChatMessageElement extends React.Component {
   static defaultProps = {
     user: {
@@ -127,6 +139,13 @@ export default class ChatMessageElement extends React.Component {
 
     if (!Strings.isEmpty(this.props.message.body.message[0].text)) {
       text = this.props.message.body.message[0].text;
+
+      // NOTE(jim): Capture all URL groups.
+      text = StringReplace(text, /(https?:\/\/\S+)/g, (match, i) => (
+        <a className={STYLES_ANCHOR} key={match + i} href={match}>
+          {match}
+        </a>
+      ));
 
       // NOTE(jim): Capture all mention groups.
       text = StringReplace(text, /@([a-zA-Z0-9_-]+)/g, (match, i) => (
