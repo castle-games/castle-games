@@ -7,7 +7,10 @@ import { css } from 'react-emotion';
 import { DevelopmentContext } from '~/contexts/DevelopmentContext';
 
 import DevelopmentLogs from '~/components/game/DevelopmentLogs';
+import DevelopmentCpuMonitor from '~/components/game/DevelopmentCpuMonitor';
 import UINavigationLink from '~/components/reusable/UINavigationLink';
+
+const ENABLE_CPU_MONITOR = false;
 
 const STYLES_CONTAINER = css`
   border-top: 1px solid ${Constants.colors.background4};
@@ -93,7 +96,7 @@ export default class DevelopmentConsole extends React.Component {
   };
 
   _renderBottomActions = () => {
-    let multiplayerHostingControl;
+    let multiplayerHostingControl, cpuMonitor;
     if (Utilities.isMultiplayer(this.props.game) && Urls.isPrivateUrl(this.props.game.url)) {
       const { isMultiplayerCodeUploadEnabled } = this.context;
       multiplayerHostingControl = (
@@ -107,12 +110,16 @@ export default class DevelopmentConsole extends React.Component {
         </UINavigationLink>
       );
     }
+    if (ENABLE_CPU_MONITOR) {
+      cpuMonitor = <DevelopmentCpuMonitor />;
+    }
     return (
       <div className={STYLES_CONTROLS_BOTTOM}>
         <UINavigationLink style={{ marginRight: 24 }} onClick={this.props.reloadGame}>
           Reload Project
         </UINavigationLink>
         {multiplayerHostingControl}
+        {cpuMonitor}
       </div>
     );
   };
