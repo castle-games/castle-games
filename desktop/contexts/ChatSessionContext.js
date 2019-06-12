@@ -202,20 +202,19 @@ class ChatSessionContextManager extends React.Component {
     let userIds = {};
 
     allMessages.forEach((m) => {
-      if (!messages[m.channelId]) {
-        messages[m.channelId] = [];
-
-        if (this._firstLoadComplete) {
-          newChannels.push(m.channelId);
-        }
-      }
-
-      userIds[m.fromUserId] = true;
-      const messageJSON = JSON.parse(m.message.body);
-      const fromUserId = m.message.name;
-      const text = messageJSON.message ? messageJSON.message[0].text : '';
-
       if (subscribedChatChannels.find((c) => c.channelId === m.channelId)) {
+        if (!messages[m.channelId]) {
+          messages[m.channelId] = [];
+
+          if (this._firstLoadComplete) {
+            newChannels.push(m.channelId);
+          }
+        }
+
+        userIds[m.fromUserId] = true;
+        const messageJSON = JSON.parse(m.message.body);
+        const fromUserId = m.message.name;
+        const text = messageJSON.message ? messageJSON.message[0].text : '';
         // NOTE(jim): Notified every time someone tags you in a channel.
         StringReplace(text, /@([a-zA-Z0-9_-]+)/g, (match, i) => {
           if (
@@ -279,9 +278,12 @@ class ChatSessionContextManager extends React.Component {
     this.setState({ messages }, async () => {
       // NOTE(jim): If someone DMs you in a channel you left, resubscribe.
       if (newChannels.length) {
+        // TODO(jim): This is subscribing channels you don't belong to.
+        /*
         newChannels.forEach(async (channelId) => {
           await ChatActions.joinChatChannel({ channelId });
         });
+        */
 
         await this.props.refreshChannelData();
       }
