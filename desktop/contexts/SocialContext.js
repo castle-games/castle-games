@@ -5,6 +5,7 @@ const SocialContextDefaults = {
   userIdToUser: {},
   usernameToUser: {},
   onlineUserIds: [],
+  users: [],
   addUser: (user) => {},
   addUsers: (users) => {},
   setOnlineUserIds: (userIds) => {},
@@ -84,6 +85,7 @@ class SocialContextProvider extends React.Component {
         ...state,
         userIdToUser: state.userIdToUser,
         usernameToUser: state.usernameToUser,
+        users
       };
     });
   };

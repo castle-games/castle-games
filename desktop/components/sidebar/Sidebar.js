@@ -235,6 +235,7 @@ class Sidebar extends React.Component {
       <div className={STYLES_SIDEBAR}>
         <SidebarOptionsMessages
           viewer={viewer}
+          social={this.props.social}
           options={social.usernameToUser}
           onDismiss={this._handleHideOptions}
           onSendMessage={this._handleCreateDirectMessage}

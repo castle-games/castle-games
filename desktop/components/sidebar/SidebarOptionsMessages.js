@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as SVG from '~/common/svg';
+import * as Actions from '~/common/actions';
 
 import { css } from 'react-emotion';
 
@@ -67,10 +68,18 @@ const STYLES_TITLE = css`
 `;
 
 export default class SidebarOptionsMessages extends React.Component {
-  render() {
-    const { options, viewer } = this.props;
+  async componentDidMount() {
+    const response = await Actions.getAllUsers();
+    this.props.social.addUsers(response);
+  }
 
-    const usernames = Object.keys(options);
+  render() {
+    const { viewer } = this.props;
+
+    let users = [];
+    if (this.props.social.users && this.props.social.users.length) {
+      users = this.props.social.users;
+    }
 
     return (
       <React.Fragment>
@@ -81,17 +90,17 @@ export default class SidebarOptionsMessages extends React.Component {
           </div>
         </header>
         <div className={STYLES_TITLE}>Send a message</div>
-        {usernames.map((u) => {
-          if (u === viewer.username) {
+        {users.map((u) => {
+          if (u.username === viewer.username) {
             return null;
           }
 
           return (
             <div
-              key={`username-${u}`}
+              key={`username-${u.userId}`}
               className={STYLES_OPTION}
-              onClick={() => this.props.onSendMessage(options[u])}>
-              {u}
+              onClick={() => this.props.onSendMessage(u)}>
+              {u.name}
             </div>
           );
         })}
