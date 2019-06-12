@@ -197,6 +197,9 @@ class ChatSessionContextManager extends React.Component {
     allMessages.forEach((m) => {
       if (!messages[m.channelId]) {
         messages[m.channelId] = [];
+        // NOTE(jim): Whenever we join a new channel. We don't want want to get desktop
+        // notifications for that channel.
+        this._firstLoadComplete = false;
       }
 
       userIds[m.fromUserId] = true;
