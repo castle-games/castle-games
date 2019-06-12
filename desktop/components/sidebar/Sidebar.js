@@ -30,9 +30,10 @@ const STYLES_CONTAINER = css`
   align-items: flex-start;
   justify-content: space-between;
   flex-direction: column;
-  width: 228px;
+  width: 196px;
   min-width: 10%;
   height: 100vh;
+  flex-shrink: 0;
   transition: 200ms ease width;
 `;
 
