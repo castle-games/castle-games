@@ -324,6 +324,7 @@ class GameScreen extends React.Component {
           </div>
           <Tools
             ref={(ref) => (this._toolsReference = ref)}
+            game={this.props.game}
             onLayoutChange={this.updateGameWindowFrame}
           />
         </div>

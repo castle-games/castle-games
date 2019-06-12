@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { css } from 'react-emotion';
+import { ToolsContext } from '~/components/game/Tools';
 
 import ReactMarkdown from 'react-markdown';
 
@@ -454,7 +455,14 @@ export default class ToolMarkdown extends React.PureComponent {
     const { element } = this.props;
     return (
       <div className={STYLES_MARKDOWN}>
-        <ReactMarkdown source={element.props && element.props.source} />
+        <ToolsContext.Consumer>
+          {({ transformAssetUri }) => (
+            <ReactMarkdown
+              source={element.props && element.props.source}
+              transformImageUri={transformAssetUri}
+            />
+          )}
+        </ToolsContext.Consumer>
       </div>
     );
   }
