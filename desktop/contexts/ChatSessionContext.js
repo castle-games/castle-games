@@ -301,7 +301,11 @@ class ChatSessionContextManager extends React.Component {
       return;
     }
 
-    this.props.setOnlineUserIds(event.user_ids);
+    let onlineUserIds = {};
+    event.user_ids.forEach((id) => {
+      onlineUserIds[id] = true;
+    });
+    this.props.setOnlineUserIds(onlineUserIds);
   };
 
   render() {

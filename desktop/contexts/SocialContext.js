@@ -4,7 +4,7 @@ import * as ChatActions from '~/common/actions-chat';
 const SocialContextDefaults = {
   userIdToUser: {},
   usernameToUser: {},
-  onlineUserIds: [],
+  onlineUserIds: {},
   users: [],
   addUser: (user) => {},
   addUsers: (users) => {},

@@ -29,7 +29,7 @@ export default class SidebarDirectMessages extends React.Component {
             c.channelId === this.props.selectedChannelId && this.props.contentMode === 'chat';
 
           const user = userIdToUser[c.otherUserId];
-          const online = onlineUserIds.find(id => id === c.otherUserId);
+          const online = onlineUserIds[c.otherUserId] === true;
 
           return (
             <SidebarDirectMessageItem
