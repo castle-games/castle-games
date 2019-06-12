@@ -164,18 +164,18 @@ class ChatSessionContextManager extends React.Component {
   _triggerLocalNotifications = (notifications) => {
     const { userIdToUser } = this.props;
 
-    notifications.forEach(({title, message, fromUserId}) => {
+    notifications.forEach(({ title, message, fromUserId }) => {
       if (fromUserId) {
         const fromUser = userIdToUser[fromUserId];
         return NativeBinds.showDesktopNotification({
           title: `${title} from @${fromUser.username}`,
-          body: `${message}`
+          body: `${message}`,
         });
       }
 
       return NativeBinds.showDesktopNotification({
         title,
-        body: `${message}`
+        body: `${message}`,
       });
     });
   };
@@ -189,8 +189,13 @@ class ChatSessionContextManager extends React.Component {
       return;
     }
 
+    // NOTE(jim): Subscribed channels only.
+    const { subscribedChatChannels } = this.props;
+    if (!subscribedChatChannels.length) {
+      return;
+    }
+
     const messages = this.state.messages;
-    let isSubscribedToNewChannels = false;
     let notificationLevel = this._getNotificationLevel();
     let notifications = [];
     let newChannels = [];
@@ -202,7 +207,6 @@ class ChatSessionContextManager extends React.Component {
 
         if (this._firstLoadComplete) {
           newChannels.push(m.channelId);
-          isSubscribedToNewChannels = true;
         }
       }
 
@@ -211,53 +215,53 @@ class ChatSessionContextManager extends React.Component {
       const fromUserId = m.message.name;
       const text = messageJSON.message ? messageJSON.message[0].text : '';
 
-      if (this.props.subscribedChatChannels && this.props.subscribedChatChannels.length) {
-        if (this.props.subscribedChatChannels.find(c => c.channelId === m.channelId)) {
-          // NOTE(jim): Just using an existing library as a substitute for forEach
-          StringReplace(text, /@([a-zA-Z0-9_-]+)/g, (match, i) => {
-            if (viewer
-              && notificationLevel === NotificationLevel.TAG
-              && String(fromUserId) !== String(viewer.userId)
-              && !m.message.delay
-              && match !== viewer.username) {
-              notifications.push({
-                title: 'Castle Chat',
-                fromUserId,
-                message: text
-              });
-            }
-
-            return match;
-          });
-
-          if (viewer
-            && notificationLevel === NotificationLevel.EVERY
-            && String(fromUserId) !== String(viewer.userId)
-            && !m.message.delay) {
+      if (subscribedChatChannels.find((c) => c.channelId === m.channelId)) {
+        // NOTE(jim): Notified every time someone tags you in a channel.
+        StringReplace(text, /@([a-zA-Z0-9_-]+)/g, (match, i) => {
+          if (
+            notificationLevel === NotificationLevel.TAG &&
+            String(fromUserId) !== String(viewer.userId) &&
+            !m.message.delay &&
+            match === viewer.username
+          ) {
             notifications.push({
               title: 'Castle Chat',
               fromUserId,
-              message: text
+              message: text,
             });
           }
-        }
 
-        // NOTE(jim): We can simplify this some other time.
-        const requiredMessageProps = {
-          fromUserId: m.fromUserId,
-          chatMessageId: m.chatMessageId,
-          text: text,
-          timestamp: m.timestamp
-        };
+          return match;
+        });
 
-        // NOTE(jim): This is an unfortunate complication. On the first load you want to push elements
-        // into the array, on the second load you want to perform an unshift. I'll need to ping Jesse
-        // about this at some point.
-        if (this._firstLoadComplete !== false) {
-          messages[m.channelId].push(requiredMessageProps);
-        } else {
-          messages[m.channelId].unshift(requiredMessageProps);
+        // NOTE(jim): Notified every time someone chats in a channel.
+        if (
+          notificationLevel === NotificationLevel.EVERY &&
+          String(fromUserId) !== String(viewer.userId) &&
+          !m.message.delay
+        ) {
+          notifications.push({
+            title: 'Castle Chat',
+            fromUserId,
+            message: text,
+          });
         }
+      }
+
+      // NOTE(jim): The only props the message component needs.
+      const requiredMessageProps = {
+        fromUserId: m.fromUserId,
+        chatMessageId: m.chatMessageId,
+        text: text,
+        timestamp: m.timestamp,
+      };
+
+      // NOTE(jim): First load the array is reversed. You must
+      // do this.
+      if (this._firstLoadComplete) {
+        messages[m.channelId].push(requiredMessageProps);
+      } else {
+        messages[m.channelId].unshift(requiredMessageProps);
       }
     });
 
@@ -266,21 +270,22 @@ class ChatSessionContextManager extends React.Component {
       await this.props.addUsersToSocial(users);
     } catch (e) {}
 
-    // NOTE(jim): You want the first load to be complete before you send anything else.
+    // NOTE(jim): Do not send notifications when messages first load.
     if (notifications.length > 0 && this._firstLoadComplete) {
       this._triggerLocalNotifications(notifications);
     }
 
-    if (isSubscribedToNewChannels) {
-      newChannels.forEach(async (channelId) => {
-        await ChatActions.joinChatChannel({ channelId });
-      });
-
-      await this.props.refreshChannelData();
-    }
-
     this._firstLoadComplete = true;
-    this.setState({ messages });
+    this.setState({ messages }, async () => {
+      // NOTE(jim): If someone DMs you in a channel you left, resubscribe.
+      if (newChannels.length) {
+        newChannels.forEach(async (channelId) => {
+          await ChatActions.joinChatChannel({ channelId });
+        });
+
+        await this.props.refreshChannelData();
+      }
+    });
   };
 
   _handlePresenceAsync = async (event) => {
