@@ -203,7 +203,6 @@ class ChatSessionContextManager extends React.Component {
 
     allMessages.forEach((m) => {
       const isSubscribed = subscribedChatChannels.find((c) => c.channelId === m.channelId);
-      console.log(subscribedChatChannels);
 
       // NOTE(jim): I shouldn't even have to check.
       if (!isSubscribed) {
