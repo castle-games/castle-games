@@ -210,7 +210,6 @@ class ChatSessionContextManager extends React.Component {
           && String(fromUserId) !== String(viewer.userId)
           && !m.message.delay
           && match !== viewer.username) {
-          console.log('tag');
           notifications.push({
             title: 'Castle Chat',
             fromUserId,

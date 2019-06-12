@@ -124,7 +124,10 @@ const run = async () => {
   });
 
   const notifications = await Actions.getNotificationPreferences();
-  state.currentUser = { user: {...viewer, notifications} };
+  state.currentUser = { user: viewer };
+  if (state.currentUser.user) {
+    state.currentUser = { user: {...state.currentUser.user, notifications} };
+  }
 
   // NOTE(jim): You must be authenticated to use Castle.
   // https://github.com/castle-games/ghost/issues/480
