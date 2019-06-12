@@ -190,13 +190,17 @@ class ChatSessionContextManager extends React.Component {
     }
 
     const messages = this.state.messages;
+    let isSubscribedToNewChannels = false;
     let notificationLevel = this._getNotificationLevel();
     let notifications = [];
+    let newChannels = [];
     let userIds = {};
 
     allMessages.forEach((m) => {
       if (!messages[m.channelId]) {
         messages[m.channelId] = [];
+        newChannels.push(m.channelId);
+        isSubscribedToNewChannels = true;
         // NOTE(jim): Whenever we join a new channel. We don't want want to get desktop
         // notifications for that channel.
         this._firstLoadComplete = false;
@@ -223,15 +227,19 @@ class ChatSessionContextManager extends React.Component {
         return match;
       });
 
-      if (viewer
-        && notificationLevel === NotificationLevel.EVERY
-        && String(fromUserId) !== String(viewer.userId)
-        && !m.message.delay) {
-        notifications.push({
-          title: 'Castle Chat',
-          fromUserId,
-          message: messageJSON.message[0].text
-        });
+      if (this.props.subscribedChatChannels && this.props.subscribedChatChannels.length) {
+        if (this.props.subscribedChatChannels.find(id => m.channelId)) {
+          if (viewer
+            && notificationLevel === NotificationLevel.EVERY
+            && String(fromUserId) !== String(viewer.userId)
+            && !m.message.delay) {
+            notifications.push({
+              title: 'Castle Chat',
+              fromUserId,
+              message: messageJSON.message[0].text
+            });
+          }
+        }
       }
 
       // NOTE(jim): We can simplify this some other time.
@@ -260,6 +268,13 @@ class ChatSessionContextManager extends React.Component {
     // NOTE(jim): You want the first load to be complete before you send anything else.
     if (notifications.length > 0 && this._firstLoadComplete) {
       this._triggerLocalNotifications(notifications);
+    }
+
+    if (isSubscribedToNewChannels) {
+      newChannels.forEach(async (channelId) => {
+        await ChatActions.joinChatChannel({ channelId });
+      });
+      this.props.refreshChannelData();
     }
 
     this._firstLoadComplete = true;
@@ -293,9 +308,11 @@ class ChatSessionContextProvider extends React.Component {
               <ChatSessionContextManager
                 currentUser={currentUser}
                 userIdToUser={social.userIdToUser}
+                subscribedChatChannels={social.subscribedChatChannels}
                 findSubscribedChannel={social.findSubscribedChannel}
                 setOnlineUserIds={social.setOnlineUserIds}
                 addUsersToSocial={social.addUsers}
+                refreshChannelData={social.refreshChannelData}
                 newUserJoinChannels={social.newUserJoinChannels}
                 {...this.props}
               />
