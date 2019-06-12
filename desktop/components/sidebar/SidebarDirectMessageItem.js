@@ -82,10 +82,6 @@ export default ({ data, onClick, user }) => {
   }
 
   let color = null;
-  if (!data.online) {
-    color = Constants.REFACTOR_COLORS.subdued;
-  }
-
   if (data.active) {
     color = 'magenta';
   }
@@ -104,12 +100,8 @@ export default ({ data, onClick, user }) => {
       ) : (
         <figure
           className={STYLES_AVATAR}
-          style={{ backgroundImage: user.photo ? `url(${user.photo.url})` : `` }}
-        >
-          <span
-            className={STYLES_INDICATOR}
-            style={{ background: Constants.REFACTOR_COLORS.subdued }}
-          />
+          style={{ backgroundImage: user.photo ? `url(${user.photo.url})` : `` }}>
+          <span className={STYLES_INDICATOR} style={{ background: '#ACACAC' }} />
         </figure>
       )}
       <div className={STYLES_TEXT}>
