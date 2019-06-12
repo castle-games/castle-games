@@ -4,6 +4,7 @@ import * as Strings from '~/common/strings';
 import * as Constants from '~/common/constants';
 import * as NativeUtil from '~/native/nativeutil';
 import * as ChatActions from '~/common/actions-chat';
+import * as Actions from '~/common/actions';
 
 import { css } from 'react-emotion';
 
@@ -53,6 +54,11 @@ class Sidebar extends React.Component {
     value: '',
     mode: 'DEFAULT',
   };
+
+  async componentDidMount() {
+    const response = await Actions.getAllUsers();
+    this.props.social.addSearchableUsers(response);
+  }
 
   _handleSignIn = () => {
     return this.props.navigator.navigateToSignIn();

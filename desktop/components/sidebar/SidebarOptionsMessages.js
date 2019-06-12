@@ -2,7 +2,6 @@ import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as SVG from '~/common/svg';
 import * as Strings from '~/common/strings';
-import * as Actions from '~/common/actions';
 
 import { css } from 'react-emotion';
 
@@ -69,11 +68,6 @@ const STYLES_TITLE = css`
 `;
 
 export default class SidebarOptionsMessages extends React.Component {
-  async componentDidMount() {
-    const response = await Actions.getAllUsers();
-    this.props.social.addUsers(response);
-  }
-
   render() {
     const { viewer } = this.props;
 
