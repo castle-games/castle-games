@@ -175,9 +175,8 @@ export default class ChatMessageElement extends React.Component {
                 ? () => this.props.onNavigateToUserProfile(this.props.user)
                 : () => {}
             }>
-            {Strings.isEmpty(this.props.user.name)
-              ? this.props.user.username
-              : this.props.user.name}
+
+            {Strings.getPresentationName(this.props.user)}
             <span className={STYLES_TIMESTAMP}>
               {Strings.toChatDate(this.props.message.timestamp)}
             </span>

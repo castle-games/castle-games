@@ -1,6 +1,20 @@
+import * as React from 'react';
+
 import { Value } from 'slate';
 
 import Plain from 'slate-plain-serializer';
+
+export const getPresentationName = (user) => {
+  if (isEmpty(user.name)) {
+    return user.username;
+  }
+
+  if (user.name === user.username) {
+    return user.username;
+  }
+
+  return <React.Fragment>{user.name} <span style={{ fontWeight: 400, fontSize: `10px`}}>({user.username})</span></React.Fragment>;
+}
 
 export const elide = (string, length = 140) => {
   if (isEmpty(string)) {

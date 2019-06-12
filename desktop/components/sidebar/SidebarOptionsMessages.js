@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as SVG from '~/common/svg';
+import * as Strings from '~/common/strings';
 import * as Actions from '~/common/actions';
 
 import { css } from 'react-emotion';
@@ -100,7 +101,7 @@ export default class SidebarOptionsMessages extends React.Component {
               key={`username-${u.userId}`}
               className={STYLES_OPTION}
               onClick={() => this.props.onSendMessage(u)}>
-              {u.name}
+              {Strings.getPresentationName(u)}
             </div>
           );
         })}
