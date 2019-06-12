@@ -37,15 +37,15 @@ const STYLES_AUTH = css`
 
 const STYLES_AVATAR = css`
   flex-shrink: 0;
-  background-size: cover;
-  background-position: 50% 50%;
   height: 20px;
   width: 20px;
   margin-top: 8px;
-  background-color: magenta;
   border-radius: 4px;
   cursor: pointer;
   margin-right: 8px;
+  background-size: cover;
+  background-position: 50% 50%;
+  background-color: magenta;
 `;
 
 const STYLES_BYLINE = css`

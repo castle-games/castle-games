@@ -18,6 +18,7 @@ export default class SidebarDirectMessages extends React.Component {
       return null;
     }
 
+    const { onlineUserIds, userIdToUser } = this.props.social;
     return (
       <div className={STYLES_CONTAINER}>
         <SidebarGroupHeader onShowOptions={this.props.onShowOptions}>
@@ -27,12 +28,13 @@ export default class SidebarDirectMessages extends React.Component {
           const active =
             c.channelId === this.props.selectedChannelId && this.props.contentMode === 'chat';
 
-          const user = this.props.social.userIdToUser[c.otherUserId];
+          const user = userIdToUser[c.otherUserId];
+          const online = onlineUserIds.find(id => id === c.otherUserId);
 
           return (
             <SidebarDirectMessageItem
               key={`direct-message-${c.otherUserId}`}
-              data={{ name: c.name, active }}
+              data={{ name: c.name, active, online }}
               user={user}
               onClick={() => this.props.onSelectChannel(c)}
             />

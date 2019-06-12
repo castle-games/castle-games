@@ -68,11 +68,11 @@ const STYLES_AVATAR = css`
   flex-shrink: 0;
   background-size: cover;
   background-position: 50% 50%;
+  background-color: magenta;
   height: 20px;
   width: 20px;
   position: relative;
   border-radius: 4px;
-  background: magenta;
 `;
 
 export default ({ data, onClick, user }) => {
@@ -104,7 +104,12 @@ export default ({ data, onClick, user }) => {
         <figure
           className={STYLES_AVATAR}
           style={{ backgroundImage: user.photo ? `url(${user.photo.url})` : `` }}
-        />
+        >
+          <span
+            className={STYLES_INDICATOR}
+            style={{ background: Constants.REFACTOR_COLORS.subdued }}
+          />
+        </figure>
       )}
       <div className={STYLES_TEXT}>
         <h3 className={STYLES_NAME} style={{ color }}>
