@@ -199,36 +199,37 @@ class ChatSessionContextManager extends React.Component {
     allMessages.forEach((m) => {
       if (!messages[m.channelId]) {
         messages[m.channelId] = [];
-        newChannels.push(m.channelId);
-        isSubscribedToNewChannels = true;
-        // NOTE(jim): Whenever we join a new channel. We don't want want to get desktop
-        // notifications for that channel.
-        this._firstLoadComplete = false;
+
+        if (this._firstLoadComplete) {
+          newChannels.push(m.channelId);
+          isSubscribedToNewChannels = true;
+        }
       }
 
       userIds[m.fromUserId] = true;
       const messageJSON = JSON.parse(m.message.body);
       const fromUserId = m.message.name;
-
-      // NOTE(jim): Just using an existing library as a substitute for forEach
-      StringReplace(messageJSON.message[0].text, /@([a-zA-Z0-9_-]+)/g, (match, i) => {
-        if (viewer
-          && notificationLevel === NotificationLevel.TAG
-          && String(fromUserId) !== String(viewer.userId)
-          && !m.message.delay
-          && match !== viewer.username) {
-          notifications.push({
-            title: 'Castle Chat',
-            fromUserId,
-            message: messageJSON.message[0].text
-          });
-        }
-
-        return match;
-      });
+      const text = messageJSON.message ? messageJSON.message[0].text : '';
 
       if (this.props.subscribedChatChannels && this.props.subscribedChatChannels.length) {
-        if (this.props.subscribedChatChannels.find(id => m.channelId)) {
+        if (this.props.subscribedChatChannels.find(c => c.channelId === m.channelId)) {
+          // NOTE(jim): Just using an existing library as a substitute for forEach
+          StringReplace(text, /@([a-zA-Z0-9_-]+)/g, (match, i) => {
+            if (viewer
+              && notificationLevel === NotificationLevel.TAG
+              && String(fromUserId) !== String(viewer.userId)
+              && !m.message.delay
+              && match !== viewer.username) {
+              notifications.push({
+                title: 'Castle Chat',
+                fromUserId,
+                message: text
+              });
+            }
+
+            return match;
+          });
+
           if (viewer
             && notificationLevel === NotificationLevel.EVERY
             && String(fromUserId) !== String(viewer.userId)
@@ -236,27 +237,27 @@ class ChatSessionContextManager extends React.Component {
             notifications.push({
               title: 'Castle Chat',
               fromUserId,
-              message: messageJSON.message[0].text
+              message: text
             });
           }
         }
-      }
 
-      // NOTE(jim): We can simplify this some other time.
-      const requiredMessageProps = {
-        fromUserId: m.fromUserId,
-        chatMessageId: m.chatMessageId,
-        text: messageJSON.message[0].text,
-        timestamp: m.timestamp
-      };
+        // NOTE(jim): We can simplify this some other time.
+        const requiredMessageProps = {
+          fromUserId: m.fromUserId,
+          chatMessageId: m.chatMessageId,
+          text: text,
+          timestamp: m.timestamp
+        };
 
-      // NOTE(jim): This is an unfortunate complication. On the first load you want to push elements
-      // into the array, on the second load you want to perform an unshift. I'll need to ping Jesse
-      // about this at some point.
-      if (this._firstLoadComplete !== false) {
-        messages[m.channelId].push(requiredMessageProps);
-      } else {
-        messages[m.channelId].unshift(requiredMessageProps);
+        // NOTE(jim): This is an unfortunate complication. On the first load you want to push elements
+        // into the array, on the second load you want to perform an unshift. I'll need to ping Jesse
+        // about this at some point.
+        if (this._firstLoadComplete !== false) {
+          messages[m.channelId].push(requiredMessageProps);
+        } else {
+          messages[m.channelId].unshift(requiredMessageProps);
+        }
       }
     });
 
@@ -274,7 +275,8 @@ class ChatSessionContextManager extends React.Component {
       newChannels.forEach(async (channelId) => {
         await ChatActions.joinChatChannel({ channelId });
       });
-      this.props.refreshChannelData();
+
+      await this.props.refreshChannelData();
     }
 
     this._firstLoadComplete = true;
