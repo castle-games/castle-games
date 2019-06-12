@@ -12,6 +12,7 @@ const STYLES_USER = css`
   margin: 8px 0 12px 0;
   padding: 0 16px 0 16px;
   cursor: pointer;
+  user-select: none;
   transition: 200ms ease color;
 
   :hover {

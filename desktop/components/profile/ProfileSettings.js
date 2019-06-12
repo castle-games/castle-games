@@ -94,6 +94,7 @@ export default class ProfileSettings extends React.Component {
 
       const user = { ...this.props.user, notifications };
       this.context.setCurrentUser(user);
+      this.props.onShowSettings();
       return;
     }
 
@@ -102,6 +103,7 @@ export default class ProfileSettings extends React.Component {
 
     const user = { ...this.props.user, notifications };
     this.context.setCurrentUser(user);
+    this.props.onShowSettings();
   };
 
   render() {

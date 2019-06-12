@@ -43,6 +43,7 @@ class ProfileScreen extends React.Component {
     navigateToGameUrl: async (url) => {},
     navigateToUserProfile: (user) => {},
   };
+
   state = {
     mode: this.props.options.mode ? this.props.options.mode : 'games',
     gameToUpdate: null, // if mode === 'update-game'
@@ -53,6 +54,7 @@ class ProfileScreen extends React.Component {
       this.props.creator && this.props.creator.userId ? this.props.creator.userId : null;
     const nextUserId =
       nextProps.creator && nextProps.creator.userId ? nextProps.creator.userId : null;
+
     if (nextUserId != existingUserId) {
       // we're rendering a new profile, reset state.
       this._onShowGames();
@@ -158,7 +160,7 @@ class ProfileScreen extends React.Component {
   _renderSettings = (isOwnProfile, user) => {
     if (!isOwnProfile) return null;
 
-    return <ProfileSettings user={user} />;
+    return <ProfileSettings user={user} onShowSettings={this._onShowSettings} />;
   };
 
   _renderSignOutContent = (isOwnProfile) => {
