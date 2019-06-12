@@ -202,42 +202,33 @@ class ChatSessionContextManager extends React.Component {
     let userIds = {};
 
     allMessages.forEach((m) => {
-      if (subscribedChatChannels.find((c) => c.channelId === m.channelId)) {
-        if (!messages[m.channelId]) {
-          messages[m.channelId] = [];
+      const isSubscribed = subscribedChatChannels.find((c) => c.channelId === m.channelId);
+      console.log(subscribedChatChannels);
 
-          if (this._firstLoadComplete) {
-            newChannels.push(m.channelId);
-          }
+      // NOTE(jim): I shouldn't even have to check.
+      if (!isSubscribed) {
+        return;
+      }
+
+      if (!messages[m.channelId]) {
+        messages[m.channelId] = [];
+
+        if (this._firstLoadComplete) {
+          newChannels.push(m.channelId);
         }
+      }
 
-        userIds[m.fromUserId] = true;
-        const messageJSON = JSON.parse(m.message.body);
-        const fromUserId = m.message.name;
-        const text = messageJSON.message ? messageJSON.message[0].text : '';
-        // NOTE(jim): Notified every time someone tags you in a channel.
-        StringReplace(text, /@([a-zA-Z0-9_-]+)/g, (match, i) => {
-          if (
-            notificationLevel === NotificationLevel.TAG &&
-            String(fromUserId) !== String(viewer.userId) &&
-            !m.message.delay &&
-            match === viewer.username
-          ) {
-            notifications.push({
-              title: 'Castle Chat',
-              fromUserId,
-              message: text,
-            });
-          }
-
-          return match;
-        });
-
-        // NOTE(jim): Notified every time someone chats in a channel.
+      userIds[m.fromUserId] = true;
+      const messageJSON = JSON.parse(m.message.body);
+      const fromUserId = m.message.name;
+      const text = messageJSON.message ? messageJSON.message[0].text : '';
+      // NOTE(jim): Notified every time someone tags you in a channel.
+      StringReplace(text, /@([a-zA-Z0-9_-]+)/g, (match, i) => {
         if (
-          notificationLevel === NotificationLevel.EVERY &&
+          notificationLevel === NotificationLevel.TAG &&
           String(fromUserId) !== String(viewer.userId) &&
-          !m.message.delay
+          !m.message.delay &&
+          match === viewer.username
         ) {
           notifications.push({
             title: 'Castle Chat',
@@ -245,6 +236,21 @@ class ChatSessionContextManager extends React.Component {
             message: text,
           });
         }
+
+        return match;
+      });
+
+      // NOTE(jim): Notified every time someone chats in a channel.
+      if (
+        notificationLevel === NotificationLevel.EVERY &&
+        String(fromUserId) !== String(viewer.userId) &&
+        !m.message.delay
+      ) {
+        notifications.push({
+          title: 'Castle Chat',
+          fromUserId,
+          message: text,
+        });
       }
 
       // NOTE(jim): The only props the message component needs.
@@ -278,8 +284,8 @@ class ChatSessionContextManager extends React.Component {
     this.setState({ messages }, async () => {
       // NOTE(jim): If someone DMs you in a channel you left, resubscribe.
       if (newChannels.length) {
-        // TODO(jim): This is subscribing channels you don't belong to.
-        /*
+        /* TODO(jim): Can't do this because it may join channels you
+        // are not allowed to join.
         newChannels.forEach(async (channelId) => {
           await ChatActions.joinChatChannel({ channelId });
         });
