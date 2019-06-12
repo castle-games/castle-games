@@ -47,7 +47,7 @@ const STYLES_NAME = css`
   font-family: ${Constants.REFACTOR_FONTS.system};
   font-weight: 600;
   font-size: 12px;
-  margin-top: 1px;
+  margin-top: 2px;
 `;
 
 const STYLES_STATUS = css`

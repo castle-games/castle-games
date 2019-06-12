@@ -123,7 +123,8 @@ const run = async () => {
     allChatChannels,
   });
 
-  state.currentUser = { user: viewer };
+  const notifications = await Actions.getNotificationPreferences();
+  state.currentUser = { user: {...viewer, notifications} };
 
   // NOTE(jim): You must be authenticated to use Castle.
   // https://github.com/castle-games/ghost/issues/480

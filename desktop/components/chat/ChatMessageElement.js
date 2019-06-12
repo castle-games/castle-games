@@ -125,20 +125,8 @@ export default class ChatMessageElement extends React.Component {
   render() {
     let text = '';
 
-    // TODO(jim): Figure out what to do with this.
-    if (this.props.message.body === 2) {
-      console.log('type 2', this.props.message);
-      return null;
-    }
-
-    // TODO(jim): Figure out what to do with this.
-    if (this.props.message.body === 1) {
-      console.log('type 1', this.props.message);
-      return null;
-    }
-
-    if (!Strings.isEmpty(this.props.message.body.message[0].text)) {
-      text = this.props.message.body.message[0].text;
+    if (!Strings.isEmpty(this.props.message.text)) {
+      text = this.props.message.text;
 
       // NOTE(jim): Capture all URL groups.
       text = StringReplace(text, /(https?:\/\/\S+)/g, (match, i) => (
