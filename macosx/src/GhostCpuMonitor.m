@@ -9,12 +9,11 @@
 #define GHOST_CPU_MONITOR_INTERVAL_SEC 1
 
 @interface GhostCpuMonitor () {
-  processor_info_array_t cpuInfo, prevCpuInfo;
+  processor_cpu_load_info_t cpuInfo, prevCpuInfo;
   mach_msg_type_number_t numCpuInfo, numPrevCpuInfo;
   float *usage;
 }
 
-@property(nonatomic, assign) unsigned numCPUs;
 @property(nonatomic, strong) NSTimer *updateTimer;
 @property(nonatomic, strong) NSLock *CPUUsageLock;
 @property(nonatomic, copy) void (^updateCallback)(unsigned, float *);
@@ -29,13 +28,13 @@
     _updateCallback = callback;
     return;
   }
-  [self _countCPUs];
-  usage = malloc(_numCPUs * sizeof(float));
+  unsigned numCPUs = [self _getNumCPUs];
+  usage = malloc(numCPUs * sizeof(float));
   _CPUUsageLock = [[NSLock alloc] init];
   _updateCallback = callback;
   _updateTimer = [NSTimer scheduledTimerWithTimeInterval:GHOST_CPU_MONITOR_INTERVAL_SEC
                                                   target:self
-                                                selector:@selector(_updateInfo:)
+                                                selector:@selector(_measureMachineCpuUsage:)
                                                 userInfo:nil
                                                  repeats:YES];
 }
@@ -57,41 +56,46 @@
   }
 }
 
-- (void)_countCPUs {
+- (unsigned)_getNumCPUs {
   int mib[2U] = {CTL_HW, HW_NCPU};
-  size_t sizeOfNumCPUs = sizeof(_numCPUs);
-  int status = sysctl(mib, 2U, &_numCPUs, &sizeOfNumCPUs, NULL, 0U);
+  unsigned numCPUs;
+  size_t sizeOfNumCPUs = sizeof(numCPUs);
+  int status = sysctl(mib, 2U, &numCPUs, &sizeOfNumCPUs, NULL, 0U);
   if (status) {
-    _numCPUs = 1;
+    numCPUs = 1;
   }
+  return numCPUs;
 }
 
-- (void)_updateInfo:(__unused NSTimer *)sender {
+/**
+ *  Measure CPU usage across all processes on the machine.
+ */
+- (void)_measureMachineCpuUsage:(__unused NSTimer *)sender {
   natural_t numCPUsU = 0U;
   kern_return_t result = host_processor_info(mach_host_self(), PROCESSOR_CPU_LOAD_INFO, &numCPUsU,
-                                             &cpuInfo, &numCpuInfo);
+                                             (processor_info_array_t *)&cpuInfo, &numCpuInfo);
   if (result == KERN_SUCCESS) {
     [_CPUUsageLock lock];
 
-    for (unsigned cpuIdx = 0U; cpuIdx < _numCPUs; ++cpuIdx) {
-      float inUse, total;
+    for (natural_t cpuIdx = 0U; cpuIdx < numCPUsU; ++cpuIdx) {
+      unsigned inUse = 0, total = 0;
       if (prevCpuInfo) {
-        inUse = ((cpuInfo[(CPU_STATE_MAX * cpuIdx) + CPU_STATE_USER] -
-                  prevCpuInfo[(CPU_STATE_MAX * cpuIdx) + CPU_STATE_USER]) +
-                 (cpuInfo[(CPU_STATE_MAX * cpuIdx) + CPU_STATE_SYSTEM] -
-                  prevCpuInfo[(CPU_STATE_MAX * cpuIdx) + CPU_STATE_SYSTEM]) +
-                 (cpuInfo[(CPU_STATE_MAX * cpuIdx) + CPU_STATE_NICE] -
-                  prevCpuInfo[(CPU_STATE_MAX * cpuIdx) + CPU_STATE_NICE]));
-        total = inUse + (cpuInfo[(CPU_STATE_MAX * cpuIdx) + CPU_STATE_IDLE] -
-                         prevCpuInfo[(CPU_STATE_MAX * cpuIdx) + CPU_STATE_IDLE]);
+        inUse = cpuInfo[cpuIdx].cpu_ticks[CPU_STATE_USER] -
+                prevCpuInfo[cpuIdx].cpu_ticks[CPU_STATE_USER] +
+                (cpuInfo[cpuIdx].cpu_ticks[CPU_STATE_SYSTEM] -
+                 prevCpuInfo[cpuIdx].cpu_ticks[CPU_STATE_SYSTEM]) +
+                cpuInfo[cpuIdx].cpu_ticks[CPU_STATE_NICE] -
+                cpuInfo[cpuIdx].cpu_ticks[CPU_STATE_NICE];
+        total = inUse + cpuInfo[cpuIdx].cpu_ticks[CPU_STATE_IDLE] -
+                prevCpuInfo[cpuIdx].cpu_ticks[CPU_STATE_IDLE];
       } else {
-        inUse = cpuInfo[(CPU_STATE_MAX * cpuIdx) + CPU_STATE_USER] +
-                cpuInfo[(CPU_STATE_MAX * cpuIdx) + CPU_STATE_SYSTEM] +
-                cpuInfo[(CPU_STATE_MAX * cpuIdx) + CPU_STATE_NICE];
-        total = inUse + cpuInfo[(CPU_STATE_MAX * cpuIdx) + CPU_STATE_IDLE];
+        inUse = cpuInfo[cpuIdx].cpu_ticks[CPU_STATE_USER] +
+                cpuInfo[cpuIdx].cpu_ticks[CPU_STATE_SYSTEM] +
+                cpuInfo[cpuIdx].cpu_ticks[CPU_STATE_NICE];
+        total = inUse + cpuInfo[cpuIdx].cpu_ticks[CPU_STATE_IDLE];
       }
 
-      usage[cpuIdx] = inUse / total;
+      usage[cpuIdx] = (float)inUse / (float)total;
     }
     [_CPUUsageLock unlock];
 
@@ -107,7 +111,7 @@
     numCpuInfo = 0U;
 
     if (_updateCallback) {
-      _updateCallback(_numCPUs, usage);
+      _updateCallback(numCPUsU, usage);
     }
   } else {
     NSLog(@"Failed to measure CPU info, stopping task");
