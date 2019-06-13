@@ -2,20 +2,23 @@
 #pragma once
 #include <windows.h>
 
+typedef DWORD(WINAPI *GhostCpuCallback)(float usage);
+
 // http://www.philosophicalgeek.com/2009/01/03/determine-cpu-usage-of-current-process-c-and-c/
 class GhostCpu {
 public:
   GhostCpu(void);
   ~GhostCpu();
 
-  short GetUsage();
-  void StartMonitor();
+  void MeasureUsage();
+  void StartMonitor(GhostCpuCallback callback);
   void StopMonitor();
 
 private:
-  ULONGLONG SubtractTimes(const FILETIME& ftA, const FILETIME& ftB);
+  float GetUsage();
   bool EnoughTimePassed();
   inline bool IsFirstRun() const { return (m_dwLastRun == 0); }
+  ULONGLONG SubtractTimes(const FILETIME& ftA, const FILETIME& ftB);
 
   // system total times
   FILETIME m_ftPrevSysKernel;
@@ -25,10 +28,11 @@ private:
   FILETIME m_ftPrevProcKernel;
   FILETIME m_ftPrevProcUser;
 
-  short m_nCpuUsage;
+  float m_nCpuUsage;
   ULONGLONG m_dwLastRun;
   volatile LONG m_lRunCount;
 
   // monitor thread
+  GhostCpuCallback m_callback;
   HANDLE m_monitorThread;
 };

@@ -2,7 +2,7 @@
 #include <windows.h>
 #include "ghost_cpu.h"
 
-#define GHOST_CPU_POLL_MS 3000
+#define GHOST_CPU_POLL_MS 2000
 DWORD WINAPI GhostCpuMonitorThreadProc(LPVOID lpParam);
 
 GhostCpu::GhostCpu(void)
@@ -21,10 +21,13 @@ GhostCpu::~GhostCpu() {
   StopMonitor();
 }
 
-void GhostCpu::StartMonitor() {
+void GhostCpu::StartMonitor(GhostCpuCallback callback) {
   if (m_monitorThread) {
-    StopMonitor();
+    // already running
+    m_callback = callback;
+    return;
   }
+  m_callback = callback;
   m_monitorThread = CreateThread(NULL, 0, GhostCpuMonitorThreadProc, (LPVOID) this, 0, NULL);
 }
 
@@ -43,10 +46,10 @@ void GhostCpu::StopMonitor() {
 * If the method is recalled to quickly, the previous value
 * is returned.
 ***********************************************/
-short GhostCpu::GetUsage() {
+float GhostCpu::GetUsage() {
   // create a local copy to protect against race conditions in setting the 
   // member variable
-  short nCpuCopy = m_nCpuUsage;
+  float nCpuCopy = m_nCpuUsage;
   if (::InterlockedIncrement(&m_lRunCount) == 1) {
     if (!EnoughTimePassed()) {
       ::InterlockedDecrement(&m_lRunCount);
@@ -83,7 +86,7 @@ short GhostCpu::GetUsage() {
       ULONGLONG nTotalProc = ftProcKernelDiff + ftProcUserDiff;
 
       if (nTotalSys > 0) {
-        m_nCpuUsage = (short)((100.0 * nTotalProc) / nTotalSys);
+        m_nCpuUsage = nTotalProc / (float)nTotalSys;
       }
     }
 
@@ -118,11 +121,17 @@ bool GhostCpu::EnoughTimePassed() {
   return (dwCurrentTickCount - m_dwLastRun) > minElapsedMS;
 }
 
+void GhostCpu::MeasureUsage() {
+  float usage = GetUsage();
+  if (m_callback) {
+    m_callback(usage);
+  }
+}
+
 DWORD WINAPI GhostCpuMonitorThreadProc(LPVOID lpParam) {
   GhostCpu *usage = (GhostCpu *)lpParam;
   while (true) {
-    short cpuUsage = usage->GetUsage();
-    // TODO: send usage to JS
+    usage->MeasureUsage();
     Sleep(GHOST_CPU_POLL_MS);
   }
 }

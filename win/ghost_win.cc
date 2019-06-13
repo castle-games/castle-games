@@ -49,6 +49,7 @@ extern "C" {
 #include "wintoastlib.h"
 
 #include "ghost_win.h"
+#include "ghost_cpu.h"
 
 using namespace WinToastLib;
 
@@ -851,6 +852,20 @@ const char *ghostGetCachePath() {
 
 void ghostTakeScreenCapture() {}
 
+static GhostCpu sCpuUsageMonitor;
+
+DWORD WINAPI cpuUsageCallback(float usage) {
+  std::stringstream params;
+  params << "{ usage: [" << usage << "] }";
+  ghostSendJSEvent(kGhostCpuUsageEventName, params.str().c_str());
+  return 0;
+}
+
 void ghostSetCpuMonitoring(bool isMonitoringCpu) {
-  // TODO: GhostCpu::startMonitor() / StopMonitor()
+  if (isMonitoringCpu) {
+    sCpuUsageMonitor.StartMonitor(cpuUsageCallback);
+  }
+  else {
+    sCpuUsageMonitor.StopMonitor();
+  }
 }
