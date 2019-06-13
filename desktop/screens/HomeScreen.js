@@ -5,27 +5,41 @@ import { css } from 'react-emotion';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigatorContext } from '~/contexts/NavigationContext';
 
+import GamesHomeScreen from '~/screens/GamesHomeScreen';
 import UIGameGrid from '~/components/reusable/UIGameGrid';
 
 const STYLES_CONTAINER = css`
   background: ${Constants.colors.background};
   width: 100%;
   height: 100%;
-  overflow-y: scroll;
   padding-bottom: 64px;
 
+  overflow-y: scroll;
   ::-webkit-scrollbar {
     display: none;
     width: 1px;
   }
 `;
 
+const STYLES_MODAL = css`
+  position: absolute;
+  background: red;
+`;
+
 class HomeScreen extends React.Component {
+
   static defaultProps = {
-    featuredGames: [],
+    trendingGames: [],
+    gamesUnderConstruction: [],
+    newestGames: [],
+    randomGames: [],
     featuredExamples: [],
     history: [],
     refreshHistory: async () => {},
+  };
+
+  state = {
+    gameInfoToShow: null,
   };
 
   componentDidMount() {
@@ -46,13 +60,17 @@ class HomeScreen extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
-        {mode === 'featured' || mode === 'home' ? (
-          <UIGameGrid
+        {mode === 'posts' ? (
+          <UIPostList
             viewer={this.props.viewer}
-            gameItems={this.props.featuredGames}
             onUserSelect={this.props.navigateToUserProfile}
             onGameSelect={this._navigateToGame}
             onSignInSelect={this.props.navigateToSignIn}
+          />
+        ) : null}
+        {mode === 'home' ? (
+          <GamesHomeScreen
+            {...this.props}
           />
         ) : null}
         {mode === 'examples' ? (
@@ -66,8 +84,8 @@ class HomeScreen extends React.Component {
         ) : null}
         {mode === 'history' ? (
           <UIGameGrid
-            gameItems={recentGames}
             viewer={this.props.viewer}
+            gameItems={recentGames}
             onUserSelect={this.props.navigateToUserProfile}
             onGameSelect={this._navigateToGame}
             onSignInSelect={this.props.navigateToSignIn}

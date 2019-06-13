@@ -463,7 +463,22 @@ export async function getInitialData() {
         ${GAME_ITEMS}
       }
 
-      featuredGames {
+      trendingGames {
+        ${GAME_FIELDS}
+        ${NESTED_GAME_OWNER}
+      }
+
+      gamesUnderConstruction {
+        ${GAME_FIELDS}
+        ${NESTED_GAME_OWNER}
+      }
+
+      newestGames {
+        ${GAME_FIELDS}
+        ${NESTED_GAME_OWNER}
+      }
+
+      randomGames {
         ${GAME_FIELDS}
         ${NESTED_GAME_OWNER}
       }

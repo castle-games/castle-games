@@ -58,6 +58,7 @@ class CurrentUserContextProvider extends React.Component {
       return;
     }
     const userStatusHistory = await Actions.getUserStatusHistory(viewer.userId);
+
     this.setState({
       user: viewer,
       userStatusHistory,

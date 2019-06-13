@@ -55,7 +55,7 @@ export default ({ data, onClick }) => {
       style={{ color: data.active ? 'magenta' : null }}
       onClick={onClick ? onClick : null}>
       <span className={STYLES_SYMBOL}>
-        {data.game ? <SVG.SidebarFeaturedGames size="14px" /> : <SVG.HashTag size="14px" />}
+        {data.game ? <SVG.SidebarGames size="14px" /> : <SVG.HashTag size="14px" />}
       </span>
       <span className={STYLES_NAME} style={{ fontWeight: data.active ? '700' : null }}>
         {data.name}

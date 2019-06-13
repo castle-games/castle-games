@@ -8,11 +8,11 @@ import { DevelopmentSetterContext } from '~/contexts/DevelopmentContext';
 import { NavigationContext, NavigatorContext } from '~/contexts/NavigationContext';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 
-import CreateProjectScreen from '~/screens/CreateProjectScreen';
 import GameWindow from '~/native/gamewindow';
 import ChatScreen from '~/screens/ChatScreen';
 import GameScreen from '~/screens/GameScreen';
 import HomeScreen from '~/screens/HomeScreen';
+import CreateProjectScreen from '~/screens/CreateProjectScreen';
 import PostsScreen from '~/screens/PostsScreen';
 import ProfileScreen from '~/screens/ProfileScreen';
 import NotificationScreen from '~/screens/NotificationScreen';
@@ -105,15 +105,18 @@ class ContentContainer extends React.Component {
       return <PostsScreen />;
     } else if (
       mode === 'home' ||
-      mode === 'featured' ||
       mode === 'history' ||
       mode === 'examples'
     ) {
       return (
         <HomeScreen
-          featuredGames={this.props.featuredGames}
+          trendingGames={this.props.trendingGames}
+          gamesUnderConstruction={this.props.gamesUnderConstruction}
+          newestGames={this.props.newestGames}
+          randomGames={this.props.randomGames}
           featuredExamples={this.props.featuredExamples}
           timeLastNavigated={this.props.timeLastNavigated}
+          viewer={this.props.viewer}
           mode={mode}
         />
       );
@@ -160,7 +163,6 @@ class ContentContainer extends React.Component {
         {this.props.mode === 'profile' ||
         this.props.mode === 'home' ||
         this.props.mode === 'create' ||
-        this.props.mode === 'featured' ||
         this.props.mode === 'examples' ||
         this.props.mode === 'history' ||
         this.props.mode === 'posts' ? (

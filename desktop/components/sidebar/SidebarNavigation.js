@@ -17,18 +17,18 @@ export default class SidebarNavigation extends React.Component {
       <div className={STYLES_CONTAINER}>
         <SidebarNavigationItem
           data={{
-            name: 'Create',
-            svg: 'make',
-            onClick: this.props.onNavigateToMakeGame,
-            active: this.props.contentMode === 'create',
+            name: 'Games',
+            svg: 'home',
+            onClick: this.props.onNavigateToGames,
+            active: this.props.contentMode === 'home',
           }}
         />
         <SidebarNavigationItem
           data={{
-            name: 'Games',
-            svg: 'featured',
-            onClick: this.props.onNavigateToFeaturedGames,
-            active: this.props.contentMode === 'featured',
+            name: 'Create',
+            svg: 'make',
+            onClick: this.props.onNavigateToMakeGame,
+            active: this.props.contentMode === 'create',
           }}
         />
         <SidebarNavigationItem

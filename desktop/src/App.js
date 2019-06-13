@@ -202,7 +202,10 @@ class App extends React.Component {
   render() {
     return (
       <AppContainer
-        featuredGames={this.state.featuredGames}
+        trendingGames={this.state.trendingGames}
+        gamesUnderConstruction={this.state.gamesUnderConstruction}
+        newestGames={this.state.newestGames}
+        randomGames={this.state.randomGames}
         featuredExamples={this.state.featuredExamples}
         updateAvailable={this.state.updateAvailable}
         isFullScreen={this.props.navigation.isFullScreen}

@@ -2,7 +2,10 @@ import * as Actions from '~/common/actions';
 
 export const getProductData = async () => {
   let data;
-  let featuredGames = [];
+  let trendingGames = [];
+  let gamesUnderConstruction = [];
+  let newestGames = [];
+  let randomGames = [];
   let featuredExamples = [];
   let recentChatMessages = [];
   let subscribedChatChannels = [];
@@ -18,7 +21,10 @@ export const getProductData = async () => {
 
   if (data) {
     isOffline = false;
-    featuredGames = data.featuredGames ? data.featuredGames : [];
+    trendingGames = data.trendingGames ? data.trendingGames : [];
+    gamesUnderConstruction = data.gamesUnderConstruction ? data.gamesUnderConstruction : [];
+    newestGames = data.newestGames ? data.newestGames : [];
+    randomGames = data.randomGames ? data.randomGames : [];
     featuredExamples = data.featuredExamples ? data.featuredExamples : [];
     recentChatMessages = data.recentChatMessages ? data.recentChatMessages : [];
     subscribedChatChannels = data.subscribedChatChannels ? data.subscribedChatChannels : [];
@@ -27,7 +33,10 @@ export const getProductData = async () => {
   }
 
   return {
-    featuredGames,
+    trendingGames,
+    gamesUnderConstruction,
+    newestGames,
+    randomGames,
     featuredExamples,
     viewer,
     isOffline,

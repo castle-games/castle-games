@@ -7,13 +7,13 @@ import { css } from 'react-emotion';
 const STYLES_CONTAINER = css`
   display: flex;
   flex-wrap: wrap;
-  padding: 0 8px 0 8px;
+  padding-right: 8px;
 `;
 
 const STYLES_TEMPLATE_CONTAINER = css`
   display: inline-block;
   padding: 0 16px 16px 0;
-  width: 192px;
+  width: 148px;
   cursor: pointer;
 `;
 
@@ -23,11 +23,15 @@ const STYLES_GAME_COVER = css`
   height: 108px;
   width: 100%;
   margin-bottom: 4px;
+  :hover {
+    filter: brightness(110%)
+  }
 `;
 
 const STYLES_GAME_TITLE = css`
   font-size: ${Constants.typescale.lvl6};
   line-height: ${Constants.linescale.lvl6};
+  font-family: ${Constants.font.system};
   display: inline-flex;
   width: 100%;
   align-items: center;

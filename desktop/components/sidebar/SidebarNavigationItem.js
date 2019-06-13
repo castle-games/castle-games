@@ -5,9 +5,9 @@ import * as SVG from '~/common/svg';
 import { css, styled } from 'react-emotion';
 
 const SVG_ICON = {
+  home: <SVG.SidebarGames size="18px" />,
   make: <SVG.SidebarMake size="18px" />,
-  featured: <SVG.SidebarFeaturedGames size="18px" />,
-  examples: <SVG.SidebarFeaturedGames size="18px" />,
+  examples: <SVG.SidebarGames size="18px" />,
   posts: <SVG.SidebarPosts size="18px" />,
   history: <SVG.SidebarHistory size="18px" />,
   documentation: <SVG.SidebarDocs size="18px" />,

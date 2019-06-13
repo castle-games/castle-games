@@ -50,6 +50,41 @@ export const adjustTextColor = (hex) => {
     : 'rgba(255, 255, 255, 0.8)';
 };
 
+export const colorLuminance = (hex, lum) => {
+  // Validate hex string
+  hex = String(hex).replace(/[^0-9a-f]/gi, "");
+  if (hex.length < 6) {
+    hex = hex.replace(/(.)/g, '$1$1');
+  }
+  lum = lum || 0;
+  // Convert to decimal and change luminosity
+  var rgb = "#",
+    c;
+  for (var i = 0; i < 3; ++i) {
+    c = parseInt(hex.substr(i * 2, 2), 16);
+    c = Math.round(Math.min(Math.max(0, c + (c * lum)), 255)).toString(16);
+    rgb += ("00" + c).substr(c.length);
+  }
+  return rgb;
+};
+
+export const adjustTextColorWithEmphasis = (hex, shouldBrighten) => {
+  if (Strings.isEmpty(hex) || hex.length < 7) {
+    hex = '#FFFFFF';
+  }
+
+  const luminosity = hex ? getLuminosityOfHex(hex) : LUMINOSITY_THEME_BREAKPOINT;
+  if (shouldBrighten) {
+    return luminosity > LUMINOSITY_THEME_BREAKPOINT
+      ? 'rgba(50, 50, 50, 0.8)'
+      : 'rgba(255, 255, 255, 0.9)';
+  } else {
+    return luminosity > LUMINOSITY_THEME_BREAKPOINT
+      ? 'rgba(0, 0, 0, 0.8)'
+      : 'rgba(255, 255, 255, 0.8)';
+  }
+};
+
 export const getColorTypeFromHex = (hex) => {
   const luminosity = hex ? getLuminosityOfHex(hex) : LUMINOSITY_THEME_BREAKPOINT;
   return luminosity > LUMINOSITY_THEME_BREAKPOINT ? 'DARK' : 'LIGHT';

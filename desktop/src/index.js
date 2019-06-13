@@ -88,7 +88,10 @@ loader.id = 'loader';
 document.body.appendChild(loader);
 
 const INITIAL_STATE_OFFLINE = {
-  featuredGames: [],
+  trendingGames: [],
+  gamesUnderConstruction: [],
+  newestGames: [],
+  randomGames: [],
   featuredExamples: [],
   isOffline: true,
 };
@@ -100,7 +103,10 @@ const run = async () => {
 
   ReactDOM.render(<GLLoaderScreen />, document.getElementById('loader'));
   const {
-    featuredGames,
+    trendingGames,
+    gamesUnderConstruction,
+    newestGames,
+    randomGames,
     featuredExamples,
     viewer,
     isOffline,
@@ -115,7 +121,10 @@ const run = async () => {
   }
 
   let state = Object.assign({}, INITIAL_STATE_OFFLINE, {
-    featuredGames,
+    trendingGames,
+    gamesUnderConstruction,
+    newestGames,
+    randomGames,
     featuredExamples,
     isOffline,
     recentChatMessages,

@@ -70,6 +70,10 @@ export const typescale = {
   base: '1rem',
 };
 
+export const sizes = {
+  cardWidth: '224px',
+}
+
 export const linescale = {
   lvl1: '1',
   lvl2: '1',

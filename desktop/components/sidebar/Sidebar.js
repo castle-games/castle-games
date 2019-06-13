@@ -85,8 +85,8 @@ class Sidebar extends React.Component {
     return this.props.navigator.navigateToContentMode('examples');
   };
 
-  _handleNavigateToFeaturedGames = () => {
-    return this.props.navigator.navigateToContentMode('featured');
+  _handleNavigateToGames = () => {
+    return this.props.navigator.navigateToContentMode('home');
   };
 
   _handleNavigateToAllPosts = () => {
@@ -189,7 +189,7 @@ class Sidebar extends React.Component {
           contentMode={navigation.contentMode}
           onNavigateToMakeGame={this._handleNavigateToMakeGame}
           onNavigateToExamples={this._handleNavigateToExamples}
-          onNavigateToFeaturedGames={this._handleNavigateToFeaturedGames}
+          onNavigateToGames={this._handleNavigateToGames}
           onNavigateToAllPosts={this._handleNavigateToAllPosts}
           onNavigateToHistory={this._handleNavigateToHistory}
           onOpenBrowserForDocumentation={this._handleOpenBrowserForDocumentation}

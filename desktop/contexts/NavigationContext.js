@@ -47,7 +47,6 @@ const AUTHENTICATED_ONLY_MODES = {
   examples: false,
   game: false,
   profile: false,
-  featured: false,
   home: false,
   signin: false,
 };

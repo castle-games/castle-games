@@ -5,6 +5,7 @@ import * as NativeUtil from '~/native/nativeutil';
 import * as Strings from '~/common/strings';
 import * as Project from '~/common/project';
 import * as Utilities from '~/common/utilities';
+import * as SVG from '~/common/svg';
 
 import { css } from 'react-emotion';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
@@ -23,6 +24,7 @@ const path = Utilities.path();
 const STYLES_CONTAINER = css`
   background: ${Constants.colors.background};
   display: flex;
+  flex-direction: column;
   width: 100%;
   height: 100%;
   overflow-y: scroll;
@@ -34,17 +36,17 @@ const STYLES_CONTAINER = css`
   }
 `;
 
-const STYLES_CONTENT = css``;
-
 const STYLES_CHOOSE_TEMPLATE = css`
   display: flex;
 `;
 
 const STYLES_PRIMARY_CONTENT = css`
-  padding-right: 40px;
+  padding-right: 8px;
 `;
 
-const STYLES_SECONDARY_CONTENT = css``;
+const STYLES_SECONDARY_CONTENT = css`
+  width: 40%;
+`;
 
 const STYLES_SECTION = css`
   cursor: pointer;
@@ -55,10 +57,23 @@ const STYLES_BOLD = css`
   font-weight: 700;
 `;
 
+const STYLES_LINK = css`
+  color: ${Constants.colors.black};
+  font-size: ${Constants.typescale.base};
+  line-height: ${Constants.linescale.base};
+  font-family: ${Constants.font.system};
+  margin-top: 16px;
+  margin-bottom: 12px;
+  :hover {
+    color: magenta;
+  }
+`;
+
 const STYLES_PARAGRAPH = css`
   color: ${Constants.colors.black};
   font-size: ${Constants.typescale.base};
   line-height: ${Constants.linescale.base};
+  font-family: ${Constants.font.system};
   margin-top: 16px;
   margin-bottom: 12px;
 `;
@@ -83,6 +98,7 @@ const STYLES_BACK = css`
 class CreateProjectScreen extends React.Component {
   static defaultProps = {
     templates: [],
+    onCancel: null,
   };
 
   state = {
@@ -223,31 +239,25 @@ class CreateProjectScreen extends React.Component {
           <div className={STYLES_PRIMARY_CONTENT}>
             <UIHeading>Create a game</UIHeading>
             <div className={STYLES_PARAGRAPH}>
-              Castle will download some starter files for your new game.{' '}
-              <span className={STYLES_BOLD}>Choose the starter template</span> that best fits.
+              Choose a starter template:
             </div>
             <ProjectTemplateChooser
               templates={this.props.templates}
               selectedTemplate={this.state.selectedTemplate}
               onSelectTemplate={this._handleSelectTemplate}
             />
-            <div className={STYLES_ACTIONS}>
-              <div className={STYLES_BACK} onClick={this.props.navigateToHome}>
-                Cancel
-              </div>
-            </div>
           </div>
           <div className={STYLES_SECONDARY_CONTENT}>
             <UIHeading>Help</UIHeading>
             <div className={STYLES_SECTION} onClick={this._handleClickTutorial}>
-              <div className={STYLES_PARAGRAPH}>
+              <div className={STYLES_LINK}>
                 <strong className={STYLES_BOLD}>Documentation</strong>
                 <br />
                 Read tutorials and examples.
               </div>
             </div>
             <div className={STYLES_SECTION}>
-              <div className={STYLES_PARAGRAPH} onClick={this._handleOpenProject}>
+              <div className={STYLES_LINK} onClick={this._handleOpenProject}>
                 <strong className={STYLES_BOLD}>Open project</strong>
                 <br />
                 Open a project from your computer.
@@ -352,9 +362,7 @@ class CreateProjectScreen extends React.Component {
       content = this._renderFinished();
     }
     return (
-      <div className={STYLES_CONTAINER}>
-        <div className={STYLES_CONTENT}>{content}</div>
-      </div>
+      <div className={STYLES_CONTAINER}>{content}</div>
     );
   }
 }
