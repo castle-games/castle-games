@@ -44,7 +44,7 @@ const STYLES_GAME_SCREENSHOT = css`
   cursor: pointer;
   background-size: cover;
   background-position: 50% 50%;
-  backgroundColor: rgba(0, 0, 0, 0.1);
+  backgroundcolor: rgba(0, 0, 0, 0.1);
 `;
 
 const STYLES_GAME_TITLE_SECTION = css`
@@ -100,8 +100,7 @@ const STYLES_UNDER_CONSTRUCTION = css`
   top: 0px;
   width: 100%;
   height: 24px;
-  background: rgba(215,215,215,0.925);
-  
+  background: rgba(215, 215, 215, 0.925);
 `;
 
 const STYLES_UNDER_CONSTRUCTION_TITLE = css`
@@ -134,21 +133,21 @@ export default class UIGameCell extends React.Component {
   };
 
   _handleToggleHover = (shouldSetHovering) => {
-    this.setState({ isHovering: shouldSetHovering })
-  }
+    this.setState({ isHovering: shouldSetHovering });
+  };
 
   // used for case where user left modal while hovering over a card
-  // on the main games page. this prevents an issue where the info button  
+  // on the main games page. this prevents an issue where the info button
   // will not re-appear on the card unless they leave and re-enter the entire card
   _handleMouseMove = () => {
     if (!this.state.isHovering) {
-      this.setState({ isHovering: true })
+      this.setState({ isHovering: true });
     }
-  }
+  };
 
   _handleToggleHoverOnInfoButton = (shouldSetHovering) => {
-    this.setState({ isHoveringOnInfoButton: shouldSetHovering })
-  }
+    this.setState({ isHoveringOnInfoButton: shouldSetHovering });
+  };
 
   _handleToggleVisibility = () => {
     this.setState({ isPopoverVisible: !this.state.isPopoverVisible });
@@ -196,7 +195,9 @@ export default class UIGameCell extends React.Component {
       game.metadata && game.metadata.primaryColor ? `#${game.metadata.primaryColor}` : '#3d3d3d';
     const textColor = Utilities.adjustTextColorWithEmphasis(backgroundColor, this.state.isHovering);
 
-    const finalColor = this.state.isHovering ? Utilities.colorLuminance(backgroundColor, 0.1) : backgroundColor;
+    const finalColor = this.state.isHovering
+      ? Utilities.colorLuminance(backgroundColor, 0.1)
+      : backgroundColor;
 
     let description;
     let isPrivate = Urls.isPrivateUrl(game.url);
@@ -205,35 +206,39 @@ export default class UIGameCell extends React.Component {
       description = <div className={STYLES_URL}>{game.url}</div>;
     }
 
-    
     return (
-      <div className={STYLES_GAME}
-            onMouseEnter={() => this._handleToggleHover(true)}
-            onMouseLeave={() => this._handleToggleHover(false)}
-            onMouseMove={this._handleMouseMove}
-            >
-        <div className={STYLES_GAME_ITEM} style={{ color: textColor, 'backgroundColor': finalColor }}>
+      <div
+        className={STYLES_GAME}
+        onMouseEnter={() => this._handleToggleHover(true)}
+        onMouseLeave={() => this._handleToggleHover(false)}
+        onMouseMove={this._handleMouseMove}>
+        <div className={STYLES_GAME_ITEM} style={{ color: textColor, backgroundColor: finalColor }}>
           <div
             className={STYLES_GAME_SCREENSHOT}
             onClick={this._handleGameSelect}
-            style={{ backgroundImage: this.props.src ? `url(${this.props.src})` : null, 
-                    filter: this.state.isHovering ? 'brightness(110%)' : 'none' }}
+            style={{
+              backgroundImage: this.props.src ? `url(${this.props.src})` : null,
+              filter: this.state.isHovering ? 'brightness(110%)' : 'none',
+            }}
           />
           <div className={STYLES_GAME_TITLE_SECTION}>
             <div className={STYLES_GAME_TITLE_AUTHOR}>
               <div className={STYLES_GAME_TITLE} onClick={this._handleGameSelect}>
                 {title} {isPrivate ? <Tag>Local</Tag> : null} <br />
               </div>
-              <div className={STYLES_GAME_AUTHOR}
-                  onClick={() => this.props.onUserSelect(game.owner)}>
+              <div
+                className={STYLES_GAME_AUTHOR}
+                onClick={() => this.props.onUserSelect(game.owner)}>
                 {game.owner.username}
               </div>
             </div>
 
             <div
               className={STYLES_INFO}
-              style={{ color: this.state.isHoveringOnInfoButton ? 'white' : 
-                        textColor, visibility: this.state.isHovering ? 'visible' : 'hidden' }}
+              style={{
+                color: this.state.isHoveringOnInfoButton ? 'white' : textColor,
+                visibility: this.state.isHovering ? 'visible' : 'hidden',
+              }}
               onMouseEnter={() => this._handleToggleHoverOnInfoButton(true)}
               onMouseLeave={() => this._handleToggleHoverOnInfoButton(false)}
               onClick={this._handleShowGameInfo}>
@@ -242,14 +247,14 @@ export default class UIGameCell extends React.Component {
           </div>
         </div>
         {description}
-        {this.props.underConstruction ? 
+        {this.props.underConstruction ? (
           <div className={STYLES_UNDER_CONSTRUCTION}>
             <div className={STYLES_UNDER_CONSTRUCTION_TITLE}>
-              <SVGC.Build size="12px" style={{'marginRight': '8px'}}/>
+              <SVGC.Build size="12px" style={{ marginRight: '8px' }} />
               Under Construction
             </div>
           </div>
-        : null}
+        ) : null}
       </div>
     );
   }
