@@ -122,9 +122,8 @@ const STYLES_GAME_SCREENSHOT = css`
   }
 `;
 
-const STYLES_DETAILS_HEADER = css`
+const STYLES_DETAILS_SECTION = css`
   padding-top: 16px;
-  background: ${Constants.colors.background};
 `;
 
 const STYLES_BYLINE = css`
@@ -209,8 +208,7 @@ const STYLES_DETAIL_BUTTON = css`
 `;
 
 const STYLES_GAME_DESCRIPTION = css`
-  padding: 8px 24px 24px 24px;
-  background: ${Constants.colors.background};
+  padding: 8px 24px 24px 0px;
   color: ${Constants.colors.text};
   font-family: ${Constants.font.system};
   font-size: ${Constants.typescale.lvl6};
@@ -317,9 +315,10 @@ class GameInfoModal extends React.Component {
       game.metadata && game.metadata.primaryColor ? `#${game.metadata.primaryColor}` : '#3d3d3d';
     const textColor = Utilities.adjustTextColor(backgroundColor);
 
-    const finalBackgroundColor = this.state.isHoveringOnPlay
-      ? Utilities.colorLuminance(backgroundColor, 0.1)
-      : backgroundColor;
+    const finalBackgroundColor = this.state.isHoveringOnPlay ? Utilities.colorLuminance(backgroundColor, 0.1) : backgroundColor;
+
+    const descriptionBackgroundColor = Utilities.increaseBrightness(backgroundColor, 85);
+
 
     let gameDescription = !Strings.isEmpty(game.description) ? game.description : null;
 
@@ -333,7 +332,7 @@ class GameInfoModal extends React.Component {
         <div className={STYLES_WRAP}>
           <div
             className={STYLES_CONTENT}
-            style={{ color: textColor }}
+            style={{ color: textColor, background: descriptionBackgroundColor }}
             ref={(contentArea) => (this.contentArea = contentArea)}>
             <div
               className={STYLES_CARTRIDGE_BACKGROUND}
@@ -371,7 +370,7 @@ class GameInfoModal extends React.Component {
               </div>
               <div className={STYLES_PLAY_COUNT}>{game.playCount} plays</div>
             </div>
-            <div className={STYLES_DETAILS_HEADER}>
+            <div className={STYLES_DETAILS_SECTION}>
               {this._renderCreator(game)}
               <div className={STYLES_DETAIL_TEXT}>
                 <div className={STYLES_DETAIL_BUTTONS_SECTION}>
@@ -396,9 +395,9 @@ class GameInfoModal extends React.Component {
                     </div>
                   ) : null}
                 </div>
+                <div className={STYLES_GAME_DESCRIPTION}>{gameDescription}</div>
               </div>
             </div>
-            <div className={STYLES_GAME_DESCRIPTION}>{gameDescription}</div>
           </div>
         </div>
       </div>
