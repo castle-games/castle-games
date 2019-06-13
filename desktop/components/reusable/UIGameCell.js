@@ -31,8 +31,16 @@ const STYLES_GAME_AUTHOR = css`
 const STYLES_GAME_ITEM = css`
   background: ${Constants.colors.white};
   border-radius: 4px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
   position: relative;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  transition: 200ms ease all;
+  transition-property: transform, box-shadow, filter, background-color;
+  :hover {
+    transform: scale(1.02);
+    figure {
+      filter: brightness(110%);
+    }
+  }
 `;
 
 const STYLES_GAME_SCREENSHOT = css`
@@ -213,12 +221,11 @@ export default class UIGameCell extends React.Component {
         onMouseLeave={() => this._handleToggleHover(false)}
         onMouseMove={this._handleMouseMove}>
         <div className={STYLES_GAME_ITEM} style={{ color: textColor, backgroundColor: finalColor }}>
-          <div
+          <figure
             className={STYLES_GAME_SCREENSHOT}
             onClick={this._handleGameSelect}
             style={{
               backgroundImage: this.props.src ? `url(${this.props.src})` : null,
-              filter: this.state.isHovering ? 'brightness(110%)' : 'none',
             }}
           />
           <div className={STYLES_GAME_TITLE_SECTION}>

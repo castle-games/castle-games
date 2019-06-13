@@ -31,11 +31,7 @@ const STYLES_ROW_TITLE = css`
   width: 260px;
 `;
 
-const STYLES_CELL_ITEM = css`
-  :hover {
-    transform: scale(1.02);
-  }
-`;
+const STYLES_CELL_ITEM = css``;
 
 export default class UIGameSet extends React.Component {
   static defaultProps = {
