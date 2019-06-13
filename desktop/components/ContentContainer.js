@@ -81,8 +81,8 @@ class ContentContainer extends React.Component {
   };
 
   _handleSearchSubmit = async (e) => {
-    const { isCastleUrl } = Urls.getCastleUrlInfo(e.target.value);
-    if (!isCastleUrl) {
+    const { isUrl } = Urls.getCastleUrlInfo(e.target.value);
+    if (!isUrl) {
       return this._handleSearchChange(e);
     }
 
@@ -103,11 +103,7 @@ class ContentContainer extends React.Component {
       return <GameScreen isFullScreen={this.props.isFullScreen} />;
     } else if (mode === 'posts') {
       return <PostsScreen />;
-    } else if (
-      mode === 'home' ||
-      mode === 'history' ||
-      mode === 'examples'
-    ) {
+    } else if (mode === 'home' || mode === 'history' || mode === 'examples') {
       return (
         <HomeScreen
           trendingGames={this.props.trendingGames}

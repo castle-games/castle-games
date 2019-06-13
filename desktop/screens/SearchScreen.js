@@ -98,8 +98,8 @@ export default class SearchScreen extends React.Component {
 
   _updateResults = async ({ query }) => {
     query = this._stringAsSearchInvariant(query);
-    const { isCastleUrl } = Urls.getCastleUrlInfo(query);
-    if (Strings.isEmpty(query) || isCastleUrl) {
+    const { isUrl } = Urls.getCastleUrlInfo(query);
+    if (Strings.isEmpty(query) || isUrl) {
       this.setState({
         isLoading: false,
         results: {
@@ -154,12 +154,26 @@ export default class SearchScreen extends React.Component {
   };
 
   _renderNoResults = () => {
-    const { isCastleUrl } = Urls.getCastleUrlInfo(this.props.query);
+    const { isUrl, isCastleUrl } = Urls.getCastleUrlInfo(this.props.query);
     if (isCastleUrl) {
       return (
         <React.Fragment>
           <div className={STYLES_SEARCH_RESPONSE}>
             That looks like a game URL. Press Enter to open it, or click here:
+          </div>
+          <div
+            className={STYLES_SEARCH_RESPONSE_ACTION}
+            onClick={() => this._maybeNavigateToUrl(this.props.query)}>
+            {this.props.query}
+          </div>
+        </React.Fragment>
+      );
+    } else if (isUrl) {
+      return (
+        <React.Fragment>
+          <div className={STYLES_SEARCH_RESPONSE}>
+            We didn't find any results for that query, but it looks like some kind of URL. Press
+            Enter to try to open it, or click here:
           </div>
           <div
             className={STYLES_SEARCH_RESPONSE_ACTION}

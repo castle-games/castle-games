@@ -96,16 +96,22 @@ const isMetadataFileUrl = (urlStr) => {
 };
 
 /**
- *  @return { isCastleUrl, type }
+ *  @return { isUrl, isCastleUrl, type }
+ *  isUrl is true if url.parse(urlStr) returned something.
+ *  isCastleUrl is true if we think castle can open it.
  *  type can be 'game' or 'post'
  *  if type === post, result also includes `postId`
  */
 const getCastleUrlInfo = (urlStr) => {
   let parsedUrl = url.parse(urlStr);
   let isCastleUrl = false,
+    isUrl = false,
     type = null,
     data = {};
   if (parsedUrl) {
+    if (parsedUrl.protocol) {
+      isUrl = true;
+    }
     if (
       (parsedUrl.protocol &&
         (parsedUrl.protocol.startsWith('castle') || parsedUrl.protocol.startsWith('file'))) ||
@@ -116,6 +122,7 @@ const getCastleUrlInfo = (urlStr) => {
       isCastleUrl = true;
       type = 'game';
     } else if (parsedUrl.hostname === 'castle.games') {
+      isUrl = true;
       if (parsedUrl.pathname.startsWith('/@') || parsedUrl.pathname.startsWith('/+')) {
         // published game
         isCastleUrl = true;
@@ -131,7 +138,7 @@ const getCastleUrlInfo = (urlStr) => {
       }
     }
   }
-  return { isCastleUrl, type, ...data };
+  return { isUrl, isCastleUrl, type, ...data };
 };
 
 export {
