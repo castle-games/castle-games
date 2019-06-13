@@ -13,7 +13,6 @@ const STYLES_GAME_ROW = css`
   display: flex;
   align-items: flex-start;
   flex-wrap: no-wrap;
-  overflow: hidden;
   margin: 0px 0px 0px 16px;
 `;
 
@@ -30,6 +29,12 @@ const STYLES_ROW_TITLE = css`
   font-size: 18px;
   font-weight: 700;
   width: 260px;
+`;
+
+const STYLES_CELL_ITEM = css`
+  :hover {
+    transform: scale(1.02);
+  }
 `;
 
 export default class UIGameSet extends React.Component {
@@ -72,19 +77,21 @@ export default class UIGameSet extends React.Component {
           {this._maxGameItemsWhichFitOntoScreen().map((m) => {
             const key = m.key ? m.key : m.gameId ? m.gameId : m.url;
             return (
-              <UIGameCell
-                key={key}
-                renderCartridgeOnly={this.props.renderCartridgeOnly}
-                onGameSelect={this.props.onGameSelect}
-                onShowGameInfo={this.props.onShowGameInfo}
-                underConstruction={this.props.underConstruction}
-                onGameUpdate={this.props.onGameUpdate}
-                onUserSelect={this.props.onUserSelect}
-                onSignInSelect={this.props.onSignInSelect}
-                src={m.coverImage && m.coverImage.url}
-                game={m}
-                viewer={this.props.viewer}
-              />
+              <div className={STYLES_CELL_ITEM}>
+                <UIGameCell
+                  key={key}
+                  renderCartridgeOnly={this.props.renderCartridgeOnly}
+                  onGameSelect={this.props.onGameSelect}
+                  onShowGameInfo={this.props.onShowGameInfo}
+                  underConstruction={this.props.underConstruction}
+                  onGameUpdate={this.props.onGameUpdate}
+                  onUserSelect={this.props.onUserSelect}
+                  onSignInSelect={this.props.onSignInSelect}
+                  src={m.coverImage && m.coverImage.url}
+                  game={m}
+                  viewer={this.props.viewer}
+                />
+              </div>
             );
           })}
         </div>
