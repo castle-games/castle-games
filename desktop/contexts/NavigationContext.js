@@ -299,6 +299,23 @@ class NavigationContextManager extends React.Component {
         try {
           const updatedUser = await Actions.getUser({ userId: user.userId });
           this.props.social.addUser(updatedUser);
+          this.setState((state) => {
+            if (
+              state.navigation.userProfileShown &&
+              state.navigation.userProfileShown.userId == updatedUser.userId
+            ) {
+              // we're still viewing this profile, so add the refreshed profile data to
+              // the navigation state.
+              return {
+                ...state,
+                navigation: {
+                  ...state.navigation,
+                  userProfileShown: updatedUser,
+                },
+              };
+            }
+            return state;
+          });
         } catch (_) {}
       })();
     }
