@@ -59,27 +59,28 @@ export default class UIGameSet extends React.Component {
   _handleResize = () => {
     const width = this._containerRef.offsetWidth;
     this.setState({ width });
-  }
+  };
 
   _maxGameItemsWhichFitOntoScreen() {
-    const numItemsToRender = ((this.state.width - 24) / (parseInt(Constants.sizes.cardWidth, 10) + 12))
-    return this.props.gameItems.slice(0, numItemsToRender)
+    const numItemsToRender =
+      (this.state.width - 24) / (parseInt(Constants.sizes.cardWidth, 10) + 12);
+    return this.props.gameItems.slice(0, numItemsToRender);
   }
 
   render() {
     return (
-      <div className={STYLES_CONTAINER}
-        ref={(c) => {this._containerRef = c}}>
-        <div className={STYLES_ROW_TITLE}>
-          {this.props.title}
-        </div>
-        <div className={this.props.renderAsGrid ? STYLES_GAME_GRID : STYLES_GAME_ROW }>
-          {this._maxGameItemsWhichFitOntoScreen().map((m) => {
+      <div
+        className={STYLES_CONTAINER}
+        ref={(c) => {
+          this._containerRef = c;
+        }}>
+        <div className={STYLES_ROW_TITLE}>{this.props.title}</div>
+        <div className={this.props.renderAsGrid ? STYLES_GAME_GRID : STYLES_GAME_ROW}>
+          {this._maxGameItemsWhichFitOntoScreen().map((m, i) => {
             const key = m.key ? m.key : m.gameId ? m.gameId : m.url;
             return (
-              <div className={STYLES_CELL_ITEM}>
+              <div className={STYLES_CELL_ITEM} key={`${key}-i`}>
                 <UIGameCell
-                  key={key}
                   renderCartridgeOnly={this.props.renderCartridgeOnly}
                   onGameSelect={this.props.onGameSelect}
                   onShowGameInfo={this.props.onShowGameInfo}

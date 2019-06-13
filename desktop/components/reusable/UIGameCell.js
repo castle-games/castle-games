@@ -44,7 +44,7 @@ const STYLES_GAME_SCREENSHOT = css`
   cursor: pointer;
   background-size: cover;
   background-position: 50% 50%;
-  backgroundcolor: rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.1);
 `;
 
 const STYLES_GAME_TITLE_SECTION = css`
