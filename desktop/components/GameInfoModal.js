@@ -47,7 +47,7 @@ const STYLES_CANCEL = css`
   height: 64px;
   :hover {
     color: white;
-    background: rgba(0,0,0,0.09);
+    background: rgba(0, 0, 0, 0.09);
   }
 `;
 
@@ -67,7 +67,7 @@ const STYLES_GAME_TITLE = css`
 const STYLES_PLAY = css`
   display: flex;
   flex-direction: row;
-  margin-left: 24px;
+  margin-left: 14px;
   font-family: ${Constants.font.game};
   font-size: ${Constants.typescale.lvl4};
 `;
@@ -112,7 +112,7 @@ const STYLES_GAME_SCREENSHOT = css`
   cursor: pointer;
   background-size: cover;
   background-position: 50% 50%;
-  backgroundColor: rgba(0, 0, 0, 0.1);
+  backgroundcolor: rgba(0, 0, 0, 0.1);
   :hover {
     filter: brightness(110%);
   }
@@ -138,13 +138,13 @@ const STYLES_AVATAR = css`
   cursor: pointer;
   background-size: cover;
   background-position: 50% 50%;
-  backgroundColor: rgba(0, 0, 0, 0.1);
+  backgroundcolor: rgba(0, 0, 0, 0.1);
 `;
 
 const STYLES_AUTHOR_TWO_LINER = css`
   display: flex;
   margin-left: 16px;
-  flex-direction: column; 
+  flex-direction: column;
   justify-content: center;
 `;
 
@@ -172,8 +172,8 @@ const STYLES_DETAIL_TEXT = css`
 `;
 
 const STYLES_COPY_LINK_CONTENTS = css`
-  display: flex; 
-  flexDirection: row; 
+  display: flex;
+  flexdirection: row;
   align-items: center;
 `;
 
@@ -232,7 +232,7 @@ class GameInfoModal extends React.Component {
 
   _handleGameSelect = (game) => {
     this.props.onGameSelect(game);
-  }
+  };
 
   componentWillMount() {
     document.addEventListener('mousedown', this._handleClick, false);
@@ -252,7 +252,7 @@ class GameInfoModal extends React.Component {
     }
 
     return;
-  }
+  };
 
   _handleViewSource = (gameEntryPoint) => {
     NativeUtil.openExternalURL(Urls.githubUserContentToRepoUrl(gameEntryPoint));
@@ -270,32 +270,30 @@ class GameInfoModal extends React.Component {
     document.execCommand('copy');
     textField.remove();
     this.setState({ gameUrlWasCopiedToClipboard: true });
-  }
+  };
 
   _renderCreator = (game) => {
     return (
-      <div 
+      <div
         className={STYLES_BYLINE}
         onMouseEnter={() => this._handleHoverOnAuthor(true)}
         onMouseLeave={() => this._handleHoverOnAuthor(false)}
-        onClick={() => this.props.onUserSelect(game.owner)}
-      >
+        onClick={() => this.props.onUserSelect(game.owner)}>
         <div
           className={STYLES_AVATAR}
           style={{
             backgroundImage:
               game.owner.photo && game.owner.photo.url ? `url(${game.owner.photo.url})` : null,
-              filter: this.state.isHoveringOnAuthor ? 'brightness(120%)' : 'none',
+            filter: this.state.isHoveringOnAuthor ? 'brightness(120%)' : 'none',
           }}
         />
         <div className={STYLES_AUTHOR_TWO_LINER}>
           <div className={STYLES_AUTHOR_PREFIX} onClick={() => this.props.onUserSelect(game.owner)}>
             A game by
           </div>
-          <div 
+          <div
             className={STYLES_AUTHOR_NAME}
-            style={{ 'textDecoration': this.state.isHoveringOnAuthor ? 'underline' : 'none'}}
-          >
+            style={{ textDecoration: this.state.isHoveringOnAuthor ? 'underline' : 'none' }}>
             {game.owner.username}
           </div>
         </div>
@@ -310,8 +308,9 @@ class GameInfoModal extends React.Component {
       game.metadata && game.metadata.primaryColor ? `#${game.metadata.primaryColor}` : '#3d3d3d';
     const textColor = Utilities.adjustTextColor(backgroundColor);
 
-    const finalBackgroundColor = this.state.isHoveringOnPlay ? Utilities.colorLuminance(backgroundColor, 0.1) : backgroundColor;
-
+    const finalBackgroundColor = this.state.isHoveringOnPlay
+      ? Utilities.colorLuminance(backgroundColor, 0.1)
+      : backgroundColor;
 
     let gameDescription = !Strings.isEmpty(game.description) ? game.description : null;
 
@@ -319,90 +318,75 @@ class GameInfoModal extends React.Component {
     const isOpenSource = Urls.isOpenSource(luaEntryPoint);
 
     return (
-      <div className={STYLES_CONTAINER}
-          ref={darkOverlayArea => this.darkOverlayArea = darkOverlayArea}>
-        <div className={STYLES_CONTENT} style={{color: textColor}}
-            ref={contentArea => this.contentArea = contentArea}>
-
-            <div 
-              className={STYLES_CARTRIDGE_BACKGROUND}
-              style={{background: finalBackgroundColor}}
-            >
-              <div className={STYLES_GAME_TITLE}>
-                {game.title}
-              </div>
-              <div 
-                className={STYLES_CANCEL}
-                onMouseEnter={() => this._handleHoverOnPlay(false)}
-                onClick={this.props.onCancel}
-              >
-                <SVG.Dismiss size="16px" />
-              </div>
-            </div>
+      <div
+        className={STYLES_CONTAINER}
+        ref={(darkOverlayArea) => (this.darkOverlayArea = darkOverlayArea)}>
+        <div
+          className={STYLES_CONTENT}
+          style={{ color: textColor }}
+          ref={(contentArea) => (this.contentArea = contentArea)}>
+          <div className={STYLES_CARTRIDGE_BACKGROUND} style={{ background: finalBackgroundColor }}>
+            <div className={STYLES_GAME_TITLE}>{game.title}</div>
             <div
-              className={STYLES_GAME_SCREENSHOT}
-              onClick={() => this._handleGameSelect(game)}
-              onMouseEnter={() => this._handleHoverOnPlay(true)}
-              onMouseLeave={() => this._handleHoverOnPlay(false)}
-              style={{ 
-                backgroundImage: game.coverImage && game.coverImage.url ? `url(${game.coverImage.url})` : null,
-                filter: this.state.isHoveringOnPlay ? 'brightness(110%)' : 'none',
-              }}
-            />
-            <div
-              className={STYLES_CARTRIDGE_BACKGROUND}
-              onClick={() => this._handleGameSelect(game)}
-              onMouseEnter={() => this._handleHoverOnPlay(true)}
-              onMouseLeave={() => this._handleHoverOnPlay(false)}
-              style={{background: finalBackgroundColor, 'cursor': 'pointer'}}
-            >
-              <div 
-                className={this.state.isHoveringOnPlay ? `${STYLES_PLAY} ${STYLES_PLAY_HOVER}` : STYLES_PLAY}
-              >
-                <SVG.Play size="32px" />
-                {' '}Play
-              </div>  
-              <div className={STYLES_PLAY_COUNT}>
-                {game.playCount}{' '}plays
-              </div>
+              className={STYLES_CANCEL}
+              onMouseEnter={() => this._handleHoverOnPlay(false)}
+              onClick={this.props.onCancel}>
+              <SVG.Dismiss size="16px" />
             </div>
+          </div>
+          <div
+            className={STYLES_GAME_SCREENSHOT}
+            onClick={() => this._handleGameSelect(game)}
+            onMouseEnter={() => this._handleHoverOnPlay(true)}
+            onMouseLeave={() => this._handleHoverOnPlay(false)}
+            style={{
+              backgroundImage:
+                game.coverImage && game.coverImage.url ? `url(${game.coverImage.url})` : null,
+              filter: this.state.isHoveringOnPlay ? 'brightness(110%)' : 'none',
+            }}
+          />
+          <div
+            className={STYLES_CARTRIDGE_BACKGROUND}
+            onClick={() => this._handleGameSelect(game)}
+            onMouseEnter={() => this._handleHoverOnPlay(true)}
+            onMouseLeave={() => this._handleHoverOnPlay(false)}
+            style={{ background: finalBackgroundColor, cursor: 'pointer' }}>
+            <div
+              className={
+                this.state.isHoveringOnPlay ? `${STYLES_PLAY} ${STYLES_PLAY_HOVER}` : STYLES_PLAY
+              }>
+              <SVG.Play size="32px" /> Play
+            </div>
+            <div className={STYLES_PLAY_COUNT}>{game.playCount} plays</div>
+          </div>
           <div className={STYLES_DETAILS_HEADER}>
             {this._renderCreator(game)}
             <div className={STYLES_DETAIL_TEXT}>
               <div className={STYLES_DETAIL_BUTTONS_SECTION}>
-                <div 
-                  className={STYLES_DETAIL_BUTTON}
-                  onClick={this._handleCopyUrlToClipboard}
-                >
+                <div className={STYLES_DETAIL_BUTTON} onClick={this._handleCopyUrlToClipboard}>
                   {this.state.gameUrlWasCopiedToClipboard ? (
-                    <div className={STYLES_COPY_LINK_CONTENTS} style={{color: 'green'}}>
+                    <div className={STYLES_COPY_LINK_CONTENTS} style={{ color: 'green' }}>
                       <SVG.Check size="24px" />
-                      <div style={{'marginLeft': '8px'}}>Copied!</div>
+                      <div style={{ marginLeft: '8px' }}>Copied!</div>
                     </div>
-                  ) : 
+                  ) : (
                     <div className={STYLES_COPY_LINK_CONTENTS}>
                       <SVG.Link size="24px" />
-                      <div style={{'marginLeft': '8px'}}>Copy Link</div>
+                      <div style={{ marginLeft: '8px' }}>Copy Link</div>
                     </div>
-                  } 
+                  )}
                 </div>
                 {isOpenSource ? (
-                  <div 
+                  <div
                     className={STYLES_DETAIL_BUTTON}
-                    onClick={() => this._handleViewSource(luaEntryPoint)}
-                  >
-                    <SVG.Code size="24px" />{' '}
-                    <div style={{'marginLeft': '8px'}}>
-                      View Source
-                    </div>
+                    onClick={() => this._handleViewSource(luaEntryPoint)}>
+                    <SVG.Code size="24px" /> <div style={{ marginLeft: '8px' }}>View Source</div>
                   </div>
                 ) : null}
               </div>
             </div>
           </div>
-          <div className={STYLES_GAME_DESCRIPTION}>
-            {gameDescription}
-          </div>
+          <div className={STYLES_GAME_DESCRIPTION}>{gameDescription}</div>
         </div>
       </div>
     );
