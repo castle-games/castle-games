@@ -6,6 +6,7 @@ import * as Constants from '~/common/constants';
 import { css } from 'react-emotion';
 
 import ChatMessageElement from '~/components/chat/ChatMessageElement';
+import ChatEventElement from '~/components/chat/ChatEventElement';
 import ChatPost from '~/components/chat/ChatPost';
 
 const STYLES_CONTAINER = css`
@@ -55,6 +56,10 @@ export default class ChatMessages extends React.Component {
     const { social, navigator, chat } = this.props;
 
     let messages = this.props.messages.map((m, i) => {
+      if (m.type === 'NOTICE') {
+        return <ChatEventElement key={`chat-event-${i}`} message={m} />;
+      }
+
       const user = this.props.social.userIdToUser[m.fromUserId];
       return (
         <ChatMessageElement

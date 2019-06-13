@@ -11,6 +11,7 @@ import { NativeBinds } from '~/native/nativebinds';
 
 import StringReplace from 'react-string-replace';
 
+const GENERAL_CHANNEL_ID = `channel-79c91814-c73e-4d07-8bc6-6829fad03d72`;
 const NOTIFICATIONS_USER_ID = -1;
 const TEST_MESSAGE = null;
 const NotificationLevel = {
@@ -52,8 +53,25 @@ class ChatSessionContextManager extends React.Component {
     this._update();
   }
 
+  componentDidMount() {
+    window.addEventListener('CASTLE_ADD_CHAT_NOTIFICATION', this._handleChatNotification);
+
+    // TODO(jim): Easy way to test chat notifications.
+    /*
+    this._handleChatNotification({
+      params: { message: 'Testing... https://castle.games lol' },
+      type: 'NOTICE',
+      timestamp: new Date().toString(),
+    });
+    */
+  }
+
   componentDidUpdate(prevProps, prevState) {
     this._update(prevProps, prevState);
+  }
+
+  comonentWillUnmount() {
+    window.removeEventListener('CASTLE_ADD_CHAT_NOTIFICATION', this._handleChatNotification);
   }
 
   _getNotificationLevel = () => {
@@ -157,6 +175,22 @@ class ChatSessionContextManager extends React.Component {
     ChatActions.sendChannelChatMessage({ message, channelId: this.state.channel.channelId });
   };
 
+  _handleChatNotification = async (event) => {
+    const messages = { ...this.state.messages };
+
+    if (!messages[GENERAL_CHANNEL_ID]) {
+      messages[GENERAL_CHANNEL_ID] = [];
+    }
+
+    messages[GENERAL_CHANNEL_ID].push({
+      type: 'NOTICE',
+      text: event.params.message,
+      timestamp: new Date().toString(),
+    });
+
+    this.setState({ messages });
+  };
+
   _handleConnectStatus = async (status) => {
     // console.log('status', status);
   };
@@ -253,7 +287,8 @@ class ChatSessionContextManager extends React.Component {
       }
 
       // NOTE(jim): The only props the message component needs.
-      const requiredMessageProps = {
+      let requiredMessageProps = {
+        type: 'MESSAGE',
         fromUserId: m.fromUserId,
         chatMessageId: m.chatMessageId,
         text: text,
