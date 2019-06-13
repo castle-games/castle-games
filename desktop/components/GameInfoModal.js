@@ -22,12 +22,16 @@ const STYLES_CONTAINER = css`
   position: fixed;
 `;
 
+const STYLES_WRAP = css`
+  padding: 16px;
+  max-width: 512px;
+  width: 100%;
+`;
+
 const STYLES_CONTENT = css`
-  width: 500px;
-  background: ${Constants.colors.background};
+  width: 100%;
   border-radius: 6px;
-  margin-top: 48px;
-  margin-bottom: 48px;
+  overflow: hidden;
   overflow-y: scroll;
 
   ::-webkit-scrollbar {
@@ -119,7 +123,8 @@ const STYLES_GAME_SCREENSHOT = css`
 `;
 
 const STYLES_DETAILS_HEADER = css`
-  margin-top: 16px;
+  padding-top: 16px;
+  background: ${Constants.colors.background};
 `;
 
 const STYLES_BYLINE = css`
@@ -175,6 +180,8 @@ const STYLES_COPY_LINK_CONTENTS = css`
   display: flex;
   flexdirection: row;
   align-items: center;
+  font-weight: 600;
+  font-size: 12px;
 `;
 
 const STYLES_DETAIL_BUTTONS_SECTION = css`
@@ -192,7 +199,8 @@ const STYLES_DETAIL_BUTTON = css`
   color: ${Constants.colors.text};
   font-family: ${Constants.font.system};
   font-size: ${Constants.typescale.lvl7};
-  font-weight: 400;
+  font-weight: 600;
+  font-size: 12px;
 
   cursor: pointer;
   :hover {
@@ -201,7 +209,8 @@ const STYLES_DETAIL_BUTTON = css`
 `;
 
 const STYLES_GAME_DESCRIPTION = css`
-  margin: 8px 24px 24px 24px;
+  padding: 8px 24px 24px 24px;
+  background: ${Constants.colors.background};
   color: ${Constants.colors.text};
   font-family: ${Constants.font.system};
   font-size: ${Constants.typescale.lvl6};
@@ -321,72 +330,76 @@ class GameInfoModal extends React.Component {
       <div
         className={STYLES_CONTAINER}
         ref={(darkOverlayArea) => (this.darkOverlayArea = darkOverlayArea)}>
-        <div
-          className={STYLES_CONTENT}
-          style={{ color: textColor }}
-          ref={(contentArea) => (this.contentArea = contentArea)}>
-          <div className={STYLES_CARTRIDGE_BACKGROUND} style={{ background: finalBackgroundColor }}>
-            <div className={STYLES_GAME_TITLE}>{game.title}</div>
-            <div
-              className={STYLES_CANCEL}
-              onMouseEnter={() => this._handleHoverOnPlay(false)}
-              onClick={this.props.onCancel}>
-              <SVG.Dismiss size="16px" />
-            </div>
-          </div>
+        <div className={STYLES_WRAP}>
           <div
-            className={STYLES_GAME_SCREENSHOT}
-            onClick={() => this._handleGameSelect(game)}
-            onMouseEnter={() => this._handleHoverOnPlay(true)}
-            onMouseLeave={() => this._handleHoverOnPlay(false)}
-            style={{
-              backgroundImage:
-                game.coverImage && game.coverImage.url ? `url(${game.coverImage.url})` : null,
-              filter: this.state.isHoveringOnPlay ? 'brightness(110%)' : 'none',
-            }}
-          />
-          <div
-            className={STYLES_CARTRIDGE_BACKGROUND}
-            onClick={() => this._handleGameSelect(game)}
-            onMouseEnter={() => this._handleHoverOnPlay(true)}
-            onMouseLeave={() => this._handleHoverOnPlay(false)}
-            style={{ background: finalBackgroundColor, cursor: 'pointer' }}>
+            className={STYLES_CONTENT}
+            style={{ color: textColor }}
+            ref={(contentArea) => (this.contentArea = contentArea)}>
             <div
-              className={
-                this.state.isHoveringOnPlay ? `${STYLES_PLAY} ${STYLES_PLAY_HOVER}` : STYLES_PLAY
-              }>
-              <SVG.Play size="32px" /> Play
-            </div>
-            <div className={STYLES_PLAY_COUNT}>{game.playCount} plays</div>
-          </div>
-          <div className={STYLES_DETAILS_HEADER}>
-            {this._renderCreator(game)}
-            <div className={STYLES_DETAIL_TEXT}>
-              <div className={STYLES_DETAIL_BUTTONS_SECTION}>
-                <div className={STYLES_DETAIL_BUTTON} onClick={this._handleCopyUrlToClipboard}>
-                  {this.state.gameUrlWasCopiedToClipboard ? (
-                    <div className={STYLES_COPY_LINK_CONTENTS} style={{ color: 'green' }}>
-                      <SVG.Check size="24px" />
-                      <div style={{ marginLeft: '8px' }}>Copied!</div>
-                    </div>
-                  ) : (
-                    <div className={STYLES_COPY_LINK_CONTENTS}>
-                      <SVG.Link size="24px" />
-                      <div style={{ marginLeft: '8px' }}>Copy Link</div>
-                    </div>
-                  )}
-                </div>
-                {isOpenSource ? (
-                  <div
-                    className={STYLES_DETAIL_BUTTON}
-                    onClick={() => this._handleViewSource(luaEntryPoint)}>
-                    <SVG.Code size="24px" /> <div style={{ marginLeft: '8px' }}>View Source</div>
-                  </div>
-                ) : null}
+              className={STYLES_CARTRIDGE_BACKGROUND}
+              style={{ background: finalBackgroundColor }}>
+              <div className={STYLES_GAME_TITLE}>{game.title}</div>
+              <div
+                className={STYLES_CANCEL}
+                onMouseEnter={() => this._handleHoverOnPlay(false)}
+                onClick={this.props.onCancel}>
+                <SVG.Dismiss size="16px" />
               </div>
             </div>
+            <div
+              className={STYLES_GAME_SCREENSHOT}
+              onClick={() => this._handleGameSelect(game)}
+              onMouseEnter={() => this._handleHoverOnPlay(true)}
+              onMouseLeave={() => this._handleHoverOnPlay(false)}
+              style={{
+                backgroundImage:
+                  game.coverImage && game.coverImage.url ? `url(${game.coverImage.url})` : null,
+                filter: this.state.isHoveringOnPlay ? 'brightness(110%)' : 'none',
+              }}
+            />
+            <div
+              className={STYLES_CARTRIDGE_BACKGROUND}
+              onClick={() => this._handleGameSelect(game)}
+              onMouseEnter={() => this._handleHoverOnPlay(true)}
+              onMouseLeave={() => this._handleHoverOnPlay(false)}
+              style={{ background: finalBackgroundColor, cursor: 'pointer' }}>
+              <div
+                className={
+                  this.state.isHoveringOnPlay ? `${STYLES_PLAY} ${STYLES_PLAY_HOVER}` : STYLES_PLAY
+                }>
+                <SVG.Play size="32px" /> Play
+              </div>
+              <div className={STYLES_PLAY_COUNT}>{game.playCount} plays</div>
+            </div>
+            <div className={STYLES_DETAILS_HEADER}>
+              {this._renderCreator(game)}
+              <div className={STYLES_DETAIL_TEXT}>
+                <div className={STYLES_DETAIL_BUTTONS_SECTION}>
+                  <div className={STYLES_DETAIL_BUTTON} onClick={this._handleCopyUrlToClipboard}>
+                    {this.state.gameUrlWasCopiedToClipboard ? (
+                      <div className={STYLES_COPY_LINK_CONTENTS} style={{ color: 'green' }}>
+                        <SVG.Check size="24px" />
+                        <div style={{ marginLeft: '8px' }}>Copied!</div>
+                      </div>
+                    ) : (
+                      <div className={STYLES_COPY_LINK_CONTENTS}>
+                        <SVG.Link size="24px" />
+                        <div style={{ marginLeft: '8px' }}>Copy Link</div>
+                      </div>
+                    )}
+                  </div>
+                  {isOpenSource ? (
+                    <div
+                      className={STYLES_DETAIL_BUTTON}
+                      onClick={() => this._handleViewSource(luaEntryPoint)}>
+                      <SVG.Code size="24px" /> <div style={{ marginLeft: '8px' }}>View Source</div>
+                    </div>
+                  ) : null}
+                </div>
+              </div>
+            </div>
+            <div className={STYLES_GAME_DESCRIPTION}>{gameDescription}</div>
           </div>
-          <div className={STYLES_GAME_DESCRIPTION}>{gameDescription}</div>
         </div>
       </div>
     );
