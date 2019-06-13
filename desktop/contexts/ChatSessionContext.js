@@ -238,7 +238,7 @@ class ChatSessionContextManager extends React.Component {
       if (m.channelId.startsWith(DIRECT_MESSAGE_PREFIX)) {
         let channelUserIds = m.channelId.replace(DIRECT_MESSAGE_PREFIX, '').split(',');
         const isViewer = channelUserIds.find((id) => viewer.userId === id);
-        const isOtherUser = channelUserIds.find((id) => m.message.name === id);
+        const isOtherUser = channelUserIds.find((id) => m.fromUserId === id);
 
         // NOTE(jim): Leave the channel. Don't save the message.
         if (!isViewer && !isOtherUser) {
@@ -263,8 +263,8 @@ class ChatSessionContextManager extends React.Component {
       }
 
       userIds[m.fromUserId] = true;
+      const { fromUserId } = m;
       const messageJSON = JSON.parse(m.message.body);
-      const fromUserId = m.message.name;
       const text = messageJSON.message ? messageJSON.message[0].text : '';
 
       // NOTE(jim): Notified every time someone tags you in a channel.
