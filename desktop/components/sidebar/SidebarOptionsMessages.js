@@ -5,6 +5,8 @@ import * as Strings from '~/common/strings';
 
 import { css } from 'react-emotion';
 
+import UISidebarInput from '~/components/reusable/UISidebarInput';
+
 const STYLES_HEADER = css`
   border-bottom: 1px solid ${Constants.REFACTOR_COLORS.elements.border};
   color: ${Constants.REFACTOR_COLORS.text};
@@ -67,13 +69,44 @@ const STYLES_TITLE = css`
   margin-bottom: 8px;
 `;
 
+const STYLES_FORM = css`
+  padding: 0 16px 0 16px;
+`;
+
 export default class SidebarOptionsMessages extends React.Component {
+  state = {
+    query: '',
+  };
+
+  _handleChange = (e) => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
+
   render() {
-    const { viewer } = this.props;
+    const { viewer, social } = this.props;
 
     let users = [];
-    if (this.props.social.users && this.props.social.users.length) {
+    if (social.users && social.users.length) {
       users = this.props.social.users;
+    }
+
+    if (!Strings.isEmpty(this.state.query)) {
+      const searchQuery = this.state.query.toLowerCase();
+      users = social.users.filter((u) => {
+        let hasName = false;
+        let hasUsername = u.username.toLowerCase().includes(searchQuery);
+        if (!Strings.isEmpty(u.name)) {
+          hasName = u.name.toLowerCase().includes(searchQuery);
+        }
+
+        if (hasName) {
+          return true;
+        }
+
+        if (hasUsername) {
+          return true;
+        }
+      });
     }
 
     return (
@@ -84,7 +117,20 @@ export default class SidebarOptionsMessages extends React.Component {
             <SVG.Dismiss size="16px" />
           </div>
         </header>
-        <div className={STYLES_TITLE}>Send a message</div>
+        <div className={STYLES_TITLE}>Find a user</div>
+
+        <div className={STYLES_FORM}>
+          <UISidebarInput
+            label="By username"
+            name="query"
+            onChange={this._handleChange}
+            value={this.state.query}
+          />
+        </div>
+
+        <div className={STYLES_TITLE} style={{ marginTop: 40 }}>
+          Users
+        </div>
         {users.map((u) => {
           if (u.username === viewer.username) {
             return null;
