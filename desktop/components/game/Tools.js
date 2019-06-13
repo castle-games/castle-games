@@ -113,6 +113,18 @@ const Box = styled.div(
   flexbox
 );
 
+const Image = styled(Box)({
+  maxWidth: '100%',
+  alignSelf: 'flex-start',
+  width: 'auto',
+  height: 'auto',
+});
+
+Image.defaultProps = {
+  as: 'img',
+  m: 0,
+};
+
 export const ToolsContext = React.createContext({
   transformAssetUri: (uri) => uri,
 });
@@ -370,6 +382,29 @@ class ToolDropdown extends React.PureComponent {
   }
 }
 elementTypes['dropdown'] = ToolDropdown;
+
+const STYLES_IMAGE = css`
+  margin-bottom: 14px;
+`;
+
+class ToolImage extends React.PureComponent {
+  render() {
+    const { element } = this.props;
+
+    return (
+      <ToolsContext.Consumer>
+        {({ transformAssetUri }) => (
+          <Image
+            className={STYLES_IMAGE}
+            {...element.props}
+            src={element.props && element.props.path && transformAssetUri(element.props.path)}
+          />
+        )}
+      </ToolsContext.Consumer>
+    );
+  }
+}
+elementTypes['image'] = ToolImage;
 
 elementTypes['markdown'] = ToolMarkdown;
 
@@ -1091,21 +1126,14 @@ export default class Tools extends React.PureComponent {
                 name: 'DEFAULT',
               },
               children: {
-                lastId: 'colorPickercolor',
-                count: 1,
-                colorPickercolor: {
-                  type: 'colorPicker',
-                  pathId: '9OQ2eEk9Y9sTP0+vei+oeQ==',
+                'imageavatar.png': {
+                  type: 'image',
                   props: {
-                    label: 'color',
-                    value: {
-                      r: 1,
-                      b: 1,
-                      a: 1,
-                      g: 0,
-                    },
+                    path: 'avatar.png',
                   },
                 },
+                lastId: 'imageavatar.png',
+                count: 1,
               },
             },
           },

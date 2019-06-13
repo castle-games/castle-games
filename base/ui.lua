@@ -333,6 +333,11 @@ function ui.dropdown(label, value, items, props)
     return newValue
 end
 
+function ui.image(path, props)
+    assert(type(path) == 'string', '`ui.image` needs a string `path`')
+    addChild('image', path, merge({ path = path }, props), false)
+end
+
 function ui.markdown(source, props)
     assert(type(source) == 'string', '`ui.markdown` needs a string `source`')
     addChild('markdown', source, merge({ source = source }, props), false)
