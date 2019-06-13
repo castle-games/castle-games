@@ -355,17 +355,32 @@ class NavigationContextManager extends React.Component {
    *  Generic url handler.
    *  If this is a url to a Castle game or a Castle post, opens the url inside Castle.
    *  Otherwise, routes the url to the machine's browser.
+   *
+   *  If options.allowCastleContentType == true, requests the url even if it doesn't
+   *  look like a Castle url, and opens it as a game if it responds with a valid Castle
+   *  content type. This is slower because we have to fetch the url again.
    */
   openUrl = async (url, options) => {
-    const { isCastleUrl, type, postId } = Urls.getCastleUrlInfo(url);
+    const { isUrl, isCastleUrl, type, postId } = Urls.getCastleUrlInfo(url);
+    let handled = false;
     if (isCastleUrl) {
       if (type === 'game') {
+        handled = true;
         this.navigateToGameUrl(url, options);
       } else if (type === 'post') {
+        handled = true;
         const post = await Actions.getPostById(postId);
         this._loadGameAsync(post.sourceGame, { post });
       }
-    } else {
+    } else if (isUrl && options.allowCastleContentType) {
+      const isCastleContentType = await Urls.doesUrlRespondWithCastleContentType(url);
+      if (isCastleContentType) {
+        handled = true;
+        this.navigateToGameUrl(url, options);
+      }
+    }
+    if (!handled) {
+      // fall back to launching external browser
       NativeUtil.openExternalURL(url);
     }
   };

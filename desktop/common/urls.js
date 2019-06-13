@@ -96,6 +96,22 @@ const isMetadataFileUrl = (urlStr) => {
 };
 
 /**
+ *  Fetches the url and returns true if the response contains
+ *  x-castle-content-type: .castle
+ */
+const doesUrlRespondWithCastleContentType = async (url) => {
+  let result = false;
+  try {
+    const response = await fetch(url);
+    const contentType = response.headers.get('x-castle-content-type');
+    if (contentType && contentType.contains('.castle')) {
+      result = true;
+    }
+  } catch (_) {}
+  return result;
+};
+
+/**
  *  @return { isUrl, isCastleUrl, type }
  *  isUrl is true if url.parse(urlStr) returned something.
  *  isCastleUrl is true if we think castle can open it.
@@ -143,6 +159,7 @@ const getCastleUrlInfo = (urlStr) => {
 
 export {
   canonizeUserProvidedUrl,
+  doesUrlRespondWithCastleContentType,
   getCastleUrlInfo,
   githubUserContentToRepoUrl,
   githubUserContentToArchiveUrl,

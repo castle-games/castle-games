@@ -94,7 +94,7 @@ class ContentContainer extends React.Component {
       }
     } catch (_) {}
 
-    this.props.navigator.openUrl(url, { launchSource: 'search' });
+    this.props.navigator.openUrl(url, { launchSource: 'search', allowCastleContentType: true });
     this._handleSearchReset();
   };
 
