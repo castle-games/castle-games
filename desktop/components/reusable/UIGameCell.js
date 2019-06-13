@@ -33,7 +33,7 @@ const STYLES_GAME_ITEM = css`
   border-radius: 4px;
   position: relative;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
-  transition: 200ms ease all;
+  transition: 45ms ease all;
   transition-property: transform, box-shadow, filter, background-color;
   :hover {
     transform: scale(1.02);
