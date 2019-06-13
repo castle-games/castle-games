@@ -4,6 +4,14 @@ import { Value } from 'slate';
 
 import Plain from 'slate-plain-serializer';
 
+export const getName = (user) => {
+  if (isEmpty(user.name)) {
+    return user.username;
+  }
+
+  return user.name;
+};
+
 export const getPresentationName = (user) => {
   if (isEmpty(user.name)) {
     return user.username;
@@ -13,8 +21,12 @@ export const getPresentationName = (user) => {
     return user.username;
   }
 
-  return <React.Fragment>{user.name} <span style={{ fontWeight: 400, fontSize: `10px`}}>({user.username})</span></React.Fragment>;
-}
+  return (
+    <React.Fragment>
+      {user.name} <span style={{ fontWeight: 400, fontSize: `10px` }}>({user.username})</span>
+    </React.Fragment>
+  );
+};
 
 export const elide = (string, length = 140) => {
   if (isEmpty(string)) {

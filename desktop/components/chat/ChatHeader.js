@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
+import * as Strings from '~/common/strings';
 import * as SVG from '~/common/svg';
 
 import { css } from 'react-emotion';
@@ -62,12 +63,11 @@ const STYLES_P = css`
 
 export default class ChatHeader extends React.Component {
   render() {
-
     let name = this.props.channel.name;
     if (this.props.channel.otherUserId) {
       const { userIdToUser } = this.props.social;
       const otherUser = userIdToUser[this.props.channel.otherUserId];
-      name = `Messaging ${otherUser.name}`;
+      name = `${Strings.getName(otherUser)}`;
     }
 
     return (
@@ -81,7 +81,13 @@ export default class ChatHeader extends React.Component {
             <p className={STYLES_P} onClick={this.props.onMembersClick}>
               <strong>{this.props.channel.members.length} online</strong>
             </p>
-          ) : null}
+          ) : (
+            <p className={STYLES_P}>
+              {this.props.channel.otherUserId
+                ? `This is a private message channel.`
+                : `This is a public channel.`}
+            </p>
+          )}
         </div>
         <div className={STYLES_HEADER_RIGHT} />
       </header>

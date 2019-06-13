@@ -131,6 +131,7 @@ class ChatScreen extends React.Component {
       <div className={className}>
         <ChatHeader
           social={this.props.social}
+          viewer={this.props.viewer}
           channel={this.props.chat.channel}
           onSettingsClick={this._handleShowSingleChannelOptions}
           onMembersClick={this._handleShowSingleChannelMembers}

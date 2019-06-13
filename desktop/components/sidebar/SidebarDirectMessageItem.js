@@ -106,7 +106,7 @@ export default ({ data, onClick, user }) => {
       )}
       <div className={STYLES_TEXT}>
         <h3 className={STYLES_NAME} style={{ color }}>
-          {user.name}
+          {data.name}
         </h3>
       </div>
       {data.pending ? <span className={STYLES_NOTIFICATION}>{data.pending}</span> : null}

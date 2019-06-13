@@ -12,6 +12,7 @@ import { NativeBinds } from '~/native/nativebinds';
 import StringReplace from 'react-string-replace';
 
 const GENERAL_CHANNEL_ID = `channel-79c91814-c73e-4d07-8bc6-6829fad03d72`;
+const DIRECT_MESSAGE_PREFIX = 'dm-';
 const NOTIFICATIONS_USER_ID = -1;
 const TEST_MESSAGE = null;
 const NotificationLevel = {
@@ -215,27 +216,37 @@ class ChatSessionContextManager extends React.Component {
   };
 
   _handleMessagesAsync = async (allMessages) => {
-    const { currentUser } = this.props;
+    const { currentUser, subscribedChatChannels } = this.props;
+    const { messages } = this.state;
     const viewer = currentUser.user;
 
-    // NOTE(jim): No viewer? We can't handle the next steps.
     if (!viewer) {
       return;
     }
 
-    // NOTE(jim): Subscribed channels only.
-    const { subscribedChatChannels } = this.props;
     if (!subscribedChatChannels.length) {
       return;
     }
 
-    const messages = this.state.messages;
     let notificationLevel = this._getNotificationLevel();
     let notifications = [];
     let newChannels = [];
     let userIds = {};
 
-    allMessages.forEach((m) => {
+    allMessages.forEach(async (m) => {
+      // TODO(jim): Move this logic to the server at some point.
+      if (m.channelId.startsWith(DIRECT_MESSAGE_PREFIX)) {
+        let channelUserIds = m.channelId.replace(DIRECT_MESSAGE_PREFIX, '').split(',');
+        const isViewer = channelUserIds.find((id) => viewer.userId === id);
+        const isOtherUser = channelUserIds.find((id) => m.message.name === id);
+
+        // NOTE(jim): Leave the channel. Don't save the message.
+        if (!isViewer && !isOtherUser) {
+          await ChatActions.leaveChatChannel({ channelId: m.channelId });
+          return;
+        }
+      }
+
       const isSubscribed = subscribedChatChannels.find((c) => c.channelId === m.channelId);
 
       // NOTE(jim): I shouldn't even have to check.
@@ -255,6 +266,7 @@ class ChatSessionContextManager extends React.Component {
       const messageJSON = JSON.parse(m.message.body);
       const fromUserId = m.message.name;
       const text = messageJSON.message ? messageJSON.message[0].text : '';
+
       // NOTE(jim): Notified every time someone tags you in a channel.
       StringReplace(text, /@([a-zA-Z0-9_-]+)/g, (match, i) => {
         if (
@@ -286,7 +298,7 @@ class ChatSessionContextManager extends React.Component {
         });
       }
 
-      // NOTE(jim): The only props the message component needs.
+      // NOTE(jim): Schema for the props the rendering component needs.
       let requiredMessageProps = {
         type: 'MESSAGE',
         fromUserId: m.fromUserId,
@@ -295,8 +307,7 @@ class ChatSessionContextManager extends React.Component {
         timestamp: m.timestamp,
       };
 
-      // NOTE(jim): First load the array is reversed. You must
-      // do this.
+      // NOTE(jim): the array is reversed in the wrong direction on first load.
       if (this._firstLoadComplete) {
         messages[m.channelId].push(requiredMessageProps);
       } else {
@@ -316,15 +327,7 @@ class ChatSessionContextManager extends React.Component {
 
     this._firstLoadComplete = true;
     this.setState({ messages }, async () => {
-      // NOTE(jim): If someone DMs you in a channel you left, resubscribe.
       if (newChannels.length) {
-        /* TODO(jim): Can't do this because it may join channels you
-        // are not allowed to join.
-        newChannels.forEach(async (channelId) => {
-          await ChatActions.joinChatChannel({ channelId });
-        });
-        */
-
         await this.props.refreshChannelData();
       }
     });

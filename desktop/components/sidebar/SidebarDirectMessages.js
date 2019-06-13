@@ -2,6 +2,7 @@ import ReactDOM from 'react-dom';
 
 import * as React from 'react';
 import * as Constants from '~/common/constants';
+import * as Strings from '~/common/strings';
 
 import { css } from 'react-emotion';
 
@@ -29,12 +30,20 @@ export default class SidebarDirectMessages extends React.Component {
             c.channelId === this.props.selectedChannelId && this.props.contentMode === 'chat';
 
           const user = userIdToUser[c.otherUserId];
+          if (!user) {
+            return;
+          }
+
           const online = onlineUserIds[c.otherUserId] === true;
 
           return (
             <SidebarDirectMessageItem
               key={`direct-message-${c.otherUserId}`}
-              data={{ name: c.name, active, online }}
+              data={{
+                name: `${Strings.getName(user)}`,
+                active,
+                online,
+              }}
               user={user}
               onClick={() => this.props.onSelectChannel(c)}
             />
