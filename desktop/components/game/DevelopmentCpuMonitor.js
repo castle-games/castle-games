@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
+import * as NativeUtil from '~/native/nativeutil';
 
 import { css } from 'react-emotion';
 
@@ -17,6 +18,36 @@ const STYLES_CONTAINER = css`
 `;
 
 export default class DevelopmentCpuMonitor extends React.Component {
+  state = {
+    cpuUsage: null,
+  };
+
+  componentDidMount() {
+    this._mounted = true;
+    NativeUtil.setCpuMonitoring(true);
+    window.addEventListener('nativeCpuUsage', this._handleCpuUsageEvent);
+  }
+
+  componentWillUnmount() {
+    NativeUtil.setCpuMonitoring(false);
+    window.removeEventListener('nativeCpuUsage', this._handleCpuUsageEvent);
+    this._mounted = false;
+  }
+
+  _handleCpuUsageEvent = ({ params }) => {
+    if (!this._mounted) return;
+    // TODO: I am getting some numbers here, but are they the correct numbers?
+    // TODO: reconcile mac/win and other machines math here
+    let cpuUsage = 0;
+    if (params.usage) {
+      params.usage.forEach((usage) => {
+        cpuUsage += usage;
+      });
+      cpuUsage /= params.usage.length;
+    }
+    this.setState({ cpuUsage });
+  };
+
   _getDisplayInfo = (cpuUsage) => {
     let text,
       color,
@@ -41,7 +72,7 @@ export default class DevelopmentCpuMonitor extends React.Component {
   };
 
   render() {
-    const cpuUsage = 0; // TODO: hook up to native
+    const { cpuUsage } = this.state;
     const { text, color, backgroundColor } = this._getDisplayInfo(cpuUsage);
     return (
       <div className={STYLES_CONTAINER} style={{ color, backgroundColor }}>

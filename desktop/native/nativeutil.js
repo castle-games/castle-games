@@ -102,3 +102,7 @@ export const readFileUrl = async (fileUrl) => {
 export const focusGame = async () => {
   return await NativeBinds.focusGame();
 };
+
+export const setCpuMonitoring = async (isMonitoring) => {
+  return await NativeBinds.setCpuMonitoring({ isMonitoring });
+};

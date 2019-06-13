@@ -72,6 +72,7 @@ bool ghostGetPathToFileInAppBundle(const char *filename, const char **result);
 bool ghostGetDocumentsPath(const char **result);
 bool ghostGetVersion(const char **result);
 void ghostExecNode(const char *input, int execId);
+void ghostSetCpuMonitoring(bool isMonitoringCpu);
 
 void ghostInstallUpdate();
 

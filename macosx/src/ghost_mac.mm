@@ -3,6 +3,7 @@
 #import "ghost_obs.h"
 
 #import "GhostAppDelegate.h"
+#import "GhostCpuMonitor.h"
 #import "GhostFileSystem.h"
 
 #import <sstream>
@@ -372,3 +373,28 @@ const char *ghostGetCachePath() {
 }
 
 void ghostTakeScreenCapture() { ghostTakeScreenCaptureObs(); }
+
+void ghostSetCpuMonitoring(bool isMonitoringCpu) {
+  static dispatch_once_t onceToken;
+  static GhostCpuMonitor *sCpuMonitor;
+
+  if (isMonitoringCpu) {
+    dispatch_once(&onceToken, ^{
+      sCpuMonitor = [[GhostCpuMonitor alloc] init];
+    });
+    [sCpuMonitor start:^(unsigned numCpus, float *usage) {
+      std::stringstream params;
+      params << "{ usage: [";
+      for (unsigned ii = 0; ii < numCpus; ii++) {
+        // NSLog(@"Usage %u: %f", ii, usage[ii]);
+        params << usage[ii] << ", ";
+      }
+      params << "] }";
+      ghostSendJSEvent(kGhostCpuUsageEventName, params.str().c_str());
+    }];
+  } else {
+    if (sCpuMonitor) {
+      [sCpuMonitor stop];
+    }
+  }
+}

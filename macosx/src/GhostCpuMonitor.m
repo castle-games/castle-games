@@ -6,7 +6,7 @@
 #include <sys/sysctl.h>
 #include <sys/types.h>
 
-#define GHOST_CPU_MONITOR_INTERVAL_SEC 3
+#define GHOST_CPU_MONITOR_INTERVAL_SEC 1
 
 @interface GhostCpuMonitor () {
   processor_info_array_t cpuInfo, prevCpuInfo;
@@ -24,6 +24,11 @@
 @implementation GhostCpuMonitor
 
 - (void)start:(void (^)(unsigned, float *))callback {
+  if (_updateTimer) {
+    // already running
+    _updateCallback = callback;
+    return;
+  }
   [self _countCPUs];
   usage = malloc(_numCPUs * sizeof(float));
   _CPUUsageLock = [[NSLock alloc] init];

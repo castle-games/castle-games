@@ -284,3 +284,9 @@ JS_BIND_DEFINE(setScreenSettings) {
   ghostSetScalingModes(up, down);
   success("success");
 }
+
+JS_BIND_DEFINE(setCpuMonitoring) {
+  bool isMonitoring = arg["isMonitoring"];
+  ghostSetCpuMonitoring(isMonitoring);
+  success("success");
+}

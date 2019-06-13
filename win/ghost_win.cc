@@ -850,3 +850,7 @@ const char *ghostGetCachePath() {
 }
 
 void ghostTakeScreenCapture() {}
+
+void ghostSetCpuMonitoring(bool isMonitoringCpu) {
+  // TODO: GhostCpu::startMonitor() / StopMonitor()
+}
