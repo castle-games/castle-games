@@ -6,7 +6,7 @@
 #include <sys/sysctl.h>
 #include <sys/types.h>
 
-#define GHOST_CPU_MONITOR_INTERVAL_SEC 1
+#define GHOST_CPU_MONITOR_INTERVAL_SEC 2
 
 @interface GhostCpuMonitor () {
   processor_cpu_load_info_t cpuInfo, prevCpuInfo;
@@ -34,7 +34,7 @@
   _updateCallback = callback;
   _updateTimer = [NSTimer scheduledTimerWithTimeInterval:GHOST_CPU_MONITOR_INTERVAL_SEC
                                                   target:self
-                                                selector:@selector(_measureMachineCpuUsage:)
+                                                selector:@selector(_measureProcessCpuUsage:)
                                                 userInfo:nil
                                                  repeats:YES];
 }
@@ -68,7 +68,50 @@
 }
 
 /**
+ *  Measure CPU usage for just this process.
+ *  Callback is invoked with just a single value (not split by core).
+ *  Derived from https://stackoverflow.com/questions/8223348/ios-get-cpu-usage-from-application
+ */
+- (void)_measureProcessCpuUsage:(__unused NSTimer *)sender {
+  float totalTaskUsage = 0;
+  thread_array_t threads;
+  mach_msg_type_number_t nThreads;
+
+  kern_return_t result = task_threads(mach_task_self(), &threads, &nThreads);
+  if (result == KERN_SUCCESS) {
+    thread_info_data_t threadInfo;
+    mach_msg_type_number_t threadInfoCount;
+    thread_basic_info_t threadBasicInfo;
+    long threadUsageSec = 0;
+    long threadUsageUsec = 0;
+
+    for (natural_t threadIdx = 0; threadIdx < nThreads; threadIdx++) {
+      threadInfoCount = THREAD_INFO_MAX;
+      kern_return_t result = thread_info(threads[threadIdx], THREAD_BASIC_INFO,
+                                         (thread_info_t)threadInfo, &threadInfoCount);
+      if (result != KERN_SUCCESS) {
+        continue;
+      }
+      threadBasicInfo = (thread_basic_info_t)threadInfo;
+      if (!(threadBasicInfo->flags & TH_FLAGS_IDLE)) {
+        threadUsageSec = threadUsageSec + threadBasicInfo->user_time.seconds + threadBasicInfo->system_time.seconds;
+        threadUsageUsec = threadUsageUsec + threadBasicInfo->user_time.microseconds +
+                   threadBasicInfo->system_time.microseconds;
+        totalTaskUsage = totalTaskUsage + threadBasicInfo->cpu_usage / (float)TH_USAGE_SCALE;
+      }
+    }
+  }
+  result =
+      vm_deallocate(mach_task_self(), (vm_offset_t)threads, nThreads * sizeof(thread_t));
+  if (_updateCallback) {
+    usage[0] = totalTaskUsage;
+    _updateCallback(1, usage);
+  }
+}
+
+/**
  *  Measure CPU usage across all processes on the machine.
+ *  Callback is invoked with one value per core.
  */
 - (void)_measureMachineCpuUsage:(__unused NSTimer *)sender {
   natural_t numCPUsU = 0U;
