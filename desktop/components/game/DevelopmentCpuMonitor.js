@@ -36,8 +36,6 @@ export default class DevelopmentCpuMonitor extends React.Component {
 
   _handleCpuUsageEvent = ({ params }) => {
     if (!this._mounted) return;
-    // TODO: I am getting some numbers here, but are they the correct numbers?
-    // TODO: reconcile mac/win and other machines math here
     let cpuUsage = 0;
     if (params.usage) {
       params.usage.forEach((usage) => {
