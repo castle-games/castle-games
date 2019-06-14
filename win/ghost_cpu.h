@@ -16,11 +16,8 @@ public:
 private:
   float GetUsage();
 
-  // number of cores
-  int num_cpus_;
-
   // last observed sample
-  ULARGE_INTEGER last_cpu_, last_sys_cpu_, last_user_cpu_;
+  FILETIME last_sys_kernel_, last_sys_user_, last_proc_kernel_, last_proc_user_;
 
   // monitor thread
   GhostCpuCallback callback_;

@@ -2,15 +2,25 @@
 #include <windows.h>
 #include "ghost_cpu.h"
 
+static inline ULONGLONG SubtractTimes(const FILETIME &ftA, const FILETIME &ftB) {
+  ULARGE_INTEGER ulA, ulB;
+  ulA.LowPart = ftA.dwLowDateTime;
+  ulA.HighPart = ftA.dwHighDateTime;
+  ulB.LowPart = ftB.dwLowDateTime;
+  ulB.HighPart = ftB.dwHighDateTime;
+  return ulA.QuadPart - ulB.QuadPart;
+}
+
 #define GHOST_CPU_POLL_MS 2000
 DWORD WINAPI GhostCpuMonitorThreadProc(LPVOID lpParam);
 
 GhostCpu::GhostCpu(void)
-  :num_cpus_(0), monitor_thread_(NULL)
+  :monitor_thread_(NULL)
 {
-  ZeroMemory(&last_cpu_, sizeof(ULARGE_INTEGER));
-  ZeroMemory(&last_sys_cpu_, sizeof(ULARGE_INTEGER));
-  ZeroMemory(&last_user_cpu_, sizeof(ULARGE_INTEGER));
+  ZeroMemory(&last_sys_kernel_, sizeof(last_sys_kernel_));
+  ZeroMemory(&last_sys_user_, sizeof(last_sys_user_));
+  ZeroMemory(&last_proc_kernel_, sizeof(last_proc_kernel_));
+  ZeroMemory(&last_proc_user_, sizeof(last_proc_user_));
 }
 
 GhostCpu::~GhostCpu() {
@@ -23,18 +33,11 @@ void GhostCpu::StartMonitor(GhostCpuCallback callback) {
     callback_ = callback;
     return;
   }
-  SYSTEM_INFO sys_info;
-  GetSystemInfo(&sys_info);
-  num_cpus_ = sys_info.dwNumberOfProcessors;
 
   // compute initial sample
-  FILETIME ftime, fsys, fuser;
-  GetSystemTimeAsFileTime(&ftime);
-  memcpy(&last_cpu_, &ftime, sizeof(FILETIME));
-
-  GetProcessTimes(GetCurrentProcess(), &ftime, &ftime, &fsys, &fuser);
-  memcpy(&last_sys_cpu_, &fsys, sizeof(FILETIME));
-  memcpy(&last_user_cpu_, &fuser, sizeof(FILETIME));
+  FILETIME dummy;
+  GetSystemTimes(&dummy, &last_sys_kernel_, &last_sys_user_);
+  GetProcessTimes(GetCurrentProcess(), &dummy, &dummy, &last_proc_kernel_, &last_proc_user_);
 
   // spawn monitor thread
   callback_ = callback;
@@ -49,26 +52,24 @@ void GhostCpu::StopMonitor() {
 }
 
 float GhostCpu::GetUsage() {
-  float percent;
-  FILETIME ftime, fsys, fuser;
-  ULARGE_INTEGER current_cpu_, current_sys_cpu_, current_user_cpu_;
+  // compute current sample
+  FILETIME dummy, curr_sys_kernel, curr_sys_user, curr_proc_kernel, curr_proc_user;
+  GetSystemTimes(&dummy, &curr_sys_kernel, &curr_sys_user);
+  GetProcessTimes(GetCurrentProcess(), &dummy, &dummy, &curr_proc_kernel, &curr_proc_user);
 
-  // compute next sample
-  GetSystemTimeAsFileTime(&ftime);
-  memcpy(&current_cpu_, &ftime, sizeof(FILETIME));
+  // compute our percentage across last interval
+  ULONGLONG dSys = SubtractTimes(curr_sys_kernel, last_sys_kernel_) + SubtractTimes(curr_sys_user, last_sys_user_);
+  ULONGLONG dProc = SubtractTimes(curr_proc_kernel, last_proc_kernel_) + SubtractTimes(curr_proc_user, last_proc_user_);
+  double percent = 0;
+  if (dSys > 0) {
+    percent = ((double) dProc) / dSys;
+  }
 
-  GetProcessTimes(GetCurrentProcess(), &ftime, &ftime, &fsys, &fuser);
-  memcpy(&current_sys_cpu_, &fsys, sizeof(FILETIME));
-  memcpy(&current_user_cpu_, &fuser, sizeof(FILETIME));
-
-  // https://stackoverflow.com/questions/63166/how-to-determine-cpu-and-memory-consumption-from-inside-a-process
-  percent = (current_sys_cpu_.QuadPart - last_sys_cpu_.QuadPart) + (current_user_cpu_.QuadPart - last_user_cpu_.QuadPart);
-  percent /= (current_cpu_.QuadPart - last_cpu_.QuadPart);
-  percent /= num_cpus_; // normalize to 100% even across multiple cores
-
-  last_cpu_ = current_cpu_;
-  last_user_cpu_ = current_user_cpu_;
-  last_sys_cpu_ = current_sys_cpu_;
+  // save sample
+  last_sys_kernel_ = curr_sys_kernel;
+  last_sys_user_ = curr_sys_user;
+  last_proc_kernel_ = curr_proc_kernel;
+  last_proc_user_ = curr_proc_user;
 
   return percent;
 }
