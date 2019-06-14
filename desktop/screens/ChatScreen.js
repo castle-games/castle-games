@@ -56,6 +56,14 @@ class ChatScreen extends React.Component {
   };
 
   componentDidUpdate(prevProps) {
+    if (!prevProps.chat) {
+      return;
+    }
+
+    if (!prevProps.chat.channel) {
+      return;
+    }
+
     if (prevProps.chat.channel.channelId !== this.props.chat.channel.channelId) {
       this.setState({ mode: 'MESSAGES' });
     }

@@ -77,6 +77,12 @@ class Sidebar extends React.Component {
     return this.setState({ mode: 'DEFAULT' });
   };
 
+  _handleNavigateToChatWithoutRefresh = async (channel) => {
+    await this.props.chat.handleConnect(channel);
+    this.props.navigator.navigateToChat();
+    return this.setState({ mode: 'DEFAULT' });
+  };
+
   _handleNavigateToMakeGame = () => {
     return this.props.navigator.navigateToCreate();
   };
@@ -110,16 +116,24 @@ class Sidebar extends React.Component {
   _handleHideOptions = () => this.setState({ mode: 'DEFAULT' });
 
   _handleCreateDirectMessage = async (user) => {
+    if (this._createChannelLock) {
+      return;
+    }
+
+    this._createChannelLock = true;
+
     const response = await ChatActions.sendUserChatMessage({
       otherUserId: user.userId,
       message: '👋',
     });
 
     if (!response || response.errors) {
+      this._createChannelLock = false;
       alert(`We were unable to send ${user.username} a message.`);
       return;
     }
 
+    // NOTE(jim): The channel must appear in the refresh.
     await this.props.social.refreshChannelData();
 
     let newChannel;
@@ -129,20 +143,29 @@ class Sidebar extends React.Component {
       }
     });
 
+    this._createChannelLock = false;
     if (!newChannel) {
       return this.setState({ mode: 'DEFAULT' });
     }
 
-    this._handleNavigateToChat(newChannel);
+    this._handleNavigateToChatWithoutRefresh(newChannel);
   };
 
   _handleCreateChannel = async (name) => {
+    if (this._createChannelLock) {
+      return;
+    }
+
+    this._createChannelLock = true;
+
     if (Strings.isEmpty(name)) {
+      this._createChannelLock = false;
       alert('You must provide a channel name.');
       return;
     }
 
     const response = await ChatActions.createChatChannel({ name });
+    this._createChannelLock = false;
     if (!response || response.errors) {
       alert('We were unable to create a channel with this name.');
       return;
@@ -150,7 +173,6 @@ class Sidebar extends React.Component {
 
     if (response.data && response.data.createChatChannel) {
       this._handleNavigateToChat(response.data.createChatChannel);
-      this.props.social.refreshChannelData();
     }
   };
 

@@ -38,9 +38,10 @@ export default class SidebarDirectMessages extends React.Component {
 
           return (
             <SidebarDirectMessageItem
-              key={`direct-message-${c.otherUserId}`}
+              key={`direct-message-${c.channelId}-${c.otherUserId}`}
               data={{
                 name: `${Strings.getName(user)}`,
+                channelId: c.channelId,
                 active,
                 online,
               }}
