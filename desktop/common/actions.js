@@ -102,6 +102,7 @@ const POST_FIELDS = `
     height
   }
   hasData
+  url
   createdTime
 `;
 

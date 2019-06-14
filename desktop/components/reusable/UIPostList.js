@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as Strings from '~/common/strings';
 import * as Utilities from '~/common/utilities';
+import * as SVG from '~/common/svg';
 
 import { css } from 'react-emotion';
 import { getEmojiComponent } from '~/common/emojis';
@@ -77,14 +78,23 @@ const STYLES_USER_NAME = css`
   align-self: center;
 `;
 
-const STYLES_TIMESTAMP = css`
-  font-weight: 400;
-  color: ${Constants.REFACTOR_COLORS.subdued};
-  margin-bottom: 8px;
-  font-size: 10px;
+const STYLES_TIMESTAMP_CONTAINER = css`
   display: flex;
-  justify-content: flex-end;
-  cursor: default;
+  align-items: center;
+  justify-content: center;
+  color: ${Constants.REFACTOR_COLORS.subdued};
+  cursor: pointer;
+  margin-bottom: 4px;
+
+  :hover {
+    border-bottom: 1px solid ${Constants.REFACTOR_COLORS.subdued};
+  }
+`;
+
+const STYLES_TIMESTAMP = css`
+  margin-left: 4px;
+  font-weight: 400;
+  font-size: 10px;
 `;
 
 const STYLES_POST_BODY = css`
@@ -163,6 +173,10 @@ class UIPostCell extends React.Component {
     onUserSelect: () => {},
   };
 
+  state = {
+    urlWasCopiedToClipboard: false,
+  };
+
   _handleOpenData = async () => {
     const { post } = this.props;
     this.props.onGameSelect(post.sourceGame, { post });
@@ -174,6 +188,16 @@ class UIPostCell extends React.Component {
 
   _handleUserSelect = () => {
     this.props.onUserSelect(this.props.post.creator);
+  };
+
+  _handleCopyUrlToClipboard = () => {
+    let textField = document.createElement('textarea');
+    textField.innerText = this.props.post.url;
+    document.body.appendChild(textField);
+    textField.select();
+    document.execCommand('copy');
+    textField.remove();
+    this.setState({ urlWasCopiedToClipboard: true });
   };
 
   _renderMessage = (message) => {
@@ -247,7 +271,19 @@ class UIPostCell extends React.Component {
   };
 
   _renderCreatedTime = (createdTime) => {
-    return <div className={STYLES_TIMESTAMP}>{Strings.toChatDate(createdTime)}</div>;
+    const { urlWasCopiedToClipboard } = this.state;
+    let svg;
+    if (urlWasCopiedToClipboard) {
+      svg = <SVG.Check size="15px" style={{ color: 'green' }} />;
+    } else {
+      svg = <SVG.Link size="15px" />;
+    }
+    return (
+      <div className={STYLES_TIMESTAMP_CONTAINER} onClick={this._handleCopyUrlToClipboard}>
+        {svg}
+        <div className={STYLES_TIMESTAMP}>{Strings.toChatDate(createdTime)}</div>
+      </div>
+    );
   };
 
   render() {
@@ -279,7 +315,7 @@ class UIPostCell extends React.Component {
                 {creator.name}
               </div>
             </div>
-            {this._renderCreatedTime(createdTime)}
+            <div>{this._renderCreatedTime(createdTime)}</div>
           </div>
           <div className={STYLES_POST_BODY}>
             {messageContainer}
