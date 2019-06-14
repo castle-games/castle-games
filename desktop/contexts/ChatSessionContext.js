@@ -230,11 +230,11 @@ class ChatSessionContextManager extends React.Component {
 
     let notificationLevel = this._getNotificationLevel();
     let notifications = [];
-    let newChannels = [];
+    let needsChannelRefresh = false;
     let userIds = {};
 
     allMessages.forEach(async (m) => {
-      // TODO(jim): Move this logic to the server at some point.
+      // TODO(jim): Move this logic to the server at some point or move it to the castle-chat-lib
       if (m.channelId.startsWith(DIRECT_MESSAGE_PREFIX)) {
         let channelUserIds = m.channelId.replace(DIRECT_MESSAGE_PREFIX, '').split(',');
         const isViewer = channelUserIds.find((id) => viewer.userId === id);
@@ -242,11 +242,23 @@ class ChatSessionContextManager extends React.Component {
 
         // NOTE(jim): Leave the channel. Don't save the message.
         if (!isViewer && !isOtherUser) {
+          needsChannelRefresh = true;
           await ChatActions.leaveChatChannel({ channelId: m.channelId });
+
+          // NOTE(jim): Block messages.
           return;
+        }
+
+        // NOTE(jim): You are a member of this channel, but its clear that you aren't part of it.
+        // So we guarantee this.
+        if (isViewer && !messages[m.channelId]) {
+          messages[m.channelId] = [];
+          needsChannelRefresh = true;
+          await ChatActions.joinChatChannel({ channelId: m.channelId });
         }
       }
 
+      // NOTE(jim): Should update thanks to an awaited joinChatChannel
       const isSubscribed = subscribedChatChannels.find((c) => c.channelId === m.channelId);
 
       // NOTE(jim): I shouldn't even have to check.
@@ -258,7 +270,7 @@ class ChatSessionContextManager extends React.Component {
         messages[m.channelId] = [];
 
         if (this._firstLoadComplete) {
-          newChannels.push(m.channelId);
+          needsChannelRefresh = true;
         }
       }
 
@@ -327,9 +339,11 @@ class ChatSessionContextManager extends React.Component {
 
     this._firstLoadComplete = true;
     this.setState({ messages }, async () => {
-      if (newChannels.length) {
-        await this.props.refreshChannelData();
+      if (!needsChannelRefresh) {
+        return;
       }
+
+      await this.props.refreshChannelData();
     });
   };
 
@@ -342,6 +356,7 @@ class ChatSessionContextManager extends React.Component {
     event.user_ids.forEach((id) => {
       onlineUserIds[id] = true;
     });
+
     this.props.setOnlineUserIds(onlineUserIds);
   };
 
