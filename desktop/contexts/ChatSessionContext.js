@@ -119,6 +119,10 @@ class ChatSessionContextManager extends React.Component {
       return;
     }
 
+    if (!channel) {
+      return;
+    }
+
     let showEntryAnimation = false;
     if (this.state.channel) {
       showEntryAnimation = true;
@@ -129,6 +133,20 @@ class ChatSessionContextManager extends React.Component {
     const existingChannel = this.props.findSubscribedChannel({
       channelId: channel.channelId,
     });
+
+    // TODO(jim): This is a nice little hack, if you aren't supposed to be in the channel.
+    // We will never let you in there!!
+    if (channel.channelId.startsWith(DIRECT_MESSAGE_PREFIX)) {
+      const channelUserIds = channel.channelId.replace(DIRECT_MESSAGE_PREFIX, '').split(',');
+      const isAllowed = channelUserIds.find((id) => this.props.currentUser.user.userId === id);
+
+      if (!isAllowed) {
+        await ChatActions.leaveChatChannel({ channelId: channel.channelId });
+        await this.props.refreshChannelData();
+        return;
+      }
+    }
+
     if (!existingChannel) {
       const response = await ChatActions.joinChatChannel({ channelId: channel.channelId });
       await this._chat.loadRecentMessagesAsync();

@@ -112,7 +112,7 @@ class Sidebar extends React.Component {
   _handleCreateDirectMessage = async (user) => {
     const response = await ChatActions.sendUserChatMessage({
       otherUserId: user.userId,
-      message: 'Hey there!',
+      message: '👋',
     });
 
     if (!response || response.errors) {
