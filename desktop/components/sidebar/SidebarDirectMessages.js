@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as Strings from '~/common/strings';
+import * as ChatActions from '~/common/actions-chat';
 
 import { css } from 'react-emotion';
 
@@ -13,7 +14,34 @@ const STYLES_CONTAINER = css`
   margin-bottom: 24px;
 `;
 
+const DIRECT_MESSAGE_PREFIX = 'dm-';
+
 export default class SidebarDirectMessages extends React.Component {
+  // NOTE(jim): Another way to ensure that extra DMs don't appear and are automatically removed.
+  async componentDidMount() {
+    const { directMessages } = this.props;
+
+    let userDidRemoveChannel = false;
+    directMessages.forEach(async (c) => {
+      if (c.channelId.startsWith(DIRECT_MESSAGE_PREFIX)) {
+        const channelUserIds = c.channelId.replace(DIRECT_MESSAGE_PREFIX, '').split(',');
+        const isAllowed = channelUserIds.find((id) => this.props.viewer.userId === id);
+
+        if (!isAllowed) {
+          userDidRemoveChannel = true;
+          await ChatActions.leaveChatChannel({ channelId: c.channelId });
+          return;
+        }
+      }
+    });
+
+    if (!userDidRemoveChannel) {
+      return;
+    }
+
+    await this.props.social.refreshChannelData();
+  }
+
   render() {
     if (!this.props.viewer) {
       return null;
@@ -26,6 +54,20 @@ export default class SidebarDirectMessages extends React.Component {
           Direct Messages
         </SidebarGroupHeader>
         {this.props.directMessages.map((c) => {
+          if (c.channelId.startsWith(DIRECT_MESSAGE_PREFIX)) {
+            const channelUserIds = c.channelId.replace(DIRECT_MESSAGE_PREFIX, '').split(',');
+            const isAllowed = channelUserIds.find((id) => this.props.viewer.userId === id);
+
+            if (!isAllowed) {
+              console.error(
+                `This channel: ${
+                  c.channelId
+                } is not allowed. and will be removed on next mount. We need to find a way to get rid of these before they get to this point.`
+              );
+              return;
+            }
+          }
+
           const active =
             c.channelId === this.props.selectedChannelId && this.props.contentMode === 'chat';
 

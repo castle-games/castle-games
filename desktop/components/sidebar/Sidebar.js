@@ -66,6 +66,7 @@ class Sidebar extends React.Component {
   };
 
   _handleSignOut = () => {
+    this.props.social.clearCurrentSubscribedChats();
     this.props.currentUser.clearCurrentUser();
     this.setState({ mode: 'DEFAULT' });
   };

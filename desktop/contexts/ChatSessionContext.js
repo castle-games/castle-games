@@ -258,12 +258,8 @@ class ChatSessionContextManager extends React.Component {
         const isViewer = channelUserIds.find((id) => viewer.userId === id);
         const isOtherUser = channelUserIds.find((id) => m.fromUserId === id);
 
-        // NOTE(jim): Leave the channel. Don't save the message.
+        // NOTE(jim): Block the message
         if (!isViewer && !isOtherUser) {
-          needsChannelRefresh = true;
-          await ChatActions.leaveChatChannel({ channelId: m.channelId });
-
-          // NOTE(jim): Block messages.
           return;
         }
 

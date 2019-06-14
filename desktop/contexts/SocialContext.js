@@ -10,6 +10,7 @@ const SocialContextDefaults = {
   addUsers: (users) => {},
   addSearchableUsers: (users) => {},
   setOnlineUserIds: (userIds) => {},
+  clearCurrentSubscribedChats: () => {},
   findChannel: (channel) => {},
   refreshChannelData: () => {},
   newUserJoinChannels: () => {},
@@ -34,8 +35,16 @@ class SocialContextProvider extends React.Component {
       findSubscribedChannel: this.findSubscribedChannel,
       findChannel: this.findChannel,
       addSearchableUsers: this.addSearchableUsers,
+      clearCurrentSubscribedChats: this.clearCurrentSubscribedChats,
     };
   }
+
+  clearCurrentSubscribedChats = () => {
+    this.setState({
+      subscribedChatChannels: [],
+      recentChatMessages: [],
+    });
+  };
 
   refreshChannelData = async () => {
     const response = await ChatActions.getAllChat();
