@@ -128,16 +128,7 @@ const getCastleUrlInfo = (urlStr) => {
     if (parsedUrl.protocol) {
       isUrl = true;
     }
-    if (
-      (parsedUrl.protocol &&
-        (parsedUrl.protocol.startsWith('castle') || parsedUrl.protocol.startsWith('file'))) ||
-      (parsedUrl.pathname &&
-        (parsedUrl.pathname.endsWith('.castle') || parsedUrl.pathname.endsWith('.lua')))
-    ) {
-      // local project
-      isCastleUrl = true;
-      type = 'game';
-    } else if (parsedUrl.hostname === 'castle.games') {
+    if (parsedUrl.hostname === 'castle.games') {
       isUrl = true;
       if (parsedUrl.pathname.startsWith('/@') || parsedUrl.pathname.startsWith('/+')) {
         // published game
@@ -152,6 +143,15 @@ const getCastleUrlInfo = (urlStr) => {
           data.postId = components[components.length - 1];
         }
       }
+    } else if (
+      (parsedUrl.protocol &&
+        (parsedUrl.protocol.startsWith('castle') || parsedUrl.protocol.startsWith('file'))) ||
+      (parsedUrl.pathname &&
+        (parsedUrl.pathname.endsWith('.castle') || parsedUrl.pathname.endsWith('.lua')))
+    ) {
+      // local or self-hosted project
+      isCastleUrl = true;
+      type = 'game';
     }
   }
   return { isUrl, isCastleUrl, type, ...data };

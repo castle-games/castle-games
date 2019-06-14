@@ -99,7 +99,7 @@ class App extends React.Component {
     if (url && url.indexOf('://') === -1) {
       url = `file://${url}`;
     }
-    this.props.navigator.openUrl(e.target.href, { launchSource: 'external-link' });
+    this.props.navigator.openUrl(e.params.url, { launchSource: 'external-link' });
   };
 
   _handleNativeMenuSelectedEvent = async (e) => {
