@@ -4,7 +4,6 @@
 
 typedef DWORD(WINAPI *GhostCpuCallback)(float usage);
 
-// http://www.philosophicalgeek.com/2009/01/03/determine-cpu-usage-of-current-process-c-and-c/
 class GhostCpu {
 public:
   GhostCpu(void);
@@ -16,23 +15,14 @@ public:
 
 private:
   float GetUsage();
-  bool EnoughTimePassed();
-  inline bool IsFirstRun() const { return (m_dwLastRun == 0); }
-  ULONGLONG SubtractTimes(const FILETIME& ftA, const FILETIME& ftB);
 
-  // system total times
-  FILETIME m_ftPrevSysKernel;
-  FILETIME m_ftPrevSysUser;
+  // number of cores
+  int num_cpus_;
 
-  // process times
-  FILETIME m_ftPrevProcKernel;
-  FILETIME m_ftPrevProcUser;
-
-  float m_nCpuUsage;
-  ULONGLONG m_dwLastRun;
-  volatile LONG m_lRunCount;
+  // last observed sample
+  ULARGE_INTEGER last_cpu_, last_sys_cpu_, last_user_cpu_;
 
   // monitor thread
-  GhostCpuCallback m_callback;
-  HANDLE m_monitorThread;
+  GhostCpuCallback callback_;
+  HANDLE monitor_thread_;
 };

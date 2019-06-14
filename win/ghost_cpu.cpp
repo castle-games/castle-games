@@ -6,15 +6,11 @@
 DWORD WINAPI GhostCpuMonitorThreadProc(LPVOID lpParam);
 
 GhostCpu::GhostCpu(void)
-  :m_nCpuUsage(-1)
-  , m_dwLastRun(0)
-  , m_lRunCount(0)
-  , m_monitorThread(NULL)
+  :num_cpus_(0), monitor_thread_(NULL)
 {
-  ZeroMemory(&m_ftPrevSysKernel, sizeof(FILETIME));
-  ZeroMemory(&m_ftPrevSysUser, sizeof(FILETIME));
-  ZeroMemory(&m_ftPrevProcKernel, sizeof(FILETIME));
-  ZeroMemory(&m_ftPrevProcUser, sizeof(FILETIME));
+  ZeroMemory(&last_cpu_, sizeof(ULARGE_INTEGER));
+  ZeroMemory(&last_sys_cpu_, sizeof(ULARGE_INTEGER));
+  ZeroMemory(&last_user_cpu_, sizeof(ULARGE_INTEGER));
 }
 
 GhostCpu::~GhostCpu() {
@@ -22,109 +18,65 @@ GhostCpu::~GhostCpu() {
 }
 
 void GhostCpu::StartMonitor(GhostCpuCallback callback) {
-  if (m_monitorThread) {
+  if (monitor_thread_) {
     // already running
-    m_callback = callback;
+    callback_ = callback;
     return;
   }
-  m_callback = callback;
-  m_monitorThread = CreateThread(NULL, 0, GhostCpuMonitorThreadProc, (LPVOID) this, 0, NULL);
+  SYSTEM_INFO sys_info;
+  GetSystemInfo(&sys_info);
+  num_cpus_ = sys_info.dwNumberOfProcessors;
+
+  // compute initial sample
+  FILETIME ftime, fsys, fuser;
+  GetSystemTimeAsFileTime(&ftime);
+  memcpy(&last_cpu_, &ftime, sizeof(FILETIME));
+
+  GetProcessTimes(GetCurrentProcess(), &ftime, &ftime, &fsys, &fuser);
+  memcpy(&last_sys_cpu_, &fsys, sizeof(FILETIME));
+  memcpy(&last_user_cpu_, &fuser, sizeof(FILETIME));
+
+  // spawn monitor thread
+  callback_ = callback;
+  monitor_thread_ = CreateThread(NULL, 0, GhostCpuMonitorThreadProc, (LPVOID) this, 0, NULL);
 }
 
 void GhostCpu::StopMonitor() {
-  if (m_monitorThread) {
-    CloseHandle(m_monitorThread);
-    m_monitorThread = NULL;
+  if (monitor_thread_) {
+    CloseHandle(monitor_thread_);
+    monitor_thread_ = NULL;
   }
 }
 
-/**********************************************
-* GhostCpu::GetUsage
-* returns the percent of the CPU that this process
-* has used since the last time the method was called.
-* If there is not enough information, -1 is returned.
-* If the method is recalled to quickly, the previous value
-* is returned.
-***********************************************/
 float GhostCpu::GetUsage() {
-  // create a local copy to protect against race conditions in setting the 
-  // member variable
-  float nCpuCopy = m_nCpuUsage;
-  if (::InterlockedIncrement(&m_lRunCount) == 1) {
-    if (!EnoughTimePassed()) {
-      ::InterlockedDecrement(&m_lRunCount);
-      return nCpuCopy;
-    }
+  float percent;
+  FILETIME ftime, fsys, fuser;
+  ULARGE_INTEGER current_cpu_, current_sys_cpu_, current_user_cpu_;
 
-    FILETIME ftSysIdle, ftSysKernel, ftSysUser;
-    FILETIME ftProcCreation, ftProcExit, ftProcKernel, ftProcUser;
+  // compute next sample
+  GetSystemTimeAsFileTime(&ftime);
+  memcpy(&current_cpu_, &ftime, sizeof(FILETIME));
 
-    if (!GetSystemTimes(&ftSysIdle, &ftSysKernel, &ftSysUser) ||
-      !GetProcessTimes(GetCurrentProcess(), &ftProcCreation,
-        &ftProcExit, &ftProcKernel, &ftProcUser)) {
-      ::InterlockedDecrement(&m_lRunCount);
-      return nCpuCopy;
-    }
+  GetProcessTimes(GetCurrentProcess(), &ftime, &ftime, &fsys, &fuser);
+  memcpy(&current_sys_cpu_, &fsys, sizeof(FILETIME));
+  memcpy(&current_user_cpu_, &fuser, sizeof(FILETIME));
 
-    if (!IsFirstRun()) {
-      /*
-      CPU usage is calculated by getting the total amount of time
-      the system has operated since the last measurement
-      (made up of kernel + user) and the total
-      amount of time the process has run (kernel + user).
-      */
-      ULONGLONG ftSysKernelDiff =
-        SubtractTimes(ftSysKernel, m_ftPrevSysKernel);
-      ULONGLONG ftSysUserDiff =
-        SubtractTimes(ftSysUser, m_ftPrevSysUser);
-      ULONGLONG ftProcKernelDiff =
-        SubtractTimes(ftProcKernel, m_ftPrevProcKernel);
-      ULONGLONG ftProcUserDiff =
-        SubtractTimes(ftProcUser, m_ftPrevProcUser);
+  // https://stackoverflow.com/questions/63166/how-to-determine-cpu-and-memory-consumption-from-inside-a-process
+  percent = (current_sys_cpu_.QuadPart - last_sys_cpu_.QuadPart) + (current_user_cpu_.QuadPart - last_user_cpu_.QuadPart);
+  percent /= (current_cpu_.QuadPart - last_cpu_.QuadPart);
+  percent /= num_cpus_; // normalize to 100% even across multiple cores
 
-      ULONGLONG nTotalSys = ftSysKernelDiff + ftSysUserDiff;
-      ULONGLONG nTotalProc = ftProcKernelDiff + ftProcUserDiff;
+  last_cpu_ = current_cpu_;
+  last_user_cpu_ = current_user_cpu_;
+  last_sys_cpu_ = current_sys_cpu_;
 
-      if (nTotalSys > 0) {
-        m_nCpuUsage = nTotalProc / (float)nTotalSys;
-      }
-    }
-
-    m_ftPrevSysKernel = ftSysKernel;
-    m_ftPrevSysUser = ftSysUser;
-    m_ftPrevProcKernel = ftProcKernel;
-    m_ftPrevProcUser = ftProcUser;
-
-    m_dwLastRun = GetTickCount64();
-    nCpuCopy = m_nCpuUsage;
-  }
-
-  ::InterlockedDecrement(&m_lRunCount);
-  return nCpuCopy;
-}
-
-ULONGLONG GhostCpu::SubtractTimes(const FILETIME& ftA, const FILETIME& ftB) {
-  LARGE_INTEGER a, b;
-  a.LowPart = ftA.dwLowDateTime;
-  a.HighPart = ftA.dwHighDateTime;
-
-  b.LowPart = ftB.dwLowDateTime;
-  b.HighPart = ftB.dwHighDateTime;
-
-  return a.QuadPart - b.QuadPart;
-}
-
-bool GhostCpu::EnoughTimePassed() {
-  const int minElapsedMS = 250;
-
-  ULONGLONG dwCurrentTickCount = GetTickCount64();
-  return (dwCurrentTickCount - m_dwLastRun) > minElapsedMS;
+  return percent;
 }
 
 void GhostCpu::MeasureUsage() {
   float usage = GetUsage();
-  if (m_callback) {
-    m_callback(usage);
+  if (callback_) {
+    callback_(usage);
   }
 }
 
