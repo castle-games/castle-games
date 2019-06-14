@@ -48,8 +48,8 @@ extern "C" {
 #include "simple_handler.h"
 #include "wintoastlib.h"
 
-#include "ghost_win.h"
 #include "ghost_cpu.h"
+#include "ghost_win.h"
 
 using namespace WinToastLib;
 
@@ -864,8 +864,7 @@ DWORD WINAPI cpuUsageCallback(float usage) {
 void ghostSetCpuMonitoring(bool isMonitoringCpu) {
   if (isMonitoringCpu) {
     sCpuUsageMonitor.StartMonitor(cpuUsageCallback);
-  }
-  else {
+  } else {
     sCpuUsageMonitor.StopMonitor();
   }
 }
