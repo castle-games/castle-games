@@ -333,6 +333,28 @@ function ui.dropdown(label, value, items, props)
     return newValue
 end
 
+function ui.filePicker(label, value, props)
+    assert(type(label) == 'string', '`ui.filePicker` needs a string `label`')
+    assert(type(value) == 'string' or type(value) == 'nil', '`ui.filePicker` needs a string or nil `value`')
+
+    local c = addChild('filePicker', label, without(merge({ label = label, value = value }, props), 'onChange'), true)
+
+    local newValue = value
+    local es = pendingEvents[c.pathId]
+    if es then
+        for _, e in ipairs(es) do
+            if e.type == 'onChange' then
+                if props and props.onChange then
+                    newValue = props.onChange(e.value) or e.value
+                else
+                    newValue = e.value
+                end
+            end
+        end
+    end
+    return newValue
+end
+
 function ui.image(path, props)
     assert(type(path) == 'string', '`ui.image` needs a string `path`')
     addChild('image', path, merge({ path = path }, props), false)

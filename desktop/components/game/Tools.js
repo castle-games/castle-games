@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as NativeUtil from '~/native/nativeutil';
 import * as Constants from '~/common/constants';
 import * as Utilities from '~/common/utilities';
+import * as Actions from '~/common/actions';
 
 import { css, injectGlobal } from 'react-emotion';
 import {
@@ -27,6 +28,7 @@ import styled from 'styled-components';
 import Logs from '~/common/logs';
 import ToolMarkdown from '~/components/game/ToolMarkdown';
 import url from 'url';
+import Dropzone from 'react-dropzone';
 
 import 'rc-color-picker/assets/index.css';
 import '~/components/game/Tools.min.css';
@@ -142,19 +144,26 @@ class ToolBox extends React.PureComponent {
 }
 elementTypes['box'] = ToolBox;
 
+const STYLES_BUTTON_CONTAINER = css`
+  width: 100%;
+  margin-bottom: 14px;
+`;
+
 class ToolButton extends React.PureComponent {
   render() {
     const { element } = this.props;
     return (
-      <Carbon>
-        <Button
-          {...element.props}
-          small={!(element.props && element.props.big)}
-          kind={(element.props && element.props.kind) || 'secondary'}
-          onClick={() => sendEvent(element.pathId, { type: 'onClick' })}>
-          {element.props.label}
-        </Button>
-      </Carbon>
+      <div className={STYLES_BUTTON_CONTAINER}>
+        <Carbon>
+          <Button
+            {...element.props}
+            small={!(element.props && element.props.big)}
+            kind={(element.props && element.props.kind) || 'secondary'}
+            onClick={() => sendEvent(element.pathId, { type: 'onClick' })}>
+            {element.props.label}
+          </Button>
+        </Carbon>
+      </div>
     );
   }
 }
@@ -382,6 +391,195 @@ class ToolDropdown extends React.PureComponent {
   }
 }
 elementTypes['dropdown'] = ToolDropdown;
+
+const STYLES_FILE_PICKER_CONTAINER = css`
+  font-family: 'sf-mono', Consolas, monaco, monospace;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.125rem;
+  letter-spacing: 0.16px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  align-items: flex-start;
+  margin-bottom: 14px;
+`;
+
+const STYLES_FILE_PICKER_DRAG_ROOT = css`
+  width: 100%;
+`;
+
+const STYLES_FILE_PICKER_BUTTON_ROW = css`
+  width: 100%;
+  margin-top: 4px;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const STYLES_FILE_PICKER_BUTTON_CONTAINER = css`
+  .bx--btn {
+    width: 126px !important;
+    margin-bottom: none !important;
+    flex-shrink: 1 !important;
+  }
+`;
+
+const STYLES_FILE_PICKER_INFO = css`
+  flex: 1;
+  font-family: 'sf-mono', Consolas, monaco, monospace;
+  font-size: 0.75rem;
+  font-style: italic;
+  line-height: 1rem;
+  letter-spacing: 0.32px;
+  font-style: italic;
+  color: #bebebe;
+
+  a:visited {
+    color: #ff00ff;
+  }
+  a:hover {
+    color: #8f79d8;
+  }
+  a {
+    color: #ff00ff;
+    font-weight: 600;
+    -webkit-transition: 200ms ease color;
+    transition: 200ms ease color;
+  }
+`;
+
+const STYLES_FILE_PICKER_PREVIEW_IMAGE = css`
+  max-height: 32px;
+  max-width: 32px;
+`;
+
+class ToolFilePicker extends React.PureComponent {
+  state = {
+    value: this.props.element.props.value,
+    lastSentEventId: null,
+  };
+
+  static getDerivedStateFromProps(props, state) {
+    if (
+      state.lastSentEventId === null ||
+      props.element.lastReportedEventId == state.lastSentEventId
+    ) {
+      return {
+        value: props.element.props.value,
+      };
+    }
+    return null;
+  }
+
+  render() {
+    const { element } = this.props;
+
+    let maybeLabel = null;
+    if (element.props && element.props.label && !element.props.hideLabel) {
+      maybeLabel = (
+        <label
+          htmlFor={element.pathId}
+          className={`bx--label${element.props.disabled ? `  bx--label--disabled` : ''}`}>
+          {element.props.label}
+        </label>
+      );
+    }
+
+    let maybeHelperText = null;
+    if (element.props && element.props.helperText) {
+      maybeHelperText = (
+        <helperText
+          htmlFor={element.pathId}
+          className={`bx--form__helper-text${
+            element.props.disabled ? `  bx--form__helper-text--disabled` : ''
+          }`}>
+          {element.props.helperText}
+        </helperText>
+      );
+    }
+
+    return (
+      <div className={STYLES_FILE_PICKER_CONTAINER}>
+        <Carbon>
+          {maybeLabel}
+          {maybeHelperText}
+        </Carbon>
+        <Dropzone
+          noClick
+          multiple={false}
+          onDrop={this._handleOnDrop}
+          accept={element.props.type === 'image' ? 'image/*' : undefined}>
+          {({ getRootProps, getInputProps, open }) => (
+            <div className={STYLES_FILE_PICKER_DRAG_ROOT} {...getRootProps()}>
+              <input {...getInputProps()} />
+              <div className={STYLES_FILE_PICKER_INFO}>
+                {this.state.value ? (
+                  element.props.type === 'image' ? (
+                    <img className={STYLES_FILE_PICKER_PREVIEW_IMAGE} src={this.state.value} />
+                  ) : (
+                    <a href={this.state.value}>Open</a>
+                  )
+                ) : (
+                  'No file'
+                )}
+              </div>
+              <div className={STYLES_FILE_PICKER_BUTTON_ROW}>
+                {this.state.value && !this.state.uploading ? (
+                  <Carbon>
+                    <div className={STYLES_FILE_PICKER_BUTTON_CONTAINER}>
+                      <Button small kind="secondary" onClick={this._handleOnClickRemove}>
+                        Remove
+                      </Button>
+                    </div>
+                  </Carbon>
+                ) : null}
+                <Carbon>
+                  <div className={STYLES_FILE_PICKER_BUTTON_CONTAINER}>
+                    <Button small kind="secondary" onClick={open} disabled={this.state.uploading}>
+                      {this.state.uploading ? 'Uploading...' : 'Browse'}
+                    </Button>
+                  </div>
+                </Carbon>
+              </div>
+            </div>
+          )}
+        </Dropzone>
+      </div>
+    );
+  }
+
+  _handleOnDrop = async (files) => {
+    this.setState({ uploading: true });
+    try {
+      const result = await Actions.uploadImageAsync({ file: files[0] });
+      this.setState({
+        value: result.url,
+        lastSentEventId: sendEvent(this.props.element.pathId, {
+          type: 'onChange',
+          value: result.url,
+        }),
+      });
+    } catch (e) {
+      // TODO(nikki): Report this error somehow...
+    } finally {
+      this.setState({ uploading: false });
+    }
+  };
+
+  _handleOnClickRemove = () => {
+    this.setState({
+      value: undefined,
+      lastSentEventId: sendEvent(this.props.element.pathId, {
+        type: 'onChange',
+        value: undefined,
+      }),
+    });
+  };
+}
+elementTypes['filePicker'] = ToolFilePicker;
 
 const STYLES_IMAGE = css`
   margin-bottom: 14px;
@@ -1085,7 +1283,6 @@ const STYLES_CONTAINER = css`
   .bx--slider-container,
   .bx--accordion,
   .bx--toggle__label,
-  .bx--btn,
   .tabs-container {
     margin-bottom: 14px !important;
   }
@@ -1126,14 +1323,17 @@ export default class Tools extends React.PureComponent {
                 name: 'DEFAULT',
               },
               children: {
-                'imageavatar.png': {
-                  type: 'image',
-                  props: {
-                    path: 'avatar.png',
-                  },
-                },
-                lastId: 'imageavatar.png',
+                lastId: 'filePickerfile',
                 count: 1,
+                filePickerfile: {
+                  type: 'filePicker',
+                  pathId: 'DEFAULTfilePickerfile',
+                  props: {
+                    label: 'file',
+                    value: 'https://d1vkcv80qw9qqp.cloudfront.net/d4a6e2c64b593f7592561b98f447be88',
+                  },
+                  lastReportedEventId: 1,
+                },
               },
             },
           },
