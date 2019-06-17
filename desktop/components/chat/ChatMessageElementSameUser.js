@@ -14,16 +14,15 @@ const STYLES_CONTAINER = css`
   justify-content: space-between;
   flex-shrink: 0;
   width: 100%;
-  padding: 16px 48px 0 16px;
+  padding: 0 48px 0px 16px;
 `;
 
 const STYLES_LEFT = css`
   flex-shrink: 0;
   background-size: cover;
   background-position: 50% 50%;
-  height: 40px;
+  height: 1px;
   width: 40px;
-  background-color: #f3f3f3;
   cursor: pointer;
   border-radius: 4px;
 `;
@@ -34,25 +33,10 @@ const STYLES_RIGHT = css`
   width: 100%;
 `;
 
-const STYLES_AUTHOR_NAME = css`
-  cursor: pointer;
-  margin-top: 2px;
-  font-size: 13px;
-  font-weight: 700;
-  color: ${Constants.REFACTOR_COLORS.text};
-`;
-
-const STYLES_TIMESTAMP = css`
-  font-weight: 400;
-  color: ${Constants.REFACTOR_COLORS.subdued};
-  margin-left: 4px;
-  font-size: 10px;
-`;
-
 const STYLES_AUTHOR_MESSAGE = css`
   line-height: 20px;
   font-size: 14px;
-  margin-top: 2px;
+  margin-top: 0;
   overflow-wrap: break-word;
   white-space: pre-wrap;
   color: ${Constants.REFACTOR_COLORS.text};
@@ -159,28 +143,8 @@ export default class ChatMessageElement extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
-        <span
-          className={STYLES_LEFT}
-          onClick={
-            this.props.user.username
-              ? () => this.props.onNavigateToUserProfile(this.props.user)
-              : () => {}
-          }
-          style={{ backgroundImage: this.props.user ? `url(${this.props.user.photo.url})` : `` }}
-        />
+        <span className={STYLES_LEFT} />
         <span className={STYLES_RIGHT}>
-          <div
-            className={STYLES_AUTHOR_NAME}
-            onClick={
-              this.props.user.username
-                ? () => this.props.onNavigateToUserProfile(this.props.user)
-                : () => {}
-            }>
-            {Strings.getPresentationName(this.props.user)}
-            <span className={STYLES_TIMESTAMP}>
-              {Strings.toChatDate(this.props.message.timestamp)}
-            </span>
-          </div>
           <div className={STYLES_AUTHOR_MESSAGE}>{text}</div>
         </span>
       </div>

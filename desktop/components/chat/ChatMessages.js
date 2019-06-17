@@ -6,6 +6,7 @@ import * as Constants from '~/common/constants';
 import { css } from 'react-emotion';
 
 import ChatMessageElement from '~/components/chat/ChatMessageElement';
+import ChatMessageElementSameUser from '~/components/chat/ChatMessageElementSameUser';
 import ChatEventElement from '~/components/chat/ChatEventElement';
 import ChatPost from '~/components/chat/ChatPost';
 
@@ -61,6 +62,23 @@ export default class ChatMessages extends React.Component {
       }
 
       const user = this.props.social.userIdToUser[m.fromUserId];
+
+      let previousMessage = this.props.messages[i - 1];
+      if (previousMessage) {
+        if (user && previousMessage.fromUserId === user.userId) {
+          return (
+            <ChatMessageElementSameUser
+              key={`chat-${m.fromUserId}-${m.chatMessageId}-${i}`}
+              message={m}
+              social={this.props.social}
+              navigator={this.props.navigator}
+              chat={this.props.chat}
+              onNavigateToUserProfile={this.props.navigator.navigateToUserProfile}
+            />
+          );
+        }
+      }
+
       return (
         <ChatMessageElement
           key={`chat-${m.fromUserId}-${m.chatMessageId}-${i}`}
