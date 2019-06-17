@@ -29,6 +29,12 @@ const STYLES_BOTTOM = css`
 `;
 
 export default class ChatMessages extends React.Component {
+  static defaultProps = {
+    theme: {
+      textColor: Constants.REFACTOR_COLORS.text,
+    },
+  };
+
   _container;
   _containerBottom;
 
@@ -74,13 +80,14 @@ export default class ChatMessages extends React.Component {
             navigator={this.props.navigator}
             chat={this.props.chat}
             onNavigateToUserProfile={this.props.navigator.navigateToUserProfile}
+            theme={this.props.theme}
           />
         );
       }
 
       let previousMessage = this.props.messages[i - 1];
       if (previousMessage) {
-        if (user && previousMessage.fromUserId === user.userId) {
+        if (previousMessage.fromUserId === m.fromUserId) {
           return (
             <ChatMessageElementSameUser
               key={`chat-${m.fromUserId}-${m.chatMessageId}-${i}`}
@@ -89,6 +96,7 @@ export default class ChatMessages extends React.Component {
               navigator={this.props.navigator}
               chat={this.props.chat}
               onNavigateToUserProfile={this.props.navigator.navigateToUserProfile}
+              theme={this.props.theme}
             />
           );
         }
@@ -103,6 +111,7 @@ export default class ChatMessages extends React.Component {
           navigator={this.props.navigator}
           chat={this.props.chat}
           onNavigateToUserProfile={this.props.navigator.navigateToUserProfile}
+          theme={this.props.theme}
         />
       );
     });

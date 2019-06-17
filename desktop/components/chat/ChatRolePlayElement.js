@@ -82,6 +82,9 @@ export default class ChatMessageElement extends React.Component {
         url: null,
       },
     },
+    theme: {
+      textColor: null,
+    },
   };
 
   _handleNavigateToUser = async ({ username }) => {
@@ -155,7 +158,9 @@ export default class ChatMessageElement extends React.Component {
           style={{ backgroundImage: this.props.user ? `url(${this.props.user.photo.url})` : `` }}
         />
         <span className={STYLES_RIGHT}>
-          <div className={STYLES_AUTHOR_MESSAGE}>{text}</div>
+          <div className={STYLES_AUTHOR_MESSAGE} style={{ color: this.props.theme.textColor }}>
+            {text}
+          </div>
         </span>
       </div>
     );

@@ -77,14 +77,14 @@ const STYLES_CHANNEL = css`
 `;
 
 const STYLES_ANCHOR = css`
-  color: ${Constants.REFACTOR_COLORS.text};
+  color: ${Constants.REFACTOR_COLORS.subdued};
   font-weight: 600;
   text-decoration: underline;
   :hover {
-    color: ${Constants.REFACTOR_COLORS.text};
+    color: ${Constants.REFACTOR_COLORS.subdued};
   }
   :visited {
-    color: ${Constants.REFACTOR_COLORS.text};
+    color: ${Constants.REFACTOR_COLORS.subdued};
   }
 `;
 
@@ -95,6 +95,9 @@ export default class ChatMessageElement extends React.Component {
       photo: {
         url: null,
       },
+    },
+    theme: {
+      textColor: null,
     },
   };
 
@@ -171,6 +174,7 @@ export default class ChatMessageElement extends React.Component {
         <span className={STYLES_RIGHT}>
           <div
             className={STYLES_AUTHOR_NAME}
+            style={{ color: this.props.theme.textColor }}
             onClick={
               this.props.user.username
                 ? () => this.props.onNavigateToUserProfile(this.props.user)
@@ -181,7 +185,9 @@ export default class ChatMessageElement extends React.Component {
               {Strings.toChatDate(this.props.message.timestamp)}
             </span>
           </div>
-          <div className={STYLES_AUTHOR_MESSAGE}>{text}</div>
+          <div className={STYLES_AUTHOR_MESSAGE} style={{ color: this.props.theme.textColor }}>
+            {text}
+          </div>
         </span>
       </div>
     );

@@ -13,74 +13,67 @@ import { SocialContext } from '~/contexts/SocialContext';
 import { NavigatorContext, NavigationContext } from '~/contexts/NavigationContext';
 import { ChatSessionContext } from '~/contexts/ChatSessionContext';
 
-import ChatHeader from '~/components/chat/ChatHeader';
-import ChatHeaderActive from '~/components/chat/ChatHeaderActive';
 import ChatMessages from '~/components/chat/ChatMessages';
-import ChatMembers from '~/components/chat/ChatMembers';
 import ChatInput from '~/components/chat/ChatInput';
-import ChatOptions from '~/components/chat/ChatOptions';
 
-const STYLES_CONTAINER_BASE = `
+const STYLES_CONTAINER_BASE = css`
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   flex-direction: column;
-  width: 100%;
+  width: 248px;
   min-width: 10%;
-  height: 100vh;
-  transition: 0ms ease all;
-  transition-property: transform, opacity;
-  background: ${Constants.colors.white};
+  height: 100%;
+  background: rgb(0, 0, 0);
 `;
 
-const STYLES_CONTAINER = css`
-  ${STYLES_CONTAINER_BASE};
-  transform: translateX(0px);
-  opacity: 1;
-`;
-
-const STYLES_CONTAINER_LEAVING = css`
-  ${STYLES_CONTAINER_BASE};
-  opacity: 0;
-  transform: translateX(24px);
-`;
-
-const STYLES_CONTAINER_ENTERING = css`
-  ${STYLES_CONTAINER_BASE};
-  opacity: 0;
-`;
-
-class ChatScreen extends React.Component {
+class ChatSidebar extends React.Component {
   state = {
     value: '',
     mode: 'MESSAGES',
   };
 
-  componentDidUpdate(prevProps) {
-    if (!prevProps.chat) {
-      return;
-    }
-
-    if (!prevProps.chat.channel) {
-      return;
-    }
-
-    if (prevProps.chat.channel.channelId !== this.props.chat.channel.channelId) {
-      this.setState({ mode: 'MESSAGES' });
+  async componentDidUpdate(prevProps) {
+    if (prevProps.navigation.game.title !== this.props.navigation.game.title) {
+      await this._handleJoinGameChannel();
     }
   }
 
-  _handleLeaveChannel = async () => {
-    await ChatActions.leaveChatChannel({ channelId: this.props.chat.channel.channelId });
-    this.props.social.refreshChannelData();
-    this.props.navigator.navigateToHome();
+  async componentDidMount() {
+    await this._handleJoinGameChannel();
+  }
+
+  _handleJoinGameChannel = async () => {
+    if (!this.props.navigation.game) {
+      return;
+    }
+
+    const response = await ChatActions.createChatChannel({
+      name: this.props.navigation.game.title,
+    });
+
+    await this.props.social.refreshChannelData();
+
+    if (!response || response.errors) {
+      const error = response.errors[0];
+      if (error) {
+        if (error.extensions.code === 'CHANNEL_NAME_ALREADY_EXISTS') {
+          const channel = this.props.social.allChatChannels.find((c) => {
+            return c.name === this.props.navigation.game.title;
+          });
+
+          if (channel) {
+            await this.props.chat.handleConnectGameContext(channel);
+          }
+        }
+      }
+      return;
+    }
+
+    if (response.data && response.data.createChatChannel) {
+      this.props.chat.handleConnectGameContext(response.data.createChatChannel);
+    }
   };
-
-  _handleResetChatWindow = () => this.setState({ mode: 'MESSAGES' });
-
-  _handleShowSingleChannelMembers = () => this.setState({ mode: 'MEMBERS' });
-
-  _handleShowSingleChannelOptions = () => this.setState({ mode: 'OPTIONS' });
 
   _handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
@@ -101,39 +94,16 @@ class ChatScreen extends React.Component {
   render() {
     const { mode } = this.state;
 
-    let className = STYLES_CONTAINER;
-    if (this.props.chat.animating === 3) {
-      className = STYLES_CONTAINER_LEAVING;
-    }
-
-    if (this.props.chat.animating === 1) {
-      className = STYLES_CONTAINER_ENTERING;
-    }
-
-    if (!this.props.chat.channel) {
+    if (!this.props.navigation.game) {
       return null;
     }
 
-    if (mode === 'OPTIONS') {
-      return (
-        <div className={className}>
-          <ChatHeaderActive onDismiss={this._handleResetChatWindow}>
-            Channel Settings
-          </ChatHeaderActive>
-          <ChatOptions onLeaveChannel={this._handleLeaveChannel} />
-        </div>
-      );
+    if (this.props.navigation.isFullScreen) {
+      return null;
     }
 
-    if (mode === 'MEMBERS') {
-      return (
-        <div className={className}>
-          <ChatHeaderActive onDismiss={this._handleResetChatWindow}>
-            Channel Members
-          </ChatHeaderActive>
-          <ChatMembers />
-        </div>
-      );
+    if (!this.props.chat.channel) {
+      return <div className={STYLES_CONTAINER_BASE} />;
     }
 
     let messages = [];
@@ -142,19 +112,13 @@ class ChatScreen extends React.Component {
     }
 
     return (
-      <div className={className}>
-        <ChatHeader
-          social={this.props.social}
-          viewer={this.props.viewer}
-          channel={this.props.chat.channel}
-          onSettingsClick={this._handleShowSingleChannelOptions}
-          onMembersClick={this._handleShowSingleChannelMembers}
-        />
+      <div className={STYLES_CONTAINER_BASE}>
         <ChatMessages
           messages={messages}
           chat={this.props.chat}
           navigator={this.props.navigator}
           social={this.props.social}
+          theme={{ textColor: Constants.colors.white }}
         />
         <ChatInput
           value={this.state.value}
@@ -162,13 +126,14 @@ class ChatScreen extends React.Component {
           placeholder="Type a message"
           onChange={this._handleChange}
           onKeyDown={this._handleKeyDown}
+          theme={{ textColor: Constants.colors.white }}
         />
       </div>
     );
   }
 }
 
-export default class ChatScreenWithContext extends React.Component {
+export default class ChatSidebarWithContext extends React.Component {
   render() {
     return (
       <CurrentUserContext.Consumer>
@@ -185,7 +150,7 @@ export default class ChatScreenWithContext extends React.Component {
                             return (
                               <NavigatorContext.Consumer>
                                 {(navigator) => (
-                                  <ChatScreen
+                                  <ChatSidebar
                                     viewer={currentUser.user}
                                     currentUser={currentUser}
                                     navigator={navigator}

@@ -31,6 +31,7 @@ const ChatSessionContext = React.createContext({
   messages: {},
   channel: null,
   handleConnect: (channel) => {},
+  handleConnectGameContext: (channel) => {},
   handleSendChannelMessage: (text) => {},
   animating: 2,
 });
@@ -47,6 +48,7 @@ class ChatSessionContextManager extends React.Component {
       channel: null,
       animating: 2,
       handleConnect: this._handleConnect,
+      handleConnectGameContext: this._handleConnectGameContext,
       start: this.start,
       handleSendChannelMessage: this._handleSendChannelMessage,
       destroy: this.destroy,
@@ -112,6 +114,24 @@ class ChatSessionContextManager extends React.Component {
       await this.start();
       await this.props.newUserJoinChannels();
     }
+  };
+
+  _handleConnectGameContext = async (channel) => {
+    if (!channel) {
+      return;
+    }
+
+    const existingChannel = this.props.findSubscribedChannel({
+      channelId: channel.channelId,
+    });
+
+    if (!existingChannel) {
+      const response = await ChatActions.joinChatChannel({ channelId: channel.channelId });
+      await this.props.refreshChannelData();
+      await this._chat.loadRecentMessagesAsync();
+    }
+
+    this.setState({ channel });
   };
 
   _handleConnect = async (channel) => {

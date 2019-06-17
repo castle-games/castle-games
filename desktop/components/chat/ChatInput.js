@@ -37,6 +37,12 @@ const STYLES_INPUT = css`
 `;
 
 export default class ChatInput extends React.Component {
+  static defaultProps = {
+    theme: {
+      textColor: null,
+    },
+  };
+
   render() {
     return (
       <div className={STYLES_CONTAINER}>
@@ -48,6 +54,7 @@ export default class ChatInput extends React.Component {
           value={this.props.value}
           onChange={this.props.onChange}
           onKeyDown={this.props.onKeyDown}
+          style={{ color: this.props.theme.textColor }}
         />
       </div>
     );

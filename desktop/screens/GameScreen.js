@@ -15,6 +15,8 @@ import Logs from '~/common/logs';
 import GLLoaderScreen from '~/isometric/components/GLLoaderScreen';
 import Tools from '~/components/game/Tools';
 
+import ChatSidebar from '~/components/chat/ChatSidebar';
+
 const STYLES_CONTAINER = css`
   background: ${Constants.colors.black};
   width: 100%;
@@ -313,6 +315,7 @@ class GameScreen extends React.Component {
       <div className={STYLES_CONTAINER}>
         {topBarElement}
         <div className={STYLES_GAME_AND_TOOLS_CONTAINER}>
+          <ChatSidebar game={this.props.game} />
           <div
             className={STYLES_GAME_CONTAINER}
             ref={(ref) => {
