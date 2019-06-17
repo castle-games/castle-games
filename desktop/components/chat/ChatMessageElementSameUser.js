@@ -2,10 +2,9 @@ import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as Strings from '~/common/strings';
 import * as Actions from '~/common/actions';
+import * as ChatUtilities from '~/common/chat-utilities';
 
-import { css, styled } from 'react-emotion';
-
-import StringReplace from 'react-string-replace';
+import { css } from 'react-emotion';
 
 const STYLES_CONTAINER = css`
   font-family: ${Constants.REFACTOR_FONTS.system};
@@ -40,36 +39,6 @@ const STYLES_AUTHOR_MESSAGE = css`
   overflow-wrap: break-word;
   white-space: pre-wrap;
   color: ${Constants.REFACTOR_COLORS.text};
-`;
-
-const STYLES_MENTION = css`
-  font-weight: 600;
-  color: #0062ff;
-  cursor: pointer;
-  :hover {
-    text-decoration: underline;
-  }
-`;
-
-const STYLES_CHANNEL = css`
-  font-weight: 600;
-  color: magenta;
-  cursor: pointer;
-  :hover {
-    text-decoration: underline;
-  }
-`;
-
-const STYLES_ANCHOR = css`
-  color: ${Constants.REFACTOR_COLORS.text};
-  font-weight: 600;
-  text-decoration: underline;
-  :hover {
-    color: ${Constants.REFACTOR_COLORS.text};
-  }
-  :visited {
-    color: ${Constants.REFACTOR_COLORS.text};
-  }
 `;
 
 export default class ChatMessageElement extends React.Component {
@@ -115,33 +84,11 @@ export default class ChatMessageElement extends React.Component {
 
     if (!Strings.isEmpty(this.props.message.text)) {
       text = this.props.message.text;
-
-      // NOTE(jim): Capture all URL groups.
-      text = StringReplace(text, /(https?:\/\/\S+)/g, (match, i) => (
-        <a className={STYLES_ANCHOR} key={match + i} href={match}>
-          {match}
-        </a>
-      ));
-
-      // NOTE(jim): Capture all mention groups.
-      text = StringReplace(text, /@([a-zA-Z0-9_-]+)/g, (match, i) => (
-        <span
-          className={STYLES_MENTION}
-          key={match + i}
-          onClick={() => this._handleNavigateToUser({ username: match })}>
-          @{match}
-        </span>
-      ));
-
-      // NOTE(jim): Capture all channel groups.
-      text = StringReplace(text, /#([a-zA-Z0-9_-]+)/g, (match, i) => (
-        <span
-          className={STYLES_CHANNEL}
-          key={match + i}
-          onClick={() => this._handleNavigateToChannel({ name: match })}>
-          #{match}
-        </span>
-      ));
+      text = ChatUtilities.matchURL(text, this.props.social, this.props.navigator);
+      text = ChatUtilities.matchMention(text, () =>
+        this._handleNavigateToUser({ username: match })
+      );
+      text = ChatUtilities.matchChannel(text, () => this._handleNavigateToChannel({ name: match }));
     }
 
     return (

@@ -1,6 +1,85 @@
+import * as React from 'react';
 import * as Actions from '~/common/actions';
+import * as URLS from '~/common/urls';
+import * as Constants from '~/common/constants';
 
 import { isEmoji, emojiToString } from '~/common/emojis';
+import { css } from 'react-emotion';
+
+import StringReplace from 'react-string-replace';
+import ChatPost from '~/components/chat/ChatPost';
+
+const STYLES_MENTION = css`
+  font-weight: 600;
+  color: #0062ff;
+  cursor: pointer;
+  :hover {
+    text-decoration: underline;
+  }
+`;
+
+const STYLES_CHANNEL = css`
+  font-weight: 600;
+  color: magenta;
+  cursor: pointer;
+  :hover {
+    text-decoration: underline;
+  }
+`;
+
+const STYLES_ANCHOR = css`
+  color: ${Constants.REFACTOR_COLORS.text};
+  font-weight: 600;
+  text-decoration: underline;
+  :hover {
+    color: ${Constants.REFACTOR_COLORS.text};
+  }
+  :visited {
+    color: ${Constants.REFACTOR_COLORS.text};
+  }
+`;
+
+export const matchURL = (text, social, navigator) => {
+  return StringReplace(text, /(https?:\/\/\S+)/g, (match, i) => {
+    const urlData = URLS.getCastleUrlInfo(match);
+    if (urlData.type) {
+      return (
+        <ChatPost
+          key={`chat-embed-${match + i}`}
+          social={social}
+          message={{ text: match }}
+          navigator={navigator}
+          urlData={urlData}
+        />
+      );
+    }
+
+    return (
+      <a className={STYLES_ANCHOR} key={match + i} href={match}>
+        {match}
+      </a>
+    );
+  });
+};
+
+export const matchMention = (text, onClick) => {
+  return StringReplace(text, /@([a-zA-Z0-9_-]+)/g, (match, i) => (
+    <span className={STYLES_MENTION} key={match + i} onClick={onClick}>
+      @{match}
+    </span>
+  ));
+};
+
+export const matchChannel = (text, onClick) => {
+  return StringReplace(text, /#([a-zA-Z0-9_-]+)/g, (match, i) => (
+    <span
+      className={STYLES_CHANNEL}
+      key={match + i}
+      onClick={() => this._handleNavigateToChannel({ name: match })}>
+      #{match}
+    </span>
+  ));
+};
 
 async function _getAutocompleteUserAsync(text) {
   let autocompleteResults = await Actions.getAutocompleteAsync(text);

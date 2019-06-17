@@ -69,19 +69,6 @@ export default class ChatMessages extends React.Component {
         return <ChatEventElement key={`chat-event-${i}`} message={m} />;
       }
 
-      const urlData = URLS.getCastleUrlInfo(m.text);
-      if (urlData.type) {
-        return (
-          <ChatPost
-            key={`chat-post-${i}`}
-            social={this.props.social}
-            message={m}
-            navigator={this.props.navigator}
-            urlData={urlData}
-          />
-        );
-      }
-
       const user = this.props.social.userIdToUser[m.fromUserId];
 
       if (m.text.startsWith('/me')) {

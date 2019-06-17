@@ -8,9 +8,9 @@ import { css } from 'react-emotion';
 const STYLES_OUTER = css`
   flex-shrink: 0;
   width: 100%;
-  padding: 16px;
   max-width: 420px;
   height: 236px;
+  margin-top: 8px;
 `;
 
 const STYLES_CONTAINER = css`
