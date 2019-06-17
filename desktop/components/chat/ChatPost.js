@@ -107,19 +107,7 @@ const STYLES_POST = css`
 export default class ChatPost extends React.Component {
   state = {};
 
-  _handleNavigateToUser = async ({ username }) => {
-    let user = this.props.social.usernameToUser[username];
-
-    if (!user) {
-      let response = await Actions.getUserByUsername({ username });
-
-      if (!response) {
-        return;
-      }
-
-      user = response;
-    }
-
+  _handleNavigateToUser = async (user) => {
     this.props.navigator.navigateToUserProfile(user);
   };
 
@@ -161,7 +149,7 @@ export default class ChatPost extends React.Component {
               <div className={STYLES_ACTIONS}>
                 <div
                   className={STYLES_ACTION_ITEM}
-                  onClick={() => this._handleNavigateToUser({ username: creator.username })}>
+                  onClick={() => this._handleNavigateToUser(creator)}>
                   <span
                     className={STYLES_ICON}
                     style={{ backgroundImage: `url(${creator.photo.url})` }}
