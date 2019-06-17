@@ -87,10 +87,8 @@ export default class ChatMessageElement extends React.Component {
     if (!Strings.isEmpty(this.props.message.text)) {
       text = this.props.message.text.replace('/me ', '');
       text = ChatUtilities.matchURL(text, this.props.social, this.props.navigator);
-      text = ChatUtilities.matchMention(text, () =>
-        this._handleNavigateToUser({ username: match })
-      );
-      text = ChatUtilities.matchChannel(text, () => this._handleNavigateToChannel({ name: match }));
+      text = ChatUtilities.matchMention(text, this._handleNavigateToUser);
+      text = ChatUtilities.matchChannel(text, this._handleNavigateToChannel);
     }
 
     return (

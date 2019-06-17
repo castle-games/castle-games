@@ -64,7 +64,7 @@ export const matchURL = (text, social, navigator) => {
 
 export const matchMention = (text, onClick) => {
   return StringReplace(text, /@([a-zA-Z0-9_-]+)/g, (match, i) => (
-    <span className={STYLES_MENTION} key={match + i} onClick={onClick}>
+    <span className={STYLES_MENTION} key={match + i} onClick={() => onClick({ username: match })}>
       @{match}
     </span>
   ));
@@ -72,10 +72,7 @@ export const matchMention = (text, onClick) => {
 
 export const matchChannel = (text, onClick) => {
   return StringReplace(text, /#([a-zA-Z0-9_-]+)/g, (match, i) => (
-    <span
-      className={STYLES_CHANNEL}
-      key={match + i}
-      onClick={() => this._handleNavigateToChannel({ name: match })}>
+    <span className={STYLES_CHANNEL} key={match + i} onClick={() => onClick({ name: match })}>
       #{match}
     </span>
   ));
