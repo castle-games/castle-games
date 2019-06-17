@@ -8,6 +8,7 @@ import { css } from 'react-emotion';
 import ChatMessageElement from '~/components/chat/ChatMessageElement';
 import ChatMessageElementSameUser from '~/components/chat/ChatMessageElementSameUser';
 import ChatEventElement from '~/components/chat/ChatEventElement';
+import ChatRolePlayElement from '~/components/chat/ChatRolePlayElement';
 import ChatPost from '~/components/chat/ChatPost';
 
 const STYLES_CONTAINER = css`
@@ -62,6 +63,20 @@ export default class ChatMessages extends React.Component {
       }
 
       const user = this.props.social.userIdToUser[m.fromUserId];
+
+      if (m.text.startsWith('/me')) {
+        return (
+          <ChatRolePlayElement
+            key={`chat-roleplay-${i}`}
+            message={m}
+            user={user}
+            social={this.props.social}
+            navigator={this.props.navigator}
+            chat={this.props.chat}
+            onNavigateToUserProfile={this.props.navigator.navigateToUserProfile}
+          />
+        );
+      }
 
       let previousMessage = this.props.messages[i - 1];
       if (previousMessage) {
