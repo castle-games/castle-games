@@ -27,7 +27,7 @@ const STYLES_CONTAINER_BASE = `
   width: 100%;
   min-width: 10%;
   height: 100vh;
-  transition: 180ms ease all;
+  transition: 0ms ease all;
   transition-property: transform, opacity;
   background: ${Constants.colors.white};
 `;

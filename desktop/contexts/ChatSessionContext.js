@@ -127,7 +127,7 @@ class ChatSessionContextManager extends React.Component {
     if (this.state.channel) {
       showEntryAnimation = true;
       this.setState({ animating: 3 });
-      await sleep(200);
+      await sleep(0);
     }
 
     const existingChannel = this.props.findSubscribedChannel({
@@ -156,7 +156,7 @@ class ChatSessionContextManager extends React.Component {
 
     this.setState({ animating: 1, channel }, async () => {
       if (showEntryAnimation) {
-        await sleep(200);
+        await sleep(0);
       }
       this.setState({ animating: 2 });
       this._unlockAnimation = true;
