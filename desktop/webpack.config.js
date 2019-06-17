@@ -3,6 +3,7 @@ const HTMLWebpackPlugin = require('html-webpack-plugin');
 const MiniCSSExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const path = require('path');
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 const developmentConfig = require('./config/development.json');
 const productionConfig = require('./config/production.json');
 
@@ -60,6 +61,10 @@ module.exports = {
     new CopyWebpackPlugin([
       { from: path.join(__dirname, 'static', '**/*'), to: path.join(__dirname, '../web') },
     ]),
+    new MonacoWebpackPlugin({
+      // See options at https://github.com/Microsoft/monaco-editor-webpack-plugin#options
+      languages: ['lua'],
+    }),
     // inject some config variables into the bundle
     new webpack.DefinePlugin({
       config: JSON.stringify(isProduction ? productionConfig : developmentConfig),

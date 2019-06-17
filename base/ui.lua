@@ -283,6 +283,28 @@ function ui.checkbox(label, checked, props)
     return newChecked
 end
 
+function ui.codeEditor(label, value, props)
+    assert(type(label) == 'string', '`ui.codeEditor` needs a string `label`')
+    assert(type(value) == 'string', '`ui.codeEditor` needs a string `value`')
+
+    local c = addChild('codeEditor', label, without(merge({ label = label, value = value }, props), 'onChange'), true)
+
+    local newValue = value
+    local es = pendingEvents[c.pathId]
+    if es then
+        for _, e in ipairs(es) do
+            if e.type == 'onChange' then
+                if props and props.onChange then
+                    newValue = props.onChange(e.value) or e.value
+                else
+                    newValue = e.value
+                end
+            end
+        end
+    end
+    return newValue
+end
+
 function ui.colorPicker(label, r, g, b, a, props)
     assert(type(label) == 'string', '`ui.colorPicker` needs a string `label`')
     assert(type(r) == 'number', '`ui.colorPicker` needs a number `r`')

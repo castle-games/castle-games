@@ -30,6 +30,7 @@ import ToolMarkdown from '~/components/game/ToolMarkdown';
 import url from 'url';
 import Dropzone from 'react-dropzone';
 import SplitterLayout from 'react-splitter-layout';
+import MonacoEditor from 'react-monaco-editor';
 
 import 'rc-color-picker/assets/index.css';
 import 'react-splitter-layout/lib/index.css';
@@ -213,6 +214,108 @@ class ToolCheckbox extends React.PureComponent {
   }
 }
 elementTypes['checkbox'] = ToolCheckbox;
+
+const STYLES_MONACO_CONTAINER = css`
+  width: 100%;
+  height: 300px;
+`;
+
+class ToolCodeEditor extends React.PureComponent {
+  state = {
+    value: this.props.element.props.value,
+    lastSentEventId: null,
+  };
+
+  static getDerivedStateFromProps(props, state) {
+    if (
+      state.lastSentEventId === null ||
+      props.element.lastReportedEventId == state.lastSentEventId
+    ) {
+      return {
+        value: props.element.props.value,
+      };
+    }
+    return null;
+  }
+
+  render() {
+    const { element } = this.props;
+
+    let maybeLabel = null;
+    if (element.props && element.props.label && !element.props.hideLabel) {
+      maybeLabel = (
+        <label
+          htmlFor={element.pathId}
+          className={`bx--label${element.props.disabled ? `  bx--label--disabled` : ''}`}>
+          {element.props.label}
+        </label>
+      );
+    }
+
+    let maybeHelperText = null;
+    if (element.props && element.props.helperText) {
+      maybeHelperText = (
+        <helperText
+          htmlFor={element.pathId}
+          className={`bx--form__helper-text${
+            element.props.disabled ? `  bx--form__helper-text--disabled` : ''
+          }`}>
+          {element.props.helperText}
+        </helperText>
+      );
+    }
+
+    return (
+      <div className={STYLES_FILE_PICKER_CONTAINER}>
+        <Carbon>
+          {maybeLabel}
+          {maybeHelperText}
+        </Carbon>
+        <div className={STYLES_MONACO_CONTAINER}>
+          <MonacoEditor
+            width="100%"
+            height="100%"
+            language="lua"
+            theme="vs-dark"
+            options={{
+              fontSize: 14,
+
+              minimap: { enabled: false },
+
+              scrollBeyondLastColumn: false,
+              scrollBeyondLastLine: false,
+
+              lineNumbers: 'off',
+              glyphMargin: false,
+              folding: false,
+              lineNumbersMinChars: 0,
+
+              scrollbar: {
+                vertical: 'hidden',
+                verticalScrollbarSize: 0,
+                horizontal: 'hidden',
+                horizontalScrollbarSize: 0,
+              },
+
+              automaticLayout: true,
+            }}
+            value={this.state.value}
+            onChange={(value) => {
+              this.setState({
+                value,
+                lastSentEventId: sendEvent(element.pathId, {
+                  type: 'onChange',
+                  value,
+                }),
+              });
+            }}
+          />
+        </div>
+      </div>
+    );
+  }
+}
+elementTypes['codeEditor'] = ToolCodeEditor;
 
 const STYLES_COLOR_PICKER_CONTAINER = css`
   font-family: 'sf-mono', Consolas, monaco, monospace;
@@ -1329,16 +1432,16 @@ export default class Tools extends React.PureComponent {
                 name: 'DEFAULT',
               },
               children: {
-                lastId: 'filePickerfile',
+                lastId: 'codeInputcode',
                 count: 1,
-                filePickerfile: {
-                  type: 'filePicker',
-                  pathId: 'DEFAULTfilePickerfile',
+                codeInputcode: {
+                  type: 'codeInput',
+                  pathId: 'DEFAULTcodeInputcode',
                   props: {
-                    label: 'file',
-                    value: 'https://d1vkcv80qw9qqp.cloudfront.net/d4a6e2c64b593f7592561b98f447be88',
+                    label: 'code',
+                    value:
+                      "function draw()\n    if thing then\n        print('blah')\n    end\n\n    for i = 1, 20 do\n        print('ooo ' ... i)\n    end\n\n    ellipse('fill', 400, 400, 20, 20)\nend\n",
                   },
-                  lastReportedEventId: 1,
                 },
               },
             },
