@@ -57,10 +57,12 @@ const STYLES_ACTIONS = css`
   align-items: flex-start;
   justify-content: flex-start;
   flex-direction: row;
+  flex-wrap: wrap;
 `;
 
 const STYLES_ACTION_ITEM = css`
   margin-right: 24px;
+  margin-top: 8px;
   height: 20px;
   display: inline-flex;
   align-items: center;
