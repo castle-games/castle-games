@@ -10,7 +10,7 @@ const STYLES_OUTER = css`
   width: 100%;
   max-width: 420px;
   height: 236px;
-  margin-top: 8px;
+  margin-bottom: 8px;
 `;
 
 const STYLES_CONTAINER = css`
