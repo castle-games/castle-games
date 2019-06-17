@@ -8,6 +8,7 @@ import { css } from 'react-emotion';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigationContext, NavigatorContext } from '~/contexts/NavigationContext';
 
+import SplitterLayout from 'react-splitter-layout';
 import GameActionsBar from '~/components/game/GameActionsBar';
 import GameTopBar from '~/components/game/GameTopBar';
 import GameWindow from '~/native/gamewindow';
@@ -16,6 +17,8 @@ import GLLoaderScreen from '~/isometric/components/GLLoaderScreen';
 import Tools from '~/components/game/Tools';
 
 import ChatSidebar from '~/components/chat/ChatSidebar';
+
+import 'react-splitter-layout/lib/index.css';
 
 const STYLES_CONTAINER = css`
   background: ${Constants.colors.black};
@@ -35,9 +38,14 @@ const STYLES_GAME_AND_TOOLS_CONTAINER = css`
   flex-direction: row;
 `;
 
+const STYLES_GAME_AND_TOOLS_SPLITTER_CONTAINER = css`
+  flex: 1;
+  position: relative;
+`;
+
 const STYLES_GAME_CONTAINER = css`
   position: relative;
-  flex: 1;
+  height: 100%;
   align-items: center;
   justify-content: center;
   display: flex;
@@ -316,20 +324,30 @@ class GameScreen extends React.Component {
         {topBarElement}
         <div className={STYLES_GAME_AND_TOOLS_CONTAINER}>
           <ChatSidebar game={this.props.game} />
-          <div
-            className={STYLES_GAME_CONTAINER}
-            ref={(ref) => {
-              this._gameContainerReference = ref;
-              this.updateGameWindowFrame();
-            }}>
-            {maybeLoadingAnimation}
-            {maybeLoadingOverlay}
+          <div className={STYLES_GAME_AND_TOOLS_SPLITTER_CONTAINER}>
+            <SplitterLayout
+              vertical={false}
+              percentage={false}
+              primaryIndex={0}
+              secondaryInitialSize={300}
+              secondaryMinSize={300}
+              onSecondaryPaneSizeChange={this.updateGameWindowFrame}>
+              <div
+                className={STYLES_GAME_CONTAINER}
+                ref={(ref) => {
+                  this._gameContainerReference = ref;
+                  this.updateGameWindowFrame();
+                }}>
+                {maybeLoadingAnimation}
+                {maybeLoadingOverlay}
+              </div>
+              <Tools
+                ref={(ref) => (this._toolsReference = ref)}
+                game={this.props.game}
+                onLayoutChange={this.updateGameWindowFrame}
+              />
+            </SplitterLayout>
           </div>
-          <Tools
-            ref={(ref) => (this._toolsReference = ref)}
-            game={this.props.game}
-            onLayoutChange={this.updateGameWindowFrame}
-          />
         </div>
         {actionsBarElement}
       </div>

@@ -1205,7 +1205,6 @@ const applyDiff = (t, diff) => {
 };
 
 const STYLES_CONTAINER = css`
-  width: 300px;
   height: 100%;
 
   font-family: ${Constants.font.mono} !important;
