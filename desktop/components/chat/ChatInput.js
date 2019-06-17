@@ -1,3 +1,5 @@
+import AutoSizeTextarea from 'react-textarea-autosize';
+
 import * as React from 'react';
 import * as Constants from '~/common/constants';
 
@@ -20,6 +22,7 @@ const STYLES_INPUT = css`
   font-weight: 400;
   padding: 8px 8px 8px 8px;
   box-sizing: border-box;
+  resize: none;
   border-radius: 4px;
   transition: 200ms ease border;
 
@@ -37,7 +40,7 @@ export default class ChatInput extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTAINER}>
-        <input
+        <AutoSizeTextarea
           className={STYLES_INPUT}
           autoComplete="off"
           placeholder={this.props.placeholder}

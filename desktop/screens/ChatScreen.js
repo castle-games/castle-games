@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as SVG from '~/common/svg';
+import * as Strings from '~/common/strings';
 import * as Constants from '~/common/constants';
 import * as NativeUtil from '~/native/nativeutil';
 import * as ChatActions from '~/common/actions-chat';
@@ -87,6 +88,10 @@ class ChatScreen extends React.Component {
 
   _handleKeyDown = (e) => {
     if (e.which === 13) {
+      if (Strings.isEmpty(this.state.value.trim())) {
+        return;
+      }
+
       this.props.chat.handleSendChannelMessage(this.state.value);
       this.setState({ value: '' });
     }
