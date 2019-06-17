@@ -41,6 +41,7 @@ const STYLES_NAME = css`
   min-width: 10%;
   width: 100%;
   padding: 0 8px 0 8px;
+  line-height: 20px;
 `;
 
 const STYLES_SYMBOL = css`
