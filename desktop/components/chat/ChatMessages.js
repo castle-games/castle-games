@@ -2,6 +2,7 @@ import ReactDOM from 'react-dom';
 
 import * as React from 'react';
 import * as Constants from '~/common/constants';
+import * as URLS from '~/common/urls';
 
 import { css } from 'react-emotion';
 
@@ -66,6 +67,19 @@ export default class ChatMessages extends React.Component {
     let messages = this.props.messages.map((m, i) => {
       if (m.type === 'NOTICE') {
         return <ChatEventElement key={`chat-event-${i}`} message={m} />;
+      }
+
+      const urlData = URLS.getCastleUrlInfo(m.text);
+      if (urlData.type) {
+        return (
+          <ChatPost
+            key={`chat-post-${i}`}
+            social={this.props.social}
+            message={m}
+            navigator={this.props.navigator}
+            urlData={urlData}
+          />
+        );
       }
 
       const user = this.props.social.userIdToUser[m.fromUserId];

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as Strings from '~/common/strings';
+import * as Actions from '~/common/actions';
 
 import { css } from 'react-emotion';
 
@@ -30,7 +31,6 @@ const STYLES_CONTAINER = css`
 
   :hover {
     transform: scale(1.025);
-    cursor: pointer;
   }
 `;
 
@@ -66,6 +66,9 @@ const STYLES_ACTION_ITEM = css`
   align-items: center;
   justify-content: space-between;
   cursor: pointer;
+  white-space: nowrap;
+  color: ${Constants.colors.white};
+  text-decoration: none;
 
   :hover {
     color: magenta;
@@ -91,6 +94,10 @@ const STYLES_TEXT = css`
 
 const STYLES_POST = css`
   cursor: pointer;
+  color: ${Constants.colors.white};
+  text-decoration: none;
+  overflow-wrap: break-word;
+  width: 100%;
 
   :hover {
     color: magenta;
@@ -98,25 +105,90 @@ const STYLES_POST = css`
 `;
 
 export default class ChatPost extends React.Component {
+  state = {};
+
+  _handleNavigateToUser = async ({ username }) => {
+    let user = this.props.social.usernameToUser[username];
+
+    if (!user) {
+      let response = await Actions.getUserByUsername({ username });
+
+      if (!response) {
+        return;
+      }
+
+      user = response;
+    }
+
+    this.props.navigator.navigateToUserProfile(user);
+  };
+
+  _handleNavigateToGame = () => {
+    const { post } = this.state;
+
+    this.props.navigator.navigateToGame(post.sourceGame, { post });
+  };
+
+  async componentDidMount() {
+    if (!this.props.urlData.postId) {
+      return;
+    }
+
+    const post = await Actions.getPostById(this.props.urlData.postId);
+    if (post) {
+      this.setState({ post });
+    }
+  }
+
   render() {
+    if (this.state.post) {
+      const { creator, sourceGame, message } = this.state.post;
+
+      const gameMediaURL = this.state.post.media.url;
+
+      let text = this.props.message.text;
+      if (message && message.message[0]) {
+        text = message.message[0].text;
+      }
+
+      return (
+        <div className={STYLES_OUTER}>
+          <div className={STYLES_CONTAINER} style={{ backgroundImage: `url(${gameMediaURL})` }}>
+            <div className={STYLES_SECTION}>
+              <div className={STYLES_POST} onClick={this._handleNavigateToGame}>
+                {text}
+              </div>
+              <div className={STYLES_ACTIONS}>
+                <div
+                  className={STYLES_ACTION_ITEM}
+                  onClick={() => this._handleNavigateToUser({ username: creator.username })}>
+                  <span
+                    className={STYLES_ICON}
+                    style={{ backgroundImage: `url(${creator.photo.url})` }}
+                  />
+                  <span className={STYLES_TEXT}>{creator.username}</span>
+                </div>
+                <span className={STYLES_ACTION_ITEM} onClick={this._handleNavigateToGame}>
+                  <span
+                    className={STYLES_ICON}
+                    style={{ backgroundImage: `url(${sourceGame.coverImage.url})` }}
+                  />
+                  <span className={STYLES_TEXT}>{sourceGame.title}</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className={STYLES_OUTER}>
         <div className={STYLES_CONTAINER}>
           <div className={STYLES_SECTION}>
-            <div className={STYLES_POST}>This is where text would appear.</div>
-            <div className={STYLES_ACTIONS}>
-              <div className={STYLES_ACTION_ITEM}>
-                <span className={STYLES_ICON} />
-                <span className={STYLES_TEXT}>Cake Killers</span>
-              </div>
-              <div className={STYLES_ACTION_ITEM}>
-                <span className={STYLES_ICON} />
-                <span className={STYLES_TEXT}>Cake Flocks</span>
-              </div>
-              <div className={STYLES_ACTION_ITEM}>
-                <span className={STYLES_TEXT}>March 14th, 2013</span>
-              </div>
-            </div>
+            <a className={STYLES_POST} href={this.props.message.text}>
+              {this.props.message.text}
+            </a>
           </div>
         </div>
       </div>
