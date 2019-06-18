@@ -21,9 +21,10 @@ import {
   Toggle,
 } from 'carbon-components-react';
 import { space, color, border, layout, flexbox } from 'styled-system';
+import { findDOMNode } from 'react-dom';
+
 import ColorPicker from 'rc-color-picker';
 import tinycolor from 'tinycolor2';
-
 import styled from 'styled-components';
 import Logs from '~/common/logs';
 import ToolMarkdown from '~/components/game/ToolMarkdown';
@@ -244,6 +245,10 @@ class ToolCodeEditor extends React.PureComponent {
     lastSentEventId: null,
   };
 
+  _monacoContainerDOMNode = null;
+  _monacoEditorRef = null;
+  _resizeObserver = null;
+
   static getDerivedStateFromProps(props, state) {
     if (
       state.lastSentEventId === null ||
@@ -291,8 +296,9 @@ class ToolCodeEditor extends React.PureComponent {
         </Carbon>
         <div className={STYLES_MONACO_CONTAINER_WITH_RESIZE}>
           <div className={STYLES_MONACO_RESIZER} />
-          <div className={STYLES_MONACO_CONTAINER}>
+          <div className={STYLES_MONACO_CONTAINER} ref={this._handleMonacoContainerRef}>
             <MonacoEditor
+              ref={(ref) => (this._monacoEditorRef = ref)}
               width="100%"
               height="100%"
               language="lua"
@@ -309,15 +315,6 @@ class ToolCodeEditor extends React.PureComponent {
                 glyphMargin: false,
                 folding: false,
                 lineNumbersMinChars: 0,
-
-                scrollbar: {
-                  vertical: 'hidden',
-                  verticalScrollbarSize: 0,
-                  horizontal: 'hidden',
-                  horizontalScrollbarSize: 0,
-                },
-
-                automaticLayout: true,
               }}
               value={this.state.value}
               onChange={(value) => {
@@ -335,6 +332,29 @@ class ToolCodeEditor extends React.PureComponent {
       </div>
     );
   }
+
+  _handleMonacoContainerRef = (ref) => {
+    // Unobserve previous
+    if (this._monacoContainerDOMNode && this._resizeObserver) {
+      this._resizeObserver.unobserve(this._monacoContainerDOMNode);
+    }
+    this._monacoContainerDOMNode = null;
+
+    // Observe new
+    if (ref) {
+      this._monacoContainerDOMNode = findDOMNode(ref);
+
+      if (!this._resizeObserver) {
+        this._resizeObserver = new ResizeObserver((entries) => {
+          if (this._monacoEditorRef) {
+            this._monacoEditorRef.editor.layout();
+          }
+        });
+      }
+
+      this._resizeObserver.observe(this._monacoContainerDOMNode);
+    }
+  };
 }
 elementTypes['codeEditor'] = ToolCodeEditor;
 
