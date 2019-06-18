@@ -11,6 +11,9 @@ const STYLES_OUTER = css`
   max-width: 420px;
   height: 236px;
   margin-bottom: 8px;
+  display: block;
+  cursor: pointer;
+  text-decoration: none;
 `;
 
 const STYLES_CONTAINER = css`
@@ -114,13 +117,19 @@ export default class ChatPost extends React.Component {
   };
 
   _handleNavigateToGame = () => {
-    const { post } = this.state;
+    const { post, game } = this.state;
+
+    if (game) {
+      return this.props.navigator.navigateToGame(game);
+    }
 
     this.props.navigator.navigateToGame(post.sourceGame, { post });
   };
 
   async componentDidMount() {
     if (!this.props.urlData.postId) {
+      const game = await Actions.getGameByUrl(this.props.message.text);
+      this.setState({ game });
       return;
     }
 
@@ -166,6 +175,20 @@ export default class ChatPost extends React.Component {
                   <span className={STYLES_TEXT}>{sourceGame.title}</span>
                 </span>
               </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    if (this.state.game) {
+      return (
+        <div className={STYLES_OUTER} onClick={this._handleNavigateToGame}>
+          <div
+            className={STYLES_CONTAINER}
+            style={{ backgroundImage: `url(${this.state.game.coverImage.url})` }}>
+            <div className={STYLES_SECTION}>
+              <div className={STYLES_POST}>{this.state.game.title}</div>
             </div>
           </div>
         </div>
