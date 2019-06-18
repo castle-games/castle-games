@@ -215,9 +215,27 @@ class ToolCheckbox extends React.PureComponent {
 }
 elementTypes['checkbox'] = ToolCheckbox;
 
-const STYLES_MONACO_CONTAINER = css`
+const STYLES_MONACO_CONTAINER_WITH_RESIZE = css`
   width: 100%;
+  position: relative;
+`;
+
+const STYLES_MONACO_RESIZER = css`
+  position: relative;
+  resize: vertical;
+  overflow: auto;
   height: 300px;
+  z-index: 1000;
+  pointer-events: none;
+`;
+
+const STYLES_MONACO_CONTAINER = css`
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  backgroundcolor: red;
 `;
 
 class ToolCodeEditor extends React.PureComponent {
@@ -271,45 +289,48 @@ class ToolCodeEditor extends React.PureComponent {
           {maybeLabel}
           {maybeHelperText}
         </Carbon>
-        <div className={STYLES_MONACO_CONTAINER}>
-          <MonacoEditor
-            width="100%"
-            height="100%"
-            language="lua"
-            theme="vs-dark"
-            options={{
-              fontSize: 14,
+        <div className={STYLES_MONACO_CONTAINER_WITH_RESIZE}>
+          <div className={STYLES_MONACO_RESIZER} />
+          <div className={STYLES_MONACO_CONTAINER}>
+            <MonacoEditor
+              width="100%"
+              height="100%"
+              language="lua"
+              theme="vs-dark"
+              options={{
+                fontSize: 14,
 
-              minimap: { enabled: false },
+                minimap: { enabled: false },
 
-              scrollBeyondLastColumn: false,
-              scrollBeyondLastLine: false,
+                scrollBeyondLastColumn: false,
+                scrollBeyondLastLine: false,
 
-              lineNumbers: 'off',
-              glyphMargin: false,
-              folding: false,
-              lineNumbersMinChars: 0,
+                lineNumbers: 'off',
+                glyphMargin: false,
+                folding: false,
+                lineNumbersMinChars: 0,
 
-              scrollbar: {
-                vertical: 'hidden',
-                verticalScrollbarSize: 0,
-                horizontal: 'hidden',
-                horizontalScrollbarSize: 0,
-              },
+                scrollbar: {
+                  vertical: 'hidden',
+                  verticalScrollbarSize: 0,
+                  horizontal: 'hidden',
+                  horizontalScrollbarSize: 0,
+                },
 
-              automaticLayout: true,
-            }}
-            value={this.state.value}
-            onChange={(value) => {
-              this.setState({
-                value,
-                lastSentEventId: sendEvent(element.pathId, {
-                  type: 'onChange',
+                automaticLayout: true,
+              }}
+              value={this.state.value}
+              onChange={(value) => {
+                this.setState({
                   value,
-                }),
-              });
-            }}
-          />
+                  lastSentEventId: sendEvent(element.pathId, {
+                    type: 'onChange',
+                    value,
+                  }),
+                });
+              }}
+            />
+          </div>
         </div>
       </div>
     );
@@ -1432,11 +1453,11 @@ export default class Tools extends React.PureComponent {
                 name: 'DEFAULT',
               },
               children: {
-                lastId: 'codeInputcode',
+                lastId: 'codeEditorcode',
                 count: 1,
-                codeInputcode: {
-                  type: 'codeInput',
-                  pathId: 'DEFAULTcodeInputcode',
+                codeEditorcode: {
+                  type: 'codeEditor',
+                  pathId: 'DEFAULTcodeEditorcode',
                   props: {
                     label: 'code',
                     value:
