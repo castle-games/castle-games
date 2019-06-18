@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as SVG from '~/common/svg';
+import * as Actions from '~/common/actions';
 import * as Strings from '~/common/strings';
 
 import { css } from 'react-emotion';
@@ -73,40 +74,52 @@ const STYLES_FORM = css`
   padding: 0 16px 0 16px;
 `;
 
+export const delay = (ms) =>
+  new Promise((resolve) => {
+    window.setTimeout(resolve, ms);
+  });
+
 export default class SidebarOptionsMessages extends React.Component {
+  _timeout;
+
   state = {
     query: '',
+    results: [],
   };
 
+  componentWillUnmount() {
+    window.clearTimeout(this._timeout);
+    this._timeout = null;
+  }
+
   _handleChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value });
+    const value = e.target.value;
+    this.setState({ [e.target.name]: value }, () => {
+      window.clearTimeout(this._timeout);
+      this._timeout = null;
+      this._handleSearch(value);
+    });
+  };
+
+  _handleSearch = (value) => {
+    this._timeout = window.setTimeout(async () => {
+      let users = [];
+
+      let autocompleteResults = await Actions.getAutocompleteAsync(value);
+      if (autocompleteResults.users) {
+        users = autocompleteResults.users;
+      }
+
+      this.setState({ results: users });
+    }, 300);
   };
 
   render() {
     const { viewer, social } = this.props;
 
     let users = [];
-    if (social.users && social.users.length) {
-      users = this.props.social.users;
-    }
-
-    if (!Strings.isEmpty(this.state.query)) {
-      const searchQuery = this.state.query.toLowerCase();
-      users = social.users.filter((u) => {
-        let hasName = false;
-        let hasUsername = u.username.toLowerCase().includes(searchQuery);
-        if (!Strings.isEmpty(u.name)) {
-          hasName = u.name.toLowerCase().includes(searchQuery);
-        }
-
-        if (hasName) {
-          return true;
-        }
-
-        if (hasUsername) {
-          return true;
-        }
-      });
+    if (this.state.results) {
+      users = this.state.results;
     }
 
     return (
@@ -128,9 +141,11 @@ export default class SidebarOptionsMessages extends React.Component {
           />
         </div>
 
-        <div className={STYLES_TITLE} style={{ marginTop: 40 }}>
-          Users
-        </div>
+        {users.length ? (
+          <div className={STYLES_TITLE} style={{ marginTop: 40 }}>
+            Users found
+          </div>
+        ) : null}
         {users.map((u) => {
           if (u.username === viewer.username) {
             return null;
