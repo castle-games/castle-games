@@ -271,7 +271,8 @@ class ChatSessionContextManager extends React.Component {
     let needsChannelRefresh = false;
     let userIds = {};
 
-    allMessages.forEach(async (m) => {
+    for (let ii = 0, nn = allMessages.length; ii < nn; ii++) {
+      const m = allMessages[ii];
       // TODO(jim): Move this logic to the server at some point or move it to the castle-chat-lib
       if (m.channelId.startsWith(DIRECT_MESSAGE_PREFIX)) {
         let channelUserIds = m.channelId.replace(DIRECT_MESSAGE_PREFIX, '').split(',');
@@ -280,7 +281,7 @@ class ChatSessionContextManager extends React.Component {
 
         // NOTE(jim): Block the message
         if (!isViewer && !isOtherUser) {
-          return;
+          continue;
         }
 
         // NOTE(jim): You are a member of this channel, but its clear that you aren't part of it.
@@ -297,7 +298,7 @@ class ChatSessionContextManager extends React.Component {
 
       // NOTE(jim): I shouldn't even have to check.
       if (!isSubscribed) {
-        return;
+        continue;
       }
 
       if (!messages[m.channelId]) {
@@ -359,7 +360,7 @@ class ChatSessionContextManager extends React.Component {
       } else {
         messages[m.channelId].unshift(requiredMessageProps);
       }
-    });
+    }
 
     try {
       let users = await Actions.getUsers({ userIds: Object.keys(userIds) });
