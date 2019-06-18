@@ -33,7 +33,7 @@ const isDevelopmentHotkey = isKeyHotkey('mod+j');
 const isEscFullScreenHotkey = isKeyHotkey('esc');
 const isEndGameHotkey = isKeyHotkey('mod+w');
 // TODO: this breaks 'cut' on macOS const isScreenCaputureHotkey = isKeyHotkey('mod+x');
-const isFocusGameHotkey = isKeyHotkey('tab');
+const isFocusGameHotkey = isKeyHotkey('mod+g');
 
 class App extends React.Component {
   _nativeChannelsPollTimeout;

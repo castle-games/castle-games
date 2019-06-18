@@ -238,12 +238,12 @@ function main.keypressed(key, ...)
     if CASTLE_MODIFIER_KEYS[key] ~= nil then
         CASTLE_MODIFIER_KEYS[key] = true
     end
+    local ctrl = CASTLE_MODIFIER_KEYS.lctrl or CASTLE_MODIFIER_KEYS.rctrl
+    local gui = CASTLE_MODIFIER_KEYS.lgui or CASTLE_MODIFIER_KEYS.rgui
+    local shift = CASTLE_MODIFIER_KEYS.lshift or CASTLE_MODIFIER_KEYS.rshift
 
     -- Intercept system hotkeys
     if castle.system.isDesktop() then
-        local ctrl = CASTLE_MODIFIER_KEYS.lctrl or CASTLE_MODIFIER_KEYS.rctrl
-        local gui = CASTLE_MODIFIER_KEYS.lgui or CASTLE_MODIFIER_KEYS.rgui
-        local shift = CASTLE_MODIFIER_KEYS.lshift or CASTLE_MODIFIER_KEYS.rshift
         if (key == 'escape') or ((ctrl or gui or shift) and (key == 'j' or key == 'r' or key == 'f' or key == 'w' or key == 'x')) then
             jsEvents.send('CASTLE_SYSTEM_KEY_PRESSED', {
                 ctrlKey = ctrl,
@@ -257,7 +257,7 @@ function main.keypressed(key, ...)
     end
 
     -- Chat focus
-    if key == 'tab' then
+    if ctrl and key == 'g' then
         C.ghostFocusChat()
     end
 
