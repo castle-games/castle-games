@@ -56,11 +56,6 @@ class Sidebar extends React.Component {
     mode: 'DEFAULT',
   };
 
-  async componentDidMount() {
-    const response = await Actions.getAllUsers();
-    this.props.social.addSearchableUsers(response);
-  }
-
   _handleSignIn = () => {
     return this.props.navigator.navigateToSignIn();
   };
@@ -259,14 +254,12 @@ class Sidebar extends React.Component {
   };
 
   _renderMessageOptions = () => {
-    const { navigation, viewer, social } = this.props;
+    const { navigation, viewer } = this.props;
 
     return (
       <div className={STYLES_SIDEBAR}>
         <SidebarOptionsMessages
           viewer={viewer}
-          social={this.props.social}
-          options={social.usernameToUser}
           onDismiss={this._handleHideOptions}
           onSendMessage={this._handleCreateDirectMessage}
         />

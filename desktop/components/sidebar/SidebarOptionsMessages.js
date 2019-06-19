@@ -115,7 +115,7 @@ export default class SidebarOptionsMessages extends React.Component {
   };
 
   render() {
-    const { viewer, social } = this.props;
+    const { viewer } = this.props;
 
     let users = [];
     if (this.state.results) {

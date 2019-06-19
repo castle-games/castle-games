@@ -440,22 +440,6 @@ export async function getUserStatusHistory(userId) {
   return result.data.userStatusHistory;
 }
 
-export async function getAllUsers() {
-  const result = await API(
-    `
-      query {
-        allUsers {
-          ${FULL_USER_FIELDS}
-        }
-      }
-    `
-  );
-  if (result.error || result.errors) {
-    return [];
-  }
-  return result.data.allUsers;
-}
-
 export async function getInitialData() {
   const result = await API(`
     query {

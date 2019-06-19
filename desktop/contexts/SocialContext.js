@@ -5,10 +5,8 @@ const SocialContextDefaults = {
   userIdToUser: {},
   usernameToUser: {},
   onlineUserIds: {},
-  users: [],
   addUser: (user) => {},
   addUsers: (users) => {},
-  addSearchableUsers: (users) => {},
   setOnlineUserIds: (userIds) => {},
   clearCurrentSubscribedChats: () => {},
   findChannel: (channel) => {},
@@ -34,7 +32,6 @@ class SocialContextProvider extends React.Component {
       newUserJoinChannels: this.newUserJoinChannels,
       findSubscribedChannel: this.findSubscribedChannel,
       findChannel: this.findChannel,
-      addSearchableUsers: this.addSearchableUsers,
       clearCurrentSubscribedChats: this.clearCurrentSubscribedChats,
     };
   }
@@ -81,22 +78,6 @@ class SocialContextProvider extends React.Component {
         ...state,
         userIdToUser: state.userIdToUser,
         usernameToUser: state.usernameToUser,
-      };
-    });
-  };
-
-  addSearchableUsers = (users) => {
-    return this.setState((state) => {
-      users.forEach((user) => {
-        state.userIdToUser[user.userId] = user;
-        state.usernameToUser[user.username] = user;
-      });
-
-      return {
-        ...state,
-        userIdToUser: state.userIdToUser,
-        usernameToUser: state.usernameToUser,
-        users,
       };
     });
   };
