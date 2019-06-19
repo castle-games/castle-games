@@ -41,11 +41,9 @@ const STYLES_SPLITTER_CHILD = css`
 `;
 
 const STYLES_GAME_AND_TOOLS_CONTAINER = css`
-  position: relative;
   width: 100%;
   height: 100%;
   display: flex;
-  flex-direction: row;
 `;
 
 const STYLES_GAME_CONTAINER = css`
@@ -325,6 +323,11 @@ class GameScreen extends React.Component {
       );
     }
 
+    let maybeChatSidebar;
+    if (!this.props.isFullScreen) {
+      maybeChatSidebar = <ChatSidebar game={this.props.game} />;
+    }
+
     return (
       <div className={STYLES_CONTAINER}>
         {topBarElement}
@@ -333,18 +336,25 @@ class GameScreen extends React.Component {
             vertical={false}
             percentage={false}
             primaryIndex={1}
-            secondaryInitialSize={300}
-            secondaryMinSize={300}
+            secondaryInitialSize={248}
+            secondaryMinSize={248}
             onSecondaryPaneSizeChange={this.updateGameWindowFrame}>
-            <ChatSidebar game={this.props.game} />
-            <div
-              className={STYLES_GAME_CONTAINER}
-              ref={(ref) => {
-                this._gameContainerReference = ref;
-                this.updateGameWindowFrame();
-              }}>
-              {maybeLoadingAnimation}
-              {maybeLoadingOverlay}
+            {maybeChatSidebar}
+            <div className={STYLES_GAME_AND_TOOLS_CONTAINER}>
+              <Tools
+                ref={(ref) => (this._toolsReference = ref)}
+                game={this.props.game}
+                onLayoutChange={this.updateGameWindowFrame}>
+                <div
+                  className={STYLES_GAME_CONTAINER}
+                  ref={(ref) => {
+                    this._gameContainerReference = ref;
+                    this.updateGameWindowFrame();
+                  }}>
+                  {maybeLoadingAnimation}
+                  {maybeLoadingOverlay}
+                </div>
+              </Tools>
             </div>
           </SplitterLayout>
         </div>
