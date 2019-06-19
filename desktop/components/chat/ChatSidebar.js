@@ -21,7 +21,7 @@ const STYLES_CONTAINER_BASE = css`
   align-items: flex-start;
   justify-content: space-between;
   flex-direction: column;
-  width: 248px;
+  width: 100%;
   min-width: 10%;
   height: 100%;
   background: rgb(0, 0, 0);

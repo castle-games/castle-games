@@ -8,6 +8,7 @@ import { css } from 'react-emotion';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigationContext, NavigatorContext } from '~/contexts/NavigationContext';
 
+import SplitterLayout from 'react-splitter-layout';
 import GameActionsBar from '~/components/game/GameActionsBar';
 import GameTopBar from '~/components/game/GameTopBar';
 import GameWindow from '~/native/gamewindow';
@@ -17,6 +18,8 @@ import Tools from '~/components/game/Tools';
 
 import ChatSidebar from '~/components/chat/ChatSidebar';
 
+import 'react-splitter-layout/lib/index.css';
+
 const STYLES_CONTAINER = css`
   background: ${Constants.colors.black};
   width: 100%;
@@ -25,6 +28,16 @@ const STYLES_CONTAINER = css`
   display: inline-flex;
   flex-direction: column;
   justify-content: space-between;
+`;
+
+const STYLES_SPLITTER_CONTAINER = css`
+  flex: 1;
+  position: relative;
+`;
+
+const STYLES_SPLITTER_CHILD = css`
+  flex: 1;
+  position: relative;
 `;
 
 const STYLES_GAME_AND_TOOLS_CONTAINER = css`
@@ -37,6 +50,7 @@ const STYLES_GAME_AND_TOOLS_CONTAINER = css`
 
 const STYLES_GAME_CONTAINER = css`
   position: relative;
+  flex: 1;
   height: 100%;
   align-items: center;
   justify-content: center;
@@ -314,12 +328,15 @@ class GameScreen extends React.Component {
     return (
       <div className={STYLES_CONTAINER}>
         {topBarElement}
-        <div className={STYLES_GAME_AND_TOOLS_CONTAINER}>
-          <ChatSidebar game={this.props.game} />
-          <Tools
-            ref={(ref) => (this._toolsReference = ref)}
-            game={this.props.game}
-            onLayoutChange={this.updateGameWindowFrame}>
+        <div className={STYLES_SPLITTER_CONTAINER}>
+          <SplitterLayout
+            vertical={false}
+            percentage={false}
+            primaryIndex={1}
+            secondaryInitialSize={300}
+            secondaryMinSize={300}
+            onSecondaryPaneSizeChange={this.updateGameWindowFrame}>
+            <ChatSidebar game={this.props.game} />
             <div
               className={STYLES_GAME_CONTAINER}
               ref={(ref) => {
@@ -329,7 +346,7 @@ class GameScreen extends React.Component {
               {maybeLoadingAnimation}
               {maybeLoadingOverlay}
             </div>
-          </Tools>
+          </SplitterLayout>
         </div>
         {actionsBarElement}
       </div>
