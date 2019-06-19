@@ -3,16 +3,17 @@ import * as SVG from '~/common/svg';
 import * as Strings from '~/common/strings';
 import * as Constants from '~/common/constants';
 import * as NativeUtil from '~/native/nativeutil';
+import * as Actions from '~/common/actions';
 import * as ChatActions from '~/common/actions-chat';
 
 import { css } from 'react-emotion';
-
 import { ConnectionStatus } from 'castle-chat-lib';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { SocialContext } from '~/contexts/SocialContext';
 import { NavigatorContext, NavigationContext } from '~/contexts/NavigationContext';
 import { ChatSessionContext } from '~/contexts/ChatSessionContext';
 
+import regexMatch from 'react-string-replace';
 import ChatHeader from '~/components/chat/ChatHeader';
 import ChatHeaderActive from '~/components/chat/ChatHeaderActive';
 import ChatMessages from '~/components/chat/ChatMessages';
@@ -51,8 +52,11 @@ const STYLES_CONTAINER_ENTERING = css`
 `;
 
 class ChatScreen extends React.Component {
+  _timeout;
+
   state = {
     value: '',
+    users: [],
     mode: 'MESSAGES',
   };
 
@@ -70,6 +74,15 @@ class ChatScreen extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    this.clear();
+  }
+
+  clear = () => {
+    window.clearTimeout(this._timeout);
+    this._timeout = null;
+  };
+
   _handleLeaveChannel = async () => {
     await ChatActions.leaveChatChannel({ channelId: this.props.chat.channel.channelId });
     this.props.social.refreshChannelData();
@@ -82,19 +95,57 @@ class ChatScreen extends React.Component {
 
   _handleShowSingleChannelOptions = () => this.setState({ mode: 'OPTIONS' });
 
+  _handleForceChange = (valueState) => {
+    this.setState(valueState);
+  };
+
   _handleChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value });
+    const value = e.target.value;
+    this.setState({ [e.target.name]: value }, () => {
+      window.clearTimeout(this._timeout);
+      this._timeout = null;
+
+      let found = false;
+      regexMatch(value, /([@][\w_-]+)$/g, (match, i) => {
+        if (!found) {
+          this._handleSearch(match);
+          found = true;
+          return;
+        }
+
+        return match;
+      });
+
+      if (!found) {
+        return this.setState({ users: [] });
+      }
+    });
+  };
+
+  _handleSearch = (value) => {
+    this._timeout = window.setTimeout(async () => {
+      let users = [];
+
+      let autocompleteResults = await Actions.getAutocompleteAsync(value);
+      if (autocompleteResults.users) {
+        users = autocompleteResults.users;
+      }
+
+      this.setState({ users: users });
+    }, 120);
   };
 
   _handleKeyDown = (e) => {
     if (e.which === 13 && !e.shiftKey) {
       event.preventDefault();
+
       if (Strings.isEmpty(this.state.value.trim())) {
         return;
       }
 
       this.props.chat.handleSendChannelMessage(this.state.value);
-      this.setState({ value: '' });
+      this.clear();
+      this.setState({ value: '', users: [] });
     }
   };
 
@@ -159,9 +210,11 @@ class ChatScreen extends React.Component {
         <ChatInput
           value={this.state.value}
           name="value"
+          users={this.state.users}
           placeholder="Type a message"
           onChange={this._handleChange}
           onKeyDown={this._handleKeyDown}
+          onForceChange={this._handleForceChange}
         />
       </div>
     );

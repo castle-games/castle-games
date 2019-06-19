@@ -936,6 +936,11 @@ export async function getAutocompleteAsync(text) {
           userId
           username
           name
+          photo {
+            url
+            height
+            width
+          }
         }
       }
     }`,
