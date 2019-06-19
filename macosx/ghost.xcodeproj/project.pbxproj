@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		38F81F9B214B4A8E00E6E242 /* main.js in Resources */ = {isa = PBXBuildFile; fileRef = 38F81F9A214B4A8E00E6E242 /* main.js */; };
-		38F81FA0214B4B0F00E6E242 /* static in Resources */ = {isa = PBXBuildFile; fileRef = 38F81F9F214B4B0F00E6E242 /* static */; };
 		910F3AF022555C4B00148428 /* ghost_obs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 910F3AE822555C4B00148428 /* ghost_obs.cpp */; };
 		910F3AF122555C4B00148428 /* ghost_obs.h in Headers */ = {isa = PBXBuildFile; fileRef = 910F3AEF22555C4B00148428 /* ghost_obs.h */; };
 		912A08332263B8F900E55CAE /* libmp3lame.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 912A080E2263B8F700E55CAE /* libmp3lame.0.dylib */; };
@@ -106,6 +104,7 @@
 		A18221D121ACB2FE0018B6DD /* js_binds.h in Headers */ = {isa = PBXBuildFile; fileRef = A18221CF21ACB2FE0018B6DD /* js_binds.h */; };
 		A1887D5122162F59008F50E3 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A1887D4A22162F59008F50E3 /* Sparkle.framework */; };
 		A1887D5222162FCF008F50E3 /* Sparkle.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = A1887D4A22162F59008F50E3 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A1EC7A3422BAC5B800B013A6 /* web in Resources */ = {isa = PBXBuildFile; fileRef = A1EC7A3322BAC5B800B013A6 /* web */; };
 		A1ED98E9211DFA0700CBC701 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A194C6C4211CD1D50093B328 /* SDL2.framework */; };
 		A1ED98EA211DFA0700CBC701 /* SDL2.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = A194C6C4211CD1D50093B328 /* SDL2.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A1F9225521EFFB1100D8F23D /* debug_utils.h in Headers */ = {isa = PBXBuildFile; fileRef = A1F9224E21EFFB1100D8F23D /* debug_utils.h */; };
@@ -133,7 +132,6 @@
 		B57FCFB62166834A00D661B2 /* ghost_mac.mm in Sources */ = {isa = PBXBuildFile; fileRef = B57FCFB52166834A00D661B2 /* ghost_mac.mm */; };
 		B57FCFB82166835B00D661B2 /* ghost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B57FCFB72166835B00D661B2 /* ghost.cpp */; };
 		B580674921EEA57100631D76 /* blank.castle in Resources */ = {isa = PBXBuildFile; fileRef = B580674221EEA57100631D76 /* blank.castle */; };
-		B59617512149BF7100BE403F /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = B59617502149BF7100BE403F /* index.html */; };
 		B5A0404321483BA5007A6CC1 /* Chromium Embedded Framework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5A0404221483BA5007A6CC1 /* Chromium Embedded Framework.framework */; };
 		B5A0404621483D2C007A6CC1 /* Chromium Embedded Framework.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = B5A0404221483BA5007A6CC1 /* Chromium Embedded Framework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B5B06A452150751A001C4382 /* simple_app.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B5B06A412150751A001C4382 /* simple_app.cpp */; };
@@ -354,9 +352,6 @@
 
 /* Begin PBXFileReference section */
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
-		38F81F9A214B4A8E00E6E242 /* main.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = main.js; sourceTree = "<group>"; };
-		38F81F9C214B4A9200E6E242 /* main.js.map */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; path = main.js.map; sourceTree = "<group>"; };
-		38F81F9F214B4B0F00E6E242 /* static */ = {isa = PBXFileReference; lastKnownFileType = folder; name = static; path = ../web/static; sourceTree = "<group>"; };
 		910F3AE822555C4B00148428 /* ghost_obs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ghost_obs.cpp; path = ../../common/ghost_obs.cpp; sourceTree = "<group>"; };
 		910F3AEF22555C4B00148428 /* ghost_obs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ghost_obs.h; path = ../../common/ghost_obs.h; sourceTree = "<group>"; };
 		912A080E2263B8F700E55CAE /* libmp3lame.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libmp3lame.0.dylib; sourceTree = "<group>"; };
@@ -419,6 +414,7 @@
 		A1887D4A22162F59008F50E3 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = Frameworks/Sparkle.framework; sourceTree = "<group>"; };
 		A194C6BA211CD1D50093B328 /* SDL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL.xcodeproj; path = "../ghost-extensions/SDL2-2.0.8/Xcode/SDL/SDL.xcodeproj"; sourceTree = "<group>"; };
 		A1E7953C20721BC800731DD3 /* package.love */ = {isa = PBXFileReference; lastKnownFileType = file; name = package.love; path = ../package.love; sourceTree = "<group>"; };
+		A1EC7A3322BAC5B800B013A6 /* web */ = {isa = PBXFileReference; lastKnownFileType = folder; name = web; path = ../web; sourceTree = "<group>"; };
 		A1F9224E21EFFB1100D8F23D /* debug_utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = debug_utils.h; sourceTree = "<group>"; };
 		A9255E021043195A00BA1496 /* vorbis.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = vorbis.framework; path = Frameworks/vorbis.framework; sourceTree = "<group>"; };
 		A9255F51104324D700BA1496 /* ogg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ogg.framework; path = Frameworks/ogg.framework; sourceTree = "<group>"; };
@@ -437,7 +433,6 @@
 		B57FCFB52166834A00D661B2 /* ghost_mac.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ghost_mac.mm; sourceTree = "<group>"; };
 		B57FCFB72166835B00D661B2 /* ghost.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ghost.cpp; sourceTree = "<group>"; };
 		B580674221EEA57100631D76 /* blank.castle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = blank.castle; sourceTree = "<group>"; };
-		B59617502149BF7100BE403F /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		B5A0404221483BA5007A6CC1 /* Chromium Embedded Framework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "Chromium Embedded Framework.framework"; path = "Frameworks/Chromium Embedded Framework.framework"; sourceTree = "<group>"; };
 		B5B06A412150751A001C4382 /* simple_app.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = simple_app.cpp; sourceTree = "<group>"; };
 		B5B06A422150751A001C4382 /* simple_handler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = simple_handler.h; sourceTree = "<group>"; };
@@ -567,13 +562,13 @@
 		29B97314FDCFA39411CA2CEA /* ghost */ = {
 			isa = PBXGroup;
 			children = (
+				A1EC7A3322BAC5B800B013A6 /* web */,
 				91543A50225578CB001B2E4A /* libraries */,
 				912D1E2E224C52D700815BBD /* node */,
 				B50F244521E6A23200967055 /* shared-assets */,
 				B5BAE382215ABA89001354F9 /* src */,
 				B55858EB215AB95300926105 /* Supporting */,
 				B5B06A402150751A001C4382 /* common */,
-				B596174F2149BF7100BE403F /* web */,
 				A1E7953C20721BC800731DD3 /* package.love */,
 				FA5D249A1A96CF4300C6FC8F /* Images.xcassets */,
 				1058C7A0FEA54F0111CA2CBB /* Frameworks */,
@@ -760,18 +755,6 @@
 				B5000229215AEB1E00CD2309 /* ghost-env.plist */,
 			);
 			path = Supporting;
-			sourceTree = "<group>";
-		};
-		B596174F2149BF7100BE403F /* web */ = {
-			isa = PBXGroup;
-			children = (
-				38F81F9F214B4B0F00E6E242 /* static */,
-				38F81F9A214B4A8E00E6E242 /* main.js */,
-				38F81F9C214B4A9200E6E242 /* main.js.map */,
-				B59617502149BF7100BE403F /* index.html */,
-			);
-			name = web;
-			path = ../web;
 			sourceTree = "<group>";
 		};
 		B5B06A402150751A001C4382 /* common */ = {
@@ -1081,15 +1064,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A1EC7A3422BAC5B800B013A6 /* web in Resources */,
 				91543A822255877D001B2E4A /* obs in Resources */,
 				B5256F7D211A56EE00891B27 /* package.love in Resources */,
-				B59617512149BF7100BE403F /* index.html in Resources */,
 				912D1E36224C52EF00815BBD /* castle-desktop-node-macos in Resources */,
-				38F81FA0214B4B0F00E6E242 /* static in Resources */,
 				B50F244721E6A23200967055 /* blank.lua in Resources */,
 				B5256F43211A555500891B27 /* Images.xcassets in Resources */,
 				91543A8A225661BD001B2E4A /* ffmpeg in Resources */,
-				38F81F9B214B4A8E00E6E242 /* main.js in Resources */,
 				B580674921EEA57100631D76 /* blank.castle in Resources */,
 				B500022A215AEB1E00CD2309 /* ghost-env.plist in Resources */,
 				91543A6122557915001B2E4A /* libobs-opengl.so in Resources */,
