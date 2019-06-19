@@ -89,6 +89,7 @@ export default class ChatMessageElement extends React.Component {
       text = ChatUtilities.matchURL(text, this.props.social, this.props.navigator);
       text = ChatUtilities.matchMention(text, this._handleNavigateToUser);
       text = ChatUtilities.matchChannel(text, this._handleNavigateToChannel);
+      text = ChatUtilities.matchEmoji(text);
     }
 
     return (

@@ -9,6 +9,10 @@ import { css } from 'react-emotion';
 import StringReplace from 'react-string-replace';
 import ChatPost from '~/components/chat/ChatPost';
 
+function replaceAll(str, find, replace) {
+  return str.replace(new RegExp(find, 'g'), replace);
+}
+
 const STYLES_MENTION = css`
   font-weight: 600;
   color: #0062ff;
@@ -38,6 +42,19 @@ const STYLES_ANCHOR = css`
     color: ${Constants.REFACTOR_COLORS.text};
   }
 `;
+
+export const matchEmoji = (text) => {
+  return StringReplace(text, /(:(?![\n])[()#$@-\w]+:)/g, (match, i) => {
+    const emojiString = replaceAll(match, ':' , '');
+
+    let emoji;
+    if (isEmoji(emojiString)) {
+      emoji = emojiToString(emojiString);
+    }
+
+    return <span key={`chat-emoji-${match + i}`}>{emoji}</span>;
+  });
+}
 
 export const matchURL = (text, social, navigator) => {
   return StringReplace(text, /(https?:\/\/\S+)/g, (match, i) => {
