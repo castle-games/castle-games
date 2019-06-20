@@ -127,8 +127,11 @@ export default class ChatPost extends React.Component {
   };
 
   async componentDidMount() {
+    let url = this.props.message.text;
+    url = url.replace('castle://', 'http://');
+
     if (!this.props.urlData.postId) {
-      const game = await Actions.getGameByUrl(this.props.message.text);
+      const game = await Actions.getGameByUrl(url);
       this.setState({ game });
       return;
     }
@@ -195,11 +198,14 @@ export default class ChatPost extends React.Component {
       );
     }
 
+    let url = this.props.message.text;
+    url = url.replace('castle://', 'http://');
+
     return (
       <div className={STYLES_OUTER}>
         <div className={STYLES_CONTAINER}>
           <div className={STYLES_SECTION}>
-            <a className={STYLES_POST} href={this.props.message.text}>
+            <a className={STYLES_POST} href={url}>
               {this.props.message.text}
             </a>
           </div>

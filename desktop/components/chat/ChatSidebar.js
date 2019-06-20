@@ -57,7 +57,7 @@ class ChatSidebar extends React.Component {
     if (!response || response.errors) {
       const error = response.errors[0];
       if (error) {
-        if (error.extensions.code === 'CHANNEL_NAME_ALREADY_EXISTS') {
+        if (error.extensions && error.extensions.code === 'CHANNEL_NAME_ALREADY_EXISTS') {
           const channel = this.props.social.allChatChannels.find((c) => {
             return c.name === this.props.navigation.game.title;
           });
