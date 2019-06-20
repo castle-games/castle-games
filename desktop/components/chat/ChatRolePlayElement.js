@@ -16,12 +16,12 @@ const STYLES_CONTAINER = css`
   padding: 16px 48px 0 16px;
 `;
 
-const STYLES_LEFT = css`
+const STYLES_AVATAR = css`
   flex-shrink: 0;
   background-size: cover;
   background-position: 50% 50%;
-  height: 40px;
-  width: 40px;
+  height: 20px;
+  width: 20px;
   background-color: #f3f3f3;
   cursor: pointer;
   border-radius: 4px;
@@ -35,8 +35,8 @@ const STYLES_RIGHT = css`
 
 const STYLES_AUTHOR_MESSAGE = css`
   font-weight: 400;
-  line-height: 40px;
-  font-size: 28px;
+  line-height: 20px;
+  font-size: 14px;
   overflow-wrap: break-word;
   white-space: pre-wrap;
   font-family: ${Constants.font.castle};
@@ -95,7 +95,7 @@ export default class ChatMessageElement extends React.Component {
     return (
       <div className={STYLES_CONTAINER}>
         <span
-          className={STYLES_LEFT}
+          className={STYLES_AVATAR}
           onClick={
             this.props.user.username
               ? () => this.props.onNavigateToUserProfile(this.props.user)
@@ -105,7 +105,7 @@ export default class ChatMessageElement extends React.Component {
         />
         <span className={STYLES_RIGHT}>
           <div className={STYLES_AUTHOR_MESSAGE} style={{ color: this.props.theme.textColor }}>
-            {text}
+            {this.props.user.username} {text}
           </div>
         </span>
       </div>
