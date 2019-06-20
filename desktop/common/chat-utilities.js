@@ -64,7 +64,7 @@ export const matchEmoji = (text) => {
 }
 
 export const matchURL = (text, social, navigator) => {
-  return StringReplace(text, /(https?:\/\/\S+)/g, (match, i) => {
+  return StringReplace(text, /(\b(https?|castle|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig, (match, i) => {
     const urlData = URLS.getCastleUrlInfo(match);
     if (urlData.type) {
       return (
