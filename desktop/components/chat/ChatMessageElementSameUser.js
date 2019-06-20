@@ -81,20 +81,26 @@ export default class ChatMessageElement extends React.Component {
 
   render() {
     let text = '';
+    let isEmojiMessage = false;
 
     if (!Strings.isEmpty(this.props.message.text)) {
       text = this.props.message.text;
       text = ChatUtilities.matchURL(text, this.props.social, this.props.navigator);
       text = ChatUtilities.matchMention(text, this._handleNavigateToUser);
       text = ChatUtilities.matchChannel(text, this._handleNavigateToChannel);
-      text = ChatUtilities.matchEmoji(text);
+      const results = ChatUtilities.matchEmoji(text);
+      text = results.text;
+      isEmojiMessage = results.isEmojiMessage;
     }
 
     return (
       <div className={STYLES_CONTAINER}>
         <span className={STYLES_LEFT} />
         <span className={STYLES_RIGHT}>
-          <div className={STYLES_AUTHOR_MESSAGE} style={{ color: this.props.theme.textColor }}>
+          <div className={STYLES_AUTHOR_MESSAGE} style={{ 
+            color: this.props.theme.textColor, 
+            fontSize: isEmojiMessage ? '40px' : null,
+            lineHeight: isEmojiMessage ? '48px' : null }}>
             {text}
           </div>
         </span>

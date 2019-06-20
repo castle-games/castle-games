@@ -44,16 +44,23 @@ const STYLES_ANCHOR = css`
 `;
 
 export const matchEmoji = (text) => {
-  return StringReplace(text, /(:(?![\n])[()#$@-\w]+:)/g, (match, i) => {
+  let isEmojiMessage = false;
+  let matchCount = 0;
+
+  let parsedText = StringReplace(text, /(:(?![\n])[()#$@-\w]+:)/g, (match, i) => {
     const emojiString = replaceAll(match, ':' , '');
 
     let emoji;
     if (isEmoji(emojiString)) {
+      matchCount = matchCount + 1;
+      isEmojiMessage = matchCount === 1;
       emoji = emojiToString(emojiString);
     }
 
     return <span key={`chat-emoji-${match + i}`}>{emoji}</span>;
   });
+
+  return { isEmojiMessage, text: parsedText };
 }
 
 export const matchURL = (text, social, navigator) => {
