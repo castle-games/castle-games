@@ -94,20 +94,25 @@ export default class ChatInput extends React.Component {
       users: [],
     });
 
-    // Captures click case.
+    // NOTE(jim): If we are not going to lose focus, don't do
+    // anything.
     if (!clicked) {
       return;
     }
 
+    // NOTE(jim): When we click, we lose focus. so we have
+    // to regain it.
     this.focus();
   };
 
   _handleKeyDown = (e) => {
+    // NOTE(jim): Prevent default up and down for multiline textarea
     if (this.props.users.length && (e.which === 38 || e.which === 40)) {
       e.preventDefault();
       return;
     }
 
+    // NOTE(jim): Prevent default return response when a user is navigating the popover.
     if (this.state.index > -1 && this.props.users.length && e.which === 13) {
       e.preventDefault();
 

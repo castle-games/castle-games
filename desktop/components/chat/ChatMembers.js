@@ -18,19 +18,24 @@ const STYLES_CONTAINER = css`
   }
 `;
 
+// NOTE(jim): Chat member blocks look like this:
+/*
+  <ChatMembersItem
+    data={{ online: true, name: 'Person #1', status: 'Is playing Blast Flocks' }}
+  />
+  <ChatMembersItem
+    data={{ online: false, name: 'Person #2', status: 'Is playing Blast Flocks' }}
+  />
+  <ChatMembersItem
+    data={{ online: false, name: 'Person #3', status: 'Is playing Blast Flocks' }}
+  />
+*/
+
 export default class ChatMembers extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTAINER}>
-        <ChatMembersItem
-          data={{ online: true, name: 'Person #1', status: 'Is playing Blast Flocks' }}
-        />
-        <ChatMembersItem
-          data={{ online: false, name: 'Person #2', status: 'Is playing Blast Flocks' }}
-        />
-        <ChatMembersItem
-          data={{ online: false, name: 'Person #3', status: 'Is playing Blast Flocks' }}
-        />
+        Coming soon
       </div>
     );
   }

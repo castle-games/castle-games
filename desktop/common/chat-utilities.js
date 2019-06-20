@@ -53,7 +53,7 @@ export const matchEmoji = (text) => {
     let emoji;
     if (isEmoji(emojiString)) {
       matchCount = matchCount + 1;
-      isEmojiMessage = matchCount === 1;
+      isEmojiMessage = matchCount === 1 && `${match}` === text[0];
       emoji = emojiToString(emojiString);
     }
 
