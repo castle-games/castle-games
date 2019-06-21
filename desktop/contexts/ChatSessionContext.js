@@ -155,8 +155,8 @@ class ChatSessionContextManager extends React.Component {
       channelId: channel.channelId,
     });
 
-    // TODO(jim): This is a nice little hack, if you aren't supposed to be in the channel.
-    // We will never let you in there!!
+    // TODO(jim): If either user is not supposed to be
+    // in this channel, kick the user.
     if (channel.channelId.startsWith(DIRECT_MESSAGE_PREFIX)) {
       const channelUserIds = channel.channelId.replace(DIRECT_MESSAGE_PREFIX, '').split(',');
       const isAllowed = channelUserIds.find((id) => this.props.currentUser.user.userId === id);
@@ -165,6 +165,20 @@ class ChatSessionContextManager extends React.Component {
         await ChatActions.leaveChatChannel({ channelId: channel.channelId });
         await this.props.refreshChannelData();
         return;
+      }
+
+      if (isAllowed) {
+        const otherUserId = channelUserIds.find((id) => this.props.currentUser.user.userId !== id);
+
+        const otherUser = this.props.userIdToUser[otherUserId];
+
+        // NOTE(jim): If the other user does not exist in our
+        // cache when creating a new DM. we need to fetch for
+        // themn
+        if (!otherUser) {
+          const updatedUser = await Actions.getUser({ userId: otherUserId });
+          this.props.addUsersToSocial([updatedUser]);
+        }
       }
     }
 
@@ -280,14 +294,15 @@ class ChatSessionContextManager extends React.Component {
     let needsChannelRefresh = false;
     let userIds = {};
 
-    // NOTE(jim): Add new users.
+    // NOTE(jim): Check which users will be new.
     allMessages.forEach((m) => {
       if (!this.props.userIdToUser[m.fromUserId]) {
         userIds[m.fromUserId] = true;
       }
     });
 
-    // NOTE(jim): If there are new users. request for them.
+    // NOTE(jim): If there are new users. add users to the
+    // cache so they do not have to be requested for again.
     const newUserIds = Object.keys(userIds);
     if (newUserIds.length) {
       try {
@@ -298,19 +313,21 @@ class ChatSessionContextManager extends React.Component {
 
     for (let ii = 0, nn = allMessages.length; ii < nn; ii++) {
       const m = allMessages[ii];
-      // TODO(jim): Move this logic to the server at some point or move it to the castle-chat-lib
+      // TODO(jim): This closure should not have to exist
+      // but it resolves some issues for now.
       if (m.channelId.startsWith(DIRECT_MESSAGE_PREFIX)) {
         let channelUserIds = m.channelId.replace(DIRECT_MESSAGE_PREFIX, '').split(',');
         const isViewer = channelUserIds.find((id) => viewer.userId === id);
         const isOtherUser = channelUserIds.find((id) => m.fromUserId === id);
 
-        // NOTE(jim): Block the message
+        // NOTE(jim): The viewer should not receive
+        // this message.
         if (!isViewer && !isOtherUser) {
           continue;
         }
 
-        // NOTE(jim): You are a member of this channel, but its clear that you aren't part of it.
-        // So we guarantee this.
+        // NOTE(jim): If you are supposed to be subscribed
+        // this function will correct that issue.
         if (isViewer && !messages[m.channelId]) {
           messages[m.channelId] = [];
           needsChannelRefresh = true;
@@ -318,10 +335,11 @@ class ChatSessionContextManager extends React.Component {
         }
       }
 
-      // NOTE(jim): Should update thanks to an awaited joinChatChannel
       const isSubscribed = subscribedChatChannels.find((c) => c.channelId === m.channelId);
 
-      // NOTE(jim): I shouldn't even have to check.
+      // NOTE(jim): Don't save messages for the viewer
+      // if they are from channels they are not subscribed
+      // to.
       if (!isSubscribed) {
         continue;
       }
@@ -340,20 +358,21 @@ class ChatSessionContextManager extends React.Component {
       let mentionsForViewer = [];
       messageJSON.message.forEach(async (part) => {
         if (part.userId) {
-          if (
+          const shouldNotifyViewerOfMention =
             notificationLevel === NotificationLevel.TAG &&
             String(m.fromUserId) !== String(viewer.userId) &&
             !m.message.delay &&
-            part.userId === viewer.userId
-          ) {
+            part.userId === viewer.userId;
+          if (shouldNotifyViewerOfMention) {
             mentionsForViewer.push(m.fromUserId);
           }
 
-          // NOTE(jim): If a user does not exist, don't try to
-          // fetch for the user. This is a bug we should fix
-          // elsewhere.
+          // NOTE(jim): this exists because a user
+          // may not exist and we want to fail gracefully.
+          // this should rarely happen and reflects
+          // a bug elsewhere if it does.
           const user = this.props.userIdToUser[part.userId];
-          const mentionString = user ? `@${user.username}` : ``;
+          const mentionString = user ? `@${user.username}` : `👤`;
           text = `${text}${mentionString}`;
           return;
         }
@@ -369,12 +388,11 @@ class ChatSessionContextManager extends React.Component {
         });
       });
 
-      // NOTE(jim): Notified every time someone chats in a channel.
-      if (
+      const shouldNotifyViewerOfChannelMessage =
         notificationLevel === NotificationLevel.EVERY &&
         String(m.fromUserId) !== String(viewer.userId) &&
-        !m.message.delay
-      ) {
+        !m.message.delay;
+      if (shouldNotifyViewerOfChannelMessage) {
         notifications.push({
           title: 'Castle Chat',
           fromUserId: m.fromUserId,
@@ -382,7 +400,8 @@ class ChatSessionContextManager extends React.Component {
         });
       }
 
-      // NOTE(jim): Schema for the props the rendering component needs.
+      // NOTE(jim): All components that render messages now
+      // can handle a JavaScript object that looks like this:
       let requiredMessageProps = {
         type: 'MESSAGE',
         fromUserId: m.fromUserId,
@@ -391,7 +410,8 @@ class ChatSessionContextManager extends React.Component {
         timestamp: m.timestamp,
       };
 
-      // NOTE(jim): the array is reversed in the wrong direction on first load.
+      // TODO(jim): Consult with Jesse about the array order
+      // on first load.
       if (this._firstLoadComplete) {
         messages[m.channelId].push(requiredMessageProps);
       } else {
@@ -399,7 +419,6 @@ class ChatSessionContextManager extends React.Component {
       }
     }
 
-    // NOTE(jim): Do not send notifications when messages first load.
     if (notifications.length > 0 && this._firstLoadComplete) {
       this._triggerLocalNotifications(notifications);
     }
