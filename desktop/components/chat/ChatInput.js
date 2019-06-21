@@ -123,6 +123,16 @@ export default class ChatInput extends React.Component {
       return;
     }
 
+    // NOTE(jim): Prevent default return response when a user is navigating the popover.
+    if (this.state.index > -1 && this.props.users.length && e.which === 9) {
+      e.preventDefault();
+
+      this._handleSelectUser(this.props.users[this.state.index]);
+      this.setState({ index: 0 });
+      return;
+    }
+
+
     this.props.onKeyDown(e);
   };
 
