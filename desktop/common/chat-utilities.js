@@ -102,7 +102,7 @@ export const matchChannel = (text, onClick) => {
   ));
 };
 
-async function _getAutocompleteUserAsync(text) {
+export const _getAutoCompleteUserAsync = async (text) => {
   let autocompleteResults = await Actions.getAutocompleteAsync(text);
   let users = autocompleteResults.users;
 
@@ -123,17 +123,13 @@ Formats messages into an object that looks like:
       text: 'this is some text',
     },
     {
-      emoji: 'smile',
-    },
-    {
       userId: 1,
     },
   ]
 }
-
-If the message has no users or emojis, it is sent as plain text.
 */
-export async function formatMessageAsync(message, cache) {
+
+export const formatMessageAsync = async (message, cache) => {
   let items = [];
   let start = 0;
   let i = 0;
@@ -174,7 +170,7 @@ export async function formatMessageAsync(message, cache) {
 
         // This should not be needed most of the time
         if (!user) {
-          user = await _getAutocompleteUserAsync(tag);
+          user = await _getAutoCompleteUserAsync(tag);
         }
 
         if (user) {
@@ -213,44 +209,4 @@ export async function formatMessageAsync(message, cache) {
       message: items,
     });
   }
-}
-
-export function convertToRichMessage(message) {
-  let plainTextMessage = {
-    message: [
-      {
-        text: message,
-      },
-    ],
-  };
-
-  if (message.charAt(0) !== '{') {
-    return plainTextMessage;
-  } else {
-    try {
-      return JSON.parse(message);
-    } catch (e) {
-      return plainTextMessage;
-    }
-  }
-}
-
-export function messageToString(message, social) {
-  let txt = '';
-
-  for (let i = 0; i < message.richMessage.message.length; i++) {
-    let messagePart = message.richMessage.message[i];
-
-    if (messagePart.text) {
-      txt += messagePart.text;
-    } else if (messagePart.userId) {
-      if (social.userIdToUser[messagePart.userId]) {
-        txt += `@${social.userIdToUser[messagePart.userId].username}`;
-      }
-    } else if (messagePart.emoji) {
-      txt += emojiToString(messagePart.emoji);
-    }
-  }
-
-  return txt;
 }
