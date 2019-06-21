@@ -23,7 +23,7 @@ import {
 import { ChatSessionContextProvider } from '~/contexts/ChatSessionContext';
 
 import AppContainer from '~/components/AppContainer';
-import ChatInput from '~/components/social/ChatInput';
+import ChatInput from '~/components/chat/ChatInput';
 import Logs from '~/common/logs';
 import PublishHistory from '~/common/publish-history';
 
@@ -196,7 +196,7 @@ class App extends React.Component {
 
   _handleNativeFocusChat = async () => {
     await Actions.delay(80);
-    ChatInput.focusInstance();
+    ChatInput.focus();
   };
 
   render() {
