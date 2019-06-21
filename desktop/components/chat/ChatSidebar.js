@@ -94,29 +94,32 @@ class ChatSidebar extends React.Component {
 
   _handleThemeChange = () => {
     this.setState({ isDarkMode: !this.state.isDarkMode });
-  }
+  };
 
   _handleBack = () => {
+    // TODO: instead of navigateToHome, this should call navigator.restoreDeferredState
+    // in order to properly "go back".
+    // but we need to actually defer the state before we can make this change.
     this.props.navigator.navigateToHome();
-  }
+  };
 
   render() {
     const { mode } = this.state;
 
-    let theme = { 
+    let theme = {
       textColor: Constants.colors.white,
       background: `#000000`,
-      inputBackground: `#171717`
+      inputBackground: `#171717`,
     };
 
     // TODO(jim): Will need to do a design system with
     // dark and light mode for everything. And change
     // arbitrary color uses like `#AAA` for the splitter.
     if (!this.state.isDarkMode) {
-      theme = { 
+      theme = {
         textColor: null,
         background: Constants.colors.white,
-        inputBackground: `#f3f3f3`
+        inputBackground: `#f3f3f3`,
       };
     }
 
@@ -138,13 +141,15 @@ class ChatSidebar extends React.Component {
     }
 
     return (
-      <div className={STYLES_CONTAINER_BASE} style={{ 
-        background: theme.background
-      }}>
-        <ChatSidebarHeader 
+      <div
+        className={STYLES_CONTAINER_BASE}
+        style={{
+          background: theme.background,
+        }}>
+        <ChatSidebarHeader
           chat={this.props.chat}
-          onBackClick={this._handleBack} 
-          onThemeClick={this._handleThemeChange} 
+          onBackClick={this._handleBack}
+          onThemeClick={this._handleThemeChange}
         />
         <ChatMessages
           messages={messages}
