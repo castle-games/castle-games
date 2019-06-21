@@ -1356,7 +1356,7 @@ const STYLES_CONTAINER = css`
 
   /* Based on the 'g90' theme (https://www.carbondesignsystem.com/guidelines/themes/) which 'Tools.scss' uses */
   color: #f3f3f3;
-  background-color: #171717;
+  background-color: #000000;
 
   /* Inputs seem to not properly hide the spinner buttons */
   input[type='number']::-webkit-inner-spin-button,
