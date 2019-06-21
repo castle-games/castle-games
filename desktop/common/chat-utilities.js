@@ -48,7 +48,7 @@ export const matchEmoji = (text) => {
   let matchCount = 0;
 
   let parsedText = StringReplace(text, /(:(?![\n])[()#$@-\w]+:)/g, (match, i) => {
-    const emojiString = replaceAll(match, ':' , '');
+    const emojiString = replaceAll(match, ':', '');
 
     let emoji;
     if (isEmoji(emojiString)) {
@@ -57,33 +57,43 @@ export const matchEmoji = (text) => {
       emoji = emojiToString(emojiString);
     }
 
-    return <span key={`chat-emoji-${match + i}`} style={{ lineHeight: 0.8, display: 'inline-block', verticalAlign: 'middle' }}>{emoji}</span>;
+    return (
+      <span
+        key={`chat-emoji-${match + i}`}
+        style={{ lineHeight: 0.8, display: 'inline-block', verticalAlign: 'middle' }}>
+        {emoji}
+      </span>
+    );
   });
 
   return { isEmojiMessage, text: parsedText };
-}
+};
 
 export const matchURL = (text, social, navigator) => {
-  return StringReplace(text, /(\b(https?|castle|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig, (match, i) => {
-    const urlData = URLS.getCastleUrlInfo(match);
-    if (urlData.type) {
+  return StringReplace(
+    text,
+    /(\b(https?|castle|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gi,
+    (match, i) => {
+      const urlData = URLS.getCastleUrlInfo(match);
+      if (urlData.type) {
+        return (
+          <ChatPost
+            key={`chat-embed-${match + i}`}
+            social={social}
+            message={{ text: match }}
+            navigator={navigator}
+            urlData={urlData}
+          />
+        );
+      }
+
       return (
-        <ChatPost
-          key={`chat-embed-${match + i}`}
-          social={social}
-          message={{ text: match }}
-          navigator={navigator}
-          urlData={urlData}
-        />
+        <a className={STYLES_ANCHOR} key={match + i} href={match}>
+          {match}
+        </a>
       );
     }
-
-    return (
-      <a className={STYLES_ANCHOR} key={match + i} href={match}>
-        {match}
-      </a>
-    );
-  });
+  );
 };
 
 export const matchMention = (text, onClick) => {
@@ -113,22 +123,17 @@ export const _getAutoCompleteUserAsync = async (text) => {
   }
 
   return null;
-}
+};
 
-/*
-Formats messages into an object that looks like:
-{
-  message: [
-    {
-      text: 'this is some text',
-    },
-    {
-      userId: 1,
-    },
-  ]
-}
-*/
-
+// NOTE(jesse): Formats message into an array
+// NOTE(jim): The adjustment to this method is:
+// emojis no longer need to be handled serverside.
+//
+// Example: [
+//   { text: 'hello' },
+//   { userId: '70' },
+//   { text: 'world' }
+// ]
 export const formatMessageAsync = async (message, cache) => {
   let items = [];
   let start = 0;
@@ -168,26 +173,36 @@ export const formatMessageAsync = async (message, cache) => {
         let tag = message.substr(i + 1, j - i - 1);
         let user = cache[tag];
 
-        // This should not be needed most of the time
+        // NOTE(jim): This is a copy and paste of how
+        // this function use to work before. If the user
+        // does not exist in the cache (which rarely happens)
+        // we try to fetch for that user. Jesse had left
+        // this note before.
         if (!user) {
           user = await _getAutoCompleteUserAsync(tag);
         }
 
-        if (user) {
-          if (i > start) {
-            items.push({
-              text: message.substr(start, i - start),
-            });
-          }
+        // NOTE(jim): This is new logic June 21, 2019, if both
+        // the cache and HTTP lookup fails. We add a tag.
+        if (i > start) {
+          items.push({
+            text: message.substr(start, i - start),
+          });
+        }
 
+        if (!user) {
+          items.push({
+            text: tag,
+          });
+        } else {
           items.push({
             userId: user.userId,
           });
-
-          i = j;
-          start = i;
-          continue;
         }
+
+        i = j;
+        start = i;
+        continue;
       }
 
       i = j + 1;
@@ -209,4 +224,4 @@ export const formatMessageAsync = async (message, cache) => {
       message: items,
     });
   }
-}
+};

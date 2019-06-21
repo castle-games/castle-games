@@ -212,6 +212,12 @@ class ChatSessionContextManager extends React.Component {
       return;
     }
 
+    // NOTE(jim): Formats message into an array
+    // Example: [
+    //   { text: 'hello' },
+    //   { userId: '70' },
+    //   { text: 'world' }
+    // ]
     message = await ChatUtilities.formatMessageAsync(message, this.props.usernameToUser);
 
     ChatActions.sendChannelChatMessage({ message, channelId: this.state.channel.channelId });
@@ -343,9 +349,12 @@ class ChatSessionContextManager extends React.Component {
             mentionsForViewer.push(m.fromUserId);
           }
 
+          // NOTE(jim): If a user does not exist, don't try to
+          // fetch for the user. This is a bug we should fix
+          // elsewhere.
           const user = this.props.userIdToUser[part.userId];
-          let mentionUser = `@${user.username}`;
-          text = `${text}${mentionUser}`;
+          const mentionString = user ? `@${user.username}` : ``;
+          text = `${text}${mentionString}`;
           return;
         }
 
