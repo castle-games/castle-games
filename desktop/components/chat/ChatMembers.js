@@ -33,10 +33,6 @@ const STYLES_CONTAINER = css`
 
 export default class ChatMembers extends React.Component {
   render() {
-    return (
-      <div className={STYLES_CONTAINER}>
-        Coming soon
-      </div>
-    );
+    return <div className={STYLES_CONTAINER}>Coming soon</div>;
   }
 }

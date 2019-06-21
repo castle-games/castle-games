@@ -93,7 +93,6 @@ export default class ChatMessageElement extends React.Component {
       const results = ChatUtilities.matchEmoji(text);
       text = results.text;
       isEmojiMessage = results.isEmojiMessage;
-
     }
 
     return (

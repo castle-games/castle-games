@@ -118,10 +118,10 @@ export default class ChatMessageElement extends React.Component {
               ? () => this.props.onNavigateToUserProfile(this.props.user)
               : () => {}
           }
-          style={{ 
+          style={{
             backgroundImage: this.props.user ? `url(${this.props.user.photo.url})` : ``,
-            width: this.props.size, 
-            height: this.props.size 
+            width: this.props.size,
+            height: this.props.size,
           }}
         />
         <span className={STYLES_RIGHT}>
@@ -138,10 +138,12 @@ export default class ChatMessageElement extends React.Component {
               {Strings.toChatDate(this.props.message.timestamp)}
             </span>
           </div>
-          <div className={STYLES_AUTHOR_MESSAGE} style={{ 
-              color: this.props.theme.textColor, 
+          <div
+            className={STYLES_AUTHOR_MESSAGE}
+            style={{
+              color: this.props.theme.textColor,
               fontSize: isEmojiMessage ? '40px' : null,
-              lineHeight: isEmojiMessage ? '48px' : null  
+              lineHeight: isEmojiMessage ? '48px' : null,
             }}>
             {text}
           </div>

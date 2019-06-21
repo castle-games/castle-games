@@ -44,7 +44,7 @@ const STYLES_INPUT = css`
   transition: 200ms ease border;
 
   ::placeholder {
-    color: #AAA;
+    color: #aaa;
   }
 
   :focus {
@@ -59,7 +59,7 @@ export default class ChatInput extends React.Component {
   static defaultProps = {
     theme: {
       textColor: null,
-      inputBackground: null
+      inputBackground: null,
     },
     users: [],
   };
@@ -132,7 +132,6 @@ export default class ChatInput extends React.Component {
       return;
     }
 
-
     this.props.onKeyDown(e);
   };
 
@@ -167,7 +166,7 @@ export default class ChatInput extends React.Component {
     let containerStyles;
     if (this.props.isSidebarGameInput) {
       containerStyles = {
-        padding: 0
+        padding: 0,
       };
 
       inputStyles = {
@@ -175,7 +174,7 @@ export default class ChatInput extends React.Component {
         padding: `8px 16px 8px 16px`,
         borderRadius: `0px`,
         color: this.props.theme.textColor,
-        background: this.props.theme.inputBackground
+        background: this.props.theme.inputBackground,
       };
     }
 

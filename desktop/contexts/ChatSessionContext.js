@@ -275,7 +275,7 @@ class ChatSessionContextManager extends React.Component {
     let userIds = {};
 
     // NOTE(jim): Add new users.
-    allMessages.forEach(m => {
+    allMessages.forEach((m) => {
       if (!this.props.userIdToUser[m.fromUserId]) {
         userIds[m.fromUserId] = true;
       }
@@ -332,7 +332,7 @@ class ChatSessionContextManager extends React.Component {
 
       let text = '';
       let mentionsForViewer = [];
-      messageJSON.message.forEach(async part => {
+      messageJSON.message.forEach(async (part) => {
         if (part.userId) {
           if (
             notificationLevel === NotificationLevel.TAG &&
@@ -352,7 +352,7 @@ class ChatSessionContextManager extends React.Component {
         text = `${text}${part.text}`;
       });
 
-      mentionsForViewer.forEach(id => {
+      mentionsForViewer.forEach((id) => {
         notifications.push({
           title: 'Castle Chat',
           fromUserId: id,

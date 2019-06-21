@@ -39,30 +39,30 @@ const STYLES_HEADER_LEFT = css`
 export default class ChatHeader extends React.Component {
   render() {
     return (
-      <header className={STYLES_HEADER} style={{ background: `#171717`}}>
+      <header className={STYLES_HEADER} style={{ background: `#171717` }}>
         <div className={STYLES_HEADER_LEFT}>
-          <UINavigationLink 
+          <UINavigationLink
             style={{
               background: '#313131',
               padding: '0 24px 0 24px',
               height: 32,
               display: 'inline-flex',
-              alignItems: 'center', 
-            }} 
+              alignItems: 'center',
+            }}
             onClick={this.props.onBackClick}>
             Back
           </UINavigationLink>
         </div>
-          <UINavigationLink 
-            style={{
-              padding: '0 24px 0 24px',
-              height: 32,
-              display: 'inline-flex',
-              alignItems: 'center', 
-            }} 
-            onClick={this.props.onThemeClick}>
-            Toggle Theme
-          </UINavigationLink>
+        <UINavigationLink
+          style={{
+            padding: '0 24px 0 24px',
+            height: 32,
+            display: 'inline-flex',
+            alignItems: 'center',
+          }}
+          onClick={this.props.onThemeClick}>
+          Toggle Theme
+        </UINavigationLink>
       </header>
     );
   }

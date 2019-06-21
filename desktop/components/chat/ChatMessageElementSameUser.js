@@ -95,15 +95,21 @@ export default class ChatMessageElement extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
-        <span className={STYLES_LEFT} style={{ 
-          width: this.props.size, 
-          height: this.props.size 
-        }}/>
+        <span
+          className={STYLES_LEFT}
+          style={{
+            width: this.props.size,
+            height: this.props.size,
+          }}
+        />
         <span className={STYLES_RIGHT}>
-          <div className={STYLES_AUTHOR_MESSAGE} style={{ 
-            color: this.props.theme.textColor, 
-            fontSize: isEmojiMessage ? '40px' : null,
-            lineHeight: isEmojiMessage ? '48px' : null }}>
+          <div
+            className={STYLES_AUTHOR_MESSAGE}
+            style={{
+              color: this.props.theme.textColor,
+              fontSize: isEmojiMessage ? '40px' : null,
+              lineHeight: isEmojiMessage ? '48px' : null,
+            }}>
             {text}
           </div>
         </span>
