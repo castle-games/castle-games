@@ -133,7 +133,7 @@ Formats messages into an object that looks like:
 
 If the message has no users or emojis, it is sent as plain text.
 */
-export async function formatMessageAsync(message, autocompleteCache) {
+export async function formatMessageAsync(message, cache) {
   let items = [];
   let start = 0;
   let i = 0;
@@ -170,7 +170,7 @@ export async function formatMessageAsync(message, autocompleteCache) {
 
       if (j >= message.length || /\s/.test(message.charAt(j))) {
         let tag = message.substr(i + 1, j - i - 1);
-        let user = autocompleteCache.users[tag];
+        let user = cache[tag];
 
         // This should not be needed most of the time
         if (!user) {
@@ -195,30 +195,6 @@ export async function formatMessageAsync(message, autocompleteCache) {
       }
 
       i = j + 1;
-    } else if (message.charAt(i) === ':') {
-      let j = i + 1;
-      while (message.charAt(j) !== ':' && j < message.length) {
-        j++;
-      }
-
-      let emojiBody = message.substr(i + 1, j - i - 1);
-      if (isEmoji(emojiBody)) {
-        if (i > start) {
-          items.push({
-            text: message.substr(start, i - start),
-          });
-        }
-
-        items.push({
-          emoji: emojiBody,
-        });
-
-        // +1 for the last :
-        i = j + 1;
-        start = i;
-      } else {
-        i++;
-      }
     } else {
       i++;
     }

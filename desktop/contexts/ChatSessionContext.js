@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as Actions from '~/common/actions';
 import * as ChatActions from '~/common/actions-chat';
+import * as ChatUtilities from '~/common/chat-utilities';
 import * as Strings from '~/common/strings';
 import * as Constants from '~/common/constants';
 
@@ -211,6 +212,8 @@ class ChatSessionContextManager extends React.Component {
       return;
     }
 
+    message = await ChatUtilities.formatMessageAsync(message, this.props.usernameToUser);
+
     ChatActions.sendChannelChatMessage({ message, channelId: this.state.channel.channelId });
   };
 
@@ -271,6 +274,22 @@ class ChatSessionContextManager extends React.Component {
     let needsChannelRefresh = false;
     let userIds = {};
 
+    // NOTE(jim): Add new users.
+    allMessages.forEach(m => {
+      if (!this.props.userIdToUser[m.fromUserId]) {
+        userIds[m.fromUserId] = true;
+      }
+    });
+
+    // NOTE(jim): If there are new users. request for them.
+    const newUserIds = Object.keys(userIds);
+    if (newUserIds.length) {
+      try {
+        let users = await Actions.getUsers({ userIds: Object.keys(userIds) });
+        await this.props.addUsersToSocial(users);
+      } catch (e) {}
+    }
+
     for (let ii = 0, nn = allMessages.length; ii < nn; ii++) {
       const m = allMessages[ii];
       // TODO(jim): Move this logic to the server at some point or move it to the castle-chat-lib
@@ -309,38 +328,47 @@ class ChatSessionContextManager extends React.Component {
         }
       }
 
-      userIds[m.fromUserId] = true;
-      const { fromUserId } = m;
       const messageJSON = JSON.parse(m.message.body);
-      const text = messageJSON.message ? messageJSON.message[0].text : '';
 
-      // NOTE(jim): Notified every time someone tags you in a channel.
-      StringReplace(text, /@([a-zA-Z0-9_-]+)/g, (match, i) => {
-        if (
-          notificationLevel === NotificationLevel.TAG &&
-          String(fromUserId) !== String(viewer.userId) &&
-          !m.message.delay &&
-          match === viewer.username
-        ) {
-          notifications.push({
-            title: 'Castle Chat',
-            fromUserId,
-            message: text,
-          });
+      let text = '';
+      let mentionsForViewer = [];
+      messageJSON.message.forEach(async part => {
+        if (part.userId) {
+          if (
+            notificationLevel === NotificationLevel.TAG &&
+            String(m.fromUserId) !== String(viewer.userId) &&
+            !m.message.delay &&
+            part.userId === viewer.userId
+          ) {
+            mentionsForViewer.push(m.fromUserId);
+          }
+
+          const user = this.props.userIdToUser[part.userId];
+          let mentionUser = `@${user.username}`;
+          text = `${text}${mentionUser}`;
+          return;
         }
 
-        return match;
+        text = `${text}${part.text}`;
+      });
+
+      mentionsForViewer.forEach(id => {
+        notifications.push({
+          title: 'Castle Chat',
+          fromUserId: id,
+          message: text,
+        });
       });
 
       // NOTE(jim): Notified every time someone chats in a channel.
       if (
         notificationLevel === NotificationLevel.EVERY &&
-        String(fromUserId) !== String(viewer.userId) &&
+        String(m.fromUserId) !== String(viewer.userId) &&
         !m.message.delay
       ) {
         notifications.push({
           title: 'Castle Chat',
-          fromUserId,
+          fromUserId: m.fromUserId,
           message: text,
         });
       }
@@ -361,11 +389,6 @@ class ChatSessionContextManager extends React.Component {
         messages[m.channelId].unshift(requiredMessageProps);
       }
     }
-
-    try {
-      let users = await Actions.getUsers({ userIds: Object.keys(userIds) });
-      await this.props.addUsersToSocial(users);
-    } catch (e) {}
 
     // NOTE(jim): Do not send notifications when messages first load.
     if (notifications.length > 0 && this._firstLoadComplete) {
@@ -418,6 +441,7 @@ class ChatSessionContextProvider extends React.Component {
                 findSubscribedChannel={social.findSubscribedChannel}
                 setOnlineUserIds={social.setOnlineUserIds}
                 addUsersToSocial={social.addUsers}
+                usernameToUser={social.usernameToUser}
                 refreshChannelData={social.refreshChannelData}
                 newUserJoinChannels={social.newUserJoinChannels}
                 {...this.props}

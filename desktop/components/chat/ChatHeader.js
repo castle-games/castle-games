@@ -63,6 +63,10 @@ const STYLES_P = css`
 
 export default class ChatHeader extends React.Component {
   render() {
+    if (!this.props.channel) {
+      return null;
+    }
+
     let name = this.props.channel.name;
     if (this.props.channel.otherUserId) {
       const { userIdToUser } = this.props.social;

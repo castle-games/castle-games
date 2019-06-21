@@ -131,6 +131,8 @@ class ChatScreen extends React.Component {
         users = autocompleteResults.users;
       }
 
+      this.props.social.addUser(users);
+
       this.setState({ users: users });
     }, 120);
   };
