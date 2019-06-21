@@ -109,7 +109,7 @@ class ChatSidebar extends React.Component {
     let theme = {
       textColor: Constants.colors.white,
       background: `#000000`,
-      inputBackground: `#171717`,
+      inputBackground: `#565656`,
     };
 
     // TODO(jim): Will need to do a design system with
