@@ -511,11 +511,20 @@ class ToolDropdown extends React.PureComponent {
 
   render() {
     const { element } = this.props;
+
+    let items = (element.props && element.props.items) || [];
+    if (!Array.isArray(items)) {
+      let arrayItems = [];
+      Object.keys(items).map((key) => (arrayItems[key] = items[key]));
+      items = arrayItems;
+    }
+
     return (
       <Carbon>
         <Dropdown
           {...element.props}
           id={element.pathId}
+          items={items}
           selectedItem={this.state.value}
           titleText={element.props && !element.props.hideLabel ? element.props.label : null}
           label={
@@ -840,6 +849,13 @@ class ToolRadioButtonGroup extends React.PureComponent {
       );
     }
 
+    let items = (element.props && element.props.items) || [];
+    if (!Array.isArray(items)) {
+      let arrayItems = [];
+      Object.keys(items).map((key) => (arrayItems[key] = items[key]));
+      items = arrayItems;
+    }
+
     return (
       <Carbon>
         <div className="bx--form-item">
@@ -851,7 +867,7 @@ class ToolRadioButtonGroup extends React.PureComponent {
                 ? 'bx--radio-button-group'
                 : 'bx--radio-button-group--vertical'
             }>
-            {((element.props && element.props.items) || []).map((item) => (
+            {items.map((item) => (
               <RadioButton
                 key={item}
                 item={item}
