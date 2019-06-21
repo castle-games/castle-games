@@ -447,8 +447,9 @@ function ui.section(...)
     local open = store[c].open
     if c.props.open ~= nil then
         open = c.props.open
-    else
-        open = open
+    end
+    if open == nil and c.props.defaultOpen then
+        open = true
     end
 
     c.open = open
