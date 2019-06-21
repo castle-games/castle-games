@@ -15,6 +15,7 @@ import { ChatSessionContext } from '~/contexts/ChatSessionContext';
 
 import ChatMessages from '~/components/chat/ChatMessages';
 import ChatInput from '~/components/chat/ChatInput';
+import ChatSidebarHeader from '~/components/chat/ChatSidebarHeader';
 
 const STYLES_CONTAINER_BASE = css`
   display: flex;
@@ -31,6 +32,7 @@ class ChatSidebar extends React.Component {
   state = {
     value: '',
     mode: 'MESSAGES',
+    isDarkMode: false,
   };
 
   async componentDidUpdate(prevProps) {
@@ -91,6 +93,14 @@ class ChatSidebar extends React.Component {
     }
   };
 
+  _handleThemeChange = () => {
+    console.log('theme change');
+  }
+
+  _handleBack = () => {
+    this.props.navigator.navigateToHome();
+  }
+
   render() {
     const { mode } = this.state;
 
@@ -113,6 +123,11 @@ class ChatSidebar extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER_BASE}>
+        <ChatSidebarHeader 
+          chat={this.props.chat}
+          onBackClick={this._handleBack} 
+          onThemeClick={this._handleThemeChange} 
+        />
         <ChatMessages
           messages={messages}
           chat={this.props.chat}

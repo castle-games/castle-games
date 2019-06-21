@@ -10,7 +10,6 @@ import { NavigationContext, NavigatorContext } from '~/contexts/NavigationContex
 
 import SplitterLayout from 'react-splitter-layout';
 import GameActionsBar from '~/components/game/GameActionsBar';
-import GameTopBar from '~/components/game/GameTopBar';
 import GameWindow from '~/native/gamewindow';
 import Logs from '~/common/logs';
 import GLLoaderScreen from '~/isometric/components/GLLoaderScreen';
@@ -284,10 +283,6 @@ class GameScreen extends React.Component {
   render() {
     let actionsBarElement, topBarElement;
     if (!this.props.isFullScreen) {
-      // TODO: instead of navigateToHome, this should call navigator.restoreDeferredState
-      // in order to properly "go back".
-      // but we need to actually defer the state before we can make this change.
-      topBarElement = <GameTopBar onGoBack={this.props.navigateToHome} />;
       actionsBarElement = (
         <GameActionsBar
           game={this.props.game}
@@ -330,7 +325,6 @@ class GameScreen extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
-        {topBarElement}
         <div className={STYLES_SPLITTER_CONTAINER}>
           <SplitterLayout
             vertical={false}
