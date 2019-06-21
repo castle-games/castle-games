@@ -170,6 +170,9 @@ class GameScreen extends React.Component {
       },
       initialPost: luaPost,
       initialParams: this.props.gameParams ? this.props.gameParams : undefined,
+      game: this.props.game
+        ? await jsGameToLuaGame(this.props.game)
+        : undefined,
       referrerGame: this.props.referrerGame
         ? await jsGameToLuaGame(this.props.referrerGame)
         : undefined,

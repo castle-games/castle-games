@@ -112,11 +112,28 @@ do
     end
 end
 
+function castle.game.getCurrent()
+    if CASTLE_INITIAL_DATA and CASTLE_INITIAL_DATA.game then
+        return CASTLE_INITIAL_DATA.game
+    end
+    return nil
+end
+
 function castle.game.getReferrer()
     if CASTLE_INITIAL_DATA and CASTLE_INITIAL_DATA.referrerGame then
         return CASTLE_INITIAL_DATA.referrerGame
     end
     return nil
+end
+
+function castle.game.isLocalFile(game)
+    if not game and CASTLE_INITIAL_DATA then
+        game = CASTLE_INITIAL_DATA.game
+    end
+    if game and game.url then
+        return game.url:sub(1, 5) == 'file:'
+    end
+    return false
 end
 
 function castle.game.load(gameIdOrUrl, params)
