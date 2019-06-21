@@ -314,6 +314,8 @@ class ToolCodeEditor extends React.PureComponent {
                 glyphMargin: false,
                 folding: false,
                 lineNumbersMinChars: 0,
+
+                readOnly: !!element.props.disabled,
               }}
               value={this.state.value}
               onChange={(value) => {
