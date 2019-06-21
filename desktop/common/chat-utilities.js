@@ -57,7 +57,7 @@ export const matchEmoji = (text) => {
       emoji = emojiToString(emojiString);
     }
 
-    return <span key={`chat-emoji-${match + i}`}>{emoji}</span>;
+    return <span key={`chat-emoji-${match + i}`} style={{ lineHeight: 0.8, display: 'inline-block', verticalAlign: 'middle' }}>{emoji}</span>;
   });
 
   return { isEmojiMessage, text: parsedText };
