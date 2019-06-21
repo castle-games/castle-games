@@ -13,7 +13,7 @@ const STYLES_CONTAINER = css`
   justify-content: space-between;
   flex-shrink: 0;
   width: 100%;
-  padding: 0 48px 0px 16px;
+  padding: 0 24px 0px 16px;
 `;
 
 const STYLES_LEFT = css`
@@ -95,7 +95,10 @@ export default class ChatMessageElement extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
-        <span className={STYLES_LEFT} />
+        <span className={STYLES_LEFT} style={{ 
+          width: this.props.size, 
+          height: this.props.size 
+        }}/>
         <span className={STYLES_RIGHT}>
           <div className={STYLES_AUTHOR_MESSAGE} style={{ 
             color: this.props.theme.textColor, 

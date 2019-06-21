@@ -13,7 +13,7 @@ const STYLES_CONTAINER = css`
   justify-content: space-between;
   flex-shrink: 0;
   width: 100%;
-  padding: 16px 48px 0 16px;
+  padding: 16px 24px 0 16px;
 `;
 
 const STYLES_AVATAR = css`

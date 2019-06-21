@@ -25,7 +25,6 @@ const STYLES_CONTAINER_BASE = css`
   width: 100%;
   min-width: 10%;
   height: 100%;
-  background: rgb(0, 0, 0);
 `;
 
 class ChatSidebar extends React.Component {
@@ -94,7 +93,7 @@ class ChatSidebar extends React.Component {
   };
 
   _handleThemeChange = () => {
-    console.log('theme change');
+    this.setState({ isDarkMode: !this.state.isDarkMode });
   }
 
   _handleBack = () => {
@@ -103,6 +102,17 @@ class ChatSidebar extends React.Component {
 
   render() {
     const { mode } = this.state;
+
+    let theme = { 
+      textColor: Constants.colors.white,
+      background: `rgb(0, 0, 0)`,
+    };
+    if (!this.state.isDarkMode) {
+      theme = { 
+        textColor: null,
+        background: Constants.colors.white,
+      };
+    }
 
     if (!this.props.navigation.game) {
       return null;
@@ -122,7 +132,9 @@ class ChatSidebar extends React.Component {
     }
 
     return (
-      <div className={STYLES_CONTAINER_BASE}>
+      <div className={STYLES_CONTAINER_BASE} style={{ 
+        background: theme.background
+      }}>
         <ChatSidebarHeader 
           chat={this.props.chat}
           onBackClick={this._handleBack} 
@@ -133,7 +145,8 @@ class ChatSidebar extends React.Component {
           chat={this.props.chat}
           navigator={this.props.navigator}
           social={this.props.social}
-          theme={{ textColor: Constants.colors.white }}
+          theme={theme}
+          size="32px"
         />
         <ChatInput
           value={this.state.value}
@@ -141,7 +154,7 @@ class ChatSidebar extends React.Component {
           placeholder="Type a message"
           onChange={this._handleChange}
           onKeyDown={this._handleKeyDown}
-          theme={{ textColor: Constants.colors.white }}
+          theme={theme}
         />
       </div>
     );

@@ -13,7 +13,7 @@ const STYLES_CONTAINER = css`
   justify-content: space-between;
   flex-shrink: 0;
   width: 100%;
-  padding: 16px 48px 0 16px;
+  padding: 16px 24px 0 16px;
 `;
 
 const STYLES_LEFT = css`
@@ -118,7 +118,11 @@ export default class ChatMessageElement extends React.Component {
               ? () => this.props.onNavigateToUserProfile(this.props.user)
               : () => {}
           }
-          style={{ backgroundImage: this.props.user ? `url(${this.props.user.photo.url})` : `` }}
+          style={{ 
+            backgroundImage: this.props.user ? `url(${this.props.user.photo.url})` : ``,
+            width: this.props.size, 
+            height: this.props.size 
+          }}
         />
         <span className={STYLES_RIGHT}>
           <div

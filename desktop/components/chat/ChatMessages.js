@@ -97,6 +97,7 @@ export default class ChatMessages extends React.Component {
               chat={this.props.chat}
               onNavigateToUserProfile={this.props.navigator.navigateToUserProfile}
               theme={this.props.theme}
+              size={this.props.size}
             />
           );
         }
@@ -112,6 +113,7 @@ export default class ChatMessages extends React.Component {
           chat={this.props.chat}
           onNavigateToUserProfile={this.props.navigator.navigateToUserProfile}
           theme={this.props.theme}
+          size={this.props.size}
         />
       );
     });
