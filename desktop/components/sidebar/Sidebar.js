@@ -120,7 +120,7 @@ class Sidebar extends React.Component {
 
     const response = await ChatActions.sendUserChatMessage({
       otherUserId: user.userId,
-      message: '👋',
+      message: ':wave:',
     });
 
     if (!response || response.errors) {
