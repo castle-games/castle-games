@@ -30,9 +30,10 @@ const STYLES_MENTIONS = css`
 const STYLES_INPUT = css`
   font-family: ${Constants.REFACTOR_FONTS.system};
   border: 2px solid ${Constants.REFACTOR_COLORS.elements.border};
+  display: flex;
   width: 100%;
-  outline: 0;
   height: 100%;
+  outline: 0;
   font-size: 14px;
   background: transparent;
   font-weight: 400;
@@ -43,7 +44,7 @@ const STYLES_INPUT = css`
   transition: 200ms ease border;
 
   ::placeholder {
-    color: ${Constants.REFACTOR_COLORS.elements.servers};
+    color: #AAA;
   }
 
   :focus {
@@ -58,6 +59,7 @@ export default class ChatInput extends React.Component {
   static defaultProps = {
     theme: {
       textColor: null,
+      inputBackground: null
     },
     users: [],
   };
@@ -151,8 +153,24 @@ export default class ChatInput extends React.Component {
     const { users } = this.props;
     const { index } = this.state;
 
+    let inputStyles;
+    let containerStyles;
+    if (this.props.isSidebarGameInput) {
+      containerStyles = {
+        padding: 0
+      };
+
+      inputStyles = {
+        border: `2px solid transparent`,
+        padding: `8px 16px 8px 16px`,
+        borderRadius: `0px`,
+        color: this.props.theme.textColor,
+        background: this.props.theme.inputBackground
+      };
+    }
+
     return (
-      <div className={STYLES_CONTAINER}>
+      <div className={STYLES_CONTAINER} style={containerStyles}>
         {users.length ? (
           <div className={STYLES_MENTIONS}>
             {users.map((o, i) => {
@@ -178,7 +196,7 @@ export default class ChatInput extends React.Component {
           value={this.props.value}
           onChange={this.props.onChange}
           onKeyDown={this._handleKeyDown}
-          style={{ color: this.props.theme.textColor }}
+          style={inputStyles}
         />
       </div>
     );

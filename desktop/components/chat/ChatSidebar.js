@@ -105,12 +105,18 @@ class ChatSidebar extends React.Component {
 
     let theme = { 
       textColor: Constants.colors.white,
-      background: `rgb(0, 0, 0)`,
+      background: `#000000`,
+      inputBackground: `#171717`
     };
+
+    // TODO(jim): Will need to do a design system with
+    // dark and light mode for everything. And change
+    // arbitrary color uses like `#AAA` for the splitter.
     if (!this.state.isDarkMode) {
       theme = { 
         textColor: null,
         background: Constants.colors.white,
+        inputBackground: `#f3f3f3`
       };
     }
 
@@ -123,7 +129,7 @@ class ChatSidebar extends React.Component {
     }
 
     if (!this.props.chat.channel) {
-      return <div className={STYLES_CONTAINER_BASE} />;
+      return null;
     }
 
     let messages = [];
@@ -155,6 +161,7 @@ class ChatSidebar extends React.Component {
           onChange={this._handleChange}
           onKeyDown={this._handleKeyDown}
           theme={theme}
+          isSidebarGameInput
         />
       </div>
     );

@@ -14,6 +14,7 @@ import UINavigationLink from '~/components/reusable/UINavigationLink';
 
 const STYLES_CONTAINER = css`
   width: 100%;
+  background: #171717;
 `;
 
 const STYLES_BUTTON = css`
