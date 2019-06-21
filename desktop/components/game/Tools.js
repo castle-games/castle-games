@@ -236,7 +236,6 @@ const STYLES_MONACO_CONTAINER = css`
   top: 0;
   right: 0;
   bottom: 0;
-  backgroundcolor: red;
 `;
 
 class ToolCodeEditor extends React.PureComponent {
