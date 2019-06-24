@@ -317,12 +317,12 @@ class ChatSessionContextManager extends React.Component {
       // but it resolves some issues for now.
       if (m.channelId.startsWith(DIRECT_MESSAGE_PREFIX)) {
         let channelUserIds = m.channelId.replace(DIRECT_MESSAGE_PREFIX, '').split(',');
-        const isViewer = channelUserIds.find((id) => viewer.userId === id);
-        const isOtherUser = channelUserIds.find((id) => m.fromUserId === id);
+        const isViewer = channelUserIds.includes(viewer.userId);
+        const isOtherUser = channelUserIds.includes(m.fromUserId);
 
         // NOTE(jim): The viewer should not receive
         // this message.
-        if (!isViewer && !isOtherUser) {
+        if (!isViewer || !isOtherUser) {
           continue;
         }
 
