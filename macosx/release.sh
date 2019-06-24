@@ -46,9 +46,6 @@ rm -rf archive.xcarchive
 
 echo -e "\n\b\bCreated 'Castle-$MACOS_VERSION.zip'"
 
-# TODO: not releasing on this branch
-exit 0
-
 if [ ! -d castle-releases ]; then
   echo "Cloning 'castle-releases'..."
   git clone https://$CASTLE_GITHUB_TOKEN@github.com/castle-games/castle-releases.git
