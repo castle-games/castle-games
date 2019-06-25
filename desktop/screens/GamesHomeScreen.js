@@ -95,7 +95,7 @@ class GamesHomeScreen extends React.Component {
   };
 
   _navigateToGame = (game, options) => {
-    return this.props.navigateToGame(game, { launchSource: `home-${this.props.mode}`, ...options });
+    return this.props.navigateToGame(game, { launchSource: `home`, ...options });
   };
 
   _renderBottom = () => {
@@ -155,7 +155,6 @@ export default class GamesHomeScreenWithContext extends React.Component {
                 viewer={currentUser ? currentUser.user : null}
                 navigateToUserProfile={navigator.navigateToUserProfile}
                 navigateToGame={navigator.navigateToGame}
-                navigateToGameUrl={navigator.navigateToGameUrl}
                 navigateToSignIn={navigator.navigateToSignIn}
                 posts={currentUser.content.posts}
                 reloadPosts={currentUser.reloadPosts}
