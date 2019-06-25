@@ -106,22 +106,12 @@ class ChatSidebar extends React.Component {
   render() {
     const { mode } = this.state;
 
+    // TODO(jim): When theming is available, you can just modify this object.
     let theme = {
       textColor: Constants.colors.white,
       background: `#000000`,
       inputBackground: `#565656`,
     };
-
-    // TODO(jim): Will need to do a design system with
-    // dark and light mode for everything. And change
-    // arbitrary color uses like `#AAA` for the splitter.
-    if (!this.state.isDarkMode) {
-      theme = {
-        textColor: null,
-        background: Constants.colors.white,
-        inputBackground: `#f3f3f3`,
-      };
-    }
 
     if (!this.props.navigation.game) {
       return null;
