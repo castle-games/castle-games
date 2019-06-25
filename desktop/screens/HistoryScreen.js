@@ -32,7 +32,7 @@ const STYLES_HISTORY_CONTENT = css`
   margin: 16px 0px 0px 0px;
 `;
 
-class HomeScreen extends React.Component {
+class HistoryScreen extends React.Component {
   static defaultProps = {
     history: [],
     refreshHistory: async () => {},
@@ -43,11 +43,10 @@ class HomeScreen extends React.Component {
   }
 
   _navigateToGame = (game, options) => {
-    return this.props.navigateToGame(game, { launchSource: `home-${this.props.mode}`, ...options });
+    return this.props.navigateToGame(game, { launchSource: `history`, ...options });
   };
 
   render() {
-    const { mode } = this.props;
     const recentGames = this.props.history
       ? this.props.history.map((historyItem) => {
           return { ...historyItem.game, key: historyItem.userStatusId };
