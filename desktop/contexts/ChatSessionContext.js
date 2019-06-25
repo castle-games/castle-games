@@ -157,6 +157,7 @@ class ChatSessionContextManager extends React.Component {
 
     // TODO(jim): If either user is not supposed to be
     // in this channel, kick the user.
+    /*
     if (channel.channelId.startsWith(DIRECT_MESSAGE_PREFIX)) {
       const channelUserIds = channel.channelId.replace(DIRECT_MESSAGE_PREFIX, '').split(',');
       const isAllowed = channelUserIds.find((id) => this.props.currentUser.user.userId === id);
@@ -181,6 +182,7 @@ class ChatSessionContextManager extends React.Component {
         }
       }
     }
+    */
 
     if (!existingChannel) {
       const response = await ChatActions.joinChatChannel({ channelId: channel.channelId });
@@ -283,7 +285,7 @@ class ChatSessionContextManager extends React.Component {
     });
   };
 
-  _handleMessagesAsync = async (allMessages) => {
+  _handleMessagesAsync = async (allUnsortedMessages) => {
     const { currentUser, subscribedChatChannels } = this.props;
     const { messages } = this.state;
     const viewer = currentUser.user;
@@ -301,19 +303,28 @@ class ChatSessionContextManager extends React.Component {
     let needsChannelRefresh = false;
     let userIds = {};
 
-    // NOTE(jim): Check which users will be new.
-    allMessages.forEach((m) => {
-      if (!this.props.userIdToUser[m.fromUserId]) {
-        userIds[m.fromUserId] = true;
+    // NOTE(jim): Preprocessing
+    // + sort the entire array by timestamps
+    // + check for new users.
+    const allMessages = allUnsortedMessages.sort((a, b) => {
+      if (!this.props.userIdToUser[a.fromUserId]) {
+        userIds[a.fromUserId] = true;
       }
+
+      if (!this.props.userIdToUser[b.fromUserId]) {
+        userIds[b.fromUserId] = true;
+      }
+
+      return new Date(a.createdTime) - new Date(b.createdTime);
     });
 
-    // NOTE(jim): If there are new users. add users to the
-    // cache so they do not have to be requested for again.
+    // NOTE(jim): Populate the cache
+    // + we dont have user entries for these users yet
+    // + we are only adding new users.
     const newUserIds = Object.keys(userIds);
     if (newUserIds.length) {
       try {
-        let users = await Actions.getUsers({ userIds: Object.keys(userIds) });
+        let users = await Actions.getUsers({ userIds: newUserIds });
         await this.props.addUsersToSocial(users);
       } catch (e) {}
     }
@@ -344,10 +355,6 @@ class ChatSessionContextManager extends React.Component {
       }
 
       const isSubscribed = subscribedChatChannels.find((c) => c.channelId === m.channelId);
-
-      // NOTE(jim): Don't save messages for the viewer
-      // if they are from channels they are not subscribed
-      // to.
       if (!isSubscribed) {
         continue;
       }
@@ -408,23 +415,13 @@ class ChatSessionContextManager extends React.Component {
         });
       }
 
-      // NOTE(jim): All components that render messages now
-      // can handle a JavaScript object that looks like this:
-      let requiredMessageProps = {
+      messages[m.channelId].push({
         type: 'MESSAGE',
         fromUserId: m.fromUserId,
         chatMessageId: m.chatMessageId,
         text: text,
         timestamp: m.timestamp,
-      };
-
-      // TODO(jim): Consult with Jesse about the array order
-      // on first load.
-      if (this._firstLoadComplete) {
-        messages[m.channelId].push(requiredMessageProps);
-      } else {
-        messages[m.channelId].unshift(requiredMessageProps);
-      }
+      });
     }
 
     if (notifications.length > 0 && this._firstLoadComplete) {
