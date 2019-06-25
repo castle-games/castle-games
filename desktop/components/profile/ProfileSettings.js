@@ -33,7 +33,7 @@ const STYLES_SECTION_TITLE = css`
   font-family: ${Constants.font.heading};
   font-weight: 400;
   margin-top: 32px;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 `;
 
 const STYLES_ROW = css`
@@ -45,12 +45,14 @@ const STYLES_ROW = css`
 `;
 
 const STYLES_COLUMN_FLUID = css`
+  display: flex;
+  justify-content: flex-end;
   color: ${Constants.colors.black};
   font-size: ${Constants.typescale.base};
   line-height: ${Constants.linescale.base};
   min-width: 25%;
   width: 100%;
-  padding-right: 24px;
+  padding-right: 48px;
 `;
 
 const STYLES_COLUMN = css`
@@ -61,14 +63,6 @@ const STYLES_COLUMN = css`
   font-size: 12px;
   text-transform: uppercase;
   flex-shrink: 0;
-`;
-
-const STYLES_HEADER_SPACER = css`
-  height: 20px;
-`;
-
-const STYLES_ROW_SPACER = css`
-  height: 8px;
 `;
 
 const Row = (props) => {
@@ -107,7 +101,7 @@ export default class ProfileSettings extends React.Component {
   };
 
   render() {
-    const { notifications } = this.props.user;
+    const { email, notifications } = this.props.user;
 
     return (
       <div className={STYLES_CONTAINER}>
@@ -115,7 +109,7 @@ export default class ProfileSettings extends React.Component {
 
         <p className={STYLES_PARAGRAPH}>Configure when you want to be notified.</p>
 
-        <h3 className={STYLES_SECTION_TITLE}>E-mail notifications</h3>
+        <div className={STYLES_SECTION_TITLE}>Send an email to {email}...</div>
 
         <Row
           secondCol={<span>Always</span>}
@@ -168,7 +162,7 @@ export default class ProfileSettings extends React.Component {
           );
         })}
 
-        <h3 className={STYLES_SECTION_TITLE}>Desktop notifications</h3>
+        <div className={STYLES_SECTION_TITLE}>Show a desktop notification...</div>
 
         <Row secondCol={<span>Always</span>} firstCol={<span>Never</span>} />
 
