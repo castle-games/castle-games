@@ -157,7 +157,6 @@ class ChatSessionContextManager extends React.Component {
 
     // TODO(jim): If either user is not supposed to be
     // in this channel, kick the user.
-    /*
     if (channel.channelId.startsWith(DIRECT_MESSAGE_PREFIX)) {
       const channelUserIds = channel.channelId.replace(DIRECT_MESSAGE_PREFIX, '').split(',');
       const isAllowed = channelUserIds.find((id) => this.props.currentUser.user.userId === id);
@@ -182,7 +181,6 @@ class ChatSessionContextManager extends React.Component {
         }
       }
     }
-    */
 
     if (!existingChannel) {
       const response = await ChatActions.joinChatChannel({ channelId: channel.channelId });
