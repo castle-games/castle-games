@@ -77,7 +77,7 @@ export default class HistoryScreenWithContext extends React.Component {
         {(navigator) => (
           <CurrentUserContext.Consumer>
             {(currentUser) => (
-              <HomeScreen
+              <HistoryScreen
                 viewer={currentUser ? currentUser.user : null}
                 navigateToUserProfile={navigator.navigateToUserProfile}
                 navigateToGame={navigator.navigateToGame}
