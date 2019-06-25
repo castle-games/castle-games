@@ -312,15 +312,21 @@ export default class UIGameCell extends React.Component {
     let descriptionText = game.description
       ? Strings.elide(game.description, 260)
       : 'No description yet :)';
-    let username = '';
+    let username, playCount;
 
     let isPrivate = Urls.isPrivateUrl(game.url);
     let isLocalFile = isPrivate || !game.owner || !game.owner.name;
     if (isLocalFile) {
       descriptionText = game.url;
-      username = 'File URL'; // TODO(Jason): show date last edited?
+      username = 'Local Project'; // TODO(Jason): show date last edited?
     } else {
       username = game.owner.username;
+      playCount = (
+        <span className={STYLES_PLAY_COUNT}>
+          {'\u2022 '}
+          {game.playCount} plays
+        </span>
+      );
     }
 
     let shouldShowGameInfo = isLocalFile || this.state.isShowingGameInfo;
@@ -370,7 +376,8 @@ export default class UIGameCell extends React.Component {
               style={{
                 backgroundImage: this.props.src ? `url(${this.props.src})` : null,
                 filter: this.state.isHoveringOnPlay ? 'brightness(105%)' : 'none',
-              }}></div>
+              }}
+            />
           )}
         </div>
 
@@ -390,10 +397,7 @@ export default class UIGameCell extends React.Component {
                   onMouseLeave={() => this._handleToggleHoverOnAuthor(false)}>
                   {username}
                 </span>
-                <span className={STYLES_PLAY_COUNT}>
-                  {'\u2022 '}
-                  {game.playCount} plays
-                </span>
+                {playCount}
               </div>
             </div>
           ) : null}
