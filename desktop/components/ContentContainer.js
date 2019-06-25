@@ -8,17 +8,18 @@ import { DevelopmentSetterContext } from '~/contexts/DevelopmentContext';
 import { NavigationContext, NavigatorContext } from '~/contexts/NavigationContext';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 
-import GameWindow from '~/native/gamewindow';
 import ChatScreen from '~/screens/ChatScreen';
-import GameScreen from '~/screens/GameScreen';
-import HomeScreen from '~/screens/HomeScreen';
-import CreateProjectScreen from '~/screens/CreateProjectScreen';
-import ProfileScreen from '~/screens/ProfileScreen';
-import NotificationScreen from '~/screens/NotificationScreen';
-import SearchScreen from '~/screens/SearchScreen';
 import ContentNavigationBar from '~/components/ContentNavigationBar';
-import NowPlayingBar from '~/components/NowPlayingBar';
+import CreateProjectScreen from '~/screens/CreateProjectScreen';
 import EditPostScreen from '~/screens/EditPostScreen';
+import GameScreen from '~/screens/GameScreen';
+import GamesHomeScreen from '~/screens/GamesHomeScreen';
+import GameWindow from '~/native/gamewindow';
+import HistoryScreen from '~/screens/HistoryScreen';
+import NotificationScreen from '~/screens/NotificationScreen';
+import NowPlayingBar from '~/components/NowPlayingBar';
+import ProfileScreen from '~/screens/ProfileScreen';
+import SearchScreen from '~/screens/SearchScreen';
 import SignInScreen from '~/screens/SignInScreen';
 
 const STYLES_CONTAINER_FLUID = css`
@@ -100,19 +101,20 @@ class ContentContainer extends React.Component {
   _renderContent = (mode) => {
     if (mode === 'game') {
       return <GameScreen isFullScreen={this.props.isFullScreen} />;
-    } else if (mode === 'home' || mode === 'history' || mode === 'examples') {
+    } else if (mode === 'home') {
       return (
-        <HomeScreen
+        <GamesHomeScreen
           trendingGames={this.props.trendingGames}
           gamesUnderConstruction={this.props.gamesUnderConstruction}
           newestGames={this.props.newestGames}
           randomGames={this.props.randomGames}
           featuredExamples={this.props.featuredExamples}
-          timeLastNavigated={this.props.timeLastNavigated}
           viewer={this.props.viewer}
           mode={mode}
         />
       );
+    } else if (mode === 'history') {
+      return <HistoryScreen />;
     } else if (mode === 'chat') {
       return <ChatScreen />;
     } else if (mode === 'create') {

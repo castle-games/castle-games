@@ -5,8 +5,6 @@ import { css } from 'react-emotion';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigatorContext } from '~/contexts/NavigationContext';
 
-import GamesHomeScreen from '~/screens/GamesHomeScreen';
-import UIGameGrid from '~/components/reusable/UIGameGrid';
 import UIGameSet from '~/components/reusable/UIGameSet';
 
 const STYLES_CONTAINER = css`
@@ -36,17 +34,8 @@ const STYLES_HISTORY_CONTENT = css`
 
 class HomeScreen extends React.Component {
   static defaultProps = {
-    trendingGames: [],
-    gamesUnderConstruction: [],
-    newestGames: [],
-    randomGames: [],
-    featuredExamples: [],
     history: [],
     refreshHistory: async () => {},
-  };
-
-  state = {
-    gameInfoToShow: null,
   };
 
   componentDidMount() {
@@ -67,42 +56,22 @@ class HomeScreen extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
-        {mode === 'posts' ? (
-          <UIPostList
+        <div className={STYLES_HISTORY_CONTENT}>
+          <div className={STYLES_SECTION_TITLE}>History</div>
+          <UIGameSet
             viewer={this.props.viewer}
+            gameItems={recentGames}
             onUserSelect={this.props.navigateToUserProfile}
             onGameSelect={this._navigateToGame}
             onSignInSelect={this.props.navigateToSignIn}
           />
-        ) : null}
-        {mode === 'home' ? <GamesHomeScreen {...this.props} /> : null}
-        {mode === 'examples' ? (
-          <UIGameGrid
-            viewer={this.props.viewer}
-            gameItems={this.props.featuredExamples}
-            onUserSelect={this.props.navigateToUserProfile}
-            onGameSelect={this._navigateToGame}
-            onSignInSelect={this.props.navigateToSignIn}
-          />
-        ) : null}
-        {mode === 'history' ? (
-          <div className={STYLES_HISTORY_CONTENT}>
-            <div className={STYLES_SECTION_TITLE}>History</div>
-            <UIGameSet
-              viewer={this.props.viewer}
-              gameItems={recentGames}
-              onUserSelect={this.props.navigateToUserProfile}
-              onGameSelect={this._navigateToGame}
-              onSignInSelect={this.props.navigateToSignIn}
-            />
-          </div>
-        ) : null}
+        </div>
       </div>
     );
   }
 }
 
-export default class HomeScreenWithContext extends React.Component {
+export default class HistoryScreenWithContext extends React.Component {
   render() {
     return (
       <NavigatorContext.Consumer>

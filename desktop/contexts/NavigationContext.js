@@ -22,7 +22,7 @@ import Logs from '~/common/logs';
  *  should have an effect on values here.
  */
 const NavigationContextDefaults = {
-  contentMode: 'home', // chat | game | profile | home | signin | notifications | create | edit_post
+  contentMode: 'home', // chat | game | profile | home | signin | notifications | create | edit_post | history
   timeLastNavigated: 0,
   gameUrl: '',
   game: null,
