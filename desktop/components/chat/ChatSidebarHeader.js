@@ -53,16 +53,6 @@ export default class ChatHeader extends React.Component {
             Back
           </UINavigationLink>
         </div>
-        <UINavigationLink
-          style={{
-            padding: '0 24px 0 24px',
-            height: 32,
-            display: 'inline-flex',
-            alignItems: 'center',
-          }}
-          onClick={this.props.onThemeClick}>
-          Toggle Theme
-        </UINavigationLink>
       </header>
     );
   }
