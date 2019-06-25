@@ -70,7 +70,7 @@ export default class ChatMessages extends React.Component {
       }
 
       const user = this.props.social.userIdToUser[m.fromUserId];
-      if (m.text.startsWith('/me')) {
+      if (m.text && m.text.startsWith('/me')) {
         return (
           <ChatRolePlayElement
             key={`chat-roleplay-${i}`}
@@ -86,7 +86,7 @@ export default class ChatMessages extends React.Component {
       }
 
       let previousMessage = this.props.messages[i - 1];
-      if (previousMessage && !previousMessage.text.startsWith('/me')) {
+      if (previousMessage && previousMessage.text && !previousMessage.text.startsWith('/me')) {
         if (previousMessage.fromUserId === m.fromUserId) {
           return (
             <ChatMessageElementSameUser
