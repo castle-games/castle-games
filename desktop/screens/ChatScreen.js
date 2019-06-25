@@ -21,6 +21,8 @@ import ChatMembers from '~/components/chat/ChatMembers';
 import ChatInput from '~/components/chat/ChatInput';
 import ChatOptions from '~/components/chat/ChatOptions';
 
+const DIRECT_MESSAGE_PREFIX = 'dm-';
+
 const STYLES_CONTAINER_BASE = `
   display: flex;
   align-items: flex-start;
@@ -145,7 +147,16 @@ class ChatScreen extends React.Component {
         return;
       }
 
-      this.props.chat.handleSendChannelMessage(this.state.value);
+      let user;
+      if (this.props.chat.channel.channelId.startsWith(DIRECT_MESSAGE_PREFIX)) {
+        const channelUserIds = this.props.chat.channel.channelId
+          .replace(DIRECT_MESSAGE_PREFIX, '')
+          .split(',');
+        const otherUserId = channelUserIds.find((id) => id !== this.props.viewer.userId);
+        user = this.props.social.userIdToUser[otherUserId];
+      }
+
+      this.props.chat.handleSendChannelMessage(this.state.value, user);
       this.clear();
       this.setState({ value: '', users: [] });
     }

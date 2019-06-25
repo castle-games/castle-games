@@ -33,7 +33,7 @@ const ChatSessionContext = React.createContext({
   channel: null,
   handleConnect: (channel) => {},
   handleConnectGameContext: (channel) => {},
-  handleSendChannelMessage: (text) => {},
+  handleSendChannelMessage: (text, user) => {},
   animating: 2,
 });
 
@@ -221,7 +221,7 @@ class ChatSessionContextManager extends React.Component {
     this._firstLoadComplete = false;
   };
 
-  _handleSendChannelMessage = async (message) => {
+  _handleSendChannelMessage = async (message, user) => {
     if (Strings.isEmpty(message)) {
       return;
     }
@@ -233,6 +233,13 @@ class ChatSessionContextManager extends React.Component {
     //   { text: 'world' }
     // ]
     message = await ChatUtilities.formatMessageAsync(message, this.props.usernameToUser);
+
+    if (user) {
+      return ChatActions.sendUserChatMessage({
+        otherUserId: user.userId,
+        message,
+      });
+    }
 
     ChatActions.sendChannelChatMessage({ message, channelId: this.state.channel.channelId });
   };
@@ -313,6 +320,7 @@ class ChatSessionContextManager extends React.Component {
 
     for (let ii = 0, nn = allMessages.length; ii < nn; ii++) {
       const m = allMessages[ii];
+
       // TODO(jim): This closure should not have to exist
       // but it resolves some issues for now.
       if (m.channelId.startsWith(DIRECT_MESSAGE_PREFIX)) {
