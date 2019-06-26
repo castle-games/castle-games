@@ -43,32 +43,6 @@ const STYLES_ANCHOR = css`
   }
 `;
 
-export const matchEmoji = (text) => {
-  let isEmojiMessage = false;
-  let matchCount = 0;
-
-  let parsedText = StringReplace(text, /(:(?![\n])[()#$@-\w]+:)/g, (match, i) => {
-    const emojiString = replaceAll(match, ':', '');
-
-    let emoji;
-    if (isEmoji(emojiString)) {
-      matchCount = matchCount + 1;
-      isEmojiMessage = matchCount === 1 && `${match}` === text[0];
-      emoji = emojiToString(emojiString);
-    }
-
-    return (
-      <span
-        key={`chat-emoji-${match + i}`}
-        style={{ lineHeight: 0.8, display: 'inline-block', verticalAlign: 'middle' }}>
-        {emoji}
-      </span>
-    );
-  });
-
-  return { isEmojiMessage, text: parsedText };
-};
-
 export const matchCastleURL = (text, social, navigator) => {
   return StringReplace(text, /(castle:\/\/\S+)/g, (match, i) => {
     const urlData = URLS.getCastleUrlInfo(match);
