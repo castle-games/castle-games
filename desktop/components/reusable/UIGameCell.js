@@ -9,6 +9,8 @@ import * as SVG from '~/components/primitives/svg';
 import { css } from 'react-emotion';
 import { Tooltip } from 'react-tippy';
 
+// NOTE(jim): This needs to be revised so that we're not animating padding
+// but we're doing a transform for performance to make use of the compositor.
 const STYLES_CONTAINER = css`
   display: inline-block;
   position: relative;
@@ -21,10 +23,21 @@ const STYLES_CONTAINER = css`
   figure {
     border-radius: ${Constants.card.radius};
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+    transition: 80 ease all;
+  }
+
+  section {
+    transition: 195ms ease all;
+    padding: 12px 0px 8px 0px;
   }
 
   :hover {
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+
+    section {
+      padding: 12px 0px 8px 8px;
+    }
+
     figure {
       border-radius: ${Constants.card.radius} ${Constants.card.radius} 0px 0px;
       box-shadow: none;
@@ -376,7 +389,7 @@ export default class UIGameCell extends React.Component {
           )}
         </div>
 
-        <div
+        <section
           className={STYLES_DETAIL_SECTION}
           style={{ borderTop: this.isHoveringOnPlay ? '1px solid #EAEAEB' : 'none' }}>
           {!this.state.isShowingGameInfo ? (
@@ -405,7 +418,7 @@ export default class UIGameCell extends React.Component {
             style={{ visibility: this.state.isHoveringOnPlay ? 'visible' : 'hidden' }}>
             <SVG.Play style={{ width: 16, height: 16 }} />
           </div>
-        </div>
+        </section>
 
         {this.state.isHoveringOnPlay ? (
           <div className={STYLES_OPTIONS_BAR}>
