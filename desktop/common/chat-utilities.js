@@ -69,31 +69,50 @@ export const matchEmoji = (text) => {
   return { isEmojiMessage, text: parsedText };
 };
 
-export const matchURL = (text, social, navigator) => {
-  return StringReplace(
-    text,
-    /(\b(https?|castle|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gi,
-    (match, i) => {
-      const urlData = URLS.getCastleUrlInfo(match);
-      if (urlData.type) {
-        return (
-          <ChatPost
-            key={`chat-embed-${match + i}`}
-            social={social}
-            message={{ text: match }}
-            navigator={navigator}
-            urlData={urlData}
-          />
-        );
-      }
-
+export const matchCastleURL = (text, social, navigator) => {
+  return StringReplace(text, /(castle:\/\/\S+)/g, (match, i) => {
+    const urlData = URLS.getCastleUrlInfo(match);
+    if (urlData.type) {
       return (
-        <a className={STYLES_ANCHOR} key={match + i} href={match}>
-          {match}
-        </a>
+        <ChatPost
+          key={`chat-embed-${match + i}`}
+          social={social}
+          message={{ text: match }}
+          navigator={navigator}
+          urlData={urlData}
+        />
       );
     }
-  );
+
+    return (
+      <a className={STYLES_ANCHOR} key={match + i} href={match}>
+        {match}
+      </a>
+    );
+  });
+};
+
+export const matchURL = (text, social, navigator) => {
+  return StringReplace(text, /(https?:\/\/\S+)/g, (match, i) => {
+    const urlData = URLS.getCastleUrlInfo(match);
+    if (urlData.type) {
+      return (
+        <ChatPost
+          key={`chat-embed-${match + i}`}
+          social={social}
+          message={{ text: match }}
+          navigator={navigator}
+          urlData={urlData}
+        />
+      );
+    }
+
+    return (
+      <a className={STYLES_ANCHOR} key={match + i} href={match}>
+        {match}
+      </a>
+    );
+  });
 };
 
 export const matchMention = (text, onClick) => {
