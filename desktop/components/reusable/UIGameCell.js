@@ -12,19 +12,23 @@ import { Tooltip } from 'react-tippy';
 const STYLES_CONTAINER = css`
   display: inline-block;
   position: relative;
-  margin-left: -4px;
-  margin-bottom: 8px;
-  padding: 8px 6px 8px 8px;
   cursor: pointer;
-  background: ${Constants.colors.background};
-
+  background: transparent;
+  margin: 0 16px 16px 0;
   border-radius: ${Constants.card.radius};
-  transition: 95ms ease-out transform;
+  transition: 195ms ease all;
+
+  figure {
+    border-radius: ${Constants.card.radius};
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  }
+
   :hover {
-    transition: 10ms ease-in transform;
-    box-shadow: ${Constants.card.boxShadow};
-    background: ${Constants.card.background};
-    z-index: 1;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    figure {
+      border-radius: ${Constants.card.radius} ${Constants.card.radius} 0px 0px;
+      box-shadow: none;
+    }
   }
 `;
 
@@ -36,7 +40,6 @@ const STYLES_TOP_SECTION = css`
 const STYLES_GAME_SCREENSHOT = css`
   width: ${Constants.card.width};
   height: ${Constants.card.imageHeight};
-  border-radius: ${Constants.card.radius} ${Constants.card.radius} 0px 0px;
   cursor: pointer;
   background-size: cover;
   background-position: 50% 50%;
@@ -44,14 +47,16 @@ const STYLES_GAME_SCREENSHOT = css`
 `;
 
 const STYLES_PLAY_ICON = css`
-  width: 18px;
-  height: 18px;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   color: ${Constants.card.iconColor};
-  margin: 10px 0px 0px auto;
 `;
 
 const STYLES_PLAY_HOVER = css`
-  cursor: pointer;
   @keyframes button-color-change {
     0% {
       color: ${Constants.colors.brand4};
@@ -63,6 +68,8 @@ const STYLES_PLAY_HOVER = css`
       color: ${Constants.colors.brand2};
     }
   }
+
+  cursor: pointer;
   animation: button-color-change infinite 400ms;
   color: white;
 `;
@@ -71,34 +78,31 @@ const STYLES_OPTIONS_BAR = css`
   display: flex;
   flex-direction: row;
   align-items: center;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(0, 0, 0, 0.95);
   color: #7f7f7f;
   border-radius: 4px;
-  border: 1px solid #cdcdcd;
-  height: 36px;
-  position: absolute;
-  right: 8px;
+  box-shadow: 0 0 0 1px #333;
+  height: 32px;
   top: 8px;
+  right: 8px;
+  position: absolute;
   cursor: pointer;
-  :hover {
-    box-shadow: ${Constants.card.boxShadow};
-  }
 `;
 
-const STYLES_INFO = css`
-  display: flex;
+const STYLES_OPTIONS_BAR_ICON = css`
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   :hover {
     color: magenta;
   }
 `;
 
 const STYLES_DESCRIPTION_SECTION = css`
+  padding: 12px 16px 8px 16px;
   font-family: ${Constants.font.system};
-  padding: 8px 12px 12px 12px;
 `;
 
 const STYLES_GAME_DESCRIPTION_HEADER = css`
@@ -109,20 +113,10 @@ const STYLES_GAME_DESCRIPTION_HEADER = css`
 `;
 
 const STYLES_GAME_DESCRIPTION = css`
+  margin-top: 16px;
   font-size: 14px;
+  line-height: 1.5;
   font-weight: 400;
-  margin-top: 8px;
-`;
-
-const STYLES_LINK_BUTTON = css`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  :hover {
-    color: magenta;
-  }
 `;
 
 const STYLES_COPY_LINK_CONTENTS = css`
@@ -137,19 +131,21 @@ const STYLES_COPY_LINK_CONTENTS = css`
 const STYLES_DETAIL_SECTION = css`
   display: flex;
   flex-direction: row;
-  padding: 8px 12px 4px 1px;
-  border-radius: 0px 0px ${Constants.card.radius} ${Constants.card.radius};
-  min-height: 48px;
+  padding: 12px 0px 8px 8px;
 `;
 
 const STYLES_TITLE_AND_PLAY = css`
   display: flex;
   flex-direction: row;
+  line-height: 0.8;
+  margin-bottom: 4px;
 `;
 
 const STYLES_GAME_TITLE_AND_AUTHOR = css`
   display: flex;
   flex-direction: column;
+  width: 100%;
+  min-width: 25%;
 `;
 
 const STYLES_GAME_TITLE = css`
@@ -170,10 +166,9 @@ const STYLES_AVATAR = css`
   height: 24px;
   border-radius: 4px;
   cursor: pointer;
-  margin-right: 8px;
-  cursor: pointer;
   flex-shrink: 0;
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
+  margin-right: 8px;
 `;
 
 const STYLES_BYLINE = css`
@@ -310,7 +305,7 @@ export default class UIGameCell extends React.Component {
     const hoveringOnDetailIcon =
       this.state.isHoveringOnInfo || this.state.isHoveringOnLink || this.state.isHoveringOnAuthor;
     let descriptionText = game.description
-      ? Strings.elide(game.description, 260)
+      ? Strings.elide(game.description, 180)
       : 'No description yet :)';
     let username, playCount;
 
@@ -371,7 +366,7 @@ export default class UIGameCell extends React.Component {
               </div>
             </div>
           ) : (
-            <div
+            <figure
               className={STYLES_GAME_SCREENSHOT}
               style={{
                 backgroundImage: this.props.src ? `url(${this.props.src})` : null,
@@ -408,7 +403,7 @@ export default class UIGameCell extends React.Component {
                 : STYLES_PLAY_ICON
             }
             style={{ visibility: this.state.isHoveringOnPlay ? 'visible' : 'hidden' }}>
-            <SVG.Play size="32px" />
+            <SVG.Play style={{ width: 16, height: 16 }} />
           </div>
         </div>
 
@@ -422,11 +417,11 @@ export default class UIGameCell extends React.Component {
                 animation="fade"
                 hideOnClick={false}>
                 <div
-                  className={STYLES_INFO}
+                  className={STYLES_OPTIONS_BAR_ICON}
                   onMouseEnter={() => this._handleToggleHoverOnInfo(true)}
                   onMouseLeave={() => this._handleToggleHoverOnInfo(false)}
                   onClick={() => this._handleToggleShowGameInfo(!shouldShowGameInfo)}>
-                  {shouldShowGameInfo ? <SVG.Image size="18px" /> : <SVG.Info height="18px" />}
+                  {shouldShowGameInfo ? <SVG.Image size="14px" /> : <SVG.Info height="14px" />}
                 </div>
               </Tooltip>
             ) : null}
@@ -437,18 +432,18 @@ export default class UIGameCell extends React.Component {
               animation="fade"
               hideOnClick={false}>
               <div
-                className={STYLES_LINK_BUTTON}
-                style={{ borderLeft: isLocalFile ? null : '1px solid #CDCDCD' }}
+                className={STYLES_OPTIONS_BAR_ICON}
+                style={{ borderLeft: isLocalFile ? null : '1px solid #333' }}
                 onMouseEnter={() => this._handleToggleHoverOnLink(true)}
                 onMouseLeave={() => this._handleToggleHoverOnLink(false)}
                 onClick={this._handleCopyUrlToClipboard}>
                 {this.state.gameUrlWasCopiedToClipboard ? (
                   <div className={STYLES_COPY_LINK_CONTENTS}>
-                    <SVG.Check size="24px" />
+                    <SVG.Check size="18px" />
                   </div>
                 ) : (
                   <div className={STYLES_COPY_LINK_CONTENTS}>
-                    <SVG.Link size="24px" />
+                    <SVG.Link size="18px" />
                   </div>
                 )}
               </div>
