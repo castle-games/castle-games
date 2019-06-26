@@ -32,7 +32,7 @@ const STYLES_CONTAINER = css`
   }
 
   :hover {
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.14);
 
     section {
       padding: 12px 0px 8px 8px;
