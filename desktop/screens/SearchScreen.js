@@ -108,7 +108,7 @@ export default class SearchScreen extends React.Component {
     } else {
       this.setState({ isLoading: true });
       const results = await Actions.search(query);
-      if (this._mounted && results && results.query === this.props.query) {
+      if (this._mounted && results && results.query === query) {
         this.setState({
           isLoading: false,
           results,
