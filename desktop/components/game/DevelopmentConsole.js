@@ -101,7 +101,8 @@ export default class DevelopmentConsole extends React.Component {
         <UINavigationLink
           onClick={() =>
             this.context.setters.setIsMultiplayerCodeUploadEnabled(!isMultiplayerCodeUploadEnabled)
-          }>
+          }
+          style={{ marginRight: 24 }}>
           {isMultiplayerCodeUploadEnabled
             ? 'Disable Multiplayer Auto Upload'
             : 'Enable Multiplayer Auto Upload'}
