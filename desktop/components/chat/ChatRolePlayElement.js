@@ -82,7 +82,7 @@ export default class ChatMessageElement extends React.Component {
 
   render() {
     let text = '';
-    let isEmojiMessage = false;
+    let isEmojiMessage = this.props.message.isEmojiMessage;
 
     if (!Strings.isEmpty(this.props.message.text)) {
       text = this.props.message.text.replace('/me ', '');

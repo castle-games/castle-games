@@ -371,6 +371,16 @@ class ChatSessionContextManager extends React.Component {
 
       let text = '';
       let mentionsForViewer = [];
+      let isEmojiMessage = false;
+
+      if (messageJSON.message) {
+        if (messageJSON.message.length === 1) {
+          if (messageJSON.message[0].emoji) {
+            isEmojiMessage = true;
+          }
+        }
+      }
+
       messageJSON.message.forEach(async (part) => {
         if (part.emoji) {
           text = `${text}${emojiToString(part.emoji)}`;
@@ -426,6 +436,7 @@ class ChatSessionContextManager extends React.Component {
         chatMessageId: m.chatMessageId,
         text: text,
         timestamp: m.timestamp,
+        isEmojiMessage,
       });
     }
 
