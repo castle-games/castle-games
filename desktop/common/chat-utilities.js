@@ -199,6 +199,30 @@ export const formatMessageAsync = async (message, cache) => {
       }
 
       i = j + 1;
+    } else if (message.charAt(i) === ':') {
+      let j = i + 1;
+      while (message.charAt(j) !== ':' && j < message.length) {
+        j++;
+      }
+
+      let emojiBody = message.substr(i + 1, j - i - 1);
+      if (isEmoji(emojiBody)) {
+        if (i > start) {
+          items.push({
+            text: message.substr(start, i - start),
+          });
+        }
+
+        items.push({
+          emoji: emojiBody,
+        });
+
+        // +1 for the last :
+        i = j + 1;
+        start = i;
+      } else {
+        i++;
+      }
     } else {
       i++;
     }

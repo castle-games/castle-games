@@ -10,6 +10,8 @@ import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { SocialContext } from '~/contexts/SocialContext';
 import { NativeBinds } from '~/native/nativebinds';
 
+import { isEmoji, emojiToString } from '~/common/emojis';
+
 import StringReplace from 'react-string-replace';
 
 const GENERAL_CHANNEL_ID = `channel-79c91814-c73e-4d07-8bc6-6829fad03d72`;
@@ -370,6 +372,11 @@ class ChatSessionContextManager extends React.Component {
       let text = '';
       let mentionsForViewer = [];
       messageJSON.message.forEach(async (part) => {
+        if (part.emoji) {
+          text = `${text}${emojiToString(part.emoji)}`;
+          return;
+        }
+
         if (part.userId) {
           const shouldNotifyViewerOfMention =
             notificationLevel === NotificationLevel.TAG &&
