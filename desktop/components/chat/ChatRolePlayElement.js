@@ -22,7 +22,6 @@ const STYLES_AVATAR = css`
   background-position: 50% 50%;
   height: 20px;
   width: 20px;
-  background-color: #f3f3f3;
   cursor: pointer;
   border-radius: 4px;
 `;

@@ -22,7 +22,6 @@ const STYLES_LEFT = css`
   background-position: 50% 50%;
   height: 40px;
   width: 40px;
-  background-color: #f3f3f3;
   cursor: pointer;
   border-radius: 4px;
 `;
