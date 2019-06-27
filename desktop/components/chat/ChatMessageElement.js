@@ -89,7 +89,10 @@ export default class ChatMessageElement extends React.Component {
     const channel = this.props.social.findChannel({ name });
 
     if (channel) {
-      await this.props.chat.handleConnect(channel);
+      if (this.props.chat) {
+        await this.props.chat.handleConnect(channel);
+      }
+
       this.props.navigator.navigateToChat();
     }
   };

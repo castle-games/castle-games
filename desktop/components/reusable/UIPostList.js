@@ -159,7 +159,7 @@ const STYLES_COPY_LINK_CONTENTS = css`
   height: 36px;
 `;
 
-class UIPostCell extends React.Component {
+export class UIPostCell extends React.Component {
   static defaultProps = {
     game: null,
     onGameSelect: () => {},
@@ -296,7 +296,8 @@ class UIPostCell extends React.Component {
         }}
         onMouseEnter={() => this._handleToggleHoverOnPost(true)}
         onMouseLeave={() => this._handleMouseLeave()}
-        onMouseMove={this._handleMouseMove}>
+        onMouseMove={this._handleMouseMove}
+        style={this.props.style}>
         <section>
           <ChatMessageElement
             onNavigateToUserProfile={this._handleUserSelect}

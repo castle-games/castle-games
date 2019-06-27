@@ -6,6 +6,7 @@ import * as Actions from '~/common/actions';
 import { css } from 'react-emotion';
 
 import UIGameCell from '~/components/reusable/UIGameCell';
+import { UIPostCell } from '~/components/reusable/UIPostList';
 
 const STYLES_OUTER = css`
   flex-shrink: 0;
@@ -37,6 +38,16 @@ const STYLES_CONTAINER = css`
   :hover {
     transform: scale(1.025);
   }
+`;
+
+const STYLES_POST_CELL_CONTAINER = css`
+  padding: 16px;
+  display: inline-block;
+  border: 1px solid #ececec;
+  max-width: 532px;
+  border-radius: 2px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+  width: 100%;
 `;
 
 const STYLES_SECTION = css`
@@ -161,42 +172,16 @@ export default class ChatPost extends React.Component {
 
   render() {
     if (this.state.post) {
-      const { creator, sourceGame, message } = this.state.post;
-
-      const gameMediaURL = this.state.post.media.url;
-
-      let text = this.props.message.text;
-      if (message && message.message[0]) {
-        text = message.message[0].text;
-      }
-
       return (
-        <div className={STYLES_OUTER}>
-          <div className={STYLES_CONTAINER} style={{ backgroundImage: `url(${gameMediaURL})` }}>
-            <div className={STYLES_SECTION}>
-              <div className={STYLES_POST} onClick={this._handleNavigateToGame}>
-                {text}
-              </div>
-              <div className={STYLES_ACTIONS}>
-                <div
-                  className={STYLES_ACTION_ITEM}
-                  onClick={() => this._handleNavigateToUser(creator)}>
-                  <span
-                    className={STYLES_ICON}
-                    style={{ backgroundImage: `url(${creator.photo.url})` }}
-                  />
-                  <span className={STYLES_TEXT}>{creator.username}</span>
-                </div>
-                <span className={STYLES_ACTION_ITEM} onClick={this._handleNavigateToGame}>
-                  <span
-                    className={STYLES_ICON}
-                    style={{ backgroundImage: `url(${sourceGame.coverImage.url})` }}
-                  />
-                  <span className={STYLES_TEXT}>{sourceGame.title}</span>
-                </span>
-              </div>
-            </div>
-          </div>
+        <div className={STYLES_POST_CELL_CONTAINER}>
+          <UIPostCell
+            post={this.state.post}
+            social={this.props.social}
+            navigator={this.props.navigator}
+            onGameSelect={this._handleNavigateToGame}
+            onUserSelect={this._handleNavigateToUser}
+            style={{ margin: 0 }}
+          />
         </div>
       );
     }
