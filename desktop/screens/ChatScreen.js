@@ -184,7 +184,10 @@ class ChatScreen extends React.Component {
           <ChatHeaderActive onDismiss={this._handleResetChatWindow}>
             Channel Settings
           </ChatHeaderActive>
-          <ChatOptions onLeaveChannel={this._handleLeaveChannel} />
+          <ChatOptions
+            onLeaveChannel={this._handleLeaveChannel}
+            channel={this.props.chat.channel}
+          />
         </div>
       );
     }

@@ -31,6 +31,7 @@ const STYLES_HEADER_RIGHT = css`
   transition: 200ms ease color;
   cursor: pointer;
   padding: 8px;
+  font-size: 14px;
 
   :hover {
     color: magenta;
@@ -49,7 +50,7 @@ export default class ChatHeaderActive extends React.Component {
           <h2 className={STYLES_H2}>{this.props.children}</h2>
         </div>
         <div className={STYLES_HEADER_RIGHT} onClick={this.props.onDismiss}>
-          <SVG.Dismiss size="16px" />
+          Return to chat
         </div>
       </header>
     );

@@ -3,6 +3,10 @@ import * as Constants from '~/common/constants';
 
 import { css } from 'react-emotion';
 
+import UIButton from '~/components/reusable/UIButton';
+
+const DIRECT_MESSAGE_PREFIX = 'dm-';
+
 const STYLES_CONTAINER = css`
   height: 100%;
   min-height: 25%;
@@ -26,11 +30,6 @@ const STYLES_CHANNEL_OPTION = css`
   transition: 200ms ease all;
   transition-property: color, background;
   cursor: pointer;
-
-  :hover {
-    color: ${Constants.colors.white};
-    background: magenta;
-  }
 `;
 
 const STYLES_CHANNEL_TITLE = css`
@@ -51,21 +50,38 @@ const STYLES_COLUMN = css`
 
 const ChannelOptionItem = (props) => {
   return (
-    <div className={STYLES_CHANNEL_OPTION} onClick={props.onClick}>
+    <div className={STYLES_CHANNEL_OPTION}>
       <h2 className={STYLES_CHANNEL_TITLE}>{props.title}</h2>
       <p className={STYLES_CHANNEL_PARAGRAPH}>{props.children}</p>
+      <div style={{ marginTop: 32 }}>
+        <UIButton onClick={props.onClick}>{props.buttonText}</UIButton>
+      </div>
     </div>
   );
 };
 
 export default class ChatOptions extends React.Component {
+  static defaultProps = {
+    channel: {
+      channelId: ``,
+    },
+  };
+
   render() {
+    let channelNoun = `channel`;
+    if (this.props.channel.channelId.startsWith(DIRECT_MESSAGE_PREFIX)) {
+      channelNoun = `direct messages`;
+    }
+
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_COLUMN}>
-          <ChannelOptionItem onClick={this.props.onLeaveChannel} title="Leave channel">
-            When you leave this channel, it will be removed from your sidebar and you will no longer
-            receive notifications.
+          <ChannelOptionItem
+            onClick={this.props.onLeaveChannel}
+            buttonText={`Remove ${channelNoun}`}
+            title={`Remove ${channelNoun}`}>
+            When you remove this {channelNoun}, it will be removed from your sidebar and you will no
+            longer receive notifications.
           </ChannelOptionItem>
         </div>
       </div>
