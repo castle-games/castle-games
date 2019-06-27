@@ -139,7 +139,7 @@ class GamesHomeScreen extends React.Component {
             />
           </div>
           <div className={STYLES_POSTS_CONTAINER}>
-            <div className={STYLES_SECTION_TITLE}>Posts</div>
+            <div className={STYLES_SECTION_TITLE}>What people are up to...</div>
             {maybePostList}
           </div>
         </div>
