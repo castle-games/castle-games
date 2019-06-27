@@ -39,6 +39,13 @@ const STYLES_COPY_LINK_CONTENTS = css`
   height: 36px;
 `;
 
+const TOOLTIP_PROPS = {
+  arrow: true,
+  duration: 170,
+  animation: 'fade',
+  hideOnClick: false,
+};
+
 export default class UIGameCellActionsBar extends React.Component {
   static defaultProps = {
     isLocalFile: false,
@@ -58,24 +65,14 @@ export default class UIGameCellActionsBar extends React.Component {
         onMouseEnter={() => onHover('update', true)}
         onMouseLeave={() => onHover('update', false)}>
         {onGameUpdate ? (
-          <Tooltip
-            title={'Update'}
-            arrow={true}
-            duration={170}
-            animation="fade"
-            hideOnClick={false}>
+          <Tooltip title={'Update'} {...TOOLTIP_PROPS}>
             <div className={STYLES_OPTIONS_BAR_ICON} onClick={onGameUpdate}>
               U
             </div>
           </Tooltip>
         ) : null}
         {!isLocalFile ? (
-          <Tooltip
-            title={isShowingInfo ? 'Show preview' : 'Show info'}
-            arrow={true}
-            duration={170}
-            animation="fade"
-            hideOnClick={false}>
+          <Tooltip title={isShowingInfo ? 'Show preview' : 'Show info'} {...TOOLTIP_PROPS}>
             <div
               className={STYLES_OPTIONS_BAR_ICON}
               onClick={() => this.props.onShowGameInfo(!isShowingInfo)}>
@@ -83,12 +80,7 @@ export default class UIGameCellActionsBar extends React.Component {
             </div>
           </Tooltip>
         ) : null}
-        <Tooltip
-          title={didCopyToClipboard ? 'Link copied!' : 'Copy Link'}
-          arrow={true}
-          duration={170}
-          animation="fade"
-          hideOnClick={false}>
+        <Tooltip title={didCopyToClipboard ? 'Link copied!' : 'Copy Link'} {...TOOLTIP_PROPS}>
           <div
             className={STYLES_OPTIONS_BAR_ICON}
             style={{ borderLeft: isLocalFile ? null : '1px solid #333' }}
