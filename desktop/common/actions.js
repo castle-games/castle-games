@@ -539,7 +539,7 @@ export async function logout() {
   return true;
 }
 
-export async function getGameByUrl(url) {
+export async function getGameByURL(url) {
   const variables = { url };
 
   let result = await API.graphqlAsync({

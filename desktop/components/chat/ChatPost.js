@@ -111,6 +111,9 @@ const STYLES_POST = css`
   }
 `;
 
+let gameCache = {};
+let postCache = {};
+
 export default class ChatPost extends React.Component {
   state = {};
 
@@ -133,12 +136,24 @@ export default class ChatPost extends React.Component {
     url = url.replace('castle://', 'http://');
 
     if (!this.props.urlData.postId) {
-      const game = await Actions.getGameByUrl(url);
-      this.setState({ game });
-      return;
+      let game = gameCache[url];
+      if (!game) {
+        game = await Actions.getGameByURL(url);
+        gameCache[url] = game;
+      }
+
+      if (game) {
+        this.setState({ game });
+        return;
+      }
     }
 
-    const post = await Actions.getPostById(this.props.urlData.postId);
+    let post = postCache[this.props.urlData.postId];
+    if (!post) {
+      post = await Actions.getPostById(this.props.urlData.postId);
+      postCache[this.props.urlData.postId] = post;
+    }
+
     if (post) {
       this.setState({ post });
     }
@@ -187,9 +202,15 @@ export default class ChatPost extends React.Component {
     }
 
     if (this.state.game) {
+      let coverImage;
+      if (this.state.game && this.state.game.coverImage) {
+        coverImage = this.state.game.coverImage.url;
+      }
+
       return (
         <UIGameCell
           game={this.state.game}
+          src={coverImage}
           onGameSelect={this._handleNavigateToGame}
           onUserSelect={this._handleNavigateToUser}
         />

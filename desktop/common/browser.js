@@ -75,7 +75,7 @@ async function resolveGameAtUrlAsync(gameUrl, opts = {}) {
 
   // always try to resolve from the server first
   try {
-    game = await Actions.getGameByUrl(gameUrl);
+    game = await Actions.getGameByURL(gameUrl);
   } catch (e) {
     game = null;
   }
