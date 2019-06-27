@@ -7,7 +7,8 @@ import * as NativeUtil from '~/native/nativeutil';
 import * as SVG from '~/components/primitives/svg';
 
 import { css } from 'react-emotion';
-import { Tooltip } from 'react-tippy';
+
+import UIGameCellActionsBar from '~/components/reusable/UIGameCellActionsBar';
 
 // NOTE(jim): This needs to be revised so that we're not animating padding
 // but we're doing a transform for performance to make use of the compositor.
@@ -87,32 +88,6 @@ const STYLES_PLAY_HOVER = css`
   color: white;
 `;
 
-const STYLES_OPTIONS_BAR = css`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  background: rgba(0, 0, 0, 0.95);
-  color: #7f7f7f;
-  border-radius: 4px;
-  box-shadow: 0 0 0 1px #333;
-  height: 32px;
-  top: 8px;
-  right: 8px;
-  position: absolute;
-  cursor: pointer;
-`;
-
-const STYLES_OPTIONS_BAR_ICON = css`
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  :hover {
-    color: magenta;
-  }
-`;
-
 const STYLES_DESCRIPTION_SECTION = css`
   padding: 12px 16px 8px 16px;
   font-family: ${Constants.font.system};
@@ -130,15 +105,6 @@ const STYLES_GAME_DESCRIPTION = css`
   font-size: 14px;
   line-height: 1.5;
   font-weight: 400;
-`;
-
-const STYLES_COPY_LINK_CONTENTS = css`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  font-size: 12px;
-  height: 36px;
 `;
 
 const STYLES_DETAIL_SECTION = css`
@@ -252,12 +218,15 @@ export default class UIGameCell extends React.Component {
     this.setState({ isShowingGameInfo: shouldShow });
   };
 
-  _handleToggleHoverOnInfo = (shouldSetHovering) => {
-    this.setState({ isHoveringOnInfo: shouldSetHovering });
-  };
-
-  _handleToggleHoverOnLink = (shouldSetHovering) => {
-    this.setState({ isHoveringOnLink: shouldSetHovering });
+  _handleHoverOnActionsBar = (action, isHovering) => {
+    switch (action) {
+      case 'info':
+        this.setState({ isHoveringOnInfo: isHovering });
+        break;
+      case 'copy-url':
+        this.setState({ isHoveringOnLink: isHovering });
+        break;
+    }
   };
 
   _handleToggleHoverOnAuthor = (shouldSetHovering) => {
@@ -423,47 +392,13 @@ export default class UIGameCell extends React.Component {
         </section>
 
         {this.state.isHoveringOnPlay ? (
-          <div className={STYLES_OPTIONS_BAR}>
-            {!isLocalFile ? (
-              <Tooltip
-                title={shouldShowGameInfo ? 'Show preview' : 'Show info'}
-                arrow={true}
-                duration={170}
-                animation="fade"
-                hideOnClick={false}>
-                <div
-                  className={STYLES_OPTIONS_BAR_ICON}
-                  onMouseEnter={() => this._handleToggleHoverOnInfo(true)}
-                  onMouseLeave={() => this._handleToggleHoverOnInfo(false)}
-                  onClick={() => this._handleToggleShowGameInfo(!shouldShowGameInfo)}>
-                  {shouldShowGameInfo ? <SVG.Image size="14px" /> : <SVG.Info height="14px" />}
-                </div>
-              </Tooltip>
-            ) : null}
-            <Tooltip
-              title={this.state.gameUrlWasCopiedToClipboard ? 'Link copied!' : 'Copy Link'}
-              arrow={true}
-              duration={170}
-              animation="fade"
-              hideOnClick={false}>
-              <div
-                className={STYLES_OPTIONS_BAR_ICON}
-                style={{ borderLeft: isLocalFile ? null : '1px solid #333' }}
-                onMouseEnter={() => this._handleToggleHoverOnLink(true)}
-                onMouseLeave={() => this._handleToggleHoverOnLink(false)}
-                onClick={this._handleCopyUrlToClipboard}>
-                {this.state.gameUrlWasCopiedToClipboard ? (
-                  <div className={STYLES_COPY_LINK_CONTENTS}>
-                    <SVG.Check size="18px" />
-                  </div>
-                ) : (
-                  <div className={STYLES_COPY_LINK_CONTENTS}>
-                    <SVG.Link size="18px" />
-                  </div>
-                )}
-              </div>
-            </Tooltip>
-          </div>
+          <UIGameCellActionsBar
+            isLocalFile={isLocalFile}
+            isShowingInfo={shouldShowGameInfo}
+            onShowGameInfo={this._handleToggleShowGameInfo}
+            onCopyUrl={this._handleCopyUrlToClipboard}
+            onHover={this._handleHoverOnActionsBar}
+          />
         ) : null}
       </div>
     );
