@@ -24,8 +24,6 @@ const NotificationLevel = {
   EVERY: 2,
 };
 
-const CHAT_SERVICE_URL = 'https://castle-chat.onrender.com';
-
 const sleep = async (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
@@ -208,7 +206,7 @@ class ChatSessionContextManager extends React.Component {
     }
 
     this._chat = new CastleChat();
-    this._chat.init(CHAT_SERVICE_URL, Constants.API_HOST, token);
+    this._chat.init(Constants.CHAT_SERVICE_URL, Constants.API_HOST, token);
     this._chat.setOnMessagesHandler(this._handleMessagesAsync);
     this._chat.setOnPresenceHandler(this._handlePresenceAsync);
     this._chat.setConnectionStatusHandler(this._handleConnectStatus);
