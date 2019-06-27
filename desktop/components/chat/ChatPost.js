@@ -5,6 +5,8 @@ import * as Actions from '~/common/actions';
 
 import { css } from 'react-emotion';
 
+import UIGameCell from '~/components/reusable/UIGameCell';
+
 const STYLES_OUTER = css`
   flex-shrink: 0;
   width: 100%;
@@ -186,15 +188,11 @@ export default class ChatPost extends React.Component {
 
     if (this.state.game) {
       return (
-        <div className={STYLES_OUTER} onClick={this._handleNavigateToGame}>
-          <div
-            className={STYLES_CONTAINER}
-            style={{ backgroundImage: `url(${this.state.game.coverImage.url})` }}>
-            <div className={STYLES_SECTION}>
-              <div className={STYLES_POST}>{this.state.game.title}</div>
-            </div>
-          </div>
-        </div>
+        <UIGameCell
+          game={this.state.game}
+          onGameSelect={this._handleNavigateToGame}
+          onUserSelect={this._handleNavigateToUser}
+        />
       );
     }
 
