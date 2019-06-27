@@ -165,13 +165,15 @@ export default class ChatPost extends React.Component {
       }
 
       return (
-        <UIGameCell
-          game={this.state.game}
-          src={coverImage}
-          onGameSelect={this._handleNavigateToGame}
-          onUserSelect={this._handleNavigateToUser}
-          theme={this.props.theme}
-        />
+        <div>
+          <UIGameCell
+            game={this.state.game}
+            src={coverImage}
+            onGameSelect={this._handleNavigateToGame}
+            onUserSelect={this._handleNavigateToUser}
+            theme={this.props.theme}
+          />
+        </div>
       );
     }
 

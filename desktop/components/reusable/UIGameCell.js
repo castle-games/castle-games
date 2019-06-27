@@ -222,6 +222,7 @@ export default class UIGameCell extends React.Component {
     onGameUpdate: null,
     renderCartridgeOnly: false,
     underConstruction: false,
+    theme: {},
   };
 
   state = {
@@ -390,7 +391,9 @@ export default class UIGameCell extends React.Component {
 
         <section
           className={STYLES_DETAIL_SECTION}
-          style={{ borderTop: this.isHoveringOnPlay ? '1px solid #EAEAEB' : 'none' }}>
+          style={{
+            background: !this.state.isHoveringOnPlay ? null : this.props.theme.embedBackground,
+          }}>
           {!this.state.isShowingGameInfo ? (
             <div className={STYLES_GAME_TITLE_AND_AUTHOR}>
               <div className={STYLES_TITLE_AND_PLAY}>
