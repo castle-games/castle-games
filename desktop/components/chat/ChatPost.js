@@ -48,6 +48,7 @@ const STYLES_POST_CELL_CONTAINER = css`
   border-radius: 2px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
   width: 100%;
+  background: #ffffff;
 `;
 
 const STYLES_SECTION = css`
@@ -63,51 +64,6 @@ const STYLES_SECTION = css`
   border-radius: 0px 0px 4px 4px;
   line-height: 1.5;
   background: linear-gradient(transparent, ${Constants.REFACTOR_COLORS.text});
-`;
-
-const STYLES_ACTIONS = css`
-  margin-top: 8px;
-  width: 100%;
-  flex-shrink: 0;
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  flex-direction: row;
-  flex-wrap: wrap;
-`;
-
-const STYLES_ACTION_ITEM = css`
-  margin-right: 24px;
-  margin-top: 8px;
-  height: 20px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: space-between;
-  cursor: pointer;
-  white-space: nowrap;
-  color: ${Constants.colors.white};
-  text-decoration: none;
-
-  :hover {
-    color: magenta;
-  }
-`;
-
-const STYLES_ICON = css`
-  background-color: ${Constants.REFACTOR_COLORS.text};
-  height: 20px;
-  width: 20px;
-  flex-shrink: 0;
-  margin-right: 8px;
-  background-size: cover;
-  background-position: 50% 50%;
-  border-radius: 2px;
-`;
-
-const STYLES_TEXT = css`
-  font-family: ${Constants.font.mono};
-  font-size: 10px;
-  text-transform: uppercase;
 `;
 
 const STYLES_POST = css`
@@ -126,6 +82,14 @@ let gameCache = {};
 let postCache = {};
 
 export default class ChatPost extends React.Component {
+  static defaultProps = {
+    theme: {
+      embedBorder: `1px solid #ececec`,
+      embedBackground: `#ffffff`,
+      embedBoxShadow: `0 1px 4px rgba(0, 0, 0, 0.07)`,
+    },
+  };
+
   state = {};
 
   _handleNavigateToUser = async (user) => {
@@ -173,7 +137,14 @@ export default class ChatPost extends React.Component {
   render() {
     if (this.state.post) {
       return (
-        <div className={STYLES_POST_CELL_CONTAINER}>
+        <div
+          className={STYLES_POST_CELL_CONTAINER}
+          style={{
+            border: this.props.theme.embedBorder,
+            background: this.props.theme.embedBackground,
+            boxShadow: this.props.theme.embedBoxShadow,
+            padding: this.props.theme.embedPadding,
+          }}>
           <UIPostCell
             post={this.state.post}
             social={this.props.social}
@@ -181,6 +152,7 @@ export default class ChatPost extends React.Component {
             onGameSelect={this._handleNavigateToGame}
             onUserSelect={this._handleNavigateToUser}
             style={{ margin: 0 }}
+            theme={this.props.theme}
           />
         </div>
       );
@@ -198,6 +170,7 @@ export default class ChatPost extends React.Component {
           src={coverImage}
           onGameSelect={this._handleNavigateToGame}
           onUserSelect={this._handleNavigateToUser}
+          theme={this.props.theme}
         />
       );
     }

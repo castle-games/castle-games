@@ -111,6 +111,10 @@ class ChatSidebar extends React.Component {
       textColor: Constants.colors.white,
       background: `#000000`,
       inputBackground: `#565656`,
+      embedBorder: `none`,
+      embedBackground: `#333`,
+      embedBoxShadow: `none`,
+      embedPadding: `8px 8px 8px 8px`,
     };
 
     if (!this.props.navigation.game) {

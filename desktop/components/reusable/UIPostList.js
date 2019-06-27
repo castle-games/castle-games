@@ -307,6 +307,7 @@ export class UIPostCell extends React.Component {
             chat={this.props.chat}
             user={creator}
             navigator={this.props.navigator}
+            theme={this.props.theme}
           />
         </section>
 

@@ -43,7 +43,7 @@ const STYLES_ANCHOR = css`
   }
 `;
 
-export const matchCastleURL = (text, social, navigator) => {
+export const matchCastleURL = (text, social, navigator, theme) => {
   return StringReplace(text, /(castle:\/\/\S+)/g, (match, i) => {
     const urlData = URLS.getCastleUrlInfo(match);
     if (urlData.type) {
@@ -54,6 +54,7 @@ export const matchCastleURL = (text, social, navigator) => {
           message={{ text: match }}
           navigator={navigator}
           urlData={urlData}
+          theme={theme}
         />
       );
     }
@@ -66,7 +67,7 @@ export const matchCastleURL = (text, social, navigator) => {
   });
 };
 
-export const matchURL = (text, social, navigator) => {
+export const matchURL = (text, social, navigator, theme) => {
   return StringReplace(text, /(https?:\/\/\S+)/g, (match, i) => {
     const urlData = URLS.getCastleUrlInfo(match);
     if (urlData.type) {
@@ -77,6 +78,7 @@ export const matchURL = (text, social, navigator) => {
           message={{ text: match }}
           navigator={navigator}
           urlData={urlData}
+          theme={theme}
         />
       );
     }
