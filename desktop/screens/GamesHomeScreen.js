@@ -117,6 +117,7 @@ class GamesHomeScreen extends React.Component {
           posts={posts}
           social={this.props.social}
           chat={this.props.chat}
+          navigator={this.props.navigator}
           onUserSelect={this.props.navigateToUserProfile}
           onGameSelect={this._navigateToGame}
         />
@@ -172,6 +173,7 @@ export default class GamesHomeScreenWithContext extends React.Component {
                               loadMorePosts={currentUser.loadMorePosts}
                               social={social}
                               chat={chat}
+                              navigator={navigator}
                               {...this.props}
                             />
                           );

@@ -201,8 +201,8 @@ class UIPostCell extends React.Component {
     this.props.onGameSelect(this.props.post.sourceGame);
   };
 
-  _handleUserSelect = () => {
-    this.props.onUserSelect(this.props.post.creator);
+  _handleUserSelect = (user) => {
+    this.props.onUserSelect(user ? user : this.props.post.creator);
   };
 
   _handleToggleHoverOnLink = (shouldSetHovering) => {
@@ -305,6 +305,7 @@ class UIPostCell extends React.Component {
             social={this.props.social}
             chat={this.props.chat}
             user={creator}
+            navigator={this.props.navigator}
           />
         </section>
 
@@ -377,6 +378,7 @@ export default class UIPostList extends React.Component {
               post={post}
               social={this.props.social}
               chat={this.props.chat}
+              navigator={this.props.navigator}
             />
           );
         })}
