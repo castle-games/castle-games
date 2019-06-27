@@ -1,6 +1,6 @@
 const USE_LOCAL_SERVER = false;
 
-export const API_HOST = USE_LOCAL_SERVER ? 'http://localhost:1380/' : 'https://api.castle.games';
+export const API_HOST = USE_LOCAL_SERVER ? 'http://localhost:1380' : 'https://api.castle.games';
 export const WEB_HOST = 'https://castle.games';
 export const CHAT_SERVICE_URL = USE_LOCAL_SERVER
   ? 'http://localhost:3003'
