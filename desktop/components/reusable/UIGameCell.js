@@ -195,8 +195,7 @@ export default class UIGameCell extends React.Component {
     mouseX: 0,
     mouseY: 0,
     isHoveringOnPlay: false,
-    isHoveringOnInfo: false,
-    isHoveringOnLink: false,
+    isHoveringOnActions: false,
     isHoveringOnAuthor: false,
     isShowingGameInfo: false,
     gameUrlWasCopiedToClipboard: false,
@@ -219,14 +218,7 @@ export default class UIGameCell extends React.Component {
   };
 
   _handleHoverOnActionsBar = (action, isHovering) => {
-    switch (action) {
-      case 'info':
-        this.setState({ isHoveringOnInfo: isHovering });
-        break;
-      case 'copy-url':
-        this.setState({ isHoveringOnLink: isHovering });
-        break;
-    }
+    this.setState({ isHoveringOnActions: isHovering });
   };
 
   _handleToggleHoverOnAuthor = (shouldSetHovering) => {
@@ -256,11 +248,7 @@ export default class UIGameCell extends React.Component {
   };
 
   _handleGameSelect = () => {
-    if (
-      this.state.isHoveringOnInfo ||
-      this.state.isHoveringOnLink ||
-      this.state.isHoveringOnAuthor
-    ) {
+    if (this.state.isHoveringOnActions || this.state.isHoveringOnAuthor) {
       return false;
     }
     this.props.onGameSelect(this.props.game);
@@ -276,6 +264,7 @@ export default class UIGameCell extends React.Component {
     let { game } = this.props;
     let { mouseX, mouseY } = this.state;
     let title = game.title ? game.title : 'Untitled';
+    let onGameUpdate = this.props.onGameUpdate ? () => this.props.onGameUpdate(game) : null;
 
     const backgroundColor =
       game.metadata && game.metadata.primaryColor ? `#${game.metadata.primaryColor}` : '#F4F4F5';
@@ -285,8 +274,7 @@ export default class UIGameCell extends React.Component {
       ? Utilities.colorLuminance(backgroundColor, 0.8)
       : backgroundColor;
 
-    const hoveringOnDetailIcon =
-      this.state.isHoveringOnInfo || this.state.isHoveringOnLink || this.state.isHoveringOnAuthor;
+    const hoveringOnDetailIcon = this.state.isHoveringOnActions || this.state.isHoveringOnAuthor;
     let descriptionText = game.description
       ? Strings.elide(game.description, 180)
       : 'No description yet :)';
@@ -395,6 +383,8 @@ export default class UIGameCell extends React.Component {
           <UIGameCellActionsBar
             isLocalFile={isLocalFile}
             isShowingInfo={shouldShowGameInfo}
+            didCopyToClipboard={this.state.gameUrlWasCopiedToClipboard}
+            onGameUpdate={onGameUpdate}
             onShowGameInfo={this._handleToggleShowGameInfo}
             onCopyUrl={this._handleCopyUrlToClipboard}
             onHover={this._handleHoverOnActionsBar}

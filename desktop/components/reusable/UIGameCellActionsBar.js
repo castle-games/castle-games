@@ -46,13 +46,29 @@ export default class UIGameCellActionsBar extends React.Component {
     didCopyToClipboard: false,
     onShowGameInfo: (showInfo) => {},
     onCopyUrl: () => {},
+    onGameUpdate: () => {},
     onHover: (action, isHovering) => {},
   };
 
   render() {
-    const { isLocalFile, isShowingInfo, didCopyToClipboard, onHover } = this.props;
+    const { isLocalFile, isShowingInfo, didCopyToClipboard, onGameUpdate, onHover } = this.props;
     return (
-      <div className={STYLES_OPTIONS_BAR}>
+      <div
+        className={STYLES_OPTIONS_BAR}
+        onMouseEnter={() => onHover('update', true)}
+        onMouseLeave={() => onHover('update', false)}>
+        {onGameUpdate ? (
+          <Tooltip
+            title={'Update'}
+            arrow={true}
+            duration={170}
+            animation="fade"
+            hideOnClick={false}>
+            <div className={STYLES_OPTIONS_BAR_ICON} onClick={onGameUpdate}>
+              U
+            </div>
+          </Tooltip>
+        ) : null}
         {!isLocalFile ? (
           <Tooltip
             title={isShowingInfo ? 'Show preview' : 'Show info'}
@@ -62,8 +78,6 @@ export default class UIGameCellActionsBar extends React.Component {
             hideOnClick={false}>
             <div
               className={STYLES_OPTIONS_BAR_ICON}
-              onMouseEnter={() => onHover('info', true)}
-              onMouseLeave={() => onHover('info', false)}
               onClick={() => this.props.onShowGameInfo(!isShowingInfo)}>
               {isShowingInfo ? <SVG.Image size="14px" /> : <SVG.Info height="14px" />}
             </div>
@@ -78,8 +92,6 @@ export default class UIGameCellActionsBar extends React.Component {
           <div
             className={STYLES_OPTIONS_BAR_ICON}
             style={{ borderLeft: isLocalFile ? null : '1px solid #333' }}
-            onMouseEnter={() => onHover('copy-url', true)}
-            onMouseLeave={() => onHover('copy-url', false)}
             onClick={this.props.onCopyUrl}>
             {didCopyToClipboard ? (
               <div className={STYLES_COPY_LINK_CONTENTS}>
