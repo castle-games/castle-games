@@ -4,6 +4,8 @@ import * as Constants from '~/common/constants';
 import { css } from 'react-emotion';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigatorContext } from '~/contexts/NavigationContext';
+import { SocialContext } from '~/contexts/SocialContext';
+import { ChatSessionContext } from '~/contexts/ChatSessionContext';
 
 import UIGameSet from '~/components/reusable/UIGameSet';
 import UIPostList from '~/components/reusable/UIPostList';
@@ -113,6 +115,8 @@ class GamesHomeScreen extends React.Component {
       maybePostList = (
         <UIPostList
           posts={posts}
+          social={this.props.social}
+          chat={this.props.chat}
           onUserSelect={this.props.navigateToUserProfile}
           onGameSelect={this._navigateToGame}
         />
@@ -150,18 +154,34 @@ export default class GamesHomeScreenWithContext extends React.Component {
       <NavigatorContext.Consumer>
         {(navigator) => (
           <CurrentUserContext.Consumer>
-            {(currentUser) => (
-              <GamesHomeScreen
-                viewer={currentUser ? currentUser.user : null}
-                navigateToUserProfile={navigator.navigateToUserProfile}
-                navigateToGame={navigator.navigateToGame}
-                navigateToSignIn={navigator.navigateToSignIn}
-                posts={currentUser.content.posts}
-                reloadPosts={currentUser.reloadPosts}
-                loadMorePosts={currentUser.loadMorePosts}
-                {...this.props}
-              />
-            )}
+            {(currentUser) => {
+              return (
+                <SocialContext.Consumer>
+                  {(social) => {
+                    return (
+                      <ChatSessionContext.Consumer>
+                        {(chat) => {
+                          return (
+                            <GamesHomeScreen
+                              viewer={currentUser ? currentUser.user : null}
+                              navigateToUserProfile={navigator.navigateToUserProfile}
+                              navigateToGame={navigator.navigateToGame}
+                              navigateToSignIn={navigator.navigateToSignIn}
+                              posts={currentUser.content.posts}
+                              reloadPosts={currentUser.reloadPosts}
+                              loadMorePosts={currentUser.loadMorePosts}
+                              social={social}
+                              chat={chat}
+                              {...this.props}
+                            />
+                          );
+                        }}
+                      </ChatSessionContext.Consumer>
+                    );
+                  }}
+                </SocialContext.Consumer>
+              );
+            }}
           </CurrentUserContext.Consumer>
         )}
       </NavigatorContext.Consumer>

@@ -375,6 +375,8 @@ export default class UIPostList extends React.Component {
               onGameSelect={this.props.onGameSelect}
               onUserSelect={this.props.onUserSelect}
               post={post}
+              social={this.props.social}
+              chat={this.props.chat}
             />
           );
         })}
