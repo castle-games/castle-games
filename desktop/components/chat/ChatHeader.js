@@ -94,7 +94,9 @@ export default class ChatHeader extends React.Component {
             </p>
           )}
         </div>
-        <div className={STYLES_HEADER_RIGHT} />
+        <div className={STYLES_HEADER_RIGHT} onClick={this.props.onSettingsClick}>
+          <SVG.Settings size="24px" />
+        </div>
       </header>
     );
   }
