@@ -49,7 +49,7 @@ export const matchCastleURL = (text, social, navigator) => {
     if (urlData.type) {
       return (
         <ChatPost
-          key={`chat-embed-${match + i}`}
+          key={`castle-chat-embed-${match + i}`}
           social={social}
           message={{ text: match }}
           navigator={navigator}
@@ -59,7 +59,7 @@ export const matchCastleURL = (text, social, navigator) => {
     }
 
     return (
-      <a className={STYLES_ANCHOR} key={match + i} href={match}>
+      <a className={STYLES_ANCHOR} key={`castle-anchor-${match + i}`} href={match}>
         {match}
       </a>
     );
@@ -72,7 +72,7 @@ export const matchURL = (text, social, navigator) => {
     if (urlData.type) {
       return (
         <ChatPost
-          key={`chat-embed-${match + i}`}
+          key={`url-chat-embed-${match + i}`}
           social={social}
           message={{ text: match }}
           navigator={navigator}
@@ -82,7 +82,7 @@ export const matchURL = (text, social, navigator) => {
     }
 
     return (
-      <a className={STYLES_ANCHOR} key={match + i} href={match}>
+      <a className={STYLES_ANCHOR} key={`url-${match + i}`} href={match}>
         {match}
       </a>
     );
@@ -91,7 +91,10 @@ export const matchURL = (text, social, navigator) => {
 
 export const matchMention = (text, onClick) => {
   return StringReplace(text, /@([a-zA-Z0-9_-]+)/g, (match, i) => (
-    <span className={STYLES_MENTION} key={match + i} onClick={() => onClick({ username: match })}>
+    <span
+      className={STYLES_MENTION}
+      key={`mention-${match + i}`}
+      onClick={() => onClick({ username: match })}>
       @{match}
     </span>
   ));
@@ -99,7 +102,10 @@ export const matchMention = (text, onClick) => {
 
 export const matchChannel = (text, onClick) => {
   return StringReplace(text, /#([a-zA-Z0-9_-]+)/g, (match, i) => (
-    <span className={STYLES_CHANNEL} key={match + i} onClick={() => onClick({ name: match })}>
+    <span
+      className={STYLES_CHANNEL}
+      key={`channel-${match + i}`}
+      onClick={() => onClick({ name: match })}>
       #{match}
     </span>
   ));

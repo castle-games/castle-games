@@ -350,7 +350,6 @@ export default class UIGameCell extends React.Component {
         onMouseMove={() => this._handleMouseMove()}
         onClick={this._handleGameSelect}
         style={{
-          transform: this.state.isHoveringOnPlay ? 'scale(1.006)' : 'scale(1.0)',
           background: this.state.isHoveringOnPlay
             ? `radial-gradient(at ${mouseX}% ${mouseY}%, #FCFCFD, ${Constants.card.background})`
             : 'transparent',

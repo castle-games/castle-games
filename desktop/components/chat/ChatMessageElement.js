@@ -107,7 +107,7 @@ export default class ChatMessageElement extends React.Component {
     }
 
     return (
-      <div className={STYLES_CONTAINER}>
+      <div className={STYLES_CONTAINER} style={this.props.style}>
         <span
           className={STYLES_LEFT}
           onClick={

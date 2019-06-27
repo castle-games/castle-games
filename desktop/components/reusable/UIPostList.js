@@ -7,31 +7,27 @@ import { css } from 'react-emotion';
 import { getEmojiComponent } from '~/common/emojis';
 import { Tooltip } from 'react-tippy';
 
+import ChatMessageElement from '~/components/chat/ChatMessageElement';
+
 const STYLES_CONTAINER = css`
   display: flex;
   align-items: flex-start;
   flex-wrap: wrap;
-  margin-left: 12px;
+  padding: 16px 24px 16px 24px;
 `;
 
 const STYLES_POST = css`
   width: 100%;
-  margin: 0px 16px 16px 0px;
-  padding: 10px 12px 4px 12px;
   max-width: 500px;
-  min-height: 408px;
   display: inline-block;
   position: relative;
   color: black;
-  background: ${Constants.colors.background};
+  margin: 0 16px 48px 0;
 
-  border-radius: ${Constants.card.radius};
-  cursor: pointer;
-  transition: 110ms ease-out transform;
   :hover {
-    transition: 0ms ease-in transform;
-    background: ${Constants.card.background};
-    box-shadow: ${Constants.card.boxShadow};
+    footer {
+      background: rgba(0, 0, 0, 0.5);
+    }
   }
 `;
 
@@ -39,10 +35,12 @@ const STYLES_MEDIA_IMAGE = css`
   width: 100%;
   height: 100%;
   cursor: pointer;
+  border-radius: 4px 4px 4px 4px;
   background-color: black;
   background-size: contain;
   background-position: 50% 50%;
   background-repeat: no-repeat;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
   min-height: 300px;
 `;
 
@@ -51,20 +49,6 @@ const STYLES_POST_CARD = css`
   display: flex;
   flex-direction: column;
   position: relative;
-`;
-
-const STYLES_POST_HEADER = css`
-  display: flex;
-  flex-direction: row;
-  min-height: 38px;
-  font-size: 15px;
-  cursor: auto;
-  padding-top: 4px;
-  padding-bottom: 12px;
-`;
-
-const STYLES_MESSAGE_CONTAINER = css`
-  max-width: 384px;
 `;
 
 const STYLES_PLAYING = css`
@@ -83,49 +67,6 @@ const STYLES_PLAYING_TITLE = css`
   }
 `;
 
-const STYLES_USER_PHOTO = css`
-  background-size: cover;
-  background-position: 50% 50%;
-  height: 40px;
-  width: 40px;
-  border-radius: 4px;
-  cursor: pointer;
-  flex-shrink: 0;
-  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  :hover {
-    filter: brightness(110%);
-  }
-`;
-
-const STYLES_TEXT_CONTAINER = css`
-  display: flex;
-  flex-direction: column;
-  margin-left: 12px;
-`;
-
-const STYLES_USER_NAME = css`
-  font-family: ${Constants.font.system};
-  font-weight: 700;
-  cursor: pointer;
-  :hover {
-    text-decoration: underline;
-  }
-`;
-
-const STYLES_MESSAGE = css`
-  margin-top: 2px;
-  overflow-wrap: break-word;
-`;
-
-const STYLES_MESSAGE_SEE_MORE = css`
-  color: ${Constants.colors.action};
-  cursor: pointer;
-  :hover {
-    text-decoration: underline;
-  }
-`;
-
 const STYLE_HEADER_TEXT_TOP_ROW = css`
   margin-top: 1px;
 `;
@@ -136,54 +77,19 @@ const STYLES_FOOTER = css`
   align-items: center;
   justify-content: center;
   min-height: 48px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0 16px 0 16px;
+  transition: background 200ms ease;
+  background: rgba(0, 0, 0, 0);
 `;
 
 const STYLES_TIMESTAMP = css`
-  font-weight: 400;
-  font-size: 12px;
-  color: #b0b0b0;
-`;
-
-const STYLES_MESSAGE_MENTION = css`
-  @keyframes color-change {
-    from,
-    20%,
-    40%,
-    60%,
-    80%,
-    to {
-      animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
-    }
-    0% {
-      opacity: 0;
-      color: #000;
-      transform: scale3d(0.3, 0.3, 0.3);
-    }
-    20% {
-      transform: scale3d(1.1, 1.1, 1.1);
-    }
-    40% {
-      transform: scale3d(0.9, 0.9, 0.9);
-    }
-    60% {
-      opacity: 1;
-      transform: scale3d(1.03, 1.03, 1.03);
-    }
-    80% {
-      transform: scale3d(0.97, 0.97, 0.97);
-    }
-    to {
-      opacity: 1;
-      color: cyan;
-      transform: scale3d(1, 1, 1);
-    }
-  }
-  cursor: pointer;
-  display: inline-block;
-  font-weight: 900;
-  color: cyan;
-  animation: color-change 750ms;
-  animation-iteration-count: 1;
+  font-weight: 500;
+  font-size: 13px;
+  color: #ffffff;
 `;
 
 const STYLES_PLAY_ICON = css`
@@ -224,9 +130,10 @@ const STYLES_OPTIONS_BAR = css`
   border: 1px solid #cdcdcd;
   height: 36px;
   position: absolute;
-  right: 8px;
-  top: 8px;
+  right: 0px;
+  top: 0px;
   cursor: pointer;
+
   :hover {
     box-shadow: ${Constants.card.boxShadow};
   }
@@ -318,50 +225,29 @@ class UIPostCell extends React.Component {
   };
 
   _renderMessage = (message) => {
-    let result = [];
-    for (let i = 0; i < message.length; i++) {
-      let messagePart = message[i];
-      if (messagePart.text) {
-        if (this.state.stringIsElided && messagePart.text.length > 150) {
-          result.push(
-            <span key={i}>
-              {Strings.elide(messagePart.text, 100)}
-              <span className={STYLES_MESSAGE_SEE_MORE} onClick={this._handleExpandString}>
-                {' '}
-                see more
-              </span>
-            </span>
-          );
-          return result;
-        } else {
-          result.push(<span key={i}>{messagePart.text}</span>);
-        }
-      } else if (messagePart.userId) {
-        let isRealUser = !!this.props.social.userIdToUser[messagePart.userId];
-        let user = this.props.social.userIdToUser[messagePart.userId] || {
-          userId: messagePart.userId,
-          username: messagePart.userId,
-        };
+    let text = ``;
 
-        result.push(
-          <span
-            key={i}
-            className={STYLES_MESSAGE_MENTION}
-            onClick={
-              isRealUser ? () => this.props.navigateToUserProfile(user) : null
-            }>{`@${user.username}`}</span>
-        );
-      } else if (messagePart.emoji) {
-        result.push(<span key={i}>{getEmojiComponent(messagePart.emoji, 16)}</span>);
+    message.forEach((part) => {
+      if (part.emoji) {
+        text = `${text}${emojiToString(part.emoji)}`;
+        return;
       }
-    }
 
-    return result;
+      if (part.userId) {
+        const user = this.props.social.userIdToUser[part.userId];
+        const mentionString = user ? `@${user.username}` : `👤`;
+        text = `${text}${mentionString}`;
+        return;
+      }
+
+      text = `${text}${part.text}`;
+    });
+
+    return text;
   };
 
   _renderMessageContainer = (message, game) => {
-    let richMessage = message ? this._renderMessage(message) : null;
-    return <div className={STYLES_MESSAGE_CONTAINER}>{richMessage}</div>;
+    return message ? this._renderMessage(message) : ``;
   };
 
   render() {
@@ -380,7 +266,7 @@ class UIPostCell extends React.Component {
       onClick = this._handleGameSelect;
     }
 
-    let messageContainer = this._renderMessageContainer(message.message, sourceGame);
+    let text = this._renderMessageContainer(message.message, sourceGame);
 
     const { urlWasCopiedToClipboard } = this.state;
     let svg;
@@ -410,42 +296,27 @@ class UIPostCell extends React.Component {
         }}
         onMouseEnter={() => this._handleToggleHoverOnPost(true)}
         onMouseLeave={() => this._handleMouseLeave()}
-        onMouseMove={this._handleMouseMove}
-        style={{
-          transform: this.state.isHoveringOnPost ? 'scale(1.004)' : 'scale(1.0)',
-          background: this.state.isHoveringOnPost
-            ? `radial-gradient(at ${mouseX}% ${mouseY}%, #FCFCFD, ${Constants.card.background})`
-            : 'transparent',
-        }}>
-        <div className={STYLES_POST_CARD}>
-          <div className={STYLES_POST_HEADER}>
-            <div
-              className={STYLES_USER_PHOTO}
-              onClick={this._handleUserSelect}
-              style={{
-                backgroundImage:
-                  creator.photo && creator.photo.url ? `url(${creator.photo.url})` : null,
-              }}
-            />
-            <div className={STYLES_TEXT_CONTAINER}>
-              <div className={STYLE_HEADER_TEXT_TOP_ROW}>
-                <span className={STYLES_USER_NAME} onClick={this._handleUserSelect}>
-                  {creator.username}
-                </span>
-                {playing}
-              </div>
-              <div className={STYLES_MESSAGE}>{messageContainer}</div>
-            </div>
-          </div>
-        </div>
+        onMouseMove={this._handleMouseMove}>
+        <section>
+          <ChatMessageElement
+            onNavigateToUserProfile={this._handleUserSelect}
+            style={{ padding: `0 0 4px 0`, minHeight: '76px' }}
+            message={{ text, timestamp: createdTime }}
+            social={this.props.social}
+            chat={this.props.chat}
+            user={creator}
+          />
+        </section>
+
         <div
           className={STYLES_MEDIA_IMAGE}
           onClick={onClick}
           style={{
             backgroundImage: `url(${media.url})`,
-          }}></div>
+          }}
+        />
 
-        <div className={STYLES_FOOTER}>
+        <footer className={STYLES_FOOTER} onClick={onClick}>
           <div
             className={STYLES_TIMESTAMP}
             style={{ visibility: this.state.isHoveringOnPost ? 'visible' : 'hidden' }}>
@@ -459,7 +330,7 @@ class UIPostCell extends React.Component {
             }>
             <SVG.Play size="32px" />
           </div>
-        </div>
+        </footer>
 
         {this.state.isHoveringOnPost ? (
           <div className={STYLES_OPTIONS_BAR}>
@@ -497,10 +368,10 @@ export default class UIPostList extends React.Component {
     const { posts } = this.props;
     return (
       <div className={STYLES_CONTAINER}>
-        {posts.map((post) => {
+        {posts.map((post, i) => {
           return (
             <UIPostCell
-              key={post.postId}
+              key={`post-${post.postId}-${i}`}
               onGameSelect={this.props.onGameSelect}
               onUserSelect={this.props.onUserSelect}
               post={post}
