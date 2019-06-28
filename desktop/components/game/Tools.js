@@ -503,7 +503,7 @@ class ToolDropdown extends React.PureComponent {
       props.element.lastReportedEventId == state.lastSentEventId
     ) {
       return {
-        value: props.element.props.value,
+        value: props.element.props.value || null, // Force `null` when value is unset
       };
     }
     return null;
@@ -515,7 +515,7 @@ class ToolDropdown extends React.PureComponent {
     let items = (element.props && element.props.items) || [];
     if (!Array.isArray(items)) {
       let arrayItems = [];
-      Object.keys(items).map((key) => (arrayItems[key] = items[key]));
+      Object.keys(items).map((key) => (arrayItems[parseInt(key, 10) - 1] = items[key]));
       items = arrayItems;
     }
 
@@ -852,7 +852,7 @@ class ToolRadioButtonGroup extends React.PureComponent {
     let items = (element.props && element.props.items) || [];
     if (!Array.isArray(items)) {
       let arrayItems = [];
-      Object.keys(items).map((key) => (arrayItems[key] = items[key]));
+      Object.keys(items).map((key) => (arrayItems[parseInt(key, 10) - 1] = items[key]));
       items = arrayItems;
     }
 

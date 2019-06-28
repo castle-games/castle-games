@@ -337,7 +337,12 @@ function ui.dropdown(label, value, items, props)
     assert(type(value) == 'string' or type(value) == 'nil', '`ui.dropdown` needs a string or nil `value`')
     assert(type(items) == 'table', '`ui.dropdown` needs a table `items`')
 
-    local c = addChild('dropdown', label, without(merge({ label = label, value = value, items = items }, props), 'onChange'), true)
+    local convertedItems = {}
+    for k, v in pairs(items) do
+        convertedItems[tostring(k)] = v
+    end
+
+    local c = addChild('dropdown', label, without(merge({ label = label, value = value, items = convertedItems }, props), 'onChange'), true)
 
     local newValue = value
     local es = pendingEvents[c.pathId]
@@ -414,7 +419,12 @@ function ui.radioButtonGroup(label, value, items, props)
     assert(type(value) == 'string', '`ui.radioButtonGroup` needs a string `value`')
     assert(type(items) == 'table', '`ui.radioButtonGroup` needs a table `items`')
 
-    local c = addChild('radioButtonGroup', label, without(merge({ label = label, value = value, items = items }, props), 'onChange'), true)
+    local convertedItems = {}
+    for k, v in pairs(items) do
+        convertedItems[tostring(k)] = v
+    end
+
+    local c = addChild('radioButtonGroup', label, without(merge({ label = label, value = value, items = convertedItems }, props), 'onChange'), true)
 
     local newValue = value
     local es = pendingEvents[c.pathId]
