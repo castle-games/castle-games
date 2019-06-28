@@ -110,10 +110,15 @@ class ChatSessionContextManager extends React.Component {
     if (prevUser && !this.props.currentUser.user) {
       this.destroy();
     }
+
     // user logged in
     if (!prevUser && this.props.currentUser.user) {
       await this.start();
       await this.props.newUserJoinChannels();
+
+      if (this._chat) {
+        await this._chat.loadRecentMessagesAsync();
+      }
     }
   };
 
@@ -211,7 +216,6 @@ class ChatSessionContextManager extends React.Component {
     this._chat.setOnPresenceHandler(this._handlePresenceAsync);
     this._chat.setConnectionStatusHandler(this._handleConnectStatus);
     this._chat.connect();
-    await this._chat.loadRecentMessagesAsync();
   };
 
   destroy = () => {
