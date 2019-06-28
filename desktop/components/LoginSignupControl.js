@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as Actions from '~/common/actions';
 import * as Constants from '~/common/constants';
+import * as NativeUtil from '~/native/nativeutil';
 import * as Strings from '~/common/strings';
 import * as Analytics from '~/common/analytics';
 
@@ -28,6 +29,11 @@ const STYLES_CONTENTS = css`
   width: 100%;
   max-width: 528px;
   padding: 24px;
+`;
+
+const STYLES_LEGAL_TEXT = css`
+  margin-top: 16px;
+  font-size: 13px;
 `;
 
 const STYLES_SPACER = css`
@@ -124,6 +130,10 @@ export default class LoginSignupScreen extends React.Component {
     }
     this.setState(s);
   };
+
+  _handleViewPrivacyPolicy = () => {
+    NativeUtil.openExternalURL(`${Constants.WEB_HOST}/legal/privacy`);
+  }
 
   _goToPassword = () => {
     this.setState({
@@ -372,6 +382,12 @@ export default class LoginSignupScreen extends React.Component {
               onChange={this._handleChange}
               value={this.state.password}
             />
+            <div className={STYLES_LEGAL_TEXT}>
+              By clicking "Create Account," you are agreeing to Castle's{' '} 
+              <span className={STYLES_ACTION} onClick={this._handleViewPrivacyPolicy}>
+                privacy policy.
+              </span>
+            </div>
             <div className={STYLES_SPACER} />
             <UIButton onClick={this._handleSignUpAsync}>Create Account</UIButton>
           </form>
