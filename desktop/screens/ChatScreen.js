@@ -7,11 +7,10 @@ import * as Actions from '~/common/actions';
 import * as ChatActions from '~/common/actions-chat';
 
 import { css } from 'react-emotion';
-import { ConnectionStatus } from 'castle-chat-lib';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
-import { SocialContext } from '~/contexts/SocialContext';
 import { NavigatorContext, NavigationContext } from '~/contexts/NavigationContext';
-import { ChatSessionContext } from '~/contexts/ChatSessionContext';
+import { ChatContext } from '~/contexts/ChatContext';
+import { UserPresenceContext } from '~/contexts/UserPresenceContext';
 
 import regexMatch from 'react-string-replace';
 import ChatHeader from '~/components/chat/ChatHeader';
@@ -67,11 +66,11 @@ class ChatScreen extends React.Component {
       return;
     }
 
-    if (!prevProps.chat.channel) {
+    if (!prevProps.channelId) {
       return;
     }
 
-    if (prevProps.chat.channel.channelId !== this.props.chat.channel.channelId) {
+    if (prevProps.channelId !== this.props.channelId) {
       this.setState({ mode: 'MESSAGES' });
     }
   }
@@ -86,8 +85,8 @@ class ChatScreen extends React.Component {
   };
 
   _handleLeaveChannel = async () => {
-    await ChatActions.leaveChatChannel({ channelId: this.props.chat.channel.channelId });
-    this.props.social.refreshChannelData();
+    await ChatActions.leaveChatChannel({ channelId: this.props.chat.channelId });
+    this.props.chat.refreshChannelData();
     this.props.navigator.navigateToHome();
   };
 
@@ -133,7 +132,7 @@ class ChatScreen extends React.Component {
         users = autocompleteResults.users;
       }
 
-      this.props.social.addUser(users);
+      this.props.userPresence.addUsers(users);
 
       this.setState({ users: users });
     }, 120);
@@ -148,15 +147,15 @@ class ChatScreen extends React.Component {
       }
 
       let user;
-      if (this.props.chat.channel.channelId.startsWith(DIRECT_MESSAGE_PREFIX)) {
-        const channelUserIds = this.props.chat.channel.channelId
-          .replace(DIRECT_MESSAGE_PREFIX, '')
-          .split(',');
+      const channel = this.props.chat.channels[this.props.channelId];
+      // TODO: check type
+      if (this.props.channelId.startsWith(DIRECT_MESSAGE_PREFIX)) {
+        const channelUserIds = this.props.channelId.replace(DIRECT_MESSAGE_PREFIX, '').split(',');
         const otherUserId = channelUserIds.find((id) => id !== this.props.viewer.userId);
-        user = this.props.social.userIdToUser[otherUserId];
+        user = this.props.userPresence.userIdToUser[otherUserId];
       }
 
-      this.props.chat.handleSendChannelMessage(this.state.value, user);
+      this.props.chat.sendMessage(this.state.value, user);
       this.clear();
       this.setState({ value: '', users: [] });
     }
@@ -174,9 +173,11 @@ class ChatScreen extends React.Component {
       className = STYLES_CONTAINER_ENTERING;
     }
 
-    if (!this.props.chat.channel) {
+    if (!this.props.channelId) {
       return null;
     }
+
+    const channel = this.props.chat.channels[this.props.channelId];
 
     if (mode === 'OPTIONS') {
       return (
@@ -184,10 +185,7 @@ class ChatScreen extends React.Component {
           <ChatHeaderActive onDismiss={this._handleResetChatWindow}>
             Channel Settings
           </ChatHeaderActive>
-          <ChatOptions
-            onLeaveChannel={this._handleLeaveChannel}
-            channel={this.props.chat.channel}
-          />
+          <ChatOptions onLeaveChannel={this._handleLeaveChannel} channel={channel} />
         </div>
       );
     }
@@ -203,17 +201,14 @@ class ChatScreen extends React.Component {
       );
     }
 
-    let messages = [];
-    if (this.props.chat.channel && this.props.chat.messages[this.props.chat.channel.channelId]) {
-      messages = this.props.chat.messages[this.props.chat.channel.channelId];
-    }
+    let messages = this.props.chat.channels[this.props.channelId].messages;
 
     return (
       <div className={className}>
         <ChatHeader
-          social={this.props.social}
+          userIdToUser={this.props.userPresence.userIdToUser}
           viewer={this.props.viewer}
-          channel={this.props.chat.channel}
+          channel={channel}
           onSettingsClick={this._handleShowSingleChannelOptions}
           onMembersClick={this._handleShowSingleChannelMembers}
         />
@@ -221,7 +216,7 @@ class ChatScreen extends React.Component {
           messages={messages}
           chat={this.props.chat}
           navigator={this.props.navigator}
-          social={this.props.social}
+          userPresence={this.props.userPresence}
         />
         <ChatInput
           value={this.state.value}
@@ -241,40 +236,32 @@ export default class ChatScreenWithContext extends React.Component {
   render() {
     return (
       <CurrentUserContext.Consumer>
-        {(currentUser) => {
-          return (
-            <SocialContext.Consumer>
-              {(social) => {
-                return (
-                  <ChatSessionContext.Consumer>
-                    {(chat) => {
-                      return (
-                        <NavigationContext.Consumer>
-                          {(navigation) => {
-                            return (
-                              <NavigatorContext.Consumer>
-                                {(navigator) => (
-                                  <ChatScreen
-                                    viewer={currentUser.user}
-                                    currentUser={currentUser}
-                                    navigator={navigator}
-                                    navigation={navigation}
-                                    social={social}
-                                    chat={chat}
-                                  />
-                                )}
-                              </NavigatorContext.Consumer>
-                            );
-                          }}
-                        </NavigationContext.Consumer>
-                      );
-                    }}
-                  </ChatSessionContext.Consumer>
-                );
-              }}
-            </SocialContext.Consumer>
-          );
-        }}
+        {(currentUser) => (
+          <UserPresenceContext.Consumer>
+            {(userPresence) => (
+              <ChatContext.Consumer>
+                {(chat) => (
+                  <NavigationContext.Consumer>
+                    {(navigation) => (
+                      <NavigatorContext.Consumer>
+                        {(navigator) => (
+                          <ChatScreen
+                            viewer={currentUser.user}
+                            currentUser={currentUser}
+                            navigator={navigator}
+                            channelId={navigation.chatChannelId}
+                            userPresence={userPresence}
+                            chat={chat}
+                          />
+                        )}
+                      </NavigatorContext.Consumer>
+                    )}
+                  </NavigationContext.Consumer>
+                )}
+              </ChatContext.Consumer>
+            )}
+          </UserPresenceContext.Consumer>
+        )}
       </CurrentUserContext.Consumer>
     );
   }

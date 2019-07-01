@@ -62,23 +62,22 @@ export default class ChatMessages extends React.Component {
   };
 
   render() {
-    const { social, navigator, chat } = this.props;
+    const { navigator, chat, userPresence } = this.props;
 
     let messages = this.props.messages.map((m, i) => {
       if (m.type === 'NOTICE') {
         return <ChatEventElement key={`chat-event-${i}`} message={m} />;
       }
 
-      const user = this.props.social.userIdToUser[m.fromUserId];
+      const user = userPresence.userIdToUser[m.fromUserId];
       if (m.text && m.text.startsWith('/me')) {
         return (
           <ChatRolePlayElement
             key={`chat-roleplay-${i}`}
             message={m}
             user={user}
-            social={this.props.social}
+            userPresence={userPresence}
             navigator={this.props.navigator}
-            chat={this.props.chat}
             onNavigateToUserProfile={this.props.navigator.navigateToUserProfile}
             theme={this.props.theme}
           />
@@ -92,9 +91,8 @@ export default class ChatMessages extends React.Component {
             <ChatMessageElementSameUser
               key={`chat-${m.fromUserId}-${m.chatMessageId}-${i}`}
               message={m}
-              social={this.props.social}
+              userPresence={userPresence}
               navigator={this.props.navigator}
-              chat={this.props.chat}
               onNavigateToUserProfile={this.props.navigator.navigateToUserProfile}
               theme={this.props.theme}
               size={this.props.size}
@@ -108,9 +106,8 @@ export default class ChatMessages extends React.Component {
           key={`chat-${m.fromUserId}-${m.chatMessageId}-${i}`}
           message={m}
           user={user}
-          social={this.props.social}
+          userPresence={userPresence}
           navigator={this.props.navigator}
-          chat={this.props.chat}
           onNavigateToUserProfile={this.props.navigator.navigateToUserProfile}
           theme={this.props.theme}
           size={this.props.size}

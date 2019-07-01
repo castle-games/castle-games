@@ -69,7 +69,7 @@ export default class ChatHeader extends React.Component {
 
     let name = this.props.channel.name;
     if (this.props.channel.otherUserId) {
-      const { userIdToUser } = this.props.social;
+      const { userIdToUser } = this.props;
       const otherUser = userIdToUser[this.props.channel.otherUserId];
 
       name = otherUser ? `${Strings.getName(otherUser)}` : `Direct Message`;

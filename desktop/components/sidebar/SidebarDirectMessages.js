@@ -17,37 +17,12 @@ const STYLES_CONTAINER = css`
 const DIRECT_MESSAGE_PREFIX = 'dm-';
 
 export default class SidebarDirectMessages extends React.Component {
-  // NOTE(jim): Another way to ensure that extra DMs don't appear and are automatically removed.
-  async componentDidMount() {
-    const { directMessages } = this.props;
-
-    let userDidRemoveChannel = false;
-    directMessages.forEach(async (c) => {
-      if (c.channelId.startsWith(DIRECT_MESSAGE_PREFIX)) {
-        const channelUserIds = c.channelId.replace(DIRECT_MESSAGE_PREFIX, '').split(',');
-        const isAllowed = channelUserIds.find((id) => this.props.viewer.userId === id);
-
-        if (!isAllowed) {
-          userDidRemoveChannel = true;
-          await ChatActions.leaveChatChannel({ channelId: c.channelId });
-          return;
-        }
-      }
-    });
-
-    if (!userDidRemoveChannel) {
-      return;
-    }
-
-    await this.props.social.refreshChannelData();
-  }
-
   render() {
     if (!this.props.viewer) {
       return null;
     }
 
-    const { onlineUserIds, userIdToUser } = this.props.social;
+    const { onlineUserIds, userIdToUser } = this.props.userPresence;
     return (
       <div className={STYLES_CONTAINER}>
         <SidebarGroupHeader onShowOptions={this.props.onShowOptions}>

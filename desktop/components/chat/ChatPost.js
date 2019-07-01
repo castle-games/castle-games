@@ -147,8 +147,7 @@ export default class ChatPost extends React.Component {
           }}>
           <UIPostCell
             post={this.state.post}
-            social={this.props.social}
-            navigator={this.props.navigator}
+            userPresence={this.props.userPresence}
             onGameSelect={this._handleNavigateToGame}
             onUserSelect={this._handleNavigateToUser}
             style={{ margin: 0 }}

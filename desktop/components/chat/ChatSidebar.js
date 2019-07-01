@@ -9,9 +9,9 @@ import { css } from 'react-emotion';
 
 import { ConnectionStatus } from 'castle-chat-lib';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
-import { SocialContext } from '~/contexts/SocialContext';
 import { NavigatorContext, NavigationContext } from '~/contexts/NavigationContext';
-import { ChatSessionContext } from '~/contexts/ChatSessionContext';
+import { ChatContext } from '~/contexts/ChatContext';
+import { UserPresence } from '~/contexts/UserPresenceContext';
 
 import ChatMessages from '~/components/chat/ChatMessages';
 import ChatInput from '~/components/chat/ChatInput';
@@ -45,35 +45,8 @@ class ChatSidebar extends React.Component {
   }
 
   _handleJoinGameChannel = async () => {
-    if (!this.props.navigation.game) {
-      return;
-    }
-
-    const response = await ChatActions.createChatChannel({
-      name: this.props.navigation.game.title,
-    });
-
-    await this.props.social.refreshChannelData();
-
-    if (!response || response.errors) {
-      const error = response.errors[0];
-      if (error) {
-        if (error.extensions && error.extensions.code === 'CHANNEL_NAME_ALREADY_EXISTS') {
-          const channel = this.props.social.allChatChannels.find((c) => {
-            return c.name === this.props.navigation.game.title;
-          });
-
-          if (channel) {
-            await this.props.chat.handleConnectGameContext(channel);
-          }
-        }
-      }
-      return;
-    }
-
-    if (response.data && response.data.createChatChannel) {
-      this.props.chat.handleConnectGameContext(response.data.createChatChannel);
-    }
+    // TODO: BEN
+    // join the channel for this game.
   };
 
   _handleChange = (e) => {
@@ -87,7 +60,7 @@ class ChatSidebar extends React.Component {
         return;
       }
 
-      this.props.chat.handleSendChannelMessage(this.state.value);
+      this.props.chat.sendMessage(this.state.value);
       this.setState({ value: '' });
     }
   };
@@ -125,14 +98,11 @@ class ChatSidebar extends React.Component {
       return null;
     }
 
-    if (!this.props.chat.channel) {
+    const channel = this.props.chat.getChannelForGame(this.props.navigation.game);
+    if (!channel) {
       return null;
     }
-
-    let messages = [];
-    if (this.props.chat.channel && this.props.chat.messages[this.props.chat.channel.channelId]) {
-      messages = this.props.chat.messages[this.props.chat.channel.channelId];
-    }
+    const messages = this.props.chat.channels[channel.channelId].messages;
 
     return (
       <div
@@ -140,16 +110,11 @@ class ChatSidebar extends React.Component {
         style={{
           background: theme.background,
         }}>
-        <ChatSidebarHeader
-          chat={this.props.chat}
-          onBackClick={this._handleBack}
-          onThemeClick={this._handleThemeChange}
-        />
+        <ChatSidebarHeader onBackClick={this._handleBack} onThemeClick={this._handleThemeChange} />
         <ChatMessages
           messages={messages}
-          chat={this.props.chat}
           navigator={this.props.navigator}
-          social={this.props.social}
+          userPresence={this.props.userPresence}
           theme={theme}
           size="32px"
         />
@@ -171,40 +136,32 @@ export default class ChatSidebarWithContext extends React.Component {
   render() {
     return (
       <CurrentUserContext.Consumer>
-        {(currentUser) => {
-          return (
-            <SocialContext.Consumer>
-              {(social) => {
-                return (
-                  <ChatSessionContext.Consumer>
-                    {(chat) => {
-                      return (
-                        <NavigationContext.Consumer>
-                          {(navigation) => {
-                            return (
-                              <NavigatorContext.Consumer>
-                                {(navigator) => (
-                                  <ChatSidebar
-                                    viewer={currentUser.user}
-                                    currentUser={currentUser}
-                                    navigator={navigator}
-                                    navigation={navigation}
-                                    social={social}
-                                    chat={chat}
-                                  />
-                                )}
-                              </NavigatorContext.Consumer>
-                            );
-                          }}
-                        </NavigationContext.Consumer>
-                      );
-                    }}
-                  </ChatSessionContext.Consumer>
-                );
-              }}
-            </SocialContext.Consumer>
-          );
-        }}
+        {(currentUser) => (
+          <UserPresenceContext.Consumer>
+            {(userPresence) => (
+              <ChatContext.Consumer>
+                {(chat) => (
+                  <NavigationContext.Consumer>
+                    {(navigation) => (
+                      <NavigatorContext.Consumer>
+                        {(navigator) => (
+                          <ChatSidebar
+                            viewer={currentUser.user}
+                            currentUser={currentUser}
+                            navigator={navigator}
+                            navigation={navigation}
+                            userPresence={userPresence}
+                            chat={chat}
+                          />
+                        )}
+                      </NavigatorContext.Consumer>
+                    )}
+                  </NavigationContext.Consumer>
+                )}
+              </ChatContext.Consumer>
+            )}
+          </UserPresenceContext.Consumer>
+        )}
       </CurrentUserContext.Consumer>
     );
   }

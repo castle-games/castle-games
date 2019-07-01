@@ -56,28 +56,13 @@ export default class ChatMessageElement extends React.Component {
   };
 
   _handleNavigateToUser = async ({ username }) => {
-    let user = this.props.social.usernameToUser[username];
-
-    if (!user) {
-      let response = await Actions.getUserByUsername({ username });
-
-      if (!response) {
-        return;
-      }
-
-      user = response;
-    }
-
-    this.props.onNavigateToUserProfile(user);
+    // TODO: BEN
+    return;
   };
 
   _handleNavigateToChannel = async ({ name }) => {
-    const channel = this.props.social.findChannel({ name });
-
-    if (channel) {
-      await this.props.chat.handleConnect(channel);
-      this.props.navigator.navigateToChat();
-    }
+    // TODO: BEN
+    return;
   };
 
   render() {
@@ -88,13 +73,13 @@ export default class ChatMessageElement extends React.Component {
       text = this.props.message.text.replace('/me ', '');
       text = ChatUtilities.matchURL(
         text,
-        this.props.social,
+        this.props.userPresence,
         this.props.navigator,
         this.props.theme
       );
       text = ChatUtilities.matchCastleURL(
         text,
-        this.props.social,
+        this.props.userPresence,
         this.props.navigator,
         this.props.theme
       );

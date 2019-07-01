@@ -10,8 +10,8 @@ import { css } from 'react-emotion';
 
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigatorContext, NavigationContext } from '~/contexts/NavigationContext';
-import { SocialContext } from '~/contexts/SocialContext';
-import { ChatSessionContext } from '~/contexts/ChatSessionContext';
+import { UserPresenceContext } from '~/contexts/UserPresenceContext';
+import { ChatContext } from '~/contexts/ChatContext';
 
 import SidebarOptions from '~/components/sidebar/SidebarOptions';
 import SidebarOptionsChannels from '~/components/sidebar/SidebarOptionsChannels';
@@ -61,21 +61,17 @@ class Sidebar extends React.Component {
   };
 
   _handleSignOut = () => {
-    this.props.social.clearCurrentSubscribedChats();
     this.props.currentUser.clearCurrentUser();
     this.setState({ mode: 'DEFAULT' });
   };
 
   _handleNavigateToChat = async (channel) => {
-    await this.props.chat.handleConnect(channel);
-    this.props.social.refreshChannelData();
-    this.props.navigator.navigateToChat();
-    return this.setState({ mode: 'DEFAULT' });
+    this.props.chat.refreshChannelData();
+    return this._handleNavigateToChatWithoutRefresh(channel);
   };
 
   _handleNavigateToChatWithoutRefresh = async (channel) => {
-    await this.props.chat.handleConnect(channel);
-    this.props.navigator.navigateToChat();
+    this.props.navigator.navigateToChat({ channelId: channel.channelId });
     return this.setState({ mode: 'DEFAULT' });
   };
 
@@ -118,6 +114,7 @@ class Sidebar extends React.Component {
 
     this._createChannelLock = true;
 
+    // TODO: remove
     const response = await ChatActions.sendUserChatMessage({
       otherUserId: user.userId,
       message: ':wave:',
@@ -130,10 +127,10 @@ class Sidebar extends React.Component {
     }
 
     // NOTE(jim): The channel must appear in the refresh.
-    await this.props.social.refreshChannelData();
+    await this.props.chat.refreshChannelData();
 
     let newChannel;
-    this.props.social.subscribedChatChannels.forEach((c) => {
+    this.props.chat.channels.forEach((c) => {
       if (c.otherUserId === user.userId) {
         newChannel = c;
       }
@@ -148,28 +145,7 @@ class Sidebar extends React.Component {
   };
 
   _handleCreateChannel = async (name) => {
-    if (this._createChannelLock) {
-      return;
-    }
-
-    this._createChannelLock = true;
-
-    if (Strings.isEmpty(name)) {
-      this._createChannelLock = false;
-      alert('You must provide a channel name.');
-      return;
-    }
-
-    const response = await ChatActions.createChatChannel({ name });
-    this._createChannelLock = false;
-    if (!response || response.errors) {
-      alert('We were unable to create a channel with this name.');
-      return;
-    }
-
-    if (response.data && response.data.createChatChannel) {
-      this._handleNavigateToChat(response.data.createChatChannel);
-    }
+    return this.props.chat.openChannelWithName(name);
   };
 
   _renderUpdateBanner = () => {
@@ -182,13 +158,17 @@ class Sidebar extends React.Component {
   };
 
   _renderRootSidebar = () => {
-    const { navigation, navigator, viewer, social, chat } = this.props;
+    const { navigation, navigator, viewer, userPresence, chat } = this.props;
     const isChatVisible = navigation.contentMode === 'chat';
 
-    let directMessages = [];
-    let channels = [];
-    social.subscribedChatChannels.forEach((c) => {
-      c.otherUserId ? directMessages.push(c) : channels.push(c);
+    let directMessages = [],
+      channels = [];
+    Object.entries(chat.channels).forEach(([channelId, channel]) => {
+      if (channel.otherUserId) {
+        directMessages.push(channel);
+      } else if (channel.isSubscribed) {
+        channels.push(channel);
+      }
     });
 
     return (
@@ -227,7 +207,7 @@ class Sidebar extends React.Component {
           <SidebarDirectMessages
             selectedChannelId={chat.channel ? chat.channel.channelId : null}
             viewer={viewer}
-            social={social}
+            userPresence={userPresence}
             contentMode={navigation.contentMode}
             isChatVisible={isChatVisible}
             directMessages={directMessages}
@@ -268,13 +248,13 @@ class Sidebar extends React.Component {
   };
 
   _renderChannelOptions = () => {
-    const { navigation, viewer, social } = this.props;
+    const { navigation, viewer, chat } = this.props;
 
     return (
       <div className={STYLES_SIDEBAR}>
         <SidebarOptionsChannels
           viewer={viewer}
-          channels={social.allChatChannels}
+          channels={chat.channels}
           onDismiss={this._handleHideOptions}
           onSelectChannel={this._handleNavigateToChat}
           onCreateChannel={this._handleCreateChannel}
@@ -316,42 +296,34 @@ export default class SidebarWithContext extends React.Component {
   render() {
     return (
       <CurrentUserContext.Consumer>
-        {(currentUser) => {
-          return (
-            <SocialContext.Consumer>
-              {(social) => {
-                return (
-                  <ChatSessionContext.Consumer>
-                    {(chat) => {
-                      return (
-                        <NavigationContext.Consumer>
-                          {(navigation) => {
-                            return (
-                              <NavigatorContext.Consumer>
-                                {(navigator) => (
-                                  <Sidebar
-                                    viewer={currentUser.user}
-                                    currentUser={currentUser}
-                                    navigator={navigator}
-                                    navigation={navigation}
-                                    social={social}
-                                    chat={chat}
-                                    updateAvailable={this.props.updateAvailable}
-                                    onNativeUpdateInstall={this.props.onNativeUpdateInstall}
-                                  />
-                                )}
-                              </NavigatorContext.Consumer>
-                            );
-                          }}
-                        </NavigationContext.Consumer>
-                      );
-                    }}
-                  </ChatSessionContext.Consumer>
-                );
-              }}
-            </SocialContext.Consumer>
-          );
-        }}
+        {(currentUser) => (
+          <UserPresenceContext.Consumer>
+            {(userPresence) => (
+              <ChatContext.Consumer>
+                {(chat) => (
+                  <NavigationContext.Consumer>
+                    {(navigation) => (
+                      <NavigatorContext.Consumer>
+                        {(navigator) => (
+                          <Sidebar
+                            viewer={currentUser.user}
+                            currentUser={currentUser}
+                            navigator={navigator}
+                            navigation={navigation}
+                            userPresence={userPresence}
+                            chat={chat}
+                            updateAvailable={this.props.updateAvailable}
+                            onNativeUpdateInstall={this.props.onNativeUpdateInstall}
+                          />
+                        )}
+                      </NavigatorContext.Consumer>
+                    )}
+                  </NavigationContext.Consumer>
+                )}
+              </ChatContext.Consumer>
+            )}
+          </UserPresenceContext.Consumer>
+        )}
       </CurrentUserContext.Consumer>
     );
   }

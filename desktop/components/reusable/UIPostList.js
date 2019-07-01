@@ -7,8 +7,6 @@ import { css } from 'react-emotion';
 import { getEmojiComponent } from '~/common/emojis';
 import { Tooltip } from 'react-tippy';
 
-import ChatMessageElement from '~/components/chat/ChatMessageElement';
-
 const STYLES_CONTAINER = css`
   display: flex;
   align-items: flex-start;
@@ -234,7 +232,7 @@ export class UIPostCell extends React.Component {
       }
 
       if (part.userId) {
-        const user = this.props.social.userIdToUser[part.userId];
+        const user = this.props.userPresence.userIdToUser[part.userId];
         const mentionString = user ? `@${user.username}` : `👤`;
         text = `${text}${mentionString}`;
         return;
@@ -298,19 +296,6 @@ export class UIPostCell extends React.Component {
         onMouseLeave={() => this._handleMouseLeave()}
         onMouseMove={this._handleMouseMove}
         style={this.props.style}>
-        <section>
-          <ChatMessageElement
-            onNavigateToUserProfile={this._handleUserSelect}
-            style={{ padding: `0 0 4px 0`, minHeight: '76px' }}
-            message={{ text, timestamp: createdTime }}
-            social={this.props.social}
-            chat={this.props.chat}
-            user={creator}
-            navigator={this.props.navigator}
-            theme={this.props.theme}
-          />
-        </section>
-
         <div
           className={STYLES_MEDIA_IMAGE}
           onClick={onClick}
@@ -378,9 +363,7 @@ export default class UIPostList extends React.Component {
               onGameSelect={this.props.onGameSelect}
               onUserSelect={this.props.onUserSelect}
               post={post}
-              social={this.props.social}
-              chat={this.props.chat}
-              navigator={this.props.navigator}
+              userPresence={this.props.userPresence}
             />
           );
         })}

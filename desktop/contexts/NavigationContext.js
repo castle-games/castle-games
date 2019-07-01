@@ -9,7 +9,7 @@ import * as Urls from '~/common/urls';
 
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { DevelopmentContext } from '~/contexts/DevelopmentContext';
-import { SocialContext } from '~/contexts/SocialContext';
+import { UserPresenceContext } from '~/contexts/UserPresenceContext';
 
 import GameWindow from '~/native/gamewindow';
 import Logs from '~/common/logs';
@@ -27,6 +27,7 @@ const NavigationContextDefaults = {
   gameUrl: '',
   game: null,
   post: null,
+  chatChannelId: null,
   gameParams: null,
   referrerGame: null,
   timeGameLoaded: 0,
@@ -61,7 +62,7 @@ const AUTHENTICATED_ONLY_MODES = {
  */
 const NavigatorContextDefaults = {
   openUrl: async (url) => {},
-  navigateToChat: () => {},
+  navigateToChat: (options) => {},
   navigateToHome: () => {},
   navigateToGameUrl: async (url, options) => {},
   navigateToGame: async (game, options) => {},
@@ -131,7 +132,7 @@ class NavigationContextManager extends React.Component {
       // current user was refreshed
       const viewer = this.props.currentUser.user;
       if (viewer) {
-        this.props.social.addUser(viewer);
+        this.props.userPresence.addUser(viewer);
         const userProfileShown = this.state.navigation.userProfileShown;
         if (userProfileShown && viewer.userId === userProfileShown.userId) {
           this.setState({
@@ -216,7 +217,12 @@ class NavigationContextManager extends React.Component {
     });
   };
 
-  navigateToChat = () => this._navigateToContentMode('chat');
+  // assumes you have a channel id.
+  // if not, use ChatContext.openChannel methods
+  navigateToChat = ({ channelId }) => {
+    let chatChannelId = channelId || this.state.chatChannelId;
+    return this._navigateToContentMode('chat', { chatChannelId });
+  };
 
   navigateToHome = () => this._navigateToContentMode('home');
 
@@ -284,11 +290,11 @@ class NavigationContextManager extends React.Component {
   };
 
   navigateToUserProfile = async (user, options) => {
-    let fullUser = this.props.social.userIdToUser[user.userId];
+    let fullUser = this.props.userPresence.userIdToUser[user.userId];
     if (!fullUser) {
       try {
         fullUser = await Actions.getUser({ userId: user.userId });
-        this.props.social.addUser(fullUser);
+        this.props.userPresence.addUser(fullUser);
       } catch (e) {
         // fall back to whatever we were given
         fullUser = user;
@@ -298,7 +304,7 @@ class NavigationContextManager extends React.Component {
       (async () => {
         try {
           const updatedUser = await Actions.getUser({ userId: user.userId });
-          this.props.social.addUser(updatedUser);
+          this.props.userPresence.addUser(updatedUser);
           this.setState((state) => {
             if (
               state.navigation.userProfileShown &&
@@ -430,14 +436,14 @@ class NavigationContextManager extends React.Component {
 class NavigationContextProvider extends React.Component {
   render() {
     return (
-      <SocialContext.Consumer>
-        {(social) => (
+      <UserPresenceContext.Consumer>
+        {(userPresence) => (
           <CurrentUserContext.Consumer>
             {(currentUser) => (
               <DevelopmentContext.Consumer>
                 {(development) => (
                   <NavigationContextManager
-                    social={social}
+                    userPresence={userPresence}
                     currentUser={currentUser}
                     development={development}
                     {...this.props}
@@ -447,7 +453,7 @@ class NavigationContextProvider extends React.Component {
             )}
           </CurrentUserContext.Consumer>
         )}
-      </SocialContext.Consumer>
+      </UserPresenceContext.Consumer>
     );
   }
 }

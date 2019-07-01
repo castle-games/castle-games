@@ -43,14 +43,14 @@ const STYLES_ANCHOR = css`
   }
 `;
 
-export const matchCastleURL = (text, social, navigator, theme) => {
+export const matchCastleURL = (text, userPresence, navigator, theme) => {
   return StringReplace(text, /(castle:\/\/\S+)/g, (match, i) => {
     const urlData = URLS.getCastleUrlInfo(match);
     if (urlData.type) {
       return (
         <ChatPost
           key={`castle-chat-embed-${match + i}`}
-          social={social}
+          userPresence={userPresence}
           message={{ text: match }}
           navigator={navigator}
           urlData={urlData}
@@ -67,14 +67,14 @@ export const matchCastleURL = (text, social, navigator, theme) => {
   });
 };
 
-export const matchURL = (text, social, navigator, theme) => {
+export const matchURL = (text, userPresence, navigator, theme) => {
   return StringReplace(text, /(https?:\/\/\S+)/g, (match, i) => {
     const urlData = URLS.getCastleUrlInfo(match);
     if (urlData.type) {
       return (
         <ChatPost
           key={`url-chat-embed-${match + i}`}
-          social={social}
+          userPresence={userPresence}
           message={{ text: match }}
           navigator={navigator}
           urlData={urlData}

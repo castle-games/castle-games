@@ -7,8 +7,9 @@ import * as Constants from '~/common/constants';
 
 import { CastleChat, ConnectionStatus } from 'castle-chat-lib';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
-import { SocialContext } from '~/contexts/SocialContext';
+import { UserPresenceContext } from '~/contexts/UserPresenceContext';
 import { NativeBinds } from '~/native/nativebinds';
+import { SocialContext } from '~/contexts/SocialContext';
 
 import { isEmoji, emojiToString } from '~/common/emojis';
 
@@ -182,7 +183,7 @@ class ChatSessionContextManager extends React.Component {
         // themn
         if (!otherUser) {
           const updatedUser = await Actions.getUser({ userId: otherUserId });
-          this.props.addUsersToSocial([updatedUser]);
+          this.props.addUsers([updatedUser]);
         }
       }
     }
@@ -327,7 +328,7 @@ class ChatSessionContextManager extends React.Component {
     if (newUserIds.length) {
       try {
         let users = await Actions.getUsers({ userIds: newUserIds });
-        await this.props.addUsersToSocial(users);
+        await this.props.addUsers(users);
       } catch (e) {}
     }
 
@@ -483,22 +484,25 @@ class ChatSessionContextProvider extends React.Component {
     return (
       <CurrentUserContext.Consumer>
         {(currentUser) => (
-          <SocialContext.Consumer>
-            {(social) => (
-              <ChatSessionContextManager
-                currentUser={currentUser}
-                userIdToUser={social.userIdToUser}
-                subscribedChatChannels={social.subscribedChatChannels}
-                findSubscribedChannel={social.findSubscribedChannel}
-                setOnlineUserIds={social.setOnlineUserIds}
-                addUsersToSocial={social.addUsers}
-                usernameToUser={social.usernameToUser}
-                refreshChannelData={social.refreshChannelData}
-                newUserJoinChannels={social.newUserJoinChannels}
-                {...this.props}
-              />
+          <UserPresenceContext.Consumer>
+            {(userPresence) => (
+              <SocialContext.Consumer>
+                {(social) => (
+                  <ChatSessionContextManager
+                    currentUser={currentUser}
+                    userIdToUser={userPresence.userIdToUser}
+                    subscribedChatChannels={social.subscribedChatChannels}
+                    findSubscribedChannel={social.findSubscribedChannel}
+                    setOnlineUserIds={userPresence.setOnlineUserIds}
+                    addUsers={userPresence.addUsers}
+                    refreshChannelData={social.refreshChannelData}
+                    newUserJoinChannels={social.newUserJoinChannels}
+                    {...this.props}
+                  />
+                )}
+              </SocialContext.Consumer>
             )}
-          </SocialContext.Consumer>
+          </UserPresenceContext.Consumer>
         )}
       </CurrentUserContext.Consumer>
     );

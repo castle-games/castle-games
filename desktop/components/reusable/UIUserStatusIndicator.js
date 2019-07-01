@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as Constants from '~/common/constants';
 
 import { css } from 'react-emotion';
-import { SocialContext } from '~/contexts/SocialContext';
+import { UserPresenceContext } from '~/contexts/UserPresenceContext';
 
 const STYLES_CONTAINER = css`
   display: inline-flex;
@@ -30,7 +30,7 @@ class UIUserStatusIndicator extends React.Component {
 
   render() {
     const { user } = this.props;
-    const isOnline = user.userId && this.props.social.onlineUserIds[user.userId];
+    const isOnline = user.userId && this.props.userPresence.onlineUserIds[user.userId];
     return (
       <div className={STYLES_CONTAINER} style={{ ...this.props.style }}>
         {this._renderIndicator(isOnline)}
@@ -42,9 +42,9 @@ class UIUserStatusIndicator extends React.Component {
 export default class UIUserStatusIndicatorWithContext extends React.Component {
   render() {
     return (
-      <SocialContext.Consumer>
-        {(social) => <UIUserStatusIndicator social={social} {...this.props} />}
-      </SocialContext.Consumer>
+      <UserPresenceContext.Consumer>
+        {(userPresence) => <UIUserStatusIndicator userPresence={userPresence} {...this.props} />}
+      </UserPresenceContext.Consumer>
     );
   }
 }

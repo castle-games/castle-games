@@ -14,13 +14,13 @@ import {
   DevelopmentSetterContext,
   DevelopmentContextProvider,
 } from '~/contexts/DevelopmentContext';
-import { SocialContextProvider } from '~/contexts/SocialContext';
 import {
   NavigatorContext,
   NavigationContext,
   NavigationContextProvider,
 } from '~/contexts/NavigationContext';
-import { ChatSessionContextProvider } from '~/contexts/ChatSessionContext';
+import { ChatContextProvider } from '~/contexts/ChatContext';
+import { UserPresenceContextProvider } from '~/contexts/UserPresenceContext';
 
 import AppContainer from '~/components/AppContainer';
 import ChatInput from '~/components/chat/ChatInput';
@@ -245,20 +245,15 @@ export default class AppWithProvider extends React.Component {
     let { currentUser, navigation } = this.props.state;
     return (
       <CurrentUserContextProvider value={currentUser}>
-        <SocialContextProvider
-          value={{
-            recentChatMessages: this.props.state.recentChatMessages,
-            subscribedChatChannels: this.props.state.subscribedChatChannels,
-            allChatChannels: this.props.state.allChatChannels,
-          }}>
+        <UserPresenceContextProvider>
           <DevelopmentContextProvider>
             <NavigationContextProvider value={{ navigation }}>
-              <ChatSessionContextProvider>
+              <ChatContextProvider>
                 <AppWithContext {...this.props} />
-              </ChatSessionContextProvider>
+              </ChatContextProvider>
             </NavigationContextProvider>
           </DevelopmentContextProvider>
-        </SocialContextProvider>
+        </UserPresenceContextProvider>
       </CurrentUserContextProvider>
     );
   }
