@@ -7,6 +7,8 @@ import { css } from 'react-emotion';
 import { getEmojiComponent } from '~/common/emojis';
 import { Tooltip } from 'react-tippy';
 
+import ChatMessageElement from '~/components/chat/ChatMessageElement';
+
 const STYLES_CONTAINER = css`
   display: flex;
   align-items: flex-start;
@@ -222,32 +224,6 @@ export class UIPostCell extends React.Component {
     this.setState({ urlWasCopiedToClipboard: true });
   };
 
-  _renderMessage = (message) => {
-    let text = ``;
-
-    message.forEach((part) => {
-      if (part.emoji) {
-        text = `${text}${emojiToString(part.emoji)}`;
-        return;
-      }
-
-      if (part.userId) {
-        const user = this.props.userPresence.userIdToUser[part.userId];
-        const mentionString = user ? `@${user.username}` : `👤`;
-        text = `${text}${mentionString}`;
-        return;
-      }
-
-      text = `${text}${part.text}`;
-    });
-
-    return text;
-  };
-
-  _renderMessageContainer = (message, game) => {
-    return message ? this._renderMessage(message) : ``;
-  };
-
   render() {
     const { post } = this.props;
     const { mouseX, mouseY } = this.state;
@@ -263,8 +239,6 @@ export class UIPostCell extends React.Component {
     } else if (sourceGame) {
       onClick = this._handleGameSelect;
     }
-
-    let text = this._renderMessageContainer(message.message, sourceGame);
 
     const { urlWasCopiedToClipboard } = this.state;
     let svg;
@@ -296,6 +270,14 @@ export class UIPostCell extends React.Component {
         onMouseLeave={() => this._handleMouseLeave()}
         onMouseMove={this._handleMouseMove}
         style={this.props.style}>
+        <section>
+          <ChatMessageElement
+            message={{ body: { ...message }, timestamp: createdTime }}
+            user={creator}
+            onNavigateToUserProfile={this._handleUserSelect}
+            style={{ padding: `0 0 4px 0`, minHeight: '76px' }}
+          />
+        </section>
         <div
           className={STYLES_MEDIA_IMAGE}
           onClick={onClick}

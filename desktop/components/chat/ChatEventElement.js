@@ -5,7 +5,7 @@ import * as Actions from '~/common/actions';
 
 import { css, styled } from 'react-emotion';
 
-import StringReplace from 'react-string-replace';
+import UIMessageBody from '~/components/reusable/UIMessageBody';
 
 const STYLES_CONTAINER = css`
   font-family: ${Constants.REFACTOR_FONTS.system};
@@ -91,13 +91,7 @@ export default class ChatEventElement extends React.Component {
   };
 
   render() {
-    let text = this.props.message.text;
-
-    text = StringReplace(text, /(https?:\/\/\S+)/g, (match, i) => (
-      <a className={STYLES_ANCHOR} key={match + i} href={match}>
-        {match}
-      </a>
-    ));
+    const { message } = this.props;
 
     return (
       <div className={STYLES_CONTAINER}>
@@ -110,7 +104,9 @@ export default class ChatEventElement extends React.Component {
                 {Strings.toChatDate(this.props.message.timestamp)}
               </span>
             </div>
-            <div className={STYLES_AUTHOR_MESSAGE}>{text}</div>
+            <div className={STYLES_AUTHOR_MESSAGE}>
+              <UIMessageBody body={message.body} />
+            </div>
           </span>
         </div>
       </div>

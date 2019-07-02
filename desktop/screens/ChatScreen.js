@@ -202,7 +202,7 @@ class ChatScreen extends React.Component {
         <ChatMessages
           messages={channel.messages}
           navigator={this.props.navigator}
-          userPresence={this.props.userPresence}
+          userIdToUser={this.props.userPresence.userIdToUser}
         />
         <ChatInput
           value={this.state.value}

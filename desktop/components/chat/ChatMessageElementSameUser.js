@@ -2,9 +2,10 @@ import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as Strings from '~/common/strings';
 import * as Actions from '~/common/actions';
-import * as ChatUtilities from '~/common/chat-utilities';
 
 import { css } from 'react-emotion';
+
+import UIMessageBody from '~/components/reusable/UIMessageBody';
 
 const STYLES_CONTAINER = css`
   font-family: ${Constants.REFACTOR_FONTS.system};
@@ -43,48 +44,14 @@ const STYLES_AUTHOR_MESSAGE = css`
 
 export default class ChatMessageElement extends React.Component {
   static defaultProps = {
-    user: {
-      name: 'Anonymous',
-      photo: {
-        url: null,
-      },
-    },
     theme: {
       textColor: null,
     },
   };
 
-  _handleNavigateToUser = async ({ username }) => {
-    // TODO: BEN
-    return;
-  };
-
-  _handleNavigateToChannel = async ({ name }) => {
-    // TODO: BEN
-    return;
-  };
-
   render() {
-    let text = '';
-    let isEmojiMessage = this.props.message.isEmojiMessage;
-
-    if (!Strings.isEmpty(this.props.message.text)) {
-      text = this.props.message.text;
-      text = ChatUtilities.matchURL(
-        text,
-        this.props.userPresence,
-        this.props.navigator,
-        this.props.theme
-      );
-      text = ChatUtilities.matchCastleURL(
-        text,
-        this.props.userPresence,
-        this.props.navigator,
-        this.props.theme
-      );
-      text = ChatUtilities.matchMention(text, this._handleNavigateToUser);
-      text = ChatUtilities.matchChannel(text, this._handleNavigateToChannel);
-    }
+    const { message } = this.props;
+    let isEmojiMessage = message.isEmojiMessage;
 
     return (
       <div className={STYLES_CONTAINER}>
@@ -103,7 +70,7 @@ export default class ChatMessageElement extends React.Component {
               fontSize: isEmojiMessage ? '40px' : null,
               lineHeight: isEmojiMessage ? '48px' : null,
             }}>
-            {text}
+            <UIMessageBody body={message.body} />
           </div>
         </span>
       </div>

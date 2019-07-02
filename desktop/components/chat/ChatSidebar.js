@@ -114,7 +114,7 @@ class ChatSidebar extends React.Component {
         <ChatMessages
           messages={messages}
           navigator={this.props.navigator}
-          userPresence={this.props.userPresence}
+          userIdToUser={this.props.userPresence.userIdToUser}
           theme={theme}
           size="32px"
         />

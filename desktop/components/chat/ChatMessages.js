@@ -1,6 +1,7 @@
 import ReactDOM from 'react-dom';
 
 import * as React from 'react';
+import * as ChatUtilities from '~/common/chat-utilities';
 import * as Constants from '~/common/constants';
 import * as URLS from '~/common/urls';
 
@@ -63,7 +64,7 @@ export default class ChatMessages extends React.Component {
   };
 
   render() {
-    const { navigator, userPresence } = this.props;
+    const { navigator, userIdToUser } = this.props;
 
     let messages = this.props.messages
       ? this.props.messages.map((m, i) => {
@@ -71,15 +72,13 @@ export default class ChatMessages extends React.Component {
             return <ChatEventElement key={`chat-event-${i}`} message={m} />;
           }
 
-          const user = userPresence.userIdToUser[m.fromUserId];
+          const user = userIdToUser[m.fromUserId];
           if (m.text && m.text.startsWith('/me')) {
             return (
               <ChatRolePlayElement
                 key={`chat-roleplay-${i}`}
                 message={m}
                 user={user}
-                userPresence={userPresence}
-                navigator={this.props.navigator}
                 onNavigateToUserProfile={this.props.navigator.navigateToUserProfile}
                 theme={this.props.theme}
               />
@@ -93,9 +92,6 @@ export default class ChatMessages extends React.Component {
                 <ChatMessageElementSameUser
                   key={`chat-${m.fromUserId}-${m.chatMessageId}-${i}`}
                   message={m}
-                  userPresence={userPresence}
-                  navigator={this.props.navigator}
-                  onNavigateToUserProfile={this.props.navigator.navigateToUserProfile}
                   theme={this.props.theme}
                   size={this.props.size}
                 />
@@ -108,8 +104,6 @@ export default class ChatMessages extends React.Component {
               key={`chat-${m.fromUserId}-${m.chatMessageId}-${i}`}
               message={m}
               user={user}
-              userPresence={userPresence}
-              navigator={this.props.navigator}
               onNavigateToUserProfile={this.props.navigator.navigateToUserProfile}
               theme={this.props.theme}
               size={this.props.size}
