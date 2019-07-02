@@ -100,7 +100,13 @@ class UIMessageBody extends React.Component {
   };
 
   _renderMessageBody = (body, onMatchAttachment) => {
-    if (!body || !body.message) return null;
+    if (!body) return null;
+
+    if (typeof body === 'string') {
+      body = { message: [{ text: body }] };
+    }
+
+    if (!body.message) return null;
 
     let components = body.message.map((c, ii) => {
       if (c.text) {

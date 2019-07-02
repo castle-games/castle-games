@@ -11,7 +11,7 @@ import { ConnectionStatus } from 'castle-chat-lib';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigatorContext, NavigationContext } from '~/contexts/NavigationContext';
 import { ChatContext } from '~/contexts/ChatContext';
-import { UserPresence } from '~/contexts/UserPresenceContext';
+import { UserPresenceContext } from '~/contexts/UserPresenceContext';
 
 import ChatMessages from '~/components/chat/ChatMessages';
 import ChatInput from '~/components/chat/ChatInput';
@@ -34,21 +34,6 @@ class ChatSidebar extends React.Component {
     isDarkMode: false,
   };
 
-  async componentDidUpdate(prevProps) {
-    if (prevProps.navigation.game.title !== this.props.navigation.game.title) {
-      await this._handleJoinGameChannel();
-    }
-  }
-
-  async componentDidMount() {
-    await this._handleJoinGameChannel();
-  }
-
-  _handleJoinGameChannel = async () => {
-    // TODO: BEN
-    // join the channel for this game.
-  };
-
   _handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
@@ -60,7 +45,7 @@ class ChatSidebar extends React.Component {
         return;
       }
 
-      this.props.chat.sendMessage(this.state.value);
+      this.props.chat.sendMessage(this.props.channelId, this.state.value);
       this.setState({ value: '' });
     }
   };
@@ -78,6 +63,7 @@ class ChatSidebar extends React.Component {
 
   render() {
     const { mode } = this.state;
+    const { channelId } = this.props;
 
     // TODO(jim): When theming is available, you can just modify this object.
     let theme = {
@@ -98,11 +84,10 @@ class ChatSidebar extends React.Component {
       return null;
     }
 
-    const channel = this.props.chat.getChannelForGame(this.props.navigation.game);
-    if (!channel) {
+    if (!channelId) {
       return null;
     }
-    const messages = this.props.chat.channels[channel.channelId].messages;
+    const messages = this.props.chat.channels[channelId].messages;
 
     return (
       <div
@@ -142,20 +127,24 @@ export default class ChatSidebarWithContext extends React.Component {
               <ChatContext.Consumer>
                 {(chat) => (
                   <NavigationContext.Consumer>
-                    {(navigation) => (
-                      <NavigatorContext.Consumer>
-                        {(navigator) => (
-                          <ChatSidebar
-                            viewer={currentUser.user}
-                            currentUser={currentUser}
-                            navigator={navigator}
-                            navigation={navigation}
-                            userPresence={userPresence}
-                            chat={chat}
-                          />
-                        )}
-                      </NavigatorContext.Consumer>
-                    )}
+                    {(navigation) => {
+                      const { channelId } = chat.findChannelForGame(navigation.game);
+                      return (
+                        <NavigatorContext.Consumer>
+                          {(navigator) => (
+                            <ChatSidebar
+                              viewer={currentUser.user}
+                              currentUser={currentUser}
+                              navigator={navigator}
+                              navigation={navigation}
+                              userPresence={userPresence}
+                              chat={chat}
+                              channelId={channelId}
+                            />
+                          )}
+                        </NavigatorContext.Consumer>
+                      );
+                    }}
                   </NavigationContext.Consumer>
                 )}
               </ChatContext.Consumer>

@@ -29,20 +29,6 @@ export default class SidebarDirectMessages extends React.Component {
           Direct Messages
         </SidebarGroupHeader>
         {this.props.directMessages.map((c) => {
-          if (c.channelId.startsWith(DIRECT_MESSAGE_PREFIX)) {
-            const channelUserIds = c.channelId.replace(DIRECT_MESSAGE_PREFIX, '').split(',');
-            const isAllowed = channelUserIds.find((id) => this.props.viewer.userId === id);
-
-            if (!isAllowed) {
-              console.error(
-                `This channel: ${
-                  c.channelId
-                } is not allowed. and will be removed on next mount. We need to find a way to get rid of these before they get to this point.`
-              );
-              return;
-            }
-          }
-
           const active =
             c.channelId === this.props.selectedChannelId && this.props.contentMode === 'chat';
 

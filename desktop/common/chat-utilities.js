@@ -3,6 +3,15 @@ import * as Actions from '~/common/actions';
 
 import { isEmoji, emojiToString } from '~/common/emojis';
 
+export const isEmojiBody = (body) => {
+  if (body && typeof body === 'string') {
+    return isEmoji(body);
+  } else if (body && body.message && body.message.length === 1) {
+    return !!body.message[0].emoji;
+  }
+  return false;
+};
+
 export const getSlashCommand = (body) => {
   let result = {
     isCommand: false,

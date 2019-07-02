@@ -50,8 +50,7 @@ export default class ChatMessageElement extends React.Component {
   };
 
   render() {
-    const { message } = this.props;
-    let isEmojiMessage = message.isEmojiMessage;
+    const { message, isEmojiMessage } = this.props;
 
     return (
       <div className={STYLES_CONTAINER}>

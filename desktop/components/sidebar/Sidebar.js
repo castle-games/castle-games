@@ -65,12 +65,6 @@ class Sidebar extends React.Component {
   };
 
   _handleNavigateToChat = async (channel) => {
-    // TODO: handle inside chat context navigation subscription
-    this.props.chat.refreshChannelData();
-    return this._handleNavigateToChatWithoutRefresh(channel);
-  };
-
-  _handleNavigateToChatWithoutRefresh = async (channel) => {
     this.props.navigator.navigateToChat({ channelId: channel.channelId });
     return this.setState({ mode: 'DEFAULT' });
   };
@@ -108,11 +102,13 @@ class Sidebar extends React.Component {
   _handleHideOptions = () => this.setState({ mode: 'DEFAULT' });
 
   _handleCreateDirectMessage = async (user) => {
-    return this.props.chat.openChannelForUser(user);
+    this.props.chat.openChannelForUser(user);
+    this._handleHideOptions();
   };
 
   _handleCreateChannel = async (name) => {
-    return this.props.chat.openChannelWithName(name);
+    this.props.chat.openChannelWithName(name);
+    this._handleHideOptions();
   };
 
   _renderUpdateBanner = () => {
@@ -223,7 +219,6 @@ class Sidebar extends React.Component {
           viewer={viewer}
           channels={chat.channels}
           onDismiss={this._handleHideOptions}
-          onSelectChannel={this._handleNavigateToChat}
           onCreateChannel={this._handleCreateChannel}
         />
       </div>

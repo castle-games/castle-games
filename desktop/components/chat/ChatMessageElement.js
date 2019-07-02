@@ -73,8 +73,7 @@ export default class ChatMessageElement extends React.Component {
   };
 
   render() {
-    const { message } = this.props;
-    let isEmojiMessage = this.props.message.isEmojiMessage;
+    const { message, isEmojiMessage } = this.props;
 
     return (
       <div className={STYLES_CONTAINER} style={this.props.style}>
@@ -112,7 +111,11 @@ export default class ChatMessageElement extends React.Component {
               fontSize: isEmojiMessage ? '40px' : null,
               lineHeight: isEmojiMessage ? '48px' : null,
             }}>
-            <UIMessageBody body={message.body} theme={this.props.theme} expandAttachments={this.props.expandAttachments} />
+            <UIMessageBody
+              body={message.body}
+              theme={this.props.theme}
+              expandAttachments={this.props.expandAttachments}
+            />
           </div>
         </span>
       </div>

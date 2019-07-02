@@ -74,11 +74,13 @@ export default class ChatMessages extends React.Component {
 
           const user = userIdToUser[m.fromUserId];
           const slashCommand = ChatUtilities.getSlashCommand(m.body);
+          const isEmojiMessage = ChatUtilities.isEmojiBody(m.body);
           if (slashCommand.isCommand && slashCommand.command === 'me') {
             return (
               <ChatRolePlayElement
                 key={`chat-roleplay-${i}`}
                 message={m}
+                isEmojiMessage={isEmojiMessage}
                 user={user}
                 onNavigateToUserProfile={this.props.navigator.navigateToUserProfile}
                 theme={this.props.theme}
@@ -94,6 +96,7 @@ export default class ChatMessages extends React.Component {
                 <ChatMessageElementSameUser
                   key={`chat-${m.fromUserId}-${m.chatMessageId}-${i}`}
                   message={m}
+                  isEmojiMessage={isEmojiMessage}
                   theme={this.props.theme}
                   size={this.props.size}
                 />
@@ -105,6 +108,7 @@ export default class ChatMessages extends React.Component {
             <ChatMessageElement
               key={`chat-${m.fromUserId}-${m.chatMessageId}-${i}`}
               message={m}
+              isEmojiMessage={isEmojiMessage}
               user={user}
               onNavigateToUserProfile={this.props.navigator.navigateToUserProfile}
               theme={this.props.theme}
