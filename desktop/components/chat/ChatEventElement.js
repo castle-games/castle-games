@@ -105,7 +105,7 @@ export default class ChatEventElement extends React.Component {
               </span>
             </div>
             <div className={STYLES_AUTHOR_MESSAGE}>
-              <UIMessageBody body={message.body} />
+              <UIMessageBody body={message.body} theme={this.props.theme} />
             </div>
           </span>
         </div>

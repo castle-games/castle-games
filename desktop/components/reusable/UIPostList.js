@@ -274,6 +274,7 @@ export class UIPostCell extends React.Component {
           <ChatMessageElement
             message={{ body: { ...message }, timestamp: createdTime }}
             user={creator}
+            expandAttachments={false}
             onNavigateToUserProfile={this._handleUserSelect}
             style={{ padding: `0 0 4px 0`, minHeight: '76px' }}
           />
@@ -345,7 +346,6 @@ export default class UIPostList extends React.Component {
               onGameSelect={this.props.onGameSelect}
               onUserSelect={this.props.onUserSelect}
               post={post}
-              userPresence={this.props.userPresence}
             />
           );
         })}

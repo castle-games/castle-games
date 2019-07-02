@@ -8,6 +8,7 @@ import { emojiToString } from '~/common/emojis';
 import { NavigatorContext } from '~/contexts/NavigationContext';
 import { UserPresenceContext } from '~/contexts/UserPresenceContext';
 
+import ChatPost from '~/components/chat/ChatPost';
 import StringReplace from 'react-string-replace';
 
 const STYLES_CHANNEL = css`
@@ -40,8 +41,14 @@ const STYLES_ANCHOR = css`
   }
 `;
 
-const matchCastleURL = (text) => {
+const matchCastleURL = (text, onMatchAttachment) => {
   return StringReplace(text, /(castle:\/\/\S+)/g, (match, i) => {
+    if (onMatchAttachment) {
+      const urlData = Urls.getCastleUrlInfo(match);
+      if (urlData.type) {
+        onMatchAttachment({ url: match, ...urlData });
+      }
+    }
     return (
       <a className={STYLES_ANCHOR} key={`castle-anchor-${match + i}`} href={match}>
         {match}
@@ -50,8 +57,14 @@ const matchCastleURL = (text) => {
   });
 };
 
-const matchURL = (text) => {
+const matchURL = (text, onMatchAttachment) => {
   return StringReplace(text, /(https?:\/\/\S+)/g, (match, i) => {
+    if (onMatchAttachment) {
+      const urlData = Urls.getCastleUrlInfo(match);
+      if (urlData.type) {
+        onMatchAttachment({ url: match, ...urlData });
+      }
+    }
     return (
       <a className={STYLES_ANCHOR} key={`url-${match + i}`} href={match}>
         {match}
@@ -80,14 +93,19 @@ export const matchChannel = (text, getChannelByName, openChannel) => {
 };
 
 class UIMessageBody extends React.Component {
-  _renderMessageBody = (body) => {
+  static defaultProps = {
+    body: null,
+    expandAttachments: true,
+  };
+
+  _renderMessageBody = (body, onMatchAttachment) => {
     if (!body || !body.message) return null;
 
     let components = body.message.map((c, ii) => {
       if (c.text) {
         let text = c.text;
-        text = matchURL(text);
-        text = matchCastleURL(text);
+        text = matchURL(text, onMatchAttachment);
+        text = matchCastleURL(text, onMatchAttachment);
         text = matchChannel(text, this.props.getChannelByName, this.props.openChannelWithName);
         return <span key={`message-${ii}`}>{text}</span>;
       } else if (c.userId) {
@@ -97,7 +115,7 @@ class UIMessageBody extends React.Component {
             <span
               className={STYLES_MENTION}
               key={`mention-${ii}`}
-              onClick={() => this.props.navigateToUserProfile(user)}>
+              onClick={() => this.props.navigator.navigateToUserProfile(user)}>
               @{user.username}
             </span>
           );
@@ -111,8 +129,34 @@ class UIMessageBody extends React.Component {
   };
 
   render() {
-    const { body } = this.props;
-    return <React.Fragment>{this._renderMessageBody(body)}</React.Fragment>;
+    const { body, expandAttachments } = this.props;
+    let attachmentsMatched, onMatchAttachment, attachments;
+
+    if (expandAttachments) {
+      attachmentsMatched = [];
+      onMatchAttachment = (urlData) => {
+        attachmentsMatched.push(urlData);
+      };
+    }
+
+    const renderedBody = this._renderMessageBody(body, onMatchAttachment);
+
+    if (attachmentsMatched && attachmentsMatched.length) {
+      attachments = attachmentsMatched.map((urlData, ii) => (
+        <ChatPost
+          key={`attachment-${ii}`}
+          urlData={urlData}
+          navigator={this.props.navigator}
+          theme={this.props.theme}
+        />
+      ));
+    }
+    return (
+      <React.Fragment>
+        <section>{renderedBody}</section>
+        <section>{attachments}</section>
+      </React.Fragment>
+    );
   }
 }
 
@@ -129,7 +173,7 @@ export default class UIMessageBodyWithContext extends React.Component {
                     userIdToUser={userPresence.userIdToUser}
                     getChannelByName={chat.findChannel}
                     openChannelWithName={chat.openChannelWithName}
-                    navigateToUserProfile={navigator.navigateToUserProfile}
+                    navigator={navigator}
                     {...this.props}
                   />
                 )}

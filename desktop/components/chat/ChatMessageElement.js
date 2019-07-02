@@ -112,7 +112,7 @@ export default class ChatMessageElement extends React.Component {
               fontSize: isEmojiMessage ? '40px' : null,
               lineHeight: isEmojiMessage ? '48px' : null,
             }}>
-            <UIMessageBody body={message.body} />
+            <UIMessageBody body={message.body} theme={this.props.theme} expandAttachments={this.props.expandAttachments} />
           </div>
         </span>
       </div>

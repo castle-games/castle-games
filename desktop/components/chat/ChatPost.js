@@ -83,6 +83,9 @@ let postCache = {};
 
 export default class ChatPost extends React.Component {
   static defaultProps = {
+    urlData: {
+      url: null,
+    },
     theme: {
       embedBorder: `1px solid #ececec`,
       embedBackground: `#ffffff`,
@@ -107,7 +110,7 @@ export default class ChatPost extends React.Component {
   };
 
   async componentDidMount() {
-    let url = this.props.message.text;
+    let url = this.props.urlData.url;
     url = url.replace('castle://', 'http://');
 
     if (!this.props.urlData.postId) {
@@ -147,7 +150,6 @@ export default class ChatPost extends React.Component {
           }}>
           <UIPostCell
             post={this.state.post}
-            userPresence={this.props.userPresence}
             onGameSelect={this._handleNavigateToGame}
             onUserSelect={this._handleNavigateToUser}
             style={{ margin: 0 }}
@@ -176,7 +178,7 @@ export default class ChatPost extends React.Component {
       );
     }
 
-    let url = this.props.message.text;
+    let url = this.props.urlData.url;
     url = url.replace('castle://', 'http://');
 
     return (
@@ -184,7 +186,7 @@ export default class ChatPost extends React.Component {
         <div className={STYLES_CONTAINER}>
           <div className={STYLES_SECTION}>
             <a className={STYLES_POST} href={url}>
-              {this.props.message.text}
+              {this.props.urlData.url}
             </a>
           </div>
         </div>

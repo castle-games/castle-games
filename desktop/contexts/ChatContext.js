@@ -304,12 +304,14 @@ class ChatContextManager extends React.Component {
   // TODO: audit
   findChannel = (name) => {
     let result = null;
-    let nameInvariant = name.toLowerCase();
-    Object.entries(this.state.channels).forEach(([channelId, channel]) => {
-      if (channel.name === nameInvariant) {
-        result = channel;
-      }
-    });
+    if (name) {
+      let nameInvariant = name.toLowerCase();
+      Object.entries(this.state.channels).forEach(([channelId, channel]) => {
+        if (channel.name === nameInvariant) {
+          result = channel;
+        }
+      });
+    }
     return result;
   };
 

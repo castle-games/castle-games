@@ -73,7 +73,8 @@ export default class ChatMessageElement extends React.Component {
         />
         <span className={STYLES_RIGHT}>
           <div className={STYLES_AUTHOR_MESSAGE} style={{ color: this.props.theme.textColor }}>
-            {this.props.user.username} <UIMessageBody body={message.body} />
+            {this.props.user.username}{' '}
+            <UIMessageBody body={message.body} theme={this.props.theme} />
           </div>
         </span>
       </div>
