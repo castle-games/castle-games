@@ -411,6 +411,10 @@ function ui.numberInput(label, value, props)
             end
         end
     end
+
+    if type(newValue) ~= 'number' then
+        newValue = (props and props.min) or 0
+    end
     return newValue
 end
 
