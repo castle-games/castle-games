@@ -3,7 +3,6 @@ import * as SVG from '~/common/svg';
 import * as Strings from '~/common/strings';
 import * as Constants from '~/common/constants';
 import * as NativeUtil from '~/native/nativeutil';
-import * as ChatActions from '~/common/actions-chat';
 import * as Actions from '~/common/actions';
 
 import { css } from 'react-emotion';
@@ -66,6 +65,7 @@ class Sidebar extends React.Component {
   };
 
   _handleNavigateToChat = async (channel) => {
+    // TODO: handle inside chat context navigation subscription
     this.props.chat.refreshChannelData();
     return this._handleNavigateToChatWithoutRefresh(channel);
   };
@@ -108,40 +108,7 @@ class Sidebar extends React.Component {
   _handleHideOptions = () => this.setState({ mode: 'DEFAULT' });
 
   _handleCreateDirectMessage = async (user) => {
-    if (this._createChannelLock) {
-      return;
-    }
-
-    this._createChannelLock = true;
-
-    // TODO: remove
-    const response = await ChatActions.sendUserChatMessage({
-      otherUserId: user.userId,
-      message: ':wave:',
-    });
-
-    if (!response || response.errors) {
-      this._createChannelLock = false;
-      alert(`We were unable to send ${user.username} a message.`);
-      return;
-    }
-
-    // NOTE(jim): The channel must appear in the refresh.
-    await this.props.chat.refreshChannelData();
-
-    let newChannel;
-    this.props.chat.channels.forEach((c) => {
-      if (c.otherUserId === user.userId) {
-        newChannel = c;
-      }
-    });
-
-    this._createChannelLock = false;
-    if (!newChannel) {
-      return this.setState({ mode: 'DEFAULT' });
-    }
-
-    this._handleNavigateToChatWithoutRefresh(newChannel);
+    return this.props.chat.openChannelForUser(user);
   };
 
   _handleCreateChannel = async (name) => {
@@ -194,7 +161,7 @@ class Sidebar extends React.Component {
         />
         {viewer ? (
           <SidebarChannels
-            selectedChannelId={chat.channel ? chat.channel.channelId : null}
+            selectedChannelId={navigation.chatChannelId}
             viewer={viewer}
             contentMode={navigation.contentMode}
             isChatVisible={isChatVisible}
@@ -205,7 +172,7 @@ class Sidebar extends React.Component {
         ) : null}
         {viewer ? (
           <SidebarDirectMessages
-            selectedChannelId={chat.channel ? chat.channel.channelId : null}
+            selectedChannelId={navigation.chatChannelId}
             viewer={viewer}
             userPresence={userPresence}
             contentMode={navigation.contentMode}

@@ -45,7 +45,6 @@ export const createChatChannel = async ({ name }) => {
           type
           createdTime
           updatedTime
-          otherUserId
         }
       }
     `,
@@ -55,57 +54,41 @@ export const createChatChannel = async ({ name }) => {
   return response;
 };
 
-export const joinChatChannel = async ({ channelId }) => {
+export const createDMChatChannel = async ({ otherUserId }) => {
   const response = await API.graphqlAsync(
     `
-      mutation($channelId: ID!) {
-        joinChatChannel(channelId: $channelId) {
+      mutation($otherUserId: ID!) {
+        createDMChatChannel(otherUserId: $otherUserId) {
           channelId
+          name
+          type
+          createdTime
+          updatedTime
+          otherUserId
         }
       }
     `,
-    { channelId }
+    { otherUserId }
   );
 
   return response;
 };
 
-export const leaveChatChannel = async ({ channelId }) => {
+export const createGameChatChannel = async ({ gameId }) => {
   const response = await API.graphqlAsync(
     `
-      mutation($channelId: ID!) {
-        leaveChatChannel(channelId: $channelId) {
+      mutation($gameId: ID!) {
+        createGameChatChannel(gameId: $gameId) {
           channelId
+          name
+          type
+          createdTime
+          updatedTime
+          gameId
         }
       }
     `,
-    { channelId }
-  );
-
-  return response;
-};
-
-export const sendChannelChatMessage = async ({ message, channelId }) => {
-  const response = await API.graphqlAsync(
-    `
-      mutation($message: String!, $channelId: ID!) {
-        sendChannelChatMessage(message: $message, channelId: $channelId)
-      }
-    `,
-    { message, channelId }
-  );
-
-  return response;
-};
-
-export const sendUserChatMessage = async ({ message, otherUserId }) => {
-  const response = await API.graphqlAsync(
-    `
-      mutation($message: String!, $otherUserId: ID!) {
-        sendUserChatMessage(message: $message, otherUserId: $otherUserId)
-      }
-    `,
-    { message, otherUserId }
+    { gameId }
   );
 
   return response;

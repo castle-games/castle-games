@@ -31,6 +31,7 @@ const STYLES_BOTTOM = css`
 
 export default class ChatMessages extends React.Component {
   static defaultProps = {
+    messages: [],
     theme: {
       textColor: Constants.REFACTOR_COLORS.text,
     },
@@ -62,35 +63,51 @@ export default class ChatMessages extends React.Component {
   };
 
   render() {
-    const { navigator, chat, userPresence } = this.props;
+    const { navigator, userPresence } = this.props;
 
-    let messages = this.props.messages.map((m, i) => {
-      if (m.type === 'NOTICE') {
-        return <ChatEventElement key={`chat-event-${i}`} message={m} />;
-      }
+    let messages = this.props.messages
+      ? this.props.messages.map((m, i) => {
+          if (m.type === 'NOTICE') {
+            return <ChatEventElement key={`chat-event-${i}`} message={m} />;
+          }
 
-      const user = userPresence.userIdToUser[m.fromUserId];
-      if (m.text && m.text.startsWith('/me')) {
-        return (
-          <ChatRolePlayElement
-            key={`chat-roleplay-${i}`}
-            message={m}
-            user={user}
-            userPresence={userPresence}
-            navigator={this.props.navigator}
-            onNavigateToUserProfile={this.props.navigator.navigateToUserProfile}
-            theme={this.props.theme}
-          />
-        );
-      }
+          const user = userPresence.userIdToUser[m.fromUserId];
+          if (m.text && m.text.startsWith('/me')) {
+            return (
+              <ChatRolePlayElement
+                key={`chat-roleplay-${i}`}
+                message={m}
+                user={user}
+                userPresence={userPresence}
+                navigator={this.props.navigator}
+                onNavigateToUserProfile={this.props.navigator.navigateToUserProfile}
+                theme={this.props.theme}
+              />
+            );
+          }
 
-      let previousMessage = this.props.messages[i - 1];
-      if (previousMessage && previousMessage.text && !previousMessage.text.startsWith('/me')) {
-        if (previousMessage.fromUserId === m.fromUserId) {
+          let previousMessage = this.props.messages[i - 1];
+          if (previousMessage && previousMessage.text && !previousMessage.text.startsWith('/me')) {
+            if (previousMessage.fromUserId === m.fromUserId) {
+              return (
+                <ChatMessageElementSameUser
+                  key={`chat-${m.fromUserId}-${m.chatMessageId}-${i}`}
+                  message={m}
+                  userPresence={userPresence}
+                  navigator={this.props.navigator}
+                  onNavigateToUserProfile={this.props.navigator.navigateToUserProfile}
+                  theme={this.props.theme}
+                  size={this.props.size}
+                />
+              );
+            }
+          }
+
           return (
-            <ChatMessageElementSameUser
+            <ChatMessageElement
               key={`chat-${m.fromUserId}-${m.chatMessageId}-${i}`}
               message={m}
+              user={user}
               userPresence={userPresence}
               navigator={this.props.navigator}
               onNavigateToUserProfile={this.props.navigator.navigateToUserProfile}
@@ -98,22 +115,8 @@ export default class ChatMessages extends React.Component {
               size={this.props.size}
             />
           );
-        }
-      }
-
-      return (
-        <ChatMessageElement
-          key={`chat-${m.fromUserId}-${m.chatMessageId}-${i}`}
-          message={m}
-          user={user}
-          userPresence={userPresence}
-          navigator={this.props.navigator}
-          onNavigateToUserProfile={this.props.navigator.navigateToUserProfile}
-          theme={this.props.theme}
-          size={this.props.size}
-        />
-      );
-    });
+        })
+      : [];
 
     return (
       <div

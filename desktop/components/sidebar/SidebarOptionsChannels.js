@@ -116,7 +116,7 @@ export default class SidebarOptionsChannels extends React.Component {
           </div>
         ) : null}
         <div>
-          {this.props.channels.map((c) => {
+          {Object.entries(this.props.channels).map(([id, c]) => {
             return (
               <div
                 key={`sidebar-options-${c.channelId}`}

@@ -1,7 +1,9 @@
 import * as React from 'react';
 import * as Actions from '~/common/actions';
 import * as ChatActions from '~/common/actions-chat';
+import * as ChatUtilities from '~/common/chat-utilities';
 import * as Constants from '~/common/constants';
+import * as Strings from '~/common/strings';
 
 import { CastleChat, ConnectionStatus } from 'castle-chat-lib';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
@@ -14,9 +16,10 @@ const EMPTY_CHAT_STATE = {
 
 const ChatContextDefaults = {
   sendMessage: async (message) => {},
-  openChannelWithName: (name) => {},
-  openChannelForUser: (user) => {},
-  openChannelForGame: (game) => {},
+  openChannelWithName: async (name) => {},
+  openChannelForUser: async (user) => {},
+  openChannelForGame: async (game) => {},
+  closeChannel: async (channelId) => {},
   findChannel: (channelName) => {}, // TODO: change
   refreshChannelData: () => {},
   ...EMPTY_CHAT_STATE,
@@ -32,7 +35,10 @@ class ChatContextManager extends React.Component {
       ...props.value,
       refreshChannelData: this.refreshChannelData,
       sendMessage: this.sendMessage,
-      getChannelForGame: this.getChannelForGame,
+      openChannelWithName: this.openChannelWithName,
+      openChannelForUser: this.openChannelForUser,
+      openChannelForGame: this.openChannelForGame,
+      closeChannel: this.closeChannel,
       findSubscribedChannel: this.findSubscribedChannel,
       findChannel: this.findChannel,
     };
@@ -102,7 +108,6 @@ class ChatContextManager extends React.Component {
     if (!channelId) {
       const response = await ChatActions.createChatChannel({ name });
       if (!response || response.errors) {
-        alert('We were unable to create a channel with this name.');
         return;
       }
       if (response.data && response.data.createChatChannel) {
@@ -110,28 +115,84 @@ class ChatContextManager extends React.Component {
       }
     }
     if (!isSubscribed) {
-      await ChatActions.joinChatChannel({ channelId });
-      await this.refreshChannelData();
-      await this._chat.loadRecentMessagesAsync();
+      await this._chat.joinChannelAsync(channelId);
     }
-    this.props.navigateToChat({ channelId });
+    return this.props.navigateToChat({ channelId });
   };
 
   // checks if we have a DM channel for this user,
   // creates it if not, and navigates to it.
-  openChannelForUser = (user) => {};
+  openChannelForUser = async (user) => {
+    if (!user || !user.userId) return;
+
+    let channelId;
+    Object.entries(this.state.channels).forEach(([key, channel]) => {
+      if (channel.otherUserId === user.userId) {
+        channelId = key;
+      }
+    });
+    if (!channelId) {
+      const response = await ChatActions.createDMChatChannel({ otherUserId: user.userId });
+      if (!response || response.errors) {
+        return;
+      }
+      if (response.data && response.data.createDMChatChannel) {
+        channelId = response.data.createDMChatChannel.channelId;
+      }
+    }
+    return this.props.navigateToChat({ channelId });
+  };
 
   // checks if we have a chat channel for this game,
   // creates it if not, and navigates to it.
-  openChannelForGame = (game) => {
-    // TODO: BEN
-    return null;
+  openChannelForGame = async (game) => {
+    if (!game || !game.gameId) return;
+
+    let channelId,
+      isSubscribed = false;
+    Object.entries(this.state.channels).forEach(([key, channel]) => {
+      if (channel.gameId === game.gameId) {
+        channelId = key;
+        isSubscribed = channel.isSubscribed;
+      }
+    });
+    if (!channelId) {
+      const response = await ChatActions.createGameChatChannel({ gameId: game.gameId });
+      if (!response || response.errors) {
+        return;
+      }
+      if (response.data && response.data.createGameChatChannel) {
+        channelId = response.data.createGameChatChannel.channelId;
+      }
+    }
+    if (!isSubscribed) {
+      await this._chat.joinChannelAsync(channelId);
+    }
+    return this.props.navigateToChat({ channelId });
   };
 
-  // TODO: _handleSendChannelMessage
-  // and the corresponding DM flow
-  sendMessage = async (message) => {
-    // TODO: BEN
+  closeChannel = async (channelId) => {
+    await this._chat.leaveChannelAsync(channelId);
+    this.setState((state) => {
+      let channels = { ...state.channels };
+      if (channels[channelId]) {
+        delete channels[channelId];
+      }
+      return {
+        ...state,
+        channels,
+      };
+    });
+  };
+
+  sendMessage = async (channelId, message) => {
+    if (!this._chat) return;
+    if (Strings.isEmpty(message)) {
+      return;
+    }
+    // TODO: second param was usernameToUser
+    message = await ChatUtilities.formatMessageAsync(message, {});
+    return this._chat.sendMessageAsync(channelId, message);
   };
 
   _handleMessagesAsync = async (allUnsortedMessages) => {
@@ -254,20 +315,11 @@ class ChatContextManager extends React.Component {
 
   // TODO: remove, put on server
   _newUserJoinChannels = async () => {
+    if (!this._chat) return;
     // NOTE(jim): General
-    await ChatActions.joinChatChannel({
-      channelId: 'channel-79c91814-c73e-4d07-8bc6-6829fad03d72',
-    });
-
+    await this._chat.joinChannelAsync('channel-79c91814-c73e-4d07-8bc6-6829fad03d72');
     // NOTE(jim): Random
-    await ChatActions.joinChatChannel({
-      channelId: 'channel-37c0532e-31a1-4558-9f3e-200337523859',
-    });
-
-    await this.refreshChannelData();
-    if (this._chat) {
-      await this._chat.loadRecentMessagesAsync();
-    }
+    await this._chat.joinChannelAsync('channel-37c0532e-31a1-4558-9f3e-200337523859');
   };
 
   render() {

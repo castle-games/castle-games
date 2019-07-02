@@ -85,8 +85,7 @@ class ChatScreen extends React.Component {
   };
 
   _handleLeaveChannel = async () => {
-    await ChatActions.leaveChatChannel({ channelId: this.props.chat.channelId });
-    this.props.chat.refreshChannelData();
+    this.props.chat.closeChannel(this.props.channelId);
     this.props.navigator.navigateToHome();
   };
 
@@ -145,17 +144,7 @@ class ChatScreen extends React.Component {
       if (Strings.isEmpty(this.state.value.trim())) {
         return;
       }
-
-      let user;
-      const channel = this.props.chat.channels[this.props.channelId];
-      // TODO: check type
-      if (this.props.channelId.startsWith(DIRECT_MESSAGE_PREFIX)) {
-        const channelUserIds = this.props.channelId.replace(DIRECT_MESSAGE_PREFIX, '').split(',');
-        const otherUserId = channelUserIds.find((id) => id !== this.props.viewer.userId);
-        user = this.props.userPresence.userIdToUser[otherUserId];
-      }
-
-      this.props.chat.sendMessage(this.state.value, user);
+      this.props.chat.sendMessage(this.props.channelId, this.state.value);
       this.clear();
       this.setState({ value: '', users: [] });
     }
@@ -201,8 +190,6 @@ class ChatScreen extends React.Component {
       );
     }
 
-    let messages = this.props.chat.channels[this.props.channelId].messages;
-
     return (
       <div className={className}>
         <ChatHeader
@@ -213,8 +200,7 @@ class ChatScreen extends React.Component {
           onMembersClick={this._handleShowSingleChannelMembers}
         />
         <ChatMessages
-          messages={messages}
-          chat={this.props.chat}
+          messages={channel.messages}
           navigator={this.props.navigator}
           userPresence={this.props.userPresence}
         />
