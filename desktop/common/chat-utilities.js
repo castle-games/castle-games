@@ -2,7 +2,28 @@ import * as React from 'react';
 import * as Actions from '~/common/actions';
 
 import { isEmoji, emojiToString } from '~/common/emojis';
-import { css } from 'react-emotion';
+
+export const getSlashCommand = (body) => {
+  let result = {
+    isCommand: false,
+    command: null,
+  };
+  let text;
+  if (body && typeof body === 'string') {
+    text = body;
+  } else if (body && body.message && body.message.length) {
+    const firstComponent = body.message[0];
+    text = firstComponent.text;
+  }
+  if (text && text.startsWith('/')) {
+    result.isCommand = true;
+    result.command = text
+      .split(' ')[0]
+      .substring(1)
+      .toLowerCase();
+  }
+  return result;
+};
 
 export const _getAutoCompleteUserAsync = async (text) => {
   let autocompleteResults = await Actions.getAutocompleteAsync(text);

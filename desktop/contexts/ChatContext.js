@@ -192,6 +192,14 @@ class ChatContextManager extends React.Component {
     }
     // TODO: second param was usernameToUser
     message = await ChatUtilities.formatMessageAsync(message, {});
+    const slashCommand = ChatUtilities.getSlashCommand(message);
+    if (slashCommand.isCommand) {
+      // capture any non-me command without sending.
+      // TODO: handle various commands
+      if (slashCommand.command !== 'me') {
+        return;
+      }
+    }
     return this._chat.sendMessageAsync(channelId, message);
   };
 

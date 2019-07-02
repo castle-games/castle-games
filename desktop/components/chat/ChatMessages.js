@@ -73,7 +73,8 @@ export default class ChatMessages extends React.Component {
           }
 
           const user = userIdToUser[m.fromUserId];
-          if (m.text && m.text.startsWith('/me')) {
+          const slashCommand = ChatUtilities.getSlashCommand(m.body);
+          if (slashCommand.isCommand && slashCommand.command === 'me') {
             return (
               <ChatRolePlayElement
                 key={`chat-roleplay-${i}`}
@@ -86,8 +87,9 @@ export default class ChatMessages extends React.Component {
           }
 
           let previousMessage = this.props.messages[i - 1];
-          if (previousMessage && previousMessage.text && !previousMessage.text.startsWith('/me')) {
-            if (previousMessage.fromUserId === m.fromUserId) {
+          if (previousMessage) {
+            const prevSlashCommand = ChatUtilities.getSlashCommand(previousMessage.body);
+            if (!prevSlashCommand.isCommand && previousMessage.fromUserId === m.fromUserId) {
               return (
                 <ChatMessageElementSameUser
                   key={`chat-${m.fromUserId}-${m.chatMessageId}-${i}`}

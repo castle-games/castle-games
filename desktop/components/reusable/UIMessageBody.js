@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as ChatUtilities from '~/common/chat-utilities';
 import * as Constants from '~/common/constants';
 import * as Urls from '~/common/urls';
 
@@ -104,6 +105,12 @@ class UIMessageBody extends React.Component {
     let components = body.message.map((c, ii) => {
       if (c.text) {
         let text = c.text;
+        if (ii == 0 && ChatUtilities.getSlashCommand(body).isCommand) {
+          text = text
+            .split(' ')
+            .slice(1)
+            .join(' ');
+        }
         text = matchURL(text, onMatchAttachment);
         text = matchCastleURL(text, onMatchAttachment);
         text = matchChannel(text, this.props.getChannelByName, this.props.openChannelWithName);
