@@ -16,6 +16,7 @@ const STYLES_CONTAINER = css`
   width: 100%;
   background: #171717;
   flex-shrink: 0;
+  overflow: hidden;
 `;
 
 const STYLES_BUTTON = css`

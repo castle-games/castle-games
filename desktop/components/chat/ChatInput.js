@@ -171,7 +171,7 @@ export default class ChatInput extends React.Component {
 
       inputStyles = {
         border: `2px solid transparent`,
-        padding: `8px 16px 8px 16px`,
+        padding: `5px 16px 6px 16px`,
         borderRadius: `0px`,
         color: this.props.theme.textColor,
         background: this.props.theme.inputBackground,
