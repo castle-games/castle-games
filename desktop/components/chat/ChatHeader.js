@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as Actions from '~/common/actions';
 import * as Constants from '~/common/constants';
 import * as Strings from '~/common/strings';
 import * as SVG from '~/common/svg';
@@ -62,6 +63,39 @@ const STYLES_P = css`
 `;
 
 export default class ChatHeader extends React.Component {
+  state = {
+    game: null,
+  };
+
+  async componentDidMount() {
+    const { channel } = this.props;
+    if (channel.type === 'game' && channel.gameId) {
+      try {
+        let game = await Actions.getGameByGameId(channel.gameId);
+        this.setState({ game });
+      } catch (_) {}
+    }
+  }
+
+  _getHeading = () => {
+    const { channel } = this.props;
+    switch (channel.type) {
+      case 'game':
+        if (this.state.game) {
+          return `People playing ${this.state.game.title}`;
+        }
+        break;
+      case 'dm':
+        return 'This is a private message thread.';
+      default:
+        if (channel.name === 'lobby') {
+          return 'Everyone in Castle';
+        }
+        break;
+    }
+    return 'This is a public channel.';
+  };
+
   render() {
     const { channel } = this.props;
     if (!channel) {
@@ -80,11 +114,7 @@ export default class ChatHeader extends React.Component {
               <strong>{channel.members.length} online</strong>
             </p>
           ) : (
-            <p className={STYLES_P}>
-              {channel.type === 'dm'
-                ? `This is a private message channel.`
-                : `This is a public channel.`}
-            </p>
+            <p className={STYLES_P}>{this._getHeading()}</p>
           )}
         </div>
         <div className={STYLES_HEADER_RIGHT} onClick={this.props.onSettingsClick}>

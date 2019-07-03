@@ -7,26 +7,25 @@ import CastleApiClient from 'castle-api-client';
 
 export const API = CastleApiClient(Constants.API_HOST);
 
+const CHANNEL_FIELDS = `
+  channelId
+  name
+  type
+  updatedTime
+  otherUserId
+  gameId
+`;
+
 export const getAllChat = async () => {
   const response = await API.graphqlAsync(
     `
       query {
         subscribedChatChannels {
-          channelId
-          name
-          type
-          createdTime
-          updatedTime
-          otherUserId
+          ${CHANNEL_FIELDS}
         }
 
         allChatChannels {
-          channelId
-          name
-          type
-          createdTime
-          updatedTime
-          otherUserId
+          ${CHANNEL_FIELDS}
         }
       }
     `
@@ -40,11 +39,7 @@ export const createChatChannel = async ({ name }) => {
     `
       mutation($name: String!) {
         createChatChannel(name: $name) {
-          channelId
-          name
-          type
-          createdTime
-          updatedTime
+          ${CHANNEL_FIELDS}
         }
       }
     `,
@@ -59,12 +54,7 @@ export const createDMChatChannel = async ({ otherUserId }) => {
     `
       mutation($otherUserId: ID!) {
         createDMChatChannel(otherUserId: $otherUserId) {
-          channelId
-          name
-          type
-          createdTime
-          updatedTime
-          otherUserId
+          ${CHANNEL_FIELDS}
         }
       }
     `,
@@ -79,12 +69,7 @@ export const createGameChatChannel = async ({ gameId }) => {
     `
       mutation($gameId: ID!) {
         createGameChatChannel(gameId: $gameId) {
-          channelId
-          name
-          type
-          createdTime
-          updatedTime
-          gameId
+          ${CHANNEL_FIELDS}
         }
       }
     `,
