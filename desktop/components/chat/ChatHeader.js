@@ -67,15 +67,27 @@ export default class ChatHeader extends React.Component {
     game: null,
   };
 
-  async componentDidMount() {
+  constructor(props) {
+    super(props);
+    this._update(null);
+  }
+
+  componentDidUpdate(prevProps) {
+    this._update(prevProps);
+  }
+
+  _update = async (prevProps) => {
     const { channel } = this.props;
     if (channel.type === 'game' && channel.gameId) {
-      try {
-        let game = await Actions.getGameByGameId(channel.gameId);
-        this.setState({ game });
-      } catch (_) {}
+      let prevGameId = prevProps ? prevProps.channel.gameId : null;
+      if (!this.state.game || channel.gameId !== prevGameId) {
+        try {
+          let game = await Actions.getGameByGameId(channel.gameId);
+          this.setState({ game });
+        } catch (_) {}
+      }
     }
-  }
+  };
 
   _getHeading = () => {
     const { channel } = this.props;
