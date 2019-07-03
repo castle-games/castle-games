@@ -412,6 +412,18 @@ class ChatContextManager extends React.Component {
       const lastMessage = this._mostRecentMessageInChannel(channelId);
       if (lastMessage) {
         this._messagesReadQueue[channelId] = lastMessage.chatMessageId;
+
+        // immediately mark read locally
+        this.setState((state) => {
+          let channels = { ...state.channels };
+          channels[channelId] = { ...channels[channelId], hasUnreadMessages: false };
+          return {
+            ...state,
+            channels,
+          };
+        });
+
+        // queue api call to mark as read
         this._clearMessagesReadQueueDebounce();
       }
     }
