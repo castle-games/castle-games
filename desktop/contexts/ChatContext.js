@@ -279,6 +279,14 @@ class ChatContextManager extends React.Component {
         if (!this.props.userPresence.userIdToUser[m.fromUserId]) {
           userIds[m.fromUserId] = true;
         }
+        if (m.body && m.body.message) {
+          for (let jj = 0; jj < m.body.message.length; jj++) {
+            const component = m.body.message[jj];
+            if (component.userId) {
+              userIds[component.userId] = true;
+            }
+          }
+        }
         if (!channels[m.channelId]) {
           // never seen this channel before, fetch the full channel object later
           channels[m.channelId] = {};
