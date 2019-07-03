@@ -143,7 +143,7 @@ class ChatContextManager extends React.Component {
   openChannelWithName = async (name) => {
     let channelId,
       isSubscribed = false,
-      createdChannel;
+      fetchedChannel;
     Object.entries(this.state.channels).forEach(([key, channel]) => {
       if (channel.name === name) {
         channelId = key;
@@ -151,20 +151,23 @@ class ChatContextManager extends React.Component {
       }
     });
     if (!channelId) {
-      const response = await ChatActions.createChatChannel({ name });
+      // don't try to create a channel, but see if one exists with this name
+      const response = await ChatActions.getAutocompleteAsync(name, ['channels']);
       if (!response || response.errors) {
         return;
       }
-      if (response.data && response.data.createChatChannel) {
-        createdChannel = response.data.createChatChannel;
-        channelId = createdChannel.channelId;
+      if (response.chatChannels && response.chatChannels.length) {
+        if (response.chatChannels[0].name === name) {
+          fetchedChannel = response.chatChannels[0];
+          channelId = fetchedChannel.channelId;
+        }
       }
     }
     if (!isSubscribed) {
       await this._chat.joinChannelAsync(channelId);
     }
-    if (createdChannel) {
-      await this._addChannel({ ...createdChannel, isSubscribed: true });
+    if (fetchedChannel) {
+      await this._addChannel({ ...fetchedChannel, isSubscribed: true });
     }
     return this.props.navigateToChat({ channelId });
   };

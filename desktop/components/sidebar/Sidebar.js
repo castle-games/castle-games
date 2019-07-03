@@ -106,7 +106,7 @@ class Sidebar extends React.Component {
     this._handleHideOptions();
   };
 
-  _handleCreateChannel = async (name) => {
+  _handleOpenChannel = async (name) => {
     this.props.chat.openChannelWithName(name);
     this._handleHideOptions();
   };
@@ -219,7 +219,7 @@ class Sidebar extends React.Component {
           viewer={viewer}
           channels={chat.channels}
           onDismiss={this._handleHideOptions}
-          onCreateChannel={this._handleCreateChannel}
+          onOpenChannel={this._handleOpenChannel}
         />
       </div>
     );

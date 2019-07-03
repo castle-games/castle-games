@@ -1,6 +1,8 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
+import * as ChatActions from '~/common/actions-chat';
 import * as SVG from '~/common/svg';
+import * as Strings from '~/common/strings';
 
 import { css } from 'react-emotion';
 
@@ -73,19 +75,55 @@ const STYLES_FORM = css`
 `;
 
 export default class SidebarOptionsChannels extends React.Component {
+  _timeout;
+
   state = {
-    name: '',
+    query: '',
+    channels: [],
   };
+
+  componentWillUnmount() {
+    window.clearTimeout(this._timeout);
+    this._timeout = null;
+  }
 
   _handleChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value });
+    const value = e.target.value;
+    this.setState({ [e.target.name]: value }, () => {
+      window.clearTimeout(this._timeout);
+      this._timeout = null;
+      this._handleSearch(value);
+    });
   };
 
-  _handleCreateChannel = () => {
-    this.props.onCreateChannel(this.state.name);
+  _handleSearch = (value) => {
+    if (Strings.isEmpty(value)) {
+      this.setState({ channels: [] });
+    } else {
+      this._timeout = window.setTimeout(async () => {
+        let channels = [];
+
+        let autocompleteResults = await ChatActions.getAutocompleteAsync(value, ['channels']);
+        if (autocompleteResults.chatChannels) {
+          channels = autocompleteResults.chatChannels;
+        }
+
+        this.setState({ channels });
+      }, 300);
+    }
   };
 
   render() {
+    let resultsMessage;
+    if (this.props.viewer) {
+      if (!Strings.isEmpty(this.state.query)) {
+        if (this.state.channels && this.state.channels.length) {
+          resultsMessage = 'Channels found';
+        } else {
+          resultsMessage = 'No channels found';
+        }
+      }
+    }
     return (
       <React.Fragment>
         <header className={STYLES_HEADER}>
@@ -94,35 +132,31 @@ export default class SidebarOptionsChannels extends React.Component {
             <SVG.Dismiss size="16px" />
           </div>
         </header>
-        {this.props.viewer ? <div className={STYLES_TITLE}>Add channel</div> : null}
+        {this.props.viewer ? <div className={STYLES_TITLE}>Find a channel</div> : null}
 
         <div className={STYLES_FORM}>
           <UISidebarInput
             label="name"
-            name="name"
+            name="query"
             onChange={this._handleChange}
-            value={this.state.name}
+            value={this.state.query}
             style={{ marginBottom: 16 }}
           />
         </div>
 
-        <div className={STYLES_OPTION} onClick={this._handleCreateChannel}>
-          Create
-        </div>
-
-        {this.props.viewer ? (
+        {resultsMessage ? (
           <div className={STYLES_TITLE} style={{ marginTop: 40 }}>
-            Find a channel
+            {resultsMessage}
           </div>
         ) : null}
         <div>
-          {Object.entries(this.props.channels).map(([id, c]) => {
+          {Object.entries(this.state.channels).map(([id, c]) => {
             return (
               <div
                 key={`sidebar-options-${c.channelId}`}
                 className={STYLES_OPTION}
                 style={{ marginBottom: 8 }}
-                onClick={() => this.props.onCreateChannel(c.name)}>
+                onClick={() => this.props.onOpenChannel(c.name)}>
                 #{c.name}
               </div>
             );
