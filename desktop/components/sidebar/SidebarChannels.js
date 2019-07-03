@@ -28,6 +28,7 @@ export default class SidebarChannels extends React.Component {
           return (
             <SidebarChannelItem
               key={`channel-${c.channelId}`}
+              channel={c}
               onClick={
                 !(active && this.props.isChatVisible)
                   ? () => this.props.onSelectChannel({ ...c })
@@ -35,7 +36,6 @@ export default class SidebarChannels extends React.Component {
               }
               data={{
                 active,
-                name: c.name,
                 pending: 0,
               }}
             />

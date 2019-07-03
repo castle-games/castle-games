@@ -49,17 +49,17 @@ const STYLES_SYMBOL = css`
   flex-shrink: 0;
 `;
 
-export default ({ data, onClick }) => {
+export default ({ channel, data, onClick }) => {
   return (
     <div
       className={STYLES_CHANNEL}
       style={{ color: data.active ? 'magenta' : null }}
       onClick={onClick ? onClick : null}>
       <span className={STYLES_SYMBOL}>
-        {data.game ? <SVG.SidebarGames size="14px" /> : <SVG.HashTag size="14px" />}
+        {channel.type === 'game' ? <SVG.SidebarGames size="14px" /> : <SVG.HashTag size="14px" />}
       </span>
       <span className={STYLES_NAME} style={{ fontWeight: data.active ? '700' : null }}>
-        {data.name}
+        {channel.name}
       </span>
       {data.pending ? <span className={STYLES_NOTIFICATION}>{data.pending}</span> : null}
     </div>

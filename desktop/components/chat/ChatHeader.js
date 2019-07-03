@@ -63,32 +63,25 @@ const STYLES_P = css`
 
 export default class ChatHeader extends React.Component {
   render() {
-    if (!this.props.channel) {
+    const { channel } = this.props;
+    if (!channel) {
       return null;
-    }
-
-    let name = this.props.channel.name;
-    if (this.props.channel.otherUserId) {
-      const { userIdToUser } = this.props;
-      const otherUser = userIdToUser[this.props.channel.otherUserId];
-
-      name = otherUser ? `${Strings.getName(otherUser)}` : `Direct Message`;
     }
 
     return (
       <header className={STYLES_HEADER}>
         <div className={STYLES_HEADER_LEFT}>
           <h2 className={STYLES_H2} onClick={this.props.onSettingsClick}>
-            <SVG.HashTag size="12px" style={{ marginRight: 4 }} />
-            {name}
+            {channel.type !== 'dm' ? <SVG.HashTag size="12px" style={{ marginRight: 4 }} /> : null}
+            {channel.name}
           </h2>
-          {this.props.channel.members && this.props.channel.members.length ? (
+          {channel.members && channel.members.length ? (
             <p className={STYLES_P} onClick={this.props.onMembersClick}>
-              <strong>{this.props.channel.members.length} online</strong>
+              <strong>{channel.members.length} online</strong>
             </p>
           ) : (
             <p className={STYLES_P}>
-              {this.props.channel.otherUserId
+              {channel.type === 'dm'
                 ? `This is a private message channel.`
                 : `This is a public channel.`}
             </p>
