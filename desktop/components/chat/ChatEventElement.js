@@ -14,7 +14,7 @@ const STYLES_CONTAINER = css`
   padding: 8px 48px 8px 16px;
 `;
 
-const STYLES_CHAT = css`
+const STYLES_NOTICE = css`
   display: flex;
   width: 100%;
   align-items: flex-start;
@@ -23,6 +23,14 @@ const STYLES_CHAT = css`
   border-radius: 4px;
   padding: 8px 0 8px 0;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
+`;
+
+const STYLES_SUBDUED = css`
+  display: flex;
+  width: 100%;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 8px 0 8px 0;
 `;
 
 const STYLES_LEFT = css`
@@ -60,12 +68,21 @@ const STYLES_TIMESTAMP = css`
   font-size: 10px;
 `;
 
-const STYLES_AUTHOR_MESSAGE = css`
+const STYLES_NOTICE_MESSAGE = css`
   line-height: 20px;
   font-size: 14px;
   overflow-wrap: break-word;
   white-space: pre-wrap;
   color: ${Constants.REFACTOR_COLORS.text};
+`;
+
+const STYLES_SUBDUED_MESSAGE = css`
+  line-height: 20px;
+  font-size: 14px;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  font-style: italic;
+  color: ${Constants.REFACTOR_COLORS.subdued};
 `;
 
 const STYLES_ANCHOR = css`
@@ -80,22 +97,13 @@ const STYLES_ANCHOR = css`
   }
 `;
 
-export default class ChatEventElement extends React.Component {
-  static defaultProps = {
-    user: {
-      name: 'Castle Event',
-      photo: {
-        url: null,
-      },
-    },
-  };
-
+class NoticeMessage extends React.Component {
   render() {
     const { message } = this.props;
 
     return (
       <div className={STYLES_CONTAINER}>
-        <div className={STYLES_CHAT}>
+        <div className={STYLES_NOTICE}>
           <span className={STYLES_LEFT}>🏰</span>
           <span className={STYLES_RIGHT}>
             <div className={STYLES_AUTHOR_NAME}>
@@ -104,7 +112,7 @@ export default class ChatEventElement extends React.Component {
                 {Strings.toChatDate(this.props.message.timestamp)}
               </span>
             </div>
-            <div className={STYLES_AUTHOR_MESSAGE}>
+            <div className={STYLES_NOTICE_MESSAGE}>
               <UIMessageBody
                 body={message.body}
                 theme={this.props.theme}
@@ -115,5 +123,50 @@ export default class ChatEventElement extends React.Component {
         </div>
       </div>
     );
+  }
+}
+
+class SubduedMessage extends React.Component {
+  render() {
+    const { message } = this.props;
+
+    return (
+      <div className={STYLES_CONTAINER}>
+        <div className={STYLES_SUBDUED}>
+          <span className={STYLES_RIGHT}>
+            <div className={STYLES_SUBDUED_MESSAGE}>
+              <UIMessageBody
+                body={message.body}
+                theme={this.props.theme}
+                expandAttachments={false}
+              />
+            </div>
+          </span>
+        </div>
+      </div>
+    );
+  }
+}
+
+export default class ChatEventElement extends React.Component {
+  static defaultProps = {
+    user: {
+      name: 'Castle',
+      photo: {
+        url: null,
+      },
+    },
+  };
+
+  render() {
+    const { message } = this.props;
+    const type = message && message.body ? message.body.notificationType : null;
+    switch (type) {
+      case 'game-session':
+        return <NoticeMessage {...this.props} />;
+      case 'joined-castle':
+      default:
+        return <SubduedMessage {...this.props} />;
+    }
   }
 }

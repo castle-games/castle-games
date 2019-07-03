@@ -331,9 +331,7 @@ class ChatContextManager extends React.Component {
     }
   };
 
-  _handleConnectStatus = async (status) => {
-    // console.log('status', status);
-  };
+  _handleConnectStatus = async (status) => {};
 
   _handlePresenceAsync = async (event) => {
     if (!event.user_ids) {
@@ -465,7 +463,7 @@ class ChatContextManager extends React.Component {
 
   _handleChatNotification = (event) => {
     // TODO: replace this with something better
-    let result = this.findChannel('general');
+    let result = this.findChannel('lobby');
     if (result) {
       this.setState(async (state) => {
         let c = { ...state.channels[result.channelId] };
@@ -473,7 +471,7 @@ class ChatContextManager extends React.Component {
           c.messages = [];
         }
         c.messages.push({
-          type: 'NOTICE',
+          fromUserId: -1,
           body: await ChatUtilities.formatMessageAsync(event.params.message),
           timestamp: new Date().toString(),
         });

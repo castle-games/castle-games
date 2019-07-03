@@ -68,7 +68,7 @@ export default class ChatMessages extends React.Component {
 
     let messages = this.props.messages
       ? this.props.messages.map((m, i) => {
-          if (m.type === 'NOTICE') {
+          if (m.fromUserId == ChatUtilities.ADMIN_USER_ID) {
             return <ChatEventElement key={`chat-event-${i}`} message={m} />;
           }
 

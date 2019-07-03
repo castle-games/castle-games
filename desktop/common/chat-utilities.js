@@ -3,6 +3,8 @@ import * as ChatActions from '~/common/actions-chat';
 
 import { isEmoji, emojiToString } from '~/common/emojis';
 
+export const ADMIN_USER_ID = -1;
+
 const CHANNEL_TYPE_SORT = {
   public: 1,
   game: 2,
