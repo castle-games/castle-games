@@ -69,7 +69,9 @@ export default class ChatMessages extends React.Component {
     let messages = this.props.messages
       ? this.props.messages.map((m, i) => {
           if (m.fromUserId == ChatUtilities.ADMIN_USER_ID) {
-            return <ChatEventElement key={`chat-event-${i}`} message={m} />;
+            return (
+              <ChatEventElement key={`chat-event-${i}`} message={m} theme={this.props.theme} />
+            );
           }
 
           const user = userIdToUser[m.fromUserId];

@@ -85,18 +85,6 @@ const STYLES_SUBDUED_MESSAGE = css`
   color: ${Constants.REFACTOR_COLORS.subdued};
 `;
 
-const STYLES_ANCHOR = css`
-  color: ${Constants.REFACTOR_COLORS.text};
-  font-weight: 600;
-  text-decoration: underline;
-  :hover {
-    color: ${Constants.REFACTOR_COLORS.text};
-  }
-  :visited {
-    color: ${Constants.REFACTOR_COLORS.text};
-  }
-`;
-
 class NoticeMessage extends React.Component {
   render() {
     const { message } = this.props;

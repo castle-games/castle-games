@@ -50,6 +50,7 @@ class Share {
       let event = new Event('CASTLE_ADD_CHAT_NOTIFICATION');
       event.params = {
         message,
+        game: this._game,
       };
       window.dispatchEvent(event);
     }
