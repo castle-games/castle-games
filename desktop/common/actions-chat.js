@@ -93,3 +93,44 @@ export const createGameChatChannel = async ({ gameId }) => {
 
   return response;
 };
+
+export async function getAutocompleteAsync(text, types = ['users']) {
+  let usersQuery = '',
+    gamesQuery = '',
+    channelsQuery = '';
+  if (types.includes('users')) {
+    usersQuery = `
+        users {
+          userId
+          username
+          name
+          photo {
+            url
+            height
+            width
+          }
+        }`;
+  }
+  if (types.includes('channels')) {
+    channelsQuery = `
+        chatChannels {
+          channelId
+          name
+          type
+        }`;
+  }
+  const result = await API(
+    `
+    query($text: String!) {
+      autocomplete(text: $text) {
+        ${usersQuery}
+        ${channelsQuery}
+      }
+    }`,
+    { text }
+  );
+  if (result.error || result.errors) {
+    return false;
+  }
+  return result.data.autocomplete;
+}

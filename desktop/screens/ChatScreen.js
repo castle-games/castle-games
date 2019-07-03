@@ -126,7 +126,7 @@ class ChatScreen extends React.Component {
     this._timeout = window.setTimeout(async () => {
       let users = [];
 
-      let autocompleteResults = await Actions.getAutocompleteAsync(value);
+      let autocompleteResults = await ChatActions.getAutocompleteAsync(value, ['users']);
       if (autocompleteResults.users) {
         users = autocompleteResults.users;
       }

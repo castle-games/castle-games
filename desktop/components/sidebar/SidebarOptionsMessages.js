@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as SVG from '~/common/svg';
-import * as Actions from '~/common/actions';
+import * as ChatActions from '~/common/actions-chat';
 import * as Strings from '~/common/strings';
 
 import { css } from 'react-emotion';
@@ -105,7 +105,7 @@ export default class SidebarOptionsMessages extends React.Component {
     this._timeout = window.setTimeout(async () => {
       let users = [];
 
-      let autocompleteResults = await Actions.getAutocompleteAsync(value);
+      let autocompleteResults = await ChatActions.getAutocompleteAsync(value, ['users']);
       if (autocompleteResults.users) {
         users = autocompleteResults.users;
       }

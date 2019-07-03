@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as Actions from '~/common/actions';
+import * as ChatActions from '~/common/actions-chat';
 
 import { isEmoji, emojiToString } from '~/common/emojis';
 
@@ -35,7 +35,7 @@ export const getSlashCommand = (body) => {
 };
 
 export const _getAutoCompleteUserAsync = async (text) => {
-  let autocompleteResults = await Actions.getAutocompleteAsync(text);
+  let autocompleteResults = await ChatActions.getAutocompleteAsync(text, ['users']);
   let users = autocompleteResults.users;
 
   for (let i = 0; i < users.length; i++) {

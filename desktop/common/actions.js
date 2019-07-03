@@ -911,31 +911,6 @@ export async function gameServerLogsAsync(gameId, castleFileUrl, entryPoint) {
   return result.data.gameServerLogs;
 }
 
-export async function getAutocompleteAsync(text) {
-  const result = await API(
-    `
-    query($text: String!) {
-      autocomplete(text: $text) {
-        users {
-          userId
-          username
-          name
-          photo {
-            url
-            height
-            width
-          }
-        }
-      }
-    }`,
-    { text }
-  );
-  if (result.error || result.errors) {
-    return false;
-  }
-  return result.data.autocomplete;
-}
-
 export async function getMultiplayerRegions() {
   const result = await API(
     `
