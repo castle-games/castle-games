@@ -92,7 +92,7 @@ export default (props) => {
 
   return (
     <div className={STYLES_USER} onClick={!isSelected ? onClick : null}>
-      {data.online ? (
+      {channel.otherUserIsOnline ? (
         <figure
           className={STYLES_AVATAR}
           style={{ backgroundImage: user.photo ? `url(${user.photo.url})` : `` }}>

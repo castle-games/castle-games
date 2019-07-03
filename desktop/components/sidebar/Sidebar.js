@@ -1,6 +1,5 @@
 import * as React from 'react';
 import * as Actions from '~/common/actions';
-import * as ChatUtilities from '~/common/chat-utilities';
 import * as Constants from '~/common/constants';
 import * as Strings from '~/common/strings';
 import * as SVG from '~/common/svg';
@@ -125,18 +124,6 @@ class Sidebar extends React.Component {
     const { navigation, navigator, viewer, userPresence, chat } = this.props;
     const isChatVisible = navigation.contentMode === 'chat';
 
-    let directMessages = [],
-      channels = [];
-    Object.entries(chat.channels).forEach(([channelId, channel]) => {
-      if (channel.otherUserId) {
-        directMessages.push(channel);
-      } else if (channel.isSubscribed) {
-        channels.push(channel);
-      }
-    });
-    channels = ChatUtilities.sortChannels(channels);
-    directMessages = ChatUtilities.sortChannels(directMessages);
-
     return (
       <div className={STYLES_SIDEBAR}>
         {this._renderUpdateBanner()}
@@ -164,7 +151,7 @@ class Sidebar extends React.Component {
             viewer={viewer}
             contentMode={navigation.contentMode}
             isChatVisible={isChatVisible}
-            channels={channels}
+            channels={chat.channels}
             onShowOptions={this._handleShowChannelOptions}
             onSelectChannel={this._handleNavigateToChat}
           />
@@ -176,7 +163,7 @@ class Sidebar extends React.Component {
             userPresence={userPresence}
             contentMode={navigation.contentMode}
             isChatVisible={isChatVisible}
-            directMessages={directMessages}
+            channels={chat.channels}
             onSelectChannel={this._handleNavigateToChat}
             onShowOptions={this._handleShowDirectMessageOptions}
           />

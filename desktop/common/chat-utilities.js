@@ -30,6 +30,10 @@ export const sortChannels = (channels) => {
     const typeCompare = _channelTypeSortValue(a.type) - _channelTypeSortValue(b.type);
     if (typeCompare != 0) return typeCompare;
 
+    // for DMs, online users first
+    const onlineCompare = !!b.otherUserIsOnline - !!a.otherUserIsOnline;
+    if (onlineCompare != 0) return onlineCompare;
+
     // alpha third
     return _channelNameInvariant(a.name) > _channelNameInvariant(b.name) ? 1 : -1;
   });
