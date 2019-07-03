@@ -19,36 +19,40 @@ import ChatSidebar from '~/components/chat/ChatSidebar';
 
 import 'react-splitter-layout/lib/index.css';
 
+// TODO(jim): We're dealing with side effects rom the react-splitter-layout
+// It should be removed.
 const STYLES_CONTAINER = css`
   background: ${Constants.colors.black};
   width: 100%;
-  height: 100%;
+  height: 100vh;
   position: relative;
-  display: inline-flex;
-  flex-direction: column;
+  display: flex;
+  align-items: flex-start;
   justify-content: space-between;
+
+  .layout-pane {
+    height: 100%;
+  }
 `;
 
-const STYLES_SPLITTER_CONTAINER = css`
-  flex: 1;
-  position: relative;
-`;
-
-const STYLES_SPLITTER_CHILD = css`
-  flex: 1;
-  position: relative;
-`;
-
+// TODO(jim): We're dealing with side effects and extra DOM elements from the react-splitter
+// layout. It should be removed.
 const STYLES_GAME_AND_TOOLS_CONTAINER = css`
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .splitter-layout {
+    position: relative;
+  }
 `;
 
 const STYLES_GAME_CONTAINER = css`
   position: relative;
-  flex: 1;
   height: 100%;
+  min-height: 25%;
   align-items: center;
   justify-content: center;
   display: flex;
@@ -170,9 +174,7 @@ class GameScreen extends React.Component {
       },
       initialPost: luaPost,
       initialParams: this.props.gameParams ? this.props.gameParams : undefined,
-      game: this.props.game
-        ? await jsGameToLuaGame(this.props.game)
-        : undefined,
+      game: this.props.game ? await jsGameToLuaGame(this.props.game) : undefined,
       referrerGame: this.props.referrerGame
         ? await jsGameToLuaGame(this.props.referrerGame)
         : undefined,
@@ -327,36 +329,33 @@ class GameScreen extends React.Component {
     }
 
     return (
-      <div className={STYLES_CONTAINER}>
-        <div className={STYLES_SPLITTER_CONTAINER}>
-          <SplitterLayout
-            vertical={false}
-            percentage={false}
-            primaryIndex={1}
-            secondaryInitialSize={248}
-            secondaryMinSize={248}
-            onSecondaryPaneSizeChange={this.updateGameWindowFrame}>
-            {maybeChatSidebar}
-            <div className={STYLES_GAME_AND_TOOLS_CONTAINER}>
-              <Tools
-                ref={(ref) => (this._toolsReference = ref)}
-                game={this.props.game}
-                onLayoutChange={this.updateGameWindowFrame}>
-                <div
-                  className={STYLES_GAME_CONTAINER}
-                  ref={(ref) => {
-                    this._gameContainerReference = ref;
-                    this.updateGameWindowFrame();
-                  }}>
-                  {maybeLoadingAnimation}
-                  {maybeLoadingOverlay}
-                </div>
-              </Tools>
+      <SplitterLayout
+        customClassName={STYLES_CONTAINER}
+        vertical={false}
+        percentage={false}
+        primaryIndex={1}
+        secondaryInitialSize={248}
+        secondaryMinSize={248}
+        onSecondaryPaneSizeChange={this.updateGameWindowFrame}>
+        {maybeChatSidebar}
+        <div className={STYLES_GAME_AND_TOOLS_CONTAINER}>
+          <Tools
+            ref={(ref) => (this._toolsReference = ref)}
+            game={this.props.game}
+            onLayoutChange={this.updateGameWindowFrame}>
+            <div
+              className={STYLES_GAME_CONTAINER}
+              ref={(ref) => {
+                this._gameContainerReference = ref;
+                this.updateGameWindowFrame();
+              }}>
+              {maybeLoadingAnimation}
+              {maybeLoadingOverlay}
             </div>
-          </SplitterLayout>
+          </Tools>
+          {actionsBarElement}
         </div>
-        {actionsBarElement}
-      </div>
+      </SplitterLayout>
     );
   }
 }
