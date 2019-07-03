@@ -49,16 +49,21 @@ const STYLES_SYMBOL = css`
   flex-shrink: 0;
 `;
 
-export default ({ channel, data, onClick }) => {
+export default (props) => {
+  const { channel, isSelected, data, onClick } = props;
+  let fontWeight;
+  if (channel.hasUnreadMessages && !isSelected) {
+    fontWeight = '700';
+  }
   return (
     <div
       className={STYLES_CHANNEL}
-      style={{ color: data.active ? 'magenta' : null }}
+      style={{ color: isSelected ? 'magenta' : null }}
       onClick={onClick ? onClick : null}>
       <span className={STYLES_SYMBOL}>
         {channel.type === 'game' ? <SVG.SidebarGames size="14px" /> : <SVG.HashTag size="14px" />}
       </span>
-      <span className={STYLES_NAME} style={{ fontWeight: data.active ? '700' : null }}>
+      <span className={STYLES_NAME} style={{ fontWeight }}>
         {channel.name}
       </span>
       {data.pending ? <span className={STYLES_NOTIFICATION}>{data.pending}</span> : null}

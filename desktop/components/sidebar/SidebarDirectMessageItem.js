@@ -45,7 +45,6 @@ const STYLES_TEXT = css`
 
 const STYLES_NAME = css`
   font-family: ${Constants.REFACTOR_FONTS.system};
-  font-weight: 600;
   font-size: 12px;
   margin-top: 2px;
 `;
@@ -76,18 +75,23 @@ const STYLES_AVATAR = css`
   border-radius: 4px;
 `;
 
-export default ({ data, onClick, user }) => {
+export default (props) => {
+  const { channel, isSelected, data, onClick, user } = props;
   if (!user) {
     return null;
   }
 
-  let color = null;
-  if (data.active) {
+  let color,
+    fontWeight = '400';
+  if (isSelected) {
     color = 'magenta';
+  }
+  if (channel.hasUnreadMessages && !isSelected) {
+    fontWeight = '700';
   }
 
   return (
-    <div className={STYLES_USER} onClick={!data.active ? onClick : () => {}}>
+    <div className={STYLES_USER} onClick={!isSelected ? onClick : null}>
       {data.online ? (
         <figure
           className={STYLES_AVATAR}
@@ -105,7 +109,7 @@ export default ({ data, onClick, user }) => {
         </figure>
       )}
       <div className={STYLES_TEXT}>
-        <h3 className={STYLES_NAME} style={{ color }}>
+        <h3 className={STYLES_NAME} style={{ color, fontWeight }}>
           {data.name}
         </h3>
       </div>

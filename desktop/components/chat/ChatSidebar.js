@@ -34,6 +34,22 @@ class ChatSidebar extends React.Component {
     isDarkMode: false,
   };
 
+  constructor(props) {
+    super(props);
+    this._update(null, null);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    this._update(prevProps, prevState);
+  }
+
+  _update = (prevProps, prevState) => {
+    const { chat, channelId } = this.props;
+    if (chat) {
+      chat.markChannelRead(channelId);
+    }
+  };
+
   _handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };

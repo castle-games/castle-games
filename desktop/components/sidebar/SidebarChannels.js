@@ -22,20 +22,20 @@ export default class SidebarChannels extends React.Component {
       <div className={STYLES_CONTAINER}>
         <SidebarGroupHeader onShowOptions={this.props.onShowOptions}>Channels</SidebarGroupHeader>
         {this.props.channels.map((c) => {
-          const active =
+          const isSelected =
             c.channelId === this.props.selectedChannelId && this.props.contentMode === 'chat';
 
           return (
             <SidebarChannelItem
               key={`channel-${c.channelId}`}
               channel={c}
+              isSelected={isSelected}
               onClick={
-                !(active && this.props.isChatVisible)
-                  ? () => this.props.onSelectChannel({ ...c })
+                !(isSelected && this.props.isChatVisible)
+                  ? () => this.props.onSelectChannel(c)
                   : null
               }
               data={{
-                active,
                 pending: 0,
               }}
             />

@@ -61,19 +61,24 @@ class ChatScreen extends React.Component {
     mode: 'MESSAGES',
   };
 
-  componentDidUpdate(prevProps) {
-    if (!prevProps.chat) {
-      return;
-    }
+  constructor(props) {
+    super(props);
+    this._update(null, null);
+  }
 
-    if (!prevProps.channelId) {
-      return;
-    }
+  componentDidUpdate(prevProps, prevState) {
+    this._update(prevProps, prevState);
+  }
 
-    if (prevProps.channelId !== this.props.channelId) {
+  _update = (prevProps, prevState) => {
+    const { chat, channelId } = this.props;
+    if (chat) {
+      chat.markChannelRead(channelId);
+    }
+    if (prevProps && prevProps.channelId !== channelId) {
       this.setState({ mode: 'MESSAGES' });
     }
-  }
+  };
 
   componentWillUnmount() {
     this.clear();

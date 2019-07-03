@@ -10,6 +10,8 @@ import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigationContext, NavigatorContext } from '~/contexts/NavigationContext';
 import { UserPresenceContext } from '~/contexts/UserPresenceContext';
 
+import _ from 'lodash';
+
 const EMPTY_CHAT_STATE = {
   channels: {},
 };
@@ -23,14 +25,19 @@ const ChatContextDefaults = {
   findChannel: (channelName) => {},
   findChannelForGame: (game) => {},
   refreshChannelData: () => {},
+  markChannelRead: (channelId) => {},
   ...EMPTY_CHAT_STATE,
 };
 
 const ChatContext = React.createContext(ChatContextDefaults);
 
 class ChatContextManager extends React.Component {
+  _messagesReadQueue;
+
   constructor(props) {
     super(props);
+    this._messagesReadQueue = {};
+    this._clearMessagesReadQueueDebounce = _.debounce(this._clearMessagesReadQueue, 300);
     this.state = {
       ...ChatContextDefaults,
       ...props.value,
@@ -42,6 +49,7 @@ class ChatContextManager extends React.Component {
       closeChannel: this.closeChannel,
       findChannel: this.findChannel,
       findChannelForGame: this.findChannelForGame,
+      markChannelRead: this.markChannelRead,
     };
     this._update();
   }
@@ -272,8 +280,12 @@ class ChatContextManager extends React.Component {
           userIds[m.fromUserId] = true;
         }
         if (!channels[m.channelId]) {
+          // never seen this channel before, fetch the full channel object later
           channels[m.channelId] = {};
           unseenChannelIds[m.channelId] = true;
+        } else {
+          // we have already loaded this channel, mark it as unread
+          channels[m.channelId].hasUnreadMessages = true;
         }
         if (!channels[m.channelId].messages) {
           channels[m.channelId].messages = [];
@@ -392,6 +404,51 @@ class ChatContextManager extends React.Component {
       });
     }
     return result;
+  };
+
+  markChannelRead = (channelId) => {
+    const channel = this.state.channels[channelId];
+    if (channel && channel.hasUnreadMessages) {
+      const lastMessage = this._mostRecentMessageInChannel(channelId);
+      if (lastMessage) {
+        this._messagesReadQueue[channelId] = lastMessage.chatMessageId;
+        this._clearMessagesReadQueueDebounce();
+      }
+    }
+  };
+
+  _clearMessagesReadQueue = async () => {
+    let updatedChannels = {};
+    let queueToClearPairs = Object.entries(this._messagesReadQueue);
+    this._messagesReadQueue = {};
+    for (let ii = 0; ii < queueToClearPairs.length; ii++) {
+      const [channelId, messageId] = queueToClearPairs[ii];
+      try {
+        const updatedChannel = await ChatActions.markMessageRead(messageId);
+        updatedChannels[channelId] = updatedChannel;
+      } catch (_) {
+        updatedChannels[channelId] = { hasUnreadMessages: false };
+      }
+    }
+    this.setState((state) => {
+      const channels = { ...state.channels };
+      Object.entries(updatedChannels).forEach(([channelId, updates]) => {
+        channels[channelId] = { ...channels[channelId], ...updates };
+      });
+      return {
+        ...state,
+        channels,
+      };
+    });
+  };
+
+  _mostRecentMessageInChannel = (channelId) => {
+    // messages are sorted by date when they arrive.
+    const channel = this.state.channels[channelId];
+    if (channel && channel.messages && channel.messages.length) {
+      return channel.messages[channel.messages.length - 1];
+    }
+    return null;
   };
 
   _handleChatNotification = (event) => {

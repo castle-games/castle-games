@@ -14,6 +14,7 @@ const CHANNEL_FIELDS = `
   updatedTime
   otherUserId
   gameId
+  hasUnreadMessages
 `;
 
 export const getAllChat = async () => {
@@ -79,7 +80,7 @@ export const createGameChatChannel = async ({ gameId }) => {
   return response;
 };
 
-export async function getAutocompleteAsync(text, types = ['users']) {
+export const getAutocompleteAsync = async (text, types = ['users']) => {
   let usersQuery = '',
     gamesQuery = '',
     channelsQuery = '';
@@ -118,4 +119,23 @@ export async function getAutocompleteAsync(text, types = ['users']) {
     return false;
   }
   return result.data.autocomplete;
-}
+};
+
+export const markMessageRead = async (chatMessageId) => {
+  const response = await API.graphqlAsync(
+    `
+      mutation($chatMessageId: ID!) {
+        markChatMessageRead(chatMessageId: $chatMessageId) {
+          ${CHANNEL_FIELDS}
+        }
+      }
+    `,
+    { chatMessageId }
+  );
+
+  if (response.error || response.errors) {
+    return null;
+  }
+
+  return response.data.markChatMessageRead;
+};

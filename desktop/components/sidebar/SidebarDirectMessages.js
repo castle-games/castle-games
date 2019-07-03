@@ -29,7 +29,7 @@ export default class SidebarDirectMessages extends React.Component {
           Direct Messages
         </SidebarGroupHeader>
         {this.props.directMessages.map((c) => {
-          const active =
+          const isSelected =
             c.channelId === this.props.selectedChannelId && this.props.contentMode === 'chat';
 
           const user = userIdToUser[c.otherUserId];
@@ -42,10 +42,10 @@ export default class SidebarDirectMessages extends React.Component {
           return (
             <SidebarDirectMessageItem
               key={`direct-message-${c.channelId}-${c.otherUserId}`}
+              channel={c}
+              isSelected={isSelected}
               data={{
                 name: `${Strings.getName(user)}`,
-                channelId: c.channelId,
-                active,
                 online,
               }}
               user={user}
