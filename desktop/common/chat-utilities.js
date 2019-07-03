@@ -3,6 +3,38 @@ import * as ChatActions from '~/common/actions-chat';
 
 import { isEmoji, emojiToString } from '~/common/emojis';
 
+const CHANNEL_TYPE_SORT = {
+  public: 1,
+  game: 2,
+  dm: 3,
+};
+
+const _channelNameInvariant = (name) => {
+  return name.toLowerCase().replace(/[\W_]+/g, '');
+};
+
+const _channelTypeSortValue = (type) => {
+  const result = CHANNEL_TYPE_SORT[type];
+  if (result) return result;
+  return 0;
+};
+
+export const sortChannels = (channels) => {
+  if (!channels || !channels.length) return channels;
+  return channels.sort((a, b) => {
+    // unread vs. read first
+    const unreadCompare = b.hasUnreadMessages - a.hasUnreadMessages;
+    if (unreadCompare != 0) return unreadCompare;
+
+    // type second
+    const typeCompare = _channelTypeSortValue(a.type) - _channelTypeSortValue(b.type);
+    if (typeCompare != 0) return typeCompare;
+
+    // alpha third
+    return _channelNameInvariant(a.name) > _channelNameInvariant(b.name) ? 1 : -1;
+  });
+};
+
 export const isEmojiBody = (body) => {
   if (body && typeof body === 'string') {
     return isEmoji(body);

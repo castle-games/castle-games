@@ -1,9 +1,10 @@
 import * as React from 'react';
-import * as SVG from '~/common/svg';
-import * as Strings from '~/common/strings';
-import * as Constants from '~/common/constants';
-import * as NativeUtil from '~/native/nativeutil';
 import * as Actions from '~/common/actions';
+import * as ChatUtilities from '~/common/chat-utilities';
+import * as Constants from '~/common/constants';
+import * as Strings from '~/common/strings';
+import * as SVG from '~/common/svg';
+import * as NativeUtil from '~/native/nativeutil';
 
 import { css } from 'react-emotion';
 
@@ -133,6 +134,8 @@ class Sidebar extends React.Component {
         channels.push(channel);
       }
     });
+    channels = ChatUtilities.sortChannels(channels);
+    directMessages = ChatUtilities.sortChannels(directMessages);
 
     return (
       <div className={STYLES_SIDEBAR}>
