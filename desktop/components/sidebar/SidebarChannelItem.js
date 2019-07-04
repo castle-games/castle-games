@@ -56,14 +56,24 @@ export default (props) => {
     fontWeight = '700';
     unreadCount = channel.unreadNotificationCount;
   }
+  let icon;
+  switch (channel.type) {
+    case 'game':
+      icon = <SVG.SidebarGames size="14px" />;
+      break;
+    case 'create':
+      icon = <SVG.SidebarMake size="14px" />;
+      break;
+    default:
+      icon = <SVG.HashTag size="14px" />;
+  }
+
   return (
     <div
       className={STYLES_CHANNEL}
       style={{ color: isSelected ? 'magenta' : null }}
       onClick={onClick ? onClick : null}>
-      <span className={STYLES_SYMBOL}>
-        {channel.type === 'game' ? <SVG.SidebarGames size="14px" /> : <SVG.HashTag size="14px" />}
-      </span>
+      <span className={STYLES_SYMBOL}>{icon}</span>
       <span className={STYLES_NAME} style={{ fontWeight }}>
         {channel.name}
       </span>

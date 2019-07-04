@@ -14,21 +14,26 @@ const STYLES_CONTAINER = css`
 export default class SidebarChannels extends React.Component {
   static defaultProps = {
     channels: [],
+    filterChannel: (channel) => true,
   };
 
   render() {
-    const { channels } = this.props;
+    const { channels, filterChannel } = this.props;
     let filteredChannels = [];
     Object.entries(channels).forEach(([channelId, channel]) => {
-      if (channel.isSubscribed && channel.type !== 'dm') {
+      if (filterChannel(channel)) {
         filteredChannels.push(channel);
       }
     });
     filteredChannels = ChatUtilities.sortChannels(filteredChannels);
 
+    if (!filteredChannels.length) {
+      return null;
+    }
+
     return (
       <div className={STYLES_CONTAINER}>
-        <SidebarGroupHeader onShowOptions={this.props.onShowOptions}>Channels</SidebarGroupHeader>
+        <SidebarGroupHeader>{this.props.title}</SidebarGroupHeader>
         {filteredChannels.map((c) => {
           const isSelected =
             c.channelId === this.props.selectedChannelId && this.props.contentMode === 'chat';

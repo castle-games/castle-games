@@ -18,6 +18,7 @@ import SidebarOptionsMessages from '~/components/sidebar/SidebarOptionsMessages'
 
 import SidebarHeader from '~/components/sidebar/SidebarHeader';
 import SidebarChannels from '~/components/sidebar/SidebarChannels';
+import SidebarProjects from '~/components/sidebar/SidebarProjects';
 import SidebarDirectMessages from '~/components/sidebar/SidebarDirectMessages';
 import SidebarNavigation from '~/components/sidebar/SidebarNavigation';
 
@@ -55,6 +56,11 @@ class Sidebar extends React.Component {
     mode: 'DEFAULT',
   };
 
+  componentDidMount() {
+    const { currentUser } = this.props;
+    currentUser.refreshCurrentUser();
+  }
+
   _handleSignIn = () => {
     return this.props.navigator.navigateToSignIn();
   };
@@ -79,14 +85,6 @@ class Sidebar extends React.Component {
 
   _handleNavigateToGames = () => {
     return this.props.navigator.navigateToContentMode('home');
-  };
-
-  _handleNavigateToAllPosts = () => {
-    return this.props.navigator.navigateToContentMode('posts');
-  };
-
-  _handleNavigateToHistory = () => {
-    return this.props.navigator.navigateToContentMode('history');
   };
 
   _handleOpenBrowserForDocumentation = () => {
@@ -121,53 +119,74 @@ class Sidebar extends React.Component {
   };
 
   _renderRootSidebar = () => {
-    const { navigation, navigator, viewer, userPresence, chat } = this.props;
+    const { navigation, navigator, currentUser, userPresence, chat } = this.props;
+    const viewer = currentUser.user;
     const isChatVisible = navigation.contentMode === 'chat';
+
+    const header = (
+      <SidebarHeader
+        viewer={viewer}
+        navigator={navigator}
+        onShowOptions={this._handleShowOptions}
+        onSignIn={this._handleSignIn}
+        onSignOut={this._handleSignOut}
+        onHideSidebar={this._handleHideSidebar}
+      />
+    );
+
+    if (!viewer) {
+      return <div className={STYLES_SIDEBAR}>{header}</div>;
+    }
 
     return (
       <div className={STYLES_SIDEBAR}>
         {this._renderUpdateBanner()}
-        <SidebarHeader
-          viewer={viewer}
-          navigator={navigator}
-          onShowOptions={this._handleShowOptions}
-          onSignIn={this._handleSignIn}
-          onSignOut={this._handleSignOut}
-          onHideSidebar={this._handleHideSidebar}
-        />
+        {header}
         <SidebarNavigation
           viewer={viewer}
           contentMode={navigation.contentMode}
           onNavigateToMakeGame={this._handleNavigateToMakeGame}
           onNavigateToExamples={this._handleNavigateToExamples}
           onNavigateToGames={this._handleNavigateToGames}
-          onNavigateToAllPosts={this._handleNavigateToAllPosts}
-          onNavigateToHistory={this._handleNavigateToHistory}
           onOpenBrowserForDocumentation={this._handleOpenBrowserForDocumentation}
         />
-        {viewer ? (
-          <SidebarChannels
-            selectedChannelId={navigation.chatChannelId}
-            viewer={viewer}
-            contentMode={navigation.contentMode}
-            isChatVisible={isChatVisible}
-            channels={chat.channels}
-            onShowOptions={this._handleShowChannelOptions}
-            onSelectChannel={this._handleNavigateToChat}
-          />
-        ) : null}
-        {viewer ? (
-          <SidebarDirectMessages
-            selectedChannelId={navigation.chatChannelId}
-            viewer={viewer}
-            userPresence={userPresence}
-            contentMode={navigation.contentMode}
-            isChatVisible={isChatVisible}
-            channels={chat.channels}
-            onSelectChannel={this._handleNavigateToChat}
-            onShowOptions={this._handleShowDirectMessageOptions}
-          />
-        ) : null}
+        <SidebarChannels
+          selectedChannelId={navigation.chatChannelId}
+          viewer={viewer}
+          title="Chat"
+          contentMode={navigation.contentMode}
+          isChatVisible={isChatVisible}
+          channels={chat.channels}
+          filterChannel={(channel) => channel.isSubscribed && channel.name === 'lobby'}
+          onShowOptions={this._handleShowChannelOptions}
+          onSelectChannel={this._handleNavigateToChat}
+        />
+        <SidebarChannels
+          selectedChannelId={navigation.chatChannelId}
+          viewer={viewer}
+          title="Recently Played"
+          contentMode={navigation.contentMode}
+          isChatVisible={isChatVisible}
+          channels={chat.channels}
+          filterChannel={(channel) => channel.isSubscribed && channel.type === 'game'}
+          onShowOptions={this._handleShowChannelOptions}
+          onSelectChannel={this._handleNavigateToChat}
+        />
+        <SidebarProjects
+          title="Recently Created"
+          userStatusHistory={currentUser.userStatusHistory}
+          onSelectGameUrl={navigator.navigateToGameUrl}
+        />
+        <SidebarDirectMessages
+          selectedChannelId={navigation.chatChannelId}
+          viewer={viewer}
+          userPresence={userPresence}
+          contentMode={navigation.contentMode}
+          isChatVisible={isChatVisible}
+          channels={chat.channels}
+          onSelectChannel={this._handleNavigateToChat}
+          onShowOptions={this._handleShowDirectMessageOptions}
+        />
       </div>
     );
   };
@@ -258,7 +277,6 @@ export default class SidebarWithContext extends React.Component {
                       <NavigatorContext.Consumer>
                         {(navigator) => (
                           <Sidebar
-                            viewer={currentUser.user}
                             currentUser={currentUser}
                             navigator={navigator}
                             navigation={navigation}

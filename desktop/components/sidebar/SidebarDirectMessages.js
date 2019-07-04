@@ -34,9 +34,7 @@ export default class SidebarDirectMessages extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
-        <SidebarGroupHeader onShowOptions={this.props.onShowOptions}>
-          Direct Messages
-        </SidebarGroupHeader>
+        <SidebarGroupHeader onShowOptions={this.props.onShowOptions}>Messages</SidebarGroupHeader>
         {directMessages.map((c) => {
           const isSelected =
             c.channelId === this.props.selectedChannelId && this.props.contentMode === 'chat';

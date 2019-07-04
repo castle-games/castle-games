@@ -28,16 +28,6 @@ export default class SidebarNavigation extends React.Component {
             active: this.props.contentMode === 'create',
           }}
         />
-        {this.props.viewer ? (
-          <SidebarNavigationItem
-            data={{
-              name: 'History',
-              svg: 'history',
-              onClick: this.props.onNavigateToHistory,
-              active: this.props.contentMode === 'history',
-            }}
-          />
-        ) : null}
       </div>
     );
   }

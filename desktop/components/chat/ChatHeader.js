@@ -48,6 +48,12 @@ const STYLES_H2 = css`
   }
 `;
 
+const STYLES_GAME_TITLE = css`
+  text-decoration: underline;
+  cursor: pointer;
+  color: magenta;
+`;
+
 const STYLES_P = css`
   margin-top: 4px;
   font-size: 12px;
@@ -94,7 +100,16 @@ export default class ChatHeader extends React.Component {
     switch (channel.type) {
       case 'game':
         if (this.state.game) {
-          return `People playing ${this.state.game.title}`;
+          return (
+            <React.Fragment>
+              This is the public chat channel for{' '}
+              <span
+                className={STYLES_GAME_TITLE}
+                onClick={() => this.props.onSelectGame(this.state.game)}>
+                {this.state.game.title}
+              </span>
+            </React.Fragment>
+          );
         }
         break;
       case 'dm':

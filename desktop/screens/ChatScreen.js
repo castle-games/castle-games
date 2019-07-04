@@ -201,6 +201,7 @@ class ChatScreen extends React.Component {
           userIdToUser={this.props.userPresence.userIdToUser}
           viewer={this.props.viewer}
           channel={channel}
+          onSelectGame={this.props.navigator.navigateToGame}
           onSettingsClick={this._handleShowSingleChannelOptions}
           onMembersClick={this._handleShowSingleChannelMembers}
         />
