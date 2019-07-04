@@ -5,6 +5,15 @@ import { css } from 'react-emotion';
 import { Tooltip } from 'react-tippy';
 
 const STYLES_OPTIONS_BAR = css`
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -17,6 +26,7 @@ const STYLES_OPTIONS_BAR = css`
   right: 8px;
   position: absolute;
   cursor: pointer;
+  animation: fade-in 200ms ease;
 `;
 
 const STYLES_OPTIONS_BAR_ICON = css`

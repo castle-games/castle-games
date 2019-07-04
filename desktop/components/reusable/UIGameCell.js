@@ -36,8 +36,8 @@ const STYLES_CONTAINER = css`
 
   :hover {
     section {
-      background: #ececec;
-      padding: 12px 0px 8px 8px;
+      box-shadow: 0 0 0 1px #ececec, 0 1px 4px rgba(0, 0, 0, 0.07);
+      padding: 12px 8px 8px 12px;
     }
 
     figure {

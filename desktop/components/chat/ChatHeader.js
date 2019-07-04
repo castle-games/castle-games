@@ -56,6 +56,7 @@ const STYLES_GAME_TITLE = css`
   text-decoration: underline;
   cursor: pointer;
   color: magenta;
+  font-weight: 600;
 `;
 
 const STYLES_P = css`
