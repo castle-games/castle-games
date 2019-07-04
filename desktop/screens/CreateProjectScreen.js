@@ -42,7 +42,7 @@ const STYLES_CHOOSE_TEMPLATE = css`
 `;
 
 const STYLES_PRIMARY_CONTENT = css`
-  padding-right: 8px;
+  padding-right: 16px;
 `;
 
 const STYLES_SECONDARY_CONTENT = css`
@@ -52,15 +52,15 @@ const STYLES_SECONDARY_CONTENT = css`
 const STYLES_SECTION = css`
   cursor: pointer;
   width: 256px;
+  font-size: 14px;
 `;
 
 const STYLES_BOLD = css`
-  font-weight: 700;
+  font-weight: 600;
 `;
 
 const STYLES_LINK = css`
   color: ${Constants.colors.black};
-  font-size: ${Constants.typescale.base};
   line-height: ${Constants.linescale.base};
   font-family: ${Constants.font.system};
   margin-top: 16px;
@@ -247,7 +247,6 @@ class CreateProjectScreen extends React.Component {
             />
           </div>
           <div className={STYLES_SECONDARY_CONTENT}>
-            <UIHeading>Help</UIHeading>
             <div className={STYLES_SECTION} onClick={this._handleClickTutorial}>
               <div className={STYLES_LINK}>
                 <strong className={STYLES_BOLD}>Documentation</strong>
