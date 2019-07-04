@@ -42,10 +42,14 @@ const STYLES_H2 = css`
   font-size: 16px;
   transition: 200ms ease color;
   cursor: pointer;
+  display: flex;
+  align-items: center;
 
   :hover {
     color: magenta;
   }
+
+  height: 32px;
 `;
 
 const STYLES_GAME_TITLE = css`
@@ -57,6 +61,8 @@ const STYLES_GAME_TITLE = css`
 const STYLES_P = css`
   margin-top: 4px;
   font-size: 12px;
+  line-height: 12px;
+  height: 12px;
 
   strong {
     cursor: pointer;
@@ -65,6 +71,11 @@ const STYLES_P = css`
     :hover {
       color: magenta;
     }
+  }
+
+  span {
+    display: inline-block;
+    vertical-align: top;
   }
 `;
 
@@ -133,7 +144,7 @@ export default class ChatHeader extends React.Component {
       <header className={STYLES_HEADER}>
         <div className={STYLES_HEADER_LEFT}>
           <h2 className={STYLES_H2} onClick={this.props.onSettingsClick}>
-            {channel.type !== 'dm' ? <SVG.HashTag size="12px" style={{ marginRight: 4 }} /> : null}
+            {channel.type !== 'dm' ? <SVG.HashTag size="12px" /> : null}
             {channel.name}
           </h2>
           {channel.members && channel.members.length ? (
