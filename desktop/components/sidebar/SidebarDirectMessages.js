@@ -1,7 +1,6 @@
 import * as React from 'react';
 import * as ChatUtilities from '~/common/chat-utilities';
 import * as Constants from '~/common/constants';
-import * as Strings from '~/common/strings';
 
 import { css } from 'react-emotion';
 
@@ -52,9 +51,6 @@ export default class SidebarDirectMessages extends React.Component {
               key={`direct-message-${c.channelId}-${c.otherUserId}`}
               channel={c}
               isSelected={isSelected}
-              data={{
-                name: `${Strings.getName(user)}`,
-              }}
               user={user}
               onClick={() => this.props.onSelectChannel(c)}
             />

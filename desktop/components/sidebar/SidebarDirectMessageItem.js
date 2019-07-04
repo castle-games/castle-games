@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
+import * as Strings from '~/common/strings';
 import * as SVG from '~/common/svg';
 
 import { css } from 'react-emotion';
@@ -76,18 +77,20 @@ const STYLES_AVATAR = css`
 `;
 
 export default (props) => {
-  const { channel, isSelected, data, onClick, user } = props;
+  const { channel, isSelected, onClick, user } = props;
   if (!user) {
     return null;
   }
 
   let color,
-    fontWeight = '400';
+    fontWeight = '400',
+    unreadCount;
   if (isSelected) {
     color = 'magenta';
   }
   if (channel.hasUnreadMessages && !isSelected) {
     fontWeight = '700';
+    unreadCount = channel.unreadNotificationCount;
   }
 
   return (
@@ -110,10 +113,10 @@ export default (props) => {
       )}
       <div className={STYLES_TEXT}>
         <h3 className={STYLES_NAME} style={{ color, fontWeight }}>
-          {data.name}
+          {Strings.getName(user)}
         </h3>
       </div>
-      {data.pending ? <span className={STYLES_NOTIFICATION}>{data.pending}</span> : null}
+      {unreadCount ? <span className={STYLES_NOTIFICATION}>{unreadCount}</span> : null}
     </div>
   );
 };

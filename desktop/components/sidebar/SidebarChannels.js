@@ -43,9 +43,6 @@ export default class SidebarChannels extends React.Component {
                   ? () => this.props.onSelectChannel(c)
                   : null
               }
-              data={{
-                pending: 0,
-              }}
             />
           );
         })}

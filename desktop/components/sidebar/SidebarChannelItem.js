@@ -50,10 +50,11 @@ const STYLES_SYMBOL = css`
 `;
 
 export default (props) => {
-  const { channel, isSelected, data, onClick } = props;
-  let fontWeight;
+  const { channel, isSelected, onClick } = props;
+  let fontWeight, unreadCount;
   if (channel.hasUnreadMessages && !isSelected) {
     fontWeight = '700';
+    unreadCount = channel.unreadNotificationCount;
   }
   return (
     <div
@@ -66,7 +67,7 @@ export default (props) => {
       <span className={STYLES_NAME} style={{ fontWeight }}>
         {channel.name}
       </span>
-      {data.pending ? <span className={STYLES_NOTIFICATION}>{data.pending}</span> : null}
+      {unreadCount ? <span className={STYLES_NOTIFICATION}>{unreadCount}</span> : null}
     </div>
   );
 };

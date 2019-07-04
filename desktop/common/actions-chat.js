@@ -15,6 +15,7 @@ const CHANNEL_FIELDS = `
   otherUserId
   gameId
   hasUnreadMessages
+  unreadNotificationCount
 `;
 
 export const getAllChat = async () => {
