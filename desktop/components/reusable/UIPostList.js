@@ -26,7 +26,7 @@ const STYLES_POST = css`
 
   :hover {
     footer {
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.7);
     }
   }
 `;
@@ -84,6 +84,7 @@ const STYLES_FOOTER = css`
   padding: 0 16px 0 16px;
   transition: background 200ms ease;
   background: rgba(0, 0, 0, 0);
+  border-radius: 0 0 4px 4px;
 `;
 
 const STYLES_TIMESTAMP = css`
@@ -104,7 +105,6 @@ const STYLES_PLAY_ICON = css`
 `;
 
 const STYLES_PLAY_HOVER = css`
-  cursor: pointer;
   @keyframes button-color-change {
     0% {
       color: ${Constants.colors.brand4};
@@ -116,6 +116,8 @@ const STYLES_PLAY_HOVER = css`
       color: ${Constants.colors.brand2};
     }
   }
+
+  cursor: pointer;
   animation: button-color-change infinite 400ms;
   color: white;
 `;
