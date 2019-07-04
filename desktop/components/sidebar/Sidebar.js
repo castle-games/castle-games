@@ -192,12 +192,12 @@ class Sidebar extends React.Component {
   };
 
   _renderOptions = () => {
-    const { navigation, viewer } = this.props;
+    const { navigation, currentUser } = this.props;
 
     return (
       <div className={STYLES_SIDEBAR}>
         <SidebarOptions
-          viewer={viewer}
+          viewer={currentUser.user}
           onDismiss={this._handleHideOptions}
           onSignOut={this._handleSignOut}
         />
@@ -206,12 +206,12 @@ class Sidebar extends React.Component {
   };
 
   _renderMessageOptions = () => {
-    const { navigation, viewer } = this.props;
+    const { navigation, currentUser } = this.props;
 
     return (
       <div className={STYLES_SIDEBAR}>
         <SidebarOptionsMessages
-          viewer={viewer}
+          viewer={currentUser.user}
           onDismiss={this._handleHideOptions}
           onSendMessage={this._handleCreateDirectMessage}
         />
@@ -220,12 +220,12 @@ class Sidebar extends React.Component {
   };
 
   _renderChannelOptions = () => {
-    const { navigation, viewer, chat } = this.props;
+    const { navigation, currentUser, chat } = this.props;
 
     return (
       <div className={STYLES_SIDEBAR}>
         <SidebarOptionsChannels
-          viewer={viewer}
+          viewer={currentUser.user}
           channels={chat.channels}
           onDismiss={this._handleHideOptions}
           onOpenChannel={this._handleOpenChannel}
