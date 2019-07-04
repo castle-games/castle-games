@@ -11,18 +11,18 @@ const STYLES_CONTAINER = css`
   font-family: ${Constants.REFACTOR_FONTS.system};
   flex-shrink: 0;
   width: 100%;
-  padding: 8px 48px 8px 16px;
+  padding: 8px 16px 8px 16px;
 `;
 
 const STYLES_NOTICE = css`
-  display: flex;
-  width: 100%;
+  display: inline-flex;
   align-items: flex-start;
   justify-content: space-between;
-  background-color: yellow;
+  border: 1px solid #ececec;
   border-radius: 4px;
-  padding: 8px 0 8px 0;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
+  padding: 8px 24px 8px 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+  overflow-wrap: break-word;
 `;
 
 const STYLES_SUBDUED = css`

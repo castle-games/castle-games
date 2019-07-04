@@ -16,6 +16,7 @@ const STYLES_CHANNEL = css`
   font-weight: 600;
   color: magenta;
   cursor: pointer;
+  overflow-wrap: break-word;
   :hover {
     text-decoration: underline;
   }
@@ -25,6 +26,7 @@ const STYLES_MENTION = css`
   font-weight: 600;
   color: #0062ff;
   cursor: pointer;
+  overflow-wrap: break-word;
   :hover {
     text-decoration: underline;
   }
@@ -34,6 +36,7 @@ const STYLES_ANCHOR = css`
   color: ${Constants.REFACTOR_COLORS.text};
   font-weight: 600;
   text-decoration: underline;
+  overflow-wrap: break-word;
   :hover {
     color: ${Constants.REFACTOR_COLORS.text};
   }
