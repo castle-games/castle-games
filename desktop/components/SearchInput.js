@@ -9,8 +9,7 @@ import ControlledInput from '~/components/primitives/ControlledInput';
 
 const STYLES_CONTAINER = css`
   color: ${Constants.colors.black};
-  background: ${Constants.colors.white};
-  box-shadow: inset 1px 0 2px -1px rgba(0, 0, 0, 0.5);
+  background: #f3f3f3;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -48,6 +47,7 @@ const STYLES_DISMISS_AREA = css`
 const STYLES_INPUT = css`
   font-family: ${Constants.font.default};
   color: ${Constants.colors.black};
+  background: transparent;
   font-size: 20px;
   display: flex;
   min-width: 25%;
@@ -64,7 +64,7 @@ const STYLES_INPUT = css`
 `;
 
 const STYLES_INPUT_READONLY = css`
-  background: ${Constants.colors.background3};
+  background: transparent;
   font-size: 24px;
   border-radius: 3px;
   padding: 4px 12px 4px 12px;
