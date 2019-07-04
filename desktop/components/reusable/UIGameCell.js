@@ -19,29 +19,28 @@ const STYLES_CONTAINER = css`
   background: transparent;
   margin: 0 16px 16px 0;
   border-radius: ${Constants.card.radius};
-  transition: 195ms ease all;
+  transition: 200ms cubic-bezier(0.17, 0.67, 0.83, 0.67) all;
 
   figure {
     border-radius: ${Constants.card.radius};
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
-    transition: 80 ease all;
+    transition: 200 cubic-bezier(0.17, 0.67, 0.83, 0.67) all;
   }
 
   section {
-    transition: 195ms ease all;
+    transition: 200ms cubic-bezier(0.17, 0.67, 0.83, 0.67) all;
     padding: 12px 0px 8px 0px;
+    margin-top: 8px;
+    border-radius: ${Constants.card.radius};
   }
 
   :hover {
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.14);
-
     section {
+      background: #ececec;
       padding: 12px 0px 8px 8px;
     }
 
     figure {
-      border-radius: ${Constants.card.radius} ${Constants.card.radius} 0px 0px;
-      box-shadow: none;
     }
   }
 `;
@@ -57,7 +56,7 @@ const STYLES_GAME_SCREENSHOT = css`
   cursor: pointer;
   background-size: cover;
   background-position: 50% 50%;
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: ${Constants.colors.black};
 `;
 
 const STYLES_PLAY_ICON = css`
@@ -133,6 +132,7 @@ const STYLES_GAME_TITLE = css`
   font-weight: 600;
   font-size: 14px;
   cursor: pointer;
+
   :hover {
     color: #55555f;
   }
@@ -158,10 +158,10 @@ const STYLES_BYLINE = css`
 `;
 
 const STYLES_AUTHOR_AND_PLAY_COUNT = css`
+  font-family: ${Constants.font.system};
   display: flex;
   flex-direction: row;
   margin-top: 2px;
-  font-family: ${Constants.font.system};
   font-size: 13px;
   color: #8d8d8d;
   font-weight: 500;
@@ -306,12 +306,7 @@ export default class UIGameCell extends React.Component {
         onMouseEnter={() => this._handleToggleHoverOnPlay(true)}
         onMouseLeave={() => this._handleMouseLeave()}
         onMouseMove={() => this._handleMouseMove()}
-        onClick={this._handleGameSelect}
-        style={{
-          background: this.state.isHoveringOnPlay
-            ? `radial-gradient(at ${mouseX}% ${mouseY}%, #FCFCFD, ${Constants.card.background})`
-            : 'transparent',
-        }}>
+        onClick={this._handleGameSelect}>
         <div className={STYLES_TOP_SECTION}>
           {shouldShowGameInfo ? (
             <div className={STYLES_DESCRIPTION_SECTION}>
@@ -340,7 +335,6 @@ export default class UIGameCell extends React.Component {
               className={STYLES_GAME_SCREENSHOT}
               style={{
                 backgroundImage: this.props.src ? `url(${this.props.src})` : null,
-                filter: this.state.isHoveringOnPlay ? 'brightness(105%)' : 'none',
               }}
             />
           )}
