@@ -62,7 +62,7 @@ export default (props) => {
       icon = <SVG.SidebarGames size="14px" />;
       break;
     case 'create':
-      icon = <SVG.SidebarMake size="14px" />;
+      icon = <SVG.Castle size="14px" />;
       break;
     default:
       icon = <SVG.HashTag size="14px" />;
