@@ -195,6 +195,7 @@ class ProfileScreen extends React.Component {
           items={this._getNavigationItems(isOwnProfile)}
           selectedKey={this.state.mode}
           onChange={this._onNavigationChange}
+          style={{ borderBottom: `1px solid #ececec`, marginBottom: `16px` }}
         />
         {profileContentElement}
       </div>

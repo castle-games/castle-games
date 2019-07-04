@@ -9,7 +9,6 @@ import UIGameSet from '~/components/reusable/UIGameSet';
 
 const STYLES_CONTAINER = css`
   background: ${Constants.colors.white};
-  box-shadow: inset 1px 0 2px -1px rgba(0, 0, 0, 0.5);
   width: 100%;
   height: 100%;
   background: #ffffff;

@@ -41,10 +41,9 @@ export default class UIHorizontalNavigation extends React.Component {
   };
 
   render() {
-    const { items } = this.props;
     return (
-      <div className={STYLES_ROW}>
-        {items.map((item) => {
+      <div className={STYLES_ROW} style={this.props.style}>
+        {this.props.items.map((item) => {
           return (
             <UINavigationItem
               key={item.key}

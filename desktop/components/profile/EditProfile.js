@@ -18,7 +18,7 @@ const STYLES_CONTAINER = css`
 `;
 
 const STYLES_SECTION = css`
-  border-bottom: 1px solid ${Constants.colors.background4};
+  border-bottom: 1px solid #ececec;
   padding: 16px 24px 16px 24px;
 
   :last-child {

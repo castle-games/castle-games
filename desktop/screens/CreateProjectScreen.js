@@ -29,7 +29,6 @@ const STYLES_CONTAINER = css`
   height: 100%;
   overflow-y: scroll;
   padding: 24px;
-  box-shadow: inset 1px 0 2px -1px rgba(0, 0, 0, 0.5);
 
   ::-webkit-scrollbar {
     display: none;
