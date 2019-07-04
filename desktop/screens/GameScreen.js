@@ -5,6 +5,7 @@ import * as Utilities from '~/common/utilities';
 import * as Actions from '~/common/actions';
 
 import { css } from 'react-emotion';
+import { NativeBinds } from '~/native/nativebinds';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigationContext, NavigatorContext } from '~/contexts/NavigationContext';
 
@@ -285,6 +286,16 @@ class GameScreen extends React.Component {
     this.setState({ isMuted });
   };
 
+  _handleFullScreen = () => {
+    this.props.setIsFullScreen(!this.props.isFullScreen);
+
+    try {
+      NativeUtil.setWindowFrameFullscreen(!this.props.isFullScreen);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   render() {
     let actionsBarElement, topBarElement;
     if (!this.props.isFullScreen) {
@@ -294,7 +305,7 @@ class GameScreen extends React.Component {
           timeGameLoaded={this.props.timeGameLoaded}
           navigateToUserProfile={this.props.navigateToUserProfile}
           clearCurrentGame={this.props.clearCurrentGame}
-          onFullScreenToggle={() => this.props.setIsFullScreen(!this.props.isFullScreen)}
+          onFullScreenToggle={this._handleFullScreen}
           reloadGame={this.props.reloadGame}
           onUpdateGameWindowFrame={this.updateGameWindowFrame}
           isMuted={this.state.isMuted}

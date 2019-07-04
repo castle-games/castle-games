@@ -6,11 +6,11 @@ import { css } from 'react-emotion';
 
 const TITLE_STYLES = `
   font-family: ${Constants.REFACTOR_FONTS.system};
+  font-size: 16px;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   padding: 0 16px 0 16px;
-  font-size: 16px;
 `;
 
 const STYLES_CONTAINER = css`

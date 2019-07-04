@@ -166,7 +166,7 @@ export default class GameActionsBar extends React.Component {
             {maybeViewSourceElement}
             {maybePostScreenshotElement}
             <UINavigationLink style={{ marginRight: 24 }} onClick={this.props.onFullScreenToggle}>
-              Theater Mode (ESC)
+              Full screen (ESC)
             </UINavigationLink>
             <UINavigationLink style={{ marginRight: 24 }} onClick={this.props.clearCurrentGame}>
               End game
