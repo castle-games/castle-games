@@ -15,7 +15,6 @@ import { UserPresenceContext } from '~/contexts/UserPresenceContext';
 
 import ChatMessages from '~/components/chat/ChatMessages';
 import ChatInput from '~/components/chat/ChatInput';
-import ChatSidebarHeader from '~/components/chat/ChatSidebarHeader';
 
 const STYLES_CONTAINER_BASE = css`
   display: flex;
@@ -66,17 +65,6 @@ class ChatSidebar extends React.Component {
     }
   };
 
-  _handleThemeChange = () => {
-    this.setState({ isDarkMode: !this.state.isDarkMode });
-  };
-
-  _handleBack = () => {
-    // TODO: instead of navigateToHome, this should call navigator.restoreDeferredState
-    // in order to properly "go back".
-    // but we need to actually defer the state before we can make this change.
-    this.props.navigator.navigateToHome();
-  };
-
   render() {
     const { mode } = this.state;
     const { channelId } = this.props;
@@ -112,7 +100,6 @@ class ChatSidebar extends React.Component {
         style={{
           background: theme.background,
         }}>
-        <ChatSidebarHeader onBackClick={this._handleBack} onThemeClick={this._handleThemeChange} />
         <ChatMessages
           messages={messages}
           navigator={this.props.navigator}

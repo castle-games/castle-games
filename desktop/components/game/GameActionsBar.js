@@ -140,7 +140,7 @@ export default class GameActionsBar extends React.Component {
 
     let maybePostScreenshotElement = (
       <UINavigationLink style={{ marginRight: 24 }} onClick={this._handlePostScreenshot}>
-        Post screenshot
+        Screenshot
       </UINavigationLink>
     );
 
@@ -167,6 +167,9 @@ export default class GameActionsBar extends React.Component {
             {maybePostScreenshotElement}
             <UINavigationLink style={{ marginRight: 24 }} onClick={this.props.onFullScreenToggle}>
               Full screen (ESC)
+            </UINavigationLink>
+            <UINavigationLink style={{ marginRight: 24 }} onClick={this.props.minimizeGame}>
+              Minimize game
             </UINavigationLink>
             <UINavigationLink style={{ marginRight: 24 }} onClick={this.props.clearCurrentGame}>
               End game

@@ -304,6 +304,7 @@ class GameScreen extends React.Component {
           game={this.props.game}
           timeGameLoaded={this.props.timeGameLoaded}
           navigateToUserProfile={this.props.navigateToUserProfile}
+          minimizeGame={this.props.navigateToHome}
           clearCurrentGame={this.props.clearCurrentGame}
           onFullScreenToggle={this._handleFullScreen}
           reloadGame={this.props.reloadGame}
