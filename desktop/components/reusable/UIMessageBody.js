@@ -48,7 +48,7 @@ const STYLES_ANCHOR = css`
   }
 `;
 
-const matchCastleURL = (text, onMatchAttachment) => {
+const matchCastleURL = (text, theme, onMatchAttachment) => {
   return StringReplace(text, /(castle:\/\/\S+)/g, (match, i) => {
     if (onMatchAttachment) {
       const urlData = Urls.getCastleUrlInfo(match);
@@ -56,15 +56,16 @@ const matchCastleURL = (text, onMatchAttachment) => {
         onMatchAttachment({ url: match, ...urlData });
       }
     }
+    const styles = theme && theme.anchorColor ? { color: theme.anchorColor } : null;
     return (
-      <a className={STYLES_ANCHOR} key={`castle-anchor-${match + i}`} href={match}>
+      <a className={STYLES_ANCHOR} key={`castle-anchor-${match + i}`} href={match} style={styles}>
         {match}
       </a>
     );
   });
 };
 
-const matchURL = (text, onMatchAttachment) => {
+const matchURL = (text, theme, onMatchAttachment) => {
   return StringReplace(text, /(https?:\/\/\S+)/g, (match, i) => {
     if (onMatchAttachment) {
       const urlData = Urls.getCastleUrlInfo(match);
@@ -72,8 +73,9 @@ const matchURL = (text, onMatchAttachment) => {
         onMatchAttachment({ url: match, ...urlData });
       }
     }
+    const styles = theme && theme.anchorColor ? { color: theme.anchorColor } : null;
     return (
-      <a className={STYLES_ANCHOR} key={`url-${match + i}`} href={match}>
+      <a className={STYLES_ANCHOR} key={`url-${match + i}`} href={match} style={styles}>
         {match}
       </a>
     );
@@ -105,7 +107,7 @@ class UIMessageBody extends React.Component {
     expandAttachments: true,
   };
 
-  _renderMessageBody = (body, onMatchAttachment) => {
+  _renderMessageBody = (body, theme, onMatchAttachment) => {
     if (!body) return null;
 
     if (typeof body === 'string') {
@@ -123,8 +125,8 @@ class UIMessageBody extends React.Component {
             .slice(1)
             .join(' ');
         }
-        text = matchURL(text, onMatchAttachment);
-        text = matchCastleURL(text, onMatchAttachment);
+        text = matchURL(text, theme, onMatchAttachment);
+        text = matchCastleURL(text, theme, onMatchAttachment);
         text = matchChannel(text, this.props.getChannelByName, this.props.openChannelWithName);
         return <span key={`message-${ii}`}>{text}</span>;
       } else if (c.userId) {
@@ -148,7 +150,7 @@ class UIMessageBody extends React.Component {
   };
 
   render() {
-    const { body, expandAttachments } = this.props;
+    const { body, theme, expandAttachments } = this.props;
     let attachmentsMatched, onMatchAttachment, attachments;
 
     if (expandAttachments) {
@@ -158,7 +160,7 @@ class UIMessageBody extends React.Component {
       };
     }
 
-    const renderedBody = this._renderMessageBody(body, onMatchAttachment);
+    const renderedBody = this._renderMessageBody(body, theme, onMatchAttachment);
 
     if (attachmentsMatched && attachmentsMatched.length) {
       attachments = attachmentsMatched.map((urlData, ii) => (

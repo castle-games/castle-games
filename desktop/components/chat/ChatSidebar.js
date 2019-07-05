@@ -85,6 +85,7 @@ class ChatSidebar extends React.Component {
     let theme = {
       textColor: Constants.colors.white,
       background: `#000000`,
+      anchorColor: Constants.colors.white,
       inputBackground: `#565656`,
       embedBorder: `none`,
       embedBackground: `#333`,
