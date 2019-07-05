@@ -14,7 +14,6 @@ import { UserPresenceContext } from '~/contexts/UserPresenceContext';
 
 import regexMatch from 'react-string-replace';
 import ChatHeader from '~/components/chat/ChatHeader';
-import ChatHeaderActive from '~/components/chat/ChatHeaderActive';
 import ChatMessages from '~/components/chat/ChatMessages';
 import ChatMembers from '~/components/chat/ChatMembers';
 import ChatInput from '~/components/chat/ChatInput';
@@ -98,8 +97,6 @@ class ChatScreen extends React.Component {
 
   _handleShowSingleChannelMembers = () => this.setState({ mode: 'MEMBERS' });
 
-  _handleShowSingleChannelOptions = () => this.setState({ mode: 'OPTIONS' });
-
   _handleForceChange = (valueState) => {
     this.setState(valueState);
   };
@@ -172,16 +169,10 @@ class ChatScreen extends React.Component {
     }
 
     const channel = this.props.chat.channels[this.props.channelId];
-
-    if (mode === 'OPTIONS') {
-      return (
-        <div className={className}>
-          <ChatHeaderActive onDismiss={this._handleResetChatWindow}>
-            Channel Settings
-          </ChatHeaderActive>
-          <ChatOptions onLeaveChannel={this._handleLeaveChannel} channel={channel} />
-        </div>
-      );
+    let onLeaveChannel;
+    if (!(channel.name === 'lobby' && channel.type === 'public')) {
+      // caint leave the lobby
+      onLeaveChannel = this._handleLeaveChannel;
     }
 
     if (mode === 'MEMBERS') {
@@ -202,7 +193,7 @@ class ChatScreen extends React.Component {
           viewer={this.props.viewer}
           channel={channel}
           onSelectGame={this.props.navigator.navigateToGame}
-          onSettingsClick={this._handleShowSingleChannelOptions}
+          onLeaveChannel={onLeaveChannel}
           onMembersClick={this._handleShowSingleChannelMembers}
         />
         <ChatMessages

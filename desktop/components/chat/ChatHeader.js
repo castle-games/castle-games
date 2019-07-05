@@ -12,7 +12,7 @@ const STYLES_HEADER = css`
   font-family: ${Constants.REFACTOR_FONTS.system};
   width: 100%;
   flex-shrink: 0;
-  padding: 8px 16px 16px 16px;
+  padding: 16px;
   overflow: hidden;
   min-height: 64px;
   display: flex;
@@ -60,7 +60,7 @@ const STYLES_GAME_TITLE = css`
 `;
 
 const STYLES_P = css`
-  margin-top: 4px;
+  margin: 4px 0 4px 0;
   font-size: 12px;
   line-height: 12px;
   height: 12px;
@@ -136,9 +136,18 @@ export default class ChatHeader extends React.Component {
   };
 
   render() {
-    const { channel } = this.props;
+    const { channel, onLeaveChannel } = this.props;
     if (!channel) {
       return null;
+    }
+
+    let leaveButton;
+    if (onLeaveChannel) {
+      leaveButton = (
+        <div className={STYLES_HEADER_RIGHT} onClick={onLeaveChannel}>
+          Leave Channel
+        </div>
+      );
     }
 
     return (
@@ -156,9 +165,7 @@ export default class ChatHeader extends React.Component {
             <p className={STYLES_P}>{this._getHeading()}</p>
           )}
         </div>
-        <div className={STYLES_HEADER_RIGHT} onClick={this.props.onSettingsClick}>
-          <SVG.Settings size="24px" />
-        </div>
+        {leaveButton}
       </header>
     );
   }
