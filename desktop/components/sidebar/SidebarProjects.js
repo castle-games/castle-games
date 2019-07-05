@@ -28,7 +28,7 @@ export default class SidebarProjects extends React.Component {
           const { game } = status;
           let isPrivate = Urls.isPrivateUrl(game.url);
           let isLocalFile = isPrivate || !game.owner || !game.owner.name;
-          let isAlreadySeen = seenUrls[game.url] !== true;
+          let isAlreadySeen = seenUrls[game.url] === true;
           seenUrls[game.url] = true;
           return isLocalFile && !isAlreadySeen;
         })
@@ -47,10 +47,10 @@ export default class SidebarProjects extends React.Component {
     return (
       <div className={STYLES_CONTAINER}>
         <SidebarGroupHeader>{this.props.title}</SidebarGroupHeader>
-        {filteredItems.map((c) => {
+        {filteredItems.map((c, ii) => {
           return (
             <SidebarChannelItem
-              key={`channel-${c.channelId}`}
+              key={`channel-${ii}-${c.url}`}
               channel={c}
               isSelected={false}
               onClick={() => this.props.onSelectGameUrl(c.url)}
