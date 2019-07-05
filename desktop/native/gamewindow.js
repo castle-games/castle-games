@@ -8,7 +8,6 @@ class GameWindow {
   _navigations = null;
 
   open = async ({ gameUrl, game, initialData, navigations, screenSettings }) => {
-    return;
     if (this._isOpen) return;
     this._isOpen = true;
     this._currentGame = game;
