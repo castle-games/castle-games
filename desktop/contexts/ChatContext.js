@@ -301,7 +301,16 @@ class ChatContextManager extends React.Component {
         channelIds[m.channelId] = true;
 
         let channel = channels[m.channelId];
-        channel.messages.push(m);
+        if (m.isEdit) {
+          const messageIndex = channel.messages.findIndex(
+            (m2) => m2.chatMessageId === m.chatMessageId
+          );
+          if (messageIndex >= 0) {
+            channel.messages[messageIndex] = m;
+          }
+        } else {
+          channel.messages.push(m);
+        }
       }
 
       Object.keys(channelIds).forEach((channelId) => {
