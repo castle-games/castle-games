@@ -10,7 +10,7 @@ const STYLES_HEADER = css`
   font-family: ${Constants.REFACTOR_FONTS.system};
   width: 100%;
   flex-shrink: 0;
-  padding: 8px 8px 0px 16px;
+  padding: 0 8px 0px 16px;
   overflow: hidden;
   min-height: 64px;
   display: flex;

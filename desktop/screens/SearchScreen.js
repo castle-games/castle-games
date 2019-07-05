@@ -196,7 +196,7 @@ export default class SearchScreen extends React.Component {
         <UIGameSet
           viewer={this.props.viewer}
           gameItems={this.state.results.games}
-          onUserSelect={this.props.navigateToUserProfile}
+          onUserSelect={this._navigateToUserProfile}
           onGameSelect={this._navigateToGame}
           onSignInSelect={this.props.navigateToSignIn}
         />

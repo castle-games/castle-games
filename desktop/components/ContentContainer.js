@@ -158,9 +158,7 @@ class ContentContainer extends React.Component {
         {this.props.mode === 'profile' ||
         this.props.mode === 'home' ||
         this.props.mode === 'create' ||
-        this.props.mode === 'examples' ||
-        this.props.mode === 'history' ||
-        this.props.mode === 'posts' ? (
+        this.props.mode === 'chat' ? (
           <ContentNavigationBar
             searchQuery={this.state.searchQuery}
             onSearchReset={this._handleSearchReset}
