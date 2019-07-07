@@ -42,11 +42,10 @@ const STYLES_BOTTOM = css`
 `;
 
 const STYLES_SECTION_TITLE = css`
-  font-weight: 900;
+  font-weight: 400;
   font-family: ${Constants.font.heading};
-  font-size: ${Constants.typescale.lvl5};
-  margin-bottom: 12px;
-  margin-left: 24px;
+  font-size: ${Constants.typescale.lvl4};
+  padding: 8px 24px 16px 24px;
 `;
 
 class GamesHomeScreen extends React.Component {

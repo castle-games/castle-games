@@ -17,7 +17,6 @@ import ProjectConfigureForm from '~/components/create/ProjectConfigureForm';
 import ProjectTemplateChooser from '~/components/create/ProjectTemplateChooser';
 import ProjectTemplatePreview from '~/components/create/ProjectTemplatePreview';
 import UIButton from '~/components/reusable/UIButton';
-import UIHeading from '~/components/reusable/UIHeading';
 
 const path = Utilities.path();
 
@@ -93,6 +92,13 @@ const STYLES_BACK = css`
   font-size: ${Constants.typescale.lvl6};
   color: ${Constants.colors.text};
   cursor: pointer;
+`;
+
+const STYLES_SECTION_TITLE = css`
+  font-family: ${Constants.font.heading};
+  font-size: ${Constants.typescale.lvl4};
+  font-weight: 400;
+  margin-bottom: 12px;
 `;
 
 class CreateProjectScreen extends React.Component {
@@ -237,7 +243,7 @@ class CreateProjectScreen extends React.Component {
       <React.Fragment>
         <div className={STYLES_CHOOSE_TEMPLATE}>
           <div className={STYLES_PRIMARY_CONTENT}>
-            <UIHeading>Create a game</UIHeading>
+            <div className={STYLES_SECTION_TITLE}>Create a game</div>
             <div className={STYLES_PARAGRAPH}>Choose a starter template:</div>
             <ProjectTemplateChooser
               templates={this.props.templates}
@@ -272,7 +278,7 @@ class CreateProjectScreen extends React.Component {
     let projectDirectoryName = this.state.selectedProjectDirectoryName;
     return (
       <React.Fragment>
-        <UIHeading>Name your project</UIHeading>
+        <div className={STYLES_SECTION_TITLE}>Name your project</div>
         <ProjectConfigureForm
           selectedProjectName={projectName}
           selectedParentDirectoryPath={projectParentDirectoryPath}
@@ -311,7 +317,7 @@ class CreateProjectScreen extends React.Component {
   _renderCreatingProject = () => {
     return (
       <React.Fragment>
-        <UIHeading>Creating your project...</UIHeading>
+        <div className={STYLES_SECTION_TITLE}>Creating your project...</div>
         <CreateProjectProgressIndicator
           projectName={this.state.selectedProjectName}
           fromTemplate={this.state.selectedTemplate}
@@ -327,7 +333,7 @@ class CreateProjectScreen extends React.Component {
   _renderFinished = () => {
     return (
       <React.Fragment>
-        <UIHeading>All done!</UIHeading>
+        <div className={STYLES_SECTION_TITLE}>All done!</div>
         <div className={STYLES_PARAGRAPH}>
           Castle finished creating your project files at{' '}
           <span className={STYLES_BOLD}>{this._getFinalProjectPath()}</span>.
