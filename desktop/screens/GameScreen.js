@@ -289,11 +289,17 @@ class GameScreen extends React.Component {
   _handleFullScreen = () => {
     this.props.setIsFullScreen(!this.props.isFullScreen);
 
+    // TODO(jim):
+    // - works for Windows
+    // - does not work for MacOS.
+    // - will need someone with native knowledge to help.
+    /*
     try {
       NativeUtil.setWindowFrameFullscreen(!this.props.isFullScreen);
     } catch (e) {
       console.log(e);
     }
+    */
   };
 
   render() {
