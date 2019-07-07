@@ -120,7 +120,7 @@ export default class ChatHeader extends React.Component {
         if (this.state.game) {
           return (
             <React.Fragment>
-              This is the public chat channel for{' '}
+              You are chatting with everyone playing{` `}
               <span
                 className={STYLES_GAME_TITLE}
                 onClick={() => this.props.onSelectGame(this.state.game)}>
@@ -131,10 +131,10 @@ export default class ChatHeader extends React.Component {
         }
         break;
       case 'dm':
-        return 'This is a private message thread.';
+        return `You are having a private conversation with ${channel.name}.`;
       default:
         if (channel.name === 'lobby') {
-          return 'Everyone in Castle';
+          return 'You are chatting with everyone on Castle';
         }
         break;
     }
