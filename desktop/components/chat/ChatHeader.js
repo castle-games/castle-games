@@ -80,6 +80,12 @@ const STYLES_P = css`
   }
 `;
 
+const STYLES_LINK = css`
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: underline;
+`;
+
 export default class ChatHeader extends React.Component {
   state = {
     game: null,
@@ -135,6 +141,21 @@ export default class ChatHeader extends React.Component {
     return 'This is a public channel.';
   };
 
+  _getLeaveMessage = () => {
+    const { channel } = this.props;
+    switch (channel.type) {
+      case 'game':
+        return 'Leave game chat';
+        break;
+      case 'dm':
+        return 'Leave conversation';
+        break;
+      default:
+        return 'Leave channel';
+        break;
+    }
+  };
+
   render() {
     const { channel, onLeaveChannel } = this.props;
     if (!channel) {
@@ -145,7 +166,7 @@ export default class ChatHeader extends React.Component {
     if (onLeaveChannel) {
       leaveButton = (
         <div className={STYLES_HEADER_RIGHT} onClick={onLeaveChannel}>
-          Leave Channel
+          <span className={STYLES_LINK}>{this._getLeaveMessage()}</span>
         </div>
       );
     }
