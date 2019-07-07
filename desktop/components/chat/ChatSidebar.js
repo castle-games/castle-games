@@ -105,7 +105,7 @@ class ChatSidebar extends React.Component {
           navigator={this.props.navigator}
           userIdToUser={this.props.userPresence.userIdToUser}
           theme={theme}
-          size="32px"
+          size="24px"
         />
         <ChatInput
           value={this.state.value}
