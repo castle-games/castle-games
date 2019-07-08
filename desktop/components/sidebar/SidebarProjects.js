@@ -6,7 +6,7 @@ import * as Urls from '~/common/urls';
 import { css } from 'react-emotion';
 
 import SidebarGroupHeader from '~/components/sidebar/SidebarGroupHeader';
-import SidebarChannelItem from '~/components/sidebar/SidebarChannelItem';
+import SidebarProjectItem from '~/components/sidebar/SidebarProjectItem';
 
 const STYLES_CONTAINER = css`
   margin-bottom: 24px;
@@ -34,7 +34,6 @@ export default class SidebarProjects extends React.Component {
         })
         .map((status) => {
           return {
-            type: 'create',
             name: status.game.title,
             url: status.game.url,
           };
@@ -47,13 +46,13 @@ export default class SidebarProjects extends React.Component {
     return (
       <div className={STYLES_CONTAINER}>
         <SidebarGroupHeader>{this.props.title}</SidebarGroupHeader>
-        {filteredItems.map((c, ii) => {
+        {filteredItems.map((p, ii) => {
           return (
-            <SidebarChannelItem
-              key={`channel-${ii}-${c.url}`}
-              channel={c}
+            <SidebarProjectItem
+              key={`project-${ii}-${p.url}`}
+              project={p}
               isSelected={false}
-              onClick={() => this.props.onSelectGameUrl(c.url)}
+              onClick={() => this.props.onSelectGameUrl(p.url)}
             />
           );
         })}
