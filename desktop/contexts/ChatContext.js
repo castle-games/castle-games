@@ -207,6 +207,12 @@ class ChatContextManager extends React.Component {
     if (!isSubscribed) {
       await this._chat.joinChannelAsync(channelId);
     }
+    if (!this.props.userPresence.userIdToUser[user.userId]) {
+      try {
+        let users = await Actions.getUsers({ userIds: [user.userId] });
+        await this.props.userPresence.addUsers(users);
+      } catch (e) {}
+    }
     if (createdChannel) {
       await this._addChannel({ ...createdChannel, isSubscribed: true });
     }
