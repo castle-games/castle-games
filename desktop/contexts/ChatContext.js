@@ -406,7 +406,7 @@ class ChatContextManager extends React.Component {
     let channelId,
       isSubscribed = false;
     Object.entries(this.state.channels).forEach(([key, channel]) => {
-      if (channel.gameId === game.gameId) {
+      if (channel.gameId && channel.gameId === game.gameId) {
         channelId = key;
         isSubscribed = channel.isSubscribed;
       }
@@ -419,7 +419,7 @@ class ChatContextManager extends React.Component {
     if (name) {
       let nameInvariant = name.toLowerCase();
       Object.entries(this.state.channels).forEach(([channelId, channel]) => {
-        if (channel.name === nameInvariant) {
+        if (channel.name && channel.name === nameInvariant) {
           result = channel;
         }
       });
