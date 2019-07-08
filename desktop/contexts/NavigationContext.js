@@ -22,7 +22,7 @@ import Logs from '~/common/logs';
  *  should have an effect on values here.
  */
 const NavigationContextDefaults = {
-  contentMode: 'home', // chat | game | profile | home | signin | notifications | create | edit_post | history
+  contentMode: 'home', // chat | game | profile | home | signin | notifications | create | edit_post
   timeLastNavigated: 0,
   gameUrl: '',
   game: null,
@@ -75,6 +75,7 @@ const NavigatorContextDefaults = {
   navigateToCreate: () => {},
   navigateToEditPost: () => {},
   reloadGame: (onlyIfVisible) => {},
+  minimizeGame: () => {},
   clearCurrentGame: async () => {},
   setIsFullScreen: (isFullScreen) => {},
 };
@@ -109,6 +110,7 @@ class NavigationContextManager extends React.Component {
         navigateToEditPost: this.navigateToEditPost,
         openUrl: this.openUrl,
         reloadGame: this.reloadGame,
+        minimizeGame: this.minimizeGame,
         clearCurrentGame: this.clearCurrentGame,
         setIsFullScreen: this.setIsFullScreen,
       },
@@ -156,18 +158,38 @@ class NavigationContextManager extends React.Component {
       return;
     }
 
-    // track game launches
-    Analytics.trackGameLaunch({ game, launchSource });
-    // navigate to the game
     const time = Date.now();
-    this._navigateToContentMode('game', {
+    const gameNavigationState = {
       game,
-      gameUrl: url,
       timeGameLoaded: time,
       timeLastNavigated: time,
       post,
       gameParams,
       referrerGame,
+    };
+
+    let deferredNavigationState;
+    if (this.state.navigation.contentMode === 'signin') {
+      // never go 'back' to sign in
+      deferredNavigationState = { mode: 'home', params: {} };
+    } else if (this.state.navigation.contentMode === 'game') {
+      // moving from one game to another; maintain existing 'back' state
+      deferredNavigationState = this.state.navigation.deferredNavigationState;
+    } else {
+      // push new 'back' state
+      deferredNavigationState = {
+        params: { ...this.state.navigation, ...gameNavigationState },
+        mode: this.state.navigation.contentMode,
+      };
+    }
+
+    // track game launches
+    Analytics.trackGameLaunch({ game, launchSource });
+    // navigate to the game
+    this._navigateToContentMode('game', {
+      gameUrl: url,
+      ...gameNavigationState,
+      deferredNavigationState,
     });
   };
 
@@ -243,7 +265,18 @@ class NavigationContextManager extends React.Component {
     if (this.state.navigation.contentMode === 'edit_post') {
       this.state.navigation.params.onCancel();
     }
-    this._navigateToContentMode('game');
+    this._navigateToContentMode('game', {
+      deferredNavigationState: {
+        mode: this.state.navigation.contentMode,
+        params: { ...this.state.navigation },
+      },
+    });
+  };
+
+  minimizeGame = () => {
+    if (this.state.navigation.contentMode === 'game') {
+      this._restoreDeferredState();
+    }
   };
 
   navigateToGameUrl = async (gameUrl, options) => {

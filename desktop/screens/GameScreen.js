@@ -310,7 +310,7 @@ class GameScreen extends React.Component {
           game={this.props.game}
           timeGameLoaded={this.props.timeGameLoaded}
           navigateToUserProfile={this.props.navigateToUserProfile}
-          minimizeGame={this.props.navigateToHome}
+          minimizeGame={this.props.minimizeGame}
           clearCurrentGame={this.props.clearCurrentGame}
           onFullScreenToggle={this._handleFullScreen}
           reloadGame={this.props.reloadGame}
@@ -399,6 +399,7 @@ export default class GameScreenWithContext extends React.Component {
                     navigateToGameUrl={navigator.navigateToGameUrl}
                     navigateToGame={navigator.navigateToGame}
                     navigateToHome={navigator.navigateToHome}
+                    minimizeGame={navigator.minimizeGame}
                     isFullScreen={navigation.isFullScreen}
                     setIsFullScreen={navigator.setIsFullScreen}
                     reloadGame={navigator.reloadGame}
