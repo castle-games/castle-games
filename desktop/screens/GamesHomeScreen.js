@@ -45,7 +45,7 @@ const STYLES_SECTION_TITLE = css`
   font-weight: 400;
   font-family: ${Constants.font.heading};
   font-size: ${Constants.typescale.lvl4};
-  padding: 8px 24px 16px 24px;
+  padding: 0px 24px 8px 24px;
 `;
 
 class GamesHomeScreen extends React.Component {
@@ -122,7 +122,6 @@ class GamesHomeScreen extends React.Component {
       <div className={STYLES_HOME_CONTAINER} onScroll={this._handleScroll}>
         <div className={STYLES_CONTENT_CONTAINER}>
           <div className={STYLES_GAMES_CONTAINER}>
-            <div className={STYLES_SECTION_TITLE}>Games</div>
             <UIGameSet
               title=""
               numRowsToElide={3}

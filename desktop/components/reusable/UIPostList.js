@@ -22,7 +22,7 @@ const STYLES_POST = css`
   display: inline-block;
   position: relative;
   color: black;
-  margin: 0 16px 48px 0;
+  margin: 0 24px 48px 0;
 
   :hover {
     footer {

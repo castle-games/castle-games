@@ -77,8 +77,8 @@ export const typescale = {
 };
 
 export const card = {
-  width: '250px',
-  imageHeight: '157px',
+  width: '220px',
+  imageHeight: '135px',
   radius: '4px',
   background: '#F8F8F9',
   backgroundHover: '#FFFFFF',

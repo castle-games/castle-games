@@ -263,7 +263,7 @@ export default class UIGameCell extends React.Component {
   render() {
     let { game } = this.props;
     let { mouseX, mouseY } = this.state;
-    let title = game.title ? game.title : 'Untitled';
+    let title = game.title ? Strings.elide(game.title, 21) : 'Untitled';
     let onGameUpdate = this.props.onGameUpdate ? () => this.props.onGameUpdate(game) : null;
 
     const backgroundColor =
@@ -276,7 +276,7 @@ export default class UIGameCell extends React.Component {
 
     const hoveringOnDetailIcon = this.state.isHoveringOnActions || this.state.isHoveringOnAuthor;
     let descriptionText = game.description
-      ? Strings.elide(game.description, 180)
+      ? Strings.elide(game.description, 104)
       : 'No description yet :)';
     let username, playCount;
 
