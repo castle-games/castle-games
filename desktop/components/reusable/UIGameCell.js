@@ -281,7 +281,7 @@ export default class UIGameCell extends React.Component {
     let username, playCount;
 
     let isPrivate = Urls.isPrivateUrl(game.url);
-    let isLocalFile = isPrivate || !game.owner || !game.owner.name;
+    let isLocalFile = isPrivate || !game.owner || !game.owner.username;
     if (isLocalFile) {
       descriptionText = game.url;
       username = 'Local Project'; // TODO(Jason): show date last edited?
