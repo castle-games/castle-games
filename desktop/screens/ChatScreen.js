@@ -88,6 +88,16 @@ class ChatScreen extends React.Component {
     this._timeout = null;
   };
 
+  _handleSelectChannelName = () => {
+    const channel = this.props.chat.channels[this.props.channelId];
+    if (channel.type === 'dm') {
+      const user = this.props.userPresence.userIdToUser[channel.otherUserId];
+      if (user) {
+        this.props.navigator.navigateToUserProfile(user);
+      }
+    }
+  };
+
   _handleLeaveChannel = async () => {
     this.props.chat.closeChannel(this.props.channelId);
     this.props.navigator.navigateToHome();
@@ -193,6 +203,7 @@ class ChatScreen extends React.Component {
           viewer={this.props.viewer}
           channel={channel}
           onSelectGame={this.props.navigator.navigateToGame}
+          onSelectChannelName={this._handleSelectChannelName}
           onLeaveChannel={onLeaveChannel}
           onMembersClick={this._handleShowSingleChannelMembers}
         />

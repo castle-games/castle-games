@@ -174,7 +174,7 @@ export default class ChatHeader extends React.Component {
     return (
       <header className={STYLES_HEADER}>
         <div className={STYLES_HEADER_LEFT}>
-          <h2 className={STYLES_H2} onClick={this.props.onSettingsClick}>
+          <h2 className={STYLES_H2} onClick={this.props.onSelectChannelName}>
             {channel.type !== 'dm' ? <SVG.HashTag size="12px" /> : null}
             {channel.name}
           </h2>
