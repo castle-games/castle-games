@@ -89,11 +89,6 @@ class NoticeMessage extends React.Component {
   render() {
     const { message } = this.props;
 
-    // TODO: hack
-    if (this.props.theme.hideEvents) {
-      return null;
-    }
-
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_NOTICE}>
@@ -152,8 +147,12 @@ export default class ChatEventElement extends React.Component {
   };
 
   render() {
-    const { message } = this.props;
-    const type = message && message.body ? message.body.notificationType : null;
+    const { message, theme } = this.props;
+    let type = message && message.body ? message.body.notificationType : null;
+    if (theme && theme.hideEvents) {
+      // TODO: hack to make sure the large notices don't overflow the left game sidebar
+      type = 'subdued';
+    }
     switch (type) {
       case 'game-session':
         return <NoticeMessage {...this.props} />;
