@@ -342,7 +342,7 @@ class GameScreen extends React.Component {
     }
 
     let maybeChatSidebar;
-    if (!this.props.isFullScreen && this.props.game.gameId) {
+    if (!this.props.isFullScreen) {
       maybeChatSidebar = <ChatSidebar game={this.props.game} />;
     }
 

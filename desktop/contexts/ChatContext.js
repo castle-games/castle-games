@@ -403,15 +403,13 @@ class ChatContextManager extends React.Component {
   };
 
   findChannelForGame = (game) => {
-    let channelId,
-      isSubscribed = false;
-    Object.entries(this.state.channels).forEach(([key, channel]) => {
-      if (channel.gameId && channel.gameId === game.gameId) {
-        channelId = key;
-        isSubscribed = channel.isSubscribed;
+    let channel = { channelId: null, isSubscribed: false };
+    Object.entries(this.state.channels).forEach(([key, c]) => {
+      if (c.gameId && c.gameId === game.gameId) {
+        channel = c;
       }
     });
-    return { channelId, isSubscribed };
+    return channel;
   };
 
   findChannel = (name) => {

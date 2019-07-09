@@ -27,7 +27,7 @@ export default class SidebarProjects extends React.Component {
         .filter((status) => {
           const { game } = status;
           let isPrivate = Urls.isPrivateUrl(game.url);
-          let isLocalFile = isPrivate || !game.owner || !game.owner.name;
+          let isLocalFile = isPrivate || !game.owner;
           let isAlreadySeen = seenUrls[game.url] === true;
           seenUrls[game.url] = true;
           return isLocalFile && !isAlreadySeen;

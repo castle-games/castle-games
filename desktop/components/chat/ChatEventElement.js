@@ -89,6 +89,11 @@ class NoticeMessage extends React.Component {
   render() {
     const { message } = this.props;
 
+    // TODO: hack
+    if (this.props.theme.hideEvents) {
+      return null;
+    }
+
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_NOTICE}>

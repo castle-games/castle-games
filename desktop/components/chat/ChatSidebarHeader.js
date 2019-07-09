@@ -36,22 +36,75 @@ const STYLES_HEADER_LEFT = css`
   }
 `;
 
-export default class ChatHeader extends React.Component {
+export default class ChatSidebarHeader extends React.Component {
+  static defaultProps = {
+    gameChannel: {},
+    isLobbySelected: true,
+    onSelectLobby: () => {},
+    onSelectGameChannel: () => {},
+  };
+
+  _renderGameChatControl = () => {
+    const { gameChannel, isLobbySelected } = this.props;
+    if (!gameChannel || !gameChannel.channelId) return null;
+
+    let selectedStyles = isLobbySelected
+      ? null
+      : {
+          background: '#000000',
+        };
+
+    return (
+      <UINavigationLink
+        style={{
+          padding: '0 24px 0 24px',
+          height: 32,
+          display: 'inline-flex',
+          alignItems: 'center',
+          maxWidth: 128,
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          ...selectedStyles,
+        }}
+        onClick={this.props.onSelectGameChannel}>
+        #{gameChannel.name}
+      </UINavigationLink>
+    );
+  };
+
+  _renderLobbyControl = () => {
+    const { gameChannel, isLobbySelected } = this.props;
+    const isGameAvailable = gameChannel !== null;
+
+    let onClick = isGameAvailable ? this.props.onSelectLobby : null;
+    let selectedStyles = isLobbySelected
+      ? {
+          background: '#000000',
+        }
+      : null;
+
+    return (
+      <UINavigationLink
+        style={{
+          padding: '0 24px 0 24px',
+          height: 32,
+          display: 'inline-flex',
+          alignItems: 'center',
+          ...selectedStyles,
+        }}
+        onClick={onClick}>
+        #lobby
+      </UINavigationLink>
+    );
+  };
+
   render() {
     return (
       <header className={STYLES_HEADER} style={{ background: `#171717` }}>
         <div className={STYLES_HEADER_LEFT}>
-          <UINavigationLink
-            style={{
-              background: '#313131',
-              padding: '0 24px 0 24px',
-              height: 32,
-              display: 'inline-flex',
-              alignItems: 'center',
-            }}
-            onClick={this.props.onBackClick}>
-            Back
-          </UINavigationLink>
+          {this._renderGameChatControl()}
+          {this._renderLobbyControl()}
         </div>
       </header>
     );

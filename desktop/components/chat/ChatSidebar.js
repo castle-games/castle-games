@@ -15,6 +15,7 @@ import { UserPresenceContext } from '~/contexts/UserPresenceContext';
 
 import ChatMessages from '~/components/chat/ChatMessages';
 import ChatInput from '~/components/chat/ChatInput';
+import ChatSidebarHeader from '~/components/chat/ChatSidebarHeader';
 
 const STYLES_CONTAINER_BASE = css`
   display: flex;
@@ -31,21 +32,49 @@ class ChatSidebar extends React.Component {
     value: '',
     mode: 'MESSAGES',
     isDarkMode: false,
+    isGameChatVisible: false,
   };
 
-  constructor(props) {
-    super(props);
-    this._update(null, null);
+  componentDidMount() {
+    this._update();
   }
 
   componentDidUpdate(prevProps, prevState) {
     this._update(prevProps, prevState);
   }
 
-  _update = (prevProps, prevState) => {
-    const { chat, channelId } = this.props;
-    if (chat) {
-      chat.markChannelRead(channelId);
+  _update = (prevProps = {}, prevState = {}) => {
+    const { chat, gameChannel, lobbyChannel } = this.props;
+    let prevChannelId = prevProps.gameChannel ? prevProps.gameChannel.channelId : null;
+    let channelId = gameChannel ? gameChannel.channelId : null;
+    if (prevChannelId !== channelId) {
+      this.setState({ isGameChatVisible: channelId !== null });
+    }
+
+    if (chat && lobbyChannel) {
+      let channelIdVisible = this.state.isGameChatVisible ? channelId : lobbyChannel.channelId;
+      let prevChannelIdVisible = prevState.isGameChatVisible
+        ? prevChannelId
+        : lobbyChannel.channelId;
+      if (channelIdVisible !== prevChannelIdVisible) {
+        chat.markChannelRead(channelIdVisible);
+      }
+    }
+  };
+
+  _getChannelIdVisible = () => {
+    return this.state.isGameChatVisible && this.props.gameChannel
+      ? this.props.gameChannel.channelId
+      : this.props.lobbyChannel.channelId;
+  };
+
+  _handleSelectLobby = () => {
+    this.setState({ isGameChatVisible: false });
+  };
+
+  _handleSelectGameChannel = () => {
+    if (this.props.gameChannel) {
+      this.setState({ isGameChatVisible: true });
     }
   };
 
@@ -60,14 +89,14 @@ class ChatSidebar extends React.Component {
         return;
       }
 
-      this.props.chat.sendMessage(this.props.channelId, this.state.value);
+      this.props.chat.sendMessage(this._getChannelIdVisible(), this.state.value);
       this.setState({ value: '' });
     }
   };
 
   render() {
     const { mode } = this.state;
-    const { channelId } = this.props;
+    const channelId = this._getChannelIdVisible();
 
     // TODO(jim): When theming is available, you can just modify this object.
     let theme = {
@@ -79,6 +108,7 @@ class ChatSidebar extends React.Component {
       embedBackground: `#333`,
       embedBoxShadow: `none`,
       embedPadding: `8px 8px 8px 8px`,
+      hideEvents: true, // TODO: hack
     };
 
     if (!this.props.navigation.game) {
@@ -93,6 +123,7 @@ class ChatSidebar extends React.Component {
       return null;
     }
     const messages = this.props.chat.channels[channelId].messages;
+    const name = this.props.chat.channels[channelId].name;
 
     return (
       <div
@@ -100,6 +131,12 @@ class ChatSidebar extends React.Component {
         style={{
           background: theme.background,
         }}>
+        <ChatSidebarHeader
+          gameChannel={this.props.gameChannel}
+          isLobbySelected={!this.state.isGameChatVisible}
+          onSelectLobby={this._handleSelectLobby}
+          onSelectGameChannel={this._handleSelectGameChannel}
+        />
         <ChatMessages
           messages={messages}
           navigator={this.props.navigator}
@@ -110,7 +147,7 @@ class ChatSidebar extends React.Component {
         <ChatInput
           value={this.state.value}
           name="value"
-          placeholder="Type a message"
+          placeholder={`Message #${name}`}
           onChange={this._handleChange}
           onKeyDown={this._handleKeyDown}
           theme={theme}
@@ -132,7 +169,8 @@ export default class ChatSidebarWithContext extends React.Component {
                 {(chat) => (
                   <NavigationContext.Consumer>
                     {(navigation) => {
-                      const { channelId } = chat.findChannelForGame(navigation.game);
+                      const gameChannel = chat.findChannelForGame(navigation.game);
+                      const lobbyChannel = chat.findChannel('lobby');
                       return (
                         <NavigatorContext.Consumer>
                           {(navigator) => (
@@ -143,7 +181,8 @@ export default class ChatSidebarWithContext extends React.Component {
                               navigation={navigation}
                               userPresence={userPresence}
                               chat={chat}
-                              channelId={channelId}
+                              gameChannel={gameChannel}
+                              lobbyChannel={lobbyChannel}
                             />
                           )}
                         </NavigatorContext.Consumer>
