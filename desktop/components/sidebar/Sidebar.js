@@ -206,12 +206,13 @@ class Sidebar extends React.Component {
   };
 
   _renderMessageOptions = () => {
-    const { navigation, currentUser } = this.props;
+    const { navigation, currentUser, userPresence } = this.props;
 
     return (
       <div className={STYLES_SIDEBAR}>
         <SidebarOptionsMessages
           viewer={currentUser.user}
+          userPresence={userPresence}
           onDismiss={this._handleHideOptions}
           onSendMessage={this._handleCreateDirectMessage}
         />

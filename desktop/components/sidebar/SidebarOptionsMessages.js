@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as ChatUtilities from '~/common/chat-utilities';
 import * as Constants from '~/common/constants';
 import * as SVG from '~/common/svg';
 import * as ChatActions from '~/common/actions-chat';
@@ -7,6 +8,7 @@ import * as Strings from '~/common/strings';
 import { css } from 'react-emotion';
 
 import UISidebarInput from '~/components/reusable/UISidebarInput';
+import SidebarDirectMessageItem from '~/components/sidebar/SidebarDirectMessageItem';
 
 const STYLES_HEADER = css`
   border-bottom: 1px solid ${Constants.REFACTOR_COLORS.elements.border};
@@ -41,23 +43,6 @@ const STYLES_HEADER_RIGHT = css`
   }
 `;
 
-const STYLES_OPTION = css`
-  font-family: ${Constants.REFACTOR_FONTS.system};
-  user-select: none;
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 8px;
-  text-align: right;
-  padding: 0 16px 0 16px;
-  width: 100%;
-  cursor: pointer;
-  transition: color 200ms ease;
-
-  :hover {
-    color: magenta;
-  }
-`;
-
 const STYLES_TITLE = css`
   font-family: ${Constants.REFACTOR_FONTS.system};
   color: ${Constants.REFACTOR_COLORS.subdued};
@@ -65,7 +50,6 @@ const STYLES_TITLE = css`
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.1px;
-  text-align: right;
   padding: 0 16px 0 16px;
   margin-bottom: 8px;
 `;
@@ -80,6 +64,12 @@ export const delay = (ms) =>
   });
 
 export default class SidebarOptionsMessages extends React.Component {
+  static defaultProps = {
+    viewer: null,
+    onDismiss: () => {},
+    onSendMessage: (user) => {},
+    userPresence: null,
+  };
   _timeout;
 
   state = {
@@ -103,34 +93,45 @@ export default class SidebarOptionsMessages extends React.Component {
 
   _handleSearch = (value) => {
     this._timeout = window.setTimeout(async () => {
-      let users = [];
+      const { userPresence } = this.props;
+      let users = null,
+        channels = [];
 
       let autocompleteResults = await ChatActions.getAutocompleteAsync(value, ['users']);
       if (autocompleteResults.users) {
         users = autocompleteResults.users;
       }
 
-      this.setState({ results: users });
+      if (users) {
+        channels = users.map((u) => {
+          return {
+            user: u,
+            hasUnreadMessages: false,
+            type: 'dm',
+            otherUserIsOnline: userPresence && userPresence.onlineUserIds[u.userId],
+            name: Strings.getName(u),
+          };
+        });
+        channels = ChatUtilities.sortChannels(channels);
+      }
+
+      this.setState({ results: channels });
     }, 300);
   };
 
   render() {
-    const { viewer } = this.props;
-
-    let users = [];
-    if (this.state.results) {
-      users = this.state.results;
-    }
+    const { viewer, onDismiss, onSendMessage } = this.props;
+    const channels = this.state.results;
 
     return (
       <React.Fragment>
         <header className={STYLES_HEADER}>
           <div className={STYLES_HEADER_LEFT} />
-          <div className={STYLES_HEADER_RIGHT} onClick={this.props.onDismiss}>
+          <div className={STYLES_HEADER_RIGHT} onClick={onDismiss}>
             <SVG.Dismiss size="16px" />
           </div>
         </header>
-        <div className={STYLES_TITLE}>Find a user</div>
+        <div className={STYLES_TITLE}>Message a user</div>
 
         <div className={STYLES_FORM}>
           <UISidebarInput
@@ -141,23 +142,23 @@ export default class SidebarOptionsMessages extends React.Component {
           />
         </div>
 
-        {users.length ? (
+        {channels && channels.length ? (
           <div className={STYLES_TITLE} style={{ marginTop: 40 }}>
             Users found
           </div>
         ) : null}
-        {users.map((u) => {
-          if (u.username === viewer.username) {
+        {channels.map((c) => {
+          if (c.user.username === viewer.username) {
             return null;
           }
 
           return (
-            <div
-              key={`username-${u.userId}`}
-              className={STYLES_OPTION}
-              onClick={() => this.props.onSendMessage(u)}>
-              {Strings.getPresentationName(u)}
-            </div>
+            <SidebarDirectMessageItem
+              key={`channel-${c.user.userId}`}
+              channel={c}
+              user={c.user}
+              onClick={() => onSendMessage(c.user)}
+            />
           );
         })}
       </React.Fragment>
