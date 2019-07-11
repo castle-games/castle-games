@@ -86,18 +86,20 @@ export const _getAutoCompleteUserAsync = async (text) => {
 };
 
 const isValidMentionCharacter = (c) => {
-  return (
-    (c >= '0' && c <= '9') ||
-    (c >= 'a' && c <= 'z') ||
-    (c >= 'A' && c <= 'Z') ||
-    c === '-' ||
-    c === '_' ||
-    c === '/'
-  );
+  return /[\w\-]/.test(c);
 };
 
 const isTerminalMentionCharacter = (c) => {
-  return /\s/.test(c);
+  return /[\s.,?!:;~()\*]/.test(c);
+};
+
+const isInitialMentionIndex = (message, index) => {
+  return (
+    // must start with @
+    message.charAt(index) === '@' &&
+    // must be preceded by a mention terminal
+    (index == 0 || isTerminalMentionCharacter(message.charAt(index - 1)))
+  );
 };
 
 // NOTE(jesse): Formats message into an array
@@ -115,12 +117,8 @@ export const formatMessageAsync = async (message, cache) => {
   let i = 0;
 
   while (i < message.length) {
-    if (message.charAt(i) === '@') {
+    if (isInitialMentionIndex(message, i)) {
       // Try converting all @... words into {userId: 1} items
-      if (i > 0 && !/\s/.test(message.charAt(i - 1))) {
-        i++;
-        continue;
-      }
 
       // find the end index of the mention
       let j;
