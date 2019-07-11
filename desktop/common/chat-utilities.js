@@ -85,6 +85,21 @@ export const _getAutoCompleteUserAsync = async (text) => {
   return null;
 };
 
+const isValidMentionCharacter = (c) => {
+  return (
+    (c >= '0' && c <= '9') ||
+    (c >= 'a' && c <= 'z') ||
+    (c >= 'A' && c <= 'Z') ||
+    c === '-' ||
+    c === '_' ||
+    c === '/'
+  );
+};
+
+const isTerminalMentionCharacter = (c) => {
+  return /\s/.test(c);
+};
+
 // NOTE(jesse): Formats message into an array
 // NOTE(jim): The adjustment to this method is:
 // emojis no longer need to be handled serverside.
@@ -107,29 +122,20 @@ export const formatMessageAsync = async (message, cache) => {
         continue;
       }
 
+      // find the end index of the mention
       let j;
       for (j = i + 1; j < message.length; j++) {
         let c = message.charAt(j);
-
-        let isUserTagValue =
-          (c >= '0' && c <= '9') ||
-          (c >= 'a' && c <= 'z') ||
-          (c >= 'A' && c <= 'Z') ||
-          c === '-' ||
-          c === '_' ||
-          c === '/';
-
-        if (/\s/.test(c)) {
+        if (isTerminalMentionCharacter(c)) {
           break;
         }
-
-        if (!isUserTagValue) {
+        if (!isValidMentionCharacter(c)) {
           i = j + 1;
-          continue;
+          break;
         }
       }
 
-      if (j >= message.length || /\s/.test(message.charAt(j))) {
+      if (i < j && (j >= message.length || isTerminalMentionCharacter(message.charAt(j)))) {
         let tag = message.substr(i + 1, j - i - 1);
         let user = cache[tag];
 
