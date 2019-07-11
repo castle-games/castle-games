@@ -88,7 +88,7 @@ export default class ChatMessages extends React.Component {
       }
     }
     return (
-      <div className={STYLES_DATELINE} key={`message-${m.messageId}`}>
+      <div className={STYLES_DATELINE} key={`dateline-${m.chatMessageId}`}>
         {Strings.toChatDateline(m.timestamp)}
       </div>
     );
