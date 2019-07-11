@@ -94,7 +94,7 @@ class NoticeMessage extends React.Component {
             <div className={STYLES_AUTHOR_NAME}>
               Castle
               <span className={STYLES_TIMESTAMP}>
-                {Strings.toChatDate(this.props.message.timestamp)}
+                {Strings.toChatTime(this.props.message.timestamp)}
               </span>
             </div>
             <div className={STYLES_NOTICE_MESSAGE}>

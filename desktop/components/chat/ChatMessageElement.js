@@ -101,7 +101,7 @@ export default class ChatMessageElement extends React.Component {
             }>
             {Strings.getPresentationName(this.props.user)}
             <span className={STYLES_TIMESTAMP}>
-              {Strings.toChatDate(this.props.message.timestamp)}
+              {Strings.toChatTime(this.props.message.timestamp)}
             </span>
           </div>
           <div

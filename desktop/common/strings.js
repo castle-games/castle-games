@@ -65,6 +65,30 @@ const areDatesSameDay = (date1, date2) => {
   );
 };
 
+export const toChatDateline = (timestamp) => {
+  let date = new Date(timestamp);
+  if (areDatesSameDay(new Date(), date)) {
+    return 'Today';
+  } else {
+    let yesterday = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
+
+    if (areDatesSameDay(yesterday, date)) {
+      return 'Yesterday';
+    } else {
+      return toDate(date);
+    }
+  }
+};
+
+export const toChatTime = (timestamp) => {
+  let date = new Date(timestamp);
+  return date.toLocaleString('en-US', {
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true,
+  });
+};
+
 export const toChatDate = (timestamp) => {
   let date = new Date(timestamp);
   let timeString = date.toLocaleString('en-US', {
