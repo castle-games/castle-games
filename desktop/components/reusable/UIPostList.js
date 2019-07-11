@@ -7,7 +7,7 @@ import { css } from 'react-emotion';
 import { getEmojiComponent } from '~/common/emojis';
 import { Tooltip } from 'react-tippy';
 
-import ChatMessageElement from '~/components/chat/ChatMessageElement';
+import UIMessageBody from '~/components/reusable/UIMessageBody';
 
 const STYLES_CONTAINER = css`
   display: flex;
@@ -51,10 +51,61 @@ const STYLES_POST_CARD = css`
   position: relative;
 `;
 
+const STYLES_POST_HEADER = css`
+  display: flex;
+  flex-direction: row;
+  min-height: 38px;
+  font-size: 15px;
+  cursor: auto;
+  padding-top: 4px;
+  padding-bottom: 12px;
+`;
+
+const STYLES_MESSAGE_CONTAINER = css`
+  max-width: 384px;
+`;
+
+const STYLES_USER_PHOTO = css`
+  background-size: cover;
+  background-position: 50% 50%;
+  height: 40px;
+  width: 40px;
+  border-radius: 4px;
+  cursor: pointer;
+  flex-shrink: 0;
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  :hover {
+    filter: brightness(110%);
+  }
+`;
+
+const STYLES_TEXT_CONTAINER = css`
+  display: flex;
+  flex-direction: column;
+  margin-left: 12px;
+`;
+
+const STYLES_USER_NAME = css`
+  font-family: ${Constants.font.system};
+  font-weight: 700;
+  cursor: pointer;
+  :hover {
+    text-decoration: underline;
+  }
+`;
+
+const STYLES_MESSAGE = css`
+  margin: 2px 0;
+  overflow-wrap: break-word;
+`;
+
 const STYLES_PLAYING = css`
+  color: ${Constants.REFACTOR_COLORS.subdued};
   white-space: nowrap;
   font-size: 15px;
   margin-top: 2px;
+  padding-left: 8px;
 `;
 
 const STYLES_PLAYING_TITLE = css`
@@ -203,8 +254,8 @@ export class UIPostCell extends React.Component {
     this.props.onGameSelect(this.props.post.sourceGame);
   };
 
-  _handleUserSelect = (user) => {
-    this.props.onUserSelect(user ? user : this.props.post.creator);
+  _handleUserSelect = () => {
+    this.props.onUserSelect(this.props.post.creator);
   };
 
   _handleToggleHoverOnLink = (shouldSetHovering) => {
@@ -254,8 +305,8 @@ export class UIPostCell extends React.Component {
     if (sourceGame) {
       playing = (
         <span className={STYLES_PLAYING}>
-          {'  \u2022  '}Playing{' '}
-          <span className={STYLES_PLAYING_TITLE} onClick={this._handleGameSelect}>
+          Playing{' '}
+          <span className={STYLES_PLAYING_TITLE} onClick={onClick}>
             {sourceGame.title}
           </span>
         </span>
@@ -271,16 +322,36 @@ export class UIPostCell extends React.Component {
         onMouseEnter={() => this._handleToggleHoverOnPost(true)}
         onMouseLeave={() => this._handleMouseLeave()}
         onMouseMove={this._handleMouseMove}
-        style={this.props.style}>
-        <section>
-          <ChatMessageElement
-            message={{ body: { ...message }, timestamp: createdTime }}
-            user={creator}
-            expandAttachments={false}
-            onNavigateToUserProfile={this._handleUserSelect}
-            style={{ padding: `0 0 4px 0`, minHeight: '76px' }}
-          />
-        </section>
+        style={{
+          transform: this.state.isHoveringOnPost ? 'scale(1.004)' : 'scale(1.0)',
+          background: this.state.isHoveringOnPost
+            ? `radial-gradient(at ${mouseX}% ${mouseY}%, #FCFCFD, ${Constants.card.background})`
+            : 'transparent',
+          ...this.props.style,
+        }}>
+        <div className={STYLES_POST_CARD}>
+          <div className={STYLES_POST_HEADER}>
+            <div
+              className={STYLES_USER_PHOTO}
+              onClick={this._handleUserSelect}
+              style={{
+                backgroundImage:
+                  creator.photo && creator.photo.url ? `url(${creator.photo.url})` : null,
+              }}
+            />
+            <div className={STYLES_TEXT_CONTAINER}>
+              <div className={STYLE_HEADER_TEXT_TOP_ROW}>
+                <span className={STYLES_USER_NAME} onClick={this._handleUserSelect}>
+                  {creator.username}
+                </span>
+                {playing}
+              </div>
+              <div className={STYLES_MESSAGE}>
+                <UIMessageBody body={message} expandAttachments={false} />
+              </div>
+            </div>
+          </div>
+        </div>
         <div
           className={STYLES_MEDIA_IMAGE}
           onClick={onClick}

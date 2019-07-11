@@ -42,6 +42,7 @@ const STYLES_CONTAINER = css`
 
 const STYLES_POST_CELL_CONTAINER = css`
   padding: 16px;
+  margin: 8px 0;
   display: inline-block;
   border: 1px solid #ececec;
   max-width: 532px;
