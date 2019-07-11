@@ -93,7 +93,12 @@ export default class ChatMessages extends React.Component {
           let previousMessage = this.props.messages[i - 1];
           if (previousMessage) {
             const prevSlashCommand = ChatUtilities.getSlashCommand(previousMessage.body);
-            if (!prevSlashCommand.isCommand && previousMessage.fromUserId === m.fromUserId) {
+            let timeBetween = (new Date(m.timestamp) - new Date(previousMessage.timestamp)) / 1000;
+            if (
+              !prevSlashCommand.isCommand &&
+              previousMessage.fromUserId === m.fromUserId &&
+              timeBetween < 60 * 5
+            ) {
               return (
                 <ChatMessageElementSameUser
                   key={`chat-${m.fromUserId}-${m.chatMessageId}-${i}`}
