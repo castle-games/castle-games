@@ -18,9 +18,6 @@ const STYLES_NOTICE = css`
   display: inline-flex;
   align-items: flex-start;
   justify-content: space-between;
-  border: 1px solid #ececec;
-  border-radius: 4px;
-  padding: 8px 24px 8px 8px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
   overflow-wrap: break-word;
 `;
@@ -95,7 +92,7 @@ class NoticeMessage extends React.Component {
           <span className={STYLES_LEFT}>🏰</span>
           <span className={STYLES_RIGHT}>
             <div className={STYLES_AUTHOR_NAME}>
-              Castle Event
+              Castle
               <span className={STYLES_TIMESTAMP}>
                 {Strings.toChatDate(this.props.message.timestamp)}
               </span>
