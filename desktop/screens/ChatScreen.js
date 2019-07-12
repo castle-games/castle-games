@@ -117,9 +117,6 @@ class ChatScreen extends React.Component {
   _handleChange = (e) => {
     const value = e.target.value;
     this.setState({ [e.target.name]: value }, () => {
-      window.clearTimeout(this._timeout);
-      this._timeout = null;
-
       let autocompleteType, query;
       regexMatch(value, /([@][\w_-]+)$/g, (match, i) => {
         if (!autocompleteType) {
@@ -139,6 +136,8 @@ class ChatScreen extends React.Component {
       if (autocompleteType) {
         this._handleSearch(query, autocompleteType);
       } else {
+        window.clearTimeout(this._timeout);
+        this._timeout = null;
         return this.setState({
           autocomplete: {
             type: null,
@@ -149,8 +148,10 @@ class ChatScreen extends React.Component {
   };
 
   _handleSearch = (value, type) => {
-    let callback;
+    let callback,
+      isNetworkRequest = false;
     if (type === 'users') {
+      isNetworkRequest = true;
       callback = async () => {
         let users = [];
         let autocompleteResults = await ChatActions.getAutocompleteAsync(value, ['users']);
@@ -176,7 +177,13 @@ class ChatScreen extends React.Component {
         });
       };
     }
-    this._timeout = window.setTimeout(callback, 200);
+    window.clearTimeout(this._timeout);
+    this._timeout = null;
+    if (isNetworkRequest) {
+      this._timeout = window.setTimeout(callback, 200);
+    } else {
+      callback();
+    }
   };
 
   _handleKeyDown = (e) => {
