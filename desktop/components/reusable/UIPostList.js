@@ -98,6 +98,12 @@ const STYLES_USER_NAME = css`
 const STYLES_MESSAGE = css`
   margin: 2px 0;
   overflow-wrap: break-word;
+  line-height: 18px;
+
+  span {
+    display: inline-block;
+    vertical-align: top;
+  }
 `;
 
 const STYLES_PLAYING = css`
@@ -106,6 +112,7 @@ const STYLES_PLAYING = css`
   font-size: 15px;
   margin-top: 2px;
   padding-left: 8px;
+  line-height: 16px;
 `;
 
 const STYLES_PLAYING_TITLE = css`
