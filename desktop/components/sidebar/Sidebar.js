@@ -161,6 +161,11 @@ class Sidebar extends React.Component {
           onShowOptions={this._handleShowChannelOptions}
           onSelectChannel={this._handleNavigateToChat}
         />
+        <SidebarProjects
+          title="Recently Created"
+          userStatusHistory={currentUser.userStatusHistory}
+          onSelectGameUrl={navigator.navigateToGameUrl}
+        />
         <SidebarChannels
           selectedChannelId={navigation.chatChannelId}
           viewer={viewer}
@@ -171,11 +176,6 @@ class Sidebar extends React.Component {
           filterChannel={(channel) => channel.isSubscribed && channel.type === 'game'}
           onShowOptions={this._handleShowChannelOptions}
           onSelectChannel={this._handleNavigateToChat}
-        />
-        <SidebarProjects
-          title="Recently Created"
-          userStatusHistory={currentUser.userStatusHistory}
-          onSelectGameUrl={navigator.navigateToGameUrl}
         />
         <SidebarDirectMessages
           selectedChannelId={navigation.chatChannelId}
