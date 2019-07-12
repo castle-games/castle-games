@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as SVG from '~/common/svg';
 import * as Strings from '~/common/strings';
 import * as Constants from '~/common/constants';
+import * as Emojis from '~/common/emojis';
 import * as NativeUtil from '~/native/nativeutil';
 import * as Actions from '~/common/actions';
 import * as ChatActions from '~/common/actions-chat';
@@ -56,7 +57,9 @@ class ChatScreen extends React.Component {
 
   state = {
     value: '',
-    users: [],
+    autocomplete: {
+      type: null,
+    },
     mode: 'MESSAGES',
   };
 
@@ -117,36 +120,63 @@ class ChatScreen extends React.Component {
       window.clearTimeout(this._timeout);
       this._timeout = null;
 
-      let found = false;
+      let autocompleteType, query;
       regexMatch(value, /([@][\w_-]+)$/g, (match, i) => {
-        if (!found) {
-          this._handleSearch(match);
-          found = true;
-          return;
+        if (!autocompleteType) {
+          autocompleteType = 'users';
+          query = match;
         }
-
+        return match;
+      });
+      regexMatch(value, /[:]([\w_-]+)$/g, (match, i) => {
+        if (!autocompleteType) {
+          autocompleteType = 'emoji';
+          query = match;
+        }
         return match;
       });
 
-      if (!found) {
-        return this.setState({ users: [] });
+      if (autocompleteType) {
+        this._handleSearch(query, autocompleteType);
+      } else {
+        return this.setState({
+          autocomplete: {
+            type: null,
+          },
+        });
       }
     });
   };
 
-  _handleSearch = (value) => {
-    this._timeout = window.setTimeout(async () => {
-      let users = [];
-
-      let autocompleteResults = await ChatActions.getAutocompleteAsync(value, ['users']);
-      if (autocompleteResults.users) {
-        users = autocompleteResults.users;
-      }
-
-      this.props.userPresence.addUsers(users);
-
-      this.setState({ users: users });
-    }, 120);
+  _handleSearch = (value, type) => {
+    let callback;
+    if (type === 'users') {
+      callback = async () => {
+        let users = [];
+        let autocompleteResults = await ChatActions.getAutocompleteAsync(value, ['users']);
+        if (autocompleteResults.users) {
+          users = autocompleteResults.users;
+        }
+        this.props.userPresence.addUsers(users);
+        this.setState({
+          autocomplete: {
+            type: 'users',
+            users,
+          },
+        });
+      };
+    } else if (type === 'emoji') {
+      callback = () => {
+        let emoji = Emojis.autocompleteShortNames(value);
+        this.setState({
+          autocomplete: {
+            type: 'emoji',
+            emoji,
+          },
+        });
+      };
+    }
+    this._timeout = window.setTimeout(callback, 200);
   };
 
   _handleKeyDown = (e) => {
@@ -158,7 +188,7 @@ class ChatScreen extends React.Component {
       }
       this.props.chat.sendMessage(this.props.channelId, this.state.value);
       this.clear();
-      this.setState({ value: '', users: [] });
+      this.setState({ value: '', autocomplete: { type: null } });
     }
   };
 
@@ -215,7 +245,7 @@ class ChatScreen extends React.Component {
         <ChatInput
           value={this.state.value}
           name="value"
-          users={this.state.users}
+          autocomplete={this.state.autocomplete}
           placeholder="Type a message"
           onChange={this._handleChange}
           onKeyDown={this._handleKeyDown}

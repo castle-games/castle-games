@@ -5,10 +5,19 @@ import SpriteSheet from 'emoji-datasource/img/twitter/sheets/32.png';
 
 const NUM_BLOCKS = 52;
 const SHORT_NAME_TO_OBJECT = {};
+const SHORT_NAMES = [];
 
 for (let i = 0; i < EmojisJSON.length; i++) {
   let emoji = EmojisJSON[i];
   SHORT_NAME_TO_OBJECT[emoji.short_name] = emoji;
+  SHORT_NAMES.push(emoji.short_name);
+}
+
+export function autocompleteShortNames(prefix) {
+  if (!prefix) return [];
+  const prefixQuery = prefix.toLowerCase().trim();
+  if (!prefixQuery.length) return [];
+  return SHORT_NAMES.filter((name) => name.startsWith(prefix));
 }
 
 export function isEmoji(text) {
