@@ -227,21 +227,9 @@ export class UIPostCell extends React.Component {
   };
 
   state = {
-    mouseX: 0,
-    mouseY: 0,
     urlWasCopiedToClipboard: false,
     isHoveringOnPost: false,
-    isHoveringOnLink: false,
     stringIsElided: true,
-  };
-
-  // TODO(jason): consolidate w/ uigamecell
-  _handleMouseMove = () => {
-    let bounds = this._containerRef.getBoundingClientRect();
-    let x = (100 * (event.clientX - bounds.left)) / bounds.width;
-    let y = (100 * (event.clientY - bounds.top)) / bounds.height;
-
-    this.setState({ mouseX: x, mouseY: y });
   };
 
   _handleExpandString = () => {
@@ -265,10 +253,6 @@ export class UIPostCell extends React.Component {
     this.props.onUserSelect(this.props.post.creator);
   };
 
-  _handleToggleHoverOnLink = (shouldSetHovering) => {
-    this.setState({ isHoveringOnLink: shouldSetHovering });
-  };
-
   _handleMouseLeave = () => {
     this._handleToggleHoverOnPost(false);
     this.setState({ urlWasCopiedToClipboard: false });
@@ -286,7 +270,6 @@ export class UIPostCell extends React.Component {
 
   render() {
     const { post } = this.props;
-    const { mouseX, mouseY } = this.state;
     const { sourceGame, creator, message, media, hasData, createdTime } = post;
 
     if (!media) {
@@ -327,8 +310,7 @@ export class UIPostCell extends React.Component {
           this._containerRef = c;
         }}
         onMouseEnter={() => this._handleToggleHoverOnPost(true)}
-        onMouseLeave={() => this._handleMouseLeave()}
-        onMouseMove={this._handleMouseMove}>
+        onMouseLeave={() => this._handleMouseLeave()}>
         <div className={STYLES_POST_CARD}>
           <div className={STYLES_POST_HEADER}>
             <div
@@ -384,11 +366,7 @@ export class UIPostCell extends React.Component {
               duration={170}
               animation="fade"
               hideOnClick={false}>
-              <div
-                className={STYLES_LINK_BUTTON}
-                onMouseEnter={() => this._handleToggleHoverOnLink(true)}
-                onMouseLeave={() => this._handleToggleHoverOnLink(false)}
-                onClick={this._handleCopyUrlToClipboard}>
+              <div className={STYLES_LINK_BUTTON} onClick={this._handleCopyUrlToClipboard}>
                 {this.state.urlWasCopiedToClipboard ? (
                   <div className={STYLES_COPY_LINK_CONTENTS}>
                     <SVG.Check size="24px" />
