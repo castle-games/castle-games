@@ -119,9 +119,10 @@ class Sidebar extends React.Component {
   };
 
   _renderRootSidebar = () => {
-    const { navigation, navigator, currentUser, userPresence, chat } = this.props;
+    const { navigator, currentUser, userPresence, chat } = this.props;
+    const { chatChannelId, contentMode } = this.props;
     const viewer = currentUser.user;
-    const isChatVisible = navigation.contentMode === 'chat';
+    const isChatVisible = contentMode === 'chat';
 
     const header = (
       <SidebarHeader
@@ -143,22 +144,16 @@ class Sidebar extends React.Component {
         {this._renderUpdateBanner()}
         {header}
         <SidebarNavigation
-          viewer={viewer}
-          contentMode={navigation.contentMode}
+          contentMode={contentMode}
           onNavigateToMakeGame={this._handleNavigateToMakeGame}
-          onNavigateToExamples={this._handleNavigateToExamples}
           onNavigateToGames={this._handleNavigateToGames}
-          onOpenBrowserForDocumentation={this._handleOpenBrowserForDocumentation}
         />
         <SidebarChannels
-          selectedChannelId={navigation.chatChannelId}
-          viewer={viewer}
+          selectedChannelId={chatChannelId}
           title="Chat"
-          contentMode={navigation.contentMode}
           isChatVisible={isChatVisible}
           channels={chat.channels}
           filterChannel={(channel) => channel.isSubscribed && channel.name === 'lobby'}
-          onShowOptions={this._handleShowChannelOptions}
           onSelectChannel={this._handleNavigateToChat}
         />
         <SidebarProjects
@@ -167,21 +162,17 @@ class Sidebar extends React.Component {
           onSelectGameUrl={navigator.navigateToGameUrl}
         />
         <SidebarChannels
-          selectedChannelId={navigation.chatChannelId}
-          viewer={viewer}
+          selectedChannelId={chatChannelId}
           title="Recently Played"
-          contentMode={navigation.contentMode}
           isChatVisible={isChatVisible}
           channels={chat.channels}
           filterChannel={(channel) => channel.isSubscribed && channel.type === 'game'}
-          onShowOptions={this._handleShowChannelOptions}
           onSelectChannel={this._handleNavigateToChat}
         />
         <SidebarDirectMessages
-          selectedChannelId={navigation.chatChannelId}
+          selectedChannelId={chatChannelId}
           viewer={viewer}
           userPresence={userPresence}
-          contentMode={navigation.contentMode}
           isChatVisible={isChatVisible}
           channels={chat.channels}
           onSelectChannel={this._handleNavigateToChat}
@@ -192,21 +183,17 @@ class Sidebar extends React.Component {
   };
 
   _renderOptions = () => {
-    const { navigation, currentUser } = this.props;
+    const { currentUser } = this.props;
 
     return (
       <div className={STYLES_SIDEBAR}>
-        <SidebarOptions
-          viewer={currentUser.user}
-          onDismiss={this._handleHideOptions}
-          onSignOut={this._handleSignOut}
-        />
+        <SidebarOptions onDismiss={this._handleHideOptions} onSignOut={this._handleSignOut} />
       </div>
     );
   };
 
   _renderMessageOptions = () => {
-    const { navigation, currentUser, userPresence } = this.props;
+    const { currentUser, userPresence } = this.props;
 
     return (
       <div className={STYLES_SIDEBAR}>
@@ -221,7 +208,7 @@ class Sidebar extends React.Component {
   };
 
   _renderChannelOptions = () => {
-    const { navigation, currentUser, chat } = this.props;
+    const { currentUser, chat } = this.props;
 
     return (
       <div className={STYLES_SIDEBAR}>
@@ -237,9 +224,8 @@ class Sidebar extends React.Component {
 
   render() {
     const { mode } = this.state;
-    const { navigation } = this.props;
-
-    if (navigation.isFullScreen) {
+    const { contentMode } = this.props;
+    if (contentMode === 'game') {
       return null;
     }
 
@@ -254,10 +240,6 @@ class Sidebar extends React.Component {
 
     if (mode === 'OPTIONS_MESSAGES') {
       sidebarElement = this._renderMessageOptions();
-    }
-
-    if (navigation.contentMode === 'game') {
-      return null;
     }
 
     return <div className={STYLES_CONTAINER}>{sidebarElement}</div>;
@@ -280,7 +262,8 @@ export default class SidebarWithContext extends React.Component {
                           <Sidebar
                             currentUser={currentUser}
                             navigator={navigator}
-                            navigation={navigation}
+                            contentMode={navigation.contentMode}
+                            chatChannelId={navigation.chatChannelId}
                             userPresence={userPresence}
                             chat={chat}
                             updateAvailable={this.props.updateAvailable}

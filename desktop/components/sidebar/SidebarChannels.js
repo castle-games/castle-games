@@ -36,18 +36,14 @@ export default class SidebarChannels extends React.Component {
         <SidebarGroupHeader>{this.props.title}</SidebarGroupHeader>
         {filteredChannels.map((c) => {
           const isSelected =
-            c.channelId === this.props.selectedChannelId && this.props.contentMode === 'chat';
+            c.channelId === this.props.selectedChannelId && this.props.isChatVisible;
 
           return (
             <SidebarChannelItem
               key={`channel-${c.channelId}`}
               channel={c}
               isSelected={isSelected}
-              onClick={
-                !(isSelected && this.props.isChatVisible)
-                  ? () => this.props.onSelectChannel(c)
-                  : null
-              }
+              onClick={!isSelected ? () => this.props.onSelectChannel(c) : null}
             />
           );
         })}

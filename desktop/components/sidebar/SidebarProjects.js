@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as ChatUtilities from '~/common/chat-utilities';
 import * as Constants from '~/common/constants';
 import * as Urls from '~/common/urls';
 

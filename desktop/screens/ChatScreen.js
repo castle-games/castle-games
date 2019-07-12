@@ -8,7 +8,6 @@ import * as Actions from '~/common/actions';
 import * as ChatActions from '~/common/actions-chat';
 
 import { css } from 'react-emotion';
-import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigatorContext, NavigationContext } from '~/contexts/NavigationContext';
 import { ChatContext } from '~/contexts/ChatContext';
 import { UserPresenceContext } from '~/contexts/UserPresenceContext';
@@ -237,7 +236,6 @@ class ChatScreen extends React.Component {
       <div className={className}>
         <ChatHeader
           userIdToUser={this.props.userPresence.userIdToUser}
-          viewer={this.props.viewer}
           channel={channel}
           onSelectGame={this.props.navigator.navigateToGame}
           onSelectChannelName={this._handleSelectChannelName}
@@ -266,34 +264,28 @@ class ChatScreen extends React.Component {
 export default class ChatScreenWithContext extends React.Component {
   render() {
     return (
-      <CurrentUserContext.Consumer>
-        {(currentUser) => (
-          <UserPresenceContext.Consumer>
-            {(userPresence) => (
-              <ChatContext.Consumer>
-                {(chat) => (
-                  <NavigationContext.Consumer>
-                    {(navigation) => (
-                      <NavigatorContext.Consumer>
-                        {(navigator) => (
-                          <ChatScreen
-                            viewer={currentUser.user}
-                            currentUser={currentUser}
-                            navigator={navigator}
-                            channelId={navigation.chatChannelId}
-                            userPresence={userPresence}
-                            chat={chat}
-                          />
-                        )}
-                      </NavigatorContext.Consumer>
+      <UserPresenceContext.Consumer>
+        {(userPresence) => (
+          <ChatContext.Consumer>
+            {(chat) => (
+              <NavigationContext.Consumer>
+                {(navigation) => (
+                  <NavigatorContext.Consumer>
+                    {(navigator) => (
+                      <ChatScreen
+                        navigator={navigator}
+                        channelId={navigation.chatChannelId}
+                        userPresence={userPresence}
+                        chat={chat}
+                      />
                     )}
-                  </NavigationContext.Consumer>
+                  </NavigatorContext.Consumer>
                 )}
-              </ChatContext.Consumer>
+              </NavigationContext.Consumer>
             )}
-          </UserPresenceContext.Consumer>
+          </ChatContext.Consumer>
         )}
-      </CurrentUserContext.Consumer>
+      </UserPresenceContext.Consumer>
     );
   }
 }
