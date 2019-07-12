@@ -328,14 +328,7 @@ export class UIPostCell extends React.Component {
         }}
         onMouseEnter={() => this._handleToggleHoverOnPost(true)}
         onMouseLeave={() => this._handleMouseLeave()}
-        onMouseMove={this._handleMouseMove}
-        style={{
-          transform: this.state.isHoveringOnPost ? 'scale(1.004)' : 'scale(1.0)',
-          background: this.state.isHoveringOnPost
-            ? `radial-gradient(at ${mouseX}% ${mouseY}%, #FCFCFD, ${Constants.card.background})`
-            : 'transparent',
-          ...this.props.style,
-        }}>
+        onMouseMove={this._handleMouseMove}>
         <div className={STYLES_POST_CARD}>
           <div className={STYLES_POST_HEADER}>
             <div
