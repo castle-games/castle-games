@@ -63,7 +63,7 @@ export default class ChatInput extends React.Component {
       inputBackground: null,
     },
     autocomplete: {
-      type: 'none',
+      type: null,
     },
   };
 
