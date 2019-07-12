@@ -7,10 +7,22 @@ const NUM_BLOCKS = 52;
 const SHORT_NAME_TO_OBJECT = {};
 const SHORT_NAMES = [];
 
+const ALIAS = {};
+ALIAS['+1'] = ['thumbsup'];
+ALIAS['-1'] = ['thumbsdown'];
+
 for (let i = 0; i < EmojisJSON.length; i++) {
   let emoji = EmojisJSON[i];
   SHORT_NAME_TO_OBJECT[emoji.short_name] = emoji;
   SHORT_NAMES.push(emoji.short_name);
+
+  if (ALIAS[emoji.short_name]) {
+    for (let j = 0, n = ALIAS[emoji.short_name].length; j < n; j++) {
+      const a = ALIAS[emoji.short_name][j];
+      SHORT_NAME_TO_OBJECT[a] = emoji;
+      SHORT_NAMES.push(a);
+    }
+  }
 }
 
 export function autocompleteShortNames(prefix) {
