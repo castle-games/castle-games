@@ -7,6 +7,8 @@ const NUM_BLOCKS = 52;
 const SHORT_NAME_TO_OBJECT = {};
 const SHORT_NAMES = [];
 
+const MAX_AUTOCOMPLETE_RESULTS = 10;
+
 const ALIAS = {};
 ALIAS['+1'] = ['thumbsup'];
 ALIAS['-1'] = ['thumbsdown'];
@@ -29,7 +31,11 @@ export function autocompleteShortNames(prefix) {
   if (!prefix) return [];
   const prefixQuery = prefix.toLowerCase().trim();
   if (!prefixQuery.length) return [];
-  return SHORT_NAMES.filter((name) => name.startsWith(prefix));
+  let result = SHORT_NAMES.filter((name) => name.startsWith(prefix));
+  if (result.length > MAX_AUTOCOMPLETE_RESULTS) {
+    result.splice(MAX_AUTOCOMPLETE_RESULTS);
+  }
+  return result;
 }
 
 export function isEmoji(text) {
