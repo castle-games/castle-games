@@ -96,7 +96,7 @@ export default class ChatInput extends React.Component {
   _handleSelectEmoji = (emoji, clicked) => {
     let substitution = `:${emoji}:`;
 
-    let newValue = regexMatch(this.props.value, /([:][\w_-]+)$/g, (match, i) => {
+    let newValue = regexMatch(this.props.value, /([:][\w_\-\+]+)$/g, (match, i) => {
       return substitution;
     });
     newValue = newValue.join().replace(`,${substitution},`, substitution);

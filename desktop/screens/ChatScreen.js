@@ -128,7 +128,7 @@ class ChatScreen extends React.Component {
         }
         return match;
       });
-      regexMatch(value, /[:]([\w_-]+)$/g, (match, i) => {
+      regexMatch(value, /[:]([\w_\-\+]+)$/g, (match, i) => {
         if (!autocompleteType) {
           autocompleteType = 'emoji';
           query = match;
