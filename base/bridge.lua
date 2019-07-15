@@ -16,6 +16,11 @@ local waitingJSCalls = {}
 -- Make a JS call to `bridge.js.<methodName>(arg)` in 'bridge.js', blocking the current coroutine (must be a
 -- network coroutine) till a response is received. Returns the result or throws the error from the response.
 local function jsCall(methodName, arg)
+    -- Can't do this on remote servers...
+    if CASTLE_SERVER then
+        return
+    end
+
     -- Get the coroutine we're running in and make sure it's a network coroutine
     local coro = coroutine.running()
     if not network.isNetworkCoroutine(coro) then
