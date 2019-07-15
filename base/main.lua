@@ -178,10 +178,12 @@ function main.load(arg)
             end
         end
 
-        -- Sleep a little to let screen dimensions settings synchronize, then create the default
-        -- font, so that it has the updated DPI
-        copas.sleep(0.08)
-        love.graphics.setFont(love.graphics.newFont(14))
+        if love.graphics then
+            -- Sleep a little to let screen dimensions settings synchronize, then create the default
+            -- font, so that it has the updated DPI
+            copas.sleep(0.08)
+            love.graphics.setFont(love.graphics.newFont(14))
+        end
 
         home = root:newChild(homeUrl, { noConf = true })
         jsEvents.send('CASTLE_GAME_LOADED', {})
