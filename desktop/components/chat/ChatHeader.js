@@ -65,6 +65,16 @@ const STYLES_P = css`
   line-height: 12px;
   height: 12px;
 
+  span {
+    display: inline-block;
+    vertical-align: top;
+  }
+`;
+
+const STYLES_ONLINE = css`
+  padding-left: 12px;
+  color: ${Constants.REFACTOR_COLORS.subdued}:
+
   strong {
     cursor: pointer;
     transition: 200ms ease color;
@@ -75,8 +85,7 @@ const STYLES_P = css`
   }
 
   span {
-    display: inline-block;
-    vertical-align: top;
+    padding: 0 8px 0 8px;
   }
 `;
 
@@ -156,8 +165,20 @@ export default class ChatHeader extends React.Component {
     }
   };
 
+  _maybeRenderMembers = (numChannelMembers) => {
+    if (numChannelMembers) {
+      return (
+        <span className={STYLES_ONLINE}>
+          <strong>{numChannelMembers} online</strong>
+          <span>&middot;</span>
+        </span>
+      );
+    }
+    return null;
+  };
+
   render() {
-    const { channel, onLeaveChannel } = this.props;
+    const { channel, onLeaveChannel, numChannelMembers } = this.props;
     if (!channel) {
       return null;
     }
@@ -178,13 +199,10 @@ export default class ChatHeader extends React.Component {
             {channel.type !== 'dm' ? <SVG.HashTag size="12px" /> : null}
             {channel.name}
           </h2>
-          {channel.members && channel.members.length ? (
-            <p className={STYLES_P} onClick={this.props.onMembersClick}>
-              <strong>{channel.members.length} online</strong>
-            </p>
-          ) : (
-            <p className={STYLES_P}>{this._getHeading()}</p>
-          )}
+          <p className={STYLES_P}>
+            {this._maybeRenderMembers(numChannelMembers)}
+            <span>{this._getHeading()}</span>
+          </p>
         </div>
         {leaveButton}
       </header>

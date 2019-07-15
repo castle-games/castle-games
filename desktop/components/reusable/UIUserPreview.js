@@ -31,7 +31,7 @@ export default class UIUserPreview extends React.Component {
     const name = user.name ? user.name : user.username;
     return (
       <div className={STYLES_CONTAINER}>
-        <UIAvatar src={avatarSrc} />
+        <UIAvatar src={avatarSrc} style={{ width: 48, height: 48 }} showIndicator={false} />
         <div className={STYLES_INFO}>
           <p className={STYLES_NAME}>{name}</p>
           <p className={STYLES_USERNAME}>{'@' + user.username}</p>

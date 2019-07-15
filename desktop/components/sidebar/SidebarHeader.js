@@ -6,6 +6,8 @@ import * as SVG from '~/common/svg';
 
 import { css } from 'react-emotion';
 
+import UIAvatar from '~/components/reusable/UIAvatar';
+
 const STYLES_HEADER = css`
   padding: 16px 16px 16px 16px;
   margin-bottom: 8px;
@@ -35,18 +37,7 @@ const STYLES_AUTH = css`
   justify-content: space-between;
 `;
 
-const STYLES_AVATAR = css`
-  flex-shrink: 0;
-  height: 20px;
-  width: 20px;
-  margin-top: 8px;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-right: 8px;
-  background-size: cover;
-  background-position: 50% 50%;
-  background-color: magenta;
-`;
+const STYLES_AVATAR = css``;
 
 const STYLES_BYLINE = css`
   min-width: 10%;
@@ -95,7 +86,15 @@ export default class SidebarHeader extends React.Component {
           Castle <SVG.Menu size="14px" style={{ margin: '3px 0 0 6px' }} />
         </h2>
         <div className={STYLES_AUTH}>
-          <span className={STYLES_AVATAR} style={{ backgroundImage: `url('${url}')` }} />
+          <UIAvatar
+            src={url}
+            showIndicator={false}
+            style={{
+              width: 20,
+              height: 20,
+              margin: '8px 8px 0 0',
+            }}
+          />
           <span className={STYLES_BYLINE} onClick={() => navigator.navigateToUserProfile(viewer)}>
             Signed in as <strong style={{ cursor: 'pointer' }}>{viewer.username}</strong>
           </span>

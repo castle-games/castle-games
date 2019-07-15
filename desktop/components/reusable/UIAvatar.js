@@ -3,23 +3,51 @@ import * as Constants from '~/common/constants';
 
 import { css } from 'react-emotion';
 
-// TODO(jim): Need to revisit this primitive.
-const STYLES_ICON = css`
-  height: 48px;
-  width: 48px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 6px;
-  background-position: 50% 50%;
+const STYLES_INDICATOR = css`
+  height: 12px;
+  width: 12px;
+  border-radius: 16px;
+  flex-shrink: 0;
+  position: absolute;
+  right: -4px;
+  bottom: -4px;
+  border: 2px solid ${Constants.REFACTOR_COLORS.elements.channels};
+`;
+
+const STYLES_AVATAR = css`
+  flex-shrink: 0;
   background-size: cover;
-  background-color: #171717;
+  background-position: 50% 50%;
+  background-color: magenta;
+  height: 20px;
+  width: 20px;
+  position: relative;
+  border-radius: 4px;
 `;
 
 export default class UIAvatar extends React.Component {
+  static defaultProps = {
+    isOnline: false,
+    showIndicator: true,
+  };
+
+  _renderIndicator = (isOnline, showIndicator) => {
+    if (!showIndicator) return null;
+
+    if (isOnline) {
+      return (
+        <span
+          className={STYLES_INDICATOR}
+          style={{ background: Constants.REFACTOR_COLORS.online }}
+        />
+      );
+    } else {
+      return <span className={STYLES_INDICATOR} style={{ background: '#ACACAC' }} />;
+    }
+  };
+
   render() {
-    const { src, icon } = this.props;
-    const maybeIconChild = !src && icon ? icon : null;
+    const { src, isOnline, showIndicator, onClick } = this.props;
 
     const avatarContextStyles = {
       backgroundImage: `url('${src}')`,
@@ -27,19 +55,19 @@ export default class UIAvatar extends React.Component {
     };
 
     let maybeEmptyStyles = {};
-    if (!maybeIconChild && !src) {
+    if (!src) {
       maybeEmptyStyles = {
         backgroundColor: Constants.colors.black25,
       };
     }
 
     return (
-      <span
-        className={STYLES_ICON}
-        onClick={this.props.onClick}
+      <figure
+        onClick={onClick}
+        className={STYLES_AVATAR}
         style={{ ...avatarContextStyles, ...maybeEmptyStyles, ...this.props.style }}>
-        {maybeIconChild}
-      </span>
+        {this._renderIndicator(isOnline, showIndicator)}
+      </figure>
     );
   }
 }

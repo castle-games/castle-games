@@ -191,7 +191,11 @@ export default class EditProfile extends React.Component {
     const inputClass = Utilities.isWindows() ? null : STYLES_FILE_INPUT;
     return (
       <div className={STYLES_SECTION_CONTENT}>
-        <UIAvatar src={avatarSrc} style={{ width: 128, height: 128, marginRight: 16 }} />
+        <UIAvatar
+          src={avatarSrc}
+          showIndicator={false}
+          style={{ width: 128, height: 128, marginRight: 16 }}
+        />
         <div className={STYLES_COLUMN}>
           {avatarLoadingElement}
           <input

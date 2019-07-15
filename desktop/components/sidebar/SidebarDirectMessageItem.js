@@ -5,6 +5,8 @@ import * as SVG from '~/common/svg';
 
 import { css } from 'react-emotion';
 
+import UIAvatar from '~/components/reusable/UIAvatar';
+
 const STYLES_USER = css`
   display: flex;
   align-items: flex-start;
@@ -54,28 +56,6 @@ const STYLES_STATUS = css`
   font-size: 10px;
 `;
 
-const STYLES_INDICATOR = css`
-  height: 12px;
-  width: 12px;
-  border-radius: 16px;
-  flex-shrink: 0;
-  position: absolute;
-  right: -4px;
-  bottom: -4px;
-  border: 2px solid ${Constants.REFACTOR_COLORS.elements.channels};
-`;
-
-const STYLES_AVATAR = css`
-  flex-shrink: 0;
-  background-size: cover;
-  background-position: 50% 50%;
-  background-color: magenta;
-  height: 20px;
-  width: 20px;
-  position: relative;
-  border-radius: 4px;
-`;
-
 export default (props) => {
   const { channel, isSelected, onClick, user } = props;
   if (!user) {
@@ -95,22 +75,7 @@ export default (props) => {
 
   return (
     <div className={STYLES_USER} onClick={!isSelected ? onClick : null}>
-      {channel.otherUserIsOnline ? (
-        <figure
-          className={STYLES_AVATAR}
-          style={{ backgroundImage: user.photo ? `url(${user.photo.url})` : `` }}>
-          <span
-            className={STYLES_INDICATOR}
-            style={{ background: Constants.REFACTOR_COLORS.online }}
-          />
-        </figure>
-      ) : (
-        <figure
-          className={STYLES_AVATAR}
-          style={{ backgroundImage: user.photo ? `url(${user.photo.url})` : `` }}>
-          <span className={STYLES_INDICATOR} style={{ background: '#ACACAC' }} />
-        </figure>
-      )}
+      <UIAvatar src={user.photo ? user.photo.url : null} isOnline={channel.otherUserIsOnline} />
       <div className={STYLES_TEXT}>
         <h3 className={STYLES_NAME} style={{ color, fontWeight }}>
           {Strings.getName(user)}

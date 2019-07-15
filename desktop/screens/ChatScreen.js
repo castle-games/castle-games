@@ -200,6 +200,7 @@ class ChatScreen extends React.Component {
 
   render() {
     const { mode } = this.state;
+    const { userPresence } = this.props;
 
     let className = STYLES_CONTAINER;
     if (this.props.chat.animating === 3) {
@@ -215,10 +216,13 @@ class ChatScreen extends React.Component {
     }
 
     const channel = this.props.chat.channels[this.props.channelId];
-    let onLeaveChannel;
+    let onLeaveChannel, numUsersOnline;
     if (!(channel.name === 'lobby' && channel.type === 'public')) {
       // caint leave the lobby
       onLeaveChannel = this._handleLeaveChannel;
+    } else {
+      // everyone online is in the lobby because you caint leave it
+      numUsersOnline = Object.keys(userPresence.onlineUserIds).length;
     }
 
     if (mode === 'MEMBERS') {
@@ -235,17 +239,17 @@ class ChatScreen extends React.Component {
     return (
       <div className={className}>
         <ChatHeader
-          userIdToUser={this.props.userPresence.userIdToUser}
           channel={channel}
           onSelectGame={this.props.navigator.navigateToGame}
           onSelectChannelName={this._handleSelectChannelName}
           onLeaveChannel={onLeaveChannel}
+          numChannelMembers={numUsersOnline}
           onMembersClick={this._handleShowSingleChannelMembers}
         />
         <ChatMessages
           messages={channel.messages}
           navigator={this.props.navigator}
-          userIdToUser={this.props.userPresence.userIdToUser}
+          userIdToUser={userPresence.userIdToUser}
         />
         <ChatInput
           value={this.state.value}
