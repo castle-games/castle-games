@@ -402,6 +402,9 @@ function love.run()
 
     local dt = 0
 
+    --- XXX(Ghost): For 60 Hz throttling when headless
+    local lastLoopStartTime, lastSleepError
+
     -- Main loop time.
     return function()
         -- Process events.
@@ -420,6 +423,24 @@ function love.run()
         -- Update dt, as we'll be passing it to update
         if love.timer then dt = love.timer.step() end
 
+        --- XXX(Ghost): 60 Hz throttling when headless
+        if not (love.graphics and love.graphics.isActive()) then
+            if lastLoopStartTime then
+                local sleepTarget = lastLoopStartTime + (1 / 60) - (lastSleepError or 0)
+                local sleepDuration = sleepTarget - love.timer.getTime()
+                if sleepDuration > 0.001 then
+                    love.timer.sleep(sleepDuration)
+                end
+                local sleepError = love.timer.getTime() - sleepTarget
+                if lastSleepError then
+                    lastSleepError = 0.5 * lastSleepError + 0.5 * sleepError
+                else
+                    lastSleepError = sleepError
+                end
+            end
+        end
+        lastLoopStartTime = love.timer.getTime()
+
         -- Call update and draw
         if love.update then love.update(dt) end -- will pass 0 if love.timer is disabled
 
@@ -430,8 +451,6 @@ function love.run()
             if love.draw then love.draw() end
 
             love.graphics.present()
-        elseif not CASTLE_SERVER then -- XXX(Ghost): Limit framerate when not drawing
-            love.timer.sleep(0.016)
         end
 
         if love.timer then love.timer.sleep(0.001) end
