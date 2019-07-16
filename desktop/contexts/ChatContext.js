@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as Actions from '~/common/actions';
 import * as ChatActions from '~/common/actions-chat';
 import * as ChatUtilities from '~/common/chat-utilities';
+import * as Notifications from '~/common/notifications';
 import * as Constants from '~/common/constants';
 import * as Strings from '~/common/strings';
 
@@ -32,6 +33,7 @@ const ChatContextDefaults = {
 const ChatContext = React.createContext(ChatContextDefaults);
 
 class ChatContextManager extends React.Component {
+  _firstLoadComplete = false;
   _messagesReadQueue;
 
   constructor(props) {
@@ -136,6 +138,7 @@ class ChatContextManager extends React.Component {
   destroy = async () => {
     await this._chat.disconnect();
     this._chat = null;
+    this._firstLoadComplete = false;
     this.setState((state) => {
       return {
         ...state,
@@ -259,7 +262,6 @@ class ChatContextManager extends React.Component {
     if (Strings.isEmpty(message)) {
       return;
     }
-    // TODO: second param was usernameToUser
     message = await ChatUtilities.formatMessageAsync(message, {});
     const slashCommand = ChatUtilities.getSlashCommand(message);
     if (slashCommand.isCommand) {
@@ -351,6 +353,17 @@ class ChatContextManager extends React.Component {
         let users = await Actions.getUsers({ userIds: newUserIds });
         await this.props.userPresence.addUsers(users);
       } catch (e) {}
+    }
+
+    // lastly, show notifications if needed
+    if (this._firstLoadComplete) {
+      Notifications.showFromChatMessages(
+        allUnsortedMessages,
+        this.props.currentUser.user,
+        this.state.channels
+      );
+    } else {
+      this._firstLoadComplete = true;
     }
   };
 

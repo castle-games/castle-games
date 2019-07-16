@@ -41,6 +41,31 @@ export const sortChannels = (channels) => {
   });
 };
 
+export const messageBodyToPlainText = (body, userIdToUser) => {
+  if (!body) return null;
+
+  if (typeof body === 'string') {
+    body = { message: [{ text: body }] };
+  }
+
+  if (!body.message) return null;
+
+  let components = body.message.map((c, ii) => {
+    if (c.text) {
+      return c.text;
+    } else if (c.userId) {
+      const user = userIdToUser[c.userId];
+      if (user) {
+        return `@${user.username}`;
+      }
+    } else if (c.emoji) {
+      return emojiToString(c.emoji);
+    }
+    return '';
+  });
+  return components.join(' ');
+};
+
 export const isEmojiBody = (body) => {
   if (body && typeof body === 'string') {
     return isEmoji(body);
