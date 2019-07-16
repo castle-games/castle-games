@@ -20,6 +20,19 @@ import UIButton from '~/components/reusable/UIButton';
 
 const path = Utilities.path();
 
+const DOCS_LINKS = [
+  {
+    title: 'Castle Docs',
+    url: `${Constants.WEB_HOST}/documentation`,
+    description: 'Read tutorials and examples.',
+  },
+  {
+    title: 'Make Your First Game',
+    url: `${Constants.WEB_HOST}/posts/@castle/make-your-first-castle-game`,
+    description: `Learn Castle's basic workflow.`,
+  },
+];
+
 const STYLES_CONTAINER = css`
   background: ${Constants.colors.background};
   display: flex;
@@ -36,21 +49,21 @@ const STYLES_CONTAINER = css`
 `;
 
 const STYLES_CHOOSE_TEMPLATE = css`
+  margin-bottom: 16px;
+`;
+
+const STYLES_DOCUMENTATION = css``;
+
+const STYLES_DOCS_LINKS = css`
   display: flex;
+  flex-wrap: wrap;
 `;
 
-const STYLES_PRIMARY_CONTENT = css`
-  padding-right: 16px;
-`;
-
-const STYLES_SECONDARY_CONTENT = css`
-  width: 40%;
-`;
-
-const STYLES_SECTION = css`
+const STYLES_LINK_CONTAINER = css`
   cursor: pointer;
   width: 256px;
   font-size: 14px;
+  margin-right: 8px;
 `;
 
 const STYLES_BOLD = css`
@@ -225,10 +238,6 @@ class CreateProjectScreen extends React.Component {
     return createdProjectUrl;
   };
 
-  _handleClickTutorial = () => {
-    NativeUtil.openExternalURL(`${Constants.WEB_HOST}/documentation`);
-  };
-
   _handleOpenProject = async () => {
     try {
       const path = await NativeUtil.chooseOpenProjectPathWithDialogAsync();
@@ -242,28 +251,31 @@ class CreateProjectScreen extends React.Component {
     return (
       <React.Fragment>
         <div className={STYLES_CHOOSE_TEMPLATE}>
-          <div className={STYLES_PRIMARY_CONTENT}>
-            <div className={STYLES_SECTION_TITLE}>Create a game</div>
-            <div className={STYLES_PARAGRAPH}>Choose a starter template:</div>
-            <ProjectTemplateChooser
-              templates={this.props.templates}
-              selectedTemplate={this.state.selectedTemplate}
-              onSelectTemplate={this._handleSelectTemplate}
-            />
-          </div>
-          <div className={STYLES_SECONDARY_CONTENT}>
-            <div className={STYLES_SECTION} onClick={this._handleClickTutorial}>
-              <div className={STYLES_LINK}>
-                <strong className={STYLES_BOLD}>Documentation</strong>
-                <br />
-                Read tutorials and examples.
+          <div className={STYLES_SECTION_TITLE}>Create a game</div>
+          <ProjectTemplateChooser
+            templates={this.props.templates}
+            selectedTemplate={this.state.selectedTemplate}
+            onSelectTemplate={this._handleSelectTemplate}
+          />
+        </div>
+        <div className={STYLES_DOCUMENTATION}>
+          <div className={STYLES_SECTION_TITLE}>Help and Documentation</div>
+          <div className={STYLES_DOCS_LINKS}>
+            {DOCS_LINKS.map((link, ii) => (
+              <div
+                key={`doc-${ii}`}
+                className={STYLES_LINK_CONTAINER}
+                onClick={() => NativeUtil.openExternalURL(link.url)}>
+                <div className={STYLES_LINK}>
+                  <strong className={STYLES_BOLD}>{link.title}</strong>
+                  <div>{link.description}</div>
+                </div>
               </div>
-            </div>
-            <div className={STYLES_SECTION}>
+            ))}
+            <div className={STYLES_LINK_CONTAINER}>
               <div className={STYLES_LINK} onClick={this._handleOpenProject}>
                 <strong className={STYLES_BOLD}>Open project</strong>
-                <br />
-                Open a project from your computer.
+                <div>Open a project from your computer.</div>
               </div>
             </div>
           </div>
