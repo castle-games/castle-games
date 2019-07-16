@@ -150,8 +150,6 @@ class ChatContextManager extends React.Component {
     });
   };
 
-  // TODO: desktop notifications logic
-
   // checks if we have a channel with this name,
   // creates it if not, and navigates to it.
   openChannelWithName = async (name) => {

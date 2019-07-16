@@ -50,7 +50,9 @@ export const showFromChatMessages = (messages, viewer, channels) => {
     const m = messages[ii];
     const channel = channels[m.channelId];
     let messageHasNotification = false;
-    if (m.body && m.body.message && m.fromUserId !== viewer.userId) {
+    // String() coercion needed at time of writing because these user ids are a number
+    // and string respectively.
+    if (m.body && m.body.message && String(m.fromUserId) !== String(viewer.userId)) {
       if (notificationLevel === NotificationLevel.EVERY || channel.type === 'dm') {
         messageHasNotification = true;
       } else if (notificationLevel === NotificationLevel.TAG) {
