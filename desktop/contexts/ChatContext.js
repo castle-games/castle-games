@@ -81,7 +81,7 @@ class ChatContextManager extends React.Component {
     const prevUser = prevProps && prevProps.currentUser ? prevProps.currentUser.user : null;
     // user logged out
     if (prevUser && !this.props.currentUser.user) {
-      this.destroy();
+      await this.destroy();
     }
 
     // user logged in
@@ -121,6 +121,7 @@ class ChatContextManager extends React.Component {
   };
 
   start = async () => {
+    await this.destroy();
     let token = await Actions.getAccessTokenAsync();
     if (!token) {
       console.error('Cannot start chat without an access token.');
@@ -132,11 +133,13 @@ class ChatContextManager extends React.Component {
     this._chat.setOnMessagesHandler(this._handleMessagesAsync);
     this._chat.setOnPresenceHandler(this._handlePresenceAsync);
     this._chat.setConnectionStatusHandler(this._handleConnectStatus);
-    this._chat.connect();
+    await this._chat.connect();
   };
 
   destroy = async () => {
-    await this._chat.disconnect();
+    if (this._chat) {
+      await this._chat.disconnect();
+    }
     this._chat = null;
     this._firstLoadComplete = false;
     this.setState((state) => {
