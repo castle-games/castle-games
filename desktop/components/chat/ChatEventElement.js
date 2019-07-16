@@ -18,7 +18,6 @@ const STYLES_NOTICE = css`
   display: inline-flex;
   align-items: flex-start;
   justify-content: space-between;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
   overflow-wrap: break-word;
 `;
 
@@ -41,7 +40,6 @@ const STYLES_LEFT = css`
   justify-content: center;
   font-size: 24px;
   cursor: pointer;
-  border-radius: 4px;
 `;
 
 const STYLES_RIGHT = css`
