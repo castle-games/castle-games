@@ -68,7 +68,11 @@ export const messageBodyToPlainText = (body, userIdToUser) => {
 
 export const isEmojiBody = (body) => {
   if (body && typeof body === 'string') {
-    return isEmoji(body);
+    if (body.charAt(0) === ':' && body.charAt(body.length - 1) === ':') {
+      return isEmoji(body.substring(1, body.length - 2));
+    } else {
+      return false;
+    }
   } else if (body && body.message && body.message.length === 1) {
     return !!body.message[0].emoji;
   }
