@@ -14,14 +14,24 @@ import UserStatus from '~/common/userstatus';
 
 const DOCS_LINKS = [
   {
-    title: 'Castle Docs',
+    title: 'Castle Docs Index',
     url: `${Constants.WEB_HOST}/documentation`,
-    description: 'Read tutorials and examples.',
+    description: 'Read all our tutorials and examples.',
   },
   {
     title: 'Make Your First Game',
     url: `${Constants.WEB_HOST}/posts/@castle/make-your-first-castle-game`,
     description: `Learn Castle's basic workflow.`,
+  },
+  {
+    title: 'Add a Game to your Profile',
+    url: `${Constants.WEB_HOST}/posts/@castle/adding-game-to-castle-profile`,
+    description: 'Get a url and a profile card for your game.',
+  },
+  {
+    title: 'Update your Castle File',
+    url: `${Constants.WEB_HOST}/posts/@castle/describe-your-game-with-castle-file`,
+    description: 'Change the title and artwork for your game.',
   },
 ];
 
