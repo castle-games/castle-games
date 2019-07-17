@@ -5,6 +5,7 @@ import * as Actions from '~/common/actions';
 
 import { css } from 'react-emotion';
 
+import UIAvatar from '~/components/reusable/UIAvatar';
 import UIMessageBody from '~/components/reusable/UIMessageBody';
 
 const STYLES_CONTAINER = css`
@@ -17,18 +18,8 @@ const STYLES_CONTAINER = css`
   padding: 16px 24px 0 16px;
 `;
 
-const STYLES_LEFT = css`
-  flex-shrink: 0;
-  background-size: cover;
-  background-position: 50% 50%;
-  height: 40px;
-  width: 40px;
-  cursor: pointer;
-  border-radius: 4px;
-`;
-
 const STYLES_RIGHT = css`
-  padding-left: 6px;
+  padding-left: 8px;
   min-width: 15%;
   width: 100%;
 `;
@@ -46,7 +37,7 @@ const STYLES_TIMESTAMP = css`
   color: ${Constants.REFACTOR_COLORS.subdued};
   margin-left: 4px;
   font-size: 10px;
-  line-height: 10px;
+  line-height: 12px;
   display: inline-block;
 `;
 
@@ -74,32 +65,22 @@ export default class ChatMessageElement extends React.Component {
 
   render() {
     const { message, isEmojiMessage } = this.props;
+    const size = this.props.size ? this.props.size : 40;
 
     return (
       <div className={STYLES_CONTAINER} style={this.props.style}>
-        <span
-          className={STYLES_LEFT}
-          onClick={
-            this.props.user.username
-              ? () => this.props.onNavigateToUserProfile(this.props.user)
-              : () => {}
-          }
-          style={{
-            backgroundImage: this.props.user ? `url(${this.props.user.photo.url})` : ``,
-            width: this.props.size,
-            height: this.props.size,
-          }}
+        <UIAvatar
+          onClick={() => this.props.onNavigateToUserProfile(this.props.user)}
+          style={{ width: size, height: size }}
+          showIndicator={false}
+          src={this.props.user.photo ? this.props.user.photo.url : null}
         />
         <span className={STYLES_RIGHT}>
           <div
             className={STYLES_AUTHOR_NAME}
             style={{ color: this.props.theme.textColor }}
-            onClick={
-              this.props.user.username
-                ? () => this.props.onNavigateToUserProfile(this.props.user)
-                : () => {}
-            }>
-            {Strings.getPresentationName(this.props.user)}
+            onClick={() => this.props.onNavigateToUserProfile(this.props.user)}>
+            {this.props.user.username}
             <span className={STYLES_TIMESTAMP}>
               {Strings.toChatTime(this.props.message.timestamp)}
             </span>

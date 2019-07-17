@@ -37,7 +37,7 @@ const STYLES_AUTHOR_NAME = css`
   cursor: pointer;
   line-height: 20px;
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 400;
   color: ${Constants.REFACTOR_COLORS.text};
 `;
 
@@ -53,7 +53,11 @@ export default class ChatInputMention extends React.Component {
           style={{ backgroundImage: this.props.user ? `url(${this.props.user.photo.url})` : `` }}
         />
         <span className={STYLES_RIGHT}>
-          <div className={STYLES_AUTHOR_NAME}>{Strings.getPresentationName(this.props.user)}</div>
+          <div
+            className={STYLES_AUTHOR_NAME}
+            style={{ color: this.props.isSelected ? Constants.colors.white : null }}>
+            {Strings.getPresentationName(this.props.user)}
+          </div>
         </span>
       </div>
     );

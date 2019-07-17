@@ -28,7 +28,7 @@ const STYLES_CONTAINER = css`
 `;
 
 const STYLES_BOTTOM = css`
-  height: 8px;
+  height: 16px;
 `;
 
 const STYLES_DATELINE = css`
@@ -43,6 +43,7 @@ const STYLES_DATELINE = css`
   border-bottom: 1px solid #ececec;
   margin: 16px 0 16px 0;
   padding-bottom: 8px;
+  cursor: default;
 `;
 
 export default class ChatMessages extends React.Component {

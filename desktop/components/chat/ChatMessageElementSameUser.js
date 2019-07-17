@@ -19,16 +19,12 @@ const STYLES_CONTAINER = css`
 
 const STYLES_LEFT = css`
   flex-shrink: 0;
-  background-size: cover;
-  background-position: 50% 50%;
   height: 1px;
   width: 40px;
-  cursor: pointer;
-  border-radius: 4px;
 `;
 
 const STYLES_RIGHT = css`
-  padding-left: 6px;
+  padding-left: 8px;
   min-width: 15%;
   width: 100%;
 `;
@@ -51,16 +47,11 @@ export default class ChatMessageElement extends React.Component {
 
   render() {
     const { message, isEmojiMessage } = this.props;
+    const size = (this.props.size) ? this.props.size : 40;
 
     return (
       <div className={STYLES_CONTAINER}>
-        <span
-          className={STYLES_LEFT}
-          style={{
-            width: this.props.size,
-            height: this.props.size,
-          }}
-        />
+        <span className={STYLES_LEFT} style={{ width: size }} />
         <span className={STYLES_RIGHT}>
           <div
             className={STYLES_AUTHOR_MESSAGE}

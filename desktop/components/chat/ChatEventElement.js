@@ -11,7 +11,7 @@ const STYLES_CONTAINER = css`
   font-family: ${Constants.REFACTOR_FONTS.system};
   flex-shrink: 0;
   width: 100%;
-  padding: 8px 16px 8px 16px;
+  padding: 16px 16px 0 16px;
 `;
 
 const STYLES_NOTICE = css`
@@ -43,7 +43,7 @@ const STYLES_LEFT = css`
 `;
 
 const STYLES_RIGHT = css`
-  padding-left: 6px;
+  padding-left: 8px;
   min-width: 15%;
   width: 100%;
 `;
@@ -61,6 +61,8 @@ const STYLES_TIMESTAMP = css`
   color: ${Constants.REFACTOR_COLORS.subdued};
   margin-left: 4px;
   font-size: 10px;
+  line-height: 12px;
+  display: inline-block;
 `;
 
 const STYLES_NOTICE_MESSAGE = css`

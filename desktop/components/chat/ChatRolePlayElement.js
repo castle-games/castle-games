@@ -8,13 +8,12 @@ import { css } from 'react-emotion';
 import UIMessageBody from '~/components/reusable/UIMessageBody';
 
 const STYLES_CONTAINER = css`
-  font-family: ${Constants.REFACTOR_FONTS.system};
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   flex-shrink: 0;
   width: 100%;
-  padding: 16px 24px 0 16px;
+  padding: 8px 24px 0 16px;
 `;
 
 const STYLES_AVATAR = css`
@@ -27,20 +26,29 @@ const STYLES_AVATAR = css`
   border-radius: 4px;
 `;
 
+const STYLES_LEFT = css`
+  flex-shrink: 0;
+  height: 1px;
+  width: 40px;
+`;
+
 const STYLES_RIGHT = css`
-  padding-left: 6px;
+  padding-left: 8px;
   min-width: 15%;
   width: 100%;
 `;
 
 const STYLES_AUTHOR_MESSAGE = css`
-  font-weight: 400;
   line-height: 20px;
   font-size: 14px;
   overflow-wrap: break-word;
   white-space: pre-wrap;
+  font-style: italic;
+  color: ${Constants.REFACTOR_COLORS.subdued};
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
   font-family: ${Constants.font.castle};
-  color: ${Constants.REFACTOR_COLORS.text};
+  display: flex;
 `;
 
 export default class ChatMessageElement extends React.Component {
@@ -58,21 +66,14 @@ export default class ChatMessageElement extends React.Component {
 
   render() {
     const { message, isEmojiMessage } = this.props;
+    const size = this.props.size ? this.props.size : 40;
 
     return (
       <div className={STYLES_CONTAINER}>
-        <span
-          className={STYLES_AVATAR}
-          onClick={
-            this.props.user.username
-              ? () => this.props.onNavigateToUserProfile(this.props.user)
-              : () => {}
-          }
-          style={{ backgroundImage: this.props.user ? `url(${this.props.user.photo.url})` : `` }}
-        />
+        <span className={STYLES_LEFT} />
         <span className={STYLES_RIGHT}>
           <div className={STYLES_AUTHOR_MESSAGE} style={{ color: this.props.theme.textColor }}>
-            {this.props.user.username}{' '}
+            <span>{this.props.user.username} </span>
             <UIMessageBody body={message.body} theme={this.props.theme} />
           </div>
         </span>

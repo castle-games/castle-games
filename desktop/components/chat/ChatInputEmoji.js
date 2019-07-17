@@ -38,7 +38,7 @@ const STYLES_EMOJI_SHORT_NAME = css`
   cursor: pointer;
   line-height: 20px;
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 400;
   color: ${Constants.REFACTOR_COLORS.text};
 `;
 
@@ -52,7 +52,11 @@ export default class ChatInputEmoji extends React.Component {
         style={{ backgroundColor: this.props.isSelected ? `magenta` : null }}>
         <span className={STYLES_LEFT}>{Emojis.getEmojiComponent(shortName)}</span>
         <span className={STYLES_RIGHT}>
-          <div className={STYLES_EMOJI_SHORT_NAME}>{shortName}</div>
+          <div
+            className={STYLES_EMOJI_SHORT_NAME}
+            style={{ color: this.props.isSelected ? Constants.colors.white : null }}>
+            {shortName}
+          </div>
         </span>
       </div>
     );

@@ -24,7 +24,7 @@ const STYLES_CHANNEL = css`
 `;
 
 const STYLES_MENTION = css`
-  font-weight: 600;
+  font-weight: 400;
   color: #0062ff;
   cursor: pointer;
   overflow-wrap: break-word;
@@ -36,12 +36,12 @@ const STYLES_MENTION = css`
 
 const STYLES_ANCHOR = css`
   color: ${Constants.REFACTOR_COLORS.text};
-  font-weight: 600;
-  text-decoration: underline;
+  font-weight: 400;
   overflow-wrap: break-word;
 
   :hover {
     color: ${Constants.REFACTOR_COLORS.text};
+    text-decoration: underline;
   }
   :visited {
     color: ${Constants.REFACTOR_COLORS.text};
