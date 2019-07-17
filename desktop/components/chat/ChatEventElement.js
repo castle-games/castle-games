@@ -1,10 +1,9 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
-import * as Strings from '~/common/strings';
-import * as Actions from '~/common/actions';
 
 import { css, styled } from 'react-emotion';
 
+import ChatMessageHeader from '~/components/chat/ChatMessageHeader';
 import UIMessageBody from '~/components/reusable/UIMessageBody';
 
 const STYLES_CONTAINER = css`
@@ -48,23 +47,6 @@ const STYLES_RIGHT = css`
   width: 100%;
 `;
 
-const STYLES_AUTHOR_NAME = css`
-  cursor: pointer;
-  margin-top: 2px;
-  font-size: 13px;
-  font-weight: 700;
-  color: ${Constants.REFACTOR_COLORS.text};
-`;
-
-const STYLES_TIMESTAMP = css`
-  font-weight: 400;
-  color: ${Constants.REFACTOR_COLORS.subdued};
-  margin-left: 4px;
-  font-size: 10px;
-  line-height: 12px;
-  display: inline-block;
-`;
-
 const STYLES_NOTICE_MESSAGE = css`
   line-height: 20px;
   font-size: 14px;
@@ -91,12 +73,11 @@ class NoticeMessage extends React.Component {
         <div className={STYLES_NOTICE}>
           <span className={STYLES_LEFT}>🏰</span>
           <span className={STYLES_RIGHT}>
-            <div className={STYLES_AUTHOR_NAME}>
-              Castle
-              <span className={STYLES_TIMESTAMP}>
-                {Strings.toChatTime(this.props.message.timestamp)}
-              </span>
-            </div>
+            <ChatMessageHeader
+              author="Castle"
+              timestamp={this.props.message.timestamp}
+              theme={this.props.theme}
+            />
             <div className={STYLES_NOTICE_MESSAGE}>
               <UIMessageBody
                 body={message.body}

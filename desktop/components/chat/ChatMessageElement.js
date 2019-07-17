@@ -1,10 +1,10 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
-import * as Strings from '~/common/strings';
 import * as Actions from '~/common/actions';
 
 import { css } from 'react-emotion';
 
+import ChatMessageHeader from '~/components/chat/ChatMessageHeader';
 import UIAvatar from '~/components/reusable/UIAvatar';
 import UIMessageBody from '~/components/reusable/UIMessageBody';
 
@@ -22,23 +22,6 @@ const STYLES_RIGHT = css`
   padding-left: 8px;
   min-width: 15%;
   width: 100%;
-`;
-
-const STYLES_AUTHOR_NAME = css`
-  cursor: pointer;
-  margin-top: 2px;
-  font-size: 13px;
-  font-weight: 700;
-  color: ${Constants.REFACTOR_COLORS.text};
-`;
-
-const STYLES_TIMESTAMP = css`
-  font-weight: 400;
-  color: ${Constants.REFACTOR_COLORS.subdued};
-  margin-left: 4px;
-  font-size: 10px;
-  line-height: 12px;
-  display: inline-block;
 `;
 
 const STYLES_AUTHOR_MESSAGE = css`
@@ -76,15 +59,12 @@ export default class ChatMessageElement extends React.Component {
           src={this.props.user.photo ? this.props.user.photo.url : null}
         />
         <span className={STYLES_RIGHT}>
-          <div
-            className={STYLES_AUTHOR_NAME}
-            style={{ color: this.props.theme.textColor }}
-            onClick={() => this.props.onNavigateToUserProfile(this.props.user)}>
-            {this.props.user.username}
-            <span className={STYLES_TIMESTAMP}>
-              {Strings.toChatTime(this.props.message.timestamp)}
-            </span>
-          </div>
+          <ChatMessageHeader
+            author={this.props.user.username}
+            timestamp={this.props.message.timestamp}
+            theme={this.props.theme}
+            onClick={() => this.props.onNavigateToUserProfile(this.props.user)}
+          />
           <div
             className={STYLES_AUTHOR_MESSAGE}
             style={{
