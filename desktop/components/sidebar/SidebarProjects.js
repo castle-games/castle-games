@@ -6,6 +6,7 @@ import { css } from 'react-emotion';
 
 import SidebarGroupHeader from '~/components/sidebar/SidebarGroupHeader';
 import SidebarProjectItem from '~/components/sidebar/SidebarProjectItem';
+import UserStatus from '~/common/userstatus';
 
 const STYLES_CONTAINER = css`
   margin-bottom: 24px;
@@ -21,22 +22,12 @@ export default class SidebarProjects extends React.Component {
 
     let filteredItems;
     if (userStatusHistory) {
-      let seenUrls = {};
-      filteredItems = userStatusHistory
-        .filter((status) => {
-          const { game } = status;
-          let isPrivate = Urls.isPrivateUrl(game.url);
-          let isLocalFile = isPrivate || !game.owner;
-          let isAlreadySeen = seenUrls[game.url] === true;
-          seenUrls[game.url] = true;
-          return isLocalFile && !isAlreadySeen;
-        })
-        .map((status) => {
-          return {
-            name: status.game.title,
-            url: status.game.url,
-          };
-        });
+      filteredItems = UserStatus.uniqueLocalUserStatuses(userStatusHistory).map((status) => {
+        return {
+          name: status.game.title,
+          url: status.game.url,
+        };
+      });
     }
     if (!filteredItems.length) {
       return null;

@@ -10,6 +10,7 @@ import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigatorContext } from '~/contexts/NavigationContext';
 
 import ProjectTemplateChooser from '~/components/create/ProjectTemplateChooser';
+import UserStatus from '~/common/userstatus';
 
 const DOCS_LINKS = [
   {
@@ -116,19 +117,11 @@ class CreateHomeScreen extends React.Component {
 
   _renderRecentProjects = () => {
     // TODO: merge logic with SidebarProjects
-    let seenUrls = {};
-    const recentProjects = this.props.history
-      .filter((item) => {
-        const { game } = item;
-        let isPrivate = Urls.isPrivateUrl(game.url);
-        let isLocalFile = isPrivate || !game.owner;
-        let isAlreadySeen = seenUrls[game.url] === true;
-        seenUrls[game.url] = true;
-        return isLocalFile && !isAlreadySeen;
-      })
-      .map((historyItem) => {
+    const recentProjects = UserStatus.uniqueLocalUserStatuses(this.props.history).map(
+      (historyItem) => {
         return { ...historyItem.game, key: historyItem.userStatusId };
-      });
+      }
+    );
     if (recentProjects && recentProjects.length) {
       return (
         <div className={STYLES_SECTION}>
