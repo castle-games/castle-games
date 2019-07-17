@@ -5,6 +5,7 @@ import * as ChatUtilities from '~/common/chat-utilities';
 import * as Notifications from '~/common/notifications';
 import * as Constants from '~/common/constants';
 import * as Strings from '~/common/strings';
+import * as uuid from 'uuid/v4';
 
 import { CastleChat, ConnectionStatus } from 'castle-chat-lib';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
@@ -61,6 +62,7 @@ class ChatContextManager extends React.Component {
   }
 
   componentDidMount() {
+    this._mounted = true;
     window.addEventListener('CASTLE_ADD_CHAT_NOTIFICATION', this._handleChatNotification);
 
     // TODO(jim): Easy way to test chat notifications.
@@ -74,6 +76,7 @@ class ChatContextManager extends React.Component {
   }
 
   componentWillUnmount() {
+    this._mounted = false;
     window.removeEventListener('CASTLE_ADD_CHAT_NOTIFICATION', this._handleChatNotification);
   }
 
@@ -142,12 +145,14 @@ class ChatContextManager extends React.Component {
     }
     this._chat = null;
     this._firstLoadComplete = false;
-    this.setState((state) => {
-      return {
-        ...state,
-        ...EMPTY_CHAT_STATE,
-      };
-    });
+    if (this._mounted) {
+      this.setState((state) => {
+        return {
+          ...state,
+          ...EMPTY_CHAT_STATE,
+        };
+      });
+    }
   };
 
   // checks if we have a channel with this name,
@@ -272,7 +277,40 @@ class ChatContextManager extends React.Component {
         return;
       }
     }
-    return this._chat.sendMessageAsync(channelId, message);
+
+    // immediately push optimistic message
+    const optimisticMessage = this._createOptimisticMessageObject(channelId, message);
+    await this.setState((state) => {
+      let channel = state.channels[channelId];
+      if (!channel) {
+        channel = {};
+      }
+      if (!channel.messages) {
+        channel.messages = [];
+      }
+      channel.messages.push(optimisticMessage);
+      const channels = { ...state.channels };
+      channels[channelId] = channel;
+      return {
+        ...state,
+        channels,
+      };
+    });
+    return this._chat.sendMessageAsync(channelId, message, optimisticMessage.tempChatMessageId);
+  };
+
+  _createOptimisticMessageObject = (channelId, body) => {
+    const { user } = this.props.currentUser;
+    const tempId = uuid();
+    return {
+      chatMessageId: tempId,
+      tempChatMessageId: tempId,
+      channelId,
+      body,
+      fromUserId: user.userId,
+      createdTime: new Date(),
+      timestamp: new Date(),
+    };
   };
 
   _handleMessagesAsync = async (allUnsortedMessages) => {
@@ -313,6 +351,13 @@ class ChatContextManager extends React.Component {
         if (m.isEdit) {
           const messageIndex = channel.messages.findIndex(
             (m2) => m2.chatMessageId === m.chatMessageId
+          );
+          if (messageIndex >= 0) {
+            channel.messages[messageIndex] = m;
+          }
+        } else if (m.tempChatMessageId) {
+          const messageIndex = channel.messages.findIndex(
+            (m2) => m2.tempChatMessageId === m.tempChatMessageId
           );
           if (messageIndex >= 0) {
             channel.messages[messageIndex] = m;
