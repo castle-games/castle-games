@@ -5,7 +5,7 @@ const CurrentUserContextDefaults = {
   user: null,
   timeLastLoaded: 0,
   userStatusHistory: [],
-  setCurrentUser: (user) => {},
+  setCurrentUser: async (user) => {},
   clearCurrentUser: async () => {},
   refreshCurrentUser: async () => {},
   content: {
@@ -35,11 +35,14 @@ class CurrentUserContextProvider extends React.Component {
     }
   }
 
-  setCurrentUser = (user) => {
-    this.setState({
+  setCurrentUser = async (user) => {
+    await this.setState({
       user,
       timeLastLoaded: Date.now(),
     });
+    if (!this.state.userStatusHistory || !this.state.userStatusHistory.length) {
+      this.refreshCurrentUser();
+    }
   };
 
   clearCurrentUser = async () => {
