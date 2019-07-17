@@ -51,12 +51,12 @@ const STYLES_RECENT_PROJECTS = css`
 const STYLES_LINK_CARD = css`
   margin-right: 16px;
   margin-bottom: 16px;
-  padding: 8px;
+  padding: 8px 16px 16px 16px;
   background: ${Constants.colors.white};
   width: ${Constants.card.width};
   cursor: pointer;
   border-radius: ${Constants.card.radius};
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  border: 1px solid #ececec;
 
   :hover {
     color: magenta;
@@ -68,7 +68,7 @@ const STYLES_CARD_TITLE = css`
   font-weight: 600;
   font-size: 14px;
   line-height: 18px;
-  margin-bottom: 4px;
+  margin: 8px 0;
 `;
 
 const STYLES_CARD_SUBTITLE = css`
