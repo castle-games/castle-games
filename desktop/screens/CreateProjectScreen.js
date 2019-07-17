@@ -11,27 +11,14 @@ import { css } from 'react-emotion';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigatorContext } from '~/contexts/NavigationContext';
 
+import CreateHomeScreen from '~/screens/CreateHomeScreen';
 import CreateProjectProgressIndicator from '~/components/create/CreateProjectProgressIndicator';
 import Logs from '~/common/logs';
 import ProjectConfigureForm from '~/components/create/ProjectConfigureForm';
-import ProjectTemplateChooser from '~/components/create/ProjectTemplateChooser';
 import ProjectTemplatePreview from '~/components/create/ProjectTemplatePreview';
 import UIButton from '~/components/reusable/UIButton';
 
 const path = Utilities.path();
-
-const DOCS_LINKS = [
-  {
-    title: 'Castle Docs',
-    url: `${Constants.WEB_HOST}/documentation`,
-    description: 'Read tutorials and examples.',
-  },
-  {
-    title: 'Make Your First Game',
-    url: `${Constants.WEB_HOST}/posts/@castle/make-your-first-castle-game`,
-    description: `Learn Castle's basic workflow.`,
-  },
-];
 
 const STYLES_CONTAINER = css`
   background: ${Constants.colors.background};
@@ -48,37 +35,8 @@ const STYLES_CONTAINER = css`
   }
 `;
 
-const STYLES_CHOOSE_TEMPLATE = css`
-  margin-bottom: 16px;
-`;
-
-const STYLES_DOCUMENTATION = css``;
-
-const STYLES_DOCS_LINKS = css`
-  display: flex;
-  flex-wrap: wrap;
-`;
-
-const STYLES_LINK_CONTAINER = css`
-  cursor: pointer;
-  width: 256px;
-  font-size: 14px;
-  margin-right: 8px;
-`;
-
 const STYLES_BOLD = css`
   font-weight: 600;
-`;
-
-const STYLES_LINK = css`
-  color: ${Constants.colors.black};
-  line-height: ${Constants.linescale.base};
-  font-family: ${Constants.font.system};
-  margin-top: 16px;
-  margin-bottom: 12px;
-  :hover {
-    color: magenta;
-  }
 `;
 
 const STYLES_PARAGRAPH = css`
@@ -238,49 +196,13 @@ class CreateProjectScreen extends React.Component {
     return createdProjectUrl;
   };
 
-  _handleOpenProject = async () => {
-    try {
-      const path = await NativeUtil.chooseOpenProjectPathWithDialogAsync();
-      if (path) {
-        await this.props.navigateToGameUrl(`file://${path}`, { launchSource: 'create-project' });
-      }
-    } catch (_) {}
-  };
-
-  _renderChooseTemplate = () => {
+  _renderCreateHome = () => {
     return (
-      <React.Fragment>
-        <div className={STYLES_CHOOSE_TEMPLATE}>
-          <div className={STYLES_SECTION_TITLE}>Create a game</div>
-          <ProjectTemplateChooser
-            templates={this.props.templates}
-            selectedTemplate={this.state.selectedTemplate}
-            onSelectTemplate={this._handleSelectTemplate}
-          />
-        </div>
-        <div className={STYLES_DOCUMENTATION}>
-          <div className={STYLES_SECTION_TITLE}>Help and Documentation</div>
-          <div className={STYLES_DOCS_LINKS}>
-            {DOCS_LINKS.map((link, ii) => (
-              <div
-                key={`doc-${ii}`}
-                className={STYLES_LINK_CONTAINER}
-                onClick={() => NativeUtil.openExternalURL(link.url)}>
-                <div className={STYLES_LINK}>
-                  <strong className={STYLES_BOLD}>{link.title}</strong>
-                  <div>{link.description}</div>
-                </div>
-              </div>
-            ))}
-            <div className={STYLES_LINK_CONTAINER}>
-              <div className={STYLES_LINK} onClick={this._handleOpenProject}>
-                <strong className={STYLES_BOLD}>Open project</strong>
-                <div>Open a project from your computer.</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </React.Fragment>
+      <CreateHomeScreen
+        templates={this.props.templates}
+        selectedTemplate={this.state.selectedTemplate}
+        onSelectTemplate={this._handleSelectTemplate}
+      />
     );
   };
 
@@ -368,7 +290,7 @@ class CreateProjectScreen extends React.Component {
   render() {
     let content;
     if (this.state.step === 'choose-template') {
-      content = this._renderChooseTemplate();
+      content = this._renderCreateHome();
     } else if (this.state.step === 'configure-project') {
       content = this._renderConfigureProject();
     } else if (this.state.step === 'create-project') {
