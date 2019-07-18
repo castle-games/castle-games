@@ -36,6 +36,7 @@ const ChatContext = React.createContext(ChatContextDefaults);
 class ChatContextManager extends React.Component {
   _firstLoadComplete = false;
   _messagesReadQueue;
+  _optimisticMessageIdsPending = {};
 
   constructor(props) {
     super(props);
@@ -302,6 +303,7 @@ class ChatContextManager extends React.Component {
   _createOptimisticMessageObject = (channelId, body) => {
     const { user } = this.props.currentUser;
     const tempId = uuid();
+    this._optimisticMessageIdsPending[tempId] = true;
     return {
       chatMessageId: tempId,
       tempChatMessageId: tempId,
@@ -348,21 +350,30 @@ class ChatContextManager extends React.Component {
         channelIds[m.channelId] = true;
 
         let channel = channels[m.channelId];
+        let didSubstituteMessage = false;
         if (m.isEdit) {
           const messageIndex = channel.messages.findIndex(
             (m2) => m2.chatMessageId === m.chatMessageId
           );
           if (messageIndex >= 0) {
             channel.messages[messageIndex] = m;
+            didSubstituteMessage = true;
           }
-        } else if (m.tempChatMessageId) {
+        }
+        if (
+          m.tempChatMessageId &&
+          this._optimisticMessageIdsPending[m.tempChatMessageId] === true
+        ) {
           const messageIndex = channel.messages.findIndex(
             (m2) => m2.tempChatMessageId === m.tempChatMessageId
           );
           if (messageIndex >= 0) {
             channel.messages[messageIndex] = m;
+            delete this._optimisticMessageIdsPending[m.tempChatMessageId];
+            didSubstituteMessage = true;
           }
-        } else {
+        }
+        if (!didSubstituteMessage) {
           channel.messages.push(m);
         }
       }
