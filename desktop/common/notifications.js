@@ -2,6 +2,12 @@ import * as ChatUtilities from '~/common/chat-utilities';
 
 import { NativeBinds } from '~/native/nativebinds';
 
+export const NotificationType = {
+  NONE: 0,
+  BADGE: 1,
+  DESKTOP: 2,
+};
+
 export const NotificationLevel = {
   NONE: 0,
   TAG: 1,
@@ -42,26 +48,33 @@ export const showNotification = ({ title, message }) => {
   });
 };
 
-export const showFromChatMessages = (messages, viewer, channels) => {
+export const chatMessageHasNotification = (m, viewer, channel, type = NotificationType.DESKTOP) => {
   const notificationLevel = _getChatNotificationLevel(viewer);
-  if (notificationLevel === NotificationLevel.NONE) return;
+  if (type === NotificationType.DESKTOP && notificationLevel === NotificationLevel.NONE)
+    return false;
 
+  let messageHasNotification = false;
+  // String() coercion needed at time of writing because these user ids are a number
+  // and string respectively.
+  if (m.body && m.body.message && String(m.fromUserId) !== String(viewer.userId)) {
+    if (type === NotificationType.DESKTOP && notificationLevel === NotificationLevel.EVERY) {
+      messageHasNotification = true;
+    } else if (channel.type === 'dm') {
+      messageHasNotification = true;
+    } else if (type === NotificationType.BADGE || notificationLevel === NotificationLevel.TAG) {
+      messageHasNotification = m.body.message.some(
+        (component) => component.userId && component.userId === viewer.userId
+      );
+    }
+  }
+  return messageHasNotification;
+};
+
+export const showFromChatMessages = (messages, viewer, channels) => {
   for (let ii = 0, nn = messages.length; ii < nn; ii++) {
     const m = messages[ii];
     const channel = channels[m.channelId];
-    let messageHasNotification = false;
-    // String() coercion needed at time of writing because these user ids are a number
-    // and string respectively.
-    if (m.body && m.body.message && String(m.fromUserId) !== String(viewer.userId)) {
-      if (notificationLevel === NotificationLevel.EVERY || channel.type === 'dm') {
-        messageHasNotification = true;
-      } else if (notificationLevel === NotificationLevel.TAG) {
-        messageHasNotification = m.body.message.some(
-          (component) => component.userId && component.userId === viewer.userId
-        );
-      }
-    }
-    if (messageHasNotification) {
+    if (chatMessageHasNotification(m, viewer, channel)) {
       showNotification({
         title: channel.name,
         message: ChatUtilities.messageBodyToPlainText(m.body),

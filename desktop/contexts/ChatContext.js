@@ -376,6 +376,17 @@ class ChatContextManager extends React.Component {
         if (!didSubstituteMessage) {
           channel.messages.push(m);
         }
+        if (
+          Notifications.chatMessageHasNotification(
+            m,
+            this.props.currentUser.user,
+            channel,
+            Notifications.NotificationType.BADGE
+          )
+        ) {
+          channel.unreadNotificationCount = channel.unreadNotificationCount || 0;
+          channel.unreadNotificationCount += 1;
+        }
       }
 
       Object.keys(channelIds).forEach((channelId) => {
@@ -505,7 +516,11 @@ class ChatContextManager extends React.Component {
         // immediately mark read locally
         this.setState((state) => {
           let channels = { ...state.channels };
-          channels[channelId] = { ...channels[channelId], hasUnreadMessages: false };
+          channels[channelId] = {
+            ...channels[channelId],
+            hasUnreadMessages: false,
+            unreadNotificationCount: 0,
+          };
           return {
             ...state,
             channels,
@@ -528,7 +543,7 @@ class ChatContextManager extends React.Component {
         const updatedChannel = await ChatActions.markMessageRead(messageId);
         updatedChannels[channelId] = updatedChannel;
       } catch (_) {
-        updatedChannels[channelId] = { hasUnreadMessages: false };
+        updatedChannels[channelId] = { hasUnreadMessages: false, unreadNotificationCount: 0 };
       }
     }
     this.setState((state) => {
