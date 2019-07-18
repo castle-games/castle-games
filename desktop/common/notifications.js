@@ -70,14 +70,14 @@ export const chatMessageHasNotification = (m, viewer, channel, type = Notificati
   return messageHasNotification;
 };
 
-export const showFromChatMessages = (messages, viewer, channels) => {
+export const showFromChatMessages = (messages, viewer, channels, userIdToUser) => {
   for (let ii = 0, nn = messages.length; ii < nn; ii++) {
     const m = messages[ii];
     const channel = channels[m.channelId];
     if (chatMessageHasNotification(m, viewer, channel)) {
       showNotification({
         title: channel.name,
-        message: ChatUtilities.messageBodyToPlainText(m.body),
+        message: ChatUtilities.messageBodyToPlainText(m.body, userIdToUser),
       });
     }
   }

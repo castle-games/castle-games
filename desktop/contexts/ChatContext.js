@@ -428,7 +428,8 @@ class ChatContextManager extends React.Component {
       Notifications.showFromChatMessages(
         allUnsortedMessages,
         this.props.currentUser.user,
-        this.state.channels
+        this.state.channels,
+        this.props.userPresence.userIdToUser
       );
     } else {
       this._firstLoadComplete = true;
