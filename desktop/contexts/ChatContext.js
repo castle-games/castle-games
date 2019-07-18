@@ -304,6 +304,10 @@ class ChatContextManager extends React.Component {
     const { user } = this.props.currentUser;
     const tempId = uuid();
     this._optimisticMessageIdsPending[tempId] = true;
+    try {
+      // this may have already been stringified to get sent over the air
+      body = JSON.parse(body);
+    } catch (_) {}
     return {
       chatMessageId: tempId,
       tempChatMessageId: tempId,
