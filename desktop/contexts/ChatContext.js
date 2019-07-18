@@ -16,6 +16,7 @@ import _ from 'lodash';
 
 const EMPTY_CHAT_STATE = {
   channels: {},
+  channelOnlineCounts: {},
 };
 
 const ChatContextDefaults = {
@@ -443,16 +444,18 @@ class ChatContextManager extends React.Component {
   _handleConnectStatus = async (status) => {};
 
   _handlePresenceAsync = async (event) => {
-    if (!event.user_ids) {
-      return;
+    if (event.user_ids) {
+      let onlineUserIds = {};
+      event.user_ids.forEach((id) => {
+        onlineUserIds[id] = true;
+      });
+      this.props.userPresence.setOnlineUserIds(onlineUserIds);
     }
-
-    let onlineUserIds = {};
-    event.user_ids.forEach((id) => {
-      onlineUserIds[id] = true;
-    });
-
-    this.props.userPresence.setOnlineUserIds(onlineUserIds);
+    if (event.channel_online_counts) {
+      this.setState({
+        channelOnlineCounts: event.channel_online_counts,
+      });
+    }
   };
 
   refreshChannelData = async () => {
