@@ -246,6 +246,9 @@ class GameScreen extends React.Component {
     if (initialData.initialPost) {
       NativeUtil.sendLuaEvent('CASTLE_POST_OPENED', initialData.initialPost);
     }
+
+    // load newest playing/making user status (don't await)
+    this.props.refreshCurrentUser();
   };
 
   _updateGameWindow = async (prevProps, prevState) => {
@@ -406,6 +409,7 @@ export default class GameScreenWithContext extends React.Component {
                     clearCurrentGame={navigator.clearCurrentGame}
                     isLoggedIn={currentUser.user !== null}
                     me={currentUser.user}
+                    refreshCurrentUser={currentUser.refreshCurrentUser}
                     {...this.props}
                   />
                 )}
