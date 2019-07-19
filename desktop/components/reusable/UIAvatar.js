@@ -29,21 +29,18 @@ export default class UIAvatar extends React.Component {
   static defaultProps = {
     isOnline: false,
     showIndicator: true,
+    style: null,
+    indicatorStyle: null,
   };
 
   _renderIndicator = (isOnline, showIndicator) => {
     if (!showIndicator) return null;
 
-    if (isOnline) {
-      return (
-        <span
-          className={STYLES_INDICATOR}
-          style={{ background: Constants.REFACTOR_COLORS.online }}
-        />
-      );
-    } else {
-      return <span className={STYLES_INDICATOR} style={{ background: '#ACACAC' }} />;
-    }
+    const styles = {
+      background: isOnline ? Constants.REFACTOR_COLORS.online : '#ACACAC',
+      ...this.props.indicatorStyle,
+    };
+    return <span className={STYLES_INDICATOR} style={styles} />;
   };
 
   render() {

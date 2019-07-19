@@ -4,34 +4,15 @@ import * as SVG from '~/common/svg';
 
 import { css } from 'react-emotion';
 
+import UIAvatar from '~/components/reusable/UIAvatar';
+import UIUserStatus from '~/components/reusable/UIUserStatus';
+
 const STYLES_USER = css`
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   font-size: 12px;
   margin-bottom: 16px;
-  cursor: pointer;
-  transition: 200ms ease color;
-
-  :hover {
-    color: magenta;
-  }
-`;
-
-const STYLES_NOTIFICATION = css`
-  font-family: ${Constants.REFACTOR_FONTS.system};
-  font-weight: 600;
-  background: rgb(255, 0, 235);
-  color: white;
-  height: 14px;
-  margin-top: 2px;
-  padding: 0 6px 0 6px;
-  border-radius: 14px;
-  font-size: 8px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 0px;
 `;
 
 const STYLES_INFO = css`
@@ -42,9 +23,11 @@ const STYLES_INFO = css`
 `;
 
 const STYLES_NAME = css`
+  color: ${Constants.REFACTOR_COLORS.text};
   font-size: 14px;
   font-weight: 600;
-  margin-top: 4px;
+  margin: 4px 0;
+  cursor: pointer;
 `;
 
 const STYLES_DESCRIPTION = css`
@@ -52,52 +35,31 @@ const STYLES_DESCRIPTION = css`
   font-size: 14px;
 `;
 
-const STYLES_INDICATOR = css`
-  height: 20px;
-  width: 20px;
-  border-radius: 20px;
-  flex-shrink: 0;
-  position: absolute;
-  right: -4px;
-  bottom: -4px;
-  border: 2px solid ${Constants.REFACTOR_COLORS.elements.body};
+const STYLES_USER_STATUS = css`
+  font-family: ${Constants.REFACTOR_FONTS.system}:
+  line-height: 20px;
+  font-size: 14px;
 `;
 
-const STYLES_AVATAR = css`
-  flex-shrink: 0;
-  background-size: cover;
-  background-position: 50% 50%;
-  height: 48px;
-  width: 48px;
-  position: relative;
-  border-radius: 4px;
-  background: magenta;
-`;
-
-export default ({ data }) => {
+export default ({ user, isOnline, navigateToGameUrl, navigateToUserProfile }) => {
   return (
     <div className={STYLES_USER}>
-      {data.online ? (
-        <figure className={STYLES_AVATAR}>
-          <span
-            className={STYLES_INDICATOR}
-            style={{ background: Constants.REFACTOR_COLORS.online }}
-          />
-        </figure>
-      ) : (
-        <figure className={STYLES_AVATAR}>
-          <span
-            className={STYLES_INDICATOR}
-            style={{ background: Constants.REFACTOR_COLORS.elements.servers }}
-          />
-        </figure>
-      )}
+      <UIAvatar
+        src={user && user.photo ? user.photo.url : null}
+        isOnline={isOnline}
+        style={{ width: 48, height: 48 }}
+        indicatorStyle={{ width: 20, height: 20, borderRadius: 10 }}
+      />
       <div className={STYLES_INFO}>
         <h2
           className={STYLES_NAME}
-          style={{ color: data.online ? null : Constants.REFACTOR_COLORS.subdued }}>
-          {data.name}
+          onClick={user ? () => navigateToUserProfile(user) : null}
+          style={{ color: isOnline ? null : Constants.REFACTOR_COLORS.subdued }}>
+          {user && user.username ? user.username : 'Loading...'}
         </h2>
+        <div className={STYLES_USER_STATUS}>
+          {user ? <UIUserStatus user={user} navigateToGameUrl={navigateToGameUrl} /> : null}
+        </div>
       </div>
     </div>
   );

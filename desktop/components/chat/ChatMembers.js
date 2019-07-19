@@ -1,7 +1,10 @@
 import * as React from 'react';
+import * as Actions from '~/common/actions';
 import * as Constants from '~/common/constants';
 
 import { css } from 'react-emotion';
+import { NavigatorContext } from '~/contexts/NavigationContext';
+import { UserPresenceContext } from '~/contexts/UserPresenceContext';
 
 import ChatMembersItem from '~/components/chat/ChatMembersItem';
 
@@ -18,21 +21,65 @@ const STYLES_CONTAINER = css`
   }
 `;
 
-// NOTE(jim): Chat member blocks look like this:
-/*
-  <ChatMembersItem
-    data={{ online: true, name: 'Person #1', status: 'Is playing Blast Flocks' }}
-  />
-  <ChatMembersItem
-    data={{ online: false, name: 'Person #2', status: 'Is playing Blast Flocks' }}
-  />
-  <ChatMembersItem
-    data={{ online: false, name: 'Person #3', status: 'Is playing Blast Flocks' }}
-  />
-*/
+class ChatMembers extends React.Component {
+  static defaultProps = {
+    userIds: [],
+    userPresence: null,
+  };
 
-export default class ChatMembers extends React.Component {
+  componentDidMount() {
+    const { userIds, userPresence } = this.props;
+    this._fetchMissingUsers(userIds, userPresence);
+  }
+
+  _fetchMissingUsers = async (userIds, userPresence) => {
+    const userIdsToFetch = userIds.filter(
+      (userId) => userPresence.onlineUserIds[userId] && !userPresence.userIdToUser[userId]
+    );
+    if (userIdsToFetch && userIdsToFetch.length) {
+      const result = await Actions.getUsers({ userIds: userIdsToFetch });
+      await this.props.userPresence.addUsers(result);
+    }
+  };
+
   render() {
-    return <div className={STYLES_CONTAINER}>Coming soon</div>;
+    const { userIds, userPresence, navigateToGameUrl, navigateToUserProfile } = this.props;
+    const { userIdToUser, onlineUserIds } = userPresence;
+    return (
+      <div className={STYLES_CONTAINER}>
+        {userIds
+          .filter((userId) => onlineUserIds[userId])
+          .map((userId) => userIdToUser[userId])
+          .map((user) => (
+            <ChatMembersItem
+              user={user}
+              isOnline={true}
+              navigateToGameUrl={navigateToGameUrl}
+              navigateToUserProfile={navigateToUserProfile}
+            />
+          ))}
+      </div>
+    );
+  }
+}
+
+export default class ChatMembersWithContext extends React.Component {
+  render() {
+    return (
+      <UserPresenceContext.Consumer>
+        {(userPresence) => (
+          <NavigatorContext.Consumer>
+            {(navigator) => (
+              <ChatMembers
+                userPresence={userPresence}
+                navigateToGameUrl={navigator.navigateToGameUrl}
+                navigateToUserProfile={navigator.navigateToUserProfile}
+                {...this.props}
+              />
+            )}
+          </NavigatorContext.Consumer>
+        )}
+      </UserPresenceContext.Consumer>
+    );
   }
 }

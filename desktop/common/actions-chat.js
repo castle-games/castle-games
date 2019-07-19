@@ -16,6 +16,9 @@ const CHANNEL_FIELDS = `
   gameId
   hasUnreadMessages
   unreadNotificationCount
+  subscribedUsers {
+    userId
+  }
 `;
 
 export const getAllChat = async () => {

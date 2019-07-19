@@ -14,6 +14,7 @@ import { UserPresenceContext } from '~/contexts/UserPresenceContext';
 
 import regexMatch from 'react-string-replace';
 import ChatHeader from '~/components/chat/ChatHeader';
+import ChatHeaderActive from '~/components/chat/ChatHeaderActive';
 import ChatMessages from '~/components/chat/ChatMessages';
 import ChatMembers from '~/components/chat/ChatMembers';
 import ChatInput from '~/components/chat/ChatInput';
@@ -229,9 +230,9 @@ class ChatScreen extends React.Component {
       return (
         <div className={className}>
           <ChatHeaderActive onDismiss={this._handleResetChatWindow}>
-            Channel Members
+            Online Channel Members
           </ChatHeaderActive>
-          <ChatMembers />
+          <ChatMembers userIds={channel.subscribedUsers.map((user) => user.userId)} />
         </div>
       );
     }

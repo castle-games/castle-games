@@ -7,9 +7,9 @@ import * as Urls from '~/common/urls';
 import { css } from 'react-emotion';
 
 import ContentEditor from '~/editor/ContentEditor';
-import UserStatus from '~/common/userstatus';
 import UICharacterCard from '~/components/reusable/UICharacterCard';
 import UIHeading from '~/components/reusable/UIHeading';
+import UIUserStatus from '~/components/reusable/UIUserStatus';
 import UIUserStatusIndicator from '~/components/reusable/UIUserStatusIndicator';
 
 const STYLES_CONTAINER = css`
@@ -96,18 +96,6 @@ const STYLES_CREATOR_IDENTITY = css`
   padding-left: 24px;
 `;
 
-const STYLES_STATUS_LINK = css`
-  color: ${Constants.colors.action};
-  word-spacing: -0.1rem;
-  text-decoration: underline;
-  cursor: pointer;
-`;
-
-const STYLES_STATUS_UNREGISTERED_TITLE = css`
-  word-spacing: -0.1rem;
-  color: ${Constants.colors.text2};
-`;
-
 export default class ProfileHeader extends React.Component {
   _handleClickCreatorLink = (url) => {
     NativeUtil.openExternalURL(url);
@@ -119,44 +107,6 @@ export default class ProfileHeader extends React.Component {
         <UIUserStatusIndicator user={creator} />
       </div>
     );
-  };
-
-  _renderTagline = (creator) => {
-    let statusElement;
-    if (creator.lastUserStatus && creator.lastUserStatus.game) {
-      // show last status if it exists and is relevant
-      let status = UserStatus.renderStatusText(creator.lastUserStatus);
-      if (status.status) {
-        if (creator.lastUserStatus.game.gameId) {
-          // link to game if it's registered
-          statusElement = (
-            <React.Fragment>
-              {status.verb}{' '}
-              <span
-                className={STYLES_STATUS_LINK}
-                onClick={() =>
-                  this.props.navigateToGameUrl(creator.lastUserStatus.game.url, {
-                    launchSource: 'profile',
-                  })
-                }>
-                {status.title}
-              </span>
-            </React.Fragment>
-          );
-        } else {
-          statusElement = (
-            <React.Fragment>
-              {status.verb} <span className={STYLES_STATUS_UNREGISTERED_TITLE}>{status.title}</span>
-            </React.Fragment>
-          );
-        }
-      }
-    }
-    if (!statusElement) {
-      // if no relevant or recent status, just show signed up date
-      statusElement = `Joined on ${Strings.toDate(creator.createdTime)}`;
-    }
-    return <React.Fragment>{statusElement}</React.Fragment>;
   };
 
   _renderLinks = (creator) => {
@@ -231,7 +181,10 @@ export default class ProfileHeader extends React.Component {
                 <UIHeading style={{ marginBottom: 8 }}>{name}</UIHeading>
                 <div className={STYLES_META}>
                   {this._renderOnlineStatus(this.props.creator)}
-                  {this._renderTagline(this.props.creator)}
+                  <UIUserStatus
+                    user={this.props.creator}
+                    navigateToGameUrl={this.props.navigateToGameUrl}
+                  />
                 </div>
               </div>
             </div>

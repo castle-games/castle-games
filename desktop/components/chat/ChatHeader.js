@@ -74,6 +74,7 @@ const STYLES_P = css`
 const STYLES_ONLINE = css`
   padding-left: 12px;
   color: ${Constants.REFACTOR_COLORS.subdued}:
+  cursor: pointer;
 
   strong {
     cursor: pointer;
@@ -168,7 +169,7 @@ export default class ChatHeader extends React.Component {
   _maybeRenderMembers = (numChannelMembers) => {
     if (numChannelMembers) {
       return (
-        <span className={STYLES_ONLINE}>
+        <span className={STYLES_ONLINE} onClick={this.props.onMembersClick}>
           <strong>{numChannelMembers} online</strong>
           <span>&middot;</span>
         </span>
