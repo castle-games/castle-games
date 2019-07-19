@@ -35,6 +35,20 @@ export const getSubscribedChannels = async () => {
   return response;
 };
 
+export const getChannels = async (channelIds) => {
+  const response = await API.graphqlAsync(
+    `
+    query($channelIds: [ID]!) {
+      chatChannels(channelIds: $channelIds) {
+        ${CHANNEL_FIELDS}
+      }
+    }
+  `,
+    { channelIds }
+  );
+  return response.data.chatChannels;
+};
+
 export const createChatChannel = async ({ name }) => {
   const response = await API.graphqlAsync(
     `

@@ -117,8 +117,7 @@ class ChatContextManager extends React.Component {
       let prevChannelId =
         prevProps && prevProps.navigation ? prevProps.navigation.chatChannelId : null;
       if (prevNavigationMode !== 'chat' || prevChannelId !== this.props.navigation.chatChannelId) {
-        // TODO: only refresh the channel messages we care about
-        this._refreshAllSubscribedChannels();
+        this._refreshChannelIds([this.props.navigation.chatChannelId]);
       }
     }
   };
@@ -137,6 +136,7 @@ class ChatContextManager extends React.Component {
     this._chat.setOnPresenceHandler(this._handlePresenceAsync);
     this._chat.setConnectionStatusHandler(this._handleConnectStatus);
     await this._chat.connect();
+    await this._refreshAllSubscribedChannels();
   };
 
   destroy = async () => {
@@ -343,7 +343,7 @@ class ChatContextManager extends React.Component {
           // never seen this channel before, fetch the full channel object later
           channels[m.channelId] = {};
           unseenChannelIds[m.channelId] = true;
-        } else {
+        } else if (this._firstLoadComplete) {
           // we have already loaded this channel, mark it as unread
           channels[m.channelId].hasUnreadMessages = true;
         }
@@ -380,6 +380,7 @@ class ChatContextManager extends React.Component {
           channel.messages.push(m);
         }
         if (
+          this._firstLoadComplete &&
           Notifications.chatMessageHasNotification(
             m,
             this.props.currentUser.user,
@@ -409,7 +410,7 @@ class ChatContextManager extends React.Component {
     // fetch channels if we get messages from unknown channels.
     const newChannelIds = Object.keys(unseenChannelIds);
     if (newChannelIds.length) {
-      await this._refreshAllSubscribedChannels();
+      await this._refreshChannelIds(newChannelIds);
       Object.entries(this.state.channels).forEach(([_, channel]) => {
         if (channel.otherUserId && !this.props.userPresence.userIdToUser[channel.otherUserId]) {
           userIds[channel.otherUserId] = true;
@@ -456,28 +457,39 @@ class ChatContextManager extends React.Component {
     }
   };
 
+  _refreshChannelIds = async (channelIds) => {
+    const response = await ChatActions.getChannels(channelIds);
+    if (response) {
+      this._mergeChannelData(response);
+    }
+  };
+
   _refreshAllSubscribedChannels = async () => {
     const response = await ChatActions.getSubscribedChannels();
     if (response && response.data) {
       const { subscribedChatChannels } = response.data;
-      this.setState((state) => {
-        let channels = {};
-        if (subscribedChatChannels) {
-          subscribedChatChannels.forEach((channel) => {
-            const existing = state.channels[channel.channelId] || {};
-            channels[channel.channelId] = {
-              ...existing,
-              ...channel,
-              isSubscribed: true,
-            };
-          });
-        }
-        return {
-          ...state,
-          channels,
-        };
-      });
+      this._mergeChannelData(subscribedChatChannels);
     }
+  };
+
+  _mergeChannelData = (updatedChannels) => {
+    this.setState((state) => {
+      let channels = { ...state.channels };
+      if (updatedChannels) {
+        updatedChannels.forEach((channel) => {
+          const existing = state.channels[channel.channelId] || {};
+          channels[channel.channelId] = {
+            ...existing,
+            ...channel,
+            isSubscribed: true,
+          };
+        });
+      }
+      return {
+        ...state,
+        channels,
+      };
+    });
   };
 
   findChannelForGame = (game) => {
