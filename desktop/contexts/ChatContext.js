@@ -571,7 +571,13 @@ class ChatContextManager extends React.Component {
     // messages are sorted by date when they arrive.
     const channel = this.state.channels[channelId];
     if (channel && channel.messages && channel.messages.length) {
-      return channel.messages[channel.messages.length - 1];
+      for (let ii = channel.messages.length - 1; ii >= 0; ii--) {
+        let m = channel.messages[ii];
+        // ignore fake notification messages and optimistic messages
+        if (m.chatMessageId && m.chatMessageId !== m.tempChatMessageId) {
+          return m;
+        }
+      }
     }
     return null;
   };
