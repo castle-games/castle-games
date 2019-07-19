@@ -21,15 +21,11 @@ const CHANNEL_FIELDS = `
   }
 `;
 
-export const getAllChat = async () => {
+export const getSubscribedChannels = async () => {
   const response = await API.graphqlAsync(
     `
       query {
         subscribedChatChannels {
-          ${CHANNEL_FIELDS}
-        }
-
-        allChatChannels {
           ${CHANNEL_FIELDS}
         }
       }

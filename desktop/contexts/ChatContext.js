@@ -27,7 +27,6 @@ const ChatContextDefaults = {
   closeChannel: async (channelId) => {},
   findChannel: (channelName) => {},
   findChannelForGame: (game) => {},
-  refreshChannelData: () => {},
   markChannelRead: (channelId) => {},
   ...EMPTY_CHAT_STATE,
 };
@@ -46,7 +45,6 @@ class ChatContextManager extends React.Component {
     this.state = {
       ...ChatContextDefaults,
       ...props.value,
-      refreshChannelData: this.refreshChannelData,
       sendMessage: this.sendMessage,
       openChannelWithName: this.openChannelWithName,
       openChannelForUser: this.openChannelForUser,
@@ -120,7 +118,7 @@ class ChatContextManager extends React.Component {
         prevProps && prevProps.navigation ? prevProps.navigation.chatChannelId : null;
       if (prevNavigationMode !== 'chat' || prevChannelId !== this.props.navigation.chatChannelId) {
         // TODO: only refresh the channel messages we care about
-        this.refreshChannelData();
+        this._refreshAllSubscribedChannels();
       }
     }
   };
@@ -411,7 +409,7 @@ class ChatContextManager extends React.Component {
     // fetch channels if we get messages from unknown channels.
     const newChannelIds = Object.keys(unseenChannelIds);
     if (newChannelIds.length) {
-      await this.refreshChannelData();
+      await this._refreshAllSubscribedChannels();
       Object.entries(this.state.channels).forEach(([_, channel]) => {
         if (channel.otherUserId && !this.props.userPresence.userIdToUser[channel.otherUserId]) {
           userIds[channel.otherUserId] = true;
@@ -458,21 +456,12 @@ class ChatContextManager extends React.Component {
     }
   };
 
-  refreshChannelData = async () => {
-    const response = await ChatActions.getAllChat();
+  _refreshAllSubscribedChannels = async () => {
+    const response = await ChatActions.getSubscribedChannels();
     if (response && response.data) {
-      const { subscribedChatChannels, allChatChannels } = response.data;
+      const { subscribedChatChannels } = response.data;
       this.setState((state) => {
         let channels = {};
-        if (allChatChannels) {
-          allChatChannels.forEach((channel) => {
-            const existing = state.channels[channel.channelId] || {};
-            channels[channel.channelId] = {
-              ...existing,
-              ...channel,
-            };
-          });
-        }
         if (subscribedChatChannels) {
           subscribedChatChannels.forEach((channel) => {
             const existing = state.channels[channel.channelId] || {};
