@@ -47,6 +47,10 @@ local function parseResources(code)
     return result
 end
 
+CHUNK_NAME_TO_FILE_NAME = {}
+
+local nextChunkId = 1
+
 local function explicitRequire(path, opts)
     -- Built-in?
     if path ~= 'main' then
@@ -164,9 +168,15 @@ local function explicitRequire(path, opts)
     -- No eval?
     if opts.noEval then return end
 
+    -- Add to chunk name map
+    local chunkId = nextChunkId
+    nextChunkId = nextChunkId + 1
+    local chunkName = '#CH#' .. nextChunkId
+    CHUNK_NAME_TO_FILE_NAME[chunkName] = url:gsub('/?init%.lua$', ''):gsub('(.*)/(.*)', '%2')
+
     -- Parse
     childEnv._G = childEnv -- `_G` is never updated by Lua, we do it ourselves
-    local chunk, err = load(response, path:gsub('(.*)/(.*)', '%2'), 'bt', childEnv)
+    local chunk, err = load(response, chunkName, 'bt', childEnv)
     if chunk == nil then
         error("error parsing '" .. url .. "': " .. err)
     end

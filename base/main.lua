@@ -94,6 +94,11 @@ do
 
     local errors = {}
     function DEFAULT_ERROR_HANDLER(err, stack) -- Referenced in 'network.lua'
+        for chunkName, filename in pairs(CHUNK_NAME_TO_FILE_NAME) do
+            local pattern = '%[string "' .. chunkName .. '"%]'
+            err = err:gsub(pattern, filename)
+            stack = stack:gsub(pattern, filename)
+        end
         oldPrint(stack)
         local obj = { error = err, stacktrace = stack }
         if castle.system.isDesktop() then
