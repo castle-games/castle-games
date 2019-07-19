@@ -25,7 +25,7 @@ const STYLES_SUBDUED = css`
   width: 100%;
   align-items: flex-start;
   justify-content: space-between;
-  padding: 8px 0 8px 0;
+  padding-left: 8px;
 `;
 
 const STYLES_LEFT = css`
