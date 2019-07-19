@@ -45,10 +45,9 @@ const STYLES_TITLE = css`
 `;
 
 const STYLES_META = css`
-  font-family: ${Constants.font.monobold};
+  font-family: ${Constants.font.system};
   margin: 4px 0 4px 0;
   font-size: 12px;
-  text-transform: uppercase;
 `;
 
 const STYLES_ABOUT = css`

@@ -14,7 +14,6 @@ import { UserPresenceContext } from '~/contexts/UserPresenceContext';
 
 import regexMatch from 'react-string-replace';
 import ChatHeader from '~/components/chat/ChatHeader';
-import ChatHeaderActive from '~/components/chat/ChatHeaderActive';
 import ChatMessages from '~/components/chat/ChatMessages';
 import ChatMembers from '~/components/chat/ChatMembers';
 import ChatInput from '~/components/chat/ChatInput';
@@ -39,17 +38,6 @@ const STYLES_CONTAINER = css`
   ${STYLES_CONTAINER_BASE};
   transform: translateX(0px);
   opacity: 1;
-`;
-
-const STYLES_CONTAINER_LEAVING = css`
-  ${STYLES_CONTAINER_BASE};
-  opacity: 0;
-  transform: translateX(24px);
-`;
-
-const STYLES_CONTAINER_ENTERING = css`
-  ${STYLES_CONTAINER_BASE};
-  opacity: 0;
 `;
 
 class ChatScreen extends React.Component {
@@ -91,12 +79,16 @@ class ChatScreen extends React.Component {
     this._timeout = null;
   };
 
-  _handleSelectChannelName = () => {
-    const channel = this.props.chat.channels[this.props.channelId];
-    if (channel.type === 'dm') {
-      const user = this.props.userPresence.userIdToUser[channel.otherUserId];
-      if (user) {
-        this.props.navigator.navigateToUserProfile(user);
+  _handleClickChannelName = () => {
+    if (this.state.mode !== 'MESSAGES') {
+      this.setState({ mode: 'MESSAGES' });
+    } else {
+      const channel = this.props.chat.channels[this.props.channelId];
+      if (channel.type === 'dm') {
+        const user = this.props.userPresence.userIdToUser[channel.otherUserId];
+        if (user) {
+          this.props.navigator.navigateToUserProfile(user);
+        }
       }
     }
   };
@@ -105,8 +97,6 @@ class ChatScreen extends React.Component {
     this.props.chat.closeChannel(this.props.channelId);
     this.props.navigator.navigateToHome();
   };
-
-  _handleResetChatWindow = () => this.setState({ mode: 'MESSAGES' });
 
   _handleShowSingleChannelMembers = () => this.setState({ mode: 'MEMBERS' });
 
@@ -199,18 +189,35 @@ class ChatScreen extends React.Component {
     }
   };
 
-  render() {
-    const { mode } = this.state;
+  _renderContent = (channel, mode) => {
     const { userPresence } = this.props;
 
-    let className = STYLES_CONTAINER;
-    if (this.props.chat.animating === 3) {
-      className = STYLES_CONTAINER_LEAVING;
+    switch (mode) {
+      case 'MEMBERS':
+        return <ChatMembers userIds={channel.subscribedUsers.map((user) => user.userId)} />;
+      default:
+        return (
+          <React.Fragment>
+            <ChatMessages
+              messages={channel.messages}
+              navigator={this.props.navigator}
+              userIdToUser={userPresence.userIdToUser}
+            />
+            <ChatInput
+              value={this.state.value}
+              name="value"
+              autocomplete={this.state.autocomplete}
+              placeholder="Type a message"
+              onChange={this._handleChange}
+              onKeyDown={this._handleKeyDown}
+              onForceChange={this._handleForceChange}
+            />
+          </React.Fragment>
+        );
     }
-
-    if (this.props.chat.animating === 1) {
-      className = STYLES_CONTAINER_ENTERING;
-    }
+  };
+  render() {
+    const { mode } = this.state;
 
     if (!this.props.channelId) {
       return null;
@@ -226,41 +233,19 @@ class ChatScreen extends React.Component {
       // don't show online counts for a 2 person dm thread
       numChannelMembers = this.props.chat.channelOnlineCounts[this.props.channelId];
     }
-    if (mode === 'MEMBERS') {
-      return (
-        <div className={className}>
-          <ChatHeaderActive onDismiss={this._handleResetChatWindow}>
-            Online Channel Members
-          </ChatHeaderActive>
-          <ChatMembers userIds={channel.subscribedUsers.map((user) => user.userId)} />
-        </div>
-      );
-    }
 
     return (
-      <div className={className}>
+      <div className={STYLES_CONTAINER}>
         <ChatHeader
           channel={channel}
+          mode={mode}
           numChannelMembers={numChannelMembers}
           onSelectGame={this.props.navigator.navigateToGame}
-          onSelectChannelName={this._handleSelectChannelName}
           onLeaveChannel={onLeaveChannel}
           onMembersClick={this._handleShowSingleChannelMembers}
+          onChannelClick={this._handleClickChannelName}
         />
-        <ChatMessages
-          messages={channel.messages}
-          navigator={this.props.navigator}
-          userIdToUser={userPresence.userIdToUser}
-        />
-        <ChatInput
-          value={this.state.value}
-          name="value"
-          autocomplete={this.state.autocomplete}
-          placeholder="Type a message"
-          onChange={this._handleChange}
-          onKeyDown={this._handleKeyDown}
-          onForceChange={this._handleForceChange}
-        />
+        {this._renderContent(channel, mode)}
       </div>
     );
   }

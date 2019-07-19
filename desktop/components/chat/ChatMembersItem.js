@@ -27,18 +27,16 @@ const STYLES_NAME = css`
   font-size: 14px;
   font-weight: 600;
   margin: 4px 0;
-  cursor: pointer;
-`;
 
-const STYLES_DESCRIPTION = css`
-  margin-top: 4px;
-  font-size: 14px;
+  span {
+    cursor: pointer;
+  }
 `;
 
 const STYLES_USER_STATUS = css`
   font-family: ${Constants.REFACTOR_FONTS.system}:
   line-height: 20px;
-  font-size: 14px;
+  font-size: 12px;
 `;
 
 export default ({ user, isOnline, navigateToGameUrl, navigateToUserProfile }) => {
@@ -53,9 +51,10 @@ export default ({ user, isOnline, navigateToGameUrl, navigateToUserProfile }) =>
       <div className={STYLES_INFO}>
         <h2
           className={STYLES_NAME}
-          onClick={user ? () => navigateToUserProfile(user) : null}
           style={{ color: isOnline ? null : Constants.REFACTOR_COLORS.subdued }}>
-          {user && user.username ? user.username : 'Loading...'}
+          <span onClick={user ? () => navigateToUserProfile(user) : null}>
+            {user && user.username ? user.username : 'Loading...'}
+          </span>
         </h2>
         <div className={STYLES_USER_STATUS}>
           {user ? <UIUserStatus user={user} navigateToGameUrl={navigateToGameUrl} /> : null}

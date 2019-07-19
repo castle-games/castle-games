@@ -41,14 +41,8 @@ const STYLES_HEADER_RIGHT = css`
 const STYLES_H2 = css`
   font-size: 16px;
   transition: 200ms ease color;
-  cursor: pointer;
   display: flex;
   align-items: center;
-
-  :hover {
-    color: magenta;
-  }
-
   height: 32px;
 `;
 
@@ -96,6 +90,15 @@ const STYLES_LINK = css`
   text-decoration: underline;
 `;
 
+const STYLES_CHANNEL_NAME = css`
+  margin-left: 6px;
+  cursor: pointer;
+
+  :hover {
+    color: magenta;
+  }
+`;
+
 export default class ChatHeader extends React.Component {
   state = {
     game: null,
@@ -121,6 +124,42 @@ export default class ChatHeader extends React.Component {
         } catch (_) {}
       }
     }
+  };
+
+  _renderTitle = () => {
+    const { channel, mode, onChannelClick } = this.props;
+    let content;
+    let hashtag = <SVG.HashTag size="12px" />;
+    switch (mode) {
+      case 'MEMBERS':
+        content = (
+          <React.Fragment>
+            Online members of{' '}
+            <span className={STYLES_CHANNEL_NAME} onClick={onChannelClick}>
+              {hashtag}
+              {channel.name}
+            </span>
+          </React.Fragment>
+        );
+        break;
+      default:
+        if (channel.type === 'dm') {
+          content = (
+            <span className={STYLES_CHANNEL_NAME} onClick={onChannelClick}>
+              {channel.name}
+            </span>
+          );
+        } else {
+          content = (
+            <span className={STYLES_CHANNEL_NAME} onClick={onChannelClick}>
+              {hashtag}
+              {channel.name}
+            </span>
+          );
+        }
+        break;
+    }
+    return <h2 className={STYLES_H2}>{content}</h2>;
   };
 
   _getHeading = () => {
@@ -166,20 +205,33 @@ export default class ChatHeader extends React.Component {
     }
   };
 
-  _maybeRenderMembers = (numChannelMembers) => {
-    if (numChannelMembers) {
-      return (
-        <span className={STYLES_ONLINE} onClick={this.props.onMembersClick}>
-          <strong>{numChannelMembers} online</strong>
-          <span>&middot;</span>
-        </span>
-      );
+  _renderActions = () => {
+    const { mode, numChannelMembers } = this.props;
+    switch (mode) {
+      case 'MEMBERS':
+        return (
+          <span className={STYLES_ONLINE} onClick={this.props.onChannelClick}>
+            <strong>Return to chat</strong>
+            <span>&middot;</span>
+          </span>
+        );
+      case 'MESSAGES':
+      default:
+        if (numChannelMembers) {
+          return (
+            <span className={STYLES_ONLINE} onClick={this.props.onMembersClick}>
+              <strong>{numChannelMembers} online</strong>
+              <span>&middot;</span>
+            </span>
+          );
+        } else {
+          return null;
+        }
     }
-    return null;
   };
 
   render() {
-    const { channel, onLeaveChannel, numChannelMembers } = this.props;
+    const { mode, channel, onLeaveChannel } = this.props;
     if (!channel) {
       return null;
     }
@@ -196,12 +248,9 @@ export default class ChatHeader extends React.Component {
     return (
       <header className={STYLES_HEADER}>
         <div className={STYLES_HEADER_LEFT}>
-          <h2 className={STYLES_H2} onClick={this.props.onSelectChannelName}>
-            {channel.type !== 'dm' ? <SVG.HashTag size="12px" /> : null}
-            {channel.name}
-          </h2>
+          {this._renderTitle()}
           <p className={STYLES_P}>
-            {this._maybeRenderMembers(numChannelMembers)}
+            {this._renderActions()}
             <span>{this._getHeading()}</span>
           </p>
         </div>

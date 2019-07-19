@@ -8,7 +8,6 @@ import UserStatus from '~/common/userstatus';
 
 const STYLES_STATUS_LINK = css`
   color: ${Constants.colors.action};
-  word-spacing: -0.1rem;
   text-decoration: underline;
   cursor: pointer;
 `;
