@@ -216,11 +216,14 @@ class ChatScreen extends React.Component {
     }
 
     const channel = this.props.chat.channels[this.props.channelId];
-    const numChannelMembers = this.props.chat.channelOnlineCounts[this.props.channelId];
-    let onLeaveChannel;
+    let onLeaveChannel, numChannelMembers;
     if (!(channel.name === 'lobby' && channel.type === 'public')) {
       // caint leave the lobby
       onLeaveChannel = this._handleLeaveChannel;
+    }
+    if (channel.type !== 'dm') {
+      // don't show online counts for a 2 person dm thread
+      numChannelMembers = this.props.chat.channelOnlineCounts[this.props.channelId];
     }
     if (mode === 'MEMBERS') {
       return (
