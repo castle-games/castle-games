@@ -91,9 +91,6 @@ document.body.appendChild(loader);
 
 const INITIAL_STATE_OFFLINE = {
   trendingGames: [],
-  gamesUnderConstruction: [],
-  newestGames: [],
-  randomGames: [],
   featuredExamples: [],
   isOffline: true,
 };
@@ -104,18 +101,7 @@ const run = async () => {
   Analytics.trackCastleLaunch();
 
   ReactDOM.render(<GLLoaderScreen />, document.getElementById('loader'));
-  const {
-    trendingGames,
-    gamesUnderConstruction,
-    newestGames,
-    randomGames,
-    featuredExamples,
-    viewer,
-    isOffline,
-    recentChatMessages,
-    subscribedChatChannels,
-    allChatChannels,
-  } = await Network.getProductData();
+  const { trendingGames, featuredExamples, viewer, isOffline } = await Network.getProductData();
 
   // if the user was automatically logged in when starting Castle, track that
   if (viewer) {
@@ -124,14 +110,8 @@ const run = async () => {
 
   let state = Object.assign({}, INITIAL_STATE_OFFLINE, {
     trendingGames,
-    gamesUnderConstruction,
-    newestGames,
-    randomGames,
     featuredExamples,
     isOffline,
-    recentChatMessages,
-    subscribedChatChannels,
-    allChatChannels,
   });
 
   const notifications = await Actions.getNotificationPreferences();

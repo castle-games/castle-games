@@ -105,9 +105,6 @@ class ContentContainer extends React.Component {
       return (
         <GamesHomeScreen
           trendingGames={this.props.trendingGames}
-          gamesUnderConstruction={this.props.gamesUnderConstruction}
-          newestGames={this.props.newestGames}
-          randomGames={this.props.randomGames}
           featuredExamples={this.props.featuredExamples}
           viewer={this.props.viewer}
           mode={mode}

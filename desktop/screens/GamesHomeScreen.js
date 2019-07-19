@@ -54,9 +54,6 @@ class GamesHomeScreen extends React.Component {
     reloadPosts: () => {},
     loadMorePosts: () => {},
     trendingGames: [],
-    gamesUnderConstruction: [],
-    newestGames: [],
-    randomGames: [],
   };
 
   state = {

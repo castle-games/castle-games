@@ -453,50 +453,9 @@ export async function getInitialData() {
         ${NESTED_GAME_OWNER}
       }
 
-      gamesUnderConstruction {
-        ${GAME_FIELDS}
-        ${NESTED_GAME_OWNER}
-      }
-
-      newestGames {
-        ${GAME_FIELDS}
-        ${NESTED_GAME_OWNER}
-      }
-
-      randomGames {
-        ${GAME_FIELDS}
-        ${NESTED_GAME_OWNER}
-      }
-
       featuredExamples {
         ${GAME_FIELDS}
         ${NESTED_GAME_OWNER}
-      }
-
-      recentChatMessages {
-        chatMessageId
-        channelId
-        fromUserId
-        body
-        createdTime
-      }
-
-      subscribedChatChannels {
-        channelId
-        name
-        type
-        createdTime
-        updatedTime
-        otherUserId
-      }
-
-      allChatChannels {
-        channelId
-        name
-        type
-        createdTime
-        updatedTime
-        otherUserId
       }
     }
   `);
