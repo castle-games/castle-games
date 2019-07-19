@@ -75,6 +75,7 @@ const GAME_FIELDS = `
     height
     width
   }
+  draft
   storageId
 `;
 
