@@ -10,24 +10,32 @@ const STYLES_CONTAINER = css`
 
 export default class SidebarNavigation extends React.Component {
   render() {
+    const { lobbyChannel, contentMode, chatChannelId } = this.props;
+
     return (
       <div className={STYLES_CONTAINER}>
         <SidebarNavigationItem
-          data={{
-            name: 'Play',
-            svg: 'home',
-            onClick: this.props.onNavigateToGames,
-            active: this.props.contentMode === 'home',
-          }}
+          name="Play"
+          svg="home"
+          onClick={this.props.onNavigateToGames}
+          active={contentMode === 'home'}
         />
         <SidebarNavigationItem
-          data={{
-            name: 'Create',
-            svg: 'make',
-            onClick: this.props.onNavigateToMakeGame,
-            active: this.props.contentMode === 'create',
-          }}
+          name="Create"
+          svg="make"
+          onClick={this.props.onNavigateToMakeGame}
+          active={contentMode === 'create'}
         />
+        {lobbyChannel ? (
+          <SidebarNavigationItem
+            name="Chat"
+            svg="chat"
+            onClick={() => this.props.onNavigateToChat(lobbyChannel)}
+            active={contentMode === 'chat' && chatChannelId === lobbyChannel.channelId}
+            hasUnreadMessages={lobbyChannel.hasUnreadMessages}
+            unreadNotificationCount={lobbyChannel.unreadNotificationCount}
+          />
+        ) : null}
       </div>
     );
   }

@@ -30,7 +30,7 @@ const STYLES_CONTAINER = css`
   align-items: flex-start;
   justify-content: space-between;
   flex-direction: column;
-  width: 196px;
+  width: 212px;
   min-width: 10%;
   height: 100vh;
   flex-shrink: 0;
@@ -139,22 +139,22 @@ class Sidebar extends React.Component {
       return <div className={STYLES_SIDEBAR}>{header}</div>;
     }
 
+    let lobbyChannel;
+    try {
+      lobbyChannel = chat.findChannel('lobby');
+    } catch (_) {}
+
     return (
       <div className={STYLES_SIDEBAR}>
         {this._renderUpdateBanner()}
         {header}
         <SidebarNavigation
           contentMode={contentMode}
+          chatChannelId={chatChannelId}
+          lobbyChannel={lobbyChannel}
           onNavigateToMakeGame={this._handleNavigateToMakeGame}
           onNavigateToGames={this._handleNavigateToGames}
-        />
-        <SidebarChannels
-          selectedChannelId={chatChannelId}
-          title="Chat"
-          isChatVisible={isChatVisible}
-          channels={chat.channels}
-          filterChannel={(channel) => channel.isSubscribed && channel.name === 'lobby'}
-          onSelectChannel={this._handleNavigateToChat}
+          onNavigateToChat={this._handleNavigateToChat}
         />
         <SidebarProjects
           title="Recently Created"
