@@ -17,19 +17,11 @@ const STYLES_PROJECT = css`
   font-size: 14px;
   transition: 200ms ease color;
   cursor: pointer;
+  color: ${Constants.REFACTOR_COLORS.text};
 
   :hover {
     color: magenta;
   }
-`;
-
-const STYLES_PATH = css`
-  cursor: default;
-  font-size: 12px;
-  color: ${Constants.REFACTOR_COLORS.subdued};
-  padding-left: 24px;
-  overflow: hidden;
-  text-overflow: ellipsis;
 `;
 
 const STYLES_NOTIFICATION = css`
@@ -54,6 +46,9 @@ const STYLES_NAME = css`
   width: 100%;
   padding: 0 8px 0 8px;
   line-height: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const STYLES_SYMBOL = css`
@@ -76,7 +71,14 @@ export default (props) => {
     fontWeight = '700';
     unreadCount = project.unreadNotificationCount;
   }
-  let name = project.name ? project.name : 'Untitled';
+  let name;
+  if (project.name) {
+    name = project.name;
+  } else if (project.url) {
+    name = truncatePath(project.url, 23);
+  } else {
+    name = 'Untitled';
+  }
 
   return (
     <div className={STYLES_CONTAINER}>
@@ -92,7 +94,6 @@ export default (props) => {
         </span>
         {unreadCount ? <span className={STYLES_NOTIFICATION}>{unreadCount}</span> : null}
       </div>
-      <div className={STYLES_PATH}>{truncatePath(project.url, 26)}</div>
     </div>
   );
 };

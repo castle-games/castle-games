@@ -35,7 +35,7 @@ const STYLES_NAME = css`
   min-width: 10%;
   width: 100%;
   cursor: pointer;
-  padding: 0 10px 0 10px;
+  padding: 0 10px 3px 10px;
 `;
 
 const STYLES_SYMBOL = css`

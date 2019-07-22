@@ -14,6 +14,7 @@ const STYLES_CHANNEL = css`
   padding: 0 16px 0 16px;
   cursor: pointer;
   transition: 200ms ease color;
+  color: ${Constants.REFACTOR_COLORS.text};
 
   :hover {
     color: magenta;

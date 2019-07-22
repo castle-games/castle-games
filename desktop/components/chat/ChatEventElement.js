@@ -135,6 +135,7 @@ export default class ChatEventElement extends React.Component {
       case 'game-session':
         return <NoticeMessage {...this.props} />;
       case 'joined-castle':
+      case 'closed-game-session':
       default:
         return <SubduedMessage {...this.props} />;
     }
