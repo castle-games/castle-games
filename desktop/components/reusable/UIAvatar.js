@@ -18,7 +18,6 @@ const STYLES_AVATAR = css`
   flex-shrink: 0;
   background-size: cover;
   background-position: 50% 50%;
-  background-color: magenta;
   height: 20px;
   width: 20px;
   position: relative;
