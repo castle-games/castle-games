@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as ChatUtilities from '~/common/chat-utilities';
 import * as Constants from '~/common/constants';
-import * as SVG from '~/common/svg';
+import * as SVG from '~/components/primitives/svg';
 import * as ChatActions from '~/common/actions-chat';
 import * as Strings from '~/common/strings';
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
-import * as SVG from '~/common/svg';
+import * as SVG from '~/components/primitives/svg';
 
 import { css } from 'react-emotion';
 

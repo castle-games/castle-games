@@ -5,7 +5,7 @@ import * as NativeUtil from '~/native/nativeutil';
 import * as Strings from '~/common/strings';
 import * as Project from '~/common/project';
 import * as Utilities from '~/common/utilities';
-import * as SVG from '~/common/svg';
+import * as SVG from '~/components/primitives/svg';
 
 import { css } from 'react-emotion';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';

@@ -3,7 +3,7 @@ import * as Constants from '~/common/constants';
 import * as ChatActions from '~/common/actions-chat';
 import * as ChatUtilities from '~/common/chat-utilities';
 import * as NativeUtil from '~/native/nativeutil';
-import * as SVG from '~/common/svg';
+import * as SVG from '~/components/primitives/svg';
 import * as Strings from '~/common/strings';
 
 import { css } from 'react-emotion';
