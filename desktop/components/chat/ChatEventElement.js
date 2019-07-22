@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as Strings from '~/common/strings';
 import * as Constants from '~/common/constants';
 
 import { css, styled } from 'react-emotion';
@@ -10,7 +11,7 @@ const STYLES_CONTAINER = css`
   font-family: ${Constants.REFACTOR_FONTS.system};
   flex-shrink: 0;
   width: 100%;
-  padding: 16px 16px 0 16px;
+  padding: 12px 16px 0 16px;
 `;
 
 const STYLES_NOTICE = css`
