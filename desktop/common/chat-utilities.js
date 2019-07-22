@@ -3,6 +3,7 @@ import * as ChatActions from '~/common/actions-chat';
 
 import { isEmoji, emojiToString } from '~/common/emojis';
 
+export const EVERYONE_CHANNEL_NAME = 'lobby';
 export const ADMIN_USER_ID = -1;
 
 const CHANNEL_TYPE_SORT = {

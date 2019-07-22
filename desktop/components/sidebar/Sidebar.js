@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as Actions from '~/common/actions';
+import * as ChatUtilities from '~/common/chat-utilities';
 import * as Constants from '~/common/constants';
 import * as Strings from '~/common/strings';
 import * as SVG from '~/common/svg';
@@ -141,7 +142,7 @@ class Sidebar extends React.Component {
 
     let lobbyChannel;
     try {
-      lobbyChannel = chat.findChannel('lobby');
+      lobbyChannel = chat.findChannel(ChatUtilities.EVERYONE_CHANNEL_NAME);
     } catch (_) {}
 
     return (

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as Actions from '~/common/actions';
+import * as ChatUtilities from '~/common/chat-utilities';
 import * as Constants from '~/common/constants';
 import * as Strings from '~/common/strings';
 import * as SVG from '~/common/svg';
@@ -182,7 +183,7 @@ export default class ChatHeader extends React.Component {
       case 'dm':
         return `You are having a private conversation with ${channel.name}.`;
       default:
-        if (channel.name === 'lobby') {
+        if (channel.name === ChatUtilities.EVERYONE_CHANNEL_NAME) {
           return 'You are chatting with everyone on Castle';
         }
         break;

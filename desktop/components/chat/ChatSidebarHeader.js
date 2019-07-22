@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
+import * as ChatUtilities from '~/common/chat-utilities';
 import * as Strings from '~/common/strings';
 import * as SVG from '~/common/svg';
 
@@ -94,7 +95,7 @@ export default class ChatSidebarHeader extends React.Component {
           ...selectedStyles,
         }}
         onClick={onClick}>
-        #lobby
+        #{ChatUtilities.EVERYONE_CHANNEL_NAME}
       </UINavigationLink>
     );
   };

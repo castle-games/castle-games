@@ -1,11 +1,12 @@
 import * as React from 'react';
-import * as SVG from '~/common/svg';
-import * as Strings from '~/common/strings';
+import * as Actions from '~/common/actions';
+import * as ChatUtilities from '~/common/chat-utilities';
 import * as Constants from '~/common/constants';
+import * as ChatActions from '~/common/actions-chat';
 import * as Emojis from '~/common/emojis';
 import * as NativeUtil from '~/native/nativeutil';
-import * as Actions from '~/common/actions';
-import * as ChatActions from '~/common/actions-chat';
+import * as SVG from '~/common/svg';
+import * as Strings from '~/common/strings';
 
 import { css } from 'react-emotion';
 import { NavigatorContext, NavigationContext } from '~/contexts/NavigationContext';
@@ -225,7 +226,7 @@ class ChatScreen extends React.Component {
 
     const channel = this.props.chat.channels[this.props.channelId];
     let onLeaveChannel, numChannelMembers;
-    if (!(channel.name === 'lobby' && channel.type === 'public')) {
+    if (!(channel.name === ChatUtilities.EVERYONE_CHANNEL_NAME && channel.type === 'public')) {
       // caint leave the lobby
       onLeaveChannel = this._handleLeaveChannel;
     }

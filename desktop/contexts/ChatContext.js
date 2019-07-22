@@ -588,7 +588,7 @@ class ChatContextManager extends React.Component {
     if (event.params.game) {
       result = this.findChannelForGame(event.params.game);
     } else {
-      result = this.findChannel('lobby');
+      result = this.findChannel(ChatUtilities.EVERYONE_CHANNEL_NAME);
     }
     if (result) {
       this.setState(async (state) => {

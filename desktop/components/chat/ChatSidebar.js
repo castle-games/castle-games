@@ -1,9 +1,10 @@
 import * as React from 'react';
+import * as Constants from '~/common/constants';
+import * as ChatActions from '~/common/actions-chat';
+import * as ChatUtilities from '~/common/chat-utilities';
+import * as NativeUtil from '~/native/nativeutil';
 import * as SVG from '~/common/svg';
 import * as Strings from '~/common/strings';
-import * as Constants from '~/common/constants';
-import * as NativeUtil from '~/native/nativeutil';
-import * as ChatActions from '~/common/actions-chat';
 
 import { css } from 'react-emotion';
 
@@ -170,7 +171,7 @@ export default class ChatSidebarWithContext extends React.Component {
                   <NavigationContext.Consumer>
                     {(navigation) => {
                       const gameChannel = chat.findChannelForGame(navigation.game);
-                      const lobbyChannel = chat.findChannel('lobby');
+                      const lobbyChannel = chat.findChannel(ChatUtilities.EVERYONE_CHANNEL_NAME);
                       return (
                         <NavigatorContext.Consumer>
                           {(navigator) => (
