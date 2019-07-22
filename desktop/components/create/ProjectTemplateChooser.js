@@ -7,7 +7,6 @@ import { css } from 'react-emotion';
 const STYLES_CONTAINER = css`
   display: flex;
   flex-wrap: wrap;
-  padding-right: 8px;
 
   figure {
     border-radius: ${Constants.card.radius};
