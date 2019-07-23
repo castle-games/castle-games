@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
+import * as NativeUtil from '~/native/nativeutil';
 import * as Urls from '~/common/urls';
 import * as Utilities from '~/common/utilities';
 
@@ -9,6 +10,8 @@ import { DevelopmentContext } from '~/contexts/DevelopmentContext';
 import DevelopmentLogs from '~/components/game/DevelopmentLogs';
 import DevelopmentCpuMonitor from '~/components/game/DevelopmentCpuMonitor';
 import UINavigationLink from '~/components/reusable/UINavigationLink';
+
+const path = Utilities.path();
 
 const STYLES_CONTAINER = css`
   border-top: 1px solid ${Constants.colors.background4};
@@ -58,7 +61,7 @@ const STYLES_GAME_URL = css`
   font-size: ${Constants.typescale.lvl7};
   color: rgba(200, 200, 200, 1);
   text-decoration: underline;
-  cursor: default;
+  cursor: pointer;
   margin-bottom: 24px;
   word-break: break-word;
 `;
@@ -91,6 +94,14 @@ export default class DevelopmentConsole extends React.Component {
       );
     }
     return null;
+  };
+
+  _handleOpenGamePath = () => {
+    const { game } = this.props;
+    if (Urls.isPrivateUrl(game.url)) {
+      const gamePath = path.dirname(game.url);
+      NativeUtil.openExternalURL(gamePath);
+    }
   };
 
   _renderBottomActions = () => {
@@ -129,7 +140,9 @@ export default class DevelopmentConsole extends React.Component {
         <div className={STYLES_GAME_CONTROLS}>
           <div className={STYLES_CONTROLS_TOP}>
             <div className={STYLES_LABEL_ACTION}>Project Url</div>
-            <div className={STYLES_GAME_URL}>{game.url}</div>
+            <div className={STYLES_GAME_URL} onClick={this._handleOpenGamePath}>
+              {game.url}
+            </div>
             {this._renderMultiplayerUploadStatus()}
           </div>
           {this._renderBottomActions()}
