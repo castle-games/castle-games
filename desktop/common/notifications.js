@@ -59,12 +59,11 @@ export const chatMessageHasNotification = (m, viewer, channel, type = Notificati
   if (m.body && m.body.message && String(m.fromUserId) !== String(viewer.userId)) {
     if (type === NotificationType.DESKTOP && notificationLevel === NotificationLevel.EVERY) {
       messageHasNotification = true;
-    } else if (channel.type === 'dm') {
-      messageHasNotification = true;
-    } else if (type === NotificationType.BADGE || notificationLevel === NotificationLevel.TAG) {
-      messageHasNotification = m.body.message.some(
-        (component) => component.userId && component.userId === viewer.userId
-      );
+    } else {
+      messageHasNotification =
+        m.body.notifications &&
+        m.body.notifications.userIds &&
+        m.body.notifications.userIds.some((id) => String(id) === viewer.userId);
     }
   }
   return messageHasNotification;
