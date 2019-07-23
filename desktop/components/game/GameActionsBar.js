@@ -138,11 +138,14 @@ export default class GameActionsBar extends React.Component {
       </span>
     );
 
-    let maybePostScreenshotElement = (
-      <UINavigationLink style={{ marginRight: 24 }} onClick={this._handlePostScreenshot}>
-        Screenshot
-      </UINavigationLink>
-    );
+    let maybePostScreenshotElement;
+    if (game.gameId) {
+      maybePostScreenshotElement = (
+        <UINavigationLink style={{ marginRight: 24 }} onClick={this._handlePostScreenshot}>
+          Screenshot
+        </UINavigationLink>
+      );
+    }
 
     return (
       <div className={STYLES_CONTAINER}>
