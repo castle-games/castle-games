@@ -6,8 +6,19 @@ import * as Strings from '~/common/strings';
 import ChatInput from '~/components/chat/ChatInput';
 import regexMatch from 'react-string-replace';
 
+const ENABLE_MESSAGE_EDITS = false;
+
+const Keys = {
+  TAB: 9,
+  ENTER: 13,
+  ESCAPE: 27,
+  UP: 38,
+  DOWN: 40,
+};
+
 export default class ChatInputControl extends React.Component {
   _timeout;
+  _inputRef;
 
   state = {
     index: 0,
@@ -15,11 +26,30 @@ export default class ChatInputControl extends React.Component {
     autocomplete: {
       type: null,
     },
+    isEditAvailable: false,
   };
+
+  componentDidMount() {
+    this._update(null, this.props);
+  }
+
+  componentDidUpdate(prevProps) {
+    this._update(prevProps, this.props);
+  }
 
   componentWillUnmount() {
     this.clear();
   }
+
+  _update = (prevProps, props) => {
+    if (props.initialValue && props.initialValue !== prevProps.initialValue) {
+      this.setState({ value: props.initialValue }, () => {
+        if (this._inputRef) {
+          this._inputRef.focus();
+        }
+      });
+    }
+  };
 
   clear = () => {
     window.clearTimeout(this._timeout);
@@ -144,34 +174,44 @@ export default class ChatInputControl extends React.Component {
   };
 
   _handleKeyDown = (e) => {
-    // NOTE(jim): Prevent default up and down for multiline textarea
-    if (this.state.autocomplete.type && (e.which === 38 || e.which === 40)) {
-      e.preventDefault();
-      return;
+    let isEventHandled = false;
+    if (e.which === Keys.ESCAPE) {
+      if (this.state.autocomplete.type) {
+        // close autocomplete
+        this.setState({ autocomplete: { type: null } });
+        isEventHandled = true;
+      } else if (this.props.isEditing) {
+        this.props.onEditCancel();
+        isEventHandled = true;
+      }
     }
-
-    // NOTE(jim): Prevent default return response when a user is navigating the popover.
-    if (this.state.autocomplete.type && e.which === 13) {
-      e.preventDefault();
+    if (this.state.autocomplete.type && (e.which === Keys.UP || e.which === Keys.DOWN)) {
+      // NOTE(jim): Prevent default up and down for multiline textarea
+      isEventHandled = true;
+    } else if (
+      this.state.index > -1 &&
+      this.state.autocomplete.type &&
+      (e.which === Keys.TAB || e.which === Keys.ENTER)
+    ) {
+      // NOTE(jim): Prevent default return response when a user is navigating the popover.
+      isEventHandled = true;
       this._handleSelectAutocompleteFromKey();
-      return;
-    }
-
-    // NOTE(jim): Prevent default return response when a user is navigating the popover.
-    if (this.state.index > -1 && this.state.autocomplete.type && e.which === 9) {
-      e.preventDefault();
-      this._handleSelectAutocompleteFromKey();
-      return;
-    }
-
-    if (e.which === 13 && !e.shiftKey) {
-      e.preventDefault();
-
+    } else if (ENABLE_MESSAGE_EDITS && e.which === Keys.UP && this.props.isEditAvailable) {
+      // up arrow edits last message
+      isEventHandled = true;
+      this.props.onSelectEdit();
+    } else if (e.which === Keys.ENTER && !e.shiftKey) {
+      // enter sends message
+      isEventHandled = true;
       if (!Strings.isEmpty(this.state.value.trim())) {
         this.props.onSendMessage(this.state.value);
         this.clear();
         this._handleSelectValue('');
       }
+    }
+
+    if (isEventHandled) {
+      e.preventDefault();
     }
   };
 
@@ -179,7 +219,7 @@ export default class ChatInputControl extends React.Component {
     const { index, autocomplete } = this.state;
 
     const length = this._getAutocompleteLength();
-    if (e.which === 38) {
+    if (e.which === Keys.UP) {
       e.preventDefault();
       this.setState({
         index: index < length - 1 ? index + 1 : length - 1,
@@ -187,7 +227,7 @@ export default class ChatInputControl extends React.Component {
       return;
     }
 
-    if (e.which === 40) {
+    if (e.which === Keys.DOWN) {
       e.preventDefault();
       this.setState({ index: index > -1 ? index - 1 : -1 });
       return;
@@ -208,6 +248,7 @@ export default class ChatInputControl extends React.Component {
   render() {
     return (
       <ChatInput
+        ref={(c) => (this._inputRef = c)}
         {...this.props}
         value={this.state.value}
         index={this.state.index}

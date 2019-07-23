@@ -8,6 +8,7 @@ import * as URLS from '~/common/urls';
 
 import { css } from 'react-emotion';
 
+import ChatMessageEditElement from '~/components/chat/ChatMessageEditElement';
 import ChatMessageElement from '~/components/chat/ChatMessageElement';
 import ChatMessageElementSameUser from '~/components/chat/ChatMessageElementSameUser';
 import ChatEventElement from '~/components/chat/ChatEventElement';
@@ -52,6 +53,7 @@ export default class ChatMessages extends React.Component {
     theme: {
       textColor: Constants.REFACTOR_COLORS.text,
     },
+    messageIdToEdit: null,
   };
 
   _container;
@@ -96,7 +98,8 @@ export default class ChatMessages extends React.Component {
   };
 
   _renderMessage = (m, previousMessage, i) => {
-    const { navigator, userIdToUser, theme } = this.props;
+    const { navigator, userIdToUser, theme, messageIdToEdit } = this.props;
+
     if (m.fromUserId == ChatUtilities.ADMIN_USER_ID) {
       return <ChatEventElement key={`chat-event-${i}`} message={m} theme={theme} />;
     }
@@ -104,6 +107,21 @@ export default class ChatMessages extends React.Component {
     const user = userIdToUser[m.fromUserId];
     const slashCommand = ChatUtilities.getSlashCommand(m.body);
     const isEmojiMessage = ChatUtilities.isEmojiBody(m.body);
+
+    if (messageIdToEdit && m.chatMessageId === messageIdToEdit) {
+      return (
+        <ChatMessageEditElement
+          key={`chat-${m.fromUserId}-${m.chatMessageId}-${i}`}
+          message={m}
+          user={user}
+          theme={theme}
+          size={this.props.size}
+          onSendMessageEdit={this.props.onSendMessageEdit}
+          onEditCancel={this.props.onEditCancel}
+        />
+      );
+    }
+
     if (slashCommand.isCommand && slashCommand.command === 'me') {
       return (
         <ChatRolePlayElement

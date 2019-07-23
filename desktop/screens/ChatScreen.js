@@ -5,6 +5,7 @@ import * as Constants from '~/common/constants';
 import * as NativeUtil from '~/native/nativeutil';
 
 import { css } from 'react-emotion';
+import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigatorContext, NavigationContext } from '~/contexts/NavigationContext';
 import { ChatContext } from '~/contexts/ChatContext';
 import { UserPresenceContext } from '~/contexts/UserPresenceContext';
@@ -37,6 +38,7 @@ const STYLES_CONTAINER = css`
 class ChatScreen extends React.Component {
   state = {
     mode: 'MESSAGES',
+    messageIdToEdit: null,
   };
 
   constructor(props) {
@@ -54,7 +56,7 @@ class ChatScreen extends React.Component {
       chat.markChannelRead(channelId);
     }
     if (prevProps && prevProps.channelId !== channelId) {
-      this.setState({ mode: 'MESSAGES' });
+      this.setState({ mode: 'MESSAGES', messageIdToEdit: null });
     }
   };
 
@@ -83,6 +85,44 @@ class ChatScreen extends React.Component {
     this.props.chat.sendMessage(this.props.channelId, message);
   };
 
+  _handleSendMessageEdit = (chatMessageId, message) => {
+    const { messageIdToEdit } = this.state;
+    if (messageIdToEdit && chatMessageId === messageIdToEdit) {
+      // TODO: actually send this message to chat context
+      this.setState({ messageIdToEdit: null });
+    }
+  };
+
+  _handleEditCancel = () => {
+    this.setState({ messageIdToEdit: null });
+  };
+
+  _isEditAvailable = () => {
+    const { messageIdToEdit } = this.state;
+    const { chat, channelId, viewer } = this.props;
+    const channel = chat.channels[channelId];
+    return (
+      !messageIdToEdit &&
+      viewer &&
+      channel.messages &&
+      channel.messages.some((message) => message.fromUserId === viewer.userId)
+    );
+  };
+
+  _handleSelectEdit = () => {
+    const { chat, channelId, viewer } = this.props;
+    const messages = chat.channels[channelId].messages;
+    if (messages && viewer) {
+      // select the most recent message belonging to the viewer
+      for (let ii = messages.length - 1; ii >= 0; ii--) {
+        const m = messages[ii];
+        if (m.fromUserId === viewer.userId) {
+          return this.setState({ messageIdToEdit: m.chatMessageId });
+        }
+      }
+    }
+  };
+
   _renderContent = (channel, mode) => {
     const { userPresence } = this.props;
 
@@ -96,11 +136,16 @@ class ChatScreen extends React.Component {
               messages={channel.messages}
               navigator={this.props.navigator}
               userIdToUser={userPresence.userIdToUser}
+              messageIdToEdit={this.state.messageIdToEdit}
+              onSendMessageEdit={this._handleSendMessageEdit}
+              onEditCancel={this._handleEditCancel}
             />
             <ChatInputControl
               placeholder="Type a message"
               addUsers={this.props.userPresence.addUsers}
               onSendMessage={this._handleSendMessage}
+              isEditAvailable={this._isEditAvailable()}
+              onSelectEdit={this._handleSelectEdit}
             />
           </React.Fragment>
         );
@@ -145,28 +190,33 @@ class ChatScreen extends React.Component {
 export default class ChatScreenWithContext extends React.Component {
   render() {
     return (
-      <UserPresenceContext.Consumer>
-        {(userPresence) => (
-          <ChatContext.Consumer>
-            {(chat) => (
-              <NavigationContext.Consumer>
-                {(navigation) => (
-                  <NavigatorContext.Consumer>
-                    {(navigator) => (
-                      <ChatScreen
-                        navigator={navigator}
-                        channelId={navigation.chatChannelId}
-                        userPresence={userPresence}
-                        chat={chat}
-                      />
+      <CurrentUserContext.Consumer>
+        {(currentUser) => (
+          <UserPresenceContext.Consumer>
+            {(userPresence) => (
+              <ChatContext.Consumer>
+                {(chat) => (
+                  <NavigationContext.Consumer>
+                    {(navigation) => (
+                      <NavigatorContext.Consumer>
+                        {(navigator) => (
+                          <ChatScreen
+                            navigator={navigator}
+                            channelId={navigation.chatChannelId}
+                            userPresence={userPresence}
+                            viewer={currentUser.user}
+                            chat={chat}
+                          />
+                        )}
+                      </NavigatorContext.Consumer>
                     )}
-                  </NavigatorContext.Consumer>
+                  </NavigationContext.Consumer>
                 )}
-              </NavigationContext.Consumer>
+              </ChatContext.Consumer>
             )}
-          </ChatContext.Consumer>
+          </UserPresenceContext.Consumer>
         )}
-      </UserPresenceContext.Consumer>
+      </CurrentUserContext.Consumer>
     );
   }
 }
