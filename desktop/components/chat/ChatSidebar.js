@@ -30,7 +30,6 @@ const STYLES_CONTAINER_BASE = css`
 
 class ChatSidebar extends React.Component {
   state = {
-    value: '',
     mode: 'MESSAGES',
     isDarkMode: false,
     isGameChatVisible: false,
@@ -79,20 +78,8 @@ class ChatSidebar extends React.Component {
     }
   };
 
-  _handleChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value });
-  };
-
-  _handleKeyDown = (e) => {
-    if (e.which === 13 && !e.shiftKey) {
-      event.preventDefault();
-      if (Strings.isEmpty(this.state.value.trim())) {
-        return;
-      }
-
-      this.props.chat.sendMessage(this._getChannelIdVisible(), this.state.value);
-      this.setState({ value: '' });
-    }
+  _handleSendMessage = (message) => {
+    this.props.chat.sendMessage(this._getChannelIdVisible(), message);
   };
 
   render() {
@@ -146,11 +133,9 @@ class ChatSidebar extends React.Component {
           size="24px"
         />
         <ChatInputControl
-          value={this.state.value}
-          name="value"
           placeholder={`Message #${name}`}
-          onChange={this._handleChange}
-          onKeyDown={this._handleKeyDown}
+          addUsers={this.props.userPresence.addUsers}
+          onSendMessage={this._handleSendMessage}
           theme={theme}
           isSidebarGameInput
         />

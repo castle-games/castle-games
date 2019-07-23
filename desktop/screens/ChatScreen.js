@@ -2,25 +2,18 @@ import * as React from 'react';
 import * as Actions from '~/common/actions';
 import * as ChatUtilities from '~/common/chat-utilities';
 import * as Constants from '~/common/constants';
-import * as ChatActions from '~/common/actions-chat';
-import * as Emojis from '~/common/emojis';
 import * as NativeUtil from '~/native/nativeutil';
-import * as SVG from '~/components/primitives/svg';
-import * as Strings from '~/common/strings';
 
 import { css } from 'react-emotion';
 import { NavigatorContext, NavigationContext } from '~/contexts/NavigationContext';
 import { ChatContext } from '~/contexts/ChatContext';
 import { UserPresenceContext } from '~/contexts/UserPresenceContext';
 
-import regexMatch from 'react-string-replace';
 import ChatHeader from '~/components/chat/ChatHeader';
 import ChatMessages from '~/components/chat/ChatMessages';
 import ChatMembers from '~/components/chat/ChatMembers';
 import ChatInputControl from '~/components/chat/ChatInputControl';
 import ChatOptions from '~/components/chat/ChatOptions';
-
-const DIRECT_MESSAGE_PREFIX = 'dm-';
 
 const STYLES_CONTAINER_BASE = `
   display: flex;
@@ -42,13 +35,7 @@ const STYLES_CONTAINER = css`
 `;
 
 class ChatScreen extends React.Component {
-  _timeout;
-
   state = {
-    value: '',
-    autocomplete: {
-      type: null,
-    },
     mode: 'MESSAGES',
   };
 
@@ -69,15 +56,6 @@ class ChatScreen extends React.Component {
     if (prevProps && prevProps.channelId !== channelId) {
       this.setState({ mode: 'MESSAGES' });
     }
-  };
-
-  componentWillUnmount() {
-    this.clear();
-  }
-
-  clear = () => {
-    window.clearTimeout(this._timeout);
-    this._timeout = null;
   };
 
   _handleClickChannelName = () => {
@@ -101,93 +79,8 @@ class ChatScreen extends React.Component {
 
   _handleShowSingleChannelMembers = () => this.setState({ mode: 'MEMBERS' });
 
-  _handleForceChange = (valueState) => {
-    this.setState(valueState);
-  };
-
-  _handleChange = (e) => {
-    const value = e.target.value;
-    this.setState({ [e.target.name]: value }, () => {
-      let autocompleteType, query;
-      regexMatch(value, /([@][\w_-]+)$/g, (match, i) => {
-        if (!autocompleteType) {
-          autocompleteType = 'users';
-          query = match;
-        }
-        return match;
-      });
-      regexMatch(value, /[:]([\w_\-\+]+)$/g, (match, i) => {
-        if (!autocompleteType) {
-          autocompleteType = 'emoji';
-          query = match;
-        }
-        return match;
-      });
-
-      if (autocompleteType) {
-        this._handleSearch(query, autocompleteType);
-      } else {
-        window.clearTimeout(this._timeout);
-        this._timeout = null;
-        return this.setState({
-          autocomplete: {
-            type: null,
-          },
-        });
-      }
-    });
-  };
-
-  _handleSearch = (value, type) => {
-    let callback,
-      isNetworkRequest = false;
-    if (type === 'users') {
-      isNetworkRequest = true;
-      callback = async () => {
-        let users = [];
-        let autocompleteResults = await ChatActions.getAutocompleteAsync(value, ['users']);
-        if (autocompleteResults.users) {
-          users = autocompleteResults.users;
-        }
-        this.props.userPresence.addUsers(users);
-        this.setState({
-          autocomplete: {
-            type: 'users',
-            users,
-          },
-        });
-      };
-    } else if (type === 'emoji') {
-      callback = () => {
-        let emoji = Emojis.autocompleteShortNames(value);
-        this.setState({
-          autocomplete: {
-            type: 'emoji',
-            emoji,
-          },
-        });
-      };
-    }
-    window.clearTimeout(this._timeout);
-    this._timeout = null;
-    if (isNetworkRequest) {
-      this._timeout = window.setTimeout(callback, 200);
-    } else {
-      callback();
-    }
-  };
-
-  _handleKeyDown = (e) => {
-    if (e.which === 13 && !e.shiftKey) {
-      event.preventDefault();
-
-      if (Strings.isEmpty(this.state.value.trim())) {
-        return;
-      }
-      this.props.chat.sendMessage(this.props.channelId, this.state.value);
-      this.clear();
-      this.setState({ value: '', autocomplete: { type: null } });
-    }
+  _handleSendMessage = (message) => {
+    this.props.chat.sendMessage(this.props.channelId, message);
   };
 
   _renderContent = (channel, mode) => {
@@ -205,18 +98,15 @@ class ChatScreen extends React.Component {
               userIdToUser={userPresence.userIdToUser}
             />
             <ChatInputControl
-              value={this.state.value}
-              name="value"
-              autocomplete={this.state.autocomplete}
               placeholder="Type a message"
-              onChange={this._handleChange}
-              onKeyDown={this._handleKeyDown}
-              onForceChange={this._handleForceChange}
+              addUsers={this.props.userPresence.addUsers}
+              onSendMessage={this._handleSendMessage}
             />
           </React.Fragment>
         );
     }
   };
+
   render() {
     const { mode } = this.state;
 
