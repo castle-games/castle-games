@@ -17,7 +17,7 @@ import regexMatch from 'react-string-replace';
 import ChatHeader from '~/components/chat/ChatHeader';
 import ChatMessages from '~/components/chat/ChatMessages';
 import ChatMembers from '~/components/chat/ChatMembers';
-import ChatInput from '~/components/chat/ChatInput';
+import ChatInputControl from '~/components/chat/ChatInputControl';
 import ChatOptions from '~/components/chat/ChatOptions';
 
 const DIRECT_MESSAGE_PREFIX = 'dm-';
@@ -204,7 +204,7 @@ class ChatScreen extends React.Component {
               navigator={this.props.navigator}
               userIdToUser={userPresence.userIdToUser}
             />
-            <ChatInput
+            <ChatInputControl
               value={this.state.value}
               name="value"
               autocomplete={this.state.autocomplete}

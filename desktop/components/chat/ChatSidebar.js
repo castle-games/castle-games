@@ -15,7 +15,7 @@ import { ChatContext } from '~/contexts/ChatContext';
 import { UserPresenceContext } from '~/contexts/UserPresenceContext';
 
 import ChatMessages from '~/components/chat/ChatMessages';
-import ChatInput from '~/components/chat/ChatInput';
+import ChatInputControl from '~/components/chat/ChatInputControl';
 import ChatSidebarHeader from '~/components/chat/ChatSidebarHeader';
 
 const STYLES_CONTAINER_BASE = css`
@@ -145,7 +145,7 @@ class ChatSidebar extends React.Component {
           theme={theme}
           size="24px"
         />
-        <ChatInput
+        <ChatInputControl
           value={this.state.value}
           name="value"
           placeholder={`Message #${name}`}

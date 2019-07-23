@@ -4,7 +4,6 @@ import * as Constants from '~/common/constants';
 import { css } from 'react-emotion';
 
 import ReactDOM from 'react-dom';
-import regexMatch from 'react-string-replace';
 import AutoSizeTextarea from 'react-textarea-autosize';
 import ChatInputEmoji from '~/components/chat/ChatInputEmoji';
 import ChatInputMention from '~/components/chat/ChatInputMention';
@@ -58,6 +57,7 @@ export default class ChatInput extends React.Component {
   _input;
 
   static defaultProps = {
+    index: 0,
     theme: {
       textColor: null,
       inputBackground: null,
@@ -67,16 +67,12 @@ export default class ChatInput extends React.Component {
     },
   };
 
-  state = {
-    index: 0,
-  };
-
   componentDidMount() {
-    window.addEventListener('keyup', this._handleKeyUp);
+    window.addEventListener('keyup', this.props.onKeyUp);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('keyup', this._handleKeyUp);
+    window.removeEventListener('keyup', this.props.onKeyUp);
   }
 
   focus = () => {
@@ -84,129 +80,25 @@ export default class ChatInput extends React.Component {
     element.focus();
   };
 
-  _handleSelectAutocompleteItem = (index) => {
-    const { autocomplete } = this.props;
-    if (autocomplete.type === 'users') {
-      this._handleSelectUser(this.props.autocomplete.users[index]);
-    } else if (autocomplete.type === 'emoji') {
-      this._handleSelectEmoji(this.props.autocomplete.emoji[index]);
-    }
-  };
-
-  _handleSelectEmoji = (emoji, clicked) => {
-    let substitution = `:${emoji}:`;
-
-    let newValue = regexMatch(this.props.value, /([:][\w_\-\+]+)$/g, (match, i) => {
-      return substitution;
-    });
-    newValue = newValue.join().replace(`,${substitution},`, substitution);
-    this._handleSelectValue(newValue, clicked);
-  };
-
-  _handleSelectUser = (user, clicked) => {
-    let mention = `@${user.username}`;
-
-    // NOTE(jim): Regex only captures at the end of the string as you type.
-    let newValue = regexMatch(this.props.value, /([@][\w_-]+)$/g, (match, i) => {
-      return mention;
-    });
-    newValue = newValue.join().replace(`,${mention},`, mention);
-    this._handleSelectValue(newValue, clicked);
-  };
-
-  _handleSelectValue = (value, clicked) => {
-    // NOTE(jim): Sometimes the regex adds extra characters around a successful mention.
-    this.props.onForceChange({
-      value,
-      autocomplete: { type: null },
-    });
-
-    // NOTE(jim): If we are not going to lose focus, don't do
-    // anything.
-    if (!clicked) {
-      return;
-    }
-
-    // NOTE(jim): When we click, we lose focus. so we have
-    // to regain it.
+  _handleSelectUser = (user) => {
+    this.props.onSelectUser(user);
     this.focus();
   };
 
-  _handleSelectAutocompleteFromKey = () => {
-    const length = this._getAutocompleteLength();
-    if (length === 1) {
-      this._handleSelectAutocompleteItem(0);
-    } else if (this.state.index >= 0) {
-      this._handleSelectAutocompleteItem(this.state.index);
-    }
-    this.setState({ index: 0 });
-  };
-
-  _handleKeyDown = (e) => {
-    // NOTE(jim): Prevent default up and down for multiline textarea
-    if (this.props.autocomplete.type && (e.which === 38 || e.which === 40)) {
-      e.preventDefault();
-      return;
-    }
-
-    // NOTE(jim): Prevent default return response when a user is navigating the popover.
-    if (this.props.autocomplete.type && e.which === 13) {
-      e.preventDefault();
-      this._handleSelectAutocompleteFromKey();
-      return;
-    }
-
-    // NOTE(jim): Prevent default return response when a user is navigating the popover.
-    if (this.state.index > -1 && this.props.autocomplete.type && e.which === 9) {
-      e.preventDefault();
-      this._handleSelectAutocompleteFromKey();
-      return;
-    }
-
-    this.props.onKeyDown(e);
-  };
-
-  _handleKeyUp = (e) => {
-    const { index } = this.state;
-    const { autocomplete } = this.props;
-
-    const length = this._getAutocompleteLength();
-    if (e.which === 38) {
-      e.preventDefault();
-      this.setState({
-        index: index < length - 1 ? index + 1 : length - 1,
-      });
-      return;
-    }
-
-    if (e.which === 40) {
-      e.preventDefault();
-      this.setState({ index: index > -1 ? index - 1 : -1 });
-      return;
-    }
-  };
-
-  _getAutocompleteLength = () => {
-    const { autocomplete } = this.props;
-    let length = 0;
-    if (autocomplete.type === 'users') {
-      length = autocomplete.users.length;
-    } else if (autocomplete.type === 'emoji') {
-      length = autocomplete.emoji.length;
-    }
-    return length;
+  _handleSelectEmoji = (emoji) => {
+    this.props.onSelectEmoji(emoji);
+    this.focus();
   };
 
   _renderAutocomplete = () => {
-    const { index } = this.state;
-    const { autocomplete } = this.props;
+    const { autocomplete, index } = this.props;
     if (autocomplete.type === 'users' && autocomplete.users.length) {
       return (
         <div className={STYLES_AUTOCOMPLETE}>
           {autocomplete.users.map((o, i) => {
             return (
               <ChatInputMention
-                onClick={() => this._handleSelectUser(o, true)}
+                onClick={() => this._handleSelectUser(o)}
                 user={o}
                 key={`option-${i}`}
                 isSelected={i === index}
@@ -221,7 +113,7 @@ export default class ChatInput extends React.Component {
           {autocomplete.emoji.map((o, i) => {
             return (
               <ChatInputEmoji
-                onClick={() => this._handleSelectEmoji(o, true)}
+                onClick={() => this._handleSelectEmoji(o)}
                 shortName={o}
                 key={`option-${i}`}
                 isSelected={i === index}
@@ -263,7 +155,7 @@ export default class ChatInput extends React.Component {
           name={this.props.name}
           value={this.props.value}
           onChange={this.props.onChange}
-          onKeyDown={this._handleKeyDown}
+          onKeyDown={this.props.onKeyDown}
           style={inputStyles}
         />
       </div>
