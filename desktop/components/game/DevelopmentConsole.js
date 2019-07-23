@@ -101,6 +101,8 @@ export default class DevelopmentConsole extends React.Component {
     if (Urls.isPrivateUrl(game.url)) {
       const gamePath = path.dirname(game.url);
       NativeUtil.openExternalURL(gamePath);
+    } else {
+      NativeUtil.openExternalURL(game.url);
     }
   };
 
