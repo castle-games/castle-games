@@ -246,12 +246,7 @@ class ChatContextManager extends React.Component {
         if (channels[channelId].messages) {
           messageIdsCleared = channels[channelId].messages.map((m) => m.chatMessageId);
         }
-        if (channels[channelId].type === 'dm') {
-          delete channels[channelId];
-        } else {
-          channels[channelId].messages = [];
-          channels[channelId].isSubscribed = false;
-        }
+        delete channels[channelId];
       }
       return {
         ...state,
