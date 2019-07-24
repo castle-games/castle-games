@@ -63,9 +63,13 @@ class ChatSidebar extends React.Component {
   };
 
   _getChannelIdVisible = () => {
-    return this.state.isGameChatVisible && this.props.gameChannel
-      ? this.props.gameChannel.channelId
-      : this.props.lobbyChannel.channelId;
+    if (this.state.isGameChatVisible && this.props.gameChannel) {
+      return this.props.gameChannel.channelId;
+    }
+    if (this.props.lobbyChannel) {
+      return this.props.lobbyChannel.channelId;
+    }
+    return null;
   };
 
   _handleSelectLobby = () => {
@@ -79,7 +83,10 @@ class ChatSidebar extends React.Component {
   };
 
   _handleSendMessage = (message) => {
-    this.props.chat.sendMessage(this._getChannelIdVisible(), message);
+    const channelId = this._getChannelIdVisible();
+    if (channelId) {
+      this.props.chat.sendMessage(channelId, message);
+    }
   };
 
   render() {
@@ -99,7 +106,7 @@ class ChatSidebar extends React.Component {
       hideEvents: true, // TODO: hack
     };
 
-    if (!this.props.navigation.game) {
+    if (!this.props.navigation.game || !channelId) {
       return null;
     }
 
@@ -107,9 +114,6 @@ class ChatSidebar extends React.Component {
       return null;
     }
 
-    if (!channelId) {
-      return null;
-    }
     const messages = this.props.chat.channels[channelId].messages;
     const name = this.props.chat.channels[channelId].name;
 

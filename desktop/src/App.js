@@ -60,7 +60,13 @@ class App extends React.Component {
     window.addEventListener('nativeFocusChat', this._handleNativeFocusChat);
     Bridge.addEventListeners();
     PingUtils.reportPingsAsync();
-    NativeUtil.setBrowserReady(() => {});
+    NativeUtil.setBrowserReady(() => {
+      // to simulate booting with a deep link.
+      // the "isTrusted" flag is sent by windows somewhere.
+      /* this._handleNativeOpenUrlEvent(
+        {"isTrusted":false,"params":{"url":"castle://castle.games/+29/@liquidream/the-ballz-are-lava"}}
+      ); */
+    });
 
     linkify.add('castle:', 'http:').add('castles:', 'https:');
 
