@@ -8,7 +8,7 @@ import { TRANSPARENT_GIF_DATA_URL } from '../../common/constants';
 const SVG_ICON = {
   home: <SVG.SidebarGames size="20px" />,
   make: <SVG.SidebarMake size="20px" />,
-  chat: <SVG.HashTagLight size="20px" />,
+  chat: <SVG.SidebarChat size="20px" />,
   examples: <SVG.SidebarGames size="20px" />,
   posts: <SVG.SidebarPosts size="20px" />,
   history: <SVG.SidebarHistory size="20px" />,
