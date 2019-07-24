@@ -199,6 +199,7 @@ export default class CreateHomeScreenWithContext extends React.Component {
               <CreateHomeScreen
                 projectOwner={currentUser.user}
                 navigateToGame={navigator.navigateToGame}
+                navigateToGameUrl={navigator.navigateToGameUrl}
                 history={currentUser.userStatusHistory}
                 refreshHistory={currentUser.refreshCurrentUser}
                 {...this.props}
