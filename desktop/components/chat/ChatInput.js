@@ -12,11 +12,12 @@ const STYLES_CONTAINER = css`
   flex-shrink: 0;
   width: 100%;
   padding: 0px 16px 8px 16px;
+  position: relative;
 `;
 
 const STYLES_AUTOCOMPLETE = css`
   position: absolute;
-  bottom: 50px;
+  bottom: 56px;
   border-radius: 4px;
   border: 1px solid rgba(219, 219, 219, 1);
   background: #fff;
