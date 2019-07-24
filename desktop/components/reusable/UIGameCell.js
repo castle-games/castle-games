@@ -1,7 +1,6 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as Urls from '~/common/urls';
-import * as Utilities from '~/common/utilities';
 import * as Strings from '~/common/strings';
 import * as NativeUtil from '~/native/nativeutil';
 import * as SVG from '~/components/primitives/svg';
@@ -171,14 +170,10 @@ export default class UIGameCell extends React.Component {
     onUserSelect: () => {},
     onShowGameInfo: () => {},
     onGameUpdate: null,
-    renderCartridgeOnly: false,
-    underConstruction: false,
     theme: {},
   };
 
   state = {
-    mouseX: 0,
-    mouseY: 0,
     isHoveringOnPlay: false,
     isHoveringOnActions: false,
     isHoveringOnAuthor: false,
@@ -188,14 +183,6 @@ export default class UIGameCell extends React.Component {
 
   _handleToggleHoverOnPlay = (shouldSetHovering) => {
     this.setState({ isHoveringOnPlay: shouldSetHovering });
-  };
-
-  _handleMouseMove = () => {
-    let bounds = this._containerRef.getBoundingClientRect();
-    let x = (100 * (event.clientX - bounds.left)) / bounds.width;
-    let y = (100 * (event.clientY - bounds.top)) / bounds.height;
-
-    this.setState({ mouseX: x, mouseY: y });
   };
 
   _handleToggleShowGameInfo = (shouldShow) => {
@@ -247,19 +234,11 @@ export default class UIGameCell extends React.Component {
 
   render() {
     let { game } = this.props;
-    let { mouseX, mouseY } = this.state;
     let title = game.title ? Strings.elide(game.title, 21) : 'Untitled';
     let onGameUpdate = this.props.onGameUpdate ? () => this.props.onGameUpdate(game) : null;
 
-    const backgroundColor =
-      game.metadata && game.metadata.primaryColor ? `#${game.metadata.primaryColor}` : '#F4F4F5';
-    const textColor = Utilities.adjustTextColorWithEmphasis(backgroundColor, this.state.isHovering);
-
-    const finalColor = this.state.isHoveringOnPlay
-      ? Utilities.colorLuminance(backgroundColor, 0.8)
-      : backgroundColor;
-
-    const numPlayersText = game.metadata.multiplayer && game.metadata.multiplayer.enabled ? 'Multiplayer' : ' ';
+    const numPlayersText =
+      game.metadata.multiplayer && game.metadata.multiplayer.enabled ? 'Multiplayer' : ' ';
 
     const hoveringOnDetailIcon = this.state.isHoveringOnActions || this.state.isHoveringOnAuthor;
     let descriptionText = game.description
@@ -287,12 +266,8 @@ export default class UIGameCell extends React.Component {
     return (
       <div
         className={STYLES_CONTAINER}
-        ref={(c) => {
-          this._containerRef = c;
-        }}
         onMouseEnter={() => this._handleToggleHoverOnPlay(true)}
-        onMouseLeave={() => this._handleMouseLeave()}
-        onMouseMove={() => this._handleMouseMove()}
+        onMouseLeave={this._handleMouseLeave}
         onClick={this._handleGameSelect}>
         <div className={STYLES_TOP_SECTION}>
           {shouldShowGameInfo ? (
@@ -350,9 +325,7 @@ export default class UIGameCell extends React.Component {
                   {playCount}
                 </div>
               </div>
-              <div className={STYLES_SECONDARY_TEXT}>
-                {numPlayersText}
-              </div>
+              <div className={STYLES_SECONDARY_TEXT}>{numPlayersText}</div>
             </div>
           ) : null}
           <div
