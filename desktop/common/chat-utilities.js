@@ -42,7 +42,7 @@ export const sortChannels = (channels) => {
   });
 };
 
-export const messageBodyToPlainText = (body, userIdToUser) => {
+export const messageBodyToPlainText = (body, userIdToUser, { useEmojiShortName = false } = {}) => {
   if (!body) return null;
 
   if (typeof body === 'string') {
@@ -60,11 +60,15 @@ export const messageBodyToPlainText = (body, userIdToUser) => {
         return `@${user.username}`;
       }
     } else if (c.emoji) {
-      return emojiToString(c.emoji);
+      if (useEmojiShortName) {
+        return `:${c.emoji}:`;
+      } else {
+        return emojiToString(c.emoji);
+      }
     }
     return '';
   });
-  return components.join(' ');
+  return components.join('');
 };
 
 export const isEmojiBody = (body) => {

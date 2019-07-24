@@ -71,7 +71,8 @@ class ChatMessageEditElement extends React.Component {
     if (prevMessage !== message && message.body) {
       const initialValue = ChatUtilities.messageBodyToPlainText(
         message.body,
-        this.props.userIdToUser
+        this.props.userIdToUser,
+        { useEmojiShortName: true } // revert actual emoji characters back to :emoji:
       );
       this.setState({ initialValue });
     }
