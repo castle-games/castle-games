@@ -19,29 +19,10 @@ const STYLES_CONTAINER = css`
   background: transparent;
   margin: 0 16px 16px 0;
   border-radius: ${Constants.card.radius};
-  transition: 200ms cubic-bezier(0.17, 0.67, 0.83, 0.67) all;
 
   figure {
     border-radius: ${Constants.card.radius};
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
-    transition: 200 cubic-bezier(0.17, 0.67, 0.83, 0.67) all;
-  }
-
-  section {
-    transition: 200ms cubic-bezier(0.17, 0.67, 0.83, 0.67) all;
-    padding: 12px 0px 8px 0px;
-    margin-top: 8px;
-    border-radius: ${Constants.card.radius};
-  }
-
-  :hover {
-    section {
-      box-shadow: 0 0 0 1px #ececec, 0 1px 4px rgba(0, 0, 0, 0.07);
-      padding: 12px 8px 8px 12px;
-    }
-
-    figure {
-    }
   }
 `;
 
@@ -51,7 +32,7 @@ const STYLES_TOP_SECTION = css`
 `;
 
 const STYLES_GAME_SCREENSHOT = css`
-  width: ${Constants.card.width};
+  width: ${Constants.card.imageWidth};
   height: ${Constants.card.imageHeight};
   cursor: pointer;
   background-size: cover;
@@ -109,14 +90,14 @@ const STYLES_GAME_DESCRIPTION = css`
 const STYLES_DETAIL_SECTION = css`
   display: flex;
   flex-direction: row;
-  padding: 12px 0px 8px 8px;
+  padding-top: 16px;
+  height: 68px;
 `;
 
 const STYLES_TITLE_AND_PLAY = css`
   display: flex;
   flex-direction: row;
   line-height: 0.8;
-  margin-bottom: 4px;
 `;
 
 const STYLES_GAME_TITLE_AND_AUTHOR = css`
@@ -157,14 +138,18 @@ const STYLES_BYLINE = css`
   cursor: pointer;
 `;
 
-const STYLES_AUTHOR_AND_PLAY_COUNT = css`
+const STYLES_SECONDARY_TEXT = css`
   font-family: ${Constants.font.system};
-  display: flex;
-  flex-direction: row;
-  margin-top: 2px;
   font-size: 13px;
   color: #8d8d8d;
   font-weight: 500;
+  margin-top: 2px;
+`;
+
+const STYLES_AUTHOR_AND_PLAY_COUNT = css`
+  margin-top: 4px;
+  display: flex;
+  flex-direction: row;
 `;
 
 const STYLES_GAME_AUTHOR = css`
@@ -274,6 +259,8 @@ export default class UIGameCell extends React.Component {
       ? Utilities.colorLuminance(backgroundColor, 0.8)
       : backgroundColor;
 
+    const numPlayersText = game.metadata.multiplayer && game.metadata.multiplayer.enabled ? 'Multiplayer' : ' ';
+
     const hoveringOnDetailIcon = this.state.isHoveringOnActions || this.state.isHoveringOnAuthor;
     let descriptionText = game.description
       ? Strings.elide(game.description, 104)
@@ -335,6 +322,7 @@ export default class UIGameCell extends React.Component {
               className={STYLES_GAME_SCREENSHOT}
               style={{
                 backgroundImage: this.props.src ? `url(${this.props.src})` : null,
+                filter: this.state.isHoveringOnPlay ? 'brightness(105%)' : null,
               }}
             />
           )}
@@ -350,15 +338,20 @@ export default class UIGameCell extends React.Component {
               <div className={STYLES_TITLE_AND_PLAY}>
                 <span className={STYLES_GAME_TITLE}>{title}</span>
               </div>
-              <div className={STYLES_AUTHOR_AND_PLAY_COUNT}>
-                <span
-                  className={STYLES_GAME_AUTHOR}
-                  onClick={() => this.props.onUserSelect(game.owner)}
-                  onMouseEnter={() => this._handleToggleHoverOnAuthor(true)}
-                  onMouseLeave={() => this._handleToggleHoverOnAuthor(false)}>
-                  {username}
-                </span>
-                {playCount}
+              <div className={STYLES_SECONDARY_TEXT}>
+                <div className={STYLES_AUTHOR_AND_PLAY_COUNT}>
+                  <span
+                    className={STYLES_GAME_AUTHOR}
+                    onClick={() => this.props.onUserSelect(game.owner)}
+                    onMouseEnter={() => this._handleToggleHoverOnAuthor(true)}
+                    onMouseLeave={() => this._handleToggleHoverOnAuthor(false)}>
+                    {username}
+                  </span>
+                  {playCount}
+                </div>
+              </div>
+              <div className={STYLES_SECONDARY_TEXT}>
+                {numPlayersText}
               </div>
             </div>
           ) : null}

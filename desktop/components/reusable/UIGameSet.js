@@ -15,7 +15,7 @@ const STYLES_GAME_ROW = css`
   flex-direction: row;
   flex-wrap: no-wrap;
   margin-bottom: 8px;
-  margin-left: 20px;
+  margin-left: 24px;
 `;
 
 const STYLES_CELL_ITEM = css``;
