@@ -13,7 +13,7 @@ const STYLES_CONTAINER = css`
   display: flex;
   align-items: flex-start;
   flex-wrap: wrap;
-  padding: 16px 24px 16px 24px;
+  padding: 0px 24px 16px 24px;
 `;
 
 const STYLES_POST = css`
