@@ -79,7 +79,7 @@ class ChatMessageEditElement extends React.Component {
   };
 
   _handleSendMessage = (message) => {
-    this.props.onSendMessageEdit(this.props.message.chatMessageId, message);
+    this.props.onSendMessageEdit(this.props.message, message);
   };
 
   render() {

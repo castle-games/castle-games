@@ -258,13 +258,13 @@ class ChatContextManager extends React.Component {
     }
   };
 
-  sendMessage = async (channelId, message) => {
+  sendMessage = async (channelId, plainMessage, messageToEdit = null) => {
     if (!this._chat) return;
-    if (Strings.isEmpty(message)) {
+    if (Strings.isEmpty(plainMessage)) {
       return;
     }
-    message = await ChatUtilities.formatMessageAsync(message, {});
-    const slashCommand = ChatUtilities.getSlashCommand(message);
+    const body = await ChatUtilities.formatMessageAsync(plainMessage, {});
+    const slashCommand = ChatUtilities.getSlashCommand(body);
     if (slashCommand.isCommand) {
       // capture any non-me command without sending.
       // TODO: handle various commands
@@ -274,7 +274,7 @@ class ChatContextManager extends React.Component {
     }
 
     // immediately push optimistic message
-    const optimisticMessage = this._createOptimisticMessageObject(channelId, message);
+    const optimisticMessage = this._createOptimisticMessageObject(channelId, body, messageToEdit);
     await this.setState((state) => {
       let channel = state.channels[channelId];
       if (!channel) {
@@ -283,7 +283,7 @@ class ChatContextManager extends React.Component {
       if (!channel.messages) {
         channel.messages = [];
       }
-      channel.messages.push(optimisticMessage);
+      this._addMessageToMessages(optimisticMessage, channel.messages);
       const channels = { ...state.channels };
       channels[channelId] = channel;
       return {
@@ -291,10 +291,18 @@ class ChatContextManager extends React.Component {
         channels,
       };
     });
-    return this._chat.sendMessageAsync(channelId, message, optimisticMessage.tempChatMessageId);
+    if (messageToEdit) {
+      return this._chat.editMessageAsync(
+        messageToEdit.chatMessageId,
+        body,
+        optimisticMessage.tempChatMessageId
+      );
+    } else {
+      return this._chat.sendMessageAsync(channelId, body, optimisticMessage.tempChatMessageId);
+    }
   };
 
-  _createOptimisticMessageObject = (channelId, body) => {
+  _createOptimisticMessageObject = (channelId, body, messageToEdit) => {
     const { user } = this.props.currentUser;
     const tempId = uuid();
     this._optimisticMessageIdsPending[tempId] = true;
@@ -302,14 +310,17 @@ class ChatContextManager extends React.Component {
       // this may have already been stringified to get sent over the air
       body = JSON.parse(body);
     } catch (_) {}
+    const timestamp = messageToEdit ? messageToEdit.timestamp : new Date();
     return {
-      chatMessageId: tempId,
+      ...messageToEdit,
+      chatMessageId: messageToEdit ? messageToEdit.chatMessageId : tempId,
       tempChatMessageId: tempId,
       channelId,
       body,
       fromUserId: user.userId,
-      createdTime: new Date(),
-      timestamp: new Date(),
+      createdTime: timestamp,
+      timestamp,
+      isEdit: messageToEdit !== null,
     };
   };
 
@@ -348,32 +359,8 @@ class ChatContextManager extends React.Component {
         channelIds[m.channelId] = true;
 
         let channel = channels[m.channelId];
-        let didSubstituteMessage = false;
-        if (m.isEdit) {
-          const messageIndex = channel.messages.findIndex(
-            (m2) => m2.chatMessageId === m.chatMessageId
-          );
-          if (messageIndex >= 0) {
-            channel.messages[messageIndex] = m;
-            didSubstituteMessage = true;
-          }
-        }
-        if (
-          m.tempChatMessageId &&
-          this._optimisticMessageIdsPending[m.tempChatMessageId] === true
-        ) {
-          const messageIndex = channel.messages.findIndex(
-            (m2) => m2.tempChatMessageId === m.tempChatMessageId
-          );
-          if (messageIndex >= 0) {
-            channel.messages[messageIndex] = m;
-            delete this._optimisticMessageIdsPending[m.tempChatMessageId];
-            didSubstituteMessage = true;
-          }
-        }
-        if (!didSubstituteMessage) {
-          channel.messages.push(m);
-        }
+        this._addMessageToMessages(m, channel.messages);
+
         if (
           this._firstLoadComplete &&
           Notifications.chatMessageHasNotification(
@@ -487,6 +474,34 @@ class ChatContextManager extends React.Component {
     });
   };
 
+  _addMessageToMessages = (m, messages) => {
+    let didSubstituteMessage = false;
+
+    // if incoming message is an edit, replace existing with the same id
+    if (m.isEdit) {
+      const messageIndex = messages.findIndex((m2) => m2.chatMessageId === m.chatMessageId);
+      if (messageIndex >= 0) {
+        messages[messageIndex] = m;
+        didSubstituteMessage = true;
+      }
+    }
+
+    // if incoming message is an optimistic ack, replace local copy with server copy
+    if (m.tempChatMessageId && this._optimisticMessageIdsPending[m.tempChatMessageId] === true) {
+      const messageIndex = messages.findIndex((m2) => m2.tempChatMessageId === m.tempChatMessageId);
+      if (messageIndex >= 0) {
+        messages[messageIndex] = m;
+        delete this._optimisticMessageIdsPending[m.tempChatMessageId];
+        didSubstituteMessage = true;
+      }
+    }
+
+    // append new message
+    if (!didSubstituteMessage) {
+      messages.push(m);
+    }
+  };
+
   findChannelForGame = (game) => {
     let channel = { channelId: null, isSubscribed: false };
     Object.entries(this.state.channels).forEach(([key, c]) => {
@@ -569,7 +584,9 @@ class ChatContextManager extends React.Component {
       for (let ii = channel.messages.length - 1; ii >= 0; ii--) {
         let m = channel.messages[ii];
         // ignore fake notification messages and optimistic messages
-        if (m.chatMessageId && m.chatMessageId !== m.tempChatMessageId) {
+        const isOptimistic =
+          m.tempChatMessageId && this._optimisticMessageIdsPending[m.tempChatMessageId];
+        if (m.chatMessageId && !isOptimistic) {
           return m;
         }
       }

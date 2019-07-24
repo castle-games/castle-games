@@ -87,16 +87,16 @@ class ChatScreen extends React.Component {
     this.props.chat.sendMessage(this.props.channelId, message);
   };
 
-  _handleSendMessageEdit = (chatMessageId, message) => {
+  _handleSendMessageEdit = async (chatMessageToEdit, message) => {
     const { messageIdToEdit } = this.state;
-    if (messageIdToEdit && chatMessageId === messageIdToEdit) {
-      // TODO: actually send this message to chat context
-      this.setState({ messageIdToEdit: null });
+    if (messageIdToEdit && chatMessageToEdit.chatMessageId === messageIdToEdit) {
+      await this._handleEditCancel();
+      this.props.chat.sendMessage(this.props.channelId, message, chatMessageToEdit);
     }
   };
 
-  _handleEditCancel = () => {
-    this.setState({ messageIdToEdit: null });
+  _handleEditCancel = async () => {
+    await this.setState({ messageIdToEdit: null });
     if (this._inputRef) {
       this._inputRef.focus();
     }
