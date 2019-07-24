@@ -36,6 +36,8 @@ const STYLES_CONTAINER = css`
 `;
 
 class ChatScreen extends React.Component {
+  _inputRef;
+
   state = {
     mode: 'MESSAGES',
     messageIdToEdit: null,
@@ -95,6 +97,9 @@ class ChatScreen extends React.Component {
 
   _handleEditCancel = () => {
     this.setState({ messageIdToEdit: null });
+    if (this._inputRef) {
+      this._inputRef.focus();
+    }
   };
 
   _isEditAvailable = () => {
@@ -141,6 +146,7 @@ class ChatScreen extends React.Component {
               onEditCancel={this._handleEditCancel}
             />
             <ChatInputControl
+              ref={(c) => (this._inputRef = c)}
               placeholder="Type a message"
               addUsers={this.props.userPresence.addUsers}
               onSendMessage={this._handleSendMessage}

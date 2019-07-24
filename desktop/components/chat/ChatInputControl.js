@@ -41,12 +41,16 @@ export default class ChatInputControl extends React.Component {
     this.clear();
   }
 
+  focus = () => {
+    if (this._inputRef) {
+      this._inputRef.focus();
+    }
+  };
+
   _update = (prevProps, props) => {
     if (props.initialValue && props.initialValue !== prevProps.initialValue) {
       this.setState({ value: props.initialValue }, () => {
-        if (this._inputRef) {
-          this._inputRef.focus();
-        }
+        this.focus();
       });
     }
   };
