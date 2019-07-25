@@ -169,7 +169,7 @@ export default class ChatInputControl extends React.Component {
     const length = this._getAutocompleteLength();
     if (length === 1) {
       this._handleSelectAutocompleteItem(0);
-    } else if (this.state.index >= 0) {
+    } else if (length > 0 && this.state.index >= 0) {
       this._handleSelectAutocompleteItem(this.state.index);
     }
     this.setState({ index: 0 });
@@ -193,6 +193,7 @@ export default class ChatInputControl extends React.Component {
     } else if (
       this.state.index > -1 &&
       this.state.autocomplete.type &&
+      this._getAutocompleteLength() > 0 &&
       (e.which === Keys.TAB || e.which === Keys.ENTER)
     ) {
       // NOTE(jim): Prevent default return response when a user is navigating the popover.
