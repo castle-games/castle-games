@@ -48,6 +48,17 @@ const STYLES_ANCHOR = css`
   }
 `;
 
+const STYLES_EDITED = css`
+  color: ${Constants.REFACTOR_COLORS.subdued};
+  padding-left: 8px;
+  font-size: 12px;
+  line-height: 10px;
+  user-select: none;
+  cursor: default;
+  font-weight: 100;
+  font-style: normal;
+`;
+
 const matchCastleURL = (text, theme, onMatchAttachment) => {
   return StringReplace(text, /(castle:\/\/\S+)/g, (match, i) => {
     if (onMatchAttachment) {
@@ -105,9 +116,10 @@ class UIMessageBody extends React.Component {
   static defaultProps = {
     body: null,
     expandAttachments: true,
+    isEdited: false,
   };
 
-  _renderMessageBody = (body, theme, onMatchAttachment) => {
+  _renderMessageBody = (body, theme, onMatchAttachment, isEdited) => {
     if (!body) return null;
 
     if (typeof body === 'string') {
@@ -146,11 +158,20 @@ class UIMessageBody extends React.Component {
       }
       return null;
     });
+
+    if (isEdited) {
+      components.push(
+        <span key={`message-edited`} className={STYLES_EDITED}>
+          (edited)
+        </span>
+      );
+    }
+
     return components;
   };
 
   render() {
-    const { body, theme, expandAttachments } = this.props;
+    const { body, theme, expandAttachments, isEdited } = this.props;
     let attachmentsMatched, onMatchAttachment, attachments;
 
     if (expandAttachments) {
@@ -160,7 +181,7 @@ class UIMessageBody extends React.Component {
       };
     }
 
-    const renderedBody = this._renderMessageBody(body, theme, onMatchAttachment);
+    const renderedBody = this._renderMessageBody(body, theme, onMatchAttachment, isEdited);
 
     if (attachmentsMatched && attachmentsMatched.length) {
       attachments = attachmentsMatched.map((urlData, ii) => (

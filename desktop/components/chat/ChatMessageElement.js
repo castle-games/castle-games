@@ -76,6 +76,7 @@ export default class ChatMessageElement extends React.Component {
               body={message.body}
               theme={this.props.theme}
               expandAttachments={this.props.expandAttachments}
+              isEdited={message.isEdited}
             />
           </div>
         </span>
