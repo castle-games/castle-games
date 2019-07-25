@@ -83,20 +83,14 @@ export default class ProfileSettings extends React.Component {
     const { category, type, frequency } = options;
 
     if (category === 'email') {
-      const response = await Actions.updateEmailPreference({ type, frequency });
-      const notifications = await Actions.getNotificationPreferences();
-
-      const user = { ...this.props.user, notifications };
-      this.context.setCurrentUser(user);
+      await Actions.updateEmailPreference({ type, frequency });
+      await this.context.refreshCurrentUser();
       this.props.onShowSettings();
       return;
     }
 
-    const response = await Actions.updateDesktopPreference({ type, frequency });
-    const notifications = await Actions.getNotificationPreferences();
-
-    const user = { ...this.props.user, notifications };
-    this.context.setCurrentUser(user);
+    await Actions.updateDesktopPreference({ type, frequency });
+    await this.context.refreshCurrentUser();
     this.props.onShowSettings();
   };
 

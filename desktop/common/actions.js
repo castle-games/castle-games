@@ -346,41 +346,6 @@ export async function getUsers({ userIds }) {
   return result.data.users;
 }
 
-export async function getNotificationPreferences() {
-  const result = await API(`
-    query {
-      getNotificationPreferences {
-        email {
-          type
-          description
-          frequency
-        }
-        desktop {
-          type
-          description
-          frequency
-        }
-      }
-    }
-  `);
-
-  // TOOD(jim): Write a global error handler.
-  if (result.error) {
-    return false;
-  }
-
-  if (result.errors) {
-    return false;
-  }
-
-  let notifications;
-  if (result && result.data) {
-    notifications = result.data.getNotificationPreferences;
-  }
-
-  return notifications;
-}
-
 export async function getViewer() {
   const result = await API(`
     query {
