@@ -204,6 +204,9 @@ export default class ChatInputControl extends React.Component {
       // up arrow edits last message
       isEventHandled = true;
       this.props.onSelectEdit();
+    } else if (e.which === Keys.TAB && this.props.isEditing) {
+      // even if we didn't capture tab for autocomplete, do not allow cycling focus
+      isEventHandled = true;
     } else if (e.which === Keys.ENTER && !e.shiftKey) {
       // enter sends message
       isEventHandled = true;
@@ -226,14 +229,14 @@ export default class ChatInputControl extends React.Component {
     if (e.which === Keys.UP) {
       e.preventDefault();
       this.setState({
-        index: index < length - 1 ? index + 1 : length - 1,
+        index: index < length - 1 ? index + 1 : 0,
       });
       return;
     }
 
     if (e.which === Keys.DOWN) {
       e.preventDefault();
-      this.setState({ index: index > -1 ? index - 1 : -1 });
+      this.setState({ index: index > 0 ? index - 1 : length - 1 });
       return;
     }
   };
