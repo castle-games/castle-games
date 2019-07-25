@@ -101,24 +101,28 @@ const run = async () => {
   Analytics.trackCastleLaunch();
 
   ReactDOM.render(<GLLoaderScreen />, document.getElementById('loader'));
-  const { trendingGames, featuredExamples, viewer, isOffline } = await Network.getProductData();
+  const {
+    trendingGames,
+    featuredExamples,
+    currentUser,
+    isOffline,
+  } = await Network.getProductData();
 
   // if the user was automatically logged in when starting Castle, track that
-  if (viewer) {
-    Analytics.trackLogin({ user: viewer, isAutoLogin: true });
+  if (currentUser && currentUser.user) {
+    Analytics.trackLogin({ user: currentUser.user, isAutoLogin: true });
   }
 
   let state = Object.assign({}, INITIAL_STATE_OFFLINE, {
     trendingGames,
     featuredExamples,
+    currentUser,
     isOffline,
   });
 
-  state.currentUser = { user: viewer };
-
   // NOTE(jim): You must be authenticated to use Castle.
   // https://github.com/castle-games/ghost/issues/480
-  state.navigation = viewer ? { contentMode: 'home' } : { contentMode: 'signin' };
+  state.navigation = currentUser.user ? { contentMode: 'home' } : { contentMode: 'signin' };
 
   ReactDOM.render(<App state={state} storage={storage} />, document.getElementById('root'));
 

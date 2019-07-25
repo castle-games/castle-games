@@ -367,6 +367,7 @@ class ChatContextManager extends React.Component {
           Notifications.chatMessageHasNotification(
             m,
             this.props.currentUser.user,
+            this.props.currentUser.settings,
             channel,
             Notifications.NotificationType.BADGE
           )
@@ -415,6 +416,7 @@ class ChatContextManager extends React.Component {
       Notifications.showFromChatMessages(
         allUnsortedMessages,
         this.props.currentUser.user,
+        this.props.currentUser.settings,
         this.state.channels,
         this.props.userPresence.userIdToUser
       );

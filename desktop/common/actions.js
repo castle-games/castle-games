@@ -107,6 +107,35 @@ const POST_FIELDS = `
   createdTime
 `;
 
+const CURRENT_USER_QUERY = `
+  me {
+    ${FULL_USER_FIELDS}
+    ${GAME_ITEMS}
+  }
+
+  getNotificationPreferences {
+    email {
+      type
+      description
+      frequency
+    }
+    desktop {
+      type
+      description
+      frequency
+    }
+  }
+
+  userStatusHistory {
+    userStatusId
+    status
+    game {
+      ${GAME_FIELDS}
+      ${NESTED_GAME_OWNER}
+    }
+  }
+`;
+
 export async function updateEmailPreference({ type, frequency }) {
   const response = await API.graphqlAsync(
     `
@@ -346,43 +375,22 @@ export async function getUsers({ userIds }) {
   return result.data.users;
 }
 
-export async function getViewer() {
+export async function getCurrentUser() {
   const result = await API(`
     query {
-      me {
-        ${FULL_USER_FIELDS}
-        ${GAME_ITEMS}
-      }
-
-      getNotificationPreferences {
-        email {
-          type
-          description
-          frequency
-        }
-        desktop {
-          type
-          description
-          frequency
-        }
-      }
+      ${CURRENT_USER_QUERY}
     }
   `);
-
-  // TOOD(jim): Write a global error handler.
-  if (result.error) {
-    return false;
+  if (result.error || result.errors) {
+    return result;
   }
-
-  if (result.errors) {
-    return false;
-  }
-
-  if (result && result.data) {
-    result.data.me.notifications = result.data.getNotificationPreferences;
-  }
-
-  return result.data.me;
+  return {
+    user: result.data.me,
+    settings: {
+      notifications: result.data.getNotificationPreferences,
+    },
+    userStatusHistory: result.data.userStatusHistory,
+  };
 }
 
 export async function getUserStatusHistory(userId) {
@@ -409,10 +417,7 @@ export async function getUserStatusHistory(userId) {
 export async function getInitialData() {
   const result = await API(`
     query {
-      me {
-        ${FULL_USER_FIELDS}
-        ${GAME_ITEMS}
-      }
+      ${CURRENT_USER_QUERY}
 
       trendingGames {
         ${GAME_FIELDS}

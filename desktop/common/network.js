@@ -4,7 +4,7 @@ export const getProductData = async () => {
   let data;
   let trendingGames = [];
   let featuredExamples = [];
-  let viewer;
+  let currentUser;
   let isOffline = true;
 
   try {
@@ -17,13 +17,19 @@ export const getProductData = async () => {
     isOffline = false;
     trendingGames = data.trendingGames ? data.trendingGames : [];
     featuredExamples = data.featuredExamples ? data.featuredExamples : [];
-    viewer = data.me;
+    currentUser = {
+      user: data.me,
+      settings: {
+        notifications: data.getNotificationPreferences,
+      },
+      userStatusHistory: data.userStatusHistory,
+    };
   }
 
   return {
     trendingGames,
     featuredExamples,
-    viewer,
+    currentUser,
     isOffline,
   };
 };

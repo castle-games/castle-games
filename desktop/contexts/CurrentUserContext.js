@@ -1,16 +1,23 @@
 import * as React from 'react';
 import * as Actions from '~/common/actions';
 
-const CurrentUserContextDefaults = {
+const EMPTY_CURRENT_USER = {
   user: null,
+  settings: {
+    notifications: null,
+  },
   timeLastLoaded: 0,
   userStatusHistory: [],
-  setCurrentUser: async (user) => {},
-  clearCurrentUser: async () => {},
-  refreshCurrentUser: async () => {},
   content: {
     posts: null,
   },
+};
+
+const CurrentUserContextDefaults = {
+  ...EMPTY_CURRENT_USER,
+  setCurrentUser: async (user) => {},
+  clearCurrentUser: async () => {},
+  refreshCurrentUser: async () => {},
   reloadPosts: () => {},
   loadMorePosts: () => {},
 };
@@ -40,7 +47,11 @@ class CurrentUserContextProvider extends React.Component {
       user,
       timeLastLoaded: Date.now(),
     });
-    if (!this.state.userStatusHistory || !this.state.userStatusHistory.length) {
+    if (
+      !this.state.userStatusHistory ||
+      !this.state.userStatusHistory.length ||
+      !this.state.settings
+    ) {
       this.refreshCurrentUser();
     }
   };
@@ -48,25 +59,27 @@ class CurrentUserContextProvider extends React.Component {
   clearCurrentUser = async () => {
     await Actions.logout();
     this.setState({
-      user: null,
-      timeLastLoaded: 0,
-      userStatusHistory: [],
-      content: CurrentUserContextDefaults.content,
+      ...EMPTY_CURRENT_USER,
     });
   };
 
   refreshCurrentUser = async () => {
-    const viewer = await Actions.getViewer();
-    if (!viewer) {
-      return;
+    try {
+      const result = await Actions.getCurrentUser();
+      if (result.error || result.errors || !result.user) {
+        throw new Error(`Unable to fetch current user: ${JSON.stringify(result, null, 2)}`);
+      }
+      const { user, settings, userStatusHistory } = result;
+      this.setState({
+        user,
+        settings,
+        userStatusHistory,
+        timeLastLoaded: Date.now(),
+      });
+    } catch (e) {
+      // TODO: failure case
+      console.warn(e);
     }
-    const userStatusHistory = await Actions.getUserStatusHistory(viewer.userId);
-
-    this.setState({
-      user: viewer,
-      userStatusHistory,
-      timeLastLoaded: Date.now(),
-    });
   };
 
   _loadPosts = async ({ pageAfterPostId } = {}) => {

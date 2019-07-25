@@ -95,7 +95,9 @@ export default class ProfileSettings extends React.Component {
   };
 
   render() {
-    const { email, notifications } = this.props.user;
+    const { user, settings } = this.context;
+    const { email } = user;
+    const { notifications } = settings;
 
     return (
       <div className={STYLES_CONTAINER}>

@@ -14,12 +14,12 @@ export const NotificationLevel = {
   EVERY: 2,
 };
 
-const _getChatNotificationLevel = (user) => {
-  if (!user) {
+const _getChatNotificationLevel = (settings) => {
+  if (!settings || !settings.notifications) {
     return NotificationLevel.NONE;
   }
 
-  let notifications = user.notifications;
+  let notifications = settings.notifications;
   if (!notifications || !notifications.desktop) {
     return NotificationLevel.NONE;
   }
@@ -48,8 +48,14 @@ export const showNotification = ({ title, message }) => {
   });
 };
 
-export const chatMessageHasNotification = (m, viewer, channel, type = NotificationType.DESKTOP) => {
-  const notificationLevel = _getChatNotificationLevel(viewer);
+export const chatMessageHasNotification = (
+  m,
+  viewer,
+  settings,
+  channel,
+  type = NotificationType.DESKTOP
+) => {
+  const notificationLevel = _getChatNotificationLevel(settings);
   if (type === NotificationType.DESKTOP && notificationLevel === NotificationLevel.NONE)
     return false;
 
@@ -73,11 +79,11 @@ export const chatMessageHasNotification = (m, viewer, channel, type = Notificati
   return messageHasNotification;
 };
 
-export const showFromChatMessages = (messages, viewer, channels, userIdToUser) => {
+export const showFromChatMessages = (messages, viewer, settings, channels, userIdToUser) => {
   for (let ii = 0, nn = messages.length; ii < nn; ii++) {
     const m = messages[ii];
     const channel = channels[m.channelId];
-    if (chatMessageHasNotification(m, viewer, channel)) {
+    if (chatMessageHasNotification(m, viewer, settings, channel)) {
       showNotification({
         title: channel.name,
         message: ChatUtilities.messageBodyToPlainText(m.body, userIdToUser),
