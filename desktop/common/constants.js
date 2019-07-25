@@ -14,6 +14,7 @@ export const REFACTOR_COLORS = {
     body: `#ffffff`,
     border: '#ececec',
     bottomBar: `#171717`,
+    gameBackground: `#000000`,
   },
   text: `#282828`,
   subdued: `#8c8c8c`,

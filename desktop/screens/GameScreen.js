@@ -17,8 +17,11 @@ import GLLoaderScreen from '~/isometric/components/GLLoaderScreen';
 import Tools from '~/components/game/Tools';
 
 import ChatSidebar from '~/components/chat/ChatSidebar';
+import Game from '~/components/game/Game';
 
 import 'react-splitter-layout/lib/index.css';
+
+const USE_NEW_GAME_SCREEN = true;
 
 // TODO(jim): We're dealing with side effects rom the react-splitter-layout
 // It should be removed.
@@ -306,6 +309,10 @@ class GameScreen extends React.Component {
   };
 
   render() {
+    if (USE_NEW_GAME_SCREEN) {
+      return <Game />;
+    }
+
     let actionsBarElement, topBarElement;
     if (!this.props.isFullScreen) {
       actionsBarElement = (
