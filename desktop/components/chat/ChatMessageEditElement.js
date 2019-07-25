@@ -35,6 +35,18 @@ const STYLES_AUTHOR_MESSAGE = css`
   color: ${Constants.REFACTOR_COLORS.text};
 `;
 
+const STYLES_EDIT_ACTIONS = css`
+  display: flex;
+  padding-left: 16px;
+`;
+
+const STYLES_CANCEL = css`
+  font-size: 12px;
+  color: ${Constants.REFACTOR_COLORS.subdued};
+  text-decoration: underline;
+  cursor: pointer;
+`;
+
 class ChatMessageEditElement extends React.Component {
   static defaultProps = {
     user: {
@@ -106,6 +118,11 @@ class ChatMessageEditElement extends React.Component {
               addUsers={this.props.addUsers}
               initialValue={this.state.initialValue}
             />
+            <div className={STYLES_EDIT_ACTIONS}>
+              <div className={STYLES_CANCEL} onClick={this.props.onEditCancel}>
+                Cancel Edit
+              </div>
+            </div>
           </div>
         </span>
       </div>
