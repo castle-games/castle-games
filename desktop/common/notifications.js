@@ -53,6 +53,10 @@ export const chatMessageHasNotification = (m, viewer, channel, type = Notificati
   if (type === NotificationType.DESKTOP && notificationLevel === NotificationLevel.NONE)
     return false;
 
+  if (m.isEdit) {
+    return false;
+  }
+
   let messageHasNotification = false;
   // String() coercion needed at time of writing because these user ids are a number
   // and string respectively.

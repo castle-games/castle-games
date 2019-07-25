@@ -321,6 +321,7 @@ class ChatContextManager extends React.Component {
       createdTime: timestamp,
       timestamp,
       isEdit: messageToEdit !== null,
+      isEdited: messageToEdit !== null,
     };
   };
 
