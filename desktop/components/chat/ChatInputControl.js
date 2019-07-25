@@ -6,8 +6,6 @@ import * as Strings from '~/common/strings';
 import ChatInput from '~/components/chat/ChatInput';
 import regexMatch from 'react-string-replace';
 
-const ENABLE_MESSAGE_EDITS = false;
-
 const Keys = {
   TAB: 9,
   ENTER: 13,
@@ -200,7 +198,7 @@ export default class ChatInputControl extends React.Component {
       // NOTE(jim): Prevent default return response when a user is navigating the popover.
       isEventHandled = true;
       this._handleSelectAutocompleteFromKey();
-    } else if (ENABLE_MESSAGE_EDITS && e.which === Keys.UP && this.props.isEditAvailable) {
+    } else if (e.which === Keys.UP && this.props.isEditAvailable) {
       // up arrow edits last message
       isEventHandled = true;
       this.props.onSelectEdit();
