@@ -1,9 +1,19 @@
 import * as React from 'react';
 
-import GameScreenLayout from '~/components/game/GameScreenLayout';
+import { css } from 'react-emotion';
 
-export default class GameWindow extends React.Component {
+import GameScreenLayout from '~/components/game/GameScreenLayout';
+import GameScreenAlert from '~/components/game/GameScreenAlert';
+import GameScreenWindowHeader from '~/components/game/GameScreenWindowHeader';
+
+export default class Game extends React.Component {
   render() {
-    return <GameScreenLayout />;
+    const elementAlert = (
+      <GameScreenAlert>There was an issue with loading your game.</GameScreenAlert>
+    );
+
+    const elementHeader = <GameScreenWindowHeader />;
+
+    return <GameScreenLayout elementAlert={elementAlert} elementHeader={elementHeader} />;
   }
 }

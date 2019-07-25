@@ -84,19 +84,21 @@ const STYLES_DEVELOPER = css`
 
 export default class GameScreenLayout extends React.Component {
   static defaultProps = {
-    top: null,
+    elementAlert: null,
+    elementHeader: null,
+    elementDeveloper: null,
   };
 
   render() {
-    const { top, developer } = this.props;
+    const { elementAlert, elementHeader, elementDeveloper } = this.props;
 
     return (
       <div className={STYLES_ROOT}>
-        {top ? <div className={STYLES_TOP}>{top}</div> : null}
+        {elementAlert ? <div className={STYLES_TOP}>{elementAlert}</div> : null}
 
         <div className={STYLES_BODY}>
           <div className={STYLES_CONTENT}>
-            <div className={STYLES_HEADER}>&nbsp;</div>
+            {elementHeader ? <div className={STYLES_HEADER}>{elementHeader}</div> : null}
 
             <div className={STYLES_MEDIA}>
               <div className={STYLES_MEDIA_SIDEBAR}>&nbsp;</div>
@@ -106,7 +108,7 @@ export default class GameScreenLayout extends React.Component {
             <div className={STYLES_ACTIONS}>&nbsp;</div>
           </div>
 
-          {developer ? <div className={STYLES_DEVELOPER}>{developer}</div> : null}
+          {elementDeveloper ? <div className={STYLES_DEVELOPER}>{elementDeveloper}</div> : null}
         </div>
       </div>
     );
