@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as Actions from '~/common/actions';
+import * as Utilities from '~/common/utilities';
 
 const EMPTY_CURRENT_USER = {
   user: null,
@@ -87,6 +88,8 @@ class CurrentUserContextProvider extends React.Component {
       this._loadingPosts = true;
       try {
         let posts = await Actions.allPostsAsync({ pageAfterPostId });
+        // shuffle posts per page to make things interesting
+        posts = Utilities.shuffle(posts);
         await this.setState((state) => {
           if (pageAfterPostId !== null && pageAfterPostId !== undefined) {
             let existingPosts = state.content.posts || [];

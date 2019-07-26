@@ -50,6 +50,14 @@ export const adjustTextColor = (hex) => {
     : 'rgba(255, 255, 255, 0.8)';
 };
 
+export const shuffle = (a) => {
+  for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+};
+
 export const colorLuminance = (hex, lum) => {
   // Validate hex string
   hex = String(hex).replace(/[^0-9a-f]/gi, "");
