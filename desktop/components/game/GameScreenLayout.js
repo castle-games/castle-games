@@ -77,7 +77,7 @@ const STYLES_ACTIONS = css`
 
 const STYLES_DEVELOPER = css`
   display: flex;
-  width: 288px;
+  width: 428px;
   height: 100%;
   flex-shrink: 0;
 `;
