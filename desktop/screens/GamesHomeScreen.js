@@ -56,6 +56,7 @@ const STYLES_POSTS_CONTAINER = css`
 const STYLES_ALL_GAMES_LOADING_INDICATOR = css`
   font-family: ${Constants.font.heading};
   font-size: ${Constants.typescale.lvl6};
+  margin: 8px 0px 0px 24px;
 `;
 
 const STYLES_BOTTOM = css`
@@ -147,7 +148,7 @@ class GamesHomeScreen extends React.Component {
 
   _renderBottom = () => {
     let maybeLoading;
-    if (this.state.isLoading) {
+    if (this.state.subNavMode == 'home' && this.state.isLoading) {
       maybeLoading = <div>Loading...</div>;
     }
     return <div className={STYLES_BOTTOM}>{maybeLoading}</div>;
