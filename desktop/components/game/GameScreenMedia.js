@@ -11,6 +11,7 @@ import GameWindow from '~/native/gamewindow';
 const STYLES_CONTAINER = css`
   width: 100%;
   height: 100%;
+  background: #000000;
 `;
 
 const jsUserToLuaUser = async (user) =>
@@ -82,68 +83,6 @@ export default class GameScreenMedia extends React.Component {
     this.updateWithProps(prevProps, prevState);
   }
 
-  _game = null;
-
-  get = () => {
-    return this._game;
-  };
-
-  _setRef = (ref) => {
-    this._game = ref;
-    this.update();
-  };
-
-  close = async () => {
-    await GameWindow.close();
-  };
-
-  open = async () => {
-    await new Promise((resolve) =>
-      this.setState(
-        { loaded: false, luaNetworkRequests: [], loadingPhase: 'initializing' },
-        resolve
-      )
-    );
-
-    Logs.system(`Loading game entry point: ${url}`);
-    const screenSettings = Utilities.getScreenSettings(game);
-    const initialData = await this._prepareInitialGameData(screenSettings);
-
-    // Launch the game window, passing all of the initial settings
-    await GameWindow.open({
-      gameUrl: url,
-      game: game,
-      navigations: {
-        navigateToEditPost: this.props.navigateToEditPost,
-        navigateToGameUrl: this.props.navigateToGameUrl,
-        navigateToGame: this.props.navigateToGame,
-      },
-      initialData,
-      screenSettings,
-    });
-
-    // Triger the `castle.postopened` event afterward
-    if (initialData.initialPost) {
-      NativeUtil.sendLuaEvent('CASTLE_POST_OPENED', initialData.initialPost);
-    }
-
-    // load newest playing/making user status (don't await)
-    if (this.props.refreshCurrentUser) {
-      this.props.refreshCurrentUser();
-    }
-  };
-
-  update = () => {
-    if (this._game) {
-      const rect = this._game.getBoundingClientRect();
-
-      GameWindow.updateFrame(rect);
-      if (this.state.loaded) {
-        GameWindow.setVisible(true);
-      }
-    }
-  };
-
   _prepareInitialGameData = async (screenSettings) => {
     // Prepare the Lua format of the post
     const luaPost = this.props.post ? await jsPostToLuaPost(this.props.post) : undefined;
@@ -192,11 +131,6 @@ export default class GameScreenMedia extends React.Component {
     this.update();
   };
 
-  _handleGameLoaded = () => {
-    GameWindow.setVisible(true);
-    this.setState({ loaded: true });
-  };
-
   _handleLuaNetworkRequest = async (e) => {
     const { type, id, url, method } = e.params;
 
@@ -217,6 +151,73 @@ export default class GameScreenMedia extends React.Component {
       }));
       return;
     }
+  };
+
+  open = async () => {
+    await new Promise((resolve) =>
+      this.setState(
+        { loaded: false, luaNetworkRequests: [], loadingPhase: 'initializing' },
+        resolve
+      )
+    );
+
+    Logs.system(`Loading game entry point: ${url}`);
+    const screenSettings = Utilities.getScreenSettings(game);
+    const initialData = await this._prepareInitialGameData(screenSettings);
+
+    // Launch the game window, passing all of the initial settings
+    await GameWindow.open({
+      gameUrl: url,
+      game: game,
+      navigations: {
+        navigateToEditPost: this.props.navigateToEditPost,
+        navigateToGameUrl: this.props.navigateToGameUrl,
+        navigateToGame: this.props.navigateToGame,
+      },
+      initialData,
+      screenSettings,
+    });
+
+    // Triger the `castle.postopened` event afterward
+    if (initialData.initialPost) {
+      NativeUtil.sendLuaEvent('CASTLE_POST_OPENED', initialData.initialPost);
+    }
+
+    // load newest playing/making user status (don't await)
+    if (this.props.refreshCurrentUser) {
+      this.props.refreshCurrentUser();
+    }
+  };
+
+  _game = null;
+
+  get = () => {
+    return this._game;
+  };
+
+  _setRef = (ref) => {
+    this._game = ref;
+    this.update();
+  };
+
+  close = async () => {
+    await GameWindow.close();
+  };
+
+  update = () => {
+    if (this._game) {
+      const rect = this._game.getBoundingClientRect();
+
+      GameWindow.updateFrame(rect);
+      if (this.state.loaded) {
+        GameWindow.setVisible(true);
+      }
+    }
+  };
+
+  _handleGameLoaded = () => {
+    GameWindow.setVisible(true);
+    this.setState({ loaded: true });
   };
 
   render() {

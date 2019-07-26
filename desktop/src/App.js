@@ -37,7 +37,8 @@ const isEndGameHotkey = isKeyHotkey('mod+w');
 // TODO: this breaks 'cut' on macOS const isScreenCaputureHotkey = isKeyHotkey('mod+x');
 const isFocusGameHotkey = isKeyHotkey('mod+g');
 
-const USE_GAME_SCREEN_DEBUG = true;
+// TODO(jim): Feature flag to make it easier to test.
+const USE_GAME_SCREEN_DEBUG = false;
 
 class App extends React.Component {
   _nativeChannelsPollTimeout;
