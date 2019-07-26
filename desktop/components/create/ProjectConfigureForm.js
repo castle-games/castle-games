@@ -13,7 +13,7 @@ const STYLES_PROJECT_INPUT_CONTAINER = css`
   border: 1px solid ${Constants.colors.background4};
   background-color: ${Constants.colors.background};
   border-radius: 4px;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 `;
 
 const STYLES_PROJECT_PATH_CHOOSER = css`

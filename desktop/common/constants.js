@@ -85,6 +85,10 @@ export const card = {
   backgroundHover: '#FFFFFF',
   boxShadow: '-1px 1px 2px 0 rgba(0, 0, 0, 0.15)',
   iconColor: '#E3E3E4',
+  mini: {
+    width: '143px',
+    imageHeight: '88px',
+  },
 };
 
 export const linescale = {

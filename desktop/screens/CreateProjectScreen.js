@@ -12,6 +12,7 @@ import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigatorContext } from '~/contexts/NavigationContext';
 
 import CreateHomeScreen from '~/screens/CreateHomeScreen';
+import DocumentationLinks from '~/components/create/DocumentationLinks';
 import CreateProjectProgressIndicator from '~/components/create/CreateProjectProgressIndicator';
 import Logs from '~/common/logs';
 import ProjectConfigureForm from '~/components/create/ProjectConfigureForm';
@@ -22,8 +23,6 @@ const path = Utilities.path();
 
 const STYLES_CONTAINER = css`
   background: ${Constants.colors.background};
-  display: flex;
-  flex-direction: column;
   width: 100%;
   height: 100%;
   overflow-y: scroll;
@@ -45,13 +44,20 @@ const STYLES_PARAGRAPH = css`
   line-height: ${Constants.linescale.base};
   font-family: ${Constants.font.system};
   margin-top: 16px;
-  margin-bottom: 12px;
+  margin-bottom: 20px;
 `;
 
 const STYLES_ACTIONS = css`
   display: flex;
   width: 100%;
   justify-content: space-between;
+`;
+
+const STYLES_PROJECT_URL = css`
+  color: ${Constants.colors.black};
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: 600;
 `;
 
 const STYLES_BACK = css`
@@ -213,6 +219,11 @@ class CreateProjectScreen extends React.Component {
     return (
       <React.Fragment>
         <div className={STYLES_SECTION_TITLE}>Name your project</div>
+        <div className={STYLES_PARAGRAPH}>
+          Castle will create a new project for you with some basic code and assets from the template
+          you selected. Choose a name for your project and select the folder that the project's
+          files should be downloaded to:
+        </div>
         <ProjectConfigureForm
           selectedProjectName={projectName}
           selectedParentDirectoryPath={projectParentDirectoryPath}
@@ -264,23 +275,32 @@ class CreateProjectScreen extends React.Component {
     );
   };
 
+  _handleOpenProject = () => {
+    NativeUtil.openExternalURL(`file://${this._getFinalProjectPath()}`);
+  };
+
   _renderFinished = () => {
     return (
       <React.Fragment>
         <div className={STYLES_SECTION_TITLE}>All done!</div>
         <div className={STYLES_PARAGRAPH}>
           Castle finished creating your project files at{' '}
-          <span className={STYLES_BOLD}>{this._getFinalProjectPath()}</span>.
+          <span className={STYLES_PROJECT_URL} onClick={this._handleOpenProject}>
+            {this._getFinalProjectPath()}
+          </span>
         </div>
         <div className={STYLES_PARAGRAPH}>
           You're ready to start making{' '}
-          <span className={STYLES_BOLD}>{this.state.selectedProjectName}</span>.
+          <span className={STYLES_BOLD}>{this.state.selectedProjectName}</span>! You can find
+          tutorials and documentation on how to make a Castle game on our website:
         </div>
+        <DocumentationLinks />
+        <div className={STYLES_PARAGRAPH}>But why not try running your game first?</div>
         <div className={STYLES_ACTIONS}>
           <UIButton
             className={STYLES_BACK}
             onClick={() => this._handleNavigateToProject(this.state.createdProjectUrl)}>
-            Open Project
+            Run Game!
           </UIButton>
         </div>
       </React.Fragment>

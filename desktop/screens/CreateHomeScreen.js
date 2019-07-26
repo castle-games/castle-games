@@ -10,6 +10,7 @@ import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigatorContext } from '~/contexts/NavigationContext';
 
 import ProjectTemplateChooser from '~/components/create/ProjectTemplateChooser';
+import DocumentationLinks from '~/components/create/DocumentationLinks';
 import UserStatus from '~/common/userstatus';
 
 const DOCS_LINKS = [
@@ -51,6 +52,15 @@ const STYLES_SECTION_TITLE = css`
   font-size: ${Constants.typescale.lvl4};
   font-weight: 400;
   margin-bottom: 12px;
+`;
+
+const STYLES_PARAGRAPH = css`
+  color: ${Constants.colors.black};
+  font-size: ${Constants.typescale.base};
+  line-height: ${Constants.linescale.base};
+  font-family: ${Constants.font.system};
+  margin-top: 16px;
+  margin-bottom: 20px;
 `;
 
 const STYLES_RECENT_PROJECTS = css`
@@ -132,24 +142,22 @@ class CreateHomeScreen extends React.Component {
         return { ...historyItem.game, key: historyItem.userStatusId };
       }
     );
-    if (recentProjects && recentProjects.length) {
-      return (
-        <div className={STYLES_SECTION}>
-          <div className={STYLES_SECTION_TITLE}>Open a recent project</div>
-          <div className={STYLES_RECENT_PROJECTS}>
-            {recentProjects.map(this._renderRecentProject)}
-            <div
-              key={`project-open`}
-              className={STYLES_LINK_CARD}
-              onClick={this._handleOpenProject}>
-              <div className={STYLES_CARD_TITLE}>Open another project...</div>
-              <div className={STYLES_CARD_SUBTITLE}>Open a project from your computer.</div>
+    return (
+      <div className={STYLES_SECTION}>
+        <div className={STYLES_SECTION_TITLE}>Open an existing project</div>
+        <div className={STYLES_RECENT_PROJECTS}>
+          {recentProjects.map(this._renderRecentProject)}
+          <div key={`project-open`} className={STYLES_LINK_CARD} onClick={this._handleOpenProject}>
+            <div className={STYLES_CARD_TITLE}>
+              {recentProjects && recentProjects.length
+                ? 'Open another project...'
+                : 'Open a project...'}
             </div>
+            <div className={STYLES_CARD_SUBTITLE}>Open a project from your computer.</div>
           </div>
         </div>
-      );
-    }
-    return null;
+      </div>
+    );
   };
 
   render() {
@@ -157,32 +165,22 @@ class CreateHomeScreen extends React.Component {
 
     return (
       <React.Fragment>
-        {this._renderRecentProjects()}
         <div className={STYLES_SECTION}>
           <div className={STYLES_SECTION_TITLE}>Create a new project</div>
+          <div className={STYLES_PARAGRAPH}>
+            Anyone can make a game on Castle! Choose one of the template games below to be your
+            starting point or select "New blank project" if you'd like begin from a blank slate.
+          </div>
           <ProjectTemplateChooser
             templates={templates}
             selectedTemplate={selectedTemplate}
             onSelectTemplate={onSelectTemplate}
           />
         </div>
+        {this._renderRecentProjects()}
         <div className={STYLES_DOCUMENTATION}>
           <div className={STYLES_SECTION_TITLE}>Help and Documentation</div>
-          <div className={STYLES_DOCS_LINKS}>
-            {DOCS_LINKS.map((link, ii) => (
-              <div
-                key={`doc-${ii}`}
-                className={STYLES_LINK_CARD}
-                onClick={() => NativeUtil.openExternalURL(link.url)}>
-                <div className={STYLES_CARD_TITLE}>{link.title}</div>
-                <div className={STYLES_CARD_SUBTITLE}>{link.description}</div>
-              </div>
-            ))}
-            <div className={STYLES_LINK_CARD} onClick={this._handleOpenProject}>
-              <div className={STYLES_CARD_TITLE}>Open project</div>
-              <div className={STYLES_CARD_SUBTITLE}>Open a project from your computer.</div>
-            </div>
-          </div>
+          <DocumentationLinks />
         </div>
       </React.Fragment>
     );

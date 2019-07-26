@@ -22,12 +22,21 @@ const STYLES_TEMPLATE_CONTAINER = css`
 `;
 
 const STYLES_GAME_COVER = css`
-  width: ${Constants.card.width};
-  height: ${Constants.card.imageHeight};
+  width: ${Constants.card.mini.width};
+  height: ${Constants.card.mini.imageHeight};
   cursor: pointer;
   background-size: cover;
   background-position: 50% 50%;
   background-color: ${Constants.colors.black};
+  margin-bottom: 4px;
+`;
+
+const STYLES_BLANK_GAME_COVER = css`
+  width: ${Constants.card.mini.width};
+  height: ${Constants.card.mini.imageHeight};
+  cursor: pointer;
+  background-color: ${Constants.colors.white};
+  border: 1px solid ${Constants.colors.background3};
   margin-bottom: 4px;
 `;
 
@@ -56,10 +65,15 @@ export default class ProjectTemplateChooser extends React.Component {
         key={Project.BLANK_TEMPLATE_ID}
         className={STYLES_TEMPLATE_CONTAINER}
         onClick={() =>
-          this.props.onSelectTemplate({ gameId: Project.BLANK_TEMPLATE_ID, title: 'blank' })
+          this.props.onSelectTemplate({
+            gameId: Project.BLANK_TEMPLATE_ID,
+            title: 'New blank project',
+            description:
+              "We'll create the basic files for your project, but it's up to you to turn them into a game!",
+          })
         }>
-        <figure className={STYLES_GAME_COVER} />
-        <div className={STYLES_GAME_TITLE}>blank</div>
+        <figure className={STYLES_BLANK_GAME_COVER} />
+        <div className={STYLES_GAME_TITLE}>New blank project</div>
       </div>
     );
   };
