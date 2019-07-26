@@ -20,7 +20,18 @@ export default class Game extends React.Component {
 
     const elementDeveloper = <GameScreenDeveloperSidebar />;
 
-    const elementGame = <GameScreenMedia />;
+    const elementGame = (
+      <GameScreenMedia
+        game={this.props.game}
+        timeGameLoaded={this.props.timeGameLoaded}
+        timeNavigatedToGame={this.props.timeNavigatedToGame}
+        navigateToUserProfile={this.props.navigateToUserProfile}
+        navigateToEditPost={this.props.navigateToEditPost}
+        navigateToGameUrl={this.props.navigateToGameUrl}
+        navigateToGame={this.props.navigateToGame}
+        refreshCurrentUser={this.props.refreshCurrentUser}
+      />
+    );
 
     const elementGameSidebar = <GameScreenSidebar />;
 

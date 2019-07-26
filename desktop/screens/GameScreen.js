@@ -310,7 +310,18 @@ class GameScreen extends React.Component {
 
   render() {
     if (USE_NEW_GAME_SCREEN) {
-      return <Game />;
+      return (
+        <Game
+          game={this.props.game}
+          timeGameLoaded={this.props.timeGameLoaded}
+          timeNavigatedToGame={this.props.timeNavigatedToGame}
+          navigateToUserProfile={this.props.navigateToUserProfile}
+          navigateToEditPost={this.props.navigateToEditPost}
+          navigateToGameUrl={this.props.navigateToGameUrl}
+          navigateToGame={this.props.navigateToGame}
+          refreshCurrentUser={this.props.refreshCurrentUser}
+        />
+      );
     }
 
     let actionsBarElement, topBarElement;
