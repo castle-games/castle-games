@@ -62,7 +62,7 @@ const STYLES_MEDIA_CONTAINER = css`
 
 const STYLES_MEDIA_SIDEBAR = css`
   display: flex;
-  width: 240px;
+  width: 188px;
   height: 100%;
   flex-shrink: 0;
 `;
@@ -80,16 +80,27 @@ const STYLES_DEVELOPER = css`
   flex-shrink: 0;
 `;
 
+// TODO(jim): Support fluid resize of components.
+// TODO(jim): Connect data.
 export default class GameScreenLayout extends React.Component {
   static defaultProps = {
-    elementAlert: null,
-    elementHeader: null,
-    elementDeveloper: null,
     elementActions: null,
+    elementAlert: null,
+    elementDeveloper: null,
+    elementGame: null,
+    elementGameSidebar: null,
+    elementHeader: null,
   };
 
   render() {
-    const { elementAlert, elementHeader, elementDeveloper, elementActions } = this.props;
+    const {
+      elementActions,
+      elementAlert,
+      elementDeveloper,
+      elementGame,
+      elementGameSidebar,
+      elementHeader,
+    } = this.props;
 
     return (
       <div className={STYLES_ROOT}>
@@ -100,8 +111,8 @@ export default class GameScreenLayout extends React.Component {
             {elementHeader ? <div className={STYLES_HEADER}>{elementHeader}</div> : null}
 
             <div className={STYLES_MEDIA}>
-              <div className={STYLES_MEDIA_SIDEBAR}>&nbsp;</div>
-              <div className={STYLES_MEDIA_CONTAINER}>&nbsp;</div>
+              <div className={STYLES_MEDIA_SIDEBAR}>{elementGameSidebar}</div>
+              <div className={STYLES_MEDIA_CONTAINER}>{elementGame}</div>
             </div>
 
             {elementActions ? <div className={STYLES_ACTIONS}>{elementActions}</div> : null}
