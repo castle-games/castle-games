@@ -40,7 +40,6 @@ const STYLES_CONTENT = css`
 
 const STYLES_HEADER = css`
   display: flex;
-  height: 24px;
   width: 100%;
   flex-shrink: 0;
 `;
@@ -70,7 +69,6 @@ const STYLES_MEDIA_SIDEBAR = css`
 
 const STYLES_ACTIONS = css`
   display: flex;
-  height: 48px;
   width: 100%;
   flex-shrink: 0;
 `;
@@ -87,10 +85,11 @@ export default class GameScreenLayout extends React.Component {
     elementAlert: null,
     elementHeader: null,
     elementDeveloper: null,
+    elementActions: null,
   };
 
   render() {
-    const { elementAlert, elementHeader, elementDeveloper } = this.props;
+    const { elementAlert, elementHeader, elementDeveloper, elementActions } = this.props;
 
     return (
       <div className={STYLES_ROOT}>
@@ -105,7 +104,7 @@ export default class GameScreenLayout extends React.Component {
               <div className={STYLES_MEDIA_CONTAINER}>&nbsp;</div>
             </div>
 
-            <div className={STYLES_ACTIONS}>&nbsp;</div>
+            {elementActions ? <div className={STYLES_ACTIONS}>{elementActions}</div> : null}
           </div>
 
           {elementDeveloper ? <div className={STYLES_DEVELOPER}>{elementDeveloper}</div> : null}

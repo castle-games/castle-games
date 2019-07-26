@@ -6,6 +6,7 @@ import GameScreenLayout from '~/components/game/GameScreenLayout';
 import GameScreenAlert from '~/components/game/GameScreenAlert';
 import GameScreenWindowHeader from '~/components/game/GameScreenWindowHeader';
 import GameScreenDeveloperSidebar from '~/components/game/GameScreenDeveloperSidebar';
+import GameScreenActionsBar from '~/components/game/GameScreenActionsBar';
 
 export default class Game extends React.Component {
   render() {
@@ -17,11 +18,14 @@ export default class Game extends React.Component {
 
     const elementDeveloper = <GameScreenDeveloperSidebar />;
 
+    const elementActions = <GameScreenActionsBar />;
+
     return (
       <GameScreenLayout
         elementAlert={elementAlert}
         elementHeader={elementHeader}
         elementDeveloper={elementDeveloper}
+        elementActions={elementActions}
       />
     );
   }
