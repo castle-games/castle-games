@@ -148,7 +148,7 @@ class GamesHomeScreen extends React.Component {
 
   _renderBottom = () => {
     let maybeLoading;
-    if (this.state.subNavMode == 'home' && this.state.isLoading) {
+    if (this.state.subNavMode === 'home' && this.state.isLoading) {
       maybeLoading = <div>Loading...</div>;
     }
     return <div className={STYLES_BOTTOM}>{maybeLoading}</div>;
@@ -171,7 +171,7 @@ class GamesHomeScreen extends React.Component {
       <div className={STYLES_HOME_CONTAINER} onScroll={this._handleScroll}>
         <div className={STYLES_CONTENT_CONTAINER}>
           <div className={STYLES_SUB_NAVIGATION_BAR}>
-            <div className={this.state.isHoveringOnHome || this.state.subNavMode == 'home'
+            <div className={this.state.isHoveringOnHome || this.state.subNavMode === 'home'
                 ? `${STYLES_SUB_NAVIGATION_ITEM} ${STYLES_SUB_NAVIGATION_ITEM_ACTIVE}`
                 : STYLES_SUB_NAVIGATION_ITEM}
               onMouseEnter={() => this._handleSetHoverOnHome(true)}
@@ -179,7 +179,7 @@ class GamesHomeScreen extends React.Component {
               onClick={() => this._changeSubNavMode('home')}>
               Home
             </div>
-            <div className={this.state.isHoveringOnAllGames || this.state.subNavMode == 'allGames'
+            <div className={this.state.isHoveringOnAllGames || this.state.subNavMode === 'allGames'
                 ? `${STYLES_SUB_NAVIGATION_ITEM} ${STYLES_SUB_NAVIGATION_ITEM_ACTIVE}`
                 : STYLES_SUB_NAVIGATION_ITEM}
               onMouseEnter={() => this._handleSetHoverOnAllGames(true)}
@@ -189,12 +189,12 @@ class GamesHomeScreen extends React.Component {
             </div>
           </div>
           <div className={STYLES_GAMES_CONTAINER}>
-            {(this.state.subNavMode == 'home') || (this.state.subNavMode == 'allGames' && this.state.allGames.length > 0) ? (
+            {(this.state.subNavMode === 'home') || (this.state.subNavMode === 'allGames' && this.state.allGames.length > 0) ? (
               <UIGameSet
                 title=""
-                numRowsToElide={this.state.subNavMode == 'home' ? 3 : -1}
+                numRowsToElide={this.state.subNavMode === 'home' ? 3 : -1}
                 viewer={this.props.viewer}
-                gameItems={this.state.subNavMode == 'home' ? this.props.trendingGames : this.state.allGames}
+                gameItems={this.state.subNavMode === 'home' ? this.props.trendingGames : this.state.allGames}
                 onUserSelect={this.props.navigateToUserProfile}
                 onGameSelect={this._navigateToGame}
                 onSignInSelect={this.props.navigateToSignIn}
@@ -205,7 +205,7 @@ class GamesHomeScreen extends React.Component {
               </div>
             )}
           </div>
-          {this.state.subNavMode == 'home' ? (
+          {this.state.subNavMode === 'home' ? (
             <div className={STYLES_POSTS_CONTAINER}>
               <div className={STYLES_SECTION_TITLE}>What people are up to...</div>
               {maybePostList}
