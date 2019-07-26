@@ -414,6 +414,28 @@ export async function getUserStatusHistory(userId) {
   return result.data.userStatusHistory;
 }
 
+export async function getAllGames() {
+  const result = await API(`
+    query {
+      allGames {
+        ${GAME_FIELDS}
+        ${NESTED_GAME_OWNER}
+      }
+    }
+  `);
+
+  if (!result) {
+    return false;
+  }
+
+  // TOOD(jim): Write a global error handler.
+  if (result.error) {
+    return false;
+  }
+
+  return result.data;
+}
+
 export async function getInitialData() {
   const result = await API(`
     query {
