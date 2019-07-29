@@ -88,8 +88,10 @@ class CurrentUserContextProvider extends React.Component {
       this._loadingPosts = true;
       try {
         let posts = await Actions.allPostsAsync({ pageAfterPostId });
+        // TODO(jason): keep track of largest postId somewhere before shuffling
+        // so that fetching the next page fetches correct
         // shuffle posts per page to make things interesting
-        posts = Utilities.shuffle(posts);
+        //posts = Utilities.shuffle(posts);
         await this.setState((state) => {
           if (pageAfterPostId !== null && pageAfterPostId !== undefined) {
             let existingPosts = state.content.posts || [];
