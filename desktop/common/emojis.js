@@ -3,8 +3,8 @@ import * as React from 'react';
 import EmojisJSON from 'emoji-datasource';
 import SpriteSheet from 'emoji-datasource/img/twitter/sheets/32.png';
 
+export const SHORT_NAME_TO_OBJECT = {};
 const NUM_BLOCKS = 52;
-const SHORT_NAME_TO_OBJECT = {};
 const SHORT_NAMES = [];
 
 const MAX_AUTOCOMPLETE_RESULTS = 10;

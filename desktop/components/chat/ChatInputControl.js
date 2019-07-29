@@ -139,13 +139,18 @@ export default class ChatInputControl extends React.Component {
     }
   };
 
-  _handleSelectEmoji = (emoji) => {
+  _handleSelectEmoji = (emoji, append = false) => {
     let substitution = `:${emoji}:`;
 
-    let newValue = regexMatch(this.state.value, /([:][\w_\-\+]+)$/g, (match, i) => {
-      return substitution;
-    });
-    newValue = newValue.join().replace(`,${substitution},`, substitution);
+    let newValue;
+    if (append) {
+      newValue = `${this.state.value}${substitution}`;
+    } else {
+      newValue = regexMatch(this.state.value, /([:][\w_\-\+]+)$/g, (match, i) => {
+        return substitution;
+      });
+      newValue = newValue.join().replace(`,${substitution},`, substitution);
+    }
     this._handleSelectValue(newValue);
   };
 

@@ -5,8 +5,11 @@ import { css } from 'react-emotion';
 
 import ReactDOM from 'react-dom';
 import AutoSizeTextarea from 'react-textarea-autosize';
-import ChatInputEmoji from '~/components/chat/ChatInputEmoji';
+import ChatInputEmojiItem from '~/components/chat/ChatInputEmojiItem';
+import ChatInputEmojiPicker from '~/components/chat/ChatInputEmojiPicker';
 import ChatInputMention from '~/components/chat/ChatInputMention';
+
+const SHOW_EMOJI_PICKER = false;
 
 const STYLES_CONTAINER = css`
   flex-shrink: 0;
@@ -86,8 +89,8 @@ export default class ChatInput extends React.Component {
     this.focus();
   };
 
-  _handleSelectEmoji = (emoji) => {
-    this.props.onSelectEmoji(emoji);
+  _handleSelectEmoji = (emoji, append = false) => {
+    this.props.onSelectEmoji(emoji, append);
     this.focus();
   };
 
@@ -113,7 +116,7 @@ export default class ChatInput extends React.Component {
         <div className={STYLES_AUTOCOMPLETE}>
           {autocomplete.emoji.map((o, i) => {
             return (
-              <ChatInputEmoji
+              <ChatInputEmojiItem
                 onClick={() => this._handleSelectEmoji(o)}
                 shortName={o}
                 key={`option-${i}`}
@@ -123,6 +126,12 @@ export default class ChatInput extends React.Component {
           })}
         </div>
       );
+    }
+  };
+
+  _renderEmojiPicker = () => {
+    if (SHOW_EMOJI_PICKER) {
+      return <ChatInputEmojiPicker onSelectEmoji={this._handleSelectEmoji} />;
     }
   };
 
@@ -146,6 +155,7 @@ export default class ChatInput extends React.Component {
     return (
       <div className={STYLES_CONTAINER} style={containerStyles}>
         {this._renderAutocomplete()}
+        {this._renderEmojiPicker()}
         <AutoSizeTextarea
           ref={(c) => {
             this._input = c;

@@ -42,7 +42,7 @@ const STYLES_EMOJI_SHORT_NAME = css`
   color: ${Constants.REFACTOR_COLORS.text};
 `;
 
-export default class ChatInputEmoji extends React.Component {
+export default class ChatInputEmojiItem extends React.Component {
   render() {
     const { shortName } = this.props;
     return (
