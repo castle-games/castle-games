@@ -45,7 +45,7 @@ export default class UIGameSet extends React.Component {
   };
 
   _maxNumGamesPerRow() {
-    return Math.floor((this.state.width - 24) / (parseInt(Constants.card.width, 10) + 8));
+    return Math.floor((this.state.width - 24) / (parseInt(Constants.card.width, 10) + 16));
   }
 
   _totalNumRows() {
