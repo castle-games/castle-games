@@ -25,6 +25,7 @@ export default class ChatInputControl extends React.Component {
       type: null,
     },
     isEditAvailable: false,
+    isShowingEmojiPicker: false,
   };
 
   componentDidMount() {
@@ -56,6 +57,21 @@ export default class ChatInputControl extends React.Component {
   clear = () => {
     window.clearTimeout(this._timeout);
     this._timeout = null;
+  };
+
+  _handleToggleEmojiPicker = () => {
+    this.setState((state) => {
+      let updates = {};
+      updates.isShowingEmojiPicker = !state.isShowingEmojiPicker;
+      if (updates.isShowingEmojiPicker) {
+        // close autocomplete if it was open
+        updates.autocomplete = { type: null };
+      }
+      return {
+        ...state,
+        ...updates,
+      };
+    });
   };
 
   _handleInputChange = (e) => {
@@ -109,6 +125,7 @@ export default class ChatInputControl extends React.Component {
             type: 'users',
             users,
           },
+          isShowingEmojiPicker: false,
         });
       };
     } else if (type === 'emoji') {
@@ -119,6 +136,7 @@ export default class ChatInputControl extends React.Component {
             type: 'emoji',
             emoji,
           },
+          isShowingEmojiPicker: false,
         });
       };
     }
@@ -167,6 +185,7 @@ export default class ChatInputControl extends React.Component {
     this.setState({
       value,
       autocomplete: { type: null },
+      isShowingEmojiPicker: false,
     });
   };
 
@@ -264,9 +283,11 @@ export default class ChatInputControl extends React.Component {
         value={this.state.value}
         index={this.state.index}
         autocomplete={this.state.autocomplete}
+        isShowingEmojiPicker={this.state.isShowingEmojiPicker}
         onChange={this._handleInputChange}
         onSelectUser={this._handleSelectUser}
         onSelectEmoji={this._handleSelectEmoji}
+        onToggleEmojiPicker={this._handleToggleEmojiPicker}
         onKeyUp={this._handleKeyUp}
         onKeyDown={this._handleKeyDown}
       />

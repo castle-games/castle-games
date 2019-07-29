@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
+import * as SVG from '~/components/primitives/svg';
 
 import { css } from 'react-emotion';
 
@@ -8,8 +9,6 @@ import AutoSizeTextarea from 'react-textarea-autosize';
 import ChatInputEmojiItem from '~/components/chat/ChatInputEmojiItem';
 import ChatInputEmojiPicker from '~/components/chat/ChatInputEmojiPicker';
 import ChatInputMention from '~/components/chat/ChatInputMention';
-
-const SHOW_EMOJI_PICKER = false;
 
 const STYLES_CONTAINER = css`
   flex-shrink: 0;
@@ -41,7 +40,7 @@ const STYLES_INPUT = css`
   font-size: 14px;
   background: transparent;
   font-weight: 400;
-  padding: 8px 8px 8px 8px;
+  padding: 8px 24px 8px 8px;
   box-sizing: border-box;
   resize: none;
   border-radius: 4px;
@@ -57,6 +56,15 @@ const STYLES_INPUT = css`
   }
 `;
 
+const STYLES_EMOJI_TOGGLE = css`
+  color: ${Constants.REFACTOR_COLORS.subdued};
+  position: absolute;
+  right: 24px;
+  bottom: 12px;
+  padding: 0 4px;
+  cursor: pointer;
+`;
+
 export default class ChatInput extends React.Component {
   _input;
 
@@ -69,6 +77,7 @@ export default class ChatInput extends React.Component {
     autocomplete: {
       type: null,
     },
+    isShowingEmojiPicker: false,
   };
 
   componentDidMount() {
@@ -130,9 +139,10 @@ export default class ChatInput extends React.Component {
   };
 
   _renderEmojiPicker = () => {
-    if (SHOW_EMOJI_PICKER) {
+    if (this.props.isShowingEmojiPicker) {
       return <ChatInputEmojiPicker onSelectEmoji={this._handleSelectEmoji} />;
     }
+    return null;
   };
 
   render() {
@@ -169,6 +179,9 @@ export default class ChatInput extends React.Component {
           onKeyDown={this.props.onKeyDown}
           style={inputStyles}
         />
+        <div className={STYLES_EMOJI_TOGGLE} onClick={this.props.onToggleEmojiPicker}>
+          <SVG.ChatEmojiPicker size="20" />
+        </div>
       </div>
     );
   }
