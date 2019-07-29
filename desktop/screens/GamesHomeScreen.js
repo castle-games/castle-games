@@ -103,7 +103,7 @@ class GamesHomeScreen extends React.Component {
       this.setState({ isLoadingPosts: false });
     }
 
-    if (this.props.allGames && this.props.allGames !== prevProps.allGames && this.state.isLoadingAllGames && this.props.allGames.length > 35 ) {
+    if (this.props.allGames && this.props.allGames !== prevProps.allGames && this.state.isLoadingAllGames && this.props.allGames.length > 35) {
       this.setState({ isLoadingAllGames: false });
     }
   }
@@ -198,7 +198,7 @@ class GamesHomeScreen extends React.Component {
                 onSignInSelect={this.props.navigateToSignIn}
               />
             ) : null}
-            {this.state.isLoadingAllGames ? (
+            {this.state.subNavMode == 'allGames' && this.state.isLoadingAllGames ? (
               <div className={STYLES_ALL_GAMES_LOADING_INDICATOR}>
                 Loading games...
               </div>
