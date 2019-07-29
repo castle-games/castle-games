@@ -25,8 +25,6 @@ const path = Utilities.path();
 
 const STYLES_CONTAINER = css`
   background: ${Constants.colors.background};
-  max-width: 768px;
-  margin: 32px auto 0 auto;
   height: 100%;
   overflow-y: scroll;
   padding: 24px;
@@ -35,6 +33,11 @@ const STYLES_CONTAINER = css`
     display: none;
     width: 1px;
   }
+`;
+
+const STYLES_CENTERED_CONTENT = css`
+  max-width: 768px;
+  margin: 32px auto 0 auto;
 `;
 
 const STYLES_BOLD = css`
@@ -349,7 +352,11 @@ class CreateProjectScreen extends React.Component {
     } else if (this.state.step === 'finished') {
       content = this._renderFinished();
     }
-    return <div className={STYLES_CONTAINER}>{content}</div>;
+    return (
+      <div className={STYLES_CONTAINER}>
+        <div className={STYLES_CENTERED_CONTENT}>{content}</div>
+      </div>
+    );
   }
 }
 
