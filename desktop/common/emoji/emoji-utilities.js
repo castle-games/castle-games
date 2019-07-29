@@ -1,9 +1,11 @@
 import * as React from 'react';
 
+import CategoriesJSON from '~/common/emoji/categories';
 import EmojisJSON from 'emoji-datasource';
 import SpriteSheet from 'emoji-datasource/img/twitter/sheets/32.png';
 
-export const SHORT_NAME_TO_OBJECT = {};
+const CATEGORIES = [];
+const SHORT_NAME_TO_OBJECT = {};
 const NUM_BLOCKS = 52;
 const SHORT_NAMES = [];
 
@@ -27,6 +29,18 @@ for (let i = 0; i < EmojisJSON.length; i++) {
   }
 }
 
+Object.entries(CategoriesJSON).forEach(([category, list]) => {
+  let filteredList = list.filter((short_name) => SHORT_NAME_TO_OBJECT[short_name] !== undefined);
+  CATEGORIES.push({
+    title: category,
+    emojis: filteredList,
+  });
+});
+
+export function getCategories() {
+  return CATEGORIES;
+}
+
 export function autocompleteShortNames(prefix) {
   if (!prefix) return [];
   const prefixQuery = prefix.toLowerCase().trim();
@@ -44,6 +58,8 @@ export function isEmoji(text) {
 
 export function getEmojiComponent(text, size = 20) {
   let emoji = SHORT_NAME_TO_OBJECT[text];
+  if (!emoji) return null;
+
   let px = emoji.sheet_x;
   let py = emoji.sheet_y;
 

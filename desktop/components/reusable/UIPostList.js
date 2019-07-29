@@ -4,7 +4,6 @@ import * as Strings from '~/common/strings';
 import * as SVG from '~/components/primitives/svg';
 
 import { css } from 'react-emotion';
-import { getEmojiComponent } from '~/common/emojis';
 import { Tooltip } from 'react-tippy';
 
 import UIMessageBody from '~/components/reusable/UIMessageBody';

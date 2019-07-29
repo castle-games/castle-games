@@ -1,8 +1,8 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
-import * as Emojis from '~/common/emojis';
 
 import { css } from 'react-emotion';
+import { getCategories, getEmojiComponent } from '~/common/emoji/emoji-utilities';
 
 const STYLES_CONTAINER = css`
   position: absolute;
@@ -10,8 +10,6 @@ const STYLES_CONTAINER = css`
   right: 16px;
   width: 384px;
   height: 256px;
-  display: flex;
-  flex-wrap: wrap;
 
   padding: 8px;
 
@@ -30,7 +28,7 @@ const STYLES_CONTAINER = css`
 
 const STYLES_EMOJI_ITEM = css`
   padding: 4px;
-  margin: 2px;
+  margin: 4px;
   border-radius: 3px;
   background: transparent;
   cursor: pointer;
@@ -40,20 +38,45 @@ const STYLES_EMOJI_ITEM = css`
   }
 `;
 
+const STYLES_CATEGORY_SECTION = css`
+  margin-bottom: 8px;
+`;
+
+const STYLES_CATEGORY_TITLE = css`
+  font-family: ${Constants.REFACTOR_FONTS.system};
+  font-size: 14px;
+  margin: 0 0 4px 4px;
+  cursor: default;
+`;
+
+const STYLES_CATEGORY_LIST = css`
+  font-family: ${Constants.REFACTOR_FONTS.system};
+  display: flex;
+  flex-wrap: wrap;
+`;
+
 export default class ChatInputEmojiPicker extends React.Component {
   static defaultProps = {
     onSelectEmoji: (shortName) => {},
   };
 
   render() {
+    const categories = getCategories();
     return (
       <div className={STYLES_CONTAINER}>
-        {Object.entries(Emojis.SHORT_NAME_TO_OBJECT).map(([name, emoji], ii) => (
-          <div
-            key={`emoji-${ii}`}
-            className={STYLES_EMOJI_ITEM}
-            onClick={() => this.props.onSelectEmoji(name, true)}>
-            {Emojis.getEmojiComponent(name)}
+        {categories.map((category, ii) => (
+          <div className={STYLES_CATEGORY_SECTION} key={`category-${ii}`}>
+            <div className={STYLES_CATEGORY_TITLE}>{category.title}</div>
+            <div className={STYLES_CATEGORY_LIST}>
+              {category.emojis.map((short_name, jj) => (
+                <div
+                  key={`emoji-${jj}`}
+                  className={STYLES_EMOJI_ITEM}
+                  onClick={() => this.props.onSelectEmoji(short_name, true)}>
+                  {getEmojiComponent(short_name)}
+                </div>
+              ))}
+            </div>
           </div>
         ))}
       </div>

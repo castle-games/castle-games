@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as ChatActions from '~/common/actions-chat';
 
-import { isEmoji, emojiToString } from '~/common/emojis';
+import { isEmoji, emojiToString } from '~/common/emoji/emoji-utilities';
 
 export const EVERYONE_CHANNEL_NAME = 'lobby';
 export const ADMIN_USER_ID = -1;

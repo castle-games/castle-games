@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ChatActions from '~/common/actions-chat';
-import * as Emojis from '~/common/emojis';
+import * as Emojis from '~/common/emoji/emoji-utilities';
 import * as Strings from '~/common/strings';
 
 import ChatInput from '~/components/chat/ChatInput';

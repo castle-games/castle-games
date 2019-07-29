@@ -5,7 +5,7 @@ import * as Urls from '~/common/urls';
 
 import { css } from 'react-emotion';
 import { ChatContext } from '~/contexts/ChatContext';
-import { emojiToString } from '~/common/emojis';
+import { emojiToString } from '~/common/emoji/emoji-utilities';
 import { NavigatorContext } from '~/contexts/NavigationContext';
 import { UserPresenceContext } from '~/contexts/UserPresenceContext';
 

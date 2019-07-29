@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
-import * as Emojis from '~/common/emojis';
+import * as Emojis from '~/common/emoji/emoji-utilities';
 import * as Strings from '~/common/strings';
 import * as Actions from '~/common/actions';
 import * as ChatUtilities from '~/common/chat-utilities';
