@@ -41,7 +41,8 @@ export const initialize = async () => {
   amplitude.getInstance().init(config.AMPLITUDE_API_KEY);
   // figure out what version of castle we're on
   let version = await NativeUtil.getVersionAsync();
-  castleVersion = typeof version === 'string' && version !== 'VERSION_UNSET' ? version : castleVersion;
+  castleVersion =
+    typeof version === 'string' && version !== 'VERSION_UNSET' ? version : castleVersion;
   if (castleVersion) {
     amplitude.getInstance().setUserProperties({ mostRecentCastleVersion: castleVersion });
   }
@@ -141,4 +142,15 @@ export const trackGameEnd = async ({ game, time = Date.now() }) => {
   lastGameLaunched = undefined;
   timeGameLaunched = undefined;
   timeWithGameInFocus = undefined;
+};
+
+// should be called whenever a user successfully creates a new game (separate from uploading a new game)
+export const trackGameCreate = async ({ name, template }) => {
+  const templateId = template ? template.gameId : null;
+  const templateName = template ? template.title : null;
+  logAmplitudeEvent('Created Game', {
+    projectName: name,
+    templateId,
+    templateName,
+  });
 };

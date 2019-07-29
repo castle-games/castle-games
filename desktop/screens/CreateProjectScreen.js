@@ -5,6 +5,7 @@ import * as NativeUtil from '~/native/nativeutil';
 import * as Strings from '~/common/strings';
 import * as Project from '~/common/project';
 import * as Utilities from '~/common/utilities';
+import * as Analytics from '~/common/analytics';
 import * as SVG from '~/components/primitives/svg';
 
 import { css } from 'react-emotion';
@@ -23,7 +24,8 @@ const path = Utilities.path();
 
 const STYLES_CONTAINER = css`
   background: ${Constants.colors.background};
-  width: 100%;
+  max-width: 768px;
+  margin: 32px auto 0 auto;
   height: 100%;
   overflow-y: scroll;
   padding: 24px;
@@ -166,6 +168,10 @@ class CreateProjectScreen extends React.Component {
   };
 
   _handleProjectFinishedCreating = (createdProjectUrl) => {
+    Analytics.trackGameCreate({
+      name: this.state.selectedProjectName,
+      template: this.state.selectedTemplate,
+    });
     this.setState({
       step: 'finished',
       createdProjectUrl,
