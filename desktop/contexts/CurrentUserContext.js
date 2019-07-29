@@ -11,6 +11,7 @@ const EMPTY_CURRENT_USER = {
   userStatusHistory: [],
   content: {
     posts: null,
+    allGames: null,
   },
 };
 
@@ -19,6 +20,7 @@ const CurrentUserContextDefaults = {
   setCurrentUser: async (user) => {},
   clearCurrentUser: async () => {},
   refreshCurrentUser: async () => {},
+  loadAllGames: async (limit) => {},
   reloadPosts: () => {},
   loadMorePosts: () => {},
 };
@@ -36,6 +38,7 @@ class CurrentUserContextProvider extends React.Component {
       refreshCurrentUser: this.refreshCurrentUser,
       reloadPosts: this.reloadPosts,
       loadMorePosts: this.loadMorePosts,
+      loadAllGames: this.loadAllGames,
     };
 
     if (props.value && props.value.user) {
@@ -108,6 +111,29 @@ class CurrentUserContextProvider extends React.Component {
       } finally {
         this._loadingPosts = false;
       }
+    }
+  };
+
+  loadAllGames = async limit => {
+    let data = null;
+
+    try {
+      data = await Actions.getAllGames(limit);
+    } catch (e) {
+      console.log(`Issue fetching all Castle games: ${e}`);
+    }
+
+    if (data) {
+      let allGames = data.allGames;
+      await this.setState((state) => {
+        return {
+          ...state,
+          content: {
+            ...state.content,
+            allGames,
+          },
+        };
+      });
     }
   };
 

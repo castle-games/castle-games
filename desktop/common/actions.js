@@ -414,15 +414,16 @@ export async function getUserStatusHistory(userId) {
   return result.data.userStatusHistory;
 }
 
-export async function getAllGames() {
+export async function getAllGames(limit) {
   const result = await API(`
-    query {
-      allGames {
+    query($limit: Int) {
+      allGames(limit: $limit) {
         ${GAME_FIELDS}
         ${NESTED_GAME_OWNER}
       }
-    }
-  `);
+    }`, 
+    { limit }
+  );
 
   if (!result) {
     return false;

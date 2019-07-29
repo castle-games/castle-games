@@ -77,15 +77,17 @@ const STYLES_SECTION_TITLE = css`
 class GamesHomeScreen extends React.Component {
   static defaultProps = {
     posts: null,
+    allGames: null,
     reloadPosts: () => {},
     loadMorePosts: () => {},
+    loadAllGames: () => {},
     trendingGames: [],
   };
 
   state = {
-    allGames: [],
     subNavMode: 'home',
-    isLoading: true,
+    isLoadingPosts: true,
+    isLoadingAllGames: true,
     isHoveringOnHome: false,
     isHoveringOnAllGames: false,
   };
@@ -93,24 +95,16 @@ class GamesHomeScreen extends React.Component {
   async componentDidMount() {
     this._mounted = true;
     this.props.reloadPosts();
-
-    // fetch all games
-    let data = null;
-
-    try {
-      data = await Actions.getAllGames();
-    } catch (e) {
-      console.log(`Issue fetching all Castle games: ${e}`);
-    }
-
-    if (data) {
-      this.setState({ allGames: data.allGames })
-    }
+    this.props.loadAllGames(35);
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.props.posts !== prevProps.posts && this.state.isLoading) {
-      this.setState({ isLoading: false });
+    if (this.props.posts !== prevProps.posts && this.state.isLoadingPosts) {
+      this.setState({ isLoadingPosts: false });
+    }
+
+    if (this.props.allGames && this.props.allGames !== prevProps.allGames && this.state.isLoadingAllGames && this.props.allGames.length > 35 ) {
+      this.setState({ isLoadingAllGames: false });
     }
   }
 
@@ -119,6 +113,10 @@ class GamesHomeScreen extends React.Component {
   }
 
   _changeSubNavMode = (newSubNavMode) => {
+    if (newSubNavMode === 'allGames') {
+      this.setState({ isLoadingAllGames: true });
+      this.props.loadAllGames();
+    }
     this.setState({ subNavMode: newSubNavMode });
   };
 
@@ -137,8 +135,8 @@ class GamesHomeScreen extends React.Component {
     const isBottom =
       e.target.scrollHeight - e.target.scrollTop <=
       e.target.clientHeight + SCROLL_BOTTOM_OFFSET + 1000;
-    if (isBottom && !this.state.isLoading) {
-      this.setState({ isLoading: true }, this.props.loadMorePosts);
+    if (isBottom && !this.state.isLoadingPosts) {
+      this.setState({ isLoadingPosts: true }, this.props.loadMorePosts);
     }
   };
 
@@ -148,7 +146,7 @@ class GamesHomeScreen extends React.Component {
 
   _renderBottom = () => {
     let maybeLoading;
-    if (this.state.subNavMode === 'home' && this.state.isLoading) {
+    if (this.state.subNavMode === 'home' && this.state.isLoadingPosts) {
       maybeLoading = <div>Loading...</div>;
     }
     return <div className={STYLES_BOTTOM}>{maybeLoading}</div>;
@@ -189,21 +187,22 @@ class GamesHomeScreen extends React.Component {
             </div>
           </div>
           <div className={STYLES_GAMES_CONTAINER}>
-            {(this.state.subNavMode === 'home') || (this.state.subNavMode === 'allGames' && this.state.allGames.length > 0) ? (
+            {(this.state.subNavMode === 'home') || (this.state.subNavMode === 'allGames' && this.props.allGames) ? (
               <UIGameSet
                 title=""
                 numRowsToElide={this.state.subNavMode === 'home' ? 3 : -1}
                 viewer={this.props.viewer}
-                gameItems={this.state.subNavMode === 'home' ? this.props.trendingGames : this.state.allGames}
+                gameItems={this.state.subNavMode === 'home' ? this.props.trendingGames : this.props.allGames}
                 onUserSelect={this.props.navigateToUserProfile}
                 onGameSelect={this._navigateToGame}
                 onSignInSelect={this.props.navigateToSignIn}
               />
-            ) : (
+            ) : null}
+            {this.state.isLoadingAllGames ? (
               <div className={STYLES_ALL_GAMES_LOADING_INDICATOR}>
-                Loading all games...
+                Loading games...
               </div>
-            )}
+            ) : null}
           </div>
           {this.state.subNavMode === 'home' ? (
             <div className={STYLES_POSTS_CONTAINER}>
@@ -231,6 +230,8 @@ export default class GamesHomeScreenWithContext extends React.Component {
                 navigateToGame={navigator.navigateToGame}
                 navigateToSignIn={navigator.navigateToSignIn}
                 posts={currentUser.content.posts}
+                allGames={currentUser.content.allGames}
+                loadAllGames={currentUser.loadAllGames}
                 reloadPosts={currentUser.reloadPosts}
                 loadMorePosts={currentUser.loadMorePosts}
                 navigator={navigator}
