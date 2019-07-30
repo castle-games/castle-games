@@ -19,6 +19,7 @@ import Logs from '~/common/logs';
 import ProjectConfigureForm from '~/components/create/ProjectConfigureForm';
 import ProjectTemplatePreview from '~/components/create/ProjectTemplatePreview';
 import UIButton from '~/components/reusable/UIButton';
+import UserStatus from '~/common/userstatus';
 
 const path = Utilities.path();
 
@@ -81,9 +82,12 @@ const STYLES_SECTION_TITLE = css`
 `;
 
 class CreateProjectScreen extends React.Component {
+  _didUserRunNewProject;
+
   static defaultProps = {
     templates: [],
     onCancel: null,
+    refreshCurrentUser: async () => {},
   };
 
   state = {
@@ -97,7 +101,18 @@ class CreateProjectScreen extends React.Component {
   };
 
   componentDidMount() {
+    this._didUserRunNewProject = false;
     this._setDefaultProjectDirectory();
+  }
+
+  componentWillUnmount() {
+    if (!this._didUserRunNewProject) {
+      // if the user exited this screen by creating a new project and then
+      // pressing the 'Run project' button, then we allow their 'making' user status
+      // to continue.
+      // for all other possible ways of exiting this screen, stop 'making'.
+      UserStatus.stop();
+    }
   }
 
   _setDefaultProjectDirectory = async () => {
@@ -167,11 +182,20 @@ class CreateProjectScreen extends React.Component {
     }
   };
 
+  _addNewProjectToCreated = async (game) => {
+    await UserStatus.startAsync(game);
+    this.props.refreshCurrentUser();
+  };
+
   _handleProjectFinishedCreating = (createdProjectUrl) => {
     Analytics.trackGameCreate({
       name: this.state.selectedProjectName,
       template: this.state.selectedTemplate,
     });
+
+    // finishing this flow counts as 'creating' a game
+    this._addNewProjectToCreated({ url: createdProjectUrl, title: this.state.selectedProjectName });
+
     this.setState({
       step: 'finished',
       createdProjectUrl,
@@ -188,6 +212,7 @@ class CreateProjectScreen extends React.Component {
   };
 
   _handleNavigateToProject = async (projectUrl) => {
+    this._didUserRunNewProject = true; // see comment in componentWillUnmount()
     await this.props.navigateToGameUrl(projectUrl, { launchSource: 'create-project' });
     Logs.system('Welcome to Castle!');
     Logs.system(`We created your project at ${projectUrl}.`);
@@ -339,6 +364,7 @@ export default class CreateProjectScreenWithContext extends React.Component {
                 navigateToHome={navigator.navigateToHome}
                 navigateToGameUrl={navigator.navigateToGameUrl}
                 projectOwner={currentUser.user}
+                refreshCurrentUser={currentUser.refreshCurrentUser}
                 {...this.props}
               />
             )}
