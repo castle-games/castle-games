@@ -31,7 +31,7 @@ const STYLES_CONTAINER = css`
   align-items: flex-start;
   justify-content: space-between;
   flex-direction: column;
-  width: 212px;
+  width: ${Constants.sidebar.width};
   min-width: 10%;
   height: 100vh;
   flex-shrink: 0;

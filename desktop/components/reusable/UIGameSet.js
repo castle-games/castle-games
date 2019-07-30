@@ -6,8 +6,7 @@ import UIGameCell from '~/components/reusable/UIGameCell';
 import { css } from 'react-emotion';
 
 const STYLES_CONTAINER = css`
-  display: flex;
-  flex-direction: column;
+  
 `;
 
 const STYLES_GAME_ROW = css`
@@ -45,7 +44,7 @@ export default class UIGameSet extends React.Component {
   };
 
   _maxNumGamesPerRow() {
-    return Math.floor((this.state.width - 24) / (parseInt(Constants.card.width, 10) + 16));
+    return Math.floor((window.innerWidth - 24 - parseInt(Constants.sidebar.width, 10)) / (parseInt(Constants.card.width, 10) + 16));
   }
 
   _totalNumRows() {

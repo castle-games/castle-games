@@ -77,6 +77,10 @@ export const typescale = {
   base: '1rem',
 };
 
+export const sidebar = {
+  width: '212px',
+};
+
 export const card = {
   width: '220px',
   imageHeight: '135px',
