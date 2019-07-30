@@ -77,6 +77,7 @@ export default class ChatInput extends React.Component {
     autocomplete: {
       type: null,
     },
+    showInlineControls: true,
     isShowingEmojiPicker: false,
   };
 
@@ -179,9 +180,11 @@ export default class ChatInput extends React.Component {
           onKeyDown={this.props.onKeyDown}
           style={inputStyles}
         />
-        <div className={STYLES_EMOJI_TOGGLE} onClick={this.props.onToggleEmojiPicker}>
-          <SVG.ChatEmojiPicker size="20" />
-        </div>
+        {this.props.showInlineControls && (
+          <div className={STYLES_EMOJI_TOGGLE} onClick={this.props.onToggleEmojiPicker}>
+            <SVG.ChatEmojiPicker size="20" />
+          </div>
+        )}
       </div>
     );
   }

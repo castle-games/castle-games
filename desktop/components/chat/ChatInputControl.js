@@ -283,6 +283,7 @@ export default class ChatInputControl extends React.Component {
         value={this.state.value}
         index={this.state.index}
         autocomplete={this.state.autocomplete}
+        showInlineControls={!this.props.isSidebarGameInput}
         isShowingEmojiPicker={this.state.isShowingEmojiPicker}
         onChange={this._handleInputChange}
         onSelectUser={this._handleSelectUser}
