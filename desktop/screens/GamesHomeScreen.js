@@ -36,7 +36,7 @@ const STYLES_SUB_NAVIGATION_ITEM = css`
   font-family: ${Constants.font.heading};
   font-size: ${Constants.typescale.lvl5};
   padding: 0px 24px 16px 24px;
-  color: #A0A0A0;
+  color: #a0a0a0;
 
   cursor: pointer;
 `;
@@ -95,7 +95,10 @@ class GamesHomeScreen extends React.Component {
   async componentDidMount() {
     this._mounted = true;
     this.props.reloadPosts();
-    this.props.loadAllGames(35);
+    if (!this.props.allGames || this.props.allGames.length < 35) {
+      // no games have been loaded yet, preload the first ~page
+      this.props.loadAllGames(35);
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -103,7 +106,12 @@ class GamesHomeScreen extends React.Component {
       this.setState({ isLoadingPosts: false });
     }
 
-    if (this.props.allGames && this.props.allGames !== prevProps.allGames && this.state.isLoadingAllGames && this.props.allGames.length > 35) {
+    if (
+      this.props.allGames &&
+      this.props.allGames !== prevProps.allGames &&
+      this.state.isLoadingAllGames &&
+      this.props.allGames.length > 35
+    ) {
       this.setState({ isLoadingAllGames: false });
     }
   }
@@ -169,17 +177,23 @@ class GamesHomeScreen extends React.Component {
       <div className={STYLES_HOME_CONTAINER} onScroll={this._handleScroll}>
         <div className={STYLES_CONTENT_CONTAINER}>
           <div className={STYLES_SUB_NAVIGATION_BAR}>
-            <div className={this.state.isHoveringOnHome || this.state.subNavMode === 'home'
-                ? `${STYLES_SUB_NAVIGATION_ITEM} ${STYLES_SUB_NAVIGATION_ITEM_ACTIVE}`
-                : STYLES_SUB_NAVIGATION_ITEM}
+            <div
+              className={
+                this.state.isHoveringOnHome || this.state.subNavMode === 'home'
+                  ? `${STYLES_SUB_NAVIGATION_ITEM} ${STYLES_SUB_NAVIGATION_ITEM_ACTIVE}`
+                  : STYLES_SUB_NAVIGATION_ITEM
+              }
               onMouseEnter={() => this._handleSetHoverOnHome(true)}
               onMouseLeave={() => this._handleSetHoverOnHome(false)}
               onClick={() => this._changeSubNavMode('home')}>
               Home
             </div>
-            <div className={this.state.isHoveringOnAllGames || this.state.subNavMode === 'allGames'
-                ? `${STYLES_SUB_NAVIGATION_ITEM} ${STYLES_SUB_NAVIGATION_ITEM_ACTIVE}`
-                : STYLES_SUB_NAVIGATION_ITEM}
+            <div
+              className={
+                this.state.isHoveringOnAllGames || this.state.subNavMode === 'allGames'
+                  ? `${STYLES_SUB_NAVIGATION_ITEM} ${STYLES_SUB_NAVIGATION_ITEM_ACTIVE}`
+                  : STYLES_SUB_NAVIGATION_ITEM
+              }
               onMouseEnter={() => this._handleSetHoverOnAllGames(true)}
               onMouseLeave={() => this._handleSetHoverOnAllGames(false)}
               onClick={() => this._changeSubNavMode('allGames')}>
@@ -187,21 +201,22 @@ class GamesHomeScreen extends React.Component {
             </div>
           </div>
           <div className={STYLES_GAMES_CONTAINER}>
-            {(this.state.subNavMode === 'home') || (this.state.subNavMode === 'allGames' && this.props.allGames) ? (
+            {this.state.subNavMode === 'home' ||
+            (this.state.subNavMode === 'allGames' && this.props.allGames) ? (
               <UIGameSet
                 title=""
                 numRowsToElide={this.state.subNavMode === 'home' ? 3 : -1}
                 viewer={this.props.viewer}
-                gameItems={this.state.subNavMode === 'home' ? this.props.trendingGames : this.props.allGames}
+                gameItems={
+                  this.state.subNavMode === 'home' ? this.props.trendingGames : this.props.allGames
+                }
                 onUserSelect={this.props.navigateToUserProfile}
                 onGameSelect={this._navigateToGame}
                 onSignInSelect={this.props.navigateToSignIn}
               />
             ) : null}
             {this.state.subNavMode == 'allGames' && this.state.isLoadingAllGames ? (
-              <div className={STYLES_ALL_GAMES_LOADING_INDICATOR}>
-                Loading games...
-              </div>
+              <div className={STYLES_ALL_GAMES_LOADING_INDICATOR}>Loading games...</div>
             ) : null}
           </div>
           {this.state.subNavMode === 'home' ? (

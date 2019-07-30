@@ -114,7 +114,7 @@ class CurrentUserContextProvider extends React.Component {
     }
   };
 
-  loadAllGames = async limit => {
+  loadAllGames = async (limit) => {
     let data = null;
 
     try {
