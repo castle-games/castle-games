@@ -118,40 +118,46 @@ export default class ProfileSettings extends React.Component {
             <Row
               key={`email-${option.type}`}
               secondCol={
-                <UICheckbox
-                  onClick={() =>
-                    this._handleSaveNotificationChange({
-                      category: 'email',
-                      type: option.type,
-                      frequency: 'every',
-                    })
-                  }
-                  value={option.frequency === 'every'}
-                />
+                option.supportedFrequencies.includes('every') && (
+                  <UICheckbox
+                    onClick={() =>
+                      this._handleSaveNotificationChange({
+                        category: 'email',
+                        type: option.type,
+                        frequency: 'every',
+                      })
+                    }
+                    value={option.frequency === 'every'}
+                  />
+                )
               }
               thirdCol={
-                <UICheckbox
-                  onClick={() =>
-                    this._handleSaveNotificationChange({
-                      category: 'email',
-                      type: option.type,
-                      frequency: 'daily',
-                    })
-                  }
-                  value={option.frequency === 'daily'}
-                />
+                option.supportedFrequencies.includes('daily') && (
+                  <UICheckbox
+                    onClick={() =>
+                      this._handleSaveNotificationChange({
+                        category: 'email',
+                        type: option.type,
+                        frequency: 'daily',
+                      })
+                    }
+                    value={option.frequency === 'daily'}
+                  />
+                )
               }
               firstCol={
-                <UICheckbox
-                  onClick={() =>
-                    this._handleSaveNotificationChange({
-                      category: 'email',
-                      type: option.type,
-                      frequency: 'never',
-                    })
-                  }
-                  value={option.frequency === 'never'}
-                />
+                option.supportedFrequencies.includes('never') && (
+                  <UICheckbox
+                    onClick={() =>
+                      this._handleSaveNotificationChange({
+                        category: 'email',
+                        type: option.type,
+                        frequency: 'never',
+                      })
+                    }
+                    value={option.frequency === 'never'}
+                  />
+                )
               }>
               {option.description}
             </Row>

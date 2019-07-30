@@ -118,11 +118,13 @@ const CURRENT_USER_QUERY = `
       type
       description
       frequency
+      supportedFrequencies
     }
     desktop {
       type
       description
       frequency
+      supportedFrequencies
     }
   }
 
