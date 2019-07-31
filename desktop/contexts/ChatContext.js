@@ -350,7 +350,7 @@ class ChatContextManager extends React.Component {
           // never seen this channel before, fetch the full channel object later
           channels[m.channelId] = {};
           unseenChannelIds[m.channelId] = true;
-        } else if (this._firstLoadComplete && !m.isEdit) {
+        } else if (this._firstLoadComplete && ChatUtilities.messageHasActivity(m)) {
           // we have already loaded this channel, mark it as unread
           channels[m.channelId].hasUnreadMessages = true;
         }

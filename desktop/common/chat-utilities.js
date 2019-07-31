@@ -42,6 +42,28 @@ export const sortChannels = (channels) => {
   });
 };
 
+/**
+ *  @return whether the message should be treated as readable activity of some kind,
+ *          for example when deciding whether to mark a channel as unread.
+ */
+export const messageHasActivity = (m) => {
+  if (m.isEdit) {
+    return false;
+  }
+  if (m.tempChatMessageId && m.chatMessageId === m.tempChatMessageId) {
+    return false;
+  }
+  if (m.body) {
+    if (
+      m.body.notificationType === 'joined-channel' ||
+      m.body.notificationType === 'left-channel'
+    ) {
+      return false;
+    }
+  }
+  return true;
+};
+
 export const messageBodyToPlainText = (body, userIdToUser, { useEmojiShortName = false } = {}) => {
   if (!body) return null;
 

@@ -45,7 +45,7 @@ export default class SidebarChannels extends React.Component {
     if (channel.messages) {
       for (let i = channel.messages.length - 1; i >= 0; i--) {
         let message = channel.messages[i];
-        if (!message.body || (message.body.notificationType !== 'joined-channel' && message.body.notificationType !== 'left-channel')) {
+        if (ChatUtilities.messageHasActivity(message)) {
           let date = new Date(message.timestamp);
           return date.getTime();
         }
@@ -72,22 +72,31 @@ export default class SidebarChannels extends React.Component {
     // If we're showing all the channels or don't have many to begin with, show all of them
     if (this.state.showingMore || filteredChannels.length <= 5) {
       visibleChannels = filteredChannels;
-    // Otherwise we display channels with high activity
+      // Otherwise we display channels with high activity
     } else {
       // Sort by activity
       let channelsSortedByActivity = filteredChannels.sort((a, b) => {
-        return this._getTimeOfMostRecentChannelActivity(b) - this._getTimeOfMostRecentChannelActivity(a);
+        return (
+          this._getTimeOfMostRecentChannelActivity(b) - this._getTimeOfMostRecentChannelActivity(a)
+        );
       });
       visibleChannels = [];
       let now = Date.now();
       let twentyFourHours = 24 * 60 * 60 * 1000;
       for (let c of channelsSortedByActivity) {
-        let hasVeryRecentActivity = this._getTimeOfMostRecentChannelActivity(c) > now - twentyFourHours;
-        let isSelectedChannel = c.channelId === this.props.selectedChannelId && this.props.isChatVisible;
+        let hasVeryRecentActivity =
+          this._getTimeOfMostRecentChannelActivity(c) > now - twentyFourHours;
+        let isSelectedChannel =
+          c.channelId === this.props.selectedChannelId && this.props.isChatVisible;
         let hasNotifications = c.unreadNotificationCount > 0;
         // Always display the 5 most active channels, any channels with messages in the past day,
         //  the selected channel, and any channels with unread notifications
-        if (visibleChannels.length < 5 || hasVeryRecentActivity || isSelectedChannel || hasNotifications) {
+        if (
+          visibleChannels.length < 5 ||
+          hasVeryRecentActivity ||
+          isSelectedChannel ||
+          hasNotifications
+        ) {
           visibleChannels.push(c);
         }
       }
