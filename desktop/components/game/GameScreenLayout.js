@@ -62,9 +62,9 @@ const STYLES_MEDIA_CONTAINER = css`
 
 const STYLES_MEDIA_SIDEBAR = css`
   display: flex;
-  width: 188px;
   height: 100%;
   flex-shrink: 0;
+  position: relative;
 `;
 
 const STYLES_ACTIONS = css`
@@ -75,13 +75,41 @@ const STYLES_ACTIONS = css`
 
 const STYLES_DEVELOPER = css`
   display: flex;
-  width: 428px;
   height: 100%;
   flex-shrink: 0;
+  position: relative;
+`;
+
+const STYLES_DRAGGABLE_SECTION_VERTICAL = css`
+  width: 12px;
+  height: 100%;
+  position: absolute;
+  right: -6px;
+  top: 0;
+  bottom: 0;
+  cursor: grab;
+  z-index: 1;
+  user-select; none;
+`;
+
+const STYLES_DRAGGABLE_SECTION_VERTICAL_LEFT = css`
+  width: 12px;
+  height: 100%;
+  position: absolute;
+  left: -6px;
+  top: 0;
+  bottom: 0;
+  cursor: grab;
+  z-index: 1;
+  user-select; none;
 `;
 
 // TODO(jim): Support fluid resize of components.
 // TODO(jim): Connect data.
+
+const MIN_SIZE = 128;
+const MAX_SIZE = 648;
+
 export default class GameScreenLayout extends React.Component {
   static defaultProps = {
     elementActions: null,
@@ -90,6 +118,62 @@ export default class GameScreenLayout extends React.Component {
     elementGame: null,
     elementGameSidebar: null,
     elementHeader: null,
+  };
+
+  state = {
+    sidebar: 188,
+    developer: 428,
+    resizing: null,
+    mouseX: null,
+    start: null,
+  };
+
+  componentDidMount() {
+    window.addEventListener('mouseup', this._handleMouseUp);
+    window.addEventListener('mousemove', this._handleMouseMove);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('mouseup', this._handleMouseUp);
+    window.removeEventListener('mousemove', this._handleMouseMove);
+  }
+
+  _handleMouseDown = (e, resizing) => {
+    this.setState({ resizing, mouseX: e.pageX, start: this.state[resizing] });
+  };
+
+  _handleMouseMove = (e) => {
+    if (!this.state.resizing) {
+      return;
+    }
+
+    let nextWidth;
+
+    if (this.state.resizing === 'developer') {
+      nextWidth = this.state.start - (e.pageX - this.state.mouseX);
+    }
+
+    if (this.state.resizing === 'sidebar') {
+      nextWidth = this.state.start + (e.pageX - this.state.mouseX);
+    }
+
+    if (nextWidth > MAX_SIZE) {
+      nextWidth = MAX_SIZE;
+    }
+
+    if (nextWidth < MIN_SIZE) {
+      nextWidth = MIN_SIZE;
+    }
+
+    if (this.state.resizing) {
+      this.setState({ [this.state.resizing]: nextWidth });
+    }
+  };
+
+  _handleMouseUp = (e) => {
+    if (this.state.resizing) {
+      this.setState({ resizing: null, mouseX: null, start: null });
+    }
   };
 
   render() {
@@ -111,14 +195,28 @@ export default class GameScreenLayout extends React.Component {
             {elementHeader ? <div className={STYLES_HEADER}>{elementHeader}</div> : null}
 
             <div className={STYLES_MEDIA}>
-              <div className={STYLES_MEDIA_SIDEBAR}>{elementGameSidebar}</div>
+              <div className={STYLES_MEDIA_SIDEBAR} style={{ width: this.state.sidebar }}>
+                {elementGameSidebar}
+                <div
+                  className={STYLES_DRAGGABLE_SECTION_VERTICAL}
+                  onMouseDown={(e) => this._handleMouseDown(e, 'sidebar')}
+                />
+              </div>
               <div className={STYLES_MEDIA_CONTAINER}>{elementGame}</div>
             </div>
 
             {elementActions ? <div className={STYLES_ACTIONS}>{elementActions}</div> : null}
           </div>
 
-          {elementDeveloper ? <div className={STYLES_DEVELOPER}>{elementDeveloper}</div> : null}
+          {elementDeveloper ? (
+            <div className={STYLES_DEVELOPER} style={{ width: this.state.developer }}>
+              <div
+                className={STYLES_DRAGGABLE_SECTION_VERTICAL_LEFT}
+                onMouseDown={(e) => this._handleMouseDown(e, 'developer')}
+              />
+              {elementDeveloper}
+            </div>
+          ) : null}
         </div>
       </div>
     );
