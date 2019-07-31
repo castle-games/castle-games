@@ -38,7 +38,7 @@ const isEndGameHotkey = isKeyHotkey('mod+w');
 const isFocusGameHotkey = isKeyHotkey('mod+g');
 
 // TODO(jim): Feature flag to make it easier to test.
-const USE_GAME_SCREEN_DEBUG = true;
+const USE_GAME_SCREEN_DEBUG = false;
 
 class App extends React.Component {
   _nativeChannelsPollTimeout;
