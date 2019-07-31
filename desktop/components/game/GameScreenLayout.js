@@ -123,9 +123,6 @@ export default class GameScreenLayout extends React.Component {
   state = {
     sidebar: 188,
     developer: 428,
-    resizing: null,
-    mouseX: null,
-    start: null,
   };
 
   componentDidMount() {
@@ -139,6 +136,7 @@ export default class GameScreenLayout extends React.Component {
   }
 
   _handleMouseDown = (e, resizing) => {
+    e.preventDefault();
     this.setState({ resizing, mouseX: e.pageX, start: this.state[resizing] });
   };
 
@@ -165,9 +163,7 @@ export default class GameScreenLayout extends React.Component {
       nextWidth = MIN_SIZE;
     }
 
-    if (this.state.resizing) {
-      this.setState({ [this.state.resizing]: nextWidth });
-    }
+    this.setState({ [this.state.resizing]: nextWidth });
   };
 
   _handleMouseUp = (e) => {
