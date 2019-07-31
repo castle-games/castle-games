@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as Strings from '~/common/strings';
 
 import { css } from 'react-emotion';
 
@@ -11,12 +12,17 @@ import GameScreenSidebar from '~/components/game/GameScreenSidebar';
 import GameScreenWindowHeader from '~/components/game/GameScreenWindowHeader';
 
 export default class Game extends React.Component {
+  static defaultProps = {
+    errorMessage: '',
+  };
+
   render() {
     const elementActions = <GameScreenActionsBar />;
 
-    const elementAlert = (
-      <GameScreenAlert>There was an issue with loading your game.</GameScreenAlert>
-    );
+    let maybeElementAlert;
+    if (!Strings.isEmpty(this.props.errorMessage)) {
+      maybeElementAlert = <GameScreenAlert>{this.props.errorMessage}</GameScreenAlert>;
+    }
 
     const elementDeveloper = <GameScreenDeveloperSidebar />;
 
@@ -40,7 +46,7 @@ export default class Game extends React.Component {
     return (
       <GameScreenLayout
         elementActions={elementActions}
-        elementAlert={elementAlert}
+        elementAlert={maybeElementAlert}
         elementDeveloper={elementDeveloper}
         elementGame={elementGame}
         elementGameSidebar={elementGameSidebar}
