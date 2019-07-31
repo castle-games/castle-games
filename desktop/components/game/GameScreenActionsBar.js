@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as GameSVG from '~/components/primitives/game-screen-svg';
 
 import { css } from 'react-emotion';
 

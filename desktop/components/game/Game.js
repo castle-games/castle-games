@@ -41,7 +41,14 @@ export default class Game extends React.Component {
 
     const elementGameSidebar = <GameScreenSidebar />;
 
-    const elementHeader = <GameScreenWindowHeader />;
+    const elementHeader = (
+      <GameScreenWindowHeader
+        navigateToHome={this.props.navigateToHome}
+        onGameMinimize={this.props.onGameMinimize}
+        onGameMaximize={this.props.onGameMaximize}
+        onGameDismiss={this.props.onGameDismiss}
+      />
+    );
 
     return (
       <GameScreenLayout
