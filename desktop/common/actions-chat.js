@@ -109,6 +109,15 @@ export const getAutocompleteAsync = async (text, types = ['users']) => {
             height
             width
           }
+          lastUserStatus {
+            userStatusId
+            status
+            game {
+              gameId
+              name
+              url
+            }
+          }
         }`;
   }
   if (types.includes('channels')) {
