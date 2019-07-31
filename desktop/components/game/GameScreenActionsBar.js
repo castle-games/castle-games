@@ -69,19 +69,30 @@ const CTA = (props) => {
 };
 
 export default class GameScreenActionsBar extends React.Component {
+  static defaultProps = {
+    onChangeVolumme: null,
+    onCreatePost: null,
+    onViewSource: null,
+    onViewDeveloper: null,
+  };
+
   render() {
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_CHAT_FIELD}>Message #pac-bois</div>
         <div className={STYLES_LEFT} style={{ paddingLeft: 16 }}>
-          <CTA style={{ marginRight: 24 }}>
-            <GameSVG.Volume height="20px" style={{ marginRight: 8 }} />
-          </CTA>
+          {this.props.onChangeVolume ? (
+            <CTA style={{ marginRight: 24 }}>
+              <GameSVG.Volume height="20px" style={{ marginRight: 8 }} />
+            </CTA>
+          ) : null}
         </div>
         <div className={STYLES_MIDDLE}>
-          <CTA style={{ marginRight: 24 }}>
-            <GameSVG.Camera height="32px" style={{ marginRight: 8 }} />
-          </CTA>
+          {this.props.onCreatePost ? (
+            <CTA style={{ marginRight: 24 }}>
+              <GameSVG.Camera height="32px" style={{ marginRight: 8 }} />
+            </CTA>
+          ) : null}
         </div>
         <div className={STYLES_RIGHT}>
           <CTA style={{ marginRight: 24 }}>
@@ -92,13 +103,17 @@ export default class GameScreenActionsBar extends React.Component {
             <GameSVG.Chip height="20px" style={{ marginRight: 8 }} />
           </CTA>
 
-          <CTA style={{ marginRight: 24 }}>
-            <GameSVG.Source height="20px" style={{ marginRight: 8 }} />
-          </CTA>
+          {this.props.onViewSource ? (
+            <CTA style={{ marginRight: 24 }} onClick={this.props.onViewSource}>
+              <GameSVG.Source height="20px" style={{ marginRight: 8 }} />
+            </CTA>
+          ) : null}
 
-          <CTA>
-            <GameSVG.Tools height="20px" style={{ marginRight: 8 }} />
-          </CTA>
+          {this.props.onViewDeveloper ? (
+            <CTA onClick={this.props.onViewDeveloper} active={this.props.developer}>
+              <GameSVG.Tools height="20px" style={{ marginRight: 8 }} />
+            </CTA>
+          ) : null}
         </div>
       </div>
     );

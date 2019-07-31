@@ -16,15 +16,30 @@ export default class Game extends React.Component {
     errorMessage: '',
   };
 
+  state = {
+    developer: false,
+  };
+
   render() {
-    const elementActions = <GameScreenActionsBar />;
+    const elementActions = (
+      <GameScreenActionsBar
+        onChangeVolume={this.props.onChangeVolume}
+        onCreatePost={this.props.onCreatePost}
+        onViewSource={this.props.onViewSource}
+        onViewDeveloper={() => this.setState({ developer: !this.state.developer })}
+        developer={this.state.developer}
+      />
+    );
 
     let maybeElementAlert;
     if (!Strings.isEmpty(this.props.errorMessage)) {
       maybeElementAlert = <GameScreenAlert>{this.props.errorMessage}</GameScreenAlert>;
     }
 
-    const elementDeveloper = <GameScreenDeveloperSidebar />;
+    let maybeElementDeveloper;
+    if (this.state.developer) {
+      maybeElementDeveloper = <GameScreenDeveloperSidebar />;
+    }
 
     const elementGame = (
       <GameScreenMedia
@@ -54,7 +69,7 @@ export default class Game extends React.Component {
       <GameScreenLayout
         elementActions={elementActions}
         elementAlert={maybeElementAlert}
-        elementDeveloper={elementDeveloper}
+        elementDeveloper={maybeElementDeveloper}
         elementGame={elementGame}
         elementGameSidebar={elementGameSidebar}
         elementHeader={elementHeader}
