@@ -2,9 +2,6 @@ import * as React from 'react';
 import * as Actions from '~/common/actions';
 import * as ChatUtilities from '~/common/chat-utilities';
 import * as Constants from '~/common/constants';
-import * as Strings from '~/common/strings';
-import * as SVG from '~/components/primitives/svg';
-import * as NativeUtil from '~/native/nativeutil';
 
 import { css } from 'react-emotion';
 
@@ -13,15 +10,14 @@ import { NavigatorContext, NavigationContext } from '~/contexts/NavigationContex
 import { UserPresenceContext } from '~/contexts/UserPresenceContext';
 import { ChatContext } from '~/contexts/ChatContext';
 
-import SidebarOptions from '~/components/sidebar/SidebarOptions';
-import SidebarOptionsChannels from '~/components/sidebar/SidebarOptionsChannels';
-import SidebarOptionsMessages from '~/components/sidebar/SidebarOptionsMessages';
-
-import SidebarHeader from '~/components/sidebar/SidebarHeader';
 import SidebarChannels from '~/components/sidebar/SidebarChannels';
-import SidebarProjects from '~/components/sidebar/SidebarProjects';
 import SidebarDirectMessages from '~/components/sidebar/SidebarDirectMessages';
-import SidebarNavigation from '~/components/sidebar/SidebarNavigation';
+import SidebarGroupChannelItem from '~/components/sidebar/SidebarGroupChannelItem';
+import SidebarHeader from '~/components/sidebar/SidebarHeader';
+import SidebarNavigationItem from '~/components/sidebar/SidebarNavigationItem';
+import SidebarOptions from '~/components/sidebar/SidebarOptions';
+import SidebarOptionsMessages from '~/components/sidebar/SidebarOptionsMessages';
+import SidebarProjects from '~/components/sidebar/SidebarProjects';
 
 // NOTE(jim): Legacy.
 import HomeUpdateBanner from '~/components/HomeUpdateBanner';
@@ -51,6 +47,10 @@ const STYLES_SIDEBAR = css`
   }
 `;
 
+const STYLES_SECTION = css`
+  margin-bottom: 8px;
+`;
+
 class Sidebar extends React.Component {
   state = {
     value: '',
@@ -61,6 +61,8 @@ class Sidebar extends React.Component {
     const { currentUser } = this.props;
     currentUser.refreshCurrentUser();
   }
+
+  _filterGameChannels = (channel) => channel.isSubscribed && channel.type === 'game';
 
   _handleSignIn = () => {
     return this.props.navigator.navigateToSignIn();
@@ -88,13 +90,7 @@ class Sidebar extends React.Component {
     return this.props.navigator.navigateToContentMode('home');
   };
 
-  _handleOpenBrowserForDocumentation = () => {
-    return NativeUtil.openExternalURL(`${Constants.WEB_HOST}/documentation`);
-  };
-
   _handleShowOptions = () => this.setState({ mode: 'OPTIONS' });
-
-  _handleShowChannelOptions = () => this.setState({ mode: 'OPTIONS_CHANNELS' });
 
   _handleShowDirectMessageOptions = () => this.setState({ mode: 'OPTIONS_MESSAGES' });
 
@@ -140,46 +136,72 @@ class Sidebar extends React.Component {
       return <div className={STYLES_SIDEBAR}>{header}</div>;
     }
 
-    let lobbyChannel;
+    let lobbyChannel,
+      isLobbySelected = false,
+      numUsersOnline = 0;
     try {
       lobbyChannel = chat.findChannel(ChatUtilities.EVERYONE_CHANNEL_NAME);
+      if (lobbyChannel) {
+        isLobbySelected = contentMode === 'chat' && chatChannelId === lobbyChannel.channelId;
+        numUsersOnline = chat.channelOnlineCounts[lobbyChannel.channelId];
+      }
     } catch (_) {}
 
     return (
       <div className={STYLES_SIDEBAR}>
         {this._renderUpdateBanner()}
         {header}
-        <SidebarNavigation
-          contentMode={contentMode}
-          chatChannelId={chatChannelId}
-          lobbyChannel={lobbyChannel}
-          onNavigateToMakeGame={this._handleNavigateToMakeGame}
-          onNavigateToGames={this._handleNavigateToGames}
-          onNavigateToChat={this._handleNavigateToChat}
-        />
-        <SidebarProjects
-          title="Recently Created"
-          userStatusHistory={currentUser.userStatusHistory}
-          onSelectGameUrl={navigator.navigateToGameUrl}
-        />
-        <SidebarChannels
-          selectedChannelId={chatChannelId}
-          title="Recently Played"
-          userStatusHistory={currentUser.userStatusHistory}
-          isChatVisible={isChatVisible}
-          channels={chat.channels}
-          filterChannel={(channel) => channel.isSubscribed && channel.type === 'game'}
-          onSelectChannel={this._handleNavigateToChat}
-        />
-        <SidebarDirectMessages
-          selectedChannelId={chatChannelId}
-          viewer={viewer}
-          userPresence={userPresence}
-          isChatVisible={isChatVisible}
-          channels={chat.channels}
-          onSelectChannel={this._handleNavigateToChat}
-          onShowOptions={this._handleShowDirectMessageOptions}
-        />
+        <div className={STYLES_SECTION}>
+          <SidebarNavigationItem
+            name="Play"
+            svg="home"
+            onClick={this._handleNavigateToGames}
+            active={contentMode === 'home'}
+          />
+          <SidebarChannels
+            selectedChannelId={chatChannelId}
+            userStatusHistory={currentUser.userStatusHistory}
+            isChatVisible={isChatVisible}
+            channels={chat.channels}
+            filterChannel={this._filterGameChannels}
+            onSelectChannel={this._handleNavigateToChat}
+          />
+        </div>
+        <div className={STYLES_SECTION}>
+          <SidebarNavigationItem
+            name="Create"
+            svg="make"
+            onClick={this._handleNavigateToMakeGame}
+            active={contentMode === 'create'}
+          />
+          <SidebarProjects
+            title="Recently Created"
+            userStatusHistory={currentUser.userStatusHistory}
+            onSelectGameUrl={navigator.navigateToGameUrl}
+          />
+        </div>
+        <div className={STYLES_SECTION}>
+          <SidebarNavigationItem
+            name="Chat"
+            svg="chat"
+            onClick={() => this._handleNavigateToChat(lobbyChannel)}
+          />
+          <SidebarGroupChannelItem
+            numMembersOnline={numUsersOnline}
+            channel={lobbyChannel}
+            userPresence={userPresence}
+            isSelected={isLobbySelected}
+            onClick={() => this._handleNavigateToChat(lobbyChannel)}
+          />
+          <SidebarDirectMessages
+            selectedChannelId={chatChannelId}
+            viewer={viewer}
+            userPresence={userPresence}
+            isChatVisible={isChatVisible}
+            channels={chat.channels}
+            onSelectChannel={this._handleNavigateToChat}
+          />
+        </div>
       </div>
     );
   };
@@ -231,17 +253,15 @@ class Sidebar extends React.Component {
       return null;
     }
 
-    let sidebarElement = this._renderRootSidebar();
-    if (mode === 'OPTIONS') {
-      sidebarElement = this._renderOptions();
-    }
-
-    if (mode === 'OPTIONS_CHANNELS') {
-      sidebarElement = this._renderChannelOptions();
-    }
-
-    if (mode === 'OPTIONS_MESSAGES') {
-      sidebarElement = this._renderMessageOptions();
+    let sidebarElement;
+    switch (mode) {
+      case 'OPTIONS':
+        sidebarElement = this._renderOptions();
+        break;
+      case 'OPTIONS_MESSAGES':
+        sidebarElement = this._renderMessageOptions();
+      default:
+        sidebarElement = this._renderRootSidebar();
     }
 
     return <div className={STYLES_CONTAINER}>{sidebarElement}</div>;

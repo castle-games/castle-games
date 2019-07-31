@@ -4,16 +4,15 @@ import * as Constants from '~/common/constants';
 
 import { css } from 'react-emotion';
 
-import SidebarGroupHeader from '~/components/sidebar/SidebarGroupHeader';
-import SidebarChannelItem from '~/components/sidebar/SidebarChannelItem';
+import SidebarActivityItem from '~/components/sidebar/SidebarActivityItem';
 
 const STYLES_CONTAINER = css`
-  margin-bottom: 24px;
+  margin-bottom: 32px;
 `;
 
 const STYLES_TOGGLE_MORE_LINK = css`
   font-family: ${Constants.REFACTOR_FONTS.system};
-  padding: 0 16px 0 16px;
+  padding: 4px 16px 0 40px;
   text-decoration: underline;
   cursor: pointer;
   font-size: 14px;
@@ -101,8 +100,7 @@ export default class SidebarChannels extends React.Component {
       // 20 hours so that if someone logs in at the same time every day, channels might not change mid-session
       let twentyHours = 20 * 60 * 60 * 1000;
       for (let c of channelsSortedByActivity) {
-        let hasVeryRecentActivity =
-          this._getTimeOfMostRecentChannelActivity(c) > now - twentyHours;
+        let hasVeryRecentActivity = this._getTimeOfMostRecentChannelActivity(c) > now - twentyHours;
         let isSelectedChannel =
           c.channelId === this.props.selectedChannelId && this.props.isChatVisible;
         let hasNotifications = c.unreadNotificationCount > 0;
@@ -126,15 +124,17 @@ export default class SidebarChannels extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
-        <SidebarGroupHeader>{this.props.title}</SidebarGroupHeader>
         {visibleChannels.map((c) => {
           const isSelected =
             c.channelId === this.props.selectedChannelId && this.props.isChatVisible;
 
           return (
-            <SidebarChannelItem
+            <SidebarActivityItem
               key={`channel-${c.channelId}`}
-              channel={c}
+              name={c.name}
+              type={c.type}
+              isUnread={c.hasUnreadMessages}
+              notificationCount={c.unreadNotificationCount}
               isSelected={isSelected}
               onClick={!isSelected ? () => this.props.onSelectChannel(c) : null}
             />
