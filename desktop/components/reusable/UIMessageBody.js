@@ -12,17 +12,6 @@ import { UserPresenceContext } from '~/contexts/UserPresenceContext';
 import ChatPost from '~/components/chat/ChatPost';
 import StringReplace from 'react-string-replace';
 
-const STYLES_CHANNEL = css`
-  font-weight: 600;
-  color: magenta;
-  cursor: pointer;
-  overflow-wrap: break-word;
-
-  :hover {
-    text-decoration: underline;
-  }
-`;
-
 const STYLES_MENTION = css`
   font-weight: 400;
   color: #0062ff;
@@ -93,25 +82,6 @@ const matchURL = (text, theme, onMatchAttachment) => {
   });
 };
 
-export const matchChannel = (text, getChannelByName, openChannel) => {
-  return StringReplace(text, /#([a-zA-Z0-9_-]+)/g, (match, i) => {
-    // TODO: get these in json and don't query
-    const channel = getChannelByName(match);
-    if (channel) {
-      return (
-        <span
-          className={STYLES_CHANNEL}
-          key={`channel-${match + i}`}
-          onClick={() => openChannel(match)}>
-          #{match}
-        </span>
-      );
-    } else {
-      return `#${match}`;
-    }
-  });
-};
-
 class UIMessageBody extends React.Component {
   static defaultProps = {
     body: null,
@@ -129,6 +99,7 @@ class UIMessageBody extends React.Component {
     if (!body.message) return null;
 
     let components = body.message.map((c, ii) => {
+      // TODO: json case for channel
       if (c.text) {
         let text = c.text;
         if (ii == 0 && ChatUtilities.getSlashCommand(body).isCommand) {
@@ -139,7 +110,6 @@ class UIMessageBody extends React.Component {
         }
         text = matchURL(text, theme, onMatchAttachment);
         text = matchCastleURL(text, theme, onMatchAttachment);
-        text = matchChannel(text, this.props.getChannelByName, this.props.openChannelWithName);
         return <span key={`message-${ii}`}>{text}</span>;
       } else if (c.userId) {
         const user = this.props.userIdToUser[c.userId];
