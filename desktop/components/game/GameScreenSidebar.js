@@ -2,6 +2,8 @@ import * as React from 'react';
 
 import { css } from 'react-emotion';
 
+import ChatSidebar from '~/components/chat/ChatSidebar';
+
 const BORDER_COLOR = '#333';
 const BACKGROUND_COLOR = '#000';
 
@@ -113,7 +115,7 @@ export default class GameScreenSidebar extends React.Component {
             className={STYLES_DRAGGABLE_SECTION_HORIZONTAL}
             onMouseDown={(e) => this._handleMouseDown(e, 'chat')}
           />
-          &nbsp;
+          <ChatSidebar game={this.props.game} />
         </div>
       </div>
     );

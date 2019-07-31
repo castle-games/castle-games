@@ -54,7 +54,7 @@ export default class Game extends React.Component {
       />
     );
 
-    const elementGameSidebar = <GameScreenSidebar />;
+    const elementGameSidebar = <GameScreenSidebar game={this.props.game} />;
 
     const elementHeader = (
       <GameScreenWindowHeader
