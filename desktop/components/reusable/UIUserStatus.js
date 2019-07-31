@@ -20,7 +20,6 @@ const STYLES_STATUS_UNREGISTERED_TITLE = css`
 export default class UIUserStatus extends React.Component {
   static defaultProps = {
     user: null,
-    navigateToGameUrl: (url) => {},
   };
 
   render() {
@@ -30,7 +29,7 @@ export default class UIUserStatus extends React.Component {
       // show last status if it exists and is relevant
       let status = UserStatus.renderStatusText(user.lastUserStatus);
       if (status.status) {
-        if (user.lastUserStatus.game.gameId) {
+        if (user.lastUserStatus.game.gameId && this.props.navigateToGameUrl) {
           // link to game if it's registered
           statusElement = (
             <React.Fragment>

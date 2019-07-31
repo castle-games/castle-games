@@ -6,6 +6,7 @@ import * as SVG from '~/components/primitives/svg';
 import { css } from 'react-emotion';
 
 import UIAvatar from '~/components/reusable/UIAvatar';
+import UserStatus from '~/common/userstatus';
 
 const STYLES_USER = css`
   display: flex;
@@ -19,7 +20,9 @@ const STYLES_USER = css`
   transition: 200ms ease color;
 
   :hover {
-    color: magenta;
+    h3 {
+      color: magenta;
+    }
   }
 `;
 
@@ -41,9 +44,11 @@ const STYLES_NOTIFICATION = css`
 
 const STYLES_TEXT = css`
   font-family: ${Constants.REFACTOR_FONTS.system};
+  padding: 0 8px 0 8px;
   min-width: 10%;
   width: 100%;
-  padding: 0 8px 0 8px;
+  display: flex;
+  flex-direction: column;
 `;
 
 const STYLES_NAME = css`
@@ -53,6 +58,7 @@ const STYLES_NAME = css`
 `;
 
 const STYLES_STATUS = css`
+  margin-top: 4px;
   font-size: 10px;
 `;
 
@@ -73,6 +79,8 @@ export default (props) => {
     unreadCount = channel.unreadNotificationCount;
   }
 
+  let { status } = UserStatus.renderStatusText(user.lastUserStatus);
+
   return (
     <div className={STYLES_USER} onClick={!isSelected ? onClick : null}>
       <UIAvatar src={user.photo ? user.photo.url : null} isOnline={channel.otherUserIsOnline} />
@@ -80,6 +88,9 @@ export default (props) => {
         <h3 className={STYLES_NAME} style={{ color, fontWeight }}>
           {Strings.getName(user)}
         </h3>
+        {status && channel.otherUserIsOnline ? (
+          <span className={STYLES_STATUS}>{status}</span>
+        ) : null}
       </div>
       {unreadCount ? <span className={STYLES_NOTIFICATION}>{unreadCount}</span> : null}
     </div>
