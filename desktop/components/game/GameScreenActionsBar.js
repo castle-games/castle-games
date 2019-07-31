@@ -79,7 +79,6 @@ export default class GameScreenActionsBar extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTAINER}>
-        <div className={STYLES_CHAT_FIELD}>Message #pac-bois</div>
         <div className={STYLES_LEFT} style={{ paddingLeft: 16 }}>
           {this.props.onChangeVolume ? (
             <CTA style={{ marginRight: 24 }}>
