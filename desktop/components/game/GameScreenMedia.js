@@ -7,11 +7,33 @@ import * as Actions from '~/common/actions';
 import { css } from 'react-emotion';
 
 import GameWindow from '~/native/gamewindow';
+import GLLoaderScreen from '~/isometric/components/GLLoaderScreen';
 
 const STYLES_CONTAINER = css`
   width: 100%;
   height: 100%;
   background: #000000;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const STYLES_LOADING_OVERLAY_CONTAINER = css`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 14px;
+`;
+
+const STYLES_LOADING_OVERLAY_ELEMENT = css`
+  font-family: ${Constants.font.mono};
+  color: ${Constants.logs.system};
+  font-size: 10px;
 `;
 
 const jsUserToLuaUser = async (user) =>
@@ -52,7 +74,7 @@ export default class GameScreenMedia extends React.Component {
 
   state = {
     isMuted: false,
-    loaded: true,
+    loaded: false,
     luaNetworkRequests: [],
     loadingPhase: 'initializing',
   };
@@ -221,6 +243,31 @@ export default class GameScreenMedia extends React.Component {
   };
 
   render() {
-    return <div ref={this._setRef} className={STYLES_CONTAINER} />;
+    let maybeLoadingAnimation, maybeLoadingOverlay;
+    if (!this.state.loaded) {
+      maybeLoadingAnimation = <GLLoaderScreen />;
+
+      const { luaNetworkRequests, loadingPhase } = this.state;
+      maybeLoadingOverlay = (
+        <div className={STYLES_LOADING_OVERLAY_CONTAINER}>
+          {luaNetworkRequests.length > 0 ? (
+            luaNetworkRequests.map(({ url }) => (
+              <div className={STYLES_LOADING_OVERLAY_ELEMENT}>Fetching {url}...</div>
+            ))
+          ) : loadingPhase === 'initializing' ? (
+            <div className={STYLES_LOADING_OVERLAY_ELEMENT}>Initializing system...</div>
+          ) : (
+            <div className={STYLES_LOADING_OVERLAY_ELEMENT}>Starting game...</div>
+          )}
+        </div>
+      );
+    }
+
+    return (
+      <div ref={this._setRef} className={STYLES_CONTAINER}>
+        {maybeLoadingAnimation}
+        {maybeLoadingOverlay}
+      </div>
+    );
   }
 }
