@@ -4,6 +4,8 @@ import * as Constants from '~/common/constants';
 
 import { css } from 'react-emotion';
 
+import DevelopmentCpuMonitor from '~/components/game/DevelopmentCpuMonitor';
+
 const STYLES_CONTAINER = css`
   height: 48px;
   width: 100%;
@@ -100,6 +102,7 @@ export default class GameScreenActionsBar extends React.Component {
 
           <CTA style={{ marginRight: 24 }}>
             <GameSVG.Chip height="20px" style={{ marginRight: 8 }} />
+            <DevelopmentCpuMonitor />
           </CTA>
 
           {this.props.onViewSource ? (
