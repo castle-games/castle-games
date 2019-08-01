@@ -1548,19 +1548,23 @@ export class ToolsWithoutSplitter extends React.Component {
     this.setState(ToolsWithoutSplitter.initialState);
   }
 
-  // NOTE(jim): Figure out why tools are broken.
   render() {
-    /*
-    <ToolsContext.Provider
-      value={{
-        transformAssetUri: this._transformAssetUri,
-      }}>
-      {Object.values(this.state.root.panes).map((element, i) => (
-        <ToolPane key={(element.props && element.props.name) || i} element={element} />
-      ))}
-    </ToolsContext.Provider>
-    */
-    return <div className={STYLES_CONTAINER}>&nbsp;</div>;
+    if (!this.state.root.panes) {
+      return null;
+    }
+
+    return (
+      <div className={STYLES_CONTAINER}>
+        <ToolsContext.Provider
+          value={{
+            transformAssetUri: this._transformAssetUri,
+          }}>
+          {Object.values(this.state.root.panes).map((element, i) => (
+            <ToolPane key={(element.props && element.props.name) || i} element={element} />
+          ))}
+        </ToolsContext.Provider>
+      </div>
+    );
   }
 
   _transformAssetUri = (uri) => {
