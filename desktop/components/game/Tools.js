@@ -1548,6 +1548,7 @@ export class ToolsWithoutSplitter extends React.Component {
     this.setState(ToolsWithoutSplitter.initialState);
   }
 
+  // NOTE(jim): Figure out why tools are broken.
   render() {
     /*
     <ToolsContext.Provider
