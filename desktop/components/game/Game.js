@@ -1,5 +1,8 @@
 import * as React from 'react';
 import * as Strings from '~/common/strings';
+import * as NativeUtil from '~/native/nativeutil';
+import * as URLS from '~/common/urls';
+import * as Utilities from '~/common/utilities';
 
 import { css } from 'react-emotion';
 import { DevelopmentContext } from '~/contexts/DevelopmentContext';
@@ -21,12 +24,19 @@ export default class Game extends React.Component {
     developer: false,
   };
 
+  _handleViewSource = (entry) => {
+    NativeUtil.openExternalURL(URLS.githubUserContentToRepoUrl(entry));
+  };
+
   render() {
+    const entryPoint = Utilities.getLuaEntryPoint(this.props.game);
+    const isOpenSource = URLS.isOpenSource(entryPoint);
+
     const elementActions = (
       <GameScreenActionsBar
         onChangeVolume={this.props.onChangeVolume}
         onCreatePost={this.props.onCreatePost}
-        onViewSource={this.props.onViewSource}
+        onViewSource={isOpenSource ? () => this._handleViewSource(entryPoint) : null}
         onViewDeveloper={() => this.setState({ developer: !this.state.developer })}
         developer={this.state.developer}
       />
