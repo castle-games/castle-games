@@ -22,7 +22,7 @@ import Game from '~/components/game/Game';
 import 'react-splitter-layout/lib/index.css';
 
 // TODO(jim): Feature flag for new game screen.
-const USE_NEW_GAME_SCREEN = false;
+const USE_NEW_GAME_SCREEN = true;
 
 // TODO(jim): We're dealing with side effects rom the react-splitter-layout
 // It should be removed.
@@ -326,6 +326,7 @@ class GameScreen extends React.Component {
           onGameMinimize={this.props.minimizeGame}
           onToggleMute={this._toggleIsMuted}
           onCreatePost={this.props.navigateToEditPost}
+          onReload={this.props.reloadGame}
           onViewSource={() => {}}
           refreshCurrentUser={this.props.refreshCurrentUser}
         />

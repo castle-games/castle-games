@@ -1,4 +1,7 @@
 import * as React from 'react';
+import * as Constants from '~/common/constants';
+import * as NativeUtil from '~/native/nativeutil';
+import * as Utilities from '~/common/utilities';
 
 import { css } from 'react-emotion';
 import { DevelopmentContext } from '~/contexts/DevelopmentContext';
@@ -22,16 +25,21 @@ const STYLES_CONTAINER = css`
 const STYLES_INFO_HEADING = css`
   width: 100%;
   font-size: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   padding: 16px 16px 16px 16px;
   flex-shrink: 0;
   border-bottom: 1px solid ${BORDER_COLOR};
   color: #fff;
 `;
 
-const STYLES_SECTION = css`
+const STYLES_INFO_HEADING_ROW = css`
+  width: 100%;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const STYLES_SECTION_HEADER = css`
   position: relative;
   width: 100%;
   height: 24px;
@@ -41,6 +49,7 @@ const STYLES_SECTION = css`
   justify-content: space-between;
   padding: 0 16px 0 16px;
   flex-shrink: 0;
+  color: #fff;
   border-bottom: 1px solid ${BORDER_COLOR};
 `;
 
@@ -143,17 +152,56 @@ export default class GameScreenDeveloperSidebar extends React.Component {
     }
   };
 
+  _handleMultiplayerCodeUpload = () => {
+    const { isMultiplayerCodeUploadEnabled } = this.context;
+    this.context.setters.setIsMultiplayerCodeUploadEnabled(!isMultiplayerCodeUploadEnabled);
+  };
+
+  _handleOpenGamePath = () => {
+    const { game } = this.props;
+    if (Urls.isPrivateUrl(game.url)) {
+      const gamePath = path.dirname(game.url);
+      NativeUtil.openExternalURL(gamePath);
+    } else {
+      NativeUtil.openExternalURL(game.url);
+    }
+  };
+
   render() {
+    const { isMultiplayerCodeUploadEnabled } = this.context;
+
+    let maybeMultiplayerElement;
+    if (Utilities.isMultiplayer(this.props.game) && Urls.isPrivateUrl(this.props.game.url)) {
+      multiplayerElement = (
+        <span onClick={this._handleMultiplayerCodeUpload}>
+          {isMultiplayerCodeUploadEnabled ? 'Disabled' : 'Enabled'}
+        </span>
+      );
+    }
+
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_INFO_HEADING}>
-          <span>Project URL</span> <span>{`{PROJECT_URL_BINDING}`}</span>
+          <div className={STYLES_INFO_HEADING_ROW} onClick={this._handleOpenGamePath}>
+            <span>Project URL</span> <span>{this.props.game.url}</span>
+          </div>
+          {isMultiplayerCodeUploadEnabled ? (
+            <div className={STYLES_INFO_HEADING_ROW}>
+              <div>Multiplayer auto upload is enabled</div>
+              <div>
+                When you Reload, Castle uploads a copy of your project's code to a temporary public
+                url, and loads it from there.
+              </div>
+            </div>
+          ) : null}
         </div>
 
-        <div className={STYLES_SECTION}>
+        <div className={STYLES_SECTION_HEADER}>
           <div className={STYLES_LEFT}>&nbsp;</div>
           <div className={STYLES_RIGHT} style={{ minWidth: 100 }}>
             &nbsp;
+            <span onClick={this.props.onReload}>Reload</span>
+            {maybeMultiplayerElement}
           </div>
         </div>
 
@@ -166,7 +214,7 @@ export default class GameScreenDeveloperSidebar extends React.Component {
         </div>
 
         <div
-          className={STYLES_SECTION}
+          className={STYLES_SECTION_HEADER}
           style={{
             borderTop: `1px solid ${BORDER_COLOR}`,
             borderBottom: 0,
@@ -182,7 +230,12 @@ export default class GameScreenDeveloperSidebar extends React.Component {
         </div>
 
         <div className={STYLES_BOTTOM} style={{ height: this.state.server }}>
-          &nbsp;
+          <DevelopmentLogs
+            logs={this.context.logs}
+            onClearLogs={this.context.setters.clearLogs}
+            game={this.props.game}
+            logMode={1}
+          />
         </div>
       </div>
     );

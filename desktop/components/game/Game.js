@@ -39,7 +39,9 @@ export default class Game extends React.Component {
 
     let maybeElementDeveloper;
     if (this.state.developer) {
-      maybeElementDeveloper = <GameScreenDeveloperSidebar game={this.props.game} />;
+      maybeElementDeveloper = (
+        <GameScreenDeveloperSidebar game={this.props.game} onReload={this.props.onReload} />
+      );
     }
 
     const elementGame = (

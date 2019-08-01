@@ -91,7 +91,7 @@ export default class DevelopmentLogs extends React.Component {
   _scrollView;
 
   state = {
-    logMode: LogMode.LOCAL,
+    logMode: this.props.logMode || LogMode.LOCAL,
     remoteLogs: [],
   };
 
