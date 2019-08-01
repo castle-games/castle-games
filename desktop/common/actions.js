@@ -131,6 +131,7 @@ const CURRENT_USER_QUERY = `
   userStatusHistory {
     userStatusId
     status
+    lastPing
     game {
       ${GAME_FIELDS}
       ${NESTED_GAME_OWNER}
@@ -417,13 +418,14 @@ export async function getUserStatusHistory(userId) {
 }
 
 export async function getAllGames(limit) {
-  const result = await API(`
+  const result = await API(
+    `
     query($limit: Int) {
       allGames(limit: $limit) {
         ${GAME_FIELDS}
         ${NESTED_GAME_OWNER}
       }
-    }`, 
+    }`,
     { limit }
   );
 

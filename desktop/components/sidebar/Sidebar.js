@@ -165,6 +165,7 @@ class Sidebar extends React.Component {
         <SidebarChannels
           selectedChannelId={chatChannelId}
           title="Recently Played"
+          userStatusHistory={currentUser.userStatusHistory}
           isChatVisible={isChatVisible}
           channels={chat.channels}
           filterChannel={(channel) => channel.isSubscribed && channel.type === 'game'}

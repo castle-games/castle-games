@@ -28,6 +28,7 @@ export default class SidebarChannels extends React.Component {
   static defaultProps = {
     channels: [],
     filterChannel: (channel) => true,
+    userStatusHistory: [],
   };
 
   state = {
@@ -40,22 +41,37 @@ export default class SidebarChannels extends React.Component {
     }));
   };
 
-  // Returns the time of the most recent activity for the channel. Join and leave notifications do not count
+  // Returns the time of the most recent activity for the channel (either the last time you played the game or the time of last message)
   _getTimeOfMostRecentChannelActivity = (channel) => {
+    let { userStatusHistory } = this.props;
+    let time = 0;
+    // Figure out when the game was last played
+    if (channel.gameId && userStatusHistory) {
+      for (let status of userStatusHistory) {
+        if (status.game && status.game.gameId === channel.gameId && status.lastPing) {
+          let date = new Date(status.lastPing);
+          time = Math.max(time, date.getTime());
+          break;
+        }
+      }
+    }
+    // Search for the most recent message in the channel
     if (channel.messages) {
       for (let i = channel.messages.length - 1; i >= 0; i--) {
         let message = channel.messages[i];
         if (ChatUtilities.messageHasActivity(message)) {
           let date = new Date(message.timestamp);
-          return date.getTime();
+          time = Math.max(time, date.getTime());
+          break;
         }
       }
     }
-    return 0;
+    // Return the time of the most recent activity
+    return time;
   };
 
   render() {
-    const { channels, filterChannel } = this.props;
+    const { channels, filterChannel, userStatusHistory } = this.props;
     let filteredChannels = [];
     Object.entries(channels).forEach(([channelId, channel]) => {
       if (filterChannel(channel)) {
@@ -82,14 +98,15 @@ export default class SidebarChannels extends React.Component {
       });
       visibleChannels = [];
       let now = Date.now();
-      let twentyFourHours = 24 * 60 * 60 * 1000;
+      // 20 hours so that if someone logs in at the same time every day, channels might not change mid-session
+      let twentyHours = 20 * 60 * 60 * 1000;
       for (let c of channelsSortedByActivity) {
         let hasVeryRecentActivity =
-          this._getTimeOfMostRecentChannelActivity(c) > now - twentyFourHours;
+          this._getTimeOfMostRecentChannelActivity(c) > now - twentyHours;
         let isSelectedChannel =
           c.channelId === this.props.selectedChannelId && this.props.isChatVisible;
         let hasNotifications = c.unreadNotificationCount > 0;
-        // Always display the 5 most active channels, any channels with messages in the past day,
+        // Always display the 5 most active channels, any channels active in the past day-or-so,
         //  the selected channel, and any channels with unread notifications
         if (
           visibleChannels.length < 5 ||

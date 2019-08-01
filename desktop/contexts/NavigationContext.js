@@ -275,6 +275,8 @@ class NavigationContextManager extends React.Component {
 
   minimizeGame = () => {
     if (this.state.navigation.contentMode === 'game') {
+      // refresh the user's status history so we the current game properly appears in the recently played list
+      this.props.currentUser.refreshCurrentUser();
       this._restoreDeferredState();
     }
   };
@@ -378,7 +380,7 @@ class NavigationContextManager extends React.Component {
 
   clearCurrentGame = async () => {
     await GameWindow.close();
-    this.setState((state) => {
+    this.setState((state, prevProps) => {
       const time = Date.now();
       const oldContentMode = state.navigation.contentMode;
       const newContentMode =
@@ -388,6 +390,8 @@ class NavigationContextManager extends React.Component {
         prevContentMode: oldContentMode,
         nextContentMode: newContentMode,
       });
+      // refresh the user's status history so we the current game properly appears in the recently played list
+      prevProps.currentUser.refreshCurrentUser();
       // track the fact that a game was ended
       Analytics.trackGameEnd({ game: state.navigation.game });
       return {
