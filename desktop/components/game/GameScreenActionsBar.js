@@ -73,7 +73,7 @@ const CTA = (props) => {
 export default class GameScreenActionsBar extends React.Component {
   static defaultProps = {
     onChangeVolumme: null,
-    onCreatePost: null,
+    onPostScreenshot: null,
     onViewSource: null,
     onViewDeveloper: null,
   };
@@ -89,17 +89,13 @@ export default class GameScreenActionsBar extends React.Component {
           ) : null}
         </div>
         <div className={STYLES_MIDDLE}>
-          {this.props.onCreatePost ? (
+          {this.props.onPostScreenshot ? (
             <CTA style={{ marginRight: 24 }}>
               <GameSVG.Camera height="32px" style={{ marginRight: 8 }} />
             </CTA>
           ) : null}
         </div>
         <div className={STYLES_RIGHT}>
-          <CTA style={{ marginRight: 24 }}>
-            <GameSVG.Multiplayer height="20px" style={{ marginRight: 8 }} />
-          </CTA>
-
           <CTA style={{ marginRight: 24 }}>
             <GameSVG.Chip height="20px" style={{ marginRight: 8 }} />
             <DevelopmentCpuMonitor />
@@ -121,3 +117,9 @@ export default class GameScreenActionsBar extends React.Component {
     );
   }
 }
+
+/*
+  <CTA style={{ marginRight: 24 }}>
+    <GameSVG.Multiplayer height="20px" style={{ marginRight: 8 }} />
+  </CTA>
+*/

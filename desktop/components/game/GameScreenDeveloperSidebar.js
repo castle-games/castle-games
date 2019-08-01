@@ -70,6 +70,7 @@ const STYLES_TOP = css`
 const STYLES_BOTTOM = css`
   border-top: 1px solid ${BORDER_COLOR};
   width: 100%;
+  flex-shrink: 0;
   overflow-y: scroll;
   position: relative;
   display: block;

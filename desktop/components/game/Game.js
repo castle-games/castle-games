@@ -3,6 +3,7 @@ import * as Strings from '~/common/strings';
 import * as NativeUtil from '~/native/nativeutil';
 import * as URLS from '~/common/urls';
 import * as Utilities from '~/common/utilities';
+import * as Bridge from '~/common/bridge';
 
 import { css } from 'react-emotion';
 import { DevelopmentContext } from '~/contexts/DevelopmentContext';
@@ -28,6 +29,14 @@ export default class Game extends React.Component {
     NativeUtil.openExternalURL(URLS.githubUserContentToRepoUrl(entry));
   };
 
+  _handlePostScreenshot = async () => {
+    await Bridge.JS.postCreate({
+      message: 'I took a screenshot!',
+      mediaType: 'capture',
+      mediaUploadParams: { autoCrop: true },
+    });
+  };
+
   render() {
     const entryPoint = Utilities.getLuaEntryPoint(this.props.game);
     const isOpenSource = URLS.isOpenSource(entryPoint);
@@ -35,7 +44,7 @@ export default class Game extends React.Component {
     const elementActions = (
       <GameScreenActionsBar
         onChangeVolume={this.props.onChangeVolume}
-        onCreatePost={this.props.onCreatePost}
+        onPostScreenshot={this._handlePostScreenshot}
         onViewSource={isOpenSource ? () => this._handleViewSource(entryPoint) : null}
         onViewDeveloper={() => this.setState({ developer: !this.state.developer })}
         developer={this.state.developer}
