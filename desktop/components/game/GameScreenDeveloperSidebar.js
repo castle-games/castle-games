@@ -1,6 +1,9 @@
 import * as React from 'react';
 
 import { css } from 'react-emotion';
+import { DevelopmentContext } from '~/contexts/DevelopmentContext';
+
+import DevelopmentLogs from '~/components/game/DevelopmentLogs';
 
 const BORDER_COLOR = '#333';
 const BACKGROUND_COLOR = '#000';
@@ -95,6 +98,8 @@ const STYLES_DRAGGABLE_SECTION_HORIZONTAL = css`
 const MIN_SIZE = 88;
 
 export default class GameScreenDeveloperSidebar extends React.Component {
+  static contextType = DevelopmentContext;
+
   state = {
     server: 360 + 4,
   };
@@ -152,7 +157,13 @@ export default class GameScreenDeveloperSidebar extends React.Component {
           </div>
         </div>
 
-        <div className={STYLES_TOP}>&nbsp;</div>
+        <div className={STYLES_TOP}>
+          <DevelopmentLogs
+            logs={this.context.logs}
+            onClearLogs={this.context.setters.clearLogs}
+            game={this.props.game}
+          />
+        </div>
 
         <div
           className={STYLES_SECTION}

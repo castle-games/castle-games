@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as Strings from '~/common/strings';
 
 import { css } from 'react-emotion';
+import { DevelopmentContext } from '~/contexts/DevelopmentContext';
 
 import GameScreenActionsBar from '~/components/game/GameScreenActionsBar';
 import GameScreenAlert from '~/components/game/GameScreenAlert';
@@ -38,7 +39,7 @@ export default class Game extends React.Component {
 
     let maybeElementDeveloper;
     if (this.state.developer) {
-      maybeElementDeveloper = <GameScreenDeveloperSidebar />;
+      maybeElementDeveloper = <GameScreenDeveloperSidebar game={this.props.game} />;
     }
 
     const elementGame = (
