@@ -181,7 +181,7 @@ export default class GameScreenDeveloperSidebar extends React.Component {
     }
 
     return (
-      <div className={STYLES_CONTAINER}>
+      <div className={STYLES_CONTAINER} style={this.props.style}>
         <div className={STYLES_INFO_HEADING}>
           <div className={STYLES_INFO_HEADING_ROW} onClick={this._handleOpenGamePath}>
             <span>Project URL</span> <span>{this.props.game.url}</span>

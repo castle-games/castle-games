@@ -19,6 +19,20 @@ const STYLES_CONTAINER = css`
   justify-content: center;
 `;
 
+const STYLES_CONTAINER_THEATER = css`
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 const STYLES_LOADING_OVERLAY_CONTAINER = css`
   position: absolute;
   bottom: 0;
@@ -263,8 +277,15 @@ export default class GameScreenMedia extends React.Component {
       );
     }
 
+    let className = STYLES_CONTAINER;
+    if (this.props.theater) {
+      className = STYLES_CONTAINER_THEATER;
+    }
+
+    console.log('theater', this.props.theater);
+
     return (
-      <div ref={this._setRef} className={STYLES_CONTAINER}>
+      <div ref={this._setRef} className={className}>
         {maybeLoadingAnimation}
         {maybeLoadingOverlay}
       </div>

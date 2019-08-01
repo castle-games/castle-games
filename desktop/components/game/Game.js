@@ -23,6 +23,7 @@ export default class Game extends React.Component {
 
   state = {
     developer: false,
+    theater: false,
   };
 
   _handleViewSource = (entry) => {
@@ -35,6 +36,10 @@ export default class Game extends React.Component {
       mediaType: 'capture',
       mediaUploadParams: { autoCrop: true },
     });
+  };
+
+  _handleGameMaximize = () => {
+    this.setState({ theater: true });
   };
 
   render() {
@@ -65,6 +70,7 @@ export default class Game extends React.Component {
 
     const elementGame = (
       <GameScreenMedia
+        theater={this.state.theater}
         game={this.props.game}
         timeGameLoaded={this.props.timeGameLoaded}
         timeNavigatedToGame={this.props.timeNavigatedToGame}
@@ -82,7 +88,7 @@ export default class Game extends React.Component {
       <GameScreenWindowHeader
         navigateToHome={this.props.navigateToHome}
         onGameMinimize={this.props.onGameMinimize}
-        onGameMaximize={this.props.onGameMaximize}
+        onGameMaximize={this._handleGameMaximize}
         onGameDismiss={this.props.onGameDismiss}
       />
     );
