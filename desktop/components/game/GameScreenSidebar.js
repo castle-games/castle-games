@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { css } from 'react-emotion';
+import { ToolsWithoutSplitter } from '~/components/game/Tools';
 
 import ChatSidebar from '~/components/chat/ChatSidebar';
 
@@ -109,7 +110,9 @@ export default class GameScreenSidebar extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTAINER}>
-        <div className={STYLES_TOP}>&nbsp;</div>
+        <div className={STYLES_TOP}>
+          <ToolsWithoutSplitter game={this.props.game} />
+        </div>
         <div className={STYLES_BOTTOM} style={{ height: this.state.chat }}>
           <div
             className={STYLES_DRAGGABLE_SECTION_HORIZONTAL}
