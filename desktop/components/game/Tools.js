@@ -119,6 +119,22 @@ const Box = styled.div(
   flexbox
 );
 
+const ScrollBox = styled.div(
+  {
+    boxSizing: 'border-box',
+    minWidth: 0,
+    display: 'flex',
+    flexDirection: 'column',
+    overflowX: 'hidden',
+    overflowY: 'scroll',
+  },
+  space,
+  color,
+  border,
+  layout,
+  flexbox
+);
+
 const Image = styled(Box)({
   maxWidth: '100%',
   alignSelf: 'flex-start',
@@ -896,9 +912,6 @@ class ToolRadioButtonGroup extends React.PureComponent {
 elementTypes['radioButtonGroup'] = ToolRadioButtonGroup;
 
 const STYLES_SCROLLBOX_CONTAINER = css`
-  overflow-y: scroll;
-  overflow-x: hidden;
-
   ::-webkit-scrollbar {
     width: 8px;
     height: 100%;
@@ -922,9 +935,9 @@ class ToolScrollBox extends React.PureComponent {
     const { element } = this.props;
 
     return (
-      <Box className={STYLES_SCROLLBOX_CONTAINER} {...element.props}>
+      <ScrollBox className={STYLES_SCROLLBOX_CONTAINER} {...element.props}>
         {renderChildren(element)}
-      </Box>
+      </ScrollBox>
     );
   }
 }
@@ -1909,63 +1922,170 @@ export default class Tools extends React.PureComponent {
                 name: 'DEFAULT',
               },
               children: {
-                lastId: 'tabstab group 1',
-                count: 2,
-                '+4mbK3DCeGY8jlYj1ZtL8w==': {
-                  type: 'markdown',
-                  props: {
-                    source:
-                      '### Markdown outside\n\nThis is Markdown outside! :) [Link](https://www.google.com)!\n    ',
-                  },
-                },
-                'tabstab group 1': {
-                  prevId: '+4mbK3DCeGY8jlYj1ZtL8w==',
-                  type: 'tabs',
-                  props: {},
-                  pathId: 'DEFAULTtabstab group 1',
+                scrollBoxscrollBox1: {
+                  type: 'scrollBox',
                   children: {
-                    lastId: 'tabTab 2',
-                    count: 2,
-                    'tabTab 2': {
-                      prevId: 'tabTab 1',
-                      type: 'tab',
+                    'buttonButton 2': {
+                      type: 'button',
+                      prevId: 'markdownRow 2',
+                      pathId: 'M2zVSmMv2v7J4/NkSuNbiA==',
                       props: {
-                        label: 'Tab 2',
-                      },
-                      pathId: 'U9eK4o53d/lYSnsUp2tn9g==',
-                      children: {
-                        lastId: 'sD/1scDCjbDk3iL3JXH4/Q==',
-                        count: 1,
-                        'sD/1scDCjbDk3iL3JXH4/Q==': {
-                          type: 'markdown',
-                          props: {
-                            source:
-                              '### Markdown in tab 2\n\nThis is Markdown in tab 2! :) [Link](https://castle.games)!\n            ',
-                          },
-                        },
+                        label: 'Button 2',
                       },
                     },
-                    'tabTab 1': {
-                      type: 'tab',
-                      children: {
-                        lastId: 'N5ZfvDwnog0riCVGcumokQ==',
-                        'N5ZfvDwnog0riCVGcumokQ==': {
-                          type: 'markdown',
-                          props: {
-                            source:
-                              '### Markdown in tab 1\n\nThis is Markdown in tab 1! :) [Link](https://www.google.com)!\n            ',
-                          },
-                        },
-                        count: 1,
-                      },
+                    'buttonButton 7': {
+                      type: 'button',
+                      prevId: 'markdownRow 7',
+                      pathId: 'RU35sM5KLJoM5VNwExRDKA==',
                       props: {
-                        label: 'Tab 1',
+                        label: 'Button 7',
                       },
-                      pathId: 'MhVaatVQ17BOWAb7QUaykw==',
-                      lastReportedEventId: 1,
+                    },
+                    'markdownRow 3': {
+                      type: 'markdown',
+                      prevId: 'buttonButton 2',
+                      props: {
+                        source: 'Row 3',
+                      },
+                    },
+                    'markdownRow 5': {
+                      type: 'markdown',
+                      prevId: 'buttonButton 4',
+                      props: {
+                        source: 'Row 5',
+                      },
+                    },
+                    'buttonButton 1': {
+                      type: 'button',
+                      prevId: 'markdownRow 1',
+                      pathId: 'PlxZ3gcfZoR24irXQ+4ZWQ==',
+                      props: {
+                        label: 'Button 1',
+                      },
+                    },
+                    'buttonButton 4': {
+                      type: 'button',
+                      prevId: 'markdownRow 4',
+                      pathId: 'iWxh1j/rQEESiqy1SVvBTw==',
+                      props: {
+                        label: 'Button 4',
+                      },
+                    },
+                    'buttonButton 6': {
+                      type: 'button',
+                      prevId: 'markdownRow 6',
+                      pathId: 'B9yBNIH20bA+Yn1XrtdVKA==',
+                      props: {
+                        label: 'Button 6',
+                      },
+                    },
+                    'markdownRow 10': {
+                      type: 'markdown',
+                      prevId: 'buttonButton 9',
+                      props: {
+                        source: 'Row 10',
+                      },
+                    },
+                    'markdownRow 1': {
+                      type: 'markdown',
+                      props: {
+                        source: 'Row 1',
+                      },
+                    },
+                    'buttonButton 5': {
+                      type: 'button',
+                      prevId: 'markdownRow 5',
+                      pathId: 'bmjOD7WbsPcdAGr86fb/jw==',
+                      props: {
+                        label: 'Button 5',
+                      },
+                    },
+                    'markdownRow 6': {
+                      type: 'markdown',
+                      prevId: 'buttonButton 5',
+                      props: {
+                        source: 'Row 6',
+                      },
+                    },
+                    lastId: 'buttonButton 10',
+                    'buttonButton 9': {
+                      type: 'button',
+                      prevId: 'markdownRow 9',
+                      pathId: 'C52qwoXeoUkl5YUKoU0ibw==',
+                      props: {
+                        label: 'Button 9',
+                      },
+                    },
+                    'markdownRow 8': {
+                      type: 'markdown',
+                      prevId: 'buttonButton 7',
+                      props: {
+                        source: 'Row 8',
+                      },
+                    },
+                    'buttonButton 8': {
+                      type: 'button',
+                      prevId: 'markdownRow 8',
+                      pathId: '/DKiVgYvK7kGVO9WmfgEeg==',
+                      props: {
+                        label: 'Button 8',
+                      },
+                    },
+                    'markdownRow 7': {
+                      type: 'markdown',
+                      prevId: 'buttonButton 6',
+                      props: {
+                        source: 'Row 7',
+                      },
+                    },
+                    'buttonButton 3': {
+                      type: 'button',
+                      prevId: 'markdownRow 3',
+                      pathId: 'wE91WwJM/uxlncEeaG/nXA==',
+                      props: {
+                        label: 'Button 3',
+                      },
+                    },
+                    'markdownRow 2': {
+                      type: 'markdown',
+                      prevId: 'buttonButton 1',
+                      props: {
+                        source: 'Row 2',
+                      },
+                    },
+                    'markdownRow 9': {
+                      type: 'markdown',
+                      prevId: 'buttonButton 8',
+                      props: {
+                        source: 'Row 9',
+                      },
+                    },
+                    count: 20,
+                    'buttonButton 10': {
+                      type: 'button',
+                      prevId: 'markdownRow 10',
+                      pathId: 'NTG4C0s0bjqFN6eMunWLBw==',
+                      props: {
+                        label: 'Button 10',
+                      },
+                    },
+                    'markdownRow 4': {
+                      type: 'markdown',
+                      prevId: 'buttonButton 3',
+                      props: {
+                        source: 'Row 4',
+                      },
                     },
                   },
+                  props: {
+                    border: '1px solid white',
+                    height: 150,
+                    padding: 2,
+                  },
+                  pathId: 'eE7a6bwxqkSyXobc7+/RCw==',
                 },
+                lastId: 'scrollBoxscrollBox1',
+                count: 1,
               },
             },
           },
