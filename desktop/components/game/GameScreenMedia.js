@@ -282,8 +282,6 @@ export default class GameScreenMedia extends React.Component {
       className = STYLES_CONTAINER_THEATER;
     }
 
-    console.log('theater', this.props.theater);
-
     return (
       <div ref={this._setRef} className={className}>
         {maybeLoadingAnimation}

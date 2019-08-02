@@ -121,7 +121,7 @@ export default class GameScreenLayout extends React.Component {
   };
 
   state = {
-    sidebar: 188,
+    sidebar: 256,
     developer: 428,
   };
 
