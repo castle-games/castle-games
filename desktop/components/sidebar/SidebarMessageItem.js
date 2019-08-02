@@ -58,6 +58,7 @@ const STYLES_NAME = css`
 const STYLES_STATUS = css`
   margin-top: 4px;
   font-size: 10px;
+  font-weight: 100;
 `;
 
 export default (props) => {
@@ -91,7 +92,11 @@ export default (props) => {
         <h3 className={STYLES_NAME} style={{ color, fontWeight }}>
           {name}
         </h3>
-        {status && isOnline ? <span className={STYLES_STATUS}>{status}</span> : null}
+        {status && isOnline ? (
+          <span className={STYLES_STATUS} style={{ fontWeight }}>
+            {status}
+          </span>
+        ) : null}
       </div>
       {unreadCount ? <span className={STYLES_NOTIFICATION}>{unreadCount}</span> : null}
     </div>

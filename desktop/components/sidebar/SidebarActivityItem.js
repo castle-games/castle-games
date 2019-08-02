@@ -53,19 +53,27 @@ const STYLES_SYMBOL = css`
 
 export default (props) => {
   const { name, type, isUnread, notificationCount, isSelected, onClick } = props;
-  let fontWeight, unreadCountToDisplay, selectedStyles;
+  let fontWeight = '100',
+    unreadCountToDisplay,
+    selectedStyles,
+    iconStyles;
   if (isUnread && !isSelected) {
     fontWeight = '700';
     unreadCountToDisplay = notificationCount;
+    iconStyles = {
+      color: Constants.REFACTOR_COLORS.text,
+    };
   }
   if (isSelected) {
     selectedStyles = {
       color: 'magenta',
       backgroundColor: '#f9f9f9',
     };
+    iconStyles = {
+      color: 'magenta',
+    };
   }
   let icon;
-  let iconStyles = isSelected ? { color: 'magenta' } : null;
   switch (type) {
     case 'game':
       icon = <SVG.SidebarGames size="14px" style={iconStyles} />;

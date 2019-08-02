@@ -19,10 +19,11 @@ const SVG_ICON = {
 
 const STYLES_ITEM = css`
   font-family: ${Constants.REFACTOR_FONTS.system};
+  text-transform: uppercase;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 400;
   margin: 0;
   padding: 4px 16px 4px 16px;

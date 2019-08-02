@@ -1,7 +1,6 @@
 import * as React from 'react';
 import * as ChatUtilities from '~/common/chat-utilities';
 import * as Constants from '~/common/constants';
-import * as Strings from '~/common/strings';
 
 import { css } from 'react-emotion';
 
@@ -47,7 +46,7 @@ export default class SidebarDirectMessages extends React.Component {
           return (
             <SidebarMessageItem
               key={`direct-message-${c.channelId}-${c.otherUserId}`}
-              name={Strings.getName(user)}
+              name={user.username}
               isUnread={c.hasUnreadMessages}
               notificationCount={c.unreadNotificationCount}
               isOnline={c.otherUserIsOnline}
