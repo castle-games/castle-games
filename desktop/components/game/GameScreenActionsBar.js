@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as GameSVG from '~/components/primitives/game-screen-svg';
+import * as SVG from '~/components/primitives/svg';
 import * as Constants from '~/common/constants';
 
 import { css } from 'react-emotion';
@@ -79,18 +80,23 @@ export default class GameScreenActionsBar extends React.Component {
   };
 
   render() {
+    let volumeElement = <GameSVG.AudioOn height="20px" style={{ marginRight: 8 }} />;
+    if (this.props.isMuted) {
+      volumeElement = <GameSVG.AudioOff height="20px" style={{ marginRight: 8 }} />;
+    }
+
     return (
       <div className={STYLES_CONTAINER} style={this.props.style}>
         <div className={STYLES_LEFT} style={{ paddingLeft: 16 }}>
-          {this.props.onChangeVolume ? (
-            <CTA style={{ marginRight: 24 }}>
-              <GameSVG.Volume height="20px" style={{ marginRight: 8 }} />
+          {this.props.onToggleMute ? (
+            <CTA style={{ marginRight: 24 }} onClick={this.props.onToggleMute}>
+              {volumeElement}
             </CTA>
           ) : null}
         </div>
         <div className={STYLES_MIDDLE}>
           {this.props.onPostScreenshot ? (
-            <CTA style={{ marginRight: 24 }}>
+            <CTA style={{ marginRight: 24 }} onClick={this.props.onPostScreenshot}>
               <GameSVG.Camera height="32px" style={{ marginRight: 8 }} />
             </CTA>
           ) : null}

@@ -43,7 +43,7 @@ export default class Game extends React.Component {
 
     const elementActions = (
       <GameScreenActionsBar
-        onChangeVolume={this.props.onChangeVolume}
+        onToggleMute={this.props.onToggleMute}
         onPostScreenshot={this._handlePostScreenshot}
         onViewSource={isOpenSource ? () => this._handleViewSource(entryPoint) : null}
         onViewDeveloper={() => this.setState({ developer: !this.state.developer })}
