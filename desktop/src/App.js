@@ -27,8 +27,6 @@ import ChatInput from '~/components/chat/ChatInput';
 import Logs from '~/common/logs';
 import PublishHistory from '~/common/publish-history';
 
-import Game from '~/components/game/Game';
-
 const isReloadHotkey = isKeyHotkey('mod+r');
 const isFullscreenHotkey = isKeyHotkey('mod+shift+f');
 const isDevelopmentHotkey = isKeyHotkey('mod+j');
@@ -211,11 +209,6 @@ class App extends React.Component {
   };
 
   render() {
-    // NOTE(jim): just for debugging purposes.
-    if (USE_GAME_SCREEN_DEBUG) {
-      return <Game />;
-    }
-
     return (
       <AppContainer
         trendingGames={this.state.trendingGames}

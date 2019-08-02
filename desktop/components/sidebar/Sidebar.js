@@ -200,6 +200,7 @@ class Sidebar extends React.Component {
             isChatVisible={isChatVisible}
             channels={chat.channels}
             onSelectChannel={this._handleNavigateToChat}
+            onSendMessage={this._handleCreateDirectMessage}
           />
         </div>
       </div>
