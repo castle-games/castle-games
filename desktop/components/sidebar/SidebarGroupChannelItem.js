@@ -32,6 +32,7 @@ export default (props) => {
           style={{ width: 24, height: 18 + (selectedUserIds.length - 1) * avatarSpacing }}>
           {selectedUserIds.map((userId, ii) => (
             <UIAvatar
+              key={`avatar-group-${ii}`}
               src={userPresence.userIdToUser[userId].photo.url}
               isOnline={true}
               style={{ position: 'absolute', top: ii * avatarSpacing, border: '1px solid #fcfcfc' }}
