@@ -1168,6 +1168,333 @@ class ToolSlider extends React.PureComponent {
 }
 elementTypes['slider'] = ToolSlider;
 
+const STYLES_TABS_CONTAINER = css`
+  border-bottom: 1px solid #3d3d3d !important;
+  padding-bottom: 0.6rem !important;
+
+  .bx--tabs {
+    font-family: 'sf-mono', Consolas, monaco, monospace;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.125rem;
+    letter-spacing: 0.16px;
+    color: #f3f3f3;
+    height: auto;
+    width: 100%;
+    position: relative;
+  }
+  @media (min-width: 42rem) {
+    .bx--tabs {
+      background: none;
+      min-height: 3rem;
+    }
+  }
+  .bx--tabs-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+    height: 2.5rem;
+    cursor: pointer;
+    color: #f3f3f3;
+    outline: 2px solid transparent;
+    border-bottom: 1px solid #6f6f6f;
+    background-color: #282828;
+  }
+  @media (min-width: 42rem) {
+    .bx--tabs-trigger {
+      display: none;
+    }
+  }
+  .bx--tabs-trigger:focus,
+  .bx--tabs-trigger:active {
+    outline: 2px solid #ff00ff;
+    outline-offset: -2px;
+  }
+  .bx--tabs-trigger svg {
+    width: 0.75rem;
+    height: 0.4375rem;
+    fill: #f3f3f3;
+    transition: transform 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
+  }
+  .bx--tabs-trigger--open:focus,
+  .bx--tabs-trigger--open:active {
+    outline: 2px solid transparent;
+    outline-offset: -2px;
+    transition: outline 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
+  }
+  .bx--tabs-trigger--open {
+    background: #3d3d3d;
+  }
+  .bx--tabs-trigger--open svg {
+    transform: rotate(-180deg);
+    transition: transform 70ms;
+    transform-origin: 50% 45%;
+  }
+  .bx--tabs--light.bx--tabs-trigger {
+    background-color: #3d3d3d;
+  }
+  .bx--tabs-trigger-text {
+    text-decoration: none;
+    padding-top: 2px;
+    color: #f3f3f3;
+    font-weight: 400;
+  }
+  .bx--tabs-trigger-text:hover {
+    color: #f3f3f3;
+  }
+  .bx--tabs-trigger-text:focus {
+    outline: none;
+  }
+  .bx--tabs__nav {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    z-index: 7000;
+    background: #282828;
+    transition: max-height 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
+    max-height: 600px;
+    width: 100%;
+  }
+  @media (min-width: 42rem) {
+    .bx--tabs__nav {
+      flex-direction: row;
+      background: none;
+      box-shadow: none;
+      z-index: auto;
+      transition: inherit;
+      max-height: auto;
+      width: auto;
+    }
+  }
+  .bx--tabs__nav--hidden {
+    transition: max-height 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
+    overflow: hidden;
+    max-height: 0;
+  }
+  @media (min-width: 42rem) {
+    .bx--tabs__nav--hidden {
+      display: flex;
+      transition: inherit;
+      overflow: visible;
+      max-height: none;
+    }
+  }
+  .bx--tabs__nav-item {
+    background-color: #282828;
+    display: flex;
+    padding: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 2.5rem;
+    transition: background-color 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
+  }
+  @media (min-width: 42rem) {
+    .bx--tabs__nav-item {
+      background: transparent;
+      height: auto;
+    }
+    .bx--tabs__nav-item + .bx--tabs__nav-item {
+      margin-left: 0.125rem;
+    }
+  }
+  .bx--tabs__nav-item .bx--tabs__nav-link {
+    transition: color 70ms cubic-bezier(0.2, 0, 0.38, 0.9),
+      border-bottom-color 70ms cubic-bezier(0.2, 0, 0.38, 0.9),
+      outline 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
+  }
+  @media (min-width: 42rem) {
+    .bx--tabs__nav-item:hover:not(.bx--tabs__nav-item--selected) {
+      background: transparent;
+    }
+  }
+  .bx--tabs__nav-item:hover:not(.bx--tabs__nav-item--disabled) {
+    background-color: #353535;
+    box-shadow: 0 -1px 0 #353535;
+  }
+  @media (min-width: 42rem) {
+    .bx--tabs__nav-item:hover:not(.bx--tabs__nav-item--disabled) {
+      background-color: transparent;
+      box-shadow: none;
+    }
+  }
+  .bx--tabs__nav-item--disabled,
+  .bx--tabs__nav-item--disabled:hover {
+    cursor: not-allowed;
+  }
+  .bx--tabs__nav-item--selected:not(.bx--tabs__nav-item--disabled) {
+    border: none;
+    display: none;
+    transition: color 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
+  }
+  @media (min-width: 42rem) {
+    .bx--tabs__nav-item--selected:not(.bx--tabs__nav-item--disabled) {
+      display: flex;
+    }
+    .bx--tabs__nav-item--selected:not(.bx--tabs__nav-item--disabled) .bx--tabs__nav-link {
+      color: #f3f3f3;
+      font-family: 'sf-mono', Consolas, monaco, monospace;
+      font-size: 0.875rem;
+      font-weight: 600;
+      line-height: 1.125rem;
+      letter-spacing: 0.16px;
+      border-bottom: 3px solid #ff00ff;
+    }
+    .bx--tabs__nav-item--selected:not(.bx--tabs__nav-item--disabled) .bx--tabs__nav-link:focus,
+    .bx--tabs__nav-item--selected:not(.bx--tabs__nav-item--disabled) .bx--tabs__nav-link:active {
+      color: #f3f3f3;
+      border-bottom: 2px solid #ff00ff;
+    }
+  }
+  a.bx--tabs__nav-link {
+    outline: 2px solid transparent;
+    outline-offset: -2px;
+    display: inline-block;
+    color: #bebebe;
+    text-decoration: none;
+    font-weight: 400;
+    padding: 0.75rem 0;
+    width: calc(100% - 32px);
+    height: 2.5rem;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin: 0 1rem;
+    line-height: 1rem;
+    border-bottom: 1px solid #3d3d3d;
+    overflow: hidden;
+    transition: border 70ms cubic-bezier(0.2, 0, 0.38, 0.9),
+      outline 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
+  }
+  a.bx--tabs__nav-link:focus,
+  a.bx--tabs__nav-link:active {
+    width: 100%;
+    margin: 0;
+    padding-left: 16px;
+    outline: 2px solid #ff00ff;
+    outline-offset: -2px;
+  }
+  @media (min-width: 42rem) {
+    a.bx--tabs__nav-link {
+      border-bottom: 3px solid #bebebe;
+      padding: 0.5rem 1rem;
+      width: 10rem;
+      margin: 0;
+      line-height: inherit;
+    }
+    a.bx--tabs__nav-link:focus,
+    a.bx--tabs__nav-link:active {
+      width: 10rem;
+      padding: 0.5rem 1rem;
+      border-bottom: 2px;
+    }
+  }
+  .bx--tabs__nav-item:hover:not(.bx--tabs__nav-item--selected):not(.bx--tabs__nav-item--disabled)
+    .bx--tabs__nav-link {
+    color: #f3f3f3;
+  }
+  @media (min-width: 42rem) {
+    .bx--tabs__nav-item:hover:not(.bx--tabs__nav-item--selected):not(.bx--tabs__nav-item--disabled)
+      .bx--tabs__nav-link {
+      color: #f3f3f3;
+      border-bottom: 3px solid #6f6f6f;
+    }
+  }
+  .bx--tabs__nav-item--disabled .bx--tabs__nav-link {
+    color: #bebebe;
+    border-bottom: 3px solid #f3f3f3;
+  }
+  .bx--tabs__nav-item--disabled:hover .bx--tabs__nav-link {
+    cursor: no-drop;
+    border-bottom: 3px solid #f3f3f3;
+  }
+  .bx--tabs__nav-item--disabled .bx--tabs__nav-link:focus,
+  .bx--tabs__nav-item--disabled a.bx--tabs__nav-link:active {
+    outline: none;
+    border-bottom: 3px solid #f3f3f3;
+  }
+  .bx--tabs__nav-item:not(.bx--tabs__nav-item--selected):not(.bx--tabs__nav-item--disabled):not(.bx--tabs__nav-item--selected)
+    .bx--tabs__nav-link:focus,
+  .bx--tabs__nav-item:not(.bx--tabs__nav-item--selected):not(.bx--tabs__nav-item--disabled):not(.bx--tabs__nav-item--selected)
+    a.bx--tabs__nav-link:active {
+    color: #bebebe;
+  }
+  .bx--tabs.bx--skeleton {
+    pointer-events: none;
+    cursor: default;
+  }
+  .bx--tabs.bx--skeleton .bx--tabs__nav-link {
+    position: relative;
+    border: none;
+    padding: 0;
+    box-shadow: none;
+    pointer-events: none;
+    background: rgba(61, 112, 178, 0.1);
+    width: 4.6875rem;
+    height: 0.75rem;
+  }
+  .bx--tabs.bx--skeleton .bx--tabs__nav-link:hover,
+  .bx--tabs.bx--skeleton .bx--tabs__nav-link:focus,
+  .bx--tabs.bx--skeleton .bx--tabs__nav-link:active {
+    border: none;
+    outline: none;
+    cursor: default;
+  }
+  .bx--tabs.bx--skeleton .bx--tabs__nav-link:before {
+    content: '';
+    width: 0%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0.3;
+    background: rgba(61, 112, 178, 0.1);
+    animation: 3000ms ease-in-out skeleton infinite;
+  }
+  .bx--tabs.bx--skeleton .bx--tabs-trigger {
+    position: relative;
+    border: none;
+    padding: 0;
+    box-shadow: none;
+    pointer-events: none;
+    background: rgba(61, 112, 178, 0.1);
+    width: 6.25rem;
+  }
+  .bx--tabs.bx--skeleton .bx--tabs-trigger:hover,
+  .bx--tabs.bx--skeleton .bx--tabs-trigger:focus,
+  .bx--tabs.bx--skeleton .bx--tabs-trigger:active {
+    border: none;
+    outline: none;
+    cursor: default;
+  }
+  .bx--tabs.bx--skeleton .bx--tabs-trigger:before {
+    content: '';
+    width: 0%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0.3;
+    background: rgba(61, 112, 178, 0.1);
+    animation: 3000ms ease-in-out skeleton infinite;
+  }
+  .bx--tabs.bx--skeleton .bx--tabs-trigger svg {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+    visibility: visible;
+    white-space: nowrap;
+  }
+`;
+
 class ToolTabs extends React.PureComponent {
   componentDidMount() {
     const { element } = this.props;
@@ -1183,23 +1510,21 @@ class ToolTabs extends React.PureComponent {
     const children = orderedChildren(element).filter(({ id, child }) => child.type == 'tab');
 
     return (
-      <Carbon>
-        <div className="tabs-container">
-          <Tabs
-            {...element.props}
-            onSelectionChange={(activeIndex) =>
-              children.forEach(({ id, child }, childIndex) =>
-                sendEvent(child.pathId, { type: 'onActive', value: childIndex === activeIndex })
-              )
-            }>
-            {children.map(({ id, child }) => (
-              <Tab key={id} {...child.props} href="javascript:void(0);">
-                {renderChildren(child)}
-              </Tab>
-            ))}
-          </Tabs>
-        </div>
-      </Carbon>
+      <div className={STYLES_TABS_CONTAINER}>
+        <Tabs
+          {...element.props}
+          onSelectionChange={(activeIndex) =>
+            children.forEach(({ id, child }, childIndex) =>
+              sendEvent(child.pathId, { type: 'onActive', value: childIndex === activeIndex })
+            )
+          }>
+          {children.map(({ id, child }) => (
+            <Tab key={id} {...child.props} href="javascript:void(0);">
+              {renderChildren(child)}
+            </Tab>
+          ))}
+        </Tabs>
+      </div>
     );
   }
 }
@@ -1430,12 +1755,6 @@ const STYLES_CONTAINER = css`
     width: auto !important;
   }
 
-  /* Add border around tabs container */
-  .tabs-container {
-    border-bottom: 1px solid #3d3d3d !important;
-    padding-bottom: 0.6rem !important;
-  }
-
   /* Add some general bottom margin */
   .bx--number,
   .bx--text-input__field-wrapper,
@@ -1590,15 +1909,61 @@ export default class Tools extends React.PureComponent {
                 name: 'DEFAULT',
               },
               children: {
-                lastId: 'codeEditorcode',
-                count: 1,
-                codeEditorcode: {
-                  type: 'codeEditor',
-                  pathId: 'DEFAULTcodeEditorcode',
+                lastId: 'tabstab group 1',
+                count: 2,
+                '+4mbK3DCeGY8jlYj1ZtL8w==': {
+                  type: 'markdown',
                   props: {
-                    label: 'code',
-                    value:
-                      "function draw()\n    if thing then\n        print('blah')\n    end\n\n    for i = 1, 20 do\n        print('ooo ' ... i)\n    end\n\n    ellipse('fill', 400, 400, 20, 20)\nend\n",
+                    source:
+                      '### Markdown outside\n\nThis is Markdown outside! :) [Link](https://www.google.com)!\n    ',
+                  },
+                },
+                'tabstab group 1': {
+                  prevId: '+4mbK3DCeGY8jlYj1ZtL8w==',
+                  type: 'tabs',
+                  props: {},
+                  pathId: 'DEFAULTtabstab group 1',
+                  children: {
+                    lastId: 'tabTab 2',
+                    count: 2,
+                    'tabTab 2': {
+                      prevId: 'tabTab 1',
+                      type: 'tab',
+                      props: {
+                        label: 'Tab 2',
+                      },
+                      pathId: 'U9eK4o53d/lYSnsUp2tn9g==',
+                      children: {
+                        lastId: 'sD/1scDCjbDk3iL3JXH4/Q==',
+                        count: 1,
+                        'sD/1scDCjbDk3iL3JXH4/Q==': {
+                          type: 'markdown',
+                          props: {
+                            source:
+                              '### Markdown in tab 2\n\nThis is Markdown in tab 2! :) [Link](https://castle.games)!\n            ',
+                          },
+                        },
+                      },
+                    },
+                    'tabTab 1': {
+                      type: 'tab',
+                      children: {
+                        lastId: 'N5ZfvDwnog0riCVGcumokQ==',
+                        'N5ZfvDwnog0riCVGcumokQ==': {
+                          type: 'markdown',
+                          props: {
+                            source:
+                              '### Markdown in tab 1\n\nThis is Markdown in tab 1! :) [Link](https://www.google.com)!\n            ',
+                          },
+                        },
+                        count: 1,
+                      },
+                      props: {
+                        label: 'Tab 1',
+                      },
+                      pathId: 'MhVaatVQ17BOWAb7QUaykw==',
+                      lastReportedEventId: 1,
+                    },
                   },
                 },
               },
