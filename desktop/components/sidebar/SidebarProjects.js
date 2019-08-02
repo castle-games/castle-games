@@ -39,7 +39,7 @@ export default class SidebarProjects extends React.Component {
   render() {
     const { userStatusHistory } = this.props;
 
-    let filteredItems;
+    let filteredItems = [];
     if (userStatusHistory) {
       filteredItems = UserStatus.uniqueLocalUserStatuses(userStatusHistory).map((status) => {
         return {
