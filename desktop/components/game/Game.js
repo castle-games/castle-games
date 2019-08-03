@@ -62,6 +62,7 @@ export default class Game extends React.Component {
 
     const elementActions = (
       <GameScreenActionsBar
+        isMuted={this.props.isMuted}
         onToggleMute={this.props.onToggleMute}
         onPostScreenshot={this._handlePostScreenshot}
         onViewSource={isOpenSource ? () => this._handleViewSource(entryPoint) : null}
@@ -80,7 +81,7 @@ export default class Game extends React.Component {
       maybeElementDeveloper = (
         <GameScreenDeveloperSidebar
           game={this.props.game}
-          getGameRef={this._getGameRef}
+          getGameFunctions={this._getGameRef}
           onReload={this.props.onReload}
         />
       );
