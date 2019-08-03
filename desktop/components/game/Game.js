@@ -17,6 +17,9 @@ import GameScreenSidebar from '~/components/game/GameScreenSidebar';
 import GameScreenWindowHeader from '~/components/game/GameScreenWindowHeader';
 
 export default class Game extends React.Component {
+  _game;
+  _tools;
+
   static defaultProps = {
     errorMessage: '',
   };
@@ -35,6 +38,22 @@ export default class Game extends React.Component {
       mediaType: 'capture',
       mediaUploadParams: { autoCrop: true },
     });
+  };
+
+  _setGameRef = (ref) => {
+    this._game = ref;
+  };
+
+  _setToolsRef = (ref) => {
+    this._tools = ref;
+  };
+
+  _getGameRef = () => {
+    return this._game;
+  };
+
+  _getToolsRef = () => {
+    return this._tools;
   };
 
   render() {
@@ -59,12 +78,18 @@ export default class Game extends React.Component {
     let maybeElementDeveloper;
     if (this.state.developer) {
       maybeElementDeveloper = (
-        <GameScreenDeveloperSidebar game={this.props.game} onReload={this.props.onReload} />
+        <GameScreenDeveloperSidebar
+          game={this.props.game}
+          getGameRef={this._getGameRef}
+          onReload={this.props.onReload}
+        />
       );
     }
 
     const elementGame = (
       <GameScreenMedia
+        ref={this._setGameRef}
+        getToolsFunctions={this._getToolsRef}
         theater={this.props.isFullScreen}
         game={this.props.game}
         timeGameLoaded={this.props.timeGameLoaded}
@@ -77,7 +102,13 @@ export default class Game extends React.Component {
       />
     );
 
-    const elementGameSidebar = <GameScreenSidebar game={this.props.game} />;
+    const elementGameSidebar = (
+      <GameScreenSidebar
+        getGameFunctions={this._getGameRef}
+        setToolsRef={this._setToolsRef}
+        game={this.props.game}
+      />
+    );
 
     const elementHeader = (
       <GameScreenWindowHeader

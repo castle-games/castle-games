@@ -197,6 +197,11 @@ export default class GameScreenMedia extends React.Component {
       )
     );
 
+    const tools = this.props.getToolsFunctions();
+    if (tools) {
+      tools.clearState();
+    }
+
     Logs.system(`Loading game entry point: ${url}`);
     const screenSettings = Utilities.getScreenSettings(game);
     const initialData = await this._prepareInitialGameData(screenSettings);
@@ -237,6 +242,11 @@ export default class GameScreenMedia extends React.Component {
   };
 
   close = async () => {
+    const tools = this.props.getToolsFunctions();
+    if (tools) {
+      tools.clearState();
+    }
+
     await GameWindow.close();
   };
 

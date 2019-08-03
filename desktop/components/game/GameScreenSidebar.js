@@ -108,11 +108,22 @@ export default class GameScreenSidebar extends React.Component {
     }
   };
 
+  _handeLayoutChange = () => {
+    const game = this.props.getGameFunctions();
+    if (game) {
+      game.update();
+    }
+  };
+
   render() {
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_TOP}>
-          <ToolsWithoutSplitter game={this.props.game} />
+          <ToolsWithoutSplitter
+            onLayoutChange={this._handleLayoutChange}
+            ref={this.props.setToolsRef}
+            game={this.props.game}
+          />
         </div>
         <div className={STYLES_BOTTOM} style={{ height: this.state.chat }}>
           <div
