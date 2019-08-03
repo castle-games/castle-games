@@ -132,20 +132,6 @@ export default class DevelopmentLogs extends React.Component {
     return Constants.logs.default;
   };
 
-  _onSelectLocal = () => {
-    this.setState({
-      logMode: LogMode.LOCAL,
-    });
-  };
-
-  _onSelectRemote = () => {
-    this._fetchRemoteLogsAsync();
-
-    this.setState({
-      logMode: LogMode.REMOTE,
-    });
-  };
-
   _fetchRemoteLogsAsync = async () => {
     this.setState({
       remoteLogs: [],
@@ -233,28 +219,7 @@ export default class DevelopmentLogs extends React.Component {
         );
         break;
     }
-    return (
-      <div className={STYLES_ACTIONS}>
-        {logActionElement}
-        {this._renderLogModeSelector()}
-      </div>
-    );
-  };
-
-  _renderLogModeSelector = () => {
-    const { logMode } = this.state;
-
-    if (Utilities.isMultiplayer(this.props.game)) {
-      let buttonTitle, onButtonClick;
-      if (logMode == LogMode.LOCAL) {
-        buttonTitle = 'Switch to Server Logs';
-        onButtonClick = this._onSelectRemote;
-      } else {
-        buttonTitle = 'Switch to Local Logs';
-        onButtonClick = this._onSelectLocal;
-      }
-      return <UINavigationLink onClick={onButtonClick}>{buttonTitle}</UINavigationLink>;
-    }
+    return <div className={STYLES_ACTIONS}>{logActionElement}</div>;
   };
 
   render() {

@@ -1745,7 +1745,7 @@ const applyDiff = (t, diff) => {
 // NOTE(jim): Remember to delete this after new UI lands.
 const STYLES_CONTAINER_V2 = css`
   font-family: ${Constants.font.mono} !important;
-  font-size: 11px;
+  font-size: 10px;
 
   /* Based on the 'g90' theme (https://www.carbondesignsystem.com/guidelines/themes/) which 'Tools.scss' uses */
   color: #f3f3f3;
@@ -1826,10 +1826,10 @@ const STYLES_CONTAINER_V2 = css`
   .bx--accordion,
   .bx--toggle__label,
   .tabs-container {
-    margin-bottom: 14px !important;
+    margin-bottom: 12px !important;
   }
 
-  padding: 14px;
+  padding: 12px;
 `;
 
 const STYLES_CONTAINER = css`
@@ -2100,7 +2100,7 @@ export default class Tools extends React.PureComponent {
   }
 
   render() {
-    console.log(`render: ${JSON.stringify(this.state.root, null, 2)}`);
+    // console.log(`render: ${JSON.stringify(this.state.root, null, 2)}`);
 
     // NOTE(jim): this will take over the default render because
     // we don't need splitter layout anymore.
