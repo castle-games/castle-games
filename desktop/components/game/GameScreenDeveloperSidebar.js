@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as NativeUtil from '~/native/nativeutil';
 import * as Utilities from '~/common/utilities';
+import * as URLS from '~/common/urls';
 
 import { css } from 'react-emotion';
 import { DevelopmentContext } from '~/contexts/DevelopmentContext';
@@ -160,7 +161,7 @@ export default class GameScreenDeveloperSidebar extends React.Component {
 
   _handleOpenGamePath = () => {
     const { game } = this.props;
-    if (Urls.isPrivateUrl(game.url)) {
+    if (URLS.isPrivateUrl(game.url)) {
       const gamePath = path.dirname(game.url);
       NativeUtil.openExternalURL(gamePath);
     } else {
@@ -172,7 +173,7 @@ export default class GameScreenDeveloperSidebar extends React.Component {
     const { isMultiplayerCodeUploadEnabled } = this.context;
 
     let maybeMultiplayerElement;
-    if (Utilities.isMultiplayer(this.props.game) && Urls.isPrivateUrl(this.props.game.url)) {
+    if (Utilities.isMultiplayer(this.props.game) && URLS.isPrivateUrl(this.props.game.url)) {
       multiplayerElement = (
         <span onClick={this._handleMultiplayerCodeUpload}>
           {isMultiplayerCodeUploadEnabled ? 'Disabled' : 'Enabled'}

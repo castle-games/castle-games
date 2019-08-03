@@ -1742,6 +1742,96 @@ const applyDiff = (t, diff) => {
   return u;
 };
 
+// NOTE(jim): Remember to delete this after new UI lands.
+const STYLES_CONTAINER_V2 = css`
+  font-family: ${Constants.font.mono} !important;
+  font-size: 11px;
+
+  /* Based on the 'g90' theme (https://www.carbondesignsystem.com/guidelines/themes/) which 'Tools.scss' uses */
+  color: #f3f3f3;
+
+  /* Inputs seem to not properly hide the spinner buttons */
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Make input elements stretch to width of container */
+  .bx--form-item {
+    align-items: stretch !important;
+  }
+
+  /* Sliders are too wide by default */
+  .bx--slider {
+    min-width: 0 !important;
+    flex: 1;
+  }
+
+  /* Fix number input fonts */
+  input[type='number'] {
+    font-family: ${Constants.font.mono} !important;
+  }
+
+  /* Justify radio button labels to left */
+  .bx--radio-button-group--vertical .bx--radio-button__label {
+    justify-content: flex-start !important;
+  }
+
+  /* Make accordion children stretch */
+  .bx--accordion__item--active .bx--accordion__content {
+    padding-left: 1rem !important;
+    padding-right: 0.8rem !important;
+    padding-bottom: 0.8rem !important;
+  }
+
+  /* Make tab headers fit */
+  .bx--tabs__nav {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: row !important;
+  }
+  .bx--tabs__nav-item {
+    display: flex !important;
+    flex: 1 !important;
+    width: auto !important;
+  }
+  a.bx--tabs__nav-link,
+  a.bx--tabs__nav-link:focus,
+  a.bx--tabs__nav-link:active {
+    display: flex !important;
+    flex: 1 !important;
+    width: auto !important;
+  }
+
+  /* Fix dropdown overflow (coupled with the mutation observer JavaScript logic) */
+  .bx--list-box {
+    position: unset !important;
+  }
+  .bx--dropdown {
+    position: unset !important;
+  }
+  .bx--list-box__menu {
+    left: unset !important;
+    right: unset !important;
+  }
+
+  /* Add some general bottom margin */
+  .bx--number,
+  .bx--text-input__field-wrapper,
+  .bx--text-area__wrapper,
+  .bx--dropdown,
+  .bx--radio-button-group--vertical,
+  .bx--slider-container,
+  .bx--accordion,
+  .bx--toggle__label,
+  .tabs-container {
+    margin-bottom: 14px !important;
+  }
+
+  padding: 14px;
+`;
+
 const STYLES_CONTAINER = css`
   height: 100%;
 
@@ -2010,8 +2100,10 @@ export default class Tools extends React.PureComponent {
   }
 
   render() {
-    // console.log(`render: ${JSON.stringify(this.state.root, null, 2)}`);
+    console.log(`render: ${JSON.stringify(this.state.root, null, 2)}`);
 
+    // NOTE(jim): this will take over the default render because
+    // we don't need splitter layout anymore.
     if (this.props.isVersionTwo) {
       let toolsElement = null;
       if (this.state.visible) {
@@ -2027,7 +2119,7 @@ export default class Tools extends React.PureComponent {
         );
       }
 
-      return <div className={STYLES_CONTAINER}>{toolsElement}</div>;
+      return <div className={STYLES_CONTAINER_V2}>{toolsElement}</div>;
     }
 
     return (
