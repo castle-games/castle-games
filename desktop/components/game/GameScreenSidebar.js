@@ -1,8 +1,8 @@
 import * as React from 'react';
 
 import { css } from 'react-emotion';
-import { ToolsWithoutSplitter } from '~/components/game/Tools';
 
+import Tools from '~/components/game/Tools';
 import ChatSidebar from '~/components/chat/ChatSidebar';
 
 const BORDER_COLOR = '#333';
@@ -119,7 +119,8 @@ export default class GameScreenSidebar extends React.Component {
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_TOP}>
-          <ToolsWithoutSplitter
+          <Tools
+            isVersionTwo
             onLayoutChange={this._handleLayoutChange}
             ref={this.props.setToolsRef}
             game={this.props.game}

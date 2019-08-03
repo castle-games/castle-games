@@ -582,7 +582,9 @@ class ToolDropdown extends React.PureComponent {
             mutation.addedNodes.forEach((addedNode) => {
               if (addedNode.classList.contains('bx--list-box__menu')) {
                 // Match the menu's width to width of the prompt
-                addedNode.style.width = window.getComputedStyle(containerDOMNode).getPropertyValue('width');
+                addedNode.style.width = window
+                  .getComputedStyle(containerDOMNode)
+                  .getPropertyValue('width');
               }
             });
           }
@@ -1859,105 +1861,6 @@ const STYLES_SPLITTER_CONTAINER = css`
 
 const DEBUG_PREPOPULATED = false;
 
-export class ToolsWithoutSplitter extends React.Component {
-  static initialState = {
-    root: DEBUG_PREPOPULATED
-      ? {
-          panes: {
-            DEFAULT: {
-              type: 'pane',
-              props: {
-                name: 'DEFAULT',
-              },
-              children: {
-                lastId: 'codeEditorcode',
-                count: 1,
-                codeEditorcode: {
-                  type: 'codeEditor',
-                  pathId: 'DEFAULTcodeEditorcode',
-                  props: {
-                    label: 'code',
-                    value:
-                      "function draw()\n    if thing then\n        print('blah')\n    end\n\n    for i = 1, 20 do\n        print('ooo ' ... i)\n    end\n\n    ellipse('fill', 400, 400, 20, 20)\nend\n",
-                  },
-                },
-              },
-            },
-          },
-        }
-      : {},
-    visible: DEBUG_PREPOPULATED,
-  };
-
-  state = ToolsWithoutSplitter.initialState;
-
-  componentDidMount() {
-    window.addEventListener('CASTLE_TOOLS_UPDATE', this._handleUpdate);
-    NativeUtil.sendLuaEvent('CASTLE_TOOLS_NEEDS_SYNC', {});
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('CASTLE_TOOLS_UPDATE', this._handleUpdate);
-  }
-
-  _handleUpdate = (e) => {
-    const diff = JSON.parse(e.params);
-    // console.log(`diff: ${JSON.stringify(diff, null, 2)}`);
-
-    const prevVisible = this.state.visible;
-    this.setState(
-      ({ root }) => {
-        const newRoot = applyDiff(root, diff);
-        const newVisible =
-          newRoot.panes &&
-          Object.values(newRoot.panes).find(
-            (element) => element.children && element.children.count > 0
-          );
-        return { root: newRoot, visible: newVisible };
-      },
-      () => {
-        if (prevVisible !== this.state.visible) {
-          this.props.onLayoutChange && this.props.onLayoutChange();
-        }
-      }
-    );
-  };
-
-  clearState() {
-    this.setState(ToolsWithoutSplitter.initialState);
-  }
-
-  render() {
-    if (!this.state.root.panes) {
-      return null;
-    }
-
-    return (
-      <div className={STYLES_CONTAINER}>
-        <ToolsContext.Provider
-          value={{
-            transformAssetUri: this._transformAssetUri,
-          }}>
-          {Object.values(this.state.root.panes).map((element, i) => (
-            <ToolPane key={(element.props && element.props.name) || i} element={element} />
-          ))}
-        </ToolsContext.Provider>
-      </div>
-    );
-  }
-
-  _transformAssetUri = (uri) => {
-    let result = url.resolve(Utilities.getLuaEntryPoint(this.props.game), uri);
-    if (!result) {
-      return uri;
-    }
-    if (Utilities.isWindows()) {
-      result = Utilities.fixWindowsFilePath(result);
-    }
-    return result;
-  };
-}
-
 export default class Tools extends React.PureComponent {
   static initialState = {
     root: DEBUG_PREPOPULATED
@@ -2108,6 +2011,25 @@ export default class Tools extends React.PureComponent {
 
   render() {
     // console.log(`render: ${JSON.stringify(this.state.root, null, 2)}`);
+
+    if (this.props.isVersionTwo) {
+      if (!this.state.visible) {
+        return null;
+      }
+
+      return (
+        <div className={STYLES_CONTAINER}>
+          <ToolsContext.Provider
+            value={{
+              transformAssetUri: this._transformAssetUri,
+            }}>
+            {Object.values(this.state.root.panes).map((element, i) => (
+              <ToolPane key={(element.props && element.props.name) || i} element={element} />
+            ))}
+          </ToolsContext.Provider>
+        </div>
+      );
+    }
 
     return (
       <SplitterLayout
