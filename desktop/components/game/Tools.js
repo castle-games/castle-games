@@ -2013,12 +2013,9 @@ export default class Tools extends React.PureComponent {
     // console.log(`render: ${JSON.stringify(this.state.root, null, 2)}`);
 
     if (this.props.isVersionTwo) {
-      if (!this.state.visible) {
-        return null;
-      }
-
-      return (
-        <div className={STYLES_CONTAINER}>
+      let toolsElement = null;
+      if (this.state.visible) {
+        toolsElement = (
           <ToolsContext.Provider
             value={{
               transformAssetUri: this._transformAssetUri,
@@ -2027,8 +2024,10 @@ export default class Tools extends React.PureComponent {
               <ToolPane key={(element.props && element.props.name) || i} element={element} />
             ))}
           </ToolsContext.Provider>
-        </div>
-      );
+        );
+      }
+
+      return <div className={STYLES_CONTAINER}>{toolsElement}</div>;
     }
 
     return (

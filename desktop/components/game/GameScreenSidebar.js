@@ -65,6 +65,10 @@ const STYLES_DRAGGABLE_SECTION_HORIZONTAL = css`
 const MIN_SIZE = 88;
 
 export default class GameScreenSidebar extends React.Component {
+  static defaultProps = {
+    setToolsRef: (ref) => {},
+  };
+
   state = {
     chat: 432,
   };
@@ -122,7 +126,7 @@ export default class GameScreenSidebar extends React.Component {
           <Tools
             isVersionTwo
             onLayoutChange={this._handleLayoutChange}
-            ref={this.props.setToolsRef}
+            setToolsRef={this.props.setToolsRef}
             game={this.props.game}
           />
         </div>

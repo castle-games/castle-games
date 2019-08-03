@@ -315,6 +315,7 @@ class GameScreen extends React.Component {
         <Game
           game={this.props.game}
           isFullScreen={this.props.isFullScreen}
+          isMuted={this.state.isMuted}
           timeGameLoaded={this.props.timeGameLoaded}
           timeNavigatedToGame={this.props.timeNavigatedToGame}
           navigateToUserProfile={this.props.navigateToUserProfile}
