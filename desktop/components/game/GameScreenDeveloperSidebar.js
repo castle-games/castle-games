@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as Window from '~/common/window';
 import * as Constants from '~/common/constants';
 import * as NativeUtil from '~/native/nativeutil';
 import * as Utilities from '~/common/utilities';
@@ -49,11 +50,19 @@ const STYLES_INFO_TEXT = css`
 
 const STYLES_INFO_TEXT_TITLE = css`
   font-weight: 700;
+  padding-right: 16px;
+  flex-shrink: 0;
 `;
 
 const STYLES_INFO_TEXT_BODY = css`
   margin-top: 8px;
   line-height: 1.225;
+`;
+
+const STYLES_INFO_TEXT_DESCRIPTION = css`
+  overflow-wrap: break-word;
+  min-width: 10%;
+  width: 100%;
 `;
 
 const STYLES_SECTION_HEADER = css`
@@ -100,14 +109,13 @@ const STYLES_BOTTOM = css`
 `;
 
 const STYLES_LEFT = css`
-  flex-shrink: 0;
-  min-width: 200px;
+  min-width: 10%;
+  width: 100%;
   font-weight: 700;
 `;
 
 const STYLES_RIGHT = css`
   flex-shrink: 0;
-  min-width: 200px;
   text-align: right;
 `;
 
@@ -143,8 +151,6 @@ const STYLES_CTA = css`
   }
 `;
 
-const MIN_SIZE = 88;
-
 export default class GameScreenDeveloperSidebar extends React.Component {
   static contextType = DevelopmentContext;
 
@@ -152,7 +158,7 @@ export default class GameScreenDeveloperSidebar extends React.Component {
   _server;
 
   state = {
-    server: 360 + 4,
+    server: Window.getViewportSize().height * 0.5 - 88,
   };
 
   componentDidMount() {
@@ -171,6 +177,10 @@ export default class GameScreenDeveloperSidebar extends React.Component {
   };
 
   _handleMouseMove = (e) => {
+    const MIN_SIZE = 164;
+    const START_HEIGHT = Window.getViewportSize().height * 0.5;
+    const MAX_SIZE = Window.getViewportSize().height * 0.8;
+
     if (!this.state.resizing) {
       return;
     }
@@ -183,6 +193,10 @@ export default class GameScreenDeveloperSidebar extends React.Component {
 
     if (nextHeight < MIN_SIZE) {
       nextHeight = MIN_SIZE;
+    }
+
+    if (nextHeight > MAX_SIZE) {
+      nextHeight = MAX_SIZE;
     }
 
     this.setState({ [this.state.resizing]: nextHeight });
@@ -234,7 +248,7 @@ export default class GameScreenDeveloperSidebar extends React.Component {
         <div className={STYLES_INFO_HEADING}>
           <div className={STYLES_INFO_HEADING_ROW} onClick={this._handleOpenGamePath}>
             <span className={STYLES_INFO_TEXT_TITLE}>Project URL</span>{' '}
-            <span>{this.props.game.url}</span>
+            <span className={STYLES_INFO_TEXT_DESCRIPTION}>{this.props.game.url}</span>
           </div>
           {isMultiplayerCodeUploadEnabled ? (
             <div className={STYLES_INFO_TEXT}>

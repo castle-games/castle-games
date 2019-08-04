@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
+import * as Window from '~/common/window';
 
 import { css } from 'react-emotion';
 
@@ -107,9 +108,6 @@ const STYLES_DRAGGABLE_SECTION_VERTICAL_LEFT = css`
 // TODO(jim): Support fluid resize of components.
 // TODO(jim): Connect data.
 
-const MIN_SIZE = 128;
-const MAX_SIZE = 648;
-
 export default class GameScreenLayout extends React.Component {
   static defaultProps = {
     elementActions: null,
@@ -141,6 +139,9 @@ export default class GameScreenLayout extends React.Component {
   };
 
   _handleMouseMove = (e) => {
+    const MIN_SIZE = Window.getViewportSize().width * 0.1;
+    const MAX_SIZE = Window.getViewportSize().width * 0.4;
+
     if (!this.state.resizing) {
       return;
     }

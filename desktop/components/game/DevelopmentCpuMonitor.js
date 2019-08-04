@@ -51,11 +51,11 @@ export default class DevelopmentCpuMonitor extends React.Component {
       color,
       backgroundColor = Constants.colors.black;
     if (isNaN(parseFloat(cpuUsage)) || cpuUsage < 0) {
-      text = 'CPU N/A';
+      text = 'N/A';
       color = Constants.REFACTOR_COLORS.subdued;
     } else {
       const percent = Math.round(cpuUsage * 100);
-      text = `${percent}% CPU`;
+      text = `${percent}%`;
       if (percent < 35) {
         color = Constants.colors.white;
       } else if (percent < 80) {

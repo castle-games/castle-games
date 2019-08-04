@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as Window from '~/common/window';
 
 import { css } from 'react-emotion';
 
@@ -62,15 +63,13 @@ const STYLES_DRAGGABLE_SECTION_HORIZONTAL = css`
   user-select; none;
 `;
 
-const MIN_SIZE = 88;
-
 export default class GameScreenSidebar extends React.Component {
   static defaultProps = {
     setToolsRef: (ref) => {},
   };
 
   state = {
-    chat: 432,
+    chat: Window.getViewportSize().height * 0.5 - 88,
   };
 
   componentDidMount() {
@@ -89,6 +88,10 @@ export default class GameScreenSidebar extends React.Component {
   };
 
   _handleMouseMove = (e) => {
+    const MIN_SIZE = 164;
+    const START_HEIGHT = Window.getViewportSize().height * 0.5;
+    const MAX_SIZE = Window.getViewportSize().height * 0.8;
+
     if (!this.state.resizing) {
       return;
     }
@@ -101,6 +104,10 @@ export default class GameScreenSidebar extends React.Component {
 
     if (nextHeight < MIN_SIZE) {
       nextHeight = MIN_SIZE;
+    }
+
+    if (nextHeight > MAX_SIZE) {
+      nextHeight = MAX_SIZE;
     }
 
     this.setState({ [this.state.resizing]: nextHeight });
