@@ -40,6 +40,14 @@ export default class Game extends React.Component {
     });
   };
 
+  _handleUpdate = () => {
+    if (!this._game) {
+      return;
+    }
+
+    this._game.update();
+  };
+
   _setGameRef = (ref) => {
     this._game = ref;
   };
@@ -83,6 +91,7 @@ export default class Game extends React.Component {
           game={this.props.game}
           getGameFunctions={this._getGameRef}
           onReload={this.props.onReload}
+          onUpdate={this._handleUpdate}
         />
       );
     }
@@ -108,6 +117,7 @@ export default class Game extends React.Component {
         getGameFunctions={this._getGameRef}
         setToolsRef={this._setToolsRef}
         game={this.props.game}
+        onUpdate={this._handleUpdate}
       />
     );
 
@@ -122,6 +132,7 @@ export default class Game extends React.Component {
 
     return (
       <GameScreenLayout
+        onUpdate={this._handleUpdate}
         elementActions={elementActions}
         elementAlert={maybeElementAlert}
         elementDeveloper={maybeElementDeveloper}

@@ -163,7 +163,10 @@ export default class GameScreenLayout extends React.Component {
       nextWidth = MIN_SIZE;
     }
 
-    this.setState({ [this.state.resizing]: nextWidth });
+    this.setState({ [this.state.resizing]: nextWidth }, () => {
+      // NOTE(jim): Update
+      this.props.onUpdate();
+    });
   };
 
   _handleMouseUp = (e) => {
