@@ -91,7 +91,7 @@ export default class DevelopmentLogs extends React.Component {
   _scrollView;
 
   state = {
-    logMode: this.props.logMode || LogMode.LOCAL,
+    logMode: this.props.logMode,
     remoteLogs: [],
   };
 
@@ -108,8 +108,12 @@ export default class DevelopmentLogs extends React.Component {
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.scroll();
+
+    if (this.props.logMode === LogMode.REMOTE) {
+      await this._fetchRemoteLogsAsync();
+    }
   }
 
   scroll = () => {

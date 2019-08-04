@@ -212,6 +212,7 @@ export default class GameScreenDeveloperSidebar extends React.Component {
             logs={this.context.logs}
             onClearLogs={this.context.setters.clearLogs}
             game={this.props.game}
+            logMode={0}
           />
         </div>
 
