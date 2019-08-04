@@ -111,6 +111,9 @@ const MIN_SIZE = 88;
 export default class GameScreenDeveloperSidebar extends React.Component {
   static contextType = DevelopmentContext;
 
+  _client;
+  _server;
+
   state = {
     server: 360 + 4,
   };
@@ -169,6 +172,14 @@ export default class GameScreenDeveloperSidebar extends React.Component {
     }
   };
 
+  _handleServerLogReload = () => {
+    if (!this._server) {
+      return;
+    }
+
+    this._server._fetchRemoteLogsAsync();
+  };
+
   render() {
     const { isMultiplayerCodeUploadEnabled } = this.context;
 
@@ -199,16 +210,18 @@ export default class GameScreenDeveloperSidebar extends React.Component {
         </div>
 
         <div className={STYLES_SECTION_HEADER}>
-          <div className={STYLES_LEFT}>&nbsp;</div>
+          <div className={STYLES_LEFT}>Client</div>
           <div className={STYLES_RIGHT} style={{ minWidth: 100 }}>
-            &nbsp;
-            <span onClick={this.props.onReload}>Reload</span>
+            <span onClick={this.context.setters.clearLogs}>Clear</span>
             {maybeMultiplayerElement}
           </div>
         </div>
 
         <div className={STYLES_TOP}>
           <DevelopmentLogs
+            ref={(ref) => {
+              this._client = ref;
+            }}
             logs={this.context.logs}
             onClearLogs={this.context.setters.clearLogs}
             game={this.props.game}
@@ -226,14 +239,17 @@ export default class GameScreenDeveloperSidebar extends React.Component {
             className={STYLES_DRAGGABLE_SECTION_HORIZONTAL}
             onMouseDown={(e) => this._handleMouseDown(e, 'server')}
           />
-          <div className={STYLES_LEFT}>&nbsp;</div>
+          <div className={STYLES_LEFT}>Server</div>
           <div className={STYLES_RIGHT} style={{ minWidth: 100 }}>
-            &nbsp;
+            <span onClick={this._handleServerLogReload}>Reload</span>
           </div>
         </div>
 
         <div className={STYLES_BOTTOM} style={{ height: this.state.server }}>
           <DevelopmentLogs
+            ref={(ref) => {
+              this._server = ref;
+            }}
             logs={this.context.logs}
             onClearLogs={this.context.setters.clearLogs}
             game={this.props.game}

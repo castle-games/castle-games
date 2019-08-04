@@ -39,7 +39,7 @@ const STYLES_SCROLLING_LOGS = css`
 `;
 
 const STYLES_LOGS = css`
-  padding: 0 24px 0 24px;
+  padding: 8px 16px 0 16px;
 `;
 
 const STYLES_LOG = css`
@@ -205,27 +205,6 @@ export default class DevelopmentLogs extends React.Component {
     ];
   };
 
-  _renderBottomActions = () => {
-    let logActionElement;
-    switch (this.state.logMode) {
-      case LogMode.LOCAL:
-        logActionElement = (
-          <UINavigationLink style={{ marginRight: 24 }} onClick={this.props.onClearLogs}>
-            Clear Logs
-          </UINavigationLink>
-        );
-        break;
-      case LogMode.REMOTE:
-        logActionElement = (
-          <UINavigationLink style={{ marginRight: 24 }} onClick={this._fetchRemoteLogsAsync}>
-            Reload Logs
-          </UINavigationLink>
-        );
-        break;
-    }
-    return <div className={STYLES_ACTIONS}>{logActionElement}</div>;
-  };
-
   render() {
     let { logMode } = this.state;
 
@@ -236,7 +215,6 @@ export default class DevelopmentLogs extends React.Component {
           ref={(c) => {
             this._scrollView = c;
           }}>
-          <div className={STYLES_SPACER} />
           <div className={STYLES_LOGS}>
             {logMode == LogMode.LOCAL ? this._renderLocalLogs() : this._renderRemoteLogs()}
           </div>
@@ -247,7 +225,6 @@ export default class DevelopmentLogs extends React.Component {
             }}
           />
         </div>
-        {this._renderBottomActions()}
       </div>
     );
   }
