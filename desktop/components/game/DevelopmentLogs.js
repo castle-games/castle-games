@@ -56,6 +56,7 @@ const STYLES_LOG_LEFT = css`
   flex-shrink: 0;
   text-transform: uppercase;
   padding-right: 24px;
+  min-width: 64px;
 `;
 
 const STYLES_LOG_RIGHT = css`

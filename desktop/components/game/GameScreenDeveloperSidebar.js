@@ -21,11 +21,12 @@ const STYLES_CONTAINER = css`
   align-items: center;
   justify-content: space-between;
   flex-direction: column;
+  font-family: ${Constants.REFACTOR_FONTS.system};
 `;
 
 const STYLES_INFO_HEADING = css`
   width: 100%;
-  font-size: 12px;
+  font-size: 11px;
   padding: 16px 16px 16px 16px;
   flex-shrink: 0;
   border-bottom: 1px solid ${BORDER_COLOR};
@@ -34,17 +35,32 @@ const STYLES_INFO_HEADING = css`
 
 const STYLES_INFO_HEADING_ROW = css`
   width: 100%;
-  font-size: 12px;
+  font-size: 11px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
+  line-height: 1.225;
+`;
+
+const STYLES_INFO_TEXT = css`
+  padding: 16px 0 0 0;
+  font-size: 11px;
+`;
+
+const STYLES_INFO_TEXT_TITLE = css`
+  font-weight: 700;
+`;
+
+const STYLES_INFO_TEXT_BODY = css`
+  margin-top: 8px;
+  line-height: 1.225;
 `;
 
 const STYLES_SECTION_HEADER = css`
   position: relative;
   width: 100%;
   height: 24px;
-  font-size: 12px;
+  font-size: 11px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -86,6 +102,7 @@ const STYLES_BOTTOM = css`
 const STYLES_LEFT = css`
   flex-shrink: 0;
   min-width: 200px;
+  font-weight: 700;
 `;
 
 const STYLES_RIGHT = css`
@@ -104,6 +121,26 @@ const STYLES_DRAGGABLE_SECTION_HORIZONTAL = css`
   cursor: grab;
   z-index: 1;
   user-select; none;
+`;
+
+const STYLES_CTA = css`
+  font-family: ${Constants.font.mono};
+  color: ${Constants.colors.white};
+  flex-shrink: 0;
+  display: inline-flex;
+  user-select: none;
+  text-transform: uppercase;
+  font-size: 10px;
+  line-height: 10px;
+  letter-spacing: 0.1px;
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 200ms ease;
+
+  :hover {
+    color: ${Constants.colors.brand2};
+  }
 `;
 
 const MIN_SIZE = 88;
@@ -196,12 +233,13 @@ export default class GameScreenDeveloperSidebar extends React.Component {
       <div className={STYLES_CONTAINER} style={this.props.style}>
         <div className={STYLES_INFO_HEADING}>
           <div className={STYLES_INFO_HEADING_ROW} onClick={this._handleOpenGamePath}>
-            <span>Project URL</span> <span>{this.props.game.url}</span>
+            <span className={STYLES_INFO_TEXT_TITLE}>Project URL</span>{' '}
+            <span>{this.props.game.url}</span>
           </div>
           {isMultiplayerCodeUploadEnabled ? (
-            <div className={STYLES_INFO_HEADING_ROW}>
-              <div>Multiplayer auto upload is enabled</div>
-              <div>
+            <div className={STYLES_INFO_TEXT}>
+              <div className={STYLES_INFO_TEXT_TITLE}>Multiplayer auto upload is enabled</div>
+              <div className={STYLES_INFO_TEXT_BODY}>
                 When you Reload, Castle uploads a copy of your project's code to a temporary public
                 url, and loads it from there.
               </div>
@@ -212,7 +250,9 @@ export default class GameScreenDeveloperSidebar extends React.Component {
         <div className={STYLES_SECTION_HEADER}>
           <div className={STYLES_LEFT}>Client</div>
           <div className={STYLES_RIGHT} style={{ minWidth: 100 }}>
-            <span onClick={this.context.setters.clearLogs}>Clear</span>
+            <span className={STYLES_CTA} onClick={this.context.setters.clearLogs}>
+              Clear
+            </span>
             {maybeMultiplayerElement}
           </div>
         </div>
@@ -241,7 +281,9 @@ export default class GameScreenDeveloperSidebar extends React.Component {
           />
           <div className={STYLES_LEFT}>Server</div>
           <div className={STYLES_RIGHT} style={{ minWidth: 100 }}>
-            <span onClick={this._handleServerLogReload}>Reload</span>
+            <span className={STYLES_CTA} onClick={this._handleServerLogReload}>
+              Reload
+            </span>
           </div>
         </div>
 
