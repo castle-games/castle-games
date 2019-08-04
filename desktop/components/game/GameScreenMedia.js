@@ -21,6 +21,7 @@ const STYLES_CONTAINER = css`
 
 const STYLES_CONTAINER_THEATER = css`
   position: fixed;
+  z-index: 1;
   top: 0;
   right: 0;
   bottom: 0;
