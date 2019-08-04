@@ -96,7 +96,7 @@ class ChatSidebar extends React.Component {
     // TODO(jim): When theming is available, you can just modify this object.
     let theme = {
       textColor: Constants.colors.white,
-      background: `#000000`,
+      background: 'transparent',
       anchorColor: Constants.colors.white,
       inputBackground: `#565656`,
       embedBorder: `none`,

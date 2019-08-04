@@ -13,7 +13,6 @@ const STYLES_FIXED_CONTAINER = css`
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: #020202;
 `;
 
 const STYLES_SCROLLING_LOGS = css`
