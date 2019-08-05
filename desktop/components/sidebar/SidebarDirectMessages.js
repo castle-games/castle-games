@@ -32,11 +32,14 @@ export default class SidebarDirectMessages extends React.Component {
       let userId = onlineUserIdsList[onlineUserIdIndex];
       if (!userIdsInList[userId] && viewer.userId !== userId) {
         let user = userIdToUser[userId];
-        directMessages.push({
-          channelId: null,
-          otherUserId: userId,
-          otherUserIsOnline: true,
-        });
+        if (user) {
+          directMessages.push({
+            channelId: null,
+            otherUserId: userId,
+            otherUserIsOnline: true,
+            name: user.username, // needed for sort
+          });
+        }
         userIdsInList[userId] = true;
       }
       onlineUserIdIndex++;
