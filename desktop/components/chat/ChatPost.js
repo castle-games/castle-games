@@ -6,7 +6,7 @@ import * as Actions from '~/common/actions';
 import { css } from 'react-emotion';
 
 import UIGameCell from '~/components/reusable/UIGameCell';
-import { UIPostCell } from '~/components/reusable/UIPostList';
+import UIPostCell from '~/components/reusable/UIPostCell';
 
 const STYLES_OUTER = css`
   flex-shrink: 0;
