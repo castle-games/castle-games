@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as Constants from '~/common/constants';
 
 import { css } from 'react-emotion';
+import { ChatContext } from '~/contexts/ChatContext';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigationContext, NavigatorContext } from '~/contexts/NavigationContext';
 
@@ -190,6 +191,7 @@ class ProfileScreen extends React.Component {
           creator={creator}
           isOwnProfile={isOwnProfile}
           navigateToGameUrl={this.props.navigateToGameUrl}
+          onSendMessage={this.props.onSendMessage}
         />
         <UIHorizontalNavigation
           items={this._getNavigationItems(isOwnProfile)}
@@ -204,7 +206,7 @@ class ProfileScreen extends React.Component {
 }
 
 export default class ProfileScreenWithContext extends React.Component {
-  _renderProfile = (navigator, navigation, currentUser) => {
+  _renderProfile = (navigator, navigation, currentUser, chat) => {
     return (
       <ProfileScreen
         navigateToGame={navigator.navigateToGame}
@@ -216,6 +218,7 @@ export default class ProfileScreenWithContext extends React.Component {
         options={navigation.options ? navigation.options : { mode: 'games' }}
         onSignOut={currentUser.clearCurrentUser}
         onAfterSave={currentUser.refreshCurrentUser}
+        onSendMessage={chat.openChannelForUser}
       />
     );
   };
@@ -226,9 +229,13 @@ export default class ProfileScreenWithContext extends React.Component {
         {(navigator) => (
           <NavigationContext.Consumer>
             {(navigation) => (
-              <CurrentUserContext.Consumer>
-                {(currentUser) => this._renderProfile(navigator, navigation, currentUser)}
-              </CurrentUserContext.Consumer>
+              <ChatContext.Consumer>
+                {(chat) => (
+                  <CurrentUserContext.Consumer>
+                    {(currentUser) => this._renderProfile(navigator, navigation, currentUser, chat)}
+                  </CurrentUserContext.Consumer>
+                )}
+              </ChatContext.Consumer>
             )}
           </NavigationContext.Consumer>
         )}

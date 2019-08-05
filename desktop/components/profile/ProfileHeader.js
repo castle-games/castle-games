@@ -2,12 +2,13 @@ import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as NativeUtil from '~/native/nativeutil';
 import * as Strings from '~/common/strings';
+import * as SVG from '~/components/primitives/svg';
 import * as Urls from '~/common/urls';
 
 import { css } from 'react-emotion';
 
 import ContentEditor from '~/editor/ContentEditor';
-import UICharacterCard from '~/components/reusable/UICharacterCard';
+import UIAvatar from '~/components/reusable/UIAvatar';
 import UIHeading from '~/components/reusable/UIHeading';
 import UIUserStatus from '~/components/reusable/UIUserStatus';
 import UIUserStatusIndicator from '~/components/reusable/UIUserStatusIndicator';
@@ -67,19 +68,24 @@ const STYLES_LINKS_ROW = css`
 `;
 
 const STYLES_LINK_ITEM = css`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   color: ${Constants.colors.black};
   font-family: ${Constants.font.system};
   font-weight: 600;
   font-size: 12px;
   margin-right: 24px;
   cursor: pointer;
-`;
 
-const STYLES_LINK = css`
-  color: ${Constants.colors.black};
+  span {
+    margin-right: 0.3em;
+  }
 
   :hover {
-    color: ${Constants.colors.selected};
+    span {
+      text-decoration: underline;
+    }
   }
 `;
 
@@ -108,9 +114,22 @@ export default class ProfileHeader extends React.Component {
     );
   };
 
-  _renderLinks = (creator) => {
+  _handleSendMessage = () => {
+    this.props.onSendMessage(this.props.creator);
+  };
+
+  _renderLinks = (creator, isOwnProfile) => {
     let linkElements = [];
     const { websiteUrl, itchUsername, twitterUsername } = creator;
+
+    if (!isOwnProfile) {
+      linkElements.push(
+        <div key="message" className={STYLES_LINK_ITEM} onClick={this._handleSendMessage}>
+          <SVG.Mail style={{ width: 14, height: 14, marginRight: 4 }} />
+          <span>Send Message</span>
+        </div>
+      );
+    }
 
     if (websiteUrl) {
       const { urlToDisplay, urlToOpen } = Urls.canonizeUserProvidedUrl(websiteUrl);
@@ -119,7 +138,7 @@ export default class ProfileHeader extends React.Component {
           key="websiteUrl"
           className={STYLES_LINK_ITEM}
           onClick={() => this._handleClickCreatorLink(urlToOpen)}>
-          <span className={STYLES_LINK}>{urlToDisplay}</span>
+          <span>{urlToDisplay}</span>
         </div>
       );
     }
@@ -130,7 +149,7 @@ export default class ProfileHeader extends React.Component {
           key="itchUsername"
           className={STYLES_LINK_ITEM}
           onClick={() => this._handleClickCreatorLink(`https://${itchUsername}.itch.io/`)}>
-          <span className={STYLES_LINK}>{itchUsername}</span> on itch
+          <span>{itchUsername}</span> on itch
         </div>
       );
     }
@@ -141,7 +160,7 @@ export default class ProfileHeader extends React.Component {
           key="twitterUsername"
           className={STYLES_LINK_ITEM}
           onClick={() => this._handleClickCreatorLink(`https://twitter.com/${twitterUsername}/`)}>
-          <span className={STYLES_LINK}>{twitterUsername}</span> on twitter
+          <span>{twitterUsername}</span> on twitter
         </div>
       );
     }
@@ -160,7 +179,7 @@ export default class ProfileHeader extends React.Component {
         aboutElement = <ContentEditor readOnly value={richAbout} className={STYLES_ABOUT} />;
       }
     }
-    const linksElement = this._renderLinks(this.props.creator);
+    const linksElement = this._renderLinks(this.props.creator, this.props.isOwnProfile);
 
     const avatarSrc =
       this.props.creator && this.props.creator.photo ? this.props.creator.photo.url : null;
@@ -175,7 +194,7 @@ export default class ProfileHeader extends React.Component {
         <div className={STYLES_BODY}>
           <div className={STYLES_BODY_LEFT}>
             <div className={STYLES_TOP}>
-              <UICharacterCard user={this.props.creator} />
+              <UIAvatar src={avatarSrc} showIndicator={false} style={{ width: 90, height: 90 }} />
               <div className={STYLES_CREATOR_IDENTITY}>
                 <UIHeading style={{ marginBottom: 8 }}>{name}</UIHeading>
                 <div className={STYLES_META}>
