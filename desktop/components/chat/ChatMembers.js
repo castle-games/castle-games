@@ -25,6 +25,7 @@ class ChatMembers extends React.Component {
   static defaultProps = {
     userIds: [],
     userPresence: null,
+    onSendMessage: (user) => {},
   };
 
   componentDidMount() {
@@ -56,6 +57,7 @@ class ChatMembers extends React.Component {
               isOnline={true}
               navigateToGameUrl={navigateToGameUrl}
               navigateToUserProfile={navigateToUserProfile}
+              onSendMessage={this.props.onSendMessage}
             />
           ))}
       </div>

@@ -9,10 +9,14 @@ import UIUserStatus from '~/components/reusable/UIUserStatus';
 
 const STYLES_USER = css`
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   font-size: 12px;
-  margin-bottom: 16px;
+  padding: 8px 16px;
+
+  :hover {
+    background: #f3f3f3;
+  }
 `;
 
 const STYLES_INFO = css`
@@ -33,13 +37,24 @@ const STYLES_NAME = css`
   }
 `;
 
+const STYLES_ACTIONS = css`
+  flex-shrink: 0;
+`;
+
+const STYLES_ACTION = css`
+  text-decoration: underline;
+  color: ${Constants.REFACTOR_COLORS.text};
+  cursor: pointer;
+  white-space: nowrap;
+`;
+
 const STYLES_USER_STATUS = css`
   font-family: ${Constants.REFACTOR_FONTS.system}:
   line-height: 20px;
   font-size: 12px;
 `;
 
-export default ({ user, isOnline, navigateToGameUrl, navigateToUserProfile }) => {
+export default ({ user, isOnline, navigateToGameUrl, navigateToUserProfile, onSendMessage }) => {
   return (
     <div className={STYLES_USER}>
       <UIAvatar
@@ -59,6 +74,11 @@ export default ({ user, isOnline, navigateToGameUrl, navigateToUserProfile }) =>
         <div className={STYLES_USER_STATUS}>
           {user ? <UIUserStatus user={user} navigateToGameUrl={navigateToGameUrl} /> : null}
         </div>
+      </div>
+      <div className={STYLES_ACTIONS}>
+        <span className={STYLES_ACTION} onClick={() => onSendMessage(user)}>
+          Send Message
+        </span>
       </div>
     </div>
   );

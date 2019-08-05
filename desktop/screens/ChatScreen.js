@@ -128,12 +128,21 @@ class ChatScreen extends React.Component {
     }
   };
 
+  _handleOpenDirectMessage = (user) => {
+    this.props.chat.openChannelForUser(user);
+  };
+
   _renderContent = (channel, mode) => {
     const { userPresence } = this.props;
 
     switch (mode) {
       case 'MEMBERS':
-        return <ChatMembers userIds={channel.subscribedUsers.map((user) => user.userId)} />;
+        return (
+          <ChatMembers
+            userIds={channel.subscribedUsers.map((user) => user.userId)}
+            onSendMessage={this._handleOpenDirectMessage}
+          />
+        );
       default:
         return (
           <React.Fragment>
