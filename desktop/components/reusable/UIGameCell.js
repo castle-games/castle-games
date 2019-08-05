@@ -236,8 +236,16 @@ export default class UIGameCell extends React.Component {
     let title = game.title ? Strings.elide(game.title, 21) : 'Untitled';
     let onGameUpdate = this.props.onGameUpdate ? () => this.props.onGameUpdate(game) : null;
 
-    const numPlayersText =
-      game.metadata.multiplayer && game.metadata.multiplayer.enabled ? 'Multiplayer' : ' ';
+    const isMultiplayer = game.metadata.multiplayer && game.metadata.multiplayer.enabled;
+    const numPlayersText = isMultiplayer ? 'Multiplayer' : ' ';
+    const draftText = game.draft ? isMultiplayer ? '\u2022 Work in Progress' : 'Work in Progress' : ' ';
+
+    let detailLine = (
+      <span className={STYLES_SECONDARY_TEXT}>
+        {numPlayersText}
+        {draftText}
+      </span>
+    );
 
     const hoveringOnDetailIcon = this.state.isHoveringOnActions || this.state.isHoveringOnAuthor;
     let descriptionText = game.description
@@ -324,7 +332,7 @@ export default class UIGameCell extends React.Component {
                   {playCount}
                 </div>
               </div>
-              <div className={STYLES_SECONDARY_TEXT}>{numPlayersText}</div>
+              {detailLine}
             </div>
           ) : null}
           <div
