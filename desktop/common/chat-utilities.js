@@ -25,11 +25,7 @@ const _channelTypeSortValue = (type) => {
 export const sortChannels = (channels) => {
   if (!channels || !channels.length) return channels;
   return channels.sort((a, b) => {
-    // unread vs. read first
-    const unreadCompare = b.hasUnreadMessages - a.hasUnreadMessages;
-    if (unreadCompare != 0) return unreadCompare;
-
-    // type second
+    // type of channel
     const typeCompare = _channelTypeSortValue(a.type) - _channelTypeSortValue(b.type);
     if (typeCompare != 0) return typeCompare;
 
@@ -37,7 +33,7 @@ export const sortChannels = (channels) => {
     const onlineCompare = !!b.otherUserIsOnline - !!a.otherUserIsOnline;
     if (onlineCompare != 0) return onlineCompare;
 
-    // alpha third
+    // alpha
     return _channelNameInvariant(a.name) > _channelNameInvariant(b.name) ? 1 : -1;
   });
 };

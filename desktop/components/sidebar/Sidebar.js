@@ -128,7 +128,6 @@ class Sidebar extends React.Component {
         onShowOptions={this._handleShowOptions}
         onSignIn={this._handleSignIn}
         onSignOut={this._handleSignOut}
-        onHideSidebar={this._handleHideSidebar}
       />
     );
 

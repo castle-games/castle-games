@@ -6,6 +6,8 @@ import { css } from 'react-emotion';
 
 import SidebarActivityItem from '~/components/sidebar/SidebarActivityItem';
 
+const MIN_NUM_CHANNELS = 5;
+
 const STYLES_CONTAINER = css`
   margin-bottom: 32px;
 `;
@@ -69,6 +71,30 @@ export default class SidebarChannels extends React.Component {
     return time;
   };
 
+  _truncateChannelsList = (channels, minLength) => {
+    let visibleChannels = [];
+    let now = Date.now();
+    // 20 hours so that if someone logs in at the same time every day, channels might not change mid-session
+    let twentyHours = 20 * 60 * 60 * 1000;
+    for (let c of channels) {
+      let hasVeryRecentActivity = this._getTimeOfMostRecentChannelActivity(c) > now - twentyHours;
+      let isSelectedChannel =
+        c.channelId === this.props.selectedChannelId && this.props.isChatVisible;
+      let hasNotifications = c.unreadNotificationCount > 0;
+      // Always display the 5 top sorted channels, any channels active in the past day-or-so,
+      //  the selected channel, and any channels with unread notifications
+      if (
+        visibleChannels.length < minLength ||
+        hasVeryRecentActivity ||
+        isSelectedChannel ||
+        hasNotifications
+      ) {
+        visibleChannels.push(c);
+      }
+    }
+    return visibleChannels;
+  };
+
   render() {
     const { channels, filterChannel, userStatusHistory } = this.props;
     let filteredChannels = [];
@@ -81,44 +107,17 @@ export default class SidebarChannels extends React.Component {
     if (!filteredChannels.length) {
       return null;
     }
+    filteredChannels = ChatUtilities.sortChannels(filteredChannels);
 
     // Of the filtered channels, figure out which ones are visible
     let visibleChannels;
     // If we're showing all the channels or don't have many to begin with, show all of them
-    if (this.state.showingMore || filteredChannels.length <= 5) {
+    if (this.state.showingMore || filteredChannels.length <= MIN_NUM_CHANNELS) {
       visibleChannels = filteredChannels;
       // Otherwise we display channels with high activity
     } else {
-      // Sort by activity
-      let channelsSortedByActivity = filteredChannels.sort((a, b) => {
-        return (
-          this._getTimeOfMostRecentChannelActivity(b) - this._getTimeOfMostRecentChannelActivity(a)
-        );
-      });
-      visibleChannels = [];
-      let now = Date.now();
-      // 20 hours so that if someone logs in at the same time every day, channels might not change mid-session
-      let twentyHours = 20 * 60 * 60 * 1000;
-      for (let c of channelsSortedByActivity) {
-        let hasVeryRecentActivity = this._getTimeOfMostRecentChannelActivity(c) > now - twentyHours;
-        let isSelectedChannel =
-          c.channelId === this.props.selectedChannelId && this.props.isChatVisible;
-        let hasNotifications = c.unreadNotificationCount > 0;
-        // Always display the 5 most active channels, any channels active in the past day-or-so,
-        //  the selected channel, and any channels with unread notifications
-        if (
-          visibleChannels.length < 5 ||
-          hasVeryRecentActivity ||
-          isSelectedChannel ||
-          hasNotifications
-        ) {
-          visibleChannels.push(c);
-        }
-      }
+      visibleChannels = this._truncateChannelsList(filteredChannels, MIN_NUM_CHANNELS);
     }
-
-    // Sort the list of visible channels
-    visibleChannels = ChatUtilities.sortChannels(visibleChannels);
 
     let showToggleMore = this.state.showingMore || visibleChannels.length < filteredChannels.length;
 
