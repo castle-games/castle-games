@@ -4,7 +4,7 @@ export const API_HOST = USE_LOCAL_SERVER ? 'http://localhost:1380' : 'https://ap
 export const WEB_HOST = 'https://castle.games';
 export const CHAT_SERVICE_URL = USE_LOCAL_SERVER
   ? 'http://localhost:3003'
-  : 'https://castle-chat.onrender.com';
+  : 'https://chat.castle.games';
 
 // TODO(jim): Delete old colors constants after full refactor.
 export const REFACTOR_COLORS = {
