@@ -238,7 +238,11 @@ export default class UIGameCell extends React.Component {
 
     const isMultiplayer = game.metadata.multiplayer && game.metadata.multiplayer.enabled;
     const numPlayersText = isMultiplayer ? 'Multiplayer' : ' ';
-    const draftText = game.draft ? isMultiplayer ? '\u2022 Work in Progress' : 'Work in Progress' : ' ';
+    const draftText = game.draft
+      ? isMultiplayer
+        ? '\u2022 Work in Progress'
+        : 'Work in Progress'
+      : ' ';
 
     let detailLine = (
       <span className={STYLES_SECONDARY_TEXT}>
