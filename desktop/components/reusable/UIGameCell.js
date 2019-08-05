@@ -16,7 +16,6 @@ const STYLES_CONTAINER = css`
   position: relative;
   cursor: pointer;
   background: transparent;
-  margin: 0 16px 16px 0;
   border-radius: ${Constants.card.radius};
 
   figure {

@@ -5,9 +5,7 @@ import UIGameCell from '~/components/reusable/UIGameCell';
 
 import { css } from 'react-emotion';
 
-const STYLES_CONTAINER = css`
-  
-`;
+const STYLES_CONTAINER = css``;
 
 const STYLES_GAME_ROW = css`
   display: flex;
@@ -17,7 +15,9 @@ const STYLES_GAME_ROW = css`
   margin-left: 24px;
 `;
 
-const STYLES_CELL_ITEM = css``;
+const STYLES_CELL_ITEM = css`
+  margin: 0 16px 16px 0;
+`;
 
 export default class UIGameSet extends React.Component {
   static defaultProps = {
@@ -44,7 +44,10 @@ export default class UIGameSet extends React.Component {
   };
 
   _maxNumGamesPerRow() {
-    return Math.floor((window.innerWidth - 24 - parseInt(Constants.sidebar.width, 10)) / (parseInt(Constants.card.width, 10) + 16));
+    return Math.floor(
+      (window.innerWidth - 24 - parseInt(Constants.sidebar.width, 10)) /
+        (parseInt(Constants.card.width, 10) + 16)
+    );
   }
 
   _totalNumRows() {
@@ -85,18 +88,14 @@ export default class UIGameSet extends React.Component {
               {this._gamesForRow(j).map((m, i) => {
                 const key = m.key ? m.key : m.gameId ? m.gameId : m.url;
                 return (
-                  <div className={STYLES_CELL_ITEM} key={`${key}-i`}>
+                  <div className={STYLES_CELL_ITEM} key={`${key}-${i}`}>
                     <UIGameCell
-                      renderCartridgeOnly={this.props.renderCartridgeOnly}
                       onGameSelect={this.props.onGameSelect}
                       onShowGameInfo={this.props.onShowGameInfo}
-                      underConstruction={this.props.underConstruction}
                       onGameUpdate={this.props.onGameUpdate}
                       onUserSelect={this.props.onUserSelect}
-                      onSignInSelect={this.props.onSignInSelect}
                       src={m.coverImage && m.coverImage.url}
                       game={m}
-                      viewer={this.props.viewer}
                     />
                   </div>
                 );

@@ -40,6 +40,10 @@ const STYLES_CONTAINER = css`
   }
 `;
 
+const STYLES_GAME_CELL_CONTAINER = css`
+  margin-top: 16px;
+`;
+
 const STYLES_POST_CELL_CONTAINER = css`
   padding: 16px;
   margin: 8px 0;
@@ -167,7 +171,7 @@ export default class ChatPost extends React.Component {
       }
 
       return (
-        <div>
+        <div className={STYLES_GAME_CELL_CONTAINER}>
           <UIGameCell
             game={this.state.game}
             src={coverImage}
