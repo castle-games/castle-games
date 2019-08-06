@@ -30,11 +30,9 @@ import Logs from '~/common/logs';
 import ToolMarkdown from '~/components/game/ToolMarkdown';
 import url from 'url';
 import Dropzone from 'react-dropzone';
-import SplitterLayout from 'react-splitter-layout';
 import MonacoEditor from 'react-monaco-editor';
 
 import 'rc-color-picker/assets/index.css';
-import 'react-splitter-layout/lib/index.css';
 import '~/components/game/Tools.min.css';
 
 //
@@ -2104,48 +2102,22 @@ export default class Tools extends React.PureComponent {
 
     // NOTE(jim): this will take over the default render because
     // we don't need splitter layout anymore.
-    if (this.props.isVersionTwo) {
-      let toolsElement = null;
-      if (this.state.visible) {
-        toolsElement = (
-          <ToolsContext.Provider
-            value={{
-              transformAssetUri: this._transformAssetUri,
-            }}>
-            {Object.values(this.state.root.panes).map((element, i) => (
-              <ToolPane key={(element.props && element.props.name) || i} element={element} />
-            ))}
-          </ToolsContext.Provider>
-        );
-      }
 
-      return <div className={STYLES_CONTAINER_V2}>{toolsElement}</div>;
+    let toolsElement = null;
+    if (this.state.visible) {
+      toolsElement = (
+        <ToolsContext.Provider
+          value={{
+            transformAssetUri: this._transformAssetUri,
+          }}>
+          {Object.values(this.state.root.panes).map((element, i) => (
+            <ToolPane key={(element.props && element.props.name) || i} element={element} />
+          ))}
+        </ToolsContext.Provider>
+      );
     }
 
-    return (
-      <SplitterLayout
-        customClassName={STYLES_SPLITTER_CONTAINER}
-        vertical={false}
-        percentage={false}
-        primaryIndex={0}
-        secondaryInitialSize={300}
-        secondaryMinSize={300}
-        onSecondaryPaneSizeChange={this.props.onLayoutChange}>
-        {this.props.children}
-        {this.state.visible ? (
-          <div className={STYLES_CONTAINER}>
-            <ToolsContext.Provider
-              value={{
-                transformAssetUri: this._transformAssetUri,
-              }}>
-              {Object.values(this.state.root.panes).map((element, i) => (
-                <ToolPane key={(element.props && element.props.name) || i} element={element} />
-              ))}
-            </ToolsContext.Provider>
-          </div>
-        ) : null}
-      </SplitterLayout>
-    );
+    return <div className={STYLES_CONTAINER_V2}>{toolsElement}</div>;
   }
 
   _transformAssetUri = (uri) => {

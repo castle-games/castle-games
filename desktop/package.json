@@ -64,7 +64,6 @@
     "react-linkify": "^0.2.2",
     "react-markdown": "^4.0.8",
     "react-monaco-editor": "^0.26.2",
-    "react-splitter-layout": "^4.0.0",
     "react-string-replace": "^0.4.4",
     "react-textarea-autosize": "^7.1.0",
     "react-tippy": "^1.2.3",
