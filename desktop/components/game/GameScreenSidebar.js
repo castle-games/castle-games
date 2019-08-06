@@ -39,6 +39,7 @@ const STYLES_TOP = css`
 const STYLES_BOTTOM = css`
   border-top: 1px solid ${BORDER_COLOR};
   width: 100%;
+  height: 100%;
   flex-shrink: 0;
   overflow-y: scroll;
   position: relative;
@@ -70,17 +71,34 @@ export default class GameScreenSidebar extends React.Component {
 
   state = {
     chat: Window.getViewportSize().height * 0.5 - 88,
+    tools: null,
   };
 
   componentDidMount() {
     window.addEventListener('mouseup', this._handleMouseUp);
     window.addEventListener('mousemove', this._handleMouseMove);
+    window.addEventListener('CASTLE_TOOLS_UPDATE', this._handleUpdate);
   }
 
   componentWillUnmount() {
     window.removeEventListener('mouseup', this._handleMouseUp);
     window.removeEventListener('mousemove', this._handleMouseMove);
+    window.removeEventListener('CASTLE_TOOLS_UPDATE', this._handleUpdate);
   }
+
+  _handleUpdate = (e) => {
+    const state = JSON.parse(e.params);
+
+    let tools = false;
+    if (state.panes && state.panes.DEFAULT) {
+      const children = state.panes.DEFAULT.children;
+      if (children.count > 0) {
+        tools = true;
+      }
+    }
+
+    this.setState({ tools });
+  };
 
   _handleMouseDown = (e, resizing) => {
     e.preventDefault();
@@ -120,17 +138,21 @@ export default class GameScreenSidebar extends React.Component {
   };
 
   render() {
+    let isToolsVisible = this.state.tools;
+
     return (
       <div className={STYLES_CONTAINER}>
-        <div className={STYLES_TOP}>
-          <Tools
-            isVersionTwo
-            onLayoutChange={this.props.onWindowSizeUpdate}
-            setToolsRef={this.props.onSetToolsRef}
-            game={this.props.game}
-          />
-        </div>
-        <div className={STYLES_BOTTOM} style={{ height: this.state.chat }}>
+        {isToolsVisible ? (
+          <div className={STYLES_TOP}>
+            <Tools
+              isVersionTwo
+              onLayoutChange={this.props.onWindowSizeUpdate}
+              setToolsRef={this.props.onSetToolsRef}
+              game={this.props.game}
+            />
+          </div>
+        ) : null}
+        <div className={STYLES_BOTTOM} style={!isToolsVisible ? null : { height: this.state.chat }}>
           <div
             className={STYLES_DRAGGABLE_SECTION_HORIZONTAL}
             onMouseDown={(e) => this._handleMouseDown(e, 'chat')}
