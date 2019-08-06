@@ -3,7 +3,6 @@ import * as ChatUtilities from '~/common/chat-utilities';
 
 import ChatMessageEditElement from '~/components/chat/ChatMessageEditElement';
 import ChatMessageElement from '~/components/chat/ChatMessageElement';
-import ChatMessageElementSameUser from '~/components/chat/ChatMessageElementSameUser';
 import ChatEventElement from '~/components/chat/ChatEventElement';
 import ChatRolePlayElement from '~/components/chat/ChatRolePlayElement';
 
@@ -35,7 +34,6 @@ export default class ChatMessage extends React.Component {
     }
 
     const slashCommand = ChatUtilities.getSlashCommand(message.body);
-    const isEmojiMessage = ChatUtilities.isEmojiBody(message.body);
 
     if (messageIdToEdit && message.chatMessageId === messageIdToEdit) {
       return <ChatMessageEditElement {...this.props} />;
@@ -45,6 +43,7 @@ export default class ChatMessage extends React.Component {
       return <ChatRolePlayElement {...this.props} />;
     }
 
+    let showAuthor = true;
     if (previousMessage) {
       const prevSlashCommand = ChatUtilities.getSlashCommand(previousMessage.body);
       let timeBetween = (new Date(message.timestamp) - new Date(previousMessage.timestamp)) / 1000;
@@ -53,10 +52,13 @@ export default class ChatMessage extends React.Component {
         previousMessage.fromUserId === message.fromUserId &&
         timeBetween < 60 * 5
       ) {
-        return <ChatMessageElementSameUser {...this.props} isEmojiMessage={isEmojiMessage} />;
+        showAuthor = false;
       }
     }
 
-    return <ChatMessageElement {...this.props} isEmojiMessage={isEmojiMessage} />;
+    const isEmojiMessage = ChatUtilities.isEmojiBody(message.body);
+    return (
+      <ChatMessageElement {...this.props} isEmojiMessage={isEmojiMessage} showAuthor={showAuthor} />
+    );
   }
 }
