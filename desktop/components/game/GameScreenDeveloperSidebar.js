@@ -152,8 +152,6 @@ const STYLES_CTA = css`
 `;
 
 export default class GameScreenDeveloperSidebar extends React.Component {
-  static contextType = DevelopmentContext;
-
   _client;
   _server;
 
@@ -209,8 +207,8 @@ export default class GameScreenDeveloperSidebar extends React.Component {
   };
 
   _handleMultiplayerCodeUpload = () => {
-    const { isMultiplayerCodeUploadEnabled } = this.context;
-    this.context.setters.setIsMultiplayerCodeUploadEnabled(!isMultiplayerCodeUploadEnabled);
+    const { isMultiplayerCodeUploadEnabled } = this.props;
+    this.props.setters.setIsMultiplayerCodeUploadEnabled(!isMultiplayerCodeUploadEnabled);
   };
 
   _handleOpenGamePath = () => {
@@ -232,7 +230,7 @@ export default class GameScreenDeveloperSidebar extends React.Component {
   };
 
   render() {
-    const { isMultiplayerCodeUploadEnabled } = this.context;
+    const { isMultiplayerCodeUploadEnabled } = this.props;
 
     let maybeMultiplayerElement;
     if (Utilities.isMultiplayer(this.props.game) && URLS.isPrivateUrl(this.props.game.url)) {
@@ -264,7 +262,7 @@ export default class GameScreenDeveloperSidebar extends React.Component {
         <div className={STYLES_SECTION_HEADER}>
           <div className={STYLES_LEFT}>Client</div>
           <div className={STYLES_RIGHT} style={{ minWidth: 100 }}>
-            <span className={STYLES_CTA} onClick={this.context.setters.clearLogs}>
+            <span className={STYLES_CTA} onClick={this.props.setters.clearLogs}>
               Clear
             </span>
             {maybeMultiplayerElement}
@@ -276,8 +274,8 @@ export default class GameScreenDeveloperSidebar extends React.Component {
             ref={(ref) => {
               this._client = ref;
             }}
-            logs={this.context.logs}
-            onClearLogs={this.context.setters.clearLogs}
+            logs={this.props.logs}
+            onClearLogs={this.props.setters.clearLogs}
             game={this.props.game}
             logMode={0}
           />
@@ -306,8 +304,8 @@ export default class GameScreenDeveloperSidebar extends React.Component {
             ref={(ref) => {
               this._server = ref;
             }}
-            logs={this.context.logs}
-            onClearLogs={this.context.setters.clearLogs}
+            logs={this.props.logs}
+            onClearLogs={this.props.setters.clearLogs}
             game={this.props.game}
             logMode={1}
           />

@@ -113,7 +113,6 @@ export default class GameScreenLayout extends React.Component {
     elementActions: null,
     elementAlert: null,
     elementDeveloper: null,
-    elementGame: null,
     elementGameSidebar: null,
     elementHeader: null,
   };
@@ -165,8 +164,7 @@ export default class GameScreenLayout extends React.Component {
     }
 
     this.setState({ [this.state.resizing]: nextWidth }, () => {
-      // NOTE(jim): Update
-      this.props.onUpdate();
+      this.props.onWindowSizeUpdate();
     });
   };
 

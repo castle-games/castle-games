@@ -16,12 +16,10 @@ import GameScreenSidebar from '~/components/game/GameScreenSidebar';
 import GameScreenWindowHeader from '~/components/game/GameScreenWindowHeader';
 
 export default class Game extends React.Component {
+  static contextType = DevelopmentContext;
+
   static defaultProps = {
     errorMessage: '',
-  };
-
-  state = {
-    developer: false,
   };
 
   _handleViewSource = (entry) => {
@@ -36,6 +34,10 @@ export default class Game extends React.Component {
     });
   };
 
+  _handleToggleDeveloper = () => {
+    this.context.setters.toggleIsDeveloping();
+  };
+
   render() {
     const entryPoint = Utilities.getLuaEntryPoint(this.props.game);
     const isOpenSource = URLS.isOpenSource(entryPoint);
@@ -46,8 +48,7 @@ export default class Game extends React.Component {
         onToggleMute={this.props.onToggleMute}
         onPostScreenshot={this._handlePostScreenshot}
         onViewSource={isOpenSource ? () => this._handleViewSource(entryPoint) : null}
-        onViewDeveloper={() => this.setState({ developer: !this.state.developer })}
-        developer={this.state.developer}
+        onViewDeveloper={this._handleToggleDeveloper}
       />
     );
 
@@ -57,12 +58,14 @@ export default class Game extends React.Component {
     }
 
     let maybeElementDeveloper;
-    if (this.state.developer) {
+    if (this.context.isDeveloping) {
       maybeElementDeveloper = (
         <GameScreenDeveloperSidebar
+          isMultiplayerCodeUploadEnabled={this.context.isMultiplayerCodeUploadEnabled}
+          setters={this.context.setters}
+          logs={this.context.logs}
           game={this.props.game}
           onReload={this.props.onReload}
-          onUpdate={this.props.updateGameWindowFrame}
         />
       );
     }
@@ -72,7 +75,6 @@ export default class Game extends React.Component {
         onSetToolsRef={this.props.onSetToolsRef}
         onWindowSizeUpdate={this.props.updateGameWindowFrame}
         game={this.props.game}
-        onUpdate={this.props.updateGameWindowFrame}
       />
     );
 
@@ -87,7 +89,7 @@ export default class Game extends React.Component {
 
     return (
       <GameScreenLayout
-        onUpdate={this.props.updateGameWindowFrame}
+        onWindowSizeUpdate={this.props.updateGameWindowFrame}
         elementActions={elementActions}
         elementAlert={maybeElementAlert}
         elementDeveloper={maybeElementDeveloper}
