@@ -42,6 +42,7 @@ const STYLES_INFO_HEADING_ROW = css`
   align-items: flex-start;
   justify-content: space-between;
   line-height: 1.225;
+  cursor: pointer;
 `;
 
 const STYLES_INFO_TEXT = css`
