@@ -9,6 +9,8 @@ import { css } from 'react-emotion';
 
 import DevelopmentLogs from '~/components/game/DevelopmentLogs';
 
+const path = Utilities.path();
+
 const BORDER_COLOR = '#333';
 const BACKGROUND_COLOR = '#000';
 
