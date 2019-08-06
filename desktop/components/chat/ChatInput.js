@@ -9,6 +9,7 @@ import AutoSizeTextarea from 'react-textarea-autosize';
 import ChatInputEmojiItem from '~/components/chat/ChatInputEmojiItem';
 import ChatInputEmojiPicker from '~/components/chat/ChatInputEmojiPicker';
 import ChatInputMention from '~/components/chat/ChatInputMention';
+import UIBoundary from '~/components/reusable/UIBoundary';
 
 const STYLES_CONTAINER = css`
   flex-shrink: 0;
@@ -141,7 +142,15 @@ export default class ChatInput extends React.Component {
 
   _renderEmojiPicker = () => {
     if (this.props.isShowingEmojiPicker) {
-      return <ChatInputEmojiPicker onSelectEmoji={this._handleSelectEmoji} />;
+      return (
+        <UIBoundary
+          enabled={true}
+          captureResize={false}
+          captureScroll={false}
+          onOutsideRectEvent={this.props.onToggleEmojiPicker}>
+          <ChatInputEmojiPicker onSelectEmoji={this._handleSelectEmoji} />
+        </UIBoundary>
+      );
     }
     return null;
   };
