@@ -17,9 +17,6 @@ import GameScreenSidebar from '~/components/game/GameScreenSidebar';
 import GameScreenWindowHeader from '~/components/game/GameScreenWindowHeader';
 
 export default class Game extends React.Component {
-  _game;
-  _tools;
-
   static defaultProps = {
     errorMessage: '',
   };
@@ -38,30 +35,6 @@ export default class Game extends React.Component {
       mediaType: 'capture',
       mediaUploadParams: { autoCrop: true },
     });
-  };
-
-  _handleUpdate = () => {
-    if (!this._game) {
-      return;
-    }
-
-    this._game.update();
-  };
-
-  _setGameRef = (ref) => {
-    this._game = ref;
-  };
-
-  _setToolsRef = (ref) => {
-    this._tools = ref;
-  };
-
-  _getGameRef = () => {
-    return this._game;
-  };
-
-  _getToolsRef = () => {
-    return this._tools;
   };
 
   render() {
@@ -89,35 +62,18 @@ export default class Game extends React.Component {
       maybeElementDeveloper = (
         <GameScreenDeveloperSidebar
           game={this.props.game}
-          getGameFunctions={this._getGameRef}
           onReload={this.props.onReload}
-          onUpdate={this._handleUpdate}
+          onUpdate={this.props.updateGameWindowFrame}
         />
       );
     }
 
-    const elementGame = (
-      <GameScreenMedia
-        ref={this._setGameRef}
-        getToolsFunctions={this._getToolsRef}
-        theater={this.props.isFullScreen}
-        game={this.props.game}
-        timeGameLoaded={this.props.timeGameLoaded}
-        timeNavigatedToGame={this.props.timeNavigatedToGame}
-        navigateToUserProfile={this.props.navigateToUserProfile}
-        navigateToEditPost={this.props.navigateToEditPost}
-        navigateToGameUrl={this.props.navigateToGameUrl}
-        navigateToGame={this.props.navigateToGame}
-        refreshCurrentUser={this.props.refreshCurrentUser}
-      />
-    );
-
     const elementGameSidebar = (
       <GameScreenSidebar
-        getGameFunctions={this._getGameRef}
-        setToolsRef={this._setToolsRef}
+        onSetToolsRef={this.props.onSetToolsRef}
+        onWindowSizeUpdate={this.props.updateGameWindowFrame}
         game={this.props.game}
-        onUpdate={this._handleUpdate}
+        onUpdate={this.props.updateGameWindowFrame}
       />
     );
 
@@ -132,14 +88,14 @@ export default class Game extends React.Component {
 
     return (
       <GameScreenLayout
-        onUpdate={this._handleUpdate}
+        onUpdate={this.props.updateGameWindowFrame}
         elementActions={elementActions}
         elementAlert={maybeElementAlert}
         elementDeveloper={maybeElementDeveloper}
-        elementGame={elementGame}
         elementGameSidebar={elementGameSidebar}
-        elementHeader={elementHeader}
-      />
+        elementHeader={elementHeader}>
+        {this.props.children}
+      </GameScreenLayout>
     );
   }
 }

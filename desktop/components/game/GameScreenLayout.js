@@ -181,7 +181,6 @@ export default class GameScreenLayout extends React.Component {
       elementActions,
       elementAlert,
       elementDeveloper,
-      elementGame,
       elementGameSidebar,
       elementHeader,
     } = this.props;
@@ -202,7 +201,7 @@ export default class GameScreenLayout extends React.Component {
                   onMouseDown={(e) => this._handleMouseDown(e, 'sidebar')}
                 />
               </div>
-              <div className={STYLES_MEDIA_CONTAINER}>{elementGame}</div>
+              <div className={STYLES_MEDIA_CONTAINER}>{this.props.children}</div>
             </div>
 
             {elementActions ? <div className={STYLES_ACTIONS}>{elementActions}</div> : null}

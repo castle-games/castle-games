@@ -236,7 +236,7 @@ export default class GameScreenDeveloperSidebar extends React.Component {
 
     let maybeMultiplayerElement;
     if (Utilities.isMultiplayer(this.props.game) && URLS.isPrivateUrl(this.props.game.url)) {
-      multiplayerElement = (
+      maybeMultiplayerElement = (
         <span onClick={this._handleMultiplayerCodeUpload}>
           {isMultiplayerCodeUploadEnabled ? 'Disabled' : 'Enabled'}
         </span>

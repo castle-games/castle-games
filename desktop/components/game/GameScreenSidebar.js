@@ -119,21 +119,14 @@ export default class GameScreenSidebar extends React.Component {
     }
   };
 
-  _handeLayoutChange = () => {
-    const game = this.props.getGameFunctions();
-    if (game) {
-      game.update();
-    }
-  };
-
   render() {
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_TOP}>
           <Tools
             isVersionTwo
-            onLayoutChange={this._handleLayoutChange}
-            setToolsRef={this.props.setToolsRef}
+            onLayoutChange={this.props.onWindowSizeUpdate}
+            setToolsRef={this.props.onSetToolsRef}
             game={this.props.game}
           />
         </div>
