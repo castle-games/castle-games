@@ -347,6 +347,9 @@ do
 end
 
 function main.quit(...)
+    love.mouse.setRelativeMode(false)
+    love.mouse.setGrabbed(false)
+
     updateLogs(true)
 
     if home then

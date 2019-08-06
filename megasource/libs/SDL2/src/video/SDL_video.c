@@ -2428,8 +2428,9 @@ SDL_UpdateWindowGrab(SDL_Window * window)
 {
     SDL_Window *grabbed_window;
     SDL_bool grabbed;
-    if ((SDL_GetMouse()->relative_mode || (window->flags & SDL_WINDOW_INPUT_GRABBED)) &&
-         (window->flags & SDL_WINDOW_INPUT_FOCUS)) {
+    // XXX(Ghost): Don't make sure window is focused
+    if ((SDL_GetMouse()->relative_mode || (window->flags & SDL_WINDOW_INPUT_GRABBED))/* &&
+         (window->flags & SDL_WINDOW_INPUT_FOCUS)*/) {
         grabbed = SDL_TRUE;
     } else {
         grabbed = SDL_FALSE;
