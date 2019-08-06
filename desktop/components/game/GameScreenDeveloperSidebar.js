@@ -237,8 +237,13 @@ export default class GameScreenDeveloperSidebar extends React.Component {
     let maybeMultiplayerElement;
     if (Utilities.isMultiplayer(this.props.game) && URLS.isPrivateUrl(this.props.game.url)) {
       maybeMultiplayerElement = (
-        <span onClick={this._handleMultiplayerCodeUpload}>
-          {isMultiplayerCodeUploadEnabled ? 'Disabled' : 'Enabled'}
+        <span
+          className={STYLES_CTA}
+          onClick={this._handleMultiplayerCodeUpload}
+          style={{ marginRight: 16 }}>
+          {isMultiplayerCodeUploadEnabled
+            ? 'Disable multiplayer auto upload'
+            : 'Enable multiplayer auto upload'}
         </span>
       );
     }
@@ -264,10 +269,11 @@ export default class GameScreenDeveloperSidebar extends React.Component {
         <div className={STYLES_SECTION_HEADER}>
           <div className={STYLES_LEFT}>Local logs</div>
           <div className={STYLES_RIGHT} style={{ minWidth: 100 }}>
+            {maybeMultiplayerElement}
+
             <span className={STYLES_CTA} onClick={this.props.setters.clearLogs}>
               Clear
             </span>
-            {maybeMultiplayerElement}
           </div>
         </div>
 
