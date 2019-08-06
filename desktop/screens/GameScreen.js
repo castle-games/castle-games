@@ -255,16 +255,18 @@ class GameScreen extends React.Component {
   };
 
   updateGameWindowFrame = () => {
-    if (this._game) {
-      const rect = this._game.getBoundingClientRect();
-      if (!rect) {
-        return;
-      }
+    if (!this._game) {
+      return;
+    }
 
-      GameWindow.updateFrame(rect);
-      if (this.state.loaded) {
-        GameWindow.setVisible(true);
-      }
+    const rect = this._game.getBoundingClientRect();
+    if (!rect) {
+      return;
+    }
+
+    GameWindow.updateFrame(rect);
+    if (this.state.loaded) {
+      GameWindow.setVisible(true);
     }
   };
 
@@ -343,7 +345,7 @@ class GameScreen extends React.Component {
         onToggleMute={this._handleToggleMute}
         onCreatePost={this.props.navigateToEditPost}
         onReload={this.props.reloadGame}
-        onWindowSizeUpdate={this.props.updateGameWindowFrame}
+        onWindowSizeUpdate={this.updateGameWindowFrame}
         refreshCurrentUser={this.props.refreshCurrentUser}>
         <div ref={this._setGameRef} className={screenClassName}>
           {this._renderLoader()}

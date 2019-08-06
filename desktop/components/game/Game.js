@@ -36,6 +36,11 @@ export default class Game extends React.Component {
 
   _handleToggleDeveloper = () => {
     this.context.setters.toggleIsDeveloping();
+
+    // NOTE(jim): call update once the screen has updated.
+    window.setTimeout(() => {
+      this.props.onWindowSizeUpdate();
+    });
   };
 
   render() {
@@ -61,6 +66,7 @@ export default class Game extends React.Component {
     if (this.context.isDeveloping) {
       maybeElementDeveloper = (
         <GameScreenDeveloperSidebar
+          onWindowSizeUpdate={this.props.onWindowSizeUpdate}
           isMultiplayerCodeUploadEnabled={this.context.isMultiplayerCodeUploadEnabled}
           setters={this.context.setters}
           logs={this.context.logs}
@@ -73,7 +79,7 @@ export default class Game extends React.Component {
     const elementGameSidebar = (
       <GameScreenSidebar
         onSetToolsRef={this.props.onSetToolsRef}
-        onWindowSizeUpdate={this.props.updateGameWindowFrame}
+        onWindowSizeUpdate={this.props.onWindowSizeUpdate}
         game={this.props.game}
       />
     );
@@ -89,12 +95,12 @@ export default class Game extends React.Component {
 
     return (
       <GameScreenLayout
-        onWindowSizeUpdate={this.props.updateGameWindowFrame}
         elementActions={elementActions}
         elementAlert={maybeElementAlert}
         elementDeveloper={maybeElementDeveloper}
         elementGameSidebar={elementGameSidebar}
-        elementHeader={elementHeader}>
+        elementHeader={elementHeader}
+        onWindowSizeUpdate={this.props.onWindowSizeUpdate}>
         {this.props.children}
       </GameScreenLayout>
     );

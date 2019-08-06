@@ -105,9 +105,6 @@ const STYLES_DRAGGABLE_SECTION_VERTICAL_LEFT = css`
   user-select; none;
 `;
 
-// TODO(jim): Support fluid resize of components.
-// TODO(jim): Connect data.
-
 export default class GameScreenLayout extends React.Component {
   static defaultProps = {
     elementActions: null,

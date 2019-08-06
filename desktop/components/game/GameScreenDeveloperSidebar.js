@@ -6,7 +6,6 @@ import * as Utilities from '~/common/utilities';
 import * as URLS from '~/common/urls';
 
 import { css } from 'react-emotion';
-import { DevelopmentContext } from '~/contexts/DevelopmentContext';
 
 import DevelopmentLogs from '~/components/game/DevelopmentLogs';
 
@@ -260,7 +259,7 @@ export default class GameScreenDeveloperSidebar extends React.Component {
         </div>
 
         <div className={STYLES_SECTION_HEADER}>
-          <div className={STYLES_LEFT}>Client</div>
+          <div className={STYLES_LEFT}>Local logs</div>
           <div className={STYLES_RIGHT} style={{ minWidth: 100 }}>
             <span className={STYLES_CTA} onClick={this.props.setters.clearLogs}>
               Clear
@@ -291,7 +290,7 @@ export default class GameScreenDeveloperSidebar extends React.Component {
             className={STYLES_DRAGGABLE_SECTION_HORIZONTAL}
             onMouseDown={(e) => this._handleMouseDown(e, 'server')}
           />
-          <div className={STYLES_LEFT}>Server</div>
+          <div className={STYLES_LEFT}>Server logs</div>
           <div className={STYLES_RIGHT} style={{ minWidth: 100 }}>
             <span className={STYLES_CTA} onClick={this._handleServerLogReload}>
               Reload
