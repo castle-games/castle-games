@@ -12,7 +12,6 @@ import GameScreenActionsBar from '~/components/game/GameScreenActionsBar';
 import GameScreenAlert from '~/components/game/GameScreenAlert';
 import GameScreenDeveloperSidebar from '~/components/game/GameScreenDeveloperSidebar';
 import GameScreenLayout from '~/components/game/GameScreenLayout';
-import GameScreenMedia from '~/components/game/GameScreenMedia';
 import GameScreenSidebar from '~/components/game/GameScreenSidebar';
 import GameScreenWindowHeader from '~/components/game/GameScreenWindowHeader';
 
