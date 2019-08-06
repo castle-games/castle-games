@@ -448,7 +448,7 @@ class NavigationContextManager extends React.Component {
   _restoreDeferredState = () => {
     if (this.state.navigation.deferredNavigationState) {
       const { mode, params } = this.state.navigation.deferredNavigationState;
-      if (params.gameUrl) {
+      if (mode === 'game' && params.gameUrl) {
         // re-resolve the game in case anything changed since they last tried to load it.
         this.navigateToGameUrl(params.gameUrl);
       } else {
