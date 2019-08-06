@@ -21,9 +21,6 @@ import Game from '~/components/game/Game';
 
 import 'react-splitter-layout/lib/index.css';
 
-// TODO(jim): Feature flag for new game screen.
-const USE_NEW_GAME_SCREEN = true;
-
 // TODO(jim): We're dealing with side effects rom the react-splitter-layout
 // It should be removed.
 const STYLES_CONTAINER = css`
@@ -310,31 +307,30 @@ class GameScreen extends React.Component {
   };
 
   render() {
-    if (USE_NEW_GAME_SCREEN) {
-      return (
-        <Game
-          game={this.props.game}
-          isFullScreen={this.props.isFullScreen}
-          isMuted={this.state.isMuted}
-          timeGameLoaded={this.props.timeGameLoaded}
-          timeNavigatedToGame={this.props.timeNavigatedToGame}
-          navigateToUserProfile={this.props.navigateToUserProfile}
-          navigateToEditPost={this.props.navigateToEditPost}
-          navigateToGameUrl={this.props.navigateToGameUrl}
-          navigateToGame={this.props.navigateToGame}
-          navigateToHome={this.props.navigateToHome}
-          onGameDismiss={this.props.clearCurrentGame}
-          onGameMaximize={this._handleFullScreen}
-          onGameMinimize={this.props.minimizeGame}
-          onToggleMute={this._toggleIsMuted}
-          onCreatePost={this.props.navigateToEditPost}
-          onReload={this.props.reloadGame}
-          onViewSource={() => {}}
-          refreshCurrentUser={this.props.refreshCurrentUser}
-        />
-      );
-    }
+    return (
+      <Game
+        game={this.props.game}
+        isFullScreen={this.props.isFullScreen}
+        isMuted={this.state.isMuted}
+        timeGameLoaded={this.props.timeGameLoaded}
+        timeNavigatedToGame={this.props.timeNavigatedToGame}
+        navigateToUserProfile={this.props.navigateToUserProfile}
+        navigateToEditPost={this.props.navigateToEditPost}
+        navigateToGameUrl={this.props.navigateToGameUrl}
+        navigateToGame={this.props.navigateToGame}
+        navigateToHome={this.props.navigateToHome}
+        onGameDismiss={this.props.clearCurrentGame}
+        onGameMaximize={this._handleFullScreen}
+        onGameMinimize={this.props.minimizeGame}
+        onToggleMute={this._toggleIsMuted}
+        onCreatePost={this.props.navigateToEditPost}
+        onReload={this.props.reloadGame}
+        onViewSource={() => {}}
+        refreshCurrentUser={this.props.refreshCurrentUser}
+      />
+    );
 
+    /*
     let actionsBarElement, topBarElement;
     if (!this.props.isFullScreen) {
       actionsBarElement = (
@@ -407,6 +403,7 @@ class GameScreen extends React.Component {
         </div>
       </SplitterLayout>
     );
+    */
   }
 }
 
