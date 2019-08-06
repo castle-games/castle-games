@@ -65,7 +65,7 @@ export default class ChatMessageElement extends React.Component {
   };
 
   render() {
-    const { message, isEmojiMessage } = this.props;
+    const { message } = this.props;
     const size = this.props.size ? this.props.size : 40;
 
     return (

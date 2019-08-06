@@ -8,12 +8,7 @@ import * as URLS from '~/common/urls';
 
 import { css } from 'react-emotion';
 
-import ChatMessageEditElement from '~/components/chat/ChatMessageEditElement';
-import ChatMessageElement from '~/components/chat/ChatMessageElement';
-import ChatMessageElementSameUser from '~/components/chat/ChatMessageElementSameUser';
-import ChatEventElement from '~/components/chat/ChatEventElement';
-import ChatRolePlayElement from '~/components/chat/ChatRolePlayElement';
-import ChatPost from '~/components/chat/ChatPost';
+import ChatMessage from '~/components/chat/ChatMessage';
 
 const STYLES_CONTAINER = css`
   height: 100%;
@@ -98,72 +93,24 @@ export default class ChatMessages extends React.Component {
   };
 
   _renderMessage = (m, previousMessage, i) => {
-    const { navigator, userIdToUser, theme, messageIdToEdit } = this.props;
+    const { navigator, userIdToUser, size, theme, messageIdToEdit } = this.props;
 
-    if (m.fromUserId == ChatUtilities.ADMIN_USER_ID) {
-      return <ChatEventElement key={`chat-event-${i}`} message={m} theme={theme} />;
+    let user;
+    if (m.fromUserId) {
+      user = userIdToUser[m.fromUserId];
     }
-
-    const user = userIdToUser[m.fromUserId];
-    const slashCommand = ChatUtilities.getSlashCommand(m.body);
-    const isEmojiMessage = ChatUtilities.isEmojiBody(m.body);
-
-    if (messageIdToEdit && m.chatMessageId === messageIdToEdit) {
-      return (
-        <ChatMessageEditElement
-          key={`chat-${m.fromUserId}-${m.chatMessageId}-${i}`}
-          message={m}
-          user={user}
-          theme={theme}
-          size={this.props.size}
-          onSendMessageEdit={this.props.onSendMessageEdit}
-          onEditCancel={this.props.onEditCancel}
-        />
-      );
-    }
-
-    if (slashCommand.isCommand && slashCommand.command === 'me') {
-      return (
-        <ChatRolePlayElement
-          key={`chat-roleplay-${i}`}
-          message={m}
-          isEmojiMessage={isEmojiMessage}
-          user={user}
-          onNavigateToUserProfile={navigator.navigateToUserProfile}
-          theme={theme}
-        />
-      );
-    }
-
-    if (previousMessage) {
-      const prevSlashCommand = ChatUtilities.getSlashCommand(previousMessage.body);
-      let timeBetween = (new Date(m.timestamp) - new Date(previousMessage.timestamp)) / 1000;
-      if (
-        !prevSlashCommand.isCommand &&
-        previousMessage.fromUserId === m.fromUserId &&
-        timeBetween < 60 * 5
-      ) {
-        return (
-          <ChatMessageElementSameUser
-            key={`chat-${m.fromUserId}-${m.chatMessageId}-${i}`}
-            message={m}
-            isEmojiMessage={isEmojiMessage}
-            theme={theme}
-            size={this.props.size}
-          />
-        );
-      }
-    }
-
     return (
-      <ChatMessageElement
-        key={`chat-${m.fromUserId}-${m.chatMessageId}-${i}`}
+      <ChatMessage
+        key={`chat-message-${i}`}
         message={m}
-        isEmojiMessage={isEmojiMessage}
+        previousMessage={previousMessage}
         user={user}
-        onNavigateToUserProfile={navigator.navigateToUserProfile}
+        size={size}
         theme={theme}
-        size={this.props.size}
+        messageIdToEdit={messageIdToEdit}
+        onNavigateToUserProfile={navigator.navigateToUserProfile}
+        onSendMessageEdit={this.props.onSendMessageEdit}
+        onEditCancel={this.props.onEditCancel}
       />
     );
   };
