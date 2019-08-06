@@ -4,7 +4,6 @@ import * as React from 'react';
 import * as ChatUtilities from '~/common/chat-utilities';
 import * as Constants from '~/common/constants';
 import * as Strings from '~/common/strings';
-import * as URLS from '~/common/urls';
 
 import { css } from 'react-emotion';
 

@@ -11,9 +11,16 @@ export default class ChatMessage extends React.Component {
   static defaultProps = {
     message: null,
     previousMessage: null,
-    user: null,
+    user: {
+      name: 'Anonymous',
+      photo: {
+        url: null,
+      },
+    },
+    theme: {
+      textColor: null,
+    },
     size: null,
-    theme: null,
     messageIdToEdit: null,
     onNavigateToUserProfile: (user) => {},
     onSendMessageEdit: () => {},
@@ -21,7 +28,7 @@ export default class ChatMessage extends React.Component {
   };
 
   render() {
-    const { message, previousMessage, user, messageIdToEdit } = this.props;
+    const { message, previousMessage, messageIdToEdit } = this.props;
 
     if (message.fromUserId == ChatUtilities.ADMIN_USER_ID) {
       return <ChatEventElement {...this.props} />;

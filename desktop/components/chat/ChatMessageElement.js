@@ -34,18 +34,6 @@ const STYLES_AUTHOR_MESSAGE = css`
 `;
 
 export default class ChatMessageElement extends React.Component {
-  static defaultProps = {
-    user: {
-      name: 'Anonymous',
-      photo: {
-        url: null,
-      },
-    },
-    theme: {
-      textColor: null,
-    },
-  };
-
   render() {
     const { message, isEmojiMessage } = this.props;
     const size = this.props.size ? this.props.size : 40;
