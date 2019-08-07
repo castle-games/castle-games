@@ -130,6 +130,7 @@ class ChatSidebar extends React.Component {
           onSelectGameChannel={this._handleSelectGameChannel}
         />
         <ChatMessages
+          viewer={this.props.viewer}
           messages={messages}
           navigator={this.props.navigator}
           userIdToUser={this.props.userPresence.userIdToUser}

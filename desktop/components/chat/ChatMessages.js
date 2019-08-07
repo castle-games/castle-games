@@ -92,21 +92,27 @@ export default class ChatMessages extends React.Component {
   };
 
   _renderMessage = (m, previousMessage, i) => {
-    const { navigator, userIdToUser, size, theme, messageIdToEdit } = this.props;
+    const { navigator, userIdToUser, size, theme, messageIdToEdit, viewer } = this.props;
 
-    let user;
+    let user,
+      isEditable = false;
     if (m.fromUserId) {
       user = userIdToUser[m.fromUserId];
+      if (viewer) {
+        isEditable = m.fromUserId === viewer.userId && this.props.onSelectEdit;
+      }
     }
     return (
       <ChatMessage
         key={`chat-message-${i}`}
         message={m}
+        isEditable={isEditable}
         previousMessage={previousMessage}
         user={user}
         size={size}
         theme={theme}
         messageIdToEdit={messageIdToEdit}
+        onSelectEdit={this.props.onSelectEdit}
         onNavigateToUserProfile={navigator.navigateToUserProfile}
         onSendMessageEdit={this.props.onSendMessageEdit}
         onEditCancel={this.props.onEditCancel}

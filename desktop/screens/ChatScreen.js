@@ -114,16 +114,22 @@ class ChatScreen extends React.Component {
     );
   };
 
-  _handleSelectEdit = () => {
+  _handleSelectEdit = (messageIdToEdit = null) => {
     const { chat, channelId, viewer } = this.props;
     const messages = chat.channels[channelId].messages;
     if (messages && viewer) {
-      // select the most recent message belonging to the viewer
-      for (let ii = messages.length - 1; ii >= 0; ii--) {
-        const m = messages[ii];
-        if (m.fromUserId === viewer.userId) {
-          return this.setState({ messageIdToEdit: m.chatMessageId });
+      if (!messageIdToEdit) {
+        // select the most recent message belonging to the viewer
+        for (let ii = messages.length - 1; ii >= 0; ii--) {
+          const m = messages[ii];
+          if (m.fromUserId === viewer.userId) {
+            messageIdToEdit = m.chatMessageId;
+            break;
+          }
         }
+      }
+      if (messageIdToEdit) {
+        return this.setState({ messageIdToEdit });
       }
     }
   };
@@ -147,9 +153,11 @@ class ChatScreen extends React.Component {
         return (
           <React.Fragment>
             <ChatMessages
+              viewer={this.props.viewer}
               messages={channel.messages}
               navigator={this.props.navigator}
               userIdToUser={userPresence.userIdToUser}
+              onSelectEdit={this._handleSelectEdit}
               messageIdToEdit={this.state.messageIdToEdit}
               onSendMessageEdit={this._handleSendMessageEdit}
               onEditCancel={this._handleEditCancel}
