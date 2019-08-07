@@ -73,7 +73,7 @@ export default class ChatInput extends React.Component {
     index: 0,
     theme: {
       textColor: null,
-      inputBackground: null,
+      inputBackground: Constants.colors.white,
     },
     autocomplete: {
       type: null,

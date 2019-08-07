@@ -14,7 +14,7 @@ const STYLES_CONTAINER = css`
   justify-content: space-between;
   flex-shrink: 0;
   width: 100%;
-  padding: 0 24px 0 16px;
+  padding: 0 24px 4px 16px;
 `;
 
 const STYLES_LEFT = css`
@@ -45,7 +45,7 @@ export default class ChatMessageElement extends React.Component {
     const { message, isEmojiMessage, showAuthor } = this.props;
     const size = this.props.size ? this.props.size : 40;
     const styles = {
-      paddingTop: showAuthor ? '16px' : null,
+      paddingTop: showAuthor ? '12px' : null,
     };
     let leftElement;
     if (showAuthor) {

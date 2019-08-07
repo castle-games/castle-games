@@ -18,11 +18,17 @@ const STYLES_CONTAINER = css`
   }
 `;
 
+const STYLES_CONTAINER_HOVER_BACKGROUND = css`
+  :hover {
+    background: #f6f6f6;
+  }
+`;
+
 const STYLES_ACTIONS = css`
   display: none;
   position: absolute;
   right: 16px;
-  top: 4px;
+  top: -4px;
 `;
 
 export default class ChatMessage extends React.Component {
@@ -117,8 +123,15 @@ export default class ChatMessage extends React.Component {
       );
     }
 
+    let containerClass;
+    if (this.props.theme && this.props.theme.background) {
+      containerClass = STYLES_CONTAINER;
+    } else {
+      containerClass = `${STYLES_CONTAINER} ${STYLES_CONTAINER_HOVER_BACKGROUND}`;
+    }
+
     return (
-      <div className={STYLES_CONTAINER}>
+      <div className={containerClass}>
         {messageElement}
         {actionsElement}
       </div>

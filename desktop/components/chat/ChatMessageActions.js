@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as Constants from '~/common/constants';
 import * as SVG from '~/components/primitives/svg';
 
 import { css } from 'react-emotion';
@@ -8,10 +9,11 @@ const STYLES_ACTION = css`
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  padding: 4px;
+  padding: 8px;
   border-radius: 2px;
   border: 1px solid #d6d6d6;
   color: #333;
+  background: ${Constants.colors.white};
 `;
 
 export default class ChatMessageActions extends React.Component {
