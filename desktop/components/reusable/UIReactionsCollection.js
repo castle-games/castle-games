@@ -68,13 +68,16 @@ export default class UIReactionsCollection extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
-        {Object.entries(reactions).map(([emoji, userIds]) => {
+        {Object.entries(reactions).map(([emoji, userIds], ii) => {
           const itemStyles =
             user && user.userId && userIds.includes(user.userId)
               ? `${STYLES_REACTION_ITEM} ${STYLES_REACTION_ITEM_SELECTED}`
               : STYLES_REACTION_ITEM;
           return (
-            <div className={itemStyles} onClick={() => this.props.onSelectReaction(emoji)}>
+            <div
+              key={`reaction-${ii}`}
+              className={itemStyles}
+              onClick={() => this.props.onSelectReaction(emoji)}>
               {getEmojiComponent(emoji, 15)}
               <span className={STYLES_REACTION_COUNT}>{userIds.length}</span>
             </div>

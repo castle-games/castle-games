@@ -10,6 +10,7 @@ const STYLES_ACTION = css`
   justify-content: center;
   cursor: pointer;
   padding: 8px;
+  margin-left: 4px;
   border-radius: 2px;
   border: 1px solid #d6d6d6;
   color: #333;
@@ -19,12 +20,13 @@ const STYLES_ACTION = css`
 export default class ChatMessageActions extends React.Component {
   static defaultProps = {
     isEditable: false,
+    isReactable: false,
     onSelectEdit: () => {},
-    onSelectReaction: (emojiShortName) => {},
+    onSelectReaction: () => {},
   };
 
   render() {
-    const { isEditable } = this.props;
+    const { isEditable, isReactable } = this.props;
     let editElement;
     if (isEditable) {
       editElement = (
@@ -33,6 +35,19 @@ export default class ChatMessageActions extends React.Component {
         </div>
       );
     }
-    return <React.Fragment>{editElement}</React.Fragment>;
+    let reactionElement;
+    if (isReactable) {
+      reactionElement = (
+        <div className={STYLES_ACTION} onClick={this.props.onSelectReaction}>
+          <SVG.ChatEmojiPicker size="16" />
+        </div>
+      );
+    }
+    return (
+      <React.Fragment>
+        {reactionElement}
+        {editElement}
+      </React.Fragment>
+    );
   }
 }

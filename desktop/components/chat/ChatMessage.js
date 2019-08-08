@@ -3,17 +3,19 @@ import * as ChatUtilities from '~/common/chat-utilities';
 
 import { css } from 'react-emotion';
 
+import ChatEventElement from '~/components/chat/ChatEventElement';
+import ChatInputEmojiPicker from '~/components/chat/ChatInputEmojiPicker';
 import ChatMessageActions from '~/components/chat/ChatMessageActions';
 import ChatMessageEditElement from '~/components/chat/ChatMessageEditElement';
 import ChatMessageElement from '~/components/chat/ChatMessageElement';
-import ChatEventElement from '~/components/chat/ChatEventElement';
 import ChatRolePlayElement from '~/components/chat/ChatRolePlayElement';
+import UIBoundary from '~/components/reusable/UIBoundary';
 
 const STYLES_CONTAINER = css`
   position: relative;
   :hover {
     #actions {
-      display: block;
+      display: flex;
     }
   }
 `;
@@ -49,8 +51,24 @@ export default class ChatMessage extends React.Component {
     messageIdToEdit: null,
     onNavigateToUserProfile: (user) => {},
     onSelectEdit: (messageIdToEdit) => {},
+    onSelectReaction: (messageReactedTo, emoji) => {},
     onSendMessageEdit: () => {},
     onEditCancel: () => {},
+  };
+
+  state = {
+    isShowingEmojiPicker: false,
+  };
+
+  _handleToggleEmojiPicker = () => {
+    this.setState({
+      isShowingEmojiPicker: !this.state.isShowingEmojiPicker,
+    });
+  };
+
+  _handleSelectEmoji = (emoji) => {
+    this.props.onSelectReaction(this.props.message, emoji);
+    this.setState({ isShowingEmojiPicker: false });
   };
 
   _getMessageActions = () => {
@@ -63,12 +81,25 @@ export default class ChatMessage extends React.Component {
 
     if (message.fromUserId == ChatUtilities.ADMIN_USER_ID) {
       // you can react to admin messages, but nothing else
-      // TODO: reactions
-      return null;
+      return { isReactable: true };
     }
 
-    // TODO: reactions
-    return { isEditable };
+    return { isEditable, isReactable: true };
+  };
+
+  _renderEmojiPicker = () => {
+    if (this.state.isShowingEmojiPicker) {
+      return (
+        <UIBoundary
+          enabled={true}
+          captureResize={false}
+          captureScroll={false}
+          onOutsideRectEvent={this._handleToggleEmojiPicker}>
+          <ChatInputEmojiPicker onSelectEmoji={this._handleSelectEmoji} />
+        </UIBoundary>
+      );
+    }
+    return null;
   };
 
   _renderMessage = () => {
@@ -119,9 +150,7 @@ export default class ChatMessage extends React.Component {
           <ChatMessageActions
             {...actions}
             onSelectEdit={() => this.props.onSelectEdit(message.chatMessageId)}
-            onSelectReaction={(emojiShortName) =>
-              this.props.onSelectReaction(message, emojiShortName)
-            }
+            onSelectReaction={this._handleToggleEmojiPicker}
           />
         </div>
       );
@@ -138,6 +167,7 @@ export default class ChatMessage extends React.Component {
       <div className={containerClass}>
         {messageElement}
         {actionsElement}
+        {this._renderEmojiPicker()}
       </div>
     );
   }
