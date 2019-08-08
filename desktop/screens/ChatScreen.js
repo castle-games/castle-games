@@ -134,6 +134,11 @@ class ChatScreen extends React.Component {
     }
   };
 
+  _handleSelectReaction = (messageReactedTo, emojiShortName) => {
+    const { chat, channelId } = this.props;
+    chat.toggleReaction(channelId, messageReactedTo, emojiShortName);
+  };
+
   _handleOpenDirectMessage = (user) => {
     this.props.chat.openChannelForUser(user);
   };
@@ -158,6 +163,7 @@ class ChatScreen extends React.Component {
               navigator={this.props.navigator}
               userIdToUser={userPresence.userIdToUser}
               onSelectEdit={this._handleSelectEdit}
+              onSelectReaction={this._handleSelectReaction}
               messageIdToEdit={this.state.messageIdToEdit}
               onSendMessageEdit={this._handleSendMessageEdit}
               onEditCancel={this._handleEditCancel}

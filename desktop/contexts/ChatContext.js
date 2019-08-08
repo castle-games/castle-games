@@ -20,7 +20,8 @@ const EMPTY_CHAT_STATE = {
 };
 
 const ChatContextDefaults = {
-  sendMessage: async (channelId, message) => {},
+  sendMessage: async (channelId, plainMessage, messageToEdit = null) => {},
+  toggleReaction: async (channelId, message, emojiShortName) => {},
   openChannelWithName: async (name) => {},
   openChannelForUser: async (user) => {},
   openChannelForGame: async (game) => {},
@@ -46,6 +47,7 @@ class ChatContextManager extends React.Component {
       ...ChatContextDefaults,
       ...props.value,
       sendMessage: this.sendMessage,
+      toggleReaction: this.toggleReaction,
       openChannelWithName: this.openChannelWithName,
       openChannelForUser: this.openChannelForUser,
       openChannelForGame: this.openChannelForGame,
@@ -302,6 +304,24 @@ class ChatContextManager extends React.Component {
     }
   };
 
+  toggleReaction = async (channelId, message, emojiShortName) => {
+    if (!this._chat) return;
+
+    // immediately push optimistic update
+    const optimisticMessage = this._createOptimisticReaction(message, emojiShortName);
+    await this.setState((state) => {
+      let channel = state.channels[channelId];
+      this._addMessageToMessages(optimisticMessage, channel.messages);
+      const channels = { ...state.channels };
+      channels[channelId] = channel;
+      return {
+        ...state,
+        channels,
+      };
+    });
+    // TODO: api call
+  };
+
   _createOptimisticMessageObject = (channelId, body, messageToEdit) => {
     const { user } = this.props.currentUser;
     const tempId = uuid();
@@ -322,6 +342,26 @@ class ChatContextManager extends React.Component {
       timestamp,
       isEdit: messageToEdit !== null,
       isEdited: messageToEdit !== null,
+    };
+  };
+
+  _createOptimisticReaction = (message, emojiShortName) => {
+    const { user } = this.props.currentUser;
+    let reactions = message.reactions || {};
+    if (reactions[emojiShortName]) {
+      const existingIndex = reactions[emojiShortName].indexOf(user.userId);
+      if (existingIndex === -1) {
+        reactions[emojiShortName].push(user.userId);
+      } else {
+        reactions[emojiShortName].splice(existingIndex, 1);
+      }
+    } else {
+      reactions[emojiShortName] = [user.userId];
+    }
+    return {
+      ...message,
+      reactions,
+      isReactionUpdate: true,
     };
   };
 
@@ -481,7 +521,7 @@ class ChatContextManager extends React.Component {
     let didSubstituteMessage = false;
 
     // if incoming message is an edit, replace existing with the same id
-    if (m.isEdit) {
+    if (m.isEdit || m.isReactionUpdate) {
       const messageIndex = messages.findIndex((m2) => m2.chatMessageId === m.chatMessageId);
       if (messageIndex >= 0) {
         messages[messageIndex] = m;

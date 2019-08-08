@@ -113,11 +113,15 @@ export default class ChatMessage extends React.Component {
     let actionsElement;
     const actions = this._getMessageActions();
     if (actions) {
+      const { message } = this.props;
       actionsElement = (
         <div id="actions" className={STYLES_ACTIONS}>
           <ChatMessageActions
             {...actions}
-            onSelectEdit={() => this.props.onSelectEdit(this.props.message.chatMessageId)}
+            onSelectEdit={() => this.props.onSelectEdit(message.chatMessageId)}
+            onSelectReaction={(emojiShortName) =>
+              this.props.onSelectReaction(message, emojiShortName)
+            }
           />
         </div>
       );

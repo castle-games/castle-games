@@ -42,27 +42,33 @@ const STYLES_REACTION_COUNT = css`
 export default class UIReactionsCollection extends React.Component {
   static contextType = CurrentUserContext;
   static defaultProps = {
-    viewer: {},
     reactions: {},
     onSelectReaction: (emoji) => {},
+  };
+
+  _isEmpty = (reactions) => {
+    if (!reactions) {
+      return true;
+    }
+
+    const pairs = Object.entries(reactions);
+    if (!pairs.length) {
+      return true;
+    }
+
+    // if all entries are empty, the collection is empty
+    return !pairs.some(([_, userIds]) => userIds.length > 0);
   };
 
   render() {
     const { reactions } = this.props;
     const { user } = this.context;
 
-    if (!reactions) {
-      return null;
-    }
-
-    const pairs = Object.entries(reactions);
-    if (!pairs.length) {
-      return null;
-    }
+    if (this._isEmpty(reactions)) return null;
 
     return (
       <div className={STYLES_CONTAINER}>
-        {pairs.map(([emoji, userIds]) => {
+        {Object.entries(reactions).map(([emoji, userIds]) => {
           const itemStyles =
             user && user.userId && userIds.includes(user.userId)
               ? `${STYLES_REACTION_ITEM} ${STYLES_REACTION_ITEM_SELECTED}`

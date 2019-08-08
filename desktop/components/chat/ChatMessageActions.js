@@ -20,6 +20,7 @@ export default class ChatMessageActions extends React.Component {
   static defaultProps = {
     isEditable: false,
     onSelectEdit: () => {},
+    onSelectReaction: (emojiShortName) => {},
   };
 
   render() {

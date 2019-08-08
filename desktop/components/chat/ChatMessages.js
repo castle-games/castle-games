@@ -113,6 +113,7 @@ export default class ChatMessages extends React.Component {
         theme={theme}
         messageIdToEdit={messageIdToEdit}
         onSelectEdit={this.props.onSelectEdit}
+        onSelectReaction={this.props.onSelectReaction}
         onNavigateToUserProfile={navigator.navigateToUserProfile}
         onSendMessageEdit={this.props.onSendMessageEdit}
         onEditCancel={this.props.onEditCancel}
