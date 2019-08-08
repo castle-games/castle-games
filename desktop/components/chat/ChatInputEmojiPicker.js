@@ -75,6 +75,7 @@ const STYLES_NAV_ITEM = css`
 `;
 
 const CATEGORY_HEADER_EMOJI = [
+  'tada',
   'grinning',
   'leaves',
   'hamburger',

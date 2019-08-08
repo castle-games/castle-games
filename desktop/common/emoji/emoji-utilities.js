@@ -29,6 +29,22 @@ for (let i = 0; i < EmojisJSON.length; i++) {
   }
 }
 
+CATEGORIES.push({
+  title: 'Useful Reactions',
+  emojis: [
+    'thumbsup',
+    'thumbsdown',
+    'smile',
+    'joy',
+    'open_mouth',
+    'heart',
+    'fire',
+    'ok_hand',
+    'clap',
+    'tada',
+  ],
+});
+
 Object.entries(CategoriesJSON).forEach(([category, list]) => {
   let filteredList = list.filter((short_name) => SHORT_NAME_TO_OBJECT[short_name] !== undefined);
   CATEGORIES.push({
