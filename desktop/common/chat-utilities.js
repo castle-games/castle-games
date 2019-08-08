@@ -92,7 +92,7 @@ export const messageBodyToPlainText = (body, userIdToUser, { useEmojiShortName =
 export const isEmojiBody = (body) => {
   if (body && typeof body === 'string') {
     if (body.charAt(0) === ':' && body.charAt(body.length - 1) === ':') {
-      return isEmoji(body.substring(1, body.length - 2));
+      return isEmoji(body.substring(1, body.length - 1));
     } else {
       return false;
     }

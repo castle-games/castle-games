@@ -265,6 +265,16 @@ class ChatContextManager extends React.Component {
     if (Strings.isEmpty(plainMessage)) {
       return;
     }
+    if (plainMessage.charAt(0) === '+' && ChatUtilities.isEmojiBody(plainMessage.substring(1))) {
+      // +:emoji: reacts to previous message
+      const lastMessage = this._mostRecentMessageInChannel(channelId);
+      if (lastMessage) {
+        const emoji = plainMessage.substring(2, plainMessage.length - 1);
+        this.toggleReaction(channelId, lastMessage, emoji);
+      }
+      return;
+    }
+
     const body = await ChatUtilities.formatMessageAsync(plainMessage, {});
     const slashCommand = ChatUtilities.getSlashCommand(body);
     if (slashCommand.isCommand) {
