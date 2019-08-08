@@ -79,6 +79,7 @@ export default class ChatMessageElement extends React.Component {
               reactions={message.reactions}
               theme={this.props.theme}
               isEdited={message.isEdited}
+              onSelectReaction={this.props.onSelectReaction}
             />
           </div>
         </span>

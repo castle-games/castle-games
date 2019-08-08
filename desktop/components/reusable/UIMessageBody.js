@@ -89,6 +89,7 @@ class UIMessageBody extends React.Component {
     reactions: null,
     expandAttachments: true,
     isEdited: false,
+    onSelectReaction: (emoji) => {},
   };
 
   _renderMessageBody = (body, theme, onMatchAttachment, isEdited) => {
@@ -168,7 +169,12 @@ class UIMessageBody extends React.Component {
 
     let reactions;
     if (this.props.reactions) {
-      reactions = <UIReactionsCollection reactions={this.props.reactions} />;
+      reactions = (
+        <UIReactionsCollection
+          reactions={this.props.reactions}
+          onSelectReaction={this.props.onSelectReaction}
+        />
+      );
     }
 
     return (

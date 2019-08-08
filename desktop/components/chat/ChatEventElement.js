@@ -85,6 +85,7 @@ class NoticeMessage extends React.Component {
                 reactions={message.reactions}
                 theme={this.props.theme}
                 expandAttachments={false}
+                onSelectReaction={this.props.onSelectReaction}
               />
             </div>
           </span>
@@ -108,6 +109,7 @@ class SubduedMessage extends React.Component {
                 reactions={message.reactions}
                 theme={this.props.theme}
                 expandAttachments={false}
+                onSelectReaction={this.props.onSelectReaction}
               />
             </div>
           </span>

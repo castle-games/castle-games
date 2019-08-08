@@ -87,6 +87,7 @@ export default class ChatMessageElement extends React.Component {
               theme={this.props.theme}
               expandAttachments={this.props.expandAttachments}
               isEdited={message.isEdited}
+              onSelectReaction={this.props.onSelectReaction}
             />
           </div>
         </span>

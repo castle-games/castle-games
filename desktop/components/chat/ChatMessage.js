@@ -105,18 +105,23 @@ export default class ChatMessage extends React.Component {
   _renderMessage = () => {
     const { message, previousMessage, messageIdToEdit } = this.props;
 
+    const props = {
+      ...this.props,
+      onSelectReaction: this._handleSelectEmoji,
+    };
+
     if (messageIdToEdit && message.chatMessageId === messageIdToEdit) {
-      return <ChatMessageEditElement {...this.props} />;
+      return <ChatMessageEditElement {...props} />;
     }
 
     if (message.fromUserId == ChatUtilities.ADMIN_USER_ID) {
-      return <ChatEventElement {...this.props} />;
+      return <ChatEventElement {...props} />;
     }
 
     const slashCommand = ChatUtilities.getSlashCommand(message.body);
 
     if (slashCommand.isCommand && slashCommand.command === 'me') {
-      return <ChatRolePlayElement {...this.props} />;
+      return <ChatRolePlayElement {...props} />;
     }
 
     let showAuthor = true;
@@ -132,10 +137,9 @@ export default class ChatMessage extends React.Component {
       }
     }
 
-    const isEmojiMessage = ChatUtilities.isEmojiBody(message.body);
-    return (
-      <ChatMessageElement {...this.props} isEmojiMessage={isEmojiMessage} showAuthor={showAuthor} />
-    );
+    props.isEmojiMessage = ChatUtilities.isEmojiBody(message.body);
+    props.showAuthor = showAuthor;
+    return <ChatMessageElement {...props} />;
   };
 
   render() {
