@@ -162,3 +162,24 @@ export const markMessageRead = async (chatMessageId) => {
 
   return response.data.markChatMessageRead;
 };
+
+// TODO: move this to castle-chat-lib
+// so that we don't have to know about fetching chat messages.
+export const toggleChatMessageReaction = async (chatMessageId, emoji) => {
+  const response = await API.graphqlAsync(
+    `
+      mutation($chatMessageId: ID!, $emoji: String) {
+        toggleChatMessageReaction(chatMessageId: $chatMessageId, emoji: $emoji) {
+          chatMessageId
+        }
+      }
+    `,
+    { chatMessageId, emoji }
+  );
+
+  if (response.error || response.errors) {
+    return null;
+  }
+
+  return response.data.toggleChatMessageReaction;
+};

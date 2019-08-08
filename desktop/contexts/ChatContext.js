@@ -319,7 +319,7 @@ class ChatContextManager extends React.Component {
         channels,
       };
     });
-    // TODO: api call
+    return ChatActions.toggleChatMessageReaction(message.chatMessageId, emojiShortName);
   };
 
   _createOptimisticMessageObject = (channelId, body, messageToEdit) => {
