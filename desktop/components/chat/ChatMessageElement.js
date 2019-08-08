@@ -83,6 +83,7 @@ export default class ChatMessageElement extends React.Component {
             }}>
             <UIMessageBody
               body={message.body}
+              reactions={message.reactions}
               theme={this.props.theme}
               expandAttachments={this.props.expandAttachments}
               isEdited={message.isEdited}

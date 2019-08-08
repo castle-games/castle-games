@@ -76,6 +76,7 @@ export default class ChatMessageElement extends React.Component {
             <span>{this.props.user.username} </span>
             <UIMessageBody
               body={message.body}
+              reactions={message.reactions}
               theme={this.props.theme}
               isEdited={message.isEdited}
             />

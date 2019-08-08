@@ -82,6 +82,7 @@ class NoticeMessage extends React.Component {
             <div className={STYLES_NOTICE_MESSAGE}>
               <UIMessageBody
                 body={message.body}
+                reactions={message.reactions}
                 theme={this.props.theme}
                 expandAttachments={false}
               />
@@ -104,6 +105,7 @@ class SubduedMessage extends React.Component {
             <div className={STYLES_SUBDUED_MESSAGE}>
               <UIMessageBody
                 body={message.body}
+                reactions={message.reactions}
                 theme={this.props.theme}
                 expandAttachments={false}
               />

@@ -11,6 +11,7 @@ import { UserPresenceContext } from '~/contexts/UserPresenceContext';
 
 import ChatPost from '~/components/chat/ChatPost';
 import StringReplace from 'react-string-replace';
+import UIReactionsCollection from '~/components/reusable/UIReactionsCollection';
 
 const STYLES_MENTION = css`
   font-weight: 400;
@@ -85,6 +86,7 @@ const matchURL = (text, theme, onMatchAttachment) => {
 class UIMessageBody extends React.Component {
   static defaultProps = {
     body: null,
+    reactions: null,
     expandAttachments: true,
     isEdited: false,
   };
@@ -163,10 +165,17 @@ class UIMessageBody extends React.Component {
         />
       ));
     }
+
+    let reactions;
+    if (this.props.reactions) {
+      reactions = <UIReactionsCollection reactions={this.props.reactions} />;
+    }
+
     return (
       <React.Fragment>
         <section>{renderedBody}</section>
         <section>{attachments}</section>
+        <section>{reactions}</section>
       </React.Fragment>
     );
   }
