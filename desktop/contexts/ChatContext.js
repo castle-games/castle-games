@@ -375,17 +375,9 @@ class ChatContextManager extends React.Component {
       for (let ii = 0, nn = allUnsortedMessages.length; ii < nn; ii++) {
         const m = allUnsortedMessages[ii];
 
-        if (!this.props.userPresence.userIdToUser[m.fromUserId]) {
-          userIds[m.fromUserId] = true;
-        }
-        if (m.body && m.body.message) {
-          for (let jj = 0; jj < m.body.message.length; jj++) {
-            const component = m.body.message[jj];
-            if (component.userId) {
-              userIds[component.userId] = true;
-            }
-          }
-        }
+        // gather any users we may need to fetch from this message
+        this._gatherUserIdsFromMessage(m, userIds);
+
         if (!channels[m.channelId]) {
           // never seen this channel before, fetch the full channel object later
           channels[m.channelId] = {};
@@ -462,6 +454,26 @@ class ChatContextManager extends React.Component {
       );
     } else {
       this._firstLoadComplete = true;
+    }
+  };
+
+  _gatherUserIdsFromMessage = (m, userIds) => {
+    const maybeAddUserId = (userId) => {
+      if (userId && !this.props.userPresence.userIdToUser[userId]) {
+        userIds[userId] = true;
+      }
+    };
+
+    maybeAddUserId(m.fromUserId);
+    if (m.body && m.body.message) {
+      m.body.message.forEach((component) => maybeAddUserId(component.userId));
+    }
+    if (m.reactions) {
+      Object.entries(m.reactions).forEach(([_, reactionUserIds]) => {
+        if (reactionUserIds) {
+          reactionUserIds.forEach(maybeAddUserId);
+        }
+      });
     }
   };
 
