@@ -4,6 +4,8 @@ import * as Constants from '~/common/constants';
 import { css } from 'react-emotion';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { getEmojiComponent } from '~/common/emoji/emoji-utilities';
+import { Tooltip } from 'react-tippy';
+import { UserPresenceContext } from '~/contexts/UserPresenceContext';
 
 const STYLES_CONTAINER = css`
   display: flex;
@@ -39,9 +41,17 @@ const STYLES_REACTION_COUNT = css`
   margin-left: 4px;
 `;
 
-export default class UIReactionsCollection extends React.Component {
-  static contextType = CurrentUserContext;
+const TOOLTIP_PROPS = {
+  arrow: true,
+  duration: 170,
+  animation: 'fade',
+  hideOnClick: false,
+};
+
+class UIReactionsCollection extends React.Component {
   static defaultProps = {
+    viewer: null,
+    userIdToUser: {},
     reactions: {},
     onSelectReaction: (emoji) => {},
   };
@@ -60,9 +70,27 @@ export default class UIReactionsCollection extends React.Component {
     return !pairs.some(([_, userIds]) => userIds.length > 0);
   };
 
+  _getTooltip = (emoji, userIds) => {
+    const { viewer, userIdToUser } = this.props;
+    let usernames = userIds.map((userId, ii) => {
+      let username;
+      if (userId == viewer.userId) {
+        username = 'you';
+      } else {
+        const user = userIdToUser[userId];
+        username = user && user.username ? user.username : 'anonymous';
+      }
+      if (userIds.length > 1 && ii == userIds.length - 1) {
+        username = `and ${username}`;
+      }
+      return username;
+    });
+    const usernamesList = usernames.length == 2 ? usernames.join(' ') : usernames.join(', ');
+    return `${usernamesList} reacted with :${emoji}:`;
+  };
+
   render() {
-    const { reactions } = this.props;
-    const { user } = this.context;
+    const { reactions, viewer } = this.props;
 
     if (this._isEmpty(reactions)) return null;
 
@@ -74,20 +102,42 @@ export default class UIReactionsCollection extends React.Component {
             return null;
           }
           const itemStyles =
-            user && user.userId && userIds.includes(user.userId)
+            viewer && viewer.userId && userIds.includes(viewer.userId)
               ? `${STYLES_REACTION_ITEM} ${STYLES_REACTION_ITEM_SELECTED}`
               : STYLES_REACTION_ITEM;
           return (
-            <div
-              key={`reaction-${ii}`}
-              className={itemStyles}
-              onClick={() => this.props.onSelectReaction(emoji)}>
-              {getEmojiComponent(emoji, 15)}
-              <span className={STYLES_REACTION_COUNT}>{count}</span>
-            </div>
+            <Tooltip title={this._getTooltip(emoji, userIds)} {...TOOLTIP_PROPS}>
+              <div
+                key={`reaction-${ii}`}
+                className={itemStyles}
+                onClick={() => this.props.onSelectReaction(emoji)}>
+                {getEmojiComponent(emoji, 15)}
+                <span className={STYLES_REACTION_COUNT}>{count}</span>
+              </div>
+            </Tooltip>
           );
         })}
       </div>
+    );
+  }
+}
+
+export default class UIReactionsCollectionWithContext extends React.Component {
+  render() {
+    return (
+      <CurrentUserContext.Consumer>
+        {(currentUser) => (
+          <UserPresenceContext.Consumer>
+            {(userPresence) => (
+              <UIReactionsCollection
+                viewer={currentUser.user}
+                userIdToUser={userPresence.userIdToUser}
+                {...this.props}
+              />
+            )}
+          </UserPresenceContext.Consumer>
+        )}
+      </CurrentUserContext.Consumer>
     );
   }
 }
