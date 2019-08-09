@@ -31,18 +31,7 @@ for (let i = 0; i < EmojisJSON.length; i++) {
 
 CATEGORIES.push({
   title: 'Useful Reactions',
-  emojis: [
-    'thumbsup',
-    'thumbsdown',
-    'smile',
-    'joy',
-    'open_mouth',
-    'heart',
-    'fire',
-    'ok_hand',
-    'clap',
-    'tada',
-  ],
+  emojis: ['+1', '-1', 'smile', 'joy', 'open_mouth', 'heart', 'fire', 'ok_hand', 'clap', 'tada'],
 });
 
 Object.entries(CategoriesJSON).forEach(([category, list]) => {
