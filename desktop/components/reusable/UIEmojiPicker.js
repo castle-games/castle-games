@@ -155,6 +155,49 @@ export default class UIEmojiPicker extends React.Component {
     );
   };
 
+  _renderFilteredEmoji = (categories, autocompleteQuery) => {
+    return (
+      <div className={STYLES_CATEGORY_SECTION} key={`category-autocomplete`}>
+        <div className={STYLES_CATEGORY_LIST}>
+          {categories.map((category, ii) =>
+            this._filterEmoji(category.emojis, autocompleteQuery).map((short_name, jj) => (
+              <div
+                key={`emoji-${ii}-${jj}`}
+                className={STYLES_EMOJI_ITEM}
+                onClick={() => this.props.onSelectEmoji(short_name, true)}>
+                {getEmojiComponent(short_name)}
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  _renderEmojiCategories = (categories) => {
+    return (
+      <React.Fragment>
+        {categories.map((category, ii) => (
+          <div className={STYLES_CATEGORY_SECTION} key={`category-${ii}`}>
+            <div className={STYLES_CATEGORY_TITLE} ref={(c) => (this._categoryHeaderRefs[ii] = c)}>
+              {category.title}
+            </div>
+            <div className={STYLES_CATEGORY_LIST}>
+              {category.emojis.map((short_name, jj) => (
+                <div
+                  key={`emoji-${jj}`}
+                  className={STYLES_EMOJI_ITEM}
+                  onClick={() => this.props.onSelectEmoji(short_name, true)}>
+                  {getEmojiComponent(short_name)}
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </React.Fragment>
+    );
+  };
+
   render() {
     const categories = getCategories();
     const { autocompleteQuery } = this.state;
@@ -169,25 +212,9 @@ export default class UIEmojiPicker extends React.Component {
           autoFocus={true}
         />
         <div className={STYLES_SCROLLING_CONTAINER}>
-          {categories.map((category, ii) => (
-            <div className={STYLES_CATEGORY_SECTION} key={`category-${ii}`}>
-              <div
-                className={STYLES_CATEGORY_TITLE}
-                ref={(c) => (this._categoryHeaderRefs[ii] = c)}>
-                {category.title}
-              </div>
-              <div className={STYLES_CATEGORY_LIST}>
-                {this._filterEmoji(category.emojis, autocompleteQuery).map((short_name, jj) => (
-                  <div
-                    key={`emoji-${jj}`}
-                    className={STYLES_EMOJI_ITEM}
-                    onClick={() => this.props.onSelectEmoji(short_name, true)}>
-                    {getEmojiComponent(short_name)}
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
+          {Strings.isEmpty(autocompleteQuery)
+            ? this._renderEmojiCategories(categories)
+            : this._renderFilteredEmoji(categories, autocompleteQuery)}
         </div>
       </div>
     );
