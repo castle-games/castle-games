@@ -106,11 +106,11 @@ class UIReactionsCollection extends React.Component {
               ? `${STYLES_REACTION_ITEM} ${STYLES_REACTION_ITEM_SELECTED}`
               : STYLES_REACTION_ITEM;
           return (
-            <Tooltip title={this._getTooltip(emoji, userIds)} {...TOOLTIP_PROPS}>
-              <div
-                key={`reaction-${ii}`}
-                className={itemStyles}
-                onClick={() => this.props.onSelectReaction(emoji)}>
+            <Tooltip
+              key={`reaction-${ii}`}
+              title={this._getTooltip(emoji, userIds)}
+              {...TOOLTIP_PROPS}>
+              <div className={itemStyles} onClick={() => this.props.onSelectReaction(emoji)}>
                 {getEmojiComponent(emoji, 15)}
                 <span className={STYLES_REACTION_COUNT}>{count}</span>
               </div>
