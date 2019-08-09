@@ -43,7 +43,7 @@ export const sortChannels = (channels) => {
  *          for example when deciding whether to mark a channel as unread.
  */
 export const messageHasActivity = (m) => {
-  if (m.isEdit) {
+  if (m.isEdit || m.isReactionUpdate) {
     return false;
   }
   if (m.tempChatMessageId && m.chatMessageId === m.tempChatMessageId) {
