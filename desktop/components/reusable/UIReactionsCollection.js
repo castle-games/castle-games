@@ -59,17 +59,12 @@ class UIReactionsCollection extends React.Component {
   };
 
   _isEmpty = (reactions) => {
-    if (!reactions) {
-      return true;
-    }
-
-    const pairs = Object.entries(reactions);
-    if (!pairs.length) {
+    if (!reactions || !reactions.length) {
       return true;
     }
 
     // if all entries are empty, the collection is empty
-    return !pairs.some(([_, userIds]) => userIds.length > 0);
+    return !reactions.some(({ userIds }) => userIds.length > 0);
   };
 
   _getTooltip = (emoji, userIds) => {
@@ -102,7 +97,7 @@ class UIReactionsCollection extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
-        {Object.entries(reactions).map(([emoji, userIds], ii) => {
+        {reactions.map(({ emoji, userIds }, ii) => {
           const count = userIds.length;
           if (!count) {
             return null;

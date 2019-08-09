@@ -357,16 +357,20 @@ class ChatContextManager extends React.Component {
 
   _createOptimisticReaction = (message, emojiShortName) => {
     const { user } = this.props.currentUser;
-    let reactions = message.reactions || {};
-    if (reactions[emojiShortName]) {
-      const existingIndex = reactions[emojiShortName].indexOf(user.userId);
+    let reactions = message.reactions || [];
+    const existingReactionIdx = reactions.findIndex((item) => item.emoji === emojiShortName);
+    if (existingReactionIdx !== -1) {
+      const existingIndex = reactions[existingReactionIdx].userIds.indexOf(user.userId);
       if (existingIndex === -1) {
-        reactions[emojiShortName].push(user.userId);
+        reactions[existingReactionIdx].userIds.push(user.userId);
       } else {
-        reactions[emojiShortName].splice(existingIndex, 1);
+        reactions[existingReactionIdx].userIds.splice(existingIndex, 1);
       }
     } else {
-      reactions[emojiShortName] = [user.userId];
+      reactions.push({
+        emoji: emojiShortName,
+        userIds: [user.userId],
+      });
     }
     return {
       ...message,
@@ -479,9 +483,9 @@ class ChatContextManager extends React.Component {
       m.body.message.forEach((component) => maybeAddUserId(component.userId));
     }
     if (m.reactions) {
-      Object.entries(m.reactions).forEach(([_, reactionUserIds]) => {
-        if (reactionUserIds) {
-          reactionUserIds.forEach(maybeAddUserId);
+      m.reactions.forEach(({ emoji, userIds }) => {
+        if (userIds) {
+          userIds.forEach(maybeAddUserId);
         }
       });
     }
