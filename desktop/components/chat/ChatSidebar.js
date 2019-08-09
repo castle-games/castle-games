@@ -28,6 +28,24 @@ const STYLES_CONTAINER_BASE = css`
   height: 100%;
 `;
 
+// TODO(jim): When theming is available, you can just modify this object.
+const THEME = {
+  textColor: Constants.colors.white,
+  background: 'transparent',
+  anchorColor: Constants.colors.white,
+  inputBackground: `#565656`,
+  embedBorder: `none`,
+  embedBackground: `#333`,
+  embedBoxShadow: `none`,
+  embedPadding: `8px 8px 8px 8px`,
+  actionItemColor: Constants.colors.white,
+  actionItemBackground: '#232323',
+  reactionItemColor: Constants.colors.white,
+  reactionItemBackground: '#232323',
+  reactionItemSelectedBackground: '#230023',
+  hideEvents: true, // TODO: hack
+};
+
 class ChatSidebar extends React.Component {
   state = {
     mode: 'MESSAGES',
@@ -89,22 +107,15 @@ class ChatSidebar extends React.Component {
     }
   };
 
+  _handleSelectReaction = (messageReactedTo, emojiShortName) => {
+    const { chat } = this.props;
+    const channelId = this._getChannelIdVisible();
+    chat.toggleReaction(channelId, messageReactedTo, emojiShortName);
+  };
+
   render() {
     const { mode } = this.state;
     const channelId = this._getChannelIdVisible();
-
-    // TODO(jim): When theming is available, you can just modify this object.
-    let theme = {
-      textColor: Constants.colors.white,
-      background: 'transparent',
-      anchorColor: Constants.colors.white,
-      inputBackground: `#565656`,
-      embedBorder: `none`,
-      embedBackground: `#333`,
-      embedBoxShadow: `none`,
-      embedPadding: `8px 8px 8px 8px`,
-      hideEvents: true, // TODO: hack
-    };
 
     if (!this.props.navigation.game || !channelId) {
       return null;
@@ -121,7 +132,7 @@ class ChatSidebar extends React.Component {
       <div
         className={STYLES_CONTAINER_BASE}
         style={{
-          background: theme.background,
+          background: THEME.background,
         }}>
         <ChatSidebarHeader
           gameChannel={this.props.gameChannel}
@@ -130,19 +141,21 @@ class ChatSidebar extends React.Component {
           onSelectGameChannel={this._handleSelectGameChannel}
         />
         <ChatMessages
+          isSidebar
           viewer={this.props.viewer}
           messages={messages}
           navigator={this.props.navigator}
           userIdToUser={this.props.userPresence.userIdToUser}
-          theme={theme}
+          onSelectReaction={this._handleSelectReaction}
+          theme={THEME}
           size="24px"
         />
         <ChatInputControl
+          isSidebar
           placeholder={`Message #${name}`}
           addUsers={this.props.userPresence.addUsers}
           onSendMessage={this._handleSendMessage}
-          theme={theme}
-          isSidebarGameInput
+          theme={THEME}
         />
       </div>
     );

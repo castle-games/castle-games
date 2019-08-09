@@ -173,6 +173,7 @@ class UIMessageBody extends React.Component {
         <UIReactionsCollection
           reactions={this.props.reactions}
           onSelectReaction={this.props.onSelectReaction}
+          theme={theme}
         />
       );
     }

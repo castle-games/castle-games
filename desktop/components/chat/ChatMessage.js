@@ -49,6 +49,7 @@ export default class ChatMessage extends React.Component {
     size: null,
     isEditable: false,
     messageIdToEdit: null,
+    enableHoverActions: true,
     onNavigateToUserProfile: (user) => {},
     onSelectEdit: (messageIdToEdit) => {},
     onSelectReaction: (messageReactedTo, emoji) => {},
@@ -147,12 +148,13 @@ export default class ChatMessage extends React.Component {
 
     let actionsElement;
     const actions = this._getMessageActions();
-    if (actions) {
+    if (actions && this.props.enableHoverActions) {
       const { message } = this.props;
       actionsElement = (
         <div id="actions" className={STYLES_ACTIONS}>
           <ChatMessageActions
             {...actions}
+            theme={this.props.theme}
             onSelectEdit={() => this.props.onSelectEdit(message.chatMessageId)}
             onSelectReaction={this._handleToggleEmojiPicker}
           />

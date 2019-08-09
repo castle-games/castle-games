@@ -13,24 +13,28 @@ const STYLES_ACTION = css`
   margin-left: 4px;
   border-radius: 2px;
   border: 1px solid #d6d6d6;
-  color: #333;
-  background: ${Constants.colors.white};
 `;
 
 export default class ChatMessageActions extends React.Component {
   static defaultProps = {
     isEditable: false,
     isReactable: false,
+    theme: {
+      actionItemColor: '#333',
+      actionItemBackground: Constants.colors.white,
+    },
     onSelectEdit: () => {},
     onSelectReaction: () => {},
   };
 
   render() {
     const { isEditable, isReactable } = this.props;
+    const theme = { ...ChatMessageActions.defaultProps.theme, ...this.props.theme };
+    const styles = { background: theme.actionItemBackground, color: theme.actionItemColor };
     let editElement;
     if (isEditable) {
       editElement = (
-        <div className={STYLES_ACTION} onClick={this.props.onSelectEdit}>
+        <div className={STYLES_ACTION} style={styles} onClick={this.props.onSelectEdit}>
           <SVG.Edit size="16" />
         </div>
       );
@@ -38,7 +42,7 @@ export default class ChatMessageActions extends React.Component {
     let reactionElement;
     if (isReactable) {
       reactionElement = (
-        <div className={STYLES_ACTION} onClick={this.props.onSelectReaction}>
+        <div className={STYLES_ACTION} style={styles} onClick={this.props.onSelectReaction}>
           <SVG.ChatEmojiPicker size="16" />
         </div>
       );

@@ -15,14 +15,12 @@ const STYLES_CONTAINER = css`
   line-height: 18px;
   font-style: normal;
   font: ${Constants.REFACTOR_FONTS.system};
-  color: ${Constants.colors.black};
 `;
 
 const STYLES_REACTION_ITEM = css`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #efefef;
   margin: 0 4px 4px 0;
   border-radius: 4px;
   cursor: pointer;
@@ -31,8 +29,6 @@ const STYLES_REACTION_ITEM = css`
 
 const STYLES_REACTION_ITEM_SELECTED = css`
   border: 1px solid fuchsia;
-  background: #feeefe;
-  color: fuchsia;
 `;
 
 const STYLES_REACTION_COUNT = css`
@@ -53,6 +49,12 @@ class UIReactionsCollection extends React.Component {
     viewer: null,
     userIdToUser: {},
     reactions: {},
+    theme: {
+      reactionItemColor: Constants.colors.black,
+      reactionItemBackground: '#efefef',
+      reactionItemSelectedColor: 'fuchsia',
+      reactionItemSelectedBackground: '#feeefe',
+    },
     onSelectReaction: (emoji) => {},
   };
 
@@ -91,6 +93,10 @@ class UIReactionsCollection extends React.Component {
 
   render() {
     const { reactions, viewer } = this.props;
+    const theme = {
+      ...UIReactionsCollection.defaultProps.theme,
+      ...this.props.theme,
+    };
 
     if (this._isEmpty(reactions)) return null;
 
@@ -101,16 +107,25 @@ class UIReactionsCollection extends React.Component {
           if (!count) {
             return null;
           }
-          const itemStyles =
-            viewer && viewer.userId && userIds.includes(viewer.userId)
-              ? `${STYLES_REACTION_ITEM} ${STYLES_REACTION_ITEM_SELECTED}`
-              : STYLES_REACTION_ITEM;
+          const isViewerIncluded = viewer && viewer.userId && userIds.includes(viewer.userId);
+          const itemClass = isViewerIncluded
+            ? `${STYLES_REACTION_ITEM} ${STYLES_REACTION_ITEM_SELECTED}`
+            : STYLES_REACTION_ITEM;
+          const itemStyles = {
+            color: isViewerIncluded ? theme.reactionItemSelectedColor : theme.reactionItemColor,
+            background: isViewerIncluded
+              ? theme.reactionItemSelectedBackground
+              : theme.reactionItemBackground,
+          };
           return (
             <Tooltip
               key={`reaction-${ii}`}
               title={this._getTooltip(emoji, userIds)}
               {...TOOLTIP_PROPS}>
-              <div className={itemStyles} onClick={() => this.props.onSelectReaction(emoji)}>
+              <div
+                className={itemClass}
+                style={itemStyles}
+                onClick={() => this.props.onSelectReaction(emoji)}>
                 {getEmojiComponent(emoji, 15)}
                 <span className={STYLES_REACTION_COUNT}>{count}</span>
               </div>

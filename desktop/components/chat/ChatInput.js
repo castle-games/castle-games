@@ -158,7 +158,7 @@ export default class ChatInput extends React.Component {
   render() {
     let inputStyles;
     let containerStyles;
-    if (this.props.isSidebarGameInput) {
+    if (this.props.isSidebar) {
       containerStyles = {
         padding: 0,
       };
