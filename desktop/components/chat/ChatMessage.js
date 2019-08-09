@@ -4,12 +4,12 @@ import * as ChatUtilities from '~/common/chat-utilities';
 import { css } from 'react-emotion';
 
 import ChatEventElement from '~/components/chat/ChatEventElement';
-import ChatInputEmojiPicker from '~/components/chat/ChatInputEmojiPicker';
 import ChatMessageActions from '~/components/chat/ChatMessageActions';
 import ChatMessageEditElement from '~/components/chat/ChatMessageEditElement';
 import ChatMessageElement from '~/components/chat/ChatMessageElement';
 import ChatRolePlayElement from '~/components/chat/ChatRolePlayElement';
 import UIBoundary from '~/components/reusable/UIBoundary';
+import UIEmojiPicker from '~/components/reusable/UIEmojiPicker';
 
 const STYLES_CONTAINER = css`
   position: relative;
@@ -95,7 +95,7 @@ export default class ChatMessage extends React.Component {
           captureResize={false}
           captureScroll={false}
           onOutsideRectEvent={this._handleToggleEmojiPicker}>
-          <ChatInputEmojiPicker onSelectEmoji={this._handleSelectEmoji} />
+          <UIEmojiPicker onSelectEmoji={this._handleSelectEmoji} />
         </UIBoundary>
       );
     }

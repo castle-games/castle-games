@@ -1,8 +1,11 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
+import * as Strings from '~/common/strings';
 
 import { css } from 'react-emotion';
 import { getCategories, getEmojiComponent } from '~/common/emoji/emoji-utilities';
+
+import ControlledInput from '~/components/primitives/ControlledInput';
 
 const STYLES_CONTAINER = css`
   position: absolute;
@@ -74,6 +77,21 @@ const STYLES_NAV_ITEM = css`
   }
 `;
 
+const STYLES_INPUT = css`
+  box-sizing: border-box;
+  width: 100%;
+  height: 24px;
+  border-radius: 4px;
+  font-size: 14px;
+  padding: 2px 4px;
+  margin-bottom: 8px;
+  border: 2px solid #ececec;
+
+  :focus {
+    outline: 0;
+  }
+`;
+
 const CATEGORY_HEADER_EMOJI = [
   'tada',
   'grinning',
@@ -87,11 +105,33 @@ const CATEGORY_HEADER_EMOJI = [
   'skin-tone-4',
 ];
 
-export default class ChatInputEmojiPicker extends React.Component {
+export default class UIEmojiPicker extends React.Component {
   _categoryHeaderRefs = {};
 
   static defaultProps = {
     onSelectEmoji: (shortName) => {},
+  };
+
+  state = {
+    autocompleteQuery: '',
+  };
+
+  _handleInputChange = (e) => {
+    let value = e.target.value;
+    if (Strings.isEmpty(value)) {
+      this.setState({ autocompleteQuery: '' });
+    } else {
+      value = value.trim().toLowerCase();
+      this.setState({ autocompleteQuery: value });
+    }
+  };
+
+  _filterEmoji = (emojis, query) => {
+    if (Strings.isEmpty(query)) {
+      return emojis;
+    } else {
+      return emojis.filter((emoji) => emoji.indexOf(query) !== -1);
+    }
   };
 
   _scrollToCategoryIndex = (index) => {
@@ -117,9 +157,17 @@ export default class ChatInputEmojiPicker extends React.Component {
 
   render() {
     const categories = getCategories();
+    const { autocompleteQuery } = this.state;
     return (
       <div className={STYLES_CONTAINER}>
         {this._renderCategoryNavigation(categories)}
+        <ControlledInput
+          className={STYLES_INPUT}
+          name="autocompleteQuery"
+          value={this.state.autocompleteQuery}
+          onChange={this._handleInputChange}
+          autoFocus={true}
+        />
         <div className={STYLES_SCROLLING_CONTAINER}>
           {categories.map((category, ii) => (
             <div className={STYLES_CATEGORY_SECTION} key={`category-${ii}`}>
@@ -129,7 +177,7 @@ export default class ChatInputEmojiPicker extends React.Component {
                 {category.title}
               </div>
               <div className={STYLES_CATEGORY_LIST}>
-                {category.emojis.map((short_name, jj) => (
+                {this._filterEmoji(category.emojis, autocompleteQuery).map((short_name, jj) => (
                   <div
                     key={`emoji-${jj}`}
                     className={STYLES_EMOJI_ITEM}
