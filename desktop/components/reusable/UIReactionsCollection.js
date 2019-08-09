@@ -10,7 +10,7 @@ import { UserPresenceContext } from '~/contexts/UserPresenceContext';
 const STYLES_CONTAINER = css`
   display: flex;
   flex-wrap: wrap;
-  padding: 4px;
+  padding: 4px 0;
   font-size: 14px;
   line-height: 18px;
   font-style: normal;
@@ -23,10 +23,10 @@ const STYLES_REACTION_ITEM = css`
   align-items: center;
   justify-content: space-between;
   background: #efefef;
-  margin: 0 4px 0 4px;
+  margin: 0 4px 4px 0;
   border-radius: 4px;
   cursor: pointer;
-  padding: 4px 6px;
+  padding: 3px 6px;
 `;
 
 const STYLES_REACTION_ITEM_SELECTED = css`
