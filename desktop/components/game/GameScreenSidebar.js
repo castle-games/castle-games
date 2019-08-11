@@ -87,14 +87,19 @@ export default class GameScreenSidebar extends React.Component {
   }
 
   _handleUpdate = (e) => {
+    // NOTE(jim): Tools is rendering, so we don't need to re-evaluate this for
+    // the current game.
+    if (this.state.tools) {
+      return;
+    }
+
     const state = JSON.parse(e.params);
 
     let tools = false;
-    if (state.panes && state.panes.DEFAULT) {
-      const children = state.panes.DEFAULT.children;
-      if (children.count > 0) {
-        tools = true;
-      }
+    if (state.panes) {
+      tools = !!Object.values(state.panes).find(
+        (element) => element.children && element.children.count > 0
+      );
     }
 
     this.setState({ tools });
