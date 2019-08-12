@@ -25,6 +25,8 @@ const STYLES_REACTION_ITEM = css`
   border-radius: 4px;
   cursor: pointer;
   padding: 3px 6px;
+  box-sizing: border-box;
+  border: 1px solid transparent;
 `;
 
 const STYLES_REACTION_ITEM_SELECTED = css`
@@ -48,7 +50,7 @@ class UIReactionsCollection extends React.Component {
   static defaultProps = {
     viewer: null,
     userIdToUser: {},
-    reactions: {},
+    reactions: [],
     theme: {
       reactionItemColor: Constants.colors.black,
       reactionItemBackground: '#efefef',
