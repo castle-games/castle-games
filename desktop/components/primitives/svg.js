@@ -84,6 +84,32 @@ export const SidebarChat = (props) => (
   </svg>
 );
 
+export const Ellipsis = (props) => (
+  <svg
+    viewBox="0 0 48 48"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="currentColor"
+    style={props.style}
+    height={props.size}>
+    <g>
+      <path d="M12 20c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm24 0c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm-12 0c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4z" />
+    </g>
+  </svg>
+);
+
+export const Refresh = (props) => (
+  <svg
+    viewBox="0 0 48 48"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="currentColor"
+    style={props.style}
+    height={props.size}>
+    <g>
+      <path d="M35.3 12.7C32.41 9.8 28.42 8 24 8 15.16 8 8.02 15.16 8.02 24S15.16 40 24 40c7.45 0 13.69-5.1 15.46-12H35.3c-1.65 4.66-6.07 8-11.3 8-6.63 0-12-5.37-12-12s5.37-12 12-12c3.31 0 6.28 1.38 8.45 3.55L26 22h14V8l-4.7 4.7z" />
+    </g>
+  </svg>
+);
+
 export const Castle = (props) => (
   <svg
     viewBox="0 0 24 24"

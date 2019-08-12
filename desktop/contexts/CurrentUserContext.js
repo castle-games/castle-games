@@ -12,6 +12,7 @@ const EMPTY_CURRENT_USER = {
   content: {
     posts: null,
     allGames: null,
+    trendingGames: null,
   },
 };
 
@@ -21,6 +22,7 @@ const CurrentUserContextDefaults = {
   clearCurrentUser: async () => {},
   refreshCurrentUser: async () => {},
   loadAllGames: async (limit) => {},
+  reloadTrendingGames: async () => {},
   reloadPosts: () => {},
   loadMorePosts: () => {},
 };
@@ -39,6 +41,7 @@ class CurrentUserContextProvider extends React.Component {
       reloadPosts: this.reloadPosts,
       loadMorePosts: this.loadMorePosts,
       loadAllGames: this.loadAllGames,
+      reloadTrendingGames: this.reloadTrendingGames,
     };
 
     if (props.value && props.value.user) {
@@ -120,7 +123,7 @@ class CurrentUserContextProvider extends React.Component {
     try {
       data = await Actions.getAllGames(limit);
     } catch (e) {
-      console.log(`Issue fetching all Castle games: ${e}`);
+      console.log(`Issue fetching all games: ${e}`);
     }
 
     if (data) {
@@ -131,6 +134,29 @@ class CurrentUserContextProvider extends React.Component {
           content: {
             ...state.content,
             allGames,
+          },
+        };
+      });
+    }
+  };
+
+  reloadTrendingGames = async () => {
+    let data = null;
+
+    try {
+      data = await Actions.getTrendingGames();
+    } catch (e) {
+      console.log(`Issue fetching trending games: ${e}`);
+    }
+
+    if (data) {
+      let trendingGames = data.trendingGames;
+      await this.setState((state) => {
+        return {
+          ...state,
+          content: {
+            ...state.content,
+            trendingGames,
           },
         };
       });

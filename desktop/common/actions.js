@@ -474,6 +474,28 @@ export async function getInitialData() {
   return result.data;
 }
 
+export async function getTrendingGames() {
+  const result = await API(`
+    query {
+      trendingGames {
+        ${GAME_FIELDS}
+        ${NESTED_GAME_OWNER}
+      }
+    }
+  `);
+
+  if (!result) {
+    return false;
+  }
+
+  // TOOD(jim): Write a global error handler.
+  if (result.error) {
+    return false;
+  }
+
+  return result.data;
+}
+
 export async function logout() {
   const result = await API.graphqlAsync({
     query: `

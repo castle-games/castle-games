@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as Actions from '~/common/actions';
+import * as SVG from '~/components/primitives/svg';
 
 import { css } from 'react-emotion';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
@@ -35,10 +36,32 @@ const STYLES_SUB_NAVIGATION_ITEM = css`
   font-weight: 400;
   font-family: ${Constants.font.heading};
   font-size: ${Constants.typescale.lvl5};
-  padding: 0px 24px 16px 24px;
+  padding: 4px 24px 16px 24px;
   color: #a0a0a0;
 
   cursor: pointer;
+`;
+
+const STYLES_REFRESH_BUTTON = css`
+  color: black;
+  border: 1px solid black;
+  border-radius: 3px;
+  margin: 0px 8px 16px 24px;
+  padding: 4px 4px 0px 4px;
+
+  cursor: pointer;
+`;
+
+const STYLES_REFRESH_BUTTON_ACTIVE = css`
+  background: #c0c0c0;
+`;
+
+const STYLES_REFRESH_BUTTON_INACTIVE = css`
+  color: #a0a0a0;
+  border: 1px solid #a0a0a0;
+  border-radius: 3px;
+  margin: 0px 8px 16px 24px;
+  padding: 4px 4px 0px 4px;
 `;
 
 const STYLES_SUB_NAVIGATION_ITEM_ACTIVE = css`
@@ -88,8 +111,10 @@ class GamesHomeScreen extends React.Component {
     subNavMode: 'home',
     isLoadingPosts: true,
     isLoadingAllGames: true,
+    isHoveringOnRefresh: false,
     isHoveringOnHome: false,
     isHoveringOnAllGames: false,
+    refreshingHomepage: false,
   };
 
   async componentDidMount() {
@@ -120,12 +145,27 @@ class GamesHomeScreen extends React.Component {
     this._mounted = false;
   }
 
+  _refreshHomepage = async () => {
+    if (this.state.subNavMode !== 'home') {
+      return;
+    }
+
+    this.setState({ refreshingHomepage: true });
+    this.props.reloadPosts();
+    await this.props.reloadTrendingGames();
+    this.setState({ refreshingHomepage: false });
+  };
+
   _changeSubNavMode = (newSubNavMode) => {
     if (newSubNavMode === 'allGames') {
       this.setState({ isLoadingAllGames: true });
       this.props.loadAllGames();
     }
     this.setState({ subNavMode: newSubNavMode });
+  };
+
+  _handleSetHoverOnRefresh = (shouldSetHovering) => {
+    this.setState({ isHoveringOnRefresh: shouldSetHovering });
   };
 
   _handleSetHoverOnHome = (shouldSetHovering) => {
@@ -177,6 +217,23 @@ class GamesHomeScreen extends React.Component {
       <div className={STYLES_HOME_CONTAINER} onScroll={this._handleScroll}>
         <div className={STYLES_CONTENT_CONTAINER}>
           <div className={STYLES_SUB_NAVIGATION_BAR}>
+            <div
+              className={
+                this.state.isHoveringOnRefresh && this.state.subNavMode === 'home'
+                  ? `${STYLES_REFRESH_BUTTON} ${STYLES_REFRESH_BUTTON_ACTIVE}`
+                  : this.state.subNavMode === 'home'
+                  ? STYLES_REFRESH_BUTTON
+                  : STYLES_REFRESH_BUTTON_INACTIVE
+              }
+              onMouseEnter={() => this._handleSetHoverOnRefresh(true)}
+              onMouseLeave={() => this._handleSetHoverOnRefresh(false)}
+              onClick={() => this._refreshHomepage()}>
+              {this.state.refreshingHomepage ? (
+                <SVG.Ellipsis size={'24px'} />
+              ) : (
+                <SVG.Refresh size={'24px'} />
+              )}
+            </div>
             <div
               className={
                 this.state.isHoveringOnHome || this.state.subNavMode === 'home'
@@ -247,6 +304,8 @@ export default class GamesHomeScreenWithContext extends React.Component {
                 posts={currentUser.content.posts}
                 allGames={currentUser.content.allGames}
                 loadAllGames={currentUser.loadAllGames}
+                trendingGames={currentUser.content.trendingGames}
+                reloadTrendingGames={currentUser.reloadTrendingGames}
                 reloadPosts={currentUser.reloadPosts}
                 loadMorePosts={currentUser.loadMorePosts}
                 navigator={navigator}

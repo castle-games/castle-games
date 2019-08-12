@@ -104,7 +104,6 @@ class ContentContainer extends React.Component {
     } else if (mode === 'home') {
       return (
         <GamesHomeScreen
-          trendingGames={this.props.trendingGames}
           featuredExamples={this.props.featuredExamples}
           viewer={this.props.viewer}
           mode={mode}
