@@ -5,7 +5,7 @@ import * as Strings from '~/common/strings';
 import { css } from 'react-emotion';
 import { getCategories, getEmojiComponent } from '~/common/emoji/emoji-utilities';
 
-import ControlledInput from '~/components/primitives/ControlledInput';
+import UIEmojiPickerInput from '~/components/reusable/UIEmojiPickerInput';
 
 const STYLES_CONTAINER = css`
   position: absolute;
@@ -13,7 +13,7 @@ const STYLES_CONTAINER = css`
   right: 16px;
   width: 384px;
 
-  padding: 8px;
+  padding: 8px 0;
 
   border-radius: 4px;
   border: 1px solid rgba(219, 219, 219, 1);
@@ -24,6 +24,7 @@ const STYLES_CONTAINER = css`
 const STYLES_SCROLLING_CONTAINER = css`
   height: 256px;
   overflow-y: scroll;
+  padding: 0 8px;
 
   ::-webkit-scrollbar {
     display: none;
@@ -62,6 +63,7 @@ const STYLES_CATEGORY_LIST = css`
 
 const STYLES_NAV_CONTAINER = css`
   display: flex;
+  padding: 0 8px;
   border-bottom: 1px solid #ececec;
   margin-bottom: 8px;
 `;
@@ -71,24 +73,10 @@ const STYLES_NAV_ITEM = css`
   border-radius: 3px;
   padding: 4px;
   margin: 0 4px 4px 4px;
+  filter: grayscale(100%);
 
   :hover {
     background: #ececec;
-  }
-`;
-
-const STYLES_INPUT = css`
-  box-sizing: border-box;
-  width: 100%;
-  height: 24px;
-  border-radius: 4px;
-  font-size: 14px;
-  padding: 2px 4px;
-  margin-bottom: 8px;
-  border: 2px solid #ececec;
-
-  :focus {
-    outline: 0;
   }
 `;
 
@@ -97,9 +85,9 @@ const CATEGORY_HEADER_EMOJI = [
   'grinning',
   'leaves',
   'hamburger',
-  'airplane',
+  'steam_locomotive',
   'soccer',
-  'bulb',
+  'package',
   'arrow_right',
   'waving_black_flag',
   'skin-tone-4',
@@ -204,9 +192,9 @@ export default class UIEmojiPicker extends React.Component {
     return (
       <div className={STYLES_CONTAINER}>
         {this._renderCategoryNavigation(categories)}
-        <ControlledInput
-          className={STYLES_INPUT}
+        <UIEmojiPickerInput
           name="autocompleteQuery"
+          placeholder="Find an emoji..."
           value={this.state.autocompleteQuery}
           onChange={this._handleInputChange}
           autoFocus={true}
