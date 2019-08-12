@@ -36,11 +36,6 @@ export default class Game extends React.Component {
 
   _handleToggleDeveloper = () => {
     this.context.setters.toggleIsDeveloping();
-
-    // NOTE(jim): call update once the screen has updated.
-    window.setTimeout(() => {
-      this.props.onWindowSizeUpdate();
-    });
   };
 
   render() {

@@ -124,6 +124,7 @@ class GameScreen extends React.Component {
     this.updateGameWindowFrame();
     window.addEventListener('CASTLE_GAME_LOADED', this._handleGameLoaded);
     window.addEventListener('GHOST_NETWORK_REQUEST', this._handleLuaNetworkRequest);
+    document.addEventListener('CASTLE_GAME_LAYOUT_UPDATE', this.updateGameWindowFrame);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -136,6 +137,7 @@ class GameScreen extends React.Component {
     window.removeEventListener('resize', this.updateGameWindowFrame);
     window.removeEventListener('CASTLE_GAME_LOADED', this._handleGameLoaded);
     window.removeEventListener('GHOST_NETWORK_REQUEST', this._handleLuaNetworkRequest);
+    document.removeEventListener('CASTLE_GAME_LAYOUT_UPDATE', this.updateGameWindowFrame);
   }
 
   _prepareInitialGameData = async (screenSettings) => {

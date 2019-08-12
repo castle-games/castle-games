@@ -52,10 +52,16 @@ class DevelopmentContextProvider extends React.Component {
       return;
     }
     if (isDeveloping != this.state.isDeveloping) {
-      this.setState({
-        isDeveloping,
-        isMultiplayerCodeUploadEnabled: false, // always reset this
-      });
+      this.setState(
+        {
+          isDeveloping,
+          isMultiplayerCodeUploadEnabled: false, // always reset this
+        },
+        () => {
+          const event = new Event('CASTLE_GAME_LAYOUT_UPDATE');
+          document.dispatchEvent(event);
+        }
+      );
     }
   };
 
