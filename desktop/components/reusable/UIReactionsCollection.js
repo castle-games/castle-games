@@ -73,7 +73,7 @@ class UIReactionsCollection extends React.Component {
     const { viewer, userIdToUser } = this.props;
     let usernames = userIds.map((userId, ii) => {
       let username;
-      if (userId == viewer.userId) {
+      if (viewer && userId == viewer.userId) {
         username = 'you';
       } else {
         const user = userIdToUser[userId];
