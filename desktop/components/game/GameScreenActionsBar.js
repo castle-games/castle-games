@@ -102,7 +102,7 @@ export default class GameScreenActionsBar extends React.Component {
           ) : null}
         </div>
         <div className={STYLES_RIGHT}>
-          <CTA style={{ marginRight: 24, pointer: 'default' }}>
+          <CTA style={{ marginRight: 24, cursor: 'default' }}>
             <GameSVG.Chip height="20px" style={{ marginRight: 8 }} />
             <DevelopmentCpuMonitor />
           </CTA>
