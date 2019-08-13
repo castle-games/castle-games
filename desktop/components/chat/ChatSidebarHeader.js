@@ -58,8 +58,8 @@ export default class ChatSidebarHeader extends React.Component {
     return (
       <UINavigationLink
         style={{
-          padding: '0 24px 0 24px',
-          height: 32,
+          padding: '0 16px 0 16px',
+          height: 24,
           display: 'inline-flex',
           alignItems: 'center',
           maxWidth: 128,
@@ -88,8 +88,8 @@ export default class ChatSidebarHeader extends React.Component {
     return (
       <UINavigationLink
         style={{
-          padding: '0 24px 0 24px',
-          height: 32,
+          padding: '0 16px 0 16px',
+          height: 24,
           display: 'inline-flex',
           alignItems: 'center',
           ...selectedStyles,
