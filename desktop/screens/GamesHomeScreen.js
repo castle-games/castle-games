@@ -46,7 +46,8 @@ const STYLES_REFRESH_BUTTON = css`
   color: black;
   border: 1px solid black;
   border-radius: 3px;
-  margin: 0px 8px 16px 24px;
+  margin: 0px 32px 16px 24px;
+  margin-left: auto;
   padding: 4px 4px 0px 4px;
 
   cursor: pointer;
@@ -59,9 +60,6 @@ const STYLES_REFRESH_BUTTON_ACTIVE = css`
 const STYLES_REFRESH_BUTTON_INACTIVE = css`
   color: #a0a0a0;
   border: 1px solid #a0a0a0;
-  border-radius: 3px;
-  margin: 0px 8px 16px 24px;
-  padding: 4px 4px 0px 4px;
 `;
 
 const STYLES_SUB_NAVIGATION_ITEM_ACTIVE = css`
@@ -219,23 +217,6 @@ class GamesHomeScreen extends React.Component {
           <div className={STYLES_SUB_NAVIGATION_BAR}>
             <div
               className={
-                this.state.isHoveringOnRefresh && this.state.subNavMode === 'home'
-                  ? `${STYLES_REFRESH_BUTTON} ${STYLES_REFRESH_BUTTON_ACTIVE}`
-                  : this.state.subNavMode === 'home'
-                  ? STYLES_REFRESH_BUTTON
-                  : STYLES_REFRESH_BUTTON_INACTIVE
-              }
-              onMouseEnter={() => this._handleSetHoverOnRefresh(true)}
-              onMouseLeave={() => this._handleSetHoverOnRefresh(false)}
-              onClick={() => this._refreshHomepage()}>
-              {this.state.refreshingHomepage ? (
-                <SVG.Ellipsis size={'24px'} />
-              ) : (
-                <SVG.Refresh size={'24px'} />
-              )}
-            </div>
-            <div
-              className={
                 this.state.isHoveringOnHome || this.state.subNavMode === 'home'
                   ? `${STYLES_SUB_NAVIGATION_ITEM} ${STYLES_SUB_NAVIGATION_ITEM_ACTIVE}`
                   : STYLES_SUB_NAVIGATION_ITEM
@@ -255,6 +236,23 @@ class GamesHomeScreen extends React.Component {
               onMouseLeave={() => this._handleSetHoverOnAllGames(false)}
               onClick={() => this._changeSubNavMode('allGames')}>
               All Games
+            </div>
+            <div
+              className={
+                this.state.isHoveringOnRefresh && this.state.subNavMode === 'home'
+                  ? `${STYLES_REFRESH_BUTTON} ${STYLES_REFRESH_BUTTON_ACTIVE}`
+                  : this.state.subNavMode === 'home'
+                  ? STYLES_REFRESH_BUTTON
+                  : `${STYLES_REFRESH_BUTTON} ${STYLES_REFRESH_BUTTON_INACTIVE}`
+              }
+              onMouseEnter={() => this._handleSetHoverOnRefresh(true)}
+              onMouseLeave={() => this._handleSetHoverOnRefresh(false)}
+              onClick={() => this._refreshHomepage()}>
+              {this.state.refreshingHomepage ? (
+                <SVG.Ellipsis size={'24px'} />
+              ) : (
+                <SVG.Refresh size={'24px'} />
+              )}
             </div>
           </div>
           <div className={STYLES_GAMES_CONTAINER}>
