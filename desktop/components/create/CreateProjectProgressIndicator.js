@@ -22,6 +22,7 @@ export default class CreateProjectProgressIndicator extends React.Component {
   static defaultProps = {
     fromTemplate: null,
     toDirectory: null,
+    initialError: null,
     onFinished: (createdProjectUrl) => {},
     onCancel: () => {},
     configureProject: async (path) => {},
@@ -42,7 +43,9 @@ export default class CreateProjectProgressIndicator extends React.Component {
 
   componentDidMount() {
     this._mounted = true;
-    if (this.props.fromTemplate) {
+    if (this.props.initialError) {
+      this._handleError(this.props.initialError);
+    } else if (this.props.fromTemplate) {
       this._url = Urls.githubUserContentToArchiveUrl(this.props.fromTemplate.entryPoint);
       Downloads.start(this._url);
       this._downloadProgressInterval = setInterval(this._pollDownload, 50);

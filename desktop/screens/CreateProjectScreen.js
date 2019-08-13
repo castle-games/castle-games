@@ -101,6 +101,7 @@ class CreateProjectScreen extends React.Component {
     selectedProjectDirectoryName: null,
     isProjectValidToCreate: true,
     createdProjectUrl: null,
+    error: null,
   };
 
   componentDidMount() {
@@ -132,6 +133,7 @@ class CreateProjectScreen extends React.Component {
     this.setState({
       step: 'choose-template',
       selectedTemplate: null,
+      error: null,
     });
   };
 
@@ -139,6 +141,7 @@ class CreateProjectScreen extends React.Component {
     this.setState({
       step: 'configure-project',
       selectedTemplate: game,
+      error: null,
     });
   };
 
@@ -176,8 +179,17 @@ class CreateProjectScreen extends React.Component {
         await ExecNode.createDirectoryAsync(projectPath);
         createdProjectUrl = await NativeUtil.createProjectAtPathAsync(projectPath);
         createdProjectUrl = await this._handleConfigureProjectAtPath(projectPath);
-      } catch (_) {}
-      this._handleProjectFinishedCreating(createdProjectUrl);
+      } catch (e) {
+        createdProjectUrl = null;
+        this.setState({
+          step: 'create-project',
+          error:
+            'Castle was not able to write your starter files. Does the path you chose already exist?',
+        });
+      }
+      if (createdProjectUrl) {
+        this._handleProjectFinishedCreating(createdProjectUrl);
+      }
     } else {
       this.setState({
         step: 'create-project',
@@ -202,6 +214,7 @@ class CreateProjectScreen extends React.Component {
     this.setState({
       step: 'finished',
       createdProjectUrl,
+      error: null,
     });
   };
 
@@ -298,6 +311,7 @@ class CreateProjectScreen extends React.Component {
       <React.Fragment>
         <div className={STYLES_SECTION_TITLE}>Creating your project...</div>
         <CreateProjectProgressIndicator
+          initialError={this.state.error}
           projectName={this.state.selectedProjectName}
           fromTemplate={this.state.selectedTemplate}
           toDirectory={this._getFinalProjectPath()}
