@@ -13,31 +13,7 @@ import GLLoaderScreen from '~/isometric/components/GLLoaderScreen';
 import GameWindow from '~/native/gamewindow';
 import Logs from '~/common/logs';
 import Game from '~/components/game/Game';
-
-const jsUserToLuaUser = async (user) =>
-  user
-    ? {
-        userId: user.userId,
-        username: user.username,
-        name: user.name,
-        photoUrl: user.photo ? user.photo.url : undefined,
-      }
-    : undefined;
-
-const jsPostToLuaPost = async ({ postId, creator, media }) => ({
-  postId,
-  creator: await jsUserToLuaUser(creator),
-  mediaUrl: media ? media.url : undefined,
-  data: await Actions.postDataAsync({ postId }),
-});
-
-const jsGameToLuaGame = async ({ gameId, owner, title, url, description }) => ({
-  gameId,
-  owner: await jsUserToLuaUser(owner),
-  title,
-  url,
-  description,
-});
+import { jsUserToLuaUser, jsPostToLuaPost, jsGameToLuaGame } from '~/common/bridge';
 
 const STYLES_CONTAINER = css`
   width: 100%;
@@ -142,7 +118,7 @@ class GameScreen extends React.Component {
 
   _prepareInitialGameData = async (screenSettings) => {
     // Prepare the Lua format of the post
-    const luaPost = this.props.post ? await jsPostToLuaPost(this.props.post) : undefined;
+    const luaPost = this.props.post ? await jsPostToLuaPost(this.props.post, { data: true }) : undefined;
 
     return {
       graphics: {

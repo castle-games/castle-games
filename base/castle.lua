@@ -384,6 +384,13 @@ function castle.post.create(options)
     }
 end
 
+function castle.post.get(options)
+    return bridge.js.postGet {
+        postId = options.postId,
+        data = options.data,
+    }
+end
+
 
 -- multiplayer
 
