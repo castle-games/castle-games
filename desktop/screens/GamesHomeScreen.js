@@ -57,11 +57,6 @@ const STYLES_REFRESH_BUTTON_ACTIVE = css`
   background: #c0c0c0;
 `;
 
-const STYLES_REFRESH_BUTTON_INACTIVE = css`
-  color: #a0a0a0;
-  border: 1px solid #a0a0a0;
-`;
-
 const STYLES_SUB_NAVIGATION_ITEM_ACTIVE = css`
   color: black;
 `;
@@ -144,13 +139,15 @@ class GamesHomeScreen extends React.Component {
   }
 
   _refreshHomepage = async () => {
-    if (this.state.subNavMode !== 'home') {
-      return;
+    this.setState({ refreshingHomepage: true });
+
+    if (this.state.subNavMode === 'home') {
+      this.props.reloadPosts();
+      await this.props.reloadTrendingGames();
+    } else if (this.state.subNavMode === 'allGames') {
+      await this.props.loadAllGames();
     }
 
-    this.setState({ refreshingHomepage: true });
-    this.props.reloadPosts();
-    await this.props.reloadTrendingGames();
     this.setState({ refreshingHomepage: false });
   };
 
@@ -239,11 +236,9 @@ class GamesHomeScreen extends React.Component {
             </div>
             <div
               className={
-                this.state.isHoveringOnRefresh && this.state.subNavMode === 'home'
+                this.state.isHoveringOnRefresh
                   ? `${STYLES_REFRESH_BUTTON} ${STYLES_REFRESH_BUTTON_ACTIVE}`
-                  : this.state.subNavMode === 'home'
-                  ? STYLES_REFRESH_BUTTON
-                  : `${STYLES_REFRESH_BUTTON} ${STYLES_REFRESH_BUTTON_INACTIVE}`
+                  : STYLES_REFRESH_BUTTON
               }
               onMouseEnter={() => this._handleSetHoverOnRefresh(true)}
               onMouseLeave={() => this._handleSetHoverOnRefresh(false)}
