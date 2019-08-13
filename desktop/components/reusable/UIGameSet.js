@@ -85,21 +85,23 @@ export default class UIGameSet extends React.Component {
         {rowIndices.map((_, j) => {
           return (
             <div className={STYLES_GAME_ROW} key={`${j}-whichRow`}>
-              {this._gamesForRow(j).map((m, i) => {
-                const key = m.key ? m.key : m.gameId ? m.gameId : m.url;
-                return (
-                  <div className={STYLES_CELL_ITEM} key={`${key}-${i}`}>
-                    <UIGameCell
-                      onGameSelect={this.props.onGameSelect}
-                      onShowGameInfo={this.props.onShowGameInfo}
-                      onGameUpdate={this.props.onGameUpdate}
-                      onUserSelect={this.props.onUserSelect}
-                      src={m.coverImage && m.coverImage.url}
-                      game={m}
-                    />
-                  </div>
-                );
-              })}
+              {this.props.gameItems !== null
+                ? this._gamesForRow(j).map((m, i) => {
+                    const key = m.key ? m.key : m.gameId ? m.gameId : m.url;
+                    return (
+                      <div className={STYLES_CELL_ITEM} key={`${key}-${i}`}>
+                        <UIGameCell
+                          onGameSelect={this.props.onGameSelect}
+                          onShowGameInfo={this.props.onShowGameInfo}
+                          onGameUpdate={this.props.onGameUpdate}
+                          onUserSelect={this.props.onUserSelect}
+                          src={m.coverImage && m.coverImage.url}
+                          game={m}
+                        />
+                      </div>
+                    );
+                  })
+                : null}
             </div>
           );
         })}
