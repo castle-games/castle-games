@@ -119,7 +119,7 @@ class GamesHomeScreen extends React.Component {
 
   async componentDidMount() {
     this._mounted = true;
-    this.props.reloadPosts();
+    this._refreshHomepage();
     if (!this.props.allGames || this.props.allGames.length < 35) {
       // no games have been loaded yet, preload the first ~page
       this.props.loadAllGames(35);
