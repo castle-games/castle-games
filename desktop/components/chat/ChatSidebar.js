@@ -43,7 +43,10 @@ const THEME = {
   reactionItemColor: Constants.colors.white,
   reactionItemBackground: '#232323',
   reactionItemSelectedBackground: '#230023',
-  hideEvents: true, // TODO: hack
+  hideEvents: true, // TODO: hack,
+  bylineSize: 12,
+  bodySize: 11,
+  bodyLineHeight: `14px`,
 };
 
 class ChatSidebar extends React.Component {

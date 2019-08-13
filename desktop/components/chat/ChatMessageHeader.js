@@ -35,7 +35,9 @@ export default class ChatMessageHeader extends React.Component {
 
   render() {
     return (
-      <div className={STYLES_AUTHOR_TIMESTAMP} style={{ color: this.props.theme.textColor }}>
+      <div
+        className={STYLES_AUTHOR_TIMESTAMP}
+        style={{ color: this.props.theme.textColor, fontSize: this.props.theme.bylineSize }}>
         <span className={STYLES_AUTHOR} onClick={this.props.onClick}>
           {this.props.author}
         </span>

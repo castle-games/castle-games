@@ -39,6 +39,7 @@ const STYLES_AUTHOR_MESSAGE = css`
 export default class ChatMessageElement extends React.Component {
   static defaultProps = {
     showAuthor: true,
+    theme: {},
   };
 
   render() {
@@ -77,8 +78,8 @@ export default class ChatMessageElement extends React.Component {
             className={STYLES_AUTHOR_MESSAGE}
             style={{
               color: this.props.theme.textColor,
-              fontSize: isEmojiMessage ? '40px' : null,
-              lineHeight: isEmojiMessage ? '48px' : null,
+              fontSize: isEmojiMessage ? '40px' : this.props.theme.bodySize,
+              lineHeight: isEmojiMessage ? '48px' : this.props.theme.bodyLineHeight,
               marginTop: showAuthor ? '2px' : null,
             }}>
             <UIMessageBody
