@@ -50,9 +50,11 @@ const STYLES_CATEGORY_SECTION = css`
 
 const STYLES_CATEGORY_TITLE = css`
   font-family: ${Constants.REFACTOR_FONTS.system};
-  font-size: 14px;
-  margin: 0 0 4px 4px;
+  font-size: 11px;
+  margin: 4px 0 4px 4px;
   cursor: default;
+  font-weight: 600;
+  text-transform: uppercase;
 `;
 
 const STYLES_CATEGORY_LIST = css`
