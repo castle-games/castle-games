@@ -22,11 +22,8 @@ const STYLES_NOTICE = css`
 `;
 
 const STYLES_SUBDUED = css`
-  display: flex;
   width: 100%;
-  align-items: flex-start;
-  justify-content: space-between;
-  padding-left: 8px;
+  display: flex;
 `;
 
 const STYLES_LEFT = css`
@@ -96,23 +93,27 @@ class NoticeMessage extends React.Component {
 }
 
 class SubduedMessage extends React.Component {
+  static defaultProps = {
+    theme: {},
+  };
+
   render() {
-    const { message } = this.props;
+    const { message, theme } = this.props;
 
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_SUBDUED}>
-          <span className={STYLES_RIGHT}>
-            <div className={STYLES_SUBDUED_MESSAGE}>
-              <UIMessageBody
-                body={message.body}
-                reactions={message.reactions}
-                theme={this.props.theme}
-                expandAttachments={false}
-                onSelectReaction={this.props.onSelectReaction}
-              />
-            </div>
-          </span>
+          <div
+            className={STYLES_SUBDUED_MESSAGE}
+            style={{ fontSize: theme.subduedFontSize, lineHeight: theme.subduedLineHeight }}>
+            <UIMessageBody
+              body={message.body}
+              reactions={message.reactions}
+              theme={this.props.theme}
+              expandAttachments={false}
+              onSelectReaction={this.props.onSelectReaction}
+            />
+          </div>
         </div>
       </div>
     );

@@ -47,6 +47,8 @@ const THEME = {
   bylineSize: 12,
   bodySize: 11,
   bodyLineHeight: `14px`,
+  subduedFontSize: `11px`,
+  subduedLineHeight: `14px`,
 };
 
 class ChatSidebar extends React.Component {
