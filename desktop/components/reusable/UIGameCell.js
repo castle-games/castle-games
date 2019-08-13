@@ -280,7 +280,7 @@ export default class UIGameCell extends React.Component {
         onMouseEnter={() => this._handleToggleHoverOnPlay(true)}
         onMouseLeave={this._handleMouseLeave}
         onClick={this._handleGameSelect}>
-        <div className={STYLES_TOP_SECTION}>
+        <div className={STYLES_TOP_SECTION} style={{ width: this.props.theme.embedWidth }}>
           {shouldShowGameInfo ? (
             <div className={STYLES_DESCRIPTION_SECTION}>
               <div className={STYLES_BYLINE} onClick={() => this.props.onUserSelect(game.owner)}>

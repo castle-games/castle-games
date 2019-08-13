@@ -8,9 +8,12 @@ import { css } from 'react-emotion';
 
 import UINavigationLink from '~/components/reusable/UINavigationLink';
 
+// TODO(jim): fix colors.
 const STYLES_HEADER = css`
   color: ${Constants.colors.white};
   font-family: ${Constants.REFACTOR_FONTS.system};
+  background: #242424;
+  border-bottom: 1px solid #333;
   width: 100%;
   flex-shrink: 0;
   overflow: hidden;
@@ -52,17 +55,17 @@ export default class ChatSidebarHeader extends React.Component {
     let selectedStyles = isLobbySelected
       ? null
       : {
-          background: '#000000',
+          color: 'magenta',
         };
 
     return (
       <UINavigationLink
         style={{
-          padding: '0 16px 0 16px',
+          padding: '0 0 0 16px',
           height: 24,
           display: 'inline-flex',
           alignItems: 'center',
-          maxWidth: 128,
+          maxWidth: 152,
           whiteSpace: 'nowrap',
           overflow: 'hidden',
           textOverflow: 'ellipsis',
@@ -81,14 +84,14 @@ export default class ChatSidebarHeader extends React.Component {
     let onClick = isGameAvailable ? this.props.onSelectLobby : null;
     let selectedStyles = isLobbySelected
       ? {
-          background: '#000000',
+          color: 'magenta',
         }
       : null;
 
     return (
       <UINavigationLink
         style={{
-          padding: '0 16px 0 16px',
+          padding: '0 0 0 24px',
           height: 24,
           display: 'inline-flex',
           alignItems: 'center',
@@ -102,7 +105,7 @@ export default class ChatSidebarHeader extends React.Component {
 
   render() {
     return (
-      <header className={STYLES_HEADER} style={{ background: `#171717` }}>
+      <header className={STYLES_HEADER} style={{ background: `#242424` }}>
         <div className={STYLES_HEADER_LEFT}>
           {this._renderGameChatControl()}
           {this._renderLobbyControl()}
