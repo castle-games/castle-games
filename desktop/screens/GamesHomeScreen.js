@@ -42,21 +42,6 @@ const STYLES_SUB_NAVIGATION_ITEM = css`
   cursor: pointer;
 `;
 
-const STYLES_REFRESH_BUTTON = css`
-  color: black;
-  border: 1px solid black;
-  border-radius: 3px;
-  margin: 0px 32px 16px 24px;
-  margin-left: auto;
-  padding: 4px 4px 0px 4px;
-
-  cursor: pointer;
-`;
-
-const STYLES_REFRESH_BUTTON_ACTIVE = css`
-  background: #c0c0c0;
-`;
-
 const STYLES_SUB_NAVIGATION_ITEM_ACTIVE = css`
   color: black;
 `;
@@ -104,7 +89,6 @@ class GamesHomeScreen extends React.Component {
     subNavMode: 'home',
     isLoadingPosts: true,
     isLoadingAllGames: true,
-    isHoveringOnRefresh: false,
     isHoveringOnHome: false,
     isHoveringOnAllGames: false,
     refreshingHomepage: false,
@@ -158,10 +142,6 @@ class GamesHomeScreen extends React.Component {
     this.setState({ subNavMode: newSubNavMode }, () => {
       this._refreshHomepage();
     });
-  };
-
-  _handleSetHoverOnRefresh = (shouldSetHovering) => {
-    this.setState({ isHoveringOnRefresh: shouldSetHovering });
   };
 
   _handleSetHoverOnHome = (shouldSetHovering) => {
@@ -234,21 +214,6 @@ class GamesHomeScreen extends React.Component {
               onMouseLeave={() => this._handleSetHoverOnAllGames(false)}
               onClick={() => this._changeSubNavMode('allGames')}>
               All Games
-            </div>
-            <div
-              className={
-                this.state.isHoveringOnRefresh
-                  ? `${STYLES_REFRESH_BUTTON} ${STYLES_REFRESH_BUTTON_ACTIVE}`
-                  : STYLES_REFRESH_BUTTON
-              }
-              onMouseEnter={() => this._handleSetHoverOnRefresh(true)}
-              onMouseLeave={() => this._handleSetHoverOnRefresh(false)}
-              onClick={() => this._refreshHomepage()}>
-              {this.state.refreshingHomepage ? (
-                <SVG.Ellipsis size={'24px'} />
-              ) : (
-                <SVG.Refresh size={'24px'} />
-              )}
             </div>
           </div>
           <div className={STYLES_GAMES_CONTAINER}>
