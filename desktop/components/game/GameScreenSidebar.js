@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as Window from '~/common/window';
+import * as NativeUtil from '~/native/nativeutil';
 
 import { css } from 'react-emotion';
 
@@ -78,6 +79,7 @@ export default class GameScreenSidebar extends React.Component {
     window.addEventListener('mouseup', this._handleMouseUp);
     window.addEventListener('mousemove', this._handleMouseMove);
     window.addEventListener('CASTLE_TOOLS_UPDATE', this._handleUpdate);
+    NativeUtil.sendLuaEvent('CASTLE_TOOLS_NEEDS_SYNC', {});
   }
 
   componentWillUnmount() {
