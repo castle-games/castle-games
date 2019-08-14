@@ -341,6 +341,20 @@ class ToolCodeEditor extends React.PureComponent {
                   }),
                 });
               }}
+              editorDidMount={(editor) => {
+                editor.onDidChangeCursorPosition(({ position }) => {
+                  const model = editor.getModel();
+                  this.setState({
+                    lastSentEventId: sendEvent(element.pathId, {
+                      type: 'onChangeCursorPosition',
+                      line: position.lineNumber,
+                      column: position.column,
+                      offset: model.getOffsetAt(position),
+                      word: model.getWordAtPosition(position).word,
+                    }),
+                  });
+                });
+              }}
             />
           </div>
         </div>

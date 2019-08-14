@@ -287,7 +287,7 @@ function ui.codeEditor(label, value, props)
     assert(type(label) == 'string', '`ui.codeEditor` needs a string `label`')
     assert(type(value) == 'string', '`ui.codeEditor` needs a string `value`')
 
-    local c = addChild('codeEditor', label, without(merge({ label = label, value = value }, props), 'onChange'), true)
+    local c = addChild('codeEditor', label, without(merge({ label = label, value = value }, props), 'onChange', 'onChangeCursorPosition'), true)
 
     local newValue = value
     local es = pendingEvents[c.pathId]
@@ -298,6 +298,16 @@ function ui.codeEditor(label, value, props)
                     newValue = props.onChange(e.value) or e.value
                 else
                     newValue = e.value
+                end
+            end
+            if e.type == 'onChangeCursorPosition' then
+                if props and props.onChangeCursorPosition then
+                    props.onChangeCursorPosition({
+                        line = e.line,
+                        column = e.column,
+                        offset = e.offset,
+                        word = e.word,
+                    })
                 end
             end
         end
