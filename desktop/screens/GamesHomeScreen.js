@@ -155,8 +155,9 @@ class GamesHomeScreen extends React.Component {
     if (newSubNavMode === 'allGames') {
       this.setState({ isLoadingAllGames: true });
     }
-    this.setState({ subNavMode: newSubNavMode });
-    this._refreshHomepage();
+    this.setState({ subNavMode: newSubNavMode }, () => {
+      this._refreshHomepage();
+    });
   };
 
   _handleSetHoverOnRefresh = (shouldSetHovering) => {
