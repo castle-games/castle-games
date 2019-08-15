@@ -5,6 +5,7 @@
 
 local copas = require 'copas'
 local http = require 'copas.http'
+http.SSLPROTOCOL = 'tlsv1_2'
 local limit = require 'copas.limit'
 local sqlite3 = require 'lsqlite3'
 local serpent = require 'serpent'
@@ -209,7 +210,6 @@ do
                         local sink = {}
                         local _, httpCode, headers = network.request {
                             url = apiUrl,
-                            protocol = 'tlsv1_2',
                             headers = sendHeaders,
                             sink = ltn12.sink.table(sink),
                         }
@@ -229,7 +229,6 @@ do
                         local sink = {}
                         network.request {
                             url = commitsPageUrl,
-                            protocol = 'tlsv1_2',
                             sink = ltn12.sink.table(sink),
                         }
                         local response = table.concat(sink)

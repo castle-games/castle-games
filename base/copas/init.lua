@@ -369,6 +369,9 @@ function copas.dohandshake(skt, sslt)
   local nskt, err = ssl.wrap(skt, sslt)
   if not nskt then return error(err) end
   local queue
+  if sslt.sni_host then
+    nskt:sni(sslt.sni_host)
+  end
   nskt:settimeout(0)
   repeat
     local success, err = nskt:dohandshake()
@@ -418,9 +421,10 @@ local _skt_mt_tcp = {
 
                    -- TODO: socket.connect is a shortcut, and must be provided with an alternative
                    -- if ssl parameters are available, it will also include a handshake
-                   connect = function(self, ...)
-                     local res, err = copas.connect(self.socket, ...)
+                   connect = function(self, host, ...)
+                     local res, err = copas.connect(self.socket, host, ...)
                      if res and self.ssl_params then
+                      self.ssl_params.sni_host = host
                        res, err = self:dohandshake()
                      end  
                      return res, err
