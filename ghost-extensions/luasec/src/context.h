@@ -2,9 +2,9 @@
 #define LSEC_CONTEXT_H
 
 /*--------------------------------------------------------------------------
- * LuaSec 0.8
+ * LuaSec 0.7
  *
- * Copyright (C) 2006-2019 Bruno Silvestre
+ * Copyright (C) 2006-2017 Bruno Silvestre
  *
  *--------------------------------------------------------------------------*/
 
@@ -24,7 +24,6 @@ typedef struct t_context_ {
   SSL_CTX *context;
   lua_State *L;
   DH *dh_param;
-  void *alpn;
   int mode;
 } t_context;
 typedef t_context* p_context;

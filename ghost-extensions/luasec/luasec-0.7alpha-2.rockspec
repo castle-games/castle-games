@@ -1,8 +1,8 @@
 package = "LuaSec"
-version = "0.8-1"
+version = "0.7alpha-2"
 source = {
-   url = "https://github.com/brunoos/luasec/archive/luasec-0.8.tar.gz",
-   dir = "luasec-luasec-0.8"
+   url = "https://github.com/brunoos/luasec/archive/luasec-0.7alpha.tar.gz",
+   dir = "luasec-luasec-0.7alpha"
 }
 description = {
    summary = "A binding for OpenSSL library to provide TLS/SSL communication over LuaSocket.",

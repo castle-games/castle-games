@@ -1,7 +1,7 @@
 /*--------------------------------------------------------------------------
- * LuaSec 0.8
+ * LuaSec 0.7alpha
  *
- * Copyright (C) 2006-2019 Bruno Silvestre
+ * Copyright (C) 2006-2017 Bruno Silvestre
  *
  *--------------------------------------------------------------------------*/
 
@@ -10,7 +10,7 @@
 
 #include <lua.h>
 
-#ifndef OPENSSL_NO_EC
+#ifndef OPENSSL_NO_ECDH
 #include <openssl/ec.h>
 
 EC_KEY *lsec_find_ec_key(lua_State *L, const char *str);

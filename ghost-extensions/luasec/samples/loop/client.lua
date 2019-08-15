@@ -23,8 +23,6 @@ while true do
    assert( peer:dohandshake() )
    --]]
 
-   peer:getpeercertificate():extensions()
-
    print(peer:receive("*l"))
    peer:close()
 end

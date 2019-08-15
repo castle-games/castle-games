@@ -1,9 +1,9 @@
 /*--------------------------------------------------------------------------
- * LuaSec 0.8
+ * LuaSec 0.7alpha
  *
- * Copyright (C) 2014-2019 Kim Alvefur, Paul Aurich, Tobias Markmann, 
+ * Copyright (C) 2014-2017 Kim Alvefur, Paul Aurich, Tobias Markmann, 
  *                         Matthew Wild.
- * Copyright (C) 2006-2019 Bruno Silvestre.
+ * Copyright (C) 2006-2017 Bruno Silvestre.
  *
  *--------------------------------------------------------------------------*/
 
@@ -11,7 +11,7 @@
 #include <string.h>
 
 #if defined(WIN32)
-#include <winsock2.h>
+#include <Winsock2.h>
 #endif
 
 #include <openssl/ssl.h>
@@ -22,17 +22,17 @@
 #include <lua.h>
 #include <lauxlib.h>
 
-#include <luasocket/io.h>
-#include <luasocket/buffer.h>
-#include <luasocket/timeout.h>
-#include <luasocket/socket.h>
+#include "luasocket/io.h"
+#include "luasocket/buffer.h"
+#include "luasocket/timeout.h"
+#include "luasocket/socket.h"
 
 #include "x509.h"
 #include "context.h"
 #include "ssl.h"
 
 
-#if (defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x2070000fL) || (OPENSSL_VERSION_NUMBER < 0x1010000fL)
+#if defined(LIBRESSL_VERSION_NUMBER) || OPENSSL_VERSION_NUMBER<0x10100000L
 #define SSL_is_server(s) (s->server)
 #define SSL_up_ref(ssl)  CRYPTO_add(&(ssl)->references, 1, CRYPTO_LOCK_SSL)
 #define X509_up_ref(c)   CRYPTO_add(&c->references, 1, CRYPTO_LOCK_X509)
@@ -302,7 +302,9 @@ static int meth_create(lua_State *L)
   SSL_set_fd(ssl->ssl, (int)SOCKET_INVALID);
   SSL_set_mode(ssl->ssl, SSL_MODE_ENABLE_PARTIAL_WRITE | 
     SSL_MODE_ACCEPT_MOVING_WRITE_BUFFER);
+#if defined(SSL_MODE_RELEASE_BUFFERS)
   SSL_set_mode(ssl->ssl, SSL_MODE_RELEASE_BUFFERS);
+#endif
   if (mode == LSEC_MODE_SERVER)
     SSL_set_accept_state(ssl->ssl);
   else
@@ -380,19 +382,8 @@ static int meth_setfd(lua_State *L)
  */
 static int meth_handshake(lua_State *L)
 {
-  int err;
   p_ssl ssl = (p_ssl)luaL_checkudata(L, 1, "SSL:Connection");
-  p_context ctx = (p_context)SSL_CTX_get_app_data(SSL_get_SSL_CTX(ssl->ssl));
-  ctx->L = L;
-  err = handshake(ssl);
-  if (ctx->dh_param) {
-    DH_free(ctx->dh_param);
-    ctx->dh_param = NULL;
-  }
-  if (ctx->alpn) {
-    free(ctx->alpn);
-    ctx->alpn = NULL;
-  }
+  int err = handshake(ssl);
   if (err == IO_DONE) {
     lua_pushboolean(L, 1);
     return 1;
@@ -803,22 +794,9 @@ static int meth_getsniname(lua_State *L)
   return 1;
 }
 
-static int meth_getalpn(lua_State *L)
-{
-  unsigned len;
-  const unsigned char *data;
-  p_ssl ssl = (p_ssl)luaL_checkudata(L, 1, "SSL:Connection");
-  SSL_get0_alpn_selected(ssl->ssl, &data, &len);
-  if (data == NULL && len == 0)
-    lua_pushnil(L);
-  else
-    lua_pushlstring(L, (const char*)data, len);
-  return 1;
-}
-
 static int meth_copyright(lua_State *L)
 {
-  lua_pushstring(L, "LuaSec 0.8 - Copyright (C) 2006-2019 Bruno Silvestre, UFG"
+  lua_pushstring(L, "LuaSec 0.7alpha - Copyright (C) 2006-2017 Bruno Silvestre, UFG"
 #if defined(WITH_LUASOCKET)
                     "\nLuaSocket 3.0-RC1 - Copyright (C) 2004-2013 Diego Nehab"
 #endif
@@ -833,7 +811,6 @@ static int meth_copyright(lua_State *L)
  */
 static luaL_Reg methods[] = {
   {"close",               meth_close},
-  {"getalpn",             meth_getalpn},
   {"getfd",               meth_getfd},
   {"getfinished",         meth_getfinished},
   {"getpeercertificate",  meth_getpeercertificate},
