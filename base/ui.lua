@@ -25,6 +25,7 @@ root.panes.DEFAULT = {
     type = 'pane',
     props = {
         name = 'DEFAULT',
+        visible = true,
     },
 }
 
@@ -215,6 +216,29 @@ local function without(t, w, ...)
         end
     end
     return without(r, ...)
+end
+
+
+--
+-- Panes
+--
+
+function ui.setVisible(...)
+    local name, visible
+    local nArgs = select('#', ...)
+    if nArgs == 2 then
+        name, visible = ...
+    elseif nArgs == 1 then
+        name, visible = 'DEFAULT', ...
+    else
+        error('`ui.setVisible` takes 1 or 2 arguments')
+    end
+    assert(root.panes[name], "no pane named '" .. name .. "'").props.visible = visible
+end
+
+function ui.getVisible(name)
+    name = name or 'DEFAULT'
+    return assert(root.panes[name], "no pane named '" .. name .. "'").props.visible
 end
 
 

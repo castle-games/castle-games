@@ -109,7 +109,9 @@ const STYLES_PANE_CONTAINER = css`
 class ToolPane extends React.PureComponent {
   render() {
     const { element } = this.props;
-    return <div className={STYLES_PANE_CONTAINER}>{renderChildren(element)}</div>;
+    return element.props.visible ? (
+      <div className={STYLES_PANE_CONTAINER}>{renderChildren(element)}</div>
+    ) : null;
   }
 }
 elementTypes['pane'] = ToolPane;
