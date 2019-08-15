@@ -169,6 +169,7 @@ export default class GameScreenDeveloperSidebar extends React.Component {
   componentWillUnmount() {
     window.removeEventListener('mouseup', this._handleMouseUp);
     window.removeEventListener('mousemove', this._handleMouseMove);
+    this.props.setters.setIsMultiplayerCodeUploadEnabled(false);
   }
 
   _handleMouseDown = (e, resizing) => {
