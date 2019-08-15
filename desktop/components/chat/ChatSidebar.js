@@ -1,21 +1,13 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
-import * as ChatActions from '~/common/actions-chat';
 import * as ChatUtilities from '~/common/chat-utilities';
-import * as NativeUtil from '~/native/nativeutil';
-import * as SVG from '~/components/primitives/svg';
-import * as Strings from '~/common/strings';
 
 import { css } from 'react-emotion';
 
-import { ConnectionStatus } from 'castle-chat-lib';
-import { CurrentUserContext } from '~/contexts/CurrentUserContext';
-import { NavigatorContext, NavigationContext } from '~/contexts/NavigationContext';
+import { NavigationContext } from '~/contexts/NavigationContext';
 import { ChatContext } from '~/contexts/ChatContext';
-import { UserPresenceContext } from '~/contexts/UserPresenceContext';
 
-import ChatMessages from '~/components/chat/ChatMessages';
-import ChatInputControl from '~/components/chat/ChatInputControl';
+import ChatChannel from '~/components/chat/ChatChannel';
 import ChatSidebarHeader from '~/components/chat/ChatSidebarHeader';
 
 const STYLES_CONTAINER_BASE = css`
@@ -106,19 +98,6 @@ class ChatSidebar extends React.Component {
     }
   };
 
-  _handleSendMessage = (message) => {
-    const channelId = this._getChannelIdVisible();
-    if (channelId) {
-      this.props.chat.sendMessage(channelId, message);
-    }
-  };
-
-  _handleSelectReaction = (messageReactedTo, emojiShortName) => {
-    const { chat } = this.props;
-    const channelId = this._getChannelIdVisible();
-    chat.toggleReaction(channelId, messageReactedTo, emojiShortName);
-  };
-
   render() {
     const { mode } = this.state;
     const channelId = this._getChannelIdVisible();
@@ -130,9 +109,6 @@ class ChatSidebar extends React.Component {
     if (this.props.navigation.isFullScreen) {
       return null;
     }
-
-    const messages = this.props.chat.channels[channelId].messages;
-    const name = this.props.chat.channels[channelId].name;
 
     return (
       <div
@@ -146,22 +122,12 @@ class ChatSidebar extends React.Component {
           onSelectLobby={this._handleSelectLobby}
           onSelectGameChannel={this._handleSelectGameChannel}
         />
-        <ChatMessages
+        <ChatChannel
           isSidebar
-          viewer={this.props.viewer}
-          messages={messages}
-          navigator={this.props.navigator}
-          userIdToUser={this.props.userPresence.userIdToUser}
-          onSelectReaction={this._handleSelectReaction}
+          chat={this.props.chat}
+          channelId={channelId}
           theme={THEME}
           size="24px"
-        />
-        <ChatInputControl
-          isSidebar
-          placeholder={`Message #${name}`}
-          addUsers={this.props.userPresence.addUsers}
-          onSendMessage={this._handleSendMessage}
-          theme={THEME}
         />
       </div>
     );
@@ -171,40 +137,24 @@ class ChatSidebar extends React.Component {
 export default class ChatSidebarWithContext extends React.Component {
   render() {
     return (
-      <CurrentUserContext.Consumer>
-        {(currentUser) => (
-          <UserPresenceContext.Consumer>
-            {(userPresence) => (
-              <ChatContext.Consumer>
-                {(chat) => (
-                  <NavigationContext.Consumer>
-                    {(navigation) => {
-                      const gameChannel = chat.findChannelForGame(navigation.game);
-                      const lobbyChannel = chat.findChannel(ChatUtilities.EVERYONE_CHANNEL_NAME);
-                      return (
-                        <NavigatorContext.Consumer>
-                          {(navigator) => (
-                            <ChatSidebar
-                              viewer={currentUser.user}
-                              currentUser={currentUser}
-                              navigator={navigator}
-                              navigation={navigation}
-                              userPresence={userPresence}
-                              chat={chat}
-                              gameChannel={gameChannel}
-                              lobbyChannel={lobbyChannel}
-                            />
-                          )}
-                        </NavigatorContext.Consumer>
-                      );
-                    }}
-                  </NavigationContext.Consumer>
-                )}
-              </ChatContext.Consumer>
-            )}
-          </UserPresenceContext.Consumer>
+      <ChatContext.Consumer>
+        {(chat) => (
+          <NavigationContext.Consumer>
+            {(navigation) => {
+              const gameChannel = chat.findChannelForGame(navigation.game);
+              const lobbyChannel = chat.findChannel(ChatUtilities.EVERYONE_CHANNEL_NAME);
+              return (
+                <ChatSidebar
+                  navigation={navigation}
+                  chat={chat}
+                  gameChannel={gameChannel}
+                  lobbyChannel={lobbyChannel}
+                />
+              );
+            }}
+          </NavigationContext.Consumer>
         )}
-      </CurrentUserContext.Consumer>
+      </ChatContext.Consumer>
     );
   }
 }
