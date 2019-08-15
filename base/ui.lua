@@ -290,7 +290,7 @@ function ui.codeEditor(label, value, props)
     local newProps = without(merge({ label = label, value = value }, props), 'onChange', 'onChangeCursorPosition')
 
     if props.onChangeCursorPosition then
-        newProps.hasOnChangeCursorPosition = true
+        newProps.enableOnChangeCursorPosition = true
     end
 
     local c = addChild('codeEditor', label, newProps, true)

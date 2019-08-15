@@ -39,6 +39,24 @@ import '~/components/game/Tools.min.css';
 // Infrastructure
 //
 
+const objectToArray = (input) => {
+  if (Array.isArray(input)) {
+    return input;
+  }
+
+  const output = [];
+  let i = '0' in input ? 0 : 1;
+  for (;;) {
+    const strI = i.toString();
+    if (!(strI in input)) {
+      break;
+    }
+    output.push(input[strI]);
+    ++i;
+  }
+  return output;
+};
+
 let nextEventId = 1;
 const sendEvent = (pathId, event) => {
   const eventId = nextEventId++;
@@ -255,6 +273,7 @@ const STYLES_MONACO_CONTAINER = css`
 class ToolCodeEditor extends React.PureComponent {
   state = {
     value: this.props.element.props.value,
+    completions: this.props.element.props.completions,
     lastSentEventId: null,
   };
 
@@ -269,6 +288,7 @@ class ToolCodeEditor extends React.PureComponent {
     ) {
       return {
         value: props.element.props.value,
+        completions: props.element.props.completions,
       };
     }
     return null;
@@ -341,8 +361,26 @@ class ToolCodeEditor extends React.PureComponent {
                   }),
                 });
               }}
+              editorWillMount={(monaco) => {
+                if (this.props.element.props.enableCompletions) {
+                  monaco.languages.registerCompletionItemProvider('lua', {
+                    provideCompletionItems: () => ({
+                      suggestions: objectToArray(this.state.completions).map(
+                        ({ label, insertText, documentation, kind, preselect, sortText }) => ({
+                          label,
+                          insertText: typeof insertText === 'string' ? insertText : label,
+                          documentation,
+                          kind: monaco.languages.CompletionItemKind[kind],
+                          preselect,
+                          sortText,
+                        })
+                      ),
+                    }),
+                  });
+                }
+              }}
               editorDidMount={(editor) => {
-                if (this.props.element.props.hasOnChangeCursorPosition) {
+                if (this.props.element.props.enableOnChangeCursorPosition) {
                   editor.onDidChangeCursorPosition(({ position }) => {
                     const model = editor.getModel();
                     const offset = model.getOffsetAt(position);
@@ -545,19 +583,12 @@ class ToolDropdown extends React.PureComponent {
   render() {
     const { element } = this.props;
 
-    let items = (element.props && element.props.items) || [];
-    if (!Array.isArray(items)) {
-      let arrayItems = [];
-      Object.keys(items).map((key) => (arrayItems[parseInt(key, 10) - 1] = items[key]));
-      items = arrayItems;
-    }
-
     return (
       <Carbon>
         <Dropdown
           {...element.props}
           id={element.pathId}
-          items={items}
+          items={objectToArray(element.props && element.props.items)}
           selectedItem={this.state.value}
           titleText={element.props && !element.props.hideLabel ? element.props.label : null}
           label={
@@ -882,13 +913,6 @@ class ToolRadioButtonGroup extends React.PureComponent {
       );
     }
 
-    let items = (element.props && element.props.items) || [];
-    if (!Array.isArray(items)) {
-      let arrayItems = [];
-      Object.keys(items).map((key) => (arrayItems[parseInt(key, 10) - 1] = items[key]));
-      items = arrayItems;
-    }
-
     return (
       <Carbon>
         <div className="bx--form-item">
@@ -900,7 +924,7 @@ class ToolRadioButtonGroup extends React.PureComponent {
                 ? 'bx--radio-button-group'
                 : 'bx--radio-button-group--vertical'
             }>
-            {items.map((item) => (
+            {objectToArray(element.props && element.props.items).map((item) => (
               <RadioButton
                 key={item}
                 item={item}
