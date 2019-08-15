@@ -364,18 +364,28 @@ class ToolCodeEditor extends React.PureComponent {
               editorWillMount={(monaco) => {
                 if (this.props.element.props.enableCompletions) {
                   monaco.languages.registerCompletionItemProvider('lua', {
-                    provideCompletionItems: () => ({
-                      suggestions: objectToArray(this.state.completions).map(
-                        ({ label, insertText, documentation, kind, preselect, sortText }) => ({
-                          label,
-                          insertText: typeof insertText === 'string' ? insertText : label,
-                          documentation,
-                          kind: monaco.languages.CompletionItemKind[kind],
-                          preselect,
-                          sortText,
-                        })
-                      ),
-                    }),
+                    provideCompletionItems: async () => {
+                      while (
+                        !(
+                          this.state.lastSentEventId === null ||
+                          this.props.element.lastReportedEventId == this.state.lastSentEventId
+                        )
+                      ) {
+                        await Actions.delay(40);
+                      }
+                      return {
+                        suggestions: objectToArray(this.state.completions).map(
+                          ({ label, insertText, documentation, kind, preselect, sortText }) => ({
+                            label,
+                            insertText: typeof insertText === 'string' ? insertText : label,
+                            documentation,
+                            kind: monaco.languages.CompletionItemKind[kind],
+                            preselect,
+                            sortText,
+                          })
+                        ),
+                      };
+                    },
                   });
                 }
               }}
