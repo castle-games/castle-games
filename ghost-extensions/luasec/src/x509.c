@@ -1,7 +1,7 @@
 /*--------------------------------------------------------------------------
- * LuaSec 0.7alpha
+ * LuaSec 0.8
  *
- * Copyright (C) 2014-2017 Kim Alvefur, Paul Aurich, Tobias Markmann
+ * Copyright (C) 2014-2019 Kim Alvefur, Paul Aurich, Tobias Markmann
  *                         Matthew Wild, Bruno Silvestre.
  *
  *--------------------------------------------------------------------------*/
@@ -372,6 +372,7 @@ int meth_extensions(lua_State* L)
         break;
       }
     }
+    sk_GENERAL_NAME_free(values);
     lua_pop(L, 1); /* ret[oid] */
     i++;           /* Next extension */
   }

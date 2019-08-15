@@ -2,19 +2,19 @@
 #define LSEC_SSL_H
 
 /*--------------------------------------------------------------------------
- * LuaSec 0.7alpha
+ * LuaSec 0.8
  *
- * Copyright (C) 2006-2017 Bruno Silvestre
+ * Copyright (C) 2006-2019 Bruno Silvestre
  *
  *--------------------------------------------------------------------------*/
 
 #include <openssl/ssl.h>
 #include <lua.h>
 
-#include "luasocket/io.h"
-#include "luasocket/buffer.h"
-#include "luasocket/timeout.h"
-#include "luasocket/socket.h"
+#include <luasocket/io.h>
+#include <luasocket/buffer.h>
+#include <luasocket/timeout.h>
+#include <luasocket/socket.h>
 
 #include "compat.h"
 #include "context.h"
