@@ -128,7 +128,7 @@ const STYLES_DRAGGABLE_SECTION_HORIZONTAL = css`
   right: 0;
   top: -6px;
   left: 0;
-  cursor: grab;
+  cursor: ns-resize;
   z-index: 1;
   user-select; none;
 `;

@@ -88,7 +88,7 @@ const STYLES_DRAGGABLE_SECTION_VERTICAL = css`
   right: -6px;
   top: 0;
   bottom: 0;
-  cursor: grab;
+  cursor: ew-resize;
   z-index: 1;
   user-select; none;
 `;
@@ -100,7 +100,7 @@ const STYLES_DRAGGABLE_SECTION_VERTICAL_LEFT = css`
   left: -6px;
   top: 0;
   bottom: 0;
-  cursor: grab;
+  cursor: ew-resize;
   z-index: 1;
   user-select; none;
 `;
