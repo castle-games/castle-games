@@ -234,9 +234,10 @@ export default class GameScreenDeveloperSidebar extends React.Component {
 
   render() {
     const { isMultiplayerCodeUploadEnabled } = this.props;
+    const isMultiplayer = Utilities.isMultiplayer(this.props.game);
 
     let maybeMultiplayerElement;
-    if (Utilities.isMultiplayer(this.props.game) && URLS.isPrivateUrl(this.props.game.url)) {
+    if (isMultiplayer && URLS.isPrivateUrl(this.props.game.url)) {
       maybeMultiplayerElement = (
         <span
           className={STYLES_CTA}
@@ -266,7 +267,6 @@ export default class GameScreenDeveloperSidebar extends React.Component {
             </div>
           ) : null}
         </div>
-
         <div className={STYLES_SECTION_HEADER}>
           <div className={STYLES_LEFT}>Local logs</div>
           <div className={STYLES_RIGHT} style={{ minWidth: 100 }}>
@@ -277,7 +277,6 @@ export default class GameScreenDeveloperSidebar extends React.Component {
             </span>
           </div>
         </div>
-
         <div className={STYLES_TOP}>
           <DevelopmentLogs
             ref={(ref) => {
@@ -289,36 +288,39 @@ export default class GameScreenDeveloperSidebar extends React.Component {
             logMode={0}
           />
         </div>
-
-        <div
-          className={STYLES_SECTION_HEADER}
-          style={{
-            borderTop: `1px solid ${BORDER_COLOR}`,
-            borderBottom: 0,
-          }}>
-          <div
-            className={STYLES_DRAGGABLE_SECTION_HORIZONTAL}
-            onMouseDown={(e) => this._handleMouseDown(e, 'server')}
-          />
-          <div className={STYLES_LEFT}>Server logs</div>
-          <div className={STYLES_RIGHT} style={{ minWidth: 100 }}>
-            <span className={STYLES_CTA} onClick={this._handleServerLogReload}>
-              Reload
-            </span>
-          </div>
-        </div>
-
-        <div className={STYLES_BOTTOM} style={{ height: this.state.server }}>
-          <DevelopmentLogs
-            ref={(ref) => {
-              this._server = ref;
-            }}
-            logs={this.props.logs}
-            onClearLogs={this.props.setters.clearLogs}
-            game={this.props.game}
-            logMode={1}
-          />
-        </div>
+        {isMultiplayer ? (
+          <React.Fragment>
+            <div
+              className={STYLES_SECTION_HEADER}
+              style={{
+                borderTop: `1px solid ${BORDER_COLOR}`,
+                borderBottom: 0,
+              }}>
+              <div
+                className={STYLES_DRAGGABLE_SECTION_HORIZONTAL}
+                onMouseDown={(e) => this._handleMouseDown(e, 'server')}
+              />
+              <div className={STYLES_LEFT}>Server logs</div>
+              <div className={STYLES_RIGHT} style={{ minWidth: 100 }}>
+                <span className={STYLES_CTA} onClick={this._handleServerLogReload}>
+                  Reload
+                </span>
+              </div>
+            </div>
+            <div className={STYLES_BOTTOM} style={{ height: this.state.server }}>
+              <DevelopmentLogs
+                ref={(ref) => {
+                  this._server = ref;
+                }}
+                logs={this.props.logs}
+                onClearLogs={this.props.setters.clearLogs}
+                game={this.props.game}
+                logMode={1}
+              />
+            </div>
+          </React.Fragment>
+        ) : null}
+        ;
       </div>
     );
   }
