@@ -59,7 +59,7 @@ export const chatMessageHasNotification = (
   if (type === NotificationType.DESKTOP && notificationLevel === NotificationLevel.NONE)
     return false;
 
-  if (m.isEdit) {
+  if (m.isEdit || m.isReactionUpdate) {
     return false;
   }
 
