@@ -1585,7 +1585,7 @@ class ToolTabs extends React.PureComponent {
             )
           }>
           {children.map(({ id, child }) => (
-            <Tab key={id} {...child.props} href="javascript:void(0);">
+            <Tab key={id} {...child.props} href="noop:noop;">
               {renderChildren(child)}
             </Tab>
           ))}

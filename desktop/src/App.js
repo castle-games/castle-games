@@ -99,6 +99,11 @@ class App extends React.Component {
   _handleAnchorClick = (e) => {
     if (e.target.localName == 'a') {
       e.preventDefault();
+
+      if (e.target.href === 'noop:noop;') { // To allow no-op `a` tags
+        return;
+      }
+
       this.props.navigator.openUrl(e.target.href, { launchSource: 'link' });
     }
   };
