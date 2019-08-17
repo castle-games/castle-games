@@ -6,6 +6,8 @@ import { ToolsContext } from '~/components/game/Tools';
 import ReactMarkdown from 'react-markdown';
 
 const STYLES_MARKDOWN = css`
+  zoom: 80%;
+
   font-size: 14px;
 
   margin-bottom: 14px;

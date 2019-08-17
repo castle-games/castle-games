@@ -72,7 +72,7 @@ export default class GameScreenSidebar extends React.Component {
 
   state = {
     chat: Window.getViewportSize().height * 0.5 - 88,
-    tools: null,
+    tools: true,
   };
 
   componentDidMount() {
@@ -97,7 +97,7 @@ export default class GameScreenSidebar extends React.Component {
 
     const state = JSON.parse(e.params);
 
-    let tools = false;
+    let tools = true;
     if (state.panes) {
       tools = !!Object.values(state.panes).find(
         (element) => element.children && element.children.count > 0
