@@ -362,7 +362,7 @@ class ToolCodeEditor extends React.PureComponent {
               language="lua"
               theme="vs-dark"
               options={{
-                fontSize: 14,
+                fontSize: 12,
 
                 minimap: { enabled: false },
 
@@ -1025,20 +1025,8 @@ elementTypes['scrollBox'] = ToolScrollBox;
 // Copied from Carbon CSS, so that we can apply only to Accordion itself but not its children
 const STYLES_SECTION_CONTAINER = css`
   .bx--accordion {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    border: 0;
-    font-size: 100%;
-    font-family: inherit;
-    vertical-align: baseline;
     list-style: none;
     width: 100%;
-  }
-  .bx--accordion > *,
-  .bx--accordion > *:before,
-  .bx--accordion > *:after {
-    box-sizing: inherit;
   }
   .bx--accordion__item {
     transition: all 110ms cubic-bezier(0.2, 0, 0.38, 0.9);
@@ -1049,13 +1037,6 @@ const STYLES_SECTION_CONTAINER = css`
     border-bottom: 1px solid #3d3d3d;
   }
   .bx--accordion__heading {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    border: 0;
-    font-size: 100%;
-    font-family: inherit;
-    vertical-align: baseline;
     display: inline-block;
     background: none;
     appearance: none;
@@ -1068,17 +1049,12 @@ const STYLES_SECTION_CONTAINER = css`
     align-items: center;
     justify-content: flex-start;
     cursor: pointer;
-    padding: 0.375rem 0;
+    padding: 0.27273rem 0;
     flex-direction: row-reverse;
     position: relative;
     width: 100%;
     margin: 0;
     transition: background-color cubic-bezier(0.2, 0, 0.38, 0.9) 110ms;
-  }
-  .bx--accordion__heading > *,
-  .bx--accordion__heading > *:before,
-  .bx--accordion__heading > *:after {
-    box-sizing: inherit;
   }
   .bx--accordion__heading::-moz-focus-inner {
     border: 0;
@@ -1108,18 +1084,18 @@ const STYLES_SECTION_CONTAINER = css`
     flex: 0 0 1rem;
     width: 1rem;
     height: 1rem;
-    margin: 0 1rem 0 0;
+    margin: 0 0.72727rem 0 0;
     fill: #f3f3f3;
     transform: rotate(90deg);
     transition: all 110ms cubic-bezier(0.2, 0, 0.38, 0.9);
   }
   .bx--accordion__title {
     font-family: 'sf-mono', Consolas, monaco, monospace;
-    font-size: 0.875rem;
+    font-size: 0.63636rem;
     font-weight: 400;
-    line-height: 1.25rem;
+    line-height: 0.90909rem;
     letter-spacing: 0.16px;
-    margin: 0 0 0 1rem;
+    margin: 0 0 0 0.72727rem;
     width: 100%;
     text-align: left;
     z-index: 0;
@@ -1127,29 +1103,29 @@ const STYLES_SECTION_CONTAINER = css`
   .bx--accordion__content {
     transition: height cubic-bezier(0.2, 0, 0.38, 0.9) 110ms,
       padding cubic-bezier(0.2, 0, 0.38, 0.9) 110ms;
-    padding-left: 1rem;
+    padding-left: 0.72727rem;
     padding-right: 25%;
     height: 0;
     visibility: hidden;
     opacity: 0;
   }
-  @media (max-width: 42rem) {
+  @media (max-width: 30.54545rem) {
     .bx--accordion__content {
-      padding-right: 3rem;
+      padding-right: 2.18182rem;
     }
   }
   .bx--accordion__content p {
-    font-family: 'sf-mono', Consolas, monaco, monospace;
-    font-size: 0.875rem;
-    font-weight: 400;
-    line-height: 1.25rem;
-    letter-spacing: 0.16px;
+    // font-family: 'sf-mono', Consolas, monaco, monospace;
+    // font-size: 0.63636rem;
+    // font-weight: 400;
+    // line-height: 0.90909rem;
+    // letter-spacing: 0.16px;
   }
   .bx--accordion__item--active {
     overflow: visible;
   }
   .bx--accordion__item--active .bx--accordion__content {
-    padding-bottom: 1.5rem;
+    padding-bottom: 1.09091rem;
     padding-top: 0.5rem;
     height: auto;
     visibility: visible;
@@ -1266,34 +1242,34 @@ const STYLES_TABS_CONTAINER = css`
 
   .bx--tabs {
     font-family: 'sf-mono', Consolas, monaco, monospace;
-    font-size: 0.875rem;
+    font-size: 0.63636rem;
     font-weight: 400;
-    line-height: 1.125rem;
+    line-height: 0.81818rem;
     letter-spacing: 0.16px;
     color: #f3f3f3;
     height: auto;
     width: 100%;
     position: relative;
   }
-  @media (min-width: 42rem) {
+  @media (min-width: 30.54545rem) {
     .bx--tabs {
       background: none;
-      min-height: 3rem;
+      min-height: 2.18182rem;
     }
   }
   .bx--tabs-trigger {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 1rem;
-    height: 2.5rem;
+    padding: 0 0.72727rem;
+    height: 1.81818rem;
     cursor: pointer;
     color: #f3f3f3;
     outline: 2px solid transparent;
     border-bottom: 1px solid #6f6f6f;
     background-color: #282828;
   }
-  @media (min-width: 42rem) {
+  @media (min-width: 30.54545rem) {
     .bx--tabs-trigger {
       display: none;
     }
@@ -1304,8 +1280,8 @@ const STYLES_TABS_CONTAINER = css`
     outline-offset: -2px;
   }
   .bx--tabs-trigger svg {
-    width: 0.75rem;
-    height: 0.4375rem;
+    width: 0.54545rem;
+    height: 0.31818rem;
     fill: #f3f3f3;
     transition: transform 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
   }
@@ -1346,13 +1322,13 @@ const STYLES_TABS_CONTAINER = css`
     list-style: none;
     display: flex;
     flex-direction: column;
-    z-index: 7000;
+    z-index: 9100;
     background: #282828;
     transition: max-height 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
     max-height: 600px;
     width: 100%;
   }
-  @media (min-width: 42rem) {
+  @media (min-width: 30.54545rem) {
     .bx--tabs__nav {
       flex-direction: row;
       background: none;
@@ -1368,7 +1344,7 @@ const STYLES_TABS_CONTAINER = css`
     overflow: hidden;
     max-height: 0;
   }
-  @media (min-width: 42rem) {
+  @media (min-width: 30.54545rem) {
     .bx--tabs__nav--hidden {
       display: flex;
       transition: inherit;
@@ -1382,16 +1358,16 @@ const STYLES_TABS_CONTAINER = css`
     padding: 0;
     cursor: pointer;
     width: 100%;
-    height: 2.5rem;
+    height: 1.81818rem;
     transition: background-color 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
   }
-  @media (min-width: 42rem) {
+  @media (min-width: 30.54545rem) {
     .bx--tabs__nav-item {
       background: transparent;
       height: auto;
     }
     .bx--tabs__nav-item + .bx--tabs__nav-item {
-      margin-left: 0.125rem;
+      margin-left: 0.09091rem;
     }
   }
   .bx--tabs__nav-item .bx--tabs__nav-link {
@@ -1399,7 +1375,7 @@ const STYLES_TABS_CONTAINER = css`
       border-bottom-color 70ms cubic-bezier(0.2, 0, 0.38, 0.9),
       outline 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
   }
-  @media (min-width: 42rem) {
+  @media (min-width: 30.54545rem) {
     .bx--tabs__nav-item:hover:not(.bx--tabs__nav-item--selected) {
       background: transparent;
     }
@@ -1408,7 +1384,7 @@ const STYLES_TABS_CONTAINER = css`
     background-color: #353535;
     box-shadow: 0 -1px 0 #353535;
   }
-  @media (min-width: 42rem) {
+  @media (min-width: 30.54545rem) {
     .bx--tabs__nav-item:hover:not(.bx--tabs__nav-item--disabled) {
       background-color: transparent;
       box-shadow: none;
@@ -1417,27 +1393,37 @@ const STYLES_TABS_CONTAINER = css`
   .bx--tabs__nav-item--disabled,
   .bx--tabs__nav-item--disabled:hover {
     cursor: not-allowed;
+    outline: none;
+  }
+  .bx--tabs__nav-item--disabled .bx--tabs__nav-link {
+    pointer-events: none;
   }
   .bx--tabs__nav-item--selected:not(.bx--tabs__nav-item--disabled) {
     border: none;
     display: none;
     transition: color 70ms cubic-bezier(0.2, 0, 0.38, 0.9);
   }
-  @media (min-width: 42rem) {
+  @media (min-width: 30.54545rem) {
     .bx--tabs__nav-item--selected:not(.bx--tabs__nav-item--disabled) {
       display: flex;
     }
-    .bx--tabs__nav-item--selected:not(.bx--tabs__nav-item--disabled) .bx--tabs__nav-link {
+    div.carbon
+      .bx--tabs__nav-item--selected:not(.bx--tabs__nav-item--disabled)
+      .bx--tabs__nav-link {
       color: #f3f3f3;
       font-family: 'sf-mono', Consolas, monaco, monospace;
-      font-size: 0.875rem;
+      font-size: 0.63636rem;
       font-weight: 600;
-      line-height: 1.125rem;
+      line-height: 0.81818rem;
       letter-spacing: 0.16px;
       border-bottom: 3px solid #ff00ff;
     }
-    .bx--tabs__nav-item--selected:not(.bx--tabs__nav-item--disabled) .bx--tabs__nav-link:focus,
-    .bx--tabs__nav-item--selected:not(.bx--tabs__nav-item--disabled) .bx--tabs__nav-link:active {
+    div.carbon
+      .bx--tabs__nav-item--selected:not(.bx--tabs__nav-item--disabled)
+      .bx--tabs__nav-link:focus,
+    div.carbon
+      .bx--tabs__nav-item--selected:not(.bx--tabs__nav-item--disabled)
+      .bx--tabs__nav-link:active {
       color: #f3f3f3;
       border-bottom: 2px solid #ff00ff;
     }
@@ -1449,13 +1435,13 @@ const STYLES_TABS_CONTAINER = css`
     color: #bebebe;
     text-decoration: none;
     font-weight: 400;
-    padding: 0.75rem 0;
+    padding: 0.54545rem 0;
     width: calc(100% - 32px);
-    height: 2.5rem;
+    height: 1.81818rem;
     white-space: nowrap;
     text-overflow: ellipsis;
-    margin: 0 1rem;
-    line-height: 1rem;
+    margin: 0 0.72727rem;
+    line-height: 0.72727rem;
     border-bottom: 1px solid #3d3d3d;
     overflow: hidden;
     transition: border 70ms cubic-bezier(0.2, 0, 0.38, 0.9),
@@ -1469,27 +1455,29 @@ const STYLES_TABS_CONTAINER = css`
     outline: 2px solid #ff00ff;
     outline-offset: -2px;
   }
-  @media (min-width: 42rem) {
+  @media (min-width: 30.54545rem) {
     a.bx--tabs__nav-link {
       border-bottom: 3px solid #bebebe;
-      padding: 0.5rem 1rem;
-      width: 10rem;
+      padding: 0.36364rem 0.72727rem;
+      width: 7.27273rem;
       margin: 0;
       line-height: inherit;
     }
     a.bx--tabs__nav-link:focus,
     a.bx--tabs__nav-link:active {
-      width: 10rem;
-      padding: 0.5rem 1rem;
+      width: 7.27273rem;
+      padding: 0.36364rem 0.72727rem;
       border-bottom: 2px;
     }
   }
-  .bx--tabs__nav-item:hover:not(.bx--tabs__nav-item--selected):not(.bx--tabs__nav-item--disabled)
+  div.carbon
+    .bx--tabs__nav-item:hover:not(.bx--tabs__nav-item--selected):not(.bx--tabs__nav-item--disabled)
     .bx--tabs__nav-link {
     color: #f3f3f3;
   }
-  @media (min-width: 42rem) {
-    .bx--tabs__nav-item:hover:not(.bx--tabs__nav-item--selected):not(.bx--tabs__nav-item--disabled)
+  @media (min-width: 30.54545rem) {
+    div.carbon
+      .bx--tabs__nav-item:hover:not(.bx--tabs__nav-item--selected):not(.bx--tabs__nav-item--disabled)
       .bx--tabs__nav-link {
       color: #f3f3f3;
       border-bottom: 3px solid #6f6f6f;
@@ -1508,9 +1496,11 @@ const STYLES_TABS_CONTAINER = css`
     outline: none;
     border-bottom: 3px solid #f3f3f3;
   }
-  .bx--tabs__nav-item:not(.bx--tabs__nav-item--selected):not(.bx--tabs__nav-item--disabled):not(.bx--tabs__nav-item--selected)
+  div.carbon
+    .bx--tabs__nav-item:not(.bx--tabs__nav-item--selected):not(.bx--tabs__nav-item--disabled):not(.bx--tabs__nav-item--selected)
     .bx--tabs__nav-link:focus,
-  .bx--tabs__nav-item:not(.bx--tabs__nav-item--selected):not(.bx--tabs__nav-item--disabled):not(.bx--tabs__nav-item--selected)
+  div.carbon
+    .bx--tabs__nav-item:not(.bx--tabs__nav-item--selected):not(.bx--tabs__nav-item--disabled):not(.bx--tabs__nav-item--selected)
     a.bx--tabs__nav-link:active {
     color: #bebebe;
   }
@@ -1524,9 +1514,9 @@ const STYLES_TABS_CONTAINER = css`
     padding: 0;
     box-shadow: none;
     pointer-events: none;
-    background: rgba(61, 112, 178, 0.1);
-    width: 4.6875rem;
-    height: 0.75rem;
+    background: #353535;
+    width: 3.40909rem;
+    height: 0.54545rem;
   }
   .bx--tabs.bx--skeleton .bx--tabs__nav-link:hover,
   .bx--tabs.bx--skeleton .bx--tabs__nav-link:focus,
@@ -1542,8 +1532,7 @@ const STYLES_TABS_CONTAINER = css`
     position: absolute;
     top: 0;
     left: 0;
-    opacity: 0.3;
-    background: rgba(61, 112, 178, 0.1);
+    background: #3d3d3d;
     animation: 3000ms ease-in-out skeleton infinite;
   }
   .bx--tabs.bx--skeleton .bx--tabs-trigger {
@@ -1552,8 +1541,8 @@ const STYLES_TABS_CONTAINER = css`
     padding: 0;
     box-shadow: none;
     pointer-events: none;
-    background: rgba(61, 112, 178, 0.1);
-    width: 6.25rem;
+    background: #353535;
+    width: 4.54545rem;
   }
   .bx--tabs.bx--skeleton .bx--tabs-trigger:hover,
   .bx--tabs.bx--skeleton .bx--tabs-trigger:focus,
@@ -1569,8 +1558,7 @@ const STYLES_TABS_CONTAINER = css`
     position: absolute;
     top: 0;
     left: 0;
-    opacity: 0.3;
-    background: rgba(61, 112, 178, 0.1);
+    background: #3d3d3d;
     animation: 3000ms ease-in-out skeleton infinite;
   }
   .bx--tabs.bx--skeleton .bx--tabs-trigger svg {
@@ -1788,7 +1776,6 @@ const applyDiff = (t, diff) => {
 const STYLES_CONTAINER_V2 = css`
   font-family: ${Constants.font.mono} !important;
   font-size: 10px;
-  zoom: 80%;
 
   /* Based on the 'g90' theme (https://www.carbondesignsystem.com/guidelines/themes/) which 'Tools.scss' uses */
   color: #f3f3f3;
@@ -1857,10 +1844,10 @@ const STYLES_CONTAINER_V2 = css`
   .bx--accordion,
   .bx--toggle__label,
   .tabs-container {
-    margin-bottom: 12px !important;
+    margin-bottom: 9px !important;
   }
 
-  padding: 12px;
+  padding: 9px;
 `;
 
 const STYLES_CONTAINER = css`
