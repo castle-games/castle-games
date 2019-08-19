@@ -1,12 +1,13 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as Strings from '~/common/strings';
+import * as Utilities from '~/common/utilities';
 
 import { css } from 'react-emotion';
 
+import UIAvatar from '~/components/reusable/UIAvatar';
 import UIHeading from '~/components/reusable/UIHeading';
-
-// TODO: audit styles
+import UIPlayIcon from '~/components/reusable/UIPlayIcon';
 
 const STYLES_CONTAINER = css`
   background: ${Constants.colors.white};
@@ -18,6 +19,9 @@ const STYLES_EMPTY = css`
 `;
 
 const STYLES_COVER = css`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
   width: 90px;
   height: 90px;
@@ -39,18 +43,14 @@ const STYLES_BODY_LEFT = css`
 `;
 
 const STYLES_BODY_RIGHT = css`
-  width: 25%;
+  max-width: 35%;
+  padding-right: 16px;
 `;
 
-const STYLES_TOP = css`
+const STYLES_CTA_CARD = css`
   display: flex;
-  margin-bottom: 24px;
-`;
-
-const STYLES_TITLE = css`
-  font-size: 48px;
-  line-height: 52px;
-  font-weight: 400;
+  cursor: pointer;
+  margin: 0 8px 8px 0;
 `;
 
 const STYLES_META = css`
@@ -60,44 +60,23 @@ const STYLES_META = css`
 `;
 
 const STYLES_ABOUT = css`
-  line-height: 1.725;
+  line-height: 1.5;
   font-weight: 200;
   font-size: 16px;
   overflow-wrap: break-word;
   white-space: pre-wrap;
-  padding: 0 24px 16px 16px;
-`;
-
-const STYLES_LINKS_ROW = css`
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 `;
 
 const STYLES_META_ITEM = css`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: ${Constants.colors.black};
+  color: ${Constants.REFACTOR_COLORS.subdued};
   font-family: ${Constants.font.system};
   font-weight: 600;
   font-size: 12px;
   margin-right: 24px;
-`;
-
-const STYLES_META_LINK_ITEM = css`
-  cursor: pointer;
-
-  span {
-    margin-left: 0.3em;
-  }
-
-  :hover {
-    span {
-      text-decoration: underline;
-    }
-  }
 `;
 
 const STYLES_STATUS = css`
@@ -107,33 +86,81 @@ const STYLES_STATUS = css`
   align-items: center;
 `;
 
-const STYLES_CREATOR_IDENTITY = css`
+const STYLES_GAME_IDENTITY = css`
   margin-bottom: 16px;
   padding-left: 24px;
 `;
 
-export default class GameMetaHeader extends React.Component {
-  _renderLinks = (game) => {
-    let linkElements = [];
-    if (game.owner && game.owner.username) {
-      linkElements.push(
-        <div
-          key="item-owner"
-          className={`${STYLES_META_ITEM} ${STYLES_META_LINK_ITEM}`}
-          onClick={() => this.props.onSelectUser(game.owner)}>
-          By <span>{game.owner.username}</span>
-        </div>
-      );
-    }
+const STYLES_CREATOR = css`
+  display: flex;
+  align-items: center;
+  font-family: ${Constants.font.system};
+  font-size: 13px;
+  font-weight: 500;
+  color: #8d8d8d;
+`;
 
-    linkElements.push(
-      <div key="item-plays" className={STYLES_META_ITEM}>
-        <span>{game.playCount} plays</span>
+const STYLES_CREATOR_LINK = css`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: ${Constants.colors.text};
+  margin: 0 8px;
+
+  :hover {
+    text-decoration: underline;
+  }
+`;
+
+const STYLES_META_ROW = css`
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+`;
+
+export default class GameMetaHeader extends React.Component {
+  state = {
+    isHoveringOnPlay: false,
+  };
+
+  _renderCreator = (user) => {
+    if (!user || !user.userId) return null;
+    const avatarSrc = user.photo ? user.photo.url : null;
+    return (
+      <div className={STYLES_CREATOR}>
+        Created by{' '}
+        <span className={STYLES_CREATOR_LINK} onClick={() => this.props.onSelectUser(user)}>
+          <UIAvatar
+            src={avatarSrc}
+            showIndicator={false}
+            style={{ width: 20, height: 20, marginRight: 6 }}
+          />
+          {user.username}
+        </span>
       </div>
     );
+  };
 
-    if (linkElements.length) {
-      return <div className={STYLES_LINKS_ROW}>{linkElements}</div>;
+  _renderStats = (game) => {
+    let items = [
+      `${game.playCount} plays`,
+      Utilities.isMultiplayer(game) ? 'Multiplayer' : 'Single Player',
+    ];
+
+    if (game.draft) {
+      items.push('Work in Progress');
+    }
+
+    if (items.length) {
+      return (
+        <div className={STYLES_META_ROW}>
+          {items.map((item, ii) => (
+            <div key={`meta-${ii}`} className={STYLES_META_ITEM}>
+              {item}
+            </div>
+          ))}
+        </div>
+      );
     }
     return null;
   };
@@ -142,30 +169,40 @@ export default class GameMetaHeader extends React.Component {
     const { game } = this.props;
     if (!game) return <div className={`${STYLES_CONTAINER} ${STYLES_EMPTY}`} />;
 
-    let aboutElement;
-    if (!Strings.isEmpty(game.description)) {
-      aboutElement = <div className={STYLES_ABOUT}>{game.description}</div>;
-    }
-
-    const linksElement = this._renderLinks(game);
-    const name = game.title;
     const coverImage = game.coverImage ? game.coverImage.url : null;
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_BODY}>
           <div className={STYLES_BODY_LEFT}>
-            <div className={STYLES_TOP}>
+            <div
+              className={STYLES_CTA_CARD}
+              onClick={() => this.props.onSelectGame(game)}
+              onMouseEnter={() => this.setState({ isHoveringOnPlay: true })}
+              onMouseLeave={() => this.setState({ isHoveringOnPlay: false })}>
               <div
                 className={STYLES_COVER}
-                style={{ backgroundImage: coverImage ? `url('${coverImage}')` : null }}
-              />
-              <div className={STYLES_CREATOR_IDENTITY}>
-                <UIHeading style={{ marginBottom: 8 }}>{name}</UIHeading>
-                {linksElement}
+                style={{
+                  backgroundImage: coverImage ? `url('${coverImage}')` : null,
+                  filter: this.state.isHoveringOnPlay ? 'brightness(95%)' : null,
+                }}>
+                <UIPlayIcon
+                  size={16}
+                  hovering={this.state.isHoveringOnPlay}
+                  visible={this.state.isHoveringOnPlay}
+                />
+              </div>
+              <div className={STYLES_GAME_IDENTITY}>
+                <UIHeading style={{ marginBottom: 8 }}>{game.title}</UIHeading>
+                {this._renderStats(game)}
               </div>
             </div>
           </div>
-          {aboutElement}
+          <div className={STYLES_BODY_RIGHT}>
+            {!Strings.isEmpty(game.description) ? (
+              <div className={STYLES_ABOUT}>{game.description}</div>
+            ) : null}
+            {this._renderCreator(game.owner)}
+          </div>
         </div>
       </div>
     );
