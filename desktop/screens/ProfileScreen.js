@@ -44,7 +44,7 @@ class ProfileScreen extends React.Component {
   };
 
   state = {
-    mode: this.props.options.mode ? this.props.options.mode : 'games',
+    mode: 'games',
     gameToUpdate: null, // if mode === 'update-game'
   };
 
@@ -70,10 +70,6 @@ class ProfileScreen extends React.Component {
           }
         }
       }
-    }
-
-    if (nextProps.options && nextProps.options.mode) {
-      this.setState({ mode: nextProps.options.mode });
     }
   }
 
@@ -215,7 +211,6 @@ export default class ProfileScreenWithContext extends React.Component {
         navigateToSignIn={navigator.navigateToSignIn}
         viewer={currentUser.user}
         creator={navigation.userProfileShown}
-        options={navigation.options ? navigation.options : { mode: 'games' }}
         onSignOut={currentUser.clearCurrentUser}
         onAfterSave={currentUser.refreshCurrentUser}
         onSendMessage={chat.openChannelForUser}

@@ -33,7 +33,6 @@ const NavigationContextDefaults = {
   timeGameLoaded: 0,
   userProfileShown: null,
   isFullScreen: false,
-  options: {},
   deferredNavigationState: null, // used when restoring navigation state after login
 };
 
@@ -61,14 +60,14 @@ const AUTHENTICATED_ONLY_MODES = {
  *  the state but never read from it.
  */
 const NavigatorContextDefaults = {
-  openUrl: async (url) => {},
+  openUrl: async (url, options) => {},
   navigateToChat: (options) => {},
   navigateToHome: () => {},
   navigateToGameUrl: async (url, options) => {},
   navigateToGame: async (game, options) => {},
   navigateToCurrentGame: () => {},
   navigateToSignIn: () => {},
-  navigateToCurrentUserProfile: (options) => {},
+  navigateToCurrentUserProfile: () => {},
   navigateToContentMode: (mode) => {},
   navigateToUserProfile: async (user) => {},
   navigateToNotifications: () => {},
@@ -314,9 +313,9 @@ class NavigationContextManager extends React.Component {
     }
   };
 
-  navigateToCurrentUserProfile = (options) => {
+  navigateToCurrentUserProfile = () => {
     if (this.props.currentUser.user) {
-      this.navigateToUserProfile(this.props.currentUser.user, options);
+      this.navigateToUserProfile(this.props.currentUser.user);
       this.props.currentUser.refreshCurrentUser();
     } else {
       // show sign in
@@ -324,7 +323,7 @@ class NavigationContextManager extends React.Component {
     }
   };
 
-  navigateToUserProfile = async (user, options) => {
+  navigateToUserProfile = async (user) => {
     let fullUser = this.props.userPresence.userIdToUser[user.userId];
     if (!fullUser) {
       try {
@@ -360,7 +359,7 @@ class NavigationContextManager extends React.Component {
         } catch (_) {}
       })();
     }
-    this._navigateToContentMode('profile', { userProfileShown: fullUser, options });
+    this._navigateToContentMode('profile', { userProfileShown: fullUser });
   };
 
   reloadGame = (onlyIfVisible) => {
