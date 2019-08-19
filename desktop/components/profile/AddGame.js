@@ -154,9 +154,10 @@ export default class AddGame extends React.Component {
 
     const { externalUrlInputValue, directoryInputValue } = this.state;
     const gameId = this.props.game ? this.props.game.gameId : null;
+    const { hostingType } = this.state;
     let previewedGame = {};
     let previewError = null;
-    if (externalUrlInputValue && externalUrlInputValue.length) {
+    if (hostingType === 'external' && externalUrlInputValue && externalUrlInputValue.length) {
       await this.setState({ isLoadingPreview: true });
       try {
         previewedGame = await Actions.previewGameAtUrl(externalUrlInputValue, gameId);
@@ -164,7 +165,7 @@ export default class AddGame extends React.Component {
         previewedGame = {};
         previewError = e.message;
       }
-    } else if (directoryInputValue && directoryInputValue.length) {
+    } else if (hostingType === 'castle' && directoryInputValue && directoryInputValue.length) {
       await this.setState({ isLoadingPreview: true });
       try {
         previewedGame = await this._previewGameAtLocalPath(directoryInputValue, gameId);
@@ -212,16 +213,17 @@ export default class AddGame extends React.Component {
   _handleSubmitForm = async () => {
     const { externalUrlInputValue, directoryInputValue } = this.state;
     const gameId = this.props.game ? this.props.game.gameId : null;
+    const { hostingType } = this.state;
     let addedGame, previewError;
     await this.setState({ isLoadingSubmit: true });
-    if (externalUrlInputValue && externalUrlInputValue.length) {
+    if (hostingType === 'external' && externalUrlInputValue && externalUrlInputValue.length) {
       try {
         addedGame = await Actions.publishGame(externalUrlInputValue, gameId);
       } catch (e) {
         addedGame = {};
         previewError = e.message;
       }
-    } else if (directoryInputValue && directoryInputValue.length) {
+    } else if (hostingType === 'castle' && directoryInputValue && directoryInputValue.length) {
       try {
         let projectUrl = `file://${directoryInputValue}`;
         let uploadedUrl = await ExecNode.uploadGameAsync(projectUrl);
@@ -232,9 +234,11 @@ export default class AddGame extends React.Component {
         previewError = e.message;
       }
       // don't block if this fails
-      try {
-        await ExecNode.writeCastleIdFileAsync(directoryInputValue, gameId);
-      } catch (_) {}
+      if (gameId) {
+        try {
+          await ExecNode.writeCastleIdFileAsync(directoryInputValue, gameId);
+        } catch (_) {}
+      }
     }
 
     if (previewError) {
