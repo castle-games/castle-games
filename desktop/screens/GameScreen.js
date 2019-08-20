@@ -190,6 +190,9 @@ class GameScreen extends React.Component {
     const screenSettings = Utilities.getScreenSettings(game);
     const initialData = await this._prepareInitialGameData(screenSettings);
 
+    // Sync initial window size
+    await this.updateGameWindowFrame();
+
     // Launch the game window, passing all of the initial settings
     await GameWindow.open({
       gameUrl: url,
@@ -234,7 +237,7 @@ class GameScreen extends React.Component {
     this.updateGameWindowFrame();
   };
 
-  updateGameWindowFrame = () => {
+  updateGameWindowFrame = async () => {
     if (!this._game) {
       return;
     }
@@ -244,9 +247,9 @@ class GameScreen extends React.Component {
       return;
     }
 
-    GameWindow.updateFrame(rect);
+    await GameWindow.updateFrame(rect);
     if (this.state.loaded) {
-      GameWindow.setVisible(true);
+      await GameWindow.setVisible(true);
     }
   };
 

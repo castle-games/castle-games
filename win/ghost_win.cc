@@ -78,14 +78,10 @@ bool ghostWinPendingChildFocus = false;
 // win implementation of 'ghost.h'
 
 static float childLeft = 0, childTop = 0, childWidth = 200, childHeight = 200;
+static bool childFrameNeverUpdated = true;
 
 static void _updateChildWindowRect() {
   ghostScreenSettingsDirty = false;
-
-  auto child = ghostWinGetChildWindow();
-  if (!child) {
-    return;
-  }
 
   RECT currParentRect = {0, 0, 10000, 10000};
   auto parent = ghostWinGetMainWindow();
@@ -104,13 +100,20 @@ static void _updateChildWindowRect() {
   float gameLeft, gameTop, gameWidth, gameHeight;
   ghostGetGameFrame(frameLeft, frameTop, frameWidth, frameHeight, &gameLeft, &gameTop, &gameWidth,
                     &gameHeight);
-  SetWindowPos(child, NULL, gameLeft, gameTop, gameWidth, gameHeight, 0);
+
+  auto child = ghostWinGetChildWindow();
+  if (child) {
+    SetWindowPos(child, NULL, gameLeft, gameTop, gameWidth, gameHeight, 0);
+  }
+
   RECT newChildRect;
   newChildRect.left = gameLeft;
   newChildRect.top = gameTop;
   newChildRect.right = gameLeft + gameWidth;
   newChildRect.bottom = gameTop + gameHeight;
   ghostWinSetChildWindowRect(newChildRect);
+
+  childFrameNeverUpdated = false;
 }
 
 static bool browserReady = false;
@@ -627,7 +630,7 @@ void ghostStep() {
   }
 
   if (luaState) {
-    if (!lovePaused) {
+    if (!lovePaused && !childFrameNeverUpdated) {
       stepLove();
     } else {
       Sleep(100);
