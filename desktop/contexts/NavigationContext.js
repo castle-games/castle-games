@@ -175,6 +175,7 @@ class NavigationContextManager extends React.Component {
     const time = Date.now();
     const gameNavigationState = {
       game,
+      sessionId: game.sessionId,
       timeGameLoaded: time,
       timeLastNavigated: time,
       post,
