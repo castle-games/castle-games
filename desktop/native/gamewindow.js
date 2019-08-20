@@ -1,18 +1,21 @@
 import { NativeBinds } from '~/native/nativebinds';
 import UserStatus from '~/common/userstatus';
-import Share from '~/common/share';
 
 class GameWindow {
   _isOpen = false;
   _currentGame = null;
   _navigations = null;
+  _openCallbacks = [];
+  _closeCallbacks = [];
 
   open = async ({ gameUrl, game, initialData, navigations, screenSettings }) => {
     if (this._isOpen) return;
     this._isOpen = true;
     this._currentGame = game;
     this._navigations = navigations;
-    Share.addEventListeners(game);
+    for (let callback of this._openCallbacks) {
+      callback(this._currentGame);
+    }
     UserStatus.startAsync(game);
     if (screenSettings) {
       await NativeBinds.setScreenSettings(screenSettings);
@@ -38,7 +41,9 @@ class GameWindow {
   close = async () => {
     if (this._isOpen) {
       UserStatus.stop();
-      Share.removeEventListeners();
+      for (let callback of this._closeCallbacks) {
+        callback(this._currentGame);
+      }
       await NativeBinds.close();
       this._isOpen = false;
       this._currentGame = null;
@@ -52,6 +57,14 @@ class GameWindow {
 
   getNavigations = () => {
     return this._navigations;
+  };
+
+  onOpen = (callback) => {
+    this._openCallbacks.push(callback);
+  };
+
+  onClose = (callback) => {
+    this._closeCallbacks.push(callback);
   };
 }
 

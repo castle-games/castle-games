@@ -6,6 +6,7 @@ import * as ExecNode from '~/common/execnode';
 import * as Strings from '~/common/strings';
 import * as NativeUtil from '~/native/nativeutil';
 import * as Urls from '~/common/urls';
+import { getSessionLink } from '~/common/utilities';
 
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { DevelopmentContext } from '~/contexts/DevelopmentContext';
@@ -26,6 +27,7 @@ const NavigationContextDefaults = {
   timeLastNavigated: 0,
   gameUrl: '',
   game: null,
+  sessionId: null,
   post: null,
   chatChannelId: null,
   gameParams: null,
@@ -114,6 +116,13 @@ class NavigationContextManager extends React.Component {
         setIsFullScreen: this.setIsFullScreen,
       },
     };
+    // we need to listen for game events related to multiplayer session connection
+    GameWindow.onOpen((game) => {
+      this._addGameEventListeners(game);
+    });
+    GameWindow.onClose((game) => {
+      this._removeGameEventListeners(game);
+    });
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -157,6 +166,12 @@ class NavigationContextManager extends React.Component {
       return;
     }
 
+    // if we're navigating from one game to another, make sure to end the first game and properly record
+    // the fact that it was closed (and also properly clear game-related properties like sessionId)
+    if (this.state.navigation.game !== NavigationContextDefaults.game) {
+      await this.clearCurrentGame();
+    }
+
     const time = Date.now();
     const gameNavigationState = {
       game,
@@ -180,6 +195,9 @@ class NavigationContextManager extends React.Component {
         params: { ...this.state.navigation, ...gameNavigationState },
         mode: this.state.navigation.contentMode,
       };
+      // don't store game or session id in the deferred state, otherwise they could get out of date
+      delete deferredNavigationState.params.game;
+      delete deferredNavigationState.params.sessionId;
     }
 
     // track game launches
@@ -229,6 +247,64 @@ class NavigationContextManager extends React.Component {
     });
   };
 
+  _addGameEventListeners = (game) => {
+    window.addEventListener(
+      'CASTLE_CONNECT_MULTIPLAYER_CLIENT_REQUEST',
+      this._connectMultiplayerClientAsync
+    );
+  };
+
+  _removeGameEventListeners = (game) => {
+    window.removeEventListener(
+      'CASTLE_CONNECT_MULTIPLAYER_CLIENT_REQUEST',
+      this._connectMultiplayerClientAsync
+    );
+  };
+
+  _connectMultiplayerClientAsync = async (e) => {
+    let { game, sessionId } = this.state.navigation;
+    let mediaUrl = e.params.mediaUrl;
+
+    // join/create a multiplayer session
+    let response;
+    if (game && (game.gameId || game.url)) {
+      response = await Actions.multiplayerJoinAsync(
+        game ? game.gameId : null,
+        game.hostedUrl || game.url,
+        null,
+        sessionId
+      );
+    } else {
+      response = await Actions.multiplayerJoinAsync(null, null, mediaUrl, sessionId);
+    }
+    NativeUtil.sendLuaEvent('CASTLE_CONNECT_MULTIPLAYER_CLIENT_RESPONSE', {
+      address: response.address,
+    });
+
+    if (response.sessionId && game) {
+      // record the id of the multiplayer session we just joined/created
+      this.setState({
+        navigation: {
+          ...this.state.navigation,
+          sessionId: response.sessionId,
+        },
+      });
+      // show a notification of the multiplayer session in chat
+      let gameTitle = game.title || 'Untitled';
+      let verb = response.isNewSession ? 'created' : 'joined';
+      let message = `You ${verb} a session of ${gameTitle}. Share this link to invite other people: ${getSessionLink(
+        game,
+        response.sessionId
+      )}`;
+      let event = new Event('CASTLE_ADD_CHAT_NOTIFICATION');
+      event.params = {
+        message,
+        game,
+      };
+      window.dispatchEvent(event);
+    }
+  };
+
   setIsFullScreen = (isFullScreen) => {
     this.setState({
       navigation: {
@@ -264,12 +340,14 @@ class NavigationContextManager extends React.Component {
     if (this.state.navigation.contentMode === 'edit_post') {
       this.state.navigation.params.onCancel();
     }
-    this._navigateToContentMode('game', {
-      deferredNavigationState: {
-        mode: this.state.navigation.contentMode,
-        params: { ...this.state.navigation },
-      },
-    });
+    let deferredNavigationState = {
+      mode: this.state.navigation.contentMode,
+      params: { ...this.state.navigation },
+    };
+    // don't store game or session id in the deferred state, otherwise they could get out of date
+    delete deferredNavigationState.params.game;
+    delete deferredNavigationState.params.sessionId;
+    this._navigateToContentMode('game', { deferredNavigationState });
   };
 
   minimizeGame = () => {
@@ -399,6 +477,7 @@ class NavigationContextManager extends React.Component {
           ...state.navigation,
           contentMode: newContentMode,
           game: NavigationContextDefaults.game,
+          sessionId: NavigationContextDefaults.sessionId,
           post: NavigationContextDefaults.post,
           gameParams: NavigationContextDefaults.gameParams,
           referrerGame: NavigationContextDefaults.referrerGame,

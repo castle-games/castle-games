@@ -54,11 +54,11 @@ export const shuffle = (array) => {
   let counter = array.length;
 
   while (counter > 0) {
-      let index = Math.floor(Math.random() * counter);
-      counter--;
-      let temp = array[counter];
-      array[counter] = array[index];
-      array[index] = temp;
+    let index = Math.floor(Math.random() * counter);
+    counter--;
+    let temp = array[counter];
+    array[counter] = array[index];
+    array[index] = temp;
   }
 
   return array;
@@ -66,18 +66,18 @@ export const shuffle = (array) => {
 
 export const colorLuminance = (hex, lum) => {
   // Validate hex string
-  hex = String(hex).replace(/[^0-9a-f]/gi, "");
+  hex = String(hex).replace(/[^0-9a-f]/gi, '');
   if (hex.length < 6) {
     hex = hex.replace(/(.)/g, '$1$1');
   }
   lum = lum || 0;
   // Convert to decimal and change luminosity
-  var rgb = "#",
+  var rgb = '#',
     c;
   for (var i = 0; i < 3; ++i) {
     c = parseInt(hex.substr(i * 2, 2), 16);
-    c = Math.round(Math.min(Math.max(0, c + (c * lum)), 255)).toString(16);
-    rgb += ("00" + c).substr(c.length);
+    c = Math.round(Math.min(Math.max(0, c + c * lum), 255)).toString(16);
+    rgb += ('00' + c).substr(c.length);
   }
   return rgb;
 };
@@ -87,18 +87,20 @@ export const increaseBrightness = (hex, percent) => {
   hex = hex.replace(/^\s*#|\s*$/g, '');
 
   // convert 3 char codes --> 6, e.g. `E0F` --> `EE00FF`
-  if(hex.length == 3){
-      hex = hex.replace(/(.)/g, '$1$1');
+  if (hex.length == 3) {
+    hex = hex.replace(/(.)/g, '$1$1');
   }
 
   var r = parseInt(hex.substr(0, 2), 16),
-      g = parseInt(hex.substr(2, 2), 16),
-      b = parseInt(hex.substr(4, 2), 16);
+    g = parseInt(hex.substr(2, 2), 16),
+    b = parseInt(hex.substr(4, 2), 16);
 
-  return '#' +
-     ((0|(1<<8) + r + (256 - r) * percent / 100).toString(16)).substr(1) +
-     ((0|(1<<8) + g + (256 - g) * percent / 100).toString(16)).substr(1) +
-     ((0|(1<<8) + b + (256 - b) * percent / 100).toString(16)).substr(1);
+  return (
+    '#' +
+    (0 | ((1 << 8) + r + ((256 - r) * percent) / 100)).toString(16).substr(1) +
+    (0 | ((1 << 8) + g + ((256 - g) * percent) / 100)).toString(16).substr(1) +
+    (0 | ((1 << 8) + b + ((256 - b) * percent) / 100)).toString(16).substr(1)
+  );
 };
 
 export const adjustTextColorWithEmphasis = (hex, shouldBrighten) => {
@@ -233,6 +235,23 @@ export function getLuaEntryPoint(game) {
     entryPoint = fixWindowsFilePath(entryPoint);
   }
   return entryPoint;
+}
+
+export function getSessionLink(game, sessionId) {
+  // e.g. https://castle.games/+someid/@author/title#sessionid
+  return game && sessionId ? `${game.hostedUrl || game.url}#${sessionId}` : null;
+}
+
+export function getShortSessionLink(game, sessionId) {
+  // e.g. @author/title#sessionid
+  let sessionLink = getSessionLink(game, sessionId);
+  if (sessionLink) {
+    let matches = sessionLink.match(/^.+castle\.games.+\/(\@.+\/.+$)/);
+    if (matches && matches.length >= 2) {
+      return matches[1];
+    }
+  }
+  return null;
 }
 
 export function isMultiplayer(game) {

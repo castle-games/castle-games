@@ -44,6 +44,8 @@ export default class Game extends React.Component {
 
     const elementActions = (
       <GameScreenActionsBar
+        game={this.props.game}
+        sessionId={this.props.sessionId}
         isMuted={this.props.isMuted}
         onToggleMute={this.props.onToggleMute}
         onPostScreenshot={this._handlePostScreenshot}

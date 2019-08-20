@@ -118,7 +118,9 @@ class GameScreen extends React.Component {
 
   _prepareInitialGameData = async (screenSettings) => {
     // Prepare the Lua format of the post
-    const luaPost = this.props.post ? await jsPostToLuaPost(this.props.post, { data: true }) : undefined;
+    const luaPost = this.props.post
+      ? await jsPostToLuaPost(this.props.post, { data: true })
+      : undefined;
 
     return {
       graphics: {
@@ -311,6 +313,7 @@ class GameScreen extends React.Component {
       <Game
         onSetToolsRef={this._setToolsRef}
         game={this.props.game}
+        sessionId={this.props.sessionId}
         isFullScreen={this.props.isFullScreen}
         isMuted={this.state.isMuted}
         navigateToUserProfile={this.props.navigateToUserProfile}
@@ -344,6 +347,7 @@ export default class GameScreenWithContext extends React.Component {
                 {(currentUser) => (
                   <GameScreen
                     game={navigation.game}
+                    sessionId={navigation.sessionId}
                     post={navigation.post}
                     gameParams={navigation.gameParams}
                     referrerGame={navigation.referrerGame}

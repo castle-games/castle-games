@@ -2,10 +2,12 @@ import * as React from 'react';
 import * as GameSVG from '~/components/primitives/game-screen-svg';
 import * as SVG from '~/components/primitives/svg';
 import * as Constants from '~/common/constants';
+import { getSessionLink, getShortSessionLink } from '~/common/utilities';
 
 import { css } from 'react-emotion';
 
 import DevelopmentCpuMonitor from '~/components/game/DevelopmentCpuMonitor';
+import MultiplayerInvite from '~/components/game/MultiplayerInvite';
 
 const STYLES_CONTAINER = css`
   height: 48px;
@@ -34,6 +36,8 @@ const STYLES_CHAT_FIELD = css`
 `;
 
 const STYLES_LEFT = css`
+  display: inline-flex;
+  align-items: center;
   flex-shrink: 0;
   min-width: 200px;
 `;
@@ -73,6 +77,8 @@ const CTA = (props) => {
 
 export default class GameScreenActionsBar extends React.Component {
   static defaultProps = {
+    game: null,
+    sessionId: null,
     onChangeVolumme: null,
     onPostScreenshot: null,
     onViewSource: null,
@@ -80,6 +86,10 @@ export default class GameScreenActionsBar extends React.Component {
   };
 
   render() {
+    let { game, sessionId } = this.props;
+    let sessionLink = getSessionLink(game, sessionId);
+    let shortSessionLink = getShortSessionLink(game, sessionId) || sessionLink;
+
     let volumeElement = <GameSVG.AudioOn height="20px" style={{ marginRight: 8 }} />;
     if (this.props.isMuted) {
       volumeElement = <GameSVG.AudioOff height="20px" style={{ marginRight: 8 }} />;
@@ -88,6 +98,13 @@ export default class GameScreenActionsBar extends React.Component {
     return (
       <div className={STYLES_CONTAINER} style={this.props.style}>
         <div className={STYLES_LEFT} style={{ paddingLeft: 16 }}>
+          {sessionLink ? (
+            <MultiplayerInvite
+              style={{ marginRight: 18 }}
+              sessionLink={sessionLink}
+              shortSessionLink={shortSessionLink}
+            />
+          ) : null}
           {this.props.onToggleMute ? (
             <CTA style={{ marginRight: 24 }} onClick={this.props.onToggleMute}>
               {volumeElement}
