@@ -11,7 +11,7 @@ const STYLES_CONTAINER = css`
   margin-bottom: 16px;
 `;
 
-const SUGGEST_MORE_ONLINE_USERS = true;
+const SUGGEST_MORE_ONLINE_USERS = false;
 const MIN_NUM_DIRECT_MESSAGES = 5;
 
 export default class SidebarDirectMessages extends React.Component {
