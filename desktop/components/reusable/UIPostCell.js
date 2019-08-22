@@ -8,6 +8,7 @@ import { Tooltip } from 'react-tippy';
 
 import UIAvatar from '~/components/reusable/UIAvatar';
 import UIMessageBody from '~/components/reusable/UIMessageBody';
+import UIPlayIcon from '~/components/reusable/UIPlayIcon';
 
 const STYLES_CONTAINER = css`
   width: 100%;
@@ -118,35 +119,6 @@ const STYLES_TIMESTAMP = css`
   font-weight: 500;
   font-size: 13px;
   color: #ffffff;
-`;
-
-const STYLES_PLAY_ICON = css`
-  width: 14px;
-  height: 14px;
-  color: ${Constants.card.iconColor};
-  margin-left: auto;
-  margin-right: 2px;
-  :hover {
-    transform: scale(1.14);
-  }
-`;
-
-const STYLES_PLAY_HOVER = css`
-  @keyframes button-color-change {
-    0% {
-      color: ${Constants.colors.brand4};
-    }
-    50% {
-      color: ${Constants.colors.brand1};
-    }
-    100% {
-      color: ${Constants.colors.brand2};
-    }
-  }
-
-  cursor: pointer;
-  animation: button-color-change infinite 400ms;
-  color: white;
 `;
 
 const STYLES_OPTIONS_BAR = css`
@@ -304,14 +276,15 @@ export default class UIPostCell extends React.Component {
             style={{ visibility: this.state.isHoveringOnPost ? 'visible' : 'hidden' }}>
             {Strings.toCardDate(createdTime)}
           </div>
-          <div
-            className={
-              this.state.isHoveringOnPost
-                ? `${STYLES_PLAY_ICON} ${STYLES_PLAY_HOVER}`
-                : STYLES_PLAY_ICON
-            }>
-            <SVG.Play size="32px" />
-          </div>
+          <UIPlayIcon
+            hovering={this.state.isHoveringOnPost}
+            size={14}
+            style={{
+              marginLeft: 'auto',
+              marginRight: 2,
+              display: 'flex',
+            }}
+          />
         </footer>
 
         {this.state.isHoveringOnPost ? (

@@ -40,11 +40,11 @@ export default class UIPlayIcon extends React.Component {
   };
 
   render() {
-    const { visible, hovering, size } = this.props;
+    const { visible, hovering, size, style } = this.props;
     return (
       <div
         className={hovering ? `${STYLES_PLAY_ICON} ${STYLES_PLAY_HOVER}` : STYLES_PLAY_ICON}
-        style={{ visibility: visible ? 'visible' : 'hidden' }}>
+        style={{ visibility: visible ? 'visible' : 'hidden', ...style }}>
         <SVG.Play style={{ width: size, height: size }} />
       </div>
     );
