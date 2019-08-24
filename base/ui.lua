@@ -313,7 +313,7 @@ function ui.codeEditor(label, value, props)
 
     local newProps = without(merge({ label = label, value = value }, props), 'onChange', 'onChangeCursorPosition')
 
-    if props.onChangeCursorPosition then
+    if props and props.onChangeCursorPosition then
         newProps.enableOnChangeCursorPosition = true
     end
 
