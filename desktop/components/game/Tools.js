@@ -31,6 +31,7 @@ import ToolMarkdown from '~/components/game/ToolMarkdown';
 import url from 'url';
 import Dropzone from 'react-dropzone';
 import MonacoEditor from 'react-monaco-editor';
+import ToolsDebugData from '~/components/game/ToolsDebugData';
 
 import 'rc-color-picker/assets/index.css';
 import '~/components/game/Tools.min.css';
@@ -192,6 +193,8 @@ const STYLES_BUTTON_CONTAINER = css`
   .bx--btn--icon-only::before {
     display: none !important;
   }
+
+  margin-bottom: 10px;
 `;
 
 class ToolButton extends React.PureComponent {
@@ -472,7 +475,7 @@ const STYLES_COLOR_PICKER_CONTAINER = css`
   flex-direction: column;
   flex: 1;
   align-items: flex-start;
-  margin-bottom: 14px;
+  margin-bottom: 10px;
 `;
 
 injectGlobal`
@@ -654,7 +657,7 @@ const STYLES_FILE_PICKER_CONTAINER = css`
   flex-direction: column;
   flex: 1;
   align-items: flex-start;
-  margin-bottom: 14px;
+  margin-bottom: 10px;
 `;
 
 const STYLES_FILE_PICKER_DRAG_ROOT = css`
@@ -834,7 +837,7 @@ class ToolFilePicker extends React.PureComponent {
 elementTypes['filePicker'] = ToolFilePicker;
 
 const STYLES_IMAGE = css`
-  margin-bottom: 14px;
+  margin-bottom: 10px;
 `;
 
 class ToolImage extends React.PureComponent {
@@ -1785,6 +1788,7 @@ const applyDiff = (t, diff) => {
 const STYLES_CONTAINER_V2 = css`
   font-family: ${Constants.font.mono} !important;
   font-size: 10px;
+  zoom: 80%;
 
   /* Based on the 'g90' theme (https://www.carbondesignsystem.com/guidelines/themes/) which 'Tools.scss' uses */
   color: #f3f3f3;
@@ -1932,10 +1936,10 @@ const STYLES_CONTAINER = css`
   .bx--accordion,
   .bx--toggle__label,
   .tabs-container {
-    margin-bottom: 14px !important;
+    margin-bottom: 10px !important;
   }
 
-  padding: 14px;
+  padding: 10px;
 
   overflow-y: scroll;
   overflow-x: hidden;
@@ -1964,53 +1968,11 @@ const STYLES_SPLITTER_CONTAINER = css`
   width: 100%;
 `;
 
-const DEBUG_PREPOPULATED = false;
+const DEBUG_PREPOPULATED = true;
 
 export default class Tools extends React.PureComponent {
   static initialState = {
-    root: DEBUG_PREPOPULATED
-      ? {
-          panes: {
-            DEFAULT: {
-              type: 'pane',
-              props: {
-                name: 'DEFAULT',
-                visible: true,
-              },
-              children: {
-                'buttonclick 2': {
-                  type: 'button',
-                  prevId: 'buttonclick 1',
-                  pathId: 'DEFAULTbuttonclick 2',
-                  props: {
-                    label: 'click 2',
-                    icon: 'https://www.iconsdb.com/icons/preview/white/x-mark-xxl.png',
-                  },
-                },
-                'buttonclick 3': {
-                  type: 'button',
-                  prevId: 'buttonclick 2',
-                  pathId: 'DEFAULTbuttonclick 3',
-                  props: {
-                    hasIconOnly: true,
-                    label: 'click 3',
-                    icon: 'https://www.iconsdb.com/icons/preview/white/x-mark-xxl.png',
-                  },
-                },
-                lastId: 'buttonclick 3',
-                count: 3,
-                'buttonclick 1': {
-                  type: 'button',
-                  pathId: 'DEFAULTbuttonclick 1',
-                  props: {
-                    label: 'click 1',
-                  },
-                },
-              },
-            },
-          },
-        }
-      : {},
+    root: DEBUG_PREPOPULATED ? ToolsDebugData : {},
     visible: DEBUG_PREPOPULATED,
   };
 
@@ -2053,7 +2015,7 @@ export default class Tools extends React.PureComponent {
   }
 
   render() {
-    // console.log(`render: ${JSON.stringify(this.state.root, null, 2)}`);
+    console.log(`render: ${JSON.stringify(this.state.root, null, 2)}`);
 
     // NOTE(jim): this will take over the default render because
     // we don't need splitter layout anymore.
