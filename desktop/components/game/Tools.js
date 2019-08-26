@@ -185,6 +185,13 @@ elementTypes['box'] = ToolBox;
 const STYLES_BUTTON_CONTAINER = css`
   width: 100%;
   margin-bottom: 14px;
+
+  .bx--btn--icon-only .bx--assistive-text,
+  .bx--btn--icon-only + .bx--assistive-text,
+  .bx--btn--icon-only::after,
+  .bx--btn--icon-only::before {
+    display: none !important;
+  }
 `;
 
 class ToolButton extends React.PureComponent {
@@ -194,11 +201,24 @@ class ToolButton extends React.PureComponent {
       <div className={STYLES_BUTTON_CONTAINER}>
         <Carbon>
           <Button
-            {...element.props}
+            disabled={element.props && element.props.disabled}
             small={!(element.props && element.props.big)}
             kind={(element.props && element.props.kind) || 'secondary'}
+            renderIcon={
+              element.props && element.props.icon
+                ? ({ ...props }) => (
+                    <ToolsContext.Consumer>
+                      {({ transformAssetUri }) => (
+                        <img {...props} src={transformAssetUri(element.props.icon)} />
+                      )}
+                    </ToolsContext.Consumer>
+                  )
+                : undefined
+            }
+            hasIconOnly={element.props && element.props.iconOnly}
+            iconDescription="new"
             onClick={() => sendEvent(element.pathId, { type: 'onClick' })}>
-            {element.props.label}
+            {element.props && element.props.iconOnly ? null : element.props.label}
           </Button>
         </Carbon>
       </div>
@@ -1955,172 +1975,37 @@ export default class Tools extends React.PureComponent {
               type: 'pane',
               props: {
                 name: 'DEFAULT',
+                visible: true,
               },
               children: {
-                scrollBoxscrollBox1: {
-                  type: 'scrollBox',
-                  children: {
-                    'buttonButton 2': {
-                      type: 'button',
-                      prevId: 'markdownRow 2',
-                      pathId: 'M2zVSmMv2v7J4/NkSuNbiA==',
-                      props: {
-                        label: 'Button 2',
-                      },
-                    },
-                    'buttonButton 7': {
-                      type: 'button',
-                      prevId: 'markdownRow 7',
-                      pathId: 'RU35sM5KLJoM5VNwExRDKA==',
-                      props: {
-                        label: 'Button 7',
-                      },
-                    },
-                    'markdownRow 3': {
-                      type: 'markdown',
-                      prevId: 'buttonButton 2',
-                      props: {
-                        source: 'Row 3',
-                      },
-                    },
-                    'markdownRow 5': {
-                      type: 'markdown',
-                      prevId: 'buttonButton 4',
-                      props: {
-                        source: 'Row 5',
-                      },
-                    },
-                    'buttonButton 1': {
-                      type: 'button',
-                      prevId: 'markdownRow 1',
-                      pathId: 'PlxZ3gcfZoR24irXQ+4ZWQ==',
-                      props: {
-                        label: 'Button 1',
-                      },
-                    },
-                    'buttonButton 4': {
-                      type: 'button',
-                      prevId: 'markdownRow 4',
-                      pathId: 'iWxh1j/rQEESiqy1SVvBTw==',
-                      props: {
-                        label: 'Button 4',
-                      },
-                    },
-                    'buttonButton 6': {
-                      type: 'button',
-                      prevId: 'markdownRow 6',
-                      pathId: 'B9yBNIH20bA+Yn1XrtdVKA==',
-                      props: {
-                        label: 'Button 6',
-                      },
-                    },
-                    'markdownRow 10': {
-                      type: 'markdown',
-                      prevId: 'buttonButton 9',
-                      props: {
-                        source: 'Row 10',
-                      },
-                    },
-                    'markdownRow 1': {
-                      type: 'markdown',
-                      props: {
-                        source: 'Row 1',
-                      },
-                    },
-                    'buttonButton 5': {
-                      type: 'button',
-                      prevId: 'markdownRow 5',
-                      pathId: 'bmjOD7WbsPcdAGr86fb/jw==',
-                      props: {
-                        label: 'Button 5',
-                      },
-                    },
-                    'markdownRow 6': {
-                      type: 'markdown',
-                      prevId: 'buttonButton 5',
-                      props: {
-                        source: 'Row 6',
-                      },
-                    },
-                    lastId: 'buttonButton 10',
-                    'buttonButton 9': {
-                      type: 'button',
-                      prevId: 'markdownRow 9',
-                      pathId: 'C52qwoXeoUkl5YUKoU0ibw==',
-                      props: {
-                        label: 'Button 9',
-                      },
-                    },
-                    'markdownRow 8': {
-                      type: 'markdown',
-                      prevId: 'buttonButton 7',
-                      props: {
-                        source: 'Row 8',
-                      },
-                    },
-                    'buttonButton 8': {
-                      type: 'button',
-                      prevId: 'markdownRow 8',
-                      pathId: '/DKiVgYvK7kGVO9WmfgEeg==',
-                      props: {
-                        label: 'Button 8',
-                      },
-                    },
-                    'markdownRow 7': {
-                      type: 'markdown',
-                      prevId: 'buttonButton 6',
-                      props: {
-                        source: 'Row 7',
-                      },
-                    },
-                    'buttonButton 3': {
-                      type: 'button',
-                      prevId: 'markdownRow 3',
-                      pathId: 'wE91WwJM/uxlncEeaG/nXA==',
-                      props: {
-                        label: 'Button 3',
-                      },
-                    },
-                    'markdownRow 2': {
-                      type: 'markdown',
-                      prevId: 'buttonButton 1',
-                      props: {
-                        source: 'Row 2',
-                      },
-                    },
-                    'markdownRow 9': {
-                      type: 'markdown',
-                      prevId: 'buttonButton 8',
-                      props: {
-                        source: 'Row 9',
-                      },
-                    },
-                    count: 20,
-                    'buttonButton 10': {
-                      type: 'button',
-                      prevId: 'markdownRow 10',
-                      pathId: 'NTG4C0s0bjqFN6eMunWLBw==',
-                      props: {
-                        label: 'Button 10',
-                      },
-                    },
-                    'markdownRow 4': {
-                      type: 'markdown',
-                      prevId: 'buttonButton 3',
-                      props: {
-                        source: 'Row 4',
-                      },
-                    },
-                  },
+                'buttonclick 2': {
+                  type: 'button',
+                  prevId: 'buttonclick 1',
+                  pathId: 'DEFAULTbuttonclick 2',
                   props: {
-                    border: '1px solid white',
-                    height: 150,
-                    padding: 2,
+                    label: 'click 2',
+                    icon: 'https://www.iconsdb.com/icons/preview/white/x-mark-xxl.png',
                   },
-                  pathId: 'eE7a6bwxqkSyXobc7+/RCw==',
                 },
-                lastId: 'scrollBoxscrollBox1',
-                count: 1,
+                'buttonclick 3': {
+                  type: 'button',
+                  prevId: 'buttonclick 2',
+                  pathId: 'DEFAULTbuttonclick 3',
+                  props: {
+                    hasIconOnly: true,
+                    label: 'click 3',
+                    icon: 'https://www.iconsdb.com/icons/preview/white/x-mark-xxl.png',
+                  },
+                },
+                lastId: 'buttonclick 3',
+                count: 3,
+                'buttonclick 1': {
+                  type: 'button',
+                  pathId: 'DEFAULTbuttonclick 1',
+                  props: {
+                    label: 'click 1',
+                  },
+                },
               },
             },
           },
