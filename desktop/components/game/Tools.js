@@ -906,6 +906,13 @@ class ToolNumberInput extends React.PureComponent {
 }
 elementTypes['numberInput'] = ToolNumberInput;
 
+const STYLES_RADIO_BUTTON_GROUP_CONTAINER = css`
+  .bx--radio-button:checked + .bx--radio-button__label .bx--radio-button__appearance:before {
+    width: 0.45rem !important;
+    height: 0.45rem !important;
+  }
+`;
+
 class ToolRadioButtonGroup extends React.PureComponent {
   state = {
     value: this.props.element.props.value,
@@ -952,39 +959,41 @@ class ToolRadioButtonGroup extends React.PureComponent {
     }
 
     return (
-      <Carbon>
-        <div className="bx--form-item">
-          {maybeLabel}
-          {maybeHelperText}
-          <div
-            className={
-              element.props && element.props.horizontal
-                ? 'bx--radio-button-group'
-                : 'bx--radio-button-group--vertical'
-            }>
-            {objectToArray(element.props && element.props.items).map((item) => (
-              <RadioButton
-                key={item}
-                item={item}
-                labelText={item}
-                checked={this.state.value == item}
-                disabled={element.props && element.props.disabled}
-                onChange={(value, name, event) => {
-                  if (event.target.checked) {
-                    this.setState({
-                      value: item,
-                      lastSentEventId: sendEvent(element.pathId, {
-                        type: 'onChange',
+      <div className={STYLES_RADIO_BUTTON_GROUP_CONTAINER}>
+        <Carbon>
+          <div className="bx--form-item">
+            {maybeLabel}
+            {maybeHelperText}
+            <div
+              className={
+                element.props && element.props.horizontal
+                  ? 'bx--radio-button-group'
+                  : 'bx--radio-button-group--vertical'
+              }>
+              {objectToArray(element.props && element.props.items).map((item) => (
+                <RadioButton
+                  key={item}
+                  item={item}
+                  labelText={item}
+                  checked={this.state.value == item}
+                  disabled={element.props && element.props.disabled}
+                  onChange={(value, name, event) => {
+                    if (event.target.checked) {
+                      this.setState({
                         value: item,
-                      }),
-                    });
-                  }
-                }}
-              />
-            ))}
+                        lastSentEventId: sendEvent(element.pathId, {
+                          type: 'onChange',
+                          value: item,
+                        }),
+                      });
+                    }
+                  }}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      </Carbon>
+        </Carbon>
+      </div>
     );
   }
 }
@@ -1696,6 +1705,16 @@ class ToolTextInput extends React.PureComponent {
 }
 elementTypes['textInput'] = ToolTextInput;
 
+const STYLES_TOGGLE_CONTAINER = css`
+  /* Fix toggle appearance for smaller sizes */
+  .bx--toggle-input:checked + .bx--toggle-input__label > .bx--toggle__switch::after {
+    transform: translateX(16px) !important;
+  }
+  .bx--toggle__switch::after {
+    top: 2.1px !important;
+  }
+`;
+
 class ToolToggle extends React.PureComponent {
   state = {
     toggled: this.props.element.props.toggled,
@@ -1717,22 +1736,24 @@ class ToolToggle extends React.PureComponent {
   render() {
     const { element } = this.props;
     return (
-      <Carbon>
-        <Toggle
-          {...element.props}
-          id={element.pathId}
-          toggled={this.state.toggled}
-          onToggle={(toggled) => {
-            this.setState({
-              toggled,
-              lastSentEventId: sendEvent(element.pathId, {
-                type: 'onToggle',
+      <div className={STYLES_TOGGLE_CONTAINER}>
+        <Carbon>
+          <Toggle
+            {...element.props}
+            id={element.pathId}
+            toggled={this.state.toggled}
+            onToggle={(toggled) => {
+              this.setState({
                 toggled,
-              }),
-            });
-          }}
-        />
-      </Carbon>
+                lastSentEventId: sendEvent(element.pathId, {
+                  type: 'onToggle',
+                  toggled,
+                }),
+              });
+            }}
+          />
+        </Carbon>
+      </div>
     );
   }
 }
