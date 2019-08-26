@@ -862,16 +862,19 @@ class ToolNumberInput extends React.PureComponent {
       <Carbon>
         <NumberInput
           {...element.props}
+          allowEmpty
           id={element.pathId}
           value={this.state.value}
           onChange={(event) => {
-            this.setState({
-              value: event.imaginaryTarget.valueAsNumber,
-              lastSentEventId: sendEvent(element.pathId, {
-                type: 'onChange',
+            if (!Number.isNaN(event.imaginaryTarget.valueAsNumber)) {
+              this.setState({
                 value: event.imaginaryTarget.valueAsNumber,
-              }),
-            });
+                lastSentEventId: sendEvent(element.pathId, {
+                  type: 'onChange',
+                  value: event.imaginaryTarget.valueAsNumber,
+                }),
+              });
+            }
           }}
         />
       </Carbon>
