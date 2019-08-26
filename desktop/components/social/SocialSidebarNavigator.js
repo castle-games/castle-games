@@ -38,8 +38,7 @@ export default class SocialSidebarNavigator extends React.Component {
     return (
       <div className={STYLES_CONTAINER}>
         {directMessages.map((c, ii) => {
-          const isSelected =
-            c.channelId === this.props.selectedChannelId && this.props.isChatVisible;
+          const isSelected = c.channelId === this.props.selectedChannelId;
 
           const user = userIdToUser[c.otherUserId];
           if (!user) {

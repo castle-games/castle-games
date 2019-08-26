@@ -115,11 +115,12 @@ class ChatContextManager extends React.Component {
       if (isNewGame) {
         this._joinOrCreateChannelForGame(this.props.navigation.game);
       }
-    } else if (this.props.navigation.contentMode === 'chat') {
+    } else {
+      let channelId = this.props.navigation.chatChannelId;
       let prevChannelId =
         prevProps && prevProps.navigation ? prevProps.navigation.chatChannelId : null;
-      if (prevNavigationMode !== 'chat' || prevChannelId !== this.props.navigation.chatChannelId) {
-        this._refreshChannelIds([this.props.navigation.chatChannelId]);
+      if (channelId && prevChannelId !== channelId) {
+        this._refreshChannelIds([channelId]);
       }
     }
   };
@@ -188,7 +189,7 @@ class ChatContextManager extends React.Component {
     if (fetchedChannel) {
       await this._addChannel({ ...fetchedChannel, isSubscribed: true });
     }
-    return this.props.navigateToChat({ channelId });
+    return this.props.showChatChannel(channelId);
   };
 
   // checks if we have a DM channel for this user,
@@ -227,7 +228,7 @@ class ChatContextManager extends React.Component {
     if (createdChannel) {
       await this._addChannel({ ...createdChannel, isSubscribed: true });
     }
-    return this.props.navigateToChat({ channelId });
+    return this.props.showChatChannel(channelId);
   };
 
   // checks if we have a chat channel for this game,
@@ -236,7 +237,7 @@ class ChatContextManager extends React.Component {
     if (!game || !game.gameId) return;
 
     const channelId = await this._joinOrCreateChannelForGame(game);
-    return this.props.navigateToChat({ channelId });
+    return this.props.showChatChannel(channelId);
   };
 
   closeChannel = async (channelId) => {
@@ -751,7 +752,7 @@ class ChatContextProvider extends React.Component {
                         currentUser={currentUser}
                         userPresence={userPresence}
                         navigation={navigation}
-                        navigateToChat={navigator.navigateToChat}
+                        showChatChannel={navigator.showChatChannel}
                         {...this.props}
                       />
                     )}

@@ -23,7 +23,7 @@ import Logs from '~/common/logs';
  *  should have an effect on values here.
  */
 const NavigationContextDefaults = {
-  contentMode: 'home', // chat | game | profile | home | signin | notifications | create | edit_post
+  contentMode: 'home', // game | profile | home | signin | notifications | create | edit_post
   timeLastNavigated: 0,
   gameUrl: '',
   game: null,
@@ -63,7 +63,7 @@ const AUTHENTICATED_ONLY_MODES = {
  */
 const NavigatorContextDefaults = {
   openUrl: async (url, options) => {},
-  navigateToChat: (options) => {},
+  showChatChannel: (channelId) => {},
   navigateToHome: () => {},
   navigateToGameUrl: async (url, options) => {},
   navigateToGame: async (game, options) => {},
@@ -98,7 +98,7 @@ class NavigationContextManager extends React.Component {
         ...NavigatorContextDefaults,
         ...props.value.navigator,
         navigateToContentMode: this.navigateToContentMode,
-        navigateToChat: this.navigateToChat,
+        showChatChannel: this.showChatChannel,
         navigateToHome: this.navigateToHome,
         navigateToGameUrl: this.navigateToGameUrl,
         navigateToGame: this.navigateToGame,
@@ -304,9 +304,14 @@ class NavigationContextManager extends React.Component {
 
   // assumes you have a channel id.
   // if not, use ChatContext.openChannel methods
-  navigateToChat = ({ channelId }) => {
+  showChatChannel = (channelId) => {
     let chatChannelId = channelId || this.state.chatChannelId;
-    return this._navigateToContentMode('chat', { chatChannelId });
+    this.setState({
+      navigation: {
+        ...this.state.navigation,
+        chatChannelId: channelId,
+      },
+    });
   };
 
   navigateToHome = () => this._navigateToContentMode('home');
