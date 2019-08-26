@@ -14,6 +14,11 @@ const STYLES_CONTAINER = css`
   justify-content: center;
 `;
 
+const STYLES_USERNAME = css`
+  cursor: pointer;
+  margin-left: 8px;
+`;
+
 export default class Viewer extends React.Component {
   _renderViewer = (navigateToCurrentUserProfile, currentUser) => {
     const avatarSrc =
@@ -23,14 +28,15 @@ export default class Viewer extends React.Component {
         <UIAvatar
           src={avatarSrc}
           onClick={navigateToCurrentUserProfile}
+          showIndicator={false}
           style={{
-            height: `32px`,
-            width: `32px`,
-            borderRadius: 0,
-            boxShadow: 'none',
-            backgroundColor: !avatarSrc ? 'magenta' : 'transparent',
+            height: `28px`,
+            width: `28px`,
           }}
         />
+        <div className={STYLES_USERNAME} onClick={navigateToCurrentUserProfile}>
+          {currentUser.user.username}
+        </div>
       </div>
     );
   };

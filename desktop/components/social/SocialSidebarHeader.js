@@ -98,7 +98,7 @@ export default class SocialSidebarHeader extends React.Component {
     } else {
       let name;
       if (channel.name === ChatUtilities.EVERYONE_CHANNEL_NAME) {
-        name = 'Everyone';
+        name = 'Community Chat';
       } else {
         name = channel.name;
       }

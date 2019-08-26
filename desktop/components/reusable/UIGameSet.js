@@ -45,7 +45,10 @@ export default class UIGameSet extends React.Component {
   };
 
   _maxNumGamesPerRow() {
-    let maxWidth = this.props.maxWidth > 0 ? this.props.maxWidth : window.innerWidth - 24;
+    let maxWidth =
+      this.props.maxWidth > 0
+        ? this.props.maxWidth
+        : window.innerWidth - parseInt(Constants.sidebar.width, 10) - 24;
     return Math.floor(maxWidth / (parseInt(Constants.card.width, 10) + 16));
   }
 

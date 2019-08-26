@@ -23,27 +23,8 @@ const STYLES_HOME_CONTAINER = css`
 `;
 
 const STYLES_CONTENT_CONTAINER = css`
-  margin-top: 16px;
+  margin-top: 24px;
   width: 100%;
-`;
-
-const STYLES_SUB_NAVIGATION_BAR = css`
-  display: flex;
-  flex-direction: row;
-`;
-
-const STYLES_SUB_NAVIGATION_ITEM = css`
-  font-weight: 400;
-  font-family: ${Constants.font.heading};
-  font-size: ${Constants.typescale.lvl5};
-  padding: 4px 24px 16px 24px;
-  color: #a0a0a0;
-
-  cursor: pointer;
-`;
-
-const STYLES_SUB_NAVIGATION_ITEM_ACTIVE = css`
-  color: black;
 `;
 
 const STYLES_GAMES_CONTAINER = css`
@@ -89,8 +70,6 @@ class GamesHomeScreen extends React.Component {
     subNavMode: 'home',
     isLoadingPosts: true,
     isLoadingAllGames: true,
-    isHoveringOnHome: false,
-    isHoveringOnAllGames: false,
     refreshingHomepage: false,
   };
 
@@ -144,14 +123,6 @@ class GamesHomeScreen extends React.Component {
     });
   };
 
-  _handleSetHoverOnHome = (shouldSetHovering) => {
-    this.setState({ isHoveringOnHome: shouldSetHovering });
-  };
-
-  _handleSetHoverOnAllGames = (shouldSetHovering) => {
-    this.setState({ isHoveringOnAllGames: shouldSetHovering });
-  };
-
   _handleScroll = (e) => {
     if (!this._mounted) return;
 
@@ -195,30 +166,7 @@ class GamesHomeScreen extends React.Component {
     return (
       <div className={STYLES_HOME_CONTAINER} onScroll={this._handleScroll}>
         <div className={STYLES_CONTENT_CONTAINER}>
-          <div className={STYLES_SUB_NAVIGATION_BAR}>
-            <div
-              className={
-                this.state.isHoveringOnHome || this.state.subNavMode === 'home'
-                  ? `${STYLES_SUB_NAVIGATION_ITEM} ${STYLES_SUB_NAVIGATION_ITEM_ACTIVE}`
-                  : STYLES_SUB_NAVIGATION_ITEM
-              }
-              onMouseEnter={() => this._handleSetHoverOnHome(true)}
-              onMouseLeave={() => this._handleSetHoverOnHome(false)}
-              onClick={() => this._changeSubNavMode('home')}>
-              Home
-            </div>
-            <div
-              className={
-                this.state.isHoveringOnAllGames || this.state.subNavMode === 'allGames'
-                  ? `${STYLES_SUB_NAVIGATION_ITEM} ${STYLES_SUB_NAVIGATION_ITEM_ACTIVE}`
-                  : STYLES_SUB_NAVIGATION_ITEM
-              }
-              onMouseEnter={() => this._handleSetHoverOnAllGames(true)}
-              onMouseLeave={() => this._handleSetHoverOnAllGames(false)}
-              onClick={() => this._changeSubNavMode('allGames')}>
-              All Games
-            </div>
-          </div>
+          <div className={STYLES_SECTION_TITLE}>Games</div>
           <div className={STYLES_GAMES_CONTAINER}>
             {this.state.subNavMode === 'home' ||
             (this.state.subNavMode === 'allGames' && this.props.allGames) ? (

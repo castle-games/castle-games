@@ -9,7 +9,6 @@ import ControlledInput from '~/components/primitives/ControlledInput';
 
 const STYLES_CONTAINER = css`
   color: ${Constants.colors.black};
-  background: #f3f3f3;
   display: flex;
   align-items: center;
   justify-content: space-between;
