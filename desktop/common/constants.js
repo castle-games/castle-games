@@ -78,7 +78,7 @@ export const typescale = {
 };
 
 export const sidebar = {
-  width: '212px',
+  width: '400px',
 };
 
 export const card = {
