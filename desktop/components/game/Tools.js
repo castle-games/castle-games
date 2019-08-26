@@ -1976,7 +1976,7 @@ const STYLES_SPLITTER_CONTAINER = css`
   width: 100%;
 `;
 
-const DEBUG_PREPOPULATED = true;
+const DEBUG_PREPOPULATED = false;
 
 export default class Tools extends React.PureComponent {
   static initialState = {
@@ -2023,7 +2023,7 @@ export default class Tools extends React.PureComponent {
   }
 
   render() {
-    console.log(`render: ${JSON.stringify(this.state.root, null, 2)}`);
+    // console.log(`render: ${JSON.stringify(this.state.root, null, 2)}`);
 
     // NOTE(jim): this will take over the default render because
     // we don't need splitter layout anymore.
