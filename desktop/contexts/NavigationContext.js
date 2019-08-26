@@ -29,6 +29,7 @@ const NavigationContextDefaults = {
   game: null,
   sessionId: null,
   post: null,
+  isChatExpanded: true,
   chatChannelId: null,
   gameParams: null,
   referrerGame: null,
@@ -64,6 +65,7 @@ const AUTHENTICATED_ONLY_MODES = {
 const NavigatorContextDefaults = {
   openUrl: async (url, options) => {},
   showChatChannel: (channelId) => {},
+  toggleIsChatExpanded: () => {},
   navigateToHome: () => {},
   navigateToGameUrl: async (url, options) => {},
   navigateToGame: async (game, options) => {},
@@ -99,6 +101,7 @@ class NavigationContextManager extends React.Component {
         ...props.value.navigator,
         navigateToContentMode: this.navigateToContentMode,
         showChatChannel: this.showChatChannel,
+        toggleIsChatExpanded: this.toggleIsChatExpanded,
         navigateToHome: this.navigateToHome,
         navigateToGameUrl: this.navigateToGameUrl,
         navigateToGame: this.navigateToGame,
@@ -310,7 +313,20 @@ class NavigationContextManager extends React.Component {
       navigation: {
         ...this.state.navigation,
         chatChannelId: channelId,
+        isChatExpanded: true,
       },
+    });
+  };
+
+  toggleIsChatExpanded = () => {
+    this.setState((state) => {
+      return {
+        ...state,
+        navigation: {
+          ...state.navigation,
+          isChatExpanded: !state.navigation.isChatExpanded,
+        },
+      };
     });
   };
 

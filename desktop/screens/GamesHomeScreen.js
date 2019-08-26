@@ -5,7 +5,7 @@ import * as SVG from '~/components/primitives/svg';
 
 import { css } from 'react-emotion';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
-import { NavigatorContext } from '~/contexts/NavigationContext';
+import { NavigatorContext, NavigationContext } from '~/contexts/NavigationContext';
 
 import UIGameSet from '~/components/reusable/UIGameSet';
 import UIPostList from '~/components/reusable/UIPostList';
@@ -189,6 +189,9 @@ class GamesHomeScreen extends React.Component {
         />
       );
     }
+    let sidebarWidth = this.props.isChatExpanded
+      ? Constants.sidebar.width
+      : Constants.sidebar.collapsedWidth;
     return (
       <div className={STYLES_HOME_CONTAINER} onScroll={this._handleScroll}>
         <div className={STYLES_CONTENT_CONTAINER}>
@@ -222,6 +225,7 @@ class GamesHomeScreen extends React.Component {
               <UIGameSet
                 title=""
                 numRowsToElide={this.state.subNavMode === 'home' ? 3 : -1}
+                maxWidth={window.innerWidth - 24 - parseInt(sidebarWidth, 10)}
                 viewer={this.props.viewer}
                 gameItems={
                   this.state.subNavMode === 'home' ? this.props.trendingGames : this.props.allGames
@@ -255,21 +259,26 @@ export default class GamesHomeScreenWithContext extends React.Component {
         {(navigator) => (
           <CurrentUserContext.Consumer>
             {(currentUser) => (
-              <GamesHomeScreen
-                viewer={currentUser ? currentUser.user : null}
-                navigateToUserProfile={navigator.navigateToUserProfile}
-                navigateToGame={navigator.navigateToGame}
-                navigateToSignIn={navigator.navigateToSignIn}
-                posts={currentUser.content.posts}
-                allGames={currentUser.content.allGames}
-                loadAllGames={currentUser.loadAllGames}
-                trendingGames={currentUser.content.trendingGames}
-                reloadTrendingGames={currentUser.reloadTrendingGames}
-                reloadPosts={currentUser.reloadPosts}
-                loadMorePosts={currentUser.loadMorePosts}
-                navigator={navigator}
-                {...this.props}
-              />
+              <NavigationContext.Consumer>
+                {(navigation) => (
+                  <GamesHomeScreen
+                    viewer={currentUser ? currentUser.user : null}
+                    navigateToUserProfile={navigator.navigateToUserProfile}
+                    navigateToGame={navigator.navigateToGame}
+                    navigateToSignIn={navigator.navigateToSignIn}
+                    posts={currentUser.content.posts}
+                    allGames={currentUser.content.allGames}
+                    loadAllGames={currentUser.loadAllGames}
+                    trendingGames={currentUser.content.trendingGames}
+                    reloadTrendingGames={currentUser.reloadTrendingGames}
+                    reloadPosts={currentUser.reloadPosts}
+                    loadMorePosts={currentUser.loadMorePosts}
+                    navigator={navigator}
+                    isChatExpanded={navigation.isChatExpanded}
+                    {...this.props}
+                  />
+                )}
+              </NavigationContext.Consumer>
             )}
           </CurrentUserContext.Consumer>
         )}

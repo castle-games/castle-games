@@ -27,7 +27,7 @@ const STYLES_LOBBY_ICON = css`
 
 export default class SocialSidebarNavigator extends React.Component {
   render() {
-    const { chat, viewer } = this.props;
+    const { chat, viewer, isChatExpanded, selectedChannelId } = this.props;
     if (!viewer) {
       return null;
     }
@@ -53,7 +53,7 @@ export default class SocialSidebarNavigator extends React.Component {
         lobbyAvatar = null;
       lobbyChannel = chat.findChannel(ChatUtilities.EVERYONE_CHANNEL_NAME);
       if (lobbyChannel) {
-        isLobbySelected = this.props.selectedChannelId === lobbyChannel.channelId;
+        isLobbySelected = isChatExpanded && selectedChannelId === lobbyChannel.channelId;
         lobbyAvatar = <div className={STYLES_LOBBY_ICON}>🏰</div>;
         lobbyItem = (
           <SocialSidebarNavigationItem
@@ -72,7 +72,7 @@ export default class SocialSidebarNavigator extends React.Component {
       <div className={STYLES_CONTAINER}>
         {lobbyItem}
         {directMessages.map((c, ii) => {
-          const isSelected = c.channelId === this.props.selectedChannelId;
+          const isSelected = isChatExpanded && c.channelId === selectedChannelId;
 
           const user = userIdToUser[c.otherUserId];
           if (!user) {

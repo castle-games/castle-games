@@ -78,7 +78,8 @@ export const typescale = {
 };
 
 export const sidebar = {
-  width: '400px',
+  width: '324px',
+  collapsedWidth: '48px',
 };
 
 export const card = {

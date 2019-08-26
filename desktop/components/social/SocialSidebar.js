@@ -18,8 +18,6 @@ const STYLES_CONTAINER = css`
   align-items: flex-start;
   justify-content: space-between;
   flex-direction: column;
-  width: ${Constants.sidebar.width};
-  min-width: 10%;
   height: 100%;
 `;
 
@@ -30,15 +28,16 @@ const STYLES_SIDEBAR_BODY = css`
 `;
 
 const STYLES_CHANNEL_NAVIGATOR = css`
-  width: 15%;
+  width: ${Constants.sidebar.collapsedWidth};
   flex-shrink: 0;
   height: 100%;
 `;
 
 const STYLES_CHANNEL = css`
-  width: 85%;
+  width: 100%;
   display: flex;
   flex-direction: column;
+  min-width: 0;
 `;
 
 class SocialSidebar extends React.Component {
@@ -85,19 +84,28 @@ class SocialSidebar extends React.Component {
   };
 
   render() {
-    const { chat, viewer, userPresence } = this.props;
+    const { chat, viewer, userPresence, isChatExpanded } = this.props;
     const channelId = this._getChannelIdVisible();
 
     if (!viewer) {
       return null;
     }
 
+    const sidebarWidth = isChatExpanded
+      ? Constants.sidebar.width
+      : Constants.sidebar.collapsedWidth;
+
     return (
-      <div className={STYLES_CONTAINER}>
-        <SocialSidebarHeader channel={chat.channels[channelId]} />
+      <div className={STYLES_CONTAINER} style={{ width: sidebarWidth, minWidth: sidebarWidth }}>
+        <SocialSidebarHeader
+          channel={chat.channels[channelId]}
+          isExpanded={isChatExpanded}
+          onToggleSidebar={this.props.navigator.toggleIsChatExpanded}
+        />
         <div className={STYLES_SIDEBAR_BODY}>
           <div className={STYLES_CHANNEL_NAVIGATOR}>
             <SocialSidebarNavigator
+              isChatExpanded={isChatExpanded}
               selectedChannelId={channelId}
               viewer={viewer}
               userPresence={userPresence}
@@ -105,11 +113,13 @@ class SocialSidebar extends React.Component {
               onSelectChannel={this._handleNavigateToChat}
             />
           </div>
-          <div className={STYLES_CHANNEL}>
-            {channelId && (
-              <ChatChannel isSidebar chat={this.props.chat} channelId={channelId} size="24px" />
-            )}
-          </div>
+          {isChatExpanded && (
+            <div className={STYLES_CHANNEL}>
+              {channelId && (
+                <ChatChannel isSidebar chat={this.props.chat} channelId={channelId} size="24px" />
+              )}
+            </div>
+          )}
         </div>
       </div>
     );
@@ -136,6 +146,7 @@ export default class SocialSidebarWithContext extends React.Component {
                             <SocialSidebar
                               userPresence={userPresence}
                               viewer={currentUser.user}
+                              isChatExpanded={navigation.isChatExpanded}
                               chatChannelId={navigation.chatChannelId}
                               chat={chat}
                               lobbyChannel={lobbyChannel}

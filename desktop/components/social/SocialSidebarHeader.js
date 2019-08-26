@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as ChatUtilities from '~/common/chat-utilities';
 import * as Constants from '~/common/constants';
 import * as Strings from '~/common/strings';
+import * as SVG from '~/components/primitives/svg';
 
 import { css } from 'react-emotion';
 
@@ -10,15 +11,28 @@ const STYLES_HEADER = css`
   color: ${Constants.REFACTOR_COLORS.text};
   font-family: ${Constants.REFACTOR_FONTS.system};
   width: 100%;
+  height: ${Constants.sidebar.collapsedWidth};
+  max-height: ${Constants.sidebar.collapsedWidth};
   flex-shrink: 0;
-  padding: 8px 8px 8px 16px;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: space-between;
 `;
 
+const STYLES_TOGGLE = css`
+  display: flex;
+  width: ${Constants.sidebar.collapsedWidth};
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    cursor: pointer;
+  }
+`;
+
 const STYLES_HEADER_LEFT = css`
+  padding: 8px 8px 8px 16px;
   min-width: 25%;
   width: 100%;
 `;
@@ -68,6 +82,10 @@ const STYLES_LINK = css`
 const STYLES_CHANNEL_NAME = css``;
 
 export default class SocialSidebarHeader extends React.Component {
+  static defaultProps = {
+    isExpanded: true,
+  };
+
   _renderTitle = () => {
     const { channel, onChannelClick } = this.props;
     let content;
@@ -97,10 +115,10 @@ export default class SocialSidebarHeader extends React.Component {
     const { channel } = this.props;
     switch (channel.type) {
       case 'dm':
-        return `You are having a private conversation with ${channel.name}`;
+        return `A private conversation with ${channel.name}`;
       default:
         if (channel.name === ChatUtilities.EVERYONE_CHANNEL_NAME) {
-          return 'You are chatting with everyone on Castle';
+          return 'Everyone on Castle';
         }
         break;
     }
@@ -134,20 +152,31 @@ export default class SocialSidebarHeader extends React.Component {
   };
 
   render() {
-    const { channel, onLeaveChannel } = this.props;
+    const { channel, isExpanded, onToggleSidebar } = this.props;
     if (!channel) {
       return null;
     }
 
+    let toggleControl;
+    let toggleProps = { width: 24, height: 24, onClick: onToggleSidebar };
+    if (isExpanded) {
+      toggleControl = <SVG.ChevronLeft {...toggleProps} />;
+    } else {
+      toggleControl = <SVG.ChevronRight {...toggleProps} />;
+    }
+
     return (
       <header className={STYLES_HEADER}>
-        <div className={STYLES_HEADER_LEFT}>
-          {this._renderTitle()}
-          <p className={STYLES_P}>
-            {this._renderActions()}
-            <span>{this._getHeading()}</span>
-          </p>
-        </div>
+        {isExpanded ? (
+          <div className={STYLES_HEADER_LEFT}>
+            {this._renderTitle()}
+            <p className={STYLES_P}>
+              {this._renderActions()}
+              <span>{this._getHeading()}</span>
+            </p>
+          </div>
+        ) : null}
+        <div className={STYLES_TOGGLE}>{toggleControl}</div>
       </header>
     );
   }
