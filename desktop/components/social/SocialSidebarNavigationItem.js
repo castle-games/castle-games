@@ -8,13 +8,14 @@ import UIAvatar from '~/components/reusable/UIAvatar';
 
 const STYLES_USER = css`
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: center;
   font-size: 12px;
   margin: 0 0 4px 0;
-  padding: 4px 8px 4px 8px;
+  padding: 4px 0 4px 0;
   cursor: pointer;
   user-select: none;
+  width: 100%;
 `;
 
 const STYLES_NOTIFICATION = css`
@@ -54,7 +55,7 @@ export default (props) => {
   if (avatarElement) {
     avatar = avatarElement;
   } else if (avatarUrl) {
-    avatar = <UIAvatar src={avatarUrl} isOnline={isOnline} />;
+    avatar = <UIAvatar src={avatarUrl} isOnline={isOnline} style={{ width: 24, height: 24 }} />;
   }
 
   return (

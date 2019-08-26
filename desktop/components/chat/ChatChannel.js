@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as ChatUtilities from '~/common/chat-utilities';
 
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigatorContext } from '~/contexts/NavigationContext';
@@ -82,6 +83,12 @@ class ChatChannel extends React.Component {
     const { chat, channelId, navigator, userPresence, viewer } = this.props;
     const channel = chat.channels[channelId];
 
+    // hack
+    let name = channel.name;
+    if (name === ChatUtilities.EVERYONE_CHANNEL_NAME) {
+      name = 'everyone';
+    }
+
     return (
       <React.Fragment>
         <ChatMessages
@@ -102,7 +109,7 @@ class ChatChannel extends React.Component {
           ref={(c) => (this._inputRef = c)}
           isSidebar={this.props.isSidebar}
           theme={this.props.theme}
-          placeholder="Type a message"
+          placeholder={`Message ${name}`}
           addUsers={userPresence.addUsers}
           onSendMessage={this._handleSendMessage}
           isEditAvailable={this._isEditAvailable()}

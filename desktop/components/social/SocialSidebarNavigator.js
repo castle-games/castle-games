@@ -13,15 +13,26 @@ const STYLES_CONTAINER = css`
   justify-content: flex-start;
   background: #e5e5e5;
   height: 100%;
+  width: 100%;
+`;
+
+const STYLES_LOBBY_ICON = css`
+  font-size: 20px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 export default class SocialSidebarNavigator extends React.Component {
   render() {
-    const { channels, viewer } = this.props;
+    const { chat, viewer } = this.props;
     if (!viewer) {
       return null;
     }
 
+    const channels = chat.channels;
     const { onlineUserIds, userIdToUser } = this.props.userPresence;
     let directMessages = [];
     Object.entries(channels).forEach(([channelId, channel]) => {
@@ -35,8 +46,31 @@ export default class SocialSidebarNavigator extends React.Component {
 
     directMessages = ChatUtilities.sortChannels(directMessages);
 
+    let lobbyItem;
+    try {
+      let lobbyChannel,
+        isLobbySelected = false,
+        lobbyAvatar = null;
+      lobbyChannel = chat.findChannel(ChatUtilities.EVERYONE_CHANNEL_NAME);
+      if (lobbyChannel) {
+        isLobbySelected = this.props.selectedChannelId === lobbyChannel.channelId;
+        lobbyAvatar = <div className={STYLES_LOBBY_ICON}>🏰</div>;
+        lobbyItem = (
+          <SocialSidebarNavigationItem
+            isUnread={lobbyChannel.hasUnreadMessages}
+            notificationCount={lobbyChannel.notificationCount}
+            isOnline={true}
+            isSelected={isLobbySelected}
+            avatarElement={lobbyAvatar}
+            onClick={() => this.props.onSelectChannel(lobbyChannel)}
+          />
+        );
+      }
+    } catch (_) {}
+
     return (
       <div className={STYLES_CONTAINER}>
+        {lobbyItem}
         {directMessages.map((c, ii) => {
           const isSelected = c.channelId === this.props.selectedChannelId;
 

@@ -10,8 +10,7 @@ import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { UserPresenceContext } from '~/contexts/UserPresenceContext';
 
 import ChatChannel from '~/components/chat/ChatChannel';
-import SidebarHeader from '~/components/sidebar/SidebarHeader';
-import SocialSidebarGroupItem from '~/components/social/SocialSidebarGroupItem';
+import SocialSidebarHeader from '~/components/social/SocialSidebarHeader';
 import SocialSidebarNavigator from '~/components/social/SocialSidebarNavigator';
 
 const STYLES_CONTAINER = css`
@@ -93,39 +92,16 @@ class SocialSidebar extends React.Component {
       return null;
     }
 
-    /* TODO: BEN: header props
-       onShowOptions={this._handleShowOptions}
-       onSignIn={this._handleSignIn}
-       onSignOut={this._handleSignOut} */
-
-    let lobbyChannel,
-      isLobbySelected = false,
-      numUsersOnline = 0;
-    try {
-      lobbyChannel = chat.findChannel(ChatUtilities.EVERYONE_CHANNEL_NAME);
-      if (lobbyChannel) {
-        isLobbySelected = channelId === lobbyChannel.channelId;
-        numUsersOnline = chat.channelOnlineCounts[lobbyChannel.channelId];
-      }
-    } catch (_) {}
-
     return (
       <div className={STYLES_CONTAINER}>
-        <SidebarHeader viewer={viewer} navigator={navigator} />
+        <SocialSidebarHeader channel={chat.channels[channelId]} />
         <div className={STYLES_SIDEBAR_BODY}>
           <div className={STYLES_CHANNEL_NAVIGATOR}>
-            <SocialSidebarGroupItem
-              numMembersOnline={numUsersOnline}
-              channel={lobbyChannel}
-              userPresence={userPresence}
-              isSelected={isLobbySelected}
-              onClick={() => this._handleNavigateToChat(lobbyChannel)}
-            />
             <SocialSidebarNavigator
               selectedChannelId={channelId}
               viewer={viewer}
               userPresence={userPresence}
-              channels={chat.channels}
+              chat={chat}
               onSelectChannel={this._handleNavigateToChat}
             />
           </div>
