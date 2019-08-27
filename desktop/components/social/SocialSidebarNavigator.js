@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as Actions from '~/common/actions';
 import * as ChatUtilities from '~/common/chat-utilities';
 import * as Constants from '~/common/constants';
 
@@ -26,27 +27,65 @@ const STYLES_LOBBY_ICON = css`
 `;
 
 export default class SocialSidebarNavigator extends React.Component {
-  render() {
-    const { chat, viewer, isChatExpanded, selectedChannelId } = this.props;
-    if (!viewer) {
-      return null;
-    }
+  state = {
+    game: null,
+  };
 
-    const channels = chat.channels;
-    const { onlineUserIds, userIdToUser } = this.props.userPresence;
-    let directMessages = [];
-    Object.entries(channels).forEach(([channelId, channel]) => {
-      if (channel.type === 'dm') {
-        directMessages.push({
-          ...channel,
-          otherUserIsOnline: onlineUserIds[channel.otherUserId],
-        });
+  componentDidUpdate(prevProps, prevState) {
+    this._update(prevProps, prevState);
+  }
+
+  componentDidMount() {
+    this._update(null, null);
+  }
+
+  _update = async (prevProps, prevState) => {
+    // TODO: put this game fetch inside navigation context and merge w meta screen
+    const { chat, gameMetaChannelId } = this.props;
+    if (!prevProps || prevProps.gameMetaChannelId !== gameMetaChannelId) {
+      if (this.state.game) {
+        await this.setState({ game: null });
       }
-    });
+      if (gameMetaChannelId) {
+        const channel = chat.channels[gameMetaChannelId];
+        if (channel.type === 'game' && channel.gameId) {
+          try {
+            let game = await Actions.getGameByGameId(channel.gameId);
+            this.setState({ game });
+          } catch (_) {}
+        }
+      }
+    }
+  };
 
-    directMessages = ChatUtilities.sortChannels(directMessages);
+  _renderGameItem = () => {
+    const { chat, gameMetaChannelId, isChatExpanded, selectedChannelId } = this.props;
+    let gameItem = null;
+    if (gameMetaChannelId) {
+      let iconSrc;
+      const channel = chat.channels[gameMetaChannelId];
+      const { game } = this.state;
+      if (game && game.coverImage) {
+        iconSrc = game.coverImage.url;
+      }
+      const isGameSelected = isChatExpanded && selectedChannelId === channel.channelId;
+      gameItem = (
+        <SocialSidebarNavigationItem
+          isUnread={channel.hasUnreadMessages}
+          notificationCount={channel.notificationCount}
+          isOnline={true}
+          isSelected={isGameSelected}
+          avatarUrl={iconSrc}
+          onClick={() => this.props.onSelectChannel(channel)}
+        />
+      );
+    }
+    return gameItem;
+  };
 
-    let lobbyItem;
+  _renderLobbyItem = () => {
+    const { chat, isChatExpanded, selectedChannelId } = this.props;
+    let lobbyItem = null;
     try {
       let lobbyChannel,
         isLobbySelected = false,
@@ -67,10 +106,33 @@ export default class SocialSidebarNavigator extends React.Component {
         );
       }
     } catch (_) {}
+    return lobbyItem;
+  };
+
+  render() {
+    const { chat, viewer, isChatExpanded, selectedChannelId, gameMetaChannelId } = this.props;
+    if (!viewer) {
+      return null;
+    }
+
+    const channels = chat.channels;
+    const { onlineUserIds, userIdToUser } = this.props.userPresence;
+    let directMessages = [];
+    Object.entries(channels).forEach(([channelId, channel]) => {
+      if (channel.type === 'dm') {
+        directMessages.push({
+          ...channel,
+          otherUserIsOnline: onlineUserIds[channel.otherUserId],
+        });
+      }
+    });
+
+    directMessages = ChatUtilities.sortChannels(directMessages);
 
     return (
       <div className={STYLES_CONTAINER}>
-        {lobbyItem}
+        {this._renderGameItem()}
+        {this._renderLobbyItem()}
         {directMessages.map((c, ii) => {
           const isSelected = isChatExpanded && c.channelId === selectedChannelId;
 

@@ -323,7 +323,10 @@ class NavigationContextManager extends React.Component {
 
   navigateToGameMeta = (channelId) => {
     let chatChannelId = channelId || this.state.chatChannelId;
-    return this._navigateToContentMode('game-meta', { gameMetaChannelId: channelId });
+    return this._navigateToContentMode('game-meta', {
+      gameMetaChannelId: channelId,
+      chatChannelId: channelId,
+    });
   };
 
   toggleIsChatExpanded = () => {

@@ -116,6 +116,8 @@ export default class SocialSidebarHeader extends React.Component {
     switch (channel.type) {
       case 'dm':
         return `A private conversation with ${channel.name}`;
+      case 'game':
+        return `People playing ${channel.name}`;
       default:
         if (channel.name === ChatUtilities.EVERYONE_CHANNEL_NAME) {
           return 'Everyone on Castle';
