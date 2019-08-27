@@ -19,6 +19,7 @@ const STYLES_CONTAINER = css`
   justify-content: space-between;
   flex-direction: column;
   height: 100%;
+  border-left: 1px solid #f3f3f3;
 `;
 
 const STYLES_SIDEBAR_BODY = css`
@@ -103,6 +104,13 @@ class SocialSidebar extends React.Component {
           onToggleSidebar={this.props.navigator.toggleIsChatExpanded}
         />
         <div className={STYLES_SIDEBAR_BODY}>
+          {isChatExpanded && (
+            <div className={STYLES_CHANNEL}>
+              {channelId && (
+                <ChatChannel isSidebar chat={this.props.chat} channelId={channelId} size="24px" />
+              )}
+            </div>
+          )}
           <div className={STYLES_CHANNEL_NAVIGATOR}>
             <SocialSidebarNavigator
               isChatExpanded={isChatExpanded}
@@ -113,13 +121,6 @@ class SocialSidebar extends React.Component {
               onSelectChannel={this._handleNavigateToChat}
             />
           </div>
-          {isChatExpanded && (
-            <div className={STYLES_CHANNEL}>
-              {channelId && (
-                <ChatChannel isSidebar chat={this.props.chat} channelId={channelId} size="24px" />
-              )}
-            </div>
-          )}
         </div>
       </div>
     );

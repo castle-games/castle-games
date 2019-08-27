@@ -160,9 +160,9 @@ export default class SocialSidebarHeader extends React.Component {
     let toggleControl;
     let toggleProps = { width: 24, height: 24, onClick: onToggleSidebar };
     if (isExpanded) {
-      toggleControl = <SVG.ChevronLeft {...toggleProps} />;
-    } else {
       toggleControl = <SVG.ChevronRight {...toggleProps} />;
+    } else {
+      toggleControl = <SVG.ChevronLeft {...toggleProps} />;
     }
 
     return (
