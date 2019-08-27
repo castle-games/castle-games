@@ -23,7 +23,7 @@ import Logs from '~/common/logs';
  *  should have an effect on values here.
  */
 const NavigationContextDefaults = {
-  contentMode: 'home', // game | profile | home | signin | notifications | create | edit_post
+  contentMode: 'home', // game | gamemeta | profile | home | signin | notifications | create | edit_post
   timeLastNavigated: 0,
   gameUrl: '',
   game: null,
@@ -31,6 +31,7 @@ const NavigationContextDefaults = {
   post: null,
   isChatExpanded: true,
   chatChannelId: null,
+  gameMetaChannelId: null, // TODO: ben: decouple from chat, take a game here
   gameParams: null,
   referrerGame: null,
   timeGameLoaded: 0,
@@ -69,6 +70,7 @@ const NavigatorContextDefaults = {
   navigateToHome: () => {},
   navigateToGameUrl: async (url, options) => {},
   navigateToGame: async (game, options) => {},
+  navigateToGameMeta: (channelId) => {}, // TODO: ben: decouple from chat
   navigateToCurrentGame: () => {},
   navigateToSignIn: () => {},
   navigateToCurrentUserProfile: () => {},
@@ -105,6 +107,7 @@ class NavigationContextManager extends React.Component {
         navigateToHome: this.navigateToHome,
         navigateToGameUrl: this.navigateToGameUrl,
         navigateToGame: this.navigateToGame,
+        navigateToGameMeta: this.navigateToGameMeta,
         navigateToCurrentGame: this.navigateToCurrentGame,
         navigateToCurrentUserProfile: this.navigateToCurrentUserProfile,
         navigateToSignIn: this.navigateToSignIn,
@@ -316,6 +319,11 @@ class NavigationContextManager extends React.Component {
         isChatExpanded: true,
       },
     });
+  };
+
+  navigateToGameMeta = (channelId) => {
+    let chatChannelId = channelId || this.state.chatChannelId;
+    return this._navigateToContentMode('game-meta', { gameMetaChannelId: channelId });
   };
 
   toggleIsChatExpanded = () => {

@@ -81,7 +81,7 @@ class ContentNavigationBar extends React.Component {
 
   _getPlayItems = () => {
     // TODO: BEN: decouple from chat (and unsub this component from chat)
-    const { channels } = this.props;
+    const { channels, navigator } = this.props;
     if (channels) {
       let filteredChannels = [];
       Object.entries(channels).forEach(([channelId, channel]) => {
@@ -94,7 +94,7 @@ class ContentNavigationBar extends React.Component {
         return filteredChannels.map((c) => {
           return {
             name: c.name,
-            onClick: () => navigator.navigateToChat({ channelId: c.channelId }),
+            onClick: () => navigator.navigateToGameMeta(c.channelId),
           };
         });
       }

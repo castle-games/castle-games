@@ -7,7 +7,6 @@ import { ChatContext } from '~/contexts/ChatContext';
 import { NavigatorContext, NavigationContext } from '~/contexts/NavigationContext';
 import { UserPresenceContext } from '~/contexts/UserPresenceContext';
 
-import ChatChannel from '~/components/chat/ChatChannel';
 import ChatMembers from '~/components/chat/ChatMembers';
 import GameMetaHeader from '~/components/gamemeta/GameMetaHeader';
 import UIHorizontalNavigation from '~/components/reusable/UIHorizontalNavigation';
@@ -26,7 +25,7 @@ const STYLES_CONTAINER = css`
 class GameMetaScreen extends React.Component {
   state = {
     game: null,
-    mode: 'chat',
+    mode: 'members',
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -49,7 +48,7 @@ class GameMetaScreen extends React.Component {
     }
     if (!prevProps || prevProps.channelId !== channelId) {
       // clear prev state
-      let updates = { mode: 'chat', messageIdToEdit: null };
+      let updates = { mode: 'members' };
       if (this.state.game) {
         updates.game = null;
       }
@@ -65,11 +64,9 @@ class GameMetaScreen extends React.Component {
   };
 
   _getNavigationItems = () => {
-    let items = [{ label: 'Chat', key: 'chat' }];
+    let items = [];
     const numChannelMembers = this.props.chat.channelOnlineCounts[this.props.channelId];
-    if (numChannelMembers > 0) {
-      items.push({ label: `People Online (${numChannelMembers})`, key: 'members' });
-    }
+    items.push({ label: `People Online (${numChannelMembers})`, key: 'members' });
     return items;
   };
 
@@ -89,15 +86,13 @@ class GameMetaScreen extends React.Component {
   _renderContent = (channel, mode) => {
     switch (mode) {
       case 'members':
+      default:
         return (
           <ChatMembers
             userIds={channel.subscribedUsers.map((user) => user.userId)}
             onSendMessage={this._handleOpenDirectMessage}
           />
         );
-      case 'chat':
-      default:
-        return <ChatChannel chat={this.props.chat} channelId={this.props.channelId} />;
     }
   };
 
@@ -149,7 +144,7 @@ export default class GameMetaScreenWithContext extends React.Component {
                     {(navigator) => (
                       <GameMetaScreen
                         navigator={navigator}
-                        channelId={navigation.chatChannelId}
+                        channelId={navigation.gameMetaChannelId}
                         userIdToUser={userPresence.userIdToUser}
                         chat={chat}
                       />

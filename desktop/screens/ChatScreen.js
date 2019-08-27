@@ -141,11 +141,6 @@ export default class ChatScreenWithContext extends React.Component {
                 {(navigation) => (
                   <NavigatorContext.Consumer>
                     {(navigator) => {
-                      // TODO: BEN: decouple chat from game navigation
-                      const channel = chat.channels[navigation.chatChannelId];
-                      if (channel.type === 'game') {
-                        return <GameMetaScreen />;
-                      }
                       return (
                         <ChatScreen
                           navigator={navigator}

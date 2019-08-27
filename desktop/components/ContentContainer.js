@@ -8,10 +8,10 @@ import { DevelopmentSetterContext } from '~/contexts/DevelopmentContext';
 import { NavigationContext, NavigatorContext } from '~/contexts/NavigationContext';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 
-import ChatScreen from '~/screens/ChatScreen';
 import ContentNavigationBar from '~/components/ContentNavigationBar';
 import CreateProjectScreen from '~/screens/CreateProjectScreen';
 import EditPostScreen from '~/screens/EditPostScreen';
+import GameMetaScreen from '~/screens/GameMetaScreen';
 import GameScreen from '~/screens/GameScreen';
 import GamesHomeScreen from '~/screens/GamesHomeScreen';
 import GameWindow from '~/native/gamewindow';
@@ -111,8 +111,8 @@ class ContentContainer extends React.Component {
       );
     } else if (mode === 'history') {
       return <HistoryScreen />;
-    } else if (mode === 'chat') {
-      return <ChatScreen />;
+    } else if (mode === 'game-meta') {
+      return <GameMetaScreen />;
     } else if (mode === 'create') {
       return <CreateProjectScreen templates={this.props.featuredExamples} />;
     } else if (mode === 'profile') {
@@ -154,7 +154,7 @@ class ContentContainer extends React.Component {
         {this.props.mode === 'profile' ||
         this.props.mode === 'home' ||
         this.props.mode === 'create' ||
-        this.props.mode === 'chat' ? (
+        this.props.mode === 'game-meta' ? (
           <ContentNavigationBar
             searchQuery={this.state.searchQuery}
             onSearchReset={this._handleSearchReset}
