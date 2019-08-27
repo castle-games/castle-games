@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as ChatUtilities from '~/common/chat-utilities';
 import * as Constants from '~/common/constants';
+import * as NativeUtil from '~/native/nativeutil';
 import * as Urls from '~/common/urls';
 
 import { css } from 'react-emotion';
@@ -105,15 +106,43 @@ class ContentNavigationBar extends React.Component {
   _getCreateItems = () => {
     const { currentUser, navigator } = this.props;
     const { userStatusHistory } = currentUser;
+    let items = [];
     if (userStatusHistory) {
-      return UserStatus.uniqueLocalUserStatuses(userStatusHistory).map((status) => {
-        return {
-          name: this._getProjectDisplayName({ name: status.game.title, url: status.game.url }),
-          onClick: () => navigator.navigateToGameUrl(status.game.url),
-        };
-      });
+      items = items.concat(
+        items,
+        UserStatus.uniqueLocalUserStatuses(userStatusHistory).map((status) => {
+          return {
+            name: this._getProjectDisplayName({ name: status.game.title, url: status.game.url }),
+            onClick: () => navigator.navigateToGameUrl(status.game.url),
+          };
+        })
+      );
     }
-    return [];
+
+    const hasExistingProjects = items.length > 0;
+
+    items.push({
+      name: 'Create a New Game',
+      onClick: this.props.navigator.navigateToCreate,
+    });
+
+    items.push({
+      name: hasExistingProjects ? 'Open another project...' : 'Open a project...',
+      onClick: this._handleOpenProject,
+    });
+
+    return items;
+  };
+
+  _handleOpenProject = async () => {
+    try {
+      const path = await NativeUtil.chooseOpenProjectPathWithDialogAsync();
+      if (path) {
+        await this.props.navigator.navigateToGameUrl(`file://${path}`, {
+          launchSource: 'create-project',
+        });
+      }
+    } catch (_) {}
   };
 
   render() {

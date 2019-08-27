@@ -9,18 +9,32 @@ const STYLES_CONTAINER = css`
   left: 0px;
   background: ${Constants.colors.white};
   border: 1px solid #f0f0f0;
-  padding: 8px;
   min-width: 192px;
   display: flex;
   flex-direction: column;
   z-index: 1;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 `;
 
 const STYLES_ITEM = css`
-  margin: 4px 8px;
+  font-family: ${Constants.REFACTOR_FONTS.system};
+  font-weight: 200;
+  padding: 6px 8px;
   font-size: 14px;
   color: ${Constants.colors.text};
   cursor: pointer;
+  overflow-wrap: break-word;
+  line-height: 18px;
+  background: transparent;
+
+  :hover {
+    background: #e5e5e5;
+  }
+
+  span {
+    display: inline-block;
+    vertical-align: top;
+  }
 `;
 
 export default class ContentNavigationMenu extends React.Component {

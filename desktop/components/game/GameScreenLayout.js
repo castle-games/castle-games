@@ -189,13 +189,15 @@ export default class GameScreenLayout extends React.Component {
             {elementHeader ? <div className={STYLES_HEADER}>{elementHeader}</div> : null}
 
             <div className={STYLES_MEDIA}>
-              <div className={STYLES_MEDIA_SIDEBAR} style={{ width: this.state.sidebar }}>
-                {elementGameSidebar}
-                <div
-                  className={STYLES_DRAGGABLE_SECTION_VERTICAL}
-                  onMouseDown={(e) => this._handleMouseDown(e, 'sidebar')}
-                />
-              </div>
+              {elementGameSidebar ? (
+                <div className={STYLES_MEDIA_SIDEBAR} style={{ width: this.state.sidebar }}>
+                  {elementGameSidebar}
+                  <div
+                    className={STYLES_DRAGGABLE_SECTION_VERTICAL}
+                    onMouseDown={(e) => this._handleMouseDown(e, 'sidebar')}
+                  />
+                </div>
+              ) : null}
               <div className={STYLES_MEDIA_CONTAINER}>{this.props.children}</div>
             </div>
 

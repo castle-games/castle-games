@@ -90,12 +90,13 @@ export default class Game extends React.Component {
       />
     );
 
+    // TODO: BEN: hack
     return (
       <GameScreenLayout
         elementActions={elementActions}
         elementAlert={maybeElementAlert}
-        elementDeveloper={maybeElementDeveloper}
-        elementGameSidebar={elementGameSidebar}
+        elementDeveloper={null}
+        elementGameSidebar={maybeElementDeveloper}
         elementHeader={elementHeader}
         onWindowSizeUpdate={this.props.onWindowSizeUpdate}>
         {this.props.children}

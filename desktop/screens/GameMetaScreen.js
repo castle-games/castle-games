@@ -16,9 +16,14 @@ const STYLES_CONTAINER = css`
   min-width: 10
   background: ${Constants.colors.white};
   height: 100%;
+  overflow-y: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+    width: 1px;
+  }
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: flex-start;
   flex-direction: column;
 `;
 
@@ -107,25 +112,32 @@ class GameMetaScreen extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
-        <GameMetaHeader
-          game={game}
-          onSelectGame={this.props.navigator.navigateToGame}
-          onSelectUser={this.props.navigator.navigateToUserProfile}
-          onLeaveChannel={this._handleLeaveChannel}
-        />
         <div
           className={css`
-            display: block;
-            width: 100%;
+            width: 768px;
+            max-width: 768px;
+            margin-top: 24px;
           `}>
-          <UIHorizontalNavigation
-            items={this._getNavigationItems()}
-            onChange={this._handleNavigationChange}
-            selectedKey={mode}
-            style={{ borderBottom: `2px solid #ececec`, width: '100%' }}
+          <GameMetaHeader
+            game={game}
+            onSelectGame={this.props.navigator.navigateToGame}
+            onSelectUser={this.props.navigator.navigateToUserProfile}
+            onLeaveChannel={this._handleLeaveChannel}
           />
+          <div
+            className={css`
+              display: block;
+              width: 100%;
+            `}>
+            <UIHorizontalNavigation
+              items={this._getNavigationItems()}
+              onChange={this._handleNavigationChange}
+              selectedKey={mode}
+              style={{ borderBottom: `2px solid #ececec`, width: '100%' }}
+            />
+            {this._renderContent(channel, mode)}
+          </div>
         </div>
-        {this._renderContent(channel, mode)}
       </div>
     );
   }

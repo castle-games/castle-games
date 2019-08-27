@@ -19,8 +19,8 @@ const STYLES_COVER = css`
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 90px;
-  height: 90px;
+  width: 360px;
+  height: 200px;
   border-radius: 4px;
   background-size: cover;
   background-position: 50% 50%;
@@ -179,29 +179,34 @@ export default class GameMetaHeader extends React.Component {
     const coverImage = game.coverImage ? game.coverImage.url : null;
     return (
       <div className={STYLES_CONTAINER}>
+        <div
+          className={css`
+            padding: 24px 0 0 24px;
+          `}>
+          <div
+            className={STYLES_CTA_CARD}
+            onClick={() => this.props.onSelectGame(game)}
+            onMouseEnter={() => this.setState({ isHoveringOnPlay: true })}
+            onMouseLeave={() => this.setState({ isHoveringOnPlay: false })}>
+            <div
+              className={STYLES_COVER}
+              style={{
+                backgroundImage: coverImage ? `url('${coverImage}')` : null,
+                filter: this.state.isHoveringOnPlay ? 'brightness(95%)' : null,
+              }}>
+              <UIPlayIcon
+                size={16}
+                hovering={this.state.isHoveringOnPlay}
+                visible={this.state.isHoveringOnPlay}
+              />
+            </div>
+          </div>
+        </div>
         <div className={STYLES_BODY}>
           <div className={STYLES_BODY_LEFT}>
-            <div
-              className={STYLES_CTA_CARD}
-              onClick={() => this.props.onSelectGame(game)}
-              onMouseEnter={() => this.setState({ isHoveringOnPlay: true })}
-              onMouseLeave={() => this.setState({ isHoveringOnPlay: false })}>
-              <div
-                className={STYLES_COVER}
-                style={{
-                  backgroundImage: coverImage ? `url('${coverImage}')` : null,
-                  filter: this.state.isHoveringOnPlay ? 'brightness(95%)' : null,
-                }}>
-                <UIPlayIcon
-                  size={16}
-                  hovering={this.state.isHoveringOnPlay}
-                  visible={this.state.isHoveringOnPlay}
-                />
-              </div>
-              <div className={STYLES_GAME_IDENTITY}>
-                <UIHeading style={{ marginBottom: 8 }}>{game.title}</UIHeading>
-                {this._renderStats(game)}
-              </div>
+            <div className={STYLES_GAME_IDENTITY}>
+              <UIHeading style={{ marginBottom: 8 }}>{game.title}</UIHeading>
+              {this._renderStats(game)}
             </div>
           </div>
           <div className={STYLES_BODY_RIGHT}>
