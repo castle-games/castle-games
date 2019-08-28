@@ -290,19 +290,6 @@ class NavigationContextManager extends React.Component {
           sessionId: response.sessionId,
         },
       });
-      // show a notification of the multiplayer session in chat
-      let gameTitle = game.title || 'Untitled';
-      let verb = response.isNewSession ? 'created' : 'joined';
-      let message = `You ${verb} a session of ${gameTitle}. Share this link to invite other people: ${getSessionLink(
-        game,
-        response.sessionId
-      )}`;
-      let event = new Event('CASTLE_ADD_CHAT_NOTIFICATION');
-      event.params = {
-        message,
-        game,
-      };
-      window.dispatchEvent(event);
     }
   };
 
