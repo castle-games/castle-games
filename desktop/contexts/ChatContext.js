@@ -427,7 +427,10 @@ class ChatContextManager extends React.Component {
         // we added new messages to this channel, re-sort
         let channel = channels[channelId];
         channel.messages = channel.messages.sort((a, b) => {
-          return new Date(a.createdTime) - new Date(b.createdTime);
+          // default to 0 for createdTime so messages without a createdTime get left in the past
+          let time1 = a.createdTime || 0;
+          let time2 = b.createdTime || 0;
+          return new Date(time1) - new Date(time2);
         });
       });
 
@@ -682,6 +685,7 @@ class ChatContextManager extends React.Component {
           fromUserId: -1,
           body: await ChatUtilities.formatMessageAsync(event.params.message),
           timestamp: new Date().toString(),
+          createdTime: new Date().toString(),
         });
         let channels = { ...state.channels };
         channels[result.channelId] = c;
