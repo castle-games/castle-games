@@ -6,62 +6,71 @@ import { css } from 'react-emotion';
 
 import UIAvatar from '~/components/reusable/UIAvatar';
 
-const STYLES_USER = css`
+const STYLES_CONTAINER = css`
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 12px;
-  margin: 0 0 4px 0;
-  padding: 4px 0 4px 0;
+  margin: 0;
+  padding: 6px 0 6px 0;
   cursor: pointer;
   user-select: none;
-  width: 100%;
+  position: relative;
+  width: ${Constants.sidebar.collapsedWidth};
 `;
 
-const STYLES_NOTIFICATION = css`
-  font-family: ${Constants.REFACTOR_FONTS.system};
-  font-weight: 600;
-  background: rgb(255, 0, 235);
-  color: white;
-  height: 14px;
-  margin-top: 2px;
-  padding: 0 6px 0 6px;
-  border-radius: 14px;
-  font-size: 8px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 0px;
-`;
+export default class SocialSidebarNavigationItem extends React.Component {
+  static defaultProps = {
+    showOnlineIndicator: true,
+  };
 
-export default (props) => {
-  const { isUnread, notificationCount, isOnline, isSelected, onClick } = props;
-  const { avatarUrl, avatarElement } = props;
+  render() {
+    const { isUnread, notificationCount, isSelected, onClick } = this.props;
+    const { isOnline, showOnlineIndicator } = this.props;
+    const { avatarUrl, avatarElement } = this.props;
 
-  let color,
-    backgroundColor,
-    fontWeight = '400',
-    unreadCount;
-  if (isSelected) {
-    color = 'magenta';
-    backgroundColor = '#f9f9f9';
+    let backgroundColor, unreadCount, indicatorStyles;
+    if (isSelected) {
+      backgroundColor = '#f9f9f9';
+    }
+    if (isUnread && !isSelected) {
+      unreadCount = notificationCount;
+      if (unreadCount > 0) {
+        indicatorStyles = {
+          backgroundColor: 'rgb(255, 0, 235)',
+          height: '14px',
+          padding: '0 6px 0 6px',
+        };
+      } else {
+        indicatorStyles = {
+          backgroundColor: 'black',
+        };
+      }
+    }
+
+    let avatar;
+    if (avatarElement) {
+      avatar = avatarElement;
+    } else if (avatarUrl) {
+      avatar = (
+        <UIAvatar
+          src={avatarUrl}
+          showIndicator={showOnlineIndicator}
+          isOnline={isOnline}
+          style={{ width: 24, height: 24 }}
+          indicatorStyle={indicatorStyles}
+          indicatorCount={unreadCount}
+        />
+      );
+    }
+
+    return (
+      <div
+        className={STYLES_CONTAINER}
+        onClick={!isSelected ? onClick : null}
+        style={{ backgroundColor }}>
+        {avatar}
+      </div>
+    );
   }
-  if (isUnread && !isSelected) {
-    fontWeight = '700';
-    unreadCount = notificationCount;
-  }
-
-  let avatar;
-  if (avatarElement) {
-    avatar = avatarElement;
-  } else if (avatarUrl) {
-    avatar = <UIAvatar src={avatarUrl} isOnline={isOnline} style={{ width: 24, height: 24 }} />;
-  }
-
-  return (
-    <div className={STYLES_USER} onClick={!isSelected ? onClick : null} style={{ backgroundColor }}>
-      {avatar}
-      {unreadCount ? <span className={STYLES_NOTIFICATION}>{unreadCount}</span> : null}
-    </div>
-  );
-};
+}

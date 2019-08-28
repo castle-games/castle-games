@@ -12,6 +12,14 @@ const STYLES_INDICATOR = css`
   right: -4px;
   bottom: -4px;
   border: 2px solid ${Constants.REFACTOR_COLORS.elements.channels};
+  font-family: ${Constants.REFACTOR_FONTS.system};
+  font-weight: 600;
+  color: white;
+  font-size: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0px;
 `;
 
 const STYLES_AVATAR = css`
@@ -30,6 +38,7 @@ export default class UIAvatar extends React.Component {
     showIndicator: true,
     style: null,
     indicatorStyle: null,
+    indicatorCount: 0,
   };
 
   _renderIndicator = (isOnline, showIndicator) => {
@@ -39,7 +48,11 @@ export default class UIAvatar extends React.Component {
       background: isOnline ? Constants.REFACTOR_COLORS.online : '#ACACAC',
       ...this.props.indicatorStyle,
     };
-    return <span className={STYLES_INDICATOR} style={styles} />;
+    return (
+      <div className={STYLES_INDICATOR} style={styles}>
+        {this.props.indicatorCount > 0 ? this.props.indicatorCount : ''}
+      </div>
+    );
   };
 
   render() {

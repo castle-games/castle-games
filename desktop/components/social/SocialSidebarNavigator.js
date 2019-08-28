@@ -4,6 +4,7 @@ import * as ChatUtilities from '~/common/chat-utilities';
 import * as Constants from '~/common/constants';
 
 import { css } from 'react-emotion';
+import { Tooltip } from 'react-tippy';
 
 import SocialSidebarNavigationItem from '~/components/social/SocialSidebarNavigationItem';
 
@@ -25,6 +26,14 @@ const STYLES_LOBBY_ICON = css`
   align-items: center;
   justify-content: center;
 `;
+
+const TOOLTIP_PROPS = {
+  arrow: true,
+  duration: 170,
+  animation: 'fade',
+  hideOnClick: false,
+  position: 'left',
+};
 
 export default class SocialSidebarNavigator extends React.Component {
   state = {
@@ -69,15 +78,18 @@ export default class SocialSidebarNavigator extends React.Component {
         iconSrc = game.coverImage.url;
       }
       const isGameSelected = isChatExpanded && selectedChannelId === channel.channelId;
+      const title = channel.name ? channel.name : 'Untitled Game Chat';
       gameItem = (
-        <SocialSidebarNavigationItem
-          isUnread={channel.hasUnreadMessages}
-          notificationCount={channel.notificationCount}
-          isOnline={true}
-          isSelected={isGameSelected}
-          avatarUrl={iconSrc}
-          onClick={() => this.props.onSelectChannel(channel)}
-        />
+        <Tooltip title={title} {...TOOLTIP_PROPS}>
+          <SocialSidebarNavigationItem
+            isUnread={channel.hasUnreadMessages}
+            notificationCount={channel.notificationCount}
+            isSelected={isGameSelected}
+            avatarUrl={iconSrc}
+            showOnlineIndicator={false}
+            onClick={() => this.props.onSelectChannel(channel)}
+          />
+        </Tooltip>
       );
     }
     return gameItem;
@@ -95,14 +107,16 @@ export default class SocialSidebarNavigator extends React.Component {
         isLobbySelected = isChatExpanded && selectedChannelId === lobbyChannel.channelId;
         lobbyAvatar = <div className={STYLES_LOBBY_ICON}>🏰</div>;
         lobbyItem = (
-          <SocialSidebarNavigationItem
-            isUnread={lobbyChannel.hasUnreadMessages}
-            notificationCount={lobbyChannel.notificationCount}
-            isOnline={true}
-            isSelected={isLobbySelected}
-            avatarElement={lobbyAvatar}
-            onClick={() => this.props.onSelectChannel(lobbyChannel)}
-          />
+          <Tooltip title="Community Chat" {...TOOLTIP_PROPS}>
+            <SocialSidebarNavigationItem
+              isUnread={lobbyChannel.hasUnreadMessages}
+              notificationCount={lobbyChannel.notificationCount}
+              isOnline={true}
+              isSelected={isLobbySelected}
+              avatarElement={lobbyAvatar}
+              onClick={() => this.props.onSelectChannel(lobbyChannel)}
+            />
+          </Tooltip>
         );
       }
     } catch (_) {}
@@ -148,16 +162,20 @@ export default class SocialSidebarNavigator extends React.Component {
             onClick = () => this.props.onSendMessage(user);
           }
           return (
-            <SocialSidebarNavigationItem
-              key={`direct-message-${ii}-${c.otherUserId}`}
-              name={user.username}
-              isUnread={c.hasUnreadMessages}
-              notificationCount={c.unreadNotificationCount}
-              isOnline={c.otherUserIsOnline}
-              isSelected={isSelected}
-              avatarUrl={user.photo ? user.photo.url : null}
-              onClick={onClick}
-            />
+            <Tooltip
+              title={c.name}
+              {...TOOLTIP_PROPS}
+              key={`direct-message-${ii}-${c.otherUserId}`}>
+              <SocialSidebarNavigationItem
+                name={user.username}
+                isUnread={c.hasUnreadMessages}
+                notificationCount={c.unreadNotificationCount}
+                isOnline={c.otherUserIsOnline}
+                isSelected={isSelected}
+                avatarUrl={user.photo ? user.photo.url : null}
+                onClick={onClick}
+              />
+            </Tooltip>
           );
         })}
       </div>

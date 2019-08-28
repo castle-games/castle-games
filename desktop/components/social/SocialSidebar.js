@@ -51,31 +51,23 @@ class SocialSidebar extends React.Component {
   }
 
   _update = (prevProps = {}, prevState = {}) => {
-    /*  TODO: BEN: mark channel read logic
-       const { chat, gameChannel, lobbyChannel } = this.props;
-    let prevChannelId = prevProps.gameChannel ? prevProps.gameChannel.channelId : null;
-    let channelId = gameChannel ? gameChannel.channelId : null;
-    if (prevChannelId !== channelId) {
-      this.setState({ isGameChatVisible: channelId !== null });
-    }
+    const { chat, lobbyChannel, chatChannelId } = this.props;
 
     if (chat && lobbyChannel) {
-      let channelIdVisible = this.state.isGameChatVisible ? channelId : lobbyChannel.channelId;
-      let prevChannelIdVisible = prevState.isGameChatVisible
-        ? prevChannelId
-        : lobbyChannel.channelId;
+      let channelIdVisible = this._getChannelIdVisible(this.props);
+      let prevChannelIdVisible = this._getChannelIdVisible(prevProps);
       if (channelIdVisible !== prevChannelIdVisible) {
         chat.markChannelRead(channelIdVisible);
       }
-    } */
+    }
   };
 
-  _getChannelIdVisible = () => {
-    const { chatChannelId } = this.props;
+  _getChannelIdVisible = (props) => {
+    const { chatChannelId } = props;
     if (chatChannelId) {
       return chatChannelId;
     } else {
-      const { lobbyChannel } = this.props;
+      const { lobbyChannel } = props;
       return lobbyChannel ? lobbyChannel.channelId : null;
     }
   };
@@ -86,7 +78,7 @@ class SocialSidebar extends React.Component {
 
   render() {
     const { chat, viewer, userPresence, isChatExpanded, gameMetaChannelId } = this.props;
-    const channelId = this._getChannelIdVisible();
+    const channelId = this._getChannelIdVisible(this.props);
 
     if (!viewer) {
       return null;
