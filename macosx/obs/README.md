@@ -11,5 +11,3 @@ sudo make install
 ```
 
 run `fix_dylib_paths.js` from this directory
-
-delete SDL!

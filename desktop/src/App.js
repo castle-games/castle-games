@@ -32,7 +32,7 @@ const isFullscreenHotkey = isKeyHotkey('mod+shift+f');
 const isDevelopmentHotkey = isKeyHotkey('mod+j');
 const isEscFullScreenHotkey = isKeyHotkey('esc');
 const isEndGameHotkey = isKeyHotkey('mod+w');
-const isScreenCaputureHotkey = isKeyHotkey('mod+shift+s');
+// TODO: this breaks 'cut' on macOS const isScreenCaputureHotkey = isKeyHotkey('mod+x');
 const isFocusGameHotkey = isKeyHotkey('mod+g');
 
 // TODO(jim): Feature flag to make it easier to test.
@@ -100,8 +100,7 @@ class App extends React.Component {
     if (e.target.localName == 'a') {
       e.preventDefault();
 
-      if (e.target.href === 'noop:noop;') {
-        // To allow no-op `a` tags
+      if (e.target.href === 'noop:noop;') { // To allow no-op `a` tags
         return;
       }
 
@@ -181,10 +180,11 @@ class App extends React.Component {
       return this.props.navigator.clearCurrentGame();
     }
 
-    if (isScreenCaputureHotkey(e)) {
+    /* TODO: reenable screen capture if (isScreenCaputureHotkey(e)) {
       e.preventDefault();
+
       ScreenCapture.takeScreenCaptureAsync();
-    }
+    } */
 
     if (isFocusGameHotkey(e)) {
       NativeUtil.focusGame();
