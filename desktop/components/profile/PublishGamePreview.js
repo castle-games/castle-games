@@ -169,7 +169,16 @@ export default class PublishGamePreview extends React.Component {
 
   render() {
     const { game, error, isLoading, instructions, localGamePath } = this.props;
-    if (game && game.slug) {
+    if (error) {
+      return (
+        <div className={STYLES_CONTAINER}>
+          <div className={STYLES_GAME_PREVIEW_ERROR}>
+            There was a problem previewing the game to add:
+          </div>
+          <div className={STYLES_GAME_PREVIEW_ERROR_DETAIL}>{error}</div>
+        </div>
+      );
+    } else if (game && game.slug) {
       let coverSrc = this._deriveCoverImage(game, localGamePath);
       return (
         <div className={STYLES_CONTAINER}>
@@ -180,15 +189,6 @@ export default class PublishGamePreview extends React.Component {
             />
             <div className={STYLES_GAME_PREVIEW_INFO}>{this._renderPreviewInfo()}</div>
           </div>
-        </div>
-      );
-    } else if (error) {
-      return (
-        <div className={STYLES_CONTAINER}>
-          <div className={STYLES_GAME_PREVIEW_ERROR}>
-            There was a problem previewing the game to add:
-          </div>
-          <div className={STYLES_GAME_PREVIEW_ERROR_DETAIL}>{error}</div>
         </div>
       );
     } else if (isLoading) {
