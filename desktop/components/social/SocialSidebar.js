@@ -15,6 +15,7 @@ import SocialSidebarHeader from '~/components/social/SocialSidebarHeader';
 import SocialSidebarNavigator from '~/components/social/SocialSidebarNavigator';
 
 const STYLES_CONTAINER = css`
+  flex-shrink: 0;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;

@@ -76,9 +76,10 @@ const STYLES_ACTIONS = css`
 
 const STYLES_DEVELOPER = css`
   display: flex;
-  height: 100%;
+  width: 100%;
   flex-shrink: 0;
   position: relative;
+  flex-direction: column;
 `;
 
 const STYLES_DRAGGABLE_SECTION_VERTICAL = css`
@@ -93,14 +94,14 @@ const STYLES_DRAGGABLE_SECTION_VERTICAL = css`
   user-select; none;
 `;
 
-const STYLES_DRAGGABLE_SECTION_VERTICAL_LEFT = css`
-  width: 12px;
-  height: 100%;
+const STYLES_DRAGGABLE_SECTION_HORIZONTAL = css`
+  height: 12px;
+  width: 100%;
   position: absolute;
-  left: -6px;
-  top: 0;
-  bottom: 0;
-  cursor: ew-resize;
+  top: -6px;
+  left: 0;
+  right: 0;
+  cursor: ns-resize;
   z-index: 1;
   user-select; none;
 `;
@@ -116,7 +117,7 @@ export default class GameScreenLayout extends React.Component {
 
   state = {
     sidebar: 256,
-    developer: 428,
+    developer: 256,
   };
 
   componentDidMount() {
@@ -131,7 +132,8 @@ export default class GameScreenLayout extends React.Component {
 
   _handleMouseDown = (e, resizing) => {
     e.preventDefault();
-    this.setState({ resizing, mouseX: e.pageX, start: this.state[resizing] });
+    const initialMousePosition = resizing === 'developer' ? e.pageY : e.pageX;
+    this.setState({ resizing, initialMousePosition, start: this.state[resizing] });
   };
 
   _handleMouseMove = (e) => {
@@ -145,11 +147,11 @@ export default class GameScreenLayout extends React.Component {
     let nextWidth;
 
     if (this.state.resizing === 'developer') {
-      nextWidth = this.state.start - (e.pageX - this.state.mouseX);
+      nextWidth = this.state.start - (e.pageY - this.state.initialMousePosition);
     }
 
     if (this.state.resizing === 'sidebar') {
-      nextWidth = this.state.start + (e.pageX - this.state.mouseX);
+      nextWidth = this.state.start + (e.pageX - this.state.initialMousePosition);
     }
 
     if (nextWidth > MAX_SIZE) {
@@ -167,7 +169,7 @@ export default class GameScreenLayout extends React.Component {
 
   _handleMouseUp = (e) => {
     if (this.state.resizing) {
-      this.setState({ resizing: null, mouseX: null, start: null });
+      this.setState({ resizing: null, initialMousePosition: null, start: null });
     }
   };
 
@@ -203,17 +205,16 @@ export default class GameScreenLayout extends React.Component {
 
             {elementActions ? <div className={STYLES_ACTIONS}>{elementActions}</div> : null}
           </div>
-
-          {elementDeveloper ? (
-            <div className={STYLES_DEVELOPER} style={{ width: this.state.developer }}>
-              <div
-                className={STYLES_DRAGGABLE_SECTION_VERTICAL_LEFT}
-                onMouseDown={(e) => this._handleMouseDown(e, 'developer')}
-              />
-              {elementDeveloper}
-            </div>
-          ) : null}
         </div>
+        {elementDeveloper ? (
+          <div className={STYLES_DEVELOPER} style={{ height: this.state.developer }}>
+            <div
+              className={STYLES_DRAGGABLE_SECTION_HORIZONTAL}
+              onMouseDown={(e) => this._handleMouseDown(e, 'developer')}
+            />
+            {elementDeveloper}
+          </div>
+        ) : null}
       </div>
     );
   }

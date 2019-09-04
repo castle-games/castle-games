@@ -26,6 +26,13 @@ const STYLES_CONTAINER = css`
   font-family: ${Constants.REFACTOR_FONTS.system};
 `;
 
+const STYLES_LOGS = css`
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: space-between;
+`;
+
 const STYLES_INFO_HEADING = css`
   width: 100%;
   font-size: 11px;
@@ -68,7 +75,8 @@ const STYLES_INFO_TEXT_DESCRIPTION = css`
 `;
 
 const STYLES_SECTION_HEADER = css`
-  position: relative;
+  position: absolute;
+  top: 0;
   width: 100%;
   height: 24px;
   font-size: 11px;
@@ -81,56 +89,40 @@ const STYLES_SECTION_HEADER = css`
   border-bottom: 1px solid ${BORDER_COLOR};
 `;
 
-const STYLES_TOP = css`
-  min-height: 10%;
-  height: 100%;
-  width: 100%;
-  overflow-y: scroll;
-  display: block;
-  background-color: #000000;
-  background-image: linear-gradient(90deg, #000000 0%, #181818 74%);
-
-  ::-webkit-scrollbar {
-    width: 0px;
-  }
-`;
-
-const STYLES_BOTTOM = css`
-  border-top: 1px solid ${BORDER_COLOR};
-  width: 100%;
-  flex-shrink: 0;
-  overflow-y: scroll;
+const STYLES_COL = css`
   position: relative;
+  width: 100%;
+  min-height: 10%;
+  min-width: 25%;
   display: block;
   background-color: #000000;
   background-image: linear-gradient(90deg, #000000 0%, #181818 74%);
+`;
+
+const STYLES_COL_RIGHT = css`
+  border-left: 1px solid ${BORDER_COLOR};
+  flex-shrink: 0;
+`;
+
+const STYLES_SCROLL = css`
+  height: 100%;
+  padding-top: 24px;
+  overflow-y: scroll;
 
   ::-webkit-scrollbar {
     width: 0px;
   }
 `;
 
-const STYLES_LEFT = css`
+const STYLES_HEADING_LEFT = css`
   min-width: 10%;
   width: 100%;
   font-weight: 700;
 `;
 
-const STYLES_RIGHT = css`
+const STYLES_HEADING_RIGHT = css`
   flex-shrink: 0;
   text-align: right;
-`;
-
-const STYLES_DRAGGABLE_SECTION_HORIZONTAL = css`
-  width: 100%;
-  height: 12px;
-  position: absolute;
-  right: 0;
-  top: -6px;
-  left: 0;
-  cursor: ns-resize;
-  z-index: 1;
-  user-select; none;
 `;
 
 const STYLES_CTA = css`
@@ -158,7 +150,7 @@ export default class GameScreenDeveloperSidebar extends React.Component {
   _server;
 
   state = {
-    server: Window.getViewportSize().height * 0.5 - 88,
+    server: 484,
   };
 
   componentDidMount() {
@@ -267,60 +259,61 @@ export default class GameScreenDeveloperSidebar extends React.Component {
             </div>
           ) : null}
         </div>
-        <div className={STYLES_SECTION_HEADER}>
-          <div className={STYLES_LEFT}>Local logs</div>
-          <div className={STYLES_RIGHT} style={{ minWidth: 100 }}>
-            {maybeMultiplayerElement}
-
-            <span className={STYLES_CTA} onClick={this.props.setters.clearLogs}>
-              Clear
-            </span>
-          </div>
-        </div>
-        <div className={STYLES_TOP}>
-          <DevelopmentLogs
-            ref={(ref) => {
-              this._client = ref;
-            }}
-            logs={this.props.logs}
-            onClearLogs={this.props.setters.clearLogs}
-            game={this.props.game}
-            logMode={0}
-          />
-        </div>
-        {isMultiplayer ? (
-          <React.Fragment>
-            <div
-              className={STYLES_SECTION_HEADER}
-              style={{
-                borderTop: `1px solid ${BORDER_COLOR}`,
-                borderBottom: 0,
-              }}>
-              <div
-                className={STYLES_DRAGGABLE_SECTION_HORIZONTAL}
-                onMouseDown={(e) => this._handleMouseDown(e, 'server')}
-              />
-              <div className={STYLES_LEFT}>Server logs</div>
-              <div className={STYLES_RIGHT} style={{ minWidth: 100 }}>
-                <span className={STYLES_CTA} onClick={this._handleServerLogReload}>
-                  Reload
+        <div className={STYLES_LOGS}>
+          <div className={STYLES_COL}>
+            <div className={STYLES_SECTION_HEADER}>
+              <div className={STYLES_HEADING_LEFT}>Local logs</div>
+              <div className={STYLES_HEADING_RIGHT} style={{ minWidth: 100 }}>
+                <span className={STYLES_CTA} onClick={this.props.setters.clearLogs}>
+                  Clear
                 </span>
               </div>
             </div>
-            <div className={STYLES_BOTTOM} style={{ height: this.state.server }}>
+            <div className={STYLES_SCROLL}>
               <DevelopmentLogs
                 ref={(ref) => {
-                  this._server = ref;
+                  this._client = ref;
                 }}
                 logs={this.props.logs}
                 onClearLogs={this.props.setters.clearLogs}
                 game={this.props.game}
-                logMode={1}
+                logMode={0}
               />
             </div>
-          </React.Fragment>
-        ) : null}
-        ;
+          </div>
+          {isMultiplayer ? (
+            <div
+              className={`${STYLES_COL} ${STYLES_COL_RIGHT}`}
+              style={{ width: this.state.server }}>
+              <div
+                className={STYLES_SECTION_HEADER}
+                style={{
+                  borderTop: `1px solid ${BORDER_COLOR}`,
+                  borderBottom: 0,
+                }}>
+                <div className={STYLES_HEADING_LEFT}>Server logs</div>
+                <div className={STYLES_HEADING_RIGHT} style={{ minWidth: 100 }}>
+                  {maybeMultiplayerElement}
+                  <span className={STYLES_CTA} onClick={this._handleServerLogReload}>
+                    Reload
+                  </span>
+                </div>
+              </div>
+              <div className={STYLES_SCROLL}>
+                <DevelopmentLogs
+                  ref={(ref) => {
+                    this._server = ref;
+                  }}
+                  logs={this.props.logs}
+                  onClearLogs={this.props.setters.clearLogs}
+                  game={this.props.game}
+                  logMode={1}
+                />
+              </div>
+            </div>
+          ) : null}
+          ;
+        </div>
       </div>
     );
   }

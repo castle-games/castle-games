@@ -126,7 +126,7 @@ export default class Game extends React.Component {
       <GameScreenLayout
         elementActions={elementActions}
         elementAlert={maybeElementAlert}
-        elementDeveloper={null}
+        elementDeveloper={maybeElementDeveloper}
         elementGameSidebar={maybeElementSidebar}
         elementHeader={elementHeader}
         onWindowSizeUpdate={this.props.onWindowSizeUpdate}>
