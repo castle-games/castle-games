@@ -18,8 +18,37 @@ import GameScreenWindowHeader from '~/components/game/GameScreenWindowHeader';
 export default class Game extends React.Component {
   static contextType = DevelopmentContext;
 
+  state = {
+    isToolsVisible: false,
+  };
+
   static defaultProps = {
     errorMessage: '',
+  };
+
+  componentDidMount() {
+    window.addEventListener('CASTLE_TOOLS_UPDATE', this._handleToolsUpdate);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('CASTLE_TOOLS_UPDATE', this._handleToolsUpdate);
+  }
+
+  _handleToolsUpdate = (e) => {
+    if (this.state.isToolsVisible) {
+      return;
+    }
+
+    const state = JSON.parse(e.params);
+
+    let isToolsVisible = false;
+    if (state.panes) {
+      isToolsVisible = !!Object.values(state.panes).find(
+        (element) => element.children && element.children.count > 0
+      );
+    }
+
+    this.setState({ isToolsVisible });
   };
 
   _handleViewSource = (entry) => {
@@ -73,13 +102,16 @@ export default class Game extends React.Component {
       );
     }
 
-    const elementGameSidebar = (
-      <GameScreenSidebar
-        onSetToolsRef={this.props.onSetToolsRef}
-        onWindowSizeUpdate={this.props.onWindowSizeUpdate}
-        game={this.props.game}
-      />
-    );
+    let maybeElementSidebar;
+    if (this.state.isToolsVisible) {
+      maybeElementSidebar = (
+        <GameScreenSidebar
+          onSetToolsRef={this.props.onSetToolsRef}
+          onWindowSizeUpdate={this.props.onWindowSizeUpdate}
+          game={this.props.game}
+        />
+      );
+    }
 
     const elementHeader = (
       <GameScreenWindowHeader
@@ -90,13 +122,12 @@ export default class Game extends React.Component {
       />
     );
 
-    // TODO: BEN: hack
     return (
       <GameScreenLayout
         elementActions={elementActions}
         elementAlert={maybeElementAlert}
         elementDeveloper={null}
-        elementGameSidebar={maybeElementDeveloper}
+        elementGameSidebar={maybeElementSidebar}
         elementHeader={elementHeader}
         onWindowSizeUpdate={this.props.onWindowSizeUpdate}>
         {this.props.children}
