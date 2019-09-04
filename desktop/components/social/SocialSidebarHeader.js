@@ -55,21 +55,20 @@ const STYLES_P = css`
 `;
 
 const STYLES_ONLINE = css`
-  padding-left: 12px;
   color: ${Constants.REFACTOR_COLORS.subdued}:
   cursor: pointer;
 
-  strong {
+  span {
+    padding: 0 8px 0 8px;
+  }
+
+  #action {
+    display: inline;
     cursor: pointer;
-    transition: 200ms ease color;
 
     :hover {
       color: magenta;
     }
-  }
-
-  span {
-    padding: 0 8px 0 8px;
   }
 `;
 
@@ -140,12 +139,12 @@ export default class SocialSidebarHeader extends React.Component {
   };
 
   _renderActions = () => {
-    const { numChannelMembers } = this.props;
-    if (numChannelMembers) {
+    const { channel, numChannelMembers } = this.props;
+    if (channel.type !== 'dm' && numChannelMembers) {
       return (
         <span className={STYLES_ONLINE} onClick={this.props.onMembersClick}>
-          <strong>{numChannelMembers} online</strong>
           <span>&middot;</span>
+          <div id="action">{numChannelMembers} online</div>
         </span>
       );
     } else {
@@ -173,8 +172,8 @@ export default class SocialSidebarHeader extends React.Component {
           <div className={STYLES_HEADER_LEFT}>
             {this._renderTitle()}
             <p className={STYLES_P}>
-              {this._renderActions()}
               <span>{this._getHeading()}</span>
+              {this._renderActions()}
             </p>
           </div>
         ) : null}

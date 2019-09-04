@@ -10,6 +10,7 @@ import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { UserPresenceContext } from '~/contexts/UserPresenceContext';
 
 import ChatChannel from '~/components/chat/ChatChannel';
+import ChatMembers from '~/components/chat/ChatMembers';
 import SocialSidebarHeader from '~/components/social/SocialSidebarHeader';
 import SocialSidebarNavigator from '~/components/social/SocialSidebarNavigator';
 
@@ -42,6 +43,10 @@ const STYLES_CHANNEL = css`
 `;
 
 class SocialSidebar extends React.Component {
+  state = {
+    mode: 'chat',
+  };
+
   componentDidMount() {
     this._update();
   }
@@ -76,6 +81,42 @@ class SocialSidebar extends React.Component {
     this.props.navigator.showChatChannel(channel.channelId);
   };
 
+  _handleToggleMembers = () => {
+    this.setState((state) => {
+      return {
+        ...state,
+        mode: state.mode === 'chat' ? 'members' : 'chat',
+      };
+    });
+  };
+
+  _handleOpenDirectMessage = (user) => {
+    this.props.chat.openChannelForUser(user);
+    return this.setState({ mode: 'chat' });
+  };
+
+  _renderContent = (mode, { channelId }) => {
+    switch (mode) {
+      case 'members':
+        const channel = this.props.chat.channels[channelId];
+        return (
+          <ChatMembers
+            userIds={channel.subscribedUsers.map((user) => user.userId)}
+            onSendMessage={this._handleOpenDirectMessage}
+          />
+        );
+      case 'chat':
+      default:
+        return (
+          <div className={STYLES_CHANNEL}>
+            {channelId && (
+              <ChatChannel isSidebar chat={this.props.chat} channelId={channelId} size="24px" />
+            )}
+          </div>
+        );
+    }
+  };
+
   render() {
     const { chat, viewer, userPresence, isChatExpanded, gameMetaChannelId } = this.props;
     const channelId = this._getChannelIdVisible(this.props);
@@ -93,16 +134,12 @@ class SocialSidebar extends React.Component {
         <SocialSidebarHeader
           channel={chat.channels[channelId]}
           isExpanded={isChatExpanded}
+          numChannelMembers={chat.channelOnlineCounts[channelId]}
           onToggleSidebar={this.props.navigator.toggleIsChatExpanded}
+          onMembersClick={this._handleToggleMembers}
         />
         <div className={STYLES_SIDEBAR_BODY}>
-          {isChatExpanded && (
-            <div className={STYLES_CHANNEL}>
-              {channelId && (
-                <ChatChannel isSidebar chat={this.props.chat} channelId={channelId} size="24px" />
-              )}
-            </div>
-          )}
+          {isChatExpanded && this._renderContent(this.state.mode, { channelId })}
           <div className={STYLES_CHANNEL_NAVIGATOR}>
             <SocialSidebarNavigator
               isChatExpanded={isChatExpanded}
