@@ -51,6 +51,18 @@ CHUNK_NAME_TO_FILE_NAME = {}
 
 local nextChunkId = 1
 
+local parsePrefetchVisited = setmetatable({}, {
+    __mode = 'k',
+    __index = function(t, k)
+        local r = rawget(t, k)
+        if not r then
+            r = {}
+            t[k] = r
+        end
+        return r
+    end
+})
+
 local function explicitRequire(path, opts)
     -- Built-in?
     if path ~= 'main' then
@@ -152,16 +164,19 @@ local function explicitRequire(path, opts)
     -- If this is the first fetch of the body, asynchronously pre-fetch resources it references
     if firstFetch then
         for _, resource in pairs(parseResources(response)) do
-            network.async(function()
-                pcall(function() -- Allow failure as we want the error to be hit on synchronous use
-                    if resource.type == 'lua' then
-                        childEnv.require(resource.path, { noEval = true })
-                    elseif resource.type == 'asset' then
-                        network.fetch(network.isAbsolute(resource.path) and resource.path or
-                                (childEnv.portal.basePath .. '/' .. resource.path))
-                    end
+            if not parsePrefetchVisited[childEnv][resource.path] then
+                parsePrefetchVisited[childEnv][resource.path] = true
+                network.async(function()
+                    pcall(function() -- Allow failure as we want the error to be hit on synchronous use
+                        if resource.type == 'lua' then
+                            childEnv.require(resource.path, { noEval = true })
+                        elseif resource.type == 'asset' then
+                            network.fetch(network.isAbsolute(resource.path) and resource.path or
+                                    (childEnv.portal.basePath .. '/' .. resource.path))
+                        end
+                    end)
                 end)
-            end)
+            end
         end
     end
 
