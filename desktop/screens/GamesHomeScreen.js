@@ -64,10 +64,10 @@ class GamesHomeScreen extends React.Component {
     loadMorePosts: () => {},
     loadAllGames: () => {},
     trendingGames: [],
+    mode: 'home',
   };
 
   state = {
-    subNavMode: 'home',
     isLoadingPosts: true,
     isLoadingAllGames: true,
     refreshingHomepage: false,
@@ -95,6 +95,14 @@ class GamesHomeScreen extends React.Component {
     ) {
       this.setState({ isLoadingAllGames: false });
     }
+
+    const prevMode = prevProps.mode;
+    if (this.props.mode !== prevMode) {
+      if (this.props.mode === 'allGames') {
+        this.setState({ isLoadingAllGames: true });
+      }
+      this._refreshHomepage();
+    }
   }
 
   componentWillUnmount() {
@@ -104,23 +112,14 @@ class GamesHomeScreen extends React.Component {
   _refreshHomepage = async () => {
     this.setState({ refreshingHomepage: true });
 
-    if (this.state.subNavMode === 'home') {
+    if (this.props.mode === 'home') {
       this.props.reloadPosts();
       await this.props.reloadTrendingGames();
-    } else if (this.state.subNavMode === 'allGames') {
+    } else if (this.props.mode === 'allGames') {
       await this.props.loadAllGames();
     }
 
     this.setState({ refreshingHomepage: false });
-  };
-
-  _changeSubNavMode = (newSubNavMode) => {
-    if (newSubNavMode === 'allGames') {
-      this.setState({ isLoadingAllGames: true });
-    }
-    this.setState({ subNavMode: newSubNavMode }, () => {
-      this._refreshHomepage();
-    });
   };
 
   _handleScroll = (e) => {
@@ -141,7 +140,7 @@ class GamesHomeScreen extends React.Component {
 
   _renderBottom = () => {
     let maybeLoading;
-    if (this.state.subNavMode === 'home' && this.state.isLoadingPosts) {
+    if (this.props.mode === 'home' && this.state.isLoadingPosts) {
       maybeLoading = <div>Loading...</div>;
     }
     return <div className={STYLES_BOTTOM}>{maybeLoading}</div>;
@@ -163,31 +162,32 @@ class GamesHomeScreen extends React.Component {
     let sidebarWidth = this.props.isChatExpanded
       ? Constants.sidebar.width
       : Constants.sidebar.collapsedWidth;
+    let title = this.props.mode === 'home' ? 'Games' : 'All Games';
     return (
       <div className={STYLES_HOME_CONTAINER} onScroll={this._handleScroll}>
         <div className={STYLES_CONTENT_CONTAINER}>
-          <div className={STYLES_SECTION_TITLE}>Games</div>
+          <div className={STYLES_SECTION_TITLE}>{title}</div>
           <div className={STYLES_GAMES_CONTAINER}>
-            {this.state.subNavMode === 'home' ||
-            (this.state.subNavMode === 'allGames' && this.props.allGames) ? (
+            {this.props.mode === 'home' ||
+            (this.props.mode === 'allGames' && this.props.allGames) ? (
               <UIGameSet
                 title=""
-                numRowsToElide={this.state.subNavMode === 'home' ? 3 : -1}
+                numRowsToElide={this.props.mode === 'home' ? 3 : -1}
                 maxWidth={window.innerWidth - 24 - parseInt(sidebarWidth, 10)}
                 viewer={this.props.viewer}
                 gameItems={
-                  this.state.subNavMode === 'home' ? this.props.trendingGames : this.props.allGames
+                  this.props.mode === 'home' ? this.props.trendingGames : this.props.allGames
                 }
                 onUserSelect={this.props.navigateToUserProfile}
                 onGameSelect={this._navigateToGame}
                 onSignInSelect={this.props.navigateToSignIn}
               />
             ) : null}
-            {this.state.subNavMode == 'allGames' && this.state.isLoadingAllGames ? (
+            {this.props.mode == 'allGames' && this.state.isLoadingAllGames ? (
               <div className={STYLES_ALL_GAMES_LOADING_INDICATOR}>Loading games...</div>
             ) : null}
           </div>
-          {this.state.subNavMode === 'home' ? (
+          {this.props.mode === 'home' ? (
             <div className={STYLES_POSTS_CONTAINER}>
               <div className={STYLES_SECTION_TITLE}>What people are up to...</div>
               {maybePostList}

@@ -101,7 +101,7 @@ class ContentContainer extends React.Component {
   _renderContent = (mode) => {
     if (mode === 'game') {
       return <GameScreen isFullScreen={this.props.isFullScreen} />;
-    } else if (mode === 'home') {
+    } else if (mode === 'home' || mode === 'allGames') {
       return (
         <GamesHomeScreen
           featuredExamples={this.props.featuredExamples}
@@ -153,6 +153,7 @@ class ContentContainer extends React.Component {
       <div className={STYLES_CONTAINER_FLUID}>
         {this.props.mode === 'profile' ||
         this.props.mode === 'home' ||
+        this.props.mode === 'allGames' ||
         this.props.mode === 'create' ||
         this.props.mode === 'game-meta' ? (
           <ContentNavigationBar

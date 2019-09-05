@@ -28,26 +28,30 @@ const STYLES_CONTAINER_LEFT = css`
 `;
 
 const STYLES_CONTAINER_MIDDLE = css`
-  min-width: 25%;
+  min-width: 15%;
   width: 100%;
-  padding-right: 16px;
+  padding-right: 8px;
   display: flex;
   align-items: center;
+  justify-content: center;
   position: relative;
 `;
 
 const STYLES_DISMISS_AREA = css`
-  top: 0px;
-  right: 16px;
-  bottom: 0px;
+  top: 0;
+  right: 0;
   position: absolute;
+  width: 18px;
+  height: 18px;
+  margin-left: 4px;
+  cursor: pointer;
 `;
 
 const STYLES_INPUT = css`
   font-family: ${Constants.font.default};
   color: ${Constants.colors.black};
   background: transparent;
-  font-size: 20px;
+  font-size: 16px;
   display: flex;
   min-width: 25%;
   width: 100%;
@@ -95,7 +99,7 @@ export default class SearchInput extends React.Component {
           placeholder="Search Castle or enter URL"
           onSubmit={this.props.onSubmit}
           onChange={this.props.onChange}
-          style={{ paddingRight: 32 }}
+          style={{ paddingRight: 8 }}
         />
       );
     }
@@ -104,13 +108,13 @@ export default class SearchInput extends React.Component {
         <div
           className={STYLES_CONTAINER_LEFT}
           onClick={this.props.readOnly ? this.props.onSearchReset : this._handleFocusInput}>
-          <SVG.SearchBarIcon height="32px" color="#c1bcbb" />
+          <SVG.SearchBarIcon height="28px" color="#c1bcbb" />
         </div>
         <div className={STYLES_CONTAINER_MIDDLE}>
           {queryElement}
           {!Strings.isEmpty(this.props.query) ? (
             <span className={STYLES_DISMISS_AREA} onClick={this.props.onSearchReset}>
-              <SVG.Dismiss height="24px" style={{ marginLeft: 8 }} />
+              <SVG.Dismiss width="18px" height="18px" />
             </span>
           ) : null}
         </div>

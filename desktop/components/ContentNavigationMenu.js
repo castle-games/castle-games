@@ -37,6 +37,12 @@ const STYLES_ITEM = css`
   }
 `;
 
+const STYLES_SEPARATOR = css`
+  height: 1px;
+  background: #e9e9e9;
+  margin: 2px 0;
+`;
+
 export default class ContentNavigationMenu extends React.Component {
   static defaultProps = {
     visible: true,
@@ -49,11 +55,17 @@ export default class ContentNavigationMenu extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
-        {items.map((item, ii) => (
-          <div key={`item-${ii}`} className={STYLES_ITEM} onClick={item.onClick}>
-            {item.name}
-          </div>
-        ))}
+        {items.map((item, ii) => {
+          if (item.isSeparator) {
+            return <div key={`item-${ii}`} className={STYLES_SEPARATOR} />;
+          } else {
+            return (
+              <div key={`item-${ii}`} className={STYLES_ITEM} onClick={item.onClick}>
+                {item.name}
+              </div>
+            );
+          }
+        })}
       </div>
     );
   }

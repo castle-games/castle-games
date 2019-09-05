@@ -23,6 +23,7 @@ const STYLES_CONTAINER = css`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  height: 48px;
 `;
 
 const STYLES_LOGO = css`
@@ -32,12 +33,11 @@ const STYLES_LOGO = css`
   border-radius: 4px;
   background-size: cover;
   background-position: 50% 50%;
-  margin-right: 12px;
 `;
 
 const STYLES_SEARCH_SECTION = css`
-  width: 50%;
-  min-width: 25%;
+  width: 25%;
+  min-width: 20%;
 `;
 
 const STYLES_NAV_ITEM = css`
@@ -92,7 +92,16 @@ class ContentNavigationBar extends React.Component {
   _getPlayItems = () => {
     // TODO: BEN: decouple from chat (and unsub this component from chat)
     const { channels, navigator } = this.props;
+
+    let items = [
+      { name: 'Home', onClick: navigator.navigateToHome },
+      { name: 'All Games', onClick: () => navigator.navigateToContentMode('allGames') },
+    ];
+
     if (channels) {
+      if (items.length > 0) {
+        items.push({ isSeparator: true });
+      }
       let filteredChannels = [];
       Object.entries(channels).forEach(([channelId, channel]) => {
         if (channel.isSubscribed && channel.type === 'game') {
@@ -101,12 +110,14 @@ class ContentNavigationBar extends React.Component {
       });
       if (filteredChannels.length) {
         filteredChannels = ChatUtilities.sortChannels(filteredChannels);
-        return filteredChannels.map((c) => {
-          return {
-            name: c.name,
-            onClick: () => navigator.navigateToGameMeta(c.channelId),
-          };
-        });
+        return items.concat(
+          filteredChannels.map((c) => {
+            return {
+              name: c.name,
+              onClick: () => navigator.navigateToGameMeta(c.channelId),
+            };
+          })
+        );
       }
     }
     return [];
@@ -129,6 +140,10 @@ class ContentNavigationBar extends React.Component {
     }
 
     const hasExistingProjects = items.length > 0;
+
+    if (hasExistingProjects) {
+      items.push({ isSeparator: true });
+    }
 
     items.push({
       name: 'Create a New Game',
@@ -158,11 +173,15 @@ class ContentNavigationBar extends React.Component {
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_NAV_ITEMS}>
+          <div className={STYLES_NAV_ITEM}>
+            <div className={STYLES_NAV_LABEL} onClick={this.props.navigator.navigateToHome}>
+              <div className={STYLES_LOGO} />
+            </div>
+          </div>
           <div
             className={STYLES_NAV_ITEM}
             onMouseEnter={() => this.setState({ isHoveringOnPlay: true })}
             onMouseLeave={() => this.setState({ isHoveringOnPlay: false })}>
-            <div className={STYLES_LOGO} />
             <span className={STYLES_NAV_LABEL} onClick={this.props.navigator.navigateToHome}>
               Play
             </span>
