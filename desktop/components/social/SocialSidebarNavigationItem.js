@@ -22,16 +22,17 @@ const STYLES_CONTAINER = css`
 export default class SocialSidebarNavigationItem extends React.Component {
   static defaultProps = {
     showOnlineIndicator: true,
+    theme: {},
   };
 
   render() {
-    const { isUnread, notificationCount, isSelected, onClick } = this.props;
+    const { isUnread, notificationCount, isSelected, onClick, theme } = this.props;
     const { isOnline, showOnlineIndicator } = this.props;
     const { avatarUrl, avatarElement } = this.props;
 
     let backgroundColor, unreadCount, indicatorStyles;
     if (isSelected) {
-      backgroundColor = '#f9f9f9';
+      backgroundColor = theme.navigatorSelectedBackground || '#d3d3d3';
     }
     if (isUnread && !isSelected) {
       unreadCount = notificationCount;
@@ -43,9 +44,12 @@ export default class SocialSidebarNavigationItem extends React.Component {
         };
       } else {
         indicatorStyles = {
-          backgroundColor: 'black',
+          backgroundColor: theme.navigatorBackground ? 'white' : 'black',
         };
       }
+    }
+    if (theme.navigatorBackground) {
+      indicatorStyles = { ...indicatorStyles, borderColor: theme.navigatorBackground };
     }
 
     let avatar;

@@ -4,6 +4,7 @@ import * as Constants from '~/common/constants';
 import { css } from 'react-emotion';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigatorContext } from '~/contexts/NavigationContext';
+import { Tooltip } from 'react-tippy';
 
 import UIAvatar from '~/components/reusable/UIAvatar';
 
@@ -14,30 +15,32 @@ const STYLES_CONTAINER = css`
   justify-content: center;
 `;
 
-const STYLES_USERNAME = css`
-  cursor: pointer;
-  margin-left: 8px;
-`;
+const TOOLTIP_PROPS = {
+  arrow: true,
+  duration: 170,
+  animation: 'fade',
+  hideOnClick: false,
+  position: 'left',
+};
 
 export default class Viewer extends React.Component {
   _renderViewer = (navigateToCurrentUserProfile, currentUser) => {
     const avatarSrc =
       currentUser.user && currentUser.user.photo ? currentUser.user.photo.url : null;
     return (
-      <div className={STYLES_CONTAINER}>
-        <UIAvatar
-          src={avatarSrc}
-          onClick={navigateToCurrentUserProfile}
-          showIndicator={false}
-          style={{
-            height: `28px`,
-            width: `28px`,
-          }}
-        />
-        <div className={STYLES_USERNAME} onClick={navigateToCurrentUserProfile}>
-          {currentUser.user.username}
+      <Tooltip title={`Signed in as ${currentUser.user.username}`} {...TOOLTIP_PROPS}>
+        <div className={STYLES_CONTAINER}>
+          <UIAvatar
+            src={avatarSrc}
+            onClick={navigateToCurrentUserProfile}
+            showIndicator={false}
+            style={{
+              height: `28px`,
+              width: `28px`,
+            }}
+          />
         </div>
-      </div>
+      </Tooltip>
     );
   };
 

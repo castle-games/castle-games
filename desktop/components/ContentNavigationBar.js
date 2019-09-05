@@ -13,7 +13,6 @@ import ContentNavigationMenu from '~/components/ContentNavigationMenu';
 import SearchInput from '~/components/SearchInput';
 import UINavigationLink from '~/components/reusable/UINavigationLink';
 import UserStatus from '~/common/userstatus';
-import Viewer from '~/components/Viewer';
 
 const ENABLE_NOTIF_SCREEN = false; // feature flag notification item
 
@@ -24,6 +23,16 @@ const STYLES_CONTAINER = css`
   display: flex;
   align-items: center;
   justify-content: space-between;
+`;
+
+const STYLES_LOGO = css`
+  width: 24px;
+  height: 24px;
+  background: url('/static/castle512x512.png');
+  border-radius: 4px;
+  background-size: cover;
+  background-position: 50% 50%;
+  margin-right: 12px;
 `;
 
 const STYLES_SEARCH_SECTION = css`
@@ -149,13 +158,11 @@ class ContentNavigationBar extends React.Component {
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_NAV_ITEMS}>
-          <div className={STYLES_NAV_ITEM}>
-            <Viewer />
-          </div>
           <div
             className={STYLES_NAV_ITEM}
             onMouseEnter={() => this.setState({ isHoveringOnPlay: true })}
             onMouseLeave={() => this.setState({ isHoveringOnPlay: false })}>
+            <div className={STYLES_LOGO} />
             <span className={STYLES_NAV_LABEL} onClick={this.props.navigator.navigateToHome}>
               Play
             </span>

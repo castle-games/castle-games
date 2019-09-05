@@ -2,11 +2,13 @@ import * as React from 'react';
 import * as ChatUtilities from '~/common/chat-utilities';
 import * as Constants from '~/common/constants';
 import * as Strings from '~/common/strings';
-import * as SVG from '~/components/primitives/svg';
 
 import { css } from 'react-emotion';
 
+import Viewer from '~/components/Viewer';
+
 const STYLES_HEADER = css`
+  background: #ececed;
   border-bottom: 1px solid ${Constants.REFACTOR_COLORS.elements.border};
   color: ${Constants.REFACTOR_COLORS.text};
   font-family: ${Constants.REFACTOR_FONTS.system};
@@ -20,15 +22,11 @@ const STYLES_HEADER = css`
   justify-content: space-between;
 `;
 
-const STYLES_TOGGLE = css`
+const STYLES_VIEWER = css`
   display: flex;
   width: ${Constants.sidebar.collapsedWidth};
   align-items: center;
   justify-content: center;
-
-  svg {
-    cursor: pointer;
-  }
 `;
 
 const STYLES_HEADER_LEFT = css`
@@ -153,17 +151,9 @@ export default class SocialSidebarHeader extends React.Component {
   };
 
   render() {
-    const { channel, isExpanded, onToggleSidebar } = this.props;
+    const { channel, isExpanded } = this.props;
     if (!channel) {
       return null;
-    }
-
-    let toggleControl;
-    let toggleProps = { width: 24, height: 24, onClick: onToggleSidebar };
-    if (isExpanded) {
-      toggleControl = <SVG.ChevronRight {...toggleProps} />;
-    } else {
-      toggleControl = <SVG.ChevronLeft {...toggleProps} />;
     }
 
     return (
@@ -177,7 +167,9 @@ export default class SocialSidebarHeader extends React.Component {
             </p>
           </div>
         ) : null}
-        <div className={STYLES_TOGGLE}>{toggleControl}</div>
+        <div className={STYLES_VIEWER}>
+          <Viewer />
+        </div>
       </header>
     );
   }

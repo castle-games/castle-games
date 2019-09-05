@@ -5,7 +5,7 @@ import * as Constants from '~/common/constants';
 import { css } from 'react-emotion';
 
 const STYLES_HEADER = css`
-  height: 24px;
+  height: 48px;
   width: 100%;
   background: linear-gradient(to top, #cccccc 0%, #d6d6d6 1px, #ebebeb 100%);
   display: flex;
@@ -48,7 +48,6 @@ const STYLES_RIGHT = css`
 
 export default class GameScreenWindowHeader extends React.Component {
   static defaultProps = {
-    navigateToHome: () => {},
     onGameMinimize: () => {},
     onGameMaximize: () => {},
     onGameDismiss: () => {},
@@ -57,18 +56,7 @@ export default class GameScreenWindowHeader extends React.Component {
   render() {
     return (
       <header className={STYLES_HEADER}>
-        <div className={STYLES_LEFT}>
-          {this.props.navigateToHome ? (
-            <CTA style={{ marginRight: 24 }} onClick={this.props.navigateToHome}>
-              <GameSVG.Home
-                height="12px"
-                style={{ marginRight: 8 }}
-                onClick={this.props.navigateToHome}
-              />{' '}
-              Home
-            </CTA>
-          ) : null}
-        </div>
+        <div className={STYLES_LEFT} />
         <div className={STYLES_RIGHT}>
           {this.props.onGameMinimize ? (
             <CTA style={{ marginRight: 16 }} onClick={this.props.onGameMinimize}>

@@ -43,7 +43,30 @@ const STYLES_CHANNEL = css`
   min-width: 0;
 `;
 
+const THEME = {
+  textColor: Constants.colors.white,
+  background: Constants.colors.black,
+  anchorColor: Constants.colors.white,
+  inputBackground: `#232324`,
+  navigatorBackground: '#565656',
+  navigatorSelectedBackground: '#343436',
+  embedBorder: `none`,
+  embedBackground: 'transparent',
+  embedBoxShadow: `none`,
+  embedPadding: `8px 8px 8px 8px`,
+  embedWidth: '188px',
+  actionItemColor: Constants.colors.white,
+  actionItemBackground: '#232323',
+  reactionItemColor: Constants.colors.white,
+  reactionItemBackground: '#232323',
+  reactionItemSelectedBackground: '#230023',
+};
+
 class SocialSidebar extends React.Component {
+  static defaultProps = {
+    isDarkTheme: false,
+  };
+
   state = {
     mode: 'chat',
   };
@@ -96,7 +119,7 @@ class SocialSidebar extends React.Component {
     return this.setState({ mode: 'chat' });
   };
 
-  _renderContent = (mode, { channelId }) => {
+  _renderContent = (mode, { channelId, theme }) => {
     switch (mode) {
       case 'members':
         const channel = this.props.chat.channels[channelId];
@@ -104,6 +127,7 @@ class SocialSidebar extends React.Component {
           <ChatMembers
             userIds={channel.subscribedUsers.map((user) => user.userId)}
             onSendMessage={this._handleOpenDirectMessage}
+            theme={theme}
           />
         );
       case 'chat':
@@ -111,7 +135,15 @@ class SocialSidebar extends React.Component {
         return (
           <div className={STYLES_CHANNEL}>
             {channelId && (
-              <ChatChannel isSidebar chat={this.props.chat} channelId={channelId} size="24px" />
+              <ChatChannel
+                isSidebar
+                chat={this.props.chat}
+                numChannelMembers={this.props.chat.channelOnlineCounts[channelId]}
+                onMembersClick={this._handleToggleMembers}
+                channelId={channelId}
+                size="24px"
+                theme={theme}
+              />
             )}
           </div>
         );
@@ -121,6 +153,7 @@ class SocialSidebar extends React.Component {
   render() {
     const { chat, viewer, userPresence, isChatExpanded, gameMetaChannelId } = this.props;
     const channelId = this._getChannelIdVisible(this.props);
+    let theme = this.props.isDarkTheme ? THEME : {};
 
     if (!viewer) {
       return null;
@@ -131,16 +164,17 @@ class SocialSidebar extends React.Component {
       : Constants.sidebar.collapsedWidth;
 
     return (
-      <div className={STYLES_CONTAINER} style={{ width: sidebarWidth, minWidth: sidebarWidth }}>
+      <div
+        className={STYLES_CONTAINER}
+        style={{ width: sidebarWidth, minWidth: sidebarWidth, background: theme.background }}>
         <SocialSidebarHeader
           channel={chat.channels[channelId]}
           isExpanded={isChatExpanded}
           numChannelMembers={chat.channelOnlineCounts[channelId]}
-          onToggleSidebar={this.props.navigator.toggleIsChatExpanded}
           onMembersClick={this._handleToggleMembers}
         />
         <div className={STYLES_SIDEBAR_BODY}>
-          {isChatExpanded && this._renderContent(this.state.mode, { channelId })}
+          {isChatExpanded && this._renderContent(this.state.mode, { channelId, theme })}
           <div className={STYLES_CHANNEL_NAVIGATOR}>
             <SocialSidebarNavigator
               isChatExpanded={isChatExpanded}
@@ -149,7 +183,9 @@ class SocialSidebar extends React.Component {
               userPresence={userPresence}
               gameMetaChannelId={gameMetaChannelId}
               chat={chat}
+              theme={theme}
               onSelectChannel={this._handleNavigateToChat}
+              onToggleSidebar={this.props.navigator.toggleIsChatExpanded}
             />
           </div>
         </div>
@@ -174,6 +210,7 @@ export default class SocialSidebarWithContext extends React.Component {
                           const lobbyChannel = chat.findChannel(
                             ChatUtilities.EVERYONE_CHANNEL_NAME
                           );
+                          const isDarkTheme = navigation.contentMode === 'game';
                           return (
                             <SocialSidebar
                               userPresence={userPresence}
@@ -182,6 +219,7 @@ export default class SocialSidebarWithContext extends React.Component {
                               gameMetaChannelId={navigation.gameMetaChannelId}
                               chatChannelId={navigation.chatChannelId}
                               chat={chat}
+                              isDarkTheme={isDarkTheme}
                               lobbyChannel={lobbyChannel}
                               navigator={navigator}
                             />
