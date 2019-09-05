@@ -7,7 +7,7 @@ import { css } from 'react-emotion';
 import UserStatus from '~/common/userstatus';
 
 const STYLES_STATUS_LINK = css`
-  color: ${Constants.colors.action};
+  color: magenta;
   text-decoration: underline;
   cursor: pointer;
 `;

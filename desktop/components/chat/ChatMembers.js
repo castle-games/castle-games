@@ -58,6 +58,7 @@ class ChatMembers extends React.Component {
               navigateToGameUrl={navigateToGameUrl}
               navigateToUserProfile={navigateToUserProfile}
               onSendMessage={this.props.onSendMessage}
+              theme={this.props.theme}
             />
           ))}
       </div>

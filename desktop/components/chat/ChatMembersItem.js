@@ -54,29 +54,49 @@ const STYLES_USER_STATUS = css`
   font-size: 11px;
 `;
 
-export default ({ user, isOnline, navigateToGameUrl, navigateToUserProfile, onSendMessage }) => {
+export default ({
+  user,
+  isOnline,
+  navigateToGameUrl,
+  navigateToUserProfile,
+  onSendMessage,
+  theme,
+}) => {
+  let textColor, userDarkStyles, indicatorDarkStyles;
+  if (theme && theme.textColor) {
+    textColor = theme.textColor;
+    userDarkStyles = css`
+      :hover {
+        background: #222223;
+      }
+    `;
+    indicatorDarkStyles = { borderColor: '#222223' };
+  }
   return (
-    <div className={STYLES_USER}>
+    <div className={`${STYLES_USER} ${userDarkStyles}`}>
       <UIAvatar
         src={user && user.photo ? user.photo.url : null}
         isOnline={isOnline}
         style={{ width: 36, height: 36 }}
-        indicatorStyle={{ width: 12, height: 12, borderRadius: 6 }}
+        indicatorStyle={{ width: 12, height: 12, borderRadius: 6, ...indicatorDarkStyles }}
       />
       <div className={STYLES_INFO}>
         <h2
           className={STYLES_NAME}
-          style={{ color: isOnline ? null : Constants.REFACTOR_COLORS.subdued }}>
+          style={{ color: isOnline ? textColor : Constants.REFACTOR_COLORS.subdued }}>
           <span onClick={user ? () => navigateToUserProfile(user) : null}>
             {user && user.username ? user.username : 'Loading...'}
           </span>
         </h2>
-        <div className={STYLES_USER_STATUS}>
+        <div className={STYLES_USER_STATUS} style={{ color: textColor }}>
           {user ? <UIUserStatus user={user} navigateToGameUrl={navigateToGameUrl} /> : null}
         </div>
       </div>
       <div className={STYLES_ACTIONS}>
-        <span className={STYLES_ACTION} onClick={() => onSendMessage(user)}>
+        <span
+          className={STYLES_ACTION}
+          onClick={() => onSendMessage(user)}
+          style={{ color: textColor }}>
           <SVG.Mail style={{ width: 14, height: 14, marginRight: 4 }} />
         </span>
       </div>
