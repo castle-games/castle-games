@@ -66,10 +66,6 @@ class ChatChannel extends React.Component {
   _isEditAvailable = () => {
     const { messageIdToEdit } = this.state;
     const { chat, channelId, viewer, isSidebar } = this.props;
-    if (isSidebar) {
-      // TODO: maybe enable editing messages from chat sidebar (requires theming)
-      return false;
-    }
     const channel = chat.channels[channelId];
     return (
       !messageIdToEdit &&

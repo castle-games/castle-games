@@ -60,8 +60,8 @@ const STYLES_INPUT = css`
 const STYLES_EMOJI_TOGGLE = css`
   color: ${Constants.REFACTOR_COLORS.subdued};
   position: absolute;
-  right: 24px;
-  bottom: 12px;
+  right: 4px;
+  bottom: 4px;
   padding: 0 4px;
   cursor: pointer;
 `;
@@ -191,7 +191,7 @@ export default class ChatInput extends React.Component {
         />
         {this.props.showInlineControls && (
           <div className={STYLES_EMOJI_TOGGLE} onClick={this.props.onToggleEmojiPicker}>
-            <SVG.ChatEmojiPicker size="20" />
+            <SVG.ChatEmojiPicker size="18" />
           </div>
         )}
       </div>
