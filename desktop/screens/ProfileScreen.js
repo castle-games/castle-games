@@ -76,6 +76,7 @@ class ProfileScreen extends React.Component {
   _onShowGames = () => this.setState({ mode: 'games', gameToUpdate: null });
   _onShowAddGame = () => this.setState({ mode: 'add-game' });
   _onShowEditProfile = () => this.setState({ mode: 'edit-profile' });
+  _onShowSignOut = () => this.setState({ mode: 'sign-out' });
   _onShowSettings = () => this.setState({ mode: 'settings' });
   _onShowUpdateGame = (game) => this.setState({ mode: 'update-game', gameToUpdate: game });
 
@@ -92,6 +93,7 @@ class ProfileScreen extends React.Component {
       navigationItems.push({ label: 'Add game', key: 'add-game' });
       navigationItems.push({ label: 'Edit Profile', key: 'edit-profile' });
       navigationItems.push({ label: 'Settings', key: 'settings' });
+      navigationItems.push({ label: 'Sign Out', key: 'sign-out' });
     }
 
     return navigationItems;
@@ -102,6 +104,7 @@ class ProfileScreen extends React.Component {
       games: this._onShowGames,
       'add-game': this._onShowAddGame,
       'edit-profile': this._onShowEditProfile,
+      'sign-out': this._onShowSignOut,
       settings: this._onShowSettings,
     };
 
@@ -175,6 +178,8 @@ class ProfileScreen extends React.Component {
       profileContentElement = this._renderAddGame(isOwnProfile);
     } else if (mode === 'update-game') {
       profileContentElement = this._renderUpdateGame(this.state.gameToUpdate);
+    } else if (mode === 'sign-out') {
+      profileContentElement = this._renderSignOutContent(isOwnProfile);
     } else if (mode === 'settings') {
       profileContentElement = this._renderSettings(isOwnProfile, viewer);
     } else {
