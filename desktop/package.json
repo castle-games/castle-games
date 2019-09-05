@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=development webpack-dev-server --mode development",
+    "start": "cross-env NODE_ENV=development webpack-dev-server --mode development",
     "build": "webpack --mode production",
     "prettier": "pretty-quick --staged",
     "build-tools-css": "node-sass components/game/Tools.scss components/game/Tools.css --include-path node_modules/ --include-path node_modules/carbon-components/scss/globals/scss/vendor/ && cleancss -O2 -o components/game/Tools.min.css components/game/Tools.css"
@@ -20,6 +20,7 @@
     "babel-plugin-module-resolver": "^3.0.0",
     "babel-runtime": "^6.26.0",
     "clean-css-cli": "^4.3.0",
+    "cross-env": "^5.2.0",
     "css-loader": "^1.0.0",
     "file-loader": "^3.0.1",
     "html-loader": "^0.5.5",
