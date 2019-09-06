@@ -27,6 +27,7 @@ const STYLES_VIEWER = css`
   width: ${Constants.sidebar.collapsedWidth};
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 `;
 
 const STYLES_HEADER_LEFT = css`

@@ -21,7 +21,6 @@ const STYLES_CONTAINER = css`
   justify-content: space-between;
   flex-direction: column;
   height: 100%;
-  border-left: 1px solid #f3f3f3;
 `;
 
 const STYLES_SIDEBAR_BODY = css`
@@ -45,7 +44,7 @@ const STYLES_CHANNEL = css`
 
 const THEME = {
   textColor: Constants.colors.white,
-  background: Constants.colors.black,
+  background: `#191921`,
   anchorColor: Constants.colors.white,
   inputBackground: `#232324`,
   navigatorBackground: '#565656',
@@ -164,11 +163,17 @@ class SocialSidebar extends React.Component {
     const sidebarWidth = isChatExpanded
       ? Constants.sidebar.width
       : Constants.sidebar.collapsedWidth;
+    const borderLeft = isChatExpanded ? `1px solid #f3f3f3` : null;
 
     return (
       <div
         className={STYLES_CONTAINER}
-        style={{ width: sidebarWidth, minWidth: sidebarWidth, background: theme.background }}>
+        style={{
+          width: sidebarWidth,
+          minWidth: sidebarWidth,
+          background: theme.background,
+          borderLeft,
+        }}>
         <SocialSidebarHeader
           channel={chat.channels[channelId]}
           isExpanded={isChatExpanded}
