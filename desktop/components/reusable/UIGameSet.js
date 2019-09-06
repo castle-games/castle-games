@@ -5,12 +5,9 @@ import UIGameCell from '~/components/reusable/UIGameCell';
 
 import { css } from 'react-emotion';
 
-const STYLES_CONTAINER = css``;
-
-const STYLES_GAME_ROW = css`
+const STYLES_CONTAINER = css`
   display: flex;
-  flex-direction: row;
-  flex-wrap: no-wrap;
+  flex-wrap: wrap;
   margin-bottom: 8px;
   margin-left: 24px;
 `;
@@ -20,90 +17,45 @@ const STYLES_CELL_ITEM = css`
 `;
 
 export default class UIGameSet extends React.Component {
+  _container;
+
   static defaultProps = {
-    renderAsGrid: false,
     numRowsToElide: -1,
-    maxWidth: 0,
   };
 
-  state = {
-    width: null,
-  };
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this._handleResize);
-  }
-
-  componentDidMount() {
-    window.addEventListener('resize', this._handleResize);
-    this._handleResize();
-  }
-
-  _handleResize = () => {
-    const width = this._containerRef.offsetWidth;
-    this.setState({ width });
-  };
-
-  _maxNumGamesPerRow() {
-    let maxWidth =
-      this.props.maxWidth > 0
-        ? this.props.maxWidth
-        : window.innerWidth - parseInt(Constants.sidebar.width, 10) - 24;
-    return Math.floor(maxWidth / (parseInt(Constants.card.width, 10) + 16));
-  }
-
-  _totalNumRows() {
-    if (this.props.numRowsToElide == -1) {
-      const totalNumGames = this.props.gameItems.length;
-      let maxNumGamesPerRow = this._maxNumGamesPerRow();
-      let numRows = Math.floor(totalNumGames / maxNumGamesPerRow);
-      let remainder = totalNumGames % maxNumGamesPerRow;
-      if (remainder > 0) {
-        numRows += 1;
+  _numGamesToRender = () => {
+    const { numRowsToElide, gameItems } = this.props;
+    if (numRowsToElide > 0) {
+      let numGamesPerRow = 0;
+      if (this._container) {
+        numGamesPerRow = this._container.offsetWidth / (parseInt(Constants.card.width, 10) + 16);
       }
-      return numRows;
-    } else {
-      return this.props.numRowsToElide;
+      return Math.max(1, numGamesPerRow * numRowsToElide - 1);
     }
-  }
-
-  _gamesForRow = (whichRow) => {
-    const num = this._maxNumGamesPerRow();
-    const startIdx = whichRow * num;
-    return this.props.gameItems.slice(startIdx, startIdx + num);
+    return gameItems && gameItems.length;
   };
 
   render() {
-    let rowIndices = [];
-    for (let i = 0; i < this._totalNumRows(); i++) {
-      rowIndices.push(i);
+    if (!this.props.gameItems) return null;
+
+    let itemsToRender = this.props.gameItems;
+    if (this.props.numRowsToElide > 0) {
+      itemsToRender = this.props.gameItems.slice(0, this._numGamesToRender());
     }
     return (
-      <div
-        className={STYLES_CONTAINER}
-        ref={(c) => {
-          this._containerRef = c;
-        }}>
-        {rowIndices.map((_, j) => {
+      <div className={STYLES_CONTAINER} ref={(c) => (this._container = c)}>
+        {itemsToRender.map((m, i) => {
+          const key = m.key ? m.key : m.gameId ? m.gameId : m.url;
           return (
-            <div className={STYLES_GAME_ROW} key={`${j}-whichRow`}>
-              {this.props.gameItems !== null
-                ? this._gamesForRow(j).map((m, i) => {
-                    const key = m.key ? m.key : m.gameId ? m.gameId : m.url;
-                    return (
-                      <div className={STYLES_CELL_ITEM} key={`${key}-${i}`}>
-                        <UIGameCell
-                          onGameSelect={this.props.onGameSelect}
-                          onShowGameInfo={this.props.onShowGameInfo}
-                          onGameUpdate={this.props.onGameUpdate}
-                          onUserSelect={this.props.onUserSelect}
-                          src={m.coverImage && m.coverImage.url}
-                          game={m}
-                        />
-                      </div>
-                    );
-                  })
-                : null}
+            <div className={STYLES_CELL_ITEM} key={`${key}-${i}`}>
+              <UIGameCell
+                onGameSelect={this.props.onGameSelect}
+                onShowGameInfo={this.props.onShowGameInfo}
+                onGameUpdate={this.props.onGameUpdate}
+                onUserSelect={this.props.onUserSelect}
+                src={m.coverImage && m.coverImage.url}
+                game={m}
+              />
             </div>
           );
         })}
