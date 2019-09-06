@@ -158,7 +158,11 @@ export default class UIGameCell extends React.Component {
   };
 
   _handleToggleShowGameInfo = (shouldShow) => {
-    this.setState({ isShowingGameInfo: shouldShow });
+    if (this.props.onShowGameInfo && shouldShow) {
+      this.props.onShowGameInfo();
+    } else {
+      this.setState({ isShowingGameInfo: shouldShow });
+    }
   };
 
   _handleHoverOnActionsBar = (action, isHovering) => {

@@ -4,6 +4,8 @@ import * as Constants from '~/common/constants';
 import UIGameCell from '~/components/reusable/UIGameCell';
 
 import { css } from 'react-emotion';
+import { ChatContext } from '~/contexts/ChatContext';
+import { NavigatorContext } from '~/contexts/NavigationContext';
 
 const STYLES_CONTAINER = css`
   display: flex;
@@ -16,11 +18,17 @@ const STYLES_CELL_ITEM = css`
   margin: 0 16px 16px 0;
 `;
 
-export default class UIGameSet extends React.Component {
+class UIGameSet extends React.Component {
   _container;
 
   static defaultProps = {
     numRowsToElide: -1,
+  };
+
+  _openGameMetaScreen = async (game) => {
+    // TODO: ben: decouple game meta pages from chat
+    await this.props.openChannelForGame(game);
+    this.props.navigateToGameMeta();
   };
 
   _numGamesToRender = () => {
@@ -52,7 +60,7 @@ export default class UIGameSet extends React.Component {
             <div className={STYLES_CELL_ITEM} key={`${key}-${i}`}>
               <UIGameCell
                 onGameSelect={this.props.onGameSelect}
-                onShowGameInfo={this.props.onShowGameInfo}
+                onShowGameInfo={() => this._openGameMetaScreen(m)}
                 onGameUpdate={this.props.onGameUpdate}
                 onUserSelect={this.props.onUserSelect}
                 src={m.coverImage && m.coverImage.url}
@@ -62,6 +70,26 @@ export default class UIGameSet extends React.Component {
           );
         })}
       </div>
+    );
+  }
+}
+
+export default class UIGameSetWithContext extends React.Component {
+  render() {
+    return (
+      <NavigatorContext.Consumer>
+        {(navigator) => (
+          <ChatContext.Consumer>
+            {(chat) => (
+              <UIGameSet
+                navigateToGameMeta={navigator.navigateToGameMeta}
+                openChannelForGame={chat.openChannelForGame}
+                {...this.props}
+              />
+            )}
+          </ChatContext.Consumer>
+        )}
+      </NavigatorContext.Consumer>
     );
   }
 }

@@ -89,7 +89,7 @@ class GameMetaScreen extends React.Component {
     items.push({ label: `People Online (${numChannelMembers})`, key: 'members' });
 
     const channel = chat.channels[channelId];
-    if (channel.isSubscribed) {
+    if (channel && channel.isSubscribed) {
       items.push({ label: 'Settings', key: 'settings' });
     }
 
@@ -136,11 +136,10 @@ class GameMetaScreen extends React.Component {
   render() {
     const { game, mode } = this.state;
 
-    if (!this.props.channelId) {
-      return null;
-    }
+    if (!this.props.channelId) return null;
 
     const channel = this.props.chat.channels[this.props.channelId];
+    if (!channel) return null;
 
     return (
       <div className={STYLES_CONTAINER}>

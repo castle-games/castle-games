@@ -316,7 +316,6 @@ class NavigationContextManager extends React.Component {
   // if not, use ChatContext.openChannel methods
   showChatChannel = async (channelId, options) => {
     let chatChannelId = channelId || this.state.chatChannelId;
-    console.log(`show chat channel with is game meta: ${options && options.isGameMetaChannel}`);
     return this.setState({
       navigation: {
         ...this.state.navigation,
@@ -331,10 +330,10 @@ class NavigationContextManager extends React.Component {
   };
 
   navigateToGameMeta = (channelId) => {
-    let chatChannelId = channelId || this.state.chatChannelId;
+    let chatChannelId = channelId || this.state.navigation.chatChannelId;
     return this._navigateToContentMode('game-meta', {
-      gameMetaChannelId: channelId,
-      chatChannelId: channelId,
+      gameMetaChannelId: chatChannelId,
+      chatChannelId: chatChannelId,
     });
   };
 
