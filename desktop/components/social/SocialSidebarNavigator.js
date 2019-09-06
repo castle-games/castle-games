@@ -38,21 +38,6 @@ const STYLES_BOTTOM = css`
   }
 `;
 
-const STYLES_LOBBY_ICON = css`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const STYLES_LOGO = css`
-  width: 24px;
-  height: 24px;
-  background: url('static/flag128x128.png');
-  border-radius: 4px;
-  background-size: cover;
-  background-position: 50% 50%;
-`;
-
 const TOOLTIP_PROPS = {
   arrow: true,
   duration: 170,
@@ -129,11 +114,11 @@ export default class SocialSidebarNavigator extends React.Component {
       gameItem = (
         <SocialSidebarNavigationItem
           isUnread={channel.hasUnreadMessages}
+          showOnlineIndicator={channel.hasUnreadMessages && !isGameSelected}
           notificationCount={channel.notificationCount}
           isSelected={isGameSelected}
           avatarUrl={iconSrc}
           theme={theme}
-          showOnlineIndicator={false}
           onClick={() => this.props.onSelectChannel(channel)}
         />
       );
@@ -148,23 +133,17 @@ export default class SocialSidebarNavigator extends React.Component {
     let lobbyItem = null;
     try {
       let lobbyChannel,
-        isLobbySelected = false,
-        lobbyAvatar = null;
+        isLobbySelected = false;
       lobbyChannel = chat.findChannel(ChatUtilities.EVERYONE_CHANNEL_NAME);
       if (lobbyChannel) {
         isLobbySelected = isChatExpanded && selectedChannelId === lobbyChannel.channelId;
-        lobbyAvatar = (
-          <div className={STYLES_LOBBY_ICON}>
-            <div className={STYLES_LOGO} />
-          </div>
-        );
         lobbyItem = (
           <SocialSidebarNavigationItem
             isUnread={lobbyChannel.hasUnreadMessages}
+            showOnlineIndicator={lobbyChannel.hasUnreadMessages && !isLobbySelected}
             notificationCount={lobbyChannel.notificationCount}
-            isOnline={true}
             isSelected={isLobbySelected}
-            avatarElement={lobbyAvatar}
+            avatarUrl={'static/flag128x128.png'}
             theme={theme}
             onClick={() => this.props.onSelectChannel(lobbyChannel)}
           />
