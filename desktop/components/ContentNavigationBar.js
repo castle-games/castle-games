@@ -29,7 +29,7 @@ const STYLES_CONTAINER = css`
 const STYLES_LOGO = css`
   width: 24px;
   height: 24px;
-  background: url('/static/castle512x512.png');
+  background: url('static/castle512x512.png');
   border-radius: 4px;
   background-size: cover;
   background-position: 50% 50%;

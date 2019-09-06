@@ -47,7 +47,7 @@ const STYLES_LOBBY_ICON = css`
 const STYLES_LOGO = css`
   width: 24px;
   height: 24px;
-  background: url('/static/flag128x128.png');
+  background: url('static/flag128x128.png');
   border-radius: 4px;
   background-size: cover;
   background-position: 50% 50%;
