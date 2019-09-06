@@ -29,8 +29,8 @@ const STYLES_RIGHT = css`
 `;
 
 const STYLES_AUTHOR_MESSAGE = css`
-  line-height: 20px;
-  font-size: 14px;
+  line-height: 16px;
+  font-size: 12px;
   overflow-wrap: break-word;
   white-space: pre-wrap;
   color: ${Constants.REFACTOR_COLORS.text};
@@ -46,7 +46,7 @@ export default class ChatMessageElement extends React.Component {
     const { message, isEmojiMessage, showAuthor } = this.props;
     const size = this.props.size ? this.props.size : 40;
     const styles = {
-      paddingTop: showAuthor ? '12px' : null,
+      paddingTop: showAuthor ? '8px' : null,
     };
     let leftElement;
     if (showAuthor) {

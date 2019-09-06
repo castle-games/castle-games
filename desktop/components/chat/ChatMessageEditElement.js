@@ -16,7 +16,7 @@ const STYLES_CONTAINER = css`
   justify-content: space-between;
   flex-shrink: 0;
   width: 100%;
-  padding: 16px 24px 0 16px;
+  padding: 16px 12px 0 16px;
 `;
 
 const STYLES_RIGHT = css`
@@ -27,8 +27,8 @@ const STYLES_RIGHT = css`
 `;
 
 const STYLES_AUTHOR_MESSAGE = css`
-  line-height: 20px;
-  font-size: 14px;
+  line-height: 16px;
+  font-size: 12px;
   margin-top: 2px;
   overflow-wrap: break-word;
   white-space: pre-wrap;
@@ -37,7 +37,7 @@ const STYLES_AUTHOR_MESSAGE = css`
 
 const STYLES_EDIT_ACTIONS = css`
   display: flex;
-  padding-left: 16px;
+  padding-left: 8px;
 `;
 
 const STYLES_CANCEL = css`

@@ -54,8 +54,8 @@ const STYLES_NOTICE_MESSAGE = css`
 `;
 
 const STYLES_SUBDUED_MESSAGE = css`
-  line-height: 20px;
-  font-size: 14px;
+  line-height: 16px;
+  font-size: 12px;
   overflow-wrap: break-word;
   white-space: pre-wrap;
   font-style: italic;
@@ -133,10 +133,6 @@ export default class ChatEventElement extends React.Component {
   render() {
     const { message, theme } = this.props;
     let type = message && message.body ? message.body.notificationType : null;
-    if (theme && theme.hideEvents) {
-      // TODO: hack to make sure the large notices don't overflow the left game sidebar
-      type = 'subdued';
-    }
     switch (type) {
       case 'game-session':
         return <NoticeMessage {...this.props} />;

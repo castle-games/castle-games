@@ -38,7 +38,7 @@ const STYLES_INPUT = css`
   width: 100%;
   height: 100%;
   outline: 0;
-  font-size: 14px;
+  font-size: 12px;
   background: transparent;
   font-weight: 400;
   padding: 8px 24px 8px 8px;
@@ -60,8 +60,8 @@ const STYLES_INPUT = css`
 const STYLES_EMOJI_TOGGLE = css`
   color: ${Constants.REFACTOR_COLORS.subdued};
   position: absolute;
-  right: 4px;
-  bottom: 4px;
+  right: 18px;
+  bottom: 12px;
   padding: 0 4px;
   cursor: pointer;
 `;
@@ -159,14 +159,7 @@ export default class ChatInput extends React.Component {
     let inputStyles;
     let containerStyles;
     if (this.props.isSidebar) {
-      containerStyles = {
-        padding: 0,
-      };
-
       inputStyles = {
-        border: `2px solid transparent`,
-        padding: `5px 16px 6px 16px`,
-        borderRadius: `0px`,
         color: this.props.theme.textColor,
         background: this.props.theme.inputBackground,
       };
@@ -191,7 +184,7 @@ export default class ChatInput extends React.Component {
         />
         {this.props.showInlineControls && (
           <div className={STYLES_EMOJI_TOGGLE} onClick={this.props.onToggleEmojiPicker}>
-            <SVG.ChatEmojiPicker size="18" />
+            <SVG.ChatEmojiPicker size="17" />
           </div>
         )}
       </div>

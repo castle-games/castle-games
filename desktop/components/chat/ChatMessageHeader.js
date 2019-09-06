@@ -6,7 +6,7 @@ import { css } from 'react-emotion';
 
 const STYLES_AUTHOR_TIMESTAMP = css`
   margin-top: 2px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   color: ${Constants.REFACTOR_COLORS.text};
 `;
