@@ -104,6 +104,8 @@ class ContentContainer extends React.Component {
     } else if (mode === 'home' || mode === 'allGames') {
       return (
         <GamesHomeScreen
+          updateAvailable={this.props.updateAvailable}
+          onNativeUpdateInstall={this.props.onNativeUpdateInstall}
           featuredExamples={this.props.featuredExamples}
           viewer={this.props.viewer}
           mode={mode}

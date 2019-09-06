@@ -9,28 +9,27 @@ const STYLES_CONTAINER = css`
   font-family: ${Constants.font.system};
   background: ${Constants.brand.yellow};
   color: ${Constants.colors.text};
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 16px;
+  user-select: none;
 `;
 
 const STYLES_CONTENT = css`
-  padding: 8px 8px 8px 8px;
+  padding: 16px;
 `;
 
 const STYLES_ACTIONS = css`
-  padding: 8px 8px 8px 8px;
+  padding: 8px 16px;
   display: flex;
-  margin-top: 16px;
   align-items: center;
   justify-content: flex-start;
-  background: #d99e0b;
+  background: ${Constants.colors.black};
 `;
 
 const STYLES_VERSION = css`
   font-family: ${Constants.font.monobold};
   font-size: 10px;
   text-transform: uppercase;
-  margin-top: 4px;
+  margin-top: 8px;
 `;
 
 // TODO(jim): Delete his legacy component the moment you get a chance.

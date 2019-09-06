@@ -21,11 +21,12 @@ export default class AppContainer extends React.Component {
   render() {
     return (
       <div className={STYLES_CONTAINER}>
-        <ContentContainer {...this.props} />
-        <SocialSidebar
+        <ContentContainer
           updateAvailable={this.props.updateAvailable}
           onNativeUpdateInstall={this.props.onNativeUpdateInstall}
+          {...this.props}
         />
+        <SocialSidebar />
       </div>
     );
   }

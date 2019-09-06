@@ -7,6 +7,7 @@ import { css } from 'react-emotion';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigatorContext, NavigationContext } from '~/contexts/NavigationContext';
 
+import HomeUpdateBanner from '~/components/HomeUpdateBanner';
 import UIGameSet from '~/components/reusable/UIGameSet';
 import UIPostList from '~/components/reusable/UIPostList';
 
@@ -65,6 +66,7 @@ class GamesHomeScreen extends React.Component {
     loadAllGames: () => {},
     trendingGames: [],
     mode: 'home',
+    updateAvailable: null,
   };
 
   state = {
@@ -138,6 +140,15 @@ class GamesHomeScreen extends React.Component {
     return this.props.navigateToGame(game, { launchSource: `home`, ...options });
   };
 
+  _renderUpdateBanner = () => {
+    return this.props.updateAvailable ? (
+      <HomeUpdateBanner
+        updateAvailable={this.props.updateAvailable}
+        onNativeUpdateInstall={this.props.onNativeUpdateInstall}
+      />
+    ) : null;
+  };
+
   _renderBottom = () => {
     let maybeLoading;
     if (this.props.mode === 'home' && this.state.isLoadingPosts) {
@@ -165,6 +176,7 @@ class GamesHomeScreen extends React.Component {
     let title = this.props.mode === 'home' ? 'Games' : 'All Games';
     return (
       <div className={STYLES_HOME_CONTAINER} onScroll={this._handleScroll}>
+        {this._renderUpdateBanner()}
         <div className={STYLES_CONTENT_CONTAINER}>
           <div className={STYLES_SECTION_TITLE}>{title}</div>
           <div className={STYLES_GAMES_CONTAINER}>
