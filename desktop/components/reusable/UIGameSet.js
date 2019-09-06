@@ -28,9 +28,11 @@ export default class UIGameSet extends React.Component {
     if (numRowsToElide > 0) {
       let numGamesPerRow = 0;
       if (this._container) {
-        numGamesPerRow = this._container.offsetWidth / (parseInt(Constants.card.width, 10) + 16);
+        numGamesPerRow = Math.floor(
+          this._container.offsetWidth / (parseInt(Constants.card.width, 10) + 16)
+        );
       }
-      return Math.max(1, numGamesPerRow * numRowsToElide - 1);
+      return Math.max(1, numGamesPerRow * numRowsToElide);
     }
     return gameItems && gameItems.length;
   };
