@@ -64,7 +64,7 @@ const THEME = {
 
 class SocialSidebar extends React.Component {
   static defaultProps = {
-    isDarkTheme: false,
+    isGameVisible: false,
   };
 
   state = {
@@ -152,9 +152,10 @@ class SocialSidebar extends React.Component {
   };
 
   render() {
-    const { chat, viewer, userPresence, isChatExpanded, gameMetaChannelId } = this.props;
+    const { chat, viewer, userPresence, gameMetaChannelId } = this.props;
+    const { isGameVisible, isChatExpanded } = this.props;
     const channelId = this._getChannelIdVisible(this.props);
-    let theme = this.props.isDarkTheme ? THEME : {};
+    let theme = isGameVisible ? THEME : {};
 
     if (!viewer) {
       return null;
@@ -178,6 +179,7 @@ class SocialSidebar extends React.Component {
           {isChatExpanded && this._renderContent(this.state.mode, { channelId, theme })}
           <div className={STYLES_CHANNEL_NAVIGATOR}>
             <SocialSidebarNavigator
+              isGameVisible={isGameVisible}
               isChatExpanded={isChatExpanded}
               selectedChannelId={channelId}
               viewer={viewer}
@@ -211,7 +213,7 @@ export default class SocialSidebarWithContext extends React.Component {
                           const lobbyChannel = chat.findChannel(
                             ChatUtilities.EVERYONE_CHANNEL_NAME
                           );
-                          const isDarkTheme = navigation.contentMode === 'game';
+                          const isGameVisible = navigation.contentMode === 'game';
                           return (
                             <SocialSidebar
                               userPresence={userPresence}
@@ -220,7 +222,7 @@ export default class SocialSidebarWithContext extends React.Component {
                               gameMetaChannelId={navigation.gameMetaChannelId}
                               chatChannelId={navigation.chatChannelId}
                               chat={chat}
-                              isDarkTheme={isDarkTheme}
+                              isGameVisible={isGameVisible}
                               lobbyChannel={lobbyChannel}
                               navigator={navigator}
                             />

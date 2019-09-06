@@ -78,6 +78,21 @@ export default class SocialSidebarNavigator extends React.Component {
     this._update(null, null);
   }
 
+  // do not show tooltips if a game is visible and the sidebar is collapsed,
+  // because the game will draw over the tooltips.
+  _maybeWrapWithTooltip = (child, title) => {
+    const { isGameVisible, isChatExpanded } = this.props;
+    const showTooltip = !(isGameVisible && !isChatExpanded);
+    if (showTooltip) {
+      return (
+        <Tooltip title={title} {...TOOLTIP_PROPS}>
+          {child}
+        </Tooltip>
+      );
+    }
+    return child;
+  };
+
   _update = async (prevProps, prevState) => {
     // TODO: put this game fetch inside navigation context and merge w meta screen
     const { chat, gameMetaChannelId } = this.props;
@@ -110,19 +125,19 @@ export default class SocialSidebarNavigator extends React.Component {
       }
       const isGameSelected = isChatExpanded && selectedChannelId === channel.channelId;
       const title = channel.name ? channel.name : 'Untitled Game Chat';
+
       gameItem = (
-        <Tooltip title={title} {...TOOLTIP_PROPS}>
-          <SocialSidebarNavigationItem
-            isUnread={channel.hasUnreadMessages}
-            notificationCount={channel.notificationCount}
-            isSelected={isGameSelected}
-            avatarUrl={iconSrc}
-            theme={theme}
-            showOnlineIndicator={false}
-            onClick={() => this.props.onSelectChannel(channel)}
-          />
-        </Tooltip>
+        <SocialSidebarNavigationItem
+          isUnread={channel.hasUnreadMessages}
+          notificationCount={channel.notificationCount}
+          isSelected={isGameSelected}
+          avatarUrl={iconSrc}
+          theme={theme}
+          showOnlineIndicator={false}
+          onClick={() => this.props.onSelectChannel(channel)}
+        />
       );
+      return this._maybeWrapWithTooltip(gameItem, title);
     }
     return gameItem;
   };
@@ -144,18 +159,17 @@ export default class SocialSidebarNavigator extends React.Component {
           </div>
         );
         lobbyItem = (
-          <Tooltip title="Community Chat" {...TOOLTIP_PROPS}>
-            <SocialSidebarNavigationItem
-              isUnread={lobbyChannel.hasUnreadMessages}
-              notificationCount={lobbyChannel.notificationCount}
-              isOnline={true}
-              isSelected={isLobbySelected}
-              avatarElement={lobbyAvatar}
-              theme={theme}
-              onClick={() => this.props.onSelectChannel(lobbyChannel)}
-            />
-          </Tooltip>
+          <SocialSidebarNavigationItem
+            isUnread={lobbyChannel.hasUnreadMessages}
+            notificationCount={lobbyChannel.notificationCount}
+            isOnline={true}
+            isSelected={isLobbySelected}
+            avatarElement={lobbyAvatar}
+            theme={theme}
+            onClick={() => this.props.onSelectChannel(lobbyChannel)}
+          />
         );
+        return this._maybeWrapWithTooltip(lobbyItem, 'Community Chat');
       }
     } catch (_) {}
     return lobbyItem;
@@ -211,23 +225,19 @@ export default class SocialSidebarNavigator extends React.Component {
             } else {
               onClick = () => this.props.onSendMessage(user);
             }
-            return (
-              <Tooltip
-                title={c.name}
-                {...TOOLTIP_PROPS}
-                key={`direct-message-${ii}-${c.otherUserId}`}>
-                <SocialSidebarNavigationItem
-                  name={user.username}
-                  isUnread={c.hasUnreadMessages}
-                  notificationCount={c.unreadNotificationCount}
-                  isOnline={c.otherUserIsOnline}
-                  isSelected={isSelected}
-                  avatarUrl={user.photo ? user.photo.url : null}
-                  onClick={onClick}
-                  theme={theme}
-                />
-              </Tooltip>
+            let item = (
+              <SocialSidebarNavigationItem
+                name={user.username}
+                isUnread={c.hasUnreadMessages}
+                notificationCount={c.unreadNotificationCount}
+                isOnline={c.otherUserIsOnline}
+                isSelected={isSelected}
+                avatarUrl={user.photo ? user.photo.url : null}
+                onClick={onClick}
+                theme={theme}
+              />
             );
+            return this._maybeWrapWithTooltip(item, c.name);
           })}
         </div>
         <div className={STYLES_BOTTOM}>
