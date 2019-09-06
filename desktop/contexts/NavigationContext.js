@@ -65,7 +65,7 @@ const AUTHENTICATED_ONLY_MODES = {
  */
 const NavigatorContextDefaults = {
   openUrl: async (url, options) => {},
-  showChatChannel: (channelId) => {},
+  showChatChannel: async (channelId) => {},
   toggleIsChatExpanded: () => {},
   navigateToHome: () => {},
   navigateToGameUrl: async (url, options) => {},
@@ -219,8 +219,12 @@ class NavigationContextManager extends React.Component {
 
   // navigator actions
   _navigateToContentMode = (mode, navigationParams) => {
-    // NOTE(jim): Added this prevent the possibilty of an exception
-    // throwing in an unforseen failure case.
+    if (mode !== 'game-meta') {
+      // TODO: ben: decouple chat from game meta pages
+      if (!navigationParams) navigationParams = {};
+      navigationParams.gameMetaChannelId = null;
+    }
+
     try {
       Analytics.trackNavigation({
         prevContentMode: this.state.navigation.contentMode,
@@ -310,12 +314,17 @@ class NavigationContextManager extends React.Component {
 
   // assumes you have a channel id.
   // if not, use ChatContext.openChannel methods
-  showChatChannel = (channelId) => {
+  showChatChannel = async (channelId, options) => {
     let chatChannelId = channelId || this.state.chatChannelId;
-    this.setState({
+    console.log(`show chat channel with is game meta: ${options && options.isGameMetaChannel}`);
+    return this.setState({
       navigation: {
         ...this.state.navigation,
         chatChannelId: channelId,
+        gameMetaChannelId:
+          options && options.isGameMetaChannel
+            ? channelId
+            : this.state.navigation.gameMetaChannelId,
         isChatExpanded: true,
       },
     });

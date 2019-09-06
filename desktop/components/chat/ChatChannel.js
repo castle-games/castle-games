@@ -78,6 +78,9 @@ class ChatChannel extends React.Component {
   render() {
     const { chat, channelId, navigator, userPresence, viewer } = this.props;
     const channel = chat.channels[channelId];
+    if (!channel) {
+      return null;
+    }
 
     // hack
     let name = channel.name;

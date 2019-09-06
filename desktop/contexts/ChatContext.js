@@ -113,7 +113,7 @@ class ChatContextManager extends React.Component {
         isNewGame = true;
       }
       if (isNewGame) {
-        this._joinOrCreateChannelForGame(this.props.navigation.game);
+        this.openChannelForGame(this.props.navigation.game);
       }
     } else {
       let channelId = this.props.navigation.chatChannelId;
@@ -237,7 +237,7 @@ class ChatContextManager extends React.Component {
     if (!game || !game.gameId) return;
 
     const channelId = await this._joinOrCreateChannelForGame(game);
-    return this.props.showChatChannel(channelId);
+    return this.props.showChatChannel(channelId, { isGameMetaChannel: true });
   };
 
   closeChannel = async (channelId) => {

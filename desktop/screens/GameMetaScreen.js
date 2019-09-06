@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as Actions from '~/common/actions';
+import * as ChatUtilities from '~/common/chat-utilities';
 import * as Constants from '~/common/constants';
 
 import { css } from 'react-emotion';
@@ -25,6 +26,19 @@ const STYLES_CONTAINER = css`
   align-items: center;
   justify-content: flex-start;
   flex-direction: column;
+`;
+
+const STYLES_CONTENT_CONTAINER = css`
+  width: 100%;
+  padding: 16px 0;
+`;
+
+const STYLES_SETTING = css`
+  span {
+    color: magenta;
+    text-decoration: underline;
+    cursor: pointer;
+  }
 `;
 
 class GameMetaScreen extends React.Component {
@@ -69,9 +83,16 @@ class GameMetaScreen extends React.Component {
   };
 
   _getNavigationItems = () => {
+    const { chat, channelId } = this.props;
     let items = [];
     const numChannelMembers = this.props.chat.channelOnlineCounts[this.props.channelId];
     items.push({ label: `People Online (${numChannelMembers})`, key: 'members' });
+
+    const channel = chat.channels[channelId];
+    if (channel.isSubscribed) {
+      items.push({ label: 'Settings', key: 'settings' });
+    }
+
     return items;
   };
 
@@ -80,6 +101,8 @@ class GameMetaScreen extends React.Component {
   };
 
   _handleLeaveChannel = async () => {
+    const lobbyChannel = this.props.chat.findChannel(ChatUtilities.EVERYONE_CHANNEL_NAME);
+    await this.props.navigator.showChatChannel(lobbyChannel.channelId);
     this.props.chat.closeChannel(this.props.channelId);
     this.props.navigator.navigateToHome();
   };
@@ -90,6 +113,15 @@ class GameMetaScreen extends React.Component {
 
   _renderContent = (channel, mode) => {
     switch (mode) {
+      case 'settings':
+        return (
+          <div className={STYLES_CONTENT_CONTAINER}>
+            <div className={STYLES_SETTING}>
+              <span onClick={this._handleLeaveChannel}>Remove</span> this game from my Play menu
+              shortcuts
+            </div>
+          </div>
+        );
       case 'members':
       default:
         return (
