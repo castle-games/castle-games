@@ -28,6 +28,7 @@ export default class Game extends React.Component {
 
   componentDidMount() {
     window.addEventListener('CASTLE_TOOLS_UPDATE', this._handleToolsUpdate);
+    NativeUtil.sendLuaEvent('CASTLE_TOOLS_NEEDS_SYNC', {});
   }
 
   componentWillUnmount() {

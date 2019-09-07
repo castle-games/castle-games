@@ -41,10 +41,6 @@ export default class GameScreenSidebar extends React.Component {
     setToolsRef: (ref) => {},
   };
 
-  componentDidMount() {
-    NativeUtil.sendLuaEvent('CASTLE_TOOLS_NEEDS_SYNC', {});
-  }
-
   render() {
     return (
       <div className={STYLES_CONTAINER}>
