@@ -455,6 +455,14 @@ export async function getInitialData() {
         ${GAME_FIELDS}
         ${NESTED_GAME_OWNER}
       }
+
+      joinableMultiplayerSessions {
+        sessionId
+        game {
+          ${GAME_FIELDS}
+          ${NESTED_GAME_OWNER}
+        }
+      }
     }
   `);
 
@@ -904,6 +912,34 @@ export async function getMultiplayerRegions() {
     return false;
   }
   return result.data.multiplayerRegions;
+}
+
+export async function getJoinableMultiplayerSessions() {
+  const result = await API(`
+    query {
+     joinableMultiplayerSessions {
+        sessionId
+        game {
+          ${GAME_FIELDS}
+          ${NESTED_GAME_OWNER}
+        }
+      }
+    }
+  `);
+
+  if (!result) {
+    throw new Error(`\`getJoinableMultiplayerSessions\`: No result`);
+  }
+
+  if (result.error) {
+    throw new Error(`\`getJoinableMultiplayerSessions\`: ${result.error.message}`);
+  }
+
+  if (result.errors) {
+    throw new Error(`\`getJoinableMultiplayerSessions\`: ${result.errors[0].message}`);
+  }
+
+  return result.data;
 }
 
 export async function updatePings(pings) {

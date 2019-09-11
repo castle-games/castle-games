@@ -13,6 +13,7 @@ const EMPTY_CURRENT_USER = {
     posts: null,
     allGames: null,
     trendingGames: null,
+    multiplayerSessions: null,
   },
 };
 
@@ -23,6 +24,7 @@ const CurrentUserContextDefaults = {
   refreshCurrentUser: async () => {},
   loadAllGames: async (limit) => {},
   reloadTrendingGames: async () => {},
+  reloadMultiplayerSessions: async () => {},
   reloadPosts: () => {},
   loadMorePosts: () => {},
 };
@@ -42,6 +44,7 @@ class CurrentUserContextProvider extends React.Component {
       loadMorePosts: this.loadMorePosts,
       loadAllGames: this.loadAllGames,
       reloadTrendingGames: this.reloadTrendingGames,
+      reloadMultiplayerSessions: this.reloadMultiplayerSessions,
     };
 
     if (props.value && props.value.user) {
@@ -157,6 +160,29 @@ class CurrentUserContextProvider extends React.Component {
           content: {
             ...state.content,
             trendingGames,
+          },
+        };
+      });
+    }
+  };
+
+  reloadMultiplayerSessions = async () => {
+    let data = null;
+
+    try {
+      data = await Actions.getJoinableMultiplayerSessions();
+    } catch (e) {
+      console.log(`Issue fetching multiplayer sessions: ${e}`);
+    }
+
+    if (data) {
+      let multiplayerSessions = data.joinableMultiplayerSessions;
+      await this.setState((state) => {
+        return {
+          ...state,
+          content: {
+            ...state.content,
+            multiplayerSessions,
           },
         };
       });

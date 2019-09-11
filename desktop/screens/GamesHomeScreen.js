@@ -32,6 +32,10 @@ const STYLES_GAMES_CONTAINER = css`
   margin-bottom: 16px;
 `;
 
+const STYLES_MULTIPLAYER_SESSIONS_CONTAINER = css`
+  margin-bottom: 16px;
+`;
+
 const STYLES_POSTS_CONTAINER = css`
   margin-bottom: 24px;
 `;
@@ -65,6 +69,8 @@ class GamesHomeScreen extends React.Component {
     loadMorePosts: () => {},
     loadAllGames: () => {},
     trendingGames: [],
+    multiplayerSessions: [],
+    reloadMultiplayerSessions: () => {},
     mode: 'home',
     updateAvailable: null,
   };
@@ -116,6 +122,7 @@ class GamesHomeScreen extends React.Component {
 
     if (this.props.mode === 'home') {
       this.props.reloadPosts();
+      this.props.reloadMultiplayerSessions();
       await this.props.reloadTrendingGames();
     } else if (this.props.mode === 'allGames') {
       await this.props.loadAllGames();
@@ -158,7 +165,10 @@ class GamesHomeScreen extends React.Component {
   };
 
   render() {
-    const { posts } = this.props;
+    const { posts, multiplayerSessions } = this.props;
+    const multiplayerGames = multiplayerSessions
+      ? multiplayerSessions.map((session) => session.game)
+      : null;
     let maybePostList;
     if (posts) {
       maybePostList = (
@@ -175,6 +185,20 @@ class GamesHomeScreen extends React.Component {
       <div className={STYLES_HOME_CONTAINER} onScroll={this._handleScroll}>
         {this._renderUpdateBanner()}
         <div className={STYLES_CONTENT_CONTAINER}>
+          {multiplayerGames && multiplayerGames.length > 0 ? (
+            <div className={STYLES_MULTIPLAYER_SESSIONS_CONTAINER}>
+              <div className={STYLES_SECTION_TITLE}>Active Multiplayer Game Sessions</div>
+              <UIGameSet
+                title=""
+                numRowsToElide={-1}
+                viewer={this.props.viewer}
+                gameItems={multiplayerGames}
+                onUserSelect={this.props.navigateToUserProfile}
+                onGameSelect={this._navigateToGame}
+                onSignInSelect={this.props.navigateToSignIn}
+              />
+            </div>
+          ) : null}
           <div className={STYLES_SECTION_TITLE}>{title}</div>
           <div className={STYLES_GAMES_CONTAINER}>
             {this.props.mode === 'home' ||
@@ -224,6 +248,8 @@ export default class GamesHomeScreenWithContext extends React.Component {
                 loadAllGames={currentUser.loadAllGames}
                 trendingGames={currentUser.content.trendingGames}
                 reloadTrendingGames={currentUser.reloadTrendingGames}
+                multiplayerSessions={currentUser.content.multiplayerSessions}
+                reloadMultiplayerSessions={currentUser.reloadMultiplayerSessions}
                 reloadPosts={currentUser.reloadPosts}
                 loadMorePosts={currentUser.loadMorePosts}
                 navigator={navigator}

@@ -52,6 +52,9 @@ const getInitialState = async () => {
       },
       content: {
         trendingGames: data.trendingGames ? data.trendingGames : [],
+        multiplayerSessions: data.joinableMultiplayerSessions
+          ? data.joinableMultiplayerSessions
+          : [],
       },
       userStatusHistory: data.userStatusHistory,
     };

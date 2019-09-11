@@ -30,6 +30,11 @@ const STYLES_TOP_SECTION = css`
   height: ${Constants.card.imageHeight};
 `;
 
+const STYLES_MINI_TOP_SECTION = css`
+  width: ${Constants.card.mini.width};
+  height: ${Constants.card.mini.imageHeight};
+`;
+
 const STYLES_GAME_SCREENSHOT = css`
   width: ${Constants.card.imageWidth};
   height: ${Constants.card.imageHeight};
@@ -37,6 +42,11 @@ const STYLES_GAME_SCREENSHOT = css`
   background-size: cover;
   background-position: 50% 50%;
   background-color: ${Constants.colors.black};
+`;
+
+const STYLES_MINI_GAME_SCREENSHOT = css`
+  width: ${Constants.card.mini.imageWidth};
+  height: ${Constants.card.mini.imageHeight};
 `;
 
 const STYLES_DESCRIPTION_SECTION = css`
@@ -142,6 +152,7 @@ export default class UIGameCell extends React.Component {
     onUserSelect: () => {},
     onShowGameInfo: () => {},
     onGameUpdate: null,
+    isMiniature: false,
     theme: {},
   };
 
@@ -186,8 +197,9 @@ export default class UIGameCell extends React.Component {
   };
 
   _handleCopyUrlToClipboard = () => {
+    let { url, sessionId } = this.props.game;
     let textField = document.createElement('textarea');
-    textField.innerText = this.props.game.url;
+    textField.innerText = url + (sessionId ? `#${sessionId}` : '');
     document.body.appendChild(textField);
     textField.select();
     document.execCommand('copy');
@@ -212,9 +224,15 @@ export default class UIGameCell extends React.Component {
     let { game } = this.props;
     let title = game.title ? Strings.elide(game.title, 21) : 'Untitled';
     let onGameUpdate = this.props.onGameUpdate ? () => this.props.onGameUpdate(game) : null;
+    let sessionId = game.sessionId;
+    let isJoinableMultiplayerSession = !!sessionId;
 
     const isMultiplayer = Utilities.isMultiplayer(game);
-    const numPlayersText = isMultiplayer ? 'Multiplayer' : ' ';
+    const numPlayersText = isMultiplayer
+      ? isJoinableMultiplayerSession
+        ? `Session #${sessionId}`
+        : 'Multiplayer'
+      : ' ';
     const draftText = game.draft
       ? isMultiplayer
         ? '\u2022 Work in Progress'
@@ -257,7 +275,11 @@ export default class UIGameCell extends React.Component {
         onMouseEnter={() => this._handleToggleHoverOnPlay(true)}
         onMouseLeave={this._handleMouseLeave}
         onClick={this._handleGameSelect}>
-        <div className={STYLES_TOP_SECTION} style={{ width: this.props.theme.embedWidth }}>
+        <div
+          className={
+            STYLES_TOP_SECTION + (this.props.isMiniature ? ` ${STYLES_MINI_TOP_SECTION}` : '')
+          }
+          style={{ width: this.props.theme.embedWidth }}>
           {shouldShowGameInfo ? (
             <div className={STYLES_DESCRIPTION_SECTION}>
               <div className={STYLES_BYLINE} onClick={() => this.props.onUserSelect(game.owner)}>
@@ -282,7 +304,10 @@ export default class UIGameCell extends React.Component {
             </div>
           ) : (
             <figure
-              className={STYLES_GAME_SCREENSHOT}
+              className={
+                STYLES_GAME_SCREENSHOT +
+                (this.props.isMiniature ? ` ${STYLES_MINI_GAME_SCREENSHOT}` : '')
+              }
               style={{
                 backgroundImage: this.props.src ? `url(${this.props.src})` : null,
                 filter: this.state.isHoveringOnPlay ? 'brightness(105%)' : null,
@@ -301,18 +326,20 @@ export default class UIGameCell extends React.Component {
               <div className={STYLES_TITLE_AND_PLAY}>
                 <span className={STYLES_GAME_TITLE}>{title}</span>
               </div>
-              <div className={STYLES_SECONDARY_TEXT}>
-                <div className={STYLES_AUTHOR_AND_PLAY_COUNT}>
-                  <span
-                    className={STYLES_GAME_AUTHOR}
-                    onClick={() => this.props.onUserSelect(game.owner)}
-                    onMouseEnter={() => this._handleToggleHoverOnAuthor(true)}
-                    onMouseLeave={() => this._handleToggleHoverOnAuthor(false)}>
-                    {username}
-                  </span>
-                  {playCount}
+              {!this.props.isMiniature ? (
+                <div className={STYLES_SECONDARY_TEXT}>
+                  <div className={STYLES_AUTHOR_AND_PLAY_COUNT}>
+                    <span
+                      className={STYLES_GAME_AUTHOR}
+                      onClick={() => this.props.onUserSelect(game.owner)}
+                      onMouseEnter={() => this._handleToggleHoverOnAuthor(true)}
+                      onMouseLeave={() => this._handleToggleHoverOnAuthor(false)}>
+                      {username}
+                    </span>
+                    {playCount}
+                  </div>
                 </div>
-              </div>
+              ) : null}
               {detailLine}
             </div>
           ) : null}
