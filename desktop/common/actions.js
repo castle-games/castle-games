@@ -442,8 +442,9 @@ export async function getAllGames(limit) {
 }
 
 export async function getInitialData() {
-  const result = await API(`
-    query {
+  const result = await API(
+    `
+    query($isStaging: Boolean) {
       ${CURRENT_USER_QUERY}
 
       trendingGames {
@@ -456,7 +457,7 @@ export async function getInitialData() {
         ${NESTED_GAME_OWNER}
       }
 
-      joinableMultiplayerSessions {
+      joinableMultiplayerSessions(isStaging: $isStaging) {
         sessionId
         game {
           ${GAME_FIELDS}
@@ -464,7 +465,11 @@ export async function getInitialData() {
         }
       }
     }
-  `);
+  `,
+    {
+      isStaging: Constants.USE_STAGING_GAME_SERVERS,
+    }
+  );
 
   if (!result) {
     return false;
@@ -833,12 +838,19 @@ export async function multiplayerJoinAsync(gameId, castleFileUrl, entryPoint, se
   try {
     result = await API.graphqlAsync(
       /* GraphQL */ `
-        mutation($gameId: ID, $castleFileUrl: String, $entryPoint: String, $sessionId: String) {
+        mutation(
+          $gameId: ID
+          $castleFileUrl: String
+          $entryPoint: String
+          $sessionId: String
+          $isStaging: Boolean
+        ) {
           joinMultiplayerSession(
             gameId: $gameId
             castleFileUrl: $castleFileUrl
             entryPoint: $entryPoint
             sessionId: $sessionId
+            isStaging: $isStaging
           ) {
             sessionId
             address
@@ -851,6 +863,7 @@ export async function multiplayerJoinAsync(gameId, castleFileUrl, entryPoint, se
         castleFileUrl,
         entryPoint,
         sessionId,
+        isStaging: Constants.USE_STAGING_GAME_SERVERS,
       }
     );
   } catch (e) {
@@ -915,9 +928,10 @@ export async function getMultiplayerRegions() {
 }
 
 export async function getJoinableMultiplayerSessions() {
-  const result = await API(`
-    query {
-     joinableMultiplayerSessions {
+  const result = await API(
+    `
+    query($isStaging: Boolean) {
+     joinableMultiplayerSessions(isStaging: $isStaging) {
         sessionId
         game {
           ${GAME_FIELDS}
@@ -925,7 +939,11 @@ export async function getJoinableMultiplayerSessions() {
         }
       }
     }
-  `);
+  `,
+    {
+      isStaging: Constants.USE_STAGING_GAME_SERVERS,
+    }
+  );
 
   if (!result) {
     throw new Error(`\`getJoinableMultiplayerSessions\`: No result`);

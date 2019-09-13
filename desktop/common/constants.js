@@ -5,6 +5,7 @@ export const WEB_HOST = 'https://castle.games';
 export const CHAT_SERVICE_URL = USE_LOCAL_SERVER
   ? 'http://localhost:3003'
   : 'https://chat.castle.games';
+export const USE_STAGING_GAME_SERVERS = false;
 
 // TODO(jim): Delete old colors constants after full refactor.
 export const REFACTOR_COLORS = {
