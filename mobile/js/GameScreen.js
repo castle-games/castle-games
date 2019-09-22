@@ -10,16 +10,16 @@ import {
   Keyboard,
 } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
+import { gql } from 'apollo-boost';
+import { Query } from 'react-apollo';
 
-import { gql, Query, isSignedInAsync } from './Conn';
+import * as Session from './Session';
 import { navigate } from './Navigation';
 
 // const DEFAULT_GAME_URI =
-//   'https://raw.githubusercontent.com/castle-games/ghost-tests/master/screensize/main.lua';
-// const DEFAULT_GAME_URI =
-//   'https://raw.githubusercontent.com/nikki93/edit-world/master/main_local.lua';
+//   'https://raw.githubusercontent.com/nikki93/procjam-oct-2018/master/main.lua';
 const DEFAULT_GAME_URI =
-  'https://raw.githubusercontent.com/nikki93/procjam-oct-2018/master/main.lua';
+  'https://raw.githubusercontent.com/castle-games/ghost-tests/d69f1e4e96add56d7aec8772acb9a2378a367fee/screensize/main.lua';
 
 let mountedInstance = null; // Ref to currently mounted `GameScreen` instance, if any
 
@@ -31,7 +31,7 @@ async function consumeUri() {
     if (mountedInstance) {
       mountedInstance.openUri(linkingUri);
       linkingUri = null;
-    } else if ((await isSignedInAsync()) && navigate('GameScreen', { uri: linkingUri })) {
+    } else if ((await Session.isSignedInAsync()) && navigate('GameScreen', { uri: linkingUri })) {
       linkingUri = null;
     }
     if (linkingUri) {

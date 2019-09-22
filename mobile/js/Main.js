@@ -6,7 +6,7 @@ import { ApolloProvider } from 'react-apollo';
 import './AutoUpdates';
 import './GhostConsole';
 import { createRootNavigator } from './Navigation';
-import * as Conn from './Conn';
+import * as Session from './Session';
 import './GhostMultiplayer';
 
 export let onApolloClientChanged;
@@ -27,13 +27,13 @@ export default class Main extends React.Component {
 
     (async () => {
       const authToken = await AsyncStorage.getItem('authToken');
-      await Conn.initAsync(authToken);
+      await Session.initAsync(authToken);
 
       this.setState({
-        apolloClient: Conn.apolloClient,
+        apolloClient: Session.apolloClient,
         appLoading: false,
         rootNavigator: createRootNavigator({
-          initialRouteName: await Conn.isSignedInAsync() ? 'GameNavigator' : 'SignInNavigator',
+          initialRouteName: await Session.isSignedInAsync() ? 'GameNavigator' : 'SignInNavigator',
         }),
       });
     })();

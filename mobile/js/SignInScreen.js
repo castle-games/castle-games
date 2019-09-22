@@ -1,7 +1,9 @@
 import React from 'react';
 import { Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { gql } from 'apollo-boost';
+import { Mutation } from 'react-apollo';
 
-import { apolloClient, gql, Mutation, initAsync } from './Conn';
+import * as Session from './Session';
 
 const textInputStyle = {
   width: '100%',
@@ -46,7 +48,7 @@ export default class SignInScreen extends React.Component {
   }
 
   _onPressSignIn = async () => {
-    const { data: { userForLoginInput: { userId } } } = await apolloClient.query({
+    const { data: { userForLoginInput: { userId } } } = await Session.apolloClient.query({
       query: gql`
         query($who: String!) {
           userForLoginInput(who: $who) {
@@ -58,7 +60,7 @@ export default class SignInScreen extends React.Component {
     });
     console.log('got `userId`: ' + userId);
 
-    const result = await apolloClient.mutate({
+    const result = await Session.apolloClient.mutate({
       mutation: gql`
         mutation($userId: ID!, $password: String!) {
           login(userId: $userId, password: $password) {
@@ -72,7 +74,7 @@ export default class SignInScreen extends React.Component {
 
     if (result && result.data && result.data.login && result.data.login.userId) {
       apolloClient.clearStore();
-      await initAsync(result.data.login.token);
+      await Session.initAsync(result.data.login.token);
       setTimeout(() => this.props.navigation.navigate('GameScreen'), 200);
     }
   }

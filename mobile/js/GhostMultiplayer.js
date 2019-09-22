@@ -1,5 +1,5 @@
 import * as GhostChannels from './GhostChannels';
-import { apolloClient, gql } from './Conn';
+import { apolloClient, gql } from './Session';
 
 // Should coincide with event names mentioned in 'base/castle.lua'
 GhostChannels.on('CASTLE_CONNECT_MULTIPLAYER_CLIENT_REQUEST', async requestJson => {
