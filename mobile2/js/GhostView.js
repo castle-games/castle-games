@@ -9,7 +9,8 @@ const NativeGhostView = requireNativeComponent('GhostView', null);
 const useDimensions = ({ settings }) => {
   const [screenScaling, setScreenScaling] = useState(null);
   const [applyScreenScaling, setApplyScreenScaling] = useState(null);
-  const [viewDimensions, setViewDimensions] = useState(null);
+  const [width, setWidth] = useState(null);
+  const [height, setHeight] = useState(null);
 
   const onContainerLayout = ({
     nativeEvent: {
@@ -21,7 +22,8 @@ const useDimensions = ({ settings }) => {
       // Full dimensions
       setApplyScreenScaling(false);
       setScreenScaling(1);
-      setViewDimensions({ width: '100%', height: '100%' });
+      setWidth('100%');
+      setHeight('100%');
     } else {
       // Fixed dimensions
       setApplyScreenScaling(true);
@@ -61,15 +63,12 @@ const useDimensions = ({ settings }) => {
         }
       }
       setScreenScaling(newScreenScaling);
-      setViewDimensions({
-        // Limit to container dimensions
-        width: Math.min(newScreenScaling * settings.width, containerWidth),
-        height: Math.min(newScreenScaling * settings.height, containerHeight),
-      });
+      setWidth(Math.min(newScreenScaling * settings.width, containerWidth));
+      setHeight(Math.min(newScreenScaling * settings.height, containerHeight));
     }
   };
 
-  return { screenScaling, applyScreenScaling, viewDimensions, onContainerLayout };
+  return { screenScaling, applyScreenScaling, width, height, onContainerLayout };
 };
 
 const GhostView = ({ style, uri }) => {
@@ -90,11 +89,11 @@ const GhostView = ({ style, uri }) => {
         justifyContent: 'center',
       }}
       onLayout={dimensionsHook.onContainerLayout}>
-      {dimensionsHook.viewDimensions !== null ? (
+      {dimensionsHook.width !== null && dimensionsHook.height !== null ? (
         <View
           style={{
-            width: dimensionsHook.viewDimensions.width,
-            height: dimensionsHook.viewDimensions.height,
+            width: dimensionsHook.width,
+            height: dimensionsHook.height,
           }}>
           <NativeGhostView
             style={{ width: '100%', height: '100%' }}
