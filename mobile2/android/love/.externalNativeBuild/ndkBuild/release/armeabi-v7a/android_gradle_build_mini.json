@@ -1,0 +1,71 @@
+{
+  "buildFiles": [
+    "C:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\src\\jni\\Android.mk",
+    "C:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\src\\jni\\Application.mk"
+  ],
+  "cleanCommands": [
+    "C:\\Users\\nikki\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\ndk-build.cmd NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003dC:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\src\\jni\\Android.mk NDK_APPLICATION_MK\u003dC:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\src\\jni\\Application.mk APP_ABI\u003darmeabi-v7a NDK_ALL_ABIS\u003darmeabi-v7a NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-16 NDK_OUT\u003dC:/Users/nikki/Development/ghost/mobile2/android/love/build/intermediates/ndkBuild/release/obj NDK_LIBS_OUT\u003dC:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\build\\intermediates\\ndkBuild\\release\\lib clean"
+  ],
+  "libraries": {
+    "theora-release-armeabi-v7a": {
+      "artifactName": "theora",
+      "buildCommand": "C:\\Users\\nikki\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\ndk-build.cmd NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003dC:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\src\\jni\\Android.mk NDK_APPLICATION_MK\u003dC:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\src\\jni\\Application.mk APP_ABI\u003darmeabi-v7a NDK_ALL_ABIS\u003darmeabi-v7a NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-16 NDK_OUT\u003dC:/Users/nikki/Development/ghost/mobile2/android/love/build/intermediates/ndkBuild/release/obj NDK_LIBS_OUT\u003dC:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\build\\intermediates\\ndkBuild\\release\\lib -j4 C:/Users/nikki/Development/ghost/mobile2/android/love/build/intermediates/ndkBuild/release/obj/local/armeabi-v7a/libtheora.a",
+      "abi": "armeabi-v7a",
+      "output": "C:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\build\\intermediates\\ndkBuild\\release\\obj\\local\\armeabi-v7a\\libtheora.a"
+    },
+    "ogg-release-armeabi-v7a": {
+      "artifactName": "ogg",
+      "buildCommand": "C:\\Users\\nikki\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\ndk-build.cmd NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003dC:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\src\\jni\\Android.mk NDK_APPLICATION_MK\u003dC:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\src\\jni\\Application.mk APP_ABI\u003darmeabi-v7a NDK_ALL_ABIS\u003darmeabi-v7a NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-16 NDK_OUT\u003dC:/Users/nikki/Development/ghost/mobile2/android/love/build/intermediates/ndkBuild/release/obj NDK_LIBS_OUT\u003dC:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\build\\intermediates\\ndkBuild\\release\\lib -j4 C:/Users/nikki/Development/ghost/mobile2/android/love/build/intermediates/ndkBuild/release/obj/local/armeabi-v7a/libogg.a",
+      "abi": "armeabi-v7a",
+      "output": "C:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\build\\intermediates\\ndkBuild\\release\\obj\\local\\armeabi-v7a\\libogg.a"
+    },
+    "freetype-release-armeabi-v7a": {
+      "artifactName": "freetype",
+      "buildCommand": "C:\\Users\\nikki\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\ndk-build.cmd NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003dC:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\src\\jni\\Android.mk NDK_APPLICATION_MK\u003dC:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\src\\jni\\Application.mk APP_ABI\u003darmeabi-v7a NDK_ALL_ABIS\u003darmeabi-v7a NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-16 NDK_OUT\u003dC:/Users/nikki/Development/ghost/mobile2/android/love/build/intermediates/ndkBuild/release/obj NDK_LIBS_OUT\u003dC:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\build\\intermediates\\ndkBuild\\release\\lib -j4 C:/Users/nikki/Development/ghost/mobile2/android/love/build/intermediates/ndkBuild/release/obj/local/armeabi-v7a/libfreetype.a",
+      "abi": "armeabi-v7a",
+      "output": "C:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\build\\intermediates\\ndkBuild\\release\\obj\\local\\armeabi-v7a\\libfreetype.a"
+    },
+    "SDL2-release-armeabi-v7a": {
+      "artifactName": "SDL2",
+      "buildCommand": "C:\\Users\\nikki\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\ndk-build.cmd NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003dC:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\src\\jni\\Android.mk NDK_APPLICATION_MK\u003dC:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\src\\jni\\Application.mk APP_ABI\u003darmeabi-v7a NDK_ALL_ABIS\u003darmeabi-v7a NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-16 NDK_OUT\u003dC:/Users/nikki/Development/ghost/mobile2/android/love/build/intermediates/ndkBuild/release/obj NDK_LIBS_OUT\u003dC:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\build\\intermediates\\ndkBuild\\release\\lib -j4 C:/Users/nikki/Development/ghost/mobile2/android/love/build/intermediates/ndkBuild/release/obj/local/armeabi-v7a/libSDL2.so",
+      "abi": "armeabi-v7a",
+      "output": "C:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\build\\intermediates\\ndkBuild\\release\\obj\\local\\armeabi-v7a\\libSDL2.so"
+    },
+    "love-release-armeabi-v7a": {
+      "artifactName": "love",
+      "buildCommand": "C:\\Users\\nikki\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\ndk-build.cmd NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003dC:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\src\\jni\\Android.mk NDK_APPLICATION_MK\u003dC:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\src\\jni\\Application.mk APP_ABI\u003darmeabi-v7a NDK_ALL_ABIS\u003darmeabi-v7a NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-16 NDK_OUT\u003dC:/Users/nikki/Development/ghost/mobile2/android/love/build/intermediates/ndkBuild/release/obj NDK_LIBS_OUT\u003dC:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\build\\intermediates\\ndkBuild\\release\\lib -j4 C:/Users/nikki/Development/ghost/mobile2/android/love/build/intermediates/ndkBuild/release/obj/local/armeabi-v7a/liblove.so",
+      "abi": "armeabi-v7a",
+      "output": "C:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\build\\intermediates\\ndkBuild\\release\\obj\\local\\armeabi-v7a\\liblove.so"
+    },
+    "openal-release-armeabi-v7a": {
+      "artifactName": "openal",
+      "buildCommand": "C:\\Users\\nikki\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\ndk-build.cmd NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003dC:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\src\\jni\\Android.mk NDK_APPLICATION_MK\u003dC:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\src\\jni\\Application.mk APP_ABI\u003darmeabi-v7a NDK_ALL_ABIS\u003darmeabi-v7a NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-16 NDK_OUT\u003dC:/Users/nikki/Development/ghost/mobile2/android/love/build/intermediates/ndkBuild/release/obj NDK_LIBS_OUT\u003dC:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\build\\intermediates\\ndkBuild\\release\\lib -j4 C:/Users/nikki/Development/ghost/mobile2/android/love/build/intermediates/ndkBuild/release/obj/local/armeabi-v7a/libopenal.so",
+      "abi": "armeabi-v7a",
+      "output": "C:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\build\\intermediates\\ndkBuild\\release\\obj\\local\\armeabi-v7a\\libopenal.so"
+    },
+    "modplug-release-armeabi-v7a": {
+      "artifactName": "modplug",
+      "buildCommand": "C:\\Users\\nikki\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\ndk-build.cmd NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003dC:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\src\\jni\\Android.mk NDK_APPLICATION_MK\u003dC:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\src\\jni\\Application.mk APP_ABI\u003darmeabi-v7a NDK_ALL_ABIS\u003darmeabi-v7a NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-16 NDK_OUT\u003dC:/Users/nikki/Development/ghost/mobile2/android/love/build/intermediates/ndkBuild/release/obj NDK_LIBS_OUT\u003dC:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\build\\intermediates\\ndkBuild\\release\\lib -j4 C:/Users/nikki/Development/ghost/mobile2/android/love/build/intermediates/ndkBuild/release/obj/local/armeabi-v7a/libmodplug.a",
+      "abi": "armeabi-v7a",
+      "output": "C:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\build\\intermediates\\ndkBuild\\release\\obj\\local\\armeabi-v7a\\libmodplug.a"
+    },
+    "vorbis-release-armeabi-v7a": {
+      "artifactName": "vorbis",
+      "buildCommand": "C:\\Users\\nikki\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\ndk-build.cmd NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003dC:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\src\\jni\\Android.mk NDK_APPLICATION_MK\u003dC:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\src\\jni\\Application.mk APP_ABI\u003darmeabi-v7a NDK_ALL_ABIS\u003darmeabi-v7a NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-16 NDK_OUT\u003dC:/Users/nikki/Development/ghost/mobile2/android/love/build/intermediates/ndkBuild/release/obj NDK_LIBS_OUT\u003dC:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\build\\intermediates\\ndkBuild\\release\\lib -j4 C:/Users/nikki/Development/ghost/mobile2/android/love/build/intermediates/ndkBuild/release/obj/local/armeabi-v7a/libvorbis.a",
+      "abi": "armeabi-v7a",
+      "output": "C:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\build\\intermediates\\ndkBuild\\release\\obj\\local\\armeabi-v7a\\libvorbis.a"
+    },
+    "ghostextensions-release-armeabi-v7a": {
+      "artifactName": "ghostextensions",
+      "buildCommand": "C:\\Users\\nikki\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\ndk-build.cmd NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003dC:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\src\\jni\\Android.mk NDK_APPLICATION_MK\u003dC:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\src\\jni\\Application.mk APP_ABI\u003darmeabi-v7a NDK_ALL_ABIS\u003darmeabi-v7a NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-16 NDK_OUT\u003dC:/Users/nikki/Development/ghost/mobile2/android/love/build/intermediates/ndkBuild/release/obj NDK_LIBS_OUT\u003dC:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\build\\intermediates\\ndkBuild\\release\\lib -j4 C:/Users/nikki/Development/ghost/mobile2/android/love/build/intermediates/ndkBuild/release/obj/local/armeabi-v7a/libghostextensions.a",
+      "abi": "armeabi-v7a",
+      "output": "C:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\build\\intermediates\\ndkBuild\\release\\obj\\local\\armeabi-v7a\\libghostextensions.a"
+    },
+    "mpg123-release-armeabi-v7a": {
+      "artifactName": "mpg123",
+      "buildCommand": "C:\\Users\\nikki\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\ndk-build.cmd NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003dC:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\src\\jni\\Android.mk NDK_APPLICATION_MK\u003dC:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\src\\jni\\Application.mk APP_ABI\u003darmeabi-v7a NDK_ALL_ABIS\u003darmeabi-v7a NDK_DEBUG\u003d0 APP_PLATFORM\u003dandroid-16 NDK_OUT\u003dC:/Users/nikki/Development/ghost/mobile2/android/love/build/intermediates/ndkBuild/release/obj NDK_LIBS_OUT\u003dC:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\build\\intermediates\\ndkBuild\\release\\lib -j4 C:/Users/nikki/Development/ghost/mobile2/android/love/build/intermediates/ndkBuild/release/obj/local/armeabi-v7a/libmpg123.so",
+      "abi": "armeabi-v7a",
+      "output": "C:\\Users\\nikki\\Development\\ghost\\mobile2\\android\\love\\build\\intermediates\\ndkBuild\\release\\obj\\local\\armeabi-v7a\\libmpg123.so"
+    }
+  }
+}

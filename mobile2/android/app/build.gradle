@@ -133,6 +133,9 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        ndk {
+            abiFilters 'armeabi-v7a'
+        }
     }
     splits {
         abi {
@@ -187,6 +190,16 @@ android {
     }
 }
 
+// Create 'game.love' asset
+android.applicationVariants.all { variant ->
+    def zipTask = project.tasks.create "zipBase${variant.name.capitalize()}", Zip
+    zipTask.destinationDir = file("$buildDir/intermediates/merged_assets/${variant.dirName}/out")
+    zipTask.baseName = "game"
+    zipTask.extension = "love"
+    zipTask.from fileTree(dir: '../../../base', include: '**/*')
+    variant.processJavaResources.dependsOn(zipTask)
+}
+
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
@@ -198,6 +211,8 @@ dependencies {
     } else {
       implementation jscFlavor
     }
+
+    implementation project(':love')
 }
 
 // Run this once to be able to run the application with BUCK
