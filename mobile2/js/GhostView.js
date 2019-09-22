@@ -1,108 +1,111 @@
-// Implemented by 'GhostView.m'.
-
-import React from 'react';
+import React, { useState } from 'react';
 import { requireNativeComponent, View } from 'react-native';
 
+// Implemented by 'GhostView.m' / 'GhostViewManager.java'.
 const NativeGhostView = requireNativeComponent('GhostView', null);
 
-export default class GhostView extends React.Component {
-  state = {
-    // Screen dimensions settings given by the game
-    screenSettings: {
-      width: 800,
-      height: 450,
-      upscaling: 'on',
-      downscaling: 'on',
-    },
+// Compute actual game view dimensions according to https://castle.games/posts/@castle/game-dimensions-and-scaling
+// when container layout occurs
+const useDimensions = ({ settings }) => {
+  const [screenScaling, setScreenScaling] = useState(null);
+  const [applyScreenScaling, setApplyScreenScaling] = useState(null);
+  const [viewDimensions, setViewDimensions] = useState(null);
 
-    // Whether screen dimensions state is ready
-    screenReady: false,
-
-    // Will be filled-in in `_handleOnLayout`
-    screenScaling: null,
-    applyScreenScaling: null,
-    screenStyles: null,
-  };
-
-  render() {
-    const { style, uri } = this.props;
-    return (
-      <View
-        style={{
-          ...style,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-        onLayout={this._handleOnLayout}>
-        {this.state.screenReady ? (
-          <View style={{ ...this.state.screenStyles }}>
-            <NativeGhostView
-              style={{ width: '100%', height: '100%' }}
-              uri={uri}
-              screenScaling={this.state.screenScaling}
-              applyScreenScaling={this.state.applyScreenScaling}
-            />
-          </View>
-        ) : null}
-      </View>
-    );
-  }
-
-  _handleOnLayout = ({
+  const onContainerLayout = ({
     nativeEvent: {
-      layout: { width: frameWidth, height: frameHeight },
+      layout: { width: containerWidth, height: containerHeight },
     },
   }) => {
     // Based on `ghostGetGameFrame` in 'ghost.cpp'
-
-    const settings = this.state.screenSettings;
-
-    let screenScaling, applyScreenScaling, width, height;
-
     if (settings.width == 0 && settings.height == 0) {
       // Full dimensions
-      screenScaling = 1;
-      applyScreenScaling = false;
-      width = '100%';
-      height = '100%';
+      setApplyScreenScaling(false);
+      setScreenScaling(1);
+      setViewDimensions({ width: '100%', height: '100%' });
     } else {
       // Fixed dimensions
-      applyScreenScaling = true;
-      if (frameWidth < settings.width || frameHeight < settings.height) {
+      setApplyScreenScaling(true);
+      let newScreenScaling;
+      if (containerWidth < settings.width || containerHeight < settings.height) {
         // Down
         if (settings.downscaling == 'off') {
-          screenScaling = 1;
+          newScreenScaling = 1;
         } else if (settings.downscaling == 'on') {
-          screenScaling = Math.min(frameWidth / settings.width, frameHeight / settings.height);
+          newScreenScaling = Math.min(
+            containerWidth / settings.width,
+            containerHeight / settings.height
+          );
         } else if (settings.downscaling == 'step') {
-          const scale = Math.min(frameWidth / settings.width, frameHeight / settings.height);
-          screenScaling = 1;
-          while (screenScaling > 0.125 && screenScaling > scale) {
-            screenScaling *= 0.5;
+          const scale = Math.min(
+            containerWidth / settings.width,
+            containerHeight / settings.height
+          );
+          newScreenScaling = 1;
+          while (newScreenScaling > 0.125 && newScreenScaling > scale) {
+            newScreenScaling *= 0.5;
           }
         }
       } else {
         // Up
         if (settings.upscaling == 'off') {
-          screenScaling = 1;
+          newScreenScaling = 1;
         } else if (settings.upscaling == 'on') {
-          screenScaling = Math.min(frameWidth / settings.width, frameHeight / settings.height);
+          newScreenScaling = Math.min(
+            containerWidth / settings.width,
+            containerHeight / settings.height
+          );
         } else if (settings.upscaling == 'step') {
-          screenScaling = Math.floor(
-            Math.min(frameWidth / settings.width, frameHeight / settings.height)
+          newScreenScaling = Math.floor(
+            Math.min(containerWidth / settings.width, containerHeight / settings.height)
           );
         }
       }
-
-      width = Math.min(screenScaling * settings.width, frameWidth);
-      height = Math.min(screenScaling * settings.height, frameHeight);
+      setScreenScaling(newScreenScaling);
+      setViewDimensions({
+        // Limit to container dimensions
+        width: Math.min(newScreenScaling * settings.width, containerWidth),
+        height: Math.min(newScreenScaling * settings.height, containerHeight),
+      });
     }
-
-    this.setState({
-      screenReady: true,
-      screenScaling,
-      applyScreenScaling,
-      screenStyles: { width, height },
-    });
   };
-}
+
+  return { screenScaling, applyScreenScaling, viewDimensions, onContainerLayout };
+};
+
+const GhostView = ({ style, uri }) => {
+  const dimensionsHook = useDimensions({
+    settings: {
+      width: 800,
+      height: 450,
+      upscaling: 'on',
+      downscaling: 'on',
+    },
+  });
+
+  return (
+    <View
+      style={{
+        ...style,
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+      onLayout={dimensionsHook.onContainerLayout}>
+      {dimensionsHook.viewDimensions !== null ? (
+        <View
+          style={{
+            width: dimensionsHook.viewDimensions.width,
+            height: dimensionsHook.viewDimensions.height,
+          }}>
+          <NativeGhostView
+            style={{ width: '100%', height: '100%' }}
+            uri={uri}
+            screenScaling={dimensionsHook.screenScaling}
+            applyScreenScaling={dimensionsHook.applyScreenScaling}
+          />
+        </View>
+      ) : null}
+    </View>
+  );
+};
+
+export default GhostView;
