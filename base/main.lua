@@ -223,9 +223,7 @@ function main.update(dt)
 
     jsEvents.update()
 
-    if castle.system.isDesktop() then
-        castle.ui.update()
-    end
+    castle.ui.update()
 
     updateLogs()
 
