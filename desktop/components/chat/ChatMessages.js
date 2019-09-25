@@ -75,7 +75,7 @@ export default class ChatMessages extends React.Component {
     });
   };
 
-  _renderDateline = (m, previousMessage) => {
+  _renderDateline = (m, previousMessage, i) => {
     if (previousMessage) {
       const date = new Date(m.timestamp);
       const prevDate = new Date(previousMessage.timestamp);
@@ -102,6 +102,10 @@ export default class ChatMessages extends React.Component {
         isEditable = m.fromUserId === viewer.userId && this.props.onSelectEdit;
       }
     }
+    const type = m && m.body ? m.body.notificationType : null;
+    if (type === 'closed-game-session') {
+      return null;
+    }
     return (
       <ChatMessage
         key={`chat-message-${i}`}
@@ -125,14 +129,17 @@ export default class ChatMessages extends React.Component {
   render() {
     let messages = [];
     if (this.props.messages) {
+      let previousMessage = null;
       this.props.messages.forEach((m, i) => {
-        let previousMessage = i > 0 ? this.props.messages[i - 1] : null;
         const message = this._renderMessage(m, previousMessage, i);
         const maybeDateline = this._renderDateline(m, previousMessage, i);
-        if (maybeDateline) {
-          messages.push(maybeDateline);
+        if (message) {
+          if (maybeDateline) {
+            messages.push(maybeDateline);
+          }
+          messages.push(message);
+          previousMessage = m;
         }
-        messages.push(message);
       });
     }
 
