@@ -65,12 +65,12 @@ export default class SocialSidebarNavigator extends React.Component {
 
   // do not show tooltips if a game is visible and the sidebar is collapsed,
   // because the game will draw over the tooltips.
-  _maybeWrapWithTooltip = (child, title) => {
+  _maybeWrapWithTooltip = (child, title, key) => {
     const { isGameVisible, isChatExpanded } = this.props;
     const showTooltip = !(isGameVisible && !isChatExpanded);
     if (showTooltip) {
       return (
-        <Tooltip title={title} {...TOOLTIP_PROPS}>
+        <Tooltip key={key} title={title} {...TOOLTIP_PROPS}>
           {child}
         </Tooltip>
       );
@@ -122,7 +122,7 @@ export default class SocialSidebarNavigator extends React.Component {
           onClick={() => this.props.onSelectChannel(channel)}
         />
       );
-      return this._maybeWrapWithTooltip(gameItem, title);
+      return this._maybeWrapWithTooltip(gameItem, title, 'navigation-game');
     }
     return gameItem;
   };
@@ -148,7 +148,7 @@ export default class SocialSidebarNavigator extends React.Component {
             onClick={() => this.props.onSelectChannel(lobbyChannel)}
           />
         );
-        return this._maybeWrapWithTooltip(lobbyItem, 'Community Chat');
+        return this._maybeWrapWithTooltip(lobbyItem, 'Community Chat', 'navigation-lobby');
       }
     } catch (_) {}
     return lobbyItem;
@@ -204,8 +204,10 @@ export default class SocialSidebarNavigator extends React.Component {
             } else {
               onClick = () => this.props.onSendMessage(user);
             }
+            const key = `sidebar-navigation-${ii}`;
             let item = (
               <SocialSidebarNavigationItem
+                key={key}
                 name={user.username}
                 isUnread={c.hasUnreadMessages}
                 notificationCount={c.unreadNotificationCount}
@@ -216,7 +218,7 @@ export default class SocialSidebarNavigator extends React.Component {
                 theme={theme}
               />
             );
-            return this._maybeWrapWithTooltip(item, c.name);
+            return this._maybeWrapWithTooltip(item, c.name, key);
           })}
         </div>
         <div className={STYLES_BOTTOM}>

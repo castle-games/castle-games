@@ -162,10 +162,10 @@ export default class SocialSidebarHeader extends React.Component {
         {isExpanded ? (
           <div className={STYLES_HEADER_LEFT}>
             {this._renderTitle()}
-            <p className={STYLES_P}>
+            <div className={STYLES_P}>
               <span>{this._getHeading()}</span>
               {this._renderActions()}
-            </p>
+            </div>
           </div>
         ) : null}
         <div className={STYLES_VIEWER}>
