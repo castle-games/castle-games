@@ -8,6 +8,8 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "castle-metadata": "^6.2.0",
+    "node-libs-react-native": "^1.0.3",
     "react": "16.8.6",
     "react-native": "0.60.5"
   },

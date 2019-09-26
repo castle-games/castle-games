@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { requireNativeComponent, View } from 'react-native';
 
 import * as GhostEvents from './GhostEvents';
+import './GhostConsole';
 
 // Implemented by 'GhostView.m' / 'GhostViewManager.java'.
 const NativeGhostView = requireNativeComponent('GhostView', null);
@@ -76,25 +77,21 @@ const useDimensions = ({ settings }) => {
   return { screenScaling, applyScreenScaling, width, height, onContainerLayout };
 };
 
-const GhostView = ({ style, uri }) => {
-  const dimensionsHook = useDimensions({
-    settings: {
-      width: 800,
-      height: 450,
-      upscaling: 'on',
-      downscaling: 'on',
-    },
-  });
+const GhostView = ({ style, uri, dimensionsSettings }) => {
+  const dimensionsHook = useDimensions({ settings: dimensionsSettings });
 
   return (
+    // Letterbox the game view
     <View
       style={{
         ...style,
+        backgroundColor: 'black',
         alignItems: 'center',
         justifyContent: 'center',
       }}
       onLayout={dimensionsHook.onContainerLayout}>
       {dimensionsHook.width !== null && dimensionsHook.height !== null ? (
+        // Use a `View` around the actual native component since it doesn't clip properly in some cases otherwise
         <View
           style={{
             width: dimensionsHook.width,
