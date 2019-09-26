@@ -193,7 +193,7 @@ function main.load(arg)
             initialFileDropped = nil
         end
 
-        if not CASTLE_SERVER then
+        if castle.system.isDesktop() then
             ffi.cdef 'void ghostDoneLoading();'
             C.ghostDoneLoading()
         end
