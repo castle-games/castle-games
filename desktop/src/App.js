@@ -28,7 +28,6 @@ import Logs from '~/common/logs';
 import PublishHistory from '~/common/publish-history';
 
 const isReloadHotkey = isKeyHotkey('mod+r');
-const isFullscreenHotkey = isKeyHotkey('mod+shift+f');
 const isDevelopmentHotkey = isKeyHotkey('mod+j');
 const isEscFullScreenHotkey = isKeyHotkey('esc');
 const isEndGameHotkey = isKeyHotkey('mod+w');
@@ -159,12 +158,6 @@ class App extends React.Component {
     }
 
     if (isEscFullScreenHotkey(e)) {
-      e.preventDefault();
-
-      return this._handleFullScreenToggle();
-    }
-
-    if (isFullscreenHotkey(e)) {
       e.preventDefault();
 
       return this._handleFullScreenToggle();

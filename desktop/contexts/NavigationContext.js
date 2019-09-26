@@ -34,7 +34,7 @@ const NavigationContextDefaults = {
     referrerGame: null,
     timeLoaded: 0,
     isVisible: false,
-    isFullScreen: false, // TODO: BEN: audit
+    isFullScreen: false,
   },
   isChatExpanded: true,
   chatChannelId: null,
@@ -176,6 +176,7 @@ class NavigationContextManager extends React.Component {
       post,
       gameParams,
       referrerGame,
+      isFullScreen: false,
     };
 
     // track game launches
@@ -299,6 +300,10 @@ class NavigationContextManager extends React.Component {
   };
 
   setIsFullScreen = (isFullScreen) => {
+    if (!this.state.navigation.playing.game) {
+      // we aren't playing a game, this is a noop
+      return;
+    }
     this.setState({
       navigation: {
         ...this.state.navigation,

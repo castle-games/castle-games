@@ -269,7 +269,7 @@ class GameScreen extends React.Component {
     this.setState({ isMuted });
   };
 
-  _handleGameMaximize = () => {
+  _handleToggleFullScreen = () => {
     this.props.setIsFullScreen(!this.props.playing.isFullScreen);
   };
 
@@ -335,7 +335,7 @@ class GameScreen extends React.Component {
         navigateToGame={this.props.navigateToGame}
         navigateToHome={this.props.navigateToHome}
         onGameDismiss={this.props.clearCurrentGame}
-        onGameMaximize={this._handleGameMaximize}
+        onGameMaximize={this._handleToggleFullScreen}
         onGameMinimize={this._handleGameMinimize}
         onToggleMute={this._handleToggleMute}
         onCreatePost={this.props.navigateToEditPost}
