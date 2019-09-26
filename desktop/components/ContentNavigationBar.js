@@ -229,7 +229,6 @@ export default class ContentNavigationBarWithContext extends React.Component {
                     {(chat) => (
                       <ContentNavigationBar
                         currentUser={currentUser}
-                        game={navigation.game}
                         channels={chat.channels}
                         navigator={navigator}
                         {...this.props}

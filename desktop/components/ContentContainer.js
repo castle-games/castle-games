@@ -38,6 +38,7 @@ const STYLES_CONTAINER_FIXED_WITH_BORDER = css`
 class ContentContainer extends React.Component {
   static defaultProps = {
     mode: 'home',
+    playing: {},
     setIsDeveloping: () => {},
   };
 
@@ -47,12 +48,12 @@ class ContentContainer extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (
-      this.props.mode === 'game' &&
-      this.props.timeGameLoaded !== prevProps.timeGameLoaded &&
-      this.props.game
+      this.props.playing.game &&
+      this.props.playing.isVisible &&
+      this.props.playing.timeLoaded !== prevProps.playing.timeLoaded
     ) {
       // if we loaded a new game, auto-show logs for local urls
-      const isLocal = Urls.isPrivateUrl(this.props.game.url);
+      const isLocal = Urls.isPrivateUrl(this.props.playing.game.url);
       this.props.setIsDeveloping(isLocal, { onlyEnable: true });
     }
 
@@ -98,10 +99,11 @@ class ContentContainer extends React.Component {
     this._handleSearchReset();
   };
 
-  _renderContent = (mode) => {
-    if (mode === 'game') {
-      return <GameScreen isFullScreen={this.props.isFullScreen} />;
-    } else if (mode === 'home' || mode === 'allGames') {
+  _renderContent = (mode, playing) => {
+    if (playing.isVisible) {
+      return <GameScreen />;
+    }
+    if (mode === 'home' || mode === 'allGames') {
       return (
         <GamesHomeScreen
           updateAvailable={this.props.updateAvailable}
@@ -141,23 +143,21 @@ class ContentContainer extends React.Component {
   render() {
     let contentElement;
     if (Strings.isEmpty(this.state.searchQuery)) {
-      contentElement = this._renderContent(this.props.mode);
+      contentElement = this._renderContent(this.props.mode, this.props.playing);
     } else {
       contentElement = this._renderSearch();
     }
 
     let nowPlayingElement;
-    if (this.props.game && this.props.mode !== 'game') {
-      nowPlayingElement = <NowPlayingBar game={this.props.game} navigator={this.props.navigator} />;
+    if (this.props.playing.game && !this.props.playing.isVisible) {
+      nowPlayingElement = (
+        <NowPlayingBar game={this.props.playing.game} navigator={this.props.navigator} />
+      );
     }
 
     return (
       <div className={STYLES_CONTAINER_FLUID}>
-        {this.props.mode === 'profile' ||
-        this.props.mode === 'home' ||
-        this.props.mode === 'allGames' ||
-        this.props.mode === 'create' ||
-        this.props.mode === 'game-meta' ? (
+        {!this.props.playing.isVisible && this.props.mode !== 'signin' ? (
           <ContentNavigationBar
             searchQuery={this.state.searchQuery}
             onSearchReset={this._handleSearchReset}
@@ -188,9 +188,8 @@ export default class ContentContainerWithContext extends React.Component {
                         <ContentContainer
                           viewer={currentUser ? currentUser.user : null}
                           mode={navigation.contentMode}
-                          timeGameLoaded={navigation.timeGameLoaded}
                           timeLastNavigated={navigation.timeLastNavigated}
-                          game={navigation.game}
+                          playing={navigation.playing}
                           navigator={navigator}
                           setIsDeveloping={development.setIsDeveloping}
                           {...this.props}

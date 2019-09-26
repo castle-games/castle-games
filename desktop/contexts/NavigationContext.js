@@ -23,36 +23,24 @@ import Logs from '~/common/logs';
  *  should have an effect on values here.
  */
 const NavigationContextDefaults = {
-  contentMode: 'home', // game | gamemeta | profile | home | signin | notifications | create | edit_post
+  contentMode: 'home', // gamemeta | profile | home | signin | create | edit_post
   timeLastNavigated: 0,
-  gameUrl: '',
-  game: null,
-  sessionId: null,
-  post: null,
+  playing: {
+    gameUrl: '',
+    game: null,
+    sessionId: null,
+    post: null,
+    gameParams: null,
+    referrerGame: null,
+    timeLoaded: 0,
+    isVisible: false,
+    isFullScreen: false, // TODO: BEN: audit
+  },
   isChatExpanded: true,
   chatChannelId: null,
   gameMetaChannelId: null, // TODO: ben: decouple from chat, take a game here
-  gameParams: null,
-  referrerGame: null,
-  timeGameLoaded: 0,
   userProfileShown: null,
-  isFullScreen: false,
   deferredNavigationState: null, // used when restoring navigation state after login
-};
-
-// NOTE(jim): Easy way to enforce signed in routes.
-const AUTHENTICATED_ONLY_MODES = {
-  chat: true,
-  edit_post: true,
-  create: true,
-  notifications: true,
-  history: true,
-  posts: false,
-  examples: false,
-  game: false,
-  profile: false,
-  home: false,
-  signin: false,
 };
 
 /**
@@ -174,46 +162,47 @@ class NavigationContextManager extends React.Component {
 
     // if we're navigating from one game to another, make sure to end the first game and properly record
     // the fact that it was closed (and also properly clear game-related properties like sessionId)
-    if (this.state.navigation.game !== NavigationContextDefaults.game) {
+    if (this.state.navigation.playing.game !== NavigationContextDefaults.playing.game) {
       await this.clearCurrentGame();
     }
 
     const time = Date.now();
     const gameNavigationState = {
       game,
+      gameUrl: url,
+      isVisible: true,
       sessionId: game.sessionId,
-      timeGameLoaded: time,
-      timeLastNavigated: time,
+      timeLoaded: time,
       post,
       gameParams,
       referrerGame,
     };
 
-    let deferredNavigationState;
-    if (this.state.navigation.contentMode === 'signin') {
-      // never go 'back' to sign in
-      deferredNavigationState = { mode: 'home', params: {} };
-    } else if (this.state.navigation.contentMode === 'game') {
-      // moving from one game to another; maintain existing 'back' state
-      deferredNavigationState = this.state.navigation.deferredNavigationState;
-    } else {
-      // push new 'back' state
-      deferredNavigationState = {
-        params: { ...this.state.navigation, ...gameNavigationState },
-        mode: this.state.navigation.contentMode,
-      };
-      // don't store game or session id in the deferred state, otherwise they could get out of date
-      delete deferredNavigationState.params.game;
-      delete deferredNavigationState.params.sessionId;
-    }
-
     // track game launches
     Analytics.trackGameLaunch({ game, launchSource });
+
+    // auth wall
+    if (!this.props.currentUser.user) {
+      let navigationParams = {
+        deferredNavigationState: {
+          mode: 'home',
+          params: { playing: gameNavigationState },
+        },
+      };
+      return this._navigateToContentMode('signin', navigationParams);
+    }
+
     // navigate to the game
-    this._navigateToContentMode('game', {
-      gameUrl: url,
-      ...gameNavigationState,
-      deferredNavigationState,
+    this.setState({
+      navigation: {
+        ...this.state.navigation,
+        contentMode:
+          this.state.navigation.contentMode === 'signin'
+            ? 'home'
+            : this.state.navigation.contentMode,
+        timeLastNavigated: time,
+        playing: gameNavigationState,
+      },
     });
   };
 
@@ -232,9 +221,8 @@ class NavigationContextManager extends React.Component {
       });
     } catch (e) {}
 
-    if (!this.props.currentUser.user) {
-      // NOTE(jim): All routes will be blocked unless a user is signed in.
-      // can condition on AUTHENTICATED_ONLY_MODES if we want to only disallow certain routes.
+    // auth wall
+    if (!this.props.currentUser.user && mode !== 'signin') {
       navigationParams = navigationParams || {};
       const originalParams = Object.assign({}, navigationParams);
       navigationParams = {
@@ -273,7 +261,7 @@ class NavigationContextManager extends React.Component {
   };
 
   _connectMultiplayerClientAsync = async (e) => {
-    let { game, sessionId } = this.state.navigation;
+    let { game, sessionId } = this.state.navigation.playing;
     let mediaUrl = e.params.mediaUrl;
 
     // join/create a multiplayer session
@@ -297,7 +285,10 @@ class NavigationContextManager extends React.Component {
       this.setState({
         navigation: {
           ...this.state.navigation,
-          sessionId: response.sessionId,
+          playing: {
+            ...this.state.navigation.playing,
+            sessionId: response.sessionId,
+          },
         },
       });
     }
@@ -307,7 +298,10 @@ class NavigationContextManager extends React.Component {
     this.setState({
       navigation: {
         ...this.state.navigation,
-        isFullScreen,
+        playing: {
+          ...this.state.navigation.playing,
+          isFullScreen,
+        },
       },
     });
   };
@@ -362,27 +356,38 @@ class NavigationContextManager extends React.Component {
   navigateToEditPost = (params) => this._navigateToContentMode('edit_post', { params });
 
   navigateToCurrentGame = () => {
-    if (!this.state.navigation.game) {
+    if (!this.state.navigation.playing.game) {
       throw new Error(`Cannot navigate to current game because there is no current game.`);
     }
     if (this.state.navigation.contentMode === 'edit_post') {
       this.state.navigation.params.onCancel();
     }
-    let deferredNavigationState = {
-      mode: this.state.navigation.contentMode,
-      params: { ...this.state.navigation },
-    };
-    // don't store game or session id in the deferred state, otherwise they could get out of date
-    delete deferredNavigationState.params.game;
-    delete deferredNavigationState.params.sessionId;
-    this._navigateToContentMode('game', { deferredNavigationState });
+    this.setState({
+      navigation: {
+        ...this.state.navigation,
+        timeLastNavigated: Date.now(),
+        playing: {
+          ...this.state.navigation.playing,
+          isVisible: true,
+        },
+      },
+    });
   };
 
   minimizeGame = () => {
-    if (this.state.navigation.contentMode === 'game') {
+    if (this.state.navigation.playing.game) {
       // refresh the user's status history so we the current game properly appears in the recently played list
       this.props.currentUser.refreshCurrentUser();
-      this._restoreDeferredState();
+      this.setState({
+        navigation: {
+          ...this.state.navigation,
+          timeLastNavigated: Date.now(),
+          playing: {
+            ...this.state.navigation.playing,
+            isVisible: false,
+          },
+        },
+      });
     }
   };
 
@@ -469,7 +474,7 @@ class NavigationContextManager extends React.Component {
   };
 
   reloadGame = (onlyIfVisible) => {
-    if (onlyIfVisible && this.state.navigation.contentMode !== 'game') {
+    if (onlyIfVisible && !this.state.navigation.playing.isVisible) {
       // not currently viewing the game and `onlyIfVisible` was set,
       // so ignore this
       return;
@@ -478,7 +483,7 @@ class NavigationContextManager extends React.Component {
       clearTimeout(this._reloadDebounceTimeout);
     }
     this._reloadDebounceTimout = setTimeout(() => {
-      this.navigateToGameUrl(this.state.navigation.game.url);
+      this.navigateToGameUrl(this.state.navigation.playing.game.url);
       this._reloadDebounceTimeout = null;
     }, 50);
   };
@@ -489,7 +494,7 @@ class NavigationContextManager extends React.Component {
       const time = Date.now();
       const oldContentMode = state.navigation.contentMode;
       const newContentMode =
-        oldContentMode === 'game' || oldContentMode === 'edit_post' ? 'home' : oldContentMode;
+        oldContentMode === 'signin' || oldContentMode === 'edit_post' ? 'home' : oldContentMode;
       // navigate away from the game
       Analytics.trackNavigation({
         prevContentMode: oldContentMode,
@@ -498,19 +503,16 @@ class NavigationContextManager extends React.Component {
       // refresh the user's status history so we the current game properly appears in the recently played list
       prevProps.currentUser.refreshCurrentUser();
       // track the fact that a game was ended
-      Analytics.trackGameEnd({ game: state.navigation.game });
+      Analytics.trackGameEnd({ game: state.navigation.playing.game });
       return {
         ...state,
         navigation: {
           ...state.navigation,
           contentMode: newContentMode,
-          game: NavigationContextDefaults.game,
-          sessionId: NavigationContextDefaults.sessionId,
-          post: NavigationContextDefaults.post,
-          gameParams: NavigationContextDefaults.gameParams,
-          referrerGame: NavigationContextDefaults.referrerGame,
-          gameUrl: NavigationContextDefaults.gameUrl,
-          timeGameLoaded: time,
+          playing: {
+            ...NavigationContextDefaults.playing,
+            timeLoaded: time,
+          },
           timeLastNavigated: time,
         },
       };
@@ -554,9 +556,9 @@ class NavigationContextManager extends React.Component {
   _restoreDeferredState = () => {
     if (this.state.navigation.deferredNavigationState) {
       const { mode, params } = this.state.navigation.deferredNavigationState;
-      if (mode === 'game' && params.gameUrl) {
+      if (params.playing && params.playing.isVisible && params.playing.gameUrl) {
         // re-resolve the game in case anything changed since they last tried to load it.
-        this.navigateToGameUrl(params.gameUrl);
+        this.navigateToGameUrl(params.playing.gameUrl);
       } else {
         this._navigateToContentMode(mode, params);
       }

@@ -94,26 +94,26 @@ class ChatContextManager extends React.Component {
       await this.start();
     }
 
-    let prevNavigationMode;
+    let prevIsGameVisible;
     if (prevProps && prevProps.navigation) {
-      prevNavigationMode = prevProps.navigation.contentMode;
+      prevIsGameVisible = prevProps.navigation.playing.isVisible;
     }
-    if (this.props.navigation.contentMode === 'game') {
+    if (this.props.navigation.playing.isVisible) {
       // refresh or autojoin game channel if the user navigated to a game.
       let isNewGame = false;
       let prevGame;
       if (prevProps && prevProps.navigation) {
-        prevGame = prevProps.navigation.game;
+        prevGame = prevProps.navigation.playing.game;
       }
-      if (prevNavigationMode !== 'game') {
+      if (!prevIsGameVisible) {
         // navigated from non-game to game
         isNewGame = true;
-      } else if (prevGame !== this.props.navigation.game) {
+      } else if (prevGame !== this.props.navigation.playing.game) {
         // navigated from one game to another game
         isNewGame = true;
       }
       if (isNewGame) {
-        this.openChannelForGame(this.props.navigation.game);
+        this.openChannelForGame(this.props.navigation.playing.game);
       }
     } else {
       let channelId = this.props.navigation.chatChannelId;

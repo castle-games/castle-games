@@ -218,7 +218,7 @@ export default class SocialSidebarWithContext extends React.Component {
                           const lobbyChannel = chat.findChannel(
                             ChatUtilities.EVERYONE_CHANNEL_NAME
                           );
-                          const isGameVisible = navigation.contentMode === 'game';
+                          const isGameVisible = navigation.playing.isVisible;
                           return (
                             <SocialSidebar
                               userPresence={userPresence}

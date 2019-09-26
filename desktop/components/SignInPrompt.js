@@ -90,15 +90,10 @@ class SignInPrompt extends React.Component {
     let prompt;
     if (deferredNavigationState) {
       const { mode, params } = deferredNavigationState;
-      switch (mode) {
-        case 'game':
-          prompt = this._renderGamePrompt(params);
-          break;
-        case 'create':
-          prompt = this._renderCreatePrompt();
-          break;
-        default:
-          break;
+      if (mode === 'create') {
+        prompt = this._renderCreatePrompt();
+      } else if (params.playing && params.playing.game) {
+        prompt = this._renderGamePrompt(params.playing);
       }
     }
 

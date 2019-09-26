@@ -149,7 +149,7 @@ class App extends React.Component {
   };
 
   _handleFullScreenToggle = () => {
-    this.props.navigator.setIsFullScreen(!this.props.navigation.isFullScreen);
+    this.props.navigator.setIsFullScreen(!this.props.navigation.playing.isFullScreen);
   };
 
   _handleKeyDownEvent = (e) => {
@@ -219,7 +219,7 @@ class App extends React.Component {
         trendingGames={this.state.trendingGames}
         featuredExamples={this.state.featuredExamples}
         updateAvailable={this.state.updateAvailable}
-        isFullScreen={this.props.navigation.isFullScreen}
+        isFullScreen={this.props.navigation.playing.isFullScreen}
         onNativeUpdateInstall={this._handleNativeUpdateInstall}
       />
     );

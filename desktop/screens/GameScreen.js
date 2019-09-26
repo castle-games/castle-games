@@ -59,8 +59,7 @@ const STYLES_LOADING_OVERLAY_ELEMENT = css`
 
 class GameScreen extends React.Component {
   static defaultProps = {
-    game: null,
-    timeGameLoaded: 0,
+    playing: {},
     isLoggedIn: false,
     navigateToUserProfile: null,
   };
@@ -122,8 +121,8 @@ class GameScreen extends React.Component {
 
   _prepareInitialGameData = async (screenSettings) => {
     // Prepare the Lua format of the post
-    const luaPost = this.props.post
-      ? await jsPostToLuaPost(this.props.post, { data: true })
+    const luaPost = this.props.playing.post
+      ? await jsPostToLuaPost(this.props.playing.post, { data: true })
       : undefined;
 
     return {
@@ -139,10 +138,10 @@ class GameScreen extends React.Component {
         me: await jsUserToLuaUser(this.props.me),
       },
       initialPost: luaPost,
-      initialParams: this.props.gameParams ? this.props.gameParams : undefined,
-      game: this.props.game ? await jsGameToLuaGame(this.props.game) : undefined,
-      referrerGame: this.props.referrerGame
-        ? await jsGameToLuaGame(this.props.referrerGame)
+      initialParams: this.props.playing.gameParams ? this.props.playing.gameParams : undefined,
+      game: this.props.playing.game ? await jsGameToLuaGame(this.props.playing.game) : undefined,
+      referrerGame: this.props.playing.referrerGame
+        ? await jsGameToLuaGame(this.props.playing.referrerGame)
         : undefined,
     };
   };
@@ -224,23 +223,26 @@ class GameScreen extends React.Component {
   };
 
   _updateGameWindow = async (prevProps, prevState) => {
-    let newUrl = Utilities.getLuaEntryPoint(this.props.game);
-    let oldUrl = prevProps ? Utilities.getLuaEntryPoint(prevProps.game) : null;
+    let newUrl = Utilities.getLuaEntryPoint(this.props.playing.game);
+    let oldUrl = prevProps ? Utilities.getLuaEntryPoint(prevProps.playing.game) : null;
 
     if (!newUrl) {
       // just close old game
       await this._closeGame();
-    } else if (!oldUrl && this.props.timeNavigatedToGame !== this.props.timeGameLoaded) {
+    } else if (!oldUrl && this.props.timeNavigatedToGame !== this.props.playing.timeLoaded) {
       // resume previously-loaded game
       // by calling this._updateGameWindowFrame() later.
     } else if (newUrl !== oldUrl) {
       // close game and open new
       await this._closeGame();
-      await this._openGame(newUrl, this.props.game);
-    } else if (newUrl === oldUrl && this.props.timeGameLoaded !== prevProps.timeGameLoaded) {
+      await this._openGame(newUrl, this.props.playing.game);
+    } else if (
+      newUrl === oldUrl &&
+      this.props.playing.timeLoaded !== prevProps.playing.timeLoaded
+    ) {
       // reload
       await this._closeGame();
-      await this._openGame(oldUrl, prevProps.game);
+      await this._openGame(oldUrl, prevProps.playing.game);
     }
     this.updateGameWindowFrame();
   };
@@ -268,7 +270,7 @@ class GameScreen extends React.Component {
   };
 
   _handleGameMaximize = () => {
-    this.props.setIsFullScreen(!this.props.isFullScreen);
+    this.props.setIsFullScreen(!this.props.playing.isFullScreen);
   };
 
   _handleGameMinimize = () => {
@@ -316,16 +318,16 @@ class GameScreen extends React.Component {
 
   render() {
     let screenClassName = STYLES_CONTAINER;
-    if (this.props.isFullScreen) {
+    if (this.props.playing.isFullScreen) {
       screenClassName = STYLES_CONTAINER_THEATER;
     }
 
     return (
       <Game
         onSetToolsRef={this._setToolsRef}
-        game={this.props.game}
-        sessionId={this.props.sessionId}
-        isFullScreen={this.props.isFullScreen}
+        game={this.props.playing.game}
+        sessionId={this.props.playing.sessionId}
+        isFullScreen={this.props.playing.isFullScreen}
         isMuted={this.state.isMuted}
         recordingStatus={this.state.recordingStatus}
         navigateToUserProfile={this.props.navigateToUserProfile}
@@ -358,12 +360,7 @@ export default class GameScreenWithContext extends React.Component {
               <CurrentUserContext.Consumer>
                 {(currentUser) => (
                   <GameScreen
-                    game={navigation.game}
-                    sessionId={navigation.sessionId}
-                    post={navigation.post}
-                    gameParams={navigation.gameParams}
-                    referrerGame={navigation.referrerGame}
-                    timeGameLoaded={navigation.timeGameLoaded}
+                    playing={navigation.playing}
                     timeNavigatedToGame={navigation.timeLastNavigated}
                     navigateToUserProfile={navigator.navigateToUserProfile}
                     navigateToEditPost={navigator.navigateToEditPost}
@@ -371,7 +368,6 @@ export default class GameScreenWithContext extends React.Component {
                     navigateToGame={navigator.navigateToGame}
                     navigateToHome={navigator.navigateToHome}
                     minimizeGame={navigator.minimizeGame}
-                    isFullScreen={navigation.isFullScreen}
                     setIsFullScreen={navigator.setIsFullScreen}
                     reloadGame={navigator.reloadGame}
                     clearCurrentGame={navigator.clearCurrentGame}
