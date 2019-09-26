@@ -69,10 +69,6 @@ export const trackSignUp = async ({ user }) => {
 
 // should be called whenever the user navigates from one content mode to another
 export const trackNavigation = async ({ prevContentMode, nextContentMode, time = Date.now() }) => {
-  // whenever we navigate away from a game, update the timer keeping track of how long it's been in focus
-  if (lastGameLaunched && prevContentMode === 'game') {
-    timeWithGameInFocus += time - Math.max(timeLastNavigated, timeGameLaunched);
-  }
   // update the timer of when the last navigation occurred
   timeLastNavigated = time;
   // track the event in amplitude (ignoring events where the user navigates to a page they're already on)
@@ -112,6 +108,21 @@ export const trackGameLaunch = async ({ game, launchSource, time = Date.now() })
     gameOwnerId,
     launchSource,
   });
+};
+
+export const trackGameMinimize = async (time = Date.now()) => {
+  // update the timer of when the last navigation occurred
+  timeLastNavigated = time;
+
+  // whenever we navigate away from a game, update the timer keeping track of how long it's been in focus
+  if (lastGameLaunched) {
+    timeWithGameInFocus += time - Math.max(timeLastNavigated, timeGameLaunched);
+  }
+};
+
+export const trackGameMaximize = async (time = Date.now()) => {
+  // update the timer of when the last navigation occurred
+  timeLastNavigated = time;
 };
 
 // should be called whenever a game ends

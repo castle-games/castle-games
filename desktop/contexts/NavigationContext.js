@@ -362,6 +362,7 @@ class NavigationContextManager extends React.Component {
     if (this.state.navigation.contentMode === 'edit_post') {
       this.state.navigation.params.onCancel();
     }
+    Analytics.trackGameMaximize();
     this.setState({
       navigation: {
         ...this.state.navigation,
@@ -376,6 +377,7 @@ class NavigationContextManager extends React.Component {
 
   minimizeGame = () => {
     if (this.state.navigation.playing.game) {
+      Analytics.trackGameMinimize();
       // refresh the user's status history so we the current game properly appears in the recently played list
       this.props.currentUser.refreshCurrentUser();
       this.setState({
