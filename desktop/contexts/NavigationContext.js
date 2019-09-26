@@ -238,6 +238,10 @@ class NavigationContextManager extends React.Component {
       navigation: {
         ...this.state.navigation,
         contentMode: mode,
+        playing: {
+          ...this.state.navigation.playing,
+          isVisible: false,
+        },
         userProfileShown: null,
         timeLastNavigated: Date.now(),
         deferredNavigationState: null,
