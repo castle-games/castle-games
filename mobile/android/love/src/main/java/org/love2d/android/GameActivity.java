@@ -31,12 +31,15 @@ import android.os.Handler;
 import android.os.PowerManager;
 import android.os.ResultReceiver;
 import android.os.Vibrator;
-import android.support.annotation.Keep;
+// XXX(Ghost): Use new `Keep` import (see below)
+// import android.support.annotation.Keep;
 import android.util.Log;
 import android.util.DisplayMetrics;
 import android.widget.Toast;
 import android.view.*;
 import android.content.pm.PackageManager;
+
+import androidx.annotation.Keep;
 
 public class GameActivity extends SDLActivity {
     private static DisplayMetrics metrics = new DisplayMetrics();

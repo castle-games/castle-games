@@ -1,5 +1,3 @@
-set JAVA_HOME=C:/Program Files/Android/Android Studio/jre
-
 @rem
 @rem Copyright 2015 the original author or authors.
 @rem
@@ -7,7 +5,7 @@ set JAVA_HOME=C:/Program Files/Android/Android Studio/jre
 @rem you may not use this file except in compliance with the License.
 @rem You may obtain a copy of the License at
 @rem
-@rem      https://www.apache.org/licenses/LICENSE-2.0
+@rem      http://www.apache.org/licenses/LICENSE-2.0
 @rem
 @rem Unless required by applicable law or agreed to in writing, software
 @rem distributed under the License is distributed on an "AS IS" BASIS,
@@ -32,7 +30,7 @@ set APP_BASE_NAME=%~n0
 set APP_HOME=%DIRNAME%
 
 @rem Add default JVM options here. You can also use JAVA_OPTS and GRADLE_OPTS to pass JVM options to this script.
-set DEFAULT_JVM_OPTS=-Dfile.encoding=UTF-8 "-Xmx64m" "-Xms64m"
+set DEFAULT_JVM_OPTS="-Xmx64m" "-Xms64m"
 
 @rem Find java.exe
 if defined JAVA_HOME goto findJavaFromJavaHome

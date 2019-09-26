@@ -1,26 +1,62 @@
-node_modules/**/*
-.expo/*
-npm-debug.*
-
-xcuserdata/
-
-compile_commands.json*
-
-._*
-
-.idea/
-brushy.iml
-ios/DerivedData/
-ios/DerivedData-beta/
-
-ios/castle/**/EXBuildConstants.*
-
-android/app/src/main/assets/shell-app-manifest.json
-android/app/src/main/assets/shell-app.bundle
-
-ios/castle/Supporting/shell-app-manifest.json
-ios/castle/Supporting/shell-app.bundle
-ios/castle/Supporting/EXShell.json
-ios/castle/Supporting/EXShell.plist.bak
-
+# OSX
+#
 .DS_Store
+
+# Xcode
+#
+build/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata
+*.xccheckout
+*.moved-aside
+DerivedData
+*.hmap
+*.ipa
+*.xcuserstate
+project.xcworkspace
+
+# Android/IntelliJ
+#
+build/
+.idea
+.gradle
+local.properties
+*.iml
+
+# node.js
+#
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# BUCK
+buck-out/
+\.buckd/
+*.keystore
+
+# fastlane
+#
+# It is recommended to not store the screenshots in the git repo. Instead, use fastlane to re-generate the
+# screenshots whenever they are needed.
+# For more information about the recommended setup visit:
+# https://docs.fastlane.tools/best-practices/source-control/
+
+*/fastlane/report.xml
+*/fastlane/Preview.html
+*/fastlane/screenshots
+
+# Bundle artifact
+*.jsbundle
+
+# CocoaPods
+/ios/Pods/
+
+# Love native build
+android/love/.externalNativeBuild/

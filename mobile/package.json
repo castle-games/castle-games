@@ -1,25 +1,27 @@
 {
-  "name": "empty-project-template",
-  "main": "node_modules/expo/AppEntry.js",
+  "name": "Castle",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "eject": "expo eject"
+    "start": "react-native start",
+    "test": "jest",
+    "lint": "eslint ."
   },
   "dependencies": {
-    "@apollo/react-hooks": "^3.1.1",
-    "apollo-boost": "^0.1.23",
-    "castle-api-client": "^5.1.2",
-    "expo": "^30.0.0",
-    "expo-cli": "^1.1.0-beta.6",
-    "expokit": "^1.5.0",
-    "graphql": "^14.0.2",
-    "graphql-tag": "^2.10.0",
-    "react": "16.9.0",
-    "react-apollo": "^2.3.3",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-30.0.0.tar.gz",
-    "react-navigation": "^3.0.9"
+    "react": "16.8.6",
+    "react-native": "0.60.5"
+  },
+  "devDependencies": {
+    "@babel/core": "7.6.0",
+    "@babel/runtime": "7.6.0",
+    "@react-native-community/eslint-config": "0.0.3",
+    "babel-jest": "24.9.0",
+    "eslint": "6.4.0",
+    "jest": "24.9.0",
+    "metro-react-native-babel-preset": "0.54.1",
+    "react-test-renderer": "16.8.6"
+  },
+  "jest": {
+    "preset": "react-native"
   }
 }
