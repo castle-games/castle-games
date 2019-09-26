@@ -84,11 +84,9 @@ do
     function print(...)
         oldPrint(...)
         local array = { ... }
+        jsEvents.send('GHOST_PRINT', array)
         if castle.system.isDesktop() then
-            jsEvents.send('GHOST_PRINT', array)
             collectedPrints[#collectedPrints + 1] = cjson.encode(array)
-        else
-            love.thread.getChannel('PRINT'):push(cjson.encode(array))
         end
     end
 
@@ -100,12 +98,9 @@ do
             stack = stack:gsub(pattern, filename)
         end
         oldPrint(stack)
-        local obj = { error = err, stacktrace = stack }
+        jsEvents.send('GHOST_ERROR', { error = err, stacktrace = stack })
         if castle.system.isDesktop() then
-            jsEvents.send('GHOST_ERROR', obj)
             love.filesystem.append(ERRORS_FILE_NAME, cjson.encode(obj) .. '\n')
-        else
-            love.thread.getChannel('ERROR'):push(cjson.encode(obj))
         end
     end
 

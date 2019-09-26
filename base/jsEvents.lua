@@ -48,7 +48,10 @@ end
 local platform = love.system.getOS()
 if platform == 'iOS' or platform == 'Android' then -- Use channels on mobile
     function jsEvents.send(name, params)
-        love.thread.getChannel(name):push(cjson.encode(params))
+        love.thread.getChannel('LUA_TO_JS_EVENTS'):push(cjson.encode({
+            name = name,
+            params = params,
+        }))
     end
 elseif not CASTLE_SERVER then -- Use FFI on desktop
     local ffi = require 'ffi'
