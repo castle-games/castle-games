@@ -66,6 +66,12 @@ if CASTLE_INITIAL_DATA and CASTLE_INITIAL_DATA.audio and CASTLE_INITIAL_DATA.aud
     setCastleVolume(CASTLE_INITIAL_DATA.audio.volume)
 end
 
+-- Keep track of constant dimensions if set
+local constantWidth, constantHeight = 0, 0
+jsEvents.listen('CASTLE_SET_DIMENSIONS', function(params)
+    constantWidth, constantHeight = params.width, params.height
+end)
+
 -- Metatable of portal instances
 local portalMeta = {}
 
@@ -149,6 +155,8 @@ function portalMeta:setupLove()
                 if ghostWidth ~= 0 then -- 0 if 'full'
                     return ghostWidth
                 end
+            elseif constantWidth ~= 0 then
+                return constantWidth
             end
             return love.graphics.getWidth()
         end
@@ -158,6 +166,8 @@ function portalMeta:setupLove()
                 if ghostHeight ~= 0 then -- 0 if 'full'
                     return ghostHeight
                 end
+            elseif constantHeight ~= 0 then
+                return constantHeight
             end
             return love.graphics.getHeight()
         end

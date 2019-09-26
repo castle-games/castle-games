@@ -1,17 +1,22 @@
 import React, { useState } from 'react';
 import { requireNativeComponent, View } from 'react-native';
 
+import * as GhostEvents from './GhostEvents';
+
 // Implemented by 'GhostView.m' / 'GhostViewManager.java'.
 const NativeGhostView = requireNativeComponent('GhostView', null);
 
-// Compute actual game view dimensions according to https://castle.games/posts/@castle/game-dimensions-and-scaling
-// when container layout occurs
 const useDimensions = ({ settings }) => {
+  // Give Lua the constant dimensions
+  GhostEvents.send('CASTLE_SET_DIMENSIONS', { width: settings.width, height: settings.height });
+
+  // Initialize state
   const [screenScaling, setScreenScaling] = useState(null);
   const [applyScreenScaling, setApplyScreenScaling] = useState(null);
   const [width, setWidth] = useState(null);
   const [height, setHeight] = useState(null);
 
+  // Compute game view dimensions when container layout occurs
   const onContainerLayout = ({
     nativeEvent: {
       layout: { width: containerWidth, height: containerHeight },

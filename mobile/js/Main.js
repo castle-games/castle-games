@@ -5,10 +5,8 @@ import './ghost/GhostConsole';
 import GhostView from './ghost/GhostView';
 // import './GhostMultiplayer';
 
-// const DEFAULT_GAME_URI =
-//   'https://raw.githubusercontent.com/castle-games/ghost-tests/d69f1e4e96add56d7aec8772acb9a2378a367fee/screensize/main.lua';
 const DEFAULT_GAME_URI =
-  'https://raw.githubusercontent.com/castle-games/ghost-tests/master/log-touches/main.lua';
+  'https://raw.githubusercontent.com/castle-games/ghost-tests/d69f1e4e96add56d7aec8772acb9a2378a367fee/screensize/main.lua';
 
 const Main = () => (
   <View style={{ flex: 1 }}>
