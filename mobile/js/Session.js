@@ -1,4 +1,4 @@
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import ApolloClient from 'apollo-boost';
 import gql from 'graphql-tag';
 
@@ -37,7 +37,6 @@ export const signInAsync = async ({ username, password }) => {
     `,
     variables: { username },
   });
-  console.log('got `userId`: ' + userId);
 
   // Log in and save the auth token
   const result = await apolloClient.mutate({
