@@ -36,6 +36,10 @@ const ChatContextDefaults = {
 const ChatContext = React.createContext(ChatContextDefaults);
 
 class ChatContextManager extends React.Component {
+  static defaultProps = {
+    updateMultiplayerSessions: () => {},
+  };
+
   _firstLoadComplete = false;
   _messagesReadQueue;
   _optimisticMessageIdsPending = {};
@@ -105,6 +109,7 @@ class ChatContextManager extends React.Component {
     this._chat.setOnMessagesHandler(this._handleMessagesAsync);
     this._chat.setOnPresenceHandler(this._handlePresenceAsync);
     this._chat.setConnectionStatusHandler(this._handleConnectStatus);
+    this._chat.setOnUpdateHandler(this._handleUpdateAsync);
     await this._chat.connect();
     await this._refreshAllSubscribedChannels();
   };
@@ -658,6 +663,23 @@ class ChatContextManager extends React.Component {
     });
   };
 
+  _handleUpdateAsync = async (type, body) => {
+    if (type === 'multiplayer-session-update') {
+      let gameIdToGame = {};
+      for (let i = 0; i < body.games.length; i++) {
+        let game = body.games[i];
+        gameIdToGame[game.gameId] = game;
+      }
+
+      for (let i = 0; i < body.sessions.length; i++) {
+        let session = body.sessions[i];
+        session.game = gameIdToGame[session.gameId];
+      }
+
+      this.props.updateMultiplayerSessions(body.sessions);
+    }
+  };
+
   render() {
     return <ChatContext.Provider value={this.state}>{this.props.children}</ChatContext.Provider>;
   }
@@ -679,6 +701,7 @@ class ChatContextProvider extends React.Component {
                         userPresence={userPresence}
                         navigation={navigation}
                         showChatChannel={navigator.showChatChannel}
+                        updateMultiplayerSessions={currentUser.updateMultiplayerSessions}
                         {...this.props}
                       />
                     )}

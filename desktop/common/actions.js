@@ -929,39 +929,6 @@ export async function getMultiplayerRegions() {
   return result.data.multiplayerRegions;
 }
 
-export async function getJoinableMultiplayerSessions() {
-  const result = await API(
-    `
-    query($isStaging: Boolean) {
-     joinableMultiplayerSessions(isStaging: $isStaging) {
-        sessionId
-        game {
-          ${GAME_FIELDS}
-          ${NESTED_GAME_OWNER}
-        }
-      }
-    }
-  `,
-    {
-      isStaging: Constants.USE_STAGING_GAME_SERVERS,
-    }
-  );
-
-  if (!result) {
-    throw new Error(`\`getJoinableMultiplayerSessions\`: No result`);
-  }
-
-  if (result.error) {
-    throw new Error(`\`getJoinableMultiplayerSessions\`: ${result.error.message}`);
-  }
-
-  if (result.errors) {
-    throw new Error(`\`getJoinableMultiplayerSessions\`: ${result.errors[0].message}`);
-  }
-
-  return result.data;
-}
-
 export async function updatePings(pings) {
   let result = await API.graphqlAsync(
     /* GraphQL */ `

@@ -70,7 +70,6 @@ class GamesHomeScreen extends React.Component {
     loadAllGames: () => {},
     trendingGames: [],
     multiplayerSessions: [],
-    reloadMultiplayerSessions: () => {},
     mode: 'home',
     updateAvailable: null,
   };
@@ -122,7 +121,6 @@ class GamesHomeScreen extends React.Component {
 
     if (this.props.mode === 'home') {
       this.props.reloadPosts();
-      this.props.reloadMultiplayerSessions();
       await this.props.reloadTrendingGames();
     } else if (this.props.mode === 'allGames') {
       await this.props.loadAllGames();
@@ -249,7 +247,6 @@ export default class GamesHomeScreenWithContext extends React.Component {
                 trendingGames={currentUser.content.trendingGames}
                 reloadTrendingGames={currentUser.reloadTrendingGames}
                 multiplayerSessions={currentUser.content.multiplayerSessions}
-                reloadMultiplayerSessions={currentUser.reloadMultiplayerSessions}
                 reloadPosts={currentUser.reloadPosts}
                 loadMorePosts={currentUser.loadMorePosts}
                 navigator={navigator}
