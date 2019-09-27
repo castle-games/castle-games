@@ -15,9 +15,9 @@ const useMetadata = ({ gameUri }) => {
   const [metadata, setMetadata] = useState(null);
 
   useEffect(() => {
-    cancelled = false;
+    let mounted = true;
 
-    const fetchMetadata = async () => {
+    const fetchMetadataAsync = async () => {
       let newMetadata = {};
       if (gameUri.endsWith('.castle')) {
         const result = await castleMetadata.fetchMetadataForUrlAsync(gameUri);
@@ -25,13 +25,13 @@ const useMetadata = ({ gameUri }) => {
           newMetadata = result.metadata;
         }
       }
-      if (!cancelled) {
+      if (mounted) {
         setMetadata(newMetadata);
       }
     };
-    fetchMetadata();
+    fetchMetadataAsync();
 
-    return () => (cancelled = true);
+    return () => (mounted = false);
   }, [gameUri]);
 
   return metadata;

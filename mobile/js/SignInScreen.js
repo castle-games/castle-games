@@ -1,11 +1,28 @@
-import React from 'react';
-import { View, TouchableOpacity, Text } from 'react-native';
+import React, { useState } from 'react';
+import { View, TouchableOpacity, Text, TextInput } from 'react-native';
 import { useNavigation } from 'react-navigation-hooks';
+import * as Session from './Session';
+
+const textInputStyle = {
+  width: '100%',
+  borderColor: '#ddd',
+  borderRadius: 4,
+  borderWidth: 1,
+  padding: 4,
+  margin: 4,
+};
 
 const SignInScreen = () => {
   const { navigate } = useNavigation();
 
-  const onPressSignIn = () => navigate('GameScreen');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const onPressSignIn = async () => {
+    await Session.signInAsync({ username, password });
+    await new Promise(resolve => setTimeout(resolve, 100));
+    navigate('GameScreen');
+  };
 
   return (
     <View
@@ -16,6 +33,17 @@ const SignInScreen = () => {
         justifyContent: 'center',
         padding: '25%',
       }}>
+      <TextInput
+        style={textInputStyle}
+        autoCapitalize="none"
+        onChangeText={newUsername => setUsername(newUsername)}
+      />
+      <TextInput
+        style={textInputStyle}
+        secureTextEntry
+        textContentType="password"
+        onChangeText={newPassword => setPassword(newPassword)}
+      />
       <TouchableOpacity
         style={{
           backgroundColor: '#ddd',
