@@ -673,7 +673,9 @@ class ChatContextManager extends React.Component {
 
       for (let i = 0; i < body.sessions.length; i++) {
         let session = body.sessions[i];
-        session.game = gameIdToGame[session.gameId];
+        // make a copy of this game, since we might have multiple sessions of this one game
+        session.game = JSON.parse(JSON.stringify(gameIdToGame[session.gameId]));
+        session.game.sessionId = session.sessionId;
       }
 
       this.props.updateMultiplayerSessions(body.sessions);
