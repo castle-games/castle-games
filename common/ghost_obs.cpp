@@ -142,24 +142,6 @@ void _ghostObsBackgroundThread() {
   }
 }
 
-bool _startRecording() {
-  if (ghostObsIsStarted || ghostObsIsRecording) {
-    return false;
-  }
-
-  bool result = obs_output_start(ghostObsOutput);
-  if (!result) {
-    return false;
-  }
-
-  ghostObsIsStarted = true;
-  ghostObsIsRecording = true;
-  _sendJSUpdate("startRecording");
-  ghostObsThread = std::thread(_ghostObsBackgroundThread);
-
-  return true;
-}
-
 void _takeScreenCapture() {
   proc_handler_t *proc_handler = obs_output_get_proc_handler(ghostObsOutput);
   proc_handler_call(proc_handler, "save", NULL);
@@ -302,15 +284,14 @@ void ghostInitObs(std::string basePath, std::string ffmpegPath, bool debug) {
   }
 }
 
-void ghostStartObs() {
-
+void _createObsOutput() {
   if (!ghostObsOutput) {
 
 #ifdef _MSC_VER
     // https://github.com/obsproject/obs-studio/blob/master/plugins/win-capture/window-capture.c
     // https://github.com/obsproject/obs-studio/blob/master/plugins/win-capture/window-helpers.c#L25
     obs_data_t *sourceSettings = obs_data_create();
-	
+
     obs_data_set_string(sourceSettings, "capture_mode", "window");
     obs_data_set_string(sourceSettings, "window", "Castle:CefBrowserWindow:Castle.exe");
     //obs_data_set_int(sourceSettings, "priority", 1); // default priority is "exe" which works fine
@@ -340,18 +321,18 @@ void ghostStartObs() {
 
 #ifdef _MSC_VER
     obs_encoder_t *ghostObsVideoEncoder =
-      obs_video_encoder_create("obs_x264", "castle_encoder", videoEncoderSettings, NULL);
+    obs_video_encoder_create("obs_x264", "castle_encoder", videoEncoderSettings, NULL);
 #else
     obs_encoder_t *ghostObsVideoEncoder =
-        obs_video_encoder_create("vt_h264_hw", "castle_encoder", videoEncoderSettings, NULL);
+    obs_video_encoder_create("vt_h264_hw", "castle_encoder", videoEncoderSettings, NULL);
 #endif
 
 #ifdef _MSC_VER
     obs_encoder_t *ghostObsAudioEncoder =
-      obs_audio_encoder_create("ffmpeg_aac", "castle_audio_encoder", NULL, 0, NULL);
+    obs_audio_encoder_create("ffmpeg_aac", "castle_audio_encoder", NULL, 0, NULL);
 #else
     obs_encoder_t *ghostObsAudioEncoder =
-        obs_audio_encoder_create("CoreAudio_AAC", "castle_audio_encoder", NULL, 0, NULL);
+    obs_audio_encoder_create("CoreAudio_AAC", "castle_audio_encoder", NULL, 0, NULL);
 #endif
 
     // obs-ffmpeg-mux.c window-basic-main-outputs.cpp
@@ -403,7 +384,29 @@ void ghostStartObs() {
     obs_output_set_video_encoder(ghostObsOutput, ghostObsVideoEncoder);
     obs_output_set_audio_encoder(ghostObsOutput, ghostObsAudioEncoder, 0);
   }
+}
 
+bool _startRecording() {
+  _createObsOutput();
+
+  if (ghostObsIsStarted || ghostObsIsRecording) {
+    return false;
+  }
+
+  bool result = obs_output_start(ghostObsOutput);
+  if (!result) {
+    return false;
+  }
+
+  ghostObsIsStarted = true;
+  ghostObsIsRecording = true;
+  _sendJSUpdate("startRecording");
+  ghostObsThread = std::thread(_ghostObsBackgroundThread);
+
+  return true;
+}
+
+void ghostStartObs() {
   if (ALWAYS_RECORDING) {
     _startRecording();
   }
@@ -417,6 +420,11 @@ void ghostStopObs() {
   obs_output_stop(ghostObsOutput);
   ghostObsIsStarted = false;
   ghostObsThread.detach();
+
+  if (!ALWAYS_RECORDING) {
+    obs_output_release(ghostObsOutput);
+    ghostObsOutput = NULL;
+  }
 }
 
 void ghostTakeScreenCaptureObs() {
