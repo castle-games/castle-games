@@ -204,7 +204,7 @@ class ChatContextManager extends React.Component {
     if (!game || !game.gameId) return;
 
     const channelId = await this._observeChannelForGame(game);
-    return this.props.showChatChannel(channelId, { isGameMetaChannel: true });
+    return this.props.showChatChannel(channelId);
   };
 
   closeChannel = async (channelId) => {

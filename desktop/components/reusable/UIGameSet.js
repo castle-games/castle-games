@@ -4,7 +4,6 @@ import * as Constants from '~/common/constants';
 import UIGameCell from '~/components/reusable/UIGameCell';
 
 import { css } from 'react-emotion';
-import { ChatContext } from '~/contexts/ChatContext';
 import { NavigatorContext } from '~/contexts/NavigationContext';
 
 const STYLES_CONTAINER = css`
@@ -27,9 +26,7 @@ class UIGameSet extends React.Component {
   };
 
   _openGameMetaScreen = async (game) => {
-    // TODO: ben: decouple game meta pages from chat
-    await this.props.openChannelForGame(game);
-    this.props.navigateToGameMeta();
+    this.props.navigateToGameMeta(game);
   };
 
   _numGamesToRender = () => {
@@ -80,15 +77,7 @@ export default class UIGameSetWithContext extends React.Component {
     return (
       <NavigatorContext.Consumer>
         {(navigator) => (
-          <ChatContext.Consumer>
-            {(chat) => (
-              <UIGameSet
-                navigateToGameMeta={navigator.navigateToGameMeta}
-                openChannelForGame={chat.openChannelForGame}
-                {...this.props}
-              />
-            )}
-          </ChatContext.Consumer>
+          <UIGameSet navigateToGameMeta={navigator.navigateToGameMeta} {...this.props} />
         )}
       </NavigatorContext.Consumer>
     );

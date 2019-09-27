@@ -332,7 +332,6 @@ class NavigationContextManager extends React.Component {
       // fall back to whatever we were given
       fullGame = game;
     }
-    // TODO: BEN: figure out how to show the appropriate chat channel
     return this._navigateToContentMode('game-meta', {
       gameMetaShown: fullGame,
     });
