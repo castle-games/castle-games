@@ -44,52 +44,14 @@ const STYLES_SETTING = css`
 class GameMetaScreen extends React.Component {
   state = {
     mode: 'members',
-    channel: null,
-  };
-
-  componentDidUpdate(prevProps, prevState) {
-    this._update(prevProps, prevState);
-  }
-
-  componentDidMount() {
-    this._mounted = true;
-    this._update(null, null);
-  }
-
-  componentWillUnmount() {
-    this._mounted = false;
-  }
-
-  _update = async (prevProps, prevState) => {
-    const { chat, game } = this.props;
-    if (!prevProps || prevProps.game !== game) {
-      // clear prev state
-      let updates = { mode: 'members' };
-      if (this.state.channel) {
-        updates.channel = null;
-      }
-      await this.setState(updates);
-      let channel;
-      if (chat) {
-        channel = chat.findChannelForGame(game);
-      }
-      if (channel && channel.type === 'game' && channel.gameId) {
-        chat.markChannelRead(channel.channelId);
-        this.setState({ channel });
-      }
-    }
   };
 
   _getNavigationItems = () => {
-    const { chat, game } = this.props;
-    const { channel } = this.state;
+    const { chat, game, channel } = this.props;
     let items = [];
     if (channel) {
       const numChannelMembers = chat.channelOnlineCounts[channel.channelId];
       items.push({ label: `People Online (${numChannelMembers})`, key: 'members' });
-      if (channel.isSubscribed) {
-        items.push({ label: 'Settings', key: 'settings' });
-      }
     }
 
     return items;
@@ -99,48 +61,28 @@ class GameMetaScreen extends React.Component {
     this.setState({ mode: selectedKey });
   };
 
-  _handleLeaveChannel = async () => {
-    // TODO: BEN: clean up
-    if (this.state.channel) {
-      const lobbyChannel = this.props.chat.findChannel(ChatUtilities.EVERYONE_CHANNEL_NAME);
-      await this.props.navigator.showChatChannel(lobbyChannel.channelId);
-      this.props.chat.closeChannel(this.state.channel.channelId);
-    }
-    this.props.navigator.navigateToHome();
-  };
-
   _handleOpenDirectMessage = (user) => {
     this.props.chat.openChannelForUser(user);
   };
 
   _renderContent = (channel, mode) => {
     switch (mode) {
-      case 'settings':
-        return (
-          <div className={STYLES_CONTENT_CONTAINER}>
-            <div className={STYLES_SETTING}>
-              <span onClick={this._handleLeaveChannel}>Remove</span> this game from my Play menu
-              shortcuts
-            </div>
-          </div>
-        );
       case 'members':
       default:
-        return (
-          <ChatMembers
-            userIds={channel.subscribedUsers.map((user) => user.userId)}
-            onSendMessage={this._handleOpenDirectMessage}
-          />
-        );
+        if (channel) {
+          const onlineUserIds = this.props.chat.channelOnlineUserIds[channel.channelId];
+          return (
+            <ChatMembers userIds={onlineUserIds} onSendMessage={this._handleOpenDirectMessage} />
+          );
+        } else {
+          return null;
+        }
     }
   };
 
   render() {
-    const { channel, mode } = this.state;
-    const { game } = this.props;
-
-    // TODO: BEN
-    if (!channel) return null;
+    const { mode } = this.state;
+    const { channel, game } = this.props;
 
     return (
       <div className={STYLES_CONTAINER}>
@@ -154,7 +96,6 @@ class GameMetaScreen extends React.Component {
             game={game}
             onSelectGame={this.props.navigator.navigateToGame}
             onSelectUser={this.props.navigator.navigateToUserProfile}
-            onLeaveChannel={this._handleLeaveChannel}
           />
           <div
             className={css`
@@ -185,14 +126,20 @@ export default class GameMetaScreenWithContext extends React.Component {
               <NavigationContext.Consumer>
                 {(navigation) => (
                   <NavigatorContext.Consumer>
-                    {(navigator) => (
-                      <GameMetaScreen
-                        navigator={navigator}
-                        game={navigation.gameMetaShown}
-                        userIdToUser={userPresence.userIdToUser}
-                        chat={chat}
-                      />
-                    )}
+                    {(navigator) => {
+                      const channel = navigation.gameMetaShown
+                        ? chat.channels[navigation.gameMetaShown.chatChannelId]
+                        : null;
+                      return (
+                        <GameMetaScreen
+                          navigator={navigator}
+                          game={navigation.gameMetaShown}
+                          userIdToUser={userPresence.userIdToUser}
+                          chat={chat}
+                          channel={channel}
+                        />
+                      );
+                    }}
                   </NavigatorContext.Consumer>
                 )}
               </NavigationContext.Consumer>

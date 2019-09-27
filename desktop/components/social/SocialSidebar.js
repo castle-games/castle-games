@@ -63,7 +63,7 @@ const THEME = {
 
 class SocialSidebar extends React.Component {
   static defaultProps = {
-    isGameVisible: false,
+    playing: {},
   };
 
   state = {
@@ -123,9 +123,10 @@ class SocialSidebar extends React.Component {
     switch (mode) {
       case 'members':
         const channel = this.props.chat.channels[channelId];
+        const onlineUserIds = this.props.chat.channelOnlineUserIds[channelId];
         return (
           <ChatMembers
-            userIds={channel.subscribedUsers.map((user) => user.userId)}
+            userIds={onlineUserIds}
             onSendMessage={this._handleOpenDirectMessage}
             theme={theme}
           />
@@ -151,10 +152,10 @@ class SocialSidebar extends React.Component {
   };
 
   render() {
-    const { chat, viewer, userPresence, gameMetaChannelId } = this.props;
-    const { isGameVisible, isChatExpanded } = this.props;
+    const { chat, viewer, userPresence, lobbyChannel } = this.props;
+    const { playing, isChatExpanded, contentMode, gameMetaShown } = this.props;
     const channelId = this._getChannelIdVisible(this.props);
-    let theme = isGameVisible ? THEME : {};
+    let theme = playing.isVisible ? THEME : {};
 
     if (!viewer) {
       return null;
@@ -184,12 +185,14 @@ class SocialSidebar extends React.Component {
           {isChatExpanded && this._renderContent(this.state.mode, { channelId, theme })}
           <div className={STYLES_CHANNEL_NAVIGATOR}>
             <SocialSidebarNavigator
-              isGameVisible={isGameVisible}
+              playing={playing}
+              contentMode={contentMode}
+              gameMetaShown={gameMetaShown}
               isChatExpanded={isChatExpanded}
               selectedChannelId={channelId}
+              lobbyChannel={lobbyChannel}
               viewer={viewer}
               userPresence={userPresence}
-              gameMetaChannelId={gameMetaChannelId}
               chat={chat}
               theme={theme}
               onSelectChannel={this._handleNavigateToChat}
@@ -218,16 +221,16 @@ export default class SocialSidebarWithContext extends React.Component {
                           const lobbyChannel = chat.findChannel(
                             ChatUtilities.EVERYONE_CHANNEL_NAME
                           );
-                          const isGameVisible = navigation.playing.isVisible;
                           return (
                             <SocialSidebar
                               userPresence={userPresence}
                               viewer={currentUser.user}
                               isChatExpanded={navigation.isChatExpanded}
-                              gameMetaChannelId={navigation.gameMetaChannelId}
+                              playing={navigation.playing}
+                              contentMode={navigation.contentMode}
+                              gameMetaShown={navigation.gameMetaShown}
                               chatChannelId={navigation.chatChannelId}
                               chat={chat}
-                              isGameVisible={isGameVisible}
                               lobbyChannel={lobbyChannel}
                               navigator={navigator}
                             />

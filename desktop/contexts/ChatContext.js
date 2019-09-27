@@ -17,6 +17,7 @@ import _ from 'lodash';
 const EMPTY_CHAT_STATE = {
   channels: {},
   channelOnlineCounts: {},
+  channelOnlineUserIds: {},
 };
 
 const ChatContextDefaults = {
@@ -83,34 +84,11 @@ class ChatContextManager extends React.Component {
       await this.start();
     }
 
-    let prevIsGameVisible;
-    if (prevProps && prevProps.navigation) {
-      prevIsGameVisible = prevProps.navigation.playing.isVisible;
-    }
-    if (this.props.navigation.playing.isVisible) {
-      // refresh or autojoin game channel if the user navigated to a game.
-      let isNewGame = false;
-      let prevGame;
-      if (prevProps && prevProps.navigation) {
-        prevGame = prevProps.navigation.playing.game;
-      }
-      if (!prevIsGameVisible) {
-        // navigated from non-game to game
-        isNewGame = true;
-      } else if (prevGame !== this.props.navigation.playing.game) {
-        // navigated from one game to another game
-        isNewGame = true;
-      }
-      if (isNewGame) {
-        this.openChannelForGame(this.props.navigation.playing.game);
-      }
-    } else {
-      let channelId = this.props.navigation.chatChannelId;
-      let prevChannelId =
-        prevProps && prevProps.navigation ? prevProps.navigation.chatChannelId : null;
-      if (channelId && prevChannelId !== channelId) {
-        this._refreshChannelIds([channelId]);
-      }
+    let channelId = this.props.navigation.chatChannelId;
+    let prevChannelId =
+      prevProps && prevProps.navigation ? prevProps.navigation.chatChannelId : null;
+    if (channelId && prevChannelId !== channelId) {
+      this._refreshChannelIds([channelId]);
     }
   };
 
@@ -225,7 +203,7 @@ class ChatContextManager extends React.Component {
   openChannelForGame = async (game) => {
     if (!game || !game.gameId) return;
 
-    const channelId = await this._joinOrCreateChannelForGame(game);
+    const channelId = await this._observeChannelForGame(game);
     return this.props.showChatChannel(channelId, { isGameMetaChannel: true });
   };
 
@@ -494,9 +472,10 @@ class ChatContextManager extends React.Component {
       });
       this.props.userPresence.setOnlineUserIds(onlineUserIds);
     }
-    if (event.channel_online_counts) {
+    if (event.channel_online_counts && event.channel_online_user_ids) {
       this.setState({
         channelOnlineCounts: event.channel_online_counts,
+        channelOnlineUserIds: event.channel_online_user_ids,
       });
     }
   };
@@ -656,25 +635,14 @@ class ChatContextManager extends React.Component {
     return null;
   };
 
-  _joinOrCreateChannelForGame = async (game) => {
-    let { channelId, isSubscribed } = this.findChannelForGame(game);
+  _observeChannelForGame = async (game) => {
+    let { channelId } = this.findChannelForGame(game);
     let createdChannel;
     if (!channelId) {
-      const response = await ChatActions.createGameChatChannel({ gameId: game.gameId });
-      if (!response || response.errors) {
-        return;
-      }
-      if (response.data && response.data.createGameChatChannel) {
-        createdChannel = response.data.createGameChatChannel;
-        channelId = createdChannel.channelId;
-      }
+      await this._chat.observeChannelAsync(game.chatChannelId);
+      channelId = game.chatChannelId;
     }
-    if (!isSubscribed) {
-      await this._chat.joinChannelAsync(channelId);
-    }
-    if (createdChannel) {
-      await this._addChannel({ ...createdChannel, isSubscribed: true });
-    }
+    await this._refreshChannelIds([channelId]);
     return channelId;
   };
 

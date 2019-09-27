@@ -52,7 +52,7 @@ export default class SocialSidebarNavigator extends React.Component {
   };
 
   state = {
-    game: null,
+    gameChatAvailable: null,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -66,8 +66,8 @@ export default class SocialSidebarNavigator extends React.Component {
   // do not show tooltips if a game is visible and the sidebar is collapsed,
   // because the game will draw over the tooltips.
   _maybeWrapWithTooltip = (child, title, key) => {
-    const { isGameVisible, isChatExpanded } = this.props;
-    const showTooltip = !(isGameVisible && !isChatExpanded);
+    const { playing, isChatExpanded } = this.props;
+    const showTooltip = !(playing.isVisible && !isChatExpanded);
     if (showTooltip) {
       return (
         <Tooltip key={key} title={title} {...TOOLTIP_PROPS}>
@@ -78,51 +78,73 @@ export default class SocialSidebarNavigator extends React.Component {
     return child;
   };
 
-  _update = async (prevProps, prevState) => {
-    // TODO: put this game fetch inside navigation context and merge w meta screen
-    const { chat, gameMetaChannelId } = this.props;
-    if (!prevProps || prevProps.gameMetaChannelId !== gameMetaChannelId) {
-      if (this.state.game) {
-        await this.setState({ game: null });
+  _computeGameVisible = (props) => {
+    let isGameVisible, game;
+    if (props) {
+      if (props.playing && props.playing.isVisible) {
+        isGameVisible = true;
+        game = props.playing.game;
+      } else if (props.contentMode === 'game-meta') {
+        isGameVisible = true;
+        game = props.gameMetaShown;
+      } else {
+        isGameVisible = false;
+        game = null;
       }
-      if (gameMetaChannelId) {
-        const channel = chat.channels[gameMetaChannelId];
-        if (channel.type === 'game' && channel.gameId) {
-          try {
-            let game = await Actions.getGameByGameId(channel.gameId);
-            this.setState({ game });
-          } catch (_) {}
+    }
+    return { isGameVisible, game };
+  };
+
+  _update = async (prevProps, prevState) => {
+    const { chat } = this.props;
+    let visibility = this._computeGameVisible(this.props);
+    let prevVisibility = this._computeGameVisible(prevProps);
+
+    if (
+      visibility.isGameVisible !== prevVisibility.isGameVisible ||
+      visibility.game !== prevVisibility.game
+    ) {
+      if (prevVisibility.game) {
+        await chat.closeChannel(prevVisibility.game.chatChannelId);
+        if (prevProps && prevProps.selectedChannelId === prevVisibility.game.chatChannelId) {
+          this.props.onSelectChannel(this.props.lobbyChannel);
         }
+      }
+      if (visibility.game) {
+        await chat.openChannelForGame(visibility.game);
+        this.setState({ gameChatAvailable: visibility.game });
       }
     }
   };
 
   _renderGameItem = () => {
-    const { chat, gameMetaChannelId, isChatExpanded, selectedChannelId } = this.props;
+    const { gameChatAvailable } = this.state;
+    const { chat, isChatExpanded, selectedChannelId } = this.props;
     const { theme } = this.props;
     let gameItem = null;
-    if (gameMetaChannelId) {
+    if (gameChatAvailable) {
       let iconSrc;
-      const channel = chat.channels[gameMetaChannelId];
-      const { game } = this.state;
-      if (game && game.coverImage) {
-        iconSrc = game.coverImage.url;
-      }
-      const isGameSelected = isChatExpanded && selectedChannelId === channel.channelId;
-      const title = channel.name ? channel.name : 'Untitled Game Chat';
+      const channel = chat.channels[gameChatAvailable.chatChannelId];
+      if (channel) {
+        if (gameChatAvailable && gameChatAvailable.coverImage) {
+          iconSrc = gameChatAvailable.coverImage.url;
+        }
+        const isGameSelected = isChatExpanded && selectedChannelId === channel.channelId;
+        const title = channel.name ? channel.name : 'Untitled Game Chat';
 
-      gameItem = (
-        <SocialSidebarNavigationItem
-          isUnread={channel.hasUnreadMessages}
-          showOnlineIndicator={channel.hasUnreadMessages && !isGameSelected}
-          notificationCount={channel.notificationCount}
-          isSelected={isGameSelected}
-          avatarUrl={iconSrc}
-          theme={theme}
-          onClick={() => this.props.onSelectChannel(channel)}
-        />
-      );
-      return this._maybeWrapWithTooltip(gameItem, title, 'navigation-game');
+        gameItem = (
+          <SocialSidebarNavigationItem
+            isUnread={channel.hasUnreadMessages}
+            showOnlineIndicator={channel.hasUnreadMessages && !isGameSelected}
+            notificationCount={channel.notificationCount}
+            isSelected={isGameSelected}
+            avatarUrl={iconSrc}
+            theme={theme}
+            onClick={() => this.props.onSelectChannel(channel)}
+          />
+        );
+        return this._maybeWrapWithTooltip(gameItem, title, 'navigation-game');
+      }
     }
     return gameItem;
   };
@@ -132,9 +154,8 @@ export default class SocialSidebarNavigator extends React.Component {
     const { theme } = this.props;
     let lobbyItem = null;
     try {
-      let lobbyChannel,
+      let lobbyChannel = this.props.lobbyChannel,
         isLobbySelected = false;
-      lobbyChannel = chat.findChannel(ChatUtilities.EVERYONE_CHANNEL_NAME);
       if (lobbyChannel) {
         isLobbySelected = isChatExpanded && selectedChannelId === lobbyChannel.channelId;
         lobbyItem = (
@@ -155,7 +176,7 @@ export default class SocialSidebarNavigator extends React.Component {
   };
 
   render() {
-    const { chat, viewer, isChatExpanded, selectedChannelId, gameMetaChannelId } = this.props;
+    const { chat, viewer, isChatExpanded, selectedChannelId } = this.props;
     const { theme } = this.props;
     if (!viewer) {
       return null;

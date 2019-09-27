@@ -16,9 +16,6 @@ const CHANNEL_FIELDS = `
   gameId
   hasUnreadMessages
   unreadNotificationCount
-  subscribedUsers {
-    userId
-  }
 `;
 
 export const getSubscribedChannels = async () => {

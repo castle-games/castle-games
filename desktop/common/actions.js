@@ -77,6 +77,7 @@ const GAME_FIELDS = `
   }
   draft
   storageId
+  chatChannelId
 `;
 
 const GAME_ITEMS = `
