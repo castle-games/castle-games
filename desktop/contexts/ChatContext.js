@@ -65,21 +65,10 @@ class ChatContextManager extends React.Component {
 
   componentDidMount() {
     this._mounted = true;
-    window.addEventListener('CASTLE_ADD_CHAT_NOTIFICATION', this._handleChatNotification);
-
-    // TODO(jim): Easy way to test chat notifications.
-    /*
-    this._handleChatNotification({
-      params: { message: 'Testing... https://castle.games lol' },
-      type: 'NOTICE',
-      timestamp: new Date().toString(),
-    });
-    */
   }
 
   componentWillUnmount() {
     this._mounted = false;
-    window.removeEventListener('CASTLE_ADD_CHAT_NOTIFICATION', this._handleChatNotification);
   }
 
   _update = async (prevProps, prevState) => {
@@ -665,37 +654,6 @@ class ChatContextManager extends React.Component {
       }
     }
     return null;
-  };
-
-  _handleChatNotification = (event) => {
-    // TODO: replace this with something better
-    let result;
-    if (event.params.game) {
-      result = this.findChannelForGame(event.params.game);
-    }
-    if (!result) {
-      result = this.findChannel(ChatUtilities.EVERYONE_CHANNEL_NAME);
-    }
-    if (result) {
-      this.setState(async (state) => {
-        let c = { ...state.channels[result.channelId] };
-        if (!c.messages) {
-          c.messages = [];
-        }
-        c.messages.push({
-          fromUserId: -1,
-          body: await ChatUtilities.formatMessageAsync(event.params.message),
-          timestamp: new Date().toString(),
-          createdTime: new Date().toString(),
-        });
-        let channels = { ...state.channels };
-        channels[result.channelId] = c;
-        return {
-          ...state,
-          channels,
-        };
-      });
-    }
   };
 
   _joinOrCreateChannelForGame = async (game) => {
