@@ -7,6 +7,7 @@ import './GhostConsole';
 // Implemented by 'GhostView.m' / 'GhostViewManager.java'.
 const NativeGhostView = requireNativeComponent('GhostView', null);
 
+// Apply dimensions settings by computing the actual game view size that fits in the container size
 const useDimensions = ({ settings }) => {
   // Give Lua the constant dimensions
   GhostEvents.send('CASTLE_SET_DIMENSIONS', { width: settings.width, height: settings.height });
