@@ -19,7 +19,7 @@ const useDimensions = ({ settings }) => {
   const [height, setHeight] = useState(null);
 
   // Compute game view dimensions when container layout occurs
-  const onContainerLayout = ({
+  const onLayoutContainer = ({
     nativeEvent: {
       layout: { width: containerWidth, height: containerHeight },
     },
@@ -75,7 +75,7 @@ const useDimensions = ({ settings }) => {
     }
   };
 
-  return { screenScaling, applyScreenScaling, width, height, onContainerLayout };
+  return { screenScaling, applyScreenScaling, width, height, onLayoutContainer };
 };
 
 const GhostView = ({ style, uri, dimensionsSettings }) => {
@@ -90,7 +90,7 @@ const GhostView = ({ style, uri, dimensionsSettings }) => {
         alignItems: 'center',
         justifyContent: 'center',
       }}
-      onLayout={dimensionsHook.onContainerLayout}>
+      onLayout={dimensionsHook.onLayoutContainer}>
       {dimensionsHook.width !== null && dimensionsHook.height !== null ? (
         // Use a `View` around the actual native component since it doesn't clip properly in some cases otherwise
         <View

@@ -5,6 +5,11 @@ import url from 'url';
 
 import GhostView from './ghost/GhostView';
 
+// const DEFAULT_GAME_URI =
+//   'https://raw.githubusercontent.com/castle-games/ghost-tests/master/screensize/project-defaults.castle';
+const DEFAULT_GAME_URI =
+  'https://raw.githubusercontent.com/schazers/badboxart/master/robosquash.castle';
+
 // Fetch and return game metadata, or `null` if still fetching
 const useMetadata = ({ gameUri }) => {
   const [metadata, setMetadata] = useState(null);
@@ -70,6 +75,8 @@ const computeDimensionsSettings = ({ metadata }) => {
 
 // Given a game URI, run and display the game!
 const GameScreen = ({ gameUri }) => {
+  gameUri = gameUri || DEFAULT_GAME_URI;
+
   const metadata = useMetadata({ gameUri });
 
   return metadata == null ? (

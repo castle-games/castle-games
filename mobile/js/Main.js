@@ -1,17 +1,19 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, StatusBar } from 'react-native';
 
-import GameScreen from './GameScreen';
+import { createRootNavigator } from './Navigation';
 
-// const DEFAULT_GAME_URI =
-//   'https://raw.githubusercontent.com/castle-games/ghost-tests/master/screensize/project-defaults.castle';
-const DEFAULT_GAME_URI =
-  'https://raw.githubusercontent.com/schazers/badboxart/master/robosquash.castle';
+const Main = () => {
+  const RootNavigator = createRootNavigator({
+    initialRouteName: 'SignInNavigator',
+  });
 
-const Main = () => (
-  <View style={{ flex: 1 }}>
-    <GameScreen gameUri={DEFAULT_GAME_URI} />
-  </View>
-);
+  return (
+    <View style={{ flex: 1 }}>
+      <StatusBar backgroundColor="white" barStyle="dark-content" />
+      <RootNavigator />
+    </View>
+  );
+};
 
 export default Main;
