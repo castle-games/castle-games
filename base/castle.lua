@@ -398,7 +398,7 @@ castle.multiplayer = {}
 
 function castle.multiplayer.connectClient(mediaUrl, callback)
     jsEvents.listen('CASTLE_CONNECT_MULTIPLAYER_CLIENT_RESPONSE', function(params)
-        callback(params.address)
+        callback(params.address, params.sessionToken)
     end)
     jsEvents.send('CASTLE_CONNECT_MULTIPLAYER_CLIENT_REQUEST', {
         mediaUrl = mediaUrl,
@@ -413,6 +413,16 @@ function castle.multiplayer.heartbeat(numClients)
     end
 end
 castle.heartbeat = castle.multiplayer.heartbeat -- XXX: Backwards compat...
+
+ffi.cdef 'void ghostHeartbeatV2(int numClients, const char **sessionTokens);'
+function castle.multiplayer.heartbeatV2(numClients, sessionTokens)
+    if CASTLE_SERVER then
+        -- +1 is needed for zero terminator
+        local arg = ffi.new("const char*[" .. (#sessionTokens + 1) .. "]", sessionTokens)
+
+        C.ghostHeartbeatV2(numClients, arg)
+    end
+end
 
 ffi.cdef 'void ghostSetIsAcceptingPlayers(bool isAcceptingPlayers);'
 function castle.multiplayer.setIsAcceptingClients(isAcceptingClients)

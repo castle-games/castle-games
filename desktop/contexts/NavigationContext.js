@@ -278,6 +278,7 @@ class NavigationContextManager extends React.Component {
     }
     NativeUtil.sendLuaEvent('CASTLE_CONNECT_MULTIPLAYER_CLIENT_RESPONSE', {
       address: response.address,
+      sessionToken: response.sessionToken,
     });
 
     if (response.sessionId && game) {

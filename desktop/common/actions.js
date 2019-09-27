@@ -856,6 +856,7 @@ export async function multiplayerJoinAsync(gameId, castleFileUrl, entryPoint, se
             sessionId
             address
             isNewSession
+            sessionToken
           }
         }
       `,
