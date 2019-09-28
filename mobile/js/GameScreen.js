@@ -115,6 +115,7 @@ const GameView = ({ gameUri }) => {
     };
   }
 
+  // Render a `GhostView` if the metadata is loaded
   return game === null ? (
     <View style={{ backgroundColor: 'black', width: '100%', height: '100%' }} />
   ) : (
