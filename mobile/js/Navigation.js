@@ -38,5 +38,5 @@ export const createRootNavigator = ({ initialRouteName }) => {
     )
   );
 
-  return () => <RootNavigator />;
+  return () => <RootNavigator enableURLHandling={false} />;
 };
