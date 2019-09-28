@@ -5,7 +5,7 @@ import { apolloClient, gql } from './Session';
 GhostEvents.listen('CASTLE_CONNECT_MULTIPLAYER_CLIENT_REQUEST', async ({ mediaUrl }) => {
   const { data } = await apolloClient.mutate({
     mutation: gql`
-      mutation($mediaUrl: String!) {
+      mutation JoinMultiplayerSession($mediaUrl: String!) {
         joinMultiplayerSession(mediaUrl: $mediaUrl) {
           address
         }

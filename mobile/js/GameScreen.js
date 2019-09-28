@@ -88,8 +88,9 @@ const GameView = ({ gameUri }) => {
   // Get game by querying `gameUri`
   const { loading: queryLoading, data } = useQuery(
     gql`
-      query($url: String) {
+      query Game($url: String) {
         game(url: $url) {
+          gameId
           entryPoint
           metadata
         }

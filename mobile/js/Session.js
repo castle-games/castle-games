@@ -29,7 +29,7 @@ export const signInAsync = async ({ username, password }) => {
     },
   } = await apolloClient.query({
     query: gql`
-      query($username: String!) {
+      query GetUserId($username: String!) {
         userForLoginInput(who: $username) {
           userId
         }
@@ -41,7 +41,7 @@ export const signInAsync = async ({ username, password }) => {
   // Log in and save the auth token
   const result = await apolloClient.mutate({
     mutation: gql`
-      mutation($userId: ID!, $password: String!) {
+      mutation SignIn($userId: ID!, $password: String!) {
         login(userId: $userId, password: $password) {
           userId
           token
