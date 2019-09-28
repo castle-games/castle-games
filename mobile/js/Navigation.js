@@ -2,14 +2,12 @@
 // module so that the app's navigation flow is always clear.
 
 import React from 'react';
-import {
-  createSwitchNavigator,
-  createAppContainer,
-} from 'react-navigation';
+import { createSwitchNavigator, createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
 import GameScreen from './GameScreen';
 import SignInScreen from './SignInScreen';
+import * as DeepLinks from './DeepLinks';
 
 const GameNavigator = createStackNavigator({
   GameScreen: {
@@ -38,5 +36,5 @@ export const createRootNavigator = ({ initialRouteName }) => {
     )
   );
 
-  return () => <RootNavigator enableURLHandling={false} />;
+  return () => <RootNavigator ref={DeepLinks.setRootNavigatorRef} enableURLHandling={false} />;
 };

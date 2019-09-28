@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
 import castleMetadata from 'castle-metadata';
 import url from 'url';
+import { useNavigationParam } from 'react-navigation-hooks';
 
 import GhostView from './ghost/GhostView';
 
@@ -17,7 +18,7 @@ const useMetadata = ({ gameUri }) => {
   useEffect(() => {
     let mounted = true;
 
-    const fetchMetadataAsync = async () => {
+    (async () => {
       let newMetadata = {};
       if (gameUri.endsWith('.castle')) {
         const result = await castleMetadata.fetchMetadataForUrlAsync(gameUri);
@@ -28,8 +29,7 @@ const useMetadata = ({ gameUri }) => {
       if (mounted) {
         setMetadata(newMetadata);
       }
-    };
-    fetchMetadataAsync();
+    })();
 
     return () => (mounted = false);
   }, [gameUri]);
@@ -75,7 +75,8 @@ const computeDimensionsSettings = ({ metadata }) => {
 
 // Given a game URI, run and display the game!
 const GameScreen = ({ gameUri }) => {
-  gameUri = gameUri || DEFAULT_GAME_URI;
+  // Prefer prop, then navigation param, then default URI
+  gameUri = gameUri || useNavigationParam('gameUri') || DEFAULT_GAME_URI;
 
   const metadata = useMetadata({ gameUri });
 

@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { View, TouchableOpacity, Text, TextInput } from 'react-native';
-import { useNavigation } from 'react-navigation-hooks';
+import { useNavigation, useNavigationParam } from 'react-navigation-hooks';
+
 import * as Session from './Session';
+import { navigateToUri } from './DeepLinks';
 
 const textInputStyle = {
   width: '100%',
@@ -15,13 +17,18 @@ const textInputStyle = {
 const SignInScreen = () => {
   const { navigate } = useNavigation();
 
+  const uriAfter = useNavigationParam('uriAfter');
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const onPressSignIn = async () => {
     await Session.signInAsync({ username, password });
-    await new Promise(resolve => setTimeout(resolve, 100));
-    navigate('GameScreen');
+    if (uriAfter) {
+      navigateToUri(uriAfter);
+    } else {
+      navigate('GameScreen');
+    }
   };
 
   return (
