@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, StatusBar, Text } from 'react-native';
+import { ApolloProvider } from '@apollo/react-hooks';
 
 import { createRootNavigator } from './Navigation';
 import * as Session from './Session';
@@ -50,7 +51,9 @@ const Main = () => {
   return (
     <View style={{ flex: 1 }}>
       <StatusBar backgroundColor="white" barStyle="dark-content" />
-      <RootNavigator />
+      <ApolloProvider client={Session.apolloClient}>
+        <RootNavigator />
+      </ApolloProvider>
     </View>
   );
 };

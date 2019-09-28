@@ -3,6 +3,8 @@ import { View } from 'react-native';
 import castleMetadata from 'castle-metadata';
 import url from 'url';
 import { useNavigationParam } from 'react-navigation-hooks';
+import { useQuery } from '@apollo/react-hooks';
+import gql from 'graphql-tag';
 
 import GhostView from './ghost/GhostView';
 
@@ -11,35 +13,40 @@ import GhostView from './ghost/GhostView';
 const DEFAULT_GAME_URI =
   'https://raw.githubusercontent.com/schazers/badboxart/master/robosquash.castle';
 
+const castleUriToHTTPSUri = uri => uri.replace(/^castle:\/\//, 'https://');
+
 // Fetch and return game metadata, or `null` if still fetching
-const useMetadata = ({ gameUri }) => {
+const useFetchMetadata = ({ gameUri, shouldFetch }) => {
   const [metadata, setMetadata] = useState(null);
 
   useEffect(() => {
     let mounted = true;
 
-    (async () => {
-      let newMetadata = {};
-      if (gameUri.endsWith('.castle')) {
-        const httpsUri = gameUri.replace(/^castle:\/\//, 'https://');
-        const result = await castleMetadata.fetchMetadataForUrlAsync(httpsUri);
-        if (result.metadata) {
-          newMetadata = result.metadata;
+    if (shouldFetch) {
+      (async () => {
+        let newMetadata = {};
+        if (gameUri.endsWith('.castle')) {
+          const result = await castleMetadata.fetchMetadataForUrlAsync(
+            castleUriToHTTPSUri(gameUri)
+          );
+          if (result.metadata) {
+            newMetadata = result.metadata;
+          }
         }
-      }
-      if (mounted) {
-        setMetadata(newMetadata);
-      }
-    })();
+        if (mounted) {
+          setMetadata(newMetadata);
+        }
+      })();
+    }
 
     return () => (mounted = false);
-  }, [gameUri]);
+  }, [gameUri, shouldFetch]);
 
   return metadata;
 };
 
 // Get the URI of the actual entrypoint Lua file for the game
-const computeEntrypointUri = ({ gameUri, metadata }) =>
+const computeEntryPointUri = ({ gameUri, metadata }) =>
   metadata.main ? url.resolve(gameUri, metadata.main) : gameUri;
 
 // Read dimensions settings into the `{ width, height, upscaling, downscaling }` format
@@ -76,15 +83,45 @@ const computeDimensionsSettings = ({ metadata }) => {
 
 // Given a `gameUri`, run and display the game!
 const GameView = ({ gameUri }) => {
-  const metadata = useMetadata({ gameUri });
+  let game = null;
 
-  return metadata == null ? (
+  // Get game by querying `gameUri`
+  const { loading: queryLoading, error, data } = useQuery(
+    gql`
+      query($url: String) {
+        game(url: $url) {
+          title
+          entryPoint
+          metadata
+        }
+      }
+    `,
+    { variables: { url: castleUriToHTTPSUri(gameUri) } }
+  );
+  if (!queryLoading && data && data.game) {
+    game = data.game;
+  }
+
+  // If query loaded and game wasn't found, try directly fetching metadata from `gameUri`
+  const fetchedMetadata = useFetchMetadata({
+    gameUri,
+    shouldFetch: !queryLoading && !game,
+  });
+  if (fetchedMetadata) {
+    game = {
+      gameUri,
+      entryPoint: computeEntryPointUri({ gameUri, metadata: fetchedMetadata }),
+      metadata: fetchedMetadata,
+    };
+  }
+
+  return game === null ? (
     <View style={{ backgroundColor: 'black', width: '100%', height: '100%' }} />
   ) : (
     <GhostView
       style={{ width: '100%', height: '100%' }}
-      uri={computeEntrypointUri({ gameUri, metadata })}
-      dimensionsSettings={computeDimensionsSettings({ metadata })}
+      uri={game.entryPoint}
+      dimensionsSettings={computeDimensionsSettings({ metadata: game.metadata })}
     />
   );
 };
