@@ -86,11 +86,10 @@ const GameView = ({ gameUri }) => {
   let game = null;
 
   // Get game by querying `gameUri`
-  const { loading: queryLoading, error, data } = useQuery(
+  const { loading: queryLoading, data } = useQuery(
     gql`
       query($url: String) {
         game(url: $url) {
-          title
           entryPoint
           metadata
         }
@@ -130,7 +129,8 @@ const GameView = ({ gameUri }) => {
 // Screen-level component which reads navigation parameters
 const GameScreen = ({ gameUri }) => {
   // Prefer prop, then navigation param, then default URI
-  gameUri = gameUri || useNavigationParam('gameUri') || DEFAULT_GAME_URI;
+  const gameUriNavigationParam = useNavigationParam('gameUri');
+  gameUri = gameUri || gameUriNavigationParam || DEFAULT_GAME_URI;
 
   // Use `key` to mount a new instance of `GameView` when `gameUri` changes
   return <GameView key={gameUri} gameUri={gameUri} />;
