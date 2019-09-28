@@ -21,7 +21,8 @@ const useMetadata = ({ gameUri }) => {
     (async () => {
       let newMetadata = {};
       if (gameUri.endsWith('.castle')) {
-        const result = await castleMetadata.fetchMetadataForUrlAsync(gameUri);
+        const httpsUri = gameUri.replace(/^castle:\/\//, 'https://');
+        const result = await castleMetadata.fetchMetadataForUrlAsync(httpsUri);
         if (result.metadata) {
           newMetadata = result.metadata;
         }
@@ -73,11 +74,8 @@ const computeDimensionsSettings = ({ metadata }) => {
   return dimensionsSettings;
 };
 
-// Given a game URI, run and display the game!
-const GameScreen = ({ gameUri }) => {
-  // Prefer prop, then navigation param, then default URI
-  gameUri = gameUri || useNavigationParam('gameUri') || DEFAULT_GAME_URI;
-
+// Given a `gameUri`, run and display the game!
+const GameView = ({ gameUri }) => {
   const metadata = useMetadata({ gameUri });
 
   return metadata == null ? (
@@ -89,6 +87,15 @@ const GameScreen = ({ gameUri }) => {
       dimensionsSettings={computeDimensionsSettings({ metadata })}
     />
   );
+};
+
+// Screen-level component which reads navigation parameters
+const GameScreen = ({ gameUri }) => {
+  // Prefer prop, then navigation param, then default URI
+  gameUri = gameUri || useNavigationParam('gameUri') || DEFAULT_GAME_URI;
+
+  // Use `key` to mount a new instance of `GameView` when `gameUri` changes
+  return <GameView key={gameUri} gameUri={gameUri} />;
 };
 
 export default GameScreen;

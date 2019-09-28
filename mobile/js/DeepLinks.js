@@ -55,7 +55,7 @@ export const setRootNavigatorRef = ref => {
 
 // Listen for `Linking` events and initial URI
 
-Linking.addEventListener('url', addPendingUri);
+Linking.addEventListener('url', ({ url }) => addPendingUri(url));
 
 (async () => {
   const initialUri = await Linking.getInitialURL();
