@@ -74,7 +74,8 @@ public class GhostViewManager extends SimpleViewManager<ViewGroup> implements Li
   @Override
   public void onHostPause() {
     if (gameActivity != null && gameActivity.isRunning()) {
-      gameActivity.onWindowFocusChanged(false);
+      // NOTE: On testing, found that only `gameActivity.pause()` is required
+//      gameActivity.onWindowFocusChanged(false);
       gameActivity.pause();
     }
   }
@@ -82,8 +83,9 @@ public class GhostViewManager extends SimpleViewManager<ViewGroup> implements Li
   @Override
   public void onHostResume() {
     if (gameActivity != null && gameActivity.isRunning()) {
+      // NOTE: On testing, found that only `gameActivity.resume()` is required
       gameActivity.resume();
-      gameActivity.onWindowFocusChanged(true);
+//      gameActivity.onWindowFocusChanged(true);
     }
   }
 
