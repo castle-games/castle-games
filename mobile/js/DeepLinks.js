@@ -3,6 +3,7 @@ import { NavigationActions } from 'react-navigation';
 
 import * as Session from './Session';
 import * as MainSwitcher from './MainSwitcher';
+import * as GameScreen from './GameScreen';
 
 let rootNavigatorRef = null;
 
@@ -24,6 +25,7 @@ export const navigateToUri = uri => {
   } else {
     // Game URI?
     MainSwitcher.switchTo('game');
+    GameScreen.goToGame({ gameUri: uri });
   }
 };
 

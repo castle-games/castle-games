@@ -126,10 +126,17 @@ const GameView = ({ gameUri }) => {
   );
 };
 
-// Screen-level component which reads navigation parameters
-const GameScreen = ({ gameUri }) => {
-  // Prefer prop, then navigation param, then default URI
-  gameUri = gameUri || DEFAULT_GAME_URI;
+export let goToGame = () => {};
+
+// Top-level component which stores the `gameUri` state
+const GameScreen = () => {
+  const [gameUri, setGameUri] = useState(DEFAULT_GAME_URI);
+
+  goToGame = ({ game: newGame, gameUri: newGameUri }) => {
+    if (newGameUri) {
+      setGameUri(newGameUri);
+    }
+  };
 
   // Use `key` to mount a new instance of `GameView` when `gameUri` changes
   return <GameView key={gameUri} gameUri={gameUri} />;
