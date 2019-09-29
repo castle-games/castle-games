@@ -1,51 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
-import castleMetadata from 'castle-metadata';
-import url from 'url';
-import { useQuery } from '@apollo/react-hooks';
+import { useLazyQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 
 import GhostView from './ghost/GhostView';
 import * as GhostEvents from './ghost/GhostEvents';
 
-const DEFAULT_GAME_URI =
-  'https://raw.githubusercontent.com/schazers/badboxart/master/robosquash.castle';
-
 const castleUriToHTTPSUri = uri => uri.replace(/^castle:\/\//, 'https://');
-
-// Fetch and return game metadata, or `null` if still fetching
-const useFetchMetadata = ({ gameUri, shouldFetch }) => {
-  const [metadata, setMetadata] = useState(null);
-
-  useEffect(() => {
-    let mounted = true;
-
-    if (shouldFetch) {
-      (async () => {
-        let newMetadata = {};
-        if (gameUri.endsWith('.castle')) {
-          const result = await castleMetadata.fetchMetadataForUrlAsync(
-            castleUriToHTTPSUri(gameUri)
-          );
-          if (result.metadata) {
-            newMetadata = result.metadata;
-          }
-        }
-        if (mounted) {
-          setMetadata(newMetadata);
-        }
-      })();
-    }
-
-    return () => (mounted = false);
-  }, [gameUri, shouldFetch]);
-
-  return metadata;
-};
-
-// Get the URI of the actual entrypoint Lua file for the game
-const computeEntryPointUri = ({ gameUri, metadata }) =>
-  metadata.main ? url.resolve(gameUri, metadata.main) : gameUri;
 
 // Read dimensions settings into the `{ width, height, upscaling, downscaling }` format
 const computeDimensionsSettings = ({ metadata }) => {
@@ -79,16 +40,15 @@ const computeDimensionsSettings = ({ metadata }) => {
   return dimensionsSettings;
 };
 
+// A line of text in the loader overlay
 const LoaderText = ({ children }) => (
   <Text style={{ color: 'white', fontSize: 12 }}>{children}</Text>
 );
 
-// Given a `gameUri`, run and display the game!
-const GameView = ({ gameUri }) => {
-  let game = null;
-
-  // Get game by querying `gameUri`
-  const { loading: queryLoading, data } = useQuery(
+// Given a `game` or `gameUri`, run and display the game!
+const GameView = ({ game, gameUri }) => {
+  // Set up a query to get the `game` from a '.castle' `gameUri`
+  const [callQuery, { loading: queryLoading, called: queryCalled, data: queryData }] = useLazyQuery(
     gql`
       query Game($url: String) {
         game(url: $url) {
@@ -98,22 +58,24 @@ const GameView = ({ gameUri }) => {
         }
       }
     `,
-    { variables: { url: castleUriToHTTPSUri(gameUri) } }
+    { variables: { url: gameUri && castleUriToHTTPSUri(gameUri) } }
   );
-  if (!queryLoading && data && data.game) {
-    game = data.game;
+
+  // If `game` isn't given and `gameUri` is to a '.castle' file, query for the `game`
+  if (!game && gameUri && gameUri.endsWith('.castle')) {
+    if (!queryCalled) {
+      callQuery();
+    } else if (!queryLoading && queryData && queryData.game) {
+      game = queryData.game;
+    }
   }
 
-  // If query loaded and game wasn't found, try directly fetching metadata from `gameUri`
-  const fetchedMetadata = useFetchMetadata({
-    gameUri,
-    shouldFetch: !queryLoading && !game,
-  });
-  if (fetchedMetadata) {
+  // If `game` isn't given and `gameUri` isn't to a '.castle' file, assume it's a URI to a Lua
+  // file and just use a stub `game`
+  if (!game && gameUri && !gameUri.endsWith('.castle')) {
     game = {
-      gameUri,
-      entryPoint: computeEntryPointUri({ gameUri, metadata: fetchedMetadata }),
-      metadata: fetchedMetadata,
+      entryPoint: gameUri,
+      metadata: {},
     };
   }
 
@@ -193,7 +155,9 @@ const GameView = ({ gameUri }) => {
             alignItems: 'flex-start',
             padding: 8,
           }}>
-          {queryLoading ? (
+          {!game && !gameUri ? (
+            <LoaderText>No game</LoaderText>
+          ) : queryLoading ? (
             <LoaderText>Fetching game...</LoaderText>
           ) : luaNetworkRequests.length === 0 ? (
             <LoaderText>Starting game...</LoaderText>
@@ -210,18 +174,25 @@ const GameView = ({ gameUri }) => {
 // to get the `game`.
 export let goToGame = ({ game, gameUri }) => {};
 
-// Top-level component which stores the `gameUri` state
+// Top-level component which stores the `game` / `gameUri` state
 const GameScreen = () => {
-  const [gameUri, setGameUri] = useState(DEFAULT_GAME_URI);
+  const [game, setGame] = useState(null);
+  const [gameUri, setGameUri] = useState(null);
 
   goToGame = ({ game: newGame, gameUri: newGameUri }) => {
+    // Prefer `game`, then `gameUri`
+    if (newGame) {
+      setGame(game);
+      setGameUri(null);
+    }
     if (newGameUri) {
+      setGame(null);
       setGameUri(newGameUri);
     }
   };
 
-  // Use `key` to mount a new instance of `GameView` when `gameUri` changes
-  return <GameView key={gameUri} gameUri={gameUri} />;
+  // Use `key` to mount a new instance of `GameView` when the game changes
+  return <GameView key={(game && game.entryPoint) || gameUri} game={game} gameUri={gameUri} />;
 };
 
 export default GameScreen;
