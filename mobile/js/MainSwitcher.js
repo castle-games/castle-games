@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text } from 'react-native';
 
-import { createRootNavigator } from './Navigation';
+import { RootNavigator } from './Navigation';
 import GameScreen from './GameScreen';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
@@ -23,18 +23,16 @@ const Page = ({ visible, children }) => (
 
 const MainSwitcher = () => {
   // `mode` is one of `'game'` or `'navigator'`
-  const [mode, setMode] = useState('game');
+  const [mode, setMode] = useState('navigator');
 
   switchTo = setMode;
-
-  const RootNavigator = createRootNavigator();
 
   return (
     <View style={{ flex: 1, backgroundColor: 'white' }}>
       <TouchableOpacity
         style={{ backgroundColor: '#ddd', padding: 4, alignItems: 'center' }}
         onPress={() => setMode(mode === 'game' ? 'navigator' : 'game')}>
-        <Text>{mode === 'game' ? 'Go to Castle' : 'Back to Game'}</Text>
+        <Text>{mode === 'game' ? 'Go to Castle' : 'Go to Game'}</Text>
       </TouchableOpacity>
       <View style={{ flex: 1 }}>
         <Page visible={mode === 'game'}>
