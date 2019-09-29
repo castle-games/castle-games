@@ -2,6 +2,7 @@ import { Linking } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 
 import * as Session from './Session';
+import * as MainSwitcher from './MainSwitcher';
 
 let rootNavigatorRef = null;
 
@@ -22,12 +23,7 @@ export const navigateToUri = uri => {
     });
   } else {
     // Game URI?
-    navigateToRoute({
-      routeName: 'GameScreen',
-      params: {
-        gameUri: uri,
-      },
-    });
+    MainSwitcher.switchTo('game');
   }
 };
 

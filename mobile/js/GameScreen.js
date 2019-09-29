@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
 import castleMetadata from 'castle-metadata';
 import url from 'url';
-import { useNavigationParam } from 'react-navigation-hooks';
 import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 
@@ -130,8 +129,7 @@ const GameView = ({ gameUri }) => {
 // Screen-level component which reads navigation parameters
 const GameScreen = ({ gameUri }) => {
   // Prefer prop, then navigation param, then default URI
-  const gameUriNavigationParam = useNavigationParam('gameUri');
-  gameUri = gameUri || gameUriNavigationParam || DEFAULT_GAME_URI;
+  gameUri = gameUri || DEFAULT_GAME_URI;
 
   // Use `key` to mount a new instance of `GameView` when `gameUri` changes
   return <GameView key={gameUri} gameUri={gameUri} />;

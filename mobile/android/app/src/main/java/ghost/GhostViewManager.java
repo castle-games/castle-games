@@ -12,6 +12,7 @@ import com.facebook.react.uimanager.annotations.ReactProp;
 
 import org.love2d.android.GameActivity;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class GhostViewManager extends SimpleViewManager<ViewGroup> implements LifecycleEventListener {
@@ -43,6 +44,15 @@ public class GhostViewManager extends SimpleViewManager<ViewGroup> implements Li
       gameActivity.handleIntent(new Intent(activity, GameActivity.class));
       GameActivity.setMetricsFromDisplay(activity.getWindowManager().getDefaultDisplay());
       gameActivity.loadLibraries();
+    }
+  }
+
+  @Override
+  public void onDropViewInstance(@Nonnull ViewGroup view) {
+    super.onDropViewInstance(view);
+
+    if (gameActivity != null) {
+      gameActivity.resetNative();
     }
   }
 

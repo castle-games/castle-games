@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { View, StatusBar, Text } from 'react-native';
 import { ApolloProvider } from '@apollo/react-hooks';
 
-import { createRootNavigator } from './Navigation';
 import * as Session from './Session';
+import MainSwitcher from './MainSwitcher';
 
 // Initialize a `Session`
 const useSession = () => {
@@ -43,16 +43,11 @@ const Main = () => {
     );
   }
 
-  // Pick initial screen based on whether signed in
-  const RootNavigator = createRootNavigator({
-    initialRouteName: Session.isSignedIn() ? 'TabNavigator' : 'SignInNavigator',
-  });
-
   return (
     <View style={{ flex: 1 }}>
       <StatusBar backgroundColor="white" barStyle="dark-content" />
       <ApolloProvider client={Session.apolloClient}>
-        <RootNavigator />
+        <MainSwitcher />
       </ApolloProvider>
     </View>
   );

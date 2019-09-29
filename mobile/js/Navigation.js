@@ -6,17 +6,10 @@ import { createSwitchNavigator, createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 
-import GameScreen from './GameScreen';
 import SignInScreen from './SignInScreen';
 import * as DeepLinks from './DeepLinks';
 import HomeScreen from './HomeScreen';
-
-const GameNavigator = createStackNavigator({
-  GameScreen: {
-    screen: GameScreen,
-    navigationOptions: { title: 'Game' },
-  },
-});
+import * as Session from './Session';
 
 const HomeNavigator = createStackNavigator({
   HomeScreen: {
@@ -27,7 +20,6 @@ const HomeNavigator = createStackNavigator({
 
 const TabNavigator = createBottomTabNavigator({
   Home: HomeNavigator,
-  Game: GameNavigator,
 });
 
 const SignInNavigator = createStackNavigator({
@@ -37,7 +29,7 @@ const SignInNavigator = createStackNavigator({
   },
 });
 
-export const createRootNavigator = ({ initialRouteName }) => {
+export const createRootNavigator = () => {
   const RootNavigator = createAppContainer(
     createSwitchNavigator(
       {
@@ -45,7 +37,8 @@ export const createRootNavigator = ({ initialRouteName }) => {
         TabNavigator,
       },
       {
-        initialRouteName,
+        // Pick initial screen based on whether signed in
+        initialRouteName: Session.isSignedIn() ? 'TabNavigator' : 'SignInNavigator',
       }
     )
   );

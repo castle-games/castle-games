@@ -1200,15 +1200,6 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
         SDLActivity.onNativeSurfaceDestroyed();
     }
 
-  @Override
-  protected void onDetachedFromWindow() {
-    super.onDetachedFromWindow();
-
-    if (SDLActivity.mSingleton != null) {
-      SDLActivity.mSingleton.resetNative();
-    }
-  }
-
   // Called when the surface is resized
     @Override
     public void surfaceChanged(SurfaceHolder holder,
