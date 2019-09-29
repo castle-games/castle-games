@@ -5,6 +5,7 @@ import gql from 'graphql-tag';
 
 import GhostView from './ghost/GhostView';
 import * as GhostEvents from './ghost/GhostEvents';
+import * as MainSwitcher from './MainSwitcher';
 
 const castleUriToHTTPSUri = uri => uri.replace(/^castle:\/\//, 'https://');
 
@@ -179,10 +180,14 @@ const GameScreen = () => {
   const [game, setGame] = useState(null);
   const [gameUri, setGameUri] = useState(null);
 
-  goToGame = ({ game: newGame, gameUri: newGameUri }) => {
+  goToGame = ({ game: newGame, gameUri: newGameUri, focus = true }) => {
+    if (focus) {
+      MainSwitcher.switchTo('game');
+    }
+
     // Prefer `game`, then `gameUri`
     if (newGame) {
-      setGame(game);
+      setGame(newGame);
       setGameUri(null);
     }
     if (newGameUri) {

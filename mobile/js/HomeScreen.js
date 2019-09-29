@@ -1,16 +1,65 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native';
+import { useQuery } from '@apollo/react-hooks';
+import gql from 'graphql-tag';
+
+import * as GameScreen from './GameScreen';
 
 const HomeScreen = () => {
+  const { loading: queryLoading, error: queryError, data: queryData } = useQuery(gql`
+    query Games {
+      allGames {
+        gameId
+        title
+        owner {
+          username
+        }
+        coverImage {
+          url
+        }
+        entryPoint
+        metadata
+      }
+    }
+  `);
+
   return (
     <View
       style={{
         flex: 1,
         backgroundColor: 'white',
-        alignItems: 'center',
-        justifyContent: 'center',
       }}>
-      <Text>Welcome home!</Text>
+      {queryLoading ? (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <Text>Loading...</Text>
+        </View>
+      ) : !(queryData && queryData.allGames) ? (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <Text>Error fetching games!</Text>
+        </View>
+      ) : (
+        <ScrollView style={{ paddingVertical: 32, paddingHorizontal: '15%' }}>
+          {queryData.allGames.map(game => (
+            <TouchableOpacity
+              key={game.gameId}
+              style={{
+                width: '100%',
+                borderWidth: 1,
+                borderColor: '#ddd',
+                borderRadius: 6,
+                marginBottom: 24,
+                overflow: 'hidden',
+              }}
+              delayPressIn={50}
+              onPress={() => GameScreen.goToGame({ game })}>
+              <View style={{ padding: 8 }}>
+                <Text style={{ fontSize: 18, fontWeight: '900' }}>{game.title}</Text>
+                <Text style={{ fontSize: 14, color: '#aaa' }}>{game.owner.username}</Text>
+              </View>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      )}
     </View>
   );
 };
