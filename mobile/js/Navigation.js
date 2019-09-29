@@ -4,16 +4,30 @@
 import React from 'react';
 import { createSwitchNavigator, createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
+import { createBottomTabNavigator } from 'react-navigation-tabs';
 
 import GameScreen from './GameScreen';
 import SignInScreen from './SignInScreen';
 import * as DeepLinks from './DeepLinks';
+import HomeScreen from './HomeScreen';
 
 const GameNavigator = createStackNavigator({
   GameScreen: {
     screen: GameScreen,
     navigationOptions: { title: 'Game' },
   },
+});
+
+const HomeNavigator = createStackNavigator({
+  HomeScreen: {
+    screen: HomeScreen,
+    navigationOptions: { title: 'Home' },
+  },
+});
+
+const TabNavigator = createBottomTabNavigator({
+  Home: HomeNavigator,
+  Game: GameNavigator,
 });
 
 const SignInNavigator = createStackNavigator({
@@ -28,7 +42,7 @@ export const createRootNavigator = ({ initialRouteName }) => {
     createSwitchNavigator(
       {
         SignInNavigator,
-        GameNavigator,
+        TabNavigator,
       },
       {
         initialRouteName,

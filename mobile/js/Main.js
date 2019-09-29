@@ -45,7 +45,7 @@ const Main = () => {
 
   // Pick initial screen based on whether signed in
   const RootNavigator = createRootNavigator({
-    initialRouteName: Session.isSignedIn() ? 'GameNavigator' : 'SignInNavigator',
+    initialRouteName: Session.isSignedIn() ? 'TabNavigator' : 'SignInNavigator',
   });
 
   return (
