@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
+import FastImage from 'react-native-fast-image';
 
 import * as GameScreen from './GameScreen';
 
@@ -52,6 +53,11 @@ const HomeScreen = () => {
               }}
               delayPressIn={50}
               onPress={() => GameScreen.goToGame({ game })}>
+              <FastImage
+                style={{ width: '100%', height: 180 }}
+                source={{ uri: game.coverImage && game.coverImage.url }}
+                resizeMode={FastImage.resizeMode.cover}
+              />
               <View style={{ padding: 8 }}>
                 <Text style={{ fontSize: 18, fontWeight: '900' }}>{game.title}</Text>
                 <Text style={{ fontSize: 14, color: '#aaa' }}>{game.owner.username}</Text>
