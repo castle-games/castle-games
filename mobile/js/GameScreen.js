@@ -126,7 +126,9 @@ const GameView = ({ gameUri }) => {
   );
 };
 
-export let goToGame = () => {};
+// Navigate to a game. Can either be directly given the `game` object, or a `gameUri` to query
+// to get the `game`.
+export let goToGame = ({ game, gameUri }) => {};
 
 // Top-level component which stores the `gameUri` state
 const GameScreen = () => {
