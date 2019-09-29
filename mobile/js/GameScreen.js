@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import castleMetadata from 'castle-metadata';
 import url from 'url';
 import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 
 import GhostView from './ghost/GhostView';
+import * as GhostEvents from './ghost/GhostEvents';
 
-// const DEFAULT_GAME_URI =
-//   'https://raw.githubusercontent.com/castle-games/ghost-tests/master/screensize/project-defaults.castle';
 const DEFAULT_GAME_URI =
   'https://raw.githubusercontent.com/schazers/badboxart/master/robosquash.castle';
 
@@ -80,6 +79,10 @@ const computeDimensionsSettings = ({ metadata }) => {
   return dimensionsSettings;
 };
 
+const LoaderText = ({ children }) => (
+  <Text style={{ color: 'white', fontSize: 12 }}>{children}</Text>
+);
+
 // Given a `gameUri`, run and display the game!
 const GameView = ({ gameUri }) => {
   let game = null;
@@ -114,15 +117,92 @@ const GameView = ({ gameUri }) => {
     };
   }
 
-  // Render a `GhostView` if the metadata is loaded
-  return game === null ? (
-    <View style={{ backgroundColor: 'black', width: '100%', height: '100%' }} />
-  ) : (
-    <GhostView
-      style={{ width: '100%', height: '100%' }}
-      uri={game.entryPoint}
-      dimensionsSettings={computeDimensionsSettings({ metadata: game.metadata })}
-    />
+  // Maintain list of network requests Lua is making
+  const [luaNetworkRequests, setLuaNetworkRequests] = useState([]);
+  useEffect(() => {
+    let mounted = true;
+
+    const listener = GhostEvents.listen(
+      'GHOST_NETWORK_REQUEST',
+      async ({ type, id, url, method }) => {
+        if (mounted) {
+          if (type === 'start') {
+            // Add to `luaNetworkRequests` if `url` is new
+            setLuaNetworkRequests(luaNetworkRequests =>
+              !luaNetworkRequests.find(req => req.url == url)
+                ? [...luaNetworkRequests, { id, url, method }]
+                : luaNetworkRequests
+            );
+          }
+          if (type === 'stop') {
+            // Wait for a slight bit then remove from `luaNetworkRequests`
+            await new Promise(resolve => setTimeout(resolve, 60));
+            if (mounted) {
+              setLuaNetworkRequests(luaNetworkRequests =>
+                luaNetworkRequests.filter(req => req.id !== id)
+              );
+            }
+          }
+        }
+      }
+    );
+
+    return () => {
+      mounted = false;
+      listener.remove();
+    };
+  }, []);
+
+  // Maintain whether game is actually loaded
+  const [gameLoaded, setGameLoaded] = useState(false);
+  useEffect(() => {
+    let mounted = true;
+    const listener = GhostEvents.listen('CASTLE_GAME_LOADED', () => {
+      if (mounted) {
+        setGameLoaded(true);
+      }
+    });
+    return () => {
+      mounted = false;
+      listener.remove();
+    };
+  }, []);
+
+  return (
+    <View style={{ flex: 1 }}>
+      {game !== null ? (
+        // Render `GhostView` when `game` is available
+        <GhostView
+          style={{ width: '100%', height: '100%' }}
+          uri={game.entryPoint}
+          dimensionsSettings={computeDimensionsSettings({ metadata: game.metadata })}
+        />
+      ) : null}
+
+      {!gameLoaded ? (
+        // Render loader until `gameLoaded`
+        <View
+          style={{
+            position: 'absolute',
+            left: 0,
+            top: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'black',
+            justifyContent: 'flex-end',
+            alignItems: 'flex-start',
+            padding: 8,
+          }}>
+          {queryLoading ? (
+            <LoaderText>Fetching game...</LoaderText>
+          ) : luaNetworkRequests.length === 0 ? (
+            <LoaderText>Starting game...</LoaderText>
+          ) : (
+            luaNetworkRequests.map(({ url }) => <LoaderText key={url}>Fetching {url}</LoaderText>)
+          )}
+        </View>
+      ) : null}
+    </View>
   );
 };
 
