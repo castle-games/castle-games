@@ -380,7 +380,7 @@ public class SDLActivity extends Activity {
     }
 
   public void pause() {
-    Log.v(TAG, "resume()");
+    Log.v(TAG, "pause()");
     mNextNativeState = NativeState.PAUSED;
     mIsResumedCalled = false;
 

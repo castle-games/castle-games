@@ -39,4 +39,4 @@ export const sendAsync = async (name, params) => {
 export const clearAsync = async () => {
   await GhostChannels.clearAsync('JS_EVENTS');
   await GhostChannels.clearAsync('LUA_JS_EVENTS');
-}
+};

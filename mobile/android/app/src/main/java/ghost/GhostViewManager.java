@@ -2,6 +2,7 @@ package ghost;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 import android.view.ViewGroup;
 
 import com.facebook.react.bridge.LifecycleEventListener;
@@ -73,6 +74,7 @@ public class GhostViewManager extends SimpleViewManager<ViewGroup> implements Li
 
   @Override
   public void onHostPause() {
+    Log.v("GHOST", "onHostPause()");
     if (gameActivity != null && gameActivity.isRunning()) {
       // NOTE: On testing, found that only `gameActivity.pause()` is required
 //      gameActivity.onWindowFocusChanged(false);
@@ -82,6 +84,7 @@ public class GhostViewManager extends SimpleViewManager<ViewGroup> implements Li
 
   @Override
   public void onHostResume() {
+    Log.v("GHOST", "onHostResume()");
     if (gameActivity != null && gameActivity.isRunning()) {
       // NOTE: On testing, found that only `gameActivity.resume()` is required
       gameActivity.resume();
