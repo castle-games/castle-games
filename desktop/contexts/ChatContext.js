@@ -206,7 +206,7 @@ class ChatContextManager extends React.Component {
   // checks if we have a chat channel for this game,
   // creates it if not, and navigates to it.
   openChannelForGame = async (game) => {
-    if (!game || !game.gameId) return;
+    if (!game || !game.gameId || !game.chatChannelId) return false;
 
     const channelId = await this._observeChannelForGame(game);
     return this.props.showChatChannel(channelId);

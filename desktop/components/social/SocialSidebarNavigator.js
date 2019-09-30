@@ -104,15 +104,17 @@ export default class SocialSidebarNavigator extends React.Component {
       visibility.isGameVisible !== prevVisibility.isGameVisible ||
       visibility.game !== prevVisibility.game
     ) {
-      if (prevVisibility.game) {
+      if (prevVisibility.game && prevVisibility.game.chatChannelId) {
         await chat.closeChannel(prevVisibility.game.chatChannelId);
         if (prevProps && prevProps.selectedChannelId === prevVisibility.game.chatChannelId) {
           this.props.onSelectChannel(this.props.lobbyChannel);
         }
       }
       if (visibility.game) {
-        await chat.openChannelForGame(visibility.game);
-        this.setState({ gameChatAvailable: visibility.game });
+        const result = await chat.openChannelForGame(visibility.game);
+        if (result !== false) {
+          this.setState({ gameChatAvailable: visibility.game });
+        }
       }
     }
   };
