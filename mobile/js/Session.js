@@ -1,3 +1,5 @@
+// Maintains session state for the API server connection -- auth token and GraphQL client
+
 import AsyncStorage from '@react-native-community/async-storage';
 import ApolloClient from 'apollo-boost';
 import gql from 'graphql-tag';
