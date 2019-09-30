@@ -7,7 +7,105 @@ import GhostView from './ghost/GhostView';
 import * as GhostEvents from './ghost/GhostEvents';
 import * as MainSwitcher from './MainSwitcher';
 
+// Lots of APIs need regular 'https://' URIs
 const castleUriToHTTPSUri = uri => uri.replace(/^castle:\/\//, 'https://');
+
+// Populate `game` by querying the database based on `game.gameId` or `gameUri`. `game` may already be
+// populated, in which case this hook doesn't fetch anything.
+const useFetchGame = ({ game, gameUri }) => {
+  // Set up a query to get the `game` from a '.castle' `gameUri`
+  const [callQuery, { loading: queryLoading, called: queryCalled, data: queryData }] = useLazyQuery(
+    gql`
+      query Game($url: String) {
+        game(url: $url) {
+          gameId
+          entryPoint
+          metadata
+        }
+      }
+    `,
+    { variables: { url: gameUri && castleUriToHTTPSUri(gameUri) } }
+  );
+
+  // If `game` isn't given and `gameUri` is to a '.castle' file, query for the `game`
+  if (!game && gameUri && gameUri.endsWith('.castle')) {
+    if (!queryCalled) {
+      callQuery();
+    } else if (!queryLoading && queryData && queryData.game) {
+      game = queryData.game;
+    }
+  }
+
+  // If `game` isn't given and `gameUri` isn't to a '.castle' file, assume it's a direct entrypoint URI
+  // and just use a stub `game`
+  if (!game && gameUri && !gameUri.endsWith('.castle')) {
+    game = {
+      entryPoint: gameUri,
+      metadata: {},
+    };
+  }
+
+  return { fetchedGame: game, isFetching: queryLoading };
+};
+
+// A line of text in the loader overlay
+const LoaderText = ({ children }) => (
+  <Text style={{ color: 'white', fontSize: 12 }}>{children}</Text>
+);
+
+// Keep track of Lua loading state -- ongoing network requests and whether it's done
+const useLuaLoading = () => {
+  // Maintain list of network requests Lua is making
+  const [networkRequests, setNetworkRequests] = useState([]);
+  useEffect(() => {
+    let mounted = true;
+
+    const listener = GhostEvents.listen(
+      'GHOST_NETWORK_REQUEST',
+      async ({ type, id, url, method }) => {
+        if (mounted) {
+          if (type === 'start') {
+            // Add to `networkRequests` if `url` is new
+            setNetworkRequests(networkRequests =>
+              !networkRequests.find(req => req.url == url)
+                ? [...networkRequests, { id, url, method }]
+                : networkRequests
+            );
+          }
+          if (type === 'stop') {
+            // Wait for a slight bit then remove from `networkRequests`
+            await new Promise(resolve => setTimeout(resolve, 60));
+            if (mounted) {
+              setNetworkRequests(networkRequests => networkRequests.filter(req => req.id !== id));
+            }
+          }
+        }
+      }
+    );
+
+    return () => {
+      mounted = false;
+      listener.remove();
+    };
+  }, []);
+
+  // Maintain whether Lua finished loading (`love.load` is done)
+  const [loaded, setLoaded] = useState(false);
+  useEffect(() => {
+    let mounted = true;
+    const listener = GhostEvents.listen('CASTLE_GAME_LOADED', () => {
+      if (mounted) {
+        setLoaded(true);
+      }
+    });
+    return () => {
+      mounted = false;
+      listener.remove();
+    };
+  }, []);
+
+  return { networkRequests, loaded };
+};
 
 // Read dimensions settings into the `{ width, height, upscaling, downscaling }` format
 const computeDimensionsSettings = ({ metadata }) => {
@@ -41,95 +139,14 @@ const computeDimensionsSettings = ({ metadata }) => {
   return dimensionsSettings;
 };
 
-// A line of text in the loader overlay
-const LoaderText = ({ children }) => (
-  <Text style={{ color: 'white', fontSize: 12 }}>{children}</Text>
-);
-
 // Given a `game` or `gameUri`, run and display the game!
 const GameView = ({ game, gameUri }) => {
-  // Set up a query to get the `game` from a '.castle' `gameUri`
-  const [callQuery, { loading: queryLoading, called: queryCalled, data: queryData }] = useLazyQuery(
-    gql`
-      query Game($url: String) {
-        game(url: $url) {
-          gameId
-          entryPoint
-          metadata
-        }
-      }
-    `,
-    { variables: { url: gameUri && castleUriToHTTPSUri(gameUri) } }
-  );
+  // Fetch the game
+  const fetchGameHook = useFetchGame({ game, gameUri });
+  game = fetchGameHook.fetchedGame;
 
-  // If `game` isn't given and `gameUri` is to a '.castle' file, query for the `game`
-  if (!game && gameUri && gameUri.endsWith('.castle')) {
-    if (!queryCalled) {
-      callQuery();
-    } else if (!queryLoading && queryData && queryData.game) {
-      game = queryData.game;
-    }
-  }
-
-  // If `game` isn't given and `gameUri` isn't to a '.castle' file, assume it's a URI to a Lua
-  // file and just use a stub `game`
-  if (!game && gameUri && !gameUri.endsWith('.castle')) {
-    game = {
-      entryPoint: gameUri,
-      metadata: {},
-    };
-  }
-
-  // Maintain list of network requests Lua is making
-  const [luaNetworkRequests, setLuaNetworkRequests] = useState([]);
-  useEffect(() => {
-    let mounted = true;
-
-    const listener = GhostEvents.listen(
-      'GHOST_NETWORK_REQUEST',
-      async ({ type, id, url, method }) => {
-        if (mounted) {
-          if (type === 'start') {
-            // Add to `luaNetworkRequests` if `url` is new
-            setLuaNetworkRequests(luaNetworkRequests =>
-              !luaNetworkRequests.find(req => req.url == url)
-                ? [...luaNetworkRequests, { id, url, method }]
-                : luaNetworkRequests
-            );
-          }
-          if (type === 'stop') {
-            // Wait for a slight bit then remove from `luaNetworkRequests`
-            await new Promise(resolve => setTimeout(resolve, 60));
-            if (mounted) {
-              setLuaNetworkRequests(luaNetworkRequests =>
-                luaNetworkRequests.filter(req => req.id !== id)
-              );
-            }
-          }
-        }
-      }
-    );
-
-    return () => {
-      mounted = false;
-      listener.remove();
-    };
-  }, []);
-
-  // Maintain whether game is actually loaded
-  const [gameLoaded, setGameLoaded] = useState(false);
-  useEffect(() => {
-    let mounted = true;
-    const listener = GhostEvents.listen('CASTLE_GAME_LOADED', () => {
-      if (mounted) {
-        setGameLoaded(true);
-      }
-    });
-    return () => {
-      mounted = false;
-      listener.remove();
-    };
-  }, []);
+  // Keep track of whether Lua is loading
+  const luaLoadingHook = useLuaLoading();
 
   return (
     <View style={{ flex: 1 }}>
@@ -142,8 +159,8 @@ const GameView = ({ game, gameUri }) => {
         />
       ) : null}
 
-      {!gameLoaded ? (
-        // Render loader until `gameLoaded`
+      {!luaLoadingHook.loaded ? (
+        // Render loader overlay until Lua finishes loading
         <View
           style={{
             position: 'absolute',
@@ -157,13 +174,19 @@ const GameView = ({ game, gameUri }) => {
             padding: 8,
           }}>
           {!game && !gameUri ? (
+            // No game to run
             <LoaderText>No game</LoaderText>
-          ) : queryLoading ? (
+          ) : fetchGameHook.isFetching ? (
+            // Game is being fetched
             <LoaderText>Fetching game...</LoaderText>
-          ) : luaNetworkRequests.length === 0 ? (
-            <LoaderText>Starting game...</LoaderText>
+          ) : luaLoadingHook.networkRequests.length === 0 ? (
+            // Game is fetched, Lua isn't making network requests but `love.load` isn't finished yet
+            <LoaderText>Loading game...</LoaderText>
           ) : (
-            luaNetworkRequests.map(({ url }) => <LoaderText key={url}>Fetching {url}</LoaderText>)
+            // Game is fetched, Lua is making network requests
+            luaLoadingHook.networkRequests.map(({ url }) => (
+              <LoaderText key={url}>Fetching {url}</LoaderText>
+            ))
           )}
         </View>
       ) : null}
