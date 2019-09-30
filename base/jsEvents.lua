@@ -23,12 +23,12 @@ function jsEvents.listen(name, listener)
     end
 end
 
-local channel = love.thread.getChannel('JS_EVENTS')
+local receiveChannel = love.thread.getChannel('JS_EVENTS')
 
 function jsEvents.update()
     local eventJson
     while true do
-        local eventJson = channel:pop()
+        local eventJson = receiveChannel:pop()
         if eventJson == nil then
             return
         end
@@ -47,8 +47,10 @@ end
 
 local platform = love.system.getOS()
 if platform == 'iOS' or platform == 'Android' then -- Use channels on mobile
+    local sendChannel = love.thread.getChannel('LUA_TO_JS_EVENTS')
+    sendChannel:clear()
     function jsEvents.send(name, params)
-        love.thread.getChannel('LUA_TO_JS_EVENTS'):push(cjson.encode({
+        sendChannel:push(cjson.encode({
             name = name,
             params = params,
         }))
