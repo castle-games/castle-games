@@ -3,6 +3,7 @@ import * as Actions from '~/common/actions';
 import * as Constants from '~/common/constants';
 import * as Strings from '~/common/strings';
 import * as Utilities from '~/common/utilities';
+import * as ExperimentalFeatures from '~/common/experimental-features';
 
 import { css } from 'react-emotion';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
@@ -79,6 +80,16 @@ const Row = (props) => {
 export default class ProfileSettings extends React.Component {
   static contextType = CurrentUserContext;
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      stagingGameServersEnabled: ExperimentalFeatures.isEnabled(
+        ExperimentalFeatures.STAGING_GAME_SERVERS
+      ),
+    };
+  }
+
   _handleSaveNotificationChange = async (options) => {
     const { category, type, frequency } = options;
 
@@ -92,6 +103,19 @@ export default class ProfileSettings extends React.Component {
     await Actions.updateDesktopPreference({ type, frequency });
     await this.context.refreshCurrentUser();
     this.props.onShowSettings();
+  };
+
+  _handleToggleStagingGameServers = async () => {
+    let stagingGameServersEnabled = !this.state.stagingGameServersEnabled;
+
+    this.setState({
+      stagingGameServersEnabled,
+    });
+
+    ExperimentalFeatures.setEnabled(
+      ExperimentalFeatures.STAGING_GAME_SERVERS,
+      stagingGameServersEnabled
+    );
   };
 
   render() {
@@ -200,6 +224,24 @@ export default class ProfileSettings extends React.Component {
             </Row>
           );
         })}
+
+        <h2 className={STYLES_HEADER} style={{ paddingTop: 50 }}>
+          Developer Options
+        </h2>
+
+        <p className={STYLES_PARAGRAPH} style={{ paddingBottom: 20 }}>
+          Advanced developer options. Most people should not need these.
+        </p>
+
+        <Row
+          firstCol={
+            <UICheckbox
+              onClick={this._handleToggleStagingGameServers}
+              value={this.state.stagingGameServersEnabled}
+            />
+          }>
+          Enable staging game servers
+        </Row>
       </div>
     );
   }

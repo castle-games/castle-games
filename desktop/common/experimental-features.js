@@ -2,6 +2,8 @@ import Storage from '~/common/storage';
 
 const storage = new Storage('experimental-features');
 
+export const STAGING_GAME_SERVERS = 'staging-game-servers';
+
 export function isEnabled(featureName) {
   return storage.getItem(featureName) === 'yes';
 }

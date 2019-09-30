@@ -7,6 +7,7 @@ import * as Strings from '~/common/strings';
 import * as NativeUtil from '~/native/nativeutil';
 import * as Urls from '~/common/urls';
 import { getSessionLink } from '~/common/utilities';
+import * as ExperimentalFeatures from '~/common/experimental-features';
 
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { DevelopmentContext } from '~/contexts/DevelopmentContext';
@@ -263,6 +264,7 @@ class NavigationContextManager extends React.Component {
   _connectMultiplayerClientAsync = async (e) => {
     let { game, sessionId } = this.state.navigation.playing;
     let mediaUrl = e.params.mediaUrl;
+    let isStaging = ExperimentalFeatures.isEnabled(ExperimentalFeatures.STAGING_GAME_SERVERS);
 
     // join/create a multiplayer session
     let response;
@@ -271,10 +273,11 @@ class NavigationContextManager extends React.Component {
         game ? game.gameId : null,
         game.hostedUrl || game.url,
         null,
-        sessionId
+        sessionId,
+        isStaging
       );
     } else {
-      response = await Actions.multiplayerJoinAsync(null, null, mediaUrl, sessionId);
+      response = await Actions.multiplayerJoinAsync(null, null, mediaUrl, sessionId, isStaging);
     }
     NativeUtil.sendLuaEvent('CASTLE_CONNECT_MULTIPLAYER_CLIENT_RESPONSE', {
       address: response.address,

@@ -445,7 +445,7 @@ export async function getAllGames(limit) {
 export async function getInitialData() {
   const result = await API(
     `
-    query($isStaging: Boolean) {
+    query {
       ${CURRENT_USER_QUERY}
 
       trendingGames {
@@ -457,19 +457,8 @@ export async function getInitialData() {
         ${GAME_FIELDS}
         ${NESTED_GAME_OWNER}
       }
-
-      joinableMultiplayerSessions(isStaging: $isStaging) {
-        sessionId
-        game {
-          ${GAME_FIELDS}
-          ${NESTED_GAME_OWNER}
-        }
-      }
     }
-  `,
-    {
-      isStaging: Constants.USE_STAGING_GAME_SERVERS,
-    }
+  `
   );
 
   if (!result) {
@@ -834,7 +823,13 @@ async function _recordUserStatusRegisteredGame(status, isNewSession, gameId) {
   return result;
 }
 
-export async function multiplayerJoinAsync(gameId, castleFileUrl, entryPoint, sessionId) {
+export async function multiplayerJoinAsync(
+  gameId,
+  castleFileUrl,
+  entryPoint,
+  sessionId,
+  isStaging
+) {
   let result;
   try {
     result = await API.graphqlAsync(
@@ -865,7 +860,7 @@ export async function multiplayerJoinAsync(gameId, castleFileUrl, entryPoint, se
         castleFileUrl,
         entryPoint,
         sessionId,
-        isStaging: Constants.USE_STAGING_GAME_SERVERS,
+        isStaging,
       }
     );
   } catch (e) {
