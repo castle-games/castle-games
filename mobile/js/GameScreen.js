@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
-import { useLazyQuery } from '@apollo/react-hooks';
+import { useLazyQuery, useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 
 import GhostView from './ghost/GhostView';
 import * as GhostEvents from './ghost/GhostEvents';
 import * as MainSwitcher from './MainSwitcher';
+import * as LuaBridge from './LuaBridge';
+import * as Session from './Session';
+import * as GhostChannels from './ghost/GhostChannels';
 
 // Lots of APIs need regular 'https://' URIs
 const castleUriToHTTPSUri = uri => uri.replace(/^castle:\/\//, 'https://');
@@ -45,7 +48,89 @@ const useFetchGame = ({ game, gameUri }) => {
     };
   }
 
-  return { fetchedGame: game, isFetching: queryLoading };
+  return { fetchedGame: game, fetching: queryLoading };
+};
+
+// Read dimensions settings into the `{ width, height, upscaling, downscaling }` format for `GhostView`
+const computeDimensionsSettings = ({ metadata }) => {
+  const { dimensions, scaling, upscaling, downscaling } = metadata;
+  const dimensionsSettings = {
+    width: 800,
+    height: 450,
+    upscaling: 'on',
+    downscaling: 'on',
+  };
+  if (dimensions) {
+    if (dimensions === 'full') {
+      dimensionsSettings.width = 0;
+      dimensionsSettings.height = 0;
+    } else {
+      const [widthStr, heightStr] = dimensions.split('x');
+      dimensionsSettings.width = parseInt(widthStr) || 800;
+      dimensionsSettings.height = parseInt(heightStr) || 450;
+    }
+  }
+  if (scaling) {
+    dimensionsSettings.upscaling = scaling;
+    dimensionsSettings.downscaling = scaling;
+  }
+  if (upscaling) {
+    dimensionsSettings.upscaling = upscaling;
+  }
+  if (downscaling) {
+    dimensionsSettings.downscaling = downscaling;
+  }
+  return dimensionsSettings;
+};
+
+// Populate the 'INITIAL_DATA' channel that Lua reads for various initial settings (eg. the user
+// object, initial audio volume, initial post, ...)
+const useInitialData = ({ game, dimensionsSettings }) => {
+  const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+
+  // Fetch `me`
+  const { loading: meLoading, data: meData } = useQuery(gql`
+    query Me {
+      me {
+        userId
+        username
+        name
+        photo {
+          url
+        }
+      }
+    }
+  `);
+  const isLoggedIn = Session.isSignedIn();
+  const me = isLoggedIn && !meLoading && meData && meData.me;
+
+  useEffect(() => {
+    if (!sending && game && dimensionsSettings && (!isLoggedIn || me)) {
+      // Ready to send to Lua
+      setSending(true);
+      (async () => {
+        await GhostChannels.clearAsync('INITIAL_DATA');
+        await GhostChannels.pushAsync(
+          'INITIAL_DATA',
+          JSON.stringify({
+            graphics: {
+              width: dimensionsSettings.width,
+              height: dimensionsSettings.height,
+            },
+            audio: { volume: 1 },
+            user: {
+              isLoggedIn,
+              me: await LuaBridge.jsUserToLuaUser(me),
+            },
+          })
+        );
+        setSent(true);
+      })();
+    }
+  }, [sending, game, dimensionsSettings]);
+
+  return { sent };
 };
 
 // A line of text in the loader overlay
@@ -107,55 +192,25 @@ const useLuaLoading = () => {
   return { networkRequests, loaded };
 };
 
-// Read dimensions settings into the `{ width, height, upscaling, downscaling }` format
-const computeDimensionsSettings = ({ metadata }) => {
-  const { dimensions, scaling, upscaling, downscaling } = metadata;
-  const dimensionsSettings = {
-    width: 800,
-    height: 450,
-    upscaling: 'on',
-    downscaling: 'on',
-  };
-  if (dimensions) {
-    if (dimensions === 'full') {
-      dimensionsSettings.width = 0;
-      dimensionsSettings.height = 0;
-    } else {
-      const [widthStr, heightStr] = dimensions.split('x');
-      dimensionsSettings.width = parseInt(widthStr) || 800;
-      dimensionsSettings.height = parseInt(heightStr) || 450;
-    }
-  }
-  if (scaling) {
-    dimensionsSettings.upscaling = scaling;
-    dimensionsSettings.downscaling = scaling;
-  }
-  if (upscaling) {
-    dimensionsSettings.upscaling = upscaling;
-  }
-  if (downscaling) {
-    dimensionsSettings.downscaling = downscaling;
-  }
-  return dimensionsSettings;
-};
-
 // Given a `game` or `gameUri`, run and display the game!
 const GameView = ({ game, gameUri }) => {
-  // Fetch the game
   const fetchGameHook = useFetchGame({ game, gameUri });
   game = fetchGameHook.fetchedGame;
 
-  // Keep track of whether Lua is loading
+  const dimensionsSettings = game && computeDimensionsSettings({ metadata: game.metadata });
+
+  const initialDataHook = useInitialData({ game, dimensionsSettings });
+
   const luaLoadingHook = useLuaLoading();
 
   return (
     <View style={{ flex: 1 }}>
-      {game !== null ? (
-        // Render `GhostView` when `game` is available
+      {game && initialDataHook.sent ? (
+        // Render `GhostView` when `game` is available and initial data is sent
         <GhostView
           style={{ width: '100%', height: '100%' }}
           uri={game.entryPoint}
-          dimensionsSettings={computeDimensionsSettings({ metadata: game.metadata })}
+          dimensionsSettings={dimensionsSettings}
         />
       ) : null}
 
@@ -176,7 +231,7 @@ const GameView = ({ game, gameUri }) => {
           {!game && !gameUri ? (
             // No game to run
             <LoaderText>No game</LoaderText>
-          ) : fetchGameHook.isFetching ? (
+          ) : fetchGameHook.fetching ? (
             // Game is being fetched
             <LoaderText>Fetching game...</LoaderText>
           ) : luaLoadingHook.networkRequests.length === 0 ? (
