@@ -102,8 +102,7 @@ export default class ChatMessages extends React.Component {
         isEditable = m.fromUserId === viewer.userId && this.props.onSelectEdit;
       }
     }
-    const type = m && m.body ? m.body.notificationType : null;
-    if (type === 'closed-game-session') {
+    if (ChatUtilities.isMessageHidden(m)) {
       return null;
     }
     return (

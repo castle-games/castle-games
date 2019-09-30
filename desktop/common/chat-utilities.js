@@ -22,6 +22,11 @@ const _channelTypeSortValue = (type) => {
   return 0;
 };
 
+export const isMessageHidden = (m) => {
+  const type = m && m.body ? m.body.notificationType : null;
+  return type === 'closed-game-session';
+};
+
 export const sortChannels = (channels) => {
   if (!channels || !channels.length) return channels;
   return channels.sort((a, b) => {

@@ -629,10 +629,10 @@ class ChatContextManager extends React.Component {
     if (channel && channel.messages && channel.messages.length) {
       for (let ii = channel.messages.length - 1; ii >= 0; ii--) {
         let m = channel.messages[ii];
-        // ignore fake notification messages and optimistic messages
+        // ignore fake notification messages and optimistic messages; ignore hidden messages
         const isOptimistic =
           m.tempChatMessageId && this._optimisticMessageIdsPending[m.tempChatMessageId];
-        if (m.chatMessageId && !isOptimistic) {
+        if (m.chatMessageId && !isOptimistic && !ChatUtilities.isMessageHidden(m)) {
           return m;
         }
       }
