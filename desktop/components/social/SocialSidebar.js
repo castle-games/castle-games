@@ -100,9 +100,9 @@ class SocialSidebar extends React.Component {
     }
   };
 
-  _handleNavigateToChat = async (channel) => {
+  _handleNavigateToChat = async (channel, options) => {
     await this.setState({ mode: 'chat' });
-    this.props.navigator.showChatChannel(channel.channelId);
+    this.props.navigator.showChatChannel(channel.channelId, options);
   };
 
   _handleToggleMembers = () => {

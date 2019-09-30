@@ -53,7 +53,7 @@ const NavigationContextDefaults = {
  */
 const NavigatorContextDefaults = {
   openUrl: async (url, options) => {},
-  showChatChannel: async (channelId) => {},
+  showChatChannel: async (channelId, options) => {},
   toggleIsChatExpanded: () => {},
   navigateToHome: () => {},
   navigateToGameUrl: async (url, options) => {},
@@ -313,13 +313,14 @@ class NavigationContextManager extends React.Component {
 
   // assumes you have a channel id.
   // if not, use ChatContext.openChannel methods
-  showChatChannel = async (channelId) => {
+  showChatChannel = async (channelId, options = {}) => {
+    const autoExpand = options.autoExpand === undefined ? true : options.autoExpand;
     let chatChannelId = channelId || this.state.chatChannelId;
     return this.setState({
       navigation: {
         ...this.state.navigation,
         chatChannelId: channelId,
-        isChatExpanded: true,
+        isChatExpanded: autoExpand ? true : this.state.navigation.isChatExpanded,
       },
     });
   };

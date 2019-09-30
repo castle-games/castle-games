@@ -25,7 +25,7 @@ const ChatContextDefaults = {
   toggleReaction: async (channelId, message, emojiShortName) => {},
   openChannelWithName: async (name) => {},
   openChannelForUser: async (user) => {},
-  openChannelForGame: async (game) => {},
+  openChannelForGame: async (game, options) => {},
   closeChannel: async (channelId) => {},
   findChannel: (channelName) => {},
   findChannelForGame: (game) => {},
@@ -205,11 +205,11 @@ class ChatContextManager extends React.Component {
 
   // checks if we have a chat channel for this game,
   // creates it if not, and navigates to it.
-  openChannelForGame = async (game) => {
+  openChannelForGame = async (game, options) => {
     if (!game || !game.gameId || !game.chatChannelId) return false;
 
     const channelId = await this._observeChannelForGame(game);
-    return this.props.showChatChannel(channelId);
+    return this.props.showChatChannel(channelId, options);
   };
 
   closeChannel = async (channelId) => {
