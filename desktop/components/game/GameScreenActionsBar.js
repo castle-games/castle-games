@@ -191,7 +191,7 @@ export default class GameScreenActionsBar extends React.Component {
             </CTA>
           ) : null}
 
-          {this.props.onPostScreenCapture && isPostControlsVisible
+          {this.props.onPostScreenCapture && isPostControlsVisible && false
             ? this._renderRecordingStatus()
             : null}
         </div>
