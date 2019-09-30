@@ -20,6 +20,8 @@
 */
 #include "../../SDL_internal.h"
 
+#include <android/log.h>
+
 #if SDL_VIDEO_DRIVER_ANDROID
 
 /* We're going to do this by default */
@@ -37,10 +39,13 @@ extern void ANDROIDAUDIO_PauseDevices(void);
 static void 
 android_egl_context_restore() 
 {
+    // XXX(Ghost): Do some logging to debug when games go blank after restoring context...
     SDL_Event event;
     SDL_WindowData *data = (SDL_WindowData *) Android_Window->driverdata;
+    __android_log_print(ANDROID_LOG_DEBUG, "SDL_GHOST", "Restoring GL context!");
     if (SDL_GL_MakeCurrent(Android_Window, (SDL_GLContext) data->egl_context) < 0) {
         /* The context is no longer valid, create a new one */
+        __android_log_print(ANDROID_LOG_DEBUG, "SDL_GHOST", "New GL context!");
         data->egl_context = (EGLContext) SDL_GL_CreateContext(Android_Window);
         SDL_GL_MakeCurrent(Android_Window, (SDL_GLContext) data->egl_context);
         event.type = SDL_RENDER_DEVICE_RESET;
