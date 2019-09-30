@@ -385,10 +385,10 @@ function castle.post.create(options)
 end
 
 function castle.post.get(options)
-    return bridge.js.postGet {
+    return castle.post._decodePost(bridge.js.postGet {
         postId = options.postId,
         data = options.data,
-    }
+    })
 end
 
 
