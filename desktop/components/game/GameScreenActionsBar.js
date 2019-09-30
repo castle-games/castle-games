@@ -166,6 +166,8 @@ export default class GameScreenActionsBar extends React.Component {
       volumeElement = <GameSVG.AudioOff height="20px" style={{ marginRight: 8 }} />;
     }
 
+    const isPostControlsVisible = game && game.gameId;
+
     return (
       <div className={STYLES_CONTAINER} style={this.props.style}>
         <div className={STYLES_LEFT} style={{ paddingLeft: 16 }}>
@@ -183,13 +185,15 @@ export default class GameScreenActionsBar extends React.Component {
           ) : null}
         </div>
         <div className={STYLES_MIDDLE}>
-          {this.props.onPostScreenshot ? (
+          {this.props.onPostScreenshot && isPostControlsVisible ? (
             <CTA style={{ marginRight: 24 }} onClick={this.props.onPostScreenshot}>
               <GameSVG.Camera height="32px" style={{ marginRight: 8 }} />
             </CTA>
           ) : null}
 
-          {this.props.onPostScreenCapture ? this._renderRecordingStatus() : null}
+          {this.props.onPostScreenCapture && isPostControlsVisible
+            ? this._renderRecordingStatus()
+            : null}
         </div>
         <div className={STYLES_RIGHT}>
           <CTA style={{ marginRight: 24, cursor: 'default' }}>
