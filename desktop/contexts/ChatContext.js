@@ -240,7 +240,7 @@ class ChatContextManager extends React.Component {
     }
     if (plainMessage.charAt(0) === '+' && ChatUtilities.isEmojiBody(plainMessage.substring(1))) {
       // +:emoji: reacts to previous message
-      const lastMessage = this._mostRecentMessageInChannel(channelId);
+      const lastMessage = this._mostRecentMessageInChannel(channelId, true);
       if (lastMessage) {
         const emoji = plainMessage.substring(2, plainMessage.length - 1);
         this.toggleReaction(channelId, lastMessage, emoji);
@@ -623,7 +623,7 @@ class ChatContextManager extends React.Component {
     });
   };
 
-  _mostRecentMessageInChannel = (channelId) => {
+  _mostRecentMessageInChannel = (channelId, countHiddenMessages = true) => {
     // messages are sorted by date when they arrive.
     const channel = this.state.channels[channelId];
     if (channel && channel.messages && channel.messages.length) {
@@ -632,7 +632,8 @@ class ChatContextManager extends React.Component {
         // ignore fake notification messages and optimistic messages; ignore hidden messages
         const isOptimistic =
           m.tempChatMessageId && this._optimisticMessageIdsPending[m.tempChatMessageId];
-        if (m.chatMessageId && !isOptimistic && !ChatUtilities.isMessageHidden(m)) {
+        const isHidden = countHiddenMessages ? false : ChatUtilities.isMessageHidden(m);
+        if (m.chatMessageId && !isOptimistic && !isHidden) {
           return m;
         }
       }
