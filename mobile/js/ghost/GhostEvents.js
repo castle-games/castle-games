@@ -32,6 +32,11 @@ export const listen = (name, handler) => {
   };
 };
 
-export const send = (name, params) => {
-  GhostChannels.pushAsync('JS_EVENTS', JSON.stringify({ name, params }));
+export const sendAsync = async (name, params) => {
+  await GhostChannels.pushAsync('JS_EVENTS', JSON.stringify({ name, params }));
 };
+
+export const clearAsync = async () => {
+  await GhostChannels.clearAsync('JS_EVENTS');
+  await GhostChannels.clearAsync('LUA_JS_EVENTS');
+}

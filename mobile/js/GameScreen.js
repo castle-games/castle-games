@@ -133,64 +133,86 @@ const useInitialData = ({ game, dimensionsSettings }) => {
   return { sent };
 };
 
-// A line of text in the loader overlay
-const LoaderText = ({ children }) => (
-  <Text style={{ color: 'white', fontSize: 12 }}>{children}</Text>
-);
+// Clear Lua <-> JS events channels for a new game
+const useClearEvents = () => {
+  const [cleared, setCleared] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      await GhostEvents.clearAsync();
+      if (mounted) {
+        setCleared(true);
+      }
+    })();
+    return () => (mounted = false);
+  }, []);
+
+  return { cleared };
+};
 
 // Keep track of Lua loading state -- ongoing network requests and whether it's done
-const useLuaLoading = () => {
+const useLuaLoading = ({ ready }) => {
   // Maintain list of network requests Lua is making
   const [networkRequests, setNetworkRequests] = useState([]);
   useEffect(() => {
-    let mounted = true;
+    if (ready) {
+      let mounted = true;
 
-    const listener = GhostEvents.listen(
-      'GHOST_NETWORK_REQUEST',
-      async ({ type, id, url, method }) => {
-        if (mounted) {
-          if (type === 'start') {
-            // Add to `networkRequests` if `url` is new
-            setNetworkRequests(networkRequests =>
-              !networkRequests.find(req => req.url == url)
-                ? [...networkRequests, { id, url, method }]
-                : networkRequests
-            );
-          }
-          if (type === 'stop') {
-            // Wait for a slight bit then remove from `networkRequests`
-            await new Promise(resolve => setTimeout(resolve, 60));
-            if (mounted) {
-              setNetworkRequests(networkRequests => networkRequests.filter(req => req.id !== id));
+      const listener = GhostEvents.listen(
+        'GHOST_NETWORK_REQUEST',
+        async ({ type, id, url, method }) => {
+          if (mounted) {
+            if (type === 'start') {
+              // Add to `networkRequests` if `url` is new
+              setNetworkRequests(networkRequests =>
+                !networkRequests.find(req => req.url == url)
+                  ? [...networkRequests, { id, url, method }]
+                  : networkRequests
+              );
+            }
+            if (type === 'stop') {
+              // Wait for a slight bit then remove from `networkRequests`
+              await new Promise(resolve => setTimeout(resolve, 60));
+              if (mounted) {
+                setNetworkRequests(networkRequests => networkRequests.filter(req => req.id !== id));
+              }
             }
           }
         }
-      }
-    );
+      );
 
-    return () => {
-      mounted = false;
-      listener.remove();
-    };
-  }, []);
+      return () => {
+        mounted = false;
+        listener.remove();
+      };
+    }
+  }, [ready]);
 
   // Maintain whether Lua finished loading (`love.load` is done)
   const [loaded, setLoaded] = useState(false);
   useEffect(() => {
-    let mounted = true;
-    const listener = GhostEvents.listen('CASTLE_GAME_LOADED', () => {
-      if (mounted) {
-        setLoaded(true);
-      }
-    });
-    return () => {
-      mounted = false;
-      listener.remove();
-    };
-  }, []);
+    if (ready) {
+      let mounted = true;
+      const listener = GhostEvents.listen('CASTLE_GAME_LOADED', () => {
+        if (mounted) {
+          setLoaded(true);
+        }
+      });
+      return () => {
+        mounted = false;
+        listener.remove();
+      };
+    }
+  }, [ready]);
 
   return { networkRequests, loaded };
 };
+
+// A line of text in the loader overlay
+const LoaderText = ({ children }) => (
+  <Text style={{ color: 'white', fontSize: 12 }}>{children}</Text>
+);
 
 // Given a `game` or `gameUri`, run and display the game!
 const GameView = ({ game, gameUri }) => {
@@ -201,12 +223,14 @@ const GameView = ({ game, gameUri }) => {
 
   const initialDataHook = useInitialData({ game, dimensionsSettings });
 
-  const luaLoadingHook = useLuaLoading();
+  const clearEventsHook = useClearEvents();
+
+  const luaLoadingHook = useLuaLoading({ ready: clearEventsHook.cleared });
 
   return (
     <View style={{ flex: 1 }}>
-      {game && initialDataHook.sent ? (
-        // Render `GhostView` when `game` is available and initial data is sent
+      {game && clearEventsHook.cleared && initialDataHook.sent ? (
+        // Render `GhostView` when ready
         <GhostView
           style={{ width: '100%', height: '100%' }}
           uri={game.entryPoint}

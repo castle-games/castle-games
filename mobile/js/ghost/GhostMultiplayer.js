@@ -14,7 +14,7 @@ GhostEvents.listen('CASTLE_CONNECT_MULTIPLAYER_CLIENT_REQUEST', async ({ mediaUr
     variables: { mediaUrl },
   });
   if (data && data.joinMultiplayerSession) {
-    GhostEvents.send('CASTLE_CONNECT_MULTIPLAYER_CLIENT_RESPONSE', {
+    GhostEvents.sendAsync('CASTLE_CONNECT_MULTIPLAYER_CLIENT_RESPONSE', {
       address: data.joinMultiplayerSession.address,
     });
   }
