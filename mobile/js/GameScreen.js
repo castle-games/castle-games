@@ -216,7 +216,9 @@ const LoaderText = ({ children }) => (
   <Text style={{ color: 'white', fontSize: 12 }}>{children}</Text>
 );
 
-// Given a `gameId` or `gameUri`, run and display the game!
+// Given a `gameId` or `gameUri`, run and display the game! The lifetime of this component must match the
+// lifetime of the game run -- it must be unmounted when the game is stopped and a new instance mounted
+// if a new game should be run (or even if the same game should be restarted).
 const GameView = ({ gameId, gameUri }) => {
   const fetchGameHook = useFetchGame({ gameId, gameUri });
   const game = fetchGameHook.fetchedGame;
@@ -279,7 +281,8 @@ const GameView = ({ gameId, gameUri }) => {
 // Navigate to a game given its `gameId` or `gameUri`.
 export let goToGame = ({ gameId, gameUri }) => {};
 
-// Top-level component which stores the `gameId` / `gameUri` state
+// Top-level component which stores the `gameId` or  `gameUri` state. This component is mounted for the
+// entire lifetime of the app and mounts fresh `GameView` instances for each game run.
 const GameScreen = () => {
   const [gameId, setGameId] = useState(null);
   const [gameUri, setGameUri] = useState(null);
