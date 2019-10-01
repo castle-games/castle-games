@@ -110,26 +110,29 @@ const useInitialData = ({ game, dimensionsSettings }) => {
       // Ready to send to Lua
       sending.current = true;
       (async () => {
+        // Clear the channel just in case
         await GhostChannels.clearAsync('INITIAL_DATA');
-        await GhostChannels.pushAsync(
-          'INITIAL_DATA',
-          JSON.stringify({
-            graphics: {
-              width: dimensionsSettings.width,
-              height: dimensionsSettings.height,
-            },
-            audio: { volume: 1 },
-            user: {
-              isLoggedIn,
-              me: await LuaBridge.jsUserToLuaUser(me),
-            },
-            game: await LuaBridge.jsGameToLuaGame(game),
-          })
-        );
+
+        // Prepare the data
+        const initialData = {
+          graphics: {
+            width: dimensionsSettings.width,
+            height: dimensionsSettings.height,
+          },
+          audio: { volume: 1 },
+          user: {
+            isLoggedIn,
+            me: await LuaBridge.jsUserToLuaUser(me),
+          },
+          game: await LuaBridge.jsGameToLuaGame(game),
+        };
+
+        // Send it!
+        await GhostChannels.pushAsync('INITIAL_DATA', JSON.stringify(initialData));
         setSent(true);
       })();
     }
-  }, [game, dimensionsSettings]);
+  }, [game, dimensionsSettings, isLoggedIn, me]);
 
   return { sent };
 };
