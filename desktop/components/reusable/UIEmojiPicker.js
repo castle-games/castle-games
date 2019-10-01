@@ -11,7 +11,6 @@ const STYLES_CONTAINER = css`
   position: absolute;
   bottom: 56px;
   right: 16px;
-  width: 384px;
 
   padding: 8px 0;
 
@@ -99,6 +98,7 @@ export default class UIEmojiPicker extends React.Component {
   _categoryHeaderRefs = {};
 
   static defaultProps = {
+    isNarrowWidth: false,
     onSelectEmoji: (shortName) => {},
   };
 
@@ -131,8 +131,10 @@ export default class UIEmojiPicker extends React.Component {
   };
 
   _renderCategoryNavigation = (categories) => {
+    const { isNarrowWidth } = this.props;
+    const narrowStyles = isNarrowWidth ? { flexWrap: 'wrap' } : {};
     return (
-      <div className={STYLES_NAV_CONTAINER}>
+      <div className={STYLES_NAV_CONTAINER} style={narrowStyles}>
         {categories.map((category, ii) => (
           <div
             className={STYLES_NAV_ITEM}
@@ -191,8 +193,10 @@ export default class UIEmojiPicker extends React.Component {
   render() {
     const categories = getCategories();
     const { autocompleteQuery } = this.state;
+    const { isNarrowWidth } = this.props;
+    const containerStyles = isNarrowWidth ? { width: 256 } : { width: 384 };
     return (
-      <div className={STYLES_CONTAINER}>
+      <div className={STYLES_CONTAINER} style={containerStyles}>
         {this._renderCategoryNavigation(categories)}
         <UIEmojiPickerInput
           name="autocompleteQuery"

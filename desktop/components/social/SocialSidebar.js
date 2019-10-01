@@ -56,6 +56,7 @@ const THEME = {
   embedWidth: '188px',
   actionItemColor: Constants.colors.white,
   actionItemBackground: '#232323',
+  useNarrowModals: true, // emoji picker, etc. cannot overlap game window.
   reactionItemColor: Constants.colors.white,
   reactionItemBackground: '#232323',
   reactionItemSelectedBackground: '#230023',

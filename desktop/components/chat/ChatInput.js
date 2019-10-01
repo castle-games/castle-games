@@ -74,6 +74,7 @@ export default class ChatInput extends React.Component {
     theme: {
       textColor: null,
       inputBackground: Constants.colors.white,
+      useNarrowModals: false,
     },
     autocomplete: {
       type: null,
@@ -142,13 +143,14 @@ export default class ChatInput extends React.Component {
 
   _renderEmojiPicker = () => {
     if (this.props.isShowingEmojiPicker) {
+      const { useNarrowModals } = this.props.theme;
       return (
         <UIBoundary
           enabled={true}
           captureResize={false}
           captureScroll={false}
           onOutsideRectEvent={this.props.onToggleEmojiPicker}>
-          <UIEmojiPicker onSelectEmoji={this._handleSelectEmoji} />
+          <UIEmojiPicker onSelectEmoji={this._handleSelectEmoji} isNarrowWidth={useNarrowModals} />
         </UIBoundary>
       );
     }
