@@ -13,54 +13,42 @@ import * as GhostChannels from './ghost/GhostChannels';
 // Lots of APIs need regular 'https://' URIs
 const castleUriToHTTPSUri = uri => uri.replace(/^castle:\/\//, 'https://');
 
-// Required fields from the `Game` GraphQL model type for actually running a game
-const GAME_REQUIRED_FIELDS = ['entryPoint', 'metadata'];
-
 // Fetch a `Game` GraphQL model instance based on `gameId` or `gameUri`
 const useFetchGame = ({ gameId, gameUri }) => {
   let game = null;
 
   // Set up a query to get the `game` from a '.castle' `gameUri`. We set up a 'lazy query' and then
-  // only actually call it later if we decide we should.
-  let shouldQuery;
+  // only actually call it if at least one of `gameId` or `gameUri` are present.
   const [callQuery, { loading: queryLoading, called: queryCalled, data: queryData }] = useLazyQuery(
     gql`
       query Game($url: String, $gameId: ID) {
         game(url: $url, gameId: $gameId) {
           gameId
-          ${GAME_REQUIRED_FIELDS.join(' ')}
+          entryPoint
+          metadata
+          ...LuaGame
         }
       }
+      ${LuaBridge.LUA_GAME_FRAGMENT}
     `,
     { variables: { url: gameUri && castleUriToHTTPSUri(gameUri), gameId } }
   );
 
-  // If `gameId` isn't given and `gameUri` isn't to a '.castle' file, assume it's a direct entrypoint URI
-  // and just use a stub `game`
-  if (!gameId && gameUri && !gameUri.endsWith('.castle')) {
-    game = {
-      entryPoint: gameUri,
-      metadata: {},
-    };
-    shouldQuery = false;
-  }
-
-  // If `gameId` isn't given and `gameUri` is to a '.castle' file, query for the `game`
-  if (!gameId && gameUri && gameUri.endsWith('.castle')) {
-    shouldQuery = true;
-  }
-
-  // If `gameId` is given, query for the `game`
-  if (gameId) {
-    shouldQuery = true;
-  }
-
-  // If should query, query!
-  if (shouldQuery) {
+  // If can query, query!
+  if (gameId || gameUri) {
     if (!queryCalled) {
       callQuery();
-    } else if (!queryLoading && queryData && queryData.game) {
-      game = queryData.game;
+    } else if (!queryLoading) {
+      if (queryData && queryData.game) {
+        // Query was successful!
+        game = queryData.game;
+      } else if (gameUri) {
+        // Query wasn't successful, assume this is a direct entrypoint URI and use a stub `game`
+        game = {
+          entryPoint: gameUri,
+          metadata: {},
+        };
+      }
     }
   }
 
@@ -109,14 +97,10 @@ const useInitialData = ({ game, dimensionsSettings }) => {
   const { loading: meLoading, data: meData } = useQuery(gql`
     query Me {
       me {
-        userId
-        username
-        name
-        photo {
-          url
-        }
+        ...LuaUser
       }
     }
+    ${LuaBridge.LUA_USER_FRAGMENT}
   `);
   const isLoggedIn = Session.isSignedIn();
   const me = isLoggedIn && !meLoading && meData && meData.me;
@@ -139,6 +123,7 @@ const useInitialData = ({ game, dimensionsSettings }) => {
               isLoggedIn,
               me: await LuaBridge.jsUserToLuaUser(me),
             },
+            game: await LuaBridge.jsGameToLuaGame(game),
           })
         );
         setSent(true);

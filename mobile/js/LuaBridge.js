@@ -1,6 +1,32 @@
+import gql from 'graphql-tag';
+
 ///
-/// Data conversion
+/// JS -> Lua for GraphQL entities
 ///
+
+export const LUA_USER_FRAGMENT = gql`
+  fragment LuaUser on User {
+    userId
+    username
+    name
+    photo {
+      url
+    }
+  }
+`;
+
+export const LUA_GAME_FRAGMENT = gql`
+  fragment LuaGame on Game {
+    gameId
+    owner {
+      ...LuaUser
+    }
+    title
+    url
+    description
+  }
+  ${LUA_USER_FRAGMENT}
+`;
 
 export const jsUserToLuaUser = async user =>
   user
