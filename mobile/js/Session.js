@@ -3,6 +3,7 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import ApolloClient from 'apollo-boost';
 import gql from 'graphql-tag';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 
 let authToken = null;
 
@@ -15,6 +16,21 @@ export const apolloClient = new ApolloClient({
       headers: authToken ? { ['X-Auth-Token']: authToken } : {},
     });
   },
+  cache: new InMemoryCache({
+    dataIdFromObject: o => {
+      switch (o.__typename) {
+        case 'Game':
+          return o.gameId;
+        default:
+          return o.id;
+      }
+    },
+    cacheRedirects: {
+      Query: {
+        game: (_, args, { getCacheKey }) => getCacheKey({ __typename: 'Game', id: args.gameId }),
+      },
+    },
+  }),
 });
 
 export const initAsync = async () => {
