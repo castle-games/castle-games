@@ -18,8 +18,6 @@ const HomeScreen = () => {
         coverImage {
           url
         }
-        entryPoint
-        metadata
       }
     }
   `);

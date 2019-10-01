@@ -10,34 +10,30 @@ import * as LuaBridge from './LuaBridge';
 import * as Session from './Session';
 import * as GhostChannels from './ghost/GhostChannels';
 
+// Required fields from the `Game` GraphQL model type for actually running a game
+const GAME_REQUIRED_FIELDS = ['entryPoint', 'metadata'];
+const gameHasRequiredFields = game => GAME_REQUIRED_FIELDS.every(fieldName => fieldName in game);
+
 // Lots of APIs need regular 'https://' URIs
 const castleUriToHTTPSUri = uri => uri.replace(/^castle:\/\//, 'https://');
 
 // Populate `game` by querying the database based on `game.gameId` or `gameUri`. `game` may already be
 // populated, in which case this hook doesn't fetch anything.
 const useFetchGame = ({ game, gameUri }) => {
-  // Set up a query to get the `game` from a '.castle' `gameUri`
+  // Set up a query to get the `game` from a '.castle' `gameUri`. We set up a 'lazy query' and then
+  // only actually call it later if we decide we should.
+  let shouldQuery;
   const [callQuery, { loading: queryLoading, called: queryCalled, data: queryData }] = useLazyQuery(
     gql`
-      query Game($url: String) {
-        game(url: $url) {
+      query Game($url: String, $gameId: ID) {
+        game(url: $url, gameId: $gameId) {
           gameId
-          entryPoint
-          metadata
+          ${GAME_REQUIRED_FIELDS.join(' ')}
         }
       }
     `,
-    { variables: { url: gameUri && castleUriToHTTPSUri(gameUri) } }
+    { variables: { url: gameUri && castleUriToHTTPSUri(gameUri), gameId: game && game.gameId } }
   );
-
-  // If `game` isn't given and `gameUri` is to a '.castle' file, query for the `game`
-  if (!game && gameUri && gameUri.endsWith('.castle')) {
-    if (!queryCalled) {
-      callQuery();
-    } else if (!queryLoading && queryData && queryData.game) {
-      game = queryData.game;
-    }
-  }
 
   // If `game` isn't given and `gameUri` isn't to a '.castle' file, assume it's a direct entrypoint URI
   // and just use a stub `game`
@@ -46,6 +42,28 @@ const useFetchGame = ({ game, gameUri }) => {
       entryPoint: gameUri,
       metadata: {},
     };
+    shouldQuery = false;
+  }
+
+  // If `game` isn't given and `gameUri` is to a '.castle' file, query for the `game`
+  if (!game && gameUri && gameUri.endsWith('.castle')) {
+    shouldQuery = true;
+  }
+
+  // If `game` is given but it's missing required fields, fall back to the `game === null` case and
+  // re-query
+  if (game && !gameHasRequiredFields(game)) {
+    shouldQuery = true;
+    game = null;
+  }
+
+  // If should query, query!
+  if (shouldQuery) {
+    if (!queryCalled) {
+      callQuery();
+    } else if (!queryLoading && queryData && queryData.game) {
+      game = queryData.game;
+    }
   }
 
   return { fetchedGame: game, fetching: queryLoading };
@@ -252,17 +270,17 @@ const GameView = ({ game, gameUri }) => {
             alignItems: 'flex-start',
             padding: 8,
           }}>
-          {!game && !gameUri ? (
-            // No game to run
-            <LoaderText>No game</LoaderText>
-          ) : fetchGameHook.fetching ? (
+          {fetchGameHook.fetching ? (
             // Game is being fetched
             <LoaderText>Fetching game...</LoaderText>
+          ) : !game && !gameUri ? (
+            // No game to run
+            <LoaderText>No game</LoaderText>
           ) : luaLoadingHook.networkRequests.length === 0 ? (
-            // Game is fetched, Lua isn't making network requests but `love.load` isn't finished yet
+            // Game is fetched and Lua isn't making network requests, but `love.load` isn't finished yet
             <LoaderText>Loading game...</LoaderText>
           ) : (
-            // Game is fetched, Lua is making network requests
+            // Game is fetched and Lua is making network requests
             luaLoadingHook.networkRequests.map(({ url }) => (
               <LoaderText key={url}>Fetching {url}</LoaderText>
             ))
@@ -299,7 +317,7 @@ const GameScreen = () => {
   };
 
   // Use `key` to mount a new instance of `GameView` when the game changes
-  return <GameView key={(game && game.entryPoint) || gameUri} game={game} gameUri={gameUri} />;
+  return <GameView key={(game && game.gameId) || gameUri} game={game} gameUri={gameUri} />;
 };
 
 export default GameScreen;
