@@ -125,8 +125,6 @@ class ContentContainer extends React.Component {
       return <NotificationScreen />;
     } else if (mode === 'edit_post') {
       return <EditPostScreen />;
-    } else if (mode === 'signin') {
-      return <SignInScreen />;
     }
   };
 
@@ -142,7 +140,9 @@ class ContentContainer extends React.Component {
 
   render() {
     let contentElement;
-    if (Strings.isEmpty(this.state.searchQuery)) {
+    if (this.props.isShowingSignIn) {
+      contentElement = <SignInScreen />;
+    } else if (Strings.isEmpty(this.state.searchQuery)) {
       contentElement = this._renderContent(this.props.mode, this.props.playing);
     } else {
       contentElement = this._renderSearch();
@@ -157,7 +157,7 @@ class ContentContainer extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER_FLUID}>
-        {!this.props.playing.isVisible && this.props.mode !== 'signin' ? (
+        {!this.props.playing.isVisible && !this.props.isShowingSignIn ? (
           <ContentNavigationBar
             searchQuery={this.state.searchQuery}
             onSearchReset={this._handleSearchReset}
@@ -188,6 +188,7 @@ export default class ContentContainerWithContext extends React.Component {
                         <ContentContainer
                           viewer={currentUser ? currentUser.user : null}
                           mode={navigation.contentMode}
+                          isShowingSignIn={navigation.isShowingSignIn}
                           timeLastNavigated={navigation.timeLastNavigated}
                           playing={navigation.playing}
                           navigator={navigator}

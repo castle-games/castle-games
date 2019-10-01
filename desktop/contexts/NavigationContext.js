@@ -24,8 +24,9 @@ import Logs from '~/common/logs';
  *  should have an effect on values here.
  */
 const NavigationContextDefaults = {
-  contentMode: 'home', // game-meta | profile | home | signin | create | edit_post
+  contentMode: 'home', // game-meta | profile | home | create | edit_post
   timeLastNavigated: 0,
+  isShowingSignIn: false,
   playing: {
     gameUrl: '',
     game: null,
@@ -41,7 +42,6 @@ const NavigationContextDefaults = {
   chatChannelId: null,
   gameMetaShown: null,
   userProfileShown: null,
-  deferredNavigationState: null, // used when restoring navigation state after login
 };
 
 /**
@@ -127,7 +127,15 @@ class NavigationContextManager extends React.Component {
     }
     // user logged in
     if (!prevProps.currentUser.user && this.props.currentUser.user) {
-      this._restoreDeferredState();
+      this.setState((state) => {
+        return {
+          ...state,
+          navigation: {
+            ...state.navigation,
+            isShowingSignIn: false,
+          },
+        };
+      });
     }
 
     if (
@@ -183,27 +191,13 @@ class NavigationContextManager extends React.Component {
     // track game launches
     Analytics.trackGameLaunch({ game, launchSource });
 
-    // auth wall
-    if (!this.props.currentUser.user) {
-      let navigationParams = {
-        deferredNavigationState: {
-          mode: 'home',
-          params: { playing: gameNavigationState },
-        },
-      };
-      return this._navigateToContentMode('signin', navigationParams);
-    }
-
     // navigate to the game
     this.setState({
       navigation: {
         ...this.state.navigation,
-        contentMode:
-          this.state.navigation.contentMode === 'signin'
-            ? 'home'
-            : this.state.navigation.contentMode,
         timeLastNavigated: time,
         playing: gameNavigationState,
+        isShowingSignIn: !this.props.currentUser.user,
       },
     });
   };
@@ -217,19 +211,6 @@ class NavigationContextManager extends React.Component {
       });
     } catch (e) {}
 
-    // auth wall
-    if (!this.props.currentUser.user && mode !== 'signin') {
-      navigationParams = navigationParams || {};
-      const originalParams = Object.assign({}, navigationParams);
-      navigationParams = {
-        deferredNavigationState: {
-          mode,
-          params: originalParams,
-        },
-      };
-      mode = 'signin';
-    }
-
     this.setState({
       navigation: {
         ...this.state.navigation,
@@ -241,7 +222,7 @@ class NavigationContextManager extends React.Component {
         userProfileShown: null,
         gameMetaShown: null,
         timeLastNavigated: Date.now(),
-        deferredNavigationState: null,
+        isShowingSignIn: !this.props.currentUser.user,
         ...navigationParams,
       },
     });
@@ -358,7 +339,17 @@ class NavigationContextManager extends React.Component {
 
   navigateToContentMode = (mode) => this._navigateToContentMode(mode);
 
-  navigateToSignIn = () => this._navigateToContentMode('signin');
+  navigateToSignIn = () => {
+    this.setState((state) => {
+      return {
+        ...state,
+        navigation: {
+          ...state.navigation,
+          isShowingSignIn: true,
+        },
+      };
+    });
+  };
 
   navigateToNotifications = () => this._navigateToContentMode('notifications');
 
@@ -442,8 +433,7 @@ class NavigationContextManager extends React.Component {
       this.navigateToUserProfile(this.props.currentUser.user);
       this.props.currentUser.refreshCurrentUser();
     } else {
-      // show sign in
-      this._navigateToContentMode('signin');
+      this.navigateToSignIn();
     }
   };
 
@@ -506,8 +496,7 @@ class NavigationContextManager extends React.Component {
     this.setState((state, prevProps) => {
       const time = Date.now();
       const oldContentMode = state.navigation.contentMode;
-      const newContentMode =
-        oldContentMode === 'signin' || oldContentMode === 'edit_post' ? 'home' : oldContentMode;
+      const newContentMode = oldContentMode === 'edit_post' ? 'home' : oldContentMode;
       // navigate away from the game
       Analytics.trackNavigation({
         prevContentMode: oldContentMode,
@@ -563,20 +552,6 @@ class NavigationContextManager extends React.Component {
     if (!handled) {
       // fall back to launching external browser
       NativeUtil.openExternalURL(url);
-    }
-  };
-
-  _restoreDeferredState = () => {
-    if (this.state.navigation.deferredNavigationState) {
-      const { mode, params } = this.state.navigation.deferredNavigationState;
-      if (params.playing && params.playing.isVisible && params.playing.gameUrl) {
-        // re-resolve the game in case anything changed since they last tried to load it.
-        this.navigateToGameUrl(params.playing.gameUrl);
-      } else {
-        this._navigateToContentMode(mode, params);
-      }
-    } else {
-      this.navigateToHome();
     }
   };
 

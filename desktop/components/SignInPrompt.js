@@ -37,7 +37,7 @@ const STYLES_GAME_COVER = css`
 
 class SignInPrompt extends React.Component {
   static defaultProps = {
-    deferredNavigationState: null,
+    navigation: {},
   };
 
   _renderDefaultPrompt = () => {
@@ -86,14 +86,14 @@ class SignInPrompt extends React.Component {
   };
 
   render() {
-    let { deferredNavigationState } = this.props;
+    let { navigation } = this.props;
     let prompt;
-    if (deferredNavigationState) {
-      const { mode, params } = deferredNavigationState;
-      if (mode === 'create') {
+    if (navigation) {
+      const { contentMode, playing } = navigation;
+      if (contentMode === 'create') {
         prompt = this._renderCreatePrompt();
-      } else if (params.playing && params.playing.game) {
-        prompt = this._renderGamePrompt(params.playing);
+      } else if (playing && playing.game) {
+        prompt = this._renderGamePrompt(playing);
       }
     }
 
@@ -110,9 +110,7 @@ export default class SignInPromptWithContext extends React.Component {
   render() {
     return (
       <NavigationContext.Consumer>
-        {(navigation) => (
-          <SignInPrompt deferredNavigationState={navigation.deferredNavigationState} />
-        )}
+        {(navigation) => <SignInPrompt navigation={navigation} />}
       </NavigationContext.Consumer>
     );
   }
