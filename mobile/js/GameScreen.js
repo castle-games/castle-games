@@ -13,7 +13,7 @@ import * as GhostChannels from './ghost/GhostChannels';
 // Lots of APIs need regular 'https://' URIs
 const castleUriToHTTPSUri = uri => uri.replace(/^castle:\/\//, 'https://');
 
-// Fetch a `Game` GraphQL model instance based on `gameId` or `gameUri`
+// Fetch a `Game` GraphQL entity based on `gameId` or `gameUri`
 const useFetchGame = ({ gameId, gameUri }) => {
   let game = null;
 
