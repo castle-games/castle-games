@@ -91,7 +91,7 @@ const computeDimensionsSettings = ({ metadata }) => {
 // object, initial audio volume, initial post, ...)
 const useInitialData = ({ game, dimensionsSettings }) => {
   const [sent, setSent] = useState(false);
-  const [sending, setSending] = useState(false);
+  const sending = useRef(false);
 
   // Fetch `me`
   const { loading: meLoading, data: meData } = useQuery(gql`
@@ -106,9 +106,9 @@ const useInitialData = ({ game, dimensionsSettings }) => {
   const me = isLoggedIn && !meLoading && meData && meData.me;
 
   useEffect(() => {
-    if (!sending && game && dimensionsSettings && (!isLoggedIn || me)) {
+    if (!sending.current && game && dimensionsSettings && (!isLoggedIn || me)) {
       // Ready to send to Lua
-      setSending(true);
+      sending.current = true;
       (async () => {
         await GhostChannels.clearAsync('INITIAL_DATA');
         await GhostChannels.pushAsync(
@@ -129,7 +129,7 @@ const useInitialData = ({ game, dimensionsSettings }) => {
         setSent(true);
       })();
     }
-  }, [sending, game, dimensionsSettings]);
+  }, [game, dimensionsSettings]);
 
   return { sent };
 };
