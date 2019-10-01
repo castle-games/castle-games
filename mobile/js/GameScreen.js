@@ -21,8 +21,8 @@ const useFetchGame = ({ gameId, gameUri }) => {
   // only actually call it if at least one of `gameId` or `gameUri` are present.
   const [callQuery, { loading: queryLoading, called: queryCalled, data: queryData }] = useLazyQuery(
     gql`
-      query Game($url: String, $gameId: ID) {
-        game(url: $url, gameId: $gameId) {
+      query Game($gameId: ID, $gameUri: String) {
+        game(gameId: $gameId, url: $gameUri) {
           gameId
           entryPoint
           metadata
@@ -31,7 +31,12 @@ const useFetchGame = ({ gameId, gameUri }) => {
       }
       ${LuaBridge.LUA_GAME_FRAGMENT}
     `,
-    { variables: { url: gameUri && castleUriToHTTPSUri(gameUri), gameId } }
+    {
+      variables: {
+        gameId,
+        gameUri: gameUri && castleUriToHTTPSUri(gameUri),
+      },
+    }
   );
 
   // If can query, query!
