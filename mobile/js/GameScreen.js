@@ -10,16 +10,16 @@ import * as LuaBridge from './LuaBridge';
 import * as Session from './Session';
 import * as GhostChannels from './ghost/GhostChannels';
 
-// Required fields from the `Game` GraphQL model type for actually running a game
-const GAME_REQUIRED_FIELDS = ['entryPoint', 'metadata'];
-const gameHasRequiredFields = game => GAME_REQUIRED_FIELDS.every(fieldName => fieldName in game);
-
 // Lots of APIs need regular 'https://' URIs
 const castleUriToHTTPSUri = uri => uri.replace(/^castle:\/\//, 'https://');
 
-// Populate `game` by querying the database based on `game.gameId` or `gameUri`. `game` may already be
-// populated, in which case this hook doesn't fetch anything.
-const useFetchGame = ({ game, gameUri }) => {
+// Required fields from the `Game` GraphQL model type for actually running a game
+const GAME_REQUIRED_FIELDS = ['entryPoint', 'metadata'];
+
+// Fetch a `Game` GraphQL model instance based on `gameId` or `gameUri`
+const useFetchGame = ({ gameId, gameUri }) => {
+  let game = null;
+
   // Set up a query to get the `game` from a '.castle' `gameUri`. We set up a 'lazy query' and then
   // only actually call it later if we decide we should.
   let shouldQuery;
@@ -32,12 +32,12 @@ const useFetchGame = ({ game, gameUri }) => {
         }
       }
     `,
-    { variables: { url: gameUri && castleUriToHTTPSUri(gameUri), gameId: game && game.gameId } }
+    { variables: { url: gameUri && castleUriToHTTPSUri(gameUri), gameId } }
   );
 
-  // If `game` isn't given and `gameUri` isn't to a '.castle' file, assume it's a direct entrypoint URI
+  // If `gameId` isn't given and `gameUri` isn't to a '.castle' file, assume it's a direct entrypoint URI
   // and just use a stub `game`
-  if (!game && gameUri && !gameUri.endsWith('.castle')) {
+  if (!gameId && gameUri && !gameUri.endsWith('.castle')) {
     game = {
       entryPoint: gameUri,
       metadata: {},
@@ -45,16 +45,14 @@ const useFetchGame = ({ game, gameUri }) => {
     shouldQuery = false;
   }
 
-  // If `game` isn't given and `gameUri` is to a '.castle' file, query for the `game`
-  if (!game && gameUri && gameUri.endsWith('.castle')) {
+  // If `gameId` isn't given and `gameUri` is to a '.castle' file, query for the `game`
+  if (!gameId && gameUri && gameUri.endsWith('.castle')) {
     shouldQuery = true;
   }
 
-  // If `game` is given but it's missing required fields, fall back to the `game === null` case and
-  // re-query
-  if (game && !gameHasRequiredFields(game)) {
+  // If `gameId` is given, query for the `game`
+  if (gameId) {
     shouldQuery = true;
-    game = null;
   }
 
   // If should query, query!
@@ -232,10 +230,10 @@ const LoaderText = ({ children }) => (
   <Text style={{ color: 'white', fontSize: 12 }}>{children}</Text>
 );
 
-// Given a `game` or `gameUri`, run and display the game!
-const GameView = ({ game, gameUri }) => {
-  const fetchGameHook = useFetchGame({ game, gameUri });
-  game = fetchGameHook.fetchedGame;
+// Given a `gameId` or `gameUri`, run and display the game!
+const GameView = ({ gameId, gameUri }) => {
+  const fetchGameHook = useFetchGame({ gameId, gameUri });
+  const game = fetchGameHook.fetchedGame;
 
   const dimensionsSettings = game && computeDimensionsSettings({ metadata: game.metadata });
 
@@ -291,33 +289,32 @@ const GameView = ({ game, gameUri }) => {
   );
 };
 
-// Navigate to a game. Can either be directly given the `game` object, or a `gameUri` to query
-// to get the `game`.
-export let goToGame = ({ game, gameUri }) => {};
+// Navigate to a game given its `gameId` or `gameUri`.
+export let goToGame = ({ gameId, gameUri }) => {};
 
-// Top-level component which stores the `game` / `gameUri` state
+// Top-level component which stores the `gameId` / `gameUri` state
 const GameScreen = () => {
-  const [game, setGame] = useState(null);
+  const [gameId, setGameId] = useState(null);
   const [gameUri, setGameUri] = useState(null);
 
-  goToGame = ({ game: newGame, gameUri: newGameUri, focus = true }) => {
+  goToGame = ({ gameId: newGameId, gameUri: newGameUri, focus = true }) => {
     if (focus) {
       MainSwitcher.switchTo('game');
     }
 
-    // Prefer `game`, then `gameUri`
-    if (newGame) {
-      setGame(newGame);
+    // Prefer `gameId`, then `gameUri`
+    if (newGameId) {
+      setGameId(newGameId);
       setGameUri(null);
     }
     if (newGameUri) {
-      setGame(null);
+      setGameId(null);
       setGameUri(newGameUri);
     }
   };
 
   // Use `key` to mount a new instance of `GameView` when the game changes
-  return <GameView key={(game && game.gameId) || gameUri} game={game} gameUri={gameUri} />;
+  return <GameView key={gameId || gameUri} gameId={gameId} gameUri={gameUri} />;
 };
 
 export default GameScreen;

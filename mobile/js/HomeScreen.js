@@ -50,7 +50,7 @@ const HomeScreen = () => {
                 overflow: 'hidden',
               }}
               delayPressIn={50}
-              onPress={() => GameScreen.goToGame({ game })}>
+              onPress={() => GameScreen.goToGame({ gameId: game.gameId })}>
               <FastImage
                 style={{ width: '100%', height: 180 }}
                 source={{ uri: game.coverImage && game.coverImage.url }}
