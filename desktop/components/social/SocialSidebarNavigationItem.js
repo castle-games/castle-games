@@ -30,7 +30,9 @@ export default class SocialSidebarNavigationItem extends React.Component {
     const { isOnline, showOnlineIndicator } = this.props;
     const { avatarUrl, avatarElement } = this.props;
 
-    let backgroundColor, unreadCount, indicatorStyles;
+    let backgroundColor,
+      unreadCount,
+      indicatorStyles = {};
     if (isSelected) {
       backgroundColor = theme.navigatorSelectedBackground || '#d3d3d3';
     }

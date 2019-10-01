@@ -45,7 +45,7 @@ export default class UIAvatar extends React.Component {
     if (!showIndicator) return null;
 
     const styles = {
-      background: isOnline ? Constants.REFACTOR_COLORS.online : '#ACACAC',
+      backgroundColor: isOnline ? Constants.REFACTOR_COLORS.online : '#ACACAC',
       ...this.props.indicatorStyle,
     };
     return (
