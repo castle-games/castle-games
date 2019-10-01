@@ -35,7 +35,7 @@ const STYLES_LOGO = css`
 
 const STYLES_SEARCH_SECTION = css`
   width: 25%;
-  min-width: 20%;
+  min-width: 280px;
 `;
 
 const STYLES_NAV_ITEM = css`
