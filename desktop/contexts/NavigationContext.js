@@ -73,6 +73,10 @@ const NavigatorContextDefaults = {
   clearCurrentGame: async () => {},
   setIsFullScreen: (isFullScreen) => {},
   setGameSessionId: (sessionId) => {},
+  isContentBackAvailable: () => false,
+  isContentForwardAvailable: () => false,
+  back: () => {},
+  forward: () => {},
 };
 
 const NavigatorContext = React.createContext(NavigatorContextDefaults);
@@ -80,6 +84,8 @@ const NavigationContext = React.createContext(NavigationContextDefaults);
 
 class NavigationContextManager extends React.Component {
   _reloadDebounceTimeout;
+  _contentHistory = [];
+  _historyIndex = 0;
 
   constructor(props) {
     super(props);
@@ -110,6 +116,11 @@ class NavigationContextManager extends React.Component {
         minimizeGame: this.minimizeGame,
         clearCurrentGame: this.clearCurrentGame,
         setIsFullScreen: this.setIsFullScreen,
+        setGameSessionId: this.setGameSessionId,
+        isContentBackAvailable: this.isContentBackAvailable,
+        isContentForwardAvailable: this.isContentForwardAvailable,
+        back: this.back,
+        forward: this.forward,
       },
     };
   }
@@ -204,6 +215,8 @@ class NavigationContextManager extends React.Component {
         nextContentMode: mode,
       });
     } catch (e) {}
+
+    this._pushContentHistory();
 
     this.setState({
       navigation: {
@@ -512,6 +525,53 @@ class NavigationContextManager extends React.Component {
       // fall back to launching external browser
       NativeUtil.openExternalURL(url);
     }
+  };
+
+  isContentBackAvailable = () => {
+    return this._historyIndex < this._contentHistory.length - 1;
+  };
+
+  isContentForwardAvailable = () => {
+    return this._historyIndex > 0;
+  };
+
+  back = () => {
+    if (this.isContentBackAvailable()) {
+      this._historyIndex++;
+      this.setState({
+        navigation: {
+          ...this.state.navigation,
+          content: this._contentHistory[this._historyIndex],
+        },
+      });
+    }
+  };
+
+  forward = () => {
+    if (this.isContentForwardAvailable()) {
+      this._historyIndex--;
+      this.setState({
+        navigation: {
+          ...this.state.navigation,
+          content: this._contentHistory[this._historyIndex],
+        },
+      });
+    }
+  };
+
+  _pushContentHistory = () => {
+    if (this._historyIndex > 0) {
+      // drop the head
+      this._contentHistory.splice(0, this._historyIndex);
+    }
+    this._contentHistory.unshift({
+      ...this.state.navigation.content,
+    });
+    if (this._contentHistory.length > 20) {
+      // trim
+      this._contentHistory.splice(20);
+    }
+    this._historyIndex = 0;
   };
 
   render() {
