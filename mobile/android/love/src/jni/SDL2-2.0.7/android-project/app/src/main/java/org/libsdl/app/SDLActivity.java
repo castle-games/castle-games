@@ -379,7 +379,7 @@ public class SDLActivity extends Activity {
       return mLayout;
     }
 
-  public void pause() {
+  public static void pause() {
     Log.v(TAG, "pause()");
     mNextNativeState = NativeState.PAUSED;
     mIsResumedCalled = false;
@@ -391,7 +391,7 @@ public class SDLActivity extends Activity {
     SDLActivity.handleNativeState();
   }
 
-  public void resume() {
+  public static void resume() {
     Log.v(TAG, "resume()");
     mNextNativeState = NativeState.RESUMED;
     mIsResumedCalled = true;
@@ -1193,8 +1193,9 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
         Log.v("SDL", "surfaceDestroyed()");
 
         // Transition to pause, if needed
-        SDLActivity.mNextNativeState = SDLActivity.NativeState.PAUSED;
-        SDLActivity.handleNativeState();
+        SDLActivity.pause();
+//        SDLActivity.mNextNativeState = SDLActivity.NativeState.PAUSED;
+//        SDLActivity.handleNativeState();
 
         SDLActivity.mIsSurfaceReady = false;
         SDLActivity.onNativeSurfaceDestroyed();
@@ -1302,6 +1303,7 @@ class SDLSurface extends SurfaceView implements SurfaceHolder.Callback,
         /* If the surface has been previously destroyed by onNativeSurfaceDestroyed, recreate it here */
         SDLActivity.onNativeSurfaceChanged();
 
+        SDLActivity.resume();
         SDLActivity.handleNativeState();
     }
 
