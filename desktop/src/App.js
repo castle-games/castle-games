@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as Actions from '~/common/actions';
+import * as ExperimentalFeatures from '~/common/experimental-features';
 import * as NativeUtil from '~/native/nativeutil';
 import * as Urls from '~/common/urls';
 import * as PingUtils from '~/common/pingutils';
@@ -24,6 +25,7 @@ import { UserPresenceContextProvider } from '~/contexts/UserPresenceContext';
 
 import AppContainer from '~/components/AppContainer';
 import ChatInput from '~/components/chat/ChatInput';
+import GameWindow from '~/native/gamewindow';
 import Logs from '~/common/logs';
 import PublishHistory from '~/common/publish-history';
 
@@ -77,6 +79,13 @@ class App extends React.Component {
       if (logs && logs.length) {
         this.props.development.addLogs(logs);
       }
+    });
+
+    GameWindow.onOpen((game) => {
+      this._addGameEventListeners(game);
+    });
+    GameWindow.onClose((game) => {
+      this._removeGameEventListeners(game);
     });
   }
 
@@ -204,6 +213,49 @@ class App extends React.Component {
   _handleNativeFocusChat = async () => {
     await Actions.delay(80);
     ChatInput.focus();
+  };
+
+  _addGameEventListeners = (game) => {
+    window.addEventListener(
+      'CASTLE_CONNECT_MULTIPLAYER_CLIENT_REQUEST',
+      this._connectMultiplayerClientAsync
+    );
+  };
+
+  _removeGameEventListeners = (game) => {
+    window.removeEventListener(
+      'CASTLE_CONNECT_MULTIPLAYER_CLIENT_REQUEST',
+      this._connectMultiplayerClientAsync
+    );
+  };
+
+  _connectMultiplayerClientAsync = async (e) => {
+    let { game, sessionId } = this.props.navigation.playing;
+    let mediaUrl = e.params.mediaUrl;
+    let isStaging = ExperimentalFeatures.isEnabled(ExperimentalFeatures.STAGING_GAME_SERVERS);
+
+    // join/create a multiplayer session
+    let response;
+    if (game && (game.gameId || game.url)) {
+      response = await Actions.multiplayerJoinAsync(
+        game ? game.gameId : null,
+        game.hostedUrl || game.url,
+        null,
+        sessionId,
+        isStaging
+      );
+    } else {
+      response = await Actions.multiplayerJoinAsync(null, null, mediaUrl, sessionId, isStaging);
+    }
+    NativeUtil.sendLuaEvent('CASTLE_CONNECT_MULTIPLAYER_CLIENT_RESPONSE', {
+      address: response.address,
+      sessionToken: response.sessionToken,
+    });
+
+    if (response.sessionId && game) {
+      // record the id of the multiplayer session we just joined/created
+      this.props.navigator.setGameSessionId(response.sessionId);
+    }
   };
 
   render() {

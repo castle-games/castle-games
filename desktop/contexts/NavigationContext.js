@@ -6,8 +6,6 @@ import * as ExecNode from '~/common/execnode';
 import * as Strings from '~/common/strings';
 import * as NativeUtil from '~/native/nativeutil';
 import * as Urls from '~/common/urls';
-import { getSessionLink } from '~/common/utilities';
-import * as ExperimentalFeatures from '~/common/experimental-features';
 
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { DevelopmentContext } from '~/contexts/DevelopmentContext';
@@ -72,6 +70,7 @@ const NavigatorContextDefaults = {
   minimizeGame: () => {},
   clearCurrentGame: async () => {},
   setIsFullScreen: (isFullScreen) => {},
+  setGameSessionId: (sessionId) => {},
 };
 
 const NavigatorContext = React.createContext(NavigatorContextDefaults);
@@ -111,13 +110,6 @@ class NavigationContextManager extends React.Component {
         setIsFullScreen: this.setIsFullScreen,
       },
     };
-    // we need to listen for game events related to multiplayer session connection
-    GameWindow.onOpen((game) => {
-      this._addGameEventListeners(game);
-    });
-    GameWindow.onClose((game) => {
-      this._removeGameEventListeners(game);
-    });
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -228,57 +220,6 @@ class NavigationContextManager extends React.Component {
     });
   };
 
-  _addGameEventListeners = (game) => {
-    window.addEventListener(
-      'CASTLE_CONNECT_MULTIPLAYER_CLIENT_REQUEST',
-      this._connectMultiplayerClientAsync
-    );
-  };
-
-  _removeGameEventListeners = (game) => {
-    window.removeEventListener(
-      'CASTLE_CONNECT_MULTIPLAYER_CLIENT_REQUEST',
-      this._connectMultiplayerClientAsync
-    );
-  };
-
-  _connectMultiplayerClientAsync = async (e) => {
-    let { game, sessionId } = this.state.navigation.playing;
-    let mediaUrl = e.params.mediaUrl;
-    let isStaging = ExperimentalFeatures.isEnabled(ExperimentalFeatures.STAGING_GAME_SERVERS);
-
-    // join/create a multiplayer session
-    let response;
-    if (game && (game.gameId || game.url)) {
-      response = await Actions.multiplayerJoinAsync(
-        game ? game.gameId : null,
-        game.hostedUrl || game.url,
-        null,
-        sessionId,
-        isStaging
-      );
-    } else {
-      response = await Actions.multiplayerJoinAsync(null, null, mediaUrl, sessionId, isStaging);
-    }
-    NativeUtil.sendLuaEvent('CASTLE_CONNECT_MULTIPLAYER_CLIENT_RESPONSE', {
-      address: response.address,
-      sessionToken: response.sessionToken,
-    });
-
-    if (response.sessionId && game) {
-      // record the id of the multiplayer session we just joined/created
-      this.setState({
-        navigation: {
-          ...this.state.navigation,
-          playing: {
-            ...this.state.navigation.playing,
-            sessionId: response.sessionId,
-          },
-        },
-      });
-    }
-  };
-
   setIsFullScreen = (isFullScreen) => {
     if (!this.state.navigation.playing.game) {
       // we aren't playing a game, this is a noop
@@ -290,6 +231,18 @@ class NavigationContextManager extends React.Component {
         playing: {
           ...this.state.navigation.playing,
           isFullScreen,
+        },
+      },
+    });
+  };
+
+  setGameSessionId = (sessionId) => {
+    this.setState({
+      navigation: {
+        ...this.state.navigation,
+        playing: {
+          ...this.state.navigation.playing,
+          sessionId,
         },
       },
     });
