@@ -16,7 +16,7 @@ setInterval(async () => {
 });
 
 export const listen = (name, handler) => {
-  listenerList = listenerLists[name];
+  let listenerList = listenerLists[name];
   if (!listenerList) {
     listenerList = {};
     listenerLists[name] = listenerList;

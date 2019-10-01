@@ -15,19 +15,6 @@ export const LUA_USER_FRAGMENT = gql`
   }
 `;
 
-export const LUA_GAME_FRAGMENT = gql`
-  fragment LuaGame on Game {
-    gameId
-    owner {
-      ...LuaUser
-    }
-    title
-    url
-    description
-  }
-  ${LUA_USER_FRAGMENT}
-`;
-
 export const jsUserToLuaUser = async user =>
   user
     ? {
@@ -44,6 +31,19 @@ export const jsPostToLuaPost = async ({ postId, creator, media }, { data }) => (
   mediaUrl: media ? media.url : undefined,
   data: data ? await Actions.postDataAsync({ postId }) : undefined,
 });
+
+export const LUA_GAME_FRAGMENT = gql`
+  fragment LuaGame on Game {
+    gameId
+    owner {
+      ...LuaUser
+    }
+    title
+    url
+    description
+  }
+  ${LUA_USER_FRAGMENT}
+`;
 
 export const jsGameToLuaGame = async ({ gameId, owner, title, url, description }) => ({
   gameId,
