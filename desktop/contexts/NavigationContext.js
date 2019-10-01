@@ -22,7 +22,11 @@ import Logs from '~/common/logs';
  *  should have an effect on values here.
  */
 const NavigationContextDefaults = {
-  contentMode: 'home', // game-meta | profile | home | create | edit_post
+  content: {
+    mode: 'home', // game-meta | profile | home | create | edit_post
+    gameMetaShown: null,
+    userProfileShown: null,
+  },
   timeLastNavigated: 0,
   isShowingSignIn: false,
   playing: {
@@ -38,8 +42,6 @@ const NavigationContextDefaults = {
   },
   isChatExpanded: true,
   chatChannelId: null,
-  gameMetaShown: null,
-  userProfileShown: null,
 };
 
 /**
@@ -198,7 +200,7 @@ class NavigationContextManager extends React.Component {
   _navigateToContentMode = (mode, navigationParams) => {
     try {
       Analytics.trackNavigation({
-        prevContentMode: this.state.navigation.contentMode,
+        prevContentMode: this.state.navigation.content.mode,
         nextContentMode: mode,
       });
     } catch (e) {}
@@ -206,16 +208,17 @@ class NavigationContextManager extends React.Component {
     this.setState({
       navigation: {
         ...this.state.navigation,
-        contentMode: mode,
+        content: {
+          ...NavigationContextDefaults.content,
+          mode,
+          ...navigationParams,
+        },
         playing: {
           ...this.state.navigation.playing,
           isVisible: false,
         },
-        userProfileShown: null,
-        gameMetaShown: null,
         timeLastNavigated: Date.now(),
         isShowingSignIn: !this.props.currentUser.user,
-        ...navigationParams,
       },
     });
   };
@@ -314,8 +317,8 @@ class NavigationContextManager extends React.Component {
     if (!this.state.navigation.playing.game) {
       throw new Error(`Cannot navigate to current game because there is no current game.`);
     }
-    if (this.state.navigation.contentMode === 'edit_post') {
-      this.state.navigation.params.onCancel();
+    if (this.state.navigation.contentMode === 'edit_post' && this.state.navigation.content.params) {
+      this.state.navigation.content.params.onCancel();
     }
     Analytics.trackGameMaximize();
     this.setState({
@@ -448,7 +451,7 @@ class NavigationContextManager extends React.Component {
     await GameWindow.close();
     this.setState((state, prevProps) => {
       const time = Date.now();
-      const oldContentMode = state.navigation.contentMode;
+      const oldContentMode = state.navigation.content.mode;
       const newContentMode = oldContentMode === 'edit_post' ? 'home' : oldContentMode;
       // navigate away from the game
       Analytics.trackNavigation({
@@ -463,7 +466,10 @@ class NavigationContextManager extends React.Component {
         ...state,
         navigation: {
           ...state.navigation,
-          contentMode: newContentMode,
+          content: {
+            ...state.navigation.content,
+            mode: newContentMode,
+          },
           playing: {
             ...NavigationContextDefaults.playing,
             timeLoaded: time,

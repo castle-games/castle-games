@@ -89,8 +89,8 @@ class SignInPrompt extends React.Component {
     let { navigation } = this.props;
     let prompt;
     if (navigation) {
-      const { contentMode, playing } = navigation;
-      if (contentMode === 'create') {
+      const { content, playing } = navigation;
+      if (content.mode === 'create') {
         prompt = this._renderCreatePrompt();
       } else if (playing && playing.game) {
         prompt = this._renderGamePrompt(playing);

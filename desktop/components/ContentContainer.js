@@ -187,7 +187,7 @@ export default class ContentContainerWithContext extends React.Component {
                       {(navigator) => (
                         <ContentContainer
                           viewer={currentUser ? currentUser.user : null}
-                          mode={navigation.contentMode}
+                          mode={navigation.content.mode}
                           isShowingSignIn={navigation.isShowingSignIn}
                           timeLastNavigated={navigation.timeLastNavigated}
                           playing={navigation.playing}

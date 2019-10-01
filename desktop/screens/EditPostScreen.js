@@ -281,7 +281,7 @@ export default class EditPostScreenWithContext extends React.Component {
         {(navigator) => (
           <NavigationContext.Consumer>
             {(navigation) => {
-              const { editPost, onSubmit, onCancel } = navigation.params;
+              const { editPost, onSubmit, onCancel } = navigation.content.params;
 
               // Mock data for testing
               // const editPost = {

@@ -215,7 +215,7 @@ export default class ProfileScreenWithContext extends React.Component {
         navigateToUserProfile={navigator.navigateToUserProfile}
         navigateToSignIn={navigator.navigateToSignIn}
         viewer={currentUser.user}
-        creator={navigation.userProfileShown}
+        creator={navigation.content.userProfileShown}
         onSignOut={currentUser.clearCurrentUser}
         onAfterSave={currentUser.refreshCurrentUser}
         onSendMessage={chat.openChannelForUser}

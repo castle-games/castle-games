@@ -228,8 +228,8 @@ export default class SocialSidebarWithContext extends React.Component {
                               viewer={currentUser.user}
                               isChatExpanded={navigation.isChatExpanded}
                               playing={navigation.playing}
-                              contentMode={navigation.contentMode}
-                              gameMetaShown={navigation.gameMetaShown}
+                              contentMode={navigation.content.mode}
+                              gameMetaShown={navigation.content.gameMetaShown}
                               chatChannelId={navigation.chatChannelId}
                               chat={chat}
                               lobbyChannel={lobbyChannel}

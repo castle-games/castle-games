@@ -127,13 +127,13 @@ export default class GameMetaScreenWithContext extends React.Component {
                 {(navigation) => (
                   <NavigatorContext.Consumer>
                     {(navigator) => {
-                      const channel = navigation.gameMetaShown
-                        ? chat.channels[navigation.gameMetaShown.chatChannelId]
+                      const channel = navigation.content.gameMetaShown
+                        ? chat.channels[navigation.content.gameMetaShown.chatChannelId]
                         : null;
                       return (
                         <GameMetaScreen
                           navigator={navigator}
-                          game={navigation.gameMetaShown}
+                          game={navigation.content.gameMetaShown}
                           userIdToUser={userPresence.userIdToUser}
                           chat={chat}
                           channel={channel}
