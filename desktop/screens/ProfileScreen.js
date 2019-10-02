@@ -38,7 +38,7 @@ class ProfileScreen extends React.Component {
     creator: null,
     viewer: null,
     onAfterSave: () => {},
-    navigateToGame: async (game) => {},
+    navigateToGameMeta: async (game) => {},
     navigateToGameUrl: async (url) => {},
     navigateToUserProfile: (user) => {},
   };
@@ -113,8 +113,8 @@ class ProfileScreen extends React.Component {
     }
   };
 
-  _navigateToGame = async (game, options) => {
-    await this.props.navigateToGame(game, { ...options, launchSource: 'profile' });
+  _navigateToGameMeta = async (game, options) => {
+    await this.props.navigateToGameMeta(game, { ...options, launchSource: 'profile' });
   };
 
   _renderGameContent = (isOwnProfile, viewer, creator) => {
@@ -124,7 +124,7 @@ class ProfileScreen extends React.Component {
           viewer={this.props.viewer}
           gameItems={creator.gameItems}
           onUserSelect={this.props.navigateToUserProfile}
-          onGameSelect={this._navigateToGame}
+          onGameSelect={this._navigateToGameMeta}
           onGameUpdate={isOwnProfile ? this._onShowUpdateGame : null}
           onSignInSelect={this.props.navigateToSignIn}
         />
@@ -210,7 +210,7 @@ export default class ProfileScreenWithContext extends React.Component {
   _renderProfile = (navigator, navigation, currentUser, chat) => {
     return (
       <ProfileScreen
-        navigateToGame={navigator.navigateToGame}
+        navigateToGameMeta={navigator.navigateToGameMeta}
         navigateToGameUrl={navigator.navigateToGameUrl}
         navigateToUserProfile={navigator.navigateToUserProfile}
         navigateToSignIn={navigator.navigateToSignIn}

@@ -150,7 +150,6 @@ export default class UIGameCell extends React.Component {
     game: null,
     onGameSelect: () => {},
     onUserSelect: () => {},
-    onShowGameInfo: () => {},
     onGameUpdate: null,
     isMiniature: false,
     theme: {},
@@ -160,20 +159,11 @@ export default class UIGameCell extends React.Component {
     isHoveringOnPlay: false,
     isHoveringOnActions: false,
     isHoveringOnAuthor: false,
-    isShowingGameInfo: false,
     gameUrlWasCopiedToClipboard: false,
   };
 
   _handleToggleHoverOnPlay = (shouldSetHovering) => {
     this.setState({ isHoveringOnPlay: shouldSetHovering });
-  };
-
-  _handleToggleShowGameInfo = (shouldShow) => {
-    if (this.props.onShowGameInfo && shouldShow) {
-      this.props.onShowGameInfo();
-    } else {
-      this.setState({ isShowingGameInfo: shouldShow });
-    }
   };
 
   _handleHoverOnActionsBar = (action, isHovering) => {
@@ -217,7 +207,6 @@ export default class UIGameCell extends React.Component {
   _handleMouseLeave = () => {
     this._handleToggleHoverOnPlay(false);
     this.setState({ gameUrlWasCopiedToClipboard: false });
-    this._handleToggleShowGameInfo(false);
   };
 
   render() {
@@ -267,8 +256,6 @@ export default class UIGameCell extends React.Component {
       );
     }
 
-    let shouldShowGameInfo = isLocalFile || this.state.isShowingGameInfo;
-
     return (
       <div
         className={STYLES_CONTAINER}
@@ -280,20 +267,9 @@ export default class UIGameCell extends React.Component {
             STYLES_TOP_SECTION + (this.props.isMiniature ? ` ${STYLES_MINI_TOP_SECTION}` : '')
           }
           style={{ width: this.props.theme.embedWidth }}>
-          {shouldShowGameInfo ? (
+          {isLocalFile ? (
             <div className={STYLES_DESCRIPTION_SECTION}>
               <div className={STYLES_BYLINE} onClick={() => this.props.onUserSelect(game.owner)}>
-                {!isLocalFile ? (
-                  <div
-                    className={STYLES_AVATAR}
-                    style={{
-                      backgroundImage:
-                        game.owner && game.owner.photo && game.owner.photo.url
-                          ? `url(${game.owner.photo.url})`
-                          : null,
-                    }}
-                  />
-                ) : null}
                 <div className={STYLES_GAME_DESCRIPTION_HEADER}>{username}</div>
               </div>
               <div
@@ -321,28 +297,26 @@ export default class UIGameCell extends React.Component {
           style={{
             background: !this.state.isHoveringOnPlay ? null : this.props.theme.embedBackground,
           }}>
-          {!this.state.isShowingGameInfo ? (
-            <div className={STYLES_GAME_TITLE_AND_AUTHOR}>
-              <div className={STYLES_TITLE_AND_PLAY}>
-                <span className={STYLES_GAME_TITLE}>{title}</span>
-              </div>
-              {!this.props.isMiniature ? (
-                <div className={STYLES_SECONDARY_TEXT}>
-                  <div className={STYLES_AUTHOR_AND_PLAY_COUNT}>
-                    <span
-                      className={STYLES_GAME_AUTHOR}
-                      onClick={() => this.props.onUserSelect(game.owner)}
-                      onMouseEnter={() => this._handleToggleHoverOnAuthor(true)}
-                      onMouseLeave={() => this._handleToggleHoverOnAuthor(false)}>
-                      {username}
-                    </span>
-                    {playCount}
-                  </div>
-                </div>
-              ) : null}
-              {detailLine}
+          <div className={STYLES_GAME_TITLE_AND_AUTHOR}>
+            <div className={STYLES_TITLE_AND_PLAY}>
+              <span className={STYLES_GAME_TITLE}>{title}</span>
             </div>
-          ) : null}
+            {!this.props.isMiniature ? (
+              <div className={STYLES_SECONDARY_TEXT}>
+                <div className={STYLES_AUTHOR_AND_PLAY_COUNT}>
+                  <span
+                    className={STYLES_GAME_AUTHOR}
+                    onClick={() => this.props.onUserSelect(game.owner)}
+                    onMouseEnter={() => this._handleToggleHoverOnAuthor(true)}
+                    onMouseLeave={() => this._handleToggleHoverOnAuthor(false)}>
+                    {username}
+                  </span>
+                  {playCount}
+                </div>
+              </div>
+            ) : null}
+            {detailLine}
+          </div>
           <UIPlayIcon
             hovering={this.state.isHoveringOnPlay && !hoveringOnDetailIcon}
             visible={this.state.isHoveringOnPlay}
@@ -352,10 +326,8 @@ export default class UIGameCell extends React.Component {
         {this.state.isHoveringOnPlay ? (
           <UIGameCellActionsBar
             isLocalFile={isLocalFile}
-            isShowingInfo={shouldShowGameInfo}
             didCopyToClipboard={this.state.gameUrlWasCopiedToClipboard}
             onGameUpdate={onGameUpdate}
-            onShowGameInfo={this._handleToggleShowGameInfo}
             onCopyUrl={this._handleCopyUrlToClipboard}
             onHover={this._handleHoverOnActionsBar}
           />

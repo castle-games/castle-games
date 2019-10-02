@@ -108,7 +108,7 @@ export default class ChatPost extends React.Component {
     const { post, game } = this.state;
 
     if (game) {
-      return this.props.navigator.navigateToGame(game);
+      return this.props.navigator.navigateToGameMeta(game);
     }
 
     this.props.navigator.navigateToGame(post.sourceGame, { post });

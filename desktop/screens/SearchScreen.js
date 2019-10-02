@@ -136,8 +136,8 @@ export default class SearchScreen extends React.Component {
     this.props.onSearchReset();
   };
 
-  _navigateToGame = async (game) => {
-    await this.context.navigateToGame(game, { launchSource: 'search' });
+  _navigateToGameMeta = async (game) => {
+    await this.context.navigateToGameMeta(game, { launchSource: 'search' });
     this.props.onSearchReset();
   };
 
@@ -197,7 +197,7 @@ export default class SearchScreen extends React.Component {
           viewer={this.props.viewer}
           gameItems={this.state.results.games}
           onUserSelect={this._navigateToUserProfile}
-          onGameSelect={this._navigateToGame}
+          onGameSelect={this._navigateToGameMeta}
           onSignInSelect={this.props.navigateToSignIn}
         />
       );

@@ -141,8 +141,8 @@ class GamesHomeScreen extends React.Component {
     }
   };
 
-  _navigateToGame = (game, options) => {
-    return this.props.navigateToGame(game, { launchSource: `home`, ...options });
+  _navigateToGameMeta = (game, options) => {
+    return this.props.navigateToGameMeta(game, { launchSource: `home`, ...options });
   };
 
   _renderUpdateBanner = () => {
@@ -174,7 +174,7 @@ class GamesHomeScreen extends React.Component {
           posts={posts}
           navigator={this.props.navigator}
           onUserSelect={this.props.navigateToUserProfile}
-          onGameSelect={this._navigateToGame}
+          onGameSelect={this._navigateToGameMeta}
         />
       );
     }
@@ -192,7 +192,7 @@ class GamesHomeScreen extends React.Component {
                 viewer={this.props.viewer}
                 gameItems={multiplayerGames}
                 onUserSelect={this.props.navigateToUserProfile}
-                onGameSelect={this._navigateToGame}
+                onGameSelect={this._navigateToGameMeta}
                 onSignInSelect={this.props.navigateToSignIn}
               />
             </div>
@@ -208,7 +208,7 @@ class GamesHomeScreen extends React.Component {
                   this.props.mode === 'home' ? this.props.trendingGames : this.props.allGames
                 }
                 onUserSelect={this.props.navigateToUserProfile}
-                onGameSelect={this._navigateToGame}
+                onGameSelect={this._navigateToGameMeta}
                 onSignInSelect={this.props.navigateToSignIn}
               />
             ) : null}
@@ -239,7 +239,7 @@ export default class GamesHomeScreenWithContext extends React.Component {
               <GamesHomeScreen
                 viewer={currentUser ? currentUser.user : null}
                 navigateToUserProfile={navigator.navigateToUserProfile}
-                navigateToGame={navigator.navigateToGame}
+                navigateToGameMeta={navigator.navigateToGameMeta}
                 navigateToSignIn={navigator.navigateToSignIn}
                 posts={currentUser.content.posts}
                 allGames={currentUser.content.allGames}

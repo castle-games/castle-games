@@ -59,16 +59,14 @@ const TOOLTIP_PROPS = {
 export default class UIGameCellActionsBar extends React.Component {
   static defaultProps = {
     isLocalFile: false,
-    isShowingInfo: false,
     didCopyToClipboard: false,
-    onShowGameInfo: (showInfo) => {},
     onCopyUrl: () => {},
     onGameUpdate: () => {},
     onHover: (action, isHovering) => {},
   };
 
   render() {
-    const { isLocalFile, isShowingInfo, didCopyToClipboard, onGameUpdate, onHover } = this.props;
+    const { isLocalFile, didCopyToClipboard, onGameUpdate, onHover } = this.props;
     return (
       <div
         className={STYLES_OPTIONS_BAR}
@@ -78,15 +76,6 @@ export default class UIGameCellActionsBar extends React.Component {
           <Tooltip title={'Update'} {...TOOLTIP_PROPS}>
             <div className={STYLES_OPTIONS_BAR_ICON} onClick={onGameUpdate}>
               U
-            </div>
-          </Tooltip>
-        ) : null}
-        {!isLocalFile ? (
-          <Tooltip title={isShowingInfo ? 'Show preview' : 'Show info'} {...TOOLTIP_PROPS}>
-            <div
-              className={STYLES_OPTIONS_BAR_ICON}
-              onClick={() => this.props.onShowGameInfo(!isShowingInfo)}>
-              {isShowingInfo ? <SVG.Image size="14px" /> : <SVG.Info height="14px" />}
             </div>
           </Tooltip>
         ) : null}

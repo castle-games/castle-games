@@ -85,6 +85,10 @@ class GameMetaScreen extends React.Component {
     this.props.chat.openChannelForUser(user);
   };
 
+  _navigateToGame = async (game, options) => {
+    await this.props.navigateToGame(game, { ...options, launchSource: 'game-meta' });
+  };
+
   _renderContent = (channel, mode) => {
     switch (mode) {
       case 'members':
@@ -104,7 +108,7 @@ class GameMetaScreen extends React.Component {
               posts={this.state.posts}
               navigator={this.props.navigator}
               onUserSelect={this.props.navigator.navigateToUserProfile}
-              onGameSelect={this.props.navigator.navigateToGame}
+              onGameSelect={this._navigateToGame}
             />
           );
         } else {
@@ -125,7 +129,7 @@ class GameMetaScreen extends React.Component {
       <div className={STYLES_CONTAINER}>
         <GameMetaHeader
           game={game}
-          onSelectGame={this.props.navigator.navigateToGame}
+          onSelectGame={this._navigateToGame}
           onSelectUser={this.props.navigator.navigateToUserProfile}
         />
         <div
