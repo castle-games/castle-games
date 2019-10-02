@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as Actions from '~/common/actions';
 import * as Constants from '~/common/constants';
 
 import { css } from 'react-emotion';
@@ -15,6 +16,7 @@ import ProfileHeader from '~/components/profile/ProfileHeader';
 import ProfileSettings from '~/components/profile/ProfileSettings';
 import SignOut from '~/components/profile/SignOut';
 import UIGameSet from '~/components/reusable/UIGameSet';
+import UIPostList from '~/components/reusable/UIPostList';
 
 const STYLES_CONTAINER = css`
   color: ${Constants.colors.text};
@@ -45,6 +47,7 @@ class ProfileScreen extends React.Component {
 
   state = {
     mode: 'games',
+    posts: [],
     gameToUpdate: null, // if mode === 'update-game'
   };
 
@@ -56,13 +59,15 @@ class ProfileScreen extends React.Component {
     this._update(null, null);
   }
 
-  _update = (prevProps) => {
+  _update = async (prevProps) => {
     const existingUserId = prevProps && prevProps.creator ? prevProps.creator.userId : null;
     const nextUserId = this.props.creator ? this.props.creator.userId : null;
 
     if (nextUserId != existingUserId) {
       // we're rendering a new profile, reset state.
       this._onShowGames();
+      const posts = await Actions.postsForUserId(nextUserId);
+      this.setState({ posts });
     } else {
       // if updating a game, pass down any new updates to that game.
       if (this.state.gameToUpdate) {
@@ -84,6 +89,7 @@ class ProfileScreen extends React.Component {
   };
 
   _onShowGames = () => this.setState({ mode: 'games', gameToUpdate: null });
+  _onShowPosts = () => this.setState({ mode: 'posts' });
   _onShowAddGame = () => this.setState({ mode: 'add-game' });
   _onShowEditProfile = () => this.setState({ mode: 'edit-profile' });
   _onShowSignOut = () => this.setState({ mode: 'sign-out' });
@@ -97,7 +103,7 @@ class ProfileScreen extends React.Component {
   };
 
   _getNavigationItems = (isOwnProfile) => {
-    let navigationItems = [{ label: 'Games', key: 'games' }];
+    let navigationItems = [{ label: 'Games', key: 'games' }, { label: 'Activity', key: 'posts' }];
 
     if (isOwnProfile) {
       navigationItems.push({ label: 'Add game', key: 'add-game' });
@@ -112,6 +118,7 @@ class ProfileScreen extends React.Component {
   _onNavigationChange = (selectedKey) => {
     const callbacks = {
       games: this._onShowGames,
+      posts: this._onShowPosts,
       'add-game': this._onShowAddGame,
       'edit-profile': this._onShowEditProfile,
       'sign-out': this._onShowSignOut,
@@ -146,6 +153,26 @@ class ProfileScreen extends React.Component {
           : 'This user has not added any games to their profile yet.'}
       </UIEmptyState>
     );
+  };
+
+  _renderPosts = (posts, isOwnProfile) => {
+    if (posts && posts.length) {
+      return (
+        <UIPostList
+          posts={this.state.posts}
+          onUserSelect={this.props.navigateToUserProfile}
+          onGameSelect={this._navigateToGameMeta}
+        />
+      );
+    } else {
+      return (
+        <UIEmptyState title="No activity yet">
+          {isOwnProfile
+            ? 'You have no recent activity shown on your profile. You can share screenshots from games you play on Castle and they will show up here.'
+            : 'This user has no recent activity.'}
+        </UIEmptyState>
+      );
+    }
   };
 
   _renderAddGame = (isOwnProfile) => {
@@ -192,6 +219,8 @@ class ProfileScreen extends React.Component {
       profileContentElement = this._renderSignOutContent(isOwnProfile);
     } else if (mode === 'settings') {
       profileContentElement = this._renderSettings(isOwnProfile, viewer);
+    } else if (mode === 'posts') {
+      profileContentElement = this._renderPosts(this.state.posts, isOwnProfile);
     } else {
       profileContentElement = this._renderGameContent(isOwnProfile, viewer, creator);
     }
