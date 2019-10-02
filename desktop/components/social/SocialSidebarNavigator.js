@@ -87,6 +87,9 @@ export default class SocialSidebarNavigator extends React.Component {
       } else if (props.contentMode === 'game-meta') {
         isGameVisible = true;
         game = props.gameMetaShown;
+      } else if (props.playing) {
+        isGameVisible = true;
+        game = props.playing.game;
       } else {
         isGameVisible = false;
         game = null;
