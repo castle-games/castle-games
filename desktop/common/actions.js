@@ -1057,6 +1057,25 @@ export async function allPostsAsync({ pageSize = 20, pageAfterPostId } = {}) {
   return result.data.allPosts;
 }
 
+export async function postsForGameId(gameId, { pageSize = 20, pageAfterPostId } = {}) {
+  const result = await API.graphqlAsync(
+    `
+      query($gameId: ID!, $pageSize: Int, $pageAfterPostId: ID) {
+        postsForGame(gameId: $gameId, pageSize: $pageSize, pageAfterPostId: $pageAfterPostId) {
+          ${POST_FIELDS}
+        }
+      }
+    `,
+    { gameId, pageSize, pageAfterPostId }
+  );
+
+  if (result.errors && result.errors.length) {
+    throw new Error(`postsForGame: ${result.errors[0].message}`);
+  }
+
+  return result.data.postsForGame;
+}
+
 export async function postDataAsync({ postId }) {
   const result = await API.graphqlAsync(
     `
