@@ -86,7 +86,7 @@ class GameMetaScreen extends React.Component {
   };
 
   _navigateToGame = async (game, options) => {
-    await this.props.navigateToGame(game, { ...options, launchSource: 'game-meta' });
+    await this.props.navigator.navigateToGame(game, { ...options, launchSource: 'game-meta' });
   };
 
   _renderContent = (channel, mode) => {
