@@ -76,3 +76,4 @@ Use either Git Bash or WSL to run commands in.
 - This results in a 'love' binary in that directory.
 - Now from the 'base/' directory at the root of your checkout of this
   repository, run `../love/build/love .`.
+
