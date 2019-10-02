@@ -37,16 +37,13 @@ const HomeScreen = () => {
           <Text>Error fetching games!</Text>
         </View>
       ) : (
-        <ScrollView style={{ paddingVertical: 32, paddingHorizontal: '15%' }}>
+        <ScrollView style={{ padding: 16, }}>
           {queryData.allGames.map(game => (
             <TouchableOpacity
               key={game.gameId}
               style={{
                 width: '100%',
-                borderWidth: 1,
-                borderColor: '#ddd',
-                borderRadius: 6,
-                marginBottom: 24,
+                marginBottom: 16,
                 overflow: 'hidden',
               }}
               delayPressIn={50}
@@ -56,8 +53,8 @@ const HomeScreen = () => {
                 source={{ uri: game.coverImage && game.coverImage.url }}
                 resizeMode={FastImage.resizeMode.cover}
               />
-              <View style={{ padding: 8 }}>
-                <Text style={{ fontSize: 18, fontWeight: '900' }}>{game.title}</Text>
+              <View style={{ paddingTop: 8 }}>
+                <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{game.title}</Text>
                 <Text style={{ fontSize: 14, color: '#aaa' }}>{game.owner.username}</Text>
               </View>
             </TouchableOpacity>

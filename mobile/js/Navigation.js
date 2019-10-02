@@ -18,7 +18,9 @@ import ProfileScreen from './ProfileScreen';
 const HomeNavigator = createStackNavigator({
   HomeScreen: {
     screen: HomeScreen,
-    navigationOptions: { title: 'Home' },
+    navigationOptions: {
+      title: 'Castle',
+    },
   },
 });
 
