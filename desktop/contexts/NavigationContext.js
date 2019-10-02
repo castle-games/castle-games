@@ -40,6 +40,10 @@ const NavigationContextDefaults = {
     isVisible: false,
     isFullScreen: false,
   },
+  contentHistory: {
+    stack: [],
+    index: 0,
+  },
   isChatExpanded: true,
   chatChannelId: null,
 };
@@ -73,10 +77,12 @@ const NavigatorContextDefaults = {
   clearCurrentGame: async () => {},
   setIsFullScreen: (isFullScreen) => {},
   setGameSessionId: (sessionId) => {},
-  isContentBackAvailable: () => false,
-  isContentForwardAvailable: () => false,
-  back: () => {},
-  forward: () => {},
+  contentHistory: {
+    isBackAvailable: () => false,
+    isForwardAvailable: () => false,
+    back: () => {},
+    forward: () => {},
+  },
 };
 
 const NavigatorContext = React.createContext(NavigatorContextDefaults);
@@ -84,14 +90,16 @@ const NavigationContext = React.createContext(NavigationContextDefaults);
 
 class NavigationContextManager extends React.Component {
   _reloadDebounceTimeout;
-  _contentHistory = [];
-  _historyIndex = 0;
 
   constructor(props) {
     super(props);
     this.state = {
       navigation: {
         ...NavigationContextDefaults,
+        contentHistory: this._pushContentHistory(
+          NavigationContextDefaults.contentHistory,
+          NavigationContextDefaults.content
+        ), // push initial history state
         ...props.value.navigation,
       },
       navigator: {
@@ -117,10 +125,12 @@ class NavigationContextManager extends React.Component {
         clearCurrentGame: this.clearCurrentGame,
         setIsFullScreen: this.setIsFullScreen,
         setGameSessionId: this.setGameSessionId,
-        isContentBackAvailable: this.isContentBackAvailable,
-        isContentForwardAvailable: this.isContentForwardAvailable,
-        back: this.back,
-        forward: this.forward,
+        contentHistory: {
+          isBackAvailable: this.isBackAvailable,
+          isForwardAvailable: this.isForwardAvailable,
+          back: this.back,
+          forward: this.forward,
+        },
       },
     };
   }
@@ -216,23 +226,26 @@ class NavigationContextManager extends React.Component {
       });
     } catch (e) {}
 
-    this._pushContentHistory();
-
-    this.setState({
-      navigation: {
-        ...this.state.navigation,
-        content: {
-          ...NavigationContextDefaults.content,
-          mode,
-          ...navigationParams,
+    this.setState((state) => {
+      const newContent = {
+        ...NavigationContextDefaults.content,
+        mode,
+        ...navigationParams,
+      };
+      return {
+        ...state,
+        navigation: {
+          ...state.navigation,
+          contentHistory: this._pushContentHistory(state.navigation.contentHistory, newContent),
+          content: newContent,
+          playing: {
+            ...state.navigation.playing,
+            isVisible: false,
+          },
+          timeLastNavigated: Date.now(),
+          isShowingSignIn: !this.props.currentUser.user,
         },
-        playing: {
-          ...this.state.navigation.playing,
-          isVisible: false,
-        },
-        timeLastNavigated: Date.now(),
-        isShowingSignIn: !this.props.currentUser.user,
-      },
+      };
     });
   };
 
@@ -527,51 +540,70 @@ class NavigationContextManager extends React.Component {
     }
   };
 
-  isContentBackAvailable = () => {
-    return this._historyIndex < this._contentHistory.length - 1;
+  isBackAvailable = () => {
+    const { index, stack } = this.state.navigation.contentHistory;
+    return index < stack.length - 1;
   };
 
-  isContentForwardAvailable = () => {
-    return this._historyIndex > 0;
+  isForwardAvailable = () => {
+    return this.state.navigation.contentHistory.index > 0;
   };
 
   back = () => {
-    if (this.isContentBackAvailable()) {
-      this._historyIndex++;
-      this.setState({
-        navigation: {
-          ...this.state.navigation,
-          content: this._contentHistory[this._historyIndex],
-        },
+    if (this.isBackAvailable()) {
+      this.setState((state) => {
+        const newIndex = state.navigation.contentHistory.index + 1;
+        return {
+          ...state,
+          navigation: {
+            ...state.navigation,
+            contentHistory: {
+              ...state.navigation.contentHistory,
+              index: newIndex,
+            },
+            content: state.navigation.contentHistory.stack[newIndex],
+          },
+        };
       });
     }
   };
 
   forward = () => {
-    if (this.isContentForwardAvailable()) {
-      this._historyIndex--;
-      this.setState({
-        navigation: {
-          ...this.state.navigation,
-          content: this._contentHistory[this._historyIndex],
-        },
+    if (this.isForwardAvailable()) {
+      this.setState((state) => {
+        const newIndex = state.navigation.contentHistory.index - 1;
+        return {
+          ...state,
+          navigation: {
+            ...state.navigation,
+            contentHistory: {
+              ...state.navigation.contentHistory,
+              index: newIndex,
+            },
+            content: state.navigation.contentHistory.stack[newIndex],
+          },
+        };
       });
     }
   };
 
-  _pushContentHistory = () => {
-    if (this._historyIndex > 0) {
+  _pushContentHistory = (contentHistory, newContent) => {
+    let newHistory = {
+      ...contentHistory,
+    };
+    if (newHistory.index > 0) {
       // drop the head
-      this._contentHistory.splice(0, this._historyIndex);
+      newHistory.stack.splice(0, newHistory.index);
     }
-    this._contentHistory.unshift({
-      ...this.state.navigation.content,
+    newHistory.stack.unshift({
+      ...newContent,
     });
-    if (this._contentHistory.length > 20) {
+    if (newHistory.stack.length > 20) {
       // trim
-      this._contentHistory.splice(20);
+      newHistory.stack.splice(20);
     }
-    this._historyIndex = 0;
+    newHistory.index = 0;
+    return newHistory;
   };
 
   render() {

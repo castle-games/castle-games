@@ -9,6 +9,7 @@ import { NavigationContext, NavigatorContext } from '~/contexts/NavigationContex
 
 import ContentNavigationMenu from '~/components/ContentNavigationMenu';
 import SearchInput from '~/components/SearchInput';
+import UIBackForwardControl from '~/components/reusable/UIBackForwardControl';
 import UINavigationLink from '~/components/reusable/UINavigationLink';
 import UserStatus from '~/common/userstatus';
 
@@ -33,9 +34,14 @@ const STYLES_LOGO = css`
   background-position: 50% 50%;
 `;
 
-const STYLES_SEARCH_SECTION = css`
+const STYLES_RIGHT = css`
   width: 25%;
-  min-width: 280px;
+  min-width: 332px;
+  display: flex;
+`;
+
+const STYLES_SEARCH = css`
+  width: 100%;
 `;
 
 const STYLES_NAV_ITEM = css`
@@ -191,13 +197,20 @@ class ContentNavigationBar extends React.Component {
             />
           </div>
         </div>
-        <div className={STYLES_SEARCH_SECTION}>
-          <SearchInput
-            query={this.props.searchQuery}
-            onSearchReset={this.props.onSearchReset}
-            onChange={this.props.onSearchChange}
-            onSubmit={this.props.onSearchSubmit}
+        <div className={STYLES_RIGHT}>
+          <UIBackForwardControl
+            history={this.props.contentHistory}
+            onBack={this.props.navigator.contentHistory.back}
+            onForward={this.props.navigator.contentHistory.forward}
           />
+          <div className={STYLES_SEARCH}>
+            <SearchInput
+              query={this.props.searchQuery}
+              onSearchReset={this.props.onSearchReset}
+              onChange={this.props.onSearchChange}
+              onSubmit={this.props.onSearchSubmit}
+            />
+          </div>
         </div>
       </div>
     );
@@ -216,6 +229,7 @@ export default class ContentNavigationBarWithContext extends React.Component {
                   <ContentNavigationBar
                     currentUser={currentUser}
                     navigator={navigator}
+                    contentHistory={navigation.contentHistory}
                     {...this.props}
                   />
                 )}
