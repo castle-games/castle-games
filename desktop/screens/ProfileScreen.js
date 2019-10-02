@@ -48,11 +48,17 @@ class ProfileScreen extends React.Component {
     gameToUpdate: null, // if mode === 'update-game'
   };
 
-  componentWillReceiveProps(nextProps) {
-    const existingUserId =
-      this.props.creator && this.props.creator.userId ? this.props.creator.userId : null;
-    const nextUserId =
-      nextProps.creator && nextProps.creator.userId ? nextProps.creator.userId : null;
+  componentDidUpdate(prevProps, prevState) {
+    this._update(prevProps, prevState);
+  }
+
+  componentDidMount() {
+    this._update(null, null);
+  }
+
+  _update = (prevProps) => {
+    const existingUserId = prevProps && prevProps.creator ? prevProps.creator.userId : null;
+    const nextUserId = this.props.creator ? this.props.creator.userId : null;
 
     if (nextUserId != existingUserId) {
       // we're rendering a new profile, reset state.
@@ -60,9 +66,13 @@ class ProfileScreen extends React.Component {
     } else {
       // if updating a game, pass down any new updates to that game.
       if (this.state.gameToUpdate) {
-        if (nextProps.creator && nextProps.creator.gameItems) {
-          for (let ii = 0, nn = nextProps.creator.gameItems.length; ii < nn; ii++) {
-            const game = nextProps.creator.gameItems[ii];
+        if (
+          this.props.creator &&
+          this.props.creator !== prevProps.creator &&
+          this.props.creator.gameItems
+        ) {
+          for (let ii = 0, nn = this.props.creator.gameItems.length; ii < nn; ii++) {
+            const game = this.props.creator.gameItems[ii];
             if (game.gameId === this.state.gameToUpdate.gameId) {
               this.setState({ gameToUpdate: game });
               break;
@@ -71,7 +81,7 @@ class ProfileScreen extends React.Component {
         }
       }
     }
-  }
+  };
 
   _onShowGames = () => this.setState({ mode: 'games', gameToUpdate: null });
   _onShowAddGame = () => this.setState({ mode: 'add-game' });
