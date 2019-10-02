@@ -1,3 +1,5 @@
+import { useState, useEffect, useRef } from 'react';
+
 import * as GhostChannels from './GhostChannels';
 
 const listenerLists = {}; // `eventName` -> `listenerId` -> `handler`
@@ -39,4 +41,46 @@ export const sendAsync = async (name, params) => {
 export const clearAsync = async () => {
   await GhostChannels.clearAsync('JS_EVENTS');
   await GhostChannels.clearAsync('LUA_JS_EVENTS');
+};
+
+// Clear Lua <-> JS events channels for a new game
+export const useClear = () => {
+  const [cleared, setCleared] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      await clearAsync();
+      if (mounted) {
+        setCleared(true);
+      }
+    })();
+    return () => (mounted = false);
+  }, []);
+
+  return { cleared };
+};
+
+// Listen for an event while respecting component lifecycle
+export const useListen = ({ eventsReady, eventName, handler }) => {
+  const savedHandler = useRef();
+
+  useEffect(() => {
+    savedHandler.current = handler;
+  }, [handler]);
+
+  useEffect(() => {
+    if (eventsReady) {
+      let mounted = true;
+      const handle = listen(eventName, params => {
+        if (mounted) {
+          savedHandler.current(params);
+        }
+      });
+      return () => {
+        mounted = false;
+        handle.remove();
+      };
+    }
+  }, [eventsReady, eventName]);
 };

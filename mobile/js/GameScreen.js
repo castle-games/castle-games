@@ -142,53 +142,11 @@ const useInitialData = ({ game, dimensionsSettings }) => {
   return { sent };
 };
 
-// Clear Lua <-> JS events channels for a new game
-const useClearLuaEvents = () => {
-  const [cleared, setCleared] = useState(false);
-
-  useEffect(() => {
-    let mounted = true;
-    (async () => {
-      await GhostEvents.clearAsync();
-      if (mounted) {
-        setCleared(true);
-      }
-    })();
-    return () => (mounted = false);
-  }, []);
-
-  return { cleared };
-};
-
-// Attach a handler to a Lua event, respecting component lifetime
-const useLuaEvent = ({ eventsReady, eventName, handler }) => {
-  const savedHandler = useRef();
-
-  useEffect(() => {
-    savedHandler.current = handler;
-  }, [handler]);
-
-  useEffect(() => {
-    if (eventsReady) {
-      let mounted = true;
-      const listener = GhostEvents.listen(eventName, params => {
-        if (mounted) {
-          savedHandler.current(params);
-        }
-      });
-      return () => {
-        mounted = false;
-        listener.remove();
-      };
-    }
-  }, [eventsReady, eventName]);
-};
-
 // Keep track of Lua loading state
 const useLuaLoading = ({ eventsReady }) => {
   // Maintain list of network requests Lua is making
   const [networkRequests, setNetworkRequests] = useState([]);
-  useLuaEvent({
+  GhostEvents.useListen({
     eventsReady,
     eventName: 'GHOST_NETWORK_REQUEST',
     handler: async ({ type, id, url, method }) => {
@@ -210,7 +168,7 @@ const useLuaLoading = ({ eventsReady }) => {
 
   // Maintain whether Lua finished loading (`love.load` is done)
   const [loaded, setLoaded] = useState(false);
-  useLuaEvent({
+  GhostEvents.useListen({
     eventsReady,
     eventName: 'CASTLE_GAME_LOADED',
     handler: () => setLoaded(true),
@@ -235,14 +193,14 @@ const GameView = ({ gameId, gameUri }) => {
 
   const initialDataHook = useInitialData({ game, dimensionsSettings });
 
-  const clearLuaEventsHook = useClearLuaEvents();
-  const eventsReady = clearLuaEventsHook.cleared;
+  const clearEventsHook = GhostEvents.useClear();
+  const eventsReady = clearEventsHook.cleared;
 
   const luaLoadingHook = useLuaLoading({ eventsReady });
 
   return (
     <View style={{ flex: 1 }}>
-      {game && clearLuaEventsHook.cleared && initialDataHook.sent ? (
+      {game && clearEventsHook.cleared && initialDataHook.sent ? (
         // Render `GhostView` when ready
         <GhostView
           style={{ width: '100%', height: '100%' }}
