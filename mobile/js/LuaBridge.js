@@ -58,7 +58,7 @@ export const jsGameToLuaGame = async ({ gameId, owner, title, url, description }
 });
 
 ///
-/// LUA -> JS -> LUA
+/// Lua -> JS -> Lua calls
 ///
 
 export const JS = {
