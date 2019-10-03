@@ -124,7 +124,7 @@ export default class SocialSidebarNavigator extends React.Component {
 
   _renderGameItem = () => {
     const { gameChatAvailable } = this.state;
-    const { chat, isChatExpanded, selectedChannelId } = this.props;
+    const { chat, isChatExpanded, selectedChannelId, voiceChannelId } = this.props;
     const { theme } = this.props;
     let gameItem = null;
     if (gameChatAvailable) {
@@ -135,7 +135,10 @@ export default class SocialSidebarNavigator extends React.Component {
           iconSrc = gameChatAvailable.coverImage.url;
         }
         const isGameSelected = isChatExpanded && selectedChannelId === channel.channelId;
-        const title = channel.name ? channel.name : 'Untitled Game Chat';
+        const isVoiceChatActive = voiceChannelId === gameChatAvailable.chatChannelId;
+        const title =
+          (channel.name ? channel.name : 'Untitled Game Chat') +
+          (isVoiceChatActive ? ' (voice chat enabled)' : '');
 
         gameItem = (
           <SocialSidebarNavigationItem
@@ -146,6 +149,7 @@ export default class SocialSidebarNavigator extends React.Component {
             avatarUrl={iconSrc}
             theme={theme}
             onClick={() => this.props.onSelectChannel(channel)}
+            isVoiceChatActive={isVoiceChatActive}
           />
         );
         return this._maybeWrapWithTooltip(gameItem, title, 'navigation-game');

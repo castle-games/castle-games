@@ -1,6 +1,5 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
-import * as SVG from '~/components/primitives/svg';
 
 import { css } from 'react-emotion';
 
@@ -12,9 +11,42 @@ const STYLES_CONTAINER = css`
   justify-content: center;
   font-size: 12px;
   margin: 0;
-  padding: 6px 0 6px 0;
   cursor: pointer;
   user-select: none;
+  position: relative;
+  width: ${Constants.sidebar.collapsedWidth};
+`;
+
+const STYLES_VOICE_CHAT_ACTIVE = css`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 6px 0 6px 0;
+  position: relative;
+  width: ${Constants.sidebar.collapsedWidth};
+
+  @keyframes voice-chat-live-color-change {
+    0% {
+      background-color: #ff0000;
+    }
+    50% {
+      background-color: transparent;
+    }
+    100% {
+      background-color: #ff0000;
+    }
+  }
+
+  animation: voice-chat-live-color-change infinite 1600ms;
+`;
+
+const STYLES_VOICE_CHAT_INACTIVE = css`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 6px 0 6px 0;
   position: relative;
   width: ${Constants.sidebar.collapsedWidth};
 `;
@@ -22,11 +54,19 @@ const STYLES_CONTAINER = css`
 export default class SocialSidebarNavigationItem extends React.Component {
   static defaultProps = {
     showOnlineIndicator: true,
+    isVoiceChatActive: false,
     theme: {},
   };
 
   render() {
-    const { isUnread, notificationCount, isSelected, onClick, theme } = this.props;
+    const {
+      isUnread,
+      notificationCount,
+      isSelected,
+      onClick,
+      theme,
+      isVoiceChatActive,
+    } = this.props;
     const { isOnline, showOnlineIndicator } = this.props;
     const { avatarUrl, avatarElement } = this.props;
 
@@ -75,7 +115,9 @@ export default class SocialSidebarNavigationItem extends React.Component {
         className={STYLES_CONTAINER}
         onClick={!isSelected ? onClick : null}
         style={{ backgroundColor }}>
-        {avatar}
+        <div className={isVoiceChatActive ? STYLES_VOICE_CHAT_ACTIVE : STYLES_VOICE_CHAT_INACTIVE}>
+          {avatar}
+        </div>
       </div>
     );
   }

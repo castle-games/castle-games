@@ -26,6 +26,8 @@ export default class ChatInputControl extends React.Component {
     },
     isEditAvailable: false,
     isShowingEmojiPicker: false,
+    isVoiceChatAvailable: false,
+    isVoiceChatActive: false,
   };
 
   componentDidMount() {

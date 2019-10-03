@@ -66,6 +66,31 @@ const STYLES_EMOJI_TOGGLE = css`
   cursor: pointer;
 `;
 
+const STYLES_VOICE_CHAT_CONTROL = css`
+  color: ${Constants.REFACTOR_COLORS.subdued};
+  position: absolute;
+  right: 46px;
+  bottom: 12px;
+  padding: 0 4px;
+  cursor: pointer;
+`;
+
+const STYLES_VOICE_CHAT_ACTIVE = css`
+  @keyframes voice-chat-live-opacity-change {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.2;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  animation: voice-chat-live-opacity-change infinite 1600ms;
+`;
+
 export default class ChatInput extends React.Component {
   _input;
 
@@ -81,6 +106,8 @@ export default class ChatInput extends React.Component {
     },
     showInlineControls: true,
     isShowingEmojiPicker: false,
+    isVoiceChatAvailable: false,
+    isVoiceChatActive: false,
   };
 
   componentDidMount() {
@@ -157,6 +184,21 @@ export default class ChatInput extends React.Component {
     return null;
   };
 
+  _renderVoiceChatControl = () => {
+    if (this.props.isVoiceChatAvailable) {
+      if (this.props.isVoiceChatActive) {
+        return (
+          <div className={STYLES_VOICE_CHAT_ACTIVE}>
+            <SVG.VoiceChatEnabled size="17" />
+          </div>
+        );
+      } else {
+        return <SVG.VoiceChatDisabled size="17" />;
+      }
+    }
+    return null;
+  };
+
   render() {
     let inputStyles;
     let containerStyles;
@@ -185,8 +227,13 @@ export default class ChatInput extends React.Component {
           style={inputStyles}
         />
         {this.props.showInlineControls && (
-          <div className={STYLES_EMOJI_TOGGLE} onClick={this.props.onToggleEmojiPicker}>
-            <SVG.ChatEmojiPicker size="17" />
+          <div>
+            <div className={STYLES_VOICE_CHAT_CONTROL} onClick={this.props.onToggleVoiceChat}>
+              {this._renderVoiceChatControl()}
+            </div>
+            <div className={STYLES_EMOJI_TOGGLE} onClick={this.props.onToggleEmojiPicker}>
+              <SVG.ChatEmojiPicker size="17" />
+            </div>
           </div>
         )}
       </div>

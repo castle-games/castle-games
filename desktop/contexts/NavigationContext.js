@@ -6,6 +6,7 @@ import * as ExecNode from '~/common/execnode';
 import * as Strings from '~/common/strings';
 import * as NativeUtil from '~/native/nativeutil';
 import * as Urls from '~/common/urls';
+import * as VoiceChat from '~/common/voicechat';
 
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { DevelopmentContext } from '~/contexts/DevelopmentContext';
@@ -46,6 +47,7 @@ const NavigationContextDefaults = {
   },
   isChatExpanded: true,
   chatChannelId: null,
+  voiceChannelId: null,
 };
 
 /**
@@ -59,6 +61,7 @@ const NavigationContextDefaults = {
 const NavigatorContextDefaults = {
   openUrl: async (url, options) => {},
   showChatChannel: async (channelId, options) => {},
+  connectToVoiceChannel: (channelId) => {},
   toggleIsChatExpanded: () => {},
   navigateToHome: () => {},
   navigateToGameUrl: async (url, options) => {},
@@ -107,6 +110,7 @@ class NavigationContextManager extends React.Component {
         ...props.value.navigator,
         navigateToContentMode: this.navigateToContentMode,
         showChatChannel: this.showChatChannel,
+        connectToVoiceChannel: this.connectToVoiceChannel,
         toggleIsChatExpanded: this.toggleIsChatExpanded,
         navigateToHome: this.navigateToHome,
         navigateToGameUrl: this.navigateToGameUrl,
@@ -287,6 +291,17 @@ class NavigationContextManager extends React.Component {
         ...this.state.navigation,
         chatChannelId: channelId,
         isChatExpanded: autoExpand ? true : this.state.navigation.isChatExpanded,
+      },
+    });
+  };
+
+  connectToVoiceChannel = (channelId) => {
+    this._connectToVoiceServer(channelId);
+
+    return this.setState({
+      navigation: {
+        ...this.state.navigation,
+        voiceChannelId: channelId,
       },
     });
   };
@@ -488,6 +503,7 @@ class NavigationContextManager extends React.Component {
       prevProps.currentUser.refreshCurrentUser();
       // track the fact that a game was ended
       Analytics.trackGameEnd({ game: state.navigation.playing.game });
+      this._connectToVoiceServer(null);
       return {
         ...state,
         navigation: {
@@ -501,6 +517,7 @@ class NavigationContextManager extends React.Component {
             timeLoaded: time,
           },
           timeLastNavigated: time,
+          voiceChannelId: null,
         },
       };
     });
@@ -604,6 +621,18 @@ class NavigationContextManager extends React.Component {
     }
     newHistory.index = 0;
     return newHistory;
+  };
+
+  _connectToVoiceServer = (channelId) => {
+    if (channelId === this.state.navigation.voiceChannelId) {
+      return;
+    }
+
+    if (channelId) {
+      VoiceChat.startVoiceChatAsync(channelId);
+    } else {
+      VoiceChat.stopVoiceChatAsync();
+    }
   };
 
   render() {

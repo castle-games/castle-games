@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as ChatUtilities from '~/common/chat-utilities';
 
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
-import { NavigatorContext } from '~/contexts/NavigationContext';
+import { NavigatorContext, NavigationContext } from '~/contexts/NavigationContext';
 import { UserPresenceContext } from '~/contexts/UserPresenceContext';
 
 import ChatInputControl from '~/components/chat/ChatInputControl';
@@ -63,6 +63,13 @@ class ChatChannel extends React.Component {
     this.props.chat.sendMessage(this.props.channelId, message);
   };
 
+  _handleToggleVoiceChat = () => {
+    const { voiceChannelId, navigator, channelId } = this.props;
+    let isEnabled = voiceChannelId === channelId;
+    isEnabled = !isEnabled;
+    navigator.connectToVoiceChannel(isEnabled ? channelId : null);
+  };
+
   _isEditAvailable = () => {
     const { messageIdToEdit } = this.state;
     const { chat, channelId, viewer, isSidebar } = this.props;
@@ -76,11 +83,24 @@ class ChatChannel extends React.Component {
   };
 
   render() {
-    const { chat, channelId, navigator, userPresence, viewer } = this.props;
+    const {
+      chat,
+      channelId,
+      navigator,
+      playing,
+      voiceChannelId,
+      userPresence,
+      viewer,
+    } = this.props;
     const channel = chat.channels[channelId];
     if (!channel) {
       return null;
     }
+
+    const isVoiceChatAvailable =
+      playing && playing.game && playing.game.chatChannelId === channelId;
+
+    const isVoiceChatActive = voiceChannelId === channelId;
 
     // hack
     let name = channel.name;
@@ -112,6 +132,9 @@ class ChatChannel extends React.Component {
           addUsers={userPresence.addUsers}
           onSendMessage={this._handleSendMessage}
           isEditAvailable={this._isEditAvailable()}
+          isVoiceChatAvailable={isVoiceChatAvailable}
+          isVoiceChatActive={isVoiceChatActive}
+          onToggleVoiceChat={this._handleToggleVoiceChat}
           onSelectEdit={this._handleSelectEdit}
         />
       </React.Fragment>
@@ -128,12 +151,18 @@ export default class ChatChannelWithContext extends React.Component {
             {(userPresence) => (
               <NavigatorContext.Consumer>
                 {(navigator) => (
-                  <ChatChannel
-                    navigator={navigator}
-                    userPresence={userPresence}
-                    viewer={currentUser.user}
-                    {...this.props}
-                  />
+                  <NavigationContext.Consumer>
+                    {(navigation) => (
+                      <ChatChannel
+                        navigator={navigator}
+                        playing={navigation.playing}
+                        voiceChannelId={navigation.voiceChannelId}
+                        userPresence={userPresence}
+                        viewer={currentUser.user}
+                        {...this.props}
+                      />
+                    )}
+                  </NavigationContext.Consumer>
                 )}
               </NavigatorContext.Consumer>
             )}

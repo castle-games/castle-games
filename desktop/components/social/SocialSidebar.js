@@ -153,7 +153,7 @@ class SocialSidebar extends React.Component {
   };
 
   render() {
-    const { chat, viewer, userPresence, lobbyChannel } = this.props;
+    const { chat, viewer, userPresence, lobbyChannel, voiceChannelId } = this.props;
     const { playing, isChatExpanded, contentMode, gameMetaShown } = this.props;
     const channelId = this._getChannelIdVisible(this.props);
     let theme = playing.isVisible ? THEME : {};
@@ -191,6 +191,7 @@ class SocialSidebar extends React.Component {
               gameMetaShown={gameMetaShown}
               isChatExpanded={isChatExpanded}
               selectedChannelId={channelId}
+              voiceChannelId={voiceChannelId}
               lobbyChannel={lobbyChannel}
               viewer={viewer}
               userPresence={userPresence}
@@ -231,6 +232,7 @@ export default class SocialSidebarWithContext extends React.Component {
                               contentMode={navigation.content.mode}
                               gameMetaShown={navigation.content.gameMetaShown}
                               chatChannelId={navigation.chatChannelId}
+                              voiceChannelId={navigation.voiceChannelId}
                               chat={chat}
                               lobbyChannel={lobbyChannel}
                               navigator={navigator}
