@@ -28,18 +28,48 @@ const MainSwitcher = () => {
   switchTo = setMode;
 
   return (
-    <View style={{ flex: 1, backgroundColor: 'white' }}>
-      <TouchableOpacity
-        style={{ backgroundColor: '#ddd', padding: 4, alignItems: 'center' }}
-        onPress={() => setMode(mode === 'game' ? 'navigator' : 'game')}>
-        <Text>{mode === 'game' ? 'Go to Castle' : 'Go to Game'}</Text>
-      </TouchableOpacity>
+    <View style={{ flex: 1, backgroundColor: 'white', position: 'relative' }}>
       <View style={{ flex: 1 }}>
         <Page visible={mode === 'game'}>
           <GameScreen />
+          <View style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              zIndex: 1,
+              backgroundColor: '#fff',
+              width: '100%',
+              padding: 16,
+            }}>
+            <TouchableOpacity onPress={() => {
+              setMode('navigator');
+              console.log(mode);
+            }}>
+              <Text style={{ fontSize: 18 }}>Return to Castle</Text>
+            </TouchableOpacity>
+          </View>
         </Page>
         <Page visible={mode === 'navigator'}>
           <RootNavigator />
+          <View style={{
+            position: 'absolute',
+            bottom: 64,
+            left: 16,
+            zIndex: 1,
+            backgroundColor: '#eee',
+            width: 90,
+            height: 160,
+            borderRadius: 8,
+            justifyContent: 'center',
+            elevation: 5,
+          }}>
+            <TouchableOpacity onPress={() => {
+              setMode('game');
+              console.log(mode);
+            }}>
+              <Text>Return to Game</Text>
+            </TouchableOpacity>
+          </View>
         </Page>
       </View>
     </View>
