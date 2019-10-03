@@ -37,19 +37,19 @@ const HomeScreen = () => {
           <Text>Error fetching games!</Text>
         </View>
       ) : (
-        <ScrollView style={{ padding: 16, }}>
+        <ScrollView contentContainerStyle={{ padding: 8, display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
           {queryData.allGames.map(game => (
             <TouchableOpacity
               key={game.gameId}
               style={{
-                width: '100%',
-                marginBottom: 16,
+                width: '50%',
+                padding: 8,
                 overflow: 'hidden',
               }}
               delayPressIn={50}
               onPress={() => GameScreen.goToGame({ gameId: game.gameId })}>
               <FastImage
-                style={{ width: '100%', height: 180 }}
+                style={{ width: '100%', aspectRatio: 16/9 }}
                 source={{ uri: game.coverImage && game.coverImage.url }}
                 resizeMode={FastImage.resizeMode.cover}
               />
