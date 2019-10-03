@@ -123,9 +123,10 @@ class EditPostScreen extends React.Component {
   _handleSubmit = () => {
     if (this._isValidForSubmit()) {
       if (this.props.onSubmit) {
-        const { message, editedMediaBlob } = this.state;
+        const { message, mediaPath, editedMediaBlob } = this.state;
         this.props.onSubmit({
           message,
+          mediaPath,
           editedMediaBlob,
         });
       }
