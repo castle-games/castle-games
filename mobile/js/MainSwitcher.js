@@ -69,12 +69,13 @@ const MainSwitcher = () => {
             zIndex: 1,
             width: '100%',
             backgroundColor: '#fff',
-            padding: 16,
+            paddingVertical: 8,
+            paddingHorizontal: 16,
           }}>
             <TouchableOpacity onPress={() => {
               setMode('navigator');
             }}>
-              <Text style={{ fontSize: 18 }}>Return to Castle</Text>
+              <Text>Return to Castle</Text>
             </TouchableOpacity>
           </View>
         }
