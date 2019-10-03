@@ -94,7 +94,7 @@ const computeDimensionsSettings = ({ metadata }) => {
 
 // Populate the 'INITIAL_DATA' channel that Lua reads for various initial settings (eg. the user
 // object, initial audio volume, initial post, ...)
-const useInitialData = ({ game, dimensionsSettings }) => {
+const useInitialData = ({ game, dimensionsSettings, extras }) => {
   const [sent, setSent] = useState(false);
   const sending = useRef(false);
 
@@ -130,6 +130,11 @@ const useInitialData = ({ game, dimensionsSettings }) => {
             me: await LuaBridge.jsUserToLuaUser(me),
           },
           game: await LuaBridge.jsGameToLuaGame(game),
+          referrerGame: extras.referrerGame
+            ? await LuaBridge.jsGameToLuaGame(extras.referrerGame)
+            : undefined,
+          initialParams: extras.initialParams ? extras.initialParams : undefined,
+          // TODO(nikki): Add `initialPost`...
         };
 
         // Send it!
@@ -185,13 +190,13 @@ const LoaderText = ({ children }) => (
 // Given a `gameId` or `gameUri`, run and display the game! The lifetime of this component must match the
 // lifetime of the game run -- it must be unmounted when the game is stopped and a new instance mounted
 // if a new game should be run (or even if the same game should be restarted).
-const GameView = ({ gameId, gameUri }) => {
+const GameView = ({ gameId, gameUri, extras }) => {
   const fetchGameHook = useFetchGame({ gameId, gameUri });
   const game = fetchGameHook.fetchedGame;
 
   const dimensionsSettings = game && computeDimensionsSettings({ metadata: game.metadata });
 
-  const initialDataHook = useInitialData({ game, dimensionsSettings });
+  const initialDataHook = useInitialData({ game, dimensionsSettings, extras });
 
   const clearEventsHook = GhostEvents.useClear();
   const eventsReady = clearEventsHook.cleared;
@@ -252,27 +257,31 @@ export let goToGame = ({ gameId, gameUri }) => {};
 // Top-level component which stores the `gameId` or  `gameUri` state. This component is mounted for the
 // entire lifetime of the app and mounts fresh `GameView` instances for each game run.
 const GameScreen = () => {
-  const [gameId, setGameId] = useState(null);
-  const [gameUri, setGameUri] = useState(null);
+  // Keep a single state object to make sure that re-renders happen in sync for all values
+  const [state, setState] = useState({
+    gameId: null,
+    gameUri: null,
+    extras: {},
+  });
 
-  goToGame = ({ gameId: newGameId, gameUri: newGameUri, focus = true }) => {
+  goToGame = async ({ gameId: newGameId, gameUri: newGameUri, focus = true, extras = {} }) => {
+    // Use a bit of a delay so we don't set state within `GameView` handlers
+    await new Promise(resolve => setTimeout(resolve, 40));
+
     if (focus) {
       MainSwitcher.switchTo('game');
     }
 
-    // Prefer `gameId`, then `gameUri`
-    if (newGameId) {
-      setGameId(newGameId);
-      setGameUri(null);
-    }
-    if (newGameUri) {
-      setGameId(null);
-      setGameUri(newGameUri);
-    }
+    setState({
+      gameId: newGameId ? newGameId : null,
+      gameUri: newGameId ? null : newGameUri,
+      extras,
+    });
   };
 
   // Use `key` to mount a new instance of `GameView` when the game changes
-  return <GameView key={gameId || gameUri} gameId={gameId} gameUri={gameUri} />;
+  const { gameId, gameUri, extras } = state;
+  return <GameView key={gameId || gameUri} gameId={gameId} gameUri={gameUri} extras={extras} />;
 };
 
 export default GameScreen;

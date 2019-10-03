@@ -1,6 +1,7 @@
 import gql from 'graphql-tag';
 
 import * as GhostEvents from './ghost/GhostEvents';
+import * as GameScreen from './GameScreen';
 
 ///
 /// JS -> Lua for GraphQL entities
@@ -71,6 +72,27 @@ export const JS = {
       await new Promise(resolve => setTimeout(resolve, 2000));
       throw new Error("js: 'l' not allowed!");
     }
+  },
+
+  // Game
+  async gameLoad({ gameIdOrUrl, params }, { game }) {
+    // Decide whether it's a `gameId` or a `gameUri`
+    let gameId = null;
+    let gameUri = null;
+    if (gameIdOrUrl.includes('://')) {
+      gameUri = gameIdOrUrl;
+    } else {
+      gameId = gameIdOrUrl;
+    }
+
+    // Go to game with current game as `referrerGame`! Don't steal focus if game was running in
+    // the background..
+    GameScreen.goToGame({
+      gameId,
+      gameUri,
+      focus: false,
+      extras: { referrerGame: game, initialParams: params },
+    });
   },
 };
 
