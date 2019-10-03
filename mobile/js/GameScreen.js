@@ -198,9 +198,11 @@ const GameView = ({ gameId, gameUri }) => {
 
   const luaLoadingHook = useLuaLoading({ eventsReady });
 
+  LuaBridge.useLuaBridge({ eventsReady, game });
+
   return (
     <View style={{ flex: 1 }}>
-      {game && clearEventsHook.cleared && initialDataHook.sent ? (
+      {game && eventsReady && initialDataHook.sent ? (
         // Render `GhostView` when ready
         <GhostView
           style={{ width: '100%', height: '100%' }}

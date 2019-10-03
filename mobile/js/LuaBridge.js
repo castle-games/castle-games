@@ -1,5 +1,7 @@
 import gql from 'graphql-tag';
 
+import * as GhostEvents from './ghost/GhostEvents';
+
 ///
 /// JS -> Lua for GraphQL entities
 ///
@@ -52,3 +54,43 @@ export const jsGameToLuaGame = async ({ gameId, owner, title, url, description }
   url,
   description,
 });
+
+///
+/// LUA -> JS -> LUA
+///
+
+export const JS = {
+  // Test method called by 'ghost-tests'
+  async sayHello({ name }) {
+    if (name !== 'l') {
+      console.log(`responding 'hello, ${name}' in 2 seconds...`);
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      return `js: hello, ${name}!`;
+    } else {
+      console.log(`throwing an error in 2 seconds...`);
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      throw new Error("js: 'l' not allowed!");
+    }
+  },
+};
+
+const onJSCallRequest = context => async ({ id, methodName, arg }) => {
+  const response = { id };
+  try {
+    const method = JS[methodName];
+    if (method) {
+      response.result = await method(arg, context);
+    }
+  } catch (e) {
+    response.error = e.toString();
+  }
+  GhostEvents.sendAsync('JS_CALL_RESPONSE', response);
+};
+
+export const useLuaBridge = ({ eventsReady, game }) => {
+  GhostEvents.useListen({
+    eventsReady,
+    eventName: 'JS_CALL_REQUEST',
+    handler: onJSCallRequest({ game }),
+  });
+};
