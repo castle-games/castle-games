@@ -1,9 +1,10 @@
-local bridge = {}
-
-
 local copas = require 'copas'
-local jsEvents = require 'jsEvents'
 local uuid = require 'uuid'
+
+local jsEvents = require '__ghost__.jsEvents'
+
+
+local bridge = {}
 
 
 ---

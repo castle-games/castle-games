@@ -61,11 +61,11 @@ end
 
 -- Built-in libraries
 
-network = require 'network'
-require = require 'require'
-castle = require 'castle'
-local root = require 'portal'
-local jsEvents = require 'jsEvents'
+network = require '__ghost__.network'
+require = require '__ghost__.require'
+castle = require '__ghost__.castle'
+local root = require '__ghost__.portal'
+local jsEvents = require '__ghost__.jsEvents'
 
 
 -- Forward `print` and errors to JS, write them to '.log' files on desktop

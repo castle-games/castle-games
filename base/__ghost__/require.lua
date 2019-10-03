@@ -8,7 +8,7 @@
 
 local defaultRequire = require
 
-local parseLua = require 'parseLua'
+local parseLua = require '__ghost__.parseLua'
 
 -- New table based on `a` with `b` providing defaults
 local function defaultOpts(a, b)

@@ -1,12 +1,13 @@
-local jsEvents = require 'jsEvents'
-local bridge = require 'bridge'
 local cjson = require 'cjson'
 local ltn12 = require 'ltn12'
 local http = require 'copas.http'
-local uuid = require 'uuid'
+local uuid = require '__ghost__.uuid'
 
 local ffi = require 'ffi'
 local C = ffi.C
+
+local jsEvents = require '__ghost__.jsEvents'
+local bridge = require '__ghost__.bridge'
 
 
 local castle = {}
@@ -435,7 +436,7 @@ castle.setIsAcceptingClients = castle.multiplayer.setIsAcceptingClients -- XXX: 
 
 -- ui
 
-castle.ui = require 'ui'
+castle.ui = require '__ghost__.ui'
 
 
 return castle

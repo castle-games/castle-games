@@ -1,6 +1,6 @@
 -- Manage loading, lifetime management and event forwarding for entries
 
-local jsEvents = require 'jsEvents'
+local jsEvents = require '__ghost__.jsEvents'
 
 local theOS = love.system.getOS()
 local isMobile = theOS == 'Android' or theOS == 'iOS'

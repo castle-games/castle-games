@@ -1,7 +1,7 @@
-local jsEvents = {}
-
-
 local cjson = require 'cjson'
+
+
+local jsEvents = {}
 
 
 local lists = {} -- `eventName` -> `listenerId` -> `listener`

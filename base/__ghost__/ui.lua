@@ -1,10 +1,11 @@
-local ui = {}
-
-
-local state = require 'state'
 local cjson = (require 'cjson').new()
 cjson.encode_sparse_array(true, 1, 0)
-local jsEvents = require 'jsEvents'
+
+local state = require '__ghost__.state'
+local jsEvents = require '__ghost__.jsEvents'
+
+
+local ui = {}
 
 
 local UI_UPDATE_FREQUENCY = 20

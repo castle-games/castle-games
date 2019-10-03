@@ -8,13 +8,15 @@ local http = require 'copas.http'
 http.SSLPROTOCOL = 'tlsv1_2'
 local limit = require 'copas.limit'
 local sqlite3 = require 'lsqlite3'
-local serpent = require 'serpent'
 local ltn12 = require 'ltn12'
 local cjson = require 'cjson'
 
-local jsEvents = require 'jsEvents'
+local serpent = require '__ghost__.serpent'
+local jsEvents = require '__ghost__.jsEvents'
+
 
 local network = {}
+
 
 local tasks = limit.new(10)
 local coros = setmetatable({}, { __mode = 'k' })
