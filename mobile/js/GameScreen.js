@@ -26,6 +26,7 @@ const useFetchGame = ({ gameId, gameUri }) => {
           gameId
           entryPoint
           metadata
+          storageId
           ...LuaGame
         }
       }

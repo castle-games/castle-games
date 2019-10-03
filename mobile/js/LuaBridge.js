@@ -2,6 +2,7 @@ import gql from 'graphql-tag';
 
 import * as GhostEvents from './ghost/GhostEvents';
 import * as GameScreen from './GameScreen';
+import * as Session from './Session';
 
 ///
 /// JS -> Lua for GraphQL entities
@@ -93,6 +94,84 @@ export const JS = {
       focus: false,
       extras: { referrerGame: game, initialParams: params },
     });
+  },
+
+  // Storage
+
+  async storageGetGlobal({ key }, { game }) {
+    const result = await Session.apolloClient.query({
+      query: gql`
+        query StorageGetGlobal($storageId: String!, $key: String!) {
+          gameGlobalStorage(storageId: $storageId, key: $key) {
+            value
+          }
+        }
+      `,
+      variables: { storageId: game.storageId, key },
+    });
+    if (result.errors && result.errors.length) {
+      throw new Error(result.errors[0].message);
+    }
+    if (result.data && result.data.gameGlobalStorage.value) {
+      return result.data.gameGlobalStorage.value;
+    }
+    return null;
+  },
+
+  async storageSetGlobal({ key, value }, { game }) {
+    const result = await Session.apolloClient.mutate({
+      query: gql`
+        mutation StorageSetGlobal($storageId: String!, $key: String!, $value: String) {
+          setGameGlobalStorage(storageId: $storageId, key: $key, value: $value)
+        }
+      `,
+      variables: {
+        storageId: game.storageId,
+        key,
+        value: value === undefined ? null : value,
+      },
+    });
+    if (result.errors && result.errors.length) {
+      throw new Error(result.errors[0].message);
+    }
+  },
+
+  async storageGetUser({ key }, { game }) {
+    const result = await Session.apolloClient.query({
+      query: gql`
+        query StorageGetUser($storageId: String!, $key: String!) {
+          gameUserStorage(storageId: $storageId, key: $key) {
+            value
+          }
+        }
+      `,
+      variables: { storageId: game.storageId, key },
+    });
+    if (result.errors && result.errors.length) {
+      throw new Error(result.errors[0].message);
+    }
+    if (result.data && result.data.gameUserStorage.value) {
+      return result.data.gameUserStorage.value;
+    }
+    return null;
+  },
+
+  async storageSetUser({ key, value }, { game }) {
+    const result = await Session.apolloClient.mutate({
+      query: gql`
+        mutation StorageSetUser($storageId: String!, $key: String!, $value: String) {
+          setGameUserStorage(storageId: $storageId, key: $key, value: $value)
+        }
+      `,
+      variables: {
+        storageId: game.storageId,
+        key,
+        value: value === undefined ? null : value,
+      },
+    });
+    if (result.errors && result.errors.length) {
+      throw new Error(result.errors[0].message);
+    }
   },
 };
 
