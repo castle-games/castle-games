@@ -120,7 +120,7 @@ export const JS = {
 
   async storageSetGlobal({ key, value }, { game }) {
     const result = await Session.apolloClient.mutate({
-      query: gql`
+      mutation: gql`
         mutation StorageSetGlobal($storageId: String!, $key: String!, $value: String) {
           setGameGlobalStorage(storageId: $storageId, key: $key, value: $value)
         }
@@ -158,7 +158,7 @@ export const JS = {
 
   async storageSetUser({ key, value }, { game }) {
     const result = await Session.apolloClient.mutate({
-      query: gql`
+      mutation: gql`
         mutation StorageSetUser($storageId: String!, $key: String!, $value: String) {
           setGameUserStorage(storageId: $storageId, key: $key, value: $value)
         }

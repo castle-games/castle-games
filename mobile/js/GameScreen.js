@@ -49,7 +49,8 @@ const useFetchGame = ({ gameId, gameUri }) => {
         // Query was successful!
         game = queryData.game;
       } else if (gameUri) {
-        // Query wasn't successful, assume this is a direct entrypoint URI and use a stub `game`
+        // Query wasn't successful, assume this is a direct entrypoint URI and use an unregistered `game`
+        // without a `gameId`
         game = {
           entryPoint: gameUri,
           metadata: {},
@@ -183,6 +184,73 @@ const useLuaLoading = ({ eventsReady }) => {
   return { networkRequests, loaded };
 };
 
+// Connect the game to the multiplayer session we're supposed to be in when it asks
+const useLuaMultiplayerClient = ({ eventsReady, game, sessionId }) => {
+  console.log('sessionId', sessionId);
+
+  GhostEvents.useListen({
+    eventsReady,
+    eventName: 'CASTLE_CONNECT_MULTIPLAYER_CLIENT_REQUEST',
+    handler: async ({ mediaUrl }) => {
+      if (sessionId) {
+        let connectionParams;
+        if (game.gameId) {
+          // Registered game
+          connectionParams = {
+            gameId: game.gameId,
+            castleFileUrl: game.url,
+            entryPoint: null,
+            sessionId,
+            isStaging: false,
+          };
+        } else {
+          // Unregistered game, just use `entryPoint`
+          connectionParams = {
+            gameId: null,
+            castleFileUrl: null,
+            entryPoint: mediaUrl,
+            sessionId,
+            isStaging: false,
+          };
+        }
+        console.log('joining');
+        const result = await Session.apolloClient.mutate({
+          mutation: gql`
+            mutation ConnectMultiplayerClient(
+              $gameId: ID
+              $castleFileUrl: String
+              $entryPoint: String
+              $sessionId: String
+              $isStaging: Boolean
+            ) {
+              joinMultiplayerSession(
+                gameId: $gameId
+                castleFileUrl: $castleFileUrl
+                entryPoint: $entryPoint
+                sessionId: $sessionId
+                isStaging: $isStaging
+              ) {
+                sessionId
+                address
+                isNewSession
+                sessionToken
+              }
+            }
+          `,
+          variables: connectionParams,
+        });
+        if (result.data) {
+          const { address, sessionToken } = result.data.joinMultiplayerSession;
+          GhostEvents.sendAsync('CASTLE_CONNECT_MULTIPLAYER_CLIENT_RESPONSE', {
+            address,
+            sessionToken,
+          });
+        }
+      }
+    },
+  });
+};
+
 // A line of text in the loader overlay
 const LoaderText = ({ children }) => (
   <Text style={{ color: 'white', fontSize: 12 }}>{children}</Text>
@@ -203,6 +271,8 @@ const GameView = ({ gameId, gameUri, extras }) => {
   const eventsReady = clearEventsHook.cleared;
 
   const luaLoadingHook = useLuaLoading({ eventsReady });
+
+  useLuaMultiplayerClient({ eventsReady, game, sessionId: extras.sessionId });
 
   LuaBridge.useLuaBridge({ eventsReady, game });
 
@@ -252,8 +322,15 @@ const GameView = ({ gameId, gameUri, extras }) => {
   );
 };
 
-// Navigate to a game given its `gameId` or `gameUri`.
-export let goToGame = ({ gameId, gameUri }) => {};
+// Navigate to a game given its `gameId` or `gameUri`. `focus` is whether to shift focus to the game view.
+//
+// `extras` carries extra parameters to the game:
+//   `referrerGame`: Game that navigated to this game through `castle.game.load`, if any
+//   `initialParams`: `params` parameter passed to `castle.game.load` while navigating to this game, if any
+//   `sessionId`: Session ID for the multiplayer session, if any
+//
+// This function is actually set below when `GameScreen` is mounted.
+export let goToGame = ({ gameId, gameUri, focus, extras }) => {};
 
 // Top-level component which stores the `gameId` or  `gameUri` state. This component is mounted for the
 // entire lifetime of the app and mounts fresh `GameView` instances for each game run.

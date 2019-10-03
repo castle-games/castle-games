@@ -23,7 +23,10 @@ export const navigateToUri = uri => {
     });
   } else {
     // Game URI?
-    GameScreen.goToGame({ gameUri: uri });
+    {
+      const [gameUri, sessionId] = uri.split('#');
+      GameScreen.goToGame({ gameUri, extras: { sessionId } });
+    }
   }
 };
 
