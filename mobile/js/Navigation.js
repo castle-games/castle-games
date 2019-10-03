@@ -19,7 +19,11 @@ const HomeNavigator = createStackNavigator({
   HomeScreen: {
     screen: HomeScreen,
     navigationOptions: {
-      title: 'Castle',
+      title: '🏰  Castle',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+        fontSize: 24,
+      }
     },
   },
 });
