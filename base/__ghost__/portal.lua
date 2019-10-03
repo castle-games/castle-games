@@ -299,14 +299,15 @@ function portalMeta:setupLove()
             require 'love.image'
             require 'love.timer'
 
-            network = require 'network'
+            network = require '__ghost__.network'
             REQUIRE_BASE_PATH = ]] .. pathLit .. [[
-            require = require 'require'
+            require = require '__ghost__.require'
+            castle = require '__ghost__.castle'
 
-            portal = require 'portal'
-            portal.basePath = REQUIRE_BASE_PATH
-            portal:setupLove()
-            love = portal.globals.love
+            local root = require 'portal'
+            root.basePath = REQUIRE_BASE_PATH
+            root:setupLove()
+            love = root.globals.love
 
             copas = require 'copas'
             copas.addthread(function(...) ]] .. code .. [[ end, ...)

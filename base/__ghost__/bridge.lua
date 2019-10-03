@@ -1,5 +1,5 @@
 local copas = require 'copas'
-local uuid = require 'uuid'
+local uuid = require '__ghost__.uuid'
 
 local jsEvents = require '__ghost__.jsEvents'
 
