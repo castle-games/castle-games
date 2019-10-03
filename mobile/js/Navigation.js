@@ -32,7 +32,7 @@ const ProfileNavigator = createStackNavigator({
 });
 
 const TabNavigator = createBottomTabNavigator({
-  Home: HomeNavigator,
+  Play: HomeNavigator,
   Profile: ProfileNavigator,
 });
 
