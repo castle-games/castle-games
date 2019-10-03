@@ -186,8 +186,6 @@ const useLuaLoading = ({ eventsReady }) => {
 
 // Connect the game to the multiplayer session we're supposed to be in when it asks
 const useLuaMultiplayerClient = ({ eventsReady, game, sessionId }) => {
-  console.log('sessionId', sessionId);
-
   GhostEvents.useListen({
     eventsReady,
     eventName: 'CASTLE_CONNECT_MULTIPLAYER_CLIENT_REQUEST',
@@ -213,7 +211,6 @@ const useLuaMultiplayerClient = ({ eventsReady, game, sessionId }) => {
             isStaging: false,
           };
         }
-        console.log('joining');
         const result = await Session.apolloClient.mutate({
           mutation: gql`
             mutation ConnectMultiplayerClient(
