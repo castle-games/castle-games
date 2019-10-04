@@ -37,13 +37,14 @@ const HomeScreen = () => {
           <Text>Error fetching games!</Text>
         </View>
       ) : (
-        <ScrollView contentContainerStyle={{
-          padding: 8,
-          display: 'flex',
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-          justifyContent: 'space-between',
-        }}>
+        <ScrollView
+          contentContainerStyle={{
+            padding: 8,
+            display: 'flex',
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            justifyContent: 'space-between',
+          }}>
           {queryData.allGames.map(game => (
             <TouchableOpacity
               key={game.gameId}
@@ -54,32 +55,34 @@ const HomeScreen = () => {
               }}
               delayPressIn={50}
               onPress={() => GameScreen.goToGame({ gameId: game.gameId })}>
-              <View style={{
-                borderRadius: 4,
-                overflow: 'hidden',
-                shadowColor: 'black',
-                shadowOpacity: 0.1,
-                shadowRadius: 8,
-                shadowOffset: {
-                  width: 0,
-                  height: 4
-                },
-                elevation: 5,
-              }}>
+              <View
+                style={{
+                  borderRadius: 4,
+                  overflow: 'hidden',
+                  shadowColor: 'black',
+                  shadowOpacity: 0.1,
+                  shadowRadius: 8,
+                  shadowOffset: {
+                    width: 0,
+                    height: 4,
+                  },
+                  elevation: 5,
+                }}>
                 <FastImage
                   style={{
                     width: '100%',
-                    aspectRatio: 16/9,
+                    aspectRatio: 16 / 9,
                   }}
                   source={{ uri: game.coverImage && game.coverImage.url }}
                   resizeMode={FastImage.resizeMode.cover}
                 />
-                <View style={{
-                  padding: 12,
-                  paddingTop: 8,
-                  backgroundColor: '#fff',
-                  height: 88,
-                }}>
+                <View
+                  style={{
+                    padding: 12,
+                    paddingTop: 8,
+                    backgroundColor: '#fff',
+                    height: 88,
+                  }}>
                   <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{game.title}</Text>
                   <Text style={{ fontSize: 14, color: '#aaa' }}>{game.owner.username}</Text>
                 </View>

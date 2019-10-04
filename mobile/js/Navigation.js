@@ -6,7 +6,7 @@ import { createSwitchNavigator, createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { useNavigation } from 'react-navigation-hooks';
-import { Text } from 'react-native'
+import { Text } from 'react-native';
 
 import SignInScreen from './SignInScreen';
 import * as DeepLinks from './DeepLinks';
@@ -24,7 +24,7 @@ const HomeNavigator = createStackNavigator({
       headerTitleStyle: {
         fontWeight: 'bold',
         fontSize: 24,
-      }
+      },
     },
   },
 });
@@ -36,29 +36,32 @@ const ProfileNavigator = createStackNavigator({
   },
 });
 
-const TabNavigator = createBottomTabNavigator({
-  Play: {
-    screen: HomeNavigator,
-    navigationOptions: {
-      tabBarIcon: ({ focused, tintColor }) => {
-        return <Text>🎮</Text>;
+const TabNavigator = createBottomTabNavigator(
+  {
+    Play: {
+      screen: HomeNavigator,
+      navigationOptions: {
+        tabBarIcon: ({ focused, tintColor }) => {
+          return <Text>🎮</Text>;
+        },
+      },
+    },
+    Profile: {
+      screen: ProfileNavigator,
+      navigationOptions: {
+        tabBarIcon: ({ focused, tintColor }) => {
+          return <Text>👤</Text>;
+        },
       },
     },
   },
-  Profile: {
-    screen: ProfileNavigator,
-    navigationOptions: {
-      tabBarIcon: ({ focused, tintColor }) => {
-        return <Text>👤</Text>;
-      },
+  {
+    tabBarOptions: {
+      showIcon: true,
+      activeTintColor: 'tomato',
     },
-  },
-}, {
-  tabBarOptions: {
-    showIcon: true,
-    activeTintColor: 'tomato',
   }
-});
+);
 
 const SignInNavigator = createStackNavigator({
   SignInScreen: {

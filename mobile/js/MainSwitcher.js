@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     elevation: 5,
     overflow: 'hidden',
-  }
+  },
 });
 
 const MainSwitcher = () => {
@@ -39,46 +39,50 @@ const MainSwitcher = () => {
   return (
     <View style={{ flex: 1, backgroundColor: 'white', position: 'relative' }}>
       <View style={{ flex: 1 }}>
-        <View style={ mode === 'game' ? styles.fullscreen : styles.windowed }>
+        <View style={mode === 'game' ? styles.fullscreen : styles.windowed}>
           <GameScreen />
-            { mode === 'navigator' &&
-              <View style={{
+          {mode === 'navigator' && (
+            <View
+              style={{
                 position: 'absolute',
                 top: 0,
                 left: 0,
                 width: '100%',
                 height: '100%',
               }}>
-                <TouchableOpacity onPress={() => {
+              <TouchableOpacity
+                onPress={() => {
                   setMode('game');
                 }}>
-                  <View style={{
+                <View
+                  style={{
                     width: '100%',
                     height: '100%',
-                  }}>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            }
+                  }}></View>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
-        { mode === 'game' &&
-          <View style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            zIndex: 1,
-            width: '100%',
-            backgroundColor: '#fff',
-            paddingVertical: 8,
-            paddingHorizontal: 16,
-          }}>
-            <TouchableOpacity onPress={() => {
-              setMode('navigator');
+        {mode === 'game' && (
+          <View
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              zIndex: 1,
+              width: '100%',
+              backgroundColor: '#fff',
+              paddingVertical: 8,
+              paddingHorizontal: 16,
             }}>
+            <TouchableOpacity
+              onPress={() => {
+                setMode('navigator');
+              }}>
               <Text>Return to Castle</Text>
             </TouchableOpacity>
           </View>
-        }
+        )}
         <RootNavigator />
       </View>
     </View>
