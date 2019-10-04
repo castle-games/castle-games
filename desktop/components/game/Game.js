@@ -5,6 +5,7 @@ import * as URLS from '~/common/urls';
 import * as Utilities from '~/common/utilities';
 import * as Bridge from '~/common/bridge';
 import * as ScreenCapture from '~/common/screencapture';
+import GameWindow from '~/native/gamewindow';
 
 import { css } from 'react-emotion';
 import { DevelopmentContext } from '~/contexts/DevelopmentContext';
@@ -65,6 +66,14 @@ export default class Game extends React.Component {
     });
   };
 
+  _handlePostScreenCapture = async () => {
+    ScreenCapture.takeScreenCaptureAsync();
+
+    // refocus the game window. otherwise on windows you'll have to click back into the game
+    GameWindow.setVisible(false);
+    GameWindow.setVisible(true);
+  }
+
   _handleToggleDeveloper = () => {
     this.context.setters.toggleIsDeveloping();
   };
@@ -81,7 +90,7 @@ export default class Game extends React.Component {
         recordingStatus={this.props.recordingStatus}
         onToggleMute={this.props.onToggleMute}
         onPostScreenshot={this._handlePostScreenshot}
-        onPostScreenCapture={ScreenCapture.takeScreenCaptureAsync}
+        onPostScreenCapture={this._handlePostScreenCapture}
         onViewSource={isOpenSource ? () => this._handleViewSource(entryPoint) : null}
         onViewDeveloper={this._handleToggleDeveloper}
       />
