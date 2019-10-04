@@ -5,7 +5,8 @@
   "scripts": {
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "prettier": "prettier --write \"js/**/*.js\""
   },
   "dependencies": {
     "@apollo/react-hooks": "^3.1.1",
@@ -33,6 +34,7 @@
     "eslint": "6.4.0",
     "jest": "24.9.0",
     "metro-react-native-babel-preset": "0.54.1",
+    "prettier": "^1.18.2",
     "react-test-renderer": "16.8.6"
   },
   "jest": {
