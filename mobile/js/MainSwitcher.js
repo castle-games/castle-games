@@ -7,7 +7,17 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export let switchTo = () => {};
 
+export let setGameRunning = () => {};
+
 const styles = StyleSheet.create({
+  hidden: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: -1,
+  },
   fullscreen: {
     position: 'absolute',
     top: 0,
@@ -34,12 +44,18 @@ const MainSwitcher = () => {
   // `mode` is one of `'game'` or `'navigator'`
   const [mode, setMode] = useState('navigator');
 
+  let gameRunning;
+  [gameRunning, setGameRunning] = useState(false);
+
   switchTo = setMode;
 
   return (
     <View style={{ flex: 1, backgroundColor: 'white', position: 'relative' }}>
       <View style={{ flex: 1 }}>
-        <View style={mode === 'game' ? styles.fullscreen : styles.windowed}>
+        <View
+          style={
+            !gameRunning ? styles.hidden : mode === 'game' ? styles.fullscreen : styles.windowed
+          }>
           <GameScreen />
           {mode === 'navigator' && (
             <View

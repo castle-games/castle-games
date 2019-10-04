@@ -34,7 +34,7 @@ const SignInScreen = () => {
       if (uriAfter) {
         navigateToUri(uriAfter);
       } else {
-        navigate('GameScreen');
+        navigate('HomeScreen');
       }
     } catch (e) {
       setSigningIn(false);

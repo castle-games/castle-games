@@ -343,6 +343,7 @@ const GameScreen = () => {
     // Use a bit of a delay so we don't set state within `GameView` handlers
     await new Promise(resolve => setTimeout(resolve, 40));
 
+    MainSwitcher.setGameRunning(true);
     if (focus) {
       MainSwitcher.switchTo('game');
     }
