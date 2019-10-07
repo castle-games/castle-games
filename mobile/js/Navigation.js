@@ -63,10 +63,9 @@ const TabNavigator = createBottomTabNavigator(
   }
 );
 
-const SignInNavigator = createStackNavigator({
+const SignInNavigator = createSwitchNavigator({
   SignInScreen: {
     screen: SignInScreen,
-    navigationOptions: { title: 'Sign In' },
   },
 });
 

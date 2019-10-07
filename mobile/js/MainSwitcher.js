@@ -74,7 +74,8 @@ const MainSwitcher = () => {
                   style={{
                     width: '100%',
                     height: '100%',
-                  }}></View>
+                  }}
+                />
               </TouchableOpacity>
             </View>
           )}

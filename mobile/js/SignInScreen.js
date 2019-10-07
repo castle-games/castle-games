@@ -1,15 +1,15 @@
 import React, { useState, Fragment } from 'react';
 import { View, TouchableOpacity, Text, TextInput } from 'react-native';
 import { useNavigation, useNavigationParam } from 'react-navigation-hooks';
+import FastImage from 'react-native-fast-image';
 
 import * as Session from './Session';
 import { navigateToUri } from './DeepLinks';
 
 const textInputStyle = {
+  backgroundColor: '#fff',
   width: '100%',
-  borderColor: '#ddd',
   borderRadius: 4,
-  borderWidth: 1,
   paddingVertical: 8,
   paddingHorizontal: 12,
   marginVertical: 8,
@@ -47,15 +47,48 @@ const SignInScreen = () => {
     <View
       style={{
         flex: 1,
-        backgroundColor: 'white',
+        backgroundColor: '#ffc21c',
         alignItems: 'center',
         justifyContent: 'center',
         padding: 16,
       }}>
+      <View
+        style={{
+          alignItems: 'center',
+          paddingBottom: 16,
+        }}>
+        <FastImage
+          style={{
+            width: 100,
+            aspectRatio: 1,
+            marginBottom: 8,
+          }}
+          source={require('../src/assets/castle.png')}
+          resizeMode={FastImage.resizeMode.cover}
+        />
+        <Text
+          style={{
+            fontSize: 32,
+            fontWeight: 'bold',
+          }}>
+          Castle
+        </Text>
+      </View>
       {signingIn ? (
         <Text>Signing in...</Text>
       ) : (
         <Fragment>
+          {errored ? (
+            <View style={{ paddingBottom: 16 }}>
+              <Text style={{ fontWeight: 'bold', fontSize: 16 }}>
+                There was a problem signing in.
+              </Text>
+              <Text>
+                Please check your network connection and ensure that the username and password are
+                correct.
+              </Text>
+            </View>
+          ) : null}
           <TextInput
             style={textInputStyle}
             autoCapitalize="none"
@@ -72,7 +105,7 @@ const SignInScreen = () => {
           />
           <TouchableOpacity
             style={{
-              backgroundColor: '#ddd',
+              backgroundColor: '#000',
               borderRadius: 4,
               paddingVertical: 8,
               paddingHorizontal: 12,
@@ -80,14 +113,8 @@ const SignInScreen = () => {
               alignItems: 'center',
             }}
             onPress={onPressSignIn}>
-            <Text>Sign In</Text>
+            <Text style={{ color: '#fff', fontWeight: 'bold' }}>Sign In</Text>
           </TouchableOpacity>
-          {errored ? (
-            <Text style={{ color: '#d00' }}>
-              Error signing in. Please check your network connection and ensure that the username
-              and password are correct.
-            </Text>
-          ) : null}
         </Fragment>
       )}
     </View>
