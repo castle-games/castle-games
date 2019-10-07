@@ -10,8 +10,9 @@ const textInputStyle = {
   borderColor: '#ddd',
   borderRadius: 4,
   borderWidth: 1,
-  padding: 4,
-  margin: 4,
+  paddingVertical: 8,
+  paddingHorizontal: 12,
+  marginVertical: 8,
 };
 
 const SignInScreen = () => {
@@ -49,7 +50,7 @@ const SignInScreen = () => {
         backgroundColor: 'white',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '25%',
+        padding: 16,
       }}>
       {signingIn ? (
         <Text>Signing in...</Text>
@@ -59,19 +60,23 @@ const SignInScreen = () => {
             style={textInputStyle}
             autoCapitalize="none"
             onChangeText={newUsername => setUsername(newUsername)}
+            autoFocus={true}
+            placeholder="Email or username"
           />
           <TextInput
             style={textInputStyle}
             secureTextEntry
             textContentType="password"
             onChangeText={newPassword => setPassword(newPassword)}
+            placeholder="Password"
           />
           <TouchableOpacity
             style={{
               backgroundColor: '#ddd',
               borderRadius: 4,
-              padding: 4,
-              margin: 4,
+              paddingVertical: 8,
+              paddingHorizontal: 12,
+              margin: 8,
               alignItems: 'center',
             }}
             onPress={onPressSignIn}>
