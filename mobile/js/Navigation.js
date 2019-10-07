@@ -6,7 +6,8 @@ import { createSwitchNavigator, createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { useNavigation } from 'react-navigation-hooks';
-import { Text } from 'react-native';
+import { Text, View } from 'react-native';
+import FastImage from 'react-native-fast-image';
 
 import SignInScreen from './SignInScreen';
 import * as DeepLinks from './DeepLinks';
@@ -20,11 +21,20 @@ const HomeNavigator = createStackNavigator({
   HomeScreen: {
     screen: HomeScreen,
     navigationOptions: {
-      title: '🏰  Castle',
-      headerTitleStyle: {
-        fontWeight: 'bold',
-        fontSize: 24,
-      },
+      headerTitle: (
+        <View style={{ padding: 16, flexDirection: 'row', alignItems: 'flex-end' }}>
+          <FastImage
+            style={{
+              width: 30,
+              height: 36,
+              marginBottom: 6,
+              marginRight: 12,
+            }}
+            source={require('../src/assets/castle-mini-yellow.png')}
+          />
+          <Text style={{ fontWeight: 'bold', fontSize: 24 }}>Castle</Text>
+        </View>
+      ),
     },
   },
 });
