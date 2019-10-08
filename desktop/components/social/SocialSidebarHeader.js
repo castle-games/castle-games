@@ -36,6 +36,28 @@ const STYLES_VIEWER_CONTAINER = css`
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
+  position: relative;
+`;
+
+const STYLES_NOTIFICATION_BADGE = css`
+  position: absolute;
+  flex-shrink: 0;
+  bottom: -4px;
+  right: -4px;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  background-color: ${Constants.brand.fuchsia};
+  border: 2px solid ${Constants.REFACTOR_COLORS.elements.channels};
+  font-family: ${Constants.REFACTOR_FONTS.system};
+  font-weight: 600;
+  color: white;
+  font-size: 9px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0px;
+  padding: 0 2px;
 `;
 
 const TOOLTIP_PROPS = {
@@ -99,6 +121,7 @@ export default class SocialSidebarHeader extends React.Component {
   static defaultProps = {
     mode: 'chat',
     isExpanded: true,
+    unseenNotificationCount: 0,
   };
 
   _renderTitle = () => {
@@ -180,6 +203,15 @@ export default class SocialSidebarHeader extends React.Component {
     }
   };
 
+  _renderNotificationBadge = () => {
+    const { unseenNotificationCount } = this.props;
+    if (unseenNotificationCount > 0) {
+      const displayCount = unseenNotificationCount > 99 ? '99+' : unseenNotificationCount;
+      return <div className={STYLES_NOTIFICATION_BADGE}>{displayCount}</div>;
+    }
+    return null;
+  };
+
   _renderViewer = () => {
     const { viewer, onSelectNotifications } = this.props;
     const avatarSrc = viewer && viewer.photo ? viewer.photo.url : null;
@@ -195,6 +227,7 @@ export default class SocialSidebarHeader extends React.Component {
               width: `28px`,
             }}
           />
+          {this._renderNotificationBadge()}
         </div>
       </Tooltip>
     );

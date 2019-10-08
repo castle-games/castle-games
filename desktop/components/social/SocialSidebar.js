@@ -173,6 +173,11 @@ class SocialSidebar extends React.Component {
       return null;
     }
 
+    const { appNotifications } = this.props;
+    const unseenNotificationCount = appNotifications
+      ? appNotifications.filter((n) => n.status === 'unseen').length
+      : 0;
+
     const sidebarWidth = isChatExpanded
       ? Constants.sidebar.width
       : Constants.sidebar.collapsedWidth;
@@ -194,6 +199,7 @@ class SocialSidebar extends React.Component {
           numChannelMembers={chat.channelOnlineCounts[channelId]}
           onMembersClick={this._handleToggleMembers}
           viewer={viewer}
+          unseenNotificationCount={unseenNotificationCount}
           onSelectNotifications={this._handleShowNotifications}
         />
         <div className={STYLES_SIDEBAR_BODY}>
@@ -242,6 +248,7 @@ export default class SocialSidebarWithContext extends React.Component {
                             <SocialSidebar
                               userPresence={userPresence}
                               viewer={currentUser.user}
+                              appNotifications={currentUser.appNotifications}
                               isChatExpanded={navigation.isChatExpanded}
                               playing={navigation.playing}
                               contentMode={navigation.content.mode}
