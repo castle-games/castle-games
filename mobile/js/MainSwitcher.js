@@ -56,6 +56,22 @@ const MainSwitcher = () => {
           style={
             !gameRunning ? styles.hidden : mode === 'game' ? styles.fullscreen : styles.windowed
           }>
+          {mode === 'game' && (
+            <View
+              style={{
+                width: '100%',
+                backgroundColor: '#000',
+                paddingVertical: 8,
+                paddingHorizontal: 16,
+              }}>
+              <TouchableOpacity
+                onPress={() => {
+                  setMode('navigator');
+                }}>
+                <Text style={{ color: '#fff' }}>Return to Castle</Text>
+              </TouchableOpacity>
+            </View>
+          )}
           <GameScreen />
           {mode === 'navigator' && (
             <View
@@ -82,26 +98,6 @@ const MainSwitcher = () => {
             </View>
           )}
         </View>
-        {mode === 'game' && (
-          <View
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              zIndex: 1,
-              width: '100%',
-              backgroundColor: '#fff',
-              paddingVertical: 8,
-              paddingHorizontal: 16,
-            }}>
-            <TouchableOpacity
-              onPress={() => {
-                setMode('navigator');
-              }}>
-              <Text>Return to Castle</Text>
-            </TouchableOpacity>
-          </View>
-        )}
         <RootNavigator />
       </View>
     </View>
