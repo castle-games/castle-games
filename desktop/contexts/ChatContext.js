@@ -665,22 +665,30 @@ class ChatContextManager extends React.Component {
   };
 
   _handleUpdateAsync = async (type, body) => {
-    if (type === 'multiplayer-session-update') {
-      let gameIdToGame = {};
-      for (let i = 0; i < body.games.length; i++) {
-        let game = body.games[i];
-        gameIdToGame[game.gameId] = game;
+    switch (type) {
+      case 'app-notification-update': {
+        const { notification, plainTextMessage, unseenCount } = body;
+        this.props.appendAppNotification(notification);
+        break;
       }
+      case 'multiplayer-session-update': {
+        let gameIdToGame = {};
+        for (let i = 0; i < body.games.length; i++) {
+          let game = body.games[i];
+          gameIdToGame[game.gameId] = game;
+        }
 
-      for (let i = 0; i < body.sessions.length; i++) {
-        let session = body.sessions[i];
-        // make a copy of this game, since we might have multiple sessions of this one game
-        session.game = JSON.parse(JSON.stringify(gameIdToGame[session.gameId]));
-        session.game.sessionId = session.sessionId;
-        session.game.sessionUsers = session.users;
+        for (let i = 0; i < body.sessions.length; i++) {
+          let session = body.sessions[i];
+          // make a copy of this game, since we might have multiple sessions of this one game
+          session.game = JSON.parse(JSON.stringify(gameIdToGame[session.gameId]));
+          session.game.sessionId = session.sessionId;
+          session.game.sessionUsers = session.users;
+        }
+
+        this.props.updateMultiplayerSessions(body.sessions);
+        break;
       }
-
-      this.props.updateMultiplayerSessions(body.sessions);
     }
   };
 
@@ -706,6 +714,7 @@ class ChatContextProvider extends React.Component {
                         navigation={navigation}
                         showChatChannel={navigator.showChatChannel}
                         updateMultiplayerSessions={currentUser.updateMultiplayerSessions}
+                        appendAppNotification={currentUser.appendAppNotification}
                         {...this.props}
                       />
                     )}

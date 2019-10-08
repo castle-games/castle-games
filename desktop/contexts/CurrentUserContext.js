@@ -31,6 +31,7 @@ const CurrentUserContextDefaults = {
   reloadPosts: () => {},
   loadMorePosts: () => {},
   loadAppNotifications: async () => {},
+  appendAppNotification: (n) => {},
 };
 
 const CurrentUserContext = React.createContext(CurrentUserContextDefaults);
@@ -50,6 +51,7 @@ class CurrentUserContextManager extends React.Component {
       reloadTrendingGames: this.reloadTrendingGames,
       updateMultiplayerSessions: this.updateMultiplayerSessions,
       loadAppNotifications: this.loadAppNotifications,
+      appendAppNotification: this.appendAppNotification,
     };
 
     if (props.value && props.value.user) {
@@ -200,30 +202,22 @@ class CurrentUserContextManager extends React.Component {
     let notifications = [];
     try {
       notifications = await Actions.appNotificationsAsync();
-
-      // TODO: BEN: remove
-      for (let ii = 0; ii < 8; ii++) {
-        notifications.push({
-          type: 'post',
-          body: {
-            message: [{ userId: 395 }, { text: ' made a post about Circloid' }],
-          },
-          status: ii < 2 ? 'unseen' : 'seen',
-          appNotificationId: 9,
-          updatedTime: ii < 2 ? '2019-10-03T20:07:06.401Z' : '2019-10-02T18:07:06.401Z',
-          chatMessageId: null,
-          chatChannelId: null,
-          gameId: 2,
-          authorUserId: 395,
-          postId: 18,
-        });
-      }
     } catch (_) {}
     if (notifications && notifications.length) {
       await Promise.all(notifications.map((n) => this._gatherObjectsFromNotification(n)));
     }
     this.setState({
       appNotifications: notifications,
+    });
+  };
+
+  appendAppNotification = (n) => {
+    this.setState((state) => {
+      const newNotifications = state.appNotifications.concat([n]);
+      return {
+        ...state,
+        appNotifications: newNotifications,
+      };
     });
   };
 
