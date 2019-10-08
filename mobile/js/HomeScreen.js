@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, TextInput } from 'react-native';
 import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import FastImage from 'react-native-fast-image';
@@ -45,6 +45,21 @@ const HomeScreen = () => {
             flexWrap: 'wrap',
             justifyContent: 'space-between',
           }}>
+          <View style={{ width: '100%', padding: 8 }}>
+            <TextInput
+              style={{
+                width: '100%',
+                borderRadius: 4,
+                backgroundColor: '#00000010',
+                borderColor: '#ccc',
+                borderWidth: 0,
+                paddingVertical: 8,
+                paddingHorizontal: 8,
+                fontSize: 16,
+              }}
+              placeholder="🔍 Search Castle or paste URL"
+            />
+          </View>
           {queryData.allGames.map(game => (
             <TouchableOpacity
               key={game.gameId}
