@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as Constants from '~/common/constants';
 import * as Actions from '~/common/actions';
 
 import { css } from 'react-emotion';
@@ -20,6 +21,22 @@ const STYLES_CONTAINER = css`
     display: none;
     width: 1px;
   }
+`;
+
+const STYLES_EMPTY = css`
+  padding: 16px;
+  font-family: ${Constants.REFACTOR_FONTS.system};
+`;
+
+const STYLES_TITLE = css`
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+`;
+
+const STYLES_PARAGRAPH = css`
+  font-size: 14px;
+  color: ${Constants.REFACTOR_COLORS.subdued};
 `;
 
 class NotificationsList extends React.Component {
@@ -87,8 +104,23 @@ class NotificationsList extends React.Component {
     }
   };
 
+  _renderEmpty = () => {
+    return (
+      <div className={STYLES_EMPTY}>
+        <div className={STYLES_TITLE}>Welcome to Castle!</div>
+        <div className={STYLES_PARAGRAPH}>
+          You don't have any notifications yet. When people mention you, invite you to games, or
+          play games you created, you'll see activity here.
+        </div>
+      </div>
+    );
+  };
+
   render() {
     const { notifications } = this.props;
+    if (!notifications || !notifications.length) {
+      return this._renderEmpty();
+    }
     return (
       <div className={STYLES_CONTAINER}>
         {notifications.map((n, ii) => this._renderNotification(n, ii))}
