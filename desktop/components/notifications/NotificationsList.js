@@ -26,10 +26,26 @@ class NotificationsList extends React.Component {
   static defaultProps = {
     notifications: [],
     reloadNotifications: async () => {},
+    setAppNotificationsStatus: (notificationIds, status) => {},
   };
 
   componentDidMount() {
     this.props.reloadNotifications();
+  }
+
+  async componentDidUpdate(prevProps) {
+    const prevNotifs = prevProps ? prevProps.notifications : null;
+    if (this.props.notifications && prevNotifs !== this.props.notifications) {
+      let notificationIdsRead = [];
+      this.props.notifications.forEach((n) => {
+        if (n.status === 'unseen') {
+          notificationIdsRead.push(n.appNotificationId);
+        }
+      });
+      if (notificationIdsRead.length) {
+        this.props.setAppNotificationsStatus(notificationIdsRead, 'seen');
+      }
+    }
   }
 
   _handleSelectNotification = async (notification) => {
@@ -62,7 +78,7 @@ class NotificationsList extends React.Component {
     if (status !== prevStatus) {
       return (
         <React.Fragment>
-          <NotificationSectionHeader unseen={status} />
+          <NotificationSectionHeader unseen={status} key={`notif-header-${ii}`} />
           {notifElement}
         </React.Fragment>
       );
@@ -91,6 +107,7 @@ export default class NotificationsListWithContext extends React.Component {
               <NotificationsList
                 notifications={currentUser.appNotifications}
                 reloadNotifications={currentUser.loadAppNotifications}
+                setAppNotificationsStatus={currentUser.setAppNotificationsStatus}
                 navigator={navigator}
               />
             )}

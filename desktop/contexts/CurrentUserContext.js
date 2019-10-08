@@ -32,6 +32,7 @@ const CurrentUserContextDefaults = {
   loadMorePosts: () => {},
   loadAppNotifications: async () => {},
   appendAppNotification: (n) => {},
+  setAppNotificationsStatus: (notificationIds, status) => {},
 };
 
 const CurrentUserContext = React.createContext(CurrentUserContextDefaults);
@@ -52,6 +53,7 @@ class CurrentUserContextManager extends React.Component {
       updateMultiplayerSessions: this.updateMultiplayerSessions,
       loadAppNotifications: this.loadAppNotifications,
       appendAppNotification: this.appendAppNotification,
+      setAppNotificationsStatus: this.setAppNotificationsStatus,
     };
 
     if (props.value && props.value.user) {
@@ -219,6 +221,23 @@ class CurrentUserContextManager extends React.Component {
         appNotifications: newNotifications,
       };
     });
+  };
+
+  setAppNotificationsStatus = async (notificationIds, status) => {
+    this.setState(
+      (state) => {
+        return {
+          ...state,
+          appNotifications: state.appNotifications.map((n) => {
+            return {
+              ...n,
+              status: notificationIds.includes(n.appNotificationId) ? status : n.status,
+            };
+          }),
+        };
+      },
+      () => Actions.setAppNotificationsStatusAsync(notificationIds, status)
+    );
   };
 
   _gatherObjectsFromNotification = async (n) => {
