@@ -15,7 +15,52 @@ const textInputStyle = {
   marginVertical: 8,
 };
 
-const SignInScreen = () => {
+const Announcement = (props) => {
+  return (
+    <View style={{
+      padding: 16,
+      paddingTop: 12,
+      backgroundColor: '#000',
+      borderRadius: 4,
+      marginBottom: 16,
+      flexDirection: 'column',
+    }}>
+      <Text style={{
+        fontWeight: 'bold',
+        color: '#fff',
+        fontSize: 16,
+        marginBottom: 4,
+      }}>
+        {props.headline}
+      </Text>
+      <Text style={{
+        color: '#fff',
+      }}>
+        {props.body}
+      </Text>
+    </View>
+  );
+}
+
+const Button = (props) => {
+  return (
+    <View
+      style={{
+        backgroundColor: '#000',
+        borderRadius: 4,
+        paddingVertical: 8,
+        paddingHorizontal: 12,
+        margin: 8,
+        alignItems: 'center',
+      }}>
+      <Text style={{color: '#fff', fontWeight: 'bold'}}>
+        {props.text}
+      </Text>
+    </View>
+  );
+}
+
+const LoginForm = () => {
   const { navigate } = useNavigation();
 
   const uriAfter = useNavigationParam('uriAfter');
@@ -25,6 +70,8 @@ const SignInScreen = () => {
 
   const [signingIn, setSigningIn] = useState(false);
   const [errored, setErrored] = useState(false);
+
+  const reset = false;
 
   const onPressSignIn = async () => {
     try {
@@ -44,6 +91,110 @@ const SignInScreen = () => {
   };
 
   return (
+    <Fragment>
+      {errored ? (
+        <Announcement
+          headline="There was a problem signing in"
+          body="Please check your network connection and ensure that the username and password are
+        //     correct." />
+      ) : null}
+      {reset ? (
+        <Announcement
+        headline="Check your email"
+        body="We've sent you an email with a link to reset your password." />
+      ) : null}
+      <Text style={{ paddingBottom: 16 }}>
+        Don't have an account?&nbsp;
+        <Text style={{ fontWeight: 'bold' }}>Sign up</Text>
+      </Text>
+      <TextInput
+        style={textInputStyle}
+        autoCapitalize="none"
+        onChangeText={newUsername => setUsername(newUsername)}
+        placeholder="Email or username"
+      />
+      <TextInput
+        style={textInputStyle}
+        autoCapitalize="none"
+        secureTextEntry
+        textContentType="password"
+        onChangeText={newPassword => setPassword(newPassword)}
+        placeholder="Password"
+      />
+      <View style={{ paddingTop: 8, paddingBottom: 16 }}>
+        <Text>Forgot password?</Text>
+      </View>
+      <TouchableOpacity onPress={onPressSignIn}>
+        <Button text="Log In" />
+      </TouchableOpacity>
+    </Fragment>
+  );
+}
+
+const CreateAccountForm = () => {
+  return (
+    <Fragment>
+      <View style={{ paddingBottom: 16, alignItems: 'center' }}>
+        <Text style={{ fontSize: 20 }}>Create a new account</Text>
+        <Text style={{ marginTop: 16 }}>
+          Already have an account?&nbsp;
+          <Text style={{ fontWeight: 'bold' }}>Log in</Text>
+        </Text>
+      </View>
+      <TextInput
+        style={textInputStyle}
+        autoCapitalize="none"
+        placeholder="Username"
+      />
+      <TextInput
+        style={textInputStyle}
+        placeholder="Your name"
+      />
+      <TextInput
+        style={textInputStyle}
+        autoCapitalize="none"
+        placeholder="Email address"
+      />
+      <TextInput
+        style={textInputStyle}
+        secureTextEntry
+        textContentType="password"
+        placeholder="New password"
+      />
+      <TouchableOpacity
+        style={{ paddingTop: 8, paddingBottom: 16 }}>
+        <Text style={{ lineHeight: 20 }}>
+          By clicking "Create Account," you are agreeing to Castle's&nbsp;
+            <Text style={{ fontWeight: 'bold' }}>privacy policy</Text>
+          .
+        </Text>
+      </TouchableOpacity>
+      <Button text="Create Account" />
+    </Fragment>
+  );
+}
+
+const ForgotPasswordForm = () => {
+  return (
+    <Fragment>
+      <View style={{ paddingBottom: 16 }}>
+        <Text style={{ fontSize: 20 }}>Forgot your password?</Text>
+      </View>
+      <TextInput
+        style={textInputStyle}
+        autoCapitalize="none"
+        onChangeText={newUsername => setUsername(newUsername)}
+        placeholder="Email or username"
+        />
+      <Button text="Reset Password" />
+    </Fragment>
+  );
+}
+
+const SignInScreen = () => {
+  const [signingIn, setSigningIn] = useState(false);
+
+  return (
     <View
       style={{
         flex: 1,
@@ -59,16 +210,15 @@ const SignInScreen = () => {
         }}>
         <FastImage
           style={{
-            width: 100,
+            width: 80,
             aspectRatio: 1,
             marginBottom: 8,
           }}
           source={require('../src/assets/castle-full-white.png')}
-          resizeMode={FastImage.resizeMode.cover}
         />
         <Text
           style={{
-            fontSize: 32,
+            fontSize: 28,
             fontWeight: 'bold',
           }}>
           Castle
@@ -78,43 +228,9 @@ const SignInScreen = () => {
         <Text>Signing in...</Text>
       ) : (
         <Fragment>
-          {errored ? (
-            <View style={{ paddingBottom: 16 }}>
-              <Text style={{ fontWeight: 'bold', fontSize: 16 }}>
-                There was a problem signing in.
-              </Text>
-              <Text>
-                Please check your network connection and ensure that the username and password are
-                correct.
-              </Text>
-            </View>
-          ) : null}
-          <TextInput
-            style={textInputStyle}
-            autoCapitalize="none"
-            onChangeText={newUsername => setUsername(newUsername)}
-            autoFocus={true}
-            placeholder="Email or username"
-          />
-          <TextInput
-            style={textInputStyle}
-            secureTextEntry
-            textContentType="password"
-            onChangeText={newPassword => setPassword(newPassword)}
-            placeholder="Password"
-          />
-          <TouchableOpacity
-            style={{
-              backgroundColor: '#000',
-              borderRadius: 4,
-              paddingVertical: 8,
-              paddingHorizontal: 12,
-              margin: 8,
-              alignItems: 'center',
-            }}
-            onPress={onPressSignIn}>
-            <Text style={{ color: '#fff', fontWeight: 'bold' }}>Sign In</Text>
-          </TouchableOpacity>
+          { LoginForm() }
+          {/* { CreateAccountForm() } */}
+          {/* { ForgotPasswordForm() } */}
         </Fragment>
       )}
     </View>
