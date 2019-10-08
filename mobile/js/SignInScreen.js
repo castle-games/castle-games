@@ -63,7 +63,7 @@ const SignInScreen = () => {
             aspectRatio: 1,
             marginBottom: 8,
           }}
-          source={require('../src/assets/castle.png')}
+          source={require('../src/assets/castle-full-white.png')}
           resizeMode={FastImage.resizeMode.cover}
         />
         <Text
