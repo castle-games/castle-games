@@ -198,6 +198,7 @@ class SocialSidebar extends React.Component {
           isExpanded={isChatExpanded}
           numChannelMembers={chat.channelOnlineCounts[channelId]}
           onMembersClick={this._handleToggleMembers}
+          onViewerClick={this.props.navigator.navigateToCurrentUserProfile}
           viewer={viewer}
           unseenNotificationCount={unseenNotificationCount}
           onSelectNotifications={this._handleShowNotifications}

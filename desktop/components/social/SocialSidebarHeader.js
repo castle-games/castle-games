@@ -92,7 +92,7 @@ const STYLES_P = css`
   }
 `;
 
-const STYLES_ONLINE = css`
+const STYLES_ACTIONS = css`
   color: ${Constants.REFACTOR_COLORS.subdued}:
   cursor: pointer;
 
@@ -153,10 +153,9 @@ export default class SocialSidebarHeader extends React.Component {
   };
 
   _getHeading = () => {
-    const { mode, channel, viewer } = this.props;
+    const { mode, channel } = this.props;
     if (mode === 'notifications') {
-      let username = viewer ? viewer.username : '';
-      return `Signed in as ${username}`;
+      return '';
     }
     switch (channel.type) {
       case 'dm':
@@ -185,23 +184,25 @@ export default class SocialSidebarHeader extends React.Component {
   };
 
   _renderActions = () => {
-    const { mode, channel, numChannelMembers } = this.props;
+    const { mode, channel, numChannelMembers, viewer } = this.props;
 
-    // TODO: notifications unread count
     if (mode === 'notifications') {
-      return null;
+      let username = viewer ? viewer.username : '';
+      return (
+        <span className={STYLES_ACTIONS} onClick={this.props.onViewerClick}>
+          <div id="action">Signed in as {username}</div>
+        </span>
+      );
     }
-
     if (channel.type !== 'dm' && numChannelMembers) {
       return (
-        <span className={STYLES_ONLINE} onClick={this.props.onMembersClick}>
+        <span className={STYLES_ACTIONS} onClick={this.props.onMembersClick}>
           <span>&middot;</span>
           <div id="action">{numChannelMembers} online</div>
         </span>
       );
-    } else {
-      return null;
     }
+    return null;
   };
 
   _renderNotificationBadge = () => {
