@@ -50,6 +50,20 @@ class NotificationsList extends React.Component {
     this.props.reloadNotifications();
   }
 
+  componentWillUnmount() {
+    let notificationIdsRead = [];
+    this.props.notifications &&
+      this.props.notifications.forEach((n) => {
+        if (n.status === 'unseen') {
+          notificationIdsRead.push(n.appNotificationId);
+        }
+      });
+    if (notificationIdsRead.length) {
+      // mark seen in local model
+      this.props.setAppNotificationsStatus(notificationIdsRead, 'seen');
+    }
+  }
+
   async componentDidUpdate(prevProps) {
     const prevNotifs = prevProps ? prevProps.notifications : null;
     if (this.props.notifications && prevNotifs !== this.props.notifications) {
@@ -60,7 +74,8 @@ class NotificationsList extends React.Component {
         }
       });
       if (notificationIdsRead.length) {
-        this.props.setAppNotificationsStatus(notificationIdsRead, 'seen');
+        // just send api call, don't mark in model
+        Actions.setAppNotificationsStatusAsync(notificationIdsRead, 'seen');
       }
     }
   }
