@@ -31,17 +31,19 @@ const ProfileIcon = () => {
     }
   `);
 
-  return(
-    <View style={{
-      paddingRight: 16,
-    }}>
-      <View style={{
-        width: 36,
-        height: 36,
-        backgroundColor: '#eee',
-        borderRadius: 18,
-        overflow: 'hidden',
+  return (
+    <View
+      style={{
+        paddingRight: 16,
       }}>
+      <View
+        style={{
+          width: 36,
+          height: 36,
+          backgroundColor: '#eee',
+          borderRadius: 18,
+          overflow: 'hidden',
+        }}>
         {queryLoading ? (
           <Fragment />
         ) : (
@@ -58,7 +60,7 @@ const ProfileIcon = () => {
       </View>
     </View>
   );
-}
+};
 
 const HomeNavigator = createStackNavigator({
   HomeScreen: {
@@ -78,7 +80,7 @@ const HomeNavigator = createStackNavigator({
           <Text style={{ fontWeight: 'bold', fontSize: 24 }}>Castle</Text>
         </View>
       ),
-      headerRight: <ProfileIcon />
+      headerRight: <ProfileIcon />,
     },
   },
 });

@@ -15,34 +15,37 @@ const textInputStyle = {
   marginVertical: 8,
 };
 
-const Announcement = (props) => {
+const Announcement = props => {
   return (
-    <View style={{
-      padding: 16,
-      paddingTop: 12,
-      backgroundColor: '#000',
-      borderRadius: 4,
-      marginBottom: 16,
-      flexDirection: 'column',
-    }}>
-      <Text style={{
-        fontWeight: 'bold',
-        color: '#fff',
-        fontSize: 16,
-        marginBottom: 4,
+    <View
+      style={{
+        padding: 16,
+        paddingTop: 12,
+        backgroundColor: '#000',
+        borderRadius: 4,
+        marginBottom: 16,
+        flexDirection: 'column',
       }}>
+      <Text
+        style={{
+          fontWeight: 'bold',
+          color: '#fff',
+          fontSize: 16,
+          marginBottom: 4,
+        }}>
         {props.headline}
       </Text>
-      <Text style={{
-        color: '#fff',
-      }}>
+      <Text
+        style={{
+          color: '#fff',
+        }}>
         {props.body}
       </Text>
     </View>
   );
-}
+};
 
-const Button = (props) => {
+const Button = props => {
   return (
     <View
       style={{
@@ -53,12 +56,10 @@ const Button = (props) => {
         margin: 8,
         alignItems: 'center',
       }}>
-      <Text style={{color: '#fff', fontWeight: 'bold'}}>
-        {props.text}
-      </Text>
+      <Text style={{ color: '#fff', fontWeight: 'bold' }}>{props.text}</Text>
     </View>
   );
-}
+};
 
 const LoginForm = () => {
   const { navigate } = useNavigation();
@@ -96,12 +97,14 @@ const LoginForm = () => {
         <Announcement
           headline="There was a problem signing in"
           body="Please check your network connection and ensure that the username and password are
-        //     correct." />
+        //     correct."
+        />
       ) : null}
       {reset ? (
         <Announcement
-        headline="Check your email"
-        body="We've sent you an email with a link to reset your password." />
+          headline="Check your email"
+          body="We've sent you an email with a link to reset your password."
+        />
       ) : null}
       <Text style={{ paddingBottom: 16 }}>
         Don't have an account?&nbsp;
@@ -129,7 +132,7 @@ const LoginForm = () => {
       </TouchableOpacity>
     </Fragment>
   );
-}
+};
 
 const CreateAccountForm = () => {
   return (
@@ -141,38 +144,25 @@ const CreateAccountForm = () => {
           <Text style={{ fontWeight: 'bold' }}>Log in</Text>
         </Text>
       </View>
-      <TextInput
-        style={textInputStyle}
-        autoCapitalize="none"
-        placeholder="Username"
-      />
-      <TextInput
-        style={textInputStyle}
-        placeholder="Your name"
-      />
-      <TextInput
-        style={textInputStyle}
-        autoCapitalize="none"
-        placeholder="Email address"
-      />
+      <TextInput style={textInputStyle} autoCapitalize="none" placeholder="Username" />
+      <TextInput style={textInputStyle} placeholder="Your name" />
+      <TextInput style={textInputStyle} autoCapitalize="none" placeholder="Email address" />
       <TextInput
         style={textInputStyle}
         secureTextEntry
         textContentType="password"
         placeholder="New password"
       />
-      <TouchableOpacity
-        style={{ paddingTop: 8, paddingBottom: 16 }}>
+      <TouchableOpacity style={{ paddingTop: 8, paddingBottom: 16 }}>
         <Text style={{ lineHeight: 20 }}>
           By clicking "Create Account," you are agreeing to Castle's&nbsp;
-            <Text style={{ fontWeight: 'bold' }}>privacy policy</Text>
-          .
+          <Text style={{ fontWeight: 'bold' }}>privacy policy</Text>.
         </Text>
       </TouchableOpacity>
       <Button text="Create Account" />
     </Fragment>
   );
-}
+};
 
 const ForgotPasswordForm = () => {
   return (
@@ -185,11 +175,11 @@ const ForgotPasswordForm = () => {
         autoCapitalize="none"
         onChangeText={newUsername => setUsername(newUsername)}
         placeholder="Email or username"
-        />
+      />
       <Button text="Reset Password" />
     </Fragment>
   );
-}
+};
 
 const SignInScreen = () => {
   const [signingIn, setSigningIn] = useState(false);
@@ -228,7 +218,7 @@ const SignInScreen = () => {
         <Text>Signing in...</Text>
       ) : (
         <Fragment>
-          { LoginForm() }
+          {LoginForm()}
           {/* { CreateAccountForm() } */}
           {/* { ForgotPasswordForm() } */}
         </Fragment>
