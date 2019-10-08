@@ -37,6 +37,7 @@ const STYLES_VIEWER_CONTAINER = css`
   align-items: center;
   justify-content: center;
   position: relative;
+  cursor: pointer;
 `;
 
 const STYLES_NOTIFICATION_BADGE = css`
@@ -213,14 +214,17 @@ export default class SocialSidebarHeader extends React.Component {
   };
 
   _renderViewer = () => {
-    const { viewer, onSelectNotifications } = this.props;
+    const { viewer, onSelectNotifications, unseenNotificationCount } = this.props;
     const avatarSrc = viewer && viewer.photo ? viewer.photo.url : null;
+    let tooltip = `Notifications for ${viewer.username}`;
+    if (unseenNotificationCount > 0) {
+      tooltip = `${tooltip} (${unseenNotificationCount} new)`;
+    }
     return (
-      <Tooltip title={`Notifications for ${viewer.username}`} {...TOOLTIP_PROPS}>
-        <div className={STYLES_VIEWER_CONTAINER}>
+      <Tooltip title={tooltip} {...TOOLTIP_PROPS}>
+        <div className={STYLES_VIEWER_CONTAINER} onClick={onSelectNotifications}>
           <UIAvatar
             src={avatarSrc}
-            onClick={onSelectNotifications}
             showIndicator={false}
             style={{
               height: `28px`,
