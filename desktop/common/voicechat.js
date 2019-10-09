@@ -26,7 +26,11 @@ function getMicPausedState() {
 }
 
 export const startVoiceChatAsync = async (roomId) => {
-  myPeerId = `${uuid()}`;
+  if (USE_LOCAL_SERVER) {
+    myPeerId = `${window.location.hash}-${uuid()}`;
+  } else {
+    myPeerId = `${uuid()}`;
+  }
 
   if (USE_LOCAL_SERVER) {
     host = 'http://localhost:3011';
@@ -71,7 +75,7 @@ export const startVoiceChatAsync = async (roomId) => {
 };
 
 export const stopVoiceChatAsync = async () => {
-  leaveRoom();
+  await leaveRoom();
 };
 
 async function joinRoomAsync() {
@@ -213,7 +217,7 @@ async function createTransport(direction) {
     // we leave the room)
     if (state === 'closed' || state === 'failed' || state === 'disconnected') {
       console.log('transport closed ... leaving the room and resetting');
-      leaveRoom();
+      await leaveRoom();
     }
   });
 
@@ -224,6 +228,8 @@ async function leaveRoom() {
   if (!joined) {
     return;
   }
+  joined = false;
+  lastPollSyncData = {};
 
   // close everything on the server-side (transports, producers, consumers)
   let { error } = await sigSocket('leave');
@@ -244,9 +250,7 @@ async function leaveRoom() {
   sendTransport = null;
   camAudioProducer = null;
   localCam = null;
-  lastPollSyncData = {};
   consumers = [];
-  joined = false;
 
   $('#remote-audio').innerHTML = '';
 }
@@ -350,11 +354,18 @@ async function resumeConsumer(consumer) {
 // polling/update logic
 //
 
-function pollAndUpdate(data) {
+let inUpdate = false;
+async function pollAndUpdate(data) {
+  while (inUpdate) {
+    await sleep(10);
+  }
+  inUpdate = true;
+
   let { peers, activeSpeaker, error } = data;
   if (error) {
     return { error };
   }
+  console.log(data);
 
   // always update bandwidth stats and active speaker display
   currentActiveSpeaker = activeSpeaker;
@@ -364,23 +375,28 @@ function pollAndUpdate(data) {
   for (let id in lastPollSyncData) {
     if (!peers[id]) {
       console.log(`peer ${id} has exited`);
-      consumers.forEach((consumer) => {
-        if (consumer.appData.peerId === id) {
-          closeConsumer(consumer);
-        }
-      });
+      await Promise.all(
+        consumers.map(async (consumer) => {
+          if (consumer.appData.peerId === id) {
+            await closeConsumer(consumer);
+          }
+        })
+      );
     }
   }
 
   // if a peer has stopped sending media that we are consuming, we
   // need to close the consumer and remove audio elements
-  consumers.forEach((consumer) => {
-    let { peerId, mediaTag } = consumer.appData;
-    if (!peers[peerId] || !peers[peerId].media || !peers[peerId].media[mediaTag]) {
-      console.log(`peer ${peerId} has stopped transmitting ${mediaTag}`);
-      closeConsumer(consumer);
-    }
-  });
+  await Promise.all(
+    consumers.map(async (consumer) => {
+      let { peerId, mediaTag } = consumer.appData;
+      if (!peers[peerId] || !peers[peerId].media || !peers[peerId].media[mediaTag]) {
+        console.log(`peer ${peerId} has stopped transmitting ${mediaTag}`);
+        console.log('yo2');
+        await closeConsumer(consumer);
+      }
+    })
+  );
 
   // subscribe to new peers
   for (let id in peers) {
@@ -395,11 +411,13 @@ function pollAndUpdate(data) {
 
     for (let [mediaTag, info] of Object.entries(peers[id].media)) {
       console.log('subscribing to ' + id + ' ' + mediaTag);
-      subscribeToTrack(id, mediaTag);
+      await subscribeToTrack(id, mediaTag);
     }
   }
 
   lastPollSyncData = peers;
+  inUpdate = false;
+
   return {}; // return an empty object if there isn't an error
 }
 
@@ -407,15 +425,19 @@ async function closeConsumer(consumer) {
   if (!consumer) {
     return;
   }
+  if (!consumers.includes(consumer)) {
+    return;
+  }
+
+  consumers = consumers.filter((c) => c !== consumer);
+  removeAudioElement(consumer);
+
   console.log('closing consumer', consumer.appData.peerId, consumer.appData.mediaTag);
   try {
     // tell the server we're closing this consumer. (the server-side
     // consumer may have been closed already, but that's okay.)
     await sigSocket('close-consumer', { consumerId: consumer.id });
     await consumer.close();
-
-    consumers = consumers.filter((c) => c !== consumer);
-    removeAudioElement(consumer);
   } catch (e) {
     console.error(e);
   }
