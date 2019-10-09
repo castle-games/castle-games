@@ -54,10 +54,10 @@ const HomeScreen = () => {
                 borderColor: '#ccc',
                 borderWidth: 0,
                 paddingVertical: 8,
-                paddingHorizontal: 8,
+                paddingHorizontal: 12,
                 fontSize: 16,
               }}
-              placeholder="🔍 Search Castle or paste URL"
+              placeholder="Paste a Castle game URL"
             />
           </View>
           {queryData.allGames.map(game => (
