@@ -112,7 +112,7 @@ export const JS = {
     if (result.errors && result.errors.length) {
       throw new Error(result.errors[0].message);
     }
-    if (result.data && result.data.gameGlobalStorage.value) {
+    if (result.data && result.data.gameGlobalStorage && result.data.gameGlobalStorage.value) {
       return result.data.gameGlobalStorage.value;
     }
     return null;
@@ -150,7 +150,7 @@ export const JS = {
     if (result.errors && result.errors.length) {
       throw new Error(result.errors[0].message);
     }
-    if (result.data && result.data.gameUserStorage.value) {
+    if (result.data && result.data.gameUserStorage && result.data.gameUserStorage.value) {
       return result.data.gameUserStorage.value;
     }
     return null;
