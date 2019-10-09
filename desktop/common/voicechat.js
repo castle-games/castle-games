@@ -7,6 +7,24 @@ const USE_LOCAL_SERVER = false;
 
 const $ = document.querySelector.bind(document);
 
+let fnQueue = [];
+let isFnRunning = false;
+async function addToFnQueue(fn) {
+  fnQueue.push(fn);
+
+  if (!isFnRunning) {
+    while (fnQueue.length > 0) {
+      isFnRunning = true;
+      try {
+        await fnQueue.shift()();
+      } catch (e) {
+        console.error(e);
+      }
+      isFnRunning = false;
+    }
+  }
+}
+
 let host;
 let myPeerId;
 let device;
@@ -19,6 +37,12 @@ let lastPollSyncData = {};
 let recvTransport;
 let socket;
 
+if (USE_LOCAL_SERVER) {
+  myPeerId = `${window.location.hash}-${uuid()}`;
+} else {
+  myPeerId = `${uuid()}`;
+}
+
 let consumers = [];
 
 function getMicPausedState() {
@@ -26,56 +50,54 @@ function getMicPausedState() {
 }
 
 export const startVoiceChatAsync = async (roomId) => {
-  if (USE_LOCAL_SERVER) {
-    myPeerId = `${window.location.hash}-${uuid()}`;
-  } else {
-    myPeerId = `${uuid()}`;
-  }
-
-  if (USE_LOCAL_SERVER) {
-    host = 'http://localhost:3011';
-  } else {
-    let mediaService = await Actions.getMediaServiceAsync({
-      roomId,
-    });
-    if (!mediaService) {
-      console.error('no media service');
-      return;
-    }
-
-    host = mediaService.address;
-  }
-
-  socket = io(host, {
-    query: {
-      peerId: myPeerId,
-      roomId,
-    },
-  });
-
-  let bodyTag = document.getElementsByTagName('body')[0];
-  let remoteAudioTag = document.createElement('div');
-  remoteAudioTag.setAttribute('id', 'remote-audio');
-  bodyTag.appendChild(remoteAudioTag);
-
-  try {
-    device = new mediasoup.Device();
-  } catch (e) {
-    if (e.name === 'UnsupportedError') {
-      console.error('browser not supported for voice calls');
-      return;
+  addToFnQueue(async () => {
+    if (USE_LOCAL_SERVER) {
+      host = 'http://localhost:3011';
     } else {
-      console.error(e);
-    }
-  }
+      let mediaService = await Actions.getMediaServiceAsync({
+        roomId,
+      });
+      if (!mediaService) {
+        console.error('no media service');
+        return;
+      }
 
-  await joinRoomAsync();
-  await startMic();
-  await sendMicStream();
+      host = mediaService.address;
+    }
+
+    socket = io(host, {
+      query: {
+        peerId: myPeerId,
+        roomId,
+      },
+    });
+
+    let bodyTag = document.getElementsByTagName('body')[0];
+    let remoteAudioTag = document.createElement('div');
+    remoteAudioTag.setAttribute('id', 'remote-audio');
+    bodyTag.appendChild(remoteAudioTag);
+
+    try {
+      device = new mediasoup.Device();
+    } catch (e) {
+      if (e.name === 'UnsupportedError') {
+        console.error('browser not supported for voice calls');
+        return;
+      } else {
+        console.error(e);
+      }
+    }
+
+    await joinRoomAsync();
+    await startMic();
+    await sendMicStream();
+  });
 };
 
 export const stopVoiceChatAsync = async () => {
-  await leaveRoom();
+  addToFnQueue(async () => {
+    await leaveRoom();
+  });
 };
 
 async function joinRoomAsync() {
@@ -354,71 +376,64 @@ async function resumeConsumer(consumer) {
 // polling/update logic
 //
 
-let inUpdate = false;
 async function pollAndUpdate(data) {
-  while (inUpdate) {
-    await sleep(10);
-  }
-  inUpdate = true;
-
-  let { peers, activeSpeaker, error } = data;
-  if (error) {
-    return { error };
-  }
-  console.log(data);
-
-  // always update bandwidth stats and active speaker display
-  currentActiveSpeaker = activeSpeaker;
-
-  // if a peer has gone away, we need to close all consumers we have
-  // for that peer and remove audio elements
-  for (let id in lastPollSyncData) {
-    if (!peers[id]) {
-      console.log(`peer ${id} has exited`);
-      await Promise.all(
-        consumers.map(async (consumer) => {
-          if (consumer.appData.peerId === id) {
-            await closeConsumer(consumer);
-          }
-        })
-      );
+  addToFnQueue(async () => {
+    let { peers, activeSpeaker, error } = data;
+    if (error) {
+      return { error };
     }
-  }
 
-  // if a peer has stopped sending media that we are consuming, we
-  // need to close the consumer and remove audio elements
-  await Promise.all(
-    consumers.map(async (consumer) => {
-      let { peerId, mediaTag } = consumer.appData;
-      if (!peers[peerId] || !peers[peerId].media || !peers[peerId].media[mediaTag]) {
-        console.log(`peer ${peerId} has stopped transmitting ${mediaTag}`);
-        console.log('yo2');
-        await closeConsumer(consumer);
+    // always update bandwidth stats and active speaker display
+    currentActiveSpeaker = activeSpeaker;
+
+    // if a peer has gone away, we need to close all consumers we have
+    // for that peer and remove audio elements
+    for (let id in lastPollSyncData) {
+      if (!peers[id]) {
+        console.log(`peer ${id} has exited`);
+        await Promise.all(
+          consumers.map(async (consumer) => {
+            if (consumer.appData.peerId === id) {
+              await closeConsumer(consumer);
+            }
+          })
+        );
       }
-    })
-  );
-
-  // subscribe to new peers
-  for (let id in peers) {
-    if (id === myPeerId) {
-      continue;
     }
 
-    let existingConsumer = consumers.find((c) => c.appData.peerId === id);
-    if (existingConsumer) {
-      continue;
+    // if a peer has stopped sending media that we are consuming, we
+    // need to close the consumer and remove audio elements
+    await Promise.all(
+      consumers.map(async (consumer) => {
+        let { peerId, mediaTag } = consumer.appData;
+        if (!peers[peerId] || !peers[peerId].media || !peers[peerId].media[mediaTag]) {
+          console.log(`peer ${peerId} has stopped transmitting ${mediaTag}`);
+          await closeConsumer(consumer);
+        }
+      })
+    );
+
+    // subscribe to new peers
+    for (let id in peers) {
+      if (id === myPeerId) {
+        continue;
+      }
+
+      let existingConsumer = consumers.find((c) => c.appData.peerId === id);
+      if (existingConsumer) {
+        continue;
+      }
+
+      for (let [mediaTag, info] of Object.entries(peers[id].media)) {
+        console.log('subscribing to ' + id + ' ' + mediaTag);
+        await subscribeToTrack(id, mediaTag);
+      }
     }
 
-    for (let [mediaTag, info] of Object.entries(peers[id].media)) {
-      console.log('subscribing to ' + id + ' ' + mediaTag);
-      await subscribeToTrack(id, mediaTag);
-    }
-  }
+    lastPollSyncData = peers;
 
-  lastPollSyncData = peers;
-  inUpdate = false;
-
-  return {}; // return an empty object if there isn't an error
+    return {}; // return an empty object if there isn't an error
+  });
 }
 
 async function closeConsumer(consumer) {
