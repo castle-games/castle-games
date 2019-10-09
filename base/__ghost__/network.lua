@@ -142,7 +142,7 @@ local function isCacheable(url)
             return true
         end
         local hash = url:match('^https?://s3%-us%-west%-2%.amazonaws%.com/castle%-hosted%-games/([^/]*)')
-        if hash:match('^[a-f0-9]*$') and #hash == 40 then
+        if hash and hash:match('^[a-f0-9]*$') and #hash == 40 then
             return true
         end
     end
