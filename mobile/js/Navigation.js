@@ -71,7 +71,7 @@ const HomeNavigator = createStackNavigator({
           <FastImage
             style={{
               width: 30,
-              height: 36,
+              height: 34,
               marginBottom: 6,
               marginRight: 12,
             }}
