@@ -68,7 +68,9 @@ const MainSwitcher = () => {
               }}>
               <TouchableOpacity
                 onPress={() => {
-                  setMode('game');
+                  if (gameRunning) {
+                    setMode('game');
+                  }
                 }}>
                 <View
                   style={{
