@@ -136,9 +136,13 @@ db:exec[[
 
 -- Whether `url` is safe to cache (never expires)
 local function isCacheable(url)
-    do -- Content-addressed asset (eg. user profile photo) on our CDN
+    do -- Content-addressed asset (eg. user profile photo, hosted game assets) on our CDN
         local hash = url:match('https://d1vkcv80qw9qqp.cloudfront.net/([a-f0-9]*)')
         if hash and #hash == 32 then
+            return true
+        end
+        local hash = url:match('^https?://s3%-us%-west%-2%.amazonaws%.com/castle%-hosted%-games/([^/]*)')
+        if hash:match('^[a-f0-9]*$') and #hash == 40 then
             return true
         end
     end
@@ -197,7 +201,7 @@ do
     mapToCacheable = function(url)
         do -- GitHub branch -> SHA
             local user, repo, branch, path = url:match(
-                '^https?://raw.githubusercontent.com/([^/]*)/([^/]*)/([^/]*)/(.*)')
+                '^https?://raw%.githubusercontent%.com/([^/]*)/([^/]*)/([^/]*)/(.*)')
             if user and repo and branch then
                 if not (branch:match('^[a-f0-9]*$') and #branch == 40) then -- Ensure not a SHA
                     local sha = githubBranchShas[user .. '/' .. repo .. '/' .. branch] -- Cached?
@@ -252,6 +256,24 @@ do
                 end
             end
         end
+
+        do -- Castle-hosted asset
+            if url:match('^https?://api%.castle%.games/api/hosted') then
+                -- See if it redirects to a CDN URL
+                local response, httpCode, headers, status = network.request {
+                    url = url,
+                    redirect = false,
+                }
+                if httpCode == 302 then
+                    local location = headers['location']
+                    local hash = location:match('^https?://s3%-us%-west%-2%.amazonaws%.com/castle%-hosted%-games/([^/]*)')
+                    if hash:match('^[a-f0-9]*$') and #hash == 40 then
+                        return location
+                    end
+                end
+            end
+        end
+
         return url
     end
 end
