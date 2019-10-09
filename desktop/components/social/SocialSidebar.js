@@ -132,7 +132,7 @@ class SocialSidebar extends React.Component {
   _renderContent = (mode, { channelId, theme }) => {
     switch (mode) {
       case 'notifications':
-        return <NotificationsList />;
+        return <NotificationsList theme={theme} />;
       case 'members':
         const channel = this.props.chat.channels[channelId];
         const onlineUserIds = this.props.chat.channelOnlineUserIds[channelId];

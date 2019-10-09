@@ -93,7 +93,7 @@ class NotificationsList extends React.Component {
   };
 
   _renderNotification = (n, ii) => {
-    const { notifications } = this.props;
+    const { notifications, theme } = this.props;
     let prevNotification = ii > 0 ? notifications[ii - 1] : null;
 
     const status = n.status === 'unseen';
@@ -102,6 +102,7 @@ class NotificationsList extends React.Component {
     const notifElement = (
       <NotificationItem
         key={`notification-${ii}`}
+        theme={theme}
         notification={n}
         onSelectNotification={this._handleSelectNotification}
       />
@@ -110,7 +111,7 @@ class NotificationsList extends React.Component {
     if (status !== prevStatus) {
       return (
         <React.Fragment>
-          <NotificationSectionHeader unseen={status} key={`notif-header-${ii}`} />
+          <NotificationSectionHeader unseen={status} key={`notif-header-${ii}`} theme={theme} />
           {notifElement}
         </React.Fragment>
       );
@@ -120,8 +121,15 @@ class NotificationsList extends React.Component {
   };
 
   _renderEmpty = () => {
+    const { theme } = this.props;
+    let themeContainerStyles;
+    if (theme) {
+      themeContainerStyles = css`
+        color: ${theme.textColor};
+      `;
+    }
     return (
-      <div className={STYLES_EMPTY}>
+      <div className={`${STYLES_EMPTY} ${themeContainerStyles}`}>
         <div className={STYLES_TITLE}>Welcome to Castle!</div>
         <div className={STYLES_PARAGRAPH}>
           You don't have any notifications yet. When people mention you, invite you to games, or
@@ -156,6 +164,7 @@ export default class NotificationsListWithContext extends React.Component {
                 reloadNotifications={currentUser.loadAppNotifications}
                 setAppNotificationsStatus={currentUser.setAppNotificationsStatus}
                 navigator={navigator}
+                {...this.props}
               />
             )}
           </NavigatorContext.Consumer>

@@ -31,17 +31,24 @@ export default class NotificationItem extends React.Component {
   };
 
   render() {
-    const { notification } = this.props;
+    const { notification, theme } = this.props;
     if (!notification || !notification.body) {
       return null;
     }
 
+    let themeContainerStyles;
+    if (theme) {
+      themeContainerStyles = css`
+        color: ${theme.textColor};
+      `;
+    }
+
     return (
       <div
-        className={STYLES_CONTAINER}
+        className={`${STYLES_CONTAINER} ${themeContainerStyles}`}
         onClick={() => this.props.onSelectNotification(notification)}>
         <div className={STYLES_BODY}>
-          <UIMessageBody body={notification.body} />
+          <UIMessageBody body={notification.body} theme={this.props.theme} />
         </div>
         <div className={STYLES_TIMESTAMP}>{Strings.toChatDate(notification.updatedTime)}</div>
       </div>
