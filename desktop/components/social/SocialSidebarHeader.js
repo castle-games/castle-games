@@ -79,12 +79,15 @@ const STYLES_H2 = css`
   font-size: 12px;
 `;
 
-const STYLES_P = css`
+const STYLES_SUBLINE = css`
   margin: 4px 0 4px 0;
   font-size: 12px;
   line-height: 14px;
-  height: 12px;
+  height: 14px;
   color: ${Constants.REFACTOR_COLORS.subdued};
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 
   span {
     display: inline-block;
@@ -249,7 +252,7 @@ export default class SocialSidebarHeader extends React.Component {
         {isExpanded ? (
           <div className={STYLES_HEADER_LEFT}>
             {this._renderTitle()}
-            <div className={STYLES_P}>
+            <div className={STYLES_SUBLINE}>
               <span>{this._getHeading()}</span>
               {this._renderActions()}
             </div>
