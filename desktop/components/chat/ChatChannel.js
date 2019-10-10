@@ -72,7 +72,7 @@ class ChatChannel extends React.Component {
 
   _isEditAvailable = () => {
     const { messageIdToEdit } = this.state;
-    const { chat, channelId, viewer, isSidebar } = this.props;
+    const { chat, channelId, viewer } = this.props;
     const channel = chat.channels[channelId];
     return (
       !messageIdToEdit &&
@@ -111,7 +111,6 @@ class ChatChannel extends React.Component {
     return (
       <React.Fragment>
         <ChatMessages
-          isSidebar={this.props.isSidebar}
           theme={this.props.theme}
           size={this.props.size}
           viewer={viewer}
@@ -126,7 +125,6 @@ class ChatChannel extends React.Component {
         />
         <ChatInputControl
           ref={(c) => (this._inputRef = c)}
-          isSidebar={this.props.isSidebar}
           theme={this.props.theme}
           placeholder={`Message ${name}`}
           addUsers={userPresence.addUsers}

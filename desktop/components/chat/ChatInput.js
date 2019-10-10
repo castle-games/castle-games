@@ -200,14 +200,11 @@ export default class ChatInput extends React.Component {
   };
 
   render() {
-    let inputStyles;
     let containerStyles;
-    if (this.props.isSidebar) {
-      inputStyles = {
-        color: this.props.theme.textColor,
-        background: this.props.theme.inputBackground,
-      };
-    }
+    let inputStyles = {
+      color: this.props.theme.textColor,
+      background: this.props.theme.inputBackground,
+    };
 
     return (
       <div className={STYLES_CONTAINER} style={containerStyles}>

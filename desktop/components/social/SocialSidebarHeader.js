@@ -21,6 +21,7 @@ const STYLES_HEADER = css`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding-top: 2px;
 `;
 
 const STYLES_VIEWER = css`
@@ -70,7 +71,7 @@ const TOOLTIP_PROPS = {
 };
 
 const STYLES_HEADER_LEFT = css`
-  padding: 8px 8px 8px 16px;
+  padding: 0 8px 0 16px;
   min-width: 25%;
   width: 100%;
 `;

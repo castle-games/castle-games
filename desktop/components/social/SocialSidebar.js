@@ -149,7 +149,6 @@ class SocialSidebar extends React.Component {
           <div className={STYLES_CHANNEL}>
             {channelId && (
               <ChatChannel
-                isSidebar
                 chat={this.props.chat}
                 numChannelMembers={this.props.chat.channelOnlineCounts[channelId]}
                 onMembersClick={this._handleToggleMembers}
