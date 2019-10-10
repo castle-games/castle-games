@@ -23,6 +23,7 @@ const EMPTY_CHAT_STATE = {
 const ChatContextDefaults = {
   sendMessage: async (channelId, plainMessage, messageToEdit = null) => {},
   toggleReaction: async (channelId, message, emojiShortName) => {},
+  openChannelWithId: async (channelId) => {},
   openChannelWithName: async (name) => {},
   openChannelForUser: async (user) => {},
   openChannelForGame: async (game, options) => {},
@@ -53,6 +54,7 @@ class ChatContextManager extends React.Component {
       ...props.value,
       sendMessage: this.sendMessage,
       toggleReaction: this.toggleReaction,
+      openChannelWithId: this.openChannelWithId,
       openChannelWithName: this.openChannelWithName,
       openChannelForUser: this.openChannelForUser,
       openChannelForGame: this.openChannelForGame,
@@ -128,6 +130,23 @@ class ChatContextManager extends React.Component {
         };
       });
     }
+  };
+
+  openChannelWithId = async (channelId) => {
+    let isSubscribed = false,
+      fetchedChannel;
+    Object.entries(this.state.channels).forEach(([key, channel]) => {
+      if (channel.channelId === channelId) {
+        isSubscribed = channel.isSubscribed;
+      }
+    });
+    if (!isSubscribed) {
+      fetchedChannel = await this._chat.joinChannelAsync(channelId);
+    }
+    if (fetchedChannel) {
+      await this._addChannel({ ...fetchedChannel, isSubscribed: true });
+    }
+    return this.props.showChatChannel(channelId);
   };
 
   // checks if we have a channel with this name,

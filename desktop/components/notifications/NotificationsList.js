@@ -3,6 +3,7 @@ import * as Constants from '~/common/constants';
 import * as Actions from '~/common/actions';
 
 import { css } from 'react-emotion';
+import { ChatContext } from '~/contexts/ChatContext';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigatorContext } from '~/contexts/NavigationContext';
 
@@ -44,6 +45,7 @@ class NotificationsList extends React.Component {
     notifications: [],
     reloadNotifications: async () => {},
     setAppNotificationsStatus: (notificationIds, status) => {},
+    onAfterSelectChat: () => {},
   };
 
   componentDidMount() {
@@ -87,6 +89,18 @@ class NotificationsList extends React.Component {
           const fullGame = await Actions.getGameByGameId(notification.gameId);
           this.props.navigator.navigateToGameMeta(fullGame);
         } catch (e) {}
+        break;
+      }
+      case 'chat_message': {
+        if (notification.gameId) {
+          try {
+            const fullGame = await Actions.getGameByGameId(notification.gameId);
+            this.props.navigator.navigateToGameMeta(fullGame);
+          } catch (e) {}
+        } else {
+          this.props.chat.openChannelWithId(notification.chatChannelId);
+        }
+        this.props.onAfterSelectChat();
         break;
       }
     }
@@ -159,13 +173,18 @@ export default class NotificationsListWithContext extends React.Component {
         {(currentUser) => (
           <NavigatorContext.Consumer>
             {(navigator) => (
-              <NotificationsList
-                notifications={currentUser.appNotifications}
-                reloadNotifications={currentUser.loadAppNotifications}
-                setAppNotificationsStatus={currentUser.setAppNotificationsStatus}
-                navigator={navigator}
-                {...this.props}
-              />
+              <ChatContext.Consumer>
+                {(chat) => (
+                  <NotificationsList
+                    notifications={currentUser.appNotifications}
+                    reloadNotifications={currentUser.loadAppNotifications}
+                    setAppNotificationsStatus={currentUser.setAppNotificationsStatus}
+                    navigator={navigator}
+                    chat={chat}
+                    {...this.props}
+                  />
+                )}
+              </ChatContext.Consumer>
             )}
           </NavigatorContext.Consumer>
         )}

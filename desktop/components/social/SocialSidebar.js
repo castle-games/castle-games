@@ -129,10 +129,14 @@ class SocialSidebar extends React.Component {
     this.setState({ mode: 'notifications' });
   };
 
+  _handleNotificationSelectChat = () => this.setState({ mode: 'chat' });
+
   _renderContent = (mode, { channelId, theme }) => {
     switch (mode) {
       case 'notifications':
-        return <NotificationsList theme={theme} />;
+        return (
+          <NotificationsList theme={theme} onAfterSelectChat={this._handleNotificationSelectChat} />
+        );
       case 'members':
         const channel = this.props.chat.channels[channelId];
         const onlineUserIds = this.props.chat.channelOnlineUserIds[channelId];
