@@ -130,6 +130,10 @@ class ProfileScreen extends React.Component {
     }
   };
 
+  _navigateToGame = async (game, options) => {
+    await this.props.navigateToGame(game, { ...options, launchSource: 'profile' });
+  };
+
   _navigateToGameMeta = async (game, options) => {
     await this.props.navigateToGameMeta(game, { ...options, launchSource: 'profile' });
   };
@@ -161,7 +165,7 @@ class ProfileScreen extends React.Component {
         <UIPostList
           posts={this.state.posts}
           onUserSelect={this.props.navigateToUserProfile}
-          onGameSelect={this._navigateToGameMeta}
+          onGameSelect={this._navigateToGame}
         />
       );
     } else {
@@ -250,6 +254,7 @@ export default class ProfileScreenWithContext extends React.Component {
     return (
       <ProfileScreen
         navigateToGameMeta={navigator.navigateToGameMeta}
+        navigateToGame={navigator.navigateToGame}
         navigateToGameUrl={navigator.navigateToGameUrl}
         navigateToUserProfile={navigator.navigateToUserProfile}
         navigateToSignIn={navigator.navigateToSignIn}

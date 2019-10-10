@@ -1099,6 +1099,9 @@ export async function postsForUserId(userId, { pageSize = 20, pageAfterPostId } 
       query($userId: ID!, $pageSize: Int, $pageAfterPostId: ID) {
         postsForUser(userId: $userId, pageSize: $pageSize, pageAfterPostId: $pageAfterPostId) {
           ${POST_FIELDS}
+          sourceGame {
+            ${GAME_FIELDS}
+          }
         }
       }
     `,
