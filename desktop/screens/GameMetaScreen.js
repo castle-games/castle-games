@@ -138,23 +138,28 @@ class GameMetaScreen extends React.Component {
 
     return (
       <div className={STYLES_CONTAINER}>
-        <GameMetaHeader
-          game={game}
-          onSelectGame={this._navigateToGame}
-          onSelectUser={this.props.navigator.navigateToUserProfile}
-        />
         <div
           className={css`
-            display: block;
-            width: 100%;
+            width: 70%;
           `}>
-          <UIHorizontalNavigation
-            items={this._getNavigationItems()}
-            onChange={this._handleNavigationChange}
-            selectedKey={mode}
-            style={{ borderBottom: `2px solid #ececec`, width: '100%' }}
+          <GameMetaHeader
+            game={game}
+            onSelectGame={this._navigateToGame}
+            onSelectUser={this.props.navigator.navigateToUserProfile}
           />
-          <div className={STYLES_CONTENT_CONTAINER}>{this._renderContent(channel, mode)}</div>
+          <div
+            className={css`
+              display: block;
+              width: 100%;
+            `}>
+            <UIHorizontalNavigation
+              items={this._getNavigationItems()}
+              onChange={this._handleNavigationChange}
+              selectedKey={mode}
+              style={{ borderBottom: `2px solid #ececec`, width: '100%' }}
+            />
+            <div className={STYLES_CONTENT_CONTAINER}>{this._renderContent(channel, mode)}</div>
+          </div>
         </div>
       </div>
     );
