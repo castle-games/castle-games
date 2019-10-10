@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, TextInput } from 'react-native';
 import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
@@ -6,18 +6,77 @@ import FastImage from 'react-native-fast-image';
 
 import * as GameScreen from './GameScreen';
 
+export const GameCard = props => {
+  const { loading: queryLoading, error: queryError, data: queryData } = useQuery(
+    gql`
+      query Game($gameId: ID) {
+        game(gameId: $gameId) {
+          gameId
+          title
+          owner {
+            username
+          }
+          coverImage {
+            url
+          }
+        }
+      }
+    `,
+    { variables: { gameId: props.gameId } }
+  );
+
+  return queryLoading ? (
+    <Fragment />
+  ) : (
+    <TouchableOpacity
+      style={{
+        width: '50%',
+        padding: 8,
+        overflow: 'hidden',
+      }}
+      delayPressIn={50}
+      onPress={() => GameScreen.goToGame({ gameId: queryData.game.gameId })}>
+      <View
+        style={{
+          borderRadius: 4,
+          overflow: 'hidden',
+          shadowColor: 'black',
+          shadowOpacity: 0.1,
+          shadowRadius: 8,
+          shadowOffset: {
+            width: 0,
+            height: 4,
+          },
+          elevation: 5,
+        }}>
+        <FastImage
+          style={{
+            width: '100%',
+            aspectRatio: 16 / 9,
+          }}
+          source={{ uri: queryData.game.coverImage && queryData.game.coverImage.url }}
+          resizeMode={FastImage.resizeMode.cover}
+        />
+        <View
+          style={{
+            padding: 12,
+            paddingTop: 8,
+            backgroundColor: '#fff',
+            height: 88,
+          }}>
+          <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{queryData.game.title}</Text>
+          <Text style={{ fontSize: 14, color: '#aaa' }}>{queryData.game.owner.username}</Text>
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
+};
+
 const HomeScreen = () => {
   const { loading: queryLoading, error: queryError, data: queryData } = useQuery(gql`
     query Games {
       allGames {
         gameId
-        title
-        owner {
-          username
-        }
-        coverImage {
-          url
-        }
       }
     }
   `);
@@ -61,48 +120,7 @@ const HomeScreen = () => {
             />
           </View>
           {queryData.allGames.map(game => (
-            <TouchableOpacity
-              key={game.gameId}
-              style={{
-                width: '50%',
-                padding: 8,
-                overflow: 'hidden',
-              }}
-              delayPressIn={50}
-              onPress={() => GameScreen.goToGame({ gameId: game.gameId })}>
-              <View
-                style={{
-                  borderRadius: 4,
-                  overflow: 'hidden',
-                  shadowColor: 'black',
-                  shadowOpacity: 0.1,
-                  shadowRadius: 8,
-                  shadowOffset: {
-                    width: 0,
-                    height: 4,
-                  },
-                  elevation: 5,
-                }}>
-                <FastImage
-                  style={{
-                    width: '100%',
-                    aspectRatio: 16 / 9,
-                  }}
-                  source={{ uri: game.coverImage && game.coverImage.url }}
-                  resizeMode={FastImage.resizeMode.cover}
-                />
-                <View
-                  style={{
-                    padding: 12,
-                    paddingTop: 8,
-                    backgroundColor: '#fff',
-                    height: 88,
-                  }}>
-                  <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{game.title}</Text>
-                  <Text style={{ fontSize: 14, color: '#aaa' }}>{game.owner.username}</Text>
-                </View>
-              </View>
-            </TouchableOpacity>
+            <GameCard gameId={game.gameId} key={game.gameId} />
           ))}
         </ScrollView>
       )}

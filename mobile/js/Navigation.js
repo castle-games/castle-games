@@ -8,9 +8,6 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { useNavigation } from 'react-navigation-hooks';
 import { Text, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import { useQuery } from '@apollo/react-hooks';
-import gql from 'graphql-tag';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import SignInScreen from './SignInScreen';
 import * as DeepLinks from './DeepLinks';
@@ -19,48 +16,6 @@ import * as Session from './Session';
 import ProfileScreen from './ProfileScreen';
 
 // App UI layout
-
-const ProfileIcon = () => {
-  const { loading: queryLoading, error: queryError, data: queryData } = useQuery(gql`
-    query Me {
-      me {
-        photo {
-          url
-        }
-      }
-    }
-  `);
-
-  return (
-    <View
-      style={{
-        paddingRight: 16,
-      }}>
-      <View
-        style={{
-          width: 36,
-          height: 36,
-          backgroundColor: '#eee',
-          borderRadius: 18,
-          overflow: 'hidden',
-        }}>
-        {queryLoading ? (
-          <Fragment />
-        ) : (
-          <TouchableOpacity>
-            <FastImage
-              style={{
-                width: 36,
-                height: 36,
-              }}
-              source={{ uri: queryData.me.photo.url }}
-            />
-          </TouchableOpacity>
-        )}
-      </View>
-    </View>
-  );
-};
 
 const HomeNavigator = createStackNavigator({
   HomeScreen: {
@@ -80,12 +35,11 @@ const HomeNavigator = createStackNavigator({
           <Text style={{ fontWeight: 'bold', fontSize: 24 }}>Castle</Text>
         </View>
       ),
-      headerRight: <ProfileIcon />,
     },
   },
 });
 
-const ProfileNavigator = createStackNavigator({
+const ProfileNavigator = createSwitchNavigator({
   ProfileScreen: {
     screen: ProfileScreen,
     navigationOptions: { title: 'Profile' },
@@ -114,7 +68,7 @@ const TabNavigator = createBottomTabNavigator(
   {
     tabBarOptions: {
       showIcon: true,
-      activeTintColor: 'tomato',
+      activeTintColor: '#000',
     },
   }
 );
@@ -141,7 +95,7 @@ const AppNavigator = createSwitchNavigator(
   {
     InitialScreen,
     SignInNavigator,
-    HomeNavigator,
+    TabNavigator,
   },
   {
     initialRouteName: 'InitialScreen',
