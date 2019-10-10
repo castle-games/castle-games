@@ -1,5 +1,5 @@
 import React, { useState, Fragment } from 'react';
-import { View, TouchableOpacity, Text, TextInput } from 'react-native';
+import { View, TouchableOpacity, Text, TextInput, StatusBar } from 'react-native';
 import { useNavigation, useNavigationParam } from 'react-navigation-hooks';
 import FastImage from 'react-native-fast-image';
 
@@ -193,6 +193,7 @@ const SignInScreen = () => {
         justifyContent: 'center',
         padding: 16,
       }}>
+      <StatusBar backgroundColor="#ffc21c" barStyle="dark-content" />
       <View
         style={{
           alignItems: 'center',
@@ -217,11 +218,11 @@ const SignInScreen = () => {
       {signingIn ? (
         <Text>Signing in...</Text>
       ) : (
-        <Fragment>
+        <View style={{ width: '100%', alignItems: 'center', paddingBottom: 64 }}>
           {LoginForm()}
           {/* { CreateAccountForm() } */}
           {/* { ForgotPasswordForm() } */}
-        </Fragment>
+        </View>
       )}
     </View>
   );
