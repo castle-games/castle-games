@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
   },
   windowed: {
     position: 'absolute',
-    bottom: 16,
+    bottom: 64,
     left: 16,
     zIndex: 1,
     backgroundColor: '#000',
