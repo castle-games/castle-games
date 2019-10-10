@@ -178,7 +178,7 @@ class GamesHomeScreen extends React.Component {
           posts={posts}
           navigator={this.props.navigator}
           onUserSelect={this.props.navigateToUserProfile}
-          onGameSelect={this._navigateToGameMeta}
+          onGameSelect={this._navigateToGame}
         />
       );
     }
