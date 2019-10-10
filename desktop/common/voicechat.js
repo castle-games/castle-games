@@ -39,6 +39,9 @@ let lastPollSyncData = {};
 let recvTransport;
 let socket;
 
+let connectedSound;
+let disconnectedSound;
+
 if (USE_LOCAL_SERVER) {
   myPeerId = `${window.location.hash}-${uuid()}`;
 } else {
@@ -53,6 +56,14 @@ function getMicPausedState() {
 
 export const startVoiceChatAsync = async (roomId) => {
   await NativeUtil.getMicrophonePermission();
+
+  if (!connectedSound) {
+    connectedSound = new Audio('static/connect_voice_chat.wav');
+  }
+
+  if (!disconnectedSound) {
+    disconnectedSound = new Audio('static/disconnect_voice_chat.wav');
+  }
 
   addToFnQueue(async () => {
     if (USE_LOCAL_SERVER) {
@@ -97,12 +108,16 @@ export const startVoiceChatAsync = async (roomId) => {
     await joinRoomAsync();
     await startMic();
     await sendMicStream();
+
+    connectedSound.play();
   });
 };
 
 export const stopVoiceChatAsync = async () => {
   addToFnQueue(async () => {
     await leaveRoom();
+
+    disconnectedSound.play();
   });
 };
 
@@ -325,6 +340,8 @@ async function subscribeToTrack(peerId, mediaTag) {
 
   // ui
   await addAudioElement(consumer);
+
+  connectedSound.play();
 }
 
 function addAudioElement(consumer) {
@@ -456,6 +473,8 @@ async function closeConsumer(consumer) {
     // consumer may have been closed already, but that's okay.)
     await sigSocket('close-consumer', { consumerId: consumer.id });
     await consumer.close();
+
+    disconnectedSound.play();
   } catch (e) {
     console.error(e);
   }
