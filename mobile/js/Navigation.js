@@ -26,11 +26,11 @@ const HomeNavigator = createStackNavigator({
           <FastImage
             style={{
               width: 30,
-              height: 34,
+              height: 36,
               marginBottom: 6,
               marginRight: 12,
             }}
-            source={require('../src/assets/castle-mini-yellow.png')}
+            source={require('../src/assets/castle-full-yellow.png')}
           />
           <Text style={{ fontWeight: 'bold', fontSize: 24 }}>Castle</Text>
         </View>
