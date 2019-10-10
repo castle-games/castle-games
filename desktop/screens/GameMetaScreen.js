@@ -40,6 +40,10 @@ const STYLES_EMPTY_CONTENT = css`
   padding: 0 16px;
 `;
 
+const STYLES_MEMBERS = css`
+  padding: 0 16px;
+`;
+
 class GameMetaScreen extends React.Component {
   state = {
     mode: 'posts',
@@ -71,7 +75,9 @@ class GameMetaScreen extends React.Component {
     }
     if (channel) {
       const numChannelMembers = chat.channelOnlineCounts[channel.channelId];
-      items.push({ label: `People Online (${numChannelMembers})`, key: 'members' });
+      if (numChannelMembers) {
+        items.push({ label: `People Online (${numChannelMembers})`, key: 'members' });
+      }
     }
 
     return items;
@@ -95,7 +101,9 @@ class GameMetaScreen extends React.Component {
         if (channel) {
           const onlineUserIds = this.props.chat.channelOnlineUserIds[channel.channelId];
           return (
-            <ChatMembers userIds={onlineUserIds} onSendMessage={this._handleOpenDirectMessage} />
+            <div className={STYLES_MEMBERS}>
+              <ChatMembers userIds={onlineUserIds} onSendMessage={this._handleOpenDirectMessage} />
+            </div>
           );
         } else {
           return null;
