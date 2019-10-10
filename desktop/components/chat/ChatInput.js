@@ -57,20 +57,20 @@ const STYLES_INPUT = css`
   }
 `;
 
-const STYLES_EMOJI_TOGGLE = css`
+const STYLES_INLINE_CONTROLS = css`
+  display: flex;
   color: ${Constants.REFACTOR_COLORS.subdued};
   position: absolute;
-  right: 18px;
-  bottom: 12px;
+  right: 22px;
+  bottom: 13px;
+`;
+
+const STYLES_EMOJI_TOGGLE = css`
   padding: 0 4px;
   cursor: pointer;
 `;
 
 const STYLES_VOICE_CHAT_CONTROL = css`
-  color: ${Constants.REFACTOR_COLORS.subdued};
-  position: absolute;
-  right: 46px;
-  bottom: 12px;
   padding: 0 4px;
   cursor: pointer;
 `;
@@ -227,7 +227,7 @@ export default class ChatInput extends React.Component {
           style={inputStyles}
         />
         {this.props.showInlineControls && (
-          <div>
+          <div className={STYLES_INLINE_CONTROLS}>
             <div className={STYLES_VOICE_CHAT_CONTROL} onClick={this.props.onToggleVoiceChat}>
               {this._renderVoiceChatControl()}
             </div>
