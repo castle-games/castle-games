@@ -18,14 +18,6 @@ const STYLES_CONTAINER = css`
 `;
 
 const STYLES_VOICE_CHAT_ACTIVE = css`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0;
-  padding: 6px 0 6px 0;
-  position: relative;
-  width: ${Constants.sidebar.collapsedWidth};
-
   @keyframes voice-chat-live-color-change {
     0% {
       background-color: #ff0000;
@@ -41,7 +33,7 @@ const STYLES_VOICE_CHAT_ACTIVE = css`
   animation: voice-chat-live-color-change infinite 1600ms;
 `;
 
-const STYLES_VOICE_CHAT_INACTIVE = css`
+const STYLES_ITEM = css`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -110,14 +102,14 @@ export default class SocialSidebarNavigationItem extends React.Component {
       );
     }
 
+    let itemStyles = isVoiceChatActive ? `${STYLES_ITEM} ${STYLES_VOICE_CHAT_ACTIVE}` : STYLES_ITEM;
+
     return (
       <div
         className={STYLES_CONTAINER}
         onClick={!isSelected ? onClick : null}
         style={{ backgroundColor }}>
-        <div className={isVoiceChatActive ? STYLES_VOICE_CHAT_ACTIVE : STYLES_VOICE_CHAT_INACTIVE}>
-          {avatar}
-        </div>
+        <div className={itemStyles}>{avatar}</div>
       </div>
     );
   }

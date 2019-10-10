@@ -76,12 +76,13 @@ const STYLES_VOICE_CHAT_CONTROL = css`
 `;
 
 const STYLES_VOICE_CHAT_ACTIVE = css`
+  color: ${Constants.colors.white};
   @keyframes voice-chat-live-opacity-change {
     0% {
       opacity: 1;
     }
     50% {
-      opacity: 0.2;
+      opacity: 0.4;
     }
     100% {
       opacity: 1;
@@ -205,6 +206,17 @@ export default class ChatInput extends React.Component {
       color: this.props.theme.textColor,
       background: this.props.theme.inputBackground,
     };
+
+    // input contents needs to make room for absolutely-positioned inline controls
+    let inputPaddingRight = 8;
+    if (this.props.showInlineControls) {
+      inputPaddingRight += 24;
+      if (this.props.isVoiceChatAvailable) {
+        inputPaddingRight += 20;
+      }
+    }
+
+    inputStyles.paddingRight = inputPaddingRight;
 
     return (
       <div className={STYLES_CONTAINER} style={containerStyles}>
