@@ -72,10 +72,12 @@ export const startVoiceChatAsync = async (roomId) => {
       },
     });
 
-    let bodyTag = document.getElementsByTagName('body')[0];
-    let remoteAudioTag = document.createElement('div');
-    remoteAudioTag.setAttribute('id', 'remote-audio');
-    bodyTag.appendChild(remoteAudioTag);
+    if (!$('#remote-audio')) {
+      let bodyTag = document.getElementsByTagName('body')[0];
+      let remoteAudioTag = document.createElement('div');
+      remoteAudioTag.setAttribute('id', 'remote-audio');
+      bodyTag.appendChild(remoteAudioTag);
+    }
 
     try {
       device = new mediasoup.Device();
@@ -131,7 +133,6 @@ async function startMic() {
   }
   try {
     localCam = await navigator.mediaDevices.getUserMedia({
-      video: false,
       audio: true,
     });
   } catch (e) {
@@ -202,9 +203,7 @@ async function createTransport(direction) {
     // needs to be set up to start sending. the producer's appData is
     // passed as a parameter
     transport.on('produce', async ({ kind, rtpParameters, appData }, callback, errback) => {
-      // we may want to start out paused (if the checkboxes in the ui
-      // aren't checked, for each media type. not very clean code, here
-      // but, you know, this isn't a real application.)
+      // we may want to start out paused
       let paused = false;
       if (appData.mediaTag === 'cam-audio') {
         paused = getMicPausedState();
@@ -234,9 +233,9 @@ async function createTransport(direction) {
   //
   transport.on('connectionstatechange', async (state) => {
     console.log(`transport ${transport.id} connectionstatechange ${state}`);
-    // for this simple sample code, assume that transports being
-    // closed is an error (we never close these transports except when
-    // we leave the room)
+    // assume that transports being closed is an error
+    // (we never close these transports except when we leave the room)
+    // TODO maybe try to reconnect here?
     if (state === 'closed' || state === 'failed' || state === 'disconnected') {
       console.log('transport closed ... leaving the room and resetting');
       await leaveRoom();
