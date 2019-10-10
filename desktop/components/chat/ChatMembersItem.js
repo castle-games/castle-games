@@ -57,7 +57,7 @@ const STYLES_USER_STATUS = css`
 export default ({
   user,
   isOnline,
-  navigateToGameUrl,
+  navigateToGameMeta,
   navigateToUserProfile,
   onSendMessage,
   theme,
@@ -89,7 +89,7 @@ export default ({
           </span>
         </h2>
         <div className={STYLES_USER_STATUS} style={{ color: textColor }}>
-          {user ? <UIUserStatus user={user} navigateToGameUrl={navigateToGameUrl} /> : null}
+          {user ? <UIUserStatus user={user} navigateToGame={navigateToGameMeta} /> : null}
         </div>
       </div>
       <div className={STYLES_ACTIONS}>

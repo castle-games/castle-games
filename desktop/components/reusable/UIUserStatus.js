@@ -29,7 +29,7 @@ export default class UIUserStatus extends React.Component {
       // show last status if it exists and is relevant
       let status = UserStatus.renderStatusText(user.lastUserStatus);
       if (status.status) {
-        if (user.lastUserStatus.game.gameId && this.props.navigateToGameUrl) {
+        if (user.lastUserStatus.game.gameId && this.props.navigateToGame) {
           // link to game if it's registered
           statusElement = (
             <React.Fragment>
@@ -37,7 +37,7 @@ export default class UIUserStatus extends React.Component {
               <span
                 className={STYLES_STATUS_LINK}
                 onClick={() =>
-                  this.props.navigateToGameUrl(user.lastUserStatus.game.url, {
+                  this.props.navigateToGame(user.lastUserStatus.game, {
                     launchSource: 'user-status',
                   })
                 }>

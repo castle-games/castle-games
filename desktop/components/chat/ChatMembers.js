@@ -43,7 +43,7 @@ class ChatMembers extends React.Component {
   };
 
   render() {
-    const { userIds, userPresence, navigateToGameUrl, navigateToUserProfile } = this.props;
+    const { userIds, userPresence, navigateToGameMeta, navigateToUserProfile } = this.props;
     const { userIdToUser, onlineUserIds } = userPresence;
     return (
       <div className={STYLES_CONTAINER}>
@@ -55,7 +55,7 @@ class ChatMembers extends React.Component {
               key={`user-item-${ii}`}
               user={user}
               isOnline={true}
-              navigateToGameUrl={navigateToGameUrl}
+              navigateToGameMeta={navigateToGameMeta}
               navigateToUserProfile={navigateToUserProfile}
               onSendMessage={this.props.onSendMessage}
               theme={this.props.theme}
@@ -75,7 +75,7 @@ export default class ChatMembersWithContext extends React.Component {
             {(navigator) => (
               <ChatMembers
                 userPresence={userPresence}
-                navigateToGameUrl={navigator.navigateToGameUrl}
+                navigateToGameMeta={navigator.navigateToGameMeta}
                 navigateToUserProfile={navigator.navigateToUserProfile}
                 {...this.props}
               />

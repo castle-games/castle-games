@@ -201,7 +201,7 @@ export default class ProfileHeader extends React.Component {
                   {this._renderOnlineStatus(this.props.creator)}
                   <UIUserStatus
                     user={this.props.creator}
-                    navigateToGameUrl={this.props.navigateToGameUrl}
+                    navigateToGame={this.props.navigateToGameMeta}
                   />
                 </div>
               </div>

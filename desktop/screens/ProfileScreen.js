@@ -41,7 +41,6 @@ class ProfileScreen extends React.Component {
     viewer: null,
     onAfterSave: () => {},
     navigateToGameMeta: async (game) => {},
-    navigateToGameUrl: async (url) => {},
     navigateToUserProfile: (user) => {},
   };
 
@@ -234,7 +233,7 @@ class ProfileScreen extends React.Component {
         <ProfileHeader
           creator={creator}
           isOwnProfile={isOwnProfile}
-          navigateToGameUrl={this.props.navigateToGameUrl}
+          navigateToGameMeta={this._navigateToGameMeta}
           onSendMessage={this.props.onSendMessage}
         />
         <UIHorizontalNavigation
@@ -255,7 +254,6 @@ export default class ProfileScreenWithContext extends React.Component {
       <ProfileScreen
         navigateToGameMeta={navigator.navigateToGameMeta}
         navigateToGame={navigator.navigateToGame}
-        navigateToGameUrl={navigator.navigateToGameUrl}
         navigateToUserProfile={navigator.navigateToUserProfile}
         navigateToSignIn={navigator.navigateToSignIn}
         viewer={currentUser.user}
