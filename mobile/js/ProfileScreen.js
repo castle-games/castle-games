@@ -72,6 +72,14 @@ const ProfileScreen = () => {
               alignItems: 'center',
               padding: 16,
               backgroundColor: '#fff',
+              shadowColor: 'black',
+              shadowOpacity: 0.1,
+              shadowRadius: 8,
+              shadowOffset: {
+                width: 0,
+                height: 4,
+              },
+              elevation: 5,
             }}>
             <View style={{ width: 96, paddingVertical: 16 }}>
               <ProfilePhoto userId={queryData.me.userId} />
