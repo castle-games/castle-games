@@ -9,11 +9,12 @@ const STYLES_CONTAINER = css`
   display: flex;
   flex-wrap: wrap;
   max-width: 960px;
+  margin: 24px 0 0 24px;
 `;
 
 const STYLES_ITEM = css`
-  width: 204px;
-  margin: 24px;
+  width: ${Constants.card.width};
+  margin: 0 16px 16px 0;
   background-color: ${Constants.colors.backgroundNavigation};
   border-radius: 4px;
   padding: 8px;

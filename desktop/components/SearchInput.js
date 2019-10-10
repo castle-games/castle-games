@@ -79,12 +79,24 @@ export default class SearchInput extends React.Component {
     query: '',
   };
 
+  state = {
+    isInputFocused: false,
+  };
+
   _input;
 
   _handleFocusInput = () => this._input.focus();
 
+  _handleInputDidFocus = () => this.setState({ isInputFocused: true });
+
+  _handleInputDidBlur = () => this.setState({ isInputFocused: false });
+
   render() {
     let queryElement;
+    const { isInputFocused } = this.state;
+
+    let iconColor = isInputFocused ? Constants.colors.black : '#c1bcbb';
+
     if (this.props.readOnly) {
       queryElement = <p className={STYLES_INPUT_READONLY}>{this.props.query}</p>;
     } else {
@@ -99,7 +111,9 @@ export default class SearchInput extends React.Component {
           placeholder="Search Castle or enter URL"
           onSubmit={this.props.onSubmit}
           onChange={this.props.onChange}
-          style={{ paddingRight: 8 }}
+          onFocus={this._handleInputDidFocus}
+          onBlur={this._handleInputDidBlur}
+          style={{ paddingRight: 16 }}
         />
       );
     }
@@ -108,7 +122,7 @@ export default class SearchInput extends React.Component {
         <div
           className={STYLES_CONTAINER_LEFT}
           onClick={this.props.readOnly ? this.props.onSearchReset : this._handleFocusInput}>
-          <SVG.SearchBarIcon height="28px" color="#c1bcbb" />
+          <SVG.SearchBarIcon height="28px" color={iconColor} />
         </div>
         <div className={STYLES_CONTAINER_MIDDLE}>
           {queryElement}

@@ -27,19 +27,26 @@ const STYLES_CONTAINER = css`
   }
 `;
 
+const STYLES_MESSAGE_CONTAINER = css`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+`;
+
 const STYLES_SEARCH_RESPONSE = css`
   color: ${Constants.colors.black};
-  font-size: ${Constants.typescale.lvl4};
-  line-height: ${Constants.linescale.lvl4};
-  padding: 24px;
+  font-size: ${Constants.typescale.lvl5};
+  line-height: ${Constants.linescale.lvl5};
 `;
 
 const STYLES_SEARCH_RESPONSE_ACTION = css`
   color: ${Constants.colors.searchEmphasis};
-  font-size: ${Constants.typescale.lvl4};
-  line-height: ${Constants.linescale.lvl4};
-  padding: 12px;
-  margin-left: 12px;
+  font-size: ${Constants.typescale.lvl5};
+  line-height: ${Constants.linescale.lvl5};
+  margin: 12px 0;
+
   text-decoration: underline;
   :hover {
     cursor: pointer;
@@ -54,7 +61,7 @@ const STYLES_SECTION = css`
 const STYLES_LOADING = css`
   padding: 24px;
   color: ${Constants.colors.text2};
-  font-size: ${Constants.typescale.lvl4};
+  font-size: ${Constants.typescale.lvl5};
 `;
 
 export default class SearchScreen extends React.Component {
@@ -106,12 +113,17 @@ export default class SearchScreen extends React.Component {
         },
       });
     } else {
-      this.setState({ isLoading: true });
+      await this.setState({ isLoading: true });
       const results = await Actions.search(query);
-      if (this._mounted && results && results.query === query) {
-        this.setState({
-          isLoading: false,
-          results,
+      if (this._mounted && results) {
+        this.setState((state) => {
+          if (this.props.query === results.query) {
+            return {
+              ...state,
+              isLoading: false,
+              results,
+            };
+          } else return state;
         });
       }
     }
@@ -183,8 +195,8 @@ export default class SearchScreen extends React.Component {
     } else {
       return (
         <div className={STYLES_SEARCH_RESPONSE}>
-          We did not find find anything matching{' '}
-          <strong style={{ color: Constants.colors.searchEmphasis }}>"{this.props.query}"</strong>.
+          We did not find any search results matching{' '}
+          <strong style={{ color: Constants.colors.searchEmphasis }}>{this.props.query}</strong>.
         </div>
       );
     }
@@ -212,7 +224,7 @@ export default class SearchScreen extends React.Component {
       );
     }
     if (!maybeGameResults && !maybeUserResults) {
-      maybeNoResults = this._renderNoResults();
+      maybeNoResults = <div className={STYLES_MESSAGE_CONTAINER}>{this._renderNoResults()}</div>;
     }
     return (
       <React.Fragment>
@@ -226,7 +238,11 @@ export default class SearchScreen extends React.Component {
     let content;
     const { isLoading } = this.state;
     if (isLoading) {
-      content = <div className={STYLES_LOADING}>Loading search results...</div>;
+      content = (
+        <div className={STYLES_MESSAGE_CONTAINER}>
+          <div className={STYLES_LOADING}>Loading search results...</div>
+        </div>
+      );
     } else {
       content = this._renderResults();
     }
