@@ -106,3 +106,7 @@ export const focusGame = async () => {
 export const setCpuMonitoring = async (isMonitoring) => {
   return await NativeBinds.setCpuMonitoring({ isMonitoring });
 };
+
+export const getMicrophonePermission = async () => {
+  return await NativeBinds.getMicrophonePermission();
+};

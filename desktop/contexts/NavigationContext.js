@@ -295,15 +295,20 @@ class NavigationContextManager extends React.Component {
     });
   };
 
-  connectToVoiceChannel = (channelId) => {
-    this._connectToVoiceServer(channelId);
+  connectToVoiceChannel = async (channelId) => {
+    try {
+      await this._connectToVoiceServerAsync(channelId);
 
-    return this.setState({
-      navigation: {
-        ...this.state.navigation,
-        voiceChannelId: channelId,
-      },
-    });
+      return this.setState({
+        navigation: {
+          ...this.state.navigation,
+          voiceChannelId: channelId,
+        },
+      });
+    } catch (e) {
+      console.error('Error connecting to voice channel: ' + e);
+      // TODO: show permission error
+    }
   };
 
   navigateToGameMeta = async (game) => {
@@ -503,7 +508,7 @@ class NavigationContextManager extends React.Component {
       prevProps.currentUser.refreshCurrentUser();
       // track the fact that a game was ended
       Analytics.trackGameEnd({ game: state.navigation.playing.game });
-      this._connectToVoiceServer(null);
+      this._connectToVoiceServerAsync(null);
       return {
         ...state,
         navigation: {
@@ -623,15 +628,15 @@ class NavigationContextManager extends React.Component {
     return newHistory;
   };
 
-  _connectToVoiceServer = (channelId) => {
+  _connectToVoiceServerAsync = async (channelId) => {
     if (channelId === this.state.navigation.voiceChannelId) {
       return;
     }
 
     if (channelId) {
-      VoiceChat.startVoiceChatAsync(channelId);
+      await VoiceChat.startVoiceChatAsync(channelId);
     } else {
-      VoiceChat.stopVoiceChatAsync();
+      await VoiceChat.stopVoiceChatAsync();
     }
   };
 

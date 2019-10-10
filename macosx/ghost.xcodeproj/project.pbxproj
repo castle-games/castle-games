@@ -135,6 +135,7 @@
 		91543A8722558AD4001B2E4A /* libboost_system.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 91543A8522558AD4001B2E4A /* libboost_system.a */; };
 		91543A8822558AD4001B2E4A /* libboost_filesystem.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 91543A8622558AD4001B2E4A /* libboost_filesystem.a */; };
 		91543A8A225661BD001B2E4A /* ffmpeg in Resources */ = {isa = PBXBuildFile; fileRef = 91543A89225661BD001B2E4A /* ffmpeg */; };
+		91935494234EEC5300B0F4B4 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9193548D234EEC5300B0F4B4 /* AVFoundation.framework */; };
 		91CF4339214841CC002024DA /* liblibcef_dll_wrapper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 91FDEBD521475159008FFB60 /* liblibcef_dll_wrapper.a */; };
 		91CF43A721484947002024DA /* liblibcef_dll_wrapper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 91FDEBD521475159008FFB60 /* liblibcef_dll_wrapper.a */; };
 		91CF43B721484A3A002024DA /* Chromium Embedded Framework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5A0404221483BA5007A6CC1 /* Chromium Embedded Framework.framework */; };
@@ -480,6 +481,7 @@
 		91543A8522558AD4001B2E4A /* libboost_system.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libboost_system.a; sourceTree = "<group>"; };
 		91543A8622558AD4001B2E4A /* libboost_filesystem.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libboost_filesystem.a; sourceTree = "<group>"; };
 		91543A89225661BD001B2E4A /* ffmpeg */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = ffmpeg; sourceTree = "<group>"; };
+		9193548D234EEC5300B0F4B4 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		91C98F9D21432C39006E745C /* cef.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cef.xcodeproj; path = ../cef/cef.xcodeproj; sourceTree = "<group>"; };
 		91CF438321484742002024DA /* Castle Helper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Castle Helper.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		91CF43AE21484A26002024DA /* .localized */ = {isa = PBXFileReference; lastKnownFileType = text; path = .localized; sourceTree = "<group>"; };
@@ -627,6 +629,7 @@
 				B5256F70211A555500891B27 /* Cocoa.framework in Frameworks */,
 				A1ED98E9211DFA0700CBC701 /* SDL2.framework in Frameworks */,
 				91537FBE2319948D0055F55F /* libbluray.2.dylib in Frameworks */,
+				91935494234EEC5300B0F4B4 /* AVFoundation.framework in Frameworks */,
 				B5256F71211A555500891B27 /* Lua.framework in Frameworks */,
 				91537FC22319948D0055F55F /* libogg.0.dylib in Frameworks */,
 				91537FA72319948D0055F55F /* libsoxr.0.dylib in Frameworks */,
@@ -643,6 +646,7 @@
 		1058C7A0FEA54F0111CA2CBB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9193548D234EEC5300B0F4B4 /* AVFoundation.framework */,
 				91CF43AD21484A26002024DA /* Documents */,
 				FAE64A9C2072738600BC7981 /* Metal.framework */,
 				FA15DFB31F9B8D9E0042AB22 /* libbz2.tbd */,

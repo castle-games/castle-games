@@ -290,3 +290,17 @@ JS_BIND_DEFINE(setCpuMonitoring) {
   ghostSetCpuMonitoring(isMonitoring);
   success("success");
 }
+
+JS_BIND_DEFINE(getMicrophonePermission) {
+#ifdef _MSC_VER
+  success("success");
+#else
+  ghostGetMicrophonePermission([success, failure](bool isGranted) {
+    if (isGranted) {
+      success("success");
+    } else {
+      failure("failure");
+    }
+  });
+#endif
+}

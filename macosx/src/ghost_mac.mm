@@ -6,6 +6,7 @@
 #import "GhostFileSystem.h"
 #import "ghost_obs.h"
 
+#import <AVFoundation/AVFoundation.h>
 #import <sstream>
 
 #pragma mark - internal
@@ -399,4 +400,40 @@ void ghostSetCpuMonitoring(bool isMonitoringCpu) {
 
 GHOST_EXPORT void ghostDoneLoading() {
   ghostStartObs();
+}
+
+void ghostGetMicrophonePermission(std::function<void(bool)> callback) {
+  if (@available(macOS 10.14, *)) {
+    switch ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeAudio])
+    {
+      case AVAuthorizationStatusAuthorized:
+      {
+        // The user has previously granted access to the camera.
+        callback(true);
+        break;
+      }
+      case AVAuthorizationStatusNotDetermined:
+      {
+        // The app hasn't yet asked the user for camera access.
+        [AVCaptureDevice requestAccessForMediaType:AVMediaTypeAudio completionHandler:^(BOOL granted) {
+          callback(granted);
+        }];
+        break;
+      }
+      case AVAuthorizationStatusDenied:
+      {
+        // The user has previously denied access.
+        callback(false);
+        return;
+      }
+      case AVAuthorizationStatusRestricted:
+      {
+        // The user can't grant access due to restrictions.
+        callback(false);
+        return;
+      }
+    }
+  } else {
+    callback(true);
+  }
 }

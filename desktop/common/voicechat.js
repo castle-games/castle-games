@@ -1,4 +1,6 @@
 import * as Actions from '~/common/actions';
+import * as NativeUtil from '~/native/nativeutil';
+
 import * as mediasoup from 'mediasoup-client';
 import * as uuid from 'uuid/v4';
 import io from 'socket.io-client';
@@ -50,6 +52,8 @@ function getMicPausedState() {
 }
 
 export const startVoiceChatAsync = async (roomId) => {
+  await NativeUtil.getMicrophonePermission();
+
   addToFnQueue(async () => {
     if (USE_LOCAL_SERVER) {
       host = 'http://localhost:3011';

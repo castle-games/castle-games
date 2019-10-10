@@ -7,6 +7,7 @@
 #define GHOST_EXPORT extern "C" __declspec(dllexport)
 #else
 #define GHOST_EXPORT extern "C" __attribute__((visibility("default")))
+#include <functional>
 #endif
 
 #ifdef __cplusplus
@@ -74,6 +75,10 @@ bool ghostGetDocumentsPath(const char **result);
 bool ghostGetVersion(const char **result);
 void ghostExecNode(const char *input, int execId);
 void ghostSetCpuMonitoring(bool isMonitoringCpu);
+
+#ifndef _MSC_VER
+void ghostGetMicrophonePermission(std::function<void(bool)> callback);
+#endif
 
 void ghostInstallUpdate();
 
