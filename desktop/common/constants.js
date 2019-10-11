@@ -1,4 +1,4 @@
-const USE_LOCAL_SERVER = false;
+const USE_LOCAL_SERVER = true;
 
 export const API_HOST = USE_LOCAL_SERVER ? 'http://localhost:1380' : 'https://api.castle.games';
 export const WEB_HOST = 'https://castle.games';

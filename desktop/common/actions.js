@@ -902,15 +902,16 @@ export async function getMultiplayerRegions() {
   return result.data.multiplayerRegions;
 }
 
-export async function updatePings(pings) {
+export async function updatePings(pings, timeZone) {
   let result = await API.graphqlAsync(
     /* GraphQL */ `
-      mutation($pings: [UserPing]!) {
-        updatePings(pings: $pings)
+      mutation($pings: [UserPing]!, $timeZone: String) {
+        updatePings(pings: $pings, timeZone: $timeZone)
       }
     `,
     {
       pings,
+      timeZone,
     }
   );
 }

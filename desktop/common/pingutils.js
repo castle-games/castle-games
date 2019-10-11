@@ -35,6 +35,15 @@ export async function reportPingsAsync() {
       })
     );
 
-    await Actions.updatePings(pings);
-  } catch (e) {}
+    let timeZone = null;
+    try {
+      timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    } catch (e) {
+      console.error('Error getting time zone ' + e);
+    }
+
+    await Actions.updatePings(pings, timeZone);
+  } catch (e) {
+    console.error('Error reporting user pings ' + e);
+  }
 }
