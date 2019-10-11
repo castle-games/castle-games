@@ -88,7 +88,7 @@ const ProfileScreen = () => {
             <View style={{ alignItems: 'center' }}>
               <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{queryData.me.name}</Text>
               <Text>@{queryData.me.username}</Text>
-              <Text style={{ paddingVertical: 16, fontWeight: 'bold' }}>Log Out</Text>
+              <Text style={{ paddingVertical: 16, color: '#aaa' }}>Log Out</Text>
             </View>
           </View>
           <ScrollView
