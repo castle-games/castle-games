@@ -90,6 +90,14 @@ const LoginForm = () => {
     }
   };
 
+  const onPressSignUp = () => {
+    navigate('CreateAccountScreen');
+  };
+
+  const onPressForgotPassword = () => {
+    navigate('ForgotPasswordScreen');
+  };
+
   return (
     <Fragment>
       {errored ? (
@@ -105,10 +113,12 @@ const LoginForm = () => {
           body="We've sent you an email with a link to reset your password."
         />
       ) : null}
-      <Text style={{ paddingBottom: 16 }}>
-        Don't have an account?&nbsp;
-        <Text style={{ fontWeight: 'bold' }}>Sign up</Text>
-      </Text>
+      <View style={{ paddingBottom: 16 }}>
+        <Text>Don't have an account?&nbsp;</Text>
+        <TouchableOpacity onPress={onPressSignUp}>
+          <Text style={{ fontWeight: 'bold' }}>Sign up</Text>
+        </TouchableOpacity>
+      </View>
       <TextInput
         style={textInputStyle}
         autoCapitalize="none"
@@ -123,9 +133,11 @@ const LoginForm = () => {
         onChangeText={newPassword => setPassword(newPassword)}
         placeholder="Password"
       />
-      <View style={{ paddingTop: 8, paddingBottom: 16 }}>
+      <TouchableOpacity
+        style={{ paddingTop: 8, paddingBottom: 16 }}
+        onPress={onPressForgotPassword}>
         <Text>Forgot password?</Text>
-      </View>
+      </TouchableOpacity>
       <TouchableOpacity onPress={onPressSignIn}>
         <Button text="Log In" />
       </TouchableOpacity>
@@ -134,6 +146,15 @@ const LoginForm = () => {
 };
 
 const CreateAccountForm = () => {
+  const [username, setUsername] = useState('');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const onPressCreateAccount = () => {
+    console.log('Creating account!');
+  };
+
   return (
     <Fragment>
       <View style={{ paddingBottom: 16, alignItems: 'center' }}>
@@ -143,14 +164,29 @@ const CreateAccountForm = () => {
           <Text style={{ fontWeight: 'bold' }}>Log in</Text>
         </Text>
       </View>
-      <TextInput style={textInputStyle} autoCapitalize="none" placeholder="Username" />
-      <TextInput style={textInputStyle} placeholder="Your name" />
-      <TextInput style={textInputStyle} autoCapitalize="none" placeholder="Email address" />
+      <TextInput
+        style={textInputStyle}
+        autoCapitalize="none"
+        placeholder="Username"
+        onChangeText={newUsername => setUsername(newUsername)}
+      />
+      <TextInput
+        style={textInputStyle}
+        placeholder="Your name"
+        onChangeText={newName => setName(newName)}
+      />
+      <TextInput
+        style={textInputStyle}
+        autoCapitalize="none"
+        placeholder="Email address"
+        onChangeText={newEmail => setEmail(newEmail)}
+      />
       <TextInput
         style={textInputStyle}
         secureTextEntry
         textContentType="password"
         placeholder="New password"
+        onChangeText={newPassword => setPassword(newPassword)}
       />
       <TouchableOpacity style={{ paddingTop: 8, paddingBottom: 16 }}>
         <Text style={{ lineHeight: 20 }}>
@@ -158,12 +194,20 @@ const CreateAccountForm = () => {
           <Text style={{ fontWeight: 'bold' }}>privacy policy</Text>.
         </Text>
       </TouchableOpacity>
-      <Button text="Create Account" />
+      <TouchableOpacity onPress={onPressCreateAccount}>
+        <Button text="Create Account" />
+      </TouchableOpacity>
     </Fragment>
   );
 };
 
 const ForgotPasswordForm = () => {
+  const [username, setUsername] = useState('');
+
+  const onPressResetPassword = () => {
+    console.log('Resetting password!');
+  };
+
   return (
     <Fragment>
       <View style={{ paddingBottom: 16 }}>
@@ -175,50 +219,62 @@ const ForgotPasswordForm = () => {
         onChangeText={newUsername => setUsername(newUsername)}
         placeholder="Email or username"
       />
-      <Button text="Reset Password" />
+      <TouchableOpacity onPress={onPressResetPassword}>
+        <Button text="Reset Password" />
+      </TouchableOpacity>
     </Fragment>
   );
 };
 
-const AuthScreen = () => {
-  return (
+const WithHeader = ({ children }) => (
+  <View
+    style={{
+      flex: 1,
+      backgroundColor: '#ffc21c',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: 16,
+    }}>
+    <StatusBar backgroundColor="#ffc21c" barStyle="dark-content" />
     <View
       style={{
-        flex: 1,
-        backgroundColor: '#ffc21c',
         alignItems: 'center',
-        justifyContent: 'center',
-        padding: 16,
+        paddingBottom: 16,
       }}>
-      <StatusBar backgroundColor="#ffc21c" barStyle="dark-content" />
-      <View
+      <FastImage
         style={{
-          alignItems: 'center',
-          paddingBottom: 16,
+          width: 80,
+          aspectRatio: 1,
+          marginBottom: 8,
+        }}
+        source={require('../src/assets/castle-full-white.png')}
+      />
+      <Text
+        style={{
+          fontSize: 28,
+          fontWeight: 'bold',
         }}>
-        <FastImage
-          style={{
-            width: 80,
-            aspectRatio: 1,
-            marginBottom: 8,
-          }}
-          source={require('../assets/images/castle-full-white.png')}
-        />
-        <Text
-          style={{
-            fontSize: 28,
-            fontFamily: 'RTAliasGrotesk-Bold',
-          }}>
-          Castle
-        </Text>
-      </View>
-      <View style={{ width: '100%', alignItems: 'center', paddingBottom: 64 }}>
-        <LoginForm />
-        {/* <CreateAccountForm /> */}
-        {/* <ForgotPasswordForm /> */}
-      </View>
+        Castle
+      </Text>
     </View>
-  );
-};
+    <View style={{ width: '100%', alignItems: 'center', paddingBottom: 64 }}>{children}</View>
+  </View>
+);
 
-export default AuthScreen;
+export const LoginScreen = () => (
+  <WithHeader>
+    <LoginForm />
+  </WithHeader>
+);
+
+export const CreateAccountScreen = () => (
+  <WithHeader>
+    <CreateAccountForm />
+  </WithHeader>
+);
+
+export const ForgotPasswordScreen = () => (
+  <WithHeader>
+    <ForgotPasswordForm />
+  </WithHeader>
+);
