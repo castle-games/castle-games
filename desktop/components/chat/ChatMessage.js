@@ -96,7 +96,7 @@ export default class ChatMessage extends React.Component {
           captureResize={false}
           captureScroll={false}
           onOutsideRectEvent={this._handleToggleEmojiPicker}>
-          <UIEmojiPicker onSelectEmoji={this._handleSelectEmoji} />
+          <UIEmojiPicker onSelectEmoji={this._handleSelectEmoji} isNarrowWidth={true} />
         </UIBoundary>
       );
     }
