@@ -6,7 +6,7 @@ import { createSwitchNavigator, createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { useNavigation } from 'react-navigation-hooks';
-import { Text, View } from 'react-native';
+import { Text, View, Image } from 'react-native';
 import FastImage from 'react-native-fast-image';
 
 import { LoginScreen, CreateAccountScreen, ForgotPasswordScreen } from './AuthScreens';
@@ -52,7 +52,16 @@ const TabNavigator = createBottomTabNavigator(
       screen: HomeNavigator,
       navigationOptions: {
         tabBarIcon: ({ focused, tintColor }) => {
-          return <Text>🎮</Text>;
+          return(
+            <Image
+              style={{
+                width: 28,
+                height: 28,
+                tintColor: tintColor,
+              }}
+              source={require('../assets/images/chess-figures.png')}
+            />
+          );
         },
       },
     },
@@ -60,15 +69,30 @@ const TabNavigator = createBottomTabNavigator(
       screen: ProfileNavigator,
       navigationOptions: {
         tabBarIcon: ({ focused, tintColor }) => {
-          return <Text>👤</Text>;
+          return(
+            <Image
+              style={{
+                width: 28,
+                height: 28,
+                tintColor: tintColor,
+              }}
+              source={require('../assets/images/single-neutral-shield.png')}
+            />
+          );
         },
       },
     },
   },
   {
     tabBarOptions: {
-      showIcon: true,
       activeTintColor: '#000',
+      inactiveTintColor: '#aaa',
+      style: {
+        height: 60,
+      },
+      tabStyle: {
+        padding: 6,
+      }
     },
   }
 );
