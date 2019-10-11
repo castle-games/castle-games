@@ -57,7 +57,9 @@ export const chatMessageHasNotification = (
   if (type === NotificationType.DESKTOP && notificationLevel === NotificationLevel.NONE)
     return false;
 
-  if (m.isEdit || m.isReactionUpdate) {
+  // check tempChatMessageId because we only want to send a notification if this message is coming
+  // from the real time server, not from history on the app server
+  if (m.isEdit || m.isReactionUpdate || !m.tempChatMessageId) {
     return false;
   }
 
