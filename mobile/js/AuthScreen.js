@@ -80,10 +80,9 @@ const LoginForm = () => {
       setErrored(false);
       await Session.signInAsync({ username, password });
       setSigningIn(false);
+      navigate('HomeScreen');
       if (uriAfter) {
         navigateToUri(uriAfter);
-      } else {
-        navigate('HomeScreen');
       }
     } catch (e) {
       setSigningIn(false);
