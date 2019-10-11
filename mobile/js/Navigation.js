@@ -9,7 +9,7 @@ import { useNavigation } from 'react-navigation-hooks';
 import { Text, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 
-import SignInScreen from './SignInScreen';
+import AuthScreen from './AuthScreen';
 import * as DeepLinks from './DeepLinks';
 import HomeScreen from './HomeScreen';
 import * as Session from './Session';
@@ -74,8 +74,8 @@ const TabNavigator = createBottomTabNavigator(
 );
 
 const SignInNavigator = createSwitchNavigator({
-  SignInScreen: {
-    screen: SignInScreen,
+  AuthScreen: {
+    screen: AuthScreen,
   },
 });
 
@@ -85,7 +85,7 @@ const InitialScreen = () => {
   if (Session.isSignedIn()) {
     navigate('HomeScreen');
   } else {
-    navigate('SignInScreen');
+    navigate('AuthScreen');
   }
 
   return null;

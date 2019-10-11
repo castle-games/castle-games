@@ -181,7 +181,7 @@ const ForgotPasswordForm = () => {
   );
 };
 
-const SignInScreen = () => {
+const AuthScreen = () => {
   return (
     <View
       style={{
@@ -222,4 +222,4 @@ const SignInScreen = () => {
   );
 };
 
-export default SignInScreen;
+export default AuthScreen;

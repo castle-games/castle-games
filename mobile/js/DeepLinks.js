@@ -14,9 +14,9 @@ const navigateToRoute = ({ routeName, params }) => {
 
 export const navigateToUri = uri => {
   if (!Session.isSignedIn()) {
-    // If not signed in, go to the sign in screen and tell it to navigate to this URI after
+    // If not signed in, go to the auth screen and tell it to navigate to this URI after
     navigateToRoute({
-      routeName: 'SignInScreen',
+      routeName: 'AuthScreen',
       params: {
         uriAfter: uri,
       },
