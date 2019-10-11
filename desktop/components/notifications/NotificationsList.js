@@ -98,7 +98,7 @@ class NotificationsList extends React.Component {
             this.props.navigator.navigateToGameMeta(fullGame);
           } catch (e) {}
         } else {
-          this.props.chat.openChannelWithId(notification.chatChannelId);
+          this.props.openChatChannelWithId(notification.chatChannelId);
         }
         this.props.onAfterSelectChat();
         break;
@@ -180,7 +180,7 @@ export default class NotificationsListWithContext extends React.Component {
                     reloadNotifications={currentUser.loadAppNotifications}
                     setAppNotificationsStatus={currentUser.setAppNotificationsStatus}
                     navigator={navigator}
-                    chat={chat}
+                    openChatChannelWithId={chat.openChannelWithId}
                     {...this.props}
                   />
                 )}
