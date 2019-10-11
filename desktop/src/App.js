@@ -300,8 +300,8 @@ export default class AppWithProvider extends React.Component {
   render() {
     let { currentUser, navigation } = this.props.state;
     return (
-      <CurrentUserContextProvider value={currentUser}>
-        <UserPresenceContextProvider>
+      <UserPresenceContextProvider>
+        <CurrentUserContextProvider value={currentUser}>
           <DevelopmentContextProvider>
             <NavigationContextProvider value={{ navigation }}>
               <ChatContextProvider>
@@ -309,8 +309,8 @@ export default class AppWithProvider extends React.Component {
               </ChatContextProvider>
             </NavigationContextProvider>
           </DevelopmentContextProvider>
-        </UserPresenceContextProvider>
-      </CurrentUserContextProvider>
+        </CurrentUserContextProvider>
+      </UserPresenceContextProvider>
     );
   }
 }

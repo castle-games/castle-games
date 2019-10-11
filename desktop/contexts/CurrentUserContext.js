@@ -206,7 +206,15 @@ class CurrentUserContextManager extends React.Component {
       notifications = await Actions.appNotificationsAsync();
     } catch (e) {}
     if (notifications && notifications.length) {
-      await Promise.all(notifications.map((n) => this._gatherObjectsFromNotification(n)));
+      let userIds = notifications.reduce(this._gatherObjectsFromNotification, {});
+      let newUserIds = Object.keys(userIds);
+      if (newUserIds.length) {
+        let users;
+        try {
+          users = await Actions.getUsers({ userIds: newUserIds });
+        } catch (_) {}
+        this.props.userPresence.addUsers(users);
+      }
     }
     this.setState({
       appNotifications: notifications,
@@ -240,8 +248,8 @@ class CurrentUserContextManager extends React.Component {
     );
   };
 
-  _gatherObjectsFromNotification = async (n) => {
-    let userIds = {};
+  _gatherObjectsFromNotification = (userIds, n) => {
+    userIds = userIds || {};
     const maybeAddUserId = (userId) => {
       if (userId && !this.props.userPresence.userIdToUser[userId]) {
         userIds[userId] = true;
@@ -253,13 +261,7 @@ class CurrentUserContextManager extends React.Component {
       n.body.message.forEach((component) => maybeAddUserId(component.userId));
     }
 
-    const newUserIds = Object.keys(userIds);
-    if (newUserIds.length) {
-      try {
-        let users = await Actions.getUsers({ userIds: newUserIds });
-        await this.props.userPresence.addUsers(users);
-      } catch (_) {}
-    }
+    return userIds;
   };
 
   render() {
