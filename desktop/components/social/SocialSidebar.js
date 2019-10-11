@@ -178,7 +178,7 @@ class SocialSidebar extends React.Component {
 
     const { appNotifications } = this.props;
     const unseenNotificationCount = appNotifications
-      ? appNotifications.filter((n) => n.status === 'unseen').length
+      ? appNotifications.filter((n) => n && n.status === 'unseen').length
       : 0;
 
     const sidebarWidth = isChatExpanded

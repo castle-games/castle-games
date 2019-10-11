@@ -204,7 +204,7 @@ class CurrentUserContextManager extends React.Component {
     let notifications = [];
     try {
       notifications = await Actions.appNotificationsAsync();
-    } catch (_) {}
+    } catch (e) {}
     if (notifications && notifications.length) {
       await Promise.all(notifications.map((n) => this._gatherObjectsFromNotification(n)));
     }

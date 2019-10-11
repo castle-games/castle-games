@@ -56,7 +56,7 @@ class NotificationsList extends React.Component {
     let notificationIdsRead = [];
     this.props.notifications &&
       this.props.notifications.forEach((n) => {
-        if (n.status === 'unseen') {
+        if (n && n.status === 'unseen') {
           notificationIdsRead.push(n.appNotificationId);
         }
       });
@@ -71,7 +71,7 @@ class NotificationsList extends React.Component {
     if (this.props.notifications && prevNotifs !== this.props.notifications) {
       let notificationIdsRead = [];
       this.props.notifications.forEach((n) => {
-        if (n.status === 'unseen') {
+        if (n && n.status === 'unseen') {
           notificationIdsRead.push(n.appNotificationId);
         }
       });
@@ -91,6 +91,8 @@ class NotificationsList extends React.Component {
         } catch (e) {}
         break;
       }
+      case 'chat_message_game_channel_owner':
+      case 'chat_message_game_channel_tagged':
       case 'chat_message': {
         if (notification.gameId) {
           try {
@@ -110,7 +112,7 @@ class NotificationsList extends React.Component {
     const { notifications, theme } = this.props;
     let prevNotification = ii > 0 ? notifications[ii - 1] : null;
 
-    const status = n.status === 'unseen';
+    const status = n && n.status === 'unseen';
     const prevStatus = prevNotification ? prevNotification.status === 'unseen' : null;
 
     const notifElement = (
