@@ -48,7 +48,7 @@ const getInitialState = async () => {
     currentUser = {
       user: data.me,
       settings: {
-        notifications: data.getNotificationPreferences,
+        notifications: data.getNotificationPreferencesV2,
       },
       content: {
         trendingGames: data.trendingGames ? data.trendingGames : [],

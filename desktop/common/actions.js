@@ -127,20 +127,7 @@ const CURRENT_USER_QUERY = `
     ${GAME_ITEMS}
   }
 
-  getNotificationPreferences {
-    email {
-      type
-      description
-      frequency
-      supportedFrequencies
-    }
-    desktop {
-      type
-      description
-      frequency
-      supportedFrequencies
-    }
-  }
+  getNotificationPreferencesV2
 
   userStatusHistory {
     userStatusId
@@ -153,40 +140,14 @@ const CURRENT_USER_QUERY = `
   }
 `;
 
-export async function updateEmailPreference({ type, frequency }) {
+export async function setNotificationPreferences({ preferences }) {
   const response = await API.graphqlAsync(
     `
-      mutation($type: String!, $frequency: EmailNotificationFrequency!) {
-        updateEmailNotificationPreference(type: $type, frequency: $frequency) {
-          email {
-            type
-            frequency
-            description
-          }
-        }
+      mutation($preferences: Json!) {
+        setNotificationPreferencesV2(preferences: $preferences)
       }
     `,
-    { type, frequency }
-  );
-
-  return response;
-}
-
-export async function updateDesktopPreference({ type, frequency }) {
-  const response = await API.graphqlAsync(
-    `
-      mutation($type: String!, $frequency: DesktopNotificationFrequency!) {
-        updateDesktopNotificationPreference(type: $type, frequency: $frequency) {
-          desktop {
-            type
-            type
-            frequency
-            description
-          }
-        }
-      }
-    `,
-    { type, frequency }
+    { preferences }
   );
 
   return response;
@@ -404,7 +365,7 @@ export async function getCurrentUser() {
   return {
     user: result.data.me,
     settings: {
-      notifications: result.data.getNotificationPreferences,
+      notifications: result.data.getNotificationPreferencesV2,
     },
     userStatusHistory: result.data.userStatusHistory,
   };

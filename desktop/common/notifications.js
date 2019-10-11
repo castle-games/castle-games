@@ -11,30 +11,28 @@ export const NotificationType = {
 export const NotificationLevel = {
   NONE: 0,
   TAG: 1,
-  EVERY: 2,
+  ALL: 2,
 };
 
 const _getChatNotificationLevel = (settings) => {
-  if (!settings || !settings.notifications) {
+  if (
+    !settings ||
+    !settings.notifications ||
+    !settings.notifications.desktop ||
+    !settings.notifications.desktop.chat
+  ) {
     return NotificationLevel.NONE;
   }
 
-  let notifications = settings.notifications;
-  if (!notifications || !notifications.desktop) {
-    return NotificationLevel.NONE;
+  let notificationsLevel = settings.notifications.desktop.chat;
+  switch (notificationsLevel) {
+    case 'tag':
+      return NotificationLevel.TAG;
+    case 'all':
+      return NotificationLevel.ALL;
+    default:
+      return NotificationLevel.NONE;
   }
-
-  let result = NotificationLevel.NONE;
-  for (let i = 0; i < notifications.desktop.length; i++) {
-    let preference = notifications.desktop[i];
-    if (preference.type === 'chat_tagged' && preference.frequency === 'every') {
-      result = NotificationLevel.TAG;
-    }
-    if (preference.type === 'chat_all' && preference.frequency === 'every') {
-      return NotificationLevel.EVERY;
-    }
-  }
-  return result;
 };
 
 export const showNotification = ({ title, message }) => {
@@ -67,7 +65,7 @@ export const chatMessageHasNotification = (
   // String() coercion needed at time of writing because these user ids are a number
   // and string respectively.
   if (m.body && m.body.message && String(m.fromUserId) !== String(viewer.userId)) {
-    if (type === NotificationType.DESKTOP && notificationLevel === NotificationLevel.EVERY) {
+    if (type === NotificationType.DESKTOP && notificationLevel === NotificationLevel.ALL) {
       messageHasNotification = true;
     } else {
       messageHasNotification =

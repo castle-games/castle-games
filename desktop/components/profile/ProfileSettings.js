@@ -1,8 +1,6 @@
 import * as React from 'react';
 import * as Actions from '~/common/actions';
 import * as Constants from '~/common/constants';
-import * as Strings from '~/common/strings';
-import * as Utilities from '~/common/utilities';
 import * as ExperimentalFeatures from '~/common/experimental-features';
 
 import { css } from 'react-emotion';
@@ -90,17 +88,36 @@ export default class ProfileSettings extends React.Component {
     };
   }
 
-  _handleSaveNotificationChange = async (options) => {
-    const { category, type, frequency } = options;
+  _handleUpdateEmailDigestFrequency = async (frequency) => {
+    await Actions.setNotificationPreferences({
+      preferences: {
+        emailDigestFrequency: frequency,
+      },
+    });
+    await this.context.refreshCurrentUser();
+    this.props.onShowSettings();
+  };
 
-    if (category === 'email') {
-      await Actions.updateEmailPreference({ type, frequency });
-      await this.context.refreshCurrentUser();
-      this.props.onShowSettings();
-      return;
-    }
+  _handleUpdateDesktopChatNotifications = async (type) => {
+    await Actions.setNotificationPreferences({
+      preferences: {
+        desktop: {
+          chat: type,
+        },
+      },
+    });
+    await this.context.refreshCurrentUser();
+    this.props.onShowSettings();
+  };
 
-    await Actions.updateDesktopPreference({ type, frequency });
+  _handleUpdateDesktopOtherNotifications = async (type) => {
+    await Actions.setNotificationPreferences({
+      preferences: {
+        desktop: {
+          other: type,
+        },
+      },
+    });
     await this.context.refreshCurrentUser();
     this.props.onShowSettings();
   };
@@ -127,103 +144,78 @@ export default class ProfileSettings extends React.Component {
       <div className={STYLES_CONTAINER}>
         <h2 className={STYLES_HEADER}>Your notifications</h2>
 
-        <p className={STYLES_PARAGRAPH}>Configure when you want to be notified.</p>
-
-        <div className={STYLES_SECTION_TITLE}>Send an email to {email}...</div>
-
+        <p className={STYLES_PARAGRAPH}>Send an email to {email}...</p>
         <Row
-          secondCol={<span>Always</span>}
-          thirdCol={<span>Summary</span>}
-          firstCol={<span>Never</span>}
+          firstCol={<span>Daily</span>}
+          secondCol={<span>Weekly</span>}
+          thirdCol={<span>Never</span>}
         />
+        <Row
+          firstCol={
+            <UICheckbox
+              onClick={() => this._handleUpdateEmailDigestFrequency('daily')}
+              value={notifications.emailDigestFrequency === 'daily'}
+            />
+          }
+          secondCol={
+            <UICheckbox
+              onClick={() => this._handleUpdateEmailDigestFrequency('weekly')}
+              value={notifications.emailDigestFrequency === 'weekly'}
+            />
+          }
+          thirdCol={
+            <UICheckbox
+              onClick={() => this._handleUpdateEmailDigestFrequency('never')}
+              value={notifications.emailDigestFrequency === 'never'}
+            />
+          }>
+          With unread activity
+        </Row>
 
-        {notifications.email.map((option) => {
-          return (
-            <Row
-              key={`email-${option.type}`}
-              secondCol={
-                option.supportedFrequencies.includes('every') && (
-                  <UICheckbox
-                    onClick={() =>
-                      this._handleSaveNotificationChange({
-                        category: 'email',
-                        type: option.type,
-                        frequency: 'every',
-                      })
-                    }
-                    value={option.frequency === 'every'}
-                  />
-                )
-              }
-              thirdCol={
-                option.supportedFrequencies.includes('daily') && (
-                  <UICheckbox
-                    onClick={() =>
-                      this._handleSaveNotificationChange({
-                        category: 'email',
-                        type: option.type,
-                        frequency: 'daily',
-                      })
-                    }
-                    value={option.frequency === 'daily'}
-                  />
-                )
-              }
-              firstCol={
-                option.supportedFrequencies.includes('never') && (
-                  <UICheckbox
-                    onClick={() =>
-                      this._handleSaveNotificationChange({
-                        category: 'email',
-                        type: option.type,
-                        frequency: 'never',
-                      })
-                    }
-                    value={option.frequency === 'never'}
-                  />
-                )
-              }>
-              {option.description}
-            </Row>
-          );
-        })}
+        <p className={STYLES_PARAGRAPH}>Show a desktop notification...</p>
+        <Row
+          firstCol={<span>Mentions</span>}
+          secondCol={<span>All</span>}
+          thirdCol={<span>None</span>}
+        />
+        <Row
+          firstCol={
+            <UICheckbox
+              onClick={() => this._handleUpdateDesktopChatNotifications('tag')}
+              value={notifications.desktop.chat === 'tag'}
+            />
+          }
+          secondCol={
+            <UICheckbox
+              onClick={() => this._handleUpdateDesktopChatNotifications('all')}
+              value={notifications.desktop.chat === 'all'}
+            />
+          }
+          thirdCol={
+            <UICheckbox
+              onClick={() => this._handleUpdateDesktopChatNotifications('none')}
+              value={notifications.desktop.chat === 'none'}
+            />
+          }>
+          For chat messages
+        </Row>
 
-        <div className={STYLES_SECTION_TITLE}>Show a desktop notification...</div>
-
-        <Row secondCol={<span>Always</span>} firstCol={<span>Never</span>} />
-
-        {notifications.desktop.map((option) => {
-          return (
-            <Row
-              key={`desktop-${option.type}`}
-              secondCol={
-                <UICheckbox
-                  onClick={() =>
-                    this._handleSaveNotificationChange({
-                      category: 'desktop',
-                      type: option.type,
-                      frequency: 'every',
-                    })
-                  }
-                  value={option.frequency === 'every'}
-                />
-              }
-              firstCol={
-                <UICheckbox
-                  onClick={() =>
-                    this._handleSaveNotificationChange({
-                      category: 'desktop',
-                      type: option.type,
-                      frequency: 'never',
-                    })
-                  }
-                  value={option.frequency === 'never'}
-                />
-              }>
-              {option.description}
-            </Row>
-          );
-        })}
+        <Row firstCol={<span>Enabled</span>} secondCol={<span>Disabled</span>} />
+        <Row
+          firstCol={
+            <UICheckbox
+              onClick={() => this._handleUpdateDesktopOtherNotifications('enabled')}
+              value={notifications.desktop.other === 'enabled'}
+            />
+          }
+          secondCol={
+            <UICheckbox
+              onClick={() => this._handleUpdateDesktopOtherNotifications('disabled')}
+              value={notifications.desktop.other === 'disabled'}
+            />
+          }>
+          For other activity
+        </Row>
 
         <h2 className={STYLES_HEADER} style={{ paddingTop: 50 }}>
           Developer Options
