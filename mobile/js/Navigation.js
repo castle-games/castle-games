@@ -73,17 +73,22 @@ const TabNavigator = createBottomTabNavigator(
   }
 );
 
-const AuthNavigator = createStackNavigator({
-  LoginScreen: {
-    screen: LoginScreen,
+const AuthNavigator = createStackNavigator(
+  {
+    LoginScreen: {
+      screen: LoginScreen,
+    },
+    CreateAccountScreen: {
+      screen: CreateAccountScreen,
+    },
+    ForgotPasswordScreen: {
+      screen: ForgotPasswordScreen,
+    },
   },
-  CreateAccountScreen: {
-    screen: CreateAccountScreen,
-  },
-  ForgotPasswordScreen: {
-    screen: ForgotPasswordScreen,
-  },
-});
+  {
+    headerMode: 'none',
+  }
+);
 
 const InitialScreen = () => {
   const { navigate } = useNavigation();

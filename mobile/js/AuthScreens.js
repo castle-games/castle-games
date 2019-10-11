@@ -1,5 +1,5 @@
 import React, { useState, Fragment } from 'react';
-import { View, TouchableOpacity, Text, TextInput, StatusBar } from 'react-native';
+import { View, TouchableOpacity, Text, TextInput, StatusBar, Linking } from 'react-native';
 import { useNavigation, useNavigationParam } from 'react-navigation-hooks';
 import FastImage from 'react-native-fast-image';
 
@@ -103,8 +103,7 @@ const LoginForm = () => {
       {errored ? (
         <Announcement
           headline="There was a problem signing in"
-          body="Please check your network connection and ensure that the username and password are
-        //     correct."
+          body="Please check your network connection and ensure that the username and password are correct."
         />
       ) : null}
       {reset ? (
@@ -113,10 +112,12 @@ const LoginForm = () => {
           body="We've sent you an email with a link to reset your password."
         />
       ) : null}
-      <View style={{ paddingBottom: 16 }}>
-        <Text>Don't have an account?&nbsp;</Text>
+      <View style={{ width: '100%', alignItems: 'center', paddingBottom: 16 }}>
         <TouchableOpacity onPress={onPressSignUp}>
-          <Text style={{ fontWeight: 'bold' }}>Sign up</Text>
+          <Text>
+            Don't have an account?&nbsp;
+            <Text style={{ fontWeight: 'bold' }}>Sign up</Text>
+          </Text>
         </TouchableOpacity>
       </View>
       <TextInput
@@ -146,10 +147,20 @@ const LoginForm = () => {
 };
 
 const CreateAccountForm = () => {
+  const { navigate } = useNavigation();
+
   const [username, setUsername] = useState('');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const onPressLogin = () => {
+    navigate('LoginScreen');
+  };
+
+  const onPressPrivacyPolicy = () => {
+    Linking.openURL('https://castle.games/legal/privacy')
+  };
 
   const onPressCreateAccount = () => {
     console.log('Creating account!');
@@ -159,10 +170,12 @@ const CreateAccountForm = () => {
     <Fragment>
       <View style={{ paddingBottom: 16, alignItems: 'center' }}>
         <Text style={{ fontSize: 20 }}>Create a new account</Text>
-        <Text style={{ marginTop: 16 }}>
-          Already have an account?&nbsp;
-          <Text style={{ fontWeight: 'bold' }}>Log in</Text>
-        </Text>
+        <TouchableOpacity onPress={onPressLogin}>
+          <Text style={{ marginTop: 16 }}>
+            Already have an account?&nbsp;
+            <Text style={{ fontWeight: 'bold' }}>Log in</Text>
+          </Text>
+        </TouchableOpacity>
       </View>
       <TextInput
         style={textInputStyle}
@@ -188,12 +201,14 @@ const CreateAccountForm = () => {
         placeholder="New password"
         onChangeText={newPassword => setPassword(newPassword)}
       />
-      <TouchableOpacity style={{ paddingTop: 8, paddingBottom: 16 }}>
-        <Text style={{ lineHeight: 20 }}>
-          By clicking "Create Account," you are agreeing to Castle's&nbsp;
-          <Text style={{ fontWeight: 'bold' }}>privacy policy</Text>.
-        </Text>
-      </TouchableOpacity>
+      <View style={{ paddingTop: 8, paddingBottom: 16 }}>
+        <TouchableOpacity onPress={onPressPrivacyPolicy}>
+          <Text style={{ lineHeight: 20 }}>
+            By clicking "Create Account," you are agreeing to Castle's&nbsp;
+            <Text style={{ fontWeight: 'bold' }}>privacy policy</Text>.
+          </Text>
+        </TouchableOpacity>
+      </View>
       <TouchableOpacity onPress={onPressCreateAccount}>
         <Button text="Create Account" />
       </TouchableOpacity>
@@ -244,7 +259,7 @@ const WithHeader = ({ children }) => (
       <FastImage
         style={{
           width: 80,
-          aspectRatio: 1,
+          aspectRatio: 5/6,
           marginBottom: 8,
         }}
         source={require('../assets/images/castle-full-white.png')}
@@ -252,7 +267,7 @@ const WithHeader = ({ children }) => (
       <Text
         style={{
           fontSize: 28,
-          fontWeight: 'bold',
+          fontFamily: 'RTAliasGrotesk-Bold',
         }}>
         Castle
       </Text>
