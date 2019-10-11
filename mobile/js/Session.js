@@ -27,9 +27,9 @@ export const apolloClient = new ApolloClient({
     dataIdFromObject: o => {
       switch (o.__typename) {
         case 'Game':
-          return o.gameId;
+          return o.gameId || o.id;
         case 'User':
-          return o.userId;
+          return o.userId || o.id;
         default:
           return o.id;
       }
@@ -37,6 +37,7 @@ export const apolloClient = new ApolloClient({
     cacheRedirects: {
       Query: {
         game: (_, args, { getCacheKey }) => getCacheKey({ __typename: 'Game', id: args.gameId }),
+        user: (_, args, { getCacheKey }) => getCacheKey({ __typename: 'User', id: args.userId }),
       },
     },
   }),

@@ -11,6 +11,7 @@ const ProfilePhoto = props => {
     gql`
       query User($userId: ID!) {
         user(userId: $userId) {
+          userId
           photo {
             url
           }

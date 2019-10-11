@@ -14,6 +14,7 @@ export const GameCard = props => {
           gameId
           title
           owner {
+            userId
             username
           }
           coverImage {
