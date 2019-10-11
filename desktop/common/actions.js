@@ -118,7 +118,7 @@ const NOTIFICATION_FIELDS = `
   gameId
   authorUserId
   postId
-  updatedTime
+  createdTime
 `;
 
 const CURRENT_USER_QUERY = `

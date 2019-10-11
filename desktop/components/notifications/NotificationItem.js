@@ -50,7 +50,7 @@ export default class NotificationItem extends React.Component {
         <div className={STYLES_BODY}>
           <UIMessageBody body={notification.body} theme={this.props.theme} />
         </div>
-        <div className={STYLES_TIMESTAMP}>{Strings.toChatDate(notification.updatedTime)}</div>
+        <div className={STYLES_TIMESTAMP}>{Strings.toChatDate(notification.createdTime)}</div>
       </div>
     );
   }
