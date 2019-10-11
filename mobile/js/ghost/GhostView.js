@@ -42,35 +42,39 @@ const useDimensions = ({ settings }) => {
         // Down
         if (settings.downscaling == 'off') {
           newScreenScaling = 1;
-        } else if (settings.downscaling == 'on') {
+        } else if (settings.downscaling == 'on' || settings.downscaling == 'step') {
           newScreenScaling = Math.min(
             containerWidth / settings.width,
             containerHeight / settings.height
           );
-        } else if (settings.downscaling == 'step') {
-          const scale = Math.min(
-            containerWidth / settings.width,
-            containerHeight / settings.height
-          );
-          newScreenScaling = 1;
-          while (newScreenScaling > 0.125 && newScreenScaling > scale) {
-            newScreenScaling *= 0.5;
-          }
         }
+        // NOTE: Always doing smooth scaling on mobile...
+        // else if (settings.downscaling == 'step') {
+        //   const scale = Math.min(
+        //     containerWidth / settings.width,
+        //     containerHeight / settings.height
+        //   );
+        //   newScreenScaling = 1;
+        //   while (newScreenScaling > 0.125 && newScreenScaling > scale) {
+        //     newScreenScaling *= 0.5;
+        //   }
+        // }
       } else {
         // Up
         if (settings.upscaling == 'off') {
           newScreenScaling = 1;
-        } else if (settings.upscaling == 'on') {
+        } else if (settings.upscaling == 'on' || settings.upscaling == 'step') {
           newScreenScaling = Math.min(
             containerWidth / settings.width,
             containerHeight / settings.height
           );
-        } else if (settings.upscaling == 'step') {
-          newScreenScaling = Math.floor(
-            Math.min(containerWidth / settings.width, containerHeight / settings.height)
-          );
         }
+        // NOTE: Always doing smooth scaling on mobile...
+        // else if (settings.upscaling == 'step') {
+        //   newScreenScaling = Math.floor(
+        //     Math.min(containerWidth / settings.width, containerHeight / settings.height)
+        //   );
+        // }
       }
       setScreenScaling(newScreenScaling);
       setWidth(Math.min(newScreenScaling * settings.width, containerWidth));
