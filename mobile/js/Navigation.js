@@ -32,7 +32,7 @@ const HomeNavigator = createStackNavigator({
             }}
             source={require('../assets/images/castle-full-yellow.png')}
           />
-          <Text style={{ fontSize: 24, fontFamily: 'RTAliasGrotesk-Bold' }}>Castle</Text>
+          <Text style={{ fontSize: 24, letterSpacing: 0.5, fontFamily: 'RTAliasGrotesk-Bold' }}>Castle</Text>
         </View>
       ),
     },
