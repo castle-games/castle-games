@@ -48,7 +48,7 @@ export const GameCard = props => {
             width: 0,
             height: 4,
           },
-          elevation: 5,
+          elevation: 1,
         }}>
         <FastImage
           style={{
@@ -64,9 +64,19 @@ export const GameCard = props => {
             paddingTop: 8,
             backgroundColor: '#fff',
             height: 88,
+            alignItems: 'center',
+            justifyContent: 'center',
           }}>
-          <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{queryData.game.title}</Text>
-          <Text style={{ fontSize: 14, color: '#aaa' }}>{queryData.game.owner.username}</Text>
+          <Text style={{
+            fontSize: 16,
+            lineHeight: 20,
+            fontFamily: 'RTAliasGrotesk-Bold',
+            marginBottom: 4,
+            textAlign: 'center',
+          }}>
+            {queryData.game.title}
+          </Text>
+          <Text style={{ fontSize: 14, color: '#aaa', fontFamily: 'RTAliasGrotesk-Regular' }}>@{queryData.game.owner.username}</Text>
         </View>
       </View>
     </TouchableOpacity>
