@@ -3,7 +3,7 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import ApolloClient from 'apollo-boost';
 import gql from 'graphql-tag';
-import { InMemoryCache } from 'apollo-cache-inmemory';
+import { InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
 
 let authToken = null;
 
@@ -17,10 +17,19 @@ export const apolloClient = new ApolloClient({
     });
   },
   cache: new InMemoryCache({
+    fragmentMatcher: new IntrospectionFragmentMatcher({
+      introspectionQueryResultData: {
+        __schema: {
+          types: [],
+        },
+      },
+    }),
     dataIdFromObject: o => {
       switch (o.__typename) {
         case 'Game':
           return o.gameId;
+        case 'User':
+          return o.userId;
         default:
           return o.id;
       }
