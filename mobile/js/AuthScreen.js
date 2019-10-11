@@ -202,12 +202,12 @@ const AuthScreen = () => {
             aspectRatio: 1,
             marginBottom: 8,
           }}
-          source={require('../src/assets/castle-full-white.png')}
+          source={require('../assets/images/castle-full-white.png')}
         />
         <Text
           style={{
             fontSize: 28,
-            fontWeight: 'bold',
+            fontFamily: 'RTAliasGrotesk-Bold',
           }}>
           Castle
         </Text>

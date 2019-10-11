@@ -231,7 +231,7 @@ const InviteBar = () => {
             width: 24,
             height: 12,
           }}
-          source={require('../src/assets/hyperlink.png')}
+          source={require('../assets/images/hyperlink.png')}
         />
       </TouchableOpacity>
     </View>
