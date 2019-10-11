@@ -182,8 +182,6 @@ const ForgotPasswordForm = () => {
 };
 
 const SignInScreen = () => {
-  const [signingIn, setSigningIn] = useState(false);
-
   return (
     <View
       style={{
@@ -215,15 +213,11 @@ const SignInScreen = () => {
           Castle
         </Text>
       </View>
-      {signingIn ? (
-        <Text>Signing in...</Text>
-      ) : (
-        <View style={{ width: '100%', alignItems: 'center', paddingBottom: 64 }}>
-          {LoginForm()}
-          {/* { CreateAccountForm() } */}
-          {/* { ForgotPasswordForm() } */}
-        </View>
-      )}
+      <View style={{ width: '100%', alignItems: 'center', paddingBottom: 64 }}>
+        <LoginForm />
+        {/* <CreateAccountForm /> */}
+        {/* <ForgotPasswordForm /> */}
+      </View>
     </View>
   );
 };
