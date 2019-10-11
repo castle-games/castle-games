@@ -30,6 +30,14 @@ export const apolloClient = new ApolloClient({
           return o.gameId || o.id;
         case 'User':
           return o.userId || o.id;
+        case 'HostedFile':
+          return o.fileId || o.id;
+        case 'Post':
+          return o.postId || o.id;
+        case 'ChatChannel':
+          return o.chatChannelId || o.id;
+        case 'ChatMessage':
+          return o.chatMessageId || o.id;
         default:
           return o.id;
       }
