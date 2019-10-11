@@ -57,8 +57,13 @@ export const initAsync = async () => {
 
 export const isSignedIn = () => authToken !== null;
 
-export const signInAsync = async ({ username, password }) => {
-  // Find `userId` for this `username`
+const useNewAuthTokenAsync = async newAuthToken => {
+  apolloClient.resetStore();
+  authToken = newAuthToken;
+  await AsyncStorage.setItem('AUTH_TOKEN', authToken);
+};
+
+const userIdForUsernameAsync = async username => {
   const {
     data: {
       userForLoginInput: { userId },
@@ -73,8 +78,12 @@ export const signInAsync = async ({ username, password }) => {
     `,
     variables: { username },
   });
+  return userId;
+};
 
-  // Log in and save the auth token
+export const signInAsync = async ({ username, password }) => {
+  const userId = await userIdForUsernameAsync(username);
+
   const result = await apolloClient.mutate({
     mutation: gql`
       mutation SignIn($userId: ID!, $password: String!) {
@@ -87,8 +96,6 @@ export const signInAsync = async ({ username, password }) => {
     variables: { userId, password },
   });
   if (result && result.data && result.data.login && result.data.login.userId) {
-    apolloClient.resetStore();
-    authToken = result.data.login.token;
-    await AsyncStorage.setItem('AUTH_TOKEN', authToken);
+    await useNewAuthTokenAsync(result.data.login.token);
   }
 };
