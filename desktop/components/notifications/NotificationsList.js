@@ -126,8 +126,8 @@ class NotificationsList extends React.Component {
 
     if (status !== prevStatus) {
       return (
-        <React.Fragment>
-          <NotificationSectionHeader unseen={status} key={`notif-header-${ii}`} theme={theme} />
+        <React.Fragment key={`notif-header-${ii}`}>
+          <NotificationSectionHeader unseen={status} theme={theme} />
           {notifElement}
         </React.Fragment>
       );
