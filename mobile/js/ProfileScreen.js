@@ -82,7 +82,7 @@ const ProfileScreen = () => {
                 width: 0,
                 height: 4,
               },
-              elevation: 1,
+              elevation: 2,
             }}>
             <View style={{ width: 96, paddingVertical: 16 }}>
               <ProfilePhoto userId={queryData.me.userId} />

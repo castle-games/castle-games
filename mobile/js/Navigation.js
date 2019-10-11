@@ -35,6 +35,7 @@ const HomeNavigator = createStackNavigator({
           <Text style={{ fontSize: 24, letterSpacing: 0.5, fontFamily: 'RTAliasGrotesk-Bold' }}>Castle</Text>
         </View>
       ),
+      headerStyle: { elevation: 2 }
     },
   },
 });

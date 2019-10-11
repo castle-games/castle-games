@@ -29,14 +29,14 @@ const styles = StyleSheet.create({
   },
   windowed: {
     position: 'absolute',
-    bottom: 64,
+    bottom: 74,
     left: 16,
     zIndex: 1,
     backgroundColor: '#000',
     width: 135,
-    height: 240,
+    aspectRatio: 9/16,
     borderRadius: 8,
-    elevation: 5,
+    elevation: 3,
     overflow: 'hidden',
   },
   logItem: {
