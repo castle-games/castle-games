@@ -223,7 +223,18 @@ class CurrentUserContextManager extends React.Component {
 
   appendAppNotification = (n) => {
     this.setState((state) => {
-      const newNotifications = state.appNotifications.concat([n]);
+      let isNotificationEdit = false;
+      let newNotifications = state.appNotifications.map((existing) => {
+        if (existing.appNotificationId === n.appNotificationId) {
+          isNotificationEdit = true;
+          return n;
+        } else {
+          return existing;
+        }
+      });
+      if (!isNotificationEdit) {
+        newNotifications = state.appNotifications.concat([n]);
+      }
       return {
         ...state,
         appNotifications: newNotifications,
