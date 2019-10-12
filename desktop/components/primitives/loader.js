@@ -21,8 +21,13 @@ export const injectGlobalLoaderStyles = () => injectGlobal`
   }
   #loader.loader--finished {
     opacity: 0;
-    transform: translateY(-256px);
     pointer-events: none;
+  }
+  #loader-inner {
+    transition: 1000ms ease all;
+  }
+  #loader-inner.loader-inner--finished {
+    transform: translateY(-256px);
   }
   @keyframes loader {
     to {

@@ -19,7 +19,7 @@ const STYLES_CASTLE_TEXT = css`
 export default class GLLoaderScreen extends React.Component {
   render() {
     return (
-      <div className={STYLES_LOADER_SCREEN}>
+      <div id={'loader-inner'} className={STYLES_LOADER_SCREEN}>
         <GLCastle />
         <div className={STYLES_CASTLE_TEXT}>Castle</div>
       </div>

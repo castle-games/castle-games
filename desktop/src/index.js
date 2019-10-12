@@ -25,6 +25,7 @@ const mountLoader = () => {
 
 const unmountLoader = async () => {
   document.getElementById('loader').classList.add('loader--finished');
+  document.getElementById('loader-inner').classList.add('loader-inner--finished');
   await Actions.delay(1000);
   ReactDOM.unmountComponentAtNode(document.getElementById('loader'));
   document.getElementById('loader').outerHTML = '';
