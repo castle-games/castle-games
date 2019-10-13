@@ -3,8 +3,10 @@ import { View, Text, ScrollView, TouchableOpacity, Linking } from 'react-native'
 import FastImage from 'react-native-fast-image';
 import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
+import { useNavigation } from 'react-navigation-hooks';
 
 import { GameCard } from './HomeScreen';
+import * as Session from './Session';
 
 const ProfilePhoto = props => {
   const { loading: queryLoading, error: queryError, data: queryData } = useQuery(
@@ -44,6 +46,8 @@ const ProfilePhoto = props => {
 };
 
 const ProfileScreen = () => {
+  const { navigate } = useNavigation();
+
   const { loading: queryLoading, error: queryError, data: queryData } = useQuery(gql`
     query Me {
       me {
@@ -57,6 +61,11 @@ const ProfileScreen = () => {
       }
     }
   `);
+
+  const onPressLogOut = async () => {
+    await Session.signOutAsync();
+    navigate('LoginScreen');
+  };
 
   return (
     <View
@@ -87,9 +96,13 @@ const ProfileScreen = () => {
             <View style={{ width: 96, paddingVertical: 16 }}>
               <ProfilePhoto userId={queryData.me.userId} />
             </View>
-            <View style={{alignItems: 'center'}}>
-              <Text style={{ fontSize: 22, fontFamily: 'RTAliasGrotesk-Bold' }}>{queryData.me.name}</Text>
-              <Text style={{ marginTop: 4, fontSize: 18, fontFamily: 'RTAliasGrotesk-Regular' }}>@{queryData.me.username}</Text>
+            <View style={{ alignItems: 'center' }}>
+              <Text style={{ fontSize: 22, fontFamily: 'RTAliasGrotesk-Bold' }}>
+                {queryData.me.name}
+              </Text>
+              <Text style={{ marginTop: 4, fontSize: 18, fontFamily: 'RTAliasGrotesk-Regular' }}>
+                @{queryData.me.username}
+              </Text>
               <View style={{ marginTop: 16, flexDirection: 'row' }}>
                 {queryData.me.websiteUrl ? (
                   <TouchableOpacity
@@ -102,7 +115,9 @@ const ProfileScreen = () => {
                     <Text>{queryData.me.websiteUrl}</Text>
                   </TouchableOpacity>
                 ) : null}
-                <Text style={{ color: '#aaa' }}>Log Out</Text>
+                <TouchableOpacity onPress={onPressLogOut}>
+                  <Text style={{ color: '#aaa' }}>Log Out</Text>
+                </TouchableOpacity>
               </View>
             </View>
           </View>

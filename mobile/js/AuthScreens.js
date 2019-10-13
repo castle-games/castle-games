@@ -98,6 +98,8 @@ const LoginForm = () => {
     navigate('ForgotPasswordScreen');
   };
 
+  // TODO: Show progress indicator if `signingIn`.
+
   return (
     <Fragment>
       {errored ? (
@@ -181,6 +183,8 @@ const CreateAccountForm = () => {
     }
   };
 
+  // TODO: Show progress indicator if `creatingAccount`, error message if `errored`.
+
   return (
     <Fragment>
       <View style={{ paddingBottom: 16, alignItems: 'center' }}>
@@ -234,9 +238,25 @@ const CreateAccountForm = () => {
 const ForgotPasswordForm = () => {
   const [username, setUsername] = useState('');
 
-  const onPressResetPassword = () => {
-    console.log('Resetting password!');
+  const [resettingPassword, setResettingPassword] = useState(false);
+  const [succeeded, setSucceeded] = useState(false);
+  const [errored, setErrored] = useState(false);
+
+  const onPressResetPassword = async () => {
+    try {
+      setResettingPassword(true);
+      setErrored(false);
+      await Session.resetPasswordAsync({ username });
+      setResettingPassword(false);
+      setSucceeded(true);
+    } catch (e) {
+      setResettingPassword(false);
+      setErrored(true);
+    }
   };
+
+  // TODO: Show progress indicator if `resettingPassword`, error message if `errored`, and a
+  //       "We sent you an email" message if `succeeded`.
 
   return (
     <Fragment>

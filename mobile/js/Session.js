@@ -60,7 +60,11 @@ export const isSignedIn = () => authToken !== null;
 const useNewAuthTokenAsync = async newAuthToken => {
   apolloClient.resetStore();
   authToken = newAuthToken;
-  await AsyncStorage.setItem('AUTH_TOKEN', authToken);
+  if (newAuthToken) {
+    await AsyncStorage.setItem('AUTH_TOKEN', authToken);
+  } else {
+    await AsyncStorage.removeItem('AUTH_TOKEN');
+  }
 };
 
 const userIdForUsernameAsync = async username => {
@@ -100,10 +104,21 @@ export const signInAsync = async ({ username, password }) => {
   }
 };
 
+export const signOutAsync = async () => {
+  await apolloClient.mutate({
+    mutation: gql`
+      mutation SignOut {
+        logout
+      }
+    `,
+  });
+  await useNewAuthTokenAsync(null);
+};
+
 export const signUpAsync = async ({ username, name, email, password }) => {
   const result = await apolloClient.mutate({
     mutation: gql`
-      mutation($name: String!, $username: String!, $email: String!, $password: String!) {
+      mutation SignUp($name: String!, $username: String!, $email: String!, $password: String!) {
         signup(user: { name: $name, username: $username }, email: $email, password: $password) {
           userId
           token
@@ -115,4 +130,17 @@ export const signUpAsync = async ({ username, name, email, password }) => {
   if (result && result.data && result.data.signup && result.data.signup.userId) {
     await useNewAuthTokenAsync(result.data.signup.token);
   }
+};
+
+export const resetPasswordAsync = async ({ username }) => {
+  const userId = await userIdForUsernameAsync(username);
+
+  await apolloClient.mutate({
+    mutation: gql`
+      mutation ResetPassword($userId: ID!) {
+        sendResetPasswordEmail(userId: $userId)
+      }
+    `,
+    variables: { userId },
+  });
 };
