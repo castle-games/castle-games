@@ -99,3 +99,20 @@ export const signInAsync = async ({ username, password }) => {
     await useNewAuthTokenAsync(result.data.login.token);
   }
 };
+
+export const signUpAsync = async ({ username, name, email, password }) => {
+  const result = await apolloClient.mutate({
+    mutation: gql`
+      mutation($name: String!, $username: String!, $email: String!, $password: String!) {
+        signup(user: { name: $name, username: $username }, email: $email, password: $password) {
+          userId
+          token
+        }
+      }
+    `,
+    variables: { username, name, email, password },
+  });
+  if (result && result.data && result.data.signup && result.data.signup.userId) {
+    await useNewAuthTokenAsync(result.data.signup.token);
+  }
+};

@@ -26,7 +26,7 @@ export const GameCard = props => {
     { variables: { gameId: props.gameId } }
   );
 
-  return queryLoading ? (
+  return !queryData ? (
     <Fragment />
   ) : (
     <TouchableOpacity

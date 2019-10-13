@@ -91,7 +91,7 @@ const LoginForm = () => {
   };
 
   const onPressSignUp = () => {
-    navigate('CreateAccountScreen');
+    navigate('CreateAccountScreen', { uriAfter });
   };
 
   const onPressForgotPassword = () => {
@@ -154,6 +154,9 @@ const CreateAccountForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const [creatingAccount, setCreatingAccount] = useState(false);
+  const [errored, setErrored] = useState(false);
+
   const onPressLogin = () => {
     navigate('LoginScreen');
   };
@@ -162,8 +165,20 @@ const CreateAccountForm = () => {
     Linking.openURL('https://castle.games/legal/privacy')
   };
 
-  const onPressCreateAccount = () => {
-    console.log('Creating account!');
+  const onPressCreateAccount = async () => {
+    try {
+      setCreatingAccount(true);
+      setErrored(false);
+      await Session.signUpAsync({ username, name, email, password });
+      setCreatingAccount(false);
+      navigate('HomeScreen');
+      if (uriAfter) {
+        navigateToUri(uriAfter);
+      }
+    } catch (e) {
+      setCreatingAccount(false);
+      setErrored(true);
+    }
   };
 
   return (
