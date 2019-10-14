@@ -443,8 +443,7 @@ export async function getInitialData() {
     return false;
   }
 
-  // TOOD(jim): Write a global error handler.
-  if (result.error) {
+  if (result.errors && result.errors.length) {
     return false;
   }
 
