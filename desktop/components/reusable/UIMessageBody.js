@@ -103,17 +103,15 @@ class UIMessageBody extends React.Component {
 
     let components = body.message.map((c, ii) => {
       // TODO: json case for channel
-      if (c.text) {
-        let text = c.text;
-        if (ii == 0 && ChatUtilities.getSlashCommand(body).isCommand) {
-          text = text
-            .split(' ')
-            .slice(1)
-            .join(' ');
-        }
-        text = matchURL(text, theme, onMatchAttachment);
-        text = matchCastleURL(text, theme, onMatchAttachment);
-        return <span key={`message-${ii}`}>{text}</span>;
+      if (c.gameId && c.text) {
+        return (
+          <span
+            className={STYLES_MENTION}
+            key={`game-${ii}`}
+            onClick={() => this.props.navigator.navigateToGameMeta({ gameId: c.gameId })}>
+            {c.text}
+          </span>
+        );
       } else if (c.userId) {
         const user = this.props.userIdToUser[c.userId];
         if (user) {
@@ -128,6 +126,17 @@ class UIMessageBody extends React.Component {
         }
       } else if (c.emoji) {
         return <span key={`message-${ii}`}>{emojiToString(c.emoji)}</span>;
+      } else if (c.text) {
+        let text = c.text;
+        if (ii == 0 && ChatUtilities.getSlashCommand(body).isCommand) {
+          text = text
+            .split(' ')
+            .slice(1)
+            .join(' ');
+        }
+        text = matchURL(text, theme, onMatchAttachment);
+        text = matchCastleURL(text, theme, onMatchAttachment);
+        return <span key={`message-${ii}`}>{text}</span>;
       }
       return null;
     });
