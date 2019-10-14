@@ -24,6 +24,6 @@ export default class NotificationSectionHeader extends React.Component {
   };
 
   render() {
-    return <div className={STYLES_CONTAINER}>{this.props.unseen ? 'New' : 'Older'}</div>;
+    return <div className={STYLES_CONTAINER}>{this.props.unseen ? 'New' : 'Previously Seen'}</div>;
   }
 }

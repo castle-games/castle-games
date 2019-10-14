@@ -8,9 +8,23 @@ import UIMessageBody from '~/components/reusable/UIMessageBody';
 
 const STYLES_CONTAINER = css`
   width: 100%;
-  padding: 8px 16px;
   font-family: ${Constants.REFACTOR_FONTS.system};
   cursor: pointer;
+`;
+
+const STYLES_ROW = css`
+  display: flex;
+  padding: 8px 16px;
+`;
+
+const STYLES_LEFT = css`
+  width: 32px;
+  flex-shrink: 0;
+  display: flex;
+`;
+
+const STYLES_RIGHT = css`
+  width: 100%;
 `;
 
 const STYLES_BODY = css`
@@ -30,6 +44,21 @@ export default class NotificationItem extends React.Component {
     onSelectNotification: () => {},
   };
 
+  _getEmoji = (n) => {
+    switch (n.type) {
+      case 'play_game_owner':
+      case 'post': {
+        return '👾';
+      }
+      case 'chat_message_game_channel_owner':
+      case 'chat_message_game_channel_tagged':
+      case 'chat_message': {
+        return '📣';
+      }
+    }
+    return '🎉';
+  };
+
   render() {
     const { notification, theme } = this.props;
     if (!notification || !notification.body) {
@@ -47,10 +76,17 @@ export default class NotificationItem extends React.Component {
       <div
         className={`${STYLES_CONTAINER} ${themeContainerStyles}`}
         onClick={() => this.props.onSelectNotification(notification)}>
-        <div className={STYLES_BODY}>
-          <UIMessageBody body={notification.body} theme={this.props.theme} />
+        <div className={STYLES_ROW}>
+          <div className={STYLES_LEFT}>
+            <p>{this._getEmoji(notification)}</p>
+          </div>
+          <div className={STYLES_RIGHT}>
+            <div className={STYLES_BODY}>
+              <UIMessageBody body={notification.body} theme={this.props.theme} />
+            </div>
+            <div className={STYLES_TIMESTAMP}>{Strings.toChatDate(notification.createdTime)}</div>
+          </div>
         </div>
-        <div className={STYLES_TIMESTAMP}>{Strings.toChatDate(notification.createdTime)}</div>
       </div>
     );
   }
