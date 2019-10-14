@@ -84,6 +84,7 @@ class NotificationsList extends React.Component {
 
   _handleSelectNotification = async (notification) => {
     switch (notification.type) {
+      case 'play_game_owner':
       case 'post': {
         try {
           const fullGame = await Actions.getGameByGameId(notification.gameId);
