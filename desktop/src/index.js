@@ -64,7 +64,9 @@ const getInitialState = async () => {
     featuredExamples,
     currentUser,
     isOffline,
-    navigation: {},
+    navigation: {
+      isShowingSignIn: !currentUser.user,
+    },
   };
 };
 
