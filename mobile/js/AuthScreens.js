@@ -65,14 +65,13 @@ const LoginForm = () => {
   const { navigate } = useNavigation();
 
   const uriAfter = useNavigationParam('uriAfter');
+  const resetPassword = useNavigationParam('resetPassword');
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const [signingIn, setSigningIn] = useState(false);
   const [errored, setErrored] = useState(false);
-
-  const reset = false;
 
   const onPressSignIn = async () => {
     try {
@@ -108,7 +107,7 @@ const LoginForm = () => {
           body="Please check your network connection and ensure that the username and password are correct."
         />
       ) : null}
-      {reset ? (
+      {resetPassword ? (
         <Announcement
           headline="Check your email"
           body="We've sent you an email with a link to reset your password."
@@ -236,6 +235,8 @@ const CreateAccountForm = () => {
 };
 
 const ForgotPasswordForm = () => {
+  const { navigate } = useNavigation();
+
   const [username, setUsername] = useState('');
 
   const [resettingPassword, setResettingPassword] = useState(false);
@@ -248,7 +249,9 @@ const ForgotPasswordForm = () => {
       setErrored(false);
       await Session.resetPasswordAsync({ username });
       setResettingPassword(false);
-      setSucceeded(true);
+      navigate('LoginScreen', {
+        resetPassword: true,
+      });
     } catch (e) {
       setResettingPassword(false);
       setErrored(true);
