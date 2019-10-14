@@ -297,7 +297,7 @@ const WithHeader = ({ children }) => (
           aspectRatio: 5/6,
           marginBottom: 8,
         }}
-        source={require('../assets/images/castle-full-white.png')}
+        source={require('../assets/images/castle-b-spinning.gif')}
       />
       <Text
         style={{

@@ -25,12 +25,12 @@ const HomeNavigator = createStackNavigator({
         <View style={{ padding: 16, flexDirection: 'row', alignItems: 'flex-end' }}>
           <FastImage
             style={{
-              width: 30,
+              width: 20,
               height: 36,
               marginBottom: 6,
-              marginRight: 12,
+              marginRight: 8,
             }}
-            source={require('../assets/images/castle-full-yellow.png')}
+            source={require('../assets/images/castle-b-mini.gif')}
           />
           <Text style={{ fontSize: 24, letterSpacing: 0.5, fontFamily: 'RTAliasGrotesk-Bold' }}>Castle</Text>
         </View>
