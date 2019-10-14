@@ -168,6 +168,10 @@ export default class EditProfile extends React.Component {
     }
   };
 
+  _isMacOSCatalina = () => {
+    return navigator.userAgent.includes('Mac OS X 10_15');
+  };
+
   _renderAvatarControl = () => {
     let avatarSrc;
     if (this.state.isExistingAvatarRemoved) {
@@ -196,6 +200,7 @@ export default class EditProfile extends React.Component {
           showIndicator={false}
           style={{ width: 128, height: 128, marginRight: 16 }}
         />
+
         <div className={STYLES_COLUMN}>
           {avatarLoadingElement}
           <input
@@ -253,10 +258,12 @@ export default class EditProfile extends React.Component {
             Save Changes
           </UISubmitButton>
         </div>
-        <div className={STYLES_SECTION}>
-          <div className={STYLES_HEADING}>Avatar</div>
-          {this._renderAvatarControl()}
-        </div>
+        {!this._isMacOSCatalina() && (
+          <div className={STYLES_SECTION}>
+            <div className={STYLES_HEADING}>Avatar</div>
+            {this._renderAvatarControl()}
+          </div>
+        )}
         <div className={STYLES_SECTION}>
           <div className={STYLES_HEADING}>Profile Info</div>
           <div className={STYLES_FIELDS}>
