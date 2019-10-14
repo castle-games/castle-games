@@ -9,7 +9,7 @@ import UIMessageBody from '~/components/reusable/UIMessageBody';
 const STYLES_CONTAINER = css`
   width: 100%;
   font-family: ${Constants.REFACTOR_FONTS.system};
-  cursor: pointer;
+  cursor: default;
 `;
 
 const STYLES_ROW = css`
@@ -36,6 +36,11 @@ const STYLES_TIMESTAMP = css`
   font-size: 10px;
   color: ${Constants.REFACTOR_COLORS.subdued};
   margin-top: 2px;
+  cursor: pointer;
+
+  :hover {
+    text-decoration: underline;
+  }
 `;
 
 export default class NotificationItem extends React.Component {
@@ -73,9 +78,7 @@ export default class NotificationItem extends React.Component {
     }
 
     return (
-      <div
-        className={`${STYLES_CONTAINER} ${themeContainerStyles}`}
-        onClick={() => this.props.onSelectNotification(notification)}>
+      <div className={`${STYLES_CONTAINER} ${themeContainerStyles}`}>
         <div className={STYLES_ROW}>
           <div className={STYLES_LEFT}>
             <p>{this._getEmoji(notification)}</p>
@@ -84,7 +87,11 @@ export default class NotificationItem extends React.Component {
             <div className={STYLES_BODY}>
               <UIMessageBody body={notification.body} theme={this.props.theme} />
             </div>
-            <div className={STYLES_TIMESTAMP}>{Strings.toChatDate(notification.createdTime)}</div>
+            <div
+              className={STYLES_TIMESTAMP}
+              onClick={() => this.props.onSelectNotification(notification)}>
+              {Strings.toChatDate(notification.createdTime)}
+            </div>
           </div>
         </div>
       </div>
