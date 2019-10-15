@@ -4,6 +4,8 @@ import * as Utilities from '~/common/utilities';
 
 import { UserPresenceContext } from '~/contexts/UserPresenceContext';
 
+const RELOAD_TRENDING_GAMES_INTERVAL_MS = 1000 * 10;
+
 const EMPTY_CURRENT_USER = {
   user: null,
   settings: {
@@ -15,6 +17,7 @@ const EMPTY_CURRENT_USER = {
     posts: null,
     allGames: null,
     trendingGames: null,
+    trendingGamesLastUpdatedTime: null,
     multiplayerSessions: null,
   },
   appNotifications: [],
@@ -155,6 +158,14 @@ class CurrentUserContextManager extends React.Component {
   reloadTrendingGames = async () => {
     let data = null;
 
+    if (
+      this.state.content.trendingGames &&
+      Date.now() - this.state.content.trendingGamesLastUpdatedTime <
+        RELOAD_TRENDING_GAMES_INTERVAL_MS
+    ) {
+      return;
+    }
+
     try {
       data = await Actions.getTrendingGames();
     } catch (e) {
@@ -169,6 +180,7 @@ class CurrentUserContextManager extends React.Component {
           content: {
             ...state.content,
             trendingGames,
+            trendingGamesLastUpdatedTime: Date.now(),
           },
         };
       });

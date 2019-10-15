@@ -53,6 +53,7 @@ const getInitialState = async () => {
       },
       content: {
         trendingGames: data.trendingGames ? data.trendingGames : [],
+        trendingGamesLastUpdatedTime: Date.now(),
         multiplayerSessions: [],
       },
       userStatusHistory: data.userStatusHistory,
