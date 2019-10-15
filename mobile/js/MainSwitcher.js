@@ -192,7 +192,7 @@ const GameHeader = () => {
           <Text style={{ color: '#bbb' }}>Invite</Text>
         </TouchableOpacity>
       </View>
-      {inviting ? <InviteBar /> : <Fragment />}
+      {inviting ? <InviteBar /> : null}
     </Fragment>
   );
 };

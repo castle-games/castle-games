@@ -30,9 +30,7 @@ const ProfilePhoto = props => {
         borderRadius: 1000000,
         overflow: 'hidden',
       }}>
-      {queryLoading ? (
-        <Fragment />
-      ) : (
+      {queryLoading ? null : (
         <FastImage
           style={{
             width: '100%',
@@ -73,9 +71,7 @@ const ProfileScreen = () => {
         flex: 1,
         backgroundColor: '#f2f2f2',
       }}>
-      {queryLoading ? (
-        <Fragment />
-      ) : (
+      {queryLoading ? null : (
         <View>
           <View
             style={{

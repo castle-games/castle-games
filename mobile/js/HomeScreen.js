@@ -27,9 +27,7 @@ export const GameCard = props => {
     { variables: { gameId: props.gameId } }
   );
 
-  return !queryData ? (
-    <Fragment />
-  ) : (
+  return !queryData ? null : (
     <TouchableOpacity
       style={{
         width: '50%',
