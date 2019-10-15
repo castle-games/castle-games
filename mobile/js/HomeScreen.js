@@ -41,6 +41,7 @@ export const GameCard = props => {
         style={{
           borderRadius: 4,
           overflow: 'hidden',
+          backgroundColor: 'white',
           shadowColor: 'black',
           shadowOpacity: 0.1,
           shadowRadius: 8,
