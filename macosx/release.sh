@@ -56,9 +56,6 @@ rm -rf archive.xcarchive
 
 echo -e "\n\b\bCreated '$ZIP_PATH'"
 
-mkdir -p /tmp/castle-build-artifacts
-mv $ZIP_PATH /tmp/castle-build-artifacts/.
-
 # --no-upload prevents actually uploading the release
 if [[ "$*" == *--no-upload* ]]
 then
@@ -74,4 +71,4 @@ cd castle-releases
 echo "Pulling 'castle-releases'..."
 git pull origin master
 echo "Performing release..."
-./castle-releases-macos mac ../Castle-$MACOS_VERSION.zip
+./castle-releases-macos mac ../$ZIP_PATH
