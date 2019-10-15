@@ -19,6 +19,38 @@
 		4577F0FF47C73EA9A0ECC7F6 /* libPods-Castle-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BDA1BD867AE232F85BAD0D0B /* libPods-Castle-tvOS.a */; };
 		4917391D17F4BFD16B3A557B /* libPods-CastleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A2BB3156AC1D98E2389E1CF /* libPods-CastleTests.a */; };
 		752DFF0FA2404564937762CE /* RTAliasGrotesk-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0C7DDD807F684FD0A7E4CD7E /* RTAliasGrotesk-Bold.otf */; };
+		A14FE39F2355CB83003B7EA0 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A14FE39E2355CB83003B7EA0 /* AudioToolbox.framework */; };
+		A14FE3A12355CB8B003B7EA0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A14FE3A02355CB8B003B7EA0 /* AVFoundation.framework */; };
+		A14FE3A32355CB93003B7EA0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A14FE3A22355CB93003B7EA0 /* CoreGraphics.framework */; };
+		A14FE3A52355CB9A003B7EA0 /* GameController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A14FE3A42355CB9A003B7EA0 /* GameController.framework */; };
+		A14FE3A72355CBB6003B7EA0 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A14FE3A62355CBAB003B7EA0 /* libz.tbd */; };
+		A14FE3A82355CBBE003B7EA0 /* liblove.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A14FE39D2355CA7B003B7EA0 /* liblove.a */; };
+		A14FE3A92355CBC8003B7EA0 /* libSDL2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A14FE3922355CA44003B7EA0 /* libSDL2.a */; };
+		A14FE3AB2355CBE3003B7EA0 /* libbz2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A14FE3AA2355CBDB003B7EA0 /* libbz2.tbd */; };
+		A14FE3AE2355CC0E003B7EA0 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A14FE3AC2355CBFF003B7EA0 /* libssl.a */; };
+		A14FE3AF2355CC21003B7EA0 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A14FE3AD2355CBFF003B7EA0 /* libcrypto.a */; };
+		A14FE3B12355CC2B003B7EA0 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A14FE3B02355CC2B003B7EA0 /* Metal.framework */; };
+		A14FE3B32355CC32003B7EA0 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A14FE3B22355CC32003B7EA0 /* OpenAL.framework */; };
+		A14FE3B52355CC39003B7EA0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A14FE3B42355CC39003B7EA0 /* QuartzCore.framework */; };
+		A14FE3B72355CD66003B7EA0 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A14FE3B62355CD66003B7EA0 /* CoreMotion.framework */; };
+		A14FE3C22355CE74003B7EA0 /* lmarshal.c in Sources */ = {isa = PBXBuildFile; fileRef = A14FE3C12355CE74003B7EA0 /* lmarshal.c */; };
+		A14FE3C62355CE94003B7EA0 /* lsqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = A14FE3C32355CE94003B7EA0 /* lsqlite3.c */; };
+		A14FE3C72355CE94003B7EA0 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = A14FE3C52355CE94003B7EA0 /* sqlite3.c */; };
+		A14FE3CF2355CEC2003B7EA0 /* fpconv.c in Sources */ = {isa = PBXBuildFile; fileRef = A14FE3CB2355CEC2003B7EA0 /* fpconv.c */; };
+		A14FE3D02355CEC2003B7EA0 /* lua_cjson.c in Sources */ = {isa = PBXBuildFile; fileRef = A14FE3CC2355CEC2003B7EA0 /* lua_cjson.c */; };
+		A14FE3D12355CEC2003B7EA0 /* strbuf.c in Sources */ = {isa = PBXBuildFile; fileRef = A14FE3CE2355CEC2003B7EA0 /* strbuf.c */; };
+		A14FE3DD2355CEF0003B7EA0 /* x509.c in Sources */ = {isa = PBXBuildFile; fileRef = A14FE3D22355CEEF003B7EA0 /* x509.c */; };
+		A14FE3DE2355CEF0003B7EA0 /* ssl.c in Sources */ = {isa = PBXBuildFile; fileRef = A14FE3D52355CEEF003B7EA0 /* ssl.c */; };
+		A14FE3DF2355CEF0003B7EA0 /* ec.c in Sources */ = {isa = PBXBuildFile; fileRef = A14FE3D82355CEEF003B7EA0 /* ec.c */; };
+		A14FE3E02355CEF0003B7EA0 /* context.c in Sources */ = {isa = PBXBuildFile; fileRef = A14FE3D92355CEEF003B7EA0 /* context.c */; };
+		A14FE3E12355CEF0003B7EA0 /* config.c in Sources */ = {isa = PBXBuildFile; fileRef = A14FE3DA2355CEEF003B7EA0 /* config.c */; };
+		A14FE3E42355CF02003B7EA0 /* lcrypto.c in Sources */ = {isa = PBXBuildFile; fileRef = A14FE3E22355CF02003B7EA0 /* lcrypto.c */; };
+		A14FE3F02355CF2D003B7EA0 /* lpcode.c in Sources */ = {isa = PBXBuildFile; fileRef = A14FE3E52355CF2D003B7EA0 /* lpcode.c */; };
+		A14FE3F12355CF2D003B7EA0 /* lptree.c in Sources */ = {isa = PBXBuildFile; fileRef = A14FE3E82355CF2D003B7EA0 /* lptree.c */; };
+		A14FE3F22355CF2D003B7EA0 /* lpvm.c in Sources */ = {isa = PBXBuildFile; fileRef = A14FE3E92355CF2D003B7EA0 /* lpvm.c */; };
+		A14FE3F32355CF2D003B7EA0 /* lpprint.c in Sources */ = {isa = PBXBuildFile; fileRef = A14FE3EA2355CF2D003B7EA0 /* lpprint.c */; };
+		A14FE3F42355CF2D003B7EA0 /* lpcap.c in Sources */ = {isa = PBXBuildFile; fileRef = A14FE3EB2355CF2D003B7EA0 /* lpcap.c */; };
+		A14FE3F72355D0C8003B7EA0 /* package.love in Resources */ = {isa = PBXBuildFile; fileRef = A14FE3F62355D0C8003B7EA0 /* package.love */; };
 		A1CCBA1623551869009F4DDD /* GhostChannels.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1CCBA1423551869009F4DDD /* GhostChannels.mm */; };
 		A1CCBA19235518C7009F4DDD /* GhostView.m in Sources */ = {isa = PBXBuildFile; fileRef = A1CCBA18235518C7009F4DDD /* GhostView.m */; };
 		B75D12A12F9E5D8776A933D2 /* libPods-Castle.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 580488360D0E6A5C5C50B415 /* libPods-Castle.a */; };
@@ -40,6 +72,34 @@
 			proxyType = 1;
 			remoteGlobalIDString = 2D02E47A1E0B4A5D006451C7;
 			remoteInfo = "Castle-tvOS";
+		};
+		A14FE3912355CA44003B7EA0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A14FE3892355CA44003B7EA0 /* SDL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FD6526630DE8FCCB002AD96B;
+			remoteInfo = "libSDL-iOS";
+		};
+		A14FE3932355CA44003B7EA0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A14FE3892355CA44003B7EA0 /* SDL.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FAB598141BB5C1B100BE72C5;
+			remoteInfo = "libSDL-tvOS";
+		};
+		A14FE39A2355CA7B003B7EA0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A14FE3952355CA7B003B7EA0 /* liblove.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FA577AAF16C7507900860150;
+			remoteInfo = "liblove-macosx";
+		};
+		A14FE39C2355CA7B003B7EA0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A14FE3952355CA7B003B7EA0 /* liblove.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FA0B78DD1A958B90000E1D17;
+			remoteInfo = "liblove-ios";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -67,6 +127,55 @@
 		7A2BB3156AC1D98E2389E1CF /* libPods-CastleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CastleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8865F844F710B24790E91D03 /* Pods-Castle-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Castle-tvOS.release.xcconfig"; path = "Target Support Files/Pods-Castle-tvOS/Pods-Castle-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		8C185AA70A18F1954FE6686B /* Pods-Castle-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Castle-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-Castle-tvOS/Pods-Castle-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		A14FE3892355CA44003B7EA0 /* SDL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL.xcodeproj; path = "../../ghost-extensions/SDL2-2.0.8/Xcode-iOS/SDL/SDL.xcodeproj"; sourceTree = "<group>"; };
+		A14FE3952355CA7B003B7EA0 /* liblove.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = liblove.xcodeproj; path = ../../love/platform/xcode/liblove.xcodeproj; sourceTree = "<group>"; };
+		A14FE39E2355CB83003B7EA0 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		A14FE3A02355CB8B003B7EA0 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		A14FE3A22355CB93003B7EA0 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		A14FE3A42355CB9A003B7EA0 /* GameController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameController.framework; path = System/Library/Frameworks/GameController.framework; sourceTree = SDKROOT; };
+		A14FE3A62355CBAB003B7EA0 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		A14FE3AA2355CBDB003B7EA0 /* libbz2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.tbd; path = usr/lib/libbz2.tbd; sourceTree = SDKROOT; };
+		A14FE3AC2355CBFF003B7EA0 /* libssl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libssl.a; path = ../../openssl/lib/iOS/libssl.a; sourceTree = "<group>"; };
+		A14FE3AD2355CBFF003B7EA0 /* libcrypto.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcrypto.a; path = ../../openssl/lib/iOS/libcrypto.a; sourceTree = "<group>"; };
+		A14FE3B02355CC2B003B7EA0 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
+		A14FE3B22355CC32003B7EA0 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
+		A14FE3B42355CC39003B7EA0 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		A14FE3B62355CD66003B7EA0 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		A14FE3C12355CE74003B7EA0 /* lmarshal.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = lmarshal.c; path = "../../ghost-extensions/lua-marshal/lmarshal.c"; sourceTree = "<group>"; };
+		A14FE3C32355CE94003B7EA0 /* lsqlite3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = lsqlite3.c; path = "../../ghost-extensions/lsqlite3/lsqlite3.c"; sourceTree = "<group>"; };
+		A14FE3C42355CE94003B7EA0 /* sqlite3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sqlite3.h; path = "../../ghost-extensions/lsqlite3/sqlite3.h"; sourceTree = "<group>"; };
+		A14FE3C52355CE94003B7EA0 /* sqlite3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sqlite3.c; path = "../../ghost-extensions/lsqlite3/sqlite3.c"; sourceTree = "<group>"; };
+		A14FE3CA2355CEC2003B7EA0 /* fpconv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fpconv.h; path = "../../ghost-extensions/lua-cjson/fpconv.h"; sourceTree = "<group>"; };
+		A14FE3CB2355CEC2003B7EA0 /* fpconv.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = fpconv.c; path = "../../ghost-extensions/lua-cjson/fpconv.c"; sourceTree = "<group>"; };
+		A14FE3CC2355CEC2003B7EA0 /* lua_cjson.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = lua_cjson.c; path = "../../ghost-extensions/lua-cjson/lua_cjson.c"; sourceTree = "<group>"; };
+		A14FE3CD2355CEC2003B7EA0 /* strbuf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = strbuf.h; path = "../../ghost-extensions/lua-cjson/strbuf.h"; sourceTree = "<group>"; };
+		A14FE3CE2355CEC2003B7EA0 /* strbuf.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = strbuf.c; path = "../../ghost-extensions/lua-cjson/strbuf.c"; sourceTree = "<group>"; };
+		A14FE3D22355CEEF003B7EA0 /* x509.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = x509.c; path = "../../ghost-extensions/luasec/src/x509.c"; sourceTree = "<group>"; };
+		A14FE3D32355CEEF003B7EA0 /* x509.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = x509.h; path = "../../ghost-extensions/luasec/src/x509.h"; sourceTree = "<group>"; };
+		A14FE3D42355CEEF003B7EA0 /* ec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ec.h; path = "../../ghost-extensions/luasec/src/ec.h"; sourceTree = "<group>"; };
+		A14FE3D52355CEEF003B7EA0 /* ssl.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ssl.c; path = "../../ghost-extensions/luasec/src/ssl.c"; sourceTree = "<group>"; };
+		A14FE3D62355CEEF003B7EA0 /* ssl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ssl.h; path = "../../ghost-extensions/luasec/src/ssl.h"; sourceTree = "<group>"; };
+		A14FE3D72355CEEF003B7EA0 /* compat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = compat.h; path = "../../ghost-extensions/luasec/src/compat.h"; sourceTree = "<group>"; };
+		A14FE3D82355CEEF003B7EA0 /* ec.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = ec.c; path = "../../ghost-extensions/luasec/src/ec.c"; sourceTree = "<group>"; };
+		A14FE3D92355CEEF003B7EA0 /* context.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = context.c; path = "../../ghost-extensions/luasec/src/context.c"; sourceTree = "<group>"; };
+		A14FE3DA2355CEEF003B7EA0 /* config.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = config.c; path = "../../ghost-extensions/luasec/src/config.c"; sourceTree = "<group>"; };
+		A14FE3DB2355CEF0003B7EA0 /* context.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = context.h; path = "../../ghost-extensions/luasec/src/context.h"; sourceTree = "<group>"; };
+		A14FE3DC2355CEF0003B7EA0 /* options.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = options.h; path = "../../ghost-extensions/luasec/src/options.h"; sourceTree = "<group>"; };
+		A14FE3E22355CF02003B7EA0 /* lcrypto.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = lcrypto.c; path = "../../ghost-extensions/luacrypto/src/lcrypto.c"; sourceTree = "<group>"; };
+		A14FE3E32355CF02003B7EA0 /* lcrypto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lcrypto.h; path = "../../ghost-extensions/luacrypto/src/lcrypto.h"; sourceTree = "<group>"; };
+		A14FE3E52355CF2D003B7EA0 /* lpcode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = lpcode.c; path = "../../ghost-extensions/lpeg/lpcode.c"; sourceTree = "<group>"; };
+		A14FE3E62355CF2D003B7EA0 /* lpcap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lpcap.h; path = "../../ghost-extensions/lpeg/lpcap.h"; sourceTree = "<group>"; };
+		A14FE3E72355CF2D003B7EA0 /* lpprint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lpprint.h; path = "../../ghost-extensions/lpeg/lpprint.h"; sourceTree = "<group>"; };
+		A14FE3E82355CF2D003B7EA0 /* lptree.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = lptree.c; path = "../../ghost-extensions/lpeg/lptree.c"; sourceTree = "<group>"; };
+		A14FE3E92355CF2D003B7EA0 /* lpvm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = lpvm.c; path = "../../ghost-extensions/lpeg/lpvm.c"; sourceTree = "<group>"; };
+		A14FE3EA2355CF2D003B7EA0 /* lpprint.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = lpprint.c; path = "../../ghost-extensions/lpeg/lpprint.c"; sourceTree = "<group>"; };
+		A14FE3EB2355CF2D003B7EA0 /* lpcap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = lpcap.c; path = "../../ghost-extensions/lpeg/lpcap.c"; sourceTree = "<group>"; };
+		A14FE3EC2355CF2D003B7EA0 /* lptypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lptypes.h; path = "../../ghost-extensions/lpeg/lptypes.h"; sourceTree = "<group>"; };
+		A14FE3ED2355CF2D003B7EA0 /* lptree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lptree.h; path = "../../ghost-extensions/lpeg/lptree.h"; sourceTree = "<group>"; };
+		A14FE3EE2355CF2D003B7EA0 /* lpvm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lpvm.h; path = "../../ghost-extensions/lpeg/lpvm.h"; sourceTree = "<group>"; };
+		A14FE3EF2355CF2D003B7EA0 /* lpcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lpcode.h; path = "../../ghost-extensions/lpeg/lpcode.h"; sourceTree = "<group>"; };
+		A14FE3F52355D09D003B7EA0 /* package.love */ = {isa = PBXFileReference; lastKnownFileType = file; name = package.love; path = ../package.love; sourceTree = "<group>"; };
+		A14FE3F62355D0C8003B7EA0 /* package.love */ = {isa = PBXFileReference; lastKnownFileType = file; name = package.love; path = ../package.love; sourceTree = "<group>"; };
 		A1CCBA1423551869009F4DDD /* GhostChannels.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GhostChannels.mm; sourceTree = "<group>"; };
 		A1CCBA18235518C7009F4DDD /* GhostView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GhostView.m; sourceTree = "<group>"; };
 		A753A21E42DB46D99AD060DF /* RTAliasGrotesk-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "RTAliasGrotesk-Regular.otf"; path = "../assets/fonts/RTAliasGrotesk-Regular.otf"; sourceTree = "<group>"; };
@@ -90,7 +199,21 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A14FE3AE2355CC0E003B7EA0 /* libssl.a in Frameworks */,
+				A14FE3AB2355CBE3003B7EA0 /* libbz2.tbd in Frameworks */,
+				A14FE3B52355CC39003B7EA0 /* QuartzCore.framework in Frameworks */,
+				A14FE3A32355CB93003B7EA0 /* CoreGraphics.framework in Frameworks */,
+				A14FE3A72355CBB6003B7EA0 /* libz.tbd in Frameworks */,
 				B75D12A12F9E5D8776A933D2 /* libPods-Castle.a in Frameworks */,
+				A14FE3A52355CB9A003B7EA0 /* GameController.framework in Frameworks */,
+				A14FE3AF2355CC21003B7EA0 /* libcrypto.a in Frameworks */,
+				A14FE3A92355CBC8003B7EA0 /* libSDL2.a in Frameworks */,
+				A14FE3B32355CC32003B7EA0 /* OpenAL.framework in Frameworks */,
+				A14FE39F2355CB83003B7EA0 /* AudioToolbox.framework in Frameworks */,
+				A14FE3A12355CB8B003B7EA0 /* AVFoundation.framework in Frameworks */,
+				A14FE3B12355CC2B003B7EA0 /* Metal.framework in Frameworks */,
+				A14FE3B72355CD66003B7EA0 /* CoreMotion.framework in Frameworks */,
+				A14FE3A82355CBBE003B7EA0 /* liblove.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -149,6 +272,19 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A14FE3F52355D09D003B7EA0 /* package.love */,
+				A14FE3B62355CD66003B7EA0 /* CoreMotion.framework */,
+				A14FE3B42355CC39003B7EA0 /* QuartzCore.framework */,
+				A14FE3B22355CC32003B7EA0 /* OpenAL.framework */,
+				A14FE3B02355CC2B003B7EA0 /* Metal.framework */,
+				A14FE3AD2355CBFF003B7EA0 /* libcrypto.a */,
+				A14FE3AC2355CBFF003B7EA0 /* libssl.a */,
+				A14FE3AA2355CBDB003B7EA0 /* libbz2.tbd */,
+				A14FE3A62355CBAB003B7EA0 /* libz.tbd */,
+				A14FE3A42355CB9A003B7EA0 /* GameController.framework */,
+				A14FE3A22355CB93003B7EA0 /* CoreGraphics.framework */,
+				A14FE3A02355CB8B003B7EA0 /* AVFoundation.framework */,
+				A14FE39E2355CB83003B7EA0 /* AudioToolbox.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
 				580488360D0E6A5C5C50B415 /* libPods-Castle.a */,
@@ -169,6 +305,10 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				A14FE3F62355D0C8003B7EA0 /* package.love */,
+				A14FE3B92355CE21003B7EA0 /* ghost-extensions */,
+				A14FE3952355CA7B003B7EA0 /* liblove.xcodeproj */,
+				A14FE3892355CA44003B7EA0 /* SDL.xcodeproj */,
 				13B07FAE1A68108700A75B9A /* Castle */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* CastleTests */,
@@ -206,6 +346,112 @@
 				16D68450ECD63C37DADEDCAB /* Pods-CastleTests.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		A14FE38A2355CA44003B7EA0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A14FE3922355CA44003B7EA0 /* libSDL2.a */,
+				A14FE3942355CA44003B7EA0 /* libSDL2.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A14FE3962355CA7B003B7EA0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A14FE39B2355CA7B003B7EA0 /* love.framework */,
+				A14FE39D2355CA7B003B7EA0 /* liblove.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A14FE3B92355CE21003B7EA0 /* ghost-extensions */ = {
+			isa = PBXGroup;
+			children = (
+				A14FE3C02355CE5F003B7EA0 /* lpeg */,
+				A14FE3BF2355CE57003B7EA0 /* luacrypto */,
+				A14FE3BE2355CE4E003B7EA0 /* luasec */,
+				A14FE3BD2355CE44003B7EA0 /* lua-cjson */,
+				A14FE3BC2355CE3B003B7EA0 /* lsqlite3 */,
+				A14FE3BB2355CE34003B7EA0 /* lua-marshal */,
+			);
+			name = "ghost-extensions";
+			sourceTree = "<group>";
+		};
+		A14FE3BB2355CE34003B7EA0 /* lua-marshal */ = {
+			isa = PBXGroup;
+			children = (
+				A14FE3C12355CE74003B7EA0 /* lmarshal.c */,
+			);
+			name = "lua-marshal";
+			sourceTree = "<group>";
+		};
+		A14FE3BC2355CE3B003B7EA0 /* lsqlite3 */ = {
+			isa = PBXGroup;
+			children = (
+				A14FE3C32355CE94003B7EA0 /* lsqlite3.c */,
+				A14FE3C52355CE94003B7EA0 /* sqlite3.c */,
+				A14FE3C42355CE94003B7EA0 /* sqlite3.h */,
+			);
+			name = lsqlite3;
+			sourceTree = "<group>";
+		};
+		A14FE3BD2355CE44003B7EA0 /* lua-cjson */ = {
+			isa = PBXGroup;
+			children = (
+				A14FE3CB2355CEC2003B7EA0 /* fpconv.c */,
+				A14FE3CA2355CEC2003B7EA0 /* fpconv.h */,
+				A14FE3CC2355CEC2003B7EA0 /* lua_cjson.c */,
+				A14FE3CE2355CEC2003B7EA0 /* strbuf.c */,
+				A14FE3CD2355CEC2003B7EA0 /* strbuf.h */,
+			);
+			name = "lua-cjson";
+			sourceTree = "<group>";
+		};
+		A14FE3BE2355CE4E003B7EA0 /* luasec */ = {
+			isa = PBXGroup;
+			children = (
+				A14FE3D72355CEEF003B7EA0 /* compat.h */,
+				A14FE3DA2355CEEF003B7EA0 /* config.c */,
+				A14FE3D92355CEEF003B7EA0 /* context.c */,
+				A14FE3DB2355CEF0003B7EA0 /* context.h */,
+				A14FE3D82355CEEF003B7EA0 /* ec.c */,
+				A14FE3D42355CEEF003B7EA0 /* ec.h */,
+				A14FE3DC2355CEF0003B7EA0 /* options.h */,
+				A14FE3D52355CEEF003B7EA0 /* ssl.c */,
+				A14FE3D62355CEEF003B7EA0 /* ssl.h */,
+				A14FE3D22355CEEF003B7EA0 /* x509.c */,
+				A14FE3D32355CEEF003B7EA0 /* x509.h */,
+			);
+			name = luasec;
+			sourceTree = "<group>";
+		};
+		A14FE3BF2355CE57003B7EA0 /* luacrypto */ = {
+			isa = PBXGroup;
+			children = (
+				A14FE3E22355CF02003B7EA0 /* lcrypto.c */,
+				A14FE3E32355CF02003B7EA0 /* lcrypto.h */,
+			);
+			name = luacrypto;
+			sourceTree = "<group>";
+		};
+		A14FE3C02355CE5F003B7EA0 /* lpeg */ = {
+			isa = PBXGroup;
+			children = (
+				A14FE3EB2355CF2D003B7EA0 /* lpcap.c */,
+				A14FE3E62355CF2D003B7EA0 /* lpcap.h */,
+				A14FE3E52355CF2D003B7EA0 /* lpcode.c */,
+				A14FE3EF2355CF2D003B7EA0 /* lpcode.h */,
+				A14FE3EA2355CF2D003B7EA0 /* lpprint.c */,
+				A14FE3E72355CF2D003B7EA0 /* lpprint.h */,
+				A14FE3E82355CF2D003B7EA0 /* lptree.c */,
+				A14FE3ED2355CF2D003B7EA0 /* lptree.h */,
+				A14FE3EC2355CF2D003B7EA0 /* lptypes.h */,
+				A14FE3E92355CF2D003B7EA0 /* lpvm.c */,
+				A14FE3EE2355CF2D003B7EA0 /* lpvm.h */,
+			);
+			name = lpeg;
 			sourceTree = "<group>";
 		};
 		F290EE920FCD404AA685C745 /* Resources */ = {
@@ -340,6 +586,16 @@
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = A14FE3962355CA7B003B7EA0 /* Products */;
+					ProjectRef = A14FE3952355CA7B003B7EA0 /* liblove.xcodeproj */;
+				},
+				{
+					ProductGroup = A14FE38A2355CA44003B7EA0 /* Products */;
+					ProjectRef = A14FE3892355CA44003B7EA0 /* SDL.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* Castle */,
@@ -349,6 +605,37 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		A14FE3922355CA44003B7EA0 /* libSDL2.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libSDL2.a;
+			remoteRef = A14FE3912355CA44003B7EA0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A14FE3942355CA44003B7EA0 /* libSDL2.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libSDL2.a;
+			remoteRef = A14FE3932355CA44003B7EA0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A14FE39B2355CA7B003B7EA0 /* love.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = love.framework;
+			remoteRef = A14FE39A2355CA7B003B7EA0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		A14FE39D2355CA7B003B7EA0 /* liblove.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = liblove.a;
+			remoteRef = A14FE39C2355CA7B003B7EA0 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		00E356EC1AD99517003FC87E /* Resources */ = {
@@ -362,6 +649,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A14FE3F72355D0C8003B7EA0 /* package.love in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				752DFF0FA2404564937762CE /* RTAliasGrotesk-Bold.otf in Resources */,
@@ -592,10 +880,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A14FE3DE2355CEF0003B7EA0 /* ssl.c in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				A14FE3C22355CE74003B7EA0 /* lmarshal.c in Sources */,
 				A1CCBA1623551869009F4DDD /* GhostChannels.mm in Sources */,
+				A14FE3E12355CEF0003B7EA0 /* config.c in Sources */,
+				A14FE3D12355CEC2003B7EA0 /* strbuf.c in Sources */,
+				A14FE3F02355CF2D003B7EA0 /* lpcode.c in Sources */,
 				A1CCBA19235518C7009F4DDD /* GhostView.m in Sources */,
+				A14FE3F22355CF2D003B7EA0 /* lpvm.c in Sources */,
+				A14FE3E42355CF02003B7EA0 /* lcrypto.c in Sources */,
+				A14FE3DD2355CEF0003B7EA0 /* x509.c in Sources */,
+				A14FE3D02355CEC2003B7EA0 /* lua_cjson.c in Sources */,
+				A14FE3C62355CE94003B7EA0 /* lsqlite3.c in Sources */,
+				A14FE3DF2355CEF0003B7EA0 /* ec.c in Sources */,
+				A14FE3CF2355CEC2003B7EA0 /* fpconv.c in Sources */,
+				A14FE3E02355CEF0003B7EA0 /* context.c in Sources */,
+				A14FE3C72355CE94003B7EA0 /* sqlite3.c in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				A14FE3F42355CF2D003B7EA0 /* lpcap.c in Sources */,
+				A14FE3F12355CF2D003B7EA0 /* lptree.c in Sources */,
+				A14FE3F32355CF2D003B7EA0 /* lpprint.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -869,6 +1174,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -886,7 +1192,14 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					../../love/src,
+					"../../ghost-extensions/SDL2-2.0.8/include",
+					../../openssl/include,
+					../../love/platform/xcode/ios/include/luajit,
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LIBRARY_SEARCH_PATHS = ../../openssl/lib/iOS;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -922,6 +1235,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
+				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -932,7 +1246,14 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					../../love/src,
+					"../../ghost-extensions/SDL2-2.0.8/include",
+					../../openssl/include,
+					../../love/platform/xcode/ios/include/luajit,
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LIBRARY_SEARCH_PATHS = ../../openssl/lib/iOS;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;

@@ -11,6 +11,32 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 
+#include <SDL.h>
+
+#import "../../../ghost-extensions/SDL2-2.0.8/src/video/uikit/SDL_uikitappdelegate.h"
+
+@implementation SDLUIKitDelegate (Castle)
+
+// SDL defines its own `int main(...)` function:
+// https://github.com/spurious/SDL-mirror/blob/5d7cfcca344034aff9327f77fc181ae3754e7a90/src/video/uikit/SDL_uikitappdelegate.m#L45-L70.
+// We tell it to use our `AppDelegate` class instead.
++ (NSString *)getAppDelegateClassName {
+  return NSStringFromClass([AppDelegate class]);
+}
+
+@end
+
+int SDL_main(int argc, char *argv[]) {
+  // Implement a dummy `SDL_main()` to satisfy the linker.
+  return 0;
+}
+
+@interface AppDelegate ()
+
+@property(nonatomic, strong) SDLUIKitDelegate *sdlDelegate;
+
+@end
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -27,6 +53,13 @@
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
+
+  // SDL
+  self.sdlDelegate = [[SDLUIKitDelegate alloc] init];
+  [self.sdlDelegate hideLaunchScreen];
+  SDL_SetMainReady();
+  SDL_iPhoneSetEventPump(SDL_FALSE);
+
   return YES;
 }
 
@@ -37,6 +70,37 @@
 #else
   return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 #endif
+}
+
+- (void)applicationWillTerminate:(UIApplication *)application {
+  [self.sdlDelegate applicationWillTerminate:application];
+}
+
+- (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
+  [self.sdlDelegate applicationDidReceiveMemoryWarning:application];
+}
+
+- (void)application:(UIApplication *)application
+    didChangeStatusBarOrientation:
+        (UIInterfaceOrientation)oldStatusBarOrientation {
+  [self.sdlDelegate application:application
+      didChangeStatusBarOrientation:oldStatusBarOrientation];
+}
+
+- (void)applicationWillResignActive:(UIApplication *)application {
+  [self.sdlDelegate applicationWillResignActive:application];
+}
+
+- (void)applicationDidEnterBackground:(UIApplication *)application {
+  [self.sdlDelegate applicationDidEnterBackground:application];
+}
+
+- (void)applicationWillEnterForeground:(UIApplication *)application {
+  [self.sdlDelegate applicationWillEnterForeground:application];
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+  [self.sdlDelegate applicationDidBecomeActive:application];
 }
 
 @end
