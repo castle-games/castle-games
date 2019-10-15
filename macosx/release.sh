@@ -48,6 +48,9 @@ rm -rf archive.xcarchive
 
 echo -e "\n\b\bCreated 'Castle-$MACOS_VERSION.zip'"
 
+mkdir -p /tmp/castle-build-artifacts
+mv CASTLE-$MACOS_VERSION.zip /tmp/castle-build-artifacts/.
+
 # --no-upload prevents actually uploading the release
 if [[ "$*" == *--no-upload* ]]
 then
