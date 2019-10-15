@@ -1,5 +1,5 @@
 import React, { useState, Fragment } from 'react';
-import { View, Text, StyleSheet, FlatList, StatusBar, Clipboard } from 'react-native';
+import { View, Text, StyleSheet, FlatList, StatusBar, Clipboard, SafeAreaView } from 'react-native';
 import FastImage from 'react-native-fast-image';
 
 import { RootNavigator } from './Navigation';
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
     backgroundColor: '#000',
     width: 135,
-    aspectRatio: 9/16,
+    aspectRatio: 9 / 16,
     borderRadius: 8,
     elevation: 3,
     overflow: 'hidden',
@@ -254,35 +254,37 @@ const MainSwitcher = () => {
           style={
             !gameRunning ? styles.hidden : mode === 'game' ? styles.fullscreen : styles.windowed
           }>
-          {mode === 'game' && <GameHeader />}
-          <GameScreen />
-          {/* {mode === 'game' && (
+          <SafeAreaView style={{ flex: 1, backgroundColor: 'black' }}>
+            {mode === 'game' && <GameHeader />}
+            <GameScreen />
+            {/* {mode === 'game' && (
             <LogList />
           )} */}
-          {mode === 'navigator' && (
-            <View
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-              }}>
-              <TouchableOpacity
-                onPress={() => {
-                  if (gameRunning) {
-                    setMode('game');
-                  }
+            {mode === 'navigator' && (
+              <View
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
                 }}>
-                <View
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                  }}
-                />
-              </TouchableOpacity>
-            </View>
-          )}
+                <TouchableOpacity
+                  onPress={() => {
+                    if (gameRunning) {
+                      setMode('game');
+                    }
+                  }}>
+                  <View
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                    }}
+                  />
+                </TouchableOpacity>
+              </View>
+            )}
+          </SafeAreaView>
         </View>
         <RootNavigator />
       </View>
