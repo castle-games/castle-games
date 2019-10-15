@@ -6,28 +6,23 @@ import FastImage from 'react-native-fast-image';
 
 import * as GameScreen from './GameScreen';
 
-export const GameCard = props => {
-  const { loading: queryLoading, error: queryError, data: queryData } = useQuery(
-    gql`
-      query Game($gameId: ID) {
-        game(gameId: $gameId) {
-          gameId
-          title
-          owner {
-            userId
-            username
-          }
-          coverImage {
-            fileId
-            url
-          }
-        }
-      }
-    `,
-    { variables: { gameId: props.gameId } }
-  );
+export const GAME_CARD_FRAGMENT = gql`
+  fragment GameCard on Game {
+    gameId
+    title
+    owner {
+      userId
+      username
+    }
+    coverImage {
+      fileId
+      url
+    }
+  }
+`;
 
-  return !queryData ? null : (
+export const GameCard = ({ game }) => {
+  return (
     <TouchableOpacity
       style={{
         width: '50%',
@@ -35,7 +30,7 @@ export const GameCard = props => {
         overflow: 'hidden',
       }}
       delayPressIn={50}
-      onPress={() => GameScreen.goToGame({ gameId: queryData.game.gameId })}>
+      onPress={() => GameScreen.goToGame({ gameId: game.gameId })}>
       <View
         style={{
           borderRadius: 4,
@@ -55,7 +50,7 @@ export const GameCard = props => {
             width: '100%',
             aspectRatio: 16 / 9,
           }}
-          source={{ uri: queryData.game.coverImage && queryData.game.coverImage.url }}
+          source={{ uri: game.coverImage && game.coverImage.url }}
           resizeMode={FastImage.resizeMode.cover}
         />
         <View
@@ -75,10 +70,10 @@ export const GameCard = props => {
               marginBottom: 4,
               textAlign: 'center',
             }}>
-            {queryData.game.title}
+            {game.title}
           </Text>
           <Text style={{ fontSize: 14, color: '#aaa', fontFamily: 'RTAliasGrotesk-Regular' }}>
-            @{queryData.game.owner.username}
+            @{game.owner.username}
           </Text>
         </View>
       </View>
@@ -91,8 +86,10 @@ const HomeScreen = () => {
     query Games {
       allGames {
         gameId
+        ...GameCard
       }
     }
+    ${GAME_CARD_FRAGMENT}
   `);
 
   return (
@@ -134,7 +131,7 @@ const HomeScreen = () => {
             />
           </View>
           {queryData.allGames.map(game => (
-            <GameCard gameId={game.gameId} key={game.gameId} />
+            <GameCard game={game} key={game.gameId} />
           ))}
         </ScrollView>
       )}

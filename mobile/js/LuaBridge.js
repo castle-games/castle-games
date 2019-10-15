@@ -14,6 +14,7 @@ export const LUA_USER_FRAGMENT = gql`
     username
     name
     photo {
+      fileId
       url
     }
   }

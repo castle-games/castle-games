@@ -5,7 +5,7 @@ import { useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import { useNavigation } from 'react-navigation-hooks';
 
-import { GameCard } from './HomeScreen';
+import { GameCard, GAME_CARD_FRAGMENT } from './HomeScreen';
 import * as Session from './Session';
 
 const ProfilePhoto = props => {
@@ -15,6 +15,7 @@ const ProfilePhoto = props => {
         user(userId: $userId) {
           userId
           photo {
+            fileId
             url
           }
         }
@@ -54,10 +55,12 @@ const ProfileScreen = () => {
         username
         gameItems {
           gameId
+          ...GameCard
         }
         websiteUrl
       }
     }
+    ${GAME_CARD_FRAGMENT}
   `);
 
   const onPressLogOut = async () => {
@@ -126,7 +129,7 @@ const ProfileScreen = () => {
               justifyContent: 'space-between',
             }}>
             {queryData.me.gameItems.map(game => (
-              <GameCard gameId={game.gameId} key={game.gameId} />
+              <GameCard game={game} key={game.gameId} />
             ))}
           </ScrollView>
         </View>
