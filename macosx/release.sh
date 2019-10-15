@@ -1,6 +1,8 @@
 #!/bin/sh
 
 # Build and upload a new version of Castle for macOS
+# Options:
+#   --no-upload: Don't upload, just build.
 
 set -e
 
@@ -45,6 +47,13 @@ rm -rf archive.xcarchive
 /usr/libexec/PlistBuddy -c "Set CFBundleShortVersionString VERSION_UNSET" Supporting/ghost-macosx.plist
 
 echo -e "\n\b\bCreated 'Castle-$MACOS_VERSION.zip'"
+
+# --no-upload prevents actually uploading the release
+if [[ "$*" == *--no-upload* ]]
+then
+    echo "--no-upload flag provided, succeeded without uploading"
+    exit 0
+fi
 
 if [ ! -d castle-releases ]; then
   echo "Cloning 'castle-releases'..."
