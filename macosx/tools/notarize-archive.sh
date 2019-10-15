@@ -33,17 +33,21 @@ while true; do
     echo "Waiting for notarization to finish..."
     xcrun altool --notarization-info "$NOTARIZE_REQUEST_UUID" -u "$APPLE_ID_NOTARIZE_USERNAME" -p "$APPLE_ID_NOTARIZE_PASSWORD" --output-format xml > $NOTARIZE_RESULT_PLIST
     NOTARIZATION_STATUS=`/usr/libexec/PlistBuddy -c "Print :notarization-info:Status" $NOTARIZE_RESULT_PLIST`
-    if [ $NOTARIZATION_STATUS != "in progress" ]; then
+    if [ "$NOTARIZATION_STATUS" != "in progress" ]; then
       break
     fi
     sleep 60
 done
 
-if [ $NOTARIZATION_STATUS != "success" ]; then
+if [ "$NOTARIZATION_STATUS" != "success" ]; then
     echo "Notarization failed:"
     cat $NOTARIZE_RESULT_PLIST
     exit 1
 fi
 
-echo "Notarization succeeded:"
-cat $NOTARIZE_RESULT_PLIST
+echo "Notarization succeeded, downloading log file..."
+NOTARIZE_LOG_FILE=$ARTIFACTS_PATH/notarize-log.txt
+NOTARIZE_LOG_FILE_URL=`/usr/libexec/PlistBuddy -c "Print :notarization-info:LogFileURL" $NOTARIZE_RESULT_PLIST`
+
+curl -k $NOTARIZE_LOG_FILE_URL -o $NOTARIZE_LOG_FILE
+exit 0
