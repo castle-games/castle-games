@@ -9,6 +9,15 @@ let authToken = null;
 
 export const getAuthToken = () => authToken;
 
+const typeNameToIdFieldName = {
+  Game: 'gameId',
+  User: 'userId',
+  HostedFile: 'fileId',
+  Post: 'postId',
+  ChatChannel: 'chatChannelId',
+  ChatMessage: 'chatMessageId',
+};
+
 export const apolloClient = new ApolloClient({
   uri: 'https://api.castle.games/graphql',
   request: operation => {
@@ -16,39 +25,33 @@ export const apolloClient = new ApolloClient({
       headers: authToken ? { ['X-Auth-Token']: authToken } : {},
     });
   },
-  cache: new InMemoryCache({
-    fragmentMatcher: new IntrospectionFragmentMatcher({
-      introspectionQueryResultData: {
-        __schema: {
-          types: [],
-        },
-      },
-    }),
-    dataIdFromObject: o => {
-      switch (o.__typename) {
-        case 'Game':
-          return o.gameId || o.id;
-        case 'User':
-          return o.userId || o.id;
-        case 'HostedFile':
-          return o.fileId || o.id;
-        case 'Post':
-          return o.postId || o.id;
-        case 'ChatChannel':
-          return o.chatChannelId || o.id;
-        case 'ChatMessage':
-          return o.chatMessageId || o.id;
-        default:
-          return o.id;
-      }
-    },
-    cacheRedirects: {
-      Query: {
-        game: (_, args, { getCacheKey }) => getCacheKey({ __typename: 'Game', id: args.gameId }),
-        user: (_, args, { getCacheKey }) => getCacheKey({ __typename: 'User', id: args.userId }),
-      },
-    },
-  }),
+  // cache: new InMemoryCache({
+  //   fragmentMatcher: new IntrospectionFragmentMatcher({
+  //     introspectionQueryResultData: {
+  //       __schema: {
+  //         types: [],
+  //       },
+  //     },
+  //   }),
+  //   dataIdFromObject: o => {
+  //     let id = o.id;
+  //     const idField = typeNameToIdFieldName[o.__typename];
+  //     if (idField) {
+  //       if (o[idField]) {
+  //         id = o[idField];
+  //       } else {
+  //         console.log(`DEBUG: Missing ID Field -- ${o.__typename} -- ${id}`);
+  //       }
+  //     }
+  //     return o.__typename + '_' + id;
+  //   },
+  //   cacheRedirects: {
+  //     Query: {
+  //       game: (_, args, { getCacheKey }) => getCacheKey({ __typename: 'Game', id: args.gameId }),
+  //       user: (_, args, { getCacheKey }) => getCacheKey({ __typename: 'User', id: args.userId }),
+  //     },
+  //   },
+  // }),
 });
 
 export const initAsync = async () => {
