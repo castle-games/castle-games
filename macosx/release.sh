@@ -40,18 +40,21 @@ ZIP_PATH=Castle-$MACOS_VERSION.zip
 
 ./tools/verify-gatekeeper.sh $APP_PATH
 
-echo "Zipping and cleaning up..."
-ditto -c -k --sequesterRsrc --keepParent $APP_PATH $ZIP_PATH
-rm -rf archive.xcarchive
+echo "Cleaning up source plists..."
 
 /usr/libexec/PlistBuddy -c "Set GHGitHash GIT_HASH_UNSET" Supporting/ghost-macosx.plist
 /usr/libexec/PlistBuddy -c "Set CFBundleVersion VERSION_UNSET" Supporting/ghost-macosx.plist
 /usr/libexec/PlistBuddy -c "Set CFBundleShortVersionString VERSION_UNSET" Supporting/ghost-macosx.plist
 
-echo -e "\n\b\bCreated 'Castle-$MACOS_VERSION.zip'"
-
 # notarize the archive
-./tools/notarize-archive.sh $ZIP_PATH
+echo "Begin notarization..."
+./tools/notarize-archive.sh $APP_PATH
+
+echo "Zipping and cleaning up archive..."
+ditto -c -k --sequesterRsrc --keepParent $APP_PATH $ZIP_PATH
+rm -rf archive.xcarchive
+
+echo -e "\n\b\bCreated '$ZIP_PATH'"
 
 mkdir -p /tmp/castle-build-artifacts
 mv $ZIP_PATH /tmp/castle-build-artifacts/.

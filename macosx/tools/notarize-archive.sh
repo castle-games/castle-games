@@ -1,16 +1,20 @@
 #!/bin/sh
 # 
-# Notarize an existing Castle archive, which is expected to be zipped
+# Notarize an existing Castle app
 
 set -e
 
 if [ -z "$1" ]
 then
-    echo "usage: notarize-archive.sh castle-zipped-archive-path"
+    echo "usage: notarize-archive.sh castle-app-path"
     exit 1
 fi
 
-ZIP_PATH=$1
+APP_PATH=$1
+ZIP_PATH=castle-notarize.zip
+
+echo "Zipping binary for notarization..."
+ditto -c -k --sequesterRsrc --keepParent $APP_PATH $ZIP_PATH
 
 ARTIFACTS_PATH=/tmp/castle-notarize-artifacts
 mkdir -p $ARTIFACTS_PATH
@@ -50,4 +54,9 @@ NOTARIZE_LOG_FILE=$ARTIFACTS_PATH/notarize-log.txt
 NOTARIZE_LOG_FILE_URL=`/usr/libexec/PlistBuddy -c "Print :notarization-info:LogFileURL" $NOTARIZE_RESULT_PLIST`
 
 curl -k $NOTARIZE_LOG_FILE_URL -o $NOTARIZE_LOG_FILE
+
+echo "Stapling notarization..."
+echo "stapler staple $APP_PATH"
+xcrun stapler staple "$APP_PATH"
+
 exit 0
