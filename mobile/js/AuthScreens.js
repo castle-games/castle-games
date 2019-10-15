@@ -163,7 +163,7 @@ const CreateAccountForm = () => {
   };
 
   const onPressPrivacyPolicy = () => {
-    Linking.openURL('https://castle.games/legal/privacy')
+    Linking.openURL('https://castle.games/legal/privacy');
   };
 
   const onPressCreateAccount = async () => {
@@ -297,7 +297,7 @@ const WithHeader = ({ children }) => (
       <FastImage
         style={{
           width: 80,
-          aspectRatio: 5/6,
+          aspectRatio: 5 / 6,
           marginBottom: 8,
         }}
         source={require('../assets/images/castle-b-spinning.gif')}

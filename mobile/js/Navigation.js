@@ -32,10 +32,12 @@ const HomeNavigator = createStackNavigator({
             }}
             source={require('../assets/images/castle-b-mini.gif')}
           />
-          <Text style={{ fontSize: 24, letterSpacing: 0.5, fontFamily: 'RTAliasGrotesk-Bold' }}>Castle</Text>
+          <Text style={{ fontSize: 24, letterSpacing: 0.5, fontFamily: 'RTAliasGrotesk-Bold' }}>
+            Castle
+          </Text>
         </View>
       ),
-      headerStyle: { elevation: 2 }
+      headerStyle: { elevation: 2 },
     },
   },
 });
@@ -53,7 +55,7 @@ const TabNavigator = createBottomTabNavigator(
       screen: HomeNavigator,
       navigationOptions: {
         tabBarIcon: ({ focused, tintColor }) => {
-          return(
+          return (
             <Image
               style={{
                 width: 28,
@@ -70,7 +72,7 @@ const TabNavigator = createBottomTabNavigator(
       screen: ProfileNavigator,
       navigationOptions: {
         tabBarIcon: ({ focused, tintColor }) => {
-          return(
+          return (
             <Image
               style={{
                 width: 28,
@@ -93,7 +95,7 @@ const TabNavigator = createBottomTabNavigator(
       },
       tabStyle: {
         padding: 6,
-      }
+      },
     },
   }
 );
