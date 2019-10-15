@@ -36,10 +36,12 @@ echo "Begin codesigning..."
 ./tools/codesign-archive.sh archive.xcarchive $TEMP_CERT_PATH/macos/CastleDeveloperID.p12
 
 APP_PATH=archive.xcarchive/Products/Applications/Castle.app
+ZIP_PATH=Castle-$MACOS_VERSION.zip
+
 ./tools/verify-gatekeeper.sh $APP_PATH
 
 echo "Zipping and cleaning up..."
-ditto -c -k --sequesterRsrc --keepParent $APP_PATH Castle-$MACOS_VERSION.zip
+ditto -c -k --sequesterRsrc --keepParent $APP_PATH $ZIP_PATH
 rm -rf archive.xcarchive
 
 /usr/libexec/PlistBuddy -c "Set GHGitHash GIT_HASH_UNSET" Supporting/ghost-macosx.plist
@@ -48,8 +50,11 @@ rm -rf archive.xcarchive
 
 echo -e "\n\b\bCreated 'Castle-$MACOS_VERSION.zip'"
 
+# notarize the archive
+./tools/notarize-archive.sh $ZIP_PATH
+
 mkdir -p /tmp/castle-build-artifacts
-mv CASTLE-$MACOS_VERSION.zip /tmp/castle-build-artifacts/.
+mv $ZIP_PATH /tmp/castle-build-artifacts/.
 
 # --no-upload prevents actually uploading the release
 if [[ "$*" == *--no-upload* ]]
