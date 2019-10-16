@@ -56,7 +56,7 @@ buck-out/
 *.jsbundle
 
 # CocoaPods
-/ios/Pods/
+#/ios/Pods/
 
 # Love native build
 android/love/.externalNativeBuild/
