@@ -1,3 +1,3 @@
 # Castle for macOS
 
-- For codesigning, see [CODESIGNING](CODESIGNING.md).
+- For CI, codesigning, notarization, certificates, gatekeeper, etc. see [DISTRIBUTION.md](DISTRIBUTION.md).
