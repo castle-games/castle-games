@@ -57,6 +57,7 @@ find $APP_PATH/Contents/Frameworks -maxdepth 1 -name "*.framework" -exec codesig
 
 echo "Try codesigning Resource binaries..."
 find $APP_PATH/Contents/Resources -perm +111 -type f -exec codesign --verbose --deep --force --keychain $TEMP_KEYCHAIN_PATH -s "${CODESIGN_IDENTITY}" {} \;
+find $APP_PATH/Contents/Resources/obs/bin -name "*.dylib" -exec codesign --verbose --deep --force --keychain $TEMP_KEYCHAIN_PATH -s "${CODESIGN_IDENTITY}" {} \;
 
 echo "Codesigning Castle.app..."
 codesign --verbose --deep --keychain $TEMP_KEYCHAIN_PATH -s "${CODESIGN_IDENTITY}" $APP_PATH
