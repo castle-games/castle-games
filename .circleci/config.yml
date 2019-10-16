@@ -4,7 +4,6 @@ jobs:
     branches:
       only:
         - release/macos
-        - ben/notarize-macos
 
     macos:
       xcode: "10.1.0"
@@ -14,7 +13,7 @@ jobs:
 
       - run:
           name: Build and Upload
-          command: cd macosx && ./release.sh --no-upload
+          command: cd macosx && ./release.sh
 
       - store_artifacts:
           path: /tmp/castle-notarize-artifacts
