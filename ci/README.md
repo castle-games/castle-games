@@ -3,10 +3,9 @@
 Azure listens to release/win and runs azure-pipelines-win.yml.
 https://dev.azure.com/Castle-Games/Castle%20Desktop/_build?definitionId=3
 
-### Mac
+### macOS
 
-CircleCI listens to release/macos and runs .circleci/config.yml.
-https://circleci.com/gh/castle-games/ghost
+CircleCI listens to the `release/macos` branch and runs `../.circleci/config.yml`. Also see: [../macosx/DISTRIBUTION.md](../macosx/DISTRIBUTION.md).
 
 ### Shared
 
