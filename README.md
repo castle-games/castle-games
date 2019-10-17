@@ -20,10 +20,6 @@
   |-- win               # Windows-specific native code
 ```
 
-## Releases
-
-For macOS, see [macosx/DISTRIBUTION.md](macosx/DISTRIBUTION.md).
-
 ## Code Style
 
 - Run `format.sh` after making changes to native code.
@@ -31,18 +27,11 @@ For macOS, see [macosx/DISTRIBUTION.md](macosx/DISTRIBUTION.md).
 
 ## Run on macOS
 
-### Prereqs
+See [macosx/README.md](macosx/README.md).
 
-- [Homebrew](https://brew.sh/)
-- Git LFS (`brew install git-lfs`, Then run `git lfs install` in this repo)
-- `git lfs pull`
+## Run on mobile
 
-### Run from Xcode
-
-- Open './macosx/ghost.xcodeproj' with Xcode.
-- Run the 'ghost-macosx' target:
-  ![Run Castle on macOS](run-mac.png)
-- If you want to test changes to the React UI, follow the readme in the `desktop` directory.
+See [mobile/README.md](mobile/README.md).
 
 ## Run on Windows
 
