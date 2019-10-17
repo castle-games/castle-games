@@ -22,7 +22,7 @@
 
 ## Releases
 
-See [Desktop Client Release Process](https://github.com/castle-games/ghost/wiki/Desktop-client-release-process).
+For macOS, see [macosx/DISTRIBUTION.md](macosx/DISTRIBUTION.md).
 
 ## Code Style
 
