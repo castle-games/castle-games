@@ -49,7 +49,7 @@ const Button = props => {
   return (
     <View
       style={{
-        backgroundColor: '#000',
+        backgroundColor: '#9955c8',
         borderRadius: 4,
         paddingVertical: 8,
         paddingHorizontal: 12,
@@ -283,12 +283,12 @@ const WithHeader = ({ children }) => (
   <View
     style={{
       flex: 1,
-      backgroundColor: '#ffc21c',
+      backgroundColor: '#ffe00e',
       alignItems: 'center',
       justifyContent: 'center',
       padding: 16,
     }}>
-    <StatusBar backgroundColor="#ffc21c" barStyle="dark-content" />
+    <StatusBar backgroundColor="#ffe00e" barStyle="dark-content" />
     <View
       style={{
         alignItems: 'center',
@@ -296,11 +296,11 @@ const WithHeader = ({ children }) => (
       }}>
       <FastImage
         style={{
-          width: 80,
-          aspectRatio: 5 / 6,
-          marginBottom: 8,
+          width: 100,
+          aspectRatio: 1,
+          marginBottom: 16,
         }}
-        source={require('../assets/images/castle-b-spinning.gif')}
+        source={require('../assets/images/castle-classic-white.png')}
       />
       <Text
         style={{

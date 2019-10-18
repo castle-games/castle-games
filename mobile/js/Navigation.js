@@ -25,12 +25,12 @@ const HomeNavigator = createStackNavigator({
         <View style={{ padding: 16, flexDirection: 'row', alignItems: 'flex-end' }}>
           <FastImage
             style={{
-              width: 20,
-              height: 36,
-              marginBottom: 6,
+              width: 30,
+              aspectRatio: 1,
+              marginBottom: 4,
               marginRight: 8,
             }}
-            source={require('../assets/images/castle-b-mini.gif')}
+            source={require('../assets/images/castle-classic-yellow.png')}
           />
           <Text style={{ fontSize: 24, letterSpacing: 0.5, fontFamily: 'RTAliasGrotesk-Bold' }}>
             Castle
@@ -88,7 +88,7 @@ const TabNavigator = createBottomTabNavigator(
   },
   {
     tabBarOptions: {
-      activeTintColor: '#000',
+      activeTintColor: '#9955c8',
       inactiveTintColor: '#aaa',
       style: {
         height: 60,
