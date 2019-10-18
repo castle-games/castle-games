@@ -1,5 +1,5 @@
 import React, { useState, Fragment } from 'react';
-import { View, TouchableOpacity, Text, TextInput, StatusBar, Linking } from 'react-native';
+import { View, TouchableOpacity, Text, TextInput, StatusBar, Linking, ActivityIndicator } from 'react-native';
 import { useNavigation, useNavigationParam } from 'react-navigation-hooks';
 import FastImage from 'react-native-fast-image';
 
@@ -14,6 +14,10 @@ const textInputStyle = {
   paddingHorizontal: 12,
   marginVertical: 8,
 };
+
+const disabledTextInputStyle = {
+  backgroundColor: '#ddd',
+}
 
 const Announcement = props => {
   return (
@@ -52,11 +56,26 @@ const Button = props => {
         backgroundColor: '#9955c8',
         borderRadius: 4,
         paddingVertical: 8,
-        paddingHorizontal: 12,
+        paddingHorizontal: 16,
         margin: 8,
         alignItems: 'center',
+        overflow: 'hidden',
       }}>
       <Text style={{ color: '#fff', fontWeight: 'bold' }}>{props.text}</Text>
+      {props.spinner ? (
+        <View
+          style={{
+            backgroundColor: '#9955c8',
+            position: 'absolute',
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+            justifyContent: 'center',
+          }}>
+          <ActivityIndicator size='small' color='#fff' />
+        </View>
+      ) : null}
     </View>
   );
 };
@@ -122,18 +141,20 @@ const LoginForm = () => {
         </TouchableOpacity>
       </View>
       <TextInput
-        style={textInputStyle}
+        style={[signingIn ? [textInputStyle, disabledTextInputStyle] : textInputStyle]}
         autoCapitalize="none"
         onChangeText={newUsername => setUsername(newUsername)}
         placeholder="Email or username"
+        editable={!signingIn}
       />
       <TextInput
-        style={textInputStyle}
+        style={[signingIn ? [textInputStyle, disabledTextInputStyle] : textInputStyle]}
         autoCapitalize="none"
         secureTextEntry
         textContentType="password"
         onChangeText={newPassword => setPassword(newPassword)}
         placeholder="Password"
+        editable={!signingIn}
       />
       <TouchableOpacity
         style={{ paddingTop: 8, paddingBottom: 16 }}
@@ -141,7 +162,7 @@ const LoginForm = () => {
         <Text>Forgot password?</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={onPressSignIn}>
-        <Button text="Log In" />
+        <Button text="Log In" spinner={signingIn} />
       </TouchableOpacity>
     </Fragment>
   );
