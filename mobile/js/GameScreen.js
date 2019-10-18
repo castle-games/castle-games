@@ -9,6 +9,7 @@ import * as MainSwitcher from './MainSwitcher';
 import * as LuaBridge from './LuaBridge';
 import * as Session from './Session';
 import * as GhostChannels from './ghost/GhostChannels';
+import * as Tools from './Tools';
 
 // Lots of APIs need regular 'https://' URIs
 const castleUriToHTTPSUri = uri => uri.replace(/^castle:\/\//, 'https://');
@@ -273,16 +274,19 @@ const GameView = ({ gameId, gameUri, extras }) => {
 
   LuaBridge.useLuaBridge({ eventsReady, game });
 
+  const toolsHook = Tools.useTools({ eventsReady });
+
   return (
     <View style={{ flex: 1 }}>
       {game && eventsReady && initialDataHook.sent ? (
         // Render `GhostView` when ready
         <GhostView
-          style={{ width: '100%', height: '100%' }}
+          style={{ flex: 1 }}
           uri={game.entryPoint}
           dimensionsSettings={dimensionsSettings}
         />
       ) : null}
+      {toolsHook.visible ? toolsHook.render : null}
 
       {!luaLoadingHook.loaded ? (
         // Render loader overlay until Lua finishes loading
