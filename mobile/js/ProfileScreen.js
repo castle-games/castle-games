@@ -75,7 +75,7 @@ const ProfileScreen = () => {
         backgroundColor: '#f2f2f2',
       }}>
       {queryLoading ? null : (
-        <View>
+        <Fragment>
           <View
             style={{
               width: '100%',
@@ -132,7 +132,7 @@ const ProfileScreen = () => {
               <GameCard game={game} key={game.gameId} />
             ))}
           </ScrollView>
-        </View>
+        </Fragment>
       )}
     </View>
   );
