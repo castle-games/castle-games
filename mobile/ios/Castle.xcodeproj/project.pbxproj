@@ -19,6 +19,7 @@
 		4577F0FF47C73EA9A0ECC7F6 /* libPods-Castle-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BDA1BD867AE232F85BAD0D0B /* libPods-Castle-tvOS.a */; };
 		4917391D17F4BFD16B3A557B /* libPods-CastleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A2BB3156AC1D98E2389E1CF /* libPods-CastleTests.a */; };
 		752DFF0FA2404564937762CE /* RTAliasGrotesk-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0C7DDD807F684FD0A7E4CD7E /* RTAliasGrotesk-Bold.otf */; };
+		A1149173235A0E6C0091184F /* GhostInputView.mm in Sources */ = {isa = PBXBuildFile; fileRef = A1149172235A0E6C0091184F /* GhostInputView.mm */; };
 		A14FE39F2355CB83003B7EA0 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A14FE39E2355CB83003B7EA0 /* AudioToolbox.framework */; };
 		A14FE3A12355CB8B003B7EA0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A14FE3A02355CB8B003B7EA0 /* AVFoundation.framework */; };
 		A14FE3A32355CB93003B7EA0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A14FE3A22355CB93003B7EA0 /* CoreGraphics.framework */; };
@@ -127,6 +128,7 @@
 		7A2BB3156AC1D98E2389E1CF /* libPods-CastleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CastleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8865F844F710B24790E91D03 /* Pods-Castle-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Castle-tvOS.release.xcconfig"; path = "Target Support Files/Pods-Castle-tvOS/Pods-Castle-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		8C185AA70A18F1954FE6686B /* Pods-Castle-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Castle-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-Castle-tvOS/Pods-Castle-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		A1149172235A0E6C0091184F /* GhostInputView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GhostInputView.mm; sourceTree = "<group>"; };
 		A14FE3892355CA44003B7EA0 /* SDL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL.xcodeproj; path = "../../ghost-extensions/SDL2-2.0.8/Xcode-iOS/SDL/SDL.xcodeproj"; sourceTree = "<group>"; };
 		A14FE3952355CA7B003B7EA0 /* liblove.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = liblove.xcodeproj; path = ../../love/platform/xcode/liblove.xcodeproj; sourceTree = "<group>"; };
 		A14FE39E2355CB83003B7EA0 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -256,6 +258,7 @@
 		13B07FAE1A68108700A75B9A /* Castle */ = {
 			isa = PBXGroup;
 			children = (
+				A1149172235A0E6C0091184F /* GhostInputView.mm */,
 				A1CCBA18235518C7009F4DDD /* GhostView.m */,
 				A1CCBA1423551869009F4DDD /* GhostChannels.mm */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
@@ -901,6 +904,7 @@
 				A14FE3F42355CF2D003B7EA0 /* lpcap.c in Sources */,
 				A14FE3F12355CF2D003B7EA0 /* lptree.c in Sources */,
 				A14FE3F32355CF2D003B7EA0 /* lpprint.c in Sources */,
+				A1149173235A0E6C0091184F /* GhostInputView.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
