@@ -33,12 +33,19 @@ echo "Uploaded binary to Apple: Request UUID is $NOTARIZE_REQUEST_UUID"
 sleep 15
 
 NOTARIZATION_STATUS=""
+TRIES=0
 while true; do
     echo "Waiting for notarization to finish..."
+    set +e # this command has intermittent failures
     xcrun altool --notarization-info "$NOTARIZE_REQUEST_UUID" -u "$APPLE_ID_NOTARIZE_USERNAME" -p "$APPLE_ID_NOTARIZE_PASSWORD" --output-format xml > $NOTARIZE_RESULT_PLIST
-    NOTARIZATION_STATUS=`/usr/libexec/PlistBuddy -c "Print :notarization-info:Status" $NOTARIZE_RESULT_PLIST`
+    NOTARIZATION_STATUS=$(/usr/libexec/PlistBuddy -c "Print :notarization-info:Status" $NOTARIZE_RESULT_PLIST || echo "in progress")
+    set -e
     if [ "$NOTARIZATION_STATUS" != "in progress" ]; then
       break
+    fi
+    ((TRIES=TRIES+1))
+    if [ $TRIES -gt 15 ]; then
+        break
     fi
     sleep 60
 done
