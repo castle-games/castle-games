@@ -207,6 +207,12 @@ const CreateAccountForm = () => {
 
   return (
     <Fragment>
+      {errored ? (
+        <Announcement
+          headline="There was a problem"
+          body="Please ensure that your information is correct."
+        />
+      ) : null}
       <View style={{ paddingBottom: 16, alignItems: 'center' }}>
         <Text style={{ fontSize: 20 }}>Create a new account</Text>
         <TouchableOpacity onPress={onPressLogin}>
@@ -284,6 +290,12 @@ const ForgotPasswordForm = () => {
 
   return (
     <Fragment>
+      {errored ? (
+        <Announcement
+          headline="There was a problem"
+          body="Please ensure that the email or username is correct."
+        />
+      ) : null}
       <View style={{ paddingBottom: 16 }}>
         <Text style={{ fontSize: 20 }}>Forgot your password?</Text>
       </View>
