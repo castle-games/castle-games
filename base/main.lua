@@ -143,13 +143,11 @@ if isMobile then
             local k = downChannel:pop()
             isKeyDown[k] = true
             love.keypressed(k, k, false)
-            print('LUA DOWN', k)
         end
         while upChannel:getCount() > 0 do
             local k = upChannel:pop()
             isKeyDown[k] = nil
             love.keyreleased(k, k)
-            print('LUA UP', k)
         end
     end
 
