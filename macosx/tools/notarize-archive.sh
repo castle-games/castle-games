@@ -30,7 +30,7 @@ xcrun altool --notarize-app -t osx -f $ZIP_PATH --primary-bundle-id "games.castl
 NOTARIZE_REQUEST_UUID=`/usr/libexec/PlistBuddy -c "Print :notarization-upload:RequestUUID" $UPLOAD_REQUEST_PLIST`
 
 echo "Uploaded binary to Apple: Request UUID is $NOTARIZE_REQUEST_UUID"
-sleep 1
+sleep 15
 
 NOTARIZATION_STATUS=""
 while true; do
