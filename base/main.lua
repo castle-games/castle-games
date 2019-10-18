@@ -132,18 +132,24 @@ local updateMobileKeyboardEvents
 if isMobile then
     local isKeyDown = {}
 
+    local downChannel = love.thread.getChannel('GHOST_INPUT_DOWN')
+    local upChannel = love.thread.getChannel('GHOST_INPUT_UP')
+
+    downChannel:clear()
+    upChannel:clear()
+
     function updateMobileKeyboardEvents()
-        local pressed = love.thread.getChannel('GHOST_MOBILE_KEY_PRESSED')
-        local released = love.thread.getChannel('GHOST_MOBILE_KEY_RELEASED')
-        while pressed:getCount() > 0 do
-            local k = pressed:pop()
+        while downChannel:getCount() > 0 do
+            local k = downChannel:pop()
             isKeyDown[k] = true
-            love.keypressed(k)
+            love.keypressed(k, k, false)
+            print('LUA DOWN', k)
         end
-        while released:getCount() > 0 do
-            local k = released:pop()
+        while upChannel:getCount() > 0 do
+            local k = upChannel:pop()
             isKeyDown[k] = nil
-            love.keyreleased(k)
+            love.keyreleased(k, k)
+            print('LUA UP', k)
         end
     end
 
