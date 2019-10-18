@@ -10,6 +10,7 @@ import * as LuaBridge from './LuaBridge';
 import * as Session from './Session';
 import * as GhostChannels from './ghost/GhostChannels';
 import * as Tools from './Tools';
+import GhostInputView from './ghost/GhostInputView';
 
 // Lots of APIs need regular 'https://' URIs
 const castleUriToHTTPSUri = uri => uri.replace(/^castle:\/\//, 'https://');
@@ -276,6 +277,16 @@ const GameView = ({ gameId, gameUri, extras }) => {
 
   const toolsHook = Tools.useTools({ eventsReady });
 
+  const keyStyle = {
+    width: 60,
+    height: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 6,
+    margin: 8,
+    backgroundColor: 'rgba(128, 128, 128, 0.5)',
+  };
+
   return (
     <View style={{ flex: 1 }}>
       {game && eventsReady && initialDataHook.sent ? (
@@ -287,6 +298,31 @@ const GameView = ({ gameId, gameUri, extras }) => {
         />
       ) : null}
       {toolsHook.visible ? toolsHook.render : null}
+
+      <View
+        pointerEvents="box-none"
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <GhostInputView style={keyStyle} input="up">
+          <Text>^</Text>
+        </GhostInputView>
+        <GhostInputView style={keyStyle} input="down">
+          <Text>V</Text>
+        </GhostInputView>
+        <GhostInputView style={keyStyle} input="left">
+          <Text>{'<'}</Text>
+        </GhostInputView>
+        <GhostInputView style={keyStyle} input="right">
+          <Text>{'>'}</Text>
+        </GhostInputView>
+      </View>
 
       {!luaLoadingHook.loaded ? (
         // Render loader overlay until Lua finishes loading
