@@ -6,7 +6,7 @@ const listenerLists = {}; // `eventName` -> `listenerId` -> `handler`
 
 let nextListenerId = 1;
 
-setInterval(async () => {
+const checkEvents = async () => {
   (await GhostChannels.popAllAsync('LUA_TO_JS_EVENTS')).forEach(eventJson => {
     const { name, params } = JSON.parse(eventJson);
 
@@ -15,7 +15,9 @@ setInterval(async () => {
       Object.values(listenerList).forEach(handler => handler(params));
     }
   });
-});
+  requestAnimationFrame(checkEvents);
+};
+requestAnimationFrame(checkEvents);
 
 export const listen = (name, handler) => {
   let listenerList = listenerLists[name];
