@@ -21,9 +21,12 @@ const typeNameToIdFieldName = {
 export const apolloClient = new ApolloClient({
   uri: 'https://api.castle.games/graphql',
   request: operation => {
-    operation.setContext({
-      headers: authToken ? { ['X-Auth-Token']: authToken } : {},
-    });
+    const headers = {};
+    headers['X-Platform'] = 'mobile';
+    if (authToken) {
+      headers['X-Auth-Token'] = authToken;
+    }
+    operation.setContext({ headers });
   },
   // cache: new InMemoryCache({
   //   fragmentMatcher: new IntrospectionFragmentMatcher({
