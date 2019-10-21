@@ -28,6 +28,13 @@ export const GameCard = ({ game }) => {
         width: '50%',
         padding: 8,
         overflow: 'hidden',
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 1,
+        },
+        shadowOpacity: 0.18,
+        shadowRadius: 1.00,
       }}
       delayPressIn={50}
       onPress={() => GameScreen.goToGame({ gameId: game.gameId })}>
@@ -36,13 +43,6 @@ export const GameCard = ({ game }) => {
           borderRadius: 4,
           overflow: 'hidden',
           backgroundColor: 'white',
-          shadowColor: 'black',
-          shadowOpacity: 0.1,
-          shadowRadius: 8,
-          shadowOffset: {
-            width: 0,
-            height: 4,
-          },
           elevation: 1,
         }}>
         <FastImage

@@ -85,13 +85,13 @@ const ProfileScreen = () => {
               alignItems: 'center',
               paddingBottom: 24,
               backgroundColor: '#fff',
-              shadowColor: 'black',
-              shadowOpacity: 0.1,
-              shadowRadius: 8,
+              shadowColor: "#000",
               shadowOffset: {
                 width: 0,
-                height: 4,
+                height: 1,
               },
+              shadowOpacity: 0.20,
+              shadowRadius: 1.41,
               elevation: 2,
             }}>
             <View style={{ width: 96, paddingVertical: 16 }}>
