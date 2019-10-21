@@ -1,4 +1,4 @@
-package com.castle;
+package games.castle;
 
 import android.view.KeyEvent;
 

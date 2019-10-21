@@ -128,7 +128,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.castle"
+        applicationId "games.castle"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
