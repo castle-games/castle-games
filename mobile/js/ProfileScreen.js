@@ -7,6 +7,7 @@ import { useNavigation } from 'react-navigation-hooks';
 
 import { GameCard, GAME_CARD_FRAGMENT } from './HomeScreen';
 import * as Session from './Session';
+import * as GameScreen from './GameScreen';
 
 const ProfilePhoto = props => {
   const { loading: queryLoading, error: queryError, data: queryData } = useQuery(
@@ -66,6 +67,7 @@ const ProfileScreen = () => {
   const onPressLogOut = async () => {
     await Session.signOutAsync();
     navigate('LoginScreen');
+    GameScreen.goToGame({});
   };
 
   return (
