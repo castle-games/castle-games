@@ -192,59 +192,63 @@ const useLuaMultiplayerClient = ({ eventsReady, game, sessionId }) => {
     eventsReady,
     eventName: 'CASTLE_CONNECT_MULTIPLAYER_CLIENT_REQUEST',
     handler: async ({ mediaUrl }) => {
-      if (sessionId) {
-        let connectionParams;
-        if (game.gameId) {
-          // Registered game
-          connectionParams = {
-            gameId: game.gameId,
-            castleFileUrl: game.url,
-            entryPoint: null,
-            sessionId,
-            isStaging: false,
-          };
-        } else {
-          // Unregistered game, just use `entryPoint`
-          connectionParams = {
-            gameId: null,
-            castleFileUrl: null,
-            entryPoint: mediaUrl,
-            sessionId,
-            isStaging: false,
-          };
-        }
-        const result = await Session.apolloClient.mutate({
-          mutation: gql`
-            mutation ConnectMultiplayerClient(
-              $gameId: ID
-              $castleFileUrl: String
-              $entryPoint: String
-              $sessionId: String
-              $isStaging: Boolean
+      let connectionParams;
+      if (game.gameId) {
+        // Registered game
+        connectionParams = {
+          gameId: game.gameId,
+          castleFileUrl: game.url,
+          entryPoint: null,
+          sessionId,
+          isStaging: false,
+        };
+      } else {
+        // Unregistered game, just use `entryPoint`
+        connectionParams = {
+          gameId: null,
+          castleFileUrl: null,
+          entryPoint: mediaUrl,
+          sessionId,
+          isStaging: false,
+        };
+      }
+      const result = await Session.apolloClient.mutate({
+        mutation: gql`
+          mutation ConnectMultiplayerClient(
+            $gameId: ID
+            $castleFileUrl: String
+            $entryPoint: String
+            $sessionId: String
+            $isStaging: Boolean
+          ) {
+            joinMultiplayerSession(
+              gameId: $gameId
+              castleFileUrl: $castleFileUrl
+              entryPoint: $entryPoint
+              sessionId: $sessionId
+              isStaging: $isStaging
             ) {
-              joinMultiplayerSession(
-                gameId: $gameId
-                castleFileUrl: $castleFileUrl
-                entryPoint: $entryPoint
-                sessionId: $sessionId
-                isStaging: $isStaging
-              ) {
-                sessionId
-                address
-                isNewSession
-                sessionToken
-              }
+              sessionId
+              address
+              isNewSession
+              sessionToken
             }
-          `,
-          variables: connectionParams,
+          }
+        `,
+        variables: connectionParams,
+      });
+      if (result.data) {
+        const {
+          address,
+          sessionId,
+          isNewSession,
+          sessionToken,
+        } = result.data.joinMultiplayerSession;
+        GhostEvents.sendAsync('CASTLE_CONNECT_MULTIPLAYER_CLIENT_RESPONSE', {
+          address,
+          sessionToken,
         });
-        if (result.data) {
-          const { address, sessionToken } = result.data.joinMultiplayerSession;
-          GhostEvents.sendAsync('CASTLE_CONNECT_MULTIPLAYER_CLIENT_RESPONSE', {
-            address,
-            sessionToken,
-          });
-        }
+        console.log(`session: ${sessionId}, ${isNewSession}`);
       }
     },
   });
@@ -276,16 +280,6 @@ const GameView = ({ gameId, gameUri, extras, showInputs }) => {
   LuaBridge.useLuaBridge({ eventsReady, game });
 
   const toolsHook = Tools.useTools({ eventsReady });
-
-  const keyStyle = {
-    width: 60,
-    height: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 6,
-    margin: 8,
-    backgroundColor: 'rgba(128, 128, 128, 0.5)',
-  };
 
   return (
     <View style={{ flex: 1 }}>
