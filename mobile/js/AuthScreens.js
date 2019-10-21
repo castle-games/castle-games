@@ -116,8 +116,6 @@ const LoginForm = () => {
     navigate('ForgotPasswordScreen');
   };
 
-  // TODO: Show progress indicator if `signingIn`.
-
   return (
     <Fragment>
       {errored ? (
@@ -141,14 +139,14 @@ const LoginForm = () => {
         </TouchableOpacity>
       </View>
       <TextInput
-        style={[signingIn ? [textInputStyle, disabledTextInputStyle] : textInputStyle]}
+        style={signingIn ? [textInputStyle, disabledTextInputStyle] : textInputStyle}
         autoCapitalize="none"
         onChangeText={newUsername => setUsername(newUsername)}
         placeholder="Email or username"
         editable={!signingIn}
       />
       <TextInput
-        style={[signingIn ? [textInputStyle, disabledTextInputStyle] : textInputStyle]}
+        style={signingIn ? [textInputStyle, disabledTextInputStyle] : textInputStyle}
         autoCapitalize="none"
         secureTextEntry
         textContentType="password"
@@ -203,8 +201,6 @@ const CreateAccountForm = () => {
     }
   };
 
-  // TODO: Show progress indicator if `creatingAccount`, error message if `errored`.
-
   return (
     <Fragment>
       {errored ? (
@@ -223,28 +219,32 @@ const CreateAccountForm = () => {
         </TouchableOpacity>
       </View>
       <TextInput
-        style={textInputStyle}
+        style={creatingAccount ? [textInputStyle, disabledTextInputStyle] : textInputStyle}
         autoCapitalize="none"
         placeholder="Username"
         onChangeText={newUsername => setUsername(newUsername)}
+        editable={!creatingAccount}
       />
       <TextInput
-        style={textInputStyle}
+        style={creatingAccount ? [textInputStyle, disabledTextInputStyle] : textInputStyle}
         placeholder="Your name"
         onChangeText={newName => setName(newName)}
+        editable={!creatingAccount}
       />
       <TextInput
-        style={textInputStyle}
+        style={creatingAccount ? [textInputStyle, disabledTextInputStyle] : textInputStyle}
         autoCapitalize="none"
         placeholder="Email address"
         onChangeText={newEmail => setEmail(newEmail)}
+        editable={!creatingAccount}
       />
       <TextInput
-        style={textInputStyle}
+        style={creatingAccount ? [textInputStyle, disabledTextInputStyle] : textInputStyle}
         secureTextEntry
         textContentType="password"
         placeholder="New password"
         onChangeText={newPassword => setPassword(newPassword)}
+        editable={!creatingAccount}
       />
       <View style={{ paddingTop: 8, paddingBottom: 16 }}>
         <TouchableOpacity onPress={onPressPrivacyPolicy}>
@@ -255,7 +255,7 @@ const CreateAccountForm = () => {
         </TouchableOpacity>
       </View>
       <TouchableOpacity onPress={onPressCreateAccount}>
-        <Button text="Create Account" />
+        <Button text="Create Account" spinner={creatingAccount} />
       </TouchableOpacity>
     </Fragment>
   );
@@ -267,7 +267,6 @@ const ForgotPasswordForm = () => {
   const [username, setUsername] = useState('');
 
   const [resettingPassword, setResettingPassword] = useState(false);
-  const [succeeded, setSucceeded] = useState(false);
   const [errored, setErrored] = useState(false);
 
   const onPressResetPassword = async () => {
@@ -285,9 +284,6 @@ const ForgotPasswordForm = () => {
     }
   };
 
-  // TODO: Show progress indicator if `resettingPassword`, error message if `errored`, and a
-  //       "We sent you an email" message if `succeeded`.
-
   return (
     <Fragment>
       {errored ? (
@@ -300,13 +296,14 @@ const ForgotPasswordForm = () => {
         <Text style={{ fontSize: 20 }}>Forgot your password?</Text>
       </View>
       <TextInput
-        style={textInputStyle}
+        style={resettingPassword ? [textInputStyle, disabledTextInputStyle] : textInputStyle}
         autoCapitalize="none"
         onChangeText={newUsername => setUsername(newUsername)}
         placeholder="Email or username"
+        editable={!resettingPassword}
       />
       <TouchableOpacity onPress={onPressResetPassword}>
-        <Button text="Reset Password" />
+        <Button text="Reset Password" spinner={resettingPassword} />
       </TouchableOpacity>
     </Fragment>
   );
