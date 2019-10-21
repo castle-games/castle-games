@@ -115,7 +115,7 @@ const HomeScreen = () => {
             flexWrap: 'wrap',
             justifyContent: 'space-between',
           }}>
-          <View style={{ width: '100%', padding: 8 }}>
+          {/* <View style={{ width: '100%', padding: 8 }}>
             <TextInput
               style={{
                 width: '100%',
@@ -129,7 +129,7 @@ const HomeScreen = () => {
               }}
               placeholder="Paste a Castle game URL"
             />
-          </View>
+          </View> */}
           {queryData.allGames.map(game => (
             <GameCard game={game} key={game.gameId} />
           ))}
