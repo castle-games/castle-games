@@ -10,7 +10,7 @@ import * as LuaBridge from './LuaBridge';
 import * as Session from './Session';
 import * as GhostChannels from './ghost/GhostChannels';
 import * as Tools from './Tools';
-import GhostInputView from './ghost/GhostInputView';
+import GameInputs from './GameInputs';
 
 // Lots of APIs need regular 'https://' URIs
 const castleUriToHTTPSUri = uri => uri.replace(/^castle:\/\//, 'https://');
@@ -299,32 +299,7 @@ const GameView = ({ gameId, gameUri, extras, showInputs }) => {
       ) : null}
       {toolsHook.visible ? toolsHook.render : null}
 
-      {showInputs ? (
-        <View
-          pointerEvents="box-none"
-          style={{
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <GhostInputView style={keyStyle} input="up">
-            <Text>^</Text>
-          </GhostInputView>
-          <GhostInputView style={keyStyle} input="down">
-            <Text>V</Text>
-          </GhostInputView>
-          <GhostInputView style={keyStyle} input="left">
-            <Text>{'<'}</Text>
-          </GhostInputView>
-          <GhostInputView style={keyStyle} input="right">
-            <Text>{'>'}</Text>
-          </GhostInputView>
-        </View>
-      ) : null}
+      {showInputs ? <GameInputs /> : null}
 
       {!luaLoadingHook.loaded ? (
         // Render loader overlay until Lua finishes loading
