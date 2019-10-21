@@ -8,6 +8,7 @@ import { useNavigation } from 'react-navigation-hooks';
 import { GameCard, GAME_CARD_FRAGMENT } from './HomeScreen';
 import * as Session from './Session';
 import * as GameScreen from './GameScreen';
+import SafeAreaView from 'react-native-safe-area-view';
 
 const ProfilePhoto = props => {
   const { loading: queryLoading, error: queryError, data: queryData } = useQuery(
@@ -78,11 +79,10 @@ const ProfileScreen = () => {
       }}>
       {queryLoading ? null : (
         <Fragment>
-          <View
+          <SafeAreaView
             style={{
               width: '100%',
               alignItems: 'center',
-              padding: 16,
               paddingBottom: 24,
               backgroundColor: '#fff',
               shadowColor: 'black',
@@ -121,7 +121,7 @@ const ProfileScreen = () => {
                 </TouchableOpacity>
               </View>
             </View>
-          </View>
+          </SafeAreaView>
           <ScrollView
             contentContainerStyle={{
               padding: 8,
