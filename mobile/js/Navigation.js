@@ -22,7 +22,7 @@ const HomeNavigator = createStackNavigator({
     screen: HomeScreen,
     navigationOptions: {
       headerTitle: (
-        <View style={{ padding: 16, flexDirection: 'row', alignItems: 'flex-end' }}>
+        <View style={{ paddingHorizontal: 16, flexDirection: 'row', alignItems: 'flex-end' }}>
           <FastImage
             style={{
               width: 30,
@@ -40,6 +40,8 @@ const HomeNavigator = createStackNavigator({
       headerStyle: { elevation: 2 },
     },
   },
+}, {
+  headerLayoutPreset: 'left',
 });
 
 const ProfileNavigator = createSwitchNavigator({
