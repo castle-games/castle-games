@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
+import * as Strings from '~/common/strings';
 
 import { css } from 'react-emotion';
 import { NavigationContext, NavigatorContext } from '~/contexts/NavigationContext';
@@ -26,7 +27,8 @@ const STYLES_CONTAINER = css`
 `;
 
 const STYLES_SIZER = css`
-  max-width: 600px;
+  width: 768px;
+  min-width: 600px;
 `;
 
 const STYLES_INPUT_CONTAINER = css`
@@ -55,14 +57,15 @@ const STYLES_INPUT = css`
 `;
 
 const STYLES_MEDIA_CONTAINER = css`
-  background-color: ${Constants.colors.white};
-  padding: 4px 8px 4px 8px;
+  background-color: transparent;
+  margin: 8px 0 16px 0;
 `;
 
 const STYLES_MEDIA_IMAGE = css`
   background-color: ${Constants.colors.black};
   object-fit: contain;
   width: 100%;
+  min-height: 280px;
   max-height: 500px;
 `;
 
@@ -93,6 +96,7 @@ class EditPostScreen extends React.Component {
       message,
       mediaPath,
       shouldCrop,
+      isValidForSubmit: !Strings.isEmpty(message) || mediaPath,
     };
   }
 
@@ -103,16 +107,14 @@ class EditPostScreen extends React.Component {
   }
 
   _handleChangeMessage = (e) => {
+    const message = e.target.value;
+    const hasValidMedia =
+      (this.state.shouldCrop && this.state.editedMediaObjUrl) ||
+      (!this.state.shouldCrop && this.state.mediaPath);
     this.setState({
-      message: e.target.value,
+      message,
+      isValidForSubmit: !Strings.isEmpty(message) || hasValidMedia,
     });
-  };
-
-  _isValidForSubmit = () => {
-    return (
-      (typeof this.state.message === 'string' && this.state.message.length > 0) ||
-      this.state.mediaPath
-    );
   };
 
   _handleCancel = () => {
@@ -121,7 +123,7 @@ class EditPostScreen extends React.Component {
   };
 
   _handleSubmit = () => {
-    if (this._isValidForSubmit()) {
+    if (this.state.isValidForSubmit) {
       if (this.props.onSubmit) {
         const { message, mediaPath, editedMediaBlob } = this.state;
         this.props.onSubmit({
@@ -226,28 +228,34 @@ class EditPostScreen extends React.Component {
       // Export!
       outputCanvas.toBlob((editedMediaBlob) => {
         const editedMediaObjUrl = URL.createObjectURL(editedMediaBlob);
-        this.setState({ editedMediaBlob, editedMediaObjUrl });
+        this.setState({
+          editedMediaBlob,
+          editedMediaObjUrl,
+          isValidForSubmit: !!editedMediaObjUrl,
+        });
       });
     };
   };
 
   render() {
-    let maybeMediaContainer;
+    let maybeImage, title;
     if (!this.state.shouldCrop || this.state.editedMediaObjUrl) {
-      maybeMediaContainer = (
-        <div className={STYLES_MEDIA_CONTAINER}>
-          <img
-            className={STYLES_MEDIA_IMAGE}
-            src={this.state.shouldCrop ? this.state.editedMediaObjUrl : this.state.mediaPath}
-          />
-        </div>
+      title = 'Post a screenshot';
+      maybeImage = (
+        <img
+          className={STYLES_MEDIA_IMAGE}
+          src={this.state.shouldCrop ? this.state.editedMediaObjUrl : this.state.mediaPath}
+        />
       );
+    } else {
+      title = 'Write a post';
+      maybeImage = <div className={STYLES_MEDIA_IMAGE} />;
     }
 
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_SIZER}>
-          <UIHeading>Make a post</UIHeading>
+          <UIHeading>{title}</UIHeading>
           <div className={STYLES_INPUT_CONTAINER}>
             <ControlledInput
               ref={this._maybeSelectInput}
@@ -255,18 +263,18 @@ class EditPostScreen extends React.Component {
               onChange={this._handleChangeMessage}
               onFocus={this._handleFocus}
               onBlur={this._handleBlur}
-              placeholder="Say something!"
+              placeholder="Write a caption for your post..."
               value={this.state.message}
               className={STYLES_INPUT}
             />
-            {maybeMediaContainer}
           </div>
+          <div className={STYLES_MEDIA_CONTAINER}>{maybeImage}</div>
           <div className={STYLES_ACTIONS}>
             <div className={STYLES_BACK} onClick={this._handleCancel}>
               Cancel
             </div>
-            <UIButton disabled={!this._isValidForSubmit()} onClick={this._handleSubmit}>
-              Submit
+            <UIButton disabled={!this.state.isValidForSubmit} onClick={this._handleSubmit}>
+              Post
             </UIButton>
           </div>
         </div>

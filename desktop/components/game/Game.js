@@ -60,7 +60,7 @@ export default class Game extends React.Component {
 
   _handlePostScreenshot = async () => {
     await Bridge.JS.postCreate({
-      message: 'I took a screenshot!',
+      message: '',
       mediaType: 'capture',
       mediaUploadParams: { autoCrop: true },
     });
@@ -72,7 +72,7 @@ export default class Game extends React.Component {
     // refocus the game window. otherwise on windows you'll have to click back into the game
     GameWindow.setVisible(false);
     GameWindow.setVisible(true);
-  }
+  };
 
   _handleToggleDeveloper = () => {
     this.context.setters.toggleIsDeveloping();
