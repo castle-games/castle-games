@@ -152,7 +152,9 @@ const LogList = () => {
   );
 };
 
-const GameHeader = () => {
+const ENABLE_INVITING = false;
+
+const GameHeader = ({ onToggleShowInputs }) => {
   const [inviting, setInviting] = useState(false);
 
   return (
@@ -177,19 +179,29 @@ const GameHeader = () => {
           }}>
           <Text style={{ color: '#bbb' }}>Return to Castle</Text>
         </TouchableOpacity>
+        {ENABLE_INVITING ? (
+          <TouchableOpacity
+            style={{
+              paddingBottom: 8,
+              paddingHorizontal: 16,
+            }}
+            onPress={() => {
+              if (inviting) {
+                setInviting(false);
+              } else {
+                setInviting(true);
+              }
+            }}>
+            <Text style={{ color: '#bbb' }}>Invite</Text>
+          </TouchableOpacity>
+        ) : null}
         <TouchableOpacity
           style={{
             paddingBottom: 8,
             paddingHorizontal: 16,
           }}
-          onPress={() => {
-            if (inviting) {
-              setInviting(false);
-            } else {
-              setInviting(true);
-            }
-          }}>
-          <Text style={{ color: '#bbb' }}>Invite</Text>
+          onPress={onToggleShowInputs}>
+          <Text style={{ color: '#bbb' }}>Toggle inputs</Text>
         </TouchableOpacity>
       </View>
       {inviting ? <InviteBar /> : null}
@@ -247,6 +259,11 @@ const MainSwitcher = () => {
 
   switchTo = setMode;
 
+  const [showInputs, setShowInputs] = useState(false);
+  const onToggleShowInputs = () => {
+    setShowInputs(!showInputs);
+  };
+
   return (
     <View style={{ flex: 1, backgroundColor: 'white', position: 'relative' }}>
       <View style={{ flex: 1 }}>
@@ -255,8 +272,8 @@ const MainSwitcher = () => {
             !gameRunning ? styles.hidden : mode === 'game' ? styles.fullscreen : styles.windowed
           }>
           <SafeAreaView style={{ flex: 1, backgroundColor: 'black' }}>
-            {mode === 'game' && <GameHeader />}
-            <GameScreen />
+            {mode === 'game' && <GameHeader onToggleShowInputs={onToggleShowInputs} />}
+            <GameScreen showInputs={showInputs} />
             {/* {mode === 'game' && (
             <LogList />
           )} */}

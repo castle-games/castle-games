@@ -258,7 +258,7 @@ const LoaderText = ({ children }) => (
 // Given a `gameId` or `gameUri`, run and display the game! The lifetime of this component must match the
 // lifetime of the game run -- it must be unmounted when the game is stopped and a new instance mounted
 // if a new game should be run (or even if the same game should be restarted).
-const GameView = ({ gameId, gameUri, extras }) => {
+const GameView = ({ gameId, gameUri, extras, showInputs }) => {
   const fetchGameHook = useFetchGame({ gameId, gameUri });
   const game = fetchGameHook.fetchedGame;
 
@@ -299,30 +299,32 @@ const GameView = ({ gameId, gameUri, extras }) => {
       ) : null}
       {toolsHook.visible ? toolsHook.render : null}
 
-      <View
-        pointerEvents="box-none"
-        style={{
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          flexDirection: 'row',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <GhostInputView style={keyStyle} input="up">
-          <Text>^</Text>
-        </GhostInputView>
-        <GhostInputView style={keyStyle} input="down">
-          <Text>V</Text>
-        </GhostInputView>
-        <GhostInputView style={keyStyle} input="left">
-          <Text>{'<'}</Text>
-        </GhostInputView>
-        <GhostInputView style={keyStyle} input="right">
-          <Text>{'>'}</Text>
-        </GhostInputView>
-      </View>
+      {showInputs ? (
+        <View
+          pointerEvents="box-none"
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <GhostInputView style={keyStyle} input="up">
+            <Text>^</Text>
+          </GhostInputView>
+          <GhostInputView style={keyStyle} input="down">
+            <Text>V</Text>
+          </GhostInputView>
+          <GhostInputView style={keyStyle} input="left">
+            <Text>{'<'}</Text>
+          </GhostInputView>
+          <GhostInputView style={keyStyle} input="right">
+            <Text>{'>'}</Text>
+          </GhostInputView>
+        </View>
+      ) : null}
 
       {!luaLoadingHook.loaded ? (
         // Render loader overlay until Lua finishes loading
@@ -371,7 +373,7 @@ export let goToGame = ({ gameId, gameUri, focus, extras }) => {};
 
 // Top-level component which stores the `gameId` or  `gameUri` state. This component is mounted for the
 // entire lifetime of the app and mounts fresh `GameView` instances for each game run.
-const GameScreen = () => {
+const GameScreen = ({ showInputs = false }) => {
   // Keep a single state object to make sure that re-renders happen in sync for all values
   const [state, setState] = useState({
     gameId: null,
@@ -402,7 +404,15 @@ const GameScreen = () => {
 
   // Use `key` to mount a new instance of `GameView` when the game changes
   const { gameId, gameUri, extras } = state;
-  return <GameView key={gameId || gameUri} gameId={gameId} gameUri={gameUri} extras={extras} />;
+  return (
+    <GameView
+      key={gameId || gameUri}
+      gameId={gameId}
+      gameUri={gameUri}
+      extras={extras}
+      showInputs={showInputs}
+    />
+  );
 };
 
 export default GameScreen;
