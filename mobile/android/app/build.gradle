@@ -152,6 +152,14 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+            if (project.hasProperty('CASTLE_UPLOAD_STORE_FILE')) {
+                storeFile file(CASTLE_UPLOAD_STORE_FILE)
+                storePassword CASTLE_UPLOAD_STORE_PASSWORD
+                keyAlias CASTLE_UPLOAD_KEY_ALIAS
+                keyPassword CASTLE_UPLOAD_KEY_PASSWORD
+            }
+        }
     }
     buildTypes {
         debug {
@@ -160,7 +168,7 @@ android {
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://facebook.github.io/react-native/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
