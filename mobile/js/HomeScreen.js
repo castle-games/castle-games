@@ -161,7 +161,7 @@ const HomeScreen = () => {
           {queryData.trendingGames.map(game => (
             <GameCard game={game} key={game.gameId} />
           ))}
-          <SectionHeaderText>Recent</SectionHeaderText>
+          <SectionHeaderText>What's New</SectionHeaderText>
           {queryData.allGames.map(game => (
             <GameCard game={game} key={game.gameId} />
           ))}
