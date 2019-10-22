@@ -11,6 +11,8 @@ import * as Session from './Session';
 import * as GhostChannels from './ghost/GhostChannels';
 import * as Tools from './Tools';
 import GameInputs from './GameInputs';
+import GameHeader from './GameHeader';
+import GameLoading from './GameLoading';
 
 // Lots of APIs need regular 'https://' URIs
 const castleUriToHTTPSUri = uri => uri.replace(/^castle:\/\//, 'https://');
@@ -262,7 +264,7 @@ const LoaderText = ({ children }) => (
 // Given a `gameId` or `gameUri`, run and display the game! The lifetime of this component must match the
 // lifetime of the game run -- it must be unmounted when the game is stopped and a new instance mounted
 // if a new game should be run (or even if the same game should be restarted).
-const GameView = ({ gameId, gameUri, extras, showInputs }) => {
+const GameView = ({ gameId, gameUri, extras, windowed }) => {
   const fetchGameHook = useFetchGame({ gameId, gameUri });
   const game = fetchGameHook.fetchedGame;
 
@@ -281,51 +283,38 @@ const GameView = ({ gameId, gameUri, extras, showInputs }) => {
 
   const toolsHook = Tools.useTools({ eventsReady });
 
+  const [showInputs, setShowInputs] = useState(true);
+  const onToggleShowInputs = () => {
+    setShowInputs(!showInputs);
+  };
+
   return (
     <View style={{ flex: 1 }}>
-      {game && eventsReady && initialDataHook.sent ? (
-        // Render `GhostView` when ready
-        <GhostView
-          style={{ flex: 1 }}
-          uri={game.entryPoint}
-          dimensionsSettings={dimensionsSettings}
-        />
-      ) : null}
-      {toolsHook.visible ? toolsHook.render : null}
+      {!windowed && (
+        <GameHeader game={game} extras={extras} onToggleShowInputs={onToggleShowInputs} />
+      )}
 
-      {showInputs ? <GameInputs /> : null}
+      <View style={{ flex: 1 }}>
+        {game && eventsReady && initialDataHook.sent ? (
+          // Render `GhostView` when ready
+          <GhostView
+            style={{ flex: 1 }}
+            uri={game.entryPoint}
+            dimensionsSettings={dimensionsSettings}
+          />
+        ) : null}
+        {toolsHook.visible ? toolsHook.render : null}
 
-      {!luaLoadingHook.loaded ? (
-        // Render loader overlay until Lua finishes loading
-        <View
-          style={{
-            position: 'absolute',
-            left: 0,
-            top: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'black',
-            justifyContent: 'flex-end',
-            alignItems: 'flex-start',
-            padding: 8,
-          }}>
-          {fetchGameHook.fetching ? (
-            // Game is being fetched
-            <LoaderText>Fetching game...</LoaderText>
-          ) : !game && !gameUri ? (
-            // No game to run
-            <LoaderText>No game</LoaderText>
-          ) : luaLoadingHook.networkRequests.length === 0 ? (
-            // Game is fetched and Lua isn't making network requests, but `love.load` isn't finished yet
-            <LoaderText>Loading game...</LoaderText>
-          ) : (
-            // Game is fetched and Lua is making network requests
-            luaLoadingHook.networkRequests.map(({ url }) => (
-              <LoaderText key={url}>Fetching {url}</LoaderText>
-            ))
-          )}
-        </View>
-      ) : null}
+        {!windowed && showInputs ? <GameInputs /> : null}
+
+        {!luaLoadingHook.loaded ? (
+          <GameLoading
+            noGame={!game && !gameUri}
+            fetching={fetchGameHook.fetching}
+            luaNetworkRequests={luaLoadingHook.networkRequests}
+          />
+        ) : null}
+      </View>
     </View>
   );
 };
@@ -342,7 +331,7 @@ export let goToGame = ({ gameId, gameUri, focus, extras }) => {};
 
 // Top-level component which stores the `gameId` or  `gameUri` state. This component is mounted for the
 // entire lifetime of the app and mounts fresh `GameView` instances for each game run.
-const GameScreen = ({ showInputs = false }) => {
+const GameScreen = ({ windowed = false }) => {
   // Keep a single state object to make sure that re-renders happen in sync for all values
   const [state, setState] = useState({
     gameId: null,
@@ -379,7 +368,7 @@ const GameScreen = ({ showInputs = false }) => {
       gameId={gameId}
       gameUri={gameUri}
       extras={extras}
-      showInputs={showInputs}
+      windowed={windowed}
     />
   );
 };
