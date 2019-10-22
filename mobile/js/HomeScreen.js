@@ -115,7 +115,7 @@ const HomeScreen = () => {
             flexWrap: 'wrap',
             justifyContent: 'space-between',
           }}>
-          {/* <View style={{ width: '100%', padding: 8 }}>
+          <View style={{ width: '100%', padding: 8 }}>
             <TextInput
               style={{
                 width: '100%',
@@ -128,8 +128,11 @@ const HomeScreen = () => {
                 fontSize: 16,
               }}
               placeholder="Paste a Castle game URL"
+              returnKeyType="go"
+              clearButtonMode="while-editing"
+              onSubmitEditing={(e) => GameScreen.goToGame({ gameUri: e.nativeEvent.text })}
             />
-          </View> */}
+          </View>
           {queryData.allGames.map(game => (
             <GameCard game={game} key={game.gameId} />
           ))}
