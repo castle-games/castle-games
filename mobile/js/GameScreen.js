@@ -189,7 +189,7 @@ const useLuaLoading = ({ eventsReady }) => {
 };
 
 // Connect the game to the multiplayer session we're supposed to be in when it asks
-const useLuaMultiplayerClient = ({ eventsReady, game, sessionId }) => {
+const useLuaMultiplayerClient = ({ eventsReady, game, sessionId, setSessionId }) => {
   GhostEvents.useListen({
     eventsReady,
     eventName: 'CASTLE_CONNECT_MULTIPLAYER_CLIENT_REQUEST',
@@ -250,16 +250,13 @@ const useLuaMultiplayerClient = ({ eventsReady, game, sessionId }) => {
           address,
           sessionToken,
         });
-        console.log(`session: ${sessionId}, ${isNewSession}`);
+        if (isNewSession) {
+          setSessionId(sessionId);
+        }
       }
     },
   });
 };
-
-// A line of text in the loader overlay
-const LoaderText = ({ children }) => (
-  <Text style={{ color: 'white', fontSize: 12 }}>{children}</Text>
-);
 
 // Given a `gameId` or `gameUri`, run and display the game! The lifetime of this component must match the
 // lifetime of the game run -- it must be unmounted when the game is stopped and a new instance mounted
@@ -277,7 +274,9 @@ const GameView = ({ gameId, gameUri, extras, windowed }) => {
 
   const luaLoadingHook = useLuaLoading({ eventsReady });
 
-  useLuaMultiplayerClient({ eventsReady, game, sessionId: extras.sessionId });
+  const [sessionId, setSessionId] = useState(extras.sessionId);
+
+  useLuaMultiplayerClient({ eventsReady, game, sessionId, setSessionId });
 
   LuaBridge.useLuaBridge({ eventsReady, game });
 
@@ -291,7 +290,7 @@ const GameView = ({ gameId, gameUri, extras, windowed }) => {
   return (
     <View style={{ flex: 1 }}>
       {!windowed && (
-        <GameHeader game={game} extras={extras} onToggleShowInputs={onToggleShowInputs} />
+        <GameHeader game={game} sessionId={sessionId} onToggleShowInputs={onToggleShowInputs} />
       )}
 
       <View style={{ flex: 1 }}>

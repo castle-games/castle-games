@@ -7,7 +7,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import * as MainSwitcher from './MainSwitcher';
 
 // The bar displaying the invite link
-const InviteBar = () => {
+const InviteBar = ({ url }) => {
   const [copied, setCopied] = useState(false);
 
   return (
@@ -29,12 +29,10 @@ const InviteBar = () => {
           paddingHorizontal: 12,
         }}
         onPress={() => {
-          Clipboard.setString('@revillo/gemzen#42EqUCXQ3');
+          Clipboard.setString(url);
           setCopied(true);
         }}>
-        <Text style={{ flex: 1, color: '#fff' }}>
-          {copied ? 'Copied!' : '@revillo/gemzen#42EqUCXQ3'}
-        </Text>
+        <Text style={{ flex: 1, color: '#fff' }}>{copied ? 'Copied!' : url}</Text>
         <FastImage
           style={{
             flex: 0,
@@ -48,9 +46,7 @@ const InviteBar = () => {
   );
 };
 
-const ENABLE_INVITING = false;
-
-const GameHeader = ({ game, extras, onToggleShowInputs }) => {
+const GameHeader = ({ game, sessionId, onToggleShowInputs }) => {
   const [inviting, setInviting] = useState(false);
 
   return (
@@ -75,7 +71,7 @@ const GameHeader = ({ game, extras, onToggleShowInputs }) => {
           }}>
           <Text style={{ color: '#bbb' }}>Return to Castle</Text>
         </TouchableOpacity>
-        {ENABLE_INVITING ? (
+        {sessionId ? (
           <TouchableOpacity
             style={{
               paddingBottom: 8,
@@ -100,7 +96,7 @@ const GameHeader = ({ game, extras, onToggleShowInputs }) => {
           <Text style={{ color: '#bbb' }}>Toggle inputs</Text>
         </TouchableOpacity>
       </View>
-      {inviting ? <InviteBar /> : null}
+      {inviting ? <InviteBar url={game.url + '#' + sessionId} /> : null}
     </Fragment>
   );
 };
