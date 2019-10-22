@@ -81,9 +81,32 @@ export const GameCard = ({ game }) => {
   );
 };
 
+const SectionHeaderText = ({ children }) => {
+  return (
+    <View style={{
+      width: '100%',
+      padding: 16,
+      paddingTop: 32,
+      alignItems: 'center',
+    }}>
+      <Text style={{
+        fontFamily: 'RTAliasGrotesk-Regular',
+        textTransform: 'uppercase',
+        letterSpacing: 1,
+      }}>
+        {children}
+      </Text>
+    </View>
+  )
+}
+
 const HomeScreen = () => {
   const { loading: queryLoading, error: queryError, data: queryData } = useQuery(gql`
     query Games {
+      trendingGames {
+        gameId
+        ...GameCard
+      }
       allGames {
         gameId
         ...GameCard
@@ -102,9 +125,9 @@ const HomeScreen = () => {
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <Text>Loading...</Text>
         </View>
-      ) : !(queryData && queryData.allGames) ? (
+      ) : !(queryData && (queryData.trendingGames || queryData.allGames)) ? (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          <Text>Error fetching games!</Text>
+          <Text>There was a problem with loading games.</Text>
         </View>
       ) : (
         <ScrollView
@@ -126,6 +149,7 @@ const HomeScreen = () => {
                 paddingVertical: 8,
                 paddingHorizontal: 12,
                 fontSize: 16,
+                marginBottom: -16,
               }}
               placeholder="Paste a Castle game URL"
               returnKeyType="go"
@@ -133,6 +157,11 @@ const HomeScreen = () => {
               onSubmitEditing={(e) => GameScreen.goToGame({ gameUri: e.nativeEvent.text })}
             />
           </View>
+          <SectionHeaderText>Trending</SectionHeaderText>
+          {queryData.trendingGames.map(game => (
+            <GameCard game={game} key={game.gameId} />
+          ))}
+          <SectionHeaderText>Recent</SectionHeaderText>
           {queryData.allGames.map(game => (
             <GameCard game={game} key={game.gameId} />
           ))}
