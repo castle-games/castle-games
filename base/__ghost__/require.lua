@@ -63,7 +63,14 @@ local parsePrefetchVisited = setmetatable({}, {
     end
 })
 
+local LATEST_SHARE_LUA_URL = 'https://raw.githubusercontent.com/castle-games/share.lua/6d70831ea98c57219f2aa285b4ad7bf7156f7c03/cs.lua'
+
 local function explicitRequire(path, opts)
+    -- 'share.lua'? Use the latest version...
+    if path:match('^https?://raw%.githubusercontent%.com/castle%-games/share%.lua/.*/cs%.lua$') then
+        path = LATEST_SHARE_LUA_URL
+    end
+
     -- Built-in?
     if path ~= 'main' then
         local builtin = _G.package.loaded[path]
