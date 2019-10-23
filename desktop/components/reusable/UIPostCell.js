@@ -181,6 +181,8 @@ export default class UIPostCell extends React.Component {
     this.props.onGameSelect(post.sourceGame, { post });
   };
 
+  _handleOpenPost = async () => this._handleOpenData();
+
   _handleGameSelect = () => {
     this.props.onGameSelect(this.props.post.sourceGame);
   };
@@ -217,6 +219,8 @@ export default class UIPostCell extends React.Component {
       onClick = this._handleOpenData;
     } else if (sourceGame) {
       onClick = this._handleGameSelect;
+    } else {
+      onClick = this._handleOpenPost;
     }
 
     const { urlWasCopiedToClipboard } = this.state;
