@@ -112,19 +112,23 @@ export const getSlashCommand = (body) => {
     isCommand: false,
     command: null,
   };
-  let text;
-  if (body && typeof body === 'string') {
-    text = body;
-  } else if (body && body.message && body.message.length) {
-    const firstComponent = body.message[0];
-    text = firstComponent.text;
-  }
-  if (text && text.startsWith('/')) {
-    result.isCommand = true;
-    result.command = text
-      .split(' ')[0]
-      .substring(1)
-      .toLowerCase();
+  try {
+    let text;
+    if (body && typeof body === 'string') {
+      text = body;
+    } else if (body && body.message && body.message.length) {
+      const firstComponent = body.message[0];
+      text = firstComponent.text;
+    }
+    if (text && typeof text === 'string' && text.startsWith('/')) {
+      result.isCommand = true;
+      result.command = text
+        .split(' ')[0]
+        .substring(1)
+        .toLowerCase();
+    }
+  } catch (e) {
+    console.warn(`getSlashCommand: malformed body error: ${e}`);
   }
   return result;
 };
