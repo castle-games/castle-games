@@ -93,7 +93,7 @@ const GameHeader = ({ game, sessionId, onToggleShowInputs }) => {
             paddingHorizontal: 16,
           }}
           onPress={onToggleShowInputs}>
-          <Text style={{ color: '#bbb' }}>Toggle inputs</Text>
+          <Text style={{ color: '#bbb' }}>Toggle Controls</Text>
         </TouchableOpacity>
       </View>
       {inviting ? <InviteBar url={game.url + '#' + sessionId} /> : null}
