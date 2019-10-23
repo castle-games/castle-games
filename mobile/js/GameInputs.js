@@ -17,6 +17,12 @@ const inputStyle = {
   borderWidth: 2,
 };
 
+const inputIconStyle = {
+  color: '#ffffffbb',
+  fontSize: 36,
+  fontWeight: 'bold',
+}
+
 const Triangle = (props) => {
   const baseStyle = {
     width: 0,
@@ -89,6 +95,13 @@ const GameInputs = () => {
     flexDirection: 'row',
   }
 
+  const splitActionInputStyle = {
+    position: 'absolute',
+    bottom: 94,
+    right: 8,
+    flexDirection: 'row',
+  }
+
   const dpadVerticalInputStyle = {
     position: 'absolute',
     bottom: 8,
@@ -104,6 +117,13 @@ const GameInputs = () => {
     flexDirection: 'row',
     width: 206,
     justifyContent: 'space-between',
+  }
+
+  const dpadActionInputStyle = {
+    position: 'absolute',
+    bottom: 8,
+    right: 8,
+    flexDirection: 'row',
   }
 
   return(
@@ -126,6 +146,13 @@ const GameInputs = () => {
         </GhostInputView>
         <GhostInputView style={inputStyle} input="right">
           <Triangle direction="right" size={25} />
+        </GhostInputView>
+      </View>
+      <View
+        pointerEvents="box-none"
+        style={ inputLayout ? splitActionInputStyle : dpadActionInputStyle }>
+        <GhostInputView style={inputStyle} input="return">
+          <Text style={inputIconStyle}>⏎</Text>
         </GhostInputView>
       </View>
       <View style={{ position: 'absolute', top: 0, right: 0, paddingVertical: 8, paddingHorizontal: 16 }}>
