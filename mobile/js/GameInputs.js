@@ -1,9 +1,12 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment } from 'react';
 import { View, Text } from 'react-native';
 
 import GhostInputView from './ghost/GhostInputView';
-import { split } from 'apollo-link';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+
+const INPUTS_MODE_SPLIT = 0;
+const INPUTS_MODE_DPAD = 1;
+const INPUTS_MODE_NONE = 2;
+export const NUM_GAME_INPUTS_MODES = 3;
 
 const inputStyle = {
   width: 70,
@@ -21,21 +24,21 @@ const inputIconStyle = {
   color: '#ffffffbb',
   fontSize: 36,
   fontWeight: 'bold',
-}
+};
 
-const Triangle = (props) => {
+const Triangle = props => {
   const baseStyle = {
     width: 0,
     height: 0,
     backgroundColor: 'transparent',
     borderStyle: 'solid',
-  }
+  };
 
   const arrowStyles = {
     up: {
       borderLeftWidth: props.size / 2,
       borderRightWidth: props.size / 2,
-      borderBottomWidth: props.size * .85,
+      borderBottomWidth: props.size * 0.85,
       borderLeftColor: 'transparent',
       borderRightColor: 'transparent',
       borderBottomColor: '#ffffffbb',
@@ -44,7 +47,7 @@ const Triangle = (props) => {
     down: {
       borderLeftWidth: props.size / 2,
       borderRightWidth: props.size / 2,
-      borderTopWidth: props.size * .85,
+      borderTopWidth: props.size * 0.85,
       borderLeftColor: 'transparent',
       borderRightColor: 'transparent',
       borderTopColor: '#ffffffbb',
@@ -53,7 +56,7 @@ const Triangle = (props) => {
     left: {
       borderTopWidth: props.size / 2,
       borderBottomWidth: props.size / 2,
-      borderRightWidth: props.size * .85,
+      borderRightWidth: props.size * 0.85,
       borderTopColor: 'transparent',
       borderBottomColor: 'transparent',
       borderRightColor: '#ffffffbb',
@@ -62,75 +65,67 @@ const Triangle = (props) => {
     right: {
       borderTopWidth: props.size / 2,
       borderBottomWidth: props.size / 2,
-      borderLeftWidth: props.size * .85,
+      borderLeftWidth: props.size * 0.85,
       borderTopColor: 'transparent',
       borderBottomColor: 'transparent',
       borderLeftColor: '#ffffffbb',
       marginRight: -(props.size / 5),
-    }
-  }
-  
-  return (
-    <View style={[baseStyle, arrowStyles[props.direction]]}></View>
-  )
-}
+    },
+  };
 
-const GameInputs = () => {
-  const [inputLayout, setLayout] = useState(true);
+  return <View style={[baseStyle, arrowStyles[props.direction]]}></View>;
+};
 
-  const onPressToggleLayout = () => {
-    setLayout(!inputLayout);
-  }
+const splitVerticalInputStyle = {
+  position: 'absolute',
+  bottom: 8,
+  left: 8,
+};
 
-  const splitVerticalInputStyle = {
-    position: 'absolute',
-    bottom: 8,
-    left: 8,
-  }
+const splitHorizontalInputStyle = {
+  position: 'absolute',
+  bottom: 8,
+  right: 8,
+  flexDirection: 'row',
+};
 
-  const splitHorizontalInputStyle = {
-    position: 'absolute',
-    bottom: 8,
-    right: 8,
-    flexDirection: 'row',
-  }
+const splitActionInputStyle = {
+  position: 'absolute',
+  bottom: 94,
+  right: 8,
+  flexDirection: 'row',
+};
 
-  const splitActionInputStyle = {
-    position: 'absolute',
-    bottom: 94,
-    right: 8,
-    flexDirection: 'row',
-  }
+const dpadVerticalInputStyle = {
+  position: 'absolute',
+  bottom: 8,
+  left: 68,
+  height: 206,
+  justifyContent: 'space-between',
+};
 
-  const dpadVerticalInputStyle = {
-    position: 'absolute',
-    bottom: 8,
-    left: 68,
-    height: 206,
-    justifyContent: 'space-between',
-  }
+const dpadHorizontalInputStyle = {
+  position: 'absolute',
+  bottom: 68,
+  left: 8,
+  flexDirection: 'row',
+  width: 206,
+  justifyContent: 'space-between',
+};
 
-  const dpadHorizontalInputStyle = {
-    position: 'absolute',
-    bottom: 68,
-    left: 8,
-    flexDirection: 'row',
-    width: 206,
-    justifyContent: 'space-between',
-  }
+const dpadActionInputStyle = {
+  position: 'absolute',
+  bottom: 8,
+  right: 8,
+  flexDirection: 'row',
+};
 
-  const dpadActionInputStyle = {
-    position: 'absolute',
-    bottom: 8,
-    right: 8,
-    flexDirection: 'row',
-  }
-
-  return(
+const GameInputs = ({ inputsMode }) => {
+  return inputsMode === INPUTS_MODE_NONE ? null : (
     <Fragment>
       <View
         pointerEvents="box-none"
-        style={ inputLayout ? splitVerticalInputStyle : dpadVerticalInputStyle }>
+        style={inputsMode === INPUTS_MODE_SPLIT ? splitVerticalInputStyle : dpadVerticalInputStyle}>
         <GhostInputView style={inputStyle} input="up">
           <Triangle direction="up" size={25} />
         </GhostInputView>
@@ -140,7 +135,9 @@ const GameInputs = () => {
       </View>
       <View
         pointerEvents="box-none"
-        style={ inputLayout ? splitHorizontalInputStyle : dpadHorizontalInputStyle }>
+        style={
+          inputsMode === INPUTS_MODE_SPLIT ? splitHorizontalInputStyle : dpadHorizontalInputStyle
+        }>
         <GhostInputView style={inputStyle} input="left">
           <Triangle direction="left" size={25} />
         </GhostInputView>
@@ -150,18 +147,13 @@ const GameInputs = () => {
       </View>
       <View
         pointerEvents="box-none"
-        style={ inputLayout ? splitActionInputStyle : dpadActionInputStyle }>
+        style={inputsMode === INPUTS_MODE_SPLIT ? splitActionInputStyle : dpadActionInputStyle}>
         <GhostInputView style={inputStyle} input="return">
           <Text style={inputIconStyle}>⏎</Text>
         </GhostInputView>
       </View>
-      <View style={{ position: 'absolute', top: 0, right: 0, paddingVertical: 8, paddingHorizontal: 16 }}>
-        <TouchableOpacity onPress={ onPressToggleLayout }>
-          <Text style={{ color: '#bbb' }}>Switch Control Layout</Text>
-        </TouchableOpacity>
-      </View>
     </Fragment>
-  )
+  );
 };
 
 export default GameInputs;

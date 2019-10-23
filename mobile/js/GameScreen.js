@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import { useLazyQuery, useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 
@@ -10,7 +10,7 @@ import * as LuaBridge from './LuaBridge';
 import * as Session from './Session';
 import * as GhostChannels from './ghost/GhostChannels';
 import * as Tools from './Tools';
-import GameInputs from './GameInputs';
+import GameInputs, { NUM_GAME_INPUTS_MODES } from './GameInputs';
 import GameHeader from './GameHeader';
 import GameLoading from './GameLoading';
 
@@ -282,15 +282,19 @@ const GameView = ({ gameId, gameUri, extras, windowed }) => {
 
   const toolsHook = Tools.useTools({ eventsReady });
 
-  const [showInputs, setShowInputs] = useState(true);
-  const onToggleShowInputs = () => {
-    setShowInputs(!showInputs);
+  const [inputsMode, setInputsMode] = useState(0);
+  const onPressNextInputsMode = () => {
+    setInputsMode((inputsMode + 1) % NUM_GAME_INPUTS_MODES);
   };
 
   return (
     <View style={{ flex: 1 }}>
       {!windowed && (
-        <GameHeader game={game} sessionId={sessionId} onToggleShowInputs={onToggleShowInputs} />
+        <GameHeader
+          game={game}
+          sessionId={sessionId}
+          onPressNextInputsMode={onPressNextInputsMode}
+        />
       )}
 
       <View style={{ flex: 1 }}>
@@ -304,7 +308,7 @@ const GameView = ({ gameId, gameUri, extras, windowed }) => {
         ) : null}
         {toolsHook.visible ? toolsHook.render : null}
 
-        {!windowed && showInputs ? <GameInputs /> : null}
+        <GameInputs inputsMode={inputsMode} />
 
         {!luaLoadingHook.loaded ? (
           <GameLoading

@@ -46,7 +46,7 @@ const InviteBar = ({ url }) => {
   );
 };
 
-const GameHeader = ({ game, sessionId, onToggleShowInputs }) => {
+const GameHeader = ({ game, sessionId, onPressNextInputsMode }) => {
   const [inviting, setInviting] = useState(false);
 
   return (
@@ -92,8 +92,8 @@ const GameHeader = ({ game, sessionId, onToggleShowInputs }) => {
             paddingBottom: 8,
             paddingHorizontal: 16,
           }}
-          onPress={onToggleShowInputs}>
-          <Text style={{ color: '#bbb' }}>Toggle Controls</Text>
+          onPress={onPressNextInputsMode}>
+          <Text style={{ color: '#bbb' }}>Switch Controls</Text>
         </TouchableOpacity>
       </View>
       {inviting ? <InviteBar url={game.url + '#' + sessionId} /> : null}
