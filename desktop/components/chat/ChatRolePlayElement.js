@@ -13,7 +13,7 @@ const STYLES_CONTAINER = css`
   justify-content: space-between;
   flex-shrink: 0;
   width: 100%;
-  padding: 4px 24px 4px 16px;
+  padding: 4px 24px 4px 0;
 `;
 
 const STYLES_AVATAR = css`
@@ -40,7 +40,7 @@ const STYLES_RIGHT = css`
 
 const STYLES_AUTHOR_MESSAGE = css`
   line-height: 20px;
-  font-size: 14px;
+  font-size: 12px;
   overflow-wrap: break-word;
   white-space: pre-wrap;
   font-style: italic;
