@@ -308,7 +308,7 @@ const GameView = ({ gameId, gameUri, extras, windowed }) => {
         ) : null}
         {toolsHook.visible ? toolsHook.render : null}
 
-        <GameInputs inputsMode={inputsMode} />
+        <GameInputs visible={!windowed} inputsMode={inputsMode} />
 
         {!luaLoadingHook.loaded ? (
           <GameLoading

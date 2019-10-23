@@ -120,8 +120,8 @@ const dpadActionInputStyle = {
   flexDirection: 'row',
 };
 
-const GameInputs = ({ inputsMode }) => {
-  return inputsMode === INPUTS_MODE_NONE ? null : (
+const GameInputs = ({ visible, inputsMode }) =>
+  !visible || inputsMode === INPUTS_MODE_NONE ? null : (
     <Fragment>
       <View
         pointerEvents="box-none"
@@ -154,6 +154,5 @@ const GameInputs = ({ inputsMode }) => {
       </View>
     </Fragment>
   );
-};
 
 export default GameInputs;
