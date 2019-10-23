@@ -69,6 +69,7 @@ const useFetchGame = ({ gameId, gameUri }) => {
 // Read dimensions settings into the `{ width, height, upscaling, downscaling }` format for `GhostView`
 const computeDimensionsSettings = ({ metadata }) => {
   const { dimensions, scaling, upscaling, downscaling } = metadata;
+
   const dimensionsSettings = {
     width: 800,
     height: 450,
@@ -95,6 +96,15 @@ const computeDimensionsSettings = ({ metadata }) => {
   if (downscaling) {
     dimensionsSettings.downscaling = downscaling;
   }
+
+  // Mobile overrides...
+  if (dimensionsSettings.upscaling === 'step') {
+    dimensionsSettings.upscaling = 'on';
+  }
+  if (dimensionsSettings.downscaling === 'step') {
+    dimensionsSettings.downscaling = 'on';
+  }
+
   return dimensionsSettings;
 };
 
