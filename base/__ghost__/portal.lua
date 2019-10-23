@@ -228,7 +228,7 @@ function portalMeta:setupLove()
                 if not code:match('\n') then
                     code = fetchFileData(code)
                 end
-                processShaderValidation(love.graphics.validateShader(true, code))
+                -- processShaderValidation(love.graphics.validateShader(true, code))
                 return love.graphics.newShader(code)
             else
                 local pixelCode, vertexCode = ...
@@ -238,7 +238,7 @@ function portalMeta:setupLove()
                 if not vertexCode:match('\n') then
                     vertexCode = fetchFileData(vertexCode)
                 end
-                processShaderValidation(love.graphics.validateShader(true, pixelCode, vertexCode))
+                -- processShaderValidation(love.graphics.validateShader(true, pixelCode, vertexCode))
                 return love.graphics.newShader(pixelCode, vertexCode)
             end
         end
