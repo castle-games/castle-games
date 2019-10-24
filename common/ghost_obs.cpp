@@ -21,6 +21,8 @@
 #include <sstream>
 #include <thread>
 
+const bool OBS_ENABLED = false;
+
 using namespace boost;
 using namespace std;
 
@@ -172,6 +174,10 @@ void _loadObsModule(std::string basePath, std::string moduleName) {
 }
 
 void ghostInitObs(std::string basePath, std::string ffmpegPath, bool debug) {
+  if (!OBS_ENABLED) {
+    return;
+  }
+
   _debug = debug;
 
   ghostFFmpegPath = ffmpegPath;
@@ -407,12 +413,20 @@ bool _startRecording() {
 }
 
 void ghostStartObs() {
+  if (!OBS_ENABLED) {
+    return;
+  }
+
   if (ALWAYS_RECORDING) {
     _startRecording();
   }
 }
 
 void ghostStopObs() {
+  if (!OBS_ENABLED) {
+    return;
+  }
+
   if (!ghostObsIsStarted) {
     return;
   }
@@ -428,6 +442,10 @@ void ghostStopObs() {
 }
 
 void ghostTakeScreenCaptureObs() {
+  if (!OBS_ENABLED) {
+    return;
+  }
+
   if (!ALWAYS_RECORDING) {
     if (!_startRecording()) {
       return;
