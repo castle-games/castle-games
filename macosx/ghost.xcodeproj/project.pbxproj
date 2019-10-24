@@ -194,6 +194,11 @@
 		B5CC96742225F90D00F5C4AC /* NSApplication+Ghost.mm in Sources */ = {isa = PBXBuildFile; fileRef = B5CC96722225F90D00F5C4AC /* NSApplication+Ghost.mm */; };
 		B5DCCFEF22A5DE1900CA3FA6 /* GhostCpuMonitor.h in Headers */ = {isa = PBXBuildFile; fileRef = B5DCCFED22A5DE1900CA3FA6 /* GhostCpuMonitor.h */; };
 		B5DCCFF022A5DE1900CA3FA6 /* GhostCpuMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = B5DCCFEE22A5DE1900CA3FA6 /* GhostCpuMonitor.m */; };
+		B5E13591236208AB00AC77C9 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B5E13590236208AB00AC77C9 /* libc++.tbd */; };
+		B5E13593236208C000AC77C9 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B5E13592236208BF00AC77C9 /* libz.tbd */; };
+		B5E13594236208F200AC77C9 /* Bugsnag.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5E135872362082500AC77C9 /* Bugsnag.framework */; };
+		B5E13595236208F200AC77C9 /* Bugsnag.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = B5E135872362082500AC77C9 /* Bugsnag.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B5E135992362090E00AC77C9 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5E135982362090E00AC77C9 /* SystemConfiguration.framework */; };
 		B5E9FC48211B6C190068BEB9 /* ghost_extensions_macos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5E9FC43211B6BA00068BEB9 /* ghost_extensions_macos.framework */; };
 		B5E9FC4B211B6E610068BEB9 /* ghost_extensions_macos.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = B5E9FC43211B6BA00068BEB9 /* ghost_extensions_macos.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -283,6 +288,27 @@
 			remoteGlobalIDString = FA577AAE16C7507900860150;
 			remoteInfo = "liblove-macosx";
 		};
+		B5E135862362082500AC77C9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B5E135812362082500AC77C9 /* Bugsnag.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8A2C8FA11C6BC1F700846019;
+			remoteInfo = Bugsnag;
+		};
+		B5E135882362082500AC77C9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B5E135812362082500AC77C9 /* Bugsnag.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8A2C8FAB1C6BC1F700846019;
+			remoteInfo = Tests;
+		};
+		B5E13596236208F200AC77C9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B5E135812362082500AC77C9 /* Bugsnag.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8A2C8FA01C6BC1F700846019;
+			remoteInfo = Bugsnag;
+		};
 		B5E9FC40211B6BA00068BEB9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = B5E9FC3B211B6B9F0068BEB9 /* ghost-extensions.xcodeproj */;
@@ -357,6 +383,7 @@
 				91537FE8231994FA0055F55F /* libwebp.7.dylib in Copy Frameworks */,
 				91537FF7231994FB0055F55F /* libx265.169.dylib in Copy Frameworks */,
 				91537FE1231994FA0055F55F /* libobs.dylib in Copy Frameworks */,
+				B5E13595236208F200AC77C9 /* Bugsnag.framework in Copy Frameworks */,
 				91537FD9231994FA0055F55F /* libmp3lame.0.dylib in Copy Frameworks */,
 				91537FDE231994FA0055F55F /* libharfbuzz.0.dylib in Copy Frameworks */,
 				91537FDC231994FA0055F55F /* libcrypto.1.0.0.dylib in Copy Frameworks */,
@@ -536,6 +563,10 @@
 		B5CC96722225F90D00F5C4AC /* NSApplication+Ghost.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSApplication+Ghost.mm"; sourceTree = "<group>"; };
 		B5DCCFED22A5DE1900CA3FA6 /* GhostCpuMonitor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GhostCpuMonitor.h; sourceTree = "<group>"; };
 		B5DCCFEE22A5DE1900CA3FA6 /* GhostCpuMonitor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GhostCpuMonitor.m; sourceTree = "<group>"; };
+		B5E135812362082500AC77C9 /* Bugsnag.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Bugsnag.xcodeproj; path = "vendor/bugsnag-cocoa/OSX/Bugsnag.xcodeproj"; sourceTree = "<group>"; };
+		B5E13590236208AB00AC77C9 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		B5E13592236208BF00AC77C9 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		B5E135982362090E00AC77C9 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		B5E9FC3B211B6B9F0068BEB9 /* ghost-extensions.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "ghost-extensions.xcodeproj"; path = "../ghost-extensions/ghost-extensions.xcodeproj"; sourceTree = "<group>"; };
 		CE73F7FF1EEB64150052DAB3 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/AVFoundation.framework; sourceTree = DEVELOPER_DIR; };
 		FA08F69116C765A200F007B5 /* love.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = love.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -563,6 +594,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B5E135992362090E00AC77C9 /* SystemConfiguration.framework in Frameworks */,
+				B5E13593236208C000AC77C9 /* libz.tbd in Frameworks */,
+				B5E13591236208AB00AC77C9 /* libc++.tbd in Frameworks */,
 				91537FC32319948D0055F55F /* libtesseract.4.dylib in Frameworks */,
 				91537F992319948D0055F55F /* libavformat.58.dylib in Frameworks */,
 				91CF4339214841CC002024DA /* liblibcef_dll_wrapper.a in Frameworks */,
@@ -592,6 +626,7 @@
 				91537F932319948D0055F55F /* libtasn1.6.dylib in Frameworks */,
 				914A9B422339C36A00C57364 /* libboost_thread.a in Frameworks */,
 				91537F8E2319948D0055F55F /* libvorbisenc.2.dylib in Frameworks */,
+				B5E13594236208F200AC77C9 /* Bugsnag.framework in Frameworks */,
 				91537F9C2319948D0055F55F /* libobsglad.dylib in Frameworks */,
 				91537FC02319948D0055F55F /* libffi.6.dylib in Frameworks */,
 				91537F962319948D0055F55F /* libglib-2.0.0.dylib in Frameworks */,
@@ -646,6 +681,9 @@
 		1058C7A0FEA54F0111CA2CBB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B5E135982362090E00AC77C9 /* SystemConfiguration.framework */,
+				B5E13592236208BF00AC77C9 /* libz.tbd */,
+				B5E13590236208AB00AC77C9 /* libc++.tbd */,
 				9193548D234EEC5300B0F4B4 /* AVFoundation.framework */,
 				91CF43AD21484A26002024DA /* Documents */,
 				FAE64A9C2072738600BC7981 /* Metal.framework */,
@@ -683,6 +721,7 @@
 				A194C6BA211CD1D50093B328 /* SDL.xcodeproj */,
 				FA577A9316C7217800860150 /* liblove.xcodeproj */,
 				B5E9FC3B211B6B9F0068BEB9 /* ghost-extensions.xcodeproj */,
+				B5E135812362082500AC77C9 /* Bugsnag.xcodeproj */,
 			);
 			indentWidth = 2;
 			name = ghost;
@@ -930,6 +969,15 @@
 			path = "ghost-macosx_Helper";
 			sourceTree = "<group>";
 		};
+		B5E135822362082500AC77C9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				B5E135872362082500AC77C9 /* Bugsnag.framework */,
+				B5E135892362082500AC77C9 /* Tests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		B5E9FC3C211B6B9F0068BEB9 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -1045,6 +1093,7 @@
 				B5256F3F211A555500891B27 /* PBXTargetDependency */,
 				A1ED98EC211DFA0700CBC701 /* PBXTargetDependency */,
 				91CF43BF21485694002024DA /* PBXTargetDependency */,
+				B5E13597236208F200AC77C9 /* PBXTargetDependency */,
 			);
 			name = "ghost-macosx";
 			productInstallPath = "$(HOME)/Applications";
@@ -1080,6 +1129,10 @@
 			mainGroup = 29B97314FDCFA39411CA2CEA /* ghost */;
 			projectDirPath = "";
 			projectReferences = (
+				{
+					ProductGroup = B5E135822362082500AC77C9 /* Products */;
+					ProjectRef = B5E135812362082500AC77C9 /* Bugsnag.xcodeproj */;
+				},
 				{
 					ProductGroup = 91C98F9E21432C39006E745C /* Products */;
 					ProjectRef = 91C98F9D21432C39006E745C /* cef.xcodeproj */;
@@ -1139,6 +1192,20 @@
 			fileType = "compiled.mach-o.executable";
 			path = "Standard DMG";
 			remoteRef = A194C6C9211CD1D50093B328 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		B5E135872362082500AC77C9 /* Bugsnag.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = Bugsnag.framework;
+			remoteRef = B5E135862362082500AC77C9 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		B5E135892362082500AC77C9 /* Tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = Tests.xctest;
+			remoteRef = B5E135882362082500AC77C9 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		B5E9FC41211B6BA00068BEB9 /* ghost_extensions.framework */ = {
@@ -1310,6 +1377,11 @@
 			isa = PBXTargetDependency;
 			name = "liblove-macosx";
 			targetProxy = B5256F40211A555500891B27 /* PBXContainerItemProxy */;
+		};
+		B5E13597236208F200AC77C9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = Bugsnag;
+			targetProxy = B5E13596236208F200AC77C9 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

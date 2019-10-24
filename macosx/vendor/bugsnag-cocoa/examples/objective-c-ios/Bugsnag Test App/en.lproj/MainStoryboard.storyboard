@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES" initialViewController="ogA-pf-q3e">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Navigation Controller-->
+        <scene sceneID="zpQ-TA-uk7">
+            <objects>
+                <navigationController id="ogA-pf-q3e" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="eMo-dQ-Ee0">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="uYB-Rg-v98" kind="relationship" relationship="rootViewController" id="ts1-mk-sku"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ktm-VJ-qMZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-343" y="282"/>
+        </scene>
+        <!--Bugsnag Examples-->
+        <scene sceneID="il4-S5-IMy">
+            <objects>
+                <tableViewController id="uYB-Rg-v98" customClass="ViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="MAi-ET-29z">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <sections>
+                            <tableViewSection headerTitle="Crashes" footerTitle="Events which terminate the app are sent to Bugsnag automatically. Reopen the app after a crash to send reports." id="gmD-Jb-yFA">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="bDh-CK-h1h">
+                                        <rect key="frame" x="0.0" y="55.5" width="414" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="bDh-CK-h1h" id="Z68-om-Prg">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MkL-AZ-Bqt">
+                                                    <rect key="frame" x="16" y="7" width="138" height="30"/>
+                                                    <state key="normal" title="Uncaught exception">
+                                                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="generateException:" destination="uYB-Rg-v98" eventType="touchUpInside" id="Eq7-nh-qPa"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="MkL-AZ-Bqt" firstAttribute="leading" secondItem="Z68-om-Prg" secondAttribute="leading" constant="16" id="GkU-vp-bD7"/>
+                                                <constraint firstItem="MkL-AZ-Bqt" firstAttribute="centerY" secondItem="Z68-om-Prg" secondAttribute="centerY" id="SL6-tG-UhJ"/>
+                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="MkL-AZ-Bqt" secondAttribute="trailing" constant="20" symbolic="YES" id="YLh-wO-kxn"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="8Sn-lK-a7g">
+                                        <rect key="frame" x="0.0" y="99.5" width="414" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="8Sn-lK-a7g" id="3dJ-Ye-puY">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wc6-pu-JVA">
+                                                    <rect key="frame" x="16" y="7" width="248" height="30"/>
+                                                    <state key="normal" title="POSIX signal (not simulator friendly)">
+                                                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="generateSignal:" destination="uYB-Rg-v98" eventType="touchUpInside" id="R1G-6f-8lH"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="wc6-pu-JVA" firstAttribute="centerY" secondItem="3dJ-Ye-puY" secondAttribute="centerY" id="4cy-R4-sKX"/>
+                                                <constraint firstItem="wc6-pu-JVA" firstAttribute="leading" secondItem="3dJ-Ye-puY" secondAttribute="leading" constant="16" id="NnE-fc-KKo"/>
+                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="wc6-pu-JVA" secondAttribute="trailing" constant="20" symbolic="YES" id="e6s-IQ-CSI"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="Yhl-gQ-P06">
+                                        <rect key="frame" x="0.0" y="143.5" width="414" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Yhl-gQ-P06" id="zVu-Ug-2Kf">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ylc-KZ-kmq">
+                                                    <rect key="frame" x="16" y="7" width="132" height="30"/>
+                                                    <state key="normal" title="Memory corruption">
+                                                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="objectiveCLockSignal:" destination="uYB-Rg-v98" eventType="touchUpInside" id="3Qs-lw-WsX"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="Ylc-KZ-kmq" firstAttribute="centerY" secondItem="zVu-Ug-2Kf" secondAttribute="centerY" id="LE4-lF-8bi"/>
+                                                <constraint firstItem="Ylc-KZ-kmq" firstAttribute="leading" secondItem="zVu-Ug-2Kf" secondAttribute="leading" constant="16" id="TeK-yh-cXX"/>
+                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Ylc-KZ-kmq" secondAttribute="trailing" constant="20" symbolic="YES" id="dUb-Zc-1qJ"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="CSh-nu-bQF">
+                                        <rect key="frame" x="0.0" y="187.5" width="414" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="CSh-nu-bQF" id="O0Y-bH-MiN">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B1f-Jm-0Hk">
+                                                    <rect key="frame" x="16" y="7" width="65" height="30"/>
+                                                    <state key="normal" title="Deadlock">
+                                                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="pthreadsLockSignal:" destination="uYB-Rg-v98" eventType="touchUpInside" id="Rs4-f6-oES"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="B1f-Jm-0Hk" secondAttribute="trailing" constant="20" symbolic="YES" id="IWg-KD-i5I"/>
+                                                <constraint firstItem="B1f-Jm-0Hk" firstAttribute="leading" secondItem="O0Y-bH-MiN" secondAttribute="leading" constant="16" id="KoA-6n-0ju"/>
+                                                <constraint firstItem="B1f-Jm-0Hk" firstAttribute="centerY" secondItem="O0Y-bH-MiN" secondAttribute="centerY" id="qyV-ok-1pf"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="Oxa-rC-wVQ">
+                                        <rect key="frame" x="0.0" y="231.5" width="414" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Oxa-rC-wVQ" id="rYc-OF-DON">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6K4-3G-uRI">
+                                                    <rect key="frame" x="16" y="7" width="102" height="30"/>
+                                                    <state key="normal" title="Stack overflow">
+                                                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="stackOverflow:" destination="uYB-Rg-v98" eventType="touchUpInside" id="ESl-gn-byo"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="6K4-3G-uRI" secondAttribute="trailing" constant="20" symbolic="YES" id="jKf-UF-UBC"/>
+                                                <constraint firstItem="6K4-3G-uRI" firstAttribute="centerY" secondItem="rYc-OF-DON" secondAttribute="centerY" id="sBt-w1-I2i"/>
+                                                <constraint firstItem="6K4-3G-uRI" firstAttribute="leading" secondItem="rYc-OF-DON" secondAttribute="leading" constant="16" id="uZu-cs-KjR"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="kTk-Cf-4A3">
+                                        <rect key="frame" x="0.0" y="275.5" width="414" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="kTk-Cf-4A3" id="WsA-pq-zKg">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6kT-FU-9Vb">
+                                                    <rect key="frame" x="16" y="7" width="280" height="30"/>
+                                                    <state key="normal" title="Memory pressure (not simulator friendly)"/>
+                                                    <connections>
+                                                        <action selector="generateOOM:" destination="uYB-Rg-v98" eventType="touchUpInside" id="Y1X-XQ-w3V"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="6kT-FU-9Vb" firstAttribute="leading" secondItem="WsA-pq-zKg" secondAttribute="leading" constant="16" id="bNp-H9-TyN"/>
+                                                <constraint firstItem="6kT-FU-9Vb" firstAttribute="centerY" secondItem="WsA-pq-zKg" secondAttribute="centerY" id="fid-St-MgN"/>
+                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="6kT-FU-9Vb" secondAttribute="trailing" constant="20" symbolic="YES" id="vI0-vT-sH8"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection headerTitle="Handled errors and exceptions" footerTitle="Events which can be handled gracefully can also be reported to Bugsnag." id="h1c-YR-XV7">
+                                <cells>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="Ofe-wk-wKd">
+                                        <rect key="frame" x="0.0" y="411" width="414" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Ofe-wk-wKd" id="qW2-pi-SzL">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gsL-Pw-GHc">
+                                                    <rect key="frame" x="16" y="7" width="182" height="30"/>
+                                                    <state key="normal" title="Use notify() from try/catch">
+                                                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="nonFatalException:" destination="uYB-Rg-v98" eventType="touchUpInside" id="CMl-qH-KQB"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="gsL-Pw-GHc" secondAttribute="trailing" constant="20" symbolic="YES" id="7NW-yY-qCN"/>
+                                                <constraint firstItem="gsL-Pw-GHc" firstAttribute="leading" secondItem="qW2-pi-SzL" secondAttribute="leading" constant="16" id="I3Y-kv-nic"/>
+                                                <constraint firstItem="gsL-Pw-GHc" firstAttribute="centerY" secondItem="qW2-pi-SzL" secondAttribute="centerY" id="aMI-c6-aRD"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="fZi-2v-vlx">
+                                        <rect key="frame" x="0.0" y="455" width="414" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="fZi-2v-vlx" id="DfY-Um-9hb">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lq8-kV-y3N">
+                                                    <rect key="frame" x="16" y="7" width="191" height="30"/>
+                                                    <state key="normal" title="Call notify() asynchronously">
+                                                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="delayedException:" destination="uYB-Rg-v98" eventType="touchUpInside" id="DGf-vT-ptW"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="Lq8-kV-y3N" firstAttribute="centerY" secondItem="DfY-Um-9hb" secondAttribute="centerY" id="2uQ-Mb-H2n"/>
+                                                <constraint firstItem="Lq8-kV-y3N" firstAttribute="leading" secondItem="DfY-Um-9hb" secondAttribute="leading" constant="16" id="7dz-H7-SsO"/>
+                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Lq8-kV-y3N" secondAttribute="trailing" constant="20" symbolic="YES" id="XFU-uc-xRe"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="t4o-vg-er6">
+                                        <rect key="frame" x="0.0" y="499" width="414" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="t4o-vg-er6" id="bUh-rr-kY1">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="T16-Wx-wJ1">
+                                                    <rect key="frame" x="16" y="7" width="234" height="30"/>
+                                                    <state key="normal" title="Send an NSError with notifyError()">
+                                                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="generateNSError:" destination="uYB-Rg-v98" eventType="touchUpInside" id="2cT-DA-qrm"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="T16-Wx-wJ1" firstAttribute="leading" secondItem="bUh-rr-kY1" secondAttribute="leading" constant="16" id="F9k-Ak-XPA"/>
+                                                <constraint firstItem="T16-Wx-wJ1" firstAttribute="centerY" secondItem="bUh-rr-kY1" secondAttribute="centerY" id="hZj-aP-sC4"/>
+                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="T16-Wx-wJ1" secondAttribute="trailing" constant="20" symbolic="YES" id="jW4-xd-O0r"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <connections>
+                            <outlet property="dataSource" destination="uYB-Rg-v98" id="fzJ-dF-04e"/>
+                            <outlet property="delegate" destination="uYB-Rg-v98" id="02C-3r-HP9"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Bugsnag Examples" id="9es-Z2-aL9"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Pa0-Qh-NQH" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="586" y="281"/>
+        </scene>
+    </scenes>
+</document>
