@@ -32,6 +32,16 @@ const STYLES_LOGO = css`
   background-position: 50% 50%;
 `;
 
+const STYLES_LOGO_HALLOWEEN = css`
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  font-size: 20px;
+`;
+
 const STYLES_RIGHT = css`
   width: 25%;
   min-width: 332px;
@@ -161,15 +171,30 @@ class ContentNavigationBar extends React.Component {
     } catch (_) {}
   };
 
+  _navigateToParty = () => {
+    NativeUtil.openExternalURL('https://castle.games/party');
+  };
+
   render() {
+    let homeItem;
+    const endOfParty = new Date('November 07, 2019 08:00:00');
+    if (new Date() < endOfParty) {
+      homeItem = (
+        <div className={STYLES_NAV_LABEL} onClick={this._navigateToParty}>
+          <div className={STYLES_LOGO_HALLOWEEN}>🎃</div>
+        </div>
+      );
+    } else {
+      homeItem = (
+        <div className={STYLES_NAV_LABEL} onClick={this.props.navigator.navigateToHome}>
+          <div className={STYLES_LOGO} />
+        </div>
+      );
+    }
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_NAV_ITEMS}>
-          <div className={STYLES_NAV_ITEM}>
-            <div className={STYLES_NAV_LABEL} onClick={this.props.navigator.navigateToHome}>
-              <div className={STYLES_LOGO} />
-            </div>
-          </div>
+          <div className={STYLES_NAV_ITEM}>{homeItem}</div>
           <div
             className={STYLES_NAV_ITEM}
             onMouseEnter={() => this.setState({ isHoveringOnPlay: true })}
