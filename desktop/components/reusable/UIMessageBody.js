@@ -27,7 +27,8 @@ const STYLES_MENTION = css`
 const STYLES_ANCHOR = css`
   color: ${Constants.REFACTOR_COLORS.text};
   font-weight: 400;
-  overflow-wrap: break-word;
+  overflow-wrap: anywhere;
+  word-break: break-all;
 
   :hover {
     color: ${Constants.REFACTOR_COLORS.text};

@@ -18,7 +18,7 @@ const STYLES_NOTICE = css`
   display: inline-flex;
   align-items: flex-start;
   justify-content: space-between;
-  overflow-wrap: break-word;
+  overflow-wrap: anywhere;
 `;
 
 const STYLES_SUBDUED = css`
@@ -47,8 +47,8 @@ const STYLES_RIGHT = css`
 
 const STYLES_NOTICE_MESSAGE = css`
   line-height: 20px;
-  font-size: 14px;
-  overflow-wrap: break-word;
+  font-size: 12px;
+  overflow-wrap: anywhere;
   white-space: pre-wrap;
   color: ${Constants.REFACTOR_COLORS.text};
 `;
@@ -63,6 +63,10 @@ const STYLES_SUBDUED_MESSAGE = css`
 `;
 
 class NoticeMessage extends React.Component {
+  static defaultProps = {
+    theme: {},
+  };
+
   render() {
     const { message } = this.props;
 
@@ -76,7 +80,11 @@ class NoticeMessage extends React.Component {
               timestamp={this.props.message.timestamp}
               theme={this.props.theme}
             />
-            <div className={STYLES_NOTICE_MESSAGE}>
+            <div
+              className={STYLES_NOTICE_MESSAGE}
+              style={{
+                color: this.props.theme.textColor,
+              }}>
               <UIMessageBody
                 body={message.body}
                 reactions={message.reactions}
