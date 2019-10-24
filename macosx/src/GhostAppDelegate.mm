@@ -17,6 +17,8 @@ extern "C" {
 #include "modules/thread/Channel.h"
 #include "modules/timer/Timer.h"
 
+#import <Bugsnag/Bugsnag.h>
+
 #import <Sparkle/SUAppcastItem.h>
 #import <Sparkle/SUUpdater.h>
 
@@ -52,6 +54,12 @@ NSArray *enumerate_windows(void) {
 }
 
 @implementation GhostAppDelegate
+
+- (void)applicationDidFinishLaunching:(__unused NSNotification *)notification
+{
+  // TODO: we could put this in CI
+  [Bugsnag startBugsnagWithApiKey:@"f4404eb3b5a6367ac2d03264683adff4"];
+}
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(__unused NSApplication *)sender {
   return NO;
@@ -105,19 +113,31 @@ NSArray *enumerate_windows(void) {
 - (void)application:(__unused NSApplication *)application
           openFiles:(nonnull NSArray<NSString *> *)filenames {
   for (NSString *filename in filenames) {
-    ghostHandleOpenUri(filename.UTF8String);
+    try {
+      ghostHandleOpenUri(filename.UTF8String);
+    } catch (NSException *e) {
+      [NSApp reportException:e];
+    }
   }
 }
 
 - (BOOL)application:(__unused NSApplication *)application openFile:(nonnull NSString *)filename {
-  ghostHandleOpenUri(filename.UTF8String);
+  try {
+    ghostHandleOpenUri(filename.UTF8String);
+  } catch (NSException *e) {
+    [NSApp reportException:e];
+  }
   return YES;
 }
 
 - (void)application:(__unused NSApplication *)application
            openURLs:(nonnull NSArray<NSURL *> *)urls {
   for (NSURL *url in urls) {
-    ghostHandleOpenUri([url.absoluteString UTF8String]);
+    try {
+      ghostHandleOpenUri([url.absoluteString UTF8String]);
+    } catch (NSException *e) {
+      [NSApp reportException:e];
+    }
   }
 }
 
@@ -370,8 +390,8 @@ void Cocoa_DispatchEvent(NSEvent *theEvent);
   }
 }
 
-- (BOOL)userNotificationCenter:(NSUserNotificationCenter *)center
-     shouldPresentNotification:(NSUserNotification *)notification {
+- (BOOL)userNotificationCenter:(__unused NSUserNotificationCenter *)center
+     shouldPresentNotification:(__unused NSUserNotification *)notification {
   return YES;
 }
 
