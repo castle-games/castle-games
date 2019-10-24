@@ -60,7 +60,8 @@ void SimpleApp::OnRegisterCustomSchemes(CefRawPtr<CefSchemeRegistrar> registrar)
   registrar->AddCustomScheme(kGhostUrlScheme, true, false, false, false, false, false);
 }
 
-void SimpleApp::OnBeforeCommandLineProcessing(const CefString& process_type, CefRefPtr<CefCommandLine> command_line) {
+void SimpleApp::OnBeforeCommandLineProcessing(const CefString &process_type,
+                                              CefRefPtr<CefCommandLine> command_line) {
   command_line->AppendSwitch("enable-media-stream");
 }
 

@@ -398,41 +398,35 @@ void ghostSetCpuMonitoring(bool isMonitoringCpu) {
   }
 }
 
-GHOST_EXPORT void ghostDoneLoading() {
-  ghostStartObs();
-}
+GHOST_EXPORT void ghostDoneLoading() { ghostStartObs(); }
 
 void ghostGetMicrophonePermission(std::function<void(bool)> callback) {
   if (@available(macOS 10.14, *)) {
     dispatch_async(dispatch_get_main_queue(), ^{
-      switch ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeAudio])
-      {
-        case AVAuthorizationStatusAuthorized:
-        {
-          // The user has previously granted access to the camera.
-          callback(true);
-          break;
-        }
-        case AVAuthorizationStatusNotDetermined:
-        {
-          // The app hasn't yet asked the user for camera access.
-          [AVCaptureDevice requestAccessForMediaType:AVMediaTypeAudio completionHandler:^(BOOL granted) {
-            callback(granted);
-          }];
-          break;
-        }
-        case AVAuthorizationStatusDenied:
-        {
-          // The user has previously denied access.
-          callback(false);
-          return;
-        }
-        case AVAuthorizationStatusRestricted:
-        {
-          // The user can't grant access due to restrictions.
-          callback(false);
-          return;
-        }
+      switch ([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeAudio]) {
+      case AVAuthorizationStatusAuthorized: {
+        // The user has previously granted access to the camera.
+        callback(true);
+        break;
+      }
+      case AVAuthorizationStatusNotDetermined: {
+        // The app hasn't yet asked the user for camera access.
+        [AVCaptureDevice requestAccessForMediaType:AVMediaTypeAudio
+                                 completionHandler:^(BOOL granted) {
+                                   callback(granted);
+                                 }];
+        break;
+      }
+      case AVAuthorizationStatusDenied: {
+        // The user has previously denied access.
+        callback(false);
+        return;
+      }
+      case AVAuthorizationStatusRestricted: {
+        // The user can't grant access due to restrictions.
+        callback(false);
+        return;
+      }
       }
     });
   } else {

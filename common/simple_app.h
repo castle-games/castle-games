@@ -22,7 +22,8 @@ public:
 
   void OnRegisterCustomSchemes(CefRawPtr<CefSchemeRegistrar> registrar) OVERRIDE;
 
-  void OnBeforeCommandLineProcessing(const CefString& process_type, CefRefPtr<CefCommandLine> command_line) OVERRIDE;
+  void OnBeforeCommandLineProcessing(const CefString &process_type,
+                                     CefRefPtr<CefCommandLine> command_line) OVERRIDE;
 
 private:
   std::string _initialUrl;

@@ -94,15 +94,15 @@
       }
       threadBasicInfo = (thread_basic_info_t)threadInfo;
       if (!(threadBasicInfo->flags & TH_FLAGS_IDLE)) {
-        threadUsageSec = threadUsageSec + threadBasicInfo->user_time.seconds + threadBasicInfo->system_time.seconds;
+        threadUsageSec = threadUsageSec + threadBasicInfo->user_time.seconds +
+                         threadBasicInfo->system_time.seconds;
         threadUsageUsec = threadUsageUsec + threadBasicInfo->user_time.microseconds +
-                   threadBasicInfo->system_time.microseconds;
+                          threadBasicInfo->system_time.microseconds;
         totalTaskUsage = totalTaskUsage + threadBasicInfo->cpu_usage / (float)TH_USAGE_SCALE;
       }
     }
   }
-  result =
-      vm_deallocate(mach_task_self(), (vm_offset_t)threads, nThreads * sizeof(thread_t));
+  result = vm_deallocate(mach_task_self(), (vm_offset_t)threads, nThreads * sizeof(thread_t));
   if (_updateCallback) {
     usage[0] = totalTaskUsage;
     _updateCallback(1, usage);

@@ -4,17 +4,17 @@
 
 #ifdef _MSC_VER
 // needed for _alloca
-#include <malloc.h>
 #include <boost/process/windows.hpp>
+#include <malloc.h>
 #endif
 
+#include <boost/algorithm/string/replace.hpp>
 #include <boost/asio.hpp>
+#include <boost/chrono.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
-#include <boost/chrono.hpp>
-#include <boost/thread/thread.hpp> 
 #include <boost/process.hpp>
-#include <boost/algorithm/string/replace.hpp>
+#include <boost/thread/thread.hpp>
 #include <graphics/vec2.h>
 #include <iostream>
 #include <obs.h>
@@ -44,7 +44,7 @@ bool _debug;
 void _sendJSUpdate(string type, string extraParams = "") {
   std::stringstream params;
   params << "{"
-  << " type: \"" << type << "\", ";
+         << " type: \"" << type << "\", ";
 
   if (extraParams.length() > 0) {
     params << extraParams;
@@ -75,7 +75,7 @@ string _ghostPreprocessVideo(string unprocessedVideoPath) {
 #ifdef _MSC_VER
       process::std_out > process::null, process::std_err > ch1Data, ch1Ios, process::windows::hide);
 #else
-	  process::std_out > process::null, process::std_err > ch1Data, ch1Ios);
+      process::std_out > process::null, process::std_err > ch1Data, ch1Ios);
 #endif
 
   ch1Ios.run();
@@ -97,9 +97,10 @@ string _ghostPreprocessVideo(string unprocessedVideoPath) {
                        process::args({"-sseof", timeArg.str(), "-i", unprocessedVideoPath,
                                       "-filter_complex", "[0:v] crop=" + cropAmount, outPath}),
 #ifdef _MSC_VER
-									  process::std_out > process::null, process::std_err > ch2Data, ch2Ios, process::windows::hide);
+                       process::std_out > process::null, process::std_err > ch2Data, ch2Ios,
+                       process::windows::hide);
 #else
-									  process::std_out > process::null, process::std_err > ch2Data, ch2Ios);
+                       process::std_out > process::null, process::std_err > ch2Data, ch2Ios);
 #endif
 
     ch2Ios.run();
@@ -124,12 +125,12 @@ void _ghostObsBackgroundThread() {
       lastReplayPath = path;
 
       string preprocessedPath = _ghostPreprocessVideo(path);
-	  filesystem::path formattedPath = filesystem::path(preprocessedPath).make_preferred();
+      filesystem::path formattedPath = filesystem::path(preprocessedPath).make_preferred();
 
 #ifdef _MSC_VER
-	  string formattedPathString = boost::replace_all_copy(formattedPath.string(), "\\", "\\\\");
+      string formattedPathString = boost::replace_all_copy(formattedPath.string(), "\\", "\\\\");
 #else
-	  string formattedPathString = formattedPath.string();
+      string formattedPathString = formattedPath.string();
 #endif
 
       _sendJSUpdate("completed", " path: \"" + formattedPathString + "\"");
@@ -140,14 +141,14 @@ void _ghostObsBackgroundThread() {
       }
     }
 
-	  boost::this_thread::sleep_for(boost::chrono::milliseconds(100));
+    boost::this_thread::sleep_for(boost::chrono::milliseconds(100));
   }
 }
 
 void _takeScreenCapture() {
   proc_handler_t *proc_handler = obs_output_get_proc_handler(ghostObsOutput);
   proc_handler_call(proc_handler, "save", NULL);
-  
+
   _sendJSUpdate("endRecording");
 }
 
@@ -300,10 +301,11 @@ void _createObsOutput() {
 
     obs_data_set_string(sourceSettings, "capture_mode", "window");
     obs_data_set_string(sourceSettings, "window", "Castle:CefBrowserWindow:Castle.exe");
-    //obs_data_set_int(sourceSettings, "priority", 1); // default priority is "exe" which works fine
+    // obs_data_set_int(sourceSettings, "priority", 1); // default priority is "exe" which works
+    // fine
     obs_data_set_bool(sourceSettings, "capture_cursor", false);
     obs_source_t *ghostObsSource =
-      obs_source_create("game_capture", "castle_source", sourceSettings, NULL);
+        obs_source_create("game_capture", "castle_source", sourceSettings, NULL);
 #else
     // https://github.com/obsproject/obs-studio/blob/master/plugins/mac-capture/mac-window-capture.m
     // window_capture
@@ -311,34 +313,34 @@ void _createObsOutput() {
     obs_data_set_string(sourceSettings, "owner_name", "Castle");
     obs_data_set_string(sourceSettings, "window_name", "castle-player");
     obs_source_t *ghostObsSource =
-      obs_source_create("window_capture", "castle_source", sourceSettings, NULL);
+        obs_source_create("window_capture", "castle_source", sourceSettings, NULL);
 #endif
 
     // encoders
     // https://github.com/obsproject/obs-studio/blob/master/plugins/obs-x264/obs-x264.c
     // https://github.com/obsproject/obs-studio/blob/master/plugins/mac-vth264/encoder.c
-    // need to specify a keyframe interval, otherwise there will only be one keyframe at the beginning and replay_buffer will never purge old frames
+    // need to specify a keyframe interval, otherwise there will only be one keyframe at the
+    // beginning and replay_buffer will never purge old frames
     obs_data_t *videoEncoderSettings = obs_data_create();
     obs_data_set_int(videoEncoderSettings, "keyint_sec", 1);
     // obs_data_set_string(videoEncoderSettings, "profile", "high");
     // obs_data_set_int(videoEncoderSettings, "bitrate", 10000);
     // obs_data_set_int(videoEncoderSettings, "max_bitrate", 10000);
 
-
 #ifdef _MSC_VER
     obs_encoder_t *ghostObsVideoEncoder =
-    obs_video_encoder_create("obs_x264", "castle_encoder", videoEncoderSettings, NULL);
+        obs_video_encoder_create("obs_x264", "castle_encoder", videoEncoderSettings, NULL);
 #else
     obs_encoder_t *ghostObsVideoEncoder =
-    obs_video_encoder_create("vt_h264_hw", "castle_encoder", videoEncoderSettings, NULL);
+        obs_video_encoder_create("vt_h264_hw", "castle_encoder", videoEncoderSettings, NULL);
 #endif
 
 #ifdef _MSC_VER
     obs_encoder_t *ghostObsAudioEncoder =
-    obs_audio_encoder_create("ffmpeg_aac", "castle_audio_encoder", NULL, 0, NULL);
+        obs_audio_encoder_create("ffmpeg_aac", "castle_audio_encoder", NULL, 0, NULL);
 #else
     obs_encoder_t *ghostObsAudioEncoder =
-    obs_audio_encoder_create("CoreAudio_AAC", "castle_audio_encoder", NULL, 0, NULL);
+        obs_audio_encoder_create("CoreAudio_AAC", "castle_audio_encoder", NULL, 0, NULL);
 #endif
 
     // obs-ffmpeg-mux.c window-basic-main-outputs.cpp

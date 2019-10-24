@@ -55,8 +55,7 @@ NSArray *enumerate_windows(void) {
 
 @implementation GhostAppDelegate
 
-- (void)applicationDidFinishLaunching:(__unused NSNotification *)notification
-{
+- (void)applicationDidFinishLaunching:(__unused NSNotification *)notification {
   // TODO: we could put this in CI
   [Bugsnag startBugsnagWithApiKey:@"f4404eb3b5a6367ac2d03264683adff4"];
 }
@@ -103,7 +102,9 @@ NSArray *enumerate_windows(void) {
   self.loveStepping = NO;
   self.windowEventsSubscribed = NO;
 
-  ghostInitObs([[NSString stringWithFormat:@"%@/obs", [[NSBundle mainBundle] resourcePath]] UTF8String], [[[NSBundle mainBundle] pathForResource:@"ffmpeg" ofType:@""] UTF8String]);
+  ghostInitObs(
+      [[NSString stringWithFormat:@"%@/obs", [[NSBundle mainBundle] resourcePath]] UTF8String],
+      [[[NSBundle mainBundle] pathForResource:@"ffmpeg" ofType:@""] UTF8String]);
 }
 
 - (NSApplicationTerminateReply)applicationShouldTerminate:(__unused NSApplication *)sender {

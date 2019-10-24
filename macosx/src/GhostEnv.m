@@ -32,7 +32,8 @@ NSString *const kCastleDisableUpdatesEntirelyKey = @"CastleDisableUpdatesEntirel
 }
 
 + (NSString *)_indexPathFromBundle {
-  NSString *indexPath = [[NSBundle mainBundle] pathForResource:@"index" ofType:@"html" inDirectory:@"web"];
+  NSString *indexPath =
+      [[NSBundle mainBundle] pathForResource:@"index" ofType:@"html" inDirectory:@"web"];
   NSAssert(indexPath && indexPath.length,
            @"The NSBundle must contain an embedded index.html to run Castle");
   indexPath = [NSString stringWithFormat:@"file://%@", indexPath];
