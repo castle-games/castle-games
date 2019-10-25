@@ -118,7 +118,7 @@ const dpadCardinalNormalSizePercent = `${dpadCardinalNormalSize}%`;
 const dpadCardinalTangentCenteringPercent = `${0.5 * (100 - dpadCardinalTangentSize)}%`;
 
 const dpadUpInputStyle = {
-  backgroundColor: '#00ff00aa',
+  // backgroundColor: '#00ff0033',
   width: dpadCardinalTangentSizePercent,
   height: dpadCardinalNormalSizePercent,
   position: 'absolute',
@@ -127,7 +127,7 @@ const dpadUpInputStyle = {
 };
 
 const dpadDownInputStyle = {
-  backgroundColor: '#00ff00aa',
+  // backgroundColor: '#00ff0033',
   width: dpadCardinalTangentSizePercent,
   height: dpadCardinalNormalSizePercent,
   position: 'absolute',
@@ -136,7 +136,7 @@ const dpadDownInputStyle = {
 };
 
 const dpadLeftInputStyle = {
-  backgroundColor: '#ff0000aa',
+  // backgroundColor: '#ff000033',
   width: dpadCardinalNormalSizePercent,
   height: dpadCardinalTangentSizePercent,
   position: 'absolute',
@@ -145,7 +145,7 @@ const dpadLeftInputStyle = {
 };
 
 const dpadRightInputStyle = {
-  backgroundColor: '#ff0000aa',
+  // backgroundColor: '#ff000033',
   width: dpadCardinalNormalSizePercent,
   height: dpadCardinalTangentSizePercent,
   position: 'absolute',
@@ -154,7 +154,7 @@ const dpadRightInputStyle = {
 };
 
 const dpadUpLeftInputStyle = {
-  backgroundColor: '#0000ffaa',
+  // backgroundColor: '#0000ff33',
   width: dpadDiagonalSizePercent,
   height: dpadDiagonalSizePercent,
   position: 'absolute',
@@ -163,7 +163,7 @@ const dpadUpLeftInputStyle = {
 };
 
 const dpadUpRightInputStyle = {
-  backgroundColor: '#0000ffaa',
+  // backgroundColor: '#0000ff33',
   width: dpadDiagonalSizePercent,
   height: dpadDiagonalSizePercent,
   position: 'absolute',
@@ -172,7 +172,7 @@ const dpadUpRightInputStyle = {
 };
 
 const dpadDownLeftInputStyle = {
-  backgroundColor: '#0000ffaa',
+  // backgroundColor: '#0000ff33',
   width: dpadDiagonalSizePercent,
   height: dpadDiagonalSizePercent,
   position: 'absolute',
@@ -181,7 +181,7 @@ const dpadDownLeftInputStyle = {
 };
 
 const dpadDownRightInputStyle = {
-  backgroundColor: '#0000ffaa',
+  // backgroundColor: '#0000ff33',
   width: dpadDiagonalSizePercent,
   height: dpadDiagonalSizePercent,
   position: 'absolute',
@@ -236,7 +236,6 @@ const DPadInputs = () => {
     <Fragment>
       <ImageBackground
         source={require('../assets/images/dpad-full.png')}
-        tintColor="#ffffffaa"
         style={dpadInputStyle}>
         <GhostInputZone zoneRef={dpadZoneRef} style={{ flex: 1 }}>
           <GhostInputView
