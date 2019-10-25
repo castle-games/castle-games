@@ -19,6 +19,6 @@ public class GhostPackage implements ReactPackage {
   public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
     return Arrays.<ViewManager>asList(
         new GhostViewManager(reactContext),
-        new GhostInputViewManager());
+        new GhostInputZoneManager());
   }
 }

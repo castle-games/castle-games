@@ -1,7 +1,7 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useRef } from 'react';
 import { View, Text } from 'react-native';
 
-import GhostInputView from './ghost/GhostInputView';
+import { GhostInputView, GhostInputZone } from './ghost/GhostInput';
 
 const INPUTS_MODE_SPLIT = 0;
 const INPUTS_MODE_DPAD = 1;
@@ -80,6 +80,7 @@ const splitVerticalInputStyle = {
   position: 'absolute',
   bottom: 8,
   left: 8,
+  backgroundColor: 'red',
 };
 
 const splitHorizontalInputStyle = {
@@ -87,6 +88,7 @@ const splitHorizontalInputStyle = {
   bottom: 8,
   right: 8,
   flexDirection: 'row',
+  backgroundColor: 'red',
 };
 
 const splitActionInputStyle = {
@@ -94,6 +96,7 @@ const splitActionInputStyle = {
   bottom: 94,
   right: 8,
   flexDirection: 'row',
+  backgroundColor: 'red',
 };
 
 const dpadVerticalInputStyle = {
@@ -120,39 +123,45 @@ const dpadActionInputStyle = {
   flexDirection: 'row',
 };
 
-const GameInputs = ({ visible, inputsMode }) =>
-  !visible || inputsMode === INPUTS_MODE_NONE ? null : (
+const GameInputs = ({ visible, inputsMode }) => {
+  const upDownZoneRef = useRef(null);
+  const leftRightZoneRef = useRef(null);
+  const actionZoneRef = useRef(null);
+
+  return !visible || inputsMode === INPUTS_MODE_NONE ? null : (
     <Fragment>
-      <View
-        pointerEvents="box-none"
+      <GhostInputZone
+        zoneRef={upDownZoneRef}
         style={inputsMode === INPUTS_MODE_SPLIT ? splitVerticalInputStyle : dpadVerticalInputStyle}>
-        <GhostInputView style={inputStyle} input="up">
+        <GhostInputView style={inputStyle} zoneRef={upDownZoneRef} config={{ keyCode: 'up' }}>
           <Triangle direction="up" size={25} />
         </GhostInputView>
-        <GhostInputView style={inputStyle} input="down">
+        <GhostInputView style={inputStyle} zoneRef={upDownZoneRef} config={{ keyCode: 'down' }}>
           <Triangle direction="down" size={25} />
         </GhostInputView>
-      </View>
-      <View
-        pointerEvents="box-none"
+      </GhostInputZone>
+      <GhostInputZone
+        zoneRef={leftRightZoneRef}
         style={
           inputsMode === INPUTS_MODE_SPLIT ? splitHorizontalInputStyle : dpadHorizontalInputStyle
         }>
-        <GhostInputView style={inputStyle} input="left">
+        <GhostInputView style={inputStyle} zoneRef={leftRightZoneRef} config={{ keyCode: 'left' }}>
           <Triangle direction="left" size={25} />
         </GhostInputView>
-        <GhostInputView style={inputStyle} input="right">
+        <GhostInputView style={inputStyle} zoneRef={leftRightZoneRef} config={{ keyCode: 'right' }}>
           <Triangle direction="right" size={25} />
         </GhostInputView>
-      </View>
-      <View
+      </GhostInputZone>
+      <GhostInputZone
+        zoneRef={actionZoneRef}
         pointerEvents="box-none"
         style={inputsMode === INPUTS_MODE_SPLIT ? splitActionInputStyle : dpadActionInputStyle}>
-        <GhostInputView style={inputStyle} input="return">
+        <GhostInputView style={inputStyle} zoneRef={actionZoneRef} config={{ keyCode: 'return' }}>
           <Text style={inputIconStyle}>⏎</Text>
         </GhostInputView>
-      </View>
+      </GhostInputZone>
     </Fragment>
   );
+};
 
 export default GameInputs;

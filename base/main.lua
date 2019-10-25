@@ -132,8 +132,8 @@ local updateMobileKeyboardEvents
 if isMobile then
     local isKeyDown = {}
 
-    local downChannel = love.thread.getChannel('GHOST_INPUT_DOWN')
-    local upChannel = love.thread.getChannel('GHOST_INPUT_UP')
+    local downChannel = love.thread.getChannel('GHOST_KEY_DOWN')
+    local upChannel = love.thread.getChannel('GHOST_KEY_UP')
 
     downChannel:clear()
     upChannel:clear()
