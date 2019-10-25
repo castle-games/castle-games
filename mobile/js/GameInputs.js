@@ -1,5 +1,5 @@
 import React, { Fragment, useRef } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ImageBackground } from 'react-native';
 
 import { GhostInputView, GhostInputZone } from './ghost/GhostInput';
 
@@ -98,37 +98,39 @@ const splitActionInputStyle = {
 
 const dpadInputStyle = {
   position: 'absolute',
-  bottom: 8,
-  left: 8,
-  height: 206,
-  width: 206,
+  bottom: 16,
+  left: 16,
+  height: 160,
+  width: 160,
 };
 
 const dpadUpInputStyle = {
-  ...inputStyle,
-  position: 'absolute',
-  top: 0,
-  left: 60,
+  // backgroundColor: '#00ff00aa',
+  width: '100%',
+  height: '35%',
 }
 
 const dpadDownInputStyle = {
-  ...inputStyle,
+  // backgroundColor: '#ff0000aa',
+  width: '100%',
+  height: '35%',
   position: 'absolute',
   bottom: 0,
-  left: 60,
 }
 
 const dpadLeftInputStyle = {
-  ...inputStyle,
+  // backgroundColor: '#0000ffaa',
+  width: '35%',
+  height: '100%',
   position: 'absolute',
-  top: 60,
-  left: 0,
+  bottom: 0,
 }
 
 const dpadRightInputStyle = {
-  ...inputStyle,
+  // backgroundColor: '#ffff00aa',
+  width: '35%',
+  height: '100%',
   position: 'absolute',
-  top: 60,
   right: 0,
 }
 
@@ -178,18 +180,23 @@ const DPadInputs = () => {
   return (
     <Fragment>
       <GhostInputZone zoneRef={dpadZoneRef} style={dpadInputStyle}>
-        <GhostInputView style={dpadUpInputStyle} zoneRef={dpadZoneRef} config={{ keyCode: 'up' }}>
-          <Triangle direction="up" size={25} />
-        </GhostInputView>
-        <GhostInputView style={dpadDownInputStyle} zoneRef={dpadZoneRef} config={{ keyCode: 'down' }}>
-          <Triangle direction="down" size={25} />
-        </GhostInputView>
-        <GhostInputView style={dpadLeftInputStyle} zoneRef={dpadZoneRef} config={{ keyCode: 'left' }}>
-          <Triangle direction="left" size={25} />
-        </GhostInputView>
-        <GhostInputView style={dpadRightInputStyle} zoneRef={dpadZoneRef} config={{ keyCode: 'right' }}>
-          <Triangle direction="right" size={25} />
-        </GhostInputView>
+        <ImageBackground
+          source={require('../assets/images/dpad-full.png')}
+          tintColor='#ffffffaa'
+          style={{ width: '100%', height: '100%' }}>
+          <GhostInputView style={dpadUpInputStyle} zoneRef={dpadZoneRef} config={{ keyCode: 'up' }}>
+            {/* <Triangle direction="up" size={25} /> */}
+          </GhostInputView>
+          <GhostInputView style={dpadDownInputStyle} zoneRef={dpadZoneRef} config={{ keyCode: 'down' }}>
+            {/* <Triangle direction="down" size={25} /> */}
+          </GhostInputView>
+          <GhostInputView style={dpadLeftInputStyle} zoneRef={dpadZoneRef} config={{ keyCode: 'left' }}>
+            {/* <Triangle direction="left" size={25} /> */}
+          </GhostInputView>
+          <GhostInputView style={dpadRightInputStyle} zoneRef={dpadZoneRef} config={{ keyCode: 'right' }}>
+            {/* <Triangle direction="right" size={25} /> */}
+          </GhostInputView>
+        </ImageBackground>
       </GhostInputZone>
       <GhostInputZone zoneRef={actionZoneRef} style={dpadActionInputStyle}>
         <GhostInputView style={inputStyle} zoneRef={actionZoneRef} config={{ keyCode: 'return' }}>
