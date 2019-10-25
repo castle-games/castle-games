@@ -105,12 +105,14 @@ const dpadInputStyle = {
 };
 
 // D-pad tuning constants -- these are the human-editable values
-const dpadDiagonalSize = 30;
-const dpadCardinalTangentSize = 50;
-const dpadCardinalNormalSize = 40;
+const dpadDiagonalSize = 35;
+const dpadDiagonalMargin = 5;
+const dpadCardinalTangentSize = 40; // Size along the edge of the d-pad
+const dpadCardinalNormalSize = 40; // Size perpendicular to the edge of the d-pad
 
 // NOTE: These values must just be computed from the above -- preferrably don't edit manually!
 const dpadDiagonalSizePercent = `${dpadDiagonalSize}%`;
+const dpadDiagonalMarginPercent = `${dpadDiagonalMargin}%`;
 const dpadCardinalTangentSizePercent = `${dpadCardinalTangentSize}%`;
 const dpadCardinalNormalSizePercent = `${dpadCardinalNormalSize}%`;
 const dpadCardinalTangentCenteringPercent = `${0.5 * (100 - dpadCardinalTangentSize)}%`;
@@ -156,8 +158,8 @@ const dpadUpLeftInputStyle = {
   width: dpadDiagonalSizePercent,
   height: dpadDiagonalSizePercent,
   position: 'absolute',
-  top: 0,
-  left: 0,
+  top: dpadDiagonalMarginPercent,
+  left: dpadDiagonalMarginPercent,
 };
 
 const dpadUpRightInputStyle = {
@@ -165,8 +167,8 @@ const dpadUpRightInputStyle = {
   width: dpadDiagonalSizePercent,
   height: dpadDiagonalSizePercent,
   position: 'absolute',
-  top: 0,
-  right: 0,
+  top: dpadDiagonalMarginPercent,
+  right: dpadDiagonalMarginPercent,
 };
 
 const dpadDownLeftInputStyle = {
@@ -174,8 +176,8 @@ const dpadDownLeftInputStyle = {
   width: dpadDiagonalSizePercent,
   height: dpadDiagonalSizePercent,
   position: 'absolute',
-  bottom: 0,
-  left: 0,
+  bottom: dpadDiagonalMarginPercent,
+  left: dpadDiagonalMarginPercent,
 };
 
 const dpadDownRightInputStyle = {
@@ -183,8 +185,8 @@ const dpadDownRightInputStyle = {
   width: dpadDiagonalSizePercent,
   height: dpadDiagonalSizePercent,
   position: 'absolute',
-  bottom: 0,
-  right: 0,
+  bottom: dpadDiagonalMarginPercent,
+  right: dpadDiagonalMarginPercent,
 };
 
 const dpadActionInputStyle = {
@@ -232,53 +234,45 @@ const DPadInputs = () => {
 
   return (
     <Fragment>
-      <GhostInputZone zoneRef={dpadZoneRef} style={dpadInputStyle}>
-        <ImageBackground
-          source={require('../assets/images/dpad-full.png')}
-          tintColor="#ffffffaa"
-          style={{ width: '100%', height: '100%' }}>
+      <ImageBackground
+        source={require('../assets/images/dpad-full.png')}
+        tintColor="#ffffffaa"
+        style={dpadInputStyle}>
+        <GhostInputZone zoneRef={dpadZoneRef} style={{ flex: 1 }}>
           <GhostInputView
             style={dpadUpInputStyle}
             zoneRef={dpadZoneRef}
-            config={{ keyCode: 'up' }}>
-          </GhostInputView>
+            config={{ keyCode: 'up' }}></GhostInputView>
           <GhostInputView
             style={dpadDownInputStyle}
             zoneRef={dpadZoneRef}
-            config={{ keyCode: 'down' }}>
-          </GhostInputView>
+            config={{ keyCode: 'down' }}></GhostInputView>
           <GhostInputView
             style={dpadLeftInputStyle}
             zoneRef={dpadZoneRef}
-            config={{ keyCode: 'left' }}>
-          </GhostInputView>
+            config={{ keyCode: 'left' }}></GhostInputView>
           <GhostInputView
             style={dpadRightInputStyle}
             zoneRef={dpadZoneRef}
-            config={{ keyCode: 'right' }}>
-          </GhostInputView>
+            config={{ keyCode: 'right' }}></GhostInputView>
           <GhostInputView
             style={dpadUpLeftInputStyle}
             zoneRef={dpadZoneRef}
-            config={{ keyCode: 'up_left' }}>
-          </GhostInputView>
+            config={{ keyCode: 'up_left' }}></GhostInputView>
           <GhostInputView
             style={dpadUpRightInputStyle}
             zoneRef={dpadZoneRef}
-            config={{ keyCode: 'up_right' }}>
-          </GhostInputView>
+            config={{ keyCode: 'up_right' }}></GhostInputView>
           <GhostInputView
             style={dpadDownLeftInputStyle}
             zoneRef={dpadZoneRef}
-            config={{ keyCode: 'down_left' }}>
-          </GhostInputView>
+            config={{ keyCode: 'down_left' }}></GhostInputView>
           <GhostInputView
             style={dpadDownRightInputStyle}
             zoneRef={dpadZoneRef}
-            config={{ keyCode: 'down_right' }}>
-          </GhostInputView>
-        </ImageBackground>
-      </GhostInputZone>
+            config={{ keyCode: 'down_right' }}></GhostInputView>
+        </GhostInputZone>
+      </ImageBackground>
       <GhostInputZone zoneRef={actionZoneRef} style={dpadActionInputStyle}>
         <GhostInputView style={inputStyle} zoneRef={actionZoneRef} config={{ keyCode: 'return' }}>
           <Text style={inputIconStyle}>⏎</Text>
