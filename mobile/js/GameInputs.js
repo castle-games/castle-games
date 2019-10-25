@@ -104,46 +104,57 @@ const dpadInputStyle = {
   width: 160,
 };
 
+// D-pad tuning constants -- these are the human-editable values
+const dpadDiagonalSize = 30;
+const dpadCardinalTangentSize = 50;
+const dpadCardinalNormalSize = 40;
+
+// NOTE: These values must just be computed from the above -- preferrably don't edit manually!
+const dpadDiagonalSizePercent = `${dpadDiagonalSize}%`;
+const dpadCardinalTangentSizePercent = `${dpadCardinalTangentSize}%`;
+const dpadCardinalNormalSizePercent = `${dpadCardinalNormalSize}%`;
+const dpadCardinalTangentCenteringPercent = `${0.5 * (100 - dpadCardinalTangentSize)}%`;
+
 const dpadUpInputStyle = {
   backgroundColor: '#00ff00aa',
-  width: '50%',
-  height: '40%',
+  width: dpadCardinalTangentSizePercent,
+  height: dpadCardinalNormalSizePercent,
   position: 'absolute',
   top: 0,
-  left: '25%',
+  left: dpadCardinalTangentCenteringPercent,
 };
 
 const dpadDownInputStyle = {
   backgroundColor: '#00ff00aa',
-  width: '50%',
-  height: '40%',
+  width: dpadCardinalTangentSizePercent,
+  height: dpadCardinalNormalSizePercent,
   position: 'absolute',
   bottom: 0,
-  left: '25%',
+  left: dpadCardinalTangentCenteringPercent,
 };
 
 const dpadLeftInputStyle = {
   backgroundColor: '#ff0000aa',
-  width: '40%',
-  height: '50%',
+  width: dpadCardinalNormalSizePercent,
+  height: dpadCardinalTangentSizePercent,
   position: 'absolute',
-  top: '25%',
+  top: dpadCardinalTangentCenteringPercent,
   left: 0,
 };
 
 const dpadRightInputStyle = {
   backgroundColor: '#ff0000aa',
-  width: '40%',
-  height: '50%',
+  width: dpadCardinalNormalSizePercent,
+  height: dpadCardinalTangentSizePercent,
   position: 'absolute',
-  top: '25%',
+  top: dpadCardinalTangentCenteringPercent,
   right: 0,
 };
 
 const dpadUpLeftInputStyle = {
   backgroundColor: '#0000ffaa',
-  width: '30%',
-  height: '30%',
+  width: dpadDiagonalSizePercent,
+  height: dpadDiagonalSizePercent,
   position: 'absolute',
   top: 0,
   left: 0,
@@ -151,8 +162,8 @@ const dpadUpLeftInputStyle = {
 
 const dpadUpRightInputStyle = {
   backgroundColor: '#0000ffaa',
-  width: '30%',
-  height: '30%',
+  width: dpadDiagonalSizePercent,
+  height: dpadDiagonalSizePercent,
   position: 'absolute',
   top: 0,
   right: 0,
@@ -160,8 +171,8 @@ const dpadUpRightInputStyle = {
 
 const dpadDownLeftInputStyle = {
   backgroundColor: '#0000ffaa',
-  width: '30%',
-  height: '30%',
+  width: dpadDiagonalSizePercent,
+  height: dpadDiagonalSizePercent,
   position: 'absolute',
   bottom: 0,
   left: 0,
@@ -169,8 +180,8 @@ const dpadDownLeftInputStyle = {
 
 const dpadDownRightInputStyle = {
   backgroundColor: '#0000ffaa',
-  width: '30%',
-  height: '30%',
+  width: dpadDiagonalSizePercent,
+  height: dpadDiagonalSizePercent,
   position: 'absolute',
   bottom: 0,
   right: 0,
