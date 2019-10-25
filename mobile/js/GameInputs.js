@@ -3,7 +3,7 @@ import { View, Text, ImageBackground } from 'react-native';
 
 import { GhostInputView, GhostInputZone } from './ghost/GhostInput';
 
-const HAPTICS = { duration: 30, amplitude: 120 };
+const HAPTICS = { duration: 20, amplitude: 80 };
 
 const INPUTS_MODE_SPLIT = 0;
 const INPUTS_MODE_DPAD = 1;
