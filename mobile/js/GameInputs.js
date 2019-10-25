@@ -3,6 +3,8 @@ import { View, Text, ImageBackground } from 'react-native';
 
 import { GhostInputView, GhostInputZone } from './ghost/GhostInput';
 
+const HAPTICS = { duration: 30, amplitude: 120 };
+
 const INPUTS_MODE_SPLIT = 0;
 const INPUTS_MODE_DPAD = 1;
 const INPUTS_MODE_NONE = 2;
@@ -203,7 +205,7 @@ const SplitInputs = () => {
 
   return (
     <Fragment>
-      <GhostInputZone zoneRef={upDownZoneRef} style={splitVerticalInputStyle}>
+      <GhostInputZone zoneRef={upDownZoneRef} haptics={HAPTICS} style={splitVerticalInputStyle}>
         <GhostInputView style={inputStyle} zoneRef={upDownZoneRef} config={{ keyCode: 'up' }}>
           <Triangle direction="up" size={25} />
         </GhostInputView>
@@ -211,7 +213,7 @@ const SplitInputs = () => {
           <Triangle direction="down" size={25} />
         </GhostInputView>
       </GhostInputZone>
-      <GhostInputZone zoneRef={leftRightZoneRef} style={splitHorizontalInputStyle}>
+      <GhostInputZone zoneRef={leftRightZoneRef} haptics={HAPTICS} style={splitHorizontalInputStyle}>
         <GhostInputView style={inputStyle} zoneRef={leftRightZoneRef} config={{ keyCode: 'left' }}>
           <Triangle direction="left" size={25} />
         </GhostInputView>
@@ -219,7 +221,7 @@ const SplitInputs = () => {
           <Triangle direction="right" size={25} />
         </GhostInputView>
       </GhostInputZone>
-      <GhostInputZone zoneRef={actionZoneRef} style={splitActionInputStyle}>
+      <GhostInputZone zoneRef={actionZoneRef} haptics={HAPTICS} style={splitActionInputStyle}>
         <GhostInputView style={inputStyle} zoneRef={actionZoneRef} config={{ keyCode: 'return' }}>
           <Text style={inputIconStyle}>⏎</Text>
         </GhostInputView>
@@ -237,7 +239,7 @@ const DPadInputs = () => {
       <ImageBackground
         source={require('../assets/images/dpad-full.png')}
         style={dpadInputStyle}>
-        <GhostInputZone zoneRef={dpadZoneRef} style={{ flex: 1 }}>
+        <GhostInputZone zoneRef={dpadZoneRef} haptics={HAPTICS} style={{ flex: 1 }}>
           <GhostInputView
             style={dpadUpInputStyle}
             zoneRef={dpadZoneRef}
@@ -272,7 +274,7 @@ const DPadInputs = () => {
             config={{ keyCode: 'down_right' }}></GhostInputView>
         </GhostInputZone>
       </ImageBackground>
-      <GhostInputZone zoneRef={actionZoneRef} style={dpadActionInputStyle}>
+      <GhostInputZone zoneRef={actionZoneRef} haptics={HAPTICS} style={dpadActionInputStyle}>
         <GhostInputView style={inputStyle} zoneRef={actionZoneRef} config={{ keyCode: 'return' }}>
           <Text style={inputIconStyle}>⏎</Text>
         </GhostInputView>

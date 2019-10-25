@@ -50,12 +50,12 @@ export const GhostInputView = ({ zoneRef, config, style, children }) => {
 
 export const NativeGhostInputZone = requireNativeComponent('GhostInputZone', null);
 
-export const GhostInputZone = ({ zoneRef, style, children }) => {
+export const GhostInputZone = ({ zoneRef, haptics, style, children }) => {
   return (
     <View style={style}>
       {children}
       <View style={{ position: 'absolute', left: 0, top: 0, right: 0, bottom: 0 }}>
-        <NativeGhostInputZone ref={zoneRef} style={{ flex: 1 }} />
+        <NativeGhostInputZone ref={zoneRef} haptics={haptics} style={{ flex: 1 }} />
       </View>
     </View>
   );

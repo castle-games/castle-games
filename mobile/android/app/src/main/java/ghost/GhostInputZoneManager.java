@@ -1,6 +1,9 @@
 package ghost;
 
 import android.content.Context;
+import android.os.Build;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
@@ -9,6 +12,7 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
+import com.facebook.react.uimanager.annotations.ReactProp;
 
 import org.love2d.android.Channels;
 
@@ -33,6 +37,9 @@ class GhostInputZone extends View implements View.OnTouchListener {
   }
 
   private SparseArray<ChildState> childStates = new SparseArray<ChildState>();
+
+  public int hapticsDuration = 40;
+  public int hapticsAmplitude = 80;
 
   public void updateChild(int childId, double x, double y, double width, double height, ReadableMap config) {
     ChildState childState = childStates.get(childId);
@@ -103,17 +110,29 @@ class GhostInputZone extends View implements View.OnTouchListener {
     }
 
     // Send events
+    boolean vibrate = false;
     for (int i = 0; i < childStates.size(); ++i) {
       ChildState childState = childStates.valueAt(i);
       boolean currDown = closest != null && childState.id == closest.id;
       if (currDown != childState.prevDown) {
         if (currDown) {
           Channels.nativePush("GHOST_KEY_DOWN", childState.keyCode);
+          vibrate = true;
         } else {
           Channels.nativePush("GHOST_KEY_UP", childState.keyCode);
         }
       }
       childState.prevDown = currDown;
+    }
+
+    // Vibrate if needed
+    if (vibrate) {
+      Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        vibrator.vibrate(VibrationEffect.createOneShot(hapticsDuration, hapticsAmplitude));
+      } else {
+        vibrator.vibrate(hapticsDuration);
+      }
     }
 
     return true;
@@ -131,6 +150,16 @@ public class GhostInputZoneManager extends SimpleViewManager<GhostInputZone> {
   protected @Nonnull
   GhostInputZone createViewInstance(@Nonnull ThemedReactContext reactContext) {
     return new GhostInputZone(reactContext);
+  }
+
+  @ReactProp(name = "haptics")
+  public void setHaptics(GhostInputZone view, ReadableMap haptics) {
+    if (haptics.hasKey("duration")) {
+      view.hapticsDuration = haptics.getInt("duration");
+    }
+    if (haptics.hasKey("amplitude")) {
+      view.hapticsAmplitude = haptics.getInt("amplitude");
+    }
   }
 
   @Override
