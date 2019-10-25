@@ -85,12 +85,12 @@ const ProfileScreen = () => {
               alignItems: 'center',
               paddingBottom: 24,
               backgroundColor: '#fff',
-              shadowColor: "#000",
+              shadowColor: '#000',
               shadowOffset: {
                 width: 0,
                 height: 1,
               },
-              shadowOpacity: 0.20,
+              shadowOpacity: 0.2,
               shadowRadius: 1.41,
               elevation: 2,
             }}>

@@ -17,32 +17,35 @@ import ProfileScreen from './ProfileScreen';
 
 // App UI layout
 
-const HomeNavigator = createStackNavigator({
-  HomeScreen: {
-    screen: HomeScreen,
-    navigationOptions: {
-      headerTitle: (
-        <View style={{ paddingHorizontal: 16, flexDirection: 'row', alignItems: 'flex-end' }}>
-          <FastImage
-            style={{
-              width: 30,
-              aspectRatio: 1,
-              marginBottom: 4,
-              marginRight: 8,
-            }}
-            source={require('../assets/images/castle-classic-yellow.png')}
-          />
-          <Text style={{ fontSize: 24, letterSpacing: 0.5, fontFamily: 'RTAliasGrotesk-Bold' }}>
-            Castle
-          </Text>
-        </View>
-      ),
-      headerStyle: { elevation: 2 },
+const HomeNavigator = createStackNavigator(
+  {
+    HomeScreen: {
+      screen: HomeScreen,
+      navigationOptions: {
+        headerTitle: (
+          <View style={{ paddingHorizontal: 16, flexDirection: 'row', alignItems: 'flex-end' }}>
+            <FastImage
+              style={{
+                width: 30,
+                aspectRatio: 1,
+                marginBottom: 4,
+                marginRight: 8,
+              }}
+              source={require('../assets/images/castle-classic-yellow.png')}
+            />
+            <Text style={{ fontSize: 24, letterSpacing: 0.5, fontFamily: 'RTAliasGrotesk-Bold' }}>
+              Castle
+            </Text>
+          </View>
+        ),
+        headerStyle: { elevation: 2 },
+      },
     },
   },
-}, {
-  headerLayoutPreset: 'left',
-});
+  {
+    headerLayoutPreset: 'left',
+  }
+);
 
 const ProfileNavigator = createSwitchNavigator({
   ProfileScreen: {

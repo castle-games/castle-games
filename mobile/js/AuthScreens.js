@@ -1,5 +1,13 @@
 import React, { useState, Fragment } from 'react';
-import { View, TouchableOpacity, Text, TextInput, StatusBar, Linking, ActivityIndicator } from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  TextInput,
+  StatusBar,
+  Linking,
+  ActivityIndicator,
+} from 'react-native';
 import { useNavigation, useNavigationParam } from 'react-navigation-hooks';
 import FastImage from 'react-native-fast-image';
 
@@ -17,7 +25,7 @@ const textInputStyle = {
 
 const disabledTextInputStyle = {
   backgroundColor: '#ddd',
-}
+};
 
 const Announcement = props => {
   return (
@@ -73,7 +81,7 @@ const Button = props => {
             right: 0,
             justifyContent: 'center',
           }}>
-          <ActivityIndicator size='small' color='#fff' />
+          <ActivityIndicator size="small" color="#fff" />
         </View>
       ) : null}
     </View>

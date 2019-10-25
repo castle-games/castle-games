@@ -108,7 +108,7 @@ const dpadUpInputStyle = {
   // backgroundColor: '#00ff00aa',
   width: '100%',
   height: '35%',
-}
+};
 
 const dpadDownInputStyle = {
   // backgroundColor: '#ff0000aa',
@@ -116,7 +116,7 @@ const dpadDownInputStyle = {
   height: '35%',
   position: 'absolute',
   bottom: 0,
-}
+};
 
 const dpadLeftInputStyle = {
   // backgroundColor: '#0000ffaa',
@@ -124,7 +124,7 @@ const dpadLeftInputStyle = {
   height: '100%',
   position: 'absolute',
   bottom: 0,
-}
+};
 
 const dpadRightInputStyle = {
   // backgroundColor: '#ffff00aa',
@@ -132,7 +132,7 @@ const dpadRightInputStyle = {
   height: '100%',
   position: 'absolute',
   right: 0,
-}
+};
 
 const dpadActionInputStyle = {
   position: 'absolute',
@@ -182,18 +182,27 @@ const DPadInputs = () => {
       <GhostInputZone zoneRef={dpadZoneRef} style={dpadInputStyle}>
         <ImageBackground
           source={require('../assets/images/dpad-full.png')}
-          tintColor='#ffffffaa'
+          tintColor="#ffffffaa"
           style={{ width: '100%', height: '100%' }}>
           <GhostInputView style={dpadUpInputStyle} zoneRef={dpadZoneRef} config={{ keyCode: 'up' }}>
             {/* <Triangle direction="up" size={25} /> */}
           </GhostInputView>
-          <GhostInputView style={dpadDownInputStyle} zoneRef={dpadZoneRef} config={{ keyCode: 'down' }}>
+          <GhostInputView
+            style={dpadDownInputStyle}
+            zoneRef={dpadZoneRef}
+            config={{ keyCode: 'down' }}>
             {/* <Triangle direction="down" size={25} /> */}
           </GhostInputView>
-          <GhostInputView style={dpadLeftInputStyle} zoneRef={dpadZoneRef} config={{ keyCode: 'left' }}>
+          <GhostInputView
+            style={dpadLeftInputStyle}
+            zoneRef={dpadZoneRef}
+            config={{ keyCode: 'left' }}>
             {/* <Triangle direction="left" size={25} /> */}
           </GhostInputView>
-          <GhostInputView style={dpadRightInputStyle} zoneRef={dpadZoneRef} config={{ keyCode: 'right' }}>
+          <GhostInputView
+            style={dpadRightInputStyle}
+            zoneRef={dpadZoneRef}
+            config={{ keyCode: 'right' }}>
             {/* <Triangle direction="right" size={25} /> */}
           </GhostInputView>
         </ImageBackground>

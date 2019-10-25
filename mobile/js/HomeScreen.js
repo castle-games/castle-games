@@ -28,13 +28,13 @@ export const GameCard = ({ game }) => {
         width: '50%',
         padding: 8,
         overflow: 'hidden',
-        shadowColor: "#000",
+        shadowColor: '#000',
         shadowOffset: {
           width: 0,
           height: 1,
         },
         shadowOpacity: 0.18,
-        shadowRadius: 1.00,
+        shadowRadius: 1.0,
       }}
       delayPressIn={50}
       onPress={() => GameScreen.goToGame({ gameId: game.gameId })}>
@@ -83,22 +83,24 @@ export const GameCard = ({ game }) => {
 
 const SectionHeaderText = ({ children }) => {
   return (
-    <View style={{
-      width: '100%',
-      padding: 16,
-      paddingTop: 32,
-      alignItems: 'center',
-    }}>
-      <Text style={{
-        fontFamily: 'RTAliasGrotesk-Regular',
-        textTransform: 'uppercase',
-        letterSpacing: 1,
+    <View
+      style={{
+        width: '100%',
+        padding: 16,
+        paddingTop: 32,
+        alignItems: 'center',
       }}>
+      <Text
+        style={{
+          fontFamily: 'RTAliasGrotesk-Regular',
+          textTransform: 'uppercase',
+          letterSpacing: 1,
+        }}>
         {children}
       </Text>
     </View>
-  )
-}
+  );
+};
 
 const HomeScreen = () => {
   const { loading: queryLoading, error: queryError, data: queryData } = useQuery(gql`
@@ -154,7 +156,7 @@ const HomeScreen = () => {
               placeholder="Paste a Castle game URL"
               returnKeyType="go"
               clearButtonMode="while-editing"
-              onSubmitEditing={(e) => GameScreen.goToGame({ gameUri: e.nativeEvent.text })}
+              onSubmitEditing={e => GameScreen.goToGame({ gameUri: e.nativeEvent.text })}
             />
           </View>
           <SectionHeaderText>Trending</SectionHeaderText>
