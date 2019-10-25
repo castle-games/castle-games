@@ -1,7 +1,6 @@
 package ghost;
 
 import android.content.Context;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
@@ -81,8 +80,6 @@ class GhostInputZone extends View implements View.OnTouchListener {
     double x = event.getRawX() - zoneX;
     double y = event.getRawY() - zoneY;
 
-    Log.d("GHOST_INPUT_ZONE", String.format("x: %f, y: %f, down: %b", x, y, down));
-
     // See if it hit someone
     ChildState closest = null;
     double closestSquaredDist = Double.MAX_VALUE;
@@ -99,6 +96,7 @@ class GhostInputZone extends View implements View.OnTouchListener {
           double squaredDist = dx * dx + dy * dy;
           if (squaredDist < closestSquaredDist) {
             closest = childState;
+            closestSquaredDist = squaredDist;
           }
         }
       }

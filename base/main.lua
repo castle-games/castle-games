@@ -130,7 +130,7 @@ end
 
 local updateMobileKeyboardEvents
 if isMobile then
-    local isKeyDown = {}
+    local keyDownCount = {} -- Number of touches on a key -- `nil` if zero
 
     local downChannel = love.thread.getChannel('GHOST_KEY_DOWN')
     local upChannel = love.thread.getChannel('GHOST_KEY_UP')
@@ -139,20 +139,35 @@ if isMobile then
     upChannel:clear()
 
     function updateMobileKeyboardEvents()
+        -- Handle presses before releases to prevent release + press events for the same key within the same frame
         while downChannel:getCount() > 0 do
-            local k = downChannel:pop()
-            isKeyDown[k] = true
-            love.keypressed(k, k, false)
+            local ks = downChannel:pop()
+            for k in ks:gmatch('[^_]+') do
+                if keyDownCount[k] == nil then
+                    -- First touch? Send pressed event.
+                    keyDownCount[k] = 1
+                    love.keypressed(k, k, false)
+                else
+                    keyDownCount[k] = keyDownCount[k] + 1
+                end
+            end
         end
         while upChannel:getCount() > 0 do
-            local k = upChannel:pop()
-            isKeyDown[k] = nil
-            love.keyreleased(k, k)
+            local ks = upChannel:pop()
+            for k in ks:gmatch('[^_]+') do
+                if keyDownCount[k] == 1 then
+                    -- Last release? Send released event.
+                    keyDownCount[k] = nil
+                    love.keyreleased(k, k)
+                elseif keyDownCount[k] ~= nil then
+                    keyDownCount[k] = keyDownCount[k] - 1
+                end
+            end
         end
     end
 
     function love.keyboard.isDown(k)
-        return isKeyDown[k] ~= nil
+        return keyDownCount[k] ~= nil
     end
 end
 

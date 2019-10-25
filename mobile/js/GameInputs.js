@@ -105,7 +105,7 @@ const dpadInputStyle = {
 };
 
 const dpadUpInputStyle = {
-  // backgroundColor: '#00ff00aa',
+  backgroundColor: '#00ff00aa',
   width: '50%',
   height: '40%',
   position: 'absolute',
@@ -114,7 +114,7 @@ const dpadUpInputStyle = {
 };
 
 const dpadDownInputStyle = {
-  // backgroundColor: '#00ff00aa',
+  backgroundColor: '#00ff00aa',
   width: '50%',
   height: '40%',
   position: 'absolute',
@@ -123,7 +123,7 @@ const dpadDownInputStyle = {
 };
 
 const dpadLeftInputStyle = {
-  // backgroundColor: '#ff0000aa',
+  backgroundColor: '#ff0000aa',
   width: '40%',
   height: '50%',
   position: 'absolute',
@@ -132,7 +132,7 @@ const dpadLeftInputStyle = {
 };
 
 const dpadRightInputStyle = {
-  // backgroundColor: '#ff0000aa',
+  backgroundColor: '#ff0000aa',
   width: '40%',
   height: '50%',
   position: 'absolute',
@@ -141,7 +141,7 @@ const dpadRightInputStyle = {
 };
 
 const dpadUpLeftInputStyle = {
-  // backgroundColor: '#0000ffaa',
+  backgroundColor: '#0000ffaa',
   width: '30%',
   height: '30%',
   position: 'absolute',
@@ -150,7 +150,7 @@ const dpadUpLeftInputStyle = {
 };
 
 const dpadUpRightInputStyle = {
-  // backgroundColor: '#0000ffaa',
+  backgroundColor: '#0000ffaa',
   width: '30%',
   height: '30%',
   position: 'absolute',
@@ -159,7 +159,7 @@ const dpadUpRightInputStyle = {
 };
 
 const dpadDownLeftInputStyle = {
-  // backgroundColor: '#0000ffaa',
+  backgroundColor: '#0000ffaa',
   width: '30%',
   height: '30%',
   position: 'absolute',
@@ -168,7 +168,7 @@ const dpadDownLeftInputStyle = {
 };
 
 const dpadDownRightInputStyle = {
-  // backgroundColor: '#0000ffaa',
+  backgroundColor: '#0000ffaa',
   width: '30%',
   height: '30%',
   position: 'absolute',
