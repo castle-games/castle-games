@@ -70,7 +70,7 @@ const useFetchGame = ({ gameId, gameUri }) => {
 const computeDimensionsSettings = ({ metadata }) => {
   const { dimensions, scaling, upscaling, downscaling } = metadata;
 
-  const dimensionsSettings = {
+  let dimensionsSettings = {
     width: 800,
     height: 450,
     upscaling: 'on',
@@ -98,12 +98,8 @@ const computeDimensionsSettings = ({ metadata }) => {
   }
 
   // Mobile overrides...
-  if (dimensionsSettings.upscaling === 'step') {
-    dimensionsSettings.upscaling = 'on';
-  }
-  if (dimensionsSettings.downscaling === 'step') {
-    dimensionsSettings.downscaling = 'on';
-  }
+  dimensionsSettings.upscaling = 'on';
+  dimensionsSettings.downscaling = 'on';
 
   return dimensionsSettings;
 };

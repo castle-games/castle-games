@@ -41,6 +41,8 @@ class GhostInputZone extends View implements View.OnTouchListener {
   public int hapticsDuration = 40;
   public int hapticsAmplitude = 80;
 
+  static long lastVibrateTime = System.currentTimeMillis();
+
   public void updateChild(int childId, double x, double y, double width, double height, ReadableMap config) {
     ChildState childState = childStates.get(childId);
     if (childState == null) {
@@ -127,11 +129,15 @@ class GhostInputZone extends View implements View.OnTouchListener {
 
     // Vibrate if needed
     if (vibrate) {
-      Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        vibrator.vibrate(VibrationEffect.createOneShot(hapticsDuration, hapticsAmplitude));
-      } else {
-        vibrator.vibrate(hapticsDuration);
+      long currTime = System.currentTimeMillis();
+      if (currTime - lastVibrateTime > 120) {
+        lastVibrateTime = currTime;
+        Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+          vibrator.vibrate(VibrationEffect.createOneShot(hapticsDuration, hapticsAmplitude));
+        } else {
+          vibrator.vibrate(hapticsDuration);
+        }
       }
     }
 
