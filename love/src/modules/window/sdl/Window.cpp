@@ -255,8 +255,7 @@ std::vector<Window::ContextAttribs> Window::getContextAttribsList() const
 	std::vector<ContextAttribs> attribslist;
 
 	// XXX(Ghost): Force an OpenGL ES context
-	attribslist.insert(attribslist.end(), glescontexts.begin(), glescontexts.end());
-	return attribslist;
+	preferGLES = true;
 
 	if (preferGLES)
 	{

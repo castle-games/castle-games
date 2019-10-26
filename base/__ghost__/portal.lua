@@ -219,8 +219,7 @@ function portalMeta:setupLove()
         function newLove.graphics.newShader(...)
             local function processShaderValidation(status, message)
                 if not status then
-                    local warningMessage = 'warning: shader will not compile on mobile devices due to the following error:\n' .. message
-                    DEFAULT_ERROR_HANDLER(warningMessage, debug.traceback('', 3))
+                    error(message, 3)
                 end
             end
             if select('#', ...) == 1 then
@@ -228,7 +227,9 @@ function portalMeta:setupLove()
                 if not code:match('\n') then
                     code = fetchFileData(code)
                 end
-                -- processShaderValidation(love.graphics.validateShader(true, code))
+                if theOS == 'OS X' then
+                    processShaderValidation(love.graphics.validateShader(true, code))
+                end
                 return love.graphics.newShader(code)
             else
                 local pixelCode, vertexCode = ...
@@ -238,7 +239,9 @@ function portalMeta:setupLove()
                 if not vertexCode:match('\n') then
                     vertexCode = fetchFileData(vertexCode)
                 end
-                -- processShaderValidation(love.graphics.validateShader(true, pixelCode, vertexCode))
+                if theOS == 'OS X' then
+                    processShaderValidation(love.graphics.validateShader(true, pixelCode, vertexCode))
+                end
                 return love.graphics.newShader(pixelCode, vertexCode)
             end
         end
