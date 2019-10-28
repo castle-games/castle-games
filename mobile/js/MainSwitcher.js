@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, FlatList, SafeAreaView } from 'react-native';
 
 import { RootNavigator } from './Navigation';
-import GameScreen from './GameScreen';
+import GameScreen, { goToGame } from './GameScreen';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export let switchTo = () => {};
@@ -191,6 +191,30 @@ const MainSwitcher = () => {
                     }}
                   />
                 </TouchableOpacity>
+                <View
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    right: 0,
+                  }}>
+                  <TouchableOpacity
+                    onPress={() => { goToGame({}) }}
+                    style={{ padding: 8 }}>
+                      <View
+                        style={{
+                          width: 28,
+                          height: 28,
+                          borderRadius: 28,
+                          backgroundColor: '#000000aa',
+                          borderWidth: 2,
+                          borderColor: '#ffffffcc',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}>
+                        <Text style={{ color: '#ffffffcc', fontSize: 24, top: -2 }}>×</Text>
+                      </View>
+                  </TouchableOpacity>
+                </View>
               </View>
             )}
           </SafeAreaView>
