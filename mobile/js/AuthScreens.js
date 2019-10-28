@@ -152,6 +152,9 @@ const LoginForm = () => {
         onChangeText={newUsername => setUsername(newUsername)}
         placeholder="Email or username"
         editable={!signingIn}
+        returnKeyType="next"
+        onSubmitEditing={() => {this._password.focus()}}
+        blurOnSubmit={false}
       />
       <TextInput
         style={signingIn ? [textInputStyle, disabledTextInputStyle] : textInputStyle}
@@ -161,6 +164,8 @@ const LoginForm = () => {
         onChangeText={newPassword => setPassword(newPassword)}
         placeholder="Password"
         editable={!signingIn}
+        ref={input => {this._password = input}}
+        returnKeyType="go"
       />
       <TouchableOpacity
         style={{ paddingTop: 8, paddingBottom: 16 }}
@@ -232,12 +237,19 @@ const CreateAccountForm = () => {
         placeholder="Username"
         onChangeText={newUsername => setUsername(newUsername)}
         editable={!creatingAccount}
+        returnKeyType="next"
+        onSubmitEditing={() => {this._name.focus()}}
+        blurOnSubmit={false}
       />
       <TextInput
         style={creatingAccount ? [textInputStyle, disabledTextInputStyle] : textInputStyle}
         placeholder="Your name"
         onChangeText={newName => setName(newName)}
         editable={!creatingAccount}
+        returnKeyType="next"
+        ref={input => {this._name = input}}
+        onSubmitEditing={() => {this._email.focus()}}
+        blurOnSubmit={false}
       />
       <TextInput
         style={creatingAccount ? [textInputStyle, disabledTextInputStyle] : textInputStyle}
@@ -245,6 +257,10 @@ const CreateAccountForm = () => {
         placeholder="Email address"
         onChangeText={newEmail => setEmail(newEmail)}
         editable={!creatingAccount}
+        returnKeyType="next"
+        ref={input => {this._email = input}}
+        onSubmitEditing={() => {this._password.focus()}}
+        blurOnSubmit={false}
       />
       <TextInput
         style={creatingAccount ? [textInputStyle, disabledTextInputStyle] : textInputStyle}
@@ -253,6 +269,8 @@ const CreateAccountForm = () => {
         placeholder="New password"
         onChangeText={newPassword => setPassword(newPassword)}
         editable={!creatingAccount}
+        returnKeyType="go"
+        ref={input => {this._password = input}}
       />
       <View style={{ paddingTop: 8, paddingBottom: 16 }}>
         <TouchableOpacity onPress={onPressPrivacyPolicy}>
