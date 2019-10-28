@@ -63,7 +63,7 @@ local parsePrefetchVisited = setmetatable({}, {
     end
 })
 
-local LATEST_SHARE_LUA_URL = 'https://raw.githubusercontent.com/castle-games/share.lua/6d70831ea98c57219f2aa285b4ad7bf7156f7c03/cs.lua'
+local LATEST_SHARE_LUA_URL = 'https://raw.githubusercontent.com/castle-games/share.lua/526e86aeaa49da90539a173ad665325cebc27f73/cs.lua'
 
 local function explicitRequire(path, opts)
     -- 'share.lua'? Use the latest version...
