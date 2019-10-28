@@ -166,6 +166,7 @@ const LoginForm = () => {
         editable={!signingIn}
         ref={input => {this._password = input}}
         returnKeyType="go"
+        onSubmitEditing={onPressSignIn}
       />
       <TouchableOpacity
         style={{ paddingTop: 8, paddingBottom: 16 }}
@@ -271,6 +272,7 @@ const CreateAccountForm = () => {
         editable={!creatingAccount}
         returnKeyType="go"
         ref={input => {this._password = input}}
+        onSubmitEditing={onPressCreateAccount}
       />
       <View style={{ paddingTop: 8, paddingBottom: 16 }}>
         <TouchableOpacity onPress={onPressPrivacyPolicy}>
@@ -327,6 +329,9 @@ const ForgotPasswordForm = () => {
         onChangeText={newUsername => setUsername(newUsername)}
         placeholder="Email or username"
         editable={!resettingPassword}
+        autoFocus={true}
+        returnKeyType="go"
+        onSubmitEditing={onPressResetPassword}
       />
       <TouchableOpacity onPress={onPressResetPassword}>
         <Button text="Reset Password" spinner={resettingPassword} />
