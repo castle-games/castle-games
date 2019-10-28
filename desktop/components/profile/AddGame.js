@@ -252,11 +252,15 @@ export default class AddGame extends React.Component {
   };
 
   _handleClickAddHelp = () => {
-    NativeUtil.openExternalURL(`${Constants.WEB_HOST}/posts/@castle/adding-game-to-castle-profile`);
+    NativeUtil.openExternalURL(
+      `${Constants.WEB_HOST}/documentation/tutorials/adding-games-to-your-profile`
+    );
   };
 
   _handleClickHostingHelp = () => {
-    NativeUtil.openExternalURL(`${Constants.WEB_HOST}/posts/@castle/hosting-your-own-games`);
+    NativeUtil.openExternalURL(
+      `${Constants.WEB_HOST}/documentation/tutorials/hosting-your-own-games`
+    );
   };
 
   _renderGamePreview = () => {
