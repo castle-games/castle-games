@@ -176,25 +176,31 @@ class ContentNavigationBar extends React.Component {
   };
 
   render() {
-    let homeItem;
+    let halloweenItem;
     const endOfParty = new Date('November 07, 2019 08:00:00');
     if (new Date() < endOfParty) {
-      homeItem = (
-        <div className={STYLES_NAV_LABEL} onClick={this._navigateToParty}>
-          <div className={STYLES_LOGO_HALLOWEEN}>🎃</div>
-        </div>
-      );
-    } else {
-      homeItem = (
-        <div className={STYLES_NAV_LABEL} onClick={this.props.navigator.navigateToHome}>
-          <div className={STYLES_LOGO} />
+      halloweenItem = (
+        <div className={STYLES_NAV_ITEM}>
+          <div className={STYLES_NAV_LABEL} onClick={this._navigateToParty}>
+            Party{' '}
+            <span
+              className={css`
+                padding: 1px 0 0 4px;
+              `}>
+              🎃
+            </span>
+          </div>
         </div>
       );
     }
     return (
       <div className={STYLES_CONTAINER}>
         <div className={STYLES_NAV_ITEMS}>
-          <div className={STYLES_NAV_ITEM}>{homeItem}</div>
+          <div className={STYLES_NAV_ITEM}>
+            <div className={STYLES_NAV_LABEL} onClick={this.props.navigator.navigateToHome}>
+              <div className={STYLES_LOGO} />
+            </div>
+          </div>
           <div
             className={STYLES_NAV_ITEM}
             onMouseEnter={() => this.setState({ isHoveringOnPlay: true })}
@@ -219,6 +225,7 @@ class ContentNavigationBar extends React.Component {
               items={this._getCreateItems()}
             />
           </div>
+          {halloweenItem}
         </div>
         <div className={STYLES_RIGHT}>
           <UIBackForwardControl
