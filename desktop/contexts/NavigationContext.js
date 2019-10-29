@@ -24,7 +24,7 @@ import Logs from '~/common/logs';
  */
 const NavigationContextDefaults = {
   content: {
-    mode: 'home', // game-meta | profile | home | create | edit_post
+    mode: 'home', // game-meta | profile | home | create | event | edit_post
     gameMetaShown: null,
     userProfileShown: null,
   },

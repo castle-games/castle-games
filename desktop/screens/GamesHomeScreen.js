@@ -7,6 +7,7 @@ import { css } from 'react-emotion';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigatorContext } from '~/contexts/NavigationContext';
 
+import EventScreen from '~/screens/EventScreen';
 import HomeUpdateBanner from '~/components/HomeUpdateBanner';
 import UIGameSet from '~/components/reusable/UIGameSet';
 import UIPostList from '~/components/reusable/UIPostList';
@@ -235,6 +236,11 @@ class GamesHomeScreen extends React.Component {
 
 export default class GamesHomeScreenWithContext extends React.Component {
   render() {
+    const { mode } = this.props;
+    if (mode === 'event') {
+      return <EventScreen {...this.props} />;
+    }
+
     return (
       <NavigatorContext.Consumer>
         {(navigator) => (

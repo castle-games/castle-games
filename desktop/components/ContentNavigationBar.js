@@ -172,7 +172,7 @@ class ContentNavigationBar extends React.Component {
   };
 
   _navigateToParty = () => {
-    NativeUtil.openExternalURL('https://castle.games/party');
+    this.props.navigator.navigateToContentMode('event');
   };
 
   render() {

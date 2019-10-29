@@ -103,7 +103,7 @@ class ContentContainer extends React.Component {
     if (playing.isVisible) {
       return <GameScreen />;
     }
-    if (mode === 'home' || mode === 'allGames') {
+    if (mode === 'home' || mode === 'allGames' || mode == 'event') {
       return (
         <GamesHomeScreen
           updateAvailable={this.props.updateAvailable}
