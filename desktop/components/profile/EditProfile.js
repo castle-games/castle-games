@@ -2,12 +2,12 @@ import * as React from 'react';
 import * as Actions from '~/common/actions';
 import * as Constants from '~/common/constants';
 import * as Strings from '~/common/strings';
-import * as Utilities from '~/common/utilities';
 
 import { css } from 'react-emotion';
 
 import Plain from 'slate-plain-serializer';
 import UIAvatar from '~/components/reusable/UIAvatar';
+import UIFileInput from '~/components/reusable/UIFileInput';
 import UIInputSecondary from '~/components/reusable/UIInputSecondary';
 import UISubmitButton from '~/components/reusable/UISubmitButton';
 import UITextArea from '~/components/reusable/UITextArea';
@@ -48,10 +48,6 @@ const STYLES_FIELDS = css`
 const STYLES_COLUMN = css`
   display: flex;
   flex-direction: column;
-`;
-
-const STYLES_FILE_INPUT = css`
-  display: inline-flex;
 `;
 
 const STYLES_GENERIC_INPUT = css`
@@ -192,7 +188,7 @@ export default class EditProfile extends React.Component {
       isAvatarUploadEnabled = false;
     }
 
-    const inputClass = Utilities.isWindows() ? null : STYLES_FILE_INPUT;
+    const useWebFileInput = !this._isMacOSCatalina(); // web file input is broken on catalina
     return (
       <div className={STYLES_SECTION_CONTENT}>
         <UIAvatar
@@ -203,13 +199,12 @@ export default class EditProfile extends React.Component {
 
         <div className={STYLES_COLUMN}>
           {avatarLoadingElement}
-          <input
-            type="file"
+          <UIFileInput
             id="avatar"
             name="avatar"
-            className={inputClass}
+            useWebFileInput={useWebFileInput}
             style={isAvatarUploadEnabled ? {} : { display: 'none' }}
-            onChange={this._onAvatarFileInputChangeAsync}
+            onWebInputChange={this._onAvatarFileInputChangeAsync}
           />
         </div>
       </div>
@@ -258,12 +253,10 @@ export default class EditProfile extends React.Component {
             Save Changes
           </UISubmitButton>
         </div>
-        {!this._isMacOSCatalina() && (
-          <div className={STYLES_SECTION}>
-            <div className={STYLES_HEADING}>Avatar</div>
-            {this._renderAvatarControl()}
-          </div>
-        )}
+        <div className={STYLES_SECTION}>
+          <div className={STYLES_HEADING}>Avatar</div>
+          {this._renderAvatarControl()}
+        </div>
         <div className={STYLES_SECTION}>
           <div className={STYLES_HEADING}>Profile Info</div>
           <div className={STYLES_FIELDS}>
