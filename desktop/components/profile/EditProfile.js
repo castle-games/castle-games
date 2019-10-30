@@ -110,6 +110,16 @@ export default class EditProfile extends React.Component {
     );
   };
 
+  _onAvatarNativeUploadStarted = () => this.setState({ isAvatarUploading: true });
+
+  _onAvatarNativeUploadFinished = (success, result) => {
+    if (success && result) {
+      this.setState({ uploadedAvatarFile: result, isAvatarUploading: false });
+    } else {
+      this.setState({ isAvatarUploading: false });
+    }
+  };
+
   _onAvatarFileInputChangeAsync = async (e) => {
     let files = e.target.files;
     if (files && files.length) {
@@ -205,6 +215,8 @@ export default class EditProfile extends React.Component {
             useWebFileInput={useWebFileInput}
             style={isAvatarUploadEnabled ? {} : { display: 'none' }}
             onWebInputChange={this._onAvatarFileInputChangeAsync}
+            onNativeFileUploadStarted={this._onAvatarNativeUploadStarted}
+            onNativeFileUploadFinished={this._onAvatarNativeUploadFinished}
           />
         </div>
       </div>
