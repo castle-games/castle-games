@@ -27,6 +27,18 @@ const disabledTextInputStyle = {
   backgroundColor: '#ddd',
 };
 
+const errorMessages = {
+  USER_NOT_FOUND: "The email or username you entered does not belong to an account. Please check your information and try again.",
+  LOGIN_BAD_CREDENTIALS: "The password you entered was incorrect. Please check your information and try again.",
+  PASSWORD_RESET_TOO_MANY: "There have been too many attempts to reset your password. Try again later.",
+  PASSWORD_RESET_INVALID_CODE: "The reset link you clicked on was invalid. It may have expired.",
+  SIGNUP_INVALID_EMAIL: "The email address you entered was invalid.",
+  SIGNUP_INVALID_USERNAME: "The username you entered was invalid. Usernames must be at least three characters long and can only contain letters, numbers, and - or _.",
+  SIGNUP_EMAIL_ALREADY_TAKEN: "There is already an account associated with the email address you entered.",
+  SIGNUP_USERNAME_ALREADY_TAKEN: "The username you entered is already taken.",
+  SIGNUP_PASSWORD_TOO_SHORT: "The password you entered is too short. Passwords must be at least five characters long.",
+}
+
 const Announcement = props => {
   return (
     <View
@@ -38,18 +50,21 @@ const Announcement = props => {
         marginBottom: 16,
         flexDirection: 'column',
       }}>
+      {props.headline ? (
+        <Text
+          style={{
+            fontWeight: 'bold',
+            color: '#fff',
+            fontSize: 16,
+            marginBottom: 4,
+          }}>
+          {props.headline}
+        </Text>
+      ) : null }
       <Text
         style={{
-          fontWeight: 'bold',
           color: '#fff',
-          fontSize: 16,
-          marginBottom: 4,
-        }}>
-        {props.headline}
-      </Text>
-      <Text
-        style={{
-          color: '#fff',
+          lineHeight: 20,
         }}>
         {props.body}
       </Text>
@@ -98,12 +113,12 @@ const LoginForm = () => {
   const [password, setPassword] = useState('');
 
   const [signingIn, setSigningIn] = useState(false);
-  const [errored, setErrored] = useState(false);
+  const [errors, setErrors] = useState([]);
 
   const onPressSignIn = async () => {
     try {
       setSigningIn(true);
-      setErrored(false);
+      setErrors([]);
       await Session.signInAsync({ username, password });
       setSigningIn(false);
       navigate('HomeScreen');
@@ -112,7 +127,7 @@ const LoginForm = () => {
       }
     } catch (e) {
       setSigningIn(false);
-      setErrored(true);
+      setErrors(e.graphQLErrors);
     }
   };
 
@@ -126,11 +141,12 @@ const LoginForm = () => {
 
   return (
     <Fragment>
-      {errored ? (
-        <Announcement
-          headline="There was a problem signing in"
-          body="Please check your network connection and ensure that the username and password are correct."
-        />
+      {errors ? (
+        <Fragment>
+          {errors.map(error => (
+            <Announcement body={errorMessages[error.extensions.code]} />
+          ))}
+        </Fragment>
       ) : null}
       {resetPassword ? (
         <Announcement
@@ -189,7 +205,7 @@ const CreateAccountForm = () => {
   const [password, setPassword] = useState('');
 
   const [creatingAccount, setCreatingAccount] = useState(false);
-  const [errored, setErrored] = useState(false);
+  const [errors, setErrors] = useState([]);
 
   const onPressLogin = () => {
     navigate('LoginScreen');
@@ -202,7 +218,7 @@ const CreateAccountForm = () => {
   const onPressCreateAccount = async () => {
     try {
       setCreatingAccount(true);
-      setErrored(false);
+      setErrors([]);
       await Session.signUpAsync({ username, name, email, password });
       setCreatingAccount(false);
       navigate('HomeScreen');
@@ -211,18 +227,17 @@ const CreateAccountForm = () => {
       }
     } catch (e) {
       setCreatingAccount(false);
-      setErrored(true);
+      setErrors(e.graphQLErrors);
     }
   };
 
   return (
     <Fragment>
-      {errored ? (
-        <Announcement
-          headline="There was a problem"
-          body="Please ensure that your information is correct."
-        />
-      ) : null}
+      <Fragment>
+          {errors.map(error => (
+            <Announcement body={errorMessages[error.extensions.code]} />
+          ))}
+        </Fragment>
       <View style={{ paddingBottom: 16, alignItems: 'center' }}>
         <Text style={{ fontSize: 20 }}>Create a new account</Text>
         <TouchableOpacity onPress={onPressLogin}>
@@ -295,12 +310,12 @@ const ForgotPasswordForm = () => {
   const [username, setUsername] = useState('');
 
   const [resettingPassword, setResettingPassword] = useState(false);
-  const [errored, setErrored] = useState(false);
+  const [errors, setErrors] = useState([]);
 
   const onPressResetPassword = async () => {
     try {
       setResettingPassword(true);
-      setErrored(false);
+      setErrors([]);
       await Session.resetPasswordAsync({ username });
       setResettingPassword(false);
       navigate('LoginScreen', {
@@ -308,17 +323,18 @@ const ForgotPasswordForm = () => {
       });
     } catch (e) {
       setResettingPassword(false);
-      setErrored(true);
+      setErrors(e.graphQLErrors);
     }
   };
 
   return (
     <Fragment>
-      {errored ? (
-        <Announcement
-          headline="There was a problem"
-          body="Please ensure that the email or username is correct."
-        />
+      {errors ? (
+        <Fragment>
+          {errors.map(error => (
+            <Announcement body={errorMessages[error.extensions.code]} />
+          ))}
+        </Fragment>
       ) : null}
       <View style={{ paddingBottom: 16 }}>
         <Text style={{ fontSize: 20 }}>Forgot your password?</Text>
