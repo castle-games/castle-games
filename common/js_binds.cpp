@@ -70,6 +70,18 @@ JS_BIND_DEFINE(chooseDirectoryWithDialog) {
   }
 }
 
+JS_BIND_DEFINE(chooseImagePathWithDialog) {
+  const char *result;
+
+  bool didChooseDirectory = ghostChooseImageWithDialog(&result);
+  if (didChooseDirectory) {
+    success(result);
+    std::free((void *)result);
+  } else {
+    failure("Unable to choose image path");
+  }
+}
+
 JS_BIND_DEFINE(chooseOpenProjectPathWithDialog) {
   const char *result;
 

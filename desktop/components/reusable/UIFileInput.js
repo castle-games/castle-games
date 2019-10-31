@@ -1,12 +1,22 @@
 import * as React from 'react';
 import * as ExecNode from '~/common/execnode';
 import * as NativeUtil from '~/native/nativeutil';
+import * as Strings from '~/common/strings';
 import * as Utilities from '~/common/utilities';
+
+const path = Utilities.path();
 
 import { css } from 'react-emotion';
 
 const STYLES_FILE_INPUT = css`
   display: inline-flex;
+`;
+
+const STYLES_CHOSEN_IMAGE_FILENAME = css`
+  margin: 0;
+  padding: 0 8px;
+  font-size: 14px;
+  user-select: none;
 `;
 
 /*
@@ -27,10 +37,14 @@ export default class UIFileInput extends React.Component {
     onNativeFileUploadFinished: (success, file) => {},
   };
 
+  state = {
+    chosenFilename: null,
+  };
+
   _nativeChooseFile = async () => {
-    // TODO: needs different native open options for images
-    const openFilePath = await NativeUtil.chooseOpenProjectPathWithDialogAsync();
-    if (openFilePath) {
+    const openFilePath = await NativeUtil.chooseImagePathWithDialogAsync();
+    if (openFilePath && !Strings.isEmpty(openFilePath)) {
+      this.setState({ chosenFilename: path.basename(openFilePath) });
       let success = false;
       this.props.onNativeFileUploadStarted();
       try {
@@ -63,10 +77,10 @@ export default class UIFileInput extends React.Component {
     if (useWebFileInput) {
       return this._renderWebFileInput();
     } else {
-      return null; // flag for now
       return (
-        <div>
+        <div className={STYLES_FILE_INPUT}>
           <input type="button" value="Choose File" onClick={this._nativeChooseFile} />
+          <p className={STYLES_CHOSEN_IMAGE_FILENAME}>{this.state.chosenFilename}</p>
         </div>
       );
     }

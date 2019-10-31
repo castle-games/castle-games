@@ -69,6 +69,7 @@ GHOST_EXPORT void ghostDoneLoading();
 bool ghostChooseDirectoryWithDialog(const char *title, const char *message, const char *action,
                                     const char **result);
 bool ghostShowOpenProjectDialog(const char **projectFilePathChosen);
+bool ghostChooseImageWithDialog(const char **imageFilePathChosen);
 bool ghostCreateProjectAtPath(const char *path, const char **entryPoint);
 bool ghostGetPathToFileInAppBundle(const char *filename, const char **result);
 bool ghostGetDocumentsPath(const char **result);

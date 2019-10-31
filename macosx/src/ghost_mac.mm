@@ -29,6 +29,7 @@ static void _ghostSendNativeOpenUrlEvent(const char *uri) {
 }
 
 typedef enum GhostOpenPanelAction {
+  kGhostOpenPanelActionChooseImage,
   kGhostOpenPanelActionChooseNewProjectDirectory,
   kGhostOpenPanelActionOpenProjectFile,
 } GhostOpenPanelAction;
@@ -37,6 +38,12 @@ void _configureOpenPanelForAction(NSOpenPanel *openPanel, GhostOpenPanelAction a
   [openPanel setAllowsMultipleSelection:NO];
   [openPanel setCanCreateDirectories:YES];
   switch (action) {
+  case kGhostOpenPanelActionChooseImage: {
+    [openPanel setCanChooseFiles:YES];
+    [openPanel setAllowedFileTypes:@[ @"jpg", @"png", @"gif" ]];
+    [openPanel setCanCreateDirectories:NO];
+    break;
+  }
   case kGhostOpenPanelActionOpenProjectFile: {
     [openPanel setCanChooseDirectories:NO];
     [openPanel setCanChooseFiles:YES];
@@ -253,6 +260,25 @@ void ghostFocusGame() {
   if (ghostMacChildWindow) {
     [ghostMacChildWindow makeKeyWindow];
   }
+}
+
+bool ghostChooseImageWithDialog(const char **result) {
+  const char *chosenPathCStr = NULL;
+  NSOpenPanel *openPanel = [NSOpenPanel openPanel];
+  [openPanel setTitle:@"Choose an image"];
+  [openPanel setPrompt:@"Open"];
+  [openPanel setMessage:@"Choose an image"];
+  _configureOpenPanelForAction(openPanel, kGhostOpenPanelActionChooseImage);
+  NSModalResponse response = _runNativeModal(openPanel);
+  if (response == NSFileHandlingPanelOKButton) {
+    NSURL *url = [[openPanel URLs] lastObject];
+    chosenPathCStr = [[url path] cStringUsingEncoding:NSUTF8StringEncoding];
+  }
+  if (chosenPathCStr) {
+    *result = strdup(chosenPathCStr);
+    return true;
+  }
+  return false;
 }
 
 bool ghostChooseDirectoryWithDialog(const char *title, const char *message, const char *action,

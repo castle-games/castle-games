@@ -189,6 +189,11 @@ inline char *convertLPCWSTRToCharArray(const wchar_t *wCharArray) {
   return string;
 }
 
+bool ghostChooseImageWithDialog(const char **imageFilePathChosen) {
+  // not implemented on windows
+  return false;
+}
+
 bool ghostChooseDirectoryWithDialog(const char *title, const char *message, const char *action,
                                     const char **result) {
   std::wstring titleStr = std::wstring(convertCharArrayToLPCWSTR(title));

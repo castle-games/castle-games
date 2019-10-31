@@ -47,6 +47,16 @@ export const chooseOpenProjectPathWithDialogAsync = async () => {
   return chosenDirectory;
 };
 
+export const chooseImagePathWithDialogAsync = async () => {
+  let chosenImagePath;
+  try {
+    chosenImagePath = await NativeBinds.chooseImagePathWithDialog();
+  } catch (e) {
+    return null;
+  }
+  return chosenImagePath;
+};
+
 export const createProjectAtPathAsync = async (path) => NativeBinds.createProjectAtPath({ path });
 
 export const setBrowserReady = async (callback) => {
