@@ -77,6 +77,10 @@ export default class UIFileInput extends React.Component {
     if (useWebFileInput) {
       return this._renderWebFileInput();
     } else {
+      if (Utilities.isWindows()) {
+        console.warn(`Custom file input is not implemented on Windows`);
+        return null;
+      }
       const label = this.state.chosenFilename ? this.state.chosenFilename : 'No file chosen';
       return (
         <div className={STYLES_FILE_INPUT} {...this.props}>
