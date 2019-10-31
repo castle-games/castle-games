@@ -178,10 +178,6 @@ export default class EditProfile extends React.Component {
     }
   };
 
-  _isMacOSCatalina = () => {
-    return navigator.userAgent.includes('Mac OS X 10_15');
-  };
-
   _renderAvatarControl = () => {
     let avatarSrc;
     if (this.state.isExistingAvatarRemoved) {
@@ -202,7 +198,6 @@ export default class EditProfile extends React.Component {
       isAvatarUploadEnabled = false;
     }
 
-    const useWebFileInput = !this._isMacOSCatalina(); // web file input is broken on catalina
     return (
       <div className={STYLES_SECTION_CONTENT}>
         <UIAvatar
@@ -216,7 +211,6 @@ export default class EditProfile extends React.Component {
           <UIFileInput
             id="avatar"
             name="avatar"
-            useWebFileInput={useWebFileInput}
             style={isAvatarUploadEnabled ? {} : { display: 'none' }}
             onWebInputChange={this._onAvatarFileInputChangeAsync}
             onNativeFileUploadStarted={this._onAvatarNativeUploadStarted}

@@ -12,6 +12,12 @@ const STYLES_FILE_INPUT = css`
   display: inline-flex;
 `;
 
+const STYLES_BUTTON = css`
+  cursor: pointer;
+  text-decoration: underline;
+  margin-right: 4px;
+`;
+
 const STYLES_CHOSEN_IMAGE_FILENAME = css`
   margin: 0;
   padding: 0 8px;
@@ -31,7 +37,6 @@ const STYLES_CHOSEN_IMAGE_FILENAME = css`
 
 export default class UIFileInput extends React.Component {
   static defaultProps = {
-    useWebFileInput: true,
     onWebInputChange: () => {}, // the onChange() callback for only <input type="file" />
     onNativeFileUploadStarted: () => {},
     onNativeFileUploadFinished: (success, file) => {},
@@ -70,21 +75,19 @@ export default class UIFileInput extends React.Component {
         {...this.props}
       />
     );
+    return null;
   };
 
   render() {
-    const { useWebFileInput } = this.props;
-    if (useWebFileInput) {
+    if (Utilities.isWindows()) {
       return this._renderWebFileInput();
     } else {
-      if (Utilities.isWindows()) {
-        console.warn(`Custom file input is not implemented on Windows`);
-        return null;
-      }
       const label = this.state.chosenFilename ? this.state.chosenFilename : 'No file chosen';
       return (
         <div className={STYLES_FILE_INPUT} {...this.props}>
-          <input type="button" value="Choose File" onClick={this._nativeChooseFile} />
+          <div className={STYLES_BUTTON} onClick={this._nativeChooseFile}>
+            Choose File
+          </div>
           <p className={STYLES_CHOSEN_IMAGE_FILENAME}>{label}</p>
         </div>
       );
