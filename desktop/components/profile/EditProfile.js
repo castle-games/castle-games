@@ -113,7 +113,15 @@ export default class EditProfile extends React.Component {
   _onAvatarNativeUploadStarted = () => this.setState({ isAvatarUploading: true });
 
   _onAvatarNativeUploadFinished = (success, result) => {
-    if (success && result) {
+    if (success) {
+      this._onAvatarUploaded(result);
+    } else {
+      this.setState({ isAvatarUploading: false });
+    }
+  };
+
+  _onAvatarUploaded = (result) => {
+    if (result) {
       this.setState({ uploadedAvatarFile: result, isAvatarUploading: false });
     } else {
       this.setState({ isAvatarUploading: false });
@@ -127,11 +135,7 @@ export default class EditProfile extends React.Component {
       const result = await Actions.uploadImageAsync({
         file: files[0],
       });
-      if (result) {
-        this.setState({ uploadedAvatarFile: result, isAvatarUploading: false });
-      } else {
-        this.setState({ isAvatarUploading: false });
-      }
+      this._onAvatarUploaded(result);
     }
   };
 

@@ -15,7 +15,7 @@ const STYLES_FILE_INPUT = css`
 const STYLES_CHOSEN_IMAGE_FILENAME = css`
   margin: 0;
   padding: 0 8px;
-  font-size: 14px;
+  font-size: 12px;
   user-select: none;
 `;
 
@@ -77,10 +77,11 @@ export default class UIFileInput extends React.Component {
     if (useWebFileInput) {
       return this._renderWebFileInput();
     } else {
+      const label = this.state.chosenFilename ? this.state.chosenFilename : 'No file chosen';
       return (
-        <div className={STYLES_FILE_INPUT}>
+        <div className={STYLES_FILE_INPUT} {...this.props}>
           <input type="button" value="Choose File" onClick={this._nativeChooseFile} />
-          <p className={STYLES_CHOSEN_IMAGE_FILENAME}>{this.state.chosenFilename}</p>
+          <p className={STYLES_CHOSEN_IMAGE_FILENAME}>{label}</p>
         </div>
       );
     }
