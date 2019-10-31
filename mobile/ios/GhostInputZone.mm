@@ -42,7 +42,11 @@ static void channelPush(NSString *name, NSString *value) {
 @interface GhostInputZone : RCTView
 
 @property(nonatomic, strong) NSString *input;
+
 @property(nonatomic, strong) NSMutableDictionary *childStates;
+
+@property(nonatomic, assign) NSTimeInterval lastVibrateTime;
+@property(nonatomic, strong) UIImpactFeedbackGenerator *feedbackGenerator;
 
 @end
 
@@ -53,6 +57,9 @@ static void channelPush(NSString *name, NSString *value) {
 - (instancetype)init {
   if (self = [super init]) {
     self.childStates = [NSMutableDictionary dictionary];
+
+    self.lastVibrateTime = [NSDate timeIntervalSinceReferenceDate];
+    self.feedbackGenerator = [[UIImpactFeedbackGenerator alloc] init];
   }
   return self;
 }
@@ -121,6 +128,13 @@ static void channelPush(NSString *name, NSString *value) {
     }
     childState.prevDown = currDown;
   }
+
+  if (vibrate) {
+    NSTimeInterval currTime = [NSDate timeIntervalSinceReferenceDate];
+    if (currTime - self.lastVibrateTime > 0.12) {
+      [self.feedbackGenerator impactOccurred];
+    }
+  }
 }
 
 - (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
@@ -129,6 +143,8 @@ static void channelPush(NSString *name, NSString *value) {
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+  [self.feedbackGenerator prepare];
+
   CGPoint point = [[touches anyObject] locationInView:self];
   [self handleTouchWithWithPoint:point isDown:YES];
 }
