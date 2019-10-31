@@ -11,16 +11,38 @@ extern "C" {
 
 #include "modules/thread/Channel.h"
 
+static void channelPush(NSString *name, NSString *value) {
+  auto channel = love::thread::Channel::getChannel(name.UTF8String);
+  auto var =
+  love::Variant(value.UTF8String,
+                [value lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
+  channel->push(var);
+}
+
 //
 // GhostInputZone
 //
 
-@interface ChildState
+@interface ChildState : NSObject
+
+@property(nonatomic, assign) int childId;
+@property(nonatomic, assign) double x;
+@property(nonatomic, assign) double y;
+@property(nonatomic, assign) double width;
+@property(nonatomic, assign) double height;
+@property(nonatomic, strong) NSString *keyCode;
+@property(nonatomic, assign) BOOL prevDown;
+
+@end
+
+@implementation ChildState
+
 @end
 
 @interface GhostInputZone : RCTView
 
 @property(nonatomic, strong) NSString *input;
+@property(nonatomic, strong) NSMutableDictionary *childStates;
 
 @end
 
@@ -28,12 +50,11 @@ extern "C" {
 
 @synthesize input;
 
-static void channelPush(NSString *name, NSString *value) {
-  auto channel = love::thread::Channel::getChannel(name.UTF8String);
-  auto var =
-      love::Variant(value.UTF8String,
-                    [value lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
-  channel->push(var);
+- (instancetype)init {
+  if (self = [super init]) {
+    self.childStates = [NSMutableDictionary dictionary];
+  }
+  return self;
 }
 
 - (void)updateChild:(NSNumber *)childId
@@ -42,15 +63,79 @@ static void channelPush(NSString *name, NSString *value) {
               width:(NSNumber *)width
              height:(NSNumber *)height
              config:(NSDictionary *)config {
-  
+  ChildState *childState = self.childStates[childId];
+  if (!childState) {
+    childState = [[ChildState alloc] init];
+    self.childStates[childId] = childState;
+  }
+
+  childState.childId = [childId intValue];
+  childState.x = [x doubleValue];
+  childState.y = [y doubleValue];
+  childState.width = [width doubleValue];
+  childState.height = [height doubleValue];
+  childState.prevDown = NO;
+
+  if (config[@"keyCode"]) {
+    childState.keyCode = config[@"keyCode"];
+  } else {
+    childState.keyCode = NULL;
+  }
+}
+
+- (void)handleTouchWithWithPoint:(CGPoint)point isDown:(BOOL)down {
+  down = down && CGRectContainsPoint(self.frame, point);
+
+  ChildState *closest = NULL;
+  double closestSquaredDist = DBL_MAX;
+  if (down) {
+    for (NSNumber *childId in self.childStates) {
+      ChildState *childState = self.childStates[childId];
+
+      if (childState.x <= point.x && point.x <= childState.x + childState.width &&
+          childState.y <= point.y && point.y <= childState.y + childState.height) {
+        double centerX = childState.x + 0.5 * childState.width;
+        double centerY = childState.y + 0.5 * childState.height;
+        double dx = point.x - centerX;
+        double dy = point.y - centerY;
+        double squaredDist = dx * dx + dy * dy;
+        if (squaredDist < closestSquaredDist) {
+          closest = childState;
+          closestSquaredDist = squaredDist;
+        }
+      }
+    }
+  }
+
+  BOOL vibrate = NO;
+  for (NSNumber *childId in self.childStates) {
+    ChildState *childState = self.childStates[childId];
+    BOOL currDown = closest && childState.childId == closest.childId;
+    if (currDown != childState.prevDown) {
+      if (currDown) {
+        channelPush(@"GHOST_KEY_DOWN", childState.keyCode);
+        vibrate = true;
+      } else {
+        channelPush(@"GHOST_KEY_UP", childState.keyCode);
+      }
+    }
+    childState.prevDown = currDown;
+  }
+}
+
+- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+  CGPoint point = [[touches anyObject] locationInView:self];
+  [self handleTouchWithWithPoint:point isDown:YES];
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-  channelPush(@"GHOST_INPUT_DOWN", self.input);
+  CGPoint point = [[touches anyObject] locationInView:self];
+  [self handleTouchWithWithPoint:point isDown:YES];
 }
 
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-  channelPush(@"GHOST_INPUT_UP", self.input);
+  CGPoint point = [[touches anyObject] locationInView:self];
+  [self handleTouchWithWithPoint:point isDown:NO];
 }
 
 @end
@@ -77,17 +162,16 @@ RCT_EXPORT_MODULE()
 }
 
 RCT_EXPORT_METHOD(updateChild:(nonnull NSNumber *)reactTag
-                  childId:(NSNumber *)childId
-                  x:(NSNumber *)x
-                  y:(NSNumber *)y
-                  width:(NSNumber *)width
-                  height:(NSNumber *)height
-                  config:(NSDictionary *)config
+                  childId:(nonnull NSNumber *)childId
+                  x:(nonnull NSNumber *)x
+                  y:(nonnull NSNumber *)y
+                  width:(nonnull NSNumber *)width
+                  height:(nonnull NSNumber *)height
+                  config:(nonnull NSDictionary *)config
                   resolver:(RCTPromiseResolveBlock)resolve
-                  rejecter:(RCTPromiseResolveBlock)reject) {
+                  rejecter:(RCTPromiseRejectBlock)reject) {
   GhostInputZone *view = (GhostInputZone *)[self.bridge.uiManager viewForReactTag:reactTag];
   if (view) {
-    NSLog(@"updateChild: %@ %@ %@ %@ %@", childId, x, y, width, height);
     [view updateChild:childId x:x y:y width:width height:height config:config];
   }
 }
