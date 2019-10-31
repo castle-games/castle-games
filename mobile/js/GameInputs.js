@@ -3,6 +3,7 @@ import { View, Text, ImageBackground } from 'react-native';
 
 import { GhostInputView, GhostInputZone } from './ghost/GhostInput';
 
+// These params only change things on Android -- iOS has a fixed haptics strength
 const HAPTICS = { duration: 20, amplitude: 80 };
 
 const INPUTS_MODE_SPLIT = 0;

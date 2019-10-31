@@ -18,19 +18,26 @@ export const GhostInputView = ({ zoneRef, config, style, children }) => {
   const sendUpdate = ({ x, y, width, height }) => {
     if (ref.current && zoneRef && zoneRef.current) {
       const zoneHandle = findNodeHandle(zoneRef.current);
-      const args = [
-        findNodeHandle(ref.current),
-        PixelRatio.getPixelSizeForLayoutSize(x),
-        PixelRatio.getPixelSizeForLayoutSize(y),
-        PixelRatio.getPixelSizeForLayoutSize(width),
-        PixelRatio.getPixelSizeForLayoutSize(height),
-        config,
-      ];
       if (Platform.OS === 'android') {
-        UIManager.dispatchViewManagerCommand(zoneHandle, 0, args);
+        UIManager.dispatchViewManagerCommand(zoneHandle, 0, [
+          findNodeHandle(ref.current),
+          PixelRatio.getPixelSizeForLayoutSize(x),
+          PixelRatio.getPixelSizeForLayoutSize(y),
+          PixelRatio.getPixelSizeForLayoutSize(width),
+          PixelRatio.getPixelSizeForLayoutSize(height),
+          config,
+        ]);
       }
       if (Platform.OS === 'ios') {
-        NativeModules.GhostInputZoneManager.updateChild(zoneHandle, ...args);
+        NativeModules.GhostInputZoneManager.updateChild(
+          zoneHandle,
+          findNodeHandle(ref.current),
+          x,
+          y,
+          width,
+          height,
+          config
+        );
       }
     }
   };
