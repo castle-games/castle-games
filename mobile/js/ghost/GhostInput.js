@@ -1,5 +1,13 @@
 import React, { useRef, useState } from 'react';
-import { requireNativeComponent, View, findNodeHandle, UIManager, PixelRatio } from 'react-native';
+import {
+  requireNativeComponent,
+  View,
+  findNodeHandle,
+  UIManager,
+  PixelRatio,
+  Platform,
+  NativeModules,
+} from 'react-native';
 
 import './GhostConsole';
 
@@ -9,14 +17,21 @@ export const GhostInputView = ({ zoneRef, config, style, children }) => {
   // Send our zone our layout and input props
   const sendUpdate = ({ x, y, width, height }) => {
     if (ref.current && zoneRef && zoneRef.current) {
-      UIManager.dispatchViewManagerCommand(findNodeHandle(zoneRef.current), 0, [
+      const zoneHandle = findNodeHandle(zoneRef.current);
+      const args = [
         findNodeHandle(ref.current),
         PixelRatio.getPixelSizeForLayoutSize(x),
         PixelRatio.getPixelSizeForLayoutSize(y),
         PixelRatio.getPixelSizeForLayoutSize(width),
         PixelRatio.getPixelSizeForLayoutSize(height),
         config,
-      ]);
+      ];
+      if (Platform.OS === 'android') {
+        UIManager.dispatchViewManagerCommand(zoneHandle, 0, args);
+      }
+      if (Platform.OS === 'ios') {
+        NativeModules.GhostInputZoneManager.updateChild(zoneHandle, ...args);
+      }
     }
   };
 
