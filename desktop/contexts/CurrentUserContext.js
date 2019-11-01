@@ -4,6 +4,8 @@ import * as Utilities from '~/common/utilities';
 
 import { UserPresenceContext } from '~/contexts/UserPresenceContext';
 
+import CurrentUserCache from '~/common/current-user-cache';
+
 const RELOAD_TRENDING_GAMES_INTERVAL_MS = 1000 * 10;
 
 const EMPTY_CURRENT_USER = {
@@ -74,6 +76,7 @@ class CurrentUserContextManager extends React.Component {
       user,
       timeLastLoaded: Date.now(),
     });
+    this._cacheCurrentUser();
     if (
       !this.state.userStatusHistory ||
       !this.state.userStatusHistory.length ||
@@ -88,6 +91,7 @@ class CurrentUserContextManager extends React.Component {
     this.setState({
       ...EMPTY_CURRENT_USER,
     });
+    CurrentUserCache.clear();
   };
 
   refreshCurrentUser = async () => {
@@ -97,12 +101,17 @@ class CurrentUserContextManager extends React.Component {
         throw new Error(`Unable to fetch current user: ${JSON.stringify(result, null, 2)}`);
       }
       const { user, settings, userStatusHistory } = result;
-      this.setState({
-        user,
-        settings,
-        userStatusHistory,
-        timeLastLoaded: Date.now(),
-      });
+      this.setState(
+        {
+          user,
+          settings,
+          userStatusHistory,
+          timeLastLoaded: Date.now(),
+        },
+        () => {
+          this._cacheCurrentUser();
+        }
+      );
     } catch (e) {
       // TODO: failure case
       console.warn(e);
@@ -290,6 +299,17 @@ class CurrentUserContextManager extends React.Component {
     }
 
     return userIds;
+  };
+
+  _cacheCurrentUser = () => {
+    let { user, appNotifications, settings, userStatusHistory, timeLastLoaded } = this.state;
+    CurrentUserCache.set({
+      user,
+      appNotifications,
+      settings,
+      userStatusHistory,
+      timeLastLoaded,
+    });
   };
 
   render() {

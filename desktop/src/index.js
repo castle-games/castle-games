@@ -5,6 +5,7 @@ import * as Analytics from '~/common/analytics';
 import { injectGlobalStyles, injectGlobalScrollOverflowPreventionStyles } from './globalStyles';
 import { injectGlobalLoaderStyles } from '~/components/primitives/loader';
 
+import CurrentUserCache from '~/common/current-user-cache';
 import ReactDOM from 'react-dom';
 import App from './App';
 import GLLoaderScreen from '~/isometric/components/GLLoaderScreen';
@@ -32,31 +33,32 @@ const unmountLoader = async () => {
 };
 
 const getInitialState = async () => {
+  CurrentUserCache.setStorage(storage);
+
   let data;
-  let currentUser = {};
+  let currentUser = CurrentUserCache.get();
   let isOffline = true;
 
   try {
     data = await Actions.getInitialData();
+    if (data) {
+      isOffline = false;
+      currentUser = {
+        user: data.me,
+        settings: {
+          notifications: data.getNotificationPreferencesV2,
+        },
+        content: {
+          featuredExamples: data.featuredExamples ? data.featuredExamples : [],
+          trendingGames: data.trendingGames ? data.trendingGames : [],
+          trendingGamesLastUpdatedTime: Date.now(),
+        },
+        userStatusHistory: data.userStatusHistory,
+        appNotifications: data.appNotifications,
+      };
+    }
   } catch (e) {
     console.log(`Issue fetching initial Castle data: ${e}`);
-  }
-
-  if (data) {
-    isOffline = false;
-    currentUser = {
-      user: data.me,
-      settings: {
-        notifications: data.getNotificationPreferencesV2,
-      },
-      content: {
-        featuredExamples: data.featuredExamples ? data.featuredExamples : [],
-        trendingGames: data.trendingGames ? data.trendingGames : [],
-        trendingGamesLastUpdatedTime: Date.now(),
-      },
-      userStatusHistory: data.userStatusHistory,
-      appNotifications: data.appNotifications,
-    };
   }
 
   return {
