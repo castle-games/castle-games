@@ -108,7 +108,6 @@ class ContentContainer extends React.Component {
         <GamesHomeScreen
           updateAvailable={this.props.updateAvailable}
           onNativeUpdateInstall={this.props.onNativeUpdateInstall}
-          featuredExamples={this.props.featuredExamples}
           viewer={this.props.viewer}
           mode={mode}
         />
@@ -118,7 +117,7 @@ class ContentContainer extends React.Component {
     } else if (mode === 'game-meta') {
       return <GameMetaScreen />;
     } else if (mode === 'create') {
-      return <CreateProjectScreen templates={this.props.featuredExamples} />;
+      return <CreateProjectScreen />;
     } else if (mode === 'profile') {
       return <ProfileScreen />;
     } else if (mode === 'notifications') {

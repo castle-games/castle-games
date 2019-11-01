@@ -262,7 +262,6 @@ class App extends React.Component {
     return (
       <AppContainer
         trendingGames={this.state.trendingGames}
-        featuredExamples={this.state.featuredExamples}
         updateAvailable={this.state.updateAvailable}
         isFullScreen={this.props.navigation.playing.isFullScreen}
         onNativeUpdateInstall={this._handleNativeUpdateInstall}

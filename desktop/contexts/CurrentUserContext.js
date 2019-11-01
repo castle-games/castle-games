@@ -16,6 +16,7 @@ const EMPTY_CURRENT_USER = {
   content: {
     posts: null,
     allGames: null,
+    featuredExamples: null,
     trendingGames: null,
     trendingGamesLastUpdatedTime: null,
     multiplayerSessions: null,

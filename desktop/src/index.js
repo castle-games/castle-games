@@ -33,7 +33,6 @@ const unmountLoader = async () => {
 
 const getInitialState = async () => {
   let data;
-  let featuredExamples = [];
   let currentUser = {};
   let isOffline = true;
 
@@ -45,13 +44,13 @@ const getInitialState = async () => {
 
   if (data) {
     isOffline = false;
-    featuredExamples = data.featuredExamples ? data.featuredExamples : [];
     currentUser = {
       user: data.me,
       settings: {
         notifications: data.getNotificationPreferencesV2,
       },
       content: {
+        featuredExamples: data.featuredExamples ? data.featuredExamples : [],
         trendingGames: data.trendingGames ? data.trendingGames : [],
         trendingGamesLastUpdatedTime: Date.now(),
         multiplayerSessions: [],
@@ -62,7 +61,6 @@ const getInitialState = async () => {
   }
 
   return {
-    featuredExamples,
     currentUser,
     isOffline,
     navigation: {

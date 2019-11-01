@@ -386,6 +386,7 @@ export default class CreateProjectScreenWithContext extends React.Component {
                 navigateToGameUrl={navigator.navigateToGameUrl}
                 projectOwner={currentUser.user}
                 refreshCurrentUser={currentUser.refreshCurrentUser}
+                templates={currentUser.content.featuredExamples}
                 {...this.props}
               />
             )}
