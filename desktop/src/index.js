@@ -53,7 +53,6 @@ const getInitialState = async () => {
         featuredExamples: data.featuredExamples ? data.featuredExamples : [],
         trendingGames: data.trendingGames ? data.trendingGames : [],
         trendingGamesLastUpdatedTime: Date.now(),
-        multiplayerSessions: [],
       },
       userStatusHistory: data.userStatusHistory,
       appNotifications: data.appNotifications,

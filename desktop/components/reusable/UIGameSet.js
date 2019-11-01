@@ -4,7 +4,6 @@ import * as Constants from '~/common/constants';
 import UIGameCell from '~/components/reusable/UIGameCell';
 
 import { css } from 'react-emotion';
-import { NavigatorContext } from '~/contexts/NavigationContext';
 
 const STYLES_CONTAINER = css`
   display: flex;
@@ -17,15 +16,11 @@ const STYLES_CELL_ITEM = css`
   margin: 0 16px 16px 0;
 `;
 
-class UIGameSet extends React.Component {
+export default class UIGameSet extends React.Component {
   _container;
 
   static defaultProps = {
     numRowsToElide: -1,
-  };
-
-  _openGameMetaScreen = async (game) => {
-    this.props.navigateToGameMeta(game);
   };
 
   _numGamesToRender = () => {
@@ -57,7 +52,6 @@ class UIGameSet extends React.Component {
             <div className={STYLES_CELL_ITEM} key={`${key}-${i}`}>
               <UIGameCell
                 onGameSelect={this.props.onGameSelect}
-                onShowGameInfo={() => this._openGameMetaScreen(m)}
                 onGameUpdate={this.props.onGameUpdate}
                 onUserSelect={this.props.onUserSelect}
                 src={m.coverImage && m.coverImage.url}
@@ -67,18 +61,6 @@ class UIGameSet extends React.Component {
           );
         })}
       </div>
-    );
-  }
-}
-
-export default class UIGameSetWithContext extends React.Component {
-  render() {
-    return (
-      <NavigatorContext.Consumer>
-        {(navigator) => (
-          <UIGameSet navigateToGameMeta={navigator.navigateToGameMeta} {...this.props} />
-        )}
-      </NavigatorContext.Consumer>
     );
   }
 }

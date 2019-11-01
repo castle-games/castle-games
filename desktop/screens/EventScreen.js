@@ -6,7 +6,6 @@ import * as NativeUtil from '~/native/nativeutil';
 import { css } from 'react-emotion';
 import { NavigatorContext } from '~/contexts/NavigationContext';
 
-import UIGameSet from '~/components/reusable/UIGameSet';
 import UIButton from '~/components/reusable/UIButton';
 
 const STYLES_HOME_CONTAINER = css`

@@ -64,13 +64,12 @@ const STYLES_SECTION_TITLE = css`
 
 class GamesHomeScreen extends React.Component {
   static defaultProps = {
-    posts: null,
-    allGames: null,
-    reloadPosts: () => {},
-    loadMorePosts: () => {},
-    loadAllGames: () => {},
-    trendingGames: [],
-    multiplayerSessions: [],
+    content: {
+      posts: null,
+      allGames: null,
+      trendingGames: [],
+      multiplayerSessions: [],
+    },
     mode: 'home',
     updateAvailable: null,
   };
@@ -84,22 +83,22 @@ class GamesHomeScreen extends React.Component {
   async componentDidMount() {
     this._mounted = true;
     this._refreshHomepage();
-    if (!this.props.allGames || this.props.allGames.length < 35) {
+    if (!this.props.content.allGames || this.props.content.allGames.length < 35) {
       // no games have been loaded yet, preload the first ~page
-      this.props.loadAllGames(35);
+      this.props.contentActions.loadAllGames(35);
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.props.posts !== prevProps.posts && this.state.isLoadingPosts) {
+    if (this.props.content.posts !== prevProps.content.posts && this.state.isLoadingPosts) {
       this.setState({ isLoadingPosts: false });
     }
 
     if (
-      this.props.allGames &&
-      this.props.allGames !== prevProps.allGames &&
+      this.props.content.allGames &&
+      this.props.content.allGames !== prevProps.content.allGames &&
       this.state.isLoadingAllGames &&
-      this.props.allGames.length > 35
+      this.props.content.allGames.length > 35
     ) {
       this.setState({ isLoadingAllGames: false });
     }
@@ -121,10 +120,10 @@ class GamesHomeScreen extends React.Component {
     this.setState({ refreshingHomepage: true });
 
     if (this.props.mode === 'home') {
-      this.props.reloadPosts();
-      await this.props.reloadTrendingGames();
+      this.props.contentActions.reloadPosts();
+      await this.props.contentActions.reloadTrendingGames();
     } else if (this.props.mode === 'allGames') {
-      await this.props.loadAllGames();
+      await this.props.contentActions.loadAllGames();
     }
 
     this.setState({ refreshingHomepage: false });
@@ -138,7 +137,7 @@ class GamesHomeScreen extends React.Component {
       e.target.scrollHeight - e.target.scrollTop <=
       e.target.clientHeight + SCROLL_BOTTOM_OFFSET + 1000;
     if (isBottom && !this.state.isLoadingPosts) {
-      this.setState({ isLoadingPosts: true }, this.props.loadMorePosts);
+      this.setState({ isLoadingPosts: true }, this.props.contentActions.loadMorePosts);
     }
   };
 
@@ -168,7 +167,7 @@ class GamesHomeScreen extends React.Component {
   };
 
   render() {
-    const { posts, multiplayerSessions } = this.props;
+    const { posts, multiplayerSessions } = this.props.content;
     const multiplayerGames = multiplayerSessions
       ? multiplayerSessions.map((session) => session.game)
       : null;
@@ -177,7 +176,6 @@ class GamesHomeScreen extends React.Component {
       maybePostList = (
         <UIPostList
           posts={posts}
-          navigator={this.props.navigator}
           onUserSelect={this.props.navigateToUserProfile}
           onGameSelect={this._navigateToGame}
         />
@@ -194,27 +192,25 @@ class GamesHomeScreen extends React.Component {
               <UIGameSet
                 title=""
                 numRowsToElide={-1}
-                viewer={this.props.viewer}
                 gameItems={multiplayerGames}
                 onUserSelect={this.props.navigateToUserProfile}
                 onGameSelect={this._navigateToGame}
-                onSignInSelect={this.props.navigateToSignIn}
               />
             </div>
           ) : null}
           <div className={STYLES_SECTION_TITLE}>{title}</div>
           <div className={STYLES_GAMES_CONTAINER}>
             {this.props.mode === 'home' ||
-            (this.props.mode === 'allGames' && this.props.allGames) ? (
+            (this.props.mode === 'allGames' && this.props.content.allGames) ? (
               <UIGameSet
                 numRowsToElide={this.props.mode === 'home' ? 3 : -1}
-                viewer={this.props.viewer}
                 gameItems={
-                  this.props.mode === 'home' ? this.props.trendingGames : this.props.allGames
+                  this.props.mode === 'home'
+                    ? this.props.content.trendingGames
+                    : this.props.content.allGames
                 }
                 onUserSelect={this.props.navigateToUserProfile}
                 onGameSelect={this._navigateToGameMeta}
-                onSignInSelect={this.props.navigateToSignIn}
               />
             ) : null}
             {this.props.mode == 'allGames' && this.state.isLoadingAllGames ? (
@@ -247,20 +243,11 @@ export default class GamesHomeScreenWithContext extends React.Component {
           <CurrentUserContext.Consumer>
             {(currentUser) => (
               <GamesHomeScreen
-                viewer={currentUser ? currentUser.user : null}
                 navigateToUserProfile={navigator.navigateToUserProfile}
                 navigateToGame={navigator.navigateToGame}
                 navigateToGameMeta={navigator.navigateToGameMeta}
-                navigateToSignIn={navigator.navigateToSignIn}
-                posts={currentUser.content.posts}
-                allGames={currentUser.content.allGames}
-                loadAllGames={currentUser.loadAllGames}
-                trendingGames={currentUser.content.trendingGames}
-                reloadTrendingGames={currentUser.reloadTrendingGames}
-                multiplayerSessions={currentUser.content.multiplayerSessions}
-                reloadPosts={currentUser.reloadPosts}
-                loadMorePosts={currentUser.loadMorePosts}
-                navigator={navigator}
+                content={currentUser.content}
+                contentActions={currentUser.contentActions}
                 {...this.props}
               />
             )}

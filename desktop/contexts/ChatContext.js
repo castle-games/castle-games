@@ -732,7 +732,9 @@ class ChatContextProvider extends React.Component {
                         userPresence={userPresence}
                         navigation={navigation}
                         showChatChannel={navigator.showChatChannel}
-                        updateMultiplayerSessions={currentUser.updateMultiplayerSessions}
+                        updateMultiplayerSessions={
+                          currentUser.contentActions.updateMultiplayerSessions
+                        }
                         appendAppNotification={currentUser.appendAppNotification}
                         {...this.props}
                       />
