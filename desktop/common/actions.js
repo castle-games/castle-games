@@ -27,6 +27,7 @@ const NESTED_GAME_OWNER = `
 const FULL_USER_FIELDS = `
   userId
   username
+  isAnonymous
   name
   email
   websiteUrl

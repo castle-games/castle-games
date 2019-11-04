@@ -134,6 +134,9 @@ export default class SocialSidebarHeader extends React.Component {
     let content;
     if (mode === 'notifications') {
       content = <span className={STYLES_CHANNEL_NAME}>My Notifications</span>;
+    } else if (!channel) {
+      // chat isn't connected, or something else happened
+      content = <span className={STYLES_CHANNEL_NAME}>Disconnected</span>;
     } else if (channel.type === 'dm') {
       content = (
         <span className={STYLES_CHANNEL_NAME} onClick={onChannelClick}>
@@ -158,7 +161,7 @@ export default class SocialSidebarHeader extends React.Component {
 
   _getHeading = () => {
     const { mode, channel } = this.props;
-    if (mode === 'notifications') {
+    if (mode === 'notifications' || !channel) {
       return '';
     }
     switch (channel.type) {
@@ -197,6 +200,9 @@ export default class SocialSidebarHeader extends React.Component {
           <div id="action">Signed in as {username}</div>
         </span>
       );
+    }
+    if (!channel) {
+      return null;
     }
     if (channel.type !== 'dm' && numChannelMembers) {
       return (
@@ -243,10 +249,7 @@ export default class SocialSidebarHeader extends React.Component {
   };
 
   render() {
-    const { channel, isExpanded } = this.props;
-    if (!channel) {
-      return null;
-    }
+    const { isExpanded } = this.props;
 
     return (
       <header className={STYLES_HEADER}>
