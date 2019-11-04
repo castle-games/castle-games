@@ -39,6 +39,10 @@ const STYLES_SECTION_TITLE = css`
   padding: 0px 24px 16px 24px;
 `;
 
+const STYLES_P = css`
+  padding: 0 24px 16px 24px;
+`;
+
 class BrowseScreen extends React.Component {
   static defaultProps = {
     content: {
@@ -47,7 +51,7 @@ class BrowseScreen extends React.Component {
   };
 
   state = {
-    isLoading: true,
+    isLoading: false,
   };
 
   async componentDidMount() {
@@ -59,8 +63,7 @@ class BrowseScreen extends React.Component {
     if (
       this.props.content.allGames &&
       this.props.content.allGames !== prevProps.content.allGames &&
-      this.state.isLoading &&
-      this.props.content.allGames.length > 35
+      this.state.isLoading
     ) {
       this.setState({ isLoading: false });
     }
@@ -72,8 +75,10 @@ class BrowseScreen extends React.Component {
 
   _reload = async () => {
     this.setState({ isLoading: true });
-    await this.props.contentActions.loadAllGames();
-    this.setState({ isLoading: false });
+    try {
+      await this.props.contentActions.loadAllGames();
+    } catch (_) {}
+    this._mounted && this.setState({ isLoading: false });
   };
 
   _navigateToGame = (game, options) => {
@@ -97,7 +102,11 @@ class BrowseScreen extends React.Component {
                 onUserSelect={this.props.navigateToUserProfile}
                 onGameSelect={this._navigateToGameMeta}
               />
-            ) : null}
+            ) : (
+              <p className={STYLES_P}>
+                It seems like we haven't loaded any games. Are you connected to the internet?
+              </p>
+            )}
             {this.state.isLoading ? (
               <div className={STYLES_ALL_GAMES_LOADING_INDICATOR}>Loading games...</div>
             ) : null}
