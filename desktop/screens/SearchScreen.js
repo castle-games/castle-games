@@ -72,6 +72,7 @@ export default class SearchScreen extends React.Component {
 
   state = {
     isLoading: false,
+    loadingError: null,
     results: {
       games: [],
       users: [],
@@ -105,26 +106,39 @@ export default class SearchScreen extends React.Component {
     query = this._stringAsSearchInvariant(query);
     const { isUrl } = Urls.getCastleUrlInfo(query);
     if (Strings.isEmpty(query) || isUrl) {
-      this.setState({
-        isLoading: false,
-        results: {
-          games: [],
-          users: [],
-        },
-      });
+      this._mounted &&
+        this.setState({
+          isLoading: false,
+          loadingError: null,
+          results: {
+            games: [],
+            users: [],
+          },
+        });
     } else {
       await this.setState({ isLoading: true });
-      const results = await Actions.search(query);
-      if (this._mounted && results) {
-        this.setState((state) => {
-          if (this.props.query === results.query) {
-            return {
-              ...state,
-              isLoading: false,
-              results,
-            };
-          } else return state;
-        });
+      let results, loadingError;
+      try {
+        results = await Actions.search(query);
+      } catch (e) {
+        loadingError = e;
+      }
+      if (this._mounted) {
+        if (results) {
+          this.setState((state) => {
+            if (this.props.query === results.query) {
+              return {
+                ...state,
+                isLoading: false,
+                loadingError: null,
+                results,
+              };
+            } else return state;
+          });
+        } else {
+          // there was a problem fetching
+          this.setState({ isLoading: false, results: { games: [], users: [] }, loadingError });
+        }
       }
     }
   };
@@ -191,6 +205,14 @@ export default class SearchScreen extends React.Component {
             {this.props.query}
           </div>
         </React.Fragment>
+      );
+    } else if (this.state.loadingError) {
+      return (
+        <div className={STYLES_SEARCH_RESPONSE}>
+          There was a problem fetching results for{' '}
+          <strong style={{ color: Constants.colors.searchEmphasis }}>{this.props.query}</strong>.
+          Are you connected to the internet?
+        </div>
       );
     } else {
       return (
