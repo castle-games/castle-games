@@ -111,7 +111,9 @@ export default class LoginSignupScreen extends React.Component {
     localViewer: null,
     suggestedUser: null,
 
+    identifyUserError: null,
     signupError: null,
+    loginError: null,
   };
 
   _goToSignup = () => {
@@ -133,7 +135,7 @@ export default class LoginSignupScreen extends React.Component {
 
   _handleViewPrivacyPolicy = () => {
     NativeUtil.openExternalURL(`${Constants.WEB_HOST}/legal/privacy`);
-  }
+  };
 
   _goToPassword = () => {
     this.setState({
@@ -147,6 +149,7 @@ export default class LoginSignupScreen extends React.Component {
     this.setState({
       step: 'WHO',
       whoSubmitEnabled: true,
+      identifyUserError: null,
     });
   };
 
@@ -228,18 +231,25 @@ export default class LoginSignupScreen extends React.Component {
     }
 
     this.setState({ whoSubmitEnabled: false });
-    const user = await Actions.getExistingUser({ who: this.state.who });
-
-    if (user) {
+    let user;
+    try {
+      user = await Actions.getExistingUser({ who: this.state.who });
+    } catch (e) {
       this.setState({
-        suggestedUser: user,
+        identifyUserError: `There was a problem looking up the email or username. Are you connected to the internet? (${e.message})`,
+        whoSubmitEnabled: true,
       });
-      this._goToPassword();
-
       return;
     }
 
-    this._goToSignup();
+    if (user) {
+      await this.setState({
+        suggestedUser: user,
+      });
+      this._goToPassword();
+    } else {
+      this._goToSignup();
+    }
   };
 
   _handleSignUpAsync = async (e) => {
@@ -383,7 +393,7 @@ export default class LoginSignupScreen extends React.Component {
               value={this.state.password}
             />
             <div className={STYLES_LEGAL_TEXT}>
-              By clicking "Create Account," you are agreeing to Castle's{' '} 
+              By clicking "Create Account," you are agreeing to Castle's{' '}
               <span className={STYLES_ACTION} onClick={this._handleViewPrivacyPolicy}>
                 privacy policy.
               </span>
@@ -405,12 +415,19 @@ export default class LoginSignupScreen extends React.Component {
   };
 
   _renderWho = () => {
+    let maybeErrorNode;
+    if (!Strings.isEmpty(this.state.identifyUserError)) {
+      maybeErrorNode = (
+        <h5 className={STYLES_ERROR_MESSAGE}>Error: {this.state.identifyUserError}</h5>
+      );
+    }
     return (
       <div className={STYLES_CONTAINER} style={this.props.style}>
         <div className={STYLES_CONTENTS}>
           <form onSubmit={this._handleSubmitEmailAsync}>
             <div className={STYLES_HEADING}>Sign in or create account</div>
             <SignInPrompt />
+            {maybeErrorNode}
             <UIInputSecondary
               value=""
               autoFocus
@@ -423,6 +440,7 @@ export default class LoginSignupScreen extends React.Component {
             <div className={STYLES_SPACER} />
             <UIButton
               type="submit"
+              disabled={!this.state.whoSubmitEnabled}
               onFocus={this._handleSubmitEmailAsync}
               onClick={this._handleSubmitEmailAsync}>
               Continue
