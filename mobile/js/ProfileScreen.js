@@ -131,7 +131,9 @@ const ProfileScreen = () => {
               justifyContent: 'space-between',
             }}>
             {queryData.me.gameItems.map(game => (
-              <GameCard game={game} key={game.gameId} />
+              <View style={{ width: '50%', padding: 8 }} key={game.gameId}>
+                <GameCard game={game} />
+              </View>
             ))}
           </ScrollView>
         </Fragment>

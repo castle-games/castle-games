@@ -23,11 +23,10 @@ export const GAME_CARD_FRAGMENT = gql`
 
 export const GameCard = ({ game }) => {
   return (
-    <TouchableOpacity
+    <View
       style={{
-        width: '50%',
-        padding: 8,
-        overflow: 'hidden',
+        borderRadius: 4,
+        backgroundColor: 'white',
         shadowColor: '#000',
         shadowOffset: {
           width: 0,
@@ -35,20 +34,17 @@ export const GameCard = ({ game }) => {
         },
         shadowOpacity: 0.18,
         shadowRadius: 1.0,
-      }}
-      delayPressIn={50}
-      onPress={() => GameScreen.goToGame({ gameId: game.gameId })}>
-      <View
-        style={{
-          borderRadius: 4,
-          overflow: 'hidden',
-          backgroundColor: 'white',
-          elevation: 1,
-        }}>
+        elevation: 1,
+      }}>
+      <TouchableOpacity
+        delayPressIn={50}
+        onPress={() => GameScreen.goToGame({ gameId: game.gameId })}>
         <FastImage
           style={{
             width: '100%',
             aspectRatio: 16 / 9,
+            borderTopLeftRadius: 4,
+            borderTopRightRadius: 4,
           }}
           source={{ uri: game.coverImage && game.coverImage.url }}
           resizeMode={FastImage.resizeMode.cover}
@@ -57,7 +53,6 @@ export const GameCard = ({ game }) => {
           style={{
             padding: 12,
             paddingTop: 8,
-            backgroundColor: '#fff',
             height: 88,
             alignItems: 'center',
             justifyContent: 'center',
@@ -76,8 +71,8 @@ export const GameCard = ({ game }) => {
             @{game.owner.username}
           </Text>
         </View>
-      </View>
-    </TouchableOpacity>
+      </TouchableOpacity>
+    </View>
   );
 };
 
@@ -161,11 +156,15 @@ const HomeScreen = () => {
           </View>
           <SectionHeaderText>Trending</SectionHeaderText>
           {queryData.trendingGames.map(game => (
-            <GameCard game={game} key={game.gameId} />
+            <View style={{ width: '50%', padding: 8 }} key={game.gameId}>
+              <GameCard game={game} />
+            </View>
           ))}
           <SectionHeaderText>What's New</SectionHeaderText>
           {queryData.allGames.map(game => (
-            <GameCard game={game} key={game.gameId} />
+            <View style={{ width: '50%', padding: 8 }} key={game.gameId}>
+              <GameCard game={game} />
+            </View>
           ))}
         </ScrollView>
       )}
