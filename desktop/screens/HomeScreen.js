@@ -9,7 +9,7 @@ import HomeUpdateBanner from '~/components/HomeUpdateBanner';
 import UIGameSet from '~/components/reusable/UIGameSet';
 import UIPostList from '~/components/reusable/UIPostList';
 
-const SCROLL_BOTTOM_OFFSET = 20;
+const SCROLL_BOTTOM_OFFSET = 200;
 
 const STYLES_HOME_CONTAINER = css`
   width: 100%;
@@ -121,10 +121,8 @@ class HomeScreen extends React.Component {
   _handleScroll = (e) => {
     if (!this._mounted) return;
 
-    // add a buffer so that as person scrolls at a reasonable browsing speed, things load before they get there
     const isBottom =
-      e.target.scrollHeight - e.target.scrollTop <=
-      e.target.clientHeight + SCROLL_BOTTOM_OFFSET + Constants.card.imageHeight * 2;
+      e.target.scrollHeight - e.target.scrollTop <= e.target.clientHeight + SCROLL_BOTTOM_OFFSET;
     if (isBottom && this.props.content.posts.length > 0 && !this.state.isLoadingPosts) {
       this.setState({ isLoadingPosts: true }, async () => {
         try {
