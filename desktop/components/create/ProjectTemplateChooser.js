@@ -100,10 +100,11 @@ export default class ProjectTemplateChooser extends React.Component {
   };
 
   render() {
+    const { templates } = this.props;
     return (
       <div className={STYLES_CONTAINER}>
         {this._renderBlankTemplate()}
-        {this.props.templates.map((game) => this._renderTemplate(game))}
+        {templates && templates.map((game) => this._renderTemplate(game))}
       </div>
     );
   }

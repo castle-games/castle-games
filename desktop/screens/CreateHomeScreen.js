@@ -163,14 +163,19 @@ class CreateHomeScreen extends React.Component {
   render() {
     const { templates, selectedTemplate, onSelectTemplate } = this.props;
 
+    let instructions;
+    if (templates && templates.count) {
+      // might be empty if we're offline
+      instructions = `Anyone can make a game on Castle! Choose one of the template games below to be your starting point or select "New blank project" if you'd like begin from a blank slate.`;
+    } else {
+      instructions = `Anyone can make a game on Castle! Choose "New blank project" to create an empty Castle project.`;
+    }
+
     return (
       <React.Fragment>
         <div className={STYLES_SECTION}>
           <div className={STYLES_SECTION_TITLE}>Create a new project</div>
-          <div className={STYLES_PARAGRAPH}>
-            Anyone can make a game on Castle! Choose one of the template games below to be your
-            starting point or select "New blank project" if you'd like begin from a blank slate.
-          </div>
+          <div className={STYLES_PARAGRAPH}>{instructions}</div>
           <ProjectTemplateChooser
             templates={templates}
             selectedTemplate={selectedTemplate}
