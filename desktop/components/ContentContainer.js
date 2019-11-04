@@ -8,13 +8,15 @@ import { DevelopmentSetterContext } from '~/contexts/DevelopmentContext';
 import { NavigationContext, NavigatorContext } from '~/contexts/NavigationContext';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 
+import BrowseScreen from '~/screens/BrowseScreen';
 import ContentNavigationBar from '~/components/ContentNavigationBar';
 import CreateProjectScreen from '~/screens/CreateProjectScreen';
 import EditPostScreen from '~/screens/EditPostScreen';
+import EventScreen from '~/screens/EventScreen';
 import GameMetaScreen from '~/screens/GameMetaScreen';
 import GameScreen from '~/screens/GameScreen';
-import GamesHomeScreen from '~/screens/GamesHomeScreen';
 import GameWindow from '~/native/gamewindow';
+import HomeScreen from '~/screens/HomeScreen';
 import HistoryScreen from '~/screens/HistoryScreen';
 import NotificationScreen from '~/screens/NotificationScreen';
 import NowPlayingBar from '~/components/NowPlayingBar';
@@ -103,15 +105,19 @@ class ContentContainer extends React.Component {
     if (playing.isVisible) {
       return <GameScreen />;
     }
-    if (mode === 'home' || mode === 'allGames' || mode == 'event') {
+    if (mode === 'home') {
       return (
-        <GamesHomeScreen
+        <HomeScreen
           updateAvailable={this.props.updateAvailable}
           onNativeUpdateInstall={this.props.onNativeUpdateInstall}
           viewer={this.props.viewer}
           mode={mode}
         />
       );
+    } else if (mode === 'browse') {
+      return <BrowseScreen />;
+    } else if (mode === 'event') {
+      return <EventScreen />;
     } else if (mode === 'history') {
       return <HistoryScreen />;
     } else if (mode === 'game-meta') {

@@ -106,7 +106,7 @@ class ContentNavigationBar extends React.Component {
 
     let items = [
       { name: 'Home', onClick: navigator.navigateToHome },
-      { name: 'All Games', onClick: () => navigator.navigateToContentMode('allGames') },
+      { name: 'All Games', onClick: () => navigator.navigateToContentMode('browse') },
     ];
 
     const { userStatusHistory } = currentUser;
