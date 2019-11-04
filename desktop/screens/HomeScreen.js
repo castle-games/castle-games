@@ -1,7 +1,5 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
-import * as Actions from '~/common/actions';
-import * as SVG from '~/components/primitives/svg';
 
 import { css } from 'react-emotion';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
@@ -40,6 +38,19 @@ const STYLES_POSTS_CONTAINER = css`
   margin-bottom: 24px;
 `;
 
+const STYLES_ERROR_CONTAINER = css`
+  margin-bottom: 16px;
+
+  p {
+    padding: 0 24px 16px 24px;
+  }
+`;
+
+const STYLES_ERROR_LINK = css`
+  text-decoration: underline;
+  cursor: pointer;
+`;
+
 const STYLES_BOTTOM = css`
   width: 100%;
   height: 64px;
@@ -67,16 +78,19 @@ class HomeScreen extends React.Component {
   };
 
   state = {
-    isLoadingPosts: true,
-    refreshingHomepage: false,
+    isLoadingPosts: false,
+    isReloading: false,
+    loadingError: null,
   };
 
   async componentDidMount() {
     this._mounted = true;
-    this._refreshHomepage();
+    this._reload();
     if (!this.props.content.allGames || this.props.content.allGames.length < 35) {
       // no games have been loaded yet, preload the first ~page
-      this.props.contentActions.loadAllGames(35);
+      try {
+        this.props.contentActions.loadAllGames(35);
+      } catch (_) {}
     }
   }
 
@@ -90,11 +104,18 @@ class HomeScreen extends React.Component {
     this._mounted = false;
   }
 
-  _refreshHomepage = async () => {
-    this.setState({ refreshingHomepage: true });
-    this.props.contentActions.reloadPosts();
-    await this.props.contentActions.reloadTrendingGames();
-    this.setState({ refreshingHomepage: false });
+  _reload = async () => {
+    if (!this.state.isReloading) {
+      this.setState({ isReloading: true, isLoadingPosts: true, loadingError: null });
+      let loadingError = null;
+      try {
+        await this.props.contentActions.reloadPosts();
+        await this.props.contentActions.reloadTrendingGames();
+      } catch (e) {
+        loadingError = e;
+      }
+      this._mounted && this.setState({ isReloading: false, isLoadingPosts: false, loadingError });
+    }
   };
 
   _handleScroll = (e) => {
@@ -104,8 +125,14 @@ class HomeScreen extends React.Component {
     const isBottom =
       e.target.scrollHeight - e.target.scrollTop <=
       e.target.clientHeight + SCROLL_BOTTOM_OFFSET + Constants.card.imageHeight * 2;
-    if (isBottom && !this.state.isLoadingPosts) {
-      this.setState({ isLoadingPosts: true }, this.props.contentActions.loadMorePosts);
+    if (isBottom && this.props.content.posts.length > 0 && !this.state.isLoadingPosts) {
+      this.setState({ isLoadingPosts: true }, async () => {
+        try {
+          this.props.contentActions.loadMorePosts();
+        } catch (_) {
+          this._mounted && this.setState({ isLoadingPosts: false });
+        }
+      });
     }
   };
 
@@ -126,6 +153,79 @@ class HomeScreen extends React.Component {
     ) : null;
   };
 
+  _renderGamesSection = () => {
+    const { trendingGames } = this.props.content;
+    if (trendingGames && trendingGames.length) {
+      return (
+        <div className={STYLES_GAMES_CONTAINER}>
+          <div className={STYLES_SECTION_TITLE}>Games</div>
+          <UIGameSet
+            numRowsToElide={3}
+            gameItems={trendingGames}
+            onUserSelect={this.props.navigateToUserProfile}
+            onGameSelect={this._navigateToGameMeta}
+          />
+        </div>
+      );
+    } else if (this.state.loadingError) {
+      return (
+        <div className={STYLES_ERROR_CONTAINER}>
+          <div className={STYLES_SECTION_TITLE}>Welcome to Castle</div>
+          <p>
+            We had an issue loading the Castle home screen, which might mean you are disconnected
+            from the internet.
+          </p>
+          <p>
+            You can still{' '}
+            <span className={STYLES_ERROR_LINK} onClick={this.props.navigateToCreate}>
+              create games
+            </span>{' '}
+            while offline!
+          </p>
+        </div>
+      );
+    }
+  };
+
+  _renderPostsSection = () => {
+    const { posts } = this.props.content;
+    if (posts) {
+      return (
+        <div className={STYLES_POSTS_CONTAINER}>
+          <div className={STYLES_SECTION_TITLE}>What people are up to...</div>
+          <UIPostList
+            posts={posts}
+            onUserSelect={this.props.navigateToUserProfile}
+            onGameSelect={this._navigateToGame}
+          />
+        </div>
+      );
+    }
+    return null;
+  };
+
+  _renderMultiplayerSection = () => {
+    const { multiplayerSessions } = this.props.content;
+    const multiplayerGames = multiplayerSessions
+      ? multiplayerSessions.map((session) => session.game)
+      : null;
+    if (multiplayerGames && multiplayerGames.length > 0) {
+      return (
+        <div className={STYLES_MULTIPLAYER_SESSIONS_CONTAINER}>
+          <div className={STYLES_SECTION_TITLE}>Active Multiplayer Game Sessions</div>
+          <UIGameSet
+            title=""
+            numRowsToElide={-1}
+            gameItems={multiplayerGames}
+            onUserSelect={this.props.navigateToUserProfile}
+            onGameSelect={this._navigateToGame}
+          />
+        </div>
+      );
+    }
+    return null;
+  };
+
   _renderBottom = () => {
     let maybeLoading;
     if (this.state.isLoadingPosts) {
@@ -135,49 +235,13 @@ class HomeScreen extends React.Component {
   };
 
   render() {
-    const { posts, multiplayerSessions } = this.props.content;
-    const multiplayerGames = multiplayerSessions
-      ? multiplayerSessions.map((session) => session.game)
-      : null;
-    let maybePostList;
-    if (posts) {
-      maybePostList = (
-        <UIPostList
-          posts={posts}
-          onUserSelect={this.props.navigateToUserProfile}
-          onGameSelect={this._navigateToGame}
-        />
-      );
-    }
     return (
       <div className={STYLES_HOME_CONTAINER} onScroll={this._handleScroll}>
         {this._renderUpdateBanner()}
         <div className={STYLES_CONTENT_CONTAINER}>
-          {multiplayerGames && multiplayerGames.length > 0 ? (
-            <div className={STYLES_MULTIPLAYER_SESSIONS_CONTAINER}>
-              <div className={STYLES_SECTION_TITLE}>Active Multiplayer Game Sessions</div>
-              <UIGameSet
-                title=""
-                numRowsToElide={-1}
-                gameItems={multiplayerGames}
-                onUserSelect={this.props.navigateToUserProfile}
-                onGameSelect={this._navigateToGame}
-              />
-            </div>
-          ) : null}
-          <div className={STYLES_SECTION_TITLE}>Games</div>
-          <div className={STYLES_GAMES_CONTAINER}>
-            <UIGameSet
-              numRowsToElide={3}
-              gameItems={this.props.content.trendingGames}
-              onUserSelect={this.props.navigateToUserProfile}
-              onGameSelect={this._navigateToGameMeta}
-            />
-          </div>
-          <div className={STYLES_POSTS_CONTAINER}>
-            <div className={STYLES_SECTION_TITLE}>What people are up to...</div>
-            {maybePostList}
-          </div>
+          {this._renderMultiplayerSection()}
+          {this._renderGamesSection()}
+          {this._renderPostsSection()}
         </div>
         {this._renderBottom()}
       </div>
@@ -196,6 +260,7 @@ export default class HomeScreenWithContext extends React.Component {
                 navigateToUserProfile={navigator.navigateToUserProfile}
                 navigateToGame={navigator.navigateToGame}
                 navigateToGameMeta={navigator.navigateToGameMeta}
+                navigateToCreate={navigator.navigateToCreate}
                 content={currentUser.content}
                 contentActions={currentUser.contentActions}
                 {...this.props}

@@ -110,8 +110,6 @@ class ContentContainer extends React.Component {
         <HomeScreen
           updateAvailable={this.props.updateAvailable}
           onNativeUpdateInstall={this.props.onNativeUpdateInstall}
-          viewer={this.props.viewer}
-          mode={mode}
         />
       );
     } else if (mode === 'browse') {

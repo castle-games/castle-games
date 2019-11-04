@@ -147,14 +147,7 @@ class CurrentUserContextManager extends React.Component {
   };
 
   loadAllGames = async (limit) => {
-    let data = null;
-
-    try {
-      data = await Actions.getAllGames(limit);
-    } catch (e) {
-      console.log(`Issue fetching all games: ${e}`);
-    }
-
+    let data = await Actions.getAllGames(limit);
     if (data) {
       let allGames = data.allGames;
       await this.setState((state) => {
@@ -180,12 +173,7 @@ class CurrentUserContextManager extends React.Component {
       return;
     }
 
-    try {
-      data = await Actions.getTrendingGames();
-    } catch (e) {
-      console.log(`Issue fetching trending games: ${e}`);
-    }
-
+    data = await Actions.getTrendingGames();
     if (data) {
       let trendingGames = data.trendingGames;
       await this.setState((state) => {
