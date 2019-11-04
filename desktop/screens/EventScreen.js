@@ -70,7 +70,7 @@ class EventScreen extends React.Component {
           />
           <div className={STYLES_SECTION_TITLE}>Castle Halloween Party</div>
           <div className={STYLES_PARAGRAPH}>
-            Join us from October 25th to November 7, 2019 while we hang out, make games, and play
+            Join us from October 25th to November 10, 2019 while we hang out, make games, and play
             games in Castle. If you make a cool game, we'll give you a rare T-Shirt, and there are
             even some cash awards!
           </div>
