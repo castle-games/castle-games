@@ -108,21 +108,24 @@ class UIReactionsCollection extends React.Component {
           const itemClass = isViewerIncluded
             ? `${STYLES_REACTION_ITEM} ${STYLES_REACTION_ITEM_SELECTED}`
             : STYLES_REACTION_ITEM;
-          const itemStyles = {
+          let itemStyles = {
             color: isViewerIncluded ? theme.reactionItemSelectedColor : theme.reactionItemColor,
             background: isViewerIncluded
               ? theme.reactionItemSelectedBackground
               : theme.reactionItemBackground,
           };
+          let onClick;
+          if (viewer.isAnonymous) {
+            itemStyles.cursor = 'default';
+          } else {
+            onClick = () => this.props.onSelectReaction(emoji);
+          }
           return (
             <Tooltip
               key={`reaction-${ii}`}
               title={this._getTooltip(emoji, userIds)}
               {...TOOLTIP_PROPS}>
-              <div
-                className={itemClass}
-                style={itemStyles}
-                onClick={() => this.props.onSelectReaction(emoji)}>
+              <div className={itemClass} style={itemStyles} onClick={onClick}>
                 {getEmojiComponent(emoji, 15)}
                 <span className={STYLES_REACTION_COUNT}>{count}</span>
               </div>

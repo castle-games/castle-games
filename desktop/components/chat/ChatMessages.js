@@ -114,7 +114,7 @@ export default class ChatMessages extends React.Component {
         user={user}
         size={size}
         theme={theme}
-        enableHoverActions={true}
+        enableHoverActions={!viewer.isAnonymous}
         messageIdToEdit={messageIdToEdit}
         onSelectEdit={this.props.onSelectEdit}
         onSelectReaction={this.props.onSelectReaction}

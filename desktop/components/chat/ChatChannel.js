@@ -108,8 +108,8 @@ class ChatChannel extends React.Component {
       name = 'everyone';
     }
 
-    return (
-      <React.Fragment>
+    if (viewer.isAnonymous) {
+      return (
         <ChatMessages
           theme={this.props.theme}
           size={this.props.size}
@@ -117,26 +117,39 @@ class ChatChannel extends React.Component {
           messages={channel.messages}
           navigator={navigator}
           userIdToUser={userPresence.userIdToUser}
-          onSelectEdit={this._handleSelectEdit}
-          onSelectReaction={this._handleSelectReaction}
-          messageIdToEdit={this.state.messageIdToEdit}
-          onSendMessageEdit={this._handleSendMessageEdit}
-          onEditCancel={this._handleEditCancel}
         />
-        <ChatInputControl
-          ref={(c) => (this._inputRef = c)}
-          theme={this.props.theme}
-          placeholder={`Message ${name}`}
-          addUsers={userPresence.addUsers}
-          onSendMessage={this._handleSendMessage}
-          isEditAvailable={this._isEditAvailable()}
-          isVoiceChatAvailable={isVoiceChatAvailable}
-          isVoiceChatActive={isVoiceChatActive}
-          onToggleVoiceChat={this._handleToggleVoiceChat}
-          onSelectEdit={this._handleSelectEdit}
-        />
-      </React.Fragment>
-    );
+      );
+    } else {
+      return (
+        <React.Fragment>
+          <ChatMessages
+            theme={this.props.theme}
+            size={this.props.size}
+            viewer={viewer}
+            messages={channel.messages}
+            navigator={navigator}
+            userIdToUser={userPresence.userIdToUser}
+            onSelectEdit={this._handleSelectEdit}
+            onSelectReaction={this._handleSelectReaction}
+            messageIdToEdit={this.state.messageIdToEdit}
+            onSendMessageEdit={this._handleSendMessageEdit}
+            onEditCancel={this._handleEditCancel}
+          />
+          <ChatInputControl
+            ref={(c) => (this._inputRef = c)}
+            theme={this.props.theme}
+            placeholder={`Message ${name}`}
+            addUsers={userPresence.addUsers}
+            onSendMessage={this._handleSendMessage}
+            isEditAvailable={this._isEditAvailable()}
+            isVoiceChatAvailable={isVoiceChatAvailable}
+            isVoiceChatActive={isVoiceChatActive}
+            onToggleVoiceChat={this._handleToggleVoiceChat}
+            onSelectEdit={this._handleSelectEdit}
+          />
+        </React.Fragment>
+      );
+    }
   }
 }
 
