@@ -33,6 +33,7 @@ const CurrentUserContextDefaults = {
   refreshCurrentUser: async () => {},
   contentActions: {
     loadAllGames: async (limit) => {},
+    loadFeaturedExamples: async () => {},
     reloadTrendingGames: async () => {},
     updateMultiplayerSessions: async () => {},
     reloadPosts: () => {},
@@ -58,6 +59,7 @@ class CurrentUserContextManager extends React.Component {
         reloadPosts: this.reloadPosts,
         loadMorePosts: this.loadMorePosts,
         loadAllGames: this.loadAllGames,
+        loadFeaturedExamples: this.loadFeaturedExamples,
         reloadTrendingGames: this.reloadTrendingGames,
         updateMultiplayerSessions: this.updateMultiplayerSessions,
       },
@@ -156,6 +158,22 @@ class CurrentUserContextManager extends React.Component {
           content: {
             ...state.content,
             allGames,
+          },
+        };
+      });
+    }
+  };
+
+  loadFeaturedExamples = async () => {
+    let data = await Actions.getFeaturedExamples();
+    if (data) {
+      let featuredExamples = data.featuredExamples;
+      await this.setState((state) => {
+        return {
+          ...state,
+          content: {
+            ...state.content,
+            featuredExamples,
           },
         };
       });

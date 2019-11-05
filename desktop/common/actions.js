@@ -467,6 +467,28 @@ export async function getTrendingGames() {
   return result.data;
 }
 
+export async function getFeaturedExamples() {
+  const result = await API(`
+    query {
+      featuredExamples {
+        ${GAME_FIELDS}
+        ${NESTED_GAME_OWNER}
+      }
+    }
+  `);
+
+  if (!result) {
+    return false;
+  }
+
+  // TOOD(jim): Write a global error handler.
+  if (result.error) {
+    return false;
+  }
+
+  return result.data;
+}
+
 export async function logout() {
   const result = await API.graphqlAsync({
     query: `

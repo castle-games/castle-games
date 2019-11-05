@@ -98,12 +98,7 @@ class HomeScreen extends React.Component {
   async componentDidMount() {
     this._mounted = true;
     this._reload();
-    if (!this.props.content.allGames || this.props.content.allGames.length < 35) {
-      // no games have been loaded yet, preload the first ~page
-      try {
-        this.props.contentActions.loadAllGames(35);
-      } catch (_) {}
-    }
+    this._preloadMoreContent();
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -127,6 +122,20 @@ class HomeScreen extends React.Component {
         loadingError = e;
       }
       this._mounted && this.setState({ isReloading: false, isLoadingPosts: false, loadingError });
+    }
+  };
+
+  _preloadMoreContent = () => {
+    if (!this.props.content.allGames || this.props.content.allGames.length < 35) {
+      // no games have been loaded yet, preload the first ~page
+      try {
+        this.props.contentActions.loadAllGames(35);
+      } catch (_) {}
+    }
+    if (!this.props.content.featuredExamples || !this.props.content.featuredExamples.length) {
+      try {
+        this.props.contentActions.loadFeaturedExamples();
+      } catch (_) {}
     }
   };
 
