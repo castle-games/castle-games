@@ -164,16 +164,27 @@ class HomeScreen extends React.Component {
   };
 
   _renderGamesSection = () => {
-    const { trendingGames } = this.props.content;
+    const { trendingGames, multiplayerSessions } = this.props.content;
+    const multiplayerGames = multiplayerSessions
+      ? multiplayerSessions.map((session) => session.game)
+      : null;
+    let gamesToShow = [];
+    if (multiplayerGames && multiplayerGames.length > 0) {
+      gamesToShow = gamesToShow.concat(multiplayerGames);
+    }
     if (trendingGames && trendingGames.length) {
+      gamesToShow = gamesToShow.concat(trendingGames);
+    }
+    if (gamesToShow.length) {
       return (
         <div className={STYLES_GAMES_CONTAINER}>
           <div className={STYLES_SECTION_TITLE}>Games</div>
           <UIGameSet
             numRowsToElide={3}
-            gameItems={trendingGames}
+            gameItems={gamesToShow}
             onUserSelect={this.props.navigateToUserProfile}
             onGameSelect={this._navigateToGameMeta}
+            onGameSessionSelect={this._navigateToGame}
           />
         </div>
       );
@@ -214,28 +225,6 @@ class HomeScreen extends React.Component {
     return null;
   };
 
-  _renderMultiplayerSection = () => {
-    const { multiplayerSessions } = this.props.content;
-    const multiplayerGames = multiplayerSessions
-      ? multiplayerSessions.map((session) => session.game)
-      : null;
-    if (multiplayerGames && multiplayerGames.length > 0) {
-      return (
-        <div className={STYLES_MULTIPLAYER_SESSIONS_CONTAINER}>
-          <div className={STYLES_SECTION_TITLE}>Active Multiplayer Game Sessions</div>
-          <UIGameSet
-            title=""
-            numRowsToElide={-1}
-            gameItems={multiplayerGames}
-            onUserSelect={this.props.navigateToUserProfile}
-            onGameSelect={this._navigateToGame}
-          />
-        </div>
-      );
-    }
-    return null;
-  };
-
   _renderBottom = () => {
     let maybeLoading;
     if (this.state.isLoadingPosts) {
@@ -256,7 +245,6 @@ class HomeScreen extends React.Component {
       <div className={STYLES_HOME_CONTAINER} onScroll={this._handleScroll}>
         {this._renderUpdateBanner()}
         <div className={STYLES_CONTENT_CONTAINER}>
-          {this._renderMultiplayerSection()}
           {this._renderGamesSection()}
           {this._renderPostsSection()}
         </div>

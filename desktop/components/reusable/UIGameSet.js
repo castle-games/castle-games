@@ -52,6 +52,7 @@ export default class UIGameSet extends React.Component {
             <div className={STYLES_CELL_ITEM} key={`${key}-${i}`}>
               <UIGameCell
                 onGameSelect={this.props.onGameSelect}
+                onGameSessionSelect={this.props.onGameSessionSelect}
                 onGameUpdate={this.props.onGameUpdate}
                 onUserSelect={this.props.onUserSelect}
                 src={m.coverImage && m.coverImage.url}

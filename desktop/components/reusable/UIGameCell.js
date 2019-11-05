@@ -162,6 +162,7 @@ export default class UIGameCell extends React.Component {
   static defaultProps = {
     game: null,
     onGameSelect: () => {},
+    onGameSessionSelect: null,
     onUserSelect: () => {},
     onGameUpdate: null,
     theme: {},
@@ -213,12 +214,21 @@ export default class UIGameCell extends React.Component {
     if (this.state.isHoveringOnActions || this.state.isHoveringOnAuthor) {
       return false;
     }
-    this.props.onGameSelect(this.props.game);
+    const { game } = this.props;
+    if (this._isJoinableMultiplayerSession(game) && this.props.onGameSessionSelect) {
+      this.props.onGameSessionSelect(game);
+    } else {
+      this.props.onGameSelect(game);
+    }
   };
 
   _handleMouseLeave = () => {
     this._handleToggleHoverOnPlay(false);
     this.setState({ gameUrlWasCopiedToClipboard: false });
+  };
+
+  _isJoinableMultiplayerSession = (game) => {
+    return !!game.sessionId;
   };
 
   _usersListToString = (users) => {
@@ -240,9 +250,10 @@ export default class UIGameCell extends React.Component {
   };
 
   _renderTagline = (game, isLocalFile) => {
-    const isJoinableMultiplayerSession = !!game.sessionId;
-    if (isJoinableMultiplayerSession) {
-      return <div className={`${STYLES_TAGLINE} ${STYLES_LIVE_TEXT}`}>Active Now</div>;
+    if (this._isJoinableMultiplayerSession(game)) {
+      return (
+        <div className={`${STYLES_TAGLINE} ${STYLES_LIVE_TEXT}`}>Active Multiplayer Session</div>
+      );
     } else if (isLocalFile) {
       return <div className={`${STYLES_TAGLINE} ${STYLES_SECONDARY_TEXT}`}>Local project</div>;
     } else {
@@ -265,8 +276,7 @@ export default class UIGameCell extends React.Component {
   };
 
   _renderDetailLine = (game) => {
-    const isJoinableMultiplayerSession = !!game.sessionId;
-    if (isJoinableMultiplayerSession) {
+    if (this._isJoinableMultiplayerSession(game)) {
       const joinText = game.sessionUsers ? this._usersListToString(game.sessionUsers) : '';
       return <span className={STYLES_SECONDARY_TEXT}>Click to join {joinText}</span>;
     } else {
