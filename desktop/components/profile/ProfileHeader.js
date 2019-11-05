@@ -118,11 +118,11 @@ export default class ProfileHeader extends React.Component {
     this.props.onSendMessage(this.props.creator);
   };
 
-  _renderLinks = (creator, isOwnProfile) => {
+  _renderLinks = (creator, isOwnProfile, isAnonymousViewer) => {
     let linkElements = [];
     const { websiteUrl, itchUsername, twitterUsername } = creator;
 
-    if (!isOwnProfile) {
+    if (!isOwnProfile && !isAnonymousViewer) {
       linkElements.push(
         <div key="message" className={STYLES_LINK_ITEM} onClick={this._handleSendMessage}>
           <SVG.Mail style={{ width: 14, height: 14, marginRight: 4 }} />
@@ -179,7 +179,11 @@ export default class ProfileHeader extends React.Component {
         aboutElement = <ContentEditor readOnly value={richAbout} className={STYLES_ABOUT} />;
       }
     }
-    const linksElement = this._renderLinks(this.props.creator, this.props.isOwnProfile);
+    const linksElement = this._renderLinks(
+      this.props.creator,
+      this.props.isOwnProfile,
+      this.props.isAnonymousViewer
+    );
 
     const avatarSrc =
       this.props.creator && this.props.creator.photo ? this.props.creator.photo.url : null;

@@ -233,6 +233,7 @@ class ProfileScreen extends React.Component {
         <ProfileHeader
           creator={creator}
           isOwnProfile={isOwnProfile}
+          isAnonymousViewer={!viewer || viewer.isAnonymous}
           navigateToGameMeta={this._navigateToGameMeta}
           onSendMessage={this.props.onSendMessage}
         />
