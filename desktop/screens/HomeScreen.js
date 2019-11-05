@@ -66,6 +66,18 @@ const STYLES_SECTION_TITLE = css`
   padding: 0px 24px 16px 24px;
 `;
 
+const STYLES_LOADING_CONTAINER = css`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 20%;
+  font-family: ${Constants.font.heading};
+  color: ${Constants.REFACTOR_COLORS.subdued};
+  font-size: ${Constants.typescale.lvl5};
+  line-height: ${Constants.linescale.lvl5};
+`;
+
 class HomeScreen extends React.Component {
   static defaultProps = {
     content: {
@@ -106,7 +118,7 @@ class HomeScreen extends React.Component {
 
   _reload = async () => {
     if (!this.state.isReloading) {
-      this.setState({ isReloading: true, isLoadingPosts: true, loadingError: null });
+      await this.setState({ isReloading: true, isLoadingPosts: true, loadingError: null });
       let loadingError = null;
       try {
         await this.props.contentActions.reloadPosts();
@@ -233,6 +245,13 @@ class HomeScreen extends React.Component {
   };
 
   render() {
+    if (
+      this.state.isReloading &&
+      (!this.props.content.trendingGames || !this.props.content.trendingGames.length)
+    ) {
+      // block screen on first load
+      return <div className={STYLES_LOADING_CONTAINER}>Loading...</div>;
+    }
     return (
       <div className={STYLES_HOME_CONTAINER} onScroll={this._handleScroll}>
         {this._renderUpdateBanner()}

@@ -423,16 +423,6 @@ export async function getInitialData() {
     query {
       ${CURRENT_USER_QUERY}
 
-      trendingGames {
-        ${GAME_FIELDS}
-        ${NESTED_GAME_OWNER}
-      }
-
-      featuredExamples {
-        ${GAME_FIELDS}
-        ${NESTED_GAME_OWNER}
-      }
-
       appNotifications {
         ${NOTIFICATION_FIELDS}
       }

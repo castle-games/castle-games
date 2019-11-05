@@ -48,11 +48,6 @@ const getInitialState = async () => {
         settings: {
           notifications: data.getNotificationPreferencesV2,
         },
-        content: {
-          featuredExamples: data.featuredExamples ? data.featuredExamples : [],
-          trendingGames: data.trendingGames ? data.trendingGames : [],
-          trendingGamesLastUpdatedTime: Date.now(),
-        },
         userStatusHistory: data.userStatusHistory,
         appNotifications: data.appNotifications,
       };
