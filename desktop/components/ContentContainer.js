@@ -17,7 +17,6 @@ import GameMetaScreen from '~/screens/GameMetaScreen';
 import GameScreen from '~/screens/GameScreen';
 import GameWindow from '~/native/gamewindow';
 import HomeScreen from '~/screens/HomeScreen';
-import HistoryScreen from '~/screens/HistoryScreen';
 import NotificationScreen from '~/screens/NotificationScreen';
 import NowPlayingBar from '~/components/NowPlayingBar';
 import ProfileScreen from '~/screens/ProfileScreen';
@@ -116,8 +115,6 @@ class ContentContainer extends React.Component {
       return <BrowseScreen />;
     } else if (mode === 'event') {
       return <EventScreen />;
-    } else if (mode === 'history') {
-      return <HistoryScreen />;
     } else if (mode === 'game-meta') {
       return <GameMetaScreen />;
     } else if (mode === 'create') {
