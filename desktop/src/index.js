@@ -8,7 +8,7 @@ import { injectGlobalLoaderStyles } from '~/components/primitives/loader';
 import CurrentUserCache from '~/common/current-user-cache';
 import ReactDOM from 'react-dom';
 import App from './App';
-import GLLoaderScreen from '~/isometric/components/GLLoaderScreen';
+import AppLoadingScreen from '~/screens/AppLoadingScreen';
 import Storage from '~/common/storage';
 
 import 'react-tippy/dist/tippy.css';
@@ -21,7 +21,7 @@ loader.id = 'loader';
 document.body.appendChild(loader);
 
 const mountLoader = () => {
-  ReactDOM.render(<GLLoaderScreen />, document.getElementById('loader'));
+  ReactDOM.render(<AppLoadingScreen />, document.getElementById('loader'));
 };
 
 const unmountLoader = async () => {
