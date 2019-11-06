@@ -157,7 +157,7 @@ export default class GameScreenActionsBar extends React.Component {
   }
 
   render() {
-    let { game, sessionId } = this.props;
+    let { game, sessionId, isAnonymousViewer } = this.props;
     let sessionLink = getSessionLink(game, sessionId);
     let shortSessionLink = getShortSessionLink(game, sessionId) || sessionLink;
 
@@ -166,7 +166,7 @@ export default class GameScreenActionsBar extends React.Component {
       volumeElement = <GameSVG.AudioOff height="20px" style={{ marginRight: 8 }} />;
     }
 
-    const isPostControlsVisible = game && game.gameId;
+    const isPostControlsVisible = game && game.gameId && !isAnonymousViewer;
 
     return (
       <div className={STYLES_CONTAINER} style={this.props.style}>

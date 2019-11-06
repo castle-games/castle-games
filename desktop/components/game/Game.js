@@ -87,6 +87,7 @@ export default class Game extends React.Component {
         game={this.props.game}
         sessionId={this.props.sessionId}
         isMuted={this.props.isMuted}
+        isAnonymousViewer={this.props.isAnonymousViewer}
         recordingStatus={this.props.recordingStatus}
         onToggleMute={this.props.onToggleMute}
         onPostScreenshot={this._handlePostScreenshot}

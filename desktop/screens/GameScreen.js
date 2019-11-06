@@ -135,7 +135,7 @@ class GameScreen extends React.Component {
       },
       user: {
         isLoggedIn: this.props.isLoggedIn,
-        me: await jsUserToLuaUser(this.props.me),
+        me: await jsUserToLuaUser(this.props.viewer),
       },
       initialPost: luaPost,
       initialParams: this.props.playing.gameParams ? this.props.playing.gameParams : undefined,
@@ -341,6 +341,7 @@ class GameScreen extends React.Component {
         onCreatePost={this.props.navigateToEditPost}
         onReload={this.props.reloadGame}
         onWindowSizeUpdate={this.updateGameWindowFrame}
+        isAnonymousViewer={!this.props.viewer || this.props.viewer.isAnonymous}
         refreshCurrentUser={this.props.refreshCurrentUser}>
         <div ref={this._setGameRef} className={screenClassName}>
           {this._renderLoader()}
@@ -372,7 +373,7 @@ export default class GameScreenWithContext extends React.Component {
                     reloadGame={navigator.reloadGame}
                     clearCurrentGame={navigator.clearCurrentGame}
                     isLoggedIn={currentUser.user !== null}
-                    me={currentUser.user}
+                    viewer={currentUser.user}
                     refreshCurrentUser={currentUser.refreshCurrentUser}
                     {...this.props}
                   />
