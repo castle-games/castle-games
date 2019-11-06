@@ -7,6 +7,7 @@ import { NavigatorContext } from '~/contexts/NavigationContext';
 
 import HomeUpdateBanner from '~/components/HomeUpdateBanner';
 import UIGameSet from '~/components/reusable/UIGameSet';
+import UILoadingCard from '~/components/reusable/UILoadingCard';
 import UIPostList from '~/components/reusable/UIPostList';
 
 const SCROLL_BOTTOM_OFFSET = 200;
@@ -69,13 +70,9 @@ const STYLES_SECTION_TITLE = css`
 const STYLES_LOADING_CONTAINER = css`
   width: 100%;
   height: 100%;
+  margin: 48px 24px;
   display: flex;
-  justify-content: center;
-  padding-top: 20%;
-  font-family: ${Constants.font.heading};
-  color: ${Constants.REFACTOR_COLORS.subdued};
-  font-size: ${Constants.typescale.lvl5};
-  line-height: ${Constants.linescale.lvl5};
+  flex-wrap: wrap;
 `;
 
 class HomeScreen extends React.Component {
@@ -248,7 +245,13 @@ class HomeScreen extends React.Component {
       (!this.props.content.trendingGames || !this.props.content.trendingGames.length)
     ) {
       // block screen on first load
-      return <div className={STYLES_LOADING_CONTAINER}>Loading...</div>;
+      return (
+        <div className={STYLES_LOADING_CONTAINER}>
+          {Array.from({ length: 12 }).map((card, ii) => (
+            <UILoadingCard key={ii} />
+          ))}
+        </div>
+      );
     }
     return (
       <div className={STYLES_HOME_CONTAINER} onScroll={this._handleScroll}>
