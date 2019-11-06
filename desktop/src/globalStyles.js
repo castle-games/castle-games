@@ -54,7 +54,7 @@ export const injectGlobalStyles = () => injectGlobal`
 
   html, body {
     font-family: ${Constants.font.default};
-    background: ${Constants.colors.black};
+    background: ${Constants.colors.white};
     font-size: 16px;
   }
 `;
