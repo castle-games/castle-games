@@ -17,14 +17,14 @@ export const injectGlobalLoaderStyles = () => injectGlobal`
     right: 0;
     bottom: 0;
     opacity: 1;
-    transition: 1000ms ease all;
+    transition: 500ms ease all;
   }
   #loader.loader--finished {
     opacity: 0;
     pointer-events: none;
   }
   #loader-inner {
-    transition: 1000ms ease all;
+    transition: 500ms ease all;
   }
   #loader-inner.loader-inner--finished {
 

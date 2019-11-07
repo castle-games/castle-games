@@ -30,7 +30,7 @@ const CurrentUserContextDefaults = {
   ...EMPTY_CURRENT_USER,
   setCurrentUser: async (user) => {},
   clearCurrentUser: async () => {},
-  refreshCurrentUser: async () => {},
+  refreshCurrentUser: async (options) => {},
   contentActions: {
     loadAllGames: async (limit) => {},
     loadFeaturedExamples: async () => {},
@@ -68,9 +68,10 @@ class CurrentUserContextManager extends React.Component {
       setAppNotificationsStatus: this.setAppNotificationsStatus,
     };
 
-    if (props.value && props.value.user) {
+    if (props.value && props.value.user && !this.state.timeLastLoaded) {
       this.state.timeLastLoaded = Date.now();
     }
+    this._loadInitialData();
   }
 
   setCurrentUser = async (user) => {
@@ -96,7 +97,14 @@ class CurrentUserContextManager extends React.Component {
     CurrentUserCache.clear();
   };
 
-  refreshCurrentUser = async () => {
+  refreshCurrentUser = async (options) => {
+    options = options || {};
+    if (options.onlyIfStale) {
+      const { timeLastLoaded } = this.state;
+      if (timeLastLoaded && Date.now() - timeLastLoaded < 30 * 1000) {
+        return;
+      }
+    }
     try {
       const result = await Actions.getCurrentUser();
       if (result.error || result.errors || !result.user) {
@@ -111,6 +119,7 @@ class CurrentUserContextManager extends React.Component {
           timeLastLoaded: Date.now(),
         },
         () => {
+          amplitude.getInstance().setUserId(user.userId);
           this._cacheCurrentUser();
         }
       );
@@ -316,6 +325,11 @@ class CurrentUserContextManager extends React.Component {
       userStatusHistory,
       timeLastLoaded,
     });
+  };
+
+  _loadInitialData = async () => {
+    this.loadAppNotifications();
+    this.refreshCurrentUser({ onlyIfStale: true });
   };
 
   render() {

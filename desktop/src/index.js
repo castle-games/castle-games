@@ -37,28 +37,12 @@ const getInitialState = async () => {
 
   let data;
   let currentUser = CurrentUserCache.get();
-  let isOffline = true;
-
-  try {
-    data = await Actions.getInitialData();
-    if (data) {
-      isOffline = false;
-      currentUser = {
-        user: data.me,
-        settings: {
-          notifications: data.getNotificationPreferencesV2,
-        },
-        userStatusHistory: data.userStatusHistory,
-        appNotifications: data.appNotifications,
-      };
-    }
-  } catch (e) {
-    console.log(`Issue fetching initial Castle data: ${e}`);
+  if (currentUser && currentUser.user) {
+    amplitude.getInstance().setUserId(currentUser.user.userId);
   }
 
   return {
     currentUser,
-    isOffline,
     navigation: {
       isShowingSignIn: !currentUser.user,
     },

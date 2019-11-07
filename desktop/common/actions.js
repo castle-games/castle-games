@@ -417,34 +417,6 @@ export async function getAllGames(limit) {
   return result.data;
 }
 
-export async function getInitialData() {
-  const result = await API(
-    `
-    query {
-      ${CURRENT_USER_QUERY}
-
-      appNotifications {
-        ${NOTIFICATION_FIELDS}
-      }
-    }
-  `
-  );
-
-  if (!result) {
-    return false;
-  }
-
-  if (result.errors && result.errors.length) {
-    return false;
-  }
-
-  if (result.data.me && result.data.me.userId) {
-    amplitude.getInstance().setUserId(result.data.me.userId);
-  }
-
-  return result.data;
-}
-
 export async function getTrendingGames() {
   const result = await API(`
     query {
