@@ -3,7 +3,7 @@ import * as Actions from '~/common/actions';
 import * as Analytics from '~/common/analytics';
 
 import { injectGlobalStyles, injectGlobalScrollOverflowPreventionStyles } from './globalStyles';
-import { injectGlobalLoaderStyles } from '~/components/primitives/loader';
+import { injectGlobalLoaderStyles, LOADER_TRANSITION_MS } from '~/components/primitives/loader';
 
 import CurrentUserCache from '~/common/current-user-cache';
 import ReactDOM from 'react-dom';
@@ -27,7 +27,7 @@ const mountLoader = () => {
 const unmountLoader = async () => {
   document.getElementById('loader').classList.add('loader--finished');
   document.getElementById('loader-inner').classList.add('loader-inner--finished');
-  await Actions.delay(1000);
+  await Actions.delay(LOADER_TRANSITION_MS);
   ReactDOM.unmountComponentAtNode(document.getElementById('loader'));
   document.getElementById('loader').outerHTML = '';
 };

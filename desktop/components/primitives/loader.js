@@ -3,6 +3,8 @@ import * as Constants from '~/common/constants';
 
 import { injectGlobal } from 'react-emotion';
 
+export const LOADER_TRANSITION_MS = 500;
+
 export const injectGlobalLoaderStyles = () => injectGlobal`
   #loader {
     background: ${Constants.colors.white};
@@ -17,14 +19,14 @@ export const injectGlobalLoaderStyles = () => injectGlobal`
     right: 0;
     bottom: 0;
     opacity: 1;
-    transition: 500ms ease all;
+    transition: ${LOADER_TRANSITION_MS}ms ease all;
   }
   #loader.loader--finished {
     opacity: 0;
     pointer-events: none;
   }
   #loader-inner {
-    transition: 500ms ease all;
+    transition: ${LOADER_TRANSITION_MS}ms ease all;
   }
   #loader-inner.loader-inner--finished {
 

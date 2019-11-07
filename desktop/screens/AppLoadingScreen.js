@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as Actions from '~/common/actions';
 import * as Constants from '~/common/constants';
 
 import { css } from 'react-emotion';
@@ -34,20 +35,28 @@ const STYLES_SIDEBAR = css``;
 const STYLES_CONTENT_CARDS = css`
   display: flex;
   flex-wrap: wrap;
-  margin: 24px;
+  margin: 48px 24px;
 `;
 
 export default class AppLoadingScreen extends React.Component {
+  state = {
+    cards: null,
+  };
+
+  async componentDidMount() {
+    await Actions.delay(1000);
+    this.setState({ cards: Array.from({ length: 12 }) });
+  }
+
   render() {
+    const { cards } = this.state;
     return (
       <div id="loader-inner" className={STYLES_CONTAINER}>
         <div className={STYLES_CONTENT}>
           <div className={STYLES_TOP_BAR} />
           <div className={STYLES_SCREEN}>
             <div className={STYLES_CONTENT_CARDS}>
-              {Array.from({ length: 12 }).map((card, ii) => (
-                <UILoadingCard key={ii} />
-              ))}
+              {cards && cards.map((card, ii) => <UILoadingCard key={ii} />)}
             </div>
           </div>
         </div>
