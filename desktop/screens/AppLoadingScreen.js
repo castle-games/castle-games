@@ -44,8 +44,13 @@ export default class AppLoadingScreen extends React.Component {
   };
 
   async componentDidMount() {
+    this._mounted = true;
     await Actions.delay(1000);
-    this.setState({ cards: Array.from({ length: 12 }) });
+    this._mounted && this.setState({ cards: Array.from({ length: 12 }) });
+  }
+
+  componentWillUnmount() {
+    this._mounted = false;
   }
 
   render() {
