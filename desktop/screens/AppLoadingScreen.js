@@ -38,32 +38,82 @@ const STYLES_CONTENT_CARDS = css`
   margin: 48px 24px;
 `;
 
+const STYLES_CONTENT_MESSAGE = css`
+  height: 100%;
+  display: flex;
+  align-items: center;
+`;
+
+const STYLES_MESSAGE = css`
+  margin: 48px;
+  max-width: 512px;
+
+  p {
+    margin: 12px 0;
+    font-size: 16px;
+    line-height: 20px;
+  }
+
+  h2 {
+    font-weight: 600;
+    font-size: 20px;
+    margin: 12px 0;
+  }
+`;
+
 export default class AppLoadingScreen extends React.Component {
   state = {
     cards: null,
+    timeout: false,
   };
 
   async componentDidMount() {
     this._mounted = true;
     await Actions.delay(1000);
     this._mounted && this.setState({ cards: Array.from({ length: 12 }) });
+    this._waitForTimeout();
   }
+
+  _waitForTimeout = async () => {
+    await Actions.delay(20 * 1000);
+    this._mounted && this.setState({ timeout: true });
+  };
 
   componentWillUnmount() {
     this._mounted = false;
   }
 
   render() {
-    const { cards } = this.state;
+    const { cards, timeout } = this.state;
+    let content;
+    if (timeout) {
+      content = (
+        <div className={STYLES_CONTENT_MESSAGE}>
+          <div className={STYLES_MESSAGE}>
+            <h2>Castle is taking a long time to load.</h2>
+            <p>
+              We're trying to load Castle, but it seems like it's taking longer than expected. If
+              the problem continues, double check your internet connection, or maybe try launching
+              Castle again.
+            </p>
+          </div>
+        </div>
+      );
+    } else if (cards) {
+      content = (
+        <div className={STYLES_CONTENT_CARDS}>
+          {cards.map((card, ii) => (
+            <UILoadingCard key={ii} />
+          ))}
+        </div>
+      );
+    }
+
     return (
       <div id="loader-inner" className={STYLES_CONTAINER}>
         <div className={STYLES_CONTENT}>
           <div className={STYLES_TOP_BAR} />
-          <div className={STYLES_SCREEN}>
-            <div className={STYLES_CONTENT_CARDS}>
-              {cards && cards.map((card, ii) => <UILoadingCard key={ii} />)}
-            </div>
-          </div>
+          <div className={STYLES_SCREEN}>{content}</div>
         </div>
         <div className={STYLES_SIDEBAR} />
       </div>
