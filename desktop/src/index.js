@@ -35,8 +35,11 @@ const unmountLoader = async () => {
 const getInitialState = async () => {
   CurrentUserCache.setStorage(storage);
 
-  let data;
-  let currentUser = CurrentUserCache.get();
+  let currentUser = {};
+  const accessToken = await Actions.getAccessTokenAsync();
+  if (accessToken) {
+    currentUser = CurrentUserCache.get();
+  }
   if (currentUser && currentUser.user) {
     amplitude.getInstance().setUserId(currentUser.user.userId);
   }

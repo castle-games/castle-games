@@ -462,6 +462,7 @@ export async function getFeaturedExamples() {
 }
 
 export async function logout() {
+  API.client.setTokenAsync(null);
   const result = await API.graphqlAsync({
     query: `
       mutation {
@@ -479,7 +480,6 @@ export async function logout() {
     return false;
   }
 
-  await API.client.setTokenAsync(null);
   return true;
 }
 

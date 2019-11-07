@@ -90,11 +90,11 @@ class CurrentUserContextManager extends React.Component {
   };
 
   clearCurrentUser = async () => {
-    await Actions.logout();
+    CurrentUserCache.clear();
+    Actions.logout();
     this.setState({
       ...EMPTY_CURRENT_USER,
     });
-    CurrentUserCache.clear();
   };
 
   refreshCurrentUser = async (options) => {
