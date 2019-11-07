@@ -5,10 +5,10 @@ import * as Analytics from '~/common/analytics';
 import { injectGlobalStyles, injectGlobalScrollOverflowPreventionStyles } from './globalStyles';
 import { injectGlobalLoaderStyles, LOADER_TRANSITION_MS } from '~/components/primitives/loader';
 
-import CurrentUserCache from '~/common/current-user-cache';
-import ReactDOM from 'react-dom';
 import App from './App';
 import AppLoadingScreen from '~/screens/AppLoadingScreen';
+import CurrentUserCache from '~/common/current-user-cache';
+import ReactDOM from 'react-dom';
 import Storage from '~/common/storage';
 
 import 'react-tippy/dist/tippy.css';
@@ -53,11 +53,12 @@ const getInitialState = async () => {
 };
 
 const run = async () => {
+  mountLoader(); // do not `await` anything before this line!
+
   // initialize analytics
   await Analytics.initialize();
   Analytics.trackCastleLaunch();
 
-  mountLoader();
   let state = await getInitialState();
 
   // if the user was automatically logged in when starting Castle, track that
