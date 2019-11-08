@@ -3,12 +3,13 @@ import { View, Text, TextInput } from 'react-native';
 
 import * as GhostEvents from './ghost/GhostEvents';
 
-const ENABLE_TOOLS = false;
+const ENABLE_TOOLS = true;
 
 //
 // Infrastructure
 //
 
+// Lua CJSON encodes sparse arrays as objects with stringified keys, use this to convert back
 const objectToArray = input => {
   if (Array.isArray(input)) {
     return input;
@@ -27,6 +28,7 @@ const objectToArray = input => {
   return output;
 };
 
+// For sending events back from JS to Lua
 let nextEventId = 1;
 const sendEvent = (pathId, event) => {
   const eventId = nextEventId++;
@@ -34,8 +36,10 @@ const sendEvent = (pathId, event) => {
   return eventId;
 };
 
+// Map of element type name (as Lua will refer to an element type by) -> component class
 const elementTypes = {};
 
+// Abstract component that reads `element.type` and uses that to instantiate a concrete component
 const Tool = ({ element }) => {
   const ElemType = elementTypes[element.type];
   if (!ElemType) {
@@ -45,6 +49,7 @@ const Tool = ({ element }) => {
   return <ElemType element={element} />;
 };
 
+// Get an ordered array of the children of an element
 const orderedChildren = element => {
   if (!element.children) {
     return [];
@@ -65,15 +70,16 @@ const orderedChildren = element => {
   return result.reverse();
 };
 
+// Render the children of an element
 const renderChildren = element =>
   orderedChildren(element).map(({ id, child }) => <Tool key={id} element={child} />);
-
-const ToolPane = ({ element }) => <View style={{ padding: 6 }}>{renderChildren(element)}</View>;
-elementTypes['pane'] = ToolPane;
 
 //
 // Components
 //
+
+const ToolPane = ({ element }) => <View style={{ padding: 6 }}>{renderChildren(element)}</View>;
+elementTypes['pane'] = ToolPane;
 
 class ToolTextInput extends React.PureComponent {
   state = {
@@ -122,6 +128,7 @@ elementTypes['textInput'] = ToolTextInput;
 // Container
 //
 
+// We get state diffs from Lua. This function applies those diffs to a previous state to produce the new state.
 const applyDiff = (t, diff) => {
   if (diff == null) {
     return t;
@@ -152,9 +159,13 @@ const applyDiff = (t, diff) => {
   return u;
 };
 
-export const useTools = ({ eventsReady }) => {
+// Top-level tools renderer -- watches for Lua <-> JS tool update events and renders the tools overlaid
+// in its container
+export default Tools = ({ eventsReady }) => {
+  // Maintain tools state
   const [root, setRoot] = useState({});
 
+  // Listen for updates
   GhostEvents.useListen({
     eventsReady,
     eventName: 'CASTLE_TOOLS_UPDATE',
@@ -164,21 +175,21 @@ export const useTools = ({ eventsReady }) => {
     },
   });
 
+  // Only visible if feature flag is enabled and there is at least one pane with children
   const visible =
     ENABLE_TOOLS &&
     root.panes &&
     Object.values(root.panes).find(element => element.children && element.children.count > 0);
+  if (!visible) {
+    return null;
+  }
 
-  const render = visible ? (
+  // Render the container
+  return (
     <View style={{ flex: 1, backgroundColor: 'white' }}>
       {Object.values(root.panes).map((element, i) => (
         <ToolPane key={(element.props && element.props.name) || i} element={element} />
       ))}
     </View>
-  ) : null;
-
-  return {
-    visible,
-    render,
-  };
+  );
 };

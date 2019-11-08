@@ -9,7 +9,7 @@ import * as MainSwitcher from './MainSwitcher';
 import * as LuaBridge from './LuaBridge';
 import * as Session from './Session';
 import * as GhostChannels from './ghost/GhostChannels';
-import * as Tools from './Tools';
+import Tools from './Tools';
 import GameInputs, { NUM_GAME_INPUTS_MODES } from './GameInputs';
 import GameHeader from './GameHeader';
 import GameLoading from './GameLoading';
@@ -286,8 +286,6 @@ const GameView = ({ gameId, gameUri, extras, windowed }) => {
 
   LuaBridge.useLuaBridge({ eventsReady, game });
 
-  const toolsHook = Tools.useTools({ eventsReady });
-
   const [inputsMode, setInputsMode] = useState(1);
   const onPressNextInputsMode = () => {
     setInputsMode((inputsMode + 1) % NUM_GAME_INPUTS_MODES);
@@ -312,7 +310,7 @@ const GameView = ({ gameId, gameUri, extras, windowed }) => {
             dimensionsSettings={dimensionsSettings}
           />
         ) : null}
-        {toolsHook.visible ? toolsHook.render : null}
+        <Tools eventsReady={eventsReady} />
 
         <GameInputs visible={!windowed} inputsMode={inputsMode} />
 
