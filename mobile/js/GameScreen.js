@@ -288,7 +288,7 @@ const GameView = ({ gameId, gameUri, extras, windowed }) => {
 
   const toolsHook = Tools.useTools({ eventsReady });
 
-  const [inputsMode, setInputsMode] = useState(0);
+  const [inputsMode, setInputsMode] = useState(1);
   const onPressNextInputsMode = () => {
     setInputsMode((inputsMode + 1) % NUM_GAME_INPUTS_MODES);
   };
