@@ -28,7 +28,7 @@ const objectToArray = input => {
   return output;
 };
 
-// For sending events back from JS to Lua
+// For sending tool events back from JS to Lua (eg. value changes)
 let nextEventId = 1;
 const sendEvent = (pathId, event) => {
   const eventId = nextEventId++;
@@ -46,7 +46,7 @@ const Tool = ({ element }) => {
     console.log(`'${element.type}' is not a valid UI element type`);
     return null;
   }
-  return <ElemType element={element} />;
+  return <ElemType element={{ ...element, props: element.props || {} }} />;
 };
 
 // Get an ordered array of the children of an element
@@ -74,6 +74,35 @@ const orderedChildren = element => {
 const renderChildren = element =>
   orderedChildren(element).map(({ id, child }) => <Tool key={id} element={child} />);
 
+// Maintain state for a `value` / `onChange` combination. Returns the current value and a setter for the new value
+// that can be invoked in a JS change event (which will then propagate the new value back to Lua). The default prop
+// and event names are 'value' and 'onChange' respectively but other ones can be provided.
+const useValue = ({ element, propName = 'value', eventName = 'onChange' }) => {
+  const [lastSentEventId, setLastSentEventId] = useState(null);
+  const [value, setValue] = useState({});
+
+  // Prop changed?
+  if (value !== element.props[propName]) {
+    // Only apply change if Lua says that it reported our last sent event, otherwise we may overwrite a more
+    // up-to-date value that we're storing (eg. new key presses in a text input before the game's value is updated)
+    if (lastSentEventId === null || element.lastReportedEventId === lastSentEventId) {
+      setValue(element.props[propName]);
+    }
+  }
+
+  const setValueAndSendEvent = newValue => {
+    setValue(newValue);
+    setLastSentEventId(
+      sendEvent(element.pathId, {
+        type: eventName,
+        value: newValue,
+      })
+    );
+  };
+
+  return [value, setValueAndSendEvent];
+};
+
 //
 // Components
 //
@@ -81,47 +110,20 @@ const renderChildren = element =>
 const ToolPane = ({ element }) => <View style={{ padding: 6 }}>{renderChildren(element)}</View>;
 elementTypes['pane'] = ToolPane;
 
-class ToolTextInput extends React.PureComponent {
-  state = {
-    value: this.props.element.props.value,
-    lastSentEventId: null,
-  };
+const ToolTextInput = ({ element }) => {
+  const [value, setValue] = useValue({ element });
 
-  static getDerivedStateFromProps(props, state) {
-    if (
-      state.lastSentEventId === null ||
-      props.element.lastReportedEventId == state.lastSentEventId
-    ) {
-      return {
-        value: props.element.props.value,
-      };
-    }
-    return null;
-  }
-
-  render() {
-    const { element } = this.props;
-
-    return (
-      <View style={{ padding: 4 }}>
-        <Text style={{ fontWeight: '900' }}>{element.props && element.props.label}</Text>
-        <TextInput
-          style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-          value={this.state.value}
-          onChangeText={newText => {
-            this.setState({
-              value: newText,
-              lastSentEventId: sendEvent(element.pathId, {
-                type: 'onChange',
-                value: newText,
-              }),
-            });
-          }}
-        />
-      </View>
-    );
-  }
-}
+  return (
+    <View style={{ padding: 4 }}>
+      <Text style={{ fontWeight: '900' }}>{element.props.label}</Text>
+      <TextInput
+        style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+        value={value}
+        onChangeText={newText => setValue(newText)}
+      />
+    </View>
+  );
+};
 elementTypes['textInput'] = ToolTextInput;
 
 //
@@ -159,8 +161,7 @@ const applyDiff = (t, diff) => {
   return u;
 };
 
-// Top-level tools renderer -- watches for Lua <-> JS tool update events and renders the tools overlaid
-// in its container
+// Top-level tools container -- watches for Lua <-> JS tool events and renders the tools overlaid in its parent
 export default Tools = ({ eventsReady }) => {
   // Maintain tools state
   const [root, setRoot] = useState({});
@@ -188,7 +189,7 @@ export default Tools = ({ eventsReady }) => {
   return (
     <View style={{ flex: 1, backgroundColor: 'white' }}>
       {Object.values(root.panes).map((element, i) => (
-        <ToolPane key={(element.props && element.props.name) || i} element={element} />
+        <ToolPane key={element.props.name || i} element={element} />
       ))}
     </View>
   );
