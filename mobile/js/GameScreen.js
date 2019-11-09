@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View } from 'react-native';
 import { useLazyQuery, useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
+import castleMetadata from 'castle-metadata';
+import url from 'url';
+import ip from 'ip';
 
 import GhostView from './ghost/GhostView';
 import * as GhostEvents from './ghost/GhostEvents';
@@ -21,8 +24,30 @@ const castleUriToHTTPSUri = uri => uri.replace(/^castle:\/\//, 'https://');
 const useFetchGame = ({ gameId, gameUri }) => {
   let game = null;
 
-  // Set up a query to get the `game` from a '.castle' `gameUri`. We set up a 'lazy query' and then
-  // only actually call it if at least one of `gameId` or `gameUri` are present.
+  // Direct metadata fetcher for when `gameUri` is a LAN URI.
+  const [fetchMetadata, setFetchMetadata] = useState(null);
+  const callFetchMetadata = useRef(null);
+  const [fetchCalled, setFetchCalled] = useState(false);
+  useEffect(() => {
+    cancelled = false;
+
+    callFetchMetadata.current = async httpUri => {
+      let newMetadata = {};
+      if (httpUri.endsWith('.castle')) {
+        const result = await castleMetadata.fetchMetadataForUrlAsync(httpUri);
+        if (result.metadata) {
+          newMetadata = result.metadata;
+        }
+      }
+      if (!cancelled) {
+        setFetchMetadata(newMetadata);
+      }
+    };
+
+    return () => (cancelled = true);
+  }, []);
+
+  // GraphQL query for when we're using `gameId`, or if `gameUri` is a public URI.
   const [callQuery, { loading: queryLoading, called: queryCalled, data: queryData }] = useLazyQuery(
     gql`
       query Game($gameId: ID, $gameUri: String) {
@@ -44,26 +69,51 @@ const useFetchGame = ({ gameId, gameUri }) => {
     }
   );
 
-  // If can query, query!
+  // If neither `gameId` nor `gameUri` are given, no game is being played, so don't do anything
   if (gameId || gameUri) {
-    if (!queryCalled) {
-      callQuery();
-    } else if (!queryLoading) {
-      if (queryData && queryData.game) {
-        // Query was successful!
-        game = queryData.game;
-      } else if (gameUri) {
-        // Query wasn't successful, assume this is a direct entrypoint URI and use an unregistered `game`
-        // without a `gameId`
+    // Figure out whether it's a LAN URI
+    let isLAN = false;
+    if (gameUri) {
+      const parsed = url.parse(gameUri);
+      if (parsed.hostname && (parsed.hostname == 'localhost' || !ip.isPublic(parsed.hostname))) {
+        isLAN = true;
+      }
+    }
+
+    if (isLAN) {
+      // LAN URI -- use a direct fetch
+      const httpUri = gameUri.replace(/^castle:\/\//, 'http://');
+      if (!fetchCalled && callFetchMetadata.current) {
+        setFetchCalled(true);
+        callFetchMetadata.current(httpUri);
+      } else if (fetchMetadata) {
+        // LAN URI will always be an unregistered game without a `gameId`
         game = {
-          entryPoint: gameUri,
-          metadata: {},
+          entryPoint: fetchMetadata.main ? url.resolve(httpUri, fetchMetadata.main) : httpUri,
+          metadata: fetchMetadata,
         };
+      }
+    } else {
+      // Public URI -- use the GraphQL query
+      if (!queryCalled) {
+        callQuery();
+      } else if (!queryLoading) {
+        if (queryData && queryData.game) {
+          // Query was successful!
+          game = queryData.game;
+        } else if (gameUri) {
+          // Query wasn't successful, assume this is a direct entrypoint URI and use an unregistered `game`
+          // without a `gameId`
+          game = {
+            entryPoint: gameUri,
+            metadata: {},
+          };
+        }
       }
     }
   }
 
-  return { fetchedGame: game, fetching: queryLoading };
+  return { fetchedGame: game, fetching: (fetchCalled && !fetchMetadata) || queryLoading };
 };
 
 // Read dimensions settings into the `{ width, height, upscaling, downscaling }` format for `GhostView`
