@@ -79,7 +79,7 @@ const renderChildren = element =>
 // and event names are 'value' and 'onChange' respectively but other ones can be provided.
 const useValue = ({ element, propName = 'value', eventName = 'onChange' }) => {
   const [lastSentEventId, setLastSentEventId] = useState(null);
-  const [value, setValue] = useState({});
+  const [value, setValue] = useState(null);
 
   // Prop changed?
   if (value !== element.props[propName]) {
