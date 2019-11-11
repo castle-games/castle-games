@@ -8,6 +8,7 @@ const DevelopmentContextDefaults = {
   isDeveloping: false,
   isMultiplayerCodeUploadEnabled: false,
   logs: [],
+  editableFiles: {},
 };
 
 /**
@@ -20,6 +21,7 @@ const DevelopmentSetterContextDefaults = {
   setIsMultiplayerCodeUploadEnabled: (isEnabled) => {},
   addLogs: (logs) => {},
   clearLogs: () => {},
+  setEditableFiles: () => {},
 };
 
 const DevelopmentContext = React.createContext({
@@ -42,6 +44,7 @@ class DevelopmentContextProvider extends React.Component {
         setIsMultiplayerCodeUploadEnabled: this.setIsMultiplayerCodeUploadEnabled,
         addLogs: this.addLogs,
         clearLogs: this.clearLogs,
+        setEditableFiles: this.setEditableFiles,
       },
     };
   }
@@ -87,6 +90,12 @@ class DevelopmentContextProvider extends React.Component {
   clearLogs = () => {
     this.setState({
       logs: [],
+    });
+  };
+
+  setEditableFiles = (files) => {
+    this.setState({
+      editableFiles: files,
     });
   };
 

@@ -63,6 +63,9 @@ class App extends React.Component {
     window.addEventListener('click', this._handleAnchorClick);
     window.addEventListener('nativeFocusChat', this._handleNativeFocusChat);
     Bridge.addEventListeners();
+    Bridge.onSetEditableFiles((files) => {
+      this.props.development.setEditableFiles(files);
+    });
     PingUtils.reportPingsAsync();
     NativeUtil.setBrowserReady(() => {
       // to simulate booting with a deep link.

@@ -110,6 +110,7 @@ export default class Game extends React.Component {
           isMultiplayerCodeUploadEnabled={this.context.isMultiplayerCodeUploadEnabled}
           setters={this.context.setters}
           logs={this.context.logs}
+          editableFiles={this.context.editableFiles}
           game={this.props.game}
           onReload={this.props.onReload}
         />

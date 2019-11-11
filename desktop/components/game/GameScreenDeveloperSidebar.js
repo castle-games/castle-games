@@ -8,6 +8,7 @@ import * as URLS from '~/common/urls';
 import { css } from 'react-emotion';
 
 import DevelopmentLogs from '~/components/game/DevelopmentLogs';
+import DevelopmentCodeEditor from '~/components/game/DevelopmentCodeEditor';
 
 const path = Utilities.path();
 
@@ -24,6 +25,29 @@ const STYLES_CONTAINER = css`
   justify-content: space-between;
   flex-direction: column;
   font-family: ${Constants.REFACTOR_FONTS.system};
+`;
+
+const STYLES_EDITOR = css`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+`;
+
+const STYLES_PICKER = css`
+  width: 15%;
+  border-right: 1px solid ${BORDER_COLOR};
+  color: #fff;
+  font-size: 11px;
+`;
+
+const STYLES_PICKER_SELECTION = css`
+  padding: 10px 0px 0px 10px;
+  cursor: pointer;
+`;
+
+const STYLES_EDITOR_CONTENT = css`
+  width: 85%;
 `;
 
 const STYLES_LOGS = css`
@@ -97,11 +121,8 @@ const STYLES_COL = css`
   display: block;
   background-color: #000000;
   background-image: linear-gradient(90deg, #000000 0%, #181818 74%);
-`;
-
-const STYLES_COL_RIGHT = css`
-  border-left: 1px solid ${BORDER_COLOR};
   flex-shrink: 0;
+  word-break: break-word;
 `;
 
 const STYLES_SCROLL = css`
@@ -151,6 +172,7 @@ export default class GameScreenDeveloperSidebar extends React.Component {
 
   state = {
     server: 484,
+    pickerSelection: 'local_logs',
   };
 
   componentDidMount() {
@@ -224,12 +246,52 @@ export default class GameScreenDeveloperSidebar extends React.Component {
     this._server._fetchRemoteLogsAsync();
   };
 
-  render() {
-    const { isMultiplayerCodeUploadEnabled } = this.props;
-    const isMultiplayer = Utilities.isMultiplayer(this.props.game);
+  _renderEditorContent = () => {
+    const { pickerSelection } = this.state;
 
+    if (pickerSelection === 'local_logs') {
+      return this._renderLocalLogs();
+    } else if (pickerSelection === 'server_logs') {
+      return this._renderServerLogs();
+    } else if (pickerSelection.startsWith('file:')) {
+      return this._renderCodeEditor();
+    } else {
+      return null;
+    }
+  };
+
+  _renderLocalLogs = () => {
+    return (
+      <div className={STYLES_LOGS}>
+        <div className={STYLES_COL}>
+          <div className={STYLES_SECTION_HEADER}>
+            <div className={STYLES_HEADING_LEFT}>Local logs</div>
+            <div className={STYLES_HEADING_RIGHT} style={{ minWidth: 100 }}>
+              <span className={STYLES_CTA} onClick={this.props.setters.clearLogs}>
+                Clear
+              </span>
+            </div>
+          </div>
+          <div className={STYLES_SCROLL}>
+            <DevelopmentLogs
+              key={'local_logs'}
+              ref={(ref) => {
+                this._client = ref;
+              }}
+              logs={this.props.logs}
+              onClearLogs={this.props.setters.clearLogs}
+              game={this.props.game}
+              logMode={0}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  _renderServerLogs = () => {
     let maybeMultiplayerElement;
-    if (isMultiplayer && URLS.isPrivateUrl(this.props.game.url)) {
+    if (URLS.isPrivateUrl(this.props.game.url)) {
       maybeMultiplayerElement = (
         <span
           className={STYLES_CTA}
@@ -241,6 +303,48 @@ export default class GameScreenDeveloperSidebar extends React.Component {
         </span>
       );
     }
+
+    return (
+      <div className={STYLES_LOGS}>
+        <div className={STYLES_COL}>
+          <div className={STYLES_SECTION_HEADER}>
+            <div className={STYLES_HEADING_LEFT}>Server logs</div>
+            <div className={STYLES_HEADING_RIGHT} style={{ minWidth: 100 }}>
+              {maybeMultiplayerElement}
+              <span className={STYLES_CTA} onClick={this._handleServerLogReload}>
+                Reload
+              </span>
+            </div>
+          </div>
+          <div className={STYLES_SCROLL}>
+            <DevelopmentLogs
+              key={'server_logs'}
+              ref={(ref) => {
+                this._server = ref;
+              }}
+              logs={this.props.logs}
+              onClearLogs={this.props.setters.clearLogs}
+              game={this.props.game}
+              logMode={1}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  _renderCodeEditor = () => {
+    const { pickerSelection } = this.state;
+    let file = pickerSelection.substring('file:'.length);
+
+    return (
+      <DevelopmentCodeEditor value={this.props.editableFiles[file].response} onChange={() => {}} />
+    );
+  };
+
+  render() {
+    const { isMultiplayerCodeUploadEnabled } = this.props;
+    const isMultiplayer = Utilities.isMultiplayer(this.props.game);
 
     return (
       <div className={STYLES_CONTAINER} style={this.props.style}>
@@ -259,60 +363,42 @@ export default class GameScreenDeveloperSidebar extends React.Component {
             </div>
           ) : null}
         </div>
-        <div className={STYLES_LOGS}>
-          <div className={STYLES_COL}>
-            <div className={STYLES_SECTION_HEADER}>
-              <div className={STYLES_HEADING_LEFT}>Local logs</div>
-              <div className={STYLES_HEADING_RIGHT} style={{ minWidth: 100 }}>
-                <span className={STYLES_CTA} onClick={this.props.setters.clearLogs}>
-                  Clear
-                </span>
-              </div>
-            </div>
-            <div className={STYLES_SCROLL}>
-              <DevelopmentLogs
-                ref={(ref) => {
-                  this._client = ref;
-                }}
-                logs={this.props.logs}
-                onClearLogs={this.props.setters.clearLogs}
-                game={this.props.game}
-                logMode={0}
-              />
-            </div>
-          </div>
-          {isMultiplayer ? (
+
+        <div className={STYLES_EDITOR}>
+          <div className={STYLES_PICKER}>
             <div
-              className={`${STYLES_COL} ${STYLES_COL_RIGHT}`}
-              style={{ width: this.state.server }}>
-              <div
-                className={STYLES_SECTION_HEADER}
-                style={{
-                  borderTop: `1px solid ${BORDER_COLOR}`,
-                  borderBottom: 0,
-                }}>
-                <div className={STYLES_HEADING_LEFT}>Server logs</div>
-                <div className={STYLES_HEADING_RIGHT} style={{ minWidth: 100 }}>
-                  {maybeMultiplayerElement}
-                  <span className={STYLES_CTA} onClick={this._handleServerLogReload}>
-                    Reload
-                  </span>
-                </div>
-              </div>
-              <div className={STYLES_SCROLL}>
-                <DevelopmentLogs
-                  ref={(ref) => {
-                    this._server = ref;
-                  }}
-                  logs={this.props.logs}
-                  onClearLogs={this.props.setters.clearLogs}
-                  game={this.props.game}
-                  logMode={1}
-                />
-              </div>
+              className={STYLES_PICKER_SELECTION}
+              onClick={() => {
+                this.setState({ pickerSelection: 'local_logs' });
+              }}>
+              Local logs
             </div>
-          ) : null}
-          ;
+            {isMultiplayer && (
+              <div
+                className={STYLES_PICKER_SELECTION}
+                onClick={() => {
+                  this.setState({ pickerSelection: 'server_logs' });
+                }}>
+                Server logs
+              </div>
+            )}
+
+            <div style={{ paddingTop: 10 }}>Files:</div>
+            {Object.keys(this.props.editableFiles).map((key) => {
+              let name = key.substring(key.lastIndexOf('/'));
+
+              return (
+                <div
+                  className={STYLES_PICKER_SELECTION}
+                  onClick={() => {
+                    this.setState({ pickerSelection: `file:${key}` });
+                  }}>
+                  {name}
+                </div>
+              );
+            })}
+          </div>
+          <div className={STYLES_EDITOR_CONTENT}>{this._renderEditorContent()}</div>
         </div>
       </div>
     );

@@ -9,6 +9,11 @@ import Logs from '~/common/logs';
 import GameWindow from '~/native/gamewindow';
 import Storage from '~/common/storage';
 
+let _setEditableFilesCallback;
+export const onSetEditableFiles = (callback) => {
+  _setEditableFilesCallback = callback;
+};
+
 ///
 /// Data conversion
 ///
@@ -210,6 +215,10 @@ export const JS = {
   async postGet({ postId, data }) {
     const jsPost = await Actions.getPostById(postId);
     return jsPost ? jsPostToLuaPost(jsPost, { data }) : null;
+  },
+
+  async setEditableFiles({ files }) {
+    _setEditableFilesCallback(files);
   },
 };
 

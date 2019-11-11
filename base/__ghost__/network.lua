@@ -13,6 +13,7 @@ local cjson = require 'cjson'
 
 local serpent = require '__ghost__.serpent'
 local jsEvents = require '__ghost__.jsEvents'
+local bridge = require '__ghost__.bridge'
 
 
 local network = {}
@@ -339,6 +340,9 @@ do
     end
 end
 
+-- A map from url to the locally edited version of the file
+local urlToLocallyEditedFile = {}
+
 -- The cache of `network.fetch` responses
 local fetchEntries = { GET = {}, HEAD = {} }
 
@@ -427,6 +431,19 @@ function network.fetch(url, method, skipCache)
         end
         entry.waiters = nil
         if entry.err then error(entry.err) end
+
+        if method == 'GET' then
+            local response = entry.result[1]
+            urlToLocallyEditedFile[url] = {
+                response = response,
+                edited = false
+            }
+
+            bridge.js.setEditableFiles {
+                files = urlToLocallyEditedFile
+            }
+        end
+
         return unpack(entry.result)
     elseif entry.result then -- Already have an entry with `result`, just return it
         return unpack(entry.result)
