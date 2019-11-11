@@ -343,6 +343,13 @@ end
 -- A map from url to the locally edited version of the file
 local urlToLocallyEditedFile = {}
 
+local function getEditedFile(url)
+    if CASTLE_INITIAL_DATA and CASTLE_INITIAL_DATA.editedFiles and CASTLE_INITIAL_DATA.editedFiles[url] then
+        return CASTLE_INITIAL_DATA.editedFiles[url]
+    end
+    return nil
+end
+
 -- The cache of `network.fetch` responses
 local fetchEntries = { GET = {}, HEAD = {} }
 
@@ -368,60 +375,72 @@ function network.fetch(url, method, skipCache)
         -- Apply mappings
         url = mapToCacheable(url)
 
-        -- Use persisted result if found
-        local persistedResult = (not skipCache) and findPersistedFetchResult(url, method)
-        if persistedResult then
-            entry.result = persistedResult
-        else -- Else actually fetch then persist it
-            local response, httpCode, headers, status, err
-            if url:match('^https?://') then
-                -- Handle 'localhost' and '0.0.0.0'
-                url = url:gsub('^http://localhost', 'http://127.0.0.1')
-                url = url:gsub('^https://localhost', 'https://127.0.0.1')
-                url = url:gsub('^http://0.0.0.0', 'http://127.0.0.1')
-                url = url:gsub('^https://0.0.0.0', 'https://127.0.0.1')
-
-                -- Handle spaces
-                url = url:gsub(' ', '%%20')
-
-                if method == 'GET' then
-                    response, httpCode, headers, status = network.request(url)
-                    if response == nil or httpCode ~= 200 then
-                        err = "error fetching '" .. url .. "': " .. tostring(status or httpCode)
-                    end
-                else
-                    response, httpCode, headers, status = network.request {
-                        url = url,
-                        method = method,
-                    }
-                end
-            elseif url:match('^file://') then
-                local filePath = url:gsub('^file://', ''):gsub('%%25', '%%')
-                local file = io.open(filePath, 'rb')
-                if file ~= nil then
-                    if method == 'GET' then
-                        response = file:read('*all')
-                    else
-                        response = 1
-                    end
-                    httpCode = 200
-                    headers = {}
-                    status = '200 ok'
-                    file:close()
-                elseif method == 'GET' then
-                    err = "error opening '" .. url .. "'"
-                else
-                    response = nil
-                    httpCode = 404
-                    headers = {}
-                    status = '404 not found'
-                end
-            end
-            if err then
-                entry.err = err
+        if getEditedFile(url) then
+            if method == 'GET' then
+                response = getEditedFile(url)
             else
-                entry.result = { response, httpCode, headers, status }
-                persistFetchResult(url, method, entry.result)
+                response = 1
+            end
+            httpCode = 200
+            headers = {}
+            status = '200 ok'
+            entry.result = { response, httpCode, headers, status }
+        else
+            -- Use persisted result if found
+            local persistedResult = (not skipCache) and findPersistedFetchResult(url, method)
+            if persistedResult then
+                entry.result = persistedResult
+            else -- Else actually fetch then persist it
+                local response, httpCode, headers, status, err
+                if url:match('^https?://') then
+                    -- Handle 'localhost' and '0.0.0.0'
+                    url = url:gsub('^http://localhost', 'http://127.0.0.1')
+                    url = url:gsub('^https://localhost', 'https://127.0.0.1')
+                    url = url:gsub('^http://0.0.0.0', 'http://127.0.0.1')
+                    url = url:gsub('^https://0.0.0.0', 'https://127.0.0.1')
+
+                    -- Handle spaces
+                    url = url:gsub(' ', '%%20')
+
+                    if method == 'GET' then
+                        response, httpCode, headers, status = network.request(url)
+                        if response == nil or httpCode ~= 200 then
+                            err = "error fetching '" .. url .. "': " .. tostring(status or httpCode)
+                        end
+                    else
+                        response, httpCode, headers, status = network.request {
+                            url = url,
+                            method = method,
+                        }
+                    end
+                elseif url:match('^file://') then
+                    local filePath = url:gsub('^file://', ''):gsub('%%25', '%%')
+                    local file = io.open(filePath, 'rb')
+                    if file ~= nil then
+                        if method == 'GET' then
+                            response = file:read('*all')
+                        else
+                            response = 1
+                        end
+                        httpCode = 200
+                        headers = {}
+                        status = '200 ok'
+                        file:close()
+                    elseif method == 'GET' then
+                        err = "error opening '" .. url .. "'"
+                    else
+                        response = nil
+                        httpCode = 404
+                        headers = {}
+                        status = '404 not found'
+                    end
+                end
+                if err then
+                    entry.err = err
+                else
+                    entry.result = { response, httpCode, headers, status }
+                    persistFetchResult(url, method, entry.result)
+                end
             end
         end
 
@@ -432,13 +451,8 @@ function network.fetch(url, method, skipCache)
         entry.waiters = nil
         if entry.err then error(entry.err) end
 
-        if method == 'GET' then
-            local response = entry.result[1]
-            urlToLocallyEditedFile[url] = {
-                response = response,
-                edited = false
-            }
-
+        if method == 'GET' and url:sub(-#'.lua') == '.lua' then
+            urlToLocallyEditedFile[url] = entry.result[1]
             bridge.js.setEditableFiles {
                 files = urlToLocallyEditedFile
             }

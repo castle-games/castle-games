@@ -6,6 +6,7 @@ import * as Utilities from '~/common/utilities';
 import * as URLS from '~/common/urls';
 
 import { css } from 'react-emotion';
+import _ from 'lodash';
 
 import DevelopmentLogs from '~/components/game/DevelopmentLogs';
 import DevelopmentCodeEditor from '~/components/game/DevelopmentCodeEditor';
@@ -39,6 +40,7 @@ const STYLES_PICKER = css`
   border-right: 1px solid ${BORDER_COLOR};
   color: #fff;
   font-size: 11px;
+  overflow-y: scroll;
 `;
 
 const STYLES_PICKER_SELECTION = css`
@@ -333,12 +335,24 @@ export default class GameScreenDeveloperSidebar extends React.Component {
     );
   };
 
+  _reloadGame = () => {
+    window.dispatchEvent(new Event('CASTLE_RELOAD_GAME'));
+  };
+
+  _reloadGameDebounced = _.debounce(this._reloadGame, 1000);
+
   _renderCodeEditor = () => {
     const { pickerSelection } = this.state;
     let file = pickerSelection.substring('file:'.length);
 
     return (
-      <DevelopmentCodeEditor value={this.props.editableFiles[file].response} onChange={() => {}} />
+      <DevelopmentCodeEditor
+        value={this.props.editableFiles[file]}
+        onChange={(value) => {
+          this.props.editFile(file, value);
+          this._reloadGameDebounced();
+        }}
+      />
     );
   };
 
@@ -385,7 +399,7 @@ export default class GameScreenDeveloperSidebar extends React.Component {
 
             <div style={{ paddingTop: 10 }}>Files:</div>
             {Object.keys(this.props.editableFiles).map((key) => {
-              let name = key.substring(key.lastIndexOf('/'));
+              let name = key.substring(key.lastIndexOf('/') + 1);
 
               return (
                 <div

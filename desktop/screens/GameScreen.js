@@ -8,6 +8,7 @@ import { css } from 'react-emotion';
 import { NativeBinds } from '~/native/nativebinds';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigationContext, NavigatorContext } from '~/contexts/NavigationContext';
+import { DevelopmentContext } from '~/contexts/DevelopmentContext';
 
 import GameWindow from '~/native/gamewindow';
 import Logs from '~/common/logs';
@@ -103,6 +104,7 @@ class GameScreen extends React.Component {
     window.addEventListener('CASTLE_GAME_LOADED', this._handleGameLoaded);
     window.addEventListener('GHOST_NETWORK_REQUEST', this._handleLuaNetworkRequest);
     document.addEventListener('CASTLE_GAME_LAYOUT_UPDATE', this.updateGameWindowFrame);
+    window.addEventListener('CASTLE_RELOAD_GAME', this._reloadGame);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -116,13 +118,26 @@ class GameScreen extends React.Component {
     window.removeEventListener('CASTLE_GAME_LOADED', this._handleGameLoaded);
     window.removeEventListener('GHOST_NETWORK_REQUEST', this._handleLuaNetworkRequest);
     document.removeEventListener('CASTLE_GAME_LAYOUT_UPDATE', this.updateGameWindowFrame);
+    window.removeEventListener('CASTLE_RELOAD_GAME', this._reloadGame);
   }
+
+  _reloadGame = async () => {
+    if (this.props && this.props.playing && this.props.playing.game) {
+      await this._closeGame();
+      await this._openGame(
+        Utilities.getLuaEntryPoint(this.props.playing.game),
+        this.props.playing.game
+      );
+    }
+  };
 
   _prepareInitialGameData = async (screenSettings) => {
     // Prepare the Lua format of the post
     const luaPost = this.props.playing.post
       ? await jsPostToLuaPost(this.props.playing.post, { data: true })
       : undefined;
+
+    console.log(JSON.stringify(this.props.editedFiles));
 
     return {
       graphics: {
@@ -142,6 +157,7 @@ class GameScreen extends React.Component {
       referrerGame: this.props.playing.referrerGame
         ? await jsGameToLuaGame(this.props.playing.referrerGame)
         : undefined,
+      editedFiles: this.props.editedFiles,
     };
   };
 
@@ -352,23 +368,28 @@ export default class GameScreenWithContext extends React.Component {
             {(navigation) => (
               <CurrentUserContext.Consumer>
                 {(currentUser) => (
-                  <GameScreen
-                    playing={navigation.playing}
-                    timeNavigatedToGame={navigation.timeLastNavigated}
-                    navigateToUserProfile={navigator.navigateToUserProfile}
-                    navigateToEditPost={navigator.navigateToEditPost}
-                    navigateToGameUrl={navigator.navigateToGameUrl}
-                    navigateToGame={navigator.navigateToGame}
-                    navigateToHome={navigator.navigateToHome}
-                    minimizeGame={navigator.minimizeGame}
-                    setIsFullScreen={navigator.setIsFullScreen}
-                    reloadGame={navigator.reloadGame}
-                    clearCurrentGame={navigator.clearCurrentGame}
-                    isLoggedIn={currentUser.user !== null}
-                    viewer={currentUser.user}
-                    refreshCurrentUser={currentUser.refreshCurrentUser}
-                    {...this.props}
-                  />
+                  <DevelopmentContext.Consumer>
+                    {(development) => (
+                      <GameScreen
+                        playing={navigation.playing}
+                        timeNavigatedToGame={navigation.timeLastNavigated}
+                        navigateToUserProfile={navigator.navigateToUserProfile}
+                        navigateToEditPost={navigator.navigateToEditPost}
+                        navigateToGameUrl={navigator.navigateToGameUrl}
+                        navigateToGame={navigator.navigateToGame}
+                        navigateToHome={navigator.navigateToHome}
+                        minimizeGame={navigator.minimizeGame}
+                        setIsFullScreen={navigator.setIsFullScreen}
+                        reloadGame={navigator.reloadGame}
+                        clearCurrentGame={navigator.clearCurrentGame}
+                        isLoggedIn={currentUser.user !== null}
+                        viewer={currentUser.user}
+                        refreshCurrentUser={currentUser.refreshCurrentUser}
+                        editedFiles={development.editedFiles}
+                        {...this.props}
+                      />
+                    )}
+                  </DevelopmentContext.Consumer>
                 )}
               </CurrentUserContext.Consumer>
             )}

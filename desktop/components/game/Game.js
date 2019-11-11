@@ -8,7 +8,7 @@ import * as ScreenCapture from '~/common/screencapture';
 import GameWindow from '~/native/gamewindow';
 
 import { css } from 'react-emotion';
-import { DevelopmentContext } from '~/contexts/DevelopmentContext';
+import { DevelopmentContext, DevelopmentSetterContext } from '~/contexts/DevelopmentContext';
 
 import GameScreenActionsBar from '~/components/game/GameScreenActionsBar';
 import GameScreenAlert from '~/components/game/GameScreenAlert';
@@ -17,9 +17,7 @@ import GameScreenLayout from '~/components/game/GameScreenLayout';
 import GameScreenSidebar from '~/components/game/GameScreenSidebar';
 import GameScreenWindowHeader from '~/components/game/GameScreenWindowHeader';
 
-export default class Game extends React.Component {
-  static contextType = DevelopmentContext;
-
+class Game extends React.Component {
   state = {
     isToolsVisible: false,
   };
@@ -75,7 +73,7 @@ export default class Game extends React.Component {
   };
 
   _handleToggleDeveloper = () => {
-    this.context.setters.toggleIsDeveloping();
+    this.props.toggleIsDeveloping();
   };
 
   render() {
@@ -103,14 +101,15 @@ export default class Game extends React.Component {
     }
 
     let maybeElementDeveloper;
-    if (this.context.isDeveloping) {
+    if (this.props.isDeveloping) {
       maybeElementDeveloper = (
         <GameScreenDeveloperSidebar
           onWindowSizeUpdate={this.props.onWindowSizeUpdate}
-          isMultiplayerCodeUploadEnabled={this.context.isMultiplayerCodeUploadEnabled}
-          setters={this.context.setters}
-          logs={this.context.logs}
-          editableFiles={this.context.editableFiles}
+          isMultiplayerCodeUploadEnabled={this.props.isMultiplayerCodeUploadEnabled}
+          setters={this.props.setters}
+          logs={this.props.logs}
+          editableFiles={this.props.editableFiles}
+          editFile={this.props.editFile}
           game={this.props.game}
           onReload={this.props.onReload}
         />
@@ -146,6 +145,31 @@ export default class Game extends React.Component {
         onWindowSizeUpdate={this.props.onWindowSizeUpdate}>
         {this.props.children}
       </GameScreenLayout>
+    );
+  }
+}
+
+export default class GameWithContext extends React.Component {
+  render() {
+    return (
+      <DevelopmentContext.Consumer>
+        {(development) => (
+          <DevelopmentSetterContext.Consumer>
+            {(developmentSetters) => (
+              <Game
+                toggleIsDeveloping={developmentSetters.toggleIsDeveloping}
+                isDeveloping={development.isDeveloping}
+                logs={development.logs}
+                editableFiles={development.editableFiles}
+                editFile={developmentSetters.editFile}
+                isMultiplayerCodeUploadEnabled={development.isMultiplayerCodeUploadEnabled}
+                setters={developmentSetters}
+                {...this.props}
+              />
+            )}
+          </DevelopmentSetterContext.Consumer>
+        )}
+      </DevelopmentContext.Consumer>
     );
   }
 }
