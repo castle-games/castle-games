@@ -8,6 +8,8 @@ import { css } from 'react-emotion';
 import UILogItem from '~/components/reusable/UILogItem';
 import UINavigationLink from '~/components/reusable/UINavigationLink';
 
+const MAX_NUM_LOGS = 1200;
+
 const STYLES_FIXED_CONTAINER = css`
   color: ${Constants.colors.white};
   height: 100%;
@@ -157,8 +159,11 @@ export default class DevelopmentLogs extends React.Component {
   };
 
   _renderLocalLogs = () => {
-    return this.props.logs.map((l, i) => {
-      return (
+    let startIndex = Math.max(0, this.props.logs.length - MAX_NUM_LOGS);
+    let logs = [];
+    for (let ii = startIndex; ii < this.props.logs.length; ii++) {
+      const l = this.props.logs[ii];
+      logs.push(
         <div
           className={STYLES_LOG}
           style={{ color: this._getLogColor(l) }}
@@ -167,7 +172,8 @@ export default class DevelopmentLogs extends React.Component {
           <div className={STYLES_LOG_RIGHT}>{l.details ? <UILogItem log={l} /> : l.text}</div>
         </div>
       );
-    });
+    }
+    return logs;
   };
 
   _renderRemoteLogs = () => {
