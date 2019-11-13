@@ -3,8 +3,6 @@ import * as Constants from '~/common/constants';
 
 import { css } from 'react-emotion';
 
-import UICharacterCard from '~/components/reusable/UICharacterCard';
-
 const STYLES_CONTAINER = css`
   display: flex;
   flex-wrap: wrap;
