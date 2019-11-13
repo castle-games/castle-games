@@ -6,24 +6,11 @@ import * as Strings from '~/common/strings';
 import * as Analytics from '~/common/analytics';
 
 import { css } from 'react-emotion';
-import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 
 import SignInPrompt from '~/components/SignInPrompt';
 import UIInputSecondary from '~/components/reusable/UIInputSecondary';
 import UIButton from '~/components/reusable/UIButton';
 import UIUserPreview from '~/components/reusable/UIUserPreview';
-
-const STYLES_CONTAINER = css`
-  font-family: ${Constants.font.system};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  background: ${Constants.colors.background};
-  color: ${Constants.colors.text};
-`;
 
 const STYLES_CONTENTS = css`
   width: 100%;
@@ -89,8 +76,6 @@ const ErrorMessage = (props) => {
 };
 
 export default class LoginSignupScreen extends React.Component {
-  static contextType = CurrentUserContext;
-
   // steps:
   //  WHO - input who you are
   //  PASSWORD - put in your password
@@ -154,7 +139,7 @@ export default class LoginSignupScreen extends React.Component {
   };
 
   _goToSuccess = () => {
-    this.context.setCurrentUser(this.state.localViewer);
+    this.props.onSignIn && this.props.onSignIn(this.state.localViewer);
     this.setState({ step: 'SUCCESS' });
   };
 
@@ -301,44 +286,42 @@ export default class LoginSignupScreen extends React.Component {
     }
 
     return (
-      <div className={STYLES_CONTAINER} style={this.props.style}>
-        <div className={STYLES_CONTENTS}>
-          <form onSubmit={this._handleLoginAsync}>
-            <UIUserPreview user={this.state.suggestedUser} />
-            <div className={STYLES_SPACER} />
-            {maybeErrorNode}
+      <div className={STYLES_CONTENTS}>
+        <form onSubmit={this._handleLoginAsync}>
+          <UIUserPreview user={this.state.suggestedUser} />
+          <div className={STYLES_SPACER} />
+          {maybeErrorNode}
 
-            <UIInputSecondary
-              key="login-password"
-              autoFocus={true}
-              label="password"
-              name="password"
-              type="password"
-              placeholder="Enter your password"
-              onChange={this._handleChange}
-              value={this.state.password}
-            />
-            <div className={STYLES_SPACER} />
-            <UIButton onClick={this._handleLoginAsync}>Sign in</UIButton>
-            <div
-              style={{ margin: `16px 0 16px 0` }}
-              className={STYLES_ACTION}
-              onClick={this._handlePasswordReset}>
-              → Reset Your Password
-            </div>
-          </form>
-
-          <div className={STYLES_FOOTER}>
-            Not {this.state.suggestedUser.name || '@' + this.state.suggestedUser.username}?{' '}
-            <span className={STYLES_ACTION} onClick={this._goToWho}>
-              Sign in
-            </span>{' '}
-            as someone else or{' '}
-            <span className={STYLES_ACTION} onClick={this._goToSignup}>
-              create a new account
-            </span>
-            .
+          <UIInputSecondary
+            key="login-password"
+            autoFocus={true}
+            label="password"
+            name="password"
+            type="password"
+            placeholder="Enter your password"
+            onChange={this._handleChange}
+            value={this.state.password}
+          />
+          <div className={STYLES_SPACER} />
+          <UIButton onClick={this._handleLoginAsync}>Sign in</UIButton>
+          <div
+            style={{ margin: `16px 0 16px 0` }}
+            className={STYLES_ACTION}
+            onClick={this._handlePasswordReset}>
+            → Reset Your Password
           </div>
+        </form>
+
+        <div className={STYLES_FOOTER}>
+          Not {this.state.suggestedUser.name || '@' + this.state.suggestedUser.username}?{' '}
+          <span className={STYLES_ACTION} onClick={this._goToWho}>
+            Sign in
+          </span>{' '}
+          as someone else or{' '}
+          <span className={STYLES_ACTION} onClick={this._goToSignup}>
+            create a new account
+          </span>
+          .
         </div>
       </div>
     );
@@ -351,64 +334,62 @@ export default class LoginSignupScreen extends React.Component {
     }
 
     return (
-      <div className={STYLES_CONTAINER} style={this.props.style}>
-        <div className={STYLES_CONTENTS}>
-          <form onSubmit={this._handleSignUpAsync}>
-            <div className={STYLES_HEADING}>Create a Castle account</div>
-            {maybeErrorNode}
-            <UIInputSecondary
-              autoFocus
-              label="username"
-              name="username"
-              placeholder="Username"
-              onChange={this._handleChange}
-              value={this.state.username}
-            />
-            <div className={STYLES_SPACER} />
-            <UIInputSecondary
-              label="name"
-              name="name"
-              type="text"
-              placeholder="Your name"
-              onChange={this._handleChange}
-              value={this.state.name}
-            />
-            <div className={STYLES_SPACER} />
-            <UIInputSecondary
-              label="email"
-              name="email"
-              type="email"
-              noValidate
-              placeholder="E-mail address"
-              onChange={this._handleChange}
-              value={this.state.email}
-            />
-            <div className={STYLES_SPACER} />
-            <UIInputSecondary
-              label="password"
-              name="password"
-              type="password"
-              placeholder="New password"
-              onChange={this._handleChange}
-              value={this.state.password}
-            />
-            <div className={STYLES_LEGAL_TEXT}>
-              By clicking "Create Account," you are agreeing to Castle's{' '}
-              <span className={STYLES_ACTION} onClick={this._handleViewPrivacyPolicy}>
-                privacy policy.
-              </span>
-            </div>
-            <div className={STYLES_SPACER} />
-            <UIButton onClick={this._handleSignUpAsync}>Create Account</UIButton>
-          </form>
-
-          <div className={STYLES_FOOTER}>
-            Already have an account?{' '}
-            <span className={STYLES_ACTION} onClick={this._goToWho}>
-              Sign in
-            </span>{' '}
-            instead.
+      <div className={STYLES_CONTENTS}>
+        <form onSubmit={this._handleSignUpAsync}>
+          <div className={STYLES_HEADING}>Create a Castle account</div>
+          {maybeErrorNode}
+          <UIInputSecondary
+            autoFocus
+            label="username"
+            name="username"
+            placeholder="Username"
+            onChange={this._handleChange}
+            value={this.state.username}
+          />
+          <div className={STYLES_SPACER} />
+          <UIInputSecondary
+            label="name"
+            name="name"
+            type="text"
+            placeholder="Your name"
+            onChange={this._handleChange}
+            value={this.state.name}
+          />
+          <div className={STYLES_SPACER} />
+          <UIInputSecondary
+            label="email"
+            name="email"
+            type="email"
+            noValidate
+            placeholder="E-mail address"
+            onChange={this._handleChange}
+            value={this.state.email}
+          />
+          <div className={STYLES_SPACER} />
+          <UIInputSecondary
+            label="password"
+            name="password"
+            type="password"
+            placeholder="New password"
+            onChange={this._handleChange}
+            value={this.state.password}
+          />
+          <div className={STYLES_LEGAL_TEXT}>
+            By clicking "Create Account," you are agreeing to Castle's{' '}
+            <span className={STYLES_ACTION} onClick={this._handleViewPrivacyPolicy}>
+              privacy policy.
+            </span>
           </div>
+          <div className={STYLES_SPACER} />
+          <UIButton onClick={this._handleSignUpAsync}>Create Account</UIButton>
+        </form>
+
+        <div className={STYLES_FOOTER}>
+          Already have an account?{' '}
+          <span className={STYLES_ACTION} onClick={this._goToWho}>
+            Sign in
+          </span>{' '}
+          instead.
         </div>
       </div>
     );
@@ -422,34 +403,32 @@ export default class LoginSignupScreen extends React.Component {
       );
     }
     return (
-      <div className={STYLES_CONTAINER} style={this.props.style}>
-        <div className={STYLES_CONTENTS}>
-          <form onSubmit={this._handleSubmitEmailAsync}>
-            <div className={STYLES_HEADING}>Sign in or create account</div>
-            <SignInPrompt />
-            {maybeErrorNode}
-            <UIInputSecondary
-              value=""
-              autoFocus
-              label="Email or Username"
-              name="who"
-              placeholder=""
-              onChange={this._handleChange}
-              value={this.state.who}
-            />
-            <div className={STYLES_SPACER} />
-            <UIButton
-              type="submit"
-              disabled={!this.state.whoSubmitEnabled}
-              onFocus={this._handleSubmitEmailAsync}
-              onClick={this._handleSubmitEmailAsync}>
-              Continue
-            </UIButton>
-            <div className={STYLES_FOOTER}>
-              You'll have another chance to review your info before submitting.
-            </div>
-          </form>
-        </div>
+      <div className={STYLES_CONTENTS}>
+        <form onSubmit={this._handleSubmitEmailAsync}>
+          <div className={STYLES_HEADING}>Sign in or create account</div>
+          <SignInPrompt />
+          {maybeErrorNode}
+          <UIInputSecondary
+            value=""
+            autoFocus
+            label="Email or Username"
+            name="who"
+            placeholder=""
+            onChange={this._handleChange}
+            value={this.state.who}
+          />
+          <div className={STYLES_SPACER} />
+          <UIButton
+            type="submit"
+            disabled={!this.state.whoSubmitEnabled}
+            onFocus={this._handleSubmitEmailAsync}
+            onClick={this._handleSubmitEmailAsync}>
+            Continue
+          </UIButton>
+          <div className={STYLES_FOOTER}>
+            You'll have another chance to review your info before submitting.
+          </div>
+        </form>
       </div>
     );
   };

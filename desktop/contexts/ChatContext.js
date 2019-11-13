@@ -80,13 +80,20 @@ class ChatContextManager extends React.Component {
 
   _update = async (prevProps, prevState) => {
     const prevUser = prevProps && prevProps.currentUser ? prevProps.currentUser.user : null;
-    // user logged out
-    if (prevUser && !this.props.currentUser.user) {
-      await this.destroy();
-    }
+    const newUser = this.props.currentUser.user;
 
-    // user logged in
-    if (!prevUser && this.props.currentUser.user) {
+    if (prevUser && !newUser) {
+      // user logged out
+      await this.destroy();
+    } else if (!prevUser && newUser) {
+      // user logged in
+      await this.start();
+    } else if (
+      prevUser &&
+      newUser &&
+      (prevUser.userId !== newUser.userId || prevUser.isAnonymous !== newUser.isAnonymous)
+    ) {
+      // user changed (i.e. switched from anon or vice versa)
       await this.start();
     }
 

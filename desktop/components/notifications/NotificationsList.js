@@ -72,7 +72,12 @@ class NotificationsList extends React.Component {
       });
     if (notificationIdsRead.length) {
       // mark seen in local model
-      this.props.setAppNotificationsStatus(notificationIdsRead, 'seen');
+      try {
+        // this can fail if the component was unmounted because the user logged out
+        this.props.setAppNotificationsStatus(notificationIdsRead, 'seen');
+      } catch (_) {
+        console.log('Did not mark notifs as read, maybe try again?');
+      }
     }
   }
 

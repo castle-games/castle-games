@@ -94,6 +94,7 @@ class CurrentUserContextManager extends React.Component {
     Actions.logout();
     this.setState({
       ...EMPTY_CURRENT_USER,
+      timeLastLoaded: Date.now(), // used to determine if you've previously signed in
     });
   };
 

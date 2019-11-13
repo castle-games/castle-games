@@ -141,7 +141,7 @@ class ContentContainer extends React.Component {
   render() {
     let contentElement;
     if (this.props.isShowingSignIn) {
-      contentElement = <SignInScreen />;
+      contentElement = <SignInScreen navigateToHome={this.props.navigator.navigateToHome} />;
     } else if (Strings.isEmpty(this.state.searchQuery)) {
       contentElement = this._renderContent(this.props.mode, this.props.playing);
     } else {
