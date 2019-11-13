@@ -1,9 +1,5 @@
 import * as React from 'react';
 
-import { Value } from 'slate';
-
-import Plain from 'slate-plain-serializer';
-
 const MINUTE = 60;
 const HOUR = MINUTE * 60;
 const DAY = HOUR * 24;
@@ -125,24 +121,6 @@ export const isEmpty = (string) => {
 
 export const pluralize = (text, count) => {
   return count > 1 || count === 0 ? `${text}s` : text;
-};
-
-export const loadEditor = (text) => {
-  // NOTE(jim): Its not clear to me when something decides to be a string.
-  if (typeof text === 'string') {
-    const parsedText = JSON.parse(text);
-    if (typeof parsedText === 'object') {
-      return Value.fromJSON(parsedText);
-    }
-
-    throw new Error('Text parsing failed. Critical error');
-  }
-
-  return Value.fromJSON(text);
-};
-
-export const isRichTextEmpty = (val) => {
-  return !val || !Value.isValue(val) || val.document.text.length == 0;
 };
 
 export const pluralizeDateUnit = (text, count) => {

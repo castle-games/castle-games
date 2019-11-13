@@ -7,7 +7,6 @@ import * as Urls from '~/common/urls';
 
 import { css } from 'react-emotion';
 
-import ContentEditor from '~/editor/ContentEditor';
 import UIAvatar from '~/components/reusable/UIAvatar';
 import UIHeading from '~/components/reusable/UIHeading';
 import UIUserStatus from '~/components/reusable/UIUserStatus';
@@ -49,15 +48,6 @@ const STYLES_META = css`
   font-family: ${Constants.font.system};
   margin: 4px 0 4px 0;
   font-size: 12px;
-`;
-
-const STYLES_ABOUT = css`
-  line-height: 1.725;
-  font-weight: 200;
-  font-size: 16px;
-  overflow-wrap: break-word;
-  white-space: pre-wrap;
-  padding: 0 24px 16px 16px;
 `;
 
 const STYLES_LINKS_ROW = css`
@@ -172,13 +162,6 @@ export default class ProfileHeader extends React.Component {
   };
 
   render() {
-    let aboutElement;
-    if (this.props.creator && this.props.creator.about && this.props.creator.about.rich) {
-      const richAbout = Strings.loadEditor(this.props.creator.about.rich);
-      if (!Strings.isRichTextEmpty(richAbout)) {
-        aboutElement = <ContentEditor readOnly value={richAbout} className={STYLES_ABOUT} />;
-      }
-    }
     const linksElement = this._renderLinks(
       this.props.creator,
       this.props.isOwnProfile,

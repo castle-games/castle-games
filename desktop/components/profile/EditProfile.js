@@ -5,12 +5,10 @@ import * as Strings from '~/common/strings';
 
 import { css } from 'react-emotion';
 
-import Plain from 'slate-plain-serializer';
 import UIAvatar from '~/components/reusable/UIAvatar';
 import UIFileInput from '~/components/reusable/UIFileInput';
 import UIInputSecondary from '~/components/reusable/UIInputSecondary';
 import UISubmitButton from '~/components/reusable/UISubmitButton';
-import UITextArea from '~/components/reusable/UITextArea';
 
 const STYLES_CONTAINER = css`
   color: ${Constants.colors.black};
@@ -61,9 +59,7 @@ export default class EditProfile extends React.Component {
     isAvatarUploading: false,
     uploadedAvatarFile: null,
     isAnyFieldEdited: false,
-    user: {
-      about: Plain.deserialize(''),
-    },
+    user: {},
   };
 
   componentDidMount() {
@@ -85,18 +81,11 @@ export default class EditProfile extends React.Component {
   }
 
   _resetForm = (user) => {
-    const richAboutObject =
-      user && user.about && user.about.rich
-        ? Strings.loadEditor(user.about.rich)
-        : Plain.deserialize('');
     this.setState({
       isExistingAvatarRemoved: false,
       isAvatarUploading: false,
       uploadedAvatarFile: null,
-      user: {
-        ...user,
-        about: richAboutObject,
-      },
+      user,
       isAnyFieldEdited: false,
     });
   };
@@ -238,22 +227,6 @@ export default class EditProfile extends React.Component {
     );
   };
 
-  _renderAboutField = () => {
-    const value = this.state.user.about;
-    return (
-      <div className={STYLES_SECTION_CONTENT}>
-        <UITextArea
-          value={value}
-          label="About"
-          onChange={this._onAboutChangeAsync}
-          onFocus={this._onFieldFocus}
-          placeholder="Write something about yourself..."
-          style={{ width: 480, marginBottom: 16 }}
-        />
-      </div>
-    );
-  };
-
   render() {
     const isSubmitEnabled = this._doesFormContainChanges();
     return (
@@ -279,7 +252,6 @@ export default class EditProfile extends React.Component {
             {this._renderGenericField('itchUsername', 'Itch', 'Itch username (optional)')}
             {this._renderGenericField('twitterUsername', 'Twitter', 'Twitter handle (optional)')}
           </div>
-          {/* this._renderAboutField() */}
         </div>
       </div>
     );
