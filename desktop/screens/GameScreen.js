@@ -9,7 +9,6 @@ import { NativeBinds } from '~/native/nativebinds';
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { NavigationContext, NavigatorContext } from '~/contexts/NavigationContext';
 
-import GLLoaderScreen from '~/isometric/components/GLLoaderScreen';
 import GameWindow from '~/native/gamewindow';
 import Logs from '~/common/logs';
 import Game from '~/components/game/Game';
@@ -289,10 +288,8 @@ class GameScreen extends React.Component {
   _renderLoader = () => {
     const { luaNetworkRequests, loadingPhase, loaded } = this.state;
 
-    let maybeLoadingAnimation, maybeLoadingOverlay;
+    let maybeLoadingOverlay;
     if (!loaded) {
-      maybeLoadingAnimation = <GLLoaderScreen />;
-
       maybeLoadingOverlay = (
         <div className={STYLES_LOADING_OVERLAY_CONTAINER}>
           {luaNetworkRequests.length > 0 ? (
@@ -308,12 +305,7 @@ class GameScreen extends React.Component {
       );
     }
 
-    return (
-      <React.Fragment>
-        {maybeLoadingOverlay}
-        {maybeLoadingAnimation}
-      </React.Fragment>
-    );
+    return <React.Fragment>{maybeLoadingOverlay}</React.Fragment>;
   };
 
   render() {
