@@ -111,11 +111,12 @@ class ContentNavigationBar extends React.Component {
 
     const { userStatusHistory } = currentUser;
     if (userStatusHistory) {
-      if (items.length > 0) {
+      const recentPlays = UserStatus.uniqueRegisteredUserStatuses(userStatusHistory);
+      if (items.length > 0 && recentPlays.length > 0) {
         items.push({ isSeparator: true });
       }
       items = items.concat(
-        UserStatus.uniqueRegisteredUserStatuses(userStatusHistory).map((status) => {
+        recentPlays.map((status) => {
           return {
             name: this._getProjectDisplayName({ name: status.game.title, url: status.game.url }),
             onClick: () => navigator.navigateToGameMeta(status.game),
