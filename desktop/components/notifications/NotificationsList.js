@@ -37,6 +37,7 @@ const STYLES_TITLE = css`
 
 const STYLES_PARAGRAPH = css`
   font-size: 14px;
+  line-height: 19px;
   color: ${Constants.REFACTOR_COLORS.subdued};
 `;
 
@@ -137,7 +138,7 @@ class NotificationsList extends React.Component {
     }
   };
 
-  _renderEmpty = () => {
+  _renderEmpty = (isAnonymous) => {
     const { theme } = this.props;
     let themeContainerStyles;
     if (theme) {
@@ -145,21 +146,26 @@ class NotificationsList extends React.Component {
         color: ${theme.textColor};
       `;
     }
+    let message;
+    if (isAnonymous) {
+      message =
+        "You're browsing Castle as a guest. If you'd like to get notified when people mention you, invite you to games, or play games you created, please sign in or create a Castle account.";
+    } else {
+      message =
+        "You don't have any notifications yet. When people mention you, invite you to games, or play games you created, you'll see activity here.";
+    }
     return (
       <div className={`${STYLES_EMPTY} ${themeContainerStyles}`}>
         <div className={STYLES_TITLE}>Welcome to Castle!</div>
-        <div className={STYLES_PARAGRAPH}>
-          You don't have any notifications yet. When people mention you, invite you to games, or
-          play games you created, you'll see activity here.
-        </div>
+        <div className={STYLES_PARAGRAPH}>{message}</div>
       </div>
     );
   };
 
   render() {
-    const { notifications } = this.props;
+    const { notifications, isAnonymous } = this.props;
     if (!notifications || !notifications.length) {
-      return this._renderEmpty();
+      return this._renderEmpty(isAnonymous);
     }
     return (
       <div className={STYLES_CONTAINER}>
@@ -179,6 +185,7 @@ export default class NotificationsListWithContext extends React.Component {
               <ChatContext.Consumer>
                 {(chat) => (
                   <NotificationsList
+                    isAnonymous={!currentUser.user || currentUser.user.isAnonymous}
                     notifications={currentUser.appNotifications}
                     reloadNotifications={currentUser.loadAppNotifications}
                     setAppNotificationsStatus={currentUser.setAppNotificationsStatus}

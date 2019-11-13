@@ -194,10 +194,15 @@ export default class SocialSidebarHeader extends React.Component {
     const { mode, channel, numChannelMembers, viewer } = this.props;
 
     if (mode === 'notifications') {
-      let username = viewer ? viewer.username : '';
+      let message;
+      if (!viewer || viewer.isAnonymous) {
+        message = 'Browsing as a guest';
+      } else {
+        message = `Signed in as ${viewer.username}`;
+      }
       return (
         <span className={STYLES_ACTIONS} onClick={this.props.onViewerClick}>
-          <div id="action">Signed in as {username}</div>
+          <div id="action">{message}</div>
         </span>
       );
     }
@@ -227,7 +232,9 @@ export default class SocialSidebarHeader extends React.Component {
   _renderViewer = () => {
     const { viewer, onSelectNotifications, unseenNotificationCount } = this.props;
     const avatarSrc = viewer && viewer.photo ? viewer.photo.url : null;
-    let tooltip = `Notifications for ${viewer.username}`;
+    let tooltip = viewer.isAnonymous
+      ? `${viewer.username} (guest)`
+      : `Notifications for ${viewer.username}`;
     if (unseenNotificationCount > 0) {
       tooltip = `${tooltip} (${unseenNotificationCount} new)`;
     }
