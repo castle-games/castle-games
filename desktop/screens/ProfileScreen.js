@@ -101,10 +101,10 @@ class ProfileScreen extends React.Component {
     this.props.onAfterSave();
   };
 
-  _getNavigationItems = (isOwnProfile) => {
+  _getNavigationItems = (isOwnProfile, isAnonymous) => {
     let navigationItems = [{ label: 'Games', key: 'games' }, { label: 'Activity', key: 'posts' }];
 
-    if (isOwnProfile) {
+    if (isOwnProfile && !isAnonymous) {
       navigationItems.push({ label: 'Add game', key: 'add-game' });
       navigationItems.push({ label: 'Edit Profile', key: 'edit-profile' });
       navigationItems.push({ label: 'Settings', key: 'settings' });
@@ -138,27 +138,45 @@ class ProfileScreen extends React.Component {
   };
 
   _renderGameContent = (isOwnProfile, viewer, creator) => {
-    return creator.gameItems && creator.gameItems.length ? (
-      <div className={STYLES_GAME_GRID}>
-        <UIGameSet
-          viewer={this.props.viewer}
-          gameItems={creator.gameItems}
-          onUserSelect={this.props.navigateToUserProfile}
-          onGameSelect={this._navigateToGameMeta}
-          onGameUpdate={isOwnProfile ? this._onShowUpdateGame : null}
-          onSignInSelect={this.props.navigateToSignIn}
-        />
-      </div>
-    ) : (
-      <UIEmptyState title="No games yet">
-        {isOwnProfile
-          ? 'You have not added any games to your profile yet.'
-          : 'This user has not added any games to their profile yet.'}
-      </UIEmptyState>
-    );
+    if (creator.gameItems && creator.gameItems.length) {
+      return (
+        <div className={STYLES_GAME_GRID}>
+          <UIGameSet
+            viewer={this.props.viewer}
+            gameItems={creator.gameItems}
+            onUserSelect={this.props.navigateToUserProfile}
+            onGameSelect={this._navigateToGameMeta}
+            onGameUpdate={isOwnProfile ? this._onShowUpdateGame : null}
+            onSignInSelect={this.props.navigateToSignIn}
+          />
+        </div>
+      );
+    } else {
+      let heading, message;
+      if (creator.isAnonymous) {
+        if (isOwnProfile) {
+          heading = 'Sign in to share games here';
+          message = 'Sign in or create a Castle account to customize your profile and add games.';
+        } else {
+          heading = `${creator.username} is a guest`;
+          message = "Guests can't customize their profile on Castle.";
+        }
+      } else {
+        heading = 'No games yet';
+        if (isOwnProfile) {
+          message = 'You have not added any games to your profile yet.';
+        } else {
+          message = 'This user has not added any games to their profile yet.';
+        }
+      }
+      if (heading && message) {
+        return <UIEmptyState title={heading}>{message}</UIEmptyState>;
+      }
+      return null;
+    }
   };
 
-  _renderPosts = (posts, isOwnProfile) => {
+  _renderPosts = (posts, isOwnProfile, creator) => {
     if (posts && posts.length) {
       return (
         <UIPostList
@@ -168,13 +186,29 @@ class ProfileScreen extends React.Component {
         />
       );
     } else {
-      return (
-        <UIEmptyState title="No activity yet">
-          {isOwnProfile
-            ? 'You have no recent activity shown on your profile. You can share screenshots from games you play on Castle and they will show up here.'
-            : 'This user has no recent activity.'}
-        </UIEmptyState>
-      );
+      let heading, message;
+      if (creator.isAnonymous) {
+        if (isOwnProfile) {
+          heading = "Sign in to share what you're playing";
+          message =
+            "Sign in or create a Castle account to share screenshots from games you're playing.";
+        } else {
+          heading = `${creator.username} is a guest`;
+          message = "Guests can't share their activity in Castle.";
+        }
+      } else {
+        heading = 'No activity yet';
+        if (isOwnProfile) {
+          message =
+            'You have no recent activity shown on your profile. You can share screenshots from games you play on Castle and they will show up here.';
+        } else {
+          message = 'This user has no recent activity.';
+        }
+      }
+      if (heading && message) {
+        return <UIEmptyState title={heading}>{message}</UIEmptyState>;
+      }
+      return null;
     }
   };
 
@@ -223,7 +257,7 @@ class ProfileScreen extends React.Component {
     } else if (mode === 'settings') {
       profileContentElement = this._renderSettings(isOwnProfile, viewer);
     } else if (mode === 'posts') {
-      profileContentElement = this._renderPosts(this.state.posts, isOwnProfile);
+      profileContentElement = this._renderPosts(this.state.posts, isOwnProfile, creator);
     } else {
       profileContentElement = this._renderGameContent(isOwnProfile, viewer, creator);
     }
@@ -238,7 +272,7 @@ class ProfileScreen extends React.Component {
           onSendMessage={this.props.onSendMessage}
         />
         <UIHorizontalNavigation
-          items={this._getNavigationItems(isOwnProfile)}
+          items={this._getNavigationItems(isOwnProfile, creator.isAnonymous)}
           selectedKey={this.state.mode}
           onChange={this._onNavigationChange}
           style={{ borderBottom: `1px solid #ececec`, marginBottom: `16px` }}

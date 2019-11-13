@@ -54,6 +54,9 @@ export default class UIUserStatus extends React.Component {
         }
       }
     }
+    if (!statusElement && user.isAnonymous) {
+      statusElement = 'Browsing as a guest';
+    }
     if (!statusElement && user.createdTime) {
       // if no relevant or recent status, just show signed up date
       statusElement = `Joined on ${Strings.toDate(user.createdTime)}`;
