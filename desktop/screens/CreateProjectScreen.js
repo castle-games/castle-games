@@ -239,10 +239,11 @@ class CreateProjectScreen extends React.Component {
   _handleConfigureProjectAtPath = async (projectPath) => {
     let projectName = this.state.selectedProjectName;
     let projectFilename = `${Strings.toDirectoryName(projectName)}.castle`;
+    let { projectOwner } = this.props;
     await Project.rewriteCastleFileAsync({
       containingFolder: projectPath,
       newFilename: projectFilename,
-      newOwner: this.props.projectOwner ? this.props.projectOwner.username : null,
+      newOwner: projectOwner && !projectOwner.isAnonymous ? projectOwner.username : null,
       newTitle: projectName ? projectName : 'my-new-project',
     });
     const createdProjectUrl = `file://${path.join(projectPath, projectFilename)}`;
