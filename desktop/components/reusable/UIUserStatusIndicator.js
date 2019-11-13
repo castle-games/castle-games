@@ -16,13 +16,16 @@ const STYLES_INDICATOR_CONTAINER = css`
 `;
 
 class UIUserStatusIndicator extends React.Component {
-  _renderIndicator = (isOnline) => {
+  _renderIndicator = (isOnline, isAnonymous) => {
     // offline
     let indicatorStyle = { border: `2px solid ${Constants.colors.userStatus.offline}` };
     if (isOnline) {
+      const color = isAnonymous
+        ? Constants.colors.userStatus.guest
+        : Constants.colors.userStatus.online;
       indicatorStyle = {
-        border: `2px solid ${Constants.colors.userStatus.online}`,
-        background: Constants.colors.userStatus.online,
+        border: `2px solid ${color}`,
+        background: color,
       };
     }
     return <div className={STYLES_INDICATOR_CONTAINER} style={indicatorStyle} />;
@@ -31,9 +34,10 @@ class UIUserStatusIndicator extends React.Component {
   render() {
     const { user } = this.props;
     const isOnline = user.userId && this.props.userPresence.onlineUserIds[user.userId];
+    const isAnonymous = user.isAnonymous;
     return (
       <div className={STYLES_CONTAINER} style={{ ...this.props.style }}>
-        {this._renderIndicator(isOnline)}
+        {this._renderIndicator(isOnline, isAnonymous)}
       </div>
     );
   }

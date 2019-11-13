@@ -50,7 +50,7 @@ export const colors = {
   error: '#f00',
   userStatus: {
     online: `#62D96B`,
-    // online: `#2EE6D6`, -- cyan option
+    guest: `#A54FD0`,
     offline: `#666`,
   },
   brand1: `#00ffff`, // cyan

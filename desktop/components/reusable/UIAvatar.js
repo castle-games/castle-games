@@ -35,17 +35,26 @@ const STYLES_AVATAR = css`
 export default class UIAvatar extends React.Component {
   static defaultProps = {
     isOnline: false,
+    isAnonymous: false,
     showIndicator: true,
     style: null,
     indicatorStyle: null,
     indicatorCount: 0,
   };
 
-  _renderIndicator = (isOnline, showIndicator) => {
+  _renderIndicator = (isOnline, isAnonymous, showIndicator) => {
     if (!showIndicator) return null;
 
+    let backgroundColor;
+    if (isOnline) {
+      backgroundColor = isAnonymous
+        ? Constants.colors.userStatus.guest
+        : Constants.REFACTOR_COLORS.online;
+    } else {
+      backgroundColor = '#ACACAC';
+    }
     const styles = {
-      backgroundColor: isOnline ? Constants.REFACTOR_COLORS.online : '#ACACAC',
+      backgroundColor,
       ...this.props.indicatorStyle,
     };
     return (
@@ -56,7 +65,7 @@ export default class UIAvatar extends React.Component {
   };
 
   render() {
-    const { src, isOnline, showIndicator, onClick } = this.props;
+    const { src, isOnline, isAnonymous, showIndicator, onClick } = this.props;
 
     const avatarContextStyles = {
       backgroundImage: `url('${src}')`,
@@ -75,7 +84,7 @@ export default class UIAvatar extends React.Component {
         onClick={onClick}
         className={STYLES_AVATAR}
         style={{ ...avatarContextStyles, ...maybeEmptyStyles, ...this.props.style }}>
-        {this._renderIndicator(isOnline, showIndicator)}
+        {this._renderIndicator(isOnline, isAnonymous, showIndicator)}
       </figure>
     );
   }

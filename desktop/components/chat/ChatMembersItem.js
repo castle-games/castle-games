@@ -77,6 +77,7 @@ export default ({
       <UIAvatar
         src={user && user.photo ? user.photo.url : null}
         isOnline={isOnline}
+        isAnonymous={user && user.isAnonymous}
         style={{ width: 36, height: 36 }}
         indicatorStyle={{ width: 12, height: 12, borderRadius: 6, ...indicatorDarkStyles }}
       />
