@@ -209,6 +209,7 @@ android.applicationVariants.all { variant ->
 }
 
 dependencies {
+    implementation project(':react-native-action-sheet')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
 

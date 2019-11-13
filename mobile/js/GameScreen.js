@@ -5,6 +5,7 @@ import gql from 'graphql-tag';
 import castleMetadata from 'castle-metadata';
 import url from 'url';
 import ip from 'ip';
+import ActionSheet from 'react-native-action-sheet';
 
 import GhostView from './ghost/GhostView';
 import * as GhostEvents from './ghost/GhostEvents';
@@ -13,7 +14,7 @@ import * as LuaBridge from './LuaBridge';
 import * as Session from './Session';
 import * as GhostChannels from './ghost/GhostChannels';
 import Tools from './Tools';
-import GameInputs, { NUM_GAME_INPUTS_MODES } from './GameInputs';
+import GameInputs, { NUM_GAME_INPUTS_MODES, GAME_INPUTS_ACTION_KEY_CODES } from './GameInputs';
 import GameHeader from './GameHeader';
 import GameLoading from './GameLoading';
 
@@ -336,10 +337,21 @@ const GameView = ({ gameId, gameUri, extras, windowed }) => {
 
   LuaBridge.useLuaBridge({ eventsReady, game });
 
-  const [inputsMode, setInputsMode] = useState(1);
+  const [inputsMode, setInputsMode] = useState(0);
   const onPressNextInputsMode = () => {
     setInputsMode((inputsMode + 1) % NUM_GAME_INPUTS_MODES);
   };
+
+  const [actionKeyCode, setActionKeyCode] = useState(GAME_INPUTS_ACTION_KEY_CODES[0]);
+  const onPressSwitchActionKeyCode = () => {
+    ActionSheet.showActionSheetWithOptions({
+      options: GAME_INPUTS_ACTION_KEY_CODES,
+    }, (i) => {
+      if (typeof i === 'number') {
+        setActionKeyCode(GAME_INPUTS_ACTION_KEY_CODES[i]);
+      }
+    })
+  }
 
   return (
     <View style={{ flex: 1 }}>
@@ -348,6 +360,7 @@ const GameView = ({ gameId, gameUri, extras, windowed }) => {
           game={game}
           sessionId={sessionId}
           onPressNextInputsMode={onPressNextInputsMode}
+          onPressSwitchActionKeyCode={onPressSwitchActionKeyCode}
         />
       )}
 
@@ -362,7 +375,7 @@ const GameView = ({ gameId, gameUri, extras, windowed }) => {
         ) : null}
         <Tools eventsReady={eventsReady} />
 
-        <GameInputs visible={!windowed} inputsMode={inputsMode} />
+        <GameInputs visible={!windowed} inputsMode={inputsMode} actionKeyCode={actionKeyCode} />
 
         {!luaLoadingHook.loaded ? (
           <GameLoading

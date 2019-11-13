@@ -6,10 +6,16 @@ import { GhostInputView, GhostInputZone } from './ghost/GhostInput';
 // These params only change things on Android -- iOS has a fixed haptics strength
 const HAPTICS = { duration: 20, amplitude: 80 };
 
-const INPUTS_MODE_SPLIT = 0;
-const INPUTS_MODE_DPAD = 1;
-const INPUTS_MODE_NONE = 2;
-export const NUM_GAME_INPUTS_MODES = 3;
+const INPUTS_MODE_DPAD = 0;
+const INPUTS_MODE_NONE = 1;
+export const NUM_GAME_INPUTS_MODES = 2;
+
+export const GAME_INPUTS_ACTION_KEY_CODES = [
+  'z',
+  'return: ⏎',
+  'lshift: ⇪',
+  'space: ␣',
+];
 
 const inputStyle = {
   width: 70,
@@ -77,26 +83,6 @@ const Triangle = props => {
   };
 
   return <View style={[baseStyle, arrowStyles[props.direction]]}></View>;
-};
-
-const splitVerticalInputStyle = {
-  position: 'absolute',
-  bottom: 8,
-  left: 8,
-};
-
-const splitHorizontalInputStyle = {
-  position: 'absolute',
-  bottom: 8,
-  right: 8,
-  flexDirection: 'row',
-};
-
-const splitActionInputStyle = {
-  position: 'absolute',
-  bottom: 94,
-  right: 8,
-  flexDirection: 'row',
 };
 
 const dpadInputStyle = {
@@ -199,47 +185,13 @@ const dpadActionInputStyle = {
   flexDirection: 'row',
 };
 
-const SplitInputs = () => {
-  const upDownZoneRef = useRef(null);
-  const leftRightZoneRef = useRef(null);
-  const actionZoneRef = useRef(null);
-
-  return (
-    <Fragment>
-      <GhostInputZone zoneRef={upDownZoneRef} haptics={HAPTICS} style={splitVerticalInputStyle}>
-        <GhostInputView style={inputStyle} zoneRef={upDownZoneRef} config={{ keyCode: 'up' }}>
-          <Triangle direction="up" size={25} />
-        </GhostInputView>
-        <GhostInputView style={inputStyle} zoneRef={upDownZoneRef} config={{ keyCode: 'down' }}>
-          <Triangle direction="down" size={25} />
-        </GhostInputView>
-      </GhostInputZone>
-      <GhostInputZone zoneRef={leftRightZoneRef} haptics={HAPTICS} style={splitHorizontalInputStyle}>
-        <GhostInputView style={inputStyle} zoneRef={leftRightZoneRef} config={{ keyCode: 'left' }}>
-          <Triangle direction="left" size={25} />
-        </GhostInputView>
-        <GhostInputView style={inputStyle} zoneRef={leftRightZoneRef} config={{ keyCode: 'right' }}>
-          <Triangle direction="right" size={25} />
-        </GhostInputView>
-      </GhostInputZone>
-      <GhostInputZone zoneRef={actionZoneRef} haptics={HAPTICS} style={splitActionInputStyle}>
-        <GhostInputView style={inputStyle} zoneRef={actionZoneRef} config={{ keyCode: 'return' }}>
-          <Text style={inputIconStyle}>⏎</Text>
-        </GhostInputView>
-      </GhostInputZone>
-    </Fragment>
-  );
-};
-
-const DPadInputs = () => {
+const DPadInputs = ({ actionKeyCode }) => {
   const dpadZoneRef = useRef(null);
   const actionZoneRef = useRef(null);
 
   return (
     <Fragment>
-      <ImageBackground
-        source={require('../assets/images/dpad-full.png')}
-        style={dpadInputStyle}>
+      <ImageBackground source={require('../assets/images/dpad-full.png')} style={dpadInputStyle}>
         <GhostInputZone zoneRef={dpadZoneRef} haptics={HAPTICS} style={{ flex: 1 }}>
           <GhostInputView
             style={dpadUpInputStyle}
@@ -276,21 +228,23 @@ const DPadInputs = () => {
         </GhostInputZone>
       </ImageBackground>
       <GhostInputZone zoneRef={actionZoneRef} haptics={HAPTICS} style={dpadActionInputStyle}>
-        <GhostInputView style={inputStyle} zoneRef={actionZoneRef} config={{ keyCode: 'return' }}>
-          <Text style={inputIconStyle}>⏎</Text>
+        <GhostInputView
+          style={inputStyle}
+          zoneRef={actionZoneRef}
+          config={{ keyCode: actionKeyCode.replace(/:.*/, '') }}>
+          <Text style={inputIconStyle}>{actionKeyCode.replace(/.*: /, '')}</Text>
         </GhostInputView>
       </GhostInputZone>
     </Fragment>
   );
 };
 
-const GameInputs = ({ visible, inputsMode }) => {
+const GameInputs = ({ visible, inputsMode, actionKeyCode }) => {
   if (!visible || inputsMode === INPUTS_MODE_NONE) {
     return null;
-  } else if (inputsMode === INPUTS_MODE_SPLIT) {
-    return <SplitInputs />;
   } else if (inputsMode === INPUTS_MODE_DPAD) {
-    return <DPadInputs />;
+    // We use `key={actionKeyCode}` here to force a re-mount when `actionKeyCode` changes
+    return <DPadInputs key={actionKeyCode} actionKeyCode={actionKeyCode} />;
   }
 };
 
