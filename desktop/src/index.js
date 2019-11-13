@@ -40,6 +40,18 @@ const getInitialState = async () => {
   if (accessToken) {
     currentUser = CurrentUserCache.get();
   }
+  if (!currentUser || !currentUser.user) {
+    try {
+      const user = await Actions.createAnonymousUser();
+      currentUser = { user };
+    } catch (e) {
+      console.warn(`Error during initial app auth: ${e}`);
+    }
+    CurrentUserCache.set({
+      user: currentUser.user,
+      timeLastLoaded: Date.now(),
+    });
+  }
   if (currentUser && currentUser.user) {
     amplitude.getInstance().setUserId(currentUser.user.userId);
   }

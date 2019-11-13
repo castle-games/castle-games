@@ -272,6 +272,32 @@ export async function signup({ name, username, email, password }) {
   return response;
 }
 
+export async function createAnonymousUser() {
+  const response = await API.graphqlAsync(
+    `
+      mutation {
+        createAnonymousUser {
+          ${FULL_USER_FIELDS}
+          token
+        }
+      }
+    `
+  );
+
+  if (response.errors) {
+    throw new Error(`Couldn't create anon user: ${response.errors[0].message}`);
+  }
+  if (
+    !response.data ||
+    !response.data.createAnonymousUser ||
+    !response.data.createAnonymousUser.token
+  ) {
+    throw new Error(`Couldn't create anon user: no token: ${JSON.stringify(response)}`);
+  }
+  await API.client.setTokenAsync(response.data.createAnonymousUser.token);
+  return response.data.createAnonymousUser;
+}
+
 export async function login({ userId, password }) {
   const response = await API.graphqlAsync(
     `
