@@ -145,6 +145,10 @@ local function isCacheable(url)
         if hash and hash:match('^[a-f0-9]*$') and #hash == 40 then
             return true
         end
+        local hash = url:match('^https?://hosted%.castle%.games/([^/]*)')
+        if hash and hash:match('^[a-f0-9]*$') and #hash == 40 then
+            return true
+        end
     end
     do -- Github SHA
         local sha = url:match('^https://raw.githubusercontent.com/[^/]*/[^/]*/([a-f0-9]*)/')
@@ -267,7 +271,11 @@ do
                 if httpCode == 302 then
                     local location = headers['location']
                     local hash = location:match('^https?://s3%-us%-west%-2%.amazonaws%.com/castle%-hosted%-games/([^/]*)')
-                    if hash:match('^[a-f0-9]*$') and #hash == 40 then
+                    if hash and hash:match('^[a-f0-9]*$') and #hash == 40 then
+                        return location
+                    end
+                    local hash = location:match('^https?://hosted%.castle%.games/([^/]*)')
+                    if hash and hash:match('^[a-f0-9]*$') and #hash == 40 then
                         return location
                     end
                 end
