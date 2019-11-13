@@ -137,8 +137,6 @@ class GameScreen extends React.Component {
       ? await jsPostToLuaPost(this.props.playing.post, { data: true })
       : undefined;
 
-    console.log(JSON.stringify(this.props.editedFiles));
-
     return {
       graphics: {
         width: screenSettings.width,

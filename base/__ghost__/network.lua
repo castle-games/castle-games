@@ -263,8 +263,13 @@ do
         end
 
         do -- Castle-hosted asset
-            if url:match('^https?://api%.castle%.games/api/hosted') then
+            local filename = url:match('^https?://api%.castle%.games/api/hosted/[^/]*/[^/]*/(.*)')
+            if filename then
                 -- See if it redirects to a CDN URL
+                if castle.game.getCurrent().hostedFiles and castle.game.getCurrent().hostedFiles[filename] then
+                    return castle.game.getCurrent().hostedFiles[filename]
+                end
+
                 local response, httpCode, headers, status = network.request {
                     url = url,
                     redirect = false,
@@ -451,11 +456,11 @@ function network.fetch(url, method, skipCache)
         entry.waiters = nil
         if entry.err then error(entry.err) end
 
-        if method == 'GET' and url:sub(-#'.lua') == '.lua' then
+        if method == 'GET' then --and url:sub(-#'.lua') == '.lua'
             urlToLocallyEditedFile[url] = entry.result[1]
-            bridge.js.setEditableFiles {
-                files = urlToLocallyEditedFile
-            }
+            --bridge.js.setEditableFiles {
+            --    files = urlToLocallyEditedFile
+            --}
         end
 
         return unpack(entry.result)

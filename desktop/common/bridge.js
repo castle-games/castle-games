@@ -35,12 +35,13 @@ export const jsPostToLuaPost = async ({ postId, creator, media }, { data }) => (
   data: data ? await Actions.postDataAsync({ postId }) : undefined,
 });
 
-export const jsGameToLuaGame = async ({ gameId, owner, title, url, description }) => ({
+export const jsGameToLuaGame = async ({ gameId, owner, title, url, description, hostedFiles }) => ({
   gameId,
   owner: await jsUserToLuaUser(owner),
   title,
   url,
   description,
+  hostedFiles,
 });
 
 ///

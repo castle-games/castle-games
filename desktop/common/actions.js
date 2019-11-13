@@ -78,6 +78,7 @@ const GAME_FIELDS = `
   draft
   storageId
   chatChannelId
+  hostedFiles
 `;
 
 const GAME_ITEMS = `
