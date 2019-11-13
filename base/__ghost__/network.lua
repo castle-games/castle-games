@@ -348,6 +348,12 @@ end
 -- A map from url to the locally edited version of the file
 local urlToLocallyEditedFile = {}
 
+function network.onGameLoaded()
+    bridge.js.setEditableFiles {
+       files = urlToLocallyEditedFile
+    }
+end
+
 local function getEditedFile(url)
     if CASTLE_INITIAL_DATA and CASTLE_INITIAL_DATA.editedFiles and CASTLE_INITIAL_DATA.editedFiles[url] then
         return CASTLE_INITIAL_DATA.editedFiles[url]
@@ -456,11 +462,8 @@ function network.fetch(url, method, skipCache)
         entry.waiters = nil
         if entry.err then error(entry.err) end
 
-        if method == 'GET' then --and url:sub(-#'.lua') == '.lua'
+        if method == 'GET' and url:sub(-#'.lua') == '.lua' then
             urlToLocallyEditedFile[url] = entry.result[1]
-            --bridge.js.setEditableFiles {
-            --    files = urlToLocallyEditedFile
-            --}
         end
 
         return unpack(entry.result)

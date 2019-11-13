@@ -216,6 +216,7 @@ function main.load(arg)
         home = root:newChild(homeUrl, { noConf = true })
         jsEvents.send('CASTLE_GAME_LOADED', {})
         io.flush()
+        network.onGameLoaded()
         if initialFileDropped then
             home:filedropped(initialFileDropped)
             initialFileDropped = nil
