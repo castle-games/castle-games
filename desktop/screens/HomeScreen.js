@@ -39,6 +39,21 @@ const STYLES_POSTS_CONTAINER = css`
   margin-bottom: 24px;
 `;
 
+const STYLES_WELCOME_CONTAINER = css`
+  margin: 24px 0;
+
+  p {
+    margin: 0 24px 12px 24px;
+    line-height: 18px;
+  }
+
+  #welcome-sign-in {
+    cursor: pointer;
+    color: fuchsia;
+    text-decoration: underline;
+  }
+`;
+
 const STYLES_ERROR_CONTAINER = css`
   margin-bottom: 16px;
 
@@ -82,6 +97,7 @@ class HomeScreen extends React.Component {
       allGames: null,
       trendingGames: [],
       multiplayerSessions: [],
+      viewer: null,
     },
     updateAvailable: null,
   };
@@ -231,6 +247,28 @@ class HomeScreen extends React.Component {
     return null;
   };
 
+  _maybeRenderWelcome = () => {
+    const { viewer } = this.props;
+    if (viewer && viewer.isAnonymous) {
+      return (
+        <div className={STYLES_WELCOME_CONTAINER}>
+          <div className={STYLES_SECTION_TITLE}>Welcome, stranger!</div>
+          <p>Hello! You've arrived at Castle, a place to play games, make games, and hang out.</p>
+          <p>
+            Just so you know, you are browsing Castle as a guest. We've assigned you a temporary
+            picture and the fictional name <strong>{viewer.username}</strong>. If you'd like to
+            change your profile or chat with others, please{' '}
+            <span id="welcome-sign-in" onClick={this.props.navigateToSignIn}>
+              sign in or create a Castle account
+            </span>
+            .
+          </p>
+        </div>
+      );
+    }
+    return null;
+  };
+
   _renderBottom = () => {
     let maybeLoading;
     if (this.state.isLoadingPosts) {
@@ -257,6 +295,7 @@ class HomeScreen extends React.Component {
       <div className={STYLES_HOME_CONTAINER} onScroll={this._handleScroll}>
         {this._renderUpdateBanner()}
         <div className={STYLES_CONTENT_CONTAINER}>
+          {this._maybeRenderWelcome()}
           {this._renderGamesSection()}
           {this._renderPostsSection()}
         </div>
@@ -278,6 +317,8 @@ export default class HomeScreenWithContext extends React.Component {
                 navigateToGame={navigator.navigateToGame}
                 navigateToGameMeta={navigator.navigateToGameMeta}
                 navigateToCreate={navigator.navigateToCreate}
+                navigateToSignIn={navigator.navigateToSignIn}
+                viewer={currentUser.user}
                 content={currentUser.content}
                 contentActions={currentUser.contentActions}
                 {...this.props}
