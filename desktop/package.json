@@ -56,7 +56,6 @@
     "path-posix": "^1.0.0",
     "path-win32": "^1.0.1",
     "platform": "^1.3.5",
-    "prop-types": "^15.6.2",
     "rc-color-picker": "^1.2.6",
     "react": "^16.8.0",
     "react-dom": "^16.7.0",
