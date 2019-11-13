@@ -94,12 +94,14 @@ export default ({
         </div>
       </div>
       <div className={STYLES_ACTIONS}>
-        <span
-          className={STYLES_ACTION}
-          onClick={() => onSendMessage(user)}
-          style={{ color: textColor }}>
-          <SVG.Mail style={{ width: 14, height: 14, marginRight: 4 }} />
-        </span>
+        {user && !user.isAnonymous ? (
+          <span
+            className={STYLES_ACTION}
+            onClick={() => onSendMessage(user)}
+            style={{ color: textColor }}>
+            <SVG.Mail style={{ width: 14, height: 14, marginRight: 4 }} />
+          </span>
+        ) : null}
       </div>
     </div>
   );
