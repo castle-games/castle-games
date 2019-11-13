@@ -9,6 +9,7 @@ import { NavigatorContext } from '~/contexts/NavigationContext';
 
 import NotificationItem from '~/components/notifications/NotificationItem';
 import NotificationSectionHeader from '~/components/notifications/NotificationSectionHeader';
+import UIButton from '~/components/reusable/UIButton';
 
 const STYLES_CONTAINER = css`
   width: 100%;
@@ -39,6 +40,14 @@ const STYLES_PARAGRAPH = css`
   font-size: 14px;
   line-height: 19px;
   color: ${Constants.REFACTOR_COLORS.subdued};
+`;
+
+const STYLES_SIGN_IN = css`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  margin-top: 24px;
 `;
 
 class NotificationsList extends React.Component {
@@ -146,10 +155,15 @@ class NotificationsList extends React.Component {
         color: ${theme.textColor};
       `;
     }
-    let message;
+    let message, maybeLoginButton;
     if (isAnonymous) {
       message =
         "You're browsing Castle as a guest. If you'd like to get notified when people mention you, invite you to games, or play games you created, please sign in or create a Castle account.";
+      maybeLoginButton = (
+        <div className={STYLES_SIGN_IN}>
+          <UIButton onClick={this.props.navigator.navigateToSignIn}>Sign In</UIButton>
+        </div>
+      );
     } else {
       message =
         "You don't have any notifications yet. When people mention you, invite you to games, or play games you created, you'll see activity here.";
@@ -158,6 +172,7 @@ class NotificationsList extends React.Component {
       <div className={`${STYLES_EMPTY} ${themeContainerStyles}`}>
         <div className={STYLES_TITLE}>Welcome to Castle!</div>
         <div className={STYLES_PARAGRAPH}>{message}</div>
+        {maybeLoginButton}
       </div>
     );
   };
