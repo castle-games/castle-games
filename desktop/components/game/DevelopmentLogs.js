@@ -97,14 +97,12 @@ export default class DevelopmentLogs extends React.Component {
     remoteLogs: [],
   };
 
-  componentWillReceiveProps(nextProps) {
-    // NOTE(jim): We give some offset to not force the scroll position to be perfect.
+  componentDidUpdate(prevProps) {
     const isBottom =
       this._scrollView.scrollHeight - this._scrollView.scrollTop - 48 <=
       this._scrollView.clientHeight;
-    const newItems = nextProps.logs.length > this.props.logs.length;
+    const newItems = !prevProps || this.props.logs.length > prevProps.logs.length;
 
-    // NOTE(jim): Only scroll if you're at the bottom with new items.
     if (isBottom && newItems) {
       this.scroll();
     }
@@ -120,12 +118,7 @@ export default class DevelopmentLogs extends React.Component {
 
   scroll = () => {
     window.setTimeout(() => {
-      // NOTE(jim): Noop if component is not mounted.
-      if (!this._logs) {
-        return;
-      }
-
-      this._logs.scrollIntoView(false);
+      this._logs && this._logs.scrollIntoView(false);
     });
   };
 
