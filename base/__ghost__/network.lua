@@ -360,11 +360,13 @@ function network.onGameLoaded()
                 end
 
                 if url:sub(-#'.lua') == '.lua' then
-                    files[url] = {
-                        url = url,
-                        filename = filename,
-                        content = entry.result[1]
-                    }
+                    if entry.result and entry.result[1] then
+                        files[url] = {
+                            url = url,
+                            filename = filename,
+                            content = entry.result[1]
+                        }
+                    end
                 else
                     files[url] = {
                         url = url,
