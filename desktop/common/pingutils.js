@@ -19,31 +19,34 @@ async function pingAsync(address) {
 }
 
 export async function reportPingsAsync() {
-  try {
-    let regions = await Actions.getMultiplayerRegions();
-    let pings = await Promise.all(
-      regions.map(async (region) => {
-        let total = 0.0;
-        for (let i = 0; i < NUM_ATTEMPTS_PER_REGION; i++) {
-          total += await pingAsync(region.pingAddress);
-        }
-
-        return {
-          region: region.name,
-          ping: Math.round(total / NUM_ATTEMPTS_PER_REGION),
-        };
-      })
-    );
-
-    let timeZone = null;
+  // delay a little before running this since it might slow down more important network requests
+  setTimeout(async () => {
     try {
-      timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    } catch (e) {
-      console.error('Error getting time zone ' + e);
-    }
+      let regions = await Actions.getMultiplayerRegions();
+      let pings = await Promise.all(
+        regions.map(async (region) => {
+          let total = 0.0;
+          for (let i = 0; i < NUM_ATTEMPTS_PER_REGION; i++) {
+            total += await pingAsync(region.pingAddress);
+          }
 
-    await Actions.updatePings(pings, timeZone);
-  } catch (e) {
-    console.error('Error reporting user pings ' + e);
-  }
+          return {
+            region: region.name,
+            ping: Math.round(total / NUM_ATTEMPTS_PER_REGION),
+          };
+        })
+      );
+
+      let timeZone = null;
+      try {
+        timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      } catch (e) {
+        console.error('Error getting time zone ' + e);
+      }
+
+      await Actions.updatePings(pings, timeZone);
+    } catch (e) {
+      console.error('Error reporting user pings ' + e);
+    }
+  }, 2000);
 }
