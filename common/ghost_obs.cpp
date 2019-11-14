@@ -2,6 +2,14 @@
 #include "ghost.h"
 #include "ghost_constants.h"
 
+// TODO: to enable obs, uncomment and delete stubs
+
+void ghostInitObs(std::string basePath, std::string ffmpegPath, bool debug) {}
+void ghostStartObs() {}
+void ghostStopObs() {}
+void ghostTakeScreenCaptureObs() {}
+
+/*
 #ifdef _MSC_VER
 // needed for _alloca
 #include <boost/process/windows.hpp>
@@ -464,3 +472,4 @@ void ghostTakeScreenCaptureObs() {
     stopRecordingThread = std::thread(_stopRecordingAfterTimeout);
   }
 }
+ */

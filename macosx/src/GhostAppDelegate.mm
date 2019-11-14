@@ -102,9 +102,10 @@ NSArray *enumerate_windows(void) {
   self.loveStepping = NO;
   self.windowEventsSubscribed = NO;
 
-  ghostInitObs(
+  // TODO: to enable obs
+  /* ghostInitObs(
       [[NSString stringWithFormat:@"%@/obs", [[NSBundle mainBundle] resourcePath]] UTF8String],
-      [[[NSBundle mainBundle] pathForResource:@"ffmpeg" ofType:@""] UTF8String]);
+      [[[NSBundle mainBundle] pathForResource:@"ffmpeg" ofType:@""] UTF8String]); */
 }
 
 - (NSApplicationTerminateReply)applicationShouldTerminate:(__unused NSApplication *)sender {
