@@ -239,9 +239,6 @@ export default class GameScreenDeveloperSidebar extends React.Component {
           let directory = null;
           let isExpanded = !!this.state.expandedDirectories[newDirectoryPath];
 
-          console.log(newDirectoryPath);
-          console.log(JSON.stringify(this.state.expandedDirectories));
-
           if (isExpanded) {
             directory = this._sortDirectory(unordered[filename], depth + 1, newDirectoryPath);
           }
@@ -479,12 +476,18 @@ export default class GameScreenDeveloperSidebar extends React.Component {
 
   _reloadGameDebounced = _.debounce(this._reloadGame, 1000);
 
+  _loadExternalFont = async (url) => {
+    let fontFace = new FontFace('GameTextEditorFontFamily', `url(${url})`);
+    let loadedFontFace = await fontFace.load();
+    document.fonts.add(loadedFontFace);
+  };
+
   _renderCodeEditor = () => {
     const { pickerSelection } = this.state;
     let url = pickerSelection.substring('file:'.length);
     let file = this.props.editableFiles[url];
 
-    let centeredContent = <div>Don't know how to display this file type</div>;
+    let centeredContent = <div>Can't display this file type</div>;
     if (file.content) {
       centeredContent = (
         <DevelopmentCodeEditor
@@ -514,9 +517,38 @@ export default class GameScreenDeveloperSidebar extends React.Component {
           <source src={url} type="audio/ogg"></source>
         </audio>
       );
-    } else if (url.endsWith('.png') || url.endsWith('.jpg')) {
+    } else if (url.endsWith('.png') || url.endsWith('.jpg') || url.endsWith('.gif')) {
       centeredContent = (
-        <img key={url} src={url} style={{ objectFit: 'contain', width: '100%', height: '100%' }} />
+        <img
+          key={url}
+          src={url}
+          style={{
+            objectFit: 'contain',
+            width: '100%',
+            height: '100%',
+            imageRendering: 'pixelated',
+          }}
+        />
+      );
+    } else if (url.endsWith('.ttf')) {
+      this._loadExternalFont(url);
+
+      centeredContent = (
+        <div
+          key={url}
+          src={url}
+          style={{
+            padding: 20,
+            fontFamily: 'GameTextEditorFontFamily',
+            fontSize: 30,
+          }}>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+          ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+          ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
+          sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
+          est laborum.
+        </div>
       );
     }
 
@@ -547,6 +579,7 @@ export default class GameScreenDeveloperSidebar extends React.Component {
 
         <div className={STYLES_EDITOR}>
           <div className={STYLES_PICKER}>
+            <div style={{ paddingTop: 10 }}>Logs:</div>
             <div
               className={STYLES_PICKER_SELECTION}
               onClick={() => {
