@@ -199,6 +199,10 @@ export default class GameScreenDeveloperSidebar extends React.Component {
         filename = filename.substring(baseUrl.length);
       }
 
+      if (filename.startsWith('./')) {
+        filename = filename.substring(2);
+      }
+
       if (filename.includes('://')) {
         root[filename] = {
           url,
@@ -517,7 +521,12 @@ export default class GameScreenDeveloperSidebar extends React.Component {
           <source src={url} type="audio/ogg"></source>
         </audio>
       );
-    } else if (url.endsWith('.png') || url.endsWith('.jpg') || url.endsWith('.gif')) {
+    } else if (
+      url.endsWith('.png') ||
+      url.endsWith('.jpg') ||
+      url.endsWith('.gif') ||
+      url.startsWith('https://d1vkcv80qw9qqp') // assets cdn url
+    ) {
       centeredContent = (
         <img
           key={url}
@@ -530,7 +539,7 @@ export default class GameScreenDeveloperSidebar extends React.Component {
           }}
         />
       );
-    } else if (url.endsWith('.ttf')) {
+    } else if (url.endsWith('.ttf') || url.endsWith('.otf')) {
       this._loadExternalFont(url);
 
       centeredContent = (
@@ -542,12 +551,7 @@ export default class GameScreenDeveloperSidebar extends React.Component {
             fontFamily: 'GameTextEditorFontFamily',
             fontSize: 30,
           }}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-          ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-          ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur
-          sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
-          est laborum.
+          Ebenezer unexpectedly bagged two tranquil aardvarks with his jiffy vacuum cleaner.
         </div>
       );
     }
