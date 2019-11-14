@@ -13,3 +13,9 @@ TODO: Move obs here as well.
 ### boost
 
 - See [boost/README.md](./boost/README.md).
+
+### obs
+
+- See [obs/README.md](./obs/README.md) to build.
+- obs is currently not part of the mac build. The dylibs will probably need to be rebuilt if we re-enable obs.
+- Once built, re-add the various obs dylibs and `ffmpeg` to the ghost project, and unstub `ghost_obs.h|cpp`.

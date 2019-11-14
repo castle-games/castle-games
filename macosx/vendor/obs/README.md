@@ -16,6 +16,6 @@ delete SDL so file from bin/
 fix ffmpeg-mux rpath:
 
 ```
-cd macosx/obs/data/obs-plugins/obs-ffmpeg/
+cd macosx/vendor/obs/data/obs-plugins/obs-ffmpeg/
 install_name_tool -add_rpath @executable_path/../../../bin/ ffmpeg-mux
 ```
