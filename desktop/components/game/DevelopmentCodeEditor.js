@@ -1,5 +1,6 @@
 import * as React from 'react';
 import MonacoEditor from 'react-monaco-editor';
+import { findDOMNode } from 'react-dom';
 
 import { css } from 'react-emotion';
 
@@ -12,8 +13,9 @@ const STYLES_CONTAINER = css`
 export default class DevelopmentCodeEditor extends React.Component {
   render() {
     return (
-      <div className={STYLES_CONTAINER}>
+      <div className={STYLES_CONTAINER} ref={this._handleMonacoContainerRef}>
         <MonacoEditor
+          ref={(ref) => (this._monacoEditorRef = ref)}
           width="100%"
           height="100%"
           language="lua"
@@ -21,7 +23,7 @@ export default class DevelopmentCodeEditor extends React.Component {
           options={{
             fontSize: 12,
 
-            minimap: { enabled: true },
+            minimap: { enabled: false },
 
             scrollBeyondLastColumn: false,
             scrollBeyondLastLine: false,
@@ -63,4 +65,31 @@ export default class DevelopmentCodeEditor extends React.Component {
       </div>
     );
   }
+
+  _monacoContainerDOMNode = null;
+  _monacoEditorRef = null;
+  _resizeObserver = null;
+
+  _handleMonacoContainerRef = (ref) => {
+    // Unobserve previous
+    if (this._monacoContainerDOMNode && this._resizeObserver) {
+      this._resizeObserver.unobserve(this._monacoContainerDOMNode);
+    }
+    this._monacoContainerDOMNode = null;
+
+    // Observe new
+    if (ref) {
+      this._monacoContainerDOMNode = findDOMNode(ref);
+
+      if (!this._resizeObserver) {
+        this._resizeObserver = new ResizeObserver((entries) => {
+          if (this._monacoEditorRef) {
+            this._monacoEditorRef.editor.layout();
+          }
+        });
+      }
+
+      this._resizeObserver.observe(this._monacoContainerDOMNode);
+    }
+  };
 }

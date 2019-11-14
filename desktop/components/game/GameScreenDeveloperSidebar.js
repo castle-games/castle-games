@@ -490,6 +490,7 @@ export default class GameScreenDeveloperSidebar extends React.Component {
     const { pickerSelection } = this.state;
     let url = pickerSelection.substring('file:'.length);
     let file = this.props.editableFiles[url];
+    let fileType = url.substring(url.lastIndexOf('.') + 1).toLowerCase();
 
     let centeredContent = <div>Can't display this file type</div>;
     if (file.content) {
@@ -503,28 +504,28 @@ export default class GameScreenDeveloperSidebar extends React.Component {
           }}
         />
       );
-    } else if (url.endsWith('.mp3')) {
+    } else if (fileType === 'mp3') {
       centeredContent = (
-        <audio key={url} controls>
+        <audio key={url} controls controlsList="nodownload">
           <source src={url} type="audio/mpeg"></source>
         </audio>
       );
-    } else if (url.endsWith('.wav')) {
+    } else if (fileType === 'wav') {
       centeredContent = (
-        <audio key={url} controls>
+        <audio key={url} controls controlsList="nodownload">
           <source src={url} type="audio/wav"></source>
         </audio>
       );
-    } else if (url.endsWith('.ogg')) {
+    } else if (fileType === 'ogg') {
       centeredContent = (
-        <audio key={url} controls>
+        <audio key={url} controls controlsList="nodownload">
           <source src={url} type="audio/ogg"></source>
         </audio>
       );
     } else if (
-      url.endsWith('.png') ||
-      url.endsWith('.jpg') ||
-      url.endsWith('.gif') ||
+      fileType === 'png' ||
+      fileType === 'jpg' ||
+      fileType === 'gif' ||
       url.startsWith('https://d1vkcv80qw9qqp') // assets cdn url
     ) {
       centeredContent = (
@@ -539,7 +540,7 @@ export default class GameScreenDeveloperSidebar extends React.Component {
           }}
         />
       );
-    } else if (url.endsWith('.ttf') || url.endsWith('.otf')) {
+    } else if (fileType === 'ttf' || fileType === '.otf') {
       this._loadExternalFont(url);
 
       centeredContent = (
@@ -551,7 +552,13 @@ export default class GameScreenDeveloperSidebar extends React.Component {
             fontFamily: 'GameTextEditorFontFamily',
             fontSize: 30,
           }}>
-          Ebenezer unexpectedly bagged two tranquil aardvarks with his jiffy vacuum cleaner.
+          <div>
+            {Math.random() > 0.5
+              ? 'Ebenezer unexpectedly bagged two tranquil aardvarks with his jiffy vacuum cleaner.'
+              : 'Sphinx of black quartz, judge my vow.'}
+          </div>
+
+          <div>{'0 1 2 3 4 5 6 7 8 9'}</div>
         </div>
       );
     }
