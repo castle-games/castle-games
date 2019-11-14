@@ -80,6 +80,12 @@ Where `some-archive.xcarchive` was created with `xcodebuild` or by our release s
 
 Every time we notarize our app, Apple generates a verbose log of various issues it encountered while notarizing the app. We attach this to the build as an artifact called `notarize-log.txt`. Check this log and consult [Apple's Notarization Guide](https://developer.apple.com/documentation/xcode/notarizing_your_app_before_distribution/resolving_common_notarization_issues) for possible issues.
 
+Another thing that can happen: If you see something like this in the log, it means you need to sign in to the Apple developer account and agree to some terms or contract or something.
+
+```
+You must first sign the relevant contracts online. (1048)
+```
+
 ### Possible issues
 
 - Anything about "already signed" or "unsealed" is likely to be an issue with one of Castle's supporting Frameworks. We have several (SDL, Love, Lua, etc.). As of macOS Mavericks, Frameworks needs to conform to a really specific file format. You can run [update-framework.sh](tools/update-framework.sh) on an older framework to convert it to a valid format.
