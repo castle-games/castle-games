@@ -29,7 +29,7 @@ export default class DevelopmentCodeEditor extends React.Component {
             lineNumbers: 'on',
             glyphMargin: false,
             folding: false,
-            lineNumbersMinChars: 0,
+            lineNumbersMinChars: 3,
           }}
           value={this.props.value}
           onChange={this.props.onChange}

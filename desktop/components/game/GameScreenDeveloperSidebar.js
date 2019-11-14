@@ -168,6 +168,15 @@ const STYLES_CTA = css`
   }
 `;
 
+const STYLES_EDITOR_INNER = css`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+`;
+
 export default class GameScreenDeveloperSidebar extends React.Component {
   _client;
   _server;
@@ -343,22 +352,46 @@ export default class GameScreenDeveloperSidebar extends React.Component {
 
   _renderCodeEditor = () => {
     const { pickerSelection } = this.state;
-    let file = pickerSelection.substring('file:'.length);
+    let url = pickerSelection.substring('file:'.length);
+    let file = this.props.editableFiles[url];
 
-    return (
-      <DevelopmentCodeEditor
-        value={this.props.editableFiles[file]}
-        onChange={(value) => {
-          this.props.editFile(file, value);
-          this._reloadGameDebounced();
-        }}
-      />
-    );
+    let centeredContent = <div>Don't know how to display this file type</div>;
+    if (file.content) {
+      centeredContent = (
+        <DevelopmentCodeEditor
+          key={url}
+          value={file.content}
+          onChange={(value) => {
+            this.props.editFile(url, value);
+            this._reloadGameDebounced();
+          }}
+        />
+      );
+    } else if (url.endsWith('.mp3')) {
+      centeredContent = (
+        <audio key={url} controls>
+          <source src={url} type="audio/mpeg"></source>
+        </audio>
+      );
+    } else if (url.endsWith('.wav')) {
+      centeredContent = (
+        <audio key={url} controls>
+          <source src={url} type="audio/wav"></source>
+        </audio>
+      );
+    } else if (url.endsWith('.png') || url.endsWith('.jpg')) {
+      centeredContent = (
+        <img key={url} src={url} style={{ objectFit: 'contain', width: '100%', height: '100%' }} />
+      );
+    }
+
+    return <div className={STYLES_EDITOR_INNER}>{centeredContent}</div>;
   };
 
   render() {
-    const { isMultiplayerCodeUploadEnabled } = this.props;
+    const { isMultiplayerCodeUploadEnabled, game } = this.props;
     const isMultiplayer = Utilities.isMultiplayer(this.props.game);
+    const baseUrl = game.entryPoint.substring(0, game.entryPoint.lastIndexOf('/') + 1);
 
     return (
       <div className={STYLES_CONTAINER} style={this.props.style}>
@@ -398,19 +431,24 @@ export default class GameScreenDeveloperSidebar extends React.Component {
             )}
 
             <div style={{ paddingTop: 10 }}>Files:</div>
-            {Object.keys(this.props.editableFiles).map((key) => {
-              let name = key.substring(key.lastIndexOf('/') + 1);
+            {Object.keys(this.props.editableFiles)
+              .sort()
+              .map((url) => {
+                let displayFilename = this.props.editableFiles[url].filename;
+                if (displayFilename.startsWith(baseUrl)) {
+                  displayFilename = displayFilename.substring(baseUrl.length);
+                }
 
-              return (
-                <div
-                  className={STYLES_PICKER_SELECTION}
-                  onClick={() => {
-                    this.setState({ pickerSelection: `file:${key}` });
-                  }}>
-                  {name}
-                </div>
-              );
-            })}
+                return (
+                  <div
+                    className={STYLES_PICKER_SELECTION}
+                    onClick={() => {
+                      this.setState({ pickerSelection: `file:${url}` });
+                    }}>
+                    {displayFilename}
+                  </div>
+                );
+              })}
           </div>
           <div className={STYLES_EDITOR_CONTENT}>{this._renderEditorContent()}</div>
         </div>

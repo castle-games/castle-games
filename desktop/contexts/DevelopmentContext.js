@@ -24,6 +24,7 @@ const DevelopmentSetterContextDefaults = {
   clearLogs: () => {},
   setEditableFiles: () => {},
   editFile: () => {},
+  clearEditableFiles: () => {},
 };
 
 const DevelopmentContext = React.createContext({
@@ -48,6 +49,7 @@ class DevelopmentContextProvider extends React.Component {
         clearLogs: this.clearLogs,
         setEditableFiles: this.setEditableFiles,
         editFile: this.editFile,
+        clearEditableFiles: this.clearEditableFiles,
       },
     };
   }
@@ -96,21 +98,31 @@ class DevelopmentContextProvider extends React.Component {
     });
   };
 
+  clearEditableFiles = () => {
+    this.setState({
+      editableFiles: {},
+      editedFiles: {},
+    });
+  };
+
   setEditableFiles = (files) => {
     this.setState({
       editableFiles: files,
     });
   };
 
-  editFile = (url, file) => {
+  editFile = (url, content) => {
     this.setState({
       editableFiles: {
         ...this.state.editableFiles,
-        [url]: file,
+        [url]: {
+          ...this.state.editableFiles[url],
+          content,
+        },
       },
       editedFiles: {
         ...this.state.editedFiles,
-        [url]: file,
+        [url]: content,
       },
     });
   };

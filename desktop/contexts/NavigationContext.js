@@ -8,7 +8,7 @@ import * as Urls from '~/common/urls';
 import * as VoiceChat from '~/common/voicechat';
 
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
-import { DevelopmentContext } from '~/contexts/DevelopmentContext';
+import { DevelopmentContext, DevelopmentSetterContext } from '~/contexts/DevelopmentContext';
 import { UserPresenceContext } from '~/contexts/UserPresenceContext';
 
 import GameWindow from '~/native/gamewindow';
@@ -508,6 +508,7 @@ class NavigationContextManager extends React.Component {
       // track the fact that a game was ended
       Analytics.trackGameEnd({ game: state.navigation.playing.game });
       this._connectToVoiceServerAsync(null);
+      this.props.developmentSetter.clearEditableFiles();
       return {
         ...state,
         navigation: {
@@ -659,12 +660,17 @@ class NavigationContextProvider extends React.Component {
             {(currentUser) => (
               <DevelopmentContext.Consumer>
                 {(development) => (
-                  <NavigationContextManager
-                    userPresence={userPresence}
-                    currentUser={currentUser}
-                    development={development}
-                    {...this.props}
-                  />
+                  <DevelopmentSetterContext.Consumer>
+                    {(developmentSetter) => (
+                      <NavigationContextManager
+                        userPresence={userPresence}
+                        currentUser={currentUser}
+                        development={development}
+                        developmentSetter={developmentSetter}
+                        {...this.props}
+                      />
+                    )}
+                  </DevelopmentSetterContext.Consumer>
                 )}
               </DevelopmentContext.Consumer>
             )}

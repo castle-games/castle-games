@@ -41,7 +41,6 @@ export const jsGameToLuaGame = async ({ gameId, owner, title, url, description, 
   title,
   url,
   description,
-  hostedFiles,
 });
 
 ///

@@ -266,8 +266,8 @@ do
             local filename = url:match('^https?://api%.castle%.games/api/hosted/[^/]*/[^/]*/(.*)')
             if filename then
                 -- See if it redirects to a CDN URL
-                if castle.game.getCurrent().hostedFiles and castle.game.getCurrent().hostedFiles[filename] then
-                    return castle.game.getCurrent().hostedFiles[filename]
+                if CASTLE_INITIAL_DATA.hostedFiles and CASTLE_INITIAL_DATA.hostedFiles[filename] then
+                    return CASTLE_INITIAL_DATA.hostedFiles[filename]
                 end
 
                 local response, httpCode, headers, status = network.request {
@@ -345,13 +345,39 @@ do
     end
 end
 
--- A map from url to the locally edited version of the file
-local urlToLocallyEditedFile = {}
+-- The cache of `network.fetch` responses
+local fetchEntries = { GET = {}, HEAD = {} }
 
 function network.onGameLoaded()
-    bridge.js.setEditableFiles {
-       files = urlToLocallyEditedFile
-    }
+    if castle.system.isDesktop() then
+        network.async(function()
+            local files = {}
+
+            for url, entry in pairs(fetchEntries['GET']) do
+                local filename = url:match('^https?://api%.castle%.games/api/hosted/[^/]*/[^/]*/(.*)')
+                if not filename then
+                    filename = url
+                end
+
+                if url:sub(-#'.lua') == '.lua' then
+                    files[url] = {
+                        url = url,
+                        filename = filename,
+                        content = entry.result[1]
+                    }
+                else
+                    files[url] = {
+                        url = url,
+                        filename = filename,
+                    }
+                end
+            end
+
+            bridge.js.setEditableFiles {
+                files = files
+            }
+        end)
+    end
 end
 
 local function getEditedFile(url)
@@ -360,9 +386,6 @@ local function getEditedFile(url)
     end
     return nil
 end
-
--- The cache of `network.fetch` responses
-local fetchEntries = { GET = {}, HEAD = {} }
 
 -- Fetch a resource with default caching semantics. If `skipCache` is true, skip looking in the
 -- persistent cache (still saves it to the cache after).
@@ -384,11 +407,12 @@ function network.fetch(url, method, skipCache)
         url = url:gsub('^castle://', 'https://')
 
         -- Apply mappings
+        local originalUrl = url
         url = mapToCacheable(url)
 
-        if getEditedFile(url) then
+        if getEditedFile(originalUrl) then
             if method == 'GET' then
-                response = getEditedFile(url)
+                response = getEditedFile(originalUrl)
             else
                 response = 1
             end
@@ -461,10 +485,6 @@ function network.fetch(url, method, skipCache)
         end
         entry.waiters = nil
         if entry.err then error(entry.err) end
-
-        if method == 'GET' and url:sub(-#'.lua') == '.lua' then
-            urlToLocallyEditedFile[url] = entry.result[1]
-        end
 
         return unpack(entry.result)
     elseif entry.result then -- Already have an entry with `result`, just return it

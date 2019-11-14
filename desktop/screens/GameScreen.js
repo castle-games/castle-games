@@ -156,6 +156,7 @@ class GameScreen extends React.Component {
         ? await jsGameToLuaGame(this.props.playing.referrerGame)
         : undefined,
       editedFiles: this.props.editedFiles,
+      hostedFiles: this.props.playing.game ? this.props.playing.game.hostedFiles : undefined,
     };
   };
 
