@@ -6,7 +6,7 @@ import { UserPresenceContext } from '~/contexts/UserPresenceContext';
 
 import CurrentUserCache from '~/common/current-user-cache';
 
-const RELOAD_TRENDING_GAMES_INTERVAL_MS = 1000 * 10;
+const RELOAD_TRENDING_GAMES_INTERVAL_MS = 1000 * 30;
 
 const EMPTY_CURRENT_USER = {
   user: null,
