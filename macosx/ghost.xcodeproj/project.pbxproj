@@ -10,10 +10,6 @@
 		910F3AF022555C4B00148428 /* ghost_obs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 910F3AE822555C4B00148428 /* ghost_obs.cpp */; };
 		910F3AF122555C4B00148428 /* ghost_obs.h in Headers */ = {isa = PBXBuildFile; fileRef = 910F3AEF22555C4B00148428 /* ghost_obs.h */; };
 		912D1E36224C52EF00815BBD /* castle-desktop-node-macos in Resources */ = {isa = PBXBuildFile; fileRef = 912D1E35224C52EF00815BBD /* castle-desktop-node-macos */; };
-		914A9B422339C36A00C57364 /* libboost_thread.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 914A9B382339C36A00C57364 /* libboost_thread.a */; };
-		914A9B432339C36A00C57364 /* libboost_chrono.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 914A9B3F2339C36A00C57364 /* libboost_chrono.a */; };
-		914A9B442339C36A00C57364 /* libboost_date_time.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 914A9B402339C36A00C57364 /* libboost_date_time.a */; };
-		914A9B452339C36A00C57364 /* libboost_regex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 914A9B412339C36A00C57364 /* libboost_regex.a */; };
 		91537F892319948D0055F55F /* libtheoraenc.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 91537F4D2319948D0055F55F /* libtheoraenc.1.dylib */; };
 		91537F8A2319948D0055F55F /* libp11-kit.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 91537F4E2319948D0055F55F /* libp11-kit.0.dylib */; };
 		91537F8B2319948D0055F55F /* libpcre.1.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 91537F4F2319948D0055F55F /* libpcre.1.dylib */; };
@@ -132,8 +128,6 @@
 		91537FFE231994FB0055F55F /* libtesseract.4.dylib in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 91537F872319948D0055F55F /* libtesseract.4.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		91537FFF231994FB0055F55F /* libopus.0.dylib in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 91537F882319948D0055F55F /* libopus.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		91543A822255877D001B2E4A /* obs in Resources */ = {isa = PBXBuildFile; fileRef = 91543A6322557943001B2E4A /* obs */; };
-		91543A8722558AD4001B2E4A /* libboost_system.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 91543A8522558AD4001B2E4A /* libboost_system.a */; };
-		91543A8822558AD4001B2E4A /* libboost_filesystem.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 91543A8622558AD4001B2E4A /* libboost_filesystem.a */; };
 		91543A8A225661BD001B2E4A /* ffmpeg in Resources */ = {isa = PBXBuildFile; fileRef = 91543A89225661BD001B2E4A /* ffmpeg */; };
 		91935494234EEC5300B0F4B4 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9193548D234EEC5300B0F4B4 /* AVFoundation.framework */; };
 		91CF4339214841CC002024DA /* liblibcef_dll_wrapper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 91FDEBD521475159008FFB60 /* liblibcef_dll_wrapper.a */; };
@@ -172,6 +166,13 @@
 		B53E72AD2152F8D2003C8616 /* ghost_constants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B53E72AB2152F8D2003C8616 /* ghost_constants.cpp */; };
 		B57FCFB62166834A00D661B2 /* ghost_mac.mm in Sources */ = {isa = PBXBuildFile; fileRef = B57FCFB52166834A00D661B2 /* ghost_mac.mm */; };
 		B57FCFB82166835B00D661B2 /* ghost.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B57FCFB72166835B00D661B2 /* ghost.cpp */; };
+		B580404E237DCD8900CBED32 /* boost in Resources */ = {isa = PBXBuildFile; fileRef = B580404D237DCD8900CBED32 /* boost */; };
+		B5804056237DCE7F00CBED32 /* libboost_chrono.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B5804052237DCE2800CBED32 /* libboost_chrono.a */; };
+		B5804057237DCE7F00CBED32 /* libboost_date_time.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B5804050237DCE2800CBED32 /* libboost_date_time.a */; };
+		B5804058237DCE7F00CBED32 /* libboost_filesystem.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B5804054237DCE2800CBED32 /* libboost_filesystem.a */; };
+		B5804059237DCE7F00CBED32 /* libboost_regex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B5804051237DCE2800CBED32 /* libboost_regex.a */; };
+		B580405A237DCE7F00CBED32 /* libboost_system.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B5804053237DCE2800CBED32 /* libboost_system.a */; };
+		B580405B237DCE7F00CBED32 /* libboost_thread.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B5804055237DCE2900CBED32 /* libboost_thread.a */; };
 		B580674921EEA57100631D76 /* blank.castle in Resources */ = {isa = PBXBuildFile; fileRef = B580674221EEA57100631D76 /* blank.castle */; };
 		B5A0404321483BA5007A6CC1 /* Chromium Embedded Framework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5A0404221483BA5007A6CC1 /* Chromium Embedded Framework.framework */; };
 		B5A0404621483D2C007A6CC1 /* Chromium Embedded Framework.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = B5A0404221483BA5007A6CC1 /* Chromium Embedded Framework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -303,13 +304,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 8A2C8FAB1C6BC1F700846019;
 			remoteInfo = Tests;
-		};
-		B5E13596236208F200AC77C9 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = B5E135812362082500AC77C9 /* Bugsnag.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = 8A2C8FA01C6BC1F700846019;
-			remoteInfo = Bugsnag;
 		};
 		B5E9FC40211B6BA00068BEB9 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -443,10 +437,6 @@
 		910F3AE822555C4B00148428 /* ghost_obs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ghost_obs.cpp; sourceTree = "<group>"; };
 		910F3AEF22555C4B00148428 /* ghost_obs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ghost_obs.h; sourceTree = "<group>"; };
 		912D1E35224C52EF00815BBD /* castle-desktop-node-macos */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = "castle-desktop-node-macos"; path = "../node/castle-desktop-node-macos"; sourceTree = "<group>"; };
-		914A9B382339C36A00C57364 /* libboost_thread.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libboost_thread.a; sourceTree = "<group>"; };
-		914A9B3F2339C36A00C57364 /* libboost_chrono.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libboost_chrono.a; sourceTree = "<group>"; };
-		914A9B402339C36A00C57364 /* libboost_date_time.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libboost_date_time.a; sourceTree = "<group>"; };
-		914A9B412339C36A00C57364 /* libboost_regex.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libboost_regex.a; sourceTree = "<group>"; };
 		91537F4D2319948D0055F55F /* libtheoraenc.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libtheoraenc.1.dylib; sourceTree = "<group>"; };
 		91537F4E2319948D0055F55F /* libp11-kit.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = "libp11-kit.0.dylib"; sourceTree = "<group>"; };
 		91537F4F2319948D0055F55F /* libpcre.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libpcre.1.dylib; sourceTree = "<group>"; };
@@ -507,8 +497,6 @@
 		91537F872319948D0055F55F /* libtesseract.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libtesseract.4.dylib; sourceTree = "<group>"; };
 		91537F882319948D0055F55F /* libopus.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopus.0.dylib; sourceTree = "<group>"; };
 		91543A6322557943001B2E4A /* obs */ = {isa = PBXFileReference; lastKnownFileType = folder; path = obs; sourceTree = SOURCE_ROOT; };
-		91543A8522558AD4001B2E4A /* libboost_system.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libboost_system.a; sourceTree = "<group>"; };
-		91543A8622558AD4001B2E4A /* libboost_filesystem.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libboost_filesystem.a; sourceTree = "<group>"; };
 		91543A89225661BD001B2E4A /* ffmpeg */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = ffmpeg; sourceTree = "<group>"; };
 		9193548D234EEC5300B0F4B4 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		91C98F9D21432C39006E745C /* cef.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cef.xcodeproj; path = ../cef/cef.xcodeproj; sourceTree = "<group>"; };
@@ -543,6 +531,14 @@
 		B55858EE215AB95300926105 /* ghost-macosx.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ghost-macosx.plist"; sourceTree = "<group>"; };
 		B57FCFB52166834A00D661B2 /* ghost_mac.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ghost_mac.mm; sourceTree = "<group>"; };
 		B57FCFB72166835B00D661B2 /* ghost.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ghost.cpp; sourceTree = "<group>"; };
+		B580404D237DCD8900CBED32 /* boost */ = {isa = PBXFileReference; lastKnownFileType = folder; path = boost; sourceTree = "<group>"; };
+		B580404F237DCE0D00CBED32 /* lib */ = {isa = PBXFileReference; lastKnownFileType = folder; name = lib; path = vendor/boost/build/lib; sourceTree = "<group>"; };
+		B5804050237DCE2800CBED32 /* libboost_date_time.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_date_time.a; path = vendor/boost/build/lib/libboost_date_time.a; sourceTree = "<group>"; };
+		B5804051237DCE2800CBED32 /* libboost_regex.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_regex.a; path = vendor/boost/build/lib/libboost_regex.a; sourceTree = "<group>"; };
+		B5804052237DCE2800CBED32 /* libboost_chrono.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_chrono.a; path = vendor/boost/build/lib/libboost_chrono.a; sourceTree = "<group>"; };
+		B5804053237DCE2800CBED32 /* libboost_system.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_system.a; path = vendor/boost/build/lib/libboost_system.a; sourceTree = "<group>"; };
+		B5804054237DCE2800CBED32 /* libboost_filesystem.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_filesystem.a; path = vendor/boost/build/lib/libboost_filesystem.a; sourceTree = "<group>"; };
+		B5804055237DCE2900CBED32 /* libboost_thread.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_thread.a; path = vendor/boost/build/lib/libboost_thread.a; sourceTree = "<group>"; };
 		B580674221EEA57100631D76 /* blank.castle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = blank.castle; sourceTree = "<group>"; };
 		B5A0404221483BA5007A6CC1 /* Chromium Embedded Framework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "Chromium Embedded Framework.framework"; path = "Frameworks/Chromium Embedded Framework.framework"; sourceTree = "<group>"; };
 		B5B06A412150751A001C4382 /* simple_app.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = simple_app.cpp; sourceTree = "<group>"; };
@@ -600,6 +596,7 @@
 			files = (
 				B5E135992362090E00AC77C9 /* SystemConfiguration.framework in Frameworks */,
 				B5E13593236208C000AC77C9 /* libz.tbd in Frameworks */,
+				B5804058237DCE7F00CBED32 /* libboost_filesystem.a in Frameworks */,
 				B5E13591236208AB00AC77C9 /* libc++.tbd in Frameworks */,
 				91537FC32319948D0055F55F /* libtesseract.4.dylib in Frameworks */,
 				91537F992319948D0055F55F /* libavformat.58.dylib in Frameworks */,
@@ -608,17 +605,17 @@
 				91537FA62319948D0055F55F /* libavresample.4.dylib in Frameworks */,
 				91537F8B2319948D0055F55F /* libpcre.1.dylib in Frameworks */,
 				91537FC42319948D0055F55F /* libopus.0.dylib in Frameworks */,
+				B5804056237DCE7F00CBED32 /* libboost_chrono.a in Frameworks */,
 				91537F892319948D0055F55F /* libtheoraenc.1.dylib in Frameworks */,
 				91537FA12319948D0055F55F /* libavutil.56.dylib in Frameworks */,
 				B5A0404321483BA5007A6CC1 /* Chromium Embedded Framework.framework in Frameworks */,
 				91537F972319948D0055F55F /* libopenjp2.7.dylib in Frameworks */,
 				91537F9A2319948D0055F55F /* libtheoradec.1.dylib in Frameworks */,
-				914A9B442339C36A00C57364 /* libboost_date_time.a in Frameworks */,
 				91537FA02319948D0055F55F /* libcrypto.1.0.0.dylib in Frameworks */,
-				914A9B452339C36A00C57364 /* libboost_regex.a in Frameworks */,
 				91537FB72319948D0055F55F /* liblzma.5.dylib in Frameworks */,
 				91537FBA2319948D0055F55F /* libsnappy.1.dylib in Frameworks */,
 				91537F9F2319948D0055F55F /* libnettle.6.dylib in Frameworks */,
+				B5804057237DCE7F00CBED32 /* libboost_date_time.a in Frameworks */,
 				91537FB02319948D0055F55F /* libfontconfig.1.dylib in Frameworks */,
 				91537FB52319948D0055F55F /* libunistring.2.dylib in Frameworks */,
 				91537FA22319948D0055F55F /* libharfbuzz.0.dylib in Frameworks */,
@@ -626,9 +623,9 @@
 				91537F912319948D0055F55F /* libswscale.5.dylib in Frameworks */,
 				91537FBD2319948D0055F55F /* librtmp.1.dylib in Frameworks */,
 				91537FBB2319948D0055F55F /* libopencore-amrwb.0.dylib in Frameworks */,
+				B580405B237DCE7F00CBED32 /* libboost_thread.a in Frameworks */,
 				91537F922319948D0055F55F /* libswresample.3.dylib in Frameworks */,
 				91537F932319948D0055F55F /* libtasn1.6.dylib in Frameworks */,
-				914A9B422339C36A00C57364 /* libboost_thread.a in Frameworks */,
 				91537F8E2319948D0055F55F /* libvorbisenc.2.dylib in Frameworks */,
 				B5E13594236208F200AC77C9 /* Bugsnag.framework in Frameworks */,
 				91537F9C2319948D0055F55F /* libobsglad.dylib in Frameworks */,
@@ -638,7 +635,6 @@
 				91537FA42319948D0055F55F /* libgif.7.dylib in Frameworks */,
 				91537FA32319948D0055F55F /* libopencore-amrnb.0.dylib in Frameworks */,
 				91537FBF2319948D0055F55F /* libgmp.10.dylib in Frameworks */,
-				91543A8822558AD4001B2E4A /* libboost_filesystem.a in Frameworks */,
 				B5E9FC48211B6C190068BEB9 /* ghost_extensions_macos.framework in Frameworks */,
 				91537FB22319948D0055F55F /* libass.9.dylib in Frameworks */,
 				91537FB62319948D0055F55F /* libtiff.5.dylib in Frameworks */,
@@ -649,7 +645,6 @@
 				91537F942319948D0055F55F /* liblept.5.dylib in Frameworks */,
 				91537F8A2319948D0055F55F /* libp11-kit.0.dylib in Frameworks */,
 				91537FA82319948D0055F55F /* libhogweed.4.dylib in Frameworks */,
-				91543A8722558AD4001B2E4A /* libboost_system.a in Frameworks */,
 				91537F8F2319948D0055F55F /* libgraphite2.3.dylib in Frameworks */,
 				91537FAC2319948D0055F55F /* libwebp.7.dylib in Frameworks */,
 				91537FB92319948D0055F55F /* libspeex.1.dylib in Frameworks */,
@@ -657,11 +652,11 @@
 				91537F8D2319948D0055F55F /* libobs.0.dylib in Frameworks */,
 				91537FB82319948D0055F55F /* libx264.155.dylib in Frameworks */,
 				91537FAE2319948D0055F55F /* libfribidi.0.dylib in Frameworks */,
+				B580405A237DCE7F00CBED32 /* libboost_system.a in Frameworks */,
 				91537FB42319948D0055F55F /* libobsglad.0.dylib in Frameworks */,
 				91537F8C2319948D0055F55F /* libpostproc.55.dylib in Frameworks */,
 				91537F9D2319948D0055F55F /* libmp3lame.0.dylib in Frameworks */,
 				91537FAF2319948D0055F55F /* libavdevice.58.dylib in Frameworks */,
-				914A9B432339C36A00C57364 /* libboost_chrono.a in Frameworks */,
 				91537F902319948D0055F55F /* libgnutls.30.dylib in Frameworks */,
 				A1887D5122162F59008F50E3 /* Sparkle.framework in Frameworks */,
 				91537FA52319948D0055F55F /* libobs.dylib in Frameworks */,
@@ -676,6 +671,7 @@
 				91537FA92319948D0055F55F /* librubberband.2.dylib in Frameworks */,
 				91537F952319948D0055F55F /* libavfilter.7.dylib in Frameworks */,
 				B5256F72211A555500891B27 /* theora.framework in Frameworks */,
+				B5804059237DCE7F00CBED32 /* libboost_regex.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -685,6 +681,13 @@
 		1058C7A0FEA54F0111CA2CBB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B5804052237DCE2800CBED32 /* libboost_chrono.a */,
+				B5804050237DCE2800CBED32 /* libboost_date_time.a */,
+				B5804054237DCE2800CBED32 /* libboost_filesystem.a */,
+				B5804051237DCE2800CBED32 /* libboost_regex.a */,
+				B5804053237DCE2800CBED32 /* libboost_system.a */,
+				B5804055237DCE2900CBED32 /* libboost_thread.a */,
+				B580404F237DCE0D00CBED32 /* lib */,
 				B5E135982362090E00AC77C9 /* SystemConfiguration.framework */,
 				B5E13592236208BF00AC77C9 /* libz.tbd */,
 				B5E13590236208AB00AC77C9 /* libc++.tbd */,
@@ -710,6 +713,7 @@
 		29B97314FDCFA39411CA2CEA /* ghost */ = {
 			isa = PBXGroup;
 			children = (
+				B580CFF8237DCB2300CBED32 /* vendor */,
 				A1EC7A3322BAC5B800B013A6 /* web */,
 				91543A50225578CB001B2E4A /* libraries */,
 				912D1E2E224C52D700815BBD /* node */,
@@ -812,7 +816,6 @@
 			isa = PBXGroup;
 			children = (
 				91543A89225661BD001B2E4A /* ffmpeg */,
-				91543A8322558AC8001B2E4A /* boost */,
 				91543A57225578F0001B2E4A /* obs */,
 			);
 			name = libraries;
@@ -826,28 +829,6 @@
 			);
 			name = obs;
 			path = "New Group";
-			sourceTree = "<group>";
-		};
-		91543A8322558AC8001B2E4A /* boost */ = {
-			isa = PBXGroup;
-			children = (
-				91543A8422558AD4001B2E4A /* lib */,
-			);
-			name = boost;
-			sourceTree = "<group>";
-		};
-		91543A8422558AD4001B2E4A /* lib */ = {
-			isa = PBXGroup;
-			children = (
-				914A9B3F2339C36A00C57364 /* libboost_chrono.a */,
-				914A9B402339C36A00C57364 /* libboost_date_time.a */,
-				914A9B412339C36A00C57364 /* libboost_regex.a */,
-				914A9B382339C36A00C57364 /* libboost_thread.a */,
-				91543A8522558AD4001B2E4A /* libboost_system.a */,
-				91543A8622558AD4001B2E4A /* libboost_filesystem.a */,
-			);
-			name = lib;
-			path = boost/build/lib;
 			sourceTree = "<group>";
 		};
 		91C98F9E21432C39006E745C /* Products */ = {
@@ -917,6 +898,14 @@
 				B5000229215AEB1E00CD2309 /* ghost-env.plist */,
 			);
 			path = Supporting;
+			sourceTree = "<group>";
+		};
+		B580CFF8237DCB2300CBED32 /* vendor */ = {
+			isa = PBXGroup;
+			children = (
+				B580404D237DCD8900CBED32 /* boost */,
+			);
+			path = vendor;
 			sourceTree = "<group>";
 		};
 		B5B06A402150751A001C4382 /* common */ = {
@@ -1100,7 +1089,6 @@
 				B5256F3F211A555500891B27 /* PBXTargetDependency */,
 				A1ED98EC211DFA0700CBC701 /* PBXTargetDependency */,
 				91CF43BF21485694002024DA /* PBXTargetDependency */,
-				B5E13597236208F200AC77C9 /* PBXTargetDependency */,
 			);
 			name = "ghost-macosx";
 			productInstallPath = "$(HOME)/Applications";
@@ -1257,6 +1245,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B580404E237DCD8900CBED32 /* boost in Resources */,
 				A1EC7A3422BAC5B800B013A6 /* web in Resources */,
 				91543A822255877D001B2E4A /* obs in Resources */,
 				B5256F7D211A56EE00891B27 /* package.love in Resources */,
@@ -1385,11 +1374,6 @@
 			isa = PBXTargetDependency;
 			name = "liblove-macosx";
 			targetProxy = B5256F40211A555500891B27 /* PBXContainerItemProxy */;
-		};
-		B5E13597236208F200AC77C9 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = Bugsnag;
-			targetProxy = B5E13596236208F200AC77C9 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1547,14 +1531,14 @@
 					"$(PROJECT_DIR)/Frameworks/SDL2.framework/Headers",
 					"$(PROJECT_DIR)/../cef",
 					"$(PROJECT_DIR)/obs/include",
-					"$(PROJECT_DIR)/boost/build/include",
+					"$(PROJECT_DIR)/vendor/boost/build/include",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Supporting/ghost-macosx.plist";
 				INSTALL_PATH = /Applications;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/obs/bin",
-					"$(PROJECT_DIR)/boost/build/lib",
+					"$(PROJECT_DIR)/vendor/boost/build/lib",
 				);
 				LLVM_LTO = NO;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
@@ -1586,14 +1570,14 @@
 					"$(PROJECT_DIR)/Frameworks/SDL2.framework/Headers",
 					"$(PROJECT_DIR)/../cef",
 					"$(PROJECT_DIR)/obs/include",
-					"$(PROJECT_DIR)/boost/build/include",
+					"$(PROJECT_DIR)/vendor/boost/build/include",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Supporting/ghost-macosx.plist";
 				INSTALL_PATH = /Applications;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/obs/bin",
-					"$(PROJECT_DIR)/boost/build/lib",
+					"$(PROJECT_DIR)/vendor/boost/build/lib",
 				);
 				LLVM_LTO = NO;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
@@ -1625,14 +1609,14 @@
 					"$(PROJECT_DIR)/Frameworks/SDL2.framework/Headers",
 					"$(PROJECT_DIR)/../cef",
 					"$(PROJECT_DIR)/obs/include",
-					"$(PROJECT_DIR)/boost/build/include",
+					"$(PROJECT_DIR)/vendor/boost/build/include",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Supporting/ghost-macosx.plist";
 				INSTALL_PATH = /Applications;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/obs/bin",
-					"$(PROJECT_DIR)/boost/build/lib",
+					"$(PROJECT_DIR)/vendor/boost/build/lib",
 				);
 				LLVM_LTO = NO;
 				MACOSX_DEPLOYMENT_TARGET = 10.11;

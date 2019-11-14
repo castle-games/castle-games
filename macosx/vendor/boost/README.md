@@ -3,7 +3,9 @@ Download https://www.boost.org/users/history/version_1_67_0.html and extract to 
 `./bootstrap.sh --prefix=../build`
 `./b2 install --with-filesystem --with-date_time --with-regex --with-chrono --with-thread link=static runtime-link=static`
 
-Right click on boost/lib in xcode and select "Add files to ghost"
+- Under the `ghost.xcodeproj` file tree in Xcode, under `vendor`, add `boost` as a folder reference.
+- Make sure header search paths and library search paths include boost directory (should already be true).
+- Make sure the boost `.a` files are added as linked Libraries under `ghost-macosx/General`.
 
 Current config:
 

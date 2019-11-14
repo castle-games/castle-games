@@ -4,8 +4,12 @@ At the time of writing, other stuff in our build (namely CEF and SDL) make it a 
 
 In the meantime, here is where we put some vendored libs.
 
-TODO: Move obs and boost here as well.
+TODO: Move obs here as well.
 
 ### Bugsnag
 
 - We follow "manual installation": https://docs.bugsnag.com/platforms/macos-objc/
+
+### boost
+
+- See [boost/README.md](./boost/README.md).
