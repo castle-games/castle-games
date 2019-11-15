@@ -1,4 +1,5 @@
 import * as React from 'react';
+import DevelopmentEditableFilesFixture from '~/fixtures/DevelopmentEditableFilesFixture';
 
 /**
  *  DevelopmentContext contains all of the "making game" state of the app.
@@ -8,7 +9,9 @@ const DevelopmentContextDefaults = {
   isDeveloping: false,
   isMultiplayerCodeUploadEnabled: false,
   logs: [],
-  editableFiles: {},
+  editableFiles: DevelopmentEditableFilesFixture.isEnabled
+    ? DevelopmentEditableFilesFixture.fixture
+    : {},
   editedFiles: {},
 };
 
@@ -100,7 +103,9 @@ class DevelopmentContextProvider extends React.Component {
 
   clearEditableFiles = () => {
     this.setState({
-      editableFiles: {},
+      editableFiles: DevelopmentEditableFilesFixture.isEnabled
+        ? DevelopmentEditableFilesFixture.fixture
+        : {},
       editedFiles: {},
     });
   };

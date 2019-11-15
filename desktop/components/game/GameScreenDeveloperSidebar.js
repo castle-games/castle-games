@@ -39,6 +39,7 @@ const STYLES_EDITOR = css`
 
 const STYLES_PICKER = css`
   width: 15%;
+  height: 100%;
   border-right: 1px solid ${BORDER_COLOR};
   color: #fff;
   font-size: 11px;
@@ -179,6 +180,29 @@ const STYLES_EDITOR_INNER = css`
   color: #fff;
 `;
 
+const STYLES_EDITOR_TABS = css`
+  width: 100%;
+  height: 30px;
+  overflow-x: scroll;
+  white-space: nowrap;
+  border-bottom: 1px solid #555;
+`;
+
+const STYLES_EDITOR_TAB = css`
+  display: inline-block;
+  padding-left: 20px;
+  border-right: 1px solid #555;
+  width: 150px;
+  height: 30px;
+  line-height: 30px;
+  color: #fff;
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+`;
+
 export default class GameScreenDeveloperSidebar extends React.Component {
   _client;
   _server;
@@ -187,6 +211,8 @@ export default class GameScreenDeveloperSidebar extends React.Component {
     server: 484,
     pickerSelection: 'local_logs',
     expandedDirectories: {},
+    focusedTabIdx: 0,
+    tabs: [],
   };
 
   _buildFileTree = () => {
@@ -307,7 +333,7 @@ export default class GameScreenDeveloperSidebar extends React.Component {
             style={{ marginLeft: `${file.depth * 10}px` }}
             className={STYLES_PICKER_SELECTION}
             onClick={() => {
-              this.setState({ pickerSelection: `file:${file.url}` });
+              this._openFile(file);
             }}>
             {file.filename}
           </div>
@@ -316,6 +342,35 @@ export default class GameScreenDeveloperSidebar extends React.Component {
     });
 
     return result;
+  };
+
+  _openFile = (file) => {
+    let tabs = [...this.state.tabs];
+    let focusedTabIdx = this.state.focusedTabIdx;
+    let foundTab = false;
+
+    for (let i = 0; i < tabs.length; i++) {
+      if (tabs[i].url === file.url) {
+        focusedTabIdx = i;
+        foundTab = true;
+        break;
+      }
+    }
+
+    if (!foundTab) {
+      tabs.push({
+        url: file.url,
+        title: file.url.substring(file.url.lastIndexOf('/') + 1),
+      });
+
+      focusedTabIdx = tabs.length - 1;
+    }
+
+    this.setState({
+      tabs,
+      focusedTabIdx,
+      pickerSelection: `file:${file.url}`,
+    });
   };
 
   componentDidMount() {
@@ -553,6 +608,8 @@ export default class GameScreenDeveloperSidebar extends React.Component {
 
   render() {
     const { isMultiplayerCodeUploadEnabled } = this.props;
+    const { tabs, focusedTabIdx } = this.state;
+
     const isMultiplayer = Utilities.isMultiplayer(this.props.game);
 
     return (
@@ -596,7 +653,25 @@ export default class GameScreenDeveloperSidebar extends React.Component {
             <div style={{ paddingTop: 10 }}>Files:</div>
             {this._buildFileTree()}
           </div>
-          <div className={STYLES_EDITOR_CONTENT}>{this._renderEditorContent()}</div>
+          <div className={STYLES_EDITOR_CONTENT}>
+            <div className={STYLES_EDITOR_TABS}>
+              {tabs.map((tab, idx) => {
+                return (
+                  <div
+                    onClick={() => {
+                      this.setState({
+                        focusedTabIdx: idx,
+                      });
+                    }}
+                    className={STYLES_EDITOR_TAB}
+                    style={{ backgroundColor: idx === focusedTabIdx ? '#333333' : '#000000' }}>
+                    {tab.title}
+                  </div>
+                );
+              })}
+            </div>
+            {this._renderEditorContent()}
+          </div>
         </div>
       </div>
     );
