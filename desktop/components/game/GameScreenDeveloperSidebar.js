@@ -10,6 +10,8 @@ import _ from 'lodash';
 
 import DevelopmentLogs from '~/components/game/DevelopmentLogs';
 import DevelopmentCodeEditor from '~/components/game/DevelopmentCodeEditor';
+import GameEditorImagePreview from '~/components/game/editor/GameEditorImagePreview';
+import GameEditorFontPreview from '~/components/game/editor/GameEditorFontPreview';
 
 const path = Utilities.path();
 
@@ -480,12 +482,6 @@ export default class GameScreenDeveloperSidebar extends React.Component {
 
   _reloadGameDebounced = _.debounce(this._reloadGame, 1000);
 
-  _loadExternalFont = async (url) => {
-    let fontFace = new FontFace('GameTextEditorFontFamily', `url(${url})`);
-    let loadedFontFace = await fontFace.load();
-    document.fonts.add(loadedFontFace);
-  };
-
   _renderCodeEditor = () => {
     const { pickerSelection } = this.state;
     let url = pickerSelection.substring('file:'.length);
@@ -529,37 +525,26 @@ export default class GameScreenDeveloperSidebar extends React.Component {
       url.startsWith('https://d1vkcv80qw9qqp') // assets cdn url
     ) {
       centeredContent = (
-        <img
+        <GameEditorImagePreview
           key={url}
-          src={url}
+          url={url}
           style={{
-            objectFit: 'contain',
             width: '100%',
             height: '100%',
-            imageRendering: 'pixelated',
           }}
         />
       );
     } else if (fileType === 'ttf' || fileType === '.otf') {
-      this._loadExternalFont(url);
-
       centeredContent = (
-        <div
+        <GameEditorFontPreview
           key={url}
-          src={url}
+          url={url}
           style={{
             padding: 20,
             fontFamily: 'GameTextEditorFontFamily',
             fontSize: 30,
-          }}>
-          <div>
-            {Math.random() > 0.5
-              ? 'Ebenezer unexpectedly bagged two tranquil aardvarks with his jiffy vacuum cleaner.'
-              : 'Sphinx of black quartz, judge my vow.'}
-          </div>
-
-          <div>{'0 1 2 3 4 5 6 7 8 9'}</div>
-        </div>
+          }}
+        />
       );
     }
 
