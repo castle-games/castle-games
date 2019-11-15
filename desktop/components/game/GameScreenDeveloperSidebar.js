@@ -186,6 +186,10 @@ const STYLES_EDITOR_TABS = css`
   overflow-x: scroll;
   white-space: nowrap;
   border-bottom: 1px solid #555;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const STYLES_EDITOR_TAB = css`
@@ -211,7 +215,10 @@ export default class GameScreenDeveloperSidebar extends React.Component {
     server: 484,
     pickerSelection: 'local_logs',
     expandedDirectories: {},
-    focusedTabIdx: 0,
+    focusedTabUrl: null,
+    hoverTabUrl: null,
+    hoverTabXUrl: null,
+    scrollToTabUrl: null,
     tabs: [],
   };
 
@@ -346,12 +353,10 @@ export default class GameScreenDeveloperSidebar extends React.Component {
 
   _openFile = (file) => {
     let tabs = [...this.state.tabs];
-    let focusedTabIdx = this.state.focusedTabIdx;
     let foundTab = false;
 
     for (let i = 0; i < tabs.length; i++) {
       if (tabs[i].url === file.url) {
-        focusedTabIdx = i;
         foundTab = true;
         break;
       }
@@ -362,14 +367,44 @@ export default class GameScreenDeveloperSidebar extends React.Component {
         url: file.url,
         title: file.url.substring(file.url.lastIndexOf('/') + 1),
       });
-
-      focusedTabIdx = tabs.length - 1;
     }
 
     this.setState({
       tabs,
-      focusedTabIdx,
+      focusedTabUrl: file.url,
       pickerSelection: `file:${file.url}`,
+      scrollToTabUrl: file.url,
+    });
+  };
+
+  _closeTab = (url) => {
+    let oldTabs = this.state.tabs;
+    let tabs = [];
+
+    let fallbackTabUrl = null;
+    let nextTabUrl = null;
+    for (let i = 0; i < oldTabs.length; i++) {
+      if (oldTabs[i].url === url) {
+        if (i > 0) {
+          fallbackTabUrl = oldTabs[i - 1].url;
+        } else if (oldTabs.length > i + 1) {
+          fallbackTabUrl = oldTabs[i + 1].url;
+        }
+
+        if (oldTabs.length > i + 1) {
+          nextTabUrl = oldTabs[i + 1].url;
+        }
+      } else {
+        tabs.push(oldTabs[i]);
+      }
+    }
+
+    let { focusedTabUrl } = this.state;
+
+    this.setState({
+      hoverTabUrl: nextTabUrl,
+      focusedTabUrl: focusedTabUrl === url ? fallbackTabUrl : focusedTabUrl,
+      tabs,
     });
   };
 
@@ -606,9 +641,13 @@ export default class GameScreenDeveloperSidebar extends React.Component {
     return <div className={STYLES_EDITOR_INNER}>{centeredContent}</div>;
   };
 
+  _tabsContainerRefFn = (ref) => {
+    this._tabsContainerRef = ref;
+  };
+
   render() {
     const { isMultiplayerCodeUploadEnabled } = this.props;
-    const { tabs, focusedTabIdx } = this.state;
+    const { tabs, focusedTabUrl, hoverTabUrl, hoverTabXUrl } = this.state;
 
     const isMultiplayer = Utilities.isMultiplayer(this.props.game);
 
@@ -654,18 +693,74 @@ export default class GameScreenDeveloperSidebar extends React.Component {
             {this._buildFileTree()}
           </div>
           <div className={STYLES_EDITOR_CONTENT}>
-            <div className={STYLES_EDITOR_TABS}>
-              {tabs.map((tab, idx) => {
+            <div ref={this._tabsContainerRefFn} className={STYLES_EDITOR_TABS}>
+              {tabs.map((tab) => {
                 return (
                   <div
+                    key={tab.url}
+                    ref={(ref) => {
+                      if (ref && this._tabsContainerRef && this.state.scrollToTabUrl === tab.url) {
+                        let scrollLeft = this._tabsContainerRef.scrollLeft;
+                        let containerWidth = this._tabsContainerRef.getBoundingClientRect().width;
+                        let elementWidth = ref.getBoundingClientRect().width;
+                        let elementPositionX = ref.offsetLeft - this._tabsContainerRef.offsetLeft;
+
+                        if (
+                          elementPositionX < scrollLeft ||
+                          elementPositionX + elementWidth - scrollLeft > containerWidth
+                        ) {
+                          this._tabsContainerRef.scrollTo(elementPositionX, 0);
+                        }
+
+                        this.setState({
+                          scrollToTabUrl: null,
+                        });
+                      }
+                    }}
                     onClick={() => {
                       this.setState({
-                        focusedTabIdx: idx,
+                        focusedTabUrl: tab.url,
+                      });
+                    }}
+                    onMouseEnter={() => {
+                      this.setState({
+                        hoverTabUrl: tab.url,
+                      });
+                    }}
+                    onMouseLeave={() => {
+                      this.setState({
+                        hoverTabUrl: null,
                       });
                     }}
                     className={STYLES_EDITOR_TAB}
-                    style={{ backgroundColor: idx === focusedTabIdx ? '#333333' : '#000000' }}>
-                    {tab.title}
+                    style={{ backgroundColor: tab.url === focusedTabUrl ? '#333333' : '#000000' }}>
+                    <span style={{ width: 110, display: 'inline-block' }}>{tab.title}</span>
+                    <span
+                      onClick={(e) => {
+                        this._closeTab(tab.url);
+
+                        // don't want parent's onClick to get triggered
+                        e.stopPropagation();
+                      }}
+                      onMouseEnter={() => {
+                        this.setState({
+                          hoverTabXUrl: tab.url,
+                        });
+                      }}
+                      onMouseLeave={() => {
+                        this.setState({
+                          hoverTabXUrl: null,
+                        });
+                      }}
+                      style={{
+                        color: tab.url === hoverTabXUrl ? '#fff' : '#888',
+                        visibility:
+                          tab.url === focusedTabUrl || tab.url === hoverTabUrl
+                            ? 'visible'
+                            : 'hidden',
+                      }}>
+                      x
+                    </span>
                   </div>
                 );
               })}

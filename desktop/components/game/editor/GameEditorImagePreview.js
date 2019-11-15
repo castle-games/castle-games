@@ -6,7 +6,7 @@ export default class GameEditorImagePreview extends React.Component {
   };
 
   componentDidUpdate(prevProps) {
-    if (prevProps !== this.props) {
+    if (prevProps !== this.props && prevProps.url !== this.props.url) {
       this._loadDimensions();
     }
   }

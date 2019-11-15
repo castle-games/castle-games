@@ -10,7 +10,7 @@ export default class GameEditorFontPreview extends React.Component {
   };
 
   componentDidUpdate(prevProps) {
-    if (prevProps !== this.props) {
+    if (prevProps !== this.props && prevProps.url !== this.props.url) {
       this._loadExternalFont();
     }
   }

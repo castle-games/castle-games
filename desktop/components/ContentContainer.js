@@ -29,6 +29,7 @@ const STYLES_CONTAINER_FLUID = css`
   width: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 `;
 
 const STYLES_CONTAINER_FIXED_WITH_BORDER = css`
