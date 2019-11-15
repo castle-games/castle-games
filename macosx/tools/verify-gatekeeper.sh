@@ -37,6 +37,18 @@ else
     exit 1
 fi
 
+# codesigning can happen with or without a secure timestamp flag,
+# but a secure timestamp is required for notarization.
+# expect output to include "Timestamp=..."
+echo "check for secure timestamp"
+if codesign -dvv $1 2>&1 | grep -qF "Timestamp="
+then
+    echo "  pass"
+else
+    echo "  failed"
+    exit 1
+fi
+
 # Expect output to look like:
 # /Applications/Castle.app: accepted
 # source=Developer ID
