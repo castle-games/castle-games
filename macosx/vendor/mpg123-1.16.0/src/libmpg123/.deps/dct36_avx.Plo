@@ -1,0 +1,7 @@
+dct36_avx.lo: dct36_avx.S mangle.h ../../src/config.h intsym.h
+
+mangle.h:
+
+../../src/config.h:
+
+intsym.h:

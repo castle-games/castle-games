@@ -1,0 +1,8 @@
+dct64_avx_float.lo: dct64_avx_float.S mangle.h ../../src/config.h \
+  intsym.h
+
+mangle.h:
+
+../../src/config.h:
+
+intsym.h:

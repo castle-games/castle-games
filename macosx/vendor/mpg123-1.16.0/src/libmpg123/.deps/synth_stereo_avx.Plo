@@ -1,0 +1,8 @@
+synth_stereo_avx.lo: synth_stereo_avx.S mangle.h ../../src/config.h \
+  intsym.h
+
+mangle.h:
+
+../../src/config.h:
+
+intsym.h:

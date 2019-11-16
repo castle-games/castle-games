@@ -1,0 +1,7 @@
+dct64_avx.lo: dct64_avx.S mangle.h ../../src/config.h intsym.h
+
+mangle.h:
+
+../../src/config.h:
+
+intsym.h:
