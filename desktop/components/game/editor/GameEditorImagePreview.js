@@ -39,14 +39,21 @@ export default class GameEditorImagePreview extends React.Component {
     let { dimensions } = this.state;
 
     return (
-      <div {...this.props}>
-        {dimensions ? `${dimensions.width}x${dimensions.height}` : ''}
+      <div
+        {...this.props}
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          ...(this.props.style || {}),
+        }}>
+        <div style={{ minHeight: 30 }}>
+          {dimensions ? `${dimensions.width}x${dimensions.height}` : ' '}
+        </div>
         <img
           src={url}
           style={{
             objectFit: 'contain',
-            width: '100%',
-            height: '100%',
+            flex: '1',
             imageRendering: 'pixelated',
           }}
         />

@@ -53,6 +53,9 @@ const STYLES_PICKER_SELECTION = css`
 
 const STYLES_EDITOR_CONTENT = css`
   width: 85%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 `;
 
 const STYLES_LOGS = css`
@@ -178,12 +181,14 @@ const STYLES_EDITOR_INNER = css`
   align-items: center;
   justify-content: center;
   color: #fff;
+  flex: 1;
 `;
 
 const STYLES_EDITOR_TABS = css`
   width: 100%;
   height: 30px;
   overflow-x: scroll;
+  overflow-y: hidden;
   white-space: nowrap;
   border-bottom: 1px solid #555;
 
@@ -203,7 +208,6 @@ const STYLES_EDITOR_TAB = css`
   font-size: 11px;
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
   cursor: pointer;
 `;
 
@@ -213,13 +217,17 @@ export default class GameScreenDeveloperSidebar extends React.Component {
 
   state = {
     server: 484,
-    pickerSelection: 'local_logs',
     expandedDirectories: {},
-    focusedTabUrl: null,
+    focusedTabUrl: 'local_logs',
     hoverTabUrl: null,
     hoverTabXUrl: null,
     scrollToTabUrl: null,
-    tabs: [],
+    tabs: [
+      {
+        url: 'local_logs',
+        title: 'Local Logs',
+      },
+    ],
   };
 
   _buildFileTree = () => {
@@ -340,7 +348,7 @@ export default class GameScreenDeveloperSidebar extends React.Component {
             style={{ marginLeft: `${file.depth * 10}px` }}
             className={STYLES_PICKER_SELECTION}
             onClick={() => {
-              this._openFile(file);
+              this._openTab(`file:${file.url}`, file.url.substring(file.url.lastIndexOf('/') + 1));
             }}>
             {file.filename}
           </div>
@@ -351,12 +359,12 @@ export default class GameScreenDeveloperSidebar extends React.Component {
     return result;
   };
 
-  _openFile = (file) => {
+  _openTab = (url, title) => {
     let tabs = [...this.state.tabs];
     let foundTab = false;
 
     for (let i = 0; i < tabs.length; i++) {
-      if (tabs[i].url === file.url) {
+      if (tabs[i].url === url) {
         foundTab = true;
         break;
       }
@@ -364,16 +372,15 @@ export default class GameScreenDeveloperSidebar extends React.Component {
 
     if (!foundTab) {
       tabs.push({
-        url: file.url,
-        title: file.url.substring(file.url.lastIndexOf('/') + 1),
+        url,
+        title,
       });
     }
 
     this.setState({
       tabs,
-      focusedTabUrl: file.url,
-      pickerSelection: `file:${file.url}`,
-      scrollToTabUrl: file.url,
+      focusedTabUrl: url,
+      scrollToTabUrl: url,
     });
   };
 
@@ -403,6 +410,7 @@ export default class GameScreenDeveloperSidebar extends React.Component {
 
     this.setState({
       hoverTabUrl: nextTabUrl,
+      hoverTabXUrl: nextTabUrl,
       focusedTabUrl: focusedTabUrl === url ? fallbackTabUrl : focusedTabUrl,
       tabs,
     });
@@ -480,13 +488,15 @@ export default class GameScreenDeveloperSidebar extends React.Component {
   };
 
   _renderEditorContent = () => {
-    const { pickerSelection } = this.state;
+    const { focusedTabUrl } = this.state;
 
-    if (pickerSelection === 'local_logs') {
+    if (!focusedTabUrl) {
+      return null;
+    } else if (focusedTabUrl === 'local_logs') {
       return this._renderLocalLogs();
-    } else if (pickerSelection === 'server_logs') {
+    } else if (focusedTabUrl === 'server_logs') {
       return this._renderServerLogs();
-    } else if (pickerSelection.startsWith('file:')) {
+    } else if (focusedTabUrl.startsWith('file:')) {
       return this._renderCodeEditor();
     } else {
       return null;
@@ -573,8 +583,8 @@ export default class GameScreenDeveloperSidebar extends React.Component {
   _reloadGameDebounced = _.debounce(this._reloadGame, 1000);
 
   _renderCodeEditor = () => {
-    const { pickerSelection } = this.state;
-    let url = pickerSelection.substring('file:'.length);
+    const { focusedTabUrl } = this.state;
+    let url = focusedTabUrl.substring('file:'.length);
     let file = this.props.editableFiles[url];
     let fileType = url.substring(url.lastIndexOf('.') + 1).toLowerCase();
 
@@ -619,7 +629,7 @@ export default class GameScreenDeveloperSidebar extends React.Component {
           key={url}
           url={url}
           style={{
-            width: '100%',
+            flex: '1',
             height: '100%',
           }}
         />
@@ -675,7 +685,7 @@ export default class GameScreenDeveloperSidebar extends React.Component {
             <div
               className={STYLES_PICKER_SELECTION}
               onClick={() => {
-                this.setState({ pickerSelection: 'local_logs' });
+                this._openTab('local_logs', 'Local Logs');
               }}>
               Local logs
             </div>
@@ -683,7 +693,7 @@ export default class GameScreenDeveloperSidebar extends React.Component {
               <div
                 className={STYLES_PICKER_SELECTION}
                 onClick={() => {
-                  this.setState({ pickerSelection: 'server_logs' });
+                  this._openTab('server_logs', 'Server Logs');
                 }}>
                 Server logs
               </div>
@@ -734,7 +744,7 @@ export default class GameScreenDeveloperSidebar extends React.Component {
                     }}
                     className={STYLES_EDITOR_TAB}
                     style={{ backgroundColor: tab.url === focusedTabUrl ? '#333333' : '#000000' }}>
-                    <span style={{ width: 110, display: 'inline-block' }}>{tab.title}</span>
+                    <span style={{ width: 100, display: 'inline-block' }}>{tab.title}</span>
                     <span
                       onClick={(e) => {
                         this._closeTab(tab.url);
@@ -753,6 +763,7 @@ export default class GameScreenDeveloperSidebar extends React.Component {
                         });
                       }}
                       style={{
+                        padding: 10,
                         color: tab.url === hoverTabXUrl ? '#fff' : '#888',
                         visibility:
                           tab.url === focusedTabUrl || tab.url === hoverTabUrl
