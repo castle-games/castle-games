@@ -199,7 +199,6 @@ const STYLES_EDITOR_TABS = css`
 
 const STYLES_EDITOR_TAB = css`
   display: inline-block;
-  padding-left: 20px;
   border-right: 1px solid #555;
   width: 150px;
   height: 30px;
@@ -209,6 +208,7 @@ const STYLES_EDITOR_TAB = css`
   white-space: nowrap;
   overflow: hidden;
   cursor: pointer;
+  user-select: none;
 `;
 
 export default class GameScreenDeveloperSidebar extends React.Component {
@@ -228,6 +228,7 @@ export default class GameScreenDeveloperSidebar extends React.Component {
         title: 'Local Logs',
       },
     ],
+    dragTab: null,
   };
 
   _buildFileTree = () => {
@@ -433,29 +434,37 @@ export default class GameScreenDeveloperSidebar extends React.Component {
   };
 
   _handleMouseMove = (e) => {
-    const MIN_SIZE = 164;
-    const START_HEIGHT = Window.getViewportSize().height * 0.5;
-    const MAX_SIZE = Window.getViewportSize().height * 0.8;
-
-    if (!this.state.resizing) {
-      return;
+    if (this.state.dragTab) {
+      this.setState({
+        dragTab: {
+          ...this.state.dragTab,
+          pageX: e.pageX,
+          pageY: e.pageY,
+        },
+      });
     }
 
-    let nextHeight;
+    if (this.state.resizing) {
+      const MIN_SIZE = 164;
+      const START_HEIGHT = Window.getViewportSize().height * 0.5;
+      const MAX_SIZE = Window.getViewportSize().height * 0.8;
 
-    if (this.state.resizing === 'server') {
-      nextHeight = this.state.start - (e.pageY - this.state.mouseY);
+      let nextHeight;
+
+      if (this.state.resizing === 'server') {
+        nextHeight = this.state.start - (e.pageY - this.state.mouseY);
+      }
+
+      if (nextHeight < MIN_SIZE) {
+        nextHeight = MIN_SIZE;
+      }
+
+      if (nextHeight > MAX_SIZE) {
+        nextHeight = MAX_SIZE;
+      }
+
+      this.setState({ [this.state.resizing]: nextHeight });
     }
-
-    if (nextHeight < MIN_SIZE) {
-      nextHeight = MIN_SIZE;
-    }
-
-    if (nextHeight > MAX_SIZE) {
-      nextHeight = MAX_SIZE;
-    }
-
-    this.setState({ [this.state.resizing]: nextHeight });
   };
 
   _handleMouseUp = (e) => {
@@ -657,7 +666,7 @@ export default class GameScreenDeveloperSidebar extends React.Component {
 
   render() {
     const { isMultiplayerCodeUploadEnabled } = this.props;
-    const { tabs, focusedTabUrl, hoverTabUrl, hoverTabXUrl } = this.state;
+    const { tabs, focusedTabUrl, hoverTabUrl, hoverTabXUrl, dragTab } = this.state;
 
     const isMultiplayer = Utilities.isMultiplayer(this.props.game);
 
@@ -727,9 +736,32 @@ export default class GameScreenDeveloperSidebar extends React.Component {
                         });
                       }
                     }}
-                    onClick={() => {
+                    onMouseDown={(e) => {
+                      let rect = e.target.getBoundingClientRect();
+                      let elementX = e.clientX - rect.left;
+                      let elementY = e.clientY - rect.top;
+
+                      console.log({
+                        ...tab,
+                        elementX,
+                        elementY,
+                        pageX: e.pageX,
+                        pageY: e.pageY,
+                      });
                       this.setState({
                         focusedTabUrl: tab.url,
+                        dragTab: {
+                          ...tab,
+                          elementX,
+                          elementY,
+                          pageX: e.pageX,
+                          pageY: e.pageY,
+                        },
+                      });
+                    }}
+                    onMouseUp={() => {
+                      this.setState({
+                        dragTab: null,
                       });
                     }}
                     onMouseEnter={() => {
@@ -744,8 +776,14 @@ export default class GameScreenDeveloperSidebar extends React.Component {
                     }}
                     className={STYLES_EDITOR_TAB}
                     style={{ backgroundColor: tab.url === focusedTabUrl ? '#333333' : '#000000' }}>
-                    <span style={{ width: 100, display: 'inline-block' }}>{tab.title}</span>
+                    <span style={{ width: 120, display: 'inline-block', paddingLeft: 20 }}>
+                      {tab.title}
+                    </span>
                     <span
+                      onMouseDown={(e) => {
+                        // don't want parent's onMouseDown to get triggered
+                        e.stopPropagation();
+                      }}
                       onClick={(e) => {
                         this._closeTab(tab.url);
 
@@ -775,6 +813,36 @@ export default class GameScreenDeveloperSidebar extends React.Component {
                   </div>
                 );
               })}
+
+              {dragTab && (
+                <div
+                  key="drag-tab"
+                  onMouseUp={() => {
+                    this.setState({
+                      dragTab: null,
+                    });
+                  }}
+                  className={STYLES_EDITOR_TAB}
+                  style={{
+                    position: 'fixed',
+                    zIndex: 10,
+                    left: dragTab.pageX - dragTab.elementX,
+                    top: dragTab.pageY - dragTab.elementY,
+                    backgroundColor: '#333333',
+                    opacity: 0.8,
+                  }}>
+                  <span style={{ width: 120, display: 'inline-block', paddingLeft: 20 }}>
+                    {dragTab.title}
+                  </span>
+                  <span
+                    style={{
+                      padding: 10,
+                      color: '#888',
+                    }}>
+                    x
+                  </span>
+                </div>
+              )}
             </div>
             {this._renderEditorContent()}
           </div>
