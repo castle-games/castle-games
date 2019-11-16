@@ -214,6 +214,7 @@ const STYLES_EDITOR_TAB = css`
 export default class GameScreenDeveloperSidebar extends React.Component {
   _client;
   _server;
+  _urlToRef = {};
 
   state = {
     server: 484,
@@ -435,7 +436,30 @@ export default class GameScreenDeveloperSidebar extends React.Component {
 
   _handleMouseMove = (e) => {
     if (this.state.dragTab) {
+      let { tabs, focusedTabUrl } = this.state;
+
+      let focusedTab = tabs.find((tab) => tab.url === focusedTabUrl);
+
+      let newPosition = -1;
+      for (let i = 0; i < tabs.length; i++) {
+        let tab = tabs[i];
+        let ref = this._urlToRef[tab.url];
+        if (ref) {
+          let rect = ref.getBoundingClientRect();
+          if (e.pageX >= rect.left && e.pageX < rect.right) {
+            newPosition = i;
+            break;
+          }
+        }
+      }
+
+      if (newPosition >= 0) {
+        tabs = tabs.filter((tab) => tab.url !== focusedTabUrl);
+        tabs.splice(newPosition, 0, focusedTab);
+      }
+
       this.setState({
+        tabs,
         dragTab: {
           ...this.state.dragTab,
           pageX: e.pageX,
@@ -718,6 +742,8 @@ export default class GameScreenDeveloperSidebar extends React.Component {
                   <div
                     key={tab.url}
                     ref={(ref) => {
+                      this._urlToRef[tab.url] = ref;
+
                       if (ref && this._tabsContainerRef && this.state.scrollToTabUrl === tab.url) {
                         let scrollLeft = this._tabsContainerRef.scrollLeft;
                         let containerWidth = this._tabsContainerRef.getBoundingClientRect().width;
@@ -741,13 +767,6 @@ export default class GameScreenDeveloperSidebar extends React.Component {
                       let elementX = e.clientX - rect.left;
                       let elementY = e.clientY - rect.top;
 
-                      console.log({
-                        ...tab,
-                        elementX,
-                        elementY,
-                        pageX: e.pageX,
-                        pageY: e.pageY,
-                      });
                       this.setState({
                         focusedTabUrl: tab.url,
                         dragTab: {
@@ -830,6 +849,7 @@ export default class GameScreenDeveloperSidebar extends React.Component {
                     top: dragTab.pageY - dragTab.elementY,
                     backgroundColor: '#333333',
                     opacity: 0.8,
+                    overflowY: 'hidden',
                   }}>
                   <span style={{ width: 120, display: 'inline-block', paddingLeft: 20 }}>
                     {dragTab.title}
