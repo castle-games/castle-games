@@ -14,6 +14,8 @@
 
 #include <SDL.h>
 
+#include "RNBootSplash.h"
+
 #import "../../../ghost-extensions/SDL2-2.0.8/src/video/uikit/SDL_uikitappdelegate.h"
 
 @implementation SDLUIKitDelegate (Castle)
@@ -54,6 +56,8 @@ int SDL_main(int argc, char *argv[]) {
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
+  
+  [RNBootSplash show:@"LaunchScreen" inView:rootView];
 
   // SDL
   self.sdlDelegate = [[SDLUIKitDelegate alloc] init];
