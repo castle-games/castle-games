@@ -1,5 +1,7 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ActivityIndicator } from 'react-native';
+
+import * as Constants from './Constants';
 
 // A line of text in the loader overlay
 const LoaderText = ({ children }) => (
@@ -20,7 +22,19 @@ const GameLoading = ({ noGame, fetching, luaNetworkRequests }) => (
       alignItems: 'flex-start',
       padding: 8,
     }}>
-    {fetching ? (
+    <View
+      style={{
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        right: 0,
+        bottom: 0,
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+      <ActivityIndicator size="large" color="#ffffff" />
+    </View>
+    {Constants.iOS ? null : fetching ? (
       // Game is being fetched
       <LoaderText>Fetching game...</LoaderText>
     ) : noGame ? (
