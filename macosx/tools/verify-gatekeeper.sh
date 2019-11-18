@@ -33,7 +33,8 @@ if codesign --verify --deep --strict --verbose=1 $1 2>&1 | grep -qF "satisfies i
 then
     echo "  pass"
 else
-    echo "  failed"
+    echo "  failed:"
+    codesign --verify --deep --strict --verbose=1 $1
     exit 1
 fi
 
