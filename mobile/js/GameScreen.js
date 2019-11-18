@@ -337,21 +337,28 @@ const GameView = ({ gameId, gameUri, extras, windowed }) => {
 
   LuaBridge.useLuaBridge({ eventsReady, game });
 
-  const [inputsMode, setInputsMode] = useState(0);
+  const [inputsMode, setInputsMode] = useState(
+    extras.inputsMode !== undefined ? extras.inputsMode : 0
+  );
   const onPressNextInputsMode = () => {
     setInputsMode((inputsMode + 1) % NUM_GAME_INPUTS_MODES);
   };
 
-  const [actionKeyCode, setActionKeyCode] = useState(GAME_INPUTS_ACTION_KEY_CODES[0]);
+  const [actionKeyCode, setActionKeyCode] = useState(
+    extras.actionKeyCode !== undefined ? extras.actionKeyCode : GAME_INPUTS_ACTION_KEY_CODES[0]
+  );
   const onPressSwitchActionKeyCode = () => {
-    ActionSheet.showActionSheetWithOptions({
-      options: GAME_INPUTS_ACTION_KEY_CODES,
-    }, (i) => {
-      if (typeof i === 'number') {
-        setActionKeyCode(GAME_INPUTS_ACTION_KEY_CODES[i]);
+    ActionSheet.showActionSheetWithOptions(
+      {
+        options: GAME_INPUTS_ACTION_KEY_CODES,
+      },
+      i => {
+        if (typeof i === 'number') {
+          setActionKeyCode(GAME_INPUTS_ACTION_KEY_CODES[i]);
+        }
       }
-    })
-  }
+    );
+  };
 
   return (
     <View style={{ flex: 1 }}>

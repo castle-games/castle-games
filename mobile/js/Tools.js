@@ -3,7 +3,7 @@ import { View, Text, TextInput } from 'react-native';
 
 import * as GhostEvents from './ghost/GhostEvents';
 
-const ENABLE_TOOLS = true;
+const ENABLE_TOOLS = false;
 
 //
 // Infrastructure
