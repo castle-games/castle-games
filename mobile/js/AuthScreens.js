@@ -15,6 +15,7 @@ import * as Session from './Session';
 import { navigateToUri } from './DeepLinks';
 
 const textInputStyle = {
+  color: '#000',
   backgroundColor: '#fff',
   width: '100%',
   borderRadius: 4,
