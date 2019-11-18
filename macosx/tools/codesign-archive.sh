@@ -58,6 +58,9 @@ find $APP_PATH/Contents/Frameworks -maxdepth 1 -name "*.framework" -exec codesig
 echo "Try codesigning Resource binaries..."
 find $APP_PATH/Contents/Resources -perm +111 -type f -exec codesign --verbose --deep --force --keychain $TEMP_KEYCHAIN_PATH -s "${CODESIGN_IDENTITY}" {} \;
 
+echo "Codesign extra Sparkle executables..."
+find $APP_PATH/Contents/Frameworks/Sparkle.framework/Versions/A/Resources -perm +111 -type f -exec codesign --verbose --deep --force --keychain $TEMP_KEYCHAIN_PATH -s "${CODESIGN_IDENTITY}" {} \;
+
 # TODO: enable the following if we start including obs.
 # find $APP_PATH/Contents/Resources/obs/bin -name "*.dylib" -exec codesign --verbose --deep --force --keychain $TEMP_KEYCHAIN_PATH -s "${CODESIGN_IDENTITY}" {} \;
 
