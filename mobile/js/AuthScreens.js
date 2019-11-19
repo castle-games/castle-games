@@ -7,6 +7,7 @@ import {
   StatusBar,
   Linking,
   ActivityIndicator,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { useNavigation, useNavigationParam } from 'react-navigation-hooks';
 import FastImage from 'react-native-fast-image';
@@ -29,16 +30,22 @@ const disabledTextInputStyle = {
 };
 
 const errorMessages = {
-  USER_NOT_FOUND: "The email or username you entered does not belong to an account. Please check your information and try again.",
-  LOGIN_BAD_CREDENTIALS: "The password you entered was incorrect. Please check your information and try again.",
-  PASSWORD_RESET_TOO_MANY: "There have been too many attempts to reset your password. Try again later.",
-  PASSWORD_RESET_INVALID_CODE: "The reset link you clicked on was invalid. It may have expired.",
-  SIGNUP_INVALID_EMAIL: "The email address you entered was invalid.",
-  SIGNUP_INVALID_USERNAME: "The username you entered was invalid. Usernames must be at least three characters long and can only contain letters, numbers, and - or _.",
-  SIGNUP_EMAIL_ALREADY_TAKEN: "There is already an account associated with the email address you entered.",
-  SIGNUP_USERNAME_ALREADY_TAKEN: "The username you entered is already taken.",
-  SIGNUP_PASSWORD_TOO_SHORT: "The password you entered is too short. Passwords must be at least five characters long.",
-}
+  USER_NOT_FOUND:
+    'The email or username you entered does not belong to an account. Please check your information and try again.',
+  LOGIN_BAD_CREDENTIALS:
+    'The password you entered was incorrect. Please check your information and try again.',
+  PASSWORD_RESET_TOO_MANY:
+    'There have been too many attempts to reset your password. Try again later.',
+  PASSWORD_RESET_INVALID_CODE: 'The reset link you clicked on was invalid. It may have expired.',
+  SIGNUP_INVALID_EMAIL: 'The email address you entered was invalid.',
+  SIGNUP_INVALID_USERNAME:
+    'The username you entered was invalid. Usernames must be at least three characters long and can only contain letters, numbers, and - or _.',
+  SIGNUP_EMAIL_ALREADY_TAKEN:
+    'There is already an account associated with the email address you entered.',
+  SIGNUP_USERNAME_ALREADY_TAKEN: 'The username you entered is already taken.',
+  SIGNUP_PASSWORD_TOO_SHORT:
+    'The password you entered is too short. Passwords must be at least five characters long.',
+};
 
 const Announcement = props => {
   return (
@@ -61,7 +68,7 @@ const Announcement = props => {
           }}>
           {props.headline}
         </Text>
-      ) : null }
+      ) : null}
       <Text
         style={{
           color: '#fff',
@@ -170,7 +177,9 @@ const LoginForm = () => {
         placeholder="Email or username"
         editable={!signingIn}
         returnKeyType="next"
-        onSubmitEditing={() => {this._password.focus()}}
+        onSubmitEditing={() => {
+          this._password.focus();
+        }}
         blurOnSubmit={false}
       />
       <TextInput
@@ -181,7 +190,9 @@ const LoginForm = () => {
         onChangeText={newPassword => setPassword(newPassword)}
         placeholder="Password"
         editable={!signingIn}
-        ref={input => {this._password = input}}
+        ref={input => {
+          this._password = input;
+        }}
         returnKeyType="go"
         onSubmitEditing={onPressSignIn}
       />
@@ -235,10 +246,10 @@ const CreateAccountForm = () => {
   return (
     <Fragment>
       <Fragment>
-          {errors.map(error => (
-            <Announcement body={errorMessages[error.extensions.code]} />
-          ))}
-        </Fragment>
+        {errors.map(error => (
+          <Announcement body={errorMessages[error.extensions.code]} />
+        ))}
+      </Fragment>
       <View style={{ paddingBottom: 16, alignItems: 'center' }}>
         <Text style={{ fontSize: 20 }}>Create a new account</Text>
         <TouchableOpacity onPress={onPressLogin}>
@@ -255,7 +266,9 @@ const CreateAccountForm = () => {
         onChangeText={newUsername => setUsername(newUsername)}
         editable={!creatingAccount}
         returnKeyType="next"
-        onSubmitEditing={() => {this._name.focus()}}
+        onSubmitEditing={() => {
+          this._name.focus();
+        }}
         blurOnSubmit={false}
       />
       <TextInput
@@ -264,8 +277,12 @@ const CreateAccountForm = () => {
         onChangeText={newName => setName(newName)}
         editable={!creatingAccount}
         returnKeyType="next"
-        ref={input => {this._name = input}}
-        onSubmitEditing={() => {this._email.focus()}}
+        ref={input => {
+          this._name = input;
+        }}
+        onSubmitEditing={() => {
+          this._email.focus();
+        }}
         blurOnSubmit={false}
       />
       <TextInput
@@ -275,8 +292,12 @@ const CreateAccountForm = () => {
         onChangeText={newEmail => setEmail(newEmail)}
         editable={!creatingAccount}
         returnKeyType="next"
-        ref={input => {this._email = input}}
-        onSubmitEditing={() => {this._password.focus()}}
+        ref={input => {
+          this._email = input;
+        }}
+        onSubmitEditing={() => {
+          this._password.focus();
+        }}
         blurOnSubmit={false}
       />
       <TextInput
@@ -287,7 +308,9 @@ const CreateAccountForm = () => {
         onChangeText={newPassword => setPassword(newPassword)}
         editable={!creatingAccount}
         returnKeyType="go"
-        ref={input => {this._password = input}}
+        ref={input => {
+          this._password = input;
+        }}
         onSubmitEditing={onPressCreateAccount}
       />
       <View style={{ paddingTop: 8, paddingBottom: 16 }}>
@@ -358,7 +381,9 @@ const ForgotPasswordForm = () => {
 };
 
 const WithHeader = ({ children }) => (
-  <View
+  <KeyboardAvoidingView
+    behavior="padding"
+    enabled
     style={{
       flex: 1,
       backgroundColor: '#ffe00e',
@@ -389,7 +414,7 @@ const WithHeader = ({ children }) => (
       </Text>
     </View>
     <View style={{ width: '100%', alignItems: 'center', paddingBottom: 64 }}>{children}</View>
-  </View>
+  </KeyboardAvoidingView>
 );
 
 export const LoginScreen = () => (
