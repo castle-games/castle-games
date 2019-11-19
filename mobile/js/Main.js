@@ -46,7 +46,7 @@ const Main = () => {
   }
 
   if (!bootSplashHidden) {
-    BootSplash.hide({ duration: 250 });
+    setTimeout(() => BootSplash.hide({ duration: 150 }), 100);
     bootSplashHidden = true;
   }
 
