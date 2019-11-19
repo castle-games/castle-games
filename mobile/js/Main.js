@@ -40,9 +40,8 @@ const Main = () => {
           alignItems: 'center',
           justifyContent: 'center',
           backgroundColor: 'white',
-        }}>
-        <Text>Loading...</Text>
-      </View>
+        }}
+      />
     );
   }
 
