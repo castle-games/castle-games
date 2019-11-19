@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 
 import * as GhostEvents from './ghost/GhostEvents';
+import { ScrollView } from 'react-native-gesture-handler';
 
-const ENABLE_TOOLS = false;
+const ENABLE_TOOLS = true;
 
 //
 // Infrastructure
@@ -115,9 +116,16 @@ const ToolTextInput = ({ element }) => {
 
   return (
     <View style={{ padding: 4 }}>
-      <Text style={{ fontWeight: '900' }}>{element.props.label}</Text>
+      <Text style={{ fontWeight: '900', marginBottom: 2 }}>{element.props.label}</Text>
       <TextInput
-        style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+        style={{
+          borderColor: 'gray',
+          borderWidth: 1,
+          borderRadius: 4,
+          paddingVertical: 8,
+          paddingHorizontal: 12,
+        }}
+        returnKeyType="done"
         value={value}
         onChangeText={newText => setValue(newText)}
       />
@@ -125,6 +133,25 @@ const ToolTextInput = ({ element }) => {
   );
 };
 elementTypes['textInput'] = ToolTextInput;
+
+const ToolButton = ({ element }) => {
+  return (
+    <View style={{ padding: 4 }}>
+      <TouchableOpacity
+        style={{
+          padding: 6,
+          backgroundColor: '#ddd',
+          justifyContent: 'center',
+          alignItems: 'center',
+          borderRadius: 6,
+        }}
+        onPress={() => sendEvent(element.pathId, { type: 'onClick' })}>
+        <Text>{element.props.label}</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+elementTypes['button'] = ToolButton;
 
 //
 // Container
@@ -187,10 +214,12 @@ export default Tools = ({ eventsReady }) => {
 
   // Render the container
   return (
-    <View style={{ flex: 1, backgroundColor: 'white' }}>
-      {Object.values(root.panes).map((element, i) => (
-        <ToolPane key={element.props.name || i} element={element} />
-      ))}
+    <View style={{ flex: 0.75, backgroundColor: 'white' }}>
+      <ScrollView style={{ flex: 1 }}>
+        {Object.values(root.panes).map((element, i) => (
+          <ToolPane key={element.props.name || i} element={element} />
+        ))}
+      </ScrollView>
     </View>
   );
 };

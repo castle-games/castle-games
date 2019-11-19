@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View } from 'react-native';
+import { View, KeyboardAvoidingView, Keyboard } from 'react-native';
 import { useLazyQuery, useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import castleMetadata from 'castle-metadata';
@@ -371,18 +371,19 @@ const GameView = ({ gameId, gameUri, extras, windowed }) => {
         />
       )}
 
-      <View style={{ flex: 1 }}>
+      <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
         {game && eventsReady && initialDataHook.sent ? (
-          // Render `GhostView` when ready
-          <GhostView
-            style={{ flex: 1 }}
-            uri={game.entryPoint}
-            dimensionsSettings={dimensionsSettings}
-          />
+          // Render `GhostView` and `GameInputs` when ready
+          <View style={{ flex: 1 }}>
+            <GhostView
+              style={{ flex: 1 }}
+              uri={game.entryPoint}
+              dimensionsSettings={dimensionsSettings}
+            />
+            <GameInputs visible={!windowed} inputsMode={inputsMode} actionKeyCode={actionKeyCode} />
+          </View>
         ) : null}
         <Tools eventsReady={eventsReady} />
-
-        <GameInputs visible={!windowed} inputsMode={inputsMode} actionKeyCode={actionKeyCode} />
 
         {!luaLoadingHook.loaded ? (
           <GameLoading
@@ -391,7 +392,7 @@ const GameView = ({ gameId, gameUri, extras, windowed }) => {
             luaNetworkRequests={luaLoadingHook.networkRequests}
           />
         ) : null}
-      </View>
+      </KeyboardAvoidingView>
     </View>
   );
 };
