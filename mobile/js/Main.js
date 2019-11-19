@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, StatusBar, Text } from 'react-native';
 import { ApolloProvider } from '@apollo/react-hooks';
+import BootSplash from 'react-native-bootsplash';
 
 import * as Session from './Session';
 import MainSwitcher from './MainSwitcher';
@@ -25,6 +26,8 @@ const useSession = () => {
   return { initialized };
 };
 
+let bootSplashHidden = false;
+
 const Main = () => {
   const sessionHook = useSession();
 
@@ -41,6 +44,11 @@ const Main = () => {
         <Text>Loading...</Text>
       </View>
     );
+  }
+
+  if (!bootSplashHidden) {
+    BootSplash.hide({ duration: 250 });
+    bootSplashHidden = true;
   }
 
   return (
