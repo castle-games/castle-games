@@ -267,6 +267,25 @@ const ToolSlider = ({ element }) => {
 };
 elementTypes['slider'] = ToolSlider;
 
+const ToolNumberInput = ({ element }) => {
+  const [value, setValue] = useValue({ element });
+
+  return (
+    <View style={{ margin: 4 }}>
+      <Text style={{ fontWeight: '900', marginBottom: 2 }}>{element.props.label}</Text>
+      <NumberInput
+        style={{ flex: 1 }}
+        minimumValue={element.props.min}
+        maximumValue={element.props.max}
+        step={element.props.step || 1}
+        value={value}
+        onValueChange={newValue => setValue(newValue)}
+      />
+    </View>
+  );
+};
+elementTypes['numberInput'] = ToolNumberInput;
+
 //
 // Container
 //
