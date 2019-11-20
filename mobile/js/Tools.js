@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import Slider from '@react-native-community/slider';
+import Markdown from 'react-native-markdown-renderer';
 
 import * as GhostEvents from './ghost/GhostEvents';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -367,6 +368,21 @@ const ToolNumberInput = ({ element }) => {
   );
 };
 elementTypes['numberInput'] = ToolNumberInput;
+
+const ToolSection = ({ element }) => {
+  sendEvent(element.pathId, { type: 'onChange', open: true });
+
+  return (
+    <View style={{ margin: 4, ...viewStyleProps(element.props) }}>
+      <Text style={{ fontSize: 24, fontWeight: '900' }}>{element.props.label}</Text>
+      {renderChildren(element)}
+    </View>
+  );
+};
+elementTypes['section'] = ToolSection;
+
+const ToolMarkdown = ({ element }) => <Markdown>{element.props.source}</Markdown>;
+elementTypes['markdown'] = ToolMarkdown;
 
 //
 // Container
