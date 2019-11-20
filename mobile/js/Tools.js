@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import Slider from '@react-native-community/slider';
 import Markdown from 'react-native-markdown-renderer';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import * as GhostEvents from './ghost/GhostEvents';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -102,7 +103,7 @@ const useValue = ({ element, propName = 'value', eventName = 'onChange', onNewVa
     setLastSentEventId(
       sendEvent(element.pathId, {
         type: eventName,
-        value: newValue,
+        [propName]: newValue,
       })
     );
   };
@@ -370,12 +371,40 @@ const ToolNumberInput = ({ element }) => {
 elementTypes['numberInput'] = ToolNumberInput;
 
 const ToolSection = ({ element }) => {
-  sendEvent(element.pathId, { type: 'onChange', open: true });
-
   return (
-    <View style={{ margin: 4, ...viewStyleProps(element.props) }}>
-      <Text style={{ fontSize: 24, fontWeight: '900' }}>{element.props.label}</Text>
-      {renderChildren(element)}
+    <View
+      style={{
+        margin: 4,
+        borderRadius: 6,
+        borderWidth: 1,
+        borderColor: '#eee',
+        overflow: 'hidden',
+        ...viewStyleProps(element.props),
+      }}>
+      <TouchableOpacity
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          paddingVertical: 6,
+          paddingLeft: 21,
+          paddingRight: 14,
+          backgroundColor: '#eee',
+          ...viewStyleProps(element.props.headingStyle),
+        }}
+        onPress={() => sendEvent(element.pathId, { type: 'onChange', open: !element.open })}>
+        <Text style={{ fontSize: 24, fontHeight: '900' }}>{element.props.label}</Text>
+        <Icon
+          name={element.open ? 'keyboard-arrow-up' : 'keyboard-arrow-down'}
+          size={30}
+          color="black"
+        />
+      </TouchableOpacity>
+      {element.open ? (
+        <View style={{ padding: 12, ...viewStyleProps(element.props.childrenStyle) }}>
+          {renderChildren(element)}
+        </View>
+      ) : null}
     </View>
   );
 };
