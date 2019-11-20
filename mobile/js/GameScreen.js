@@ -372,7 +372,7 @@ const GameView = ({ gameId, gameUri, extras, windowed, onPressReload }) => {
         />
       )}
 
-      <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
+      <KeyboardAvoidingView behavior="padding" enabled style={{ flex: 1 }}>
         {game && eventsReady && initialDataHook.sent ? (
           // Render `GhostView` and `GameInputs` when ready
           <View style={{ flex: 1 }}>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Slider } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import Slider from '@react-native-community/slider';
 
 import * as GhostEvents from './ghost/GhostEvents';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -78,7 +79,7 @@ const renderChildren = element =>
 // Maintain state for a `value` / `onChange` combination. Returns the current value and a setter for the new value
 // that can be invoked in a JS change event (which will then propagate the new value back to Lua). The default prop
 // and event names are 'value' and 'onChange' respectively but other ones can be provided.
-const useValue = ({ element, propName = 'value', eventName = 'onChange' }) => {
+const useValue = ({ element, propName = 'value', eventName = 'onChange', onNewValue }) => {
   const [lastSentEventId, setLastSentEventId] = useState(null);
   const [value, setValue] = useState(null);
 
@@ -87,7 +88,11 @@ const useValue = ({ element, propName = 'value', eventName = 'onChange' }) => {
     // Only apply change if Lua says that it reported our last sent event, otherwise we may overwrite a more
     // up-to-date value that we're storing (eg. new key presses in a text input before the game's value is updated)
     if (lastSentEventId === null || element.lastReportedEventId === lastSentEventId) {
-      setValue(element.props[propName]);
+      const newValue = element.props[propName];
+      setValue(newValue);
+      if (onNewValue) {
+        onNewValue(newValue);
+      }
     }
   }
 
@@ -267,19 +272,52 @@ const ToolSlider = ({ element }) => {
 };
 elementTypes['slider'] = ToolSlider;
 
+const numberToText = number => (typeof number === 'number' ? number.toString() : '0');
+
+const textToNumber = text => {
+  const parsed = parseFloat(text);
+  return Number.isNaN(parsed) ? 0 : parsed;
+};
+
 const ToolNumberInput = ({ element }) => {
-  const [value, setValue] = useValue({ element });
+  // We maintain `text` separately from `value` to allow incomplete text such as '' or '3.'
+
+  const [text, setText] = useState('');
+  const [value, setValue] = useValue({
+    element,
+    onNewValue: newValue => {
+      // Received a new value from Lua -- only update text if it doesn't represent the same
+      // value (to allow the user to keep editing)
+      if (textToNumber(text) !== newValue) {
+        setText(numberToText(newValue));
+      }
+    },
+  });
 
   return (
     <View style={{ margin: 4 }}>
       <Text style={{ fontWeight: '900', marginBottom: 2 }}>{element.props.label}</Text>
-      <NumberInput
-        style={{ flex: 1 }}
-        minimumValue={element.props.min}
-        maximumValue={element.props.max}
-        step={element.props.step || 1}
-        value={value}
-        onValueChange={newValue => setValue(newValue)}
+      <TextInput
+        keyboardType="numeric"
+        style={{
+          borderColor: 'gray',
+          borderWidth: 1,
+          borderRadius: 4,
+          paddingVertical: 8,
+          paddingHorizontal: 12,
+          ...viewStyleProps(element.props),
+        }}
+        returnKeyType="done"
+        value={text}
+        onChangeText={newText => {
+          // User edited the text -- save the changes and also send updated value to Lua
+          setText(newText);
+          setValue(textToNumber(newText));
+        }}
+        onBlur={() => {
+          // User unfocused the input -- revert text to reflect the value and discard edits
+          setText(numberToText(value));
+        }}
       />
     </View>
   );
@@ -349,10 +387,11 @@ export default Tools = ({ eventsReady, visible }) => {
   // Render the container
   return (
     <View style={{ flex: 0.75, backgroundColor: 'white' }}>
-      <ScrollView style={{ flex: 1 }}>
+      <ScrollView style={{ flex: 1, paddingBottom: 100 }}>
         {Object.values(root.panes).map((element, i) => (
           <ToolPane key={element.props.name || i} element={element} />
         ))}
+        <View style={{ height: 100 }} />
       </ScrollView>
     </View>
   );
