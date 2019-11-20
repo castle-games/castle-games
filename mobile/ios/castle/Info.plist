@@ -26,10 +26,10 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>castle</string>
+			<string>$(CASTLE_URL_SCHEME)</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>castle</string>
+				<string>$(CASTLE_URL_SCHEME)</string>
 			</array>
 		</dict>
 	</array>
