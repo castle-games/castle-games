@@ -225,7 +225,7 @@ const ToolTextInput = ({ element }) => {
 
   return (
     <View style={{ margin: 4 }}>
-      <Text style={{ fontWeight: '900', marginBottom: 2 }}>{element.props.label}</Text>
+      <Text style={{ fontWeight: '900', marginBottom: 4 }}>{element.props.label}</Text>
       <TextInput
         style={{
           borderColor: 'gray',
@@ -267,7 +267,7 @@ const ToolSlider = ({ element }) => {
 
   return (
     <View style={{ margin: 4 }}>
-      <Text style={{ fontWeight: '900', marginBottom: 2 }}>{element.props.label}</Text>
+      <Text style={{ fontWeight: '900', marginBottom: 4 }}>{element.props.label}</Text>
       <Slider
         style={{ flex: 1 }}
         minimumValue={element.props.min}
@@ -319,7 +319,7 @@ const ToolNumberInput = ({ element }) => {
 
   return (
     <View style={{ margin: 4 }}>
-      <Text style={{ fontWeight: '900', marginBottom: 2 }}>{element.props.label}</Text>
+      <Text style={{ fontWeight: '900', marginBottom: 4 }}>{element.props.label}</Text>
       <View style={{ flexDirection: 'row' }}>
         <TextInput
           keyboardType="numeric"
