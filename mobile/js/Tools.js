@@ -191,6 +191,9 @@ const VIEW_STYLE_PROPS = {
   opacity: true,
 };
 const viewStyleProps = p => {
+  if (!p) {
+    return {};
+  }
   const r = {};
   Object.keys(p).forEach(k => {
     if (VIEW_STYLE_PROPS[k]) {
@@ -203,6 +206,14 @@ const viewStyleProps = p => {
 //
 // Components
 //
+
+const buttonStyle = {
+  padding: 6,
+  backgroundColor: '#ddd',
+  justifyContent: 'center',
+  alignItems: 'center',
+  borderRadius: 6,
+};
 
 const ToolPane = ({ element }) => <View style={{ padding: 6 }}>{renderChildren(element)}</View>;
 elementTypes['pane'] = ToolPane;
@@ -234,11 +245,7 @@ elementTypes['textInput'] = ToolTextInput;
 const ToolButton = ({ element }) => (
   <TouchableOpacity
     style={{
-      padding: 6,
-      backgroundColor: '#ddd',
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderRadius: 6,
+      ...buttonStyle,
       margin: 4,
       ...viewStyleProps(element.props),
     }}
@@ -280,8 +287,7 @@ const textToNumber = text => {
 };
 
 const ToolNumberInput = ({ element }) => {
-  // We maintain `text` separately from `value` to allow incomplete text such as '' or '3.'
-
+  // Maintain `text` separately from `value` to allow incomplete text such as '' or '3.'
   const [text, setText] = useState('');
   const [value, setValue] = useValue({
     element,
@@ -294,31 +300,69 @@ const ToolNumberInput = ({ element }) => {
     },
   });
 
+  const checkAndSetValue = newValue => {
+    const { min, max } = element.props;
+    if (typeof min === 'number' && newValue < min) {
+      newValue = min;
+    }
+    if (typeof max === 'number' && newValue > max) {
+      newValue = max;
+    }
+    setValue(newValue);
+    return newValue;
+  };
+
+  const incrementValue = delta =>
+    setText(numberToText(checkAndSetValue((value || 0) + delta * (element.props.step || 1))));
+
   return (
     <View style={{ margin: 4 }}>
       <Text style={{ fontWeight: '900', marginBottom: 2 }}>{element.props.label}</Text>
-      <TextInput
-        keyboardType="numeric"
-        style={{
-          borderColor: 'gray',
-          borderWidth: 1,
-          borderRadius: 4,
-          paddingVertical: 8,
-          paddingHorizontal: 12,
-          ...viewStyleProps(element.props),
-        }}
-        returnKeyType="done"
-        value={text}
-        onChangeText={newText => {
-          // User edited the text -- save the changes and also send updated value to Lua
-          setText(newText);
-          setValue(textToNumber(newText));
-        }}
-        onBlur={() => {
-          // User unfocused the input -- revert text to reflect the value and discard edits
-          setText(numberToText(value));
-        }}
-      />
+      <View style={{ flexDirection: 'row' }}>
+        <TextInput
+          keyboardType="numeric"
+          style={{
+            flex: 1,
+            borderColor: 'gray',
+            borderWidth: 1,
+            borderRadius: 4,
+            paddingVertical: 8,
+            paddingHorizontal: 12,
+            ...viewStyleProps(element.props.textInputStyle),
+          }}
+          returnKeyType="done"
+          value={text}
+          onChangeText={newText => {
+            // User edited the text -- save the changes and also send updated value to Lua
+            setText(newText);
+            checkAndSetValue(textToNumber(newText));
+          }}
+          onBlur={() => {
+            // User unfocused the input -- revert text to reflect the value and discard edits
+            setText(numberToText(value));
+          }}
+        />
+        <TouchableOpacity
+          style={{
+            ...buttonStyle,
+            width: 32,
+            marginLeft: 4,
+            ...viewStyleProps(element.props.buttonStyle),
+          }}
+          onPress={() => incrementValue(1)}>
+          <Text>+</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            ...buttonStyle,
+            width: 32,
+            marginLeft: 4,
+            ...viewStyleProps(element.props.buttonStyle),
+          }}
+          onPress={() => incrementValue(-1)}>
+          <Text>-</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
