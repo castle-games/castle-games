@@ -421,11 +421,13 @@ export default class GameScreenDeveloperSidebar extends React.Component {
   componentDidMount() {
     window.addEventListener('mouseup', this._handleMouseUp);
     window.addEventListener('mousemove', this._handleMouseMove);
+    window.addEventListener('keydown', this._handleKeyDown);
   }
 
   componentWillUnmount() {
     window.removeEventListener('mouseup', this._handleMouseUp);
     window.removeEventListener('mousemove', this._handleMouseMove);
+    window.removeEventListener('keydown', this._handleKeyDown);
     this.props.setters.setIsMultiplayerCodeUploadEnabled(false);
   }
 
@@ -494,6 +496,25 @@ export default class GameScreenDeveloperSidebar extends React.Component {
   _handleMouseUp = (e) => {
     if (this.state.resizing) {
       this.setState({ resizing: null, mouseY: null, start: null });
+    }
+  };
+
+  _handleKeyDown = (e) => {
+    if (e.keyCode == 87 && e.metaKey) {
+      // meta + w
+      e.preventDefault();
+      e.stopPropagation();
+
+      let { tabs, focusedTabUrl } = this.state;
+
+      if (focusedTabUrl) {
+        tabs = tabs.filter((tab) => tab.url !== focusedTabUrl);
+
+        this.setState({
+          focusedTabUrl: null,
+          tabs,
+        });
+      }
     }
   };
 
