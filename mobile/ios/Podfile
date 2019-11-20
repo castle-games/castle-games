@@ -27,7 +27,9 @@ target 'Castle' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
+  # Native modules
   pod 'RNBootSplash', :path => '../node_modules/react-native-bootsplash'
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
   target 'CastleTests' do
     inherit! :search_paths
