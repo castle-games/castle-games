@@ -284,7 +284,7 @@ const applyDiff = (t, diff) => {
 };
 
 // Top-level tools container -- watches for Lua <-> JS tool events and renders the tools overlaid in its parent
-export default Tools = ({ eventsReady }) => {
+export default Tools = ({ eventsReady, visible }) => {
   // Maintain tools state
   const [root, setRoot] = useState({});
 
@@ -298,8 +298,9 @@ export default Tools = ({ eventsReady }) => {
     },
   });
 
-  // Only visible if feature flag is enabled and there is at least one pane with children
-  const visible =
+  // Check prop, feature flag, and that we have at least one non-empty pane
+  visible =
+    visible &&
     ENABLE_TOOLS &&
     root.panes &&
     Object.values(root.panes).find(element => element.children && element.children.count > 0);

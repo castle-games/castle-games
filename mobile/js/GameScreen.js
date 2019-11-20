@@ -384,7 +384,7 @@ const GameView = ({ gameId, gameUri, extras, windowed, onPressReload }) => {
             <GameInputs visible={!windowed} inputsMode={inputsMode} actionKeyCode={actionKeyCode} />
           </View>
         ) : null}
-        <Tools eventsReady={eventsReady} />
+        <Tools visible={!windowed} eventsReady={eventsReady} />
 
         {!luaLoadingHook.loaded ? (
           <GameLoading
