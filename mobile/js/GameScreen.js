@@ -318,7 +318,7 @@ const useLuaMultiplayerClient = ({ eventsReady, game, sessionId, setSessionId })
 // Given a `gameId` or `gameUri`, run and display the game! The lifetime of this component must match the
 // lifetime of the game run -- it must be unmounted when the game is stopped and a new instance mounted
 // if a new game should be run (or even if the same game should be restarted).
-const GameView = ({ gameId, gameUri, extras, windowed }) => {
+const GameView = ({ gameId, gameUri, extras, windowed, onPressReload }) => {
   const fetchGameHook = useFetchGame({ gameId, gameUri });
   const game = fetchGameHook.fetchedGame;
 
@@ -366,6 +366,7 @@ const GameView = ({ gameId, gameUri, extras, windowed }) => {
         <GameHeader
           game={game}
           sessionId={sessionId}
+          onPressReload={onPressReload}
           onPressNextInputsMode={onPressNextInputsMode}
           onPressSwitchActionKeyCode={onPressSwitchActionKeyCode}
         />
@@ -414,6 +415,7 @@ const GameScreen = ({ windowed = false }) => {
   const [state, setState] = useState({
     gameId: null,
     gameUri: null,
+    reloadCount: 0,
     extras: {},
   });
 
@@ -432,21 +434,33 @@ const GameScreen = ({ windowed = false }) => {
     }
 
     setState({
+      ...state,
       gameId: newGameId ? newGameId : null,
       gameUri: newGameId ? null : newGameUri,
       extras,
     });
   };
 
+  const onPressReload = async () => {
+    // Use a bit of a delay so we don't set state within `GameView` handlers
+    await new Promise(resolve => setTimeout(resolve, 40));
+
+    setState({
+      ...state,
+      reloadCount: state.reloadCount + 1,
+    });
+  };
+
   // Use `key` to mount a new instance of `GameView` when the game changes
-  const { gameId, gameUri, extras } = state;
+  const { gameId, gameUri, reloadCount, extras } = state;
   return (
     <GameView
-      key={gameId || gameUri}
+      key={`$${reloadCount}-${gameId || gameUri}`}
       gameId={gameId}
       gameUri={gameUri}
       extras={extras}
       windowed={windowed}
+      onPressReload={onPressReload}
     />
   );
 };

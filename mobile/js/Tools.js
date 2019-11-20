@@ -104,6 +104,97 @@ const useValue = ({ element, propName = 'value', eventName = 'onChange' }) => {
   return [value, setValueAndSendEvent];
 };
 
+// Select the `View` style and layout props from `p`
+const VIEW_STYLE_PROPS = {
+  alignContent: true,
+  alignItems: true,
+  alignSelf: true,
+  aspectRatio: true,
+  borderBottomWidth: true,
+  borderEndWidth: true,
+  borderLeftWidth: true,
+  borderRightWidth: true,
+  borderStartWidth: true,
+  borderTopWidth: true,
+  borderWidth: true,
+  bottom: true,
+  direction: true,
+  display: true,
+  end: true,
+  flex: true,
+  flexBasis: true,
+  flexDirection: true,
+  flexGrow: true,
+  flexShrink: true,
+  flexWrap: true,
+  height: true,
+  justifyContent: true,
+  left: true,
+  margin: true,
+  marginBottom: true,
+  marginEnd: true,
+  marginHorizontal: true,
+  marginLeft: true,
+  marginRight: true,
+  marginStart: true,
+  marginTop: true,
+  marginVertical: true,
+  maxHeight: true,
+  maxWidth: true,
+  minHeight: true,
+  minWidth: true,
+  overflow: true,
+  padding: true,
+  paddingBottom: true,
+  paddingEnd: true,
+  paddingHorizontal: true,
+  paddingLeft: true,
+  paddingRight: true,
+  paddingStart: true,
+  paddingTop: true,
+  paddingVertical: true,
+  position: true,
+  right: true,
+  start: true,
+  top: true,
+  width: true,
+  zIndex: true,
+  borderRightColor: true,
+  backfaceVisibility: true,
+  borderBottomColor: true,
+  borderBottomEndRadius: true,
+  borderBottomLeftRadius: true,
+  borderBottomRightRadius: true,
+  borderBottomStartRadius: true,
+  borderBottomWidth: true,
+  borderColor: true,
+  borderEndColor: true,
+  borderLeftColor: true,
+  borderLeftWidth: true,
+  borderRadius: true,
+  backgroundColor: true,
+  borderRightWidth: true,
+  borderStartColor: true,
+  borderStyle: true,
+  borderTopColor: true,
+  borderTopEndRadius: true,
+  borderTopLeftRadius: true,
+  borderTopRightRadius: true,
+  borderTopStartRadius: true,
+  borderTopWidth: true,
+  borderWidth: true,
+  opacity: true,
+};
+const viewStyleProps = p => {
+  const r = {};
+  Object.keys(p).forEach(k => {
+    if (VIEW_STYLE_PROPS[k]) {
+      r[k] = p[k];
+    }
+  });
+  return r;
+};
+
 //
 // Components
 //
@@ -115,7 +206,7 @@ const ToolTextInput = ({ element }) => {
   const [value, setValue] = useValue({ element });
 
   return (
-    <View style={{ padding: 4 }}>
+    <View style={{ margin: 4 }}>
       <Text style={{ fontWeight: '900', marginBottom: 2 }}>{element.props.label}</Text>
       <TextInput
         style={{
@@ -124,6 +215,7 @@ const ToolTextInput = ({ element }) => {
           borderRadius: 4,
           paddingVertical: 8,
           paddingHorizontal: 12,
+          ...viewStyleProps(element.props),
         }}
         returnKeyType="done"
         value={value}
@@ -134,24 +226,27 @@ const ToolTextInput = ({ element }) => {
 };
 elementTypes['textInput'] = ToolTextInput;
 
-const ToolButton = ({ element }) => {
-  return (
-    <View style={{ padding: 4 }}>
-      <TouchableOpacity
-        style={{
-          padding: 6,
-          backgroundColor: '#ddd',
-          justifyContent: 'center',
-          alignItems: 'center',
-          borderRadius: 6,
-        }}
-        onPress={() => sendEvent(element.pathId, { type: 'onClick' })}>
-        <Text>{element.props.label}</Text>
-      </TouchableOpacity>
-    </View>
-  );
-};
+const ToolButton = ({ element }) => (
+  <TouchableOpacity
+    style={{
+      padding: 6,
+      backgroundColor: '#ddd',
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderRadius: 6,
+      margin: 4,
+      ...viewStyleProps(element.props),
+    }}
+    onPress={() => sendEvent(element.pathId, { type: 'onClick' })}>
+    <Text>{element.props.label}</Text>
+  </TouchableOpacity>
+);
 elementTypes['button'] = ToolButton;
+
+const ToolBox = ({ element }) => (
+  <View style={{ margin: 4, ...viewStyleProps(element.props) }}>{renderChildren(element)}</View>
+);
+elementTypes['box'] = ToolBox;
 
 //
 // Container

@@ -46,7 +46,13 @@ const InviteBar = ({ url }) => {
   );
 };
 
-const GameHeader = ({ game, sessionId, onPressNextInputsMode, onPressSwitchActionKeyCode }) => {
+const GameHeader = ({
+  game,
+  sessionId,
+  onPressReload,
+  onPressNextInputsMode,
+  onPressSwitchActionKeyCode,
+}) => {
   const [inviting, setInviting] = useState(false);
 
   return (
@@ -69,7 +75,15 @@ const GameHeader = ({ game, sessionId, onPressNextInputsMode, onPressSwitchActio
           onPress={() => {
             MainSwitcher.switchTo('navigator');
           }}>
-          <Text style={{ color: '#bbb' }}>Return to Castle</Text>
+          <Text style={{ color: '#bbb' }}>Back</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            paddingBottom: 8,
+            paddingHorizontal: 16,
+          }}
+          onPress={onPressReload}>
+          <Text style={{ color: '#bbb' }}>Reload</Text>
         </TouchableOpacity>
         {sessionId ? (
           <TouchableOpacity
@@ -101,7 +115,7 @@ const GameHeader = ({ game, sessionId, onPressNextInputsMode, onPressSwitchActio
             paddingHorizontal: 16,
           }}
           onPress={onPressSwitchActionKeyCode}>
-          <Text style={{ color: '#bbb' }}>Switch Action Key</Text>
+          <Text style={{ color: '#bbb' }}>Switch Button</Text>
         </TouchableOpacity>
       </View>
       {inviting ? <InviteBar url={game.url + '#' + sessionId} /> : null}
