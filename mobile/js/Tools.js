@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Slider } from 'react-native';
 
 import * as GhostEvents from './ghost/GhostEvents';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -247,6 +247,25 @@ const ToolBox = ({ element }) => (
   <View style={{ margin: 4, ...viewStyleProps(element.props) }}>{renderChildren(element)}</View>
 );
 elementTypes['box'] = ToolBox;
+
+const ToolSlider = ({ element }) => {
+  const [value, setValue] = useValue({ element });
+
+  return (
+    <View style={{ margin: 4 }}>
+      <Text style={{ fontWeight: '900', marginBottom: 2 }}>{element.props.label}</Text>
+      <Slider
+        style={{ flex: 1 }}
+        minimumValue={element.props.min}
+        maximumValue={element.props.max}
+        step={element.props.step || 1}
+        value={value}
+        onValueChange={newValue => setValue(newValue)}
+      />
+    </View>
+  );
+};
+elementTypes['slider'] = ToolSlider;
 
 //
 // Container
