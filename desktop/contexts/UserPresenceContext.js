@@ -2,6 +2,9 @@ import * as React from 'react';
 
 // UserPresenceContext is a cache of users we have loaded in the app,
 // and whether they are currently online.
+// We use a react context for this cache because user objects can be updated
+// as a result of real-time chat events, and we want mounted components to be able to consume
+// those updates without user input.
 
 const UserPresenceContextDefaults = {
   userIdToUser: {},
@@ -31,13 +34,14 @@ class UserPresenceContextProvider extends React.Component {
 
   addUsers = (users) => {
     return this.setState((state) => {
+      const userIdToUser = { ...state.userIdToUser };
       users.forEach((user) => {
-        state.userIdToUser[user.userId] = user;
+        userIdToUser[user.userId] = user;
       });
 
       return {
         ...state,
-        userIdToUser: state.userIdToUser,
+        userIdToUser,
       };
     });
   };
