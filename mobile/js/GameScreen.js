@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, KeyboardAvoidingView, Keyboard } from 'react-native';
+import { View, KeyboardAvoidingView } from 'react-native';
 import { useLazyQuery, useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import castleMetadata from 'castle-metadata';
@@ -17,6 +17,7 @@ import Tools from './Tools';
 import GameInputs, { NUM_GAME_INPUTS_MODES, GAME_INPUTS_ACTION_KEY_CODES } from './GameInputs';
 import GameHeader from './GameHeader';
 import GameLoading from './GameLoading';
+import * as Constants from './Constants';
 
 // Lots of APIs need regular 'https://' URIs
 const castleUriToHTTPSUri = uri => uri.replace(/^castle:\/\//, 'https://');
@@ -367,7 +368,7 @@ const GameView = ({ gameId, gameUri, extras, windowed, onPressReload }) => {
         />
       )}
 
-      <KeyboardAvoidingView behavior="padding" enabled style={{ flex: 1 }}>
+      <KeyboardAvoidingView behavior="padding" enabled={Constants.iOS} style={{ flex: 1 }}>
         {game && eventsReady && initialDataHook.sent ? (
           // Render `GhostView` and `GameInputs` when ready
           <View style={{ flex: 1 }}>
