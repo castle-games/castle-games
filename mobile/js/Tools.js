@@ -224,8 +224,10 @@ const buttonStyle = {
 const ToolPane = ({ element }) => <View style={{ padding: 6 }}>{renderChildren(element)}</View>;
 elementTypes['pane'] = ToolPane;
 
-const ToolTextInput = ({ element }) => {
+const ToolTextInput = ({ element, multiline }) => {
   const [value, setValue] = useValue({ element });
+
+  multiline = typeof multiline === 'boolean' ? multiline : element.props.multiline;
 
   return (
     <View style={{ margin: 4 }}>
@@ -237,9 +239,11 @@ const ToolTextInput = ({ element }) => {
           borderRadius: 4,
           paddingVertical: 8,
           paddingHorizontal: 12,
+          height: multiline ? 72 : null,
           ...viewStyleProps(element.props),
         }}
-        returnKeyType="done"
+        returnKeyType={multiline ? null : 'done'}
+        multiline={multiline}
         value={value}
         onChangeText={newText => setValue(newText)}
       />
@@ -247,6 +251,9 @@ const ToolTextInput = ({ element }) => {
   );
 };
 elementTypes['textInput'] = ToolTextInput;
+
+const ToolTextArea = ({ element }) => <ToolTextInput element={element} multiline />;
+elementTypes['textArea'] = ToolTextArea;
 
 const ToolButton = ({ element }) => (
   <TouchableOpacity
@@ -294,7 +301,7 @@ const textToNumber = text => {
 
 const ToolNumberInput = ({ element }) => {
   // Maintain `text` separately from `value` to allow incomplete text such as '' or '3.'
-  const [text, setText] = useState('');
+  const [text, setText] = useState('0');
   const [value, setValue] = useValue({
     element,
     onNewValue: newValue => {
