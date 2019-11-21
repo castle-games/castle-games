@@ -1,5 +1,5 @@
 export default {
-  isEnabled: true,
+  isEnabled: false,
   fixture: {
     'https://raw.githubusercontent.com/bridgs/lil-hoops/master/sfx/aim.wav': {
       url: 'https://raw.githubusercontent.com/bridgs/lil-hoops/master/sfx/aim.wav',

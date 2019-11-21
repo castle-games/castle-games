@@ -650,7 +650,8 @@ export default class GameScreenDeveloperSidebar extends React.Component {
           value={file.content}
           onChange={(value) => {
             this.props.editFile(url, value);
-            this._reloadGameDebounced();
+            // This temporarily makes it readonly
+            // this._reloadGameDebounced();
           }}
         />
       );

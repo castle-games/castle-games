@@ -21,6 +21,8 @@ export default class DevelopmentCodeEditor extends React.Component {
           language="lua"
           theme="vs-dark"
           options={{
+            readOnly: true,
+
             fontSize: 12,
 
             minimap: { enabled: false },
