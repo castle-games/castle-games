@@ -7,6 +7,7 @@ import ActionSheet from 'react-native-action-sheet';
 
 import * as GhostEvents from './ghost/GhostEvents';
 import { ScrollView } from 'react-native-gesture-handler';
+import * as Constants from './Constants';
 
 const ENABLE_TOOLS = true;
 
@@ -221,6 +222,9 @@ const buttonStyle = {
   borderRadius: 6,
 };
 
+const boldWeight1 = '700';
+const boldWeight2 = Constants.iOS ? '900' : '700';
+
 const ToolPane = ({ element }) => <View style={{ padding: 6 }}>{renderChildren(element)}</View>;
 elementTypes['pane'] = ToolPane;
 
@@ -231,7 +235,7 @@ const ToolTextInput = ({ element, multiline }) => {
 
   return (
     <View style={{ margin: 4 }}>
-      <Text style={{ fontWeight: '900', marginBottom: 4 }}>{element.props.label}</Text>
+      <Text style={{ fontWeight: boldWeight2, marginBottom: 4 }}>{element.props.label}</Text>
       <TextInput
         style={{
           borderColor: 'gray',
@@ -278,9 +282,14 @@ const ToolSlider = ({ element }) => {
 
   return (
     <View style={{ margin: 4, ...viewStyleProps(element.props) }}>
-      <Text style={{ fontWeight: '900', marginBottom: 4 }}>{element.props.label}</Text>
+      <Text style={{ fontWeight: boldWeight2, marginBottom: 4 }}>{element.props.label}</Text>
       <Slider
-        style={{ flex: 1, marginTop: -4, marginBottom: -3 }}
+        style={{
+          flex: 1,
+          // iOS slider has a large margin, make it smaller
+          marginTop: Constants.iOS ? -4 : 0,
+          marginBottom: Constants.iOS ? -3 : 0,
+        }}
         minimumValue={element.props.min}
         maximumValue={element.props.max}
         step={element.props.step || 1}
@@ -330,7 +339,7 @@ const ToolNumberInput = ({ element }) => {
 
   return (
     <View style={{ margin: 4 }}>
-      <Text style={{ fontWeight: '900', marginBottom: 4 }}>{element.props.label}</Text>
+      <Text style={{ fontWeight: boldWeight2, marginBottom: 4 }}>{element.props.label}</Text>
       <View style={{ flexDirection: 'row' }}>
         <TextInput
           keyboardType="numeric"
@@ -406,7 +415,7 @@ const ToolSection = ({ element }) => (
         ...viewStyleProps(element.props.headingStyle),
       }}
       onPress={() => sendEvent(element.pathId, { type: 'onChange', open: !element.open })}>
-      <Text style={{ fontSize: 20, fontWeight: '700' }}>{element.props.label}</Text>
+      <Text style={{ fontSize: 20, fontWeight: boldWeight1 }}>{element.props.label}</Text>
       <Icon
         name={element.open ? 'keyboard-arrow-up' : 'keyboard-arrow-down'}
         size={20}
@@ -471,7 +480,7 @@ const ToolTabs = ({ element }) => {
               ...viewStyleProps(element.props.buttonStyle),
             }}
             onPress={() => setSelected(i)}>
-            <Text style={{ fontSize: 20, fontWeight: '700' }}>{child.props.label}</Text>
+            <Text style={{ fontSize: 20, fontWeight: boldWeight1 }}>{child.props.label}</Text>
           </TouchableOpacity>
         ))}
       </View>
@@ -499,15 +508,16 @@ const ToolCheckbox = ({ element, valueEventName = 'onChange', valuePropName = 'c
   const { label, labelA, labelB } = element.props;
 
   return (
-    <View style={{ margin: 4 }}>
-      <Text style={{ fontWeight: '900', marginBottom: 4 }}>
+    <View style={{ margin: 4, alignItems: 'flex-start' }}>
+      <Text style={{ fontWeight: boldWeight2, marginBottom: 4 }}>
         {typeof label === 'string' ? label : value ? labelB : labelA}
       </Text>
       <Switch
         value={value}
         style={{
-          margin: -1,
-          transform: [{ scaleX: 0.9 }, { scaleY: 0.9 }],
+          // iOS switch is sorta large, make it smaller
+          margin: Constants.iOS ? -1 : 0,
+          transform: Constants.iOS ? [{ scaleX: 0.9 }, { scaleY: 0.9 }] : [],
         }}
         onValueChange={newValue => setValue(newValue)}
       />
@@ -526,7 +536,7 @@ const ToolDropdown = ({ element }) => {
 
   return (
     <View style={{ margin: 4 }}>
-      <Text style={{ fontWeight: '900', marginBottom: 4 }}>{element.props.label}</Text>
+      <Text style={{ fontWeight: boldWeight2, marginBottom: 4 }}>{element.props.label}</Text>
       <TouchableOpacity
         style={{
           flexDirection: 'row',
