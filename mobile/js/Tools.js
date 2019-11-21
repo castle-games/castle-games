@@ -258,7 +258,7 @@ const ToolButton = ({ element }) => (
 elementTypes['button'] = ToolButton;
 
 const ToolBox = ({ element }) => (
-  <View style={{ margin: 4, ...viewStyleProps(element.props) }}>{renderChildren(element)}</View>
+  <View style={viewStyleProps(element.props)}>{renderChildren(element)}</View>
 );
 elementTypes['box'] = ToolBox;
 
@@ -266,7 +266,7 @@ const ToolSlider = ({ element }) => {
   const [value, setValue] = useValue({ element });
 
   return (
-    <View style={{ margin: 4 }}>
+    <View style={{ margin: 4, ...viewStyleProps(element.props) }}>
       <Text style={{ fontWeight: '900', marginBottom: 4 }}>{element.props.label}</Text>
       <Slider
         style={{ flex: 1 }}
@@ -370,48 +370,113 @@ const ToolNumberInput = ({ element }) => {
 };
 elementTypes['numberInput'] = ToolNumberInput;
 
-const ToolSection = ({ element }) => {
+const ToolSection = ({ element }) => (
+  <View
+    style={{
+      margin: 4,
+      borderTopLeftRadius: 8,
+      borderTopRightRadius: 8,
+      borderBottomLeftRadius: element.open ? 0 : 8,
+      borderBottomRightRadius: element.open ? 0 : 8,
+      borderBottomWidth: element.open ? 1 : 0,
+      borderColor: '#eee',
+      overflow: 'hidden',
+      ...viewStyleProps(element.props),
+    }}>
+    <TouchableOpacity
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingVertical: 6,
+        paddingLeft: 21,
+        paddingRight: 14,
+        backgroundColor: element.open ? '#ddd' : '#eee',
+        ...viewStyleProps(element.props.headingStyle),
+      }}
+      onPress={() => sendEvent(element.pathId, { type: 'onChange', open: !element.open })}>
+      <Text style={{ fontSize: 20, fontHeight: '900' }}>{element.props.label}</Text>
+      <Icon
+        name={element.open ? 'keyboard-arrow-up' : 'keyboard-arrow-down'}
+        size={20}
+        color="black"
+      />
+    </TouchableOpacity>
+    {element.open ? (
+      <View
+        style={{
+          paddingVertical: 8,
+          paddingHorizontal: 2,
+          ...viewStyleProps(element.props.childrenStyle),
+        }}>
+        {renderChildren(element)}
+      </View>
+    ) : null}
+  </View>
+);
+elementTypes['section'] = ToolSection;
+
+const ToolMarkdown = ({ element }) => (
+  <View style={{ margin: 4, ...viewStyleProps(element.props) }}>
+    <Markdown>{element.props.source}</Markdown>
+  </View>
+);
+elementTypes['markdown'] = ToolMarkdown;
+
+const ToolTabs = ({ element }) => {
+  let [selected, setSelected] = useState(0);
+
+  const children = orderedChildren(element).filter(({ id, child }) => child.type == 'tab');
+
+  if (selected >= children.length) {
+    selected = 0;
+  }
+
   return (
     <View
       style={{
         margin: 4,
-        borderRadius: 6,
-        borderWidth: 1,
+        borderTopLeftRadius: 8,
+        borderTopRightRadius: 8,
+        borderBottomWidth: 1,
         borderColor: '#eee',
         overflow: 'hidden',
         ...viewStyleProps(element.props),
       }}>
-      <TouchableOpacity
+      <View
         style={{
           flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          paddingVertical: 6,
-          paddingLeft: 21,
-          paddingRight: 14,
-          backgroundColor: '#eee',
-          ...viewStyleProps(element.props.headingStyle),
-        }}
-        onPress={() => sendEvent(element.pathId, { type: 'onChange', open: !element.open })}>
-        <Text style={{ fontSize: 24, fontHeight: '900' }}>{element.props.label}</Text>
-        <Icon
-          name={element.open ? 'keyboard-arrow-up' : 'keyboard-arrow-down'}
-          size={30}
-          color="black"
-        />
-      </TouchableOpacity>
-      {element.open ? (
-        <View style={{ padding: 12, ...viewStyleProps(element.props.childrenStyle) }}>
-          {renderChildren(element)}
-        </View>
-      ) : null}
+          ...viewStyleProps(element.props.barStyle),
+        }}>
+        {children.map(({ id, child }, i) => (
+          <TouchableOpacity
+            key={id}
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              padding: 6,
+              backgroundColor: selected === i ? '#ddd' : '#eee',
+              ...viewStyleProps(element.props.buttonStyle),
+            }}
+            onPress={() => setSelected(i)}>
+            <Text style={{ fontSize: 20, fontHeight: '900' }}>{child.props.label}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+      <View
+        key={children[selected].id}
+        style={{
+          paddingVertical: 8,
+          paddingHorizontal: 2,
+          ...viewStyleProps(element.props.childrenStyle),
+        }}>
+        {renderChildren(children[selected].child)}
+      </View>
     </View>
   );
 };
-elementTypes['section'] = ToolSection;
-
-const ToolMarkdown = ({ element }) => <Markdown>{element.props.source}</Markdown>;
-elementTypes['markdown'] = ToolMarkdown;
+elementTypes['tabs'] = ToolTabs;
 
 //
 // Container
