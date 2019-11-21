@@ -34,7 +34,6 @@ const FULL_USER_FIELDS = `
   twitterUsername
   createdTime
   updatedTime
-  about
   gamesCount
   gamesSumPlayCount
   lastUserStatus {
@@ -575,15 +574,13 @@ export async function updateUserAsync({ userId, user }) {
   const variables = {
     userId,
     ...user,
-    about: JSON.stringify(user.about),
   };
   const result = await API.graphqlAsync({
     query: `
-      mutation ($userId: ID!, $about: String, $name: String, $websiteUrl: String, $itchUsername: String, $twitterUsername: String) {
+      mutation ($userId: ID!, $name: String, $websiteUrl: String, $itchUsername: String, $twitterUsername: String) {
        updateUser(
          userId: $userId
          user: {
-           about: { rich: $about }
            name: $name
            websiteUrl: $websiteUrl
            itchUsername: $itchUsername

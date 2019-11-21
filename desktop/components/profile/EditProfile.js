@@ -128,10 +128,6 @@ export default class EditProfile extends React.Component {
     }
   };
 
-  _onAboutChangeAsync = async ({ value }) => {
-    this.setState({ user: { ...this.state.user, about: value } });
-  };
-
   _onFieldChange = (e) => {
     this.setState({ user: { ...this.state.user, [e.target.name]: e.target.value } });
   };
