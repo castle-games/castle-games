@@ -41,6 +41,7 @@ const FULL_USER_FIELDS = `
     status
     isRecent
     lastPing
+    platform
     game {
       gameId
       name

@@ -2,7 +2,6 @@ import * as React from 'react';
 import * as Actions from '~/common/actions';
 import * as Analytics from '~/common/analytics';
 import * as Browser from '~/common/browser';
-import * as ExecNode from '~/common/execnode';
 import * as Strings from '~/common/strings';
 import * as NativeUtil from '~/native/nativeutil';
 import * as Urls from '~/common/urls';

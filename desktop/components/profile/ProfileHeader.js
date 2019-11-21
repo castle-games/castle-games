@@ -97,9 +97,15 @@ export default class ProfileHeader extends React.Component {
   };
 
   _renderOnlineStatus = (creator) => {
+    let isMobileActive = false;
+    if (creator.lastUserStatus) {
+      // TODO: get this from the real time server instead
+      isMobileActive =
+        creator.lastUserStatus.platform === 'mobile' && creator.lastUserStatus.isRecent;
+    }
     return (
       <div className={STYLES_STATUS}>
-        <UIUserStatusIndicator user={creator} />
+        <UIUserStatusIndicator user={creator} isMobileActive={isMobileActive} />
       </div>
     );
   };

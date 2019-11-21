@@ -1,11 +1,14 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
+import * as SVG from '~/components/primitives/svg';
 
 import { css } from 'react-emotion';
 import { UserPresenceContext } from '~/contexts/UserPresenceContext';
 
 const STYLES_CONTAINER = css`
   display: inline-flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const STYLES_INDICATOR_CONTAINER = css`
@@ -16,7 +19,17 @@ const STYLES_INDICATOR_CONTAINER = css`
 `;
 
 class UIUserStatusIndicator extends React.Component {
-  _renderIndicator = (isOnline, isAnonymous) => {
+  _renderIndicator = (isOnline, isAnonymous, isMobileActive) => {
+    // to avoid showing ambiguous offline + active for mobile instances without chat,
+    // show a mobile icon in this case
+    if (isMobileActive) {
+      return (
+        <div>
+          <SVG.Mobile size={12} />
+        </div>
+      );
+    }
+
     // offline
     let indicatorStyle = { border: `2px solid ${Constants.colors.userStatus.offline}` };
     if (isOnline) {
@@ -32,12 +45,12 @@ class UIUserStatusIndicator extends React.Component {
   };
 
   render() {
-    const { user } = this.props;
+    const { user, isMobileActive } = this.props;
     const isOnline = user.userId && this.props.userPresence.onlineUserIds[user.userId];
     const isAnonymous = user.isAnonymous;
     return (
       <div className={STYLES_CONTAINER} style={{ ...this.props.style }}>
-        {this._renderIndicator(isOnline, isAnonymous)}
+        {this._renderIndicator(isOnline, isAnonymous, isMobileActive)}
       </div>
     );
   }
