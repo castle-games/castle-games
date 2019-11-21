@@ -1,5 +1,4 @@
 import * as Constants from '~/common/constants';
-import * as NativeUtil from '~/native/nativeutil';
 import * as Urls from '~/common/urls';
 import * as url from 'url';
 
@@ -167,12 +166,12 @@ export async function resetPassword({ userId }) {
   return response;
 }
 
-export async function getHeadersAsync() {
+async function _getHeadersAsync() {
   return await API.client._getRequestHeadersAsync();
 }
 
 export async function getAccessTokenAsync() {
-  let headers = await getHeadersAsync();
+  let headers = await _getHeadersAsync();
   if (!headers) {
     return null;
   }
@@ -184,30 +183,6 @@ export const delay = (ms) =>
   new Promise((resolve) => {
     window.setTimeout(resolve, ms);
   });
-
-export async function getUserByUsername({ username }) {
-  const response = await API.graphqlAsync(
-    `
-      query($who: String!) {
-        userForLoginInput(who: $who) {
-          ${FULL_USER_FIELDS}
-        }
-      }
-    `,
-    { who: username }
-  );
-
-  // TOOD(jim): Write a global error handler.
-  if (response.error) {
-    return false;
-  }
-
-  if (response.errors) {
-    return false;
-  }
-
-  return response.data.userForLoginInput;
-}
 
 export async function getExistingUser({ who }) {
   const response = await API.graphqlAsync(
@@ -396,27 +371,6 @@ export async function getCurrentUser() {
     },
     userStatusHistory: result.data.userStatusHistory,
   };
-}
-
-export async function getUserStatusHistory(userId) {
-  const result = await API(
-    `
-    query($userId: ID!) {
-      userStatusHistory(userId: $userId) {
-        userStatusId
-        status
-        game {
-          ${GAME_FIELDS}
-          ${NESTED_GAME_OWNER}
-        }
-      }
-    }`,
-    { userId }
-  );
-  if (result.error || result.errors) {
-    return false;
-  }
-  return result.data.userStatusHistory;
 }
 
 export async function getAllGames(limit) {
@@ -730,11 +684,6 @@ export async function previewGameAtUrl(url, gameId = null) {
 
   _validatePublishGameResult(result);
   return result.data.previewGameAtUrl;
-}
-
-export async function updateGameAtUrl(url) {
-  // TODO: BEN: remove
-  throw new Error(`DELETE ME`);
 }
 
 export async function recordUserStatus(status, isNewSession, game) {
@@ -1153,6 +1102,7 @@ export async function search(query) {
 }
 
 export async function getMediaServiceAsync(metadata) {
+  // used for voice chat
   const result = await API.graphqlAsync(
     `
       query($metadata: Json) {
