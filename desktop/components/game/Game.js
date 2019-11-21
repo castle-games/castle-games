@@ -9,6 +9,7 @@ import GameWindow from '~/native/gamewindow';
 
 import { css } from 'react-emotion';
 import { DevelopmentContext, DevelopmentSetterContext } from '~/contexts/DevelopmentContext';
+import { NavigatorContext } from '~/contexts/NavigationContext';
 
 import GameScreenActionsBar from '~/components/game/GameScreenActionsBar';
 import GameScreenAlert from '~/components/game/GameScreenAlert';
@@ -112,6 +113,7 @@ class Game extends React.Component {
           editFile={this.props.editFile}
           game={this.props.game}
           onReload={this.props.onReload}
+          navigator={this.props.navigator}
         />
       );
     }
@@ -156,16 +158,21 @@ export default class GameWithContext extends React.Component {
         {(development) => (
           <DevelopmentSetterContext.Consumer>
             {(developmentSetters) => (
-              <Game
-                toggleIsDeveloping={developmentSetters.toggleIsDeveloping}
-                isDeveloping={development.isDeveloping}
-                logs={development.logs}
-                editableFiles={development.editableFiles}
-                editFile={developmentSetters.editFile}
-                isMultiplayerCodeUploadEnabled={development.isMultiplayerCodeUploadEnabled}
-                setters={developmentSetters}
-                {...this.props}
-              />
+              <NavigatorContext.Consumer>
+                {(navigator) => (
+                  <Game
+                    toggleIsDeveloping={developmentSetters.toggleIsDeveloping}
+                    isDeveloping={development.isDeveloping}
+                    logs={development.logs}
+                    editableFiles={development.editableFiles}
+                    editFile={developmentSetters.editFile}
+                    isMultiplayerCodeUploadEnabled={development.isMultiplayerCodeUploadEnabled}
+                    setters={developmentSetters}
+                    navigator={navigator}
+                    {...this.props}
+                  />
+                )}
+              </NavigatorContext.Consumer>
             )}
           </DevelopmentSetterContext.Consumer>
         )}

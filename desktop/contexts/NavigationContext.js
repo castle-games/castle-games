@@ -75,6 +75,7 @@ const NavigatorContextDefaults = {
   navigateToCreate: () => {},
   navigateToEditPost: () => {},
   reloadGame: (onlyIfVisible) => {},
+  softReloadGame: () => {},
   minimizeGame: () => {},
   clearCurrentGame: async () => {},
   setIsFullScreen: (isFullScreen) => {},
@@ -124,6 +125,7 @@ class NavigationContextManager extends React.Component {
         navigateToEditPost: this.navigateToEditPost,
         openUrl: this.openUrl,
         reloadGame: this.reloadGame,
+        softReloadGame: this.softReloadGame,
         minimizeGame: this.minimizeGame,
         clearCurrentGame: this.clearCurrentGame,
         setIsFullScreen: this.setIsFullScreen,
@@ -490,6 +492,18 @@ class NavigationContextManager extends React.Component {
       this.navigateToGameUrl(this.state.navigation.playing.game.url);
       this._reloadDebounceTimeout = null;
     }, 50);
+  };
+
+  softReloadGame = () => {
+    this.setState({
+      navigation: {
+        ...this.state.navigation,
+        playing: {
+          ...this.state.navigation.playing,
+          timeLoaded: Date.now(),
+        },
+      },
+    });
   };
 
   clearCurrentGame = async () => {

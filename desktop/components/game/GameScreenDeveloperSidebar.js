@@ -631,7 +631,7 @@ export default class GameScreenDeveloperSidebar extends React.Component {
   };
 
   _reloadGame = () => {
-    window.dispatchEvent(new Event('CASTLE_RELOAD_GAME'));
+    this.props.navigator.softReloadGame();
   };
 
   _reloadGameDebounced = _.debounce(this._reloadGame, 1000);
