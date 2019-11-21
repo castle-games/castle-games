@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Switch, Picker } from 'react-native';
 import Slider from '@react-native-community/slider';
 import Markdown from 'react-native-markdown-renderer';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import ActionSheet from 'react-native-action-sheet';
 
 import * as GhostEvents from './ghost/GhostEvents';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -47,8 +48,11 @@ const elementTypes = {};
 const Tool = ({ element }) => {
   const ElemType = elementTypes[element.type];
   if (!ElemType) {
-    console.log(`'${element.type}' is not a valid UI element type`);
-    return null;
+    return (
+      <View style={{ backgroundColor: '#f5dccb', margin: 4, padding: 8, borderRadius: 6 }}>
+        <Text style={{ color: '#85000b' }}>{`\`ui.${element.type}\` not implemented`}</Text>
+      </View>
+    );
   }
   return <ElemType element={{ ...element, props: element.props || {} }} />;
 };
@@ -269,7 +273,7 @@ const ToolSlider = ({ element }) => {
     <View style={{ margin: 4, ...viewStyleProps(element.props) }}>
       <Text style={{ fontWeight: '900', marginBottom: 4 }}>{element.props.label}</Text>
       <Slider
-        style={{ flex: 1 }}
+        style={{ flex: 1, marginTop: -4, marginBottom: -3 }}
         minimumValue={element.props.min}
         maximumValue={element.props.max}
         step={element.props.step || 1}
@@ -395,7 +399,7 @@ const ToolSection = ({ element }) => (
         ...viewStyleProps(element.props.headingStyle),
       }}
       onPress={() => sendEvent(element.pathId, { type: 'onChange', open: !element.open })}>
-      <Text style={{ fontSize: 20, fontHeight: '900' }}>{element.props.label}</Text>
+      <Text style={{ fontSize: 20, fontWeight: '700' }}>{element.props.label}</Text>
       <Icon
         name={element.open ? 'keyboard-arrow-up' : 'keyboard-arrow-down'}
         size={20}
@@ -460,7 +464,7 @@ const ToolTabs = ({ element }) => {
               ...viewStyleProps(element.props.buttonStyle),
             }}
             onPress={() => setSelected(i)}>
-            <Text style={{ fontSize: 20, fontHeight: '900' }}>{child.props.label}</Text>
+            <Text style={{ fontSize: 20, fontWeight: '700' }}>{child.props.label}</Text>
           </TouchableOpacity>
         ))}
       </View>
@@ -477,6 +481,75 @@ const ToolTabs = ({ element }) => {
   );
 };
 elementTypes['tabs'] = ToolTabs;
+
+const ToolCheckbox = ({ element, valueEventName = 'onChange', valuePropName = 'checked' }) => {
+  const [value, setValue] = useValue({
+    element,
+    eventName: valueEventName,
+    propName: valuePropName,
+  });
+
+  const { label, labelA, labelB } = element.props;
+
+  return (
+    <View style={{ margin: 4 }}>
+      <Text style={{ fontWeight: '900', marginBottom: 4 }}>
+        {typeof label === 'string' ? label : value ? labelB : labelA}
+      </Text>
+      <Switch
+        value={value}
+        style={{
+          margin: -1,
+          transform: [{ scaleX: 0.9 }, { scaleY: 0.9 }],
+        }}
+        onValueChange={newValue => setValue(newValue)}
+      />
+    </View>
+  );
+};
+elementTypes['checkbox'] = ToolCheckbox;
+
+const ToolToggle = ({ element }) => (
+  <ToolCheckbox element={element} valueEventName="onToggle" valuePropName="toggled" />
+);
+elementTypes['toggle'] = ToolToggle;
+
+const ToolDropdown = ({ element }) => {
+  const [value, setValue] = useValue({ element });
+
+  return (
+    <View style={{ margin: 4 }}>
+      <Text style={{ fontWeight: '900', marginBottom: 4 }}>{element.props.label}</Text>
+      <TouchableOpacity
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          borderColor: 'gray',
+          borderWidth: 1,
+          borderRadius: 4,
+          paddingVertical: 8,
+          paddingHorizontal: 12,
+          ...viewStyleProps(element.props),
+        }}
+        onPress={() => {
+          const itemsArray = objectToArray(element.props.items);
+          ActionSheet.showActionSheetWithOptions(
+            { options: itemsArray.concat(['cancel']), cancelButtonIndex: itemsArray.length },
+            i => {
+              if (typeof i === 'number' && i >= 0 && i < itemsArray.length) {
+                setValue(itemsArray[i]);
+              }
+            }
+          );
+        }}>
+        <Text>{value}</Text>
+        <Icon name="keyboard-arrow-down" size={16} color="black" />
+      </TouchableOpacity>
+    </View>
+  );
+};
+elementTypes['dropdown'] = ToolDropdown;
 
 //
 // Container

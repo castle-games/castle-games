@@ -348,16 +348,11 @@ const GameView = ({ gameId, gameUri, extras, windowed, onPressReload }) => {
     extras.actionKeyCode !== undefined ? extras.actionKeyCode : GAME_INPUTS_ACTION_KEY_CODES[0]
   );
   const onPressSwitchActionKeyCode = () => {
-    ActionSheet.showActionSheetWithOptions(
-      {
-        options: GAME_INPUTS_ACTION_KEY_CODES,
-      },
-      i => {
-        if (typeof i === 'number') {
-          setActionKeyCode(GAME_INPUTS_ACTION_KEY_CODES[i]);
-        }
+    ActionSheet.showActionSheetWithOptions({ options: GAME_INPUTS_ACTION_KEY_CODES }, i => {
+      if (typeof i === 'number') {
+        setActionKeyCode(GAME_INPUTS_ACTION_KEY_CODES[i]);
       }
-    );
+    });
   };
 
   return (
