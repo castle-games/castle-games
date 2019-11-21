@@ -61,7 +61,12 @@ export default class SocialSidebarNavigator extends React.Component {
   }
 
   componentDidMount() {
+    this._mounted = true;
     this._update(null, null);
+  }
+
+  componentWillUnmount() {
+    this._mounted = false;
   }
 
   // do not show tooltips if a game is visible and the sidebar is collapsed,
@@ -117,7 +122,7 @@ export default class SocialSidebarNavigator extends React.Component {
       if (visibility.game) {
         const result = await chat.openChannelForGame(visibility.game, { autoExpand: false });
         if (result !== false) {
-          this.setState({ gameChatAvailable: visibility.game });
+          this._mounted && this.setState({ gameChatAvailable: visibility.game });
         }
       }
     }
@@ -135,7 +140,8 @@ export default class SocialSidebarNavigator extends React.Component {
         if (gameChatAvailable && gameChatAvailable.coverImage) {
           iconSrc = gameChatAvailable.coverImage.url;
         }
-        const isGameSelected = mode === 'chat' && isChatExpanded && selectedChannelId === channel.channelId;
+        const isGameSelected =
+          mode === 'chat' && isChatExpanded && selectedChannelId === channel.channelId;
         const isVoiceChatActive = voiceChannelId === gameChatAvailable.chatChannelId;
         const title =
           (channel.name ? channel.name : 'Untitled Game Chat') +
