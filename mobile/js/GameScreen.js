@@ -134,9 +134,26 @@ const computeDimensionsSettings = ({ metadata }) => {
       dimensionsSettings.width = 0;
       dimensionsSettings.height = 0;
     } else {
-      const [widthStr, heightStr] = dimensions.split('x');
-      dimensionsSettings.width = parseInt(widthStr) || 800;
-      dimensionsSettings.height = parseInt(heightStr) || 450;
+      if (typeof dimensions === 'string') {
+        const xIndex = dimensions.indexOf('x');
+        if (xIndex > 1) {
+          // WxH
+          const [widthStr, heightStr] = dimensions.split('x');
+          dimensionsSettings.width = parseInt(widthStr) || 800;
+          dimensionsSettings.height = parseInt(heightStr) || 450;
+        } else if (xIndex == 0) {
+          // xH
+          dimensionsSettings.width = 0;
+          dimensionsSettings.height = parseInt(dimensions.slice(1));
+        } else if (xIndex == -1) {
+          // W
+          dimensionsSettings.width = parseInt(dimensions);
+          dimensionsSettings.height = 0;
+        }
+      } else if (typeof dimensions === 'number') {
+        dimensionsSettings.width = dimensions;
+        dimensionsSettings.height = 0;
+      }
     }
   }
   if (scaling) {

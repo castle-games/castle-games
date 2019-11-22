@@ -3,6 +3,7 @@
 #include "ghost_obs.h"
 #include "simple_handler.h"
 
+#include <float.h>
 #include <fstream>
 #include <iostream>
 
@@ -161,32 +162,46 @@ void ghostGetGameFrame(float frameLeft, float frameTop, float frameWidth, float 
     int up, down;
     ghostGetScalingModes(&up, &down);
 
+    // 'off' is not allowed anymore...
+    if (up == GHOST_SCALING_OFF) {
+      up = GHOST_SCALING_ON;
+    }
+    if (down == GHOST_SCALING_OFF) {
+      down = GHOST_SCALING_ON;
+    }
+
+    // Zero means scale by other coordinate and fill along the zero coordinate
+    auto startScale = fmin(W != 0 ? frameWidth / W : DBL_MAX, H != 0 ? frameHeight / H : DBL_MAX);
     if (frameWidth < W || frameHeight < H) { // Down
-      if (down == GHOST_SCALING_OFF) {
-        ghostScreenScaling = 1;
-      } else if (down == GHOST_SCALING_ON) {
-        ghostScreenScaling = fmin(frameWidth / W, frameHeight / H);
+      if (down == GHOST_SCALING_ON) {
+        ghostScreenScaling = startScale;
       } else if (down == GHOST_SCALING_STEP) {
-        auto scale = fmin(frameWidth / W, frameHeight / H);
         ghostScreenScaling = 1;
-        while (ghostScreenScaling > 0.125 && ghostScreenScaling > scale) {
+        while (ghostScreenScaling > 0.125 && ghostScreenScaling > startScale) {
           ghostScreenScaling *= 0.5;
         }
       }
     } else { // Up
-      if (up == GHOST_SCALING_OFF) {
-        ghostScreenScaling = 1;
-      } else if (up == GHOST_SCALING_ON) {
-        ghostScreenScaling = fmin(frameWidth / W, frameHeight / H);
+      if (up == GHOST_SCALING_ON) {
+        ghostScreenScaling = startScale;
       } else if (up == GHOST_SCALING_STEP) {
-        ghostScreenScaling = floor(fmin(frameWidth / W, frameHeight / H));
+        ghostScreenScaling = floor(startScale);
       }
     }
 
-    *gameWidth = fmin(ghostScreenScaling * W, frameWidth);
-    *gameHeight = fmin(ghostScreenScaling * H, frameHeight);
-    *gameLeft = frameLeft + fmax(0, 0.5 * (frameWidth - *gameWidth));
-    *gameTop = frameTop + fmax(0, 0.5 * (frameHeight - *gameHeight));
+    if (W != 0 && H != 0) {
+      // Aspect-scaled
+      *gameWidth = fmin(ghostScreenScaling * W, frameWidth);
+      *gameHeight = fmin(ghostScreenScaling * H, frameHeight);
+      *gameLeft = frameLeft + fmax(0, 0.5 * (frameWidth - *gameWidth));
+      *gameTop = frameTop + fmax(0, 0.5 * (frameHeight - *gameHeight));
+    } else {
+      // Fill
+      *gameLeft = frameLeft;
+      *gameTop = frameTop;
+      *gameWidth = frameWidth;
+      *gameHeight = frameHeight;
+    }
   }
 }
 

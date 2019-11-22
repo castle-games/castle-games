@@ -32,49 +32,29 @@ const useDimensions = ({ settings }) => {
       // Full dimensions
       setApplyScreenScaling(false);
       setScreenScaling(1);
-      setWidth('100%');
-      setHeight('100%');
+      setWidth(containerWidth);
+      setHeight(containerHeight);
     } else {
       // Fixed dimensions
       setApplyScreenScaling(true);
-      let newScreenScaling;
-      if (containerWidth < settings.width || containerHeight < settings.height) {
-        // Down
-        if (settings.downscaling === 'off') {
-          newScreenScaling = 1;
-        } else if (settings.downscaling === 'on') {
-          newScreenScaling = Math.min(
-            containerWidth / settings.width,
-            containerHeight / settings.height
-          );
-        } else if (settings.downscaling === 'step') {
-          const scale = Math.min(
-            containerWidth / settings.width,
-            containerHeight / settings.height
-          );
-          newScreenScaling = 1;
-          while (newScreenScaling > 0.125 && newScreenScaling > scale) {
-            newScreenScaling *= 0.5;
-          }
-        }
+      if (settings.width !== 0 && settings.height !== 0) {
+        const newScreenScaling = Math.min(
+          containerWidth / settings.width,
+          containerHeight / settings.height
+        );
+        setScreenScaling(newScreenScaling);
+        setWidth(Math.min(newScreenScaling * settings.width, containerWidth));
+        setHeight(Math.min(newScreenScaling * settings.height, containerHeight));
       } else {
-        // Up
-        if (settings.upscaling === 'off') {
-          newScreenScaling = 1;
-        } else if (settings.upscaling === 'on') {
-          newScreenScaling = Math.min(
-            containerWidth / settings.width,
-            containerHeight / settings.height
-          );
-        } else if (settings.upscaling === 'step') {
-          newScreenScaling = Math.floor(
-            Math.min(containerWidth / settings.width, containerHeight / settings.height)
-          );
+        if (settings.width !== 0) {
+          setScreenScaling(containerWidth / settings.width);
         }
+        if (settings.height !== 0) {
+          setScreenScaling(containerHeight / settings.height);
+        }
+        setWidth(containerWidth);
+        setHeight(containerHeight);
       }
-      setScreenScaling(newScreenScaling);
-      setWidth(Math.min(newScreenScaling * settings.width, containerWidth));
-      setHeight(Math.min(newScreenScaling * settings.height, containerHeight));
     }
   };
 
