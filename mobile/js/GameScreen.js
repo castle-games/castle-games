@@ -22,9 +22,15 @@ import * as Constants from './Constants';
 // Lots of APIs need regular 'https://' URIs
 const castleUriToHTTPSUri = uri => uri.replace(/^castle:\/\//, 'https://');
 
+// Whether the given URI is local
+const isLocalUri = uri => {
+  const parsed = url.parse(uri);
+  return parsed.hostname && (parsed.hostname == 'localhost' || !ip.isPublic(parsed.hostname));
+};
+
 // Fetch a `Game` GraphQL entity based on `gameId` or `gameUri`
 const useFetchGame = ({ gameId, gameUri }) => {
-  let game = null;
+  const [game, setGame] = useState(null);
 
   // Direct metadata fetcher for when `gameUri` is a LAN URI.
   const [fetchMetadata, setFetchMetadata] = useState(null);
@@ -71,18 +77,10 @@ const useFetchGame = ({ gameId, gameUri }) => {
     }
   );
 
-  // If neither `gameId` nor `gameUri` are given, no game is being played, so don't do anything
-  if (gameId || gameUri) {
-    // Figure out whether it's a LAN URI
-    let isLAN = false;
-    if (gameUri) {
-      const parsed = url.parse(gameUri);
-      if (parsed.hostname && (parsed.hostname == 'localhost' || !ip.isPublic(parsed.hostname))) {
-        isLAN = true;
-      }
-    }
-
-    if (isLAN) {
+  // If we don't have `game` yet, we'll need to fetch it. We're ready to do that once either
+  // `gameId` or `gameUri` are given.
+  if (!game && (gameId || gameUri)) {
+    if (gameUri && isLocalUri(gameUri)) {
       // LAN URI -- use a direct fetch
       const httpUri = gameUri.replace(/^castle:\/\//, 'http://');
       if (!fetchCalled && callFetchMetadata.current) {
@@ -90,10 +88,12 @@ const useFetchGame = ({ gameId, gameUri }) => {
         callFetchMetadata.current(httpUri);
       } else if (fetchMetadata) {
         // LAN URI will always be an unregistered game without a `gameId`
-        game = {
+        setGame({
+          isLocal: true,
+          url: httpUri,
           entryPoint: fetchMetadata.main ? url.resolve(httpUri, fetchMetadata.main) : httpUri,
           metadata: fetchMetadata,
-        };
+        });
       }
     } else {
       // Public URI -- use the GraphQL query
@@ -102,14 +102,15 @@ const useFetchGame = ({ gameId, gameUri }) => {
       } else if (!queryLoading) {
         if (queryData && queryData.game) {
           // Query was successful!
-          game = queryData.game;
+          setGame(queryData.game);
         } else if (gameUri) {
           // Query wasn't successful, assume this is a direct entrypoint URI and use an unregistered `game`
           // without a `gameId`
-          game = {
+          setGame({
+            url: gameUri,
             entryPoint: gameUri,
             metadata: {},
-          };
+          });
         }
       }
     }
@@ -316,12 +317,107 @@ const useLuaMultiplayerClient = ({ eventsReady, game, sessionId, setSessionId })
   });
 };
 
+// Send user status messages while the game is being played
+const useUserStatus = ({ game }) => {
+  useEffect(() => {
+    if (game) {
+      let mounted = true;
+      let interval;
+
+      const stop = () => {
+        mounted = false;
+        clearInterval(interval);
+      };
+
+      const recordUserStatus = async isNewSession => {
+        if (mounted) {
+          const title = game.title || game.metadata.title || game.name || game.metadata.name;
+          const status = game.isLocal ? 'make' : 'play';
+
+          let result;
+          if (game.gameId) {
+            // Registered game
+            result = await Session.apolloClient.mutate({
+              mutation: gql`
+                mutation($status: String!, $isNewSession: Boolean, $registeredGameId: ID!) {
+                  recordUserStatus(
+                    status: $status
+                    isNewSession: $isNewSession
+                    registeredGameId: $registeredGameId
+                  ) {
+                    userStatusId
+                  }
+                }
+              `,
+              variables: { status, isNewSession, registeredGameId: game.gameId },
+            });
+          } else {
+            // Unregistered game
+            let coverImageUrl;
+            if (game.coverImage && game.coverImage.url) {
+              coverImageUrl = game.coverImage.url;
+            } else if (game.metadata && game.metadata.coverImage) {
+              let resolvedUrl = url.resolve(game.url, game.metadata.coverImage);
+              if (!isLocalUri(resolvedUrl)) {
+                coverImageUrl = resolvedUrl;
+              }
+            } else if (game.metadata && game.metadata.coverImageUrl) {
+              if (!isLocalUri(game.metadata.coverImageUrl)) {
+                coverImageUrl = game.metadata.coverImageUrl; // `coverImageUrl` is deprecated
+              }
+            }
+            result = await Session.apolloClient.mutate({
+              mutation: gql`
+                mutation(
+                  $status: String!
+                  $url: String!
+                  $title: String
+                  $coverImage: String
+                  $isNewSession: Boolean
+                ) {
+                  recordUserStatus(
+                    status: $status
+                    isNewSession: $isNewSession
+                    unregisteredGame: { url: $url, title: $title, coverImage: $coverImage }
+                  ) {
+                    userStatusId
+                  }
+                }
+              `,
+              variables: {
+                status,
+                isNewSession,
+                url: game.url,
+                title,
+                coverImage: coverImageUrl,
+              },
+            });
+          }
+          if (result.errors && result.errors.length) {
+            if (result.errors[0].extensions.code === 'LOGIN_REQUIRED') {
+              stop();
+            }
+          }
+        }
+      };
+
+      // Do it once as a new session, then every 25 seconds not as a new session
+      recordUserStatus(true);
+      interval = setInterval(() => recordUserStatus(false), 25000);
+
+      return stop;
+    }
+  }, [game]);
+};
+
 // Given a `gameId` or `gameUri`, run and display the game! The lifetime of this component must match the
 // lifetime of the game run -- it must be unmounted when the game is stopped and a new instance mounted
 // if a new game should be run (or even if the same game should be restarted).
 const GameView = ({ gameId, gameUri, extras, windowed, onPressReload }) => {
   const fetchGameHook = useFetchGame({ gameId, gameUri });
   const game = fetchGameHook.fetchedGame;
+
+  useUserStatus({ game });
 
   const dimensionsSettings = game && computeDimensionsSettings({ metadata: game.metadata });
 
