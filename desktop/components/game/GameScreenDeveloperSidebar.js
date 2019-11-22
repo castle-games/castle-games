@@ -10,8 +10,10 @@ import _ from 'lodash';
 
 import DevelopmentLogs from '~/components/game/DevelopmentLogs';
 import DevelopmentCodeEditor from '~/components/game/DevelopmentCodeEditor';
+import GameEditorFileTree from '~/components/game/editor/GameEditorFileTree';
 import GameEditorImagePreview from '~/components/game/editor/GameEditorImagePreview';
 import GameEditorFontPreview from '~/components/game/editor/GameEditorFontPreview';
+import GameEditorTab from '~/components/game/editor/GameEditorTab';
 
 const path = Utilities.path();
 
@@ -197,20 +199,6 @@ const STYLES_EDITOR_TABS = css`
   }
 `;
 
-const STYLES_EDITOR_TAB = css`
-  display: inline-block;
-  border-right: 1px solid #555;
-  width: 150px;
-  height: 30px;
-  line-height: 30px;
-  color: #fff;
-  font-size: 11px;
-  white-space: nowrap;
-  overflow: hidden;
-  cursor: pointer;
-  user-select: none;
-`;
-
 export default class GameScreenDeveloperSidebar extends React.Component {
   _client;
   _server;
@@ -218,7 +206,6 @@ export default class GameScreenDeveloperSidebar extends React.Component {
 
   state = {
     server: 484,
-    expandedDirectories: {},
     focusedTabUrl: 'local_logs',
     hoverTabUrl: null,
     hoverTabXUrl: null,
@@ -230,135 +217,6 @@ export default class GameScreenDeveloperSidebar extends React.Component {
       },
     ],
     dragTab: null,
-  };
-
-  _buildFileTree = () => {
-    const { game, editableFiles } = this.props;
-
-    let root = {};
-    let baseUrl = game.entryPoint.substring(0, game.entryPoint.lastIndexOf('/') + 1);
-
-    Object.keys(editableFiles).forEach((url) => {
-      let filename = editableFiles[url].filename;
-      if (filename.startsWith(baseUrl)) {
-        filename = filename.substring(baseUrl.length);
-      }
-
-      if (filename.startsWith('./')) {
-        filename = filename.substring(2);
-      }
-
-      if (filename.includes('://')) {
-        root[filename] = {
-          url,
-        };
-      } else {
-        let currentDirectory = root;
-
-        filename
-          .split('/')
-          .slice(0, -1)
-          .forEach((directory) => {
-            if (!currentDirectory[directory]) {
-              currentDirectory[directory] = {};
-            }
-
-            currentDirectory = currentDirectory[directory];
-          });
-
-        currentDirectory[filename.split('/').slice(-1)] = {
-          url,
-        };
-      }
-    });
-
-    let orderedRoot = this._sortDirectory(root, 0, '');
-    return this._buildFileTreeComponents(orderedRoot, '');
-  };
-
-  _sortDirectory = (unordered, depth, directoryPath) => {
-    let ordered = [];
-
-    // directories go first
-    Object.keys(unordered)
-      .sort()
-      .forEach((filename) => {
-        if (!unordered[filename].url) {
-          let newDirectoryPath = directoryPath + filename + '/';
-          let directory = null;
-          let isExpanded = !!this.state.expandedDirectories[newDirectoryPath];
-
-          if (isExpanded) {
-            directory = this._sortDirectory(unordered[filename], depth + 1, newDirectoryPath);
-          }
-
-          ordered.push({ depth, isExpanded, directoryName: filename, directory });
-        }
-      });
-
-    // then files
-    Object.keys(unordered)
-      .sort()
-      .forEach((filename) => {
-        if (unordered[filename].url) {
-          ordered.push({
-            depth,
-            filename,
-            url: unordered[filename].url,
-          });
-        }
-      });
-
-    return ordered;
-  };
-
-  _buildFileTreeComponents = (directory, directoryPath) => {
-    let result = [];
-
-    directory.forEach((file) => {
-      if (file.directoryName) {
-        let newDirectoryPath = directoryPath + file.directoryName + '/';
-
-        result.push(
-          <div
-            key={`${file.directoryName}`}
-            style={{ marginLeft: `${file.depth * 10}px` }}
-            className={STYLES_PICKER_SELECTION}
-            onClick={() => {
-              let expandedDirectories = { ...this.state.expandedDirectories };
-              if (expandedDirectories[newDirectoryPath]) {
-                delete expandedDirectories[newDirectoryPath];
-              } else {
-                expandedDirectories[newDirectoryPath] = true;
-              }
-
-              this.setState({
-                expandedDirectories,
-              });
-            }}>
-            {`${file.isExpanded ? String.fromCharCode('0x22C1') : '>'} ${file.directoryName}`}
-          </div>
-        );
-
-        if (file.directory) {
-          result = [...result, ...this._buildFileTreeComponents(file.directory, newDirectoryPath)];
-        }
-      } else {
-        result.push(
-          <div
-            key={file.url}
-            style={{ marginLeft: `${file.depth * 10}px` }}
-            className={STYLES_PICKER_SELECTION}
-            onClick={() => {
-              this._openTab(`file:${file.url}`, file.url.substring(file.url.lastIndexOf('/') + 1));
-            }}>
-            {file.filename}
-          </div>
-        );
-      }
-    });
-
-    return result;
   };
 
   _openTab = (url, title) => {
@@ -711,7 +569,7 @@ export default class GameScreenDeveloperSidebar extends React.Component {
   };
 
   render() {
-    const { isMultiplayerCodeUploadEnabled } = this.props;
+    const { game, editableFiles, isMultiplayerCodeUploadEnabled } = this.props;
     const { tabs, focusedTabUrl, hoverTabUrl, hoverTabXUrl, dragTab } = this.state;
 
     const isMultiplayer = Utilities.isMultiplayer(this.props.game);
@@ -755,15 +613,20 @@ export default class GameScreenDeveloperSidebar extends React.Component {
             )}
 
             <div style={{ paddingTop: 10 }}>Files:</div>
-            {this._buildFileTree()}
+            <GameEditorFileTree game={game} editableFiles={editableFiles} openTab={this._openTab} />
           </div>
           <div className={STYLES_EDITOR_CONTENT}>
             <div ref={this._tabsContainerRefFn} className={STYLES_EDITOR_TABS}>
               {tabs.map((tab) => {
                 return (
-                  <div
+                  <GameEditorTab
                     key={tab.url}
-                    ref={(ref) => {
+                    title={tab.title}
+                    isFocused={tab.url === focusedTabUrl}
+                    isHover={tab.url === hoverTabUrl}
+                    isHoverCloseButton={tab.url === hoverTabXUrl}
+                    closeTab={() => this._closeTab(tab.url)}
+                    componentRef={(ref) => {
                       this._urlToRef[tab.url] = ref;
 
                       if (ref && this._tabsContainerRef && this.state.scrollToTabUrl === tab.url) {
@@ -815,55 +678,33 @@ export default class GameScreenDeveloperSidebar extends React.Component {
                         hoverTabUrl: null,
                       });
                     }}
-                    className={STYLES_EDITOR_TAB}
-                    style={{ backgroundColor: tab.url === focusedTabUrl ? '#333333' : '#000000' }}>
-                    <span style={{ width: 120, display: 'inline-block', paddingLeft: 20 }}>
-                      {tab.title}
-                    </span>
-                    <span
-                      onMouseDown={(e) => {
-                        // don't want parent's onMouseDown to get triggered
-                        e.stopPropagation();
-                      }}
-                      onClick={(e) => {
-                        this._closeTab(tab.url);
-
-                        // don't want parent's onClick to get triggered
-                        e.stopPropagation();
-                      }}
-                      onMouseEnter={() => {
-                        this.setState({
-                          hoverTabXUrl: tab.url,
-                        });
-                      }}
-                      onMouseLeave={() => {
-                        this.setState({
-                          hoverTabXUrl: null,
-                        });
-                      }}
-                      style={{
-                        padding: 10,
-                        color: tab.url === hoverTabXUrl ? '#fff' : '#888',
-                        visibility:
-                          tab.url === focusedTabUrl || tab.url === hoverTabUrl
-                            ? 'visible'
-                            : 'hidden',
-                      }}>
-                      x
-                    </span>
-                  </div>
+                    onMouseEnterCloseButton={() => {
+                      this.setState({
+                        hoverTabXUrl: tab.url,
+                      });
+                    }}
+                    onMouseLeaveCloseButton={() => {
+                      this.setState({
+                        hoverTabXUrl: null,
+                      });
+                    }}
+                    style={{ backgroundColor: tab.url === focusedTabUrl ? '#333333' : '#000000' }}
+                  />
                 );
               })}
 
               {dragTab && (
-                <div
+                <GameEditorTab
                   key="drag-tab"
+                  title={dragTab.title}
+                  isFocused={true}
+                  isHover={false}
+                  isHoverCloseButton={false}
                   onMouseUp={() => {
                     this.setState({
                       dragTab: null,
                     });
                   }}
-                  className={STYLES_EDITOR_TAB}
                   style={{
                     position: 'fixed',
                     zIndex: 10,
@@ -872,18 +713,8 @@ export default class GameScreenDeveloperSidebar extends React.Component {
                     backgroundColor: '#333333',
                     opacity: 0.8,
                     overflowY: 'hidden',
-                  }}>
-                  <span style={{ width: 120, display: 'inline-block', paddingLeft: 20 }}>
-                    {dragTab.title}
-                  </span>
-                  <span
-                    style={{
-                      padding: 10,
-                      color: '#888',
-                    }}>
-                    x
-                  </span>
-                </div>
+                  }}
+                />
               )}
             </div>
             {this._renderEditorContent()}
