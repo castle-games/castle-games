@@ -1,5 +1,12 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Switch, Picker } from 'react-native';
+import React, { useState, useRef } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  Switch,
+} from 'react-native';
 import Slider from '@react-native-community/slider';
 import Markdown from 'react-native-markdown-renderer';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -214,6 +221,15 @@ const viewStyleProps = p => {
 // Components
 //
 
+const textInputStyle = {
+  flex: 1,
+  borderColor: 'gray',
+  borderWidth: 1,
+  borderRadius: 4,
+  paddingVertical: 8,
+  paddingHorizontal: 12,
+};
+
 const buttonStyle = {
   padding: 6,
   backgroundColor: '#ddd',
@@ -238,11 +254,7 @@ const ToolTextInput = ({ element, multiline }) => {
       <Text style={{ fontWeight: boldWeight2, marginBottom: 4 }}>{element.props.label}</Text>
       <TextInput
         style={{
-          borderColor: 'gray',
-          borderWidth: 1,
-          borderRadius: 4,
-          paddingVertical: 8,
-          paddingHorizontal: 12,
+          ...textInputStyle,
           height: multiline ? 72 : null,
           ...viewStyleProps(element.props),
         }}
@@ -337,33 +349,65 @@ const ToolNumberInput = ({ element }) => {
   const incrementValue = delta =>
     setText(numberToText(checkAndSetValue((value || 0) + delta * (element.props.step || 1))));
 
+  const [focused, setFocused] = useState(false);
+
+  const textInputRef = useRef(null);
+
   return (
     <View style={{ margin: 4 }}>
       <Text style={{ fontWeight: boldWeight2, marginBottom: 4 }}>{element.props.label}</Text>
       <View style={{ flexDirection: 'row' }}>
-        <TextInput
-          keyboardType="numeric"
-          style={{
-            flex: 1,
-            borderColor: 'gray',
-            borderWidth: 1,
-            borderRadius: 4,
-            paddingVertical: 8,
-            paddingHorizontal: 12,
-            ...viewStyleProps(element.props.textInputStyle),
-          }}
-          returnKeyType="done"
-          value={text}
-          onChangeText={newText => {
-            // User edited the text -- save the changes and also send updated value to Lua
-            setText(newText);
-            checkAndSetValue(textToNumber(newText));
-          }}
-          onBlur={() => {
-            // User unfocused the input -- revert text to reflect the value and discard edits
-            setText(numberToText(value));
-          }}
-        />
+        <View style={{ flex: 1 }}>
+          <TextInput
+            ref={textInputRef}
+            keyboardType="numeric"
+            style={{
+              ...textInputStyle,
+              ...viewStyleProps(element.props.textInputStyle),
+            }}
+            selectTextOnFocus
+            returnKeyType="done"
+            value={text}
+            onChangeText={newText => {
+              // User edited the text -- save the changes and also send updated value to Lua
+              setText(newText);
+              checkAndSetValue(textToNumber(newText));
+            }}
+            onBlur={() => {
+              setFocused(false);
+
+              // User unfocused the input -- revert text to reflect the value and discard edits
+              setText(numberToText(value));
+            }}
+          />
+          {Constants.Android && !focused ? (
+            // Workaround for https://github.com/facebook/react-native/issues/14845... :|
+            <View
+              style={{
+                ...textInputStyle,
+                position: 'absolute',
+                left: 0,
+                top: 0,
+                bottom: 0,
+                right: 0,
+                justifyContent: 'center',
+                backgroundColor: 'white',
+              }}>
+              <TouchableWithoutFeedback
+                style={{ flex: 1 }}
+                onPress={() => {
+                  if (textInputRef.current) {
+                    textInputRef.current.focus();
+                    setFocused(true);
+                  }
+                }}>
+                <Text numberOfLines={1} ellipsizeMode="tail">
+                  {value}
+                </Text>
+              </TouchableWithoutFeedback>
+            </View>
+          ) : null}
+        </View>
         <TouchableOpacity
           style={{
             ...buttonStyle,
