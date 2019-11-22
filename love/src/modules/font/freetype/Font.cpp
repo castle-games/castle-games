@@ -58,10 +58,10 @@ Rasterizer *Font::newRasterizer(love::filesystem::FileData *data)
 
 Rasterizer *Font::newTrueTypeRasterizer(love::Data *data, int size, TrueTypeRasterizer::Hinting hinting)
 {
-	float dpiscale = 1.0f;
-	auto window = Module::getInstance<window::Window>(Module::M_WINDOW);
-	if (window != nullptr)
-		dpiscale = window->getDPIScale();
+	float dpiscale = 4.0f;
+	// auto window = Module::getInstance<window::Window>(Module::M_WINDOW);
+	// if (window != nullptr)
+	// 	dpiscale = window->getDPIScale();
 
 	return newTrueTypeRasterizer(data, size, dpiscale, hinting);
 }
