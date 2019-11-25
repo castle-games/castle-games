@@ -11,10 +11,13 @@ import Slider from '@react-native-community/slider';
 import Markdown from 'react-native-markdown-renderer';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ActionSheet from 'react-native-action-sheet';
+import Popover from 'react-native-popover-view';
+import tinycolor from 'tinycolor2';
 
 import * as GhostEvents from './ghost/GhostEvents';
 import { ScrollView } from 'react-native-gesture-handler';
 import * as Constants from './Constants';
+import ColorPicker from './ColorPicker';
 
 const ENABLE_TOOLS = true;
 
@@ -611,6 +614,71 @@ const ToolDropdown = ({ element }) => {
   );
 };
 elementTypes['dropdown'] = ToolDropdown;
+
+const ToolColorPicker = ({ element }) => {
+  const [value, setValue] = useValue({ element });
+  const [picking, setPicking] = useState(false);
+
+  const anchorRef = useRef(null);
+
+  let valueStr;
+  if (value) {
+    const r255 = 255 * value.r;
+    const g255 = 255 * value.g;
+    const b255 = 255 * value.b;
+    valueStr = `rgb(${r255}, ${g255}, ${b255})`;
+  }
+
+  const setValueFromStr = newValueStr => {
+    const rgba = tinycolor(newValueStr).toRgb();
+    setValue({ r: rgba.r / 255.0, g: rgba.g / 255.0, b: rgba.b / 255.0, a: rgba.a });
+  };
+
+  return (
+    <View style={{ margin: 4 }}>
+      <Text style={{ fontWeight: boldWeight2, marginBottom: 4 }}>{element.props.label}</Text>
+      <TouchableOpacity
+        ref={anchorRef}
+        style={{
+          ...buttonStyle,
+          margin: 4,
+          alignSelf: 'flex-start',
+        }}
+        onPress={() => setPicking(true)}>
+        <View style={{ width: 20, height: 20, backgroundColor: valueStr }} />
+      </TouchableOpacity>
+      <Popover
+        fromView={anchorRef.current}
+        isVisible={picking}
+        popoverStyle={{
+          elevation: 1,
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: 1,
+          },
+          shadowOpacity: 0.18,
+          shadowRadius: 1.2,
+          overflow: 'visible',
+        }}
+        arrowStyle={{ backgroundColor: 'transparent' }}
+        backgroundStyle={{ backgroundColor: 'transparent' }}
+        onRequestClose={() => setPicking(false)}>
+        <ColorPicker
+          style={{ width: 200, height: 200 }}
+          oldColor={valueStr}
+          onColorChange={setValueFromStr}
+          onColorSelected={newValueStr => {
+            setValueFromStr(newValueStr);
+            setPicking(false);
+          }}
+          onOldColorSelected={() => setPicking(false)}
+        />
+      </Popover>
+    </View>
+  );
+};
+elementTypes['colorPicker'] = ToolColorPicker;
 
 //
 // Container
