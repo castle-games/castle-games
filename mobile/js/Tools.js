@@ -667,7 +667,6 @@ const ToolColorPicker = ({ element }) => {
         ref={anchorRef}
         style={{
           ...buttonStyle,
-          margin: 4,
           alignSelf: 'flex-start',
         }}
         onPress={() => setPicking(true)}>
