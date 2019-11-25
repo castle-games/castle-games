@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Fragment } from 'react';
 import { View, KeyboardAvoidingView } from 'react-native';
 import { useLazyQuery, useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
@@ -483,17 +483,22 @@ const GameView = ({ gameId, gameUri, extras, windowed, onPressReload }) => {
 
       <KeyboardAvoidingView behavior="padding" enabled={Constants.iOS} style={{ flex: 1 }}>
         {game && eventsReady && initialDataHook.sent ? (
-          // Render `GhostView` and `GameInputs` when ready
-          <View style={{ flex: 1 }}>
-            <GhostView
-              style={{ flex: 1 }}
-              uri={game.entryPoint}
-              dimensionsSettings={dimensionsSettings}
-            />
-            <GameInputs visible={!windowed} inputsMode={inputsMode} actionKeyCode={actionKeyCode} />
-          </View>
+          <Fragment>
+            <View style={{ flex: 1 }}>
+              <GhostView
+                style={{ flex: 1 }}
+                uri={game.entryPoint}
+                dimensionsSettings={dimensionsSettings}
+              />
+              <GameInputs
+                visible={!windowed}
+                inputsMode={inputsMode}
+                actionKeyCode={actionKeyCode}
+              />
+            </View>
+            <Tools eventsReady={eventsReady} visible={!windowed} game={game} />
+          </Fragment>
         ) : null}
-        <Tools visible={!windowed} eventsReady={eventsReady} />
 
         {!luaLoadingHook.loaded ? (
           <GameLoading

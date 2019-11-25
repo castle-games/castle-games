@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useContext } from 'react';
 import {
   View,
   Text,
@@ -13,6 +13,9 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import ActionSheet from 'react-native-action-sheet';
 import Popover from 'react-native-popover-view';
 import tinycolor from 'tinycolor2';
+import url from 'url';
+import FastImage from 'react-native-fast-image';
+import FitImage from 'react-native-fit-image';
 
 import * as GhostEvents from './ghost/GhostEvents';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -219,6 +222,11 @@ const viewStyleProps = p => {
   });
   return r;
 };
+
+// Context for common data across all tools
+const ToolsContext = React.createContext({
+  transformAssetUri: uri => uri,
+});
 
 //
 // Components
@@ -483,11 +491,29 @@ const ToolSection = ({ element }) => (
 );
 elementTypes['section'] = ToolSection;
 
-const ToolMarkdown = ({ element }) => (
-  <View style={{ margin: 4, ...viewStyleProps(element.props) }}>
-    <Markdown>{element.props.source}</Markdown>
-  </View>
-);
+const ToolMarkdown = ({ element }) => {
+  const { transformAssetUri } = useContext(ToolsContext);
+
+  return (
+    <View style={{ margin: 4, ...viewStyleProps(element.props) }}>
+      <Markdown
+        rules={{
+          image: (node, children, parent, styles) => {
+            return (
+              <FitImage
+                indicator={true}
+                key={node.key}
+                style={styles.image}
+                source={{ uri: node.attributes.src && transformAssetUri(node.attributes.src) }}
+              />
+            );
+          },
+        }}>
+        {element.props.source}
+      </Markdown>
+    </View>
+  );
+};
 elementTypes['markdown'] = ToolMarkdown;
 
 const ToolTabs = ({ element }) => {
@@ -680,6 +706,26 @@ const ToolColorPicker = ({ element }) => {
 };
 elementTypes['colorPicker'] = ToolColorPicker;
 
+const ToolImage = ({ element }) => {
+  const { transformAssetUri } = useContext(ToolsContext);
+
+  let resizeMode = FastImage.resizeMode.cover;
+  if (element.props.resizeMode) {
+    resizeMode = FastImage.resizeMode[element.props.resizeMode] || resizeMode;
+  }
+
+  const uri = element.props.path && transformAssetUri(element.props.path);
+
+  return (
+    <FastImage
+      style={{ margin: 4, width: 200, height: 200, ...viewStyleProps(element.props) }}
+      source={{ uri }}
+      resizeMode={resizeMode}
+    />
+  );
+};
+elementTypes['image'] = ToolImage;
+
 //
 // Container
 //
@@ -716,7 +762,7 @@ const applyDiff = (t, diff) => {
 };
 
 // Top-level tools container -- watches for Lua <-> JS tool events and renders the tools overlaid in its parent
-export default Tools = ({ eventsReady, visible }) => {
+export default Tools = ({ eventsReady, visible, game }) => {
   // Maintain tools state
   const [root, setRoot] = useState({});
 
@@ -730,6 +776,9 @@ export default Tools = ({ eventsReady, visible }) => {
     },
   });
 
+  // Asset URI mapper
+  const transformAssetUri = uri => url.resolve(game.entryPoint, uri) || uri;
+
   // Check prop, feature flag, and that we have at least one non-empty pane
   visible =
     visible &&
@@ -742,13 +791,15 @@ export default Tools = ({ eventsReady, visible }) => {
 
   // Render the container
   return (
-    <View style={{ flex: 0.75, backgroundColor: 'white' }}>
-      <ScrollView style={{ flex: 1, paddingBottom: 100 }}>
-        {Object.values(root.panes).map((element, i) => (
-          <ToolPane key={element.props.name || i} element={element} />
-        ))}
-        <View style={{ height: 100 }} />
-      </ScrollView>
-    </View>
+    <ToolsContext.Provider value={{ transformAssetUri }}>
+      <View style={{ flex: 0.75, backgroundColor: 'white' }}>
+        <ScrollView style={{ flex: 1, paddingBottom: 100 }}>
+          {Object.values(root.panes).map((element, i) => (
+            <ToolPane key={element.props.name || i} element={element} />
+          ))}
+          <View style={{ height: 100 }} />
+        </ScrollView>
+      </View>
+    </ToolsContext.Provider>
   );
 };
