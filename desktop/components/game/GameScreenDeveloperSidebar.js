@@ -209,8 +209,6 @@ export default class GameScreenDeveloperSidebar extends React.Component {
   state = {
     server: 484,
     focusedTabUrl: 'local_logs',
-    hoverTabUrl: null,
-    hoverTabXUrl: null,
     scrollToTabUrl: null,
     tabs: [
       {
@@ -251,17 +249,12 @@ export default class GameScreenDeveloperSidebar extends React.Component {
     let tabs = [];
 
     let fallbackTabUrl = null;
-    let nextTabUrl = null;
     for (let i = 0; i < oldTabs.length; i++) {
       if (oldTabs[i].url === url) {
         if (i > 0) {
           fallbackTabUrl = oldTabs[i - 1].url;
         } else if (oldTabs.length > i + 1) {
           fallbackTabUrl = oldTabs[i + 1].url;
-        }
-
-        if (oldTabs.length > i + 1) {
-          nextTabUrl = oldTabs[i + 1].url;
         }
       } else {
         tabs.push(oldTabs[i]);
@@ -271,8 +264,6 @@ export default class GameScreenDeveloperSidebar extends React.Component {
     let { focusedTabUrl } = this.state;
 
     this.setState({
-      hoverTabUrl: nextTabUrl,
-      hoverTabXUrl: nextTabUrl,
       focusedTabUrl: focusedTabUrl === url ? fallbackTabUrl : focusedTabUrl,
       tabs,
     });
@@ -572,7 +563,7 @@ export default class GameScreenDeveloperSidebar extends React.Component {
 
   render() {
     const { game, editableFiles, isMultiplayerCodeUploadEnabled } = this.props;
-    const { tabs, focusedTabUrl, hoverTabUrl, hoverTabXUrl, dragTab } = this.state;
+    const { tabs, focusedTabUrl, dragTab } = this.state;
 
     const isMultiplayer = Utilities.isMultiplayer(this.props.game);
 
@@ -623,8 +614,6 @@ export default class GameScreenDeveloperSidebar extends React.Component {
                     key={tab.url}
                     title={tab.title}
                     isFocused={tab.url === focusedTabUrl}
-                    isHover={tab.url === hoverTabUrl}
-                    isHoverCloseButton={tab.url === hoverTabXUrl}
                     closeTab={() => this._closeTab(tab.url)}
                     componentRef={(ref) => {
                       this._urlToRef[tab.url] = ref;
@@ -668,26 +657,6 @@ export default class GameScreenDeveloperSidebar extends React.Component {
                         dragTab: null,
                       });
                     }}
-                    onMouseEnter={() => {
-                      this.setState({
-                        hoverTabUrl: tab.url,
-                      });
-                    }}
-                    onMouseLeave={() => {
-                      this.setState({
-                        hoverTabUrl: null,
-                      });
-                    }}
-                    onMouseEnterCloseButton={() => {
-                      this.setState({
-                        hoverTabXUrl: tab.url,
-                      });
-                    }}
-                    onMouseLeaveCloseButton={() => {
-                      this.setState({
-                        hoverTabXUrl: null,
-                      });
-                    }}
                     style={{ backgroundColor: tab.url === focusedTabUrl ? '#333333' : '#000000' }}
                   />
                 );
@@ -698,8 +667,6 @@ export default class GameScreenDeveloperSidebar extends React.Component {
                   key="drag-tab"
                   title={dragTab.title}
                   isFocused={true}
-                  isHover={false}
-                  isHoverCloseButton={false}
                   onMouseUp={() => {
                     this.setState({
                       dragTab: null,

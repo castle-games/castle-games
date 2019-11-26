@@ -29,35 +29,36 @@ const STYLES_EDITOR_TAB_TEXT = css`
 `;
 
 const STYLES_EDITOR_TAB_CLOSE_BUTTON = css`
+  color: #888;
   flex-shrink: 0;
   padding: 8px;
+
+  :hover {
+    color: #fff;
+  }
 `;
 
 export default class GameEditorTab extends React.Component {
+  state = {
+    isHover: false,
+  };
+
   render() {
-    let {
-      componentRef,
-      title,
-      isFocused,
-      isHover,
-      isHoverCloseButton,
-      onMouseDown,
-      onMouseUp,
-      onMouseEnter,
-      onMouseLeave,
-      onMouseEnterCloseButton,
-      onMouseLeaveCloseButton,
-      closeTab,
-      style,
-    } = this.props;
+    let { componentRef, title, isFocused, onMouseDown, onMouseUp, closeTab, style } = this.props;
+
+    const { isHover } = this.state;
 
     return (
       <div
         ref={componentRef}
         onMouseDown={onMouseDown}
         onMouseUp={onMouseUp}
-        onMouseEnter={onMouseEnter}
-        onMouseLeave={onMouseLeave}
+        onMouseOver={() => {
+          this.setState({ isHover: true });
+        }}
+        onMouseLeave={() => {
+          this.setState({ isHover: false });
+        }}
         className={STYLES_EDITOR_TAB}
         style={style}>
         <div className={STYLES_EDITOR_TAB_TEXT}>{title}</div>
@@ -72,11 +73,8 @@ export default class GameEditorTab extends React.Component {
             // don't want parent's onClick to get triggered
             e.stopPropagation();
           }}
-          onMouseEnter={onMouseEnterCloseButton}
-          onMouseLeave={onMouseLeaveCloseButton}
           className={STYLES_EDITOR_TAB_CLOSE_BUTTON}
           style={{
-            color: isHoverCloseButton ? '#fff' : '#888',
             visibility: isFocused || isHover ? 'visible' : 'hidden',
           }}>
           <SVG.Dismiss size={10} />
