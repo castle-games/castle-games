@@ -188,7 +188,6 @@ const STYLES_EDITOR_INNER = css`
 
 const STYLES_EDITOR_TABS = css`
   width: 100%;
-  height: 30px;
   overflow-x: scroll;
   overflow-y: hidden;
   white-space: nowrap;
