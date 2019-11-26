@@ -42,6 +42,7 @@ const STYLES_EDITOR = css`
 
 const STYLES_PROJECT_TREE = css`
   width: 15%;
+  min-width: 128px;
   height: 100%;
   border-right: 1px solid ${BORDER_COLOR};
   color: #fff;
@@ -123,6 +124,7 @@ const STYLES_SECTION_HEADER = css`
   padding: 0 16px 0 16px;
   flex-shrink: 0;
   color: #fff;
+  background-color: #181818;
   border-bottom: 1px solid ${BORDER_COLOR};
 `;
 
@@ -191,14 +193,21 @@ const STYLES_EDITOR_INNER = css`
 
 const STYLES_EDITOR_TABS = css`
   width: 100%;
+  display: flex;
+  flex-shrink: 0;
   overflow-x: scroll;
   overflow-y: hidden;
   white-space: nowrap;
-  border-bottom: 1px solid #555;
 
   ::-webkit-scrollbar {
     display: none;
   }
+`;
+
+const STYLES_EMPTY_TAB = css`
+  width: 100%;
+  flex-shrink: 1;
+  border-bottom: 1px solid #555;
 `;
 
 export default class GameScreenDeveloperSidebar extends React.Component {
@@ -659,7 +668,6 @@ export default class GameScreenDeveloperSidebar extends React.Component {
                         dragTab: null,
                       });
                     }}
-                    style={{ backgroundColor: tab.url === focusedTabUrl ? '#333333' : '#000000' }}
                   />
                 );
               })}
@@ -685,6 +693,7 @@ export default class GameScreenDeveloperSidebar extends React.Component {
                   }}
                 />
               )}
+              <div id="emptyTabSpace" className={STYLES_EMPTY_TAB} />
             </div>
             {this._renderEditorContent()}
           </div>

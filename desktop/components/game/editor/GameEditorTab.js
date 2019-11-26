@@ -5,9 +5,10 @@ import { css } from 'react-emotion';
 
 const STYLES_EDITOR_TAB = css`
   display: inline-flex;
-  border-right: 1px solid #555;
+  box-sizing: border-box;
   width: 100%;
   max-width: 150px;
+  min-width: 100px;
   color: #fff;
   font-size: 11px;
   white-space: nowrap;
@@ -21,7 +22,7 @@ const STYLES_EDITOR_TAB = css`
 const STYLES_EDITOR_TAB_TEXT = css`
   width: 100%;
   display: inline-block;
-  padding-left: 16px;
+  padding: 0 0 2px 16px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -44,9 +45,15 @@ export default class GameEditorTab extends React.Component {
   };
 
   render() {
-    let { componentRef, title, isFocused, onMouseDown, onMouseUp, closeTab, style } = this.props;
+    let { componentRef, title, isFocused, onMouseDown, onMouseUp, closeTab } = this.props;
 
     const { isHover } = this.state;
+    let style = {
+      backgroundColor: isFocused ? '#333' : '#000',
+      borderBottom: isFocused ? `1px solid #333` : `1px solid #555`,
+      borderRight: isFocused ? `1px solid #555` : `1px solid #333`,
+      ...this.props.style,
+    };
 
     return (
       <div
