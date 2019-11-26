@@ -62,6 +62,9 @@ export const messageHasActivity = (m) => {
       return false;
     }
   }
+  if (isMessageHidden(m)) {
+    return false;
+  }
   return true;
 };
 
