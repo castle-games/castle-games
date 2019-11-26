@@ -29,7 +29,8 @@ import GameWindow from '~/native/gamewindow';
 import Logs from '~/common/logs';
 import PublishHistory from '~/common/publish-history';
 
-const isReloadHotkey = isKeyHotkey('mod+r');
+const isReloadHotkey = isKeyHotkey('mod+shift+r');
+const isSoftReloadHotkey = isKeyHotkey('mod+r');
 const isDevelopmentHotkey = isKeyHotkey('mod+j');
 const isEscFullScreenHotkey = isKeyHotkey('esc');
 const isEndGameHotkey = isKeyHotkey('mod+w');
@@ -167,6 +168,11 @@ class App extends React.Component {
     if (isReloadHotkey(e)) {
       e.preventDefault();
       return this.props.navigator.reloadGame(true);
+    }
+
+    if (isSoftReloadHotkey(e)) {
+      e.preventDefault();
+      return this.props.navigator.softReloadGame();
     }
 
     if (isEscFullScreenHotkey(e)) {
