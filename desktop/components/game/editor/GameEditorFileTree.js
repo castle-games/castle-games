@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as Utilities from '~/common/utilities';
 
 import { css } from 'react-emotion';
 
@@ -16,7 +17,8 @@ export default class GameEditorFileTree extends React.Component {
     const { game, editableFiles } = this.props;
 
     let root = {};
-    let baseUrl = game.entryPoint.substring(0, game.entryPoint.lastIndexOf('/') + 1);
+    const entryPoint = Utilities.getLuaEntryPoint(game);
+    let baseUrl = entryPoint.substring(0, entryPoint.lastIndexOf('/') + 1);
 
     Object.keys(editableFiles).forEach((url) => {
       let filename = editableFiles[url].filename;
