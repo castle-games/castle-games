@@ -438,6 +438,8 @@ export default class GameScreenDeveloperSidebar extends React.Component {
   };
 
   _renderServerLogs = () => {
+    let { isMultiplayerCodeUploadEnabled } = this.props;
+
     let maybeMultiplayerElement;
     if (URLS.isPrivateUrl(this.props.game.url)) {
       maybeMultiplayerElement = (
