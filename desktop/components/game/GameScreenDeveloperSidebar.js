@@ -14,6 +14,7 @@ import GameEditorFileTree from '~/components/game/editor/GameEditorFileTree';
 import GameEditorImagePreview from '~/components/game/editor/GameEditorImagePreview';
 import GameEditorFontPreview from '~/components/game/editor/GameEditorFontPreview';
 import GameEditorTab from '~/components/game/editor/GameEditorTab';
+import GameEditorTreeItem from '~/components/game/editor/GameEditorTreeItem';
 
 const path = Utilities.path();
 
@@ -39,7 +40,7 @@ const STYLES_EDITOR = css`
   flex-direction: row;
 `;
 
-const STYLES_PICKER = css`
+const STYLES_PROJECT_TREE = css`
   width: 15%;
   height: 100%;
   border-right: 1px solid ${BORDER_COLOR};
@@ -48,9 +49,11 @@ const STYLES_PICKER = css`
   overflow-y: scroll;
 `;
 
-const STYLES_PICKER_SELECTION = css`
-  padding: 10px 0px 0px 10px;
-  cursor: pointer;
+const STYLES_PROJECT_TREE_HEADER = css`
+  text-transform: uppercase;
+  font-weight: 700;
+  margin: 8px;
+  user-select: none;
 `;
 
 const STYLES_EDITOR_CONTENT = css`
@@ -419,7 +422,7 @@ export default class GameScreenDeveloperSidebar extends React.Component {
       <div className={STYLES_LOGS}>
         <div className={STYLES_COL}>
           <div className={STYLES_SECTION_HEADER}>
-            <div className={STYLES_HEADING_LEFT}>Local logs</div>
+            <div className={STYLES_HEADING_LEFT}></div>
             <div className={STYLES_HEADING_RIGHT} style={{ minWidth: 100 }}>
               <span className={STYLES_CTA} onClick={this.props.setters.clearLogs}>
                 Clear
@@ -462,7 +465,7 @@ export default class GameScreenDeveloperSidebar extends React.Component {
       <div className={STYLES_LOGS}>
         <div className={STYLES_COL}>
           <div className={STYLES_SECTION_HEADER}>
-            <div className={STYLES_HEADING_LEFT}>Server logs</div>
+            <div className={STYLES_HEADING_LEFT}></div>
             <div className={STYLES_HEADING_RIGHT} style={{ minWidth: 100 }}>
               {maybeMultiplayerElement}
               <span className={STYLES_CTA} onClick={this._handleServerLogReload}>
@@ -592,26 +595,24 @@ export default class GameScreenDeveloperSidebar extends React.Component {
         </div>
 
         <div className={STYLES_EDITOR}>
-          <div className={STYLES_PICKER}>
-            <div style={{ paddingTop: 10 }}>Logs:</div>
-            <div
-              className={STYLES_PICKER_SELECTION}
+          <div className={STYLES_PROJECT_TREE}>
+            <div className={STYLES_PROJECT_TREE_HEADER}>Logs</div>
+            <GameEditorTreeItem
               onClick={() => {
                 this._openTab('local_logs', 'Local Logs');
               }}>
               Local logs
-            </div>
+            </GameEditorTreeItem>
             {isMultiplayer && (
-              <div
-                className={STYLES_PICKER_SELECTION}
+              <GameEditorTreeItem
                 onClick={() => {
                   this._openTab('server_logs', 'Server Logs');
                 }}>
                 Server logs
-              </div>
+              </GameEditorTreeItem>
             )}
 
-            <div style={{ paddingTop: 10 }}>Files:</div>
+            <div className={STYLES_PROJECT_TREE_HEADER}>Files</div>
             <GameEditorFileTree game={game} editableFiles={editableFiles} openTab={this._openTab} />
           </div>
           <div className={STYLES_EDITOR_CONTENT}>

@@ -1,12 +1,8 @@
 import * as React from 'react';
+import * as SVG from '~/components/primitives/svg';
 import * as Utilities from '~/common/utilities';
 
-import { css } from 'react-emotion';
-
-const STYLES_PICKER_SELECTION = css`
-  padding: 10px 0px 0px 10px;
-  cursor: pointer;
-`;
+import GameEditorTreeItem from '~/components/game/editor/GameEditorTreeItem';
 
 export default class GameEditorFileTree extends React.Component {
   state = {
@@ -102,10 +98,9 @@ export default class GameEditorFileTree extends React.Component {
         let newDirectoryPath = directoryPath + file.directoryName + '/';
 
         result.push(
-          <div
+          <GameEditorTreeItem
             key={`${file.directoryName}`}
-            style={{ marginLeft: `${file.depth * 10}px` }}
-            className={STYLES_PICKER_SELECTION}
+            style={{ marginLeft: `${file.depth * 12}px` }}
             onClick={() => {
               let expandedDirectories = { ...this.state.expandedDirectories };
               if (expandedDirectories[newDirectoryPath]) {
@@ -118,8 +113,13 @@ export default class GameEditorFileTree extends React.Component {
                 expandedDirectories,
               });
             }}>
-            {`${file.isExpanded ? String.fromCharCode('0x22C1') : '>'} ${file.directoryName}`}
-          </div>
+            {file.isExpanded ? (
+              <SVG.DirectoryExpanded width={7} height={7} style={{ paddingRight: 4 }} />
+            ) : (
+              <SVG.DirectoryCollapsed width={7} height={7} style={{ paddingRight: 4 }} />
+            )}
+            {file.directoryName}
+          </GameEditorTreeItem>
         );
 
         if (file.directory) {
@@ -127,10 +127,9 @@ export default class GameEditorFileTree extends React.Component {
         }
       } else {
         result.push(
-          <div
+          <GameEditorTreeItem
             key={file.url}
-            style={{ marginLeft: `${file.depth * 10}px` }}
-            className={STYLES_PICKER_SELECTION}
+            style={{ marginLeft: `${file.depth * 12}px` }}
             onClick={() => {
               this.props.openTab(
                 `file:${file.url}`,
@@ -138,7 +137,7 @@ export default class GameEditorFileTree extends React.Component {
               );
             }}>
             {file.filename}
-          </div>
+          </GameEditorTreeItem>
         );
       }
     });

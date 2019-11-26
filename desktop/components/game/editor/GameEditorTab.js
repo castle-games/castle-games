@@ -22,6 +22,9 @@ const STYLES_EDITOR_TAB_TEXT = css`
   width: 100%;
   display: inline-block;
   padding-left: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   pointer-events: none;
 `;
 
