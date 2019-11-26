@@ -16,6 +16,7 @@ import tinycolor from 'tinycolor2';
 import url from 'url';
 import FastImage from 'react-native-fast-image';
 import FitImage from 'react-native-fit-image';
+import WebView from 'react-native-webview';
 
 import * as GhostEvents from './ghost/GhostEvents';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -724,6 +725,74 @@ const ToolImage = ({ element }) => {
   );
 };
 elementTypes['image'] = ToolImage;
+
+const ToolCodeEditor = ({ element }) => {
+  const webViewRef = useRef(null);
+
+  const [value, setValue] = useValue({
+    element,
+    onNewValue: newValue => {
+      if (webViewRef.current) {
+        webViewRef.current.injectJavascript(`
+          window.editor.getDoc().setValue(${JSON.stringify(newValue)});
+        `);
+      }
+    },
+  });
+
+  const injectedJavaScript = `
+    // Initialize CodeMirror
+    window.editor = CodeMirror.fromTextArea(document.getElementById('code'), {
+        mode: 'text/x-lua',
+        lineNumbers: true,
+        lineWrapping: true,
+    });
+
+    // Wrap with indent
+    var charWidth = window.editor.defaultCharWidth(), basePadding = 4;
+    window.editor.on('renderLine', function(cm, line, elt) {
+      var off = (CodeMirror.countColumn(line.text, null, cm.getOption('tabSize')) + 2) * charWidth;
+      elt.style.textIndent = '-' + off + 'px';
+      elt.style.paddingLeft = (basePadding + off) + 'px';
+    });
+    window.editor.refresh();
+
+    // Initial value
+    window.editor.getDoc().setValue(${JSON.stringify(value)});
+
+    // Send changes back
+    window.editor.on('change', function() {
+      window.ReactNativeWebView.postMessage(JSON.stringify({
+        type: 'change',
+        newValue: window.editor.getDoc().getValue(),
+      }));
+    });
+  `;
+
+  const onMessage = event => {
+    const data = JSON.parse(event.nativeEvent.data);
+    switch (data.type) {
+      case 'change':
+        setValue(data.newValue);
+        break;
+    }
+  };
+
+  return (
+    <View style={{ margin: 4 }}>
+      <Text style={{ fontWeight: boldWeight2, marginBottom: 4 }}>{element.props.label}</Text>
+      <WebView
+        ref={webViewRef}
+        style={{ height: 200, borderColor: 'gray', borderWidth: 1, borderRadius: 4 }}
+        source={{ uri: 'http://192.168.1.15:8082/index.html' }}
+        injectedJavaScript={injectedJavaScript}
+        onMessage={onMessage}
+        incognito
+      />
+    </View>
+  );
+};
+elementTypes['codeEditor'] = ToolCodeEditor;
 
 //
 // Container
