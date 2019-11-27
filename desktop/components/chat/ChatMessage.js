@@ -34,6 +34,8 @@ const STYLES_ACTIONS = css`
 `;
 
 export default class ChatMessage extends React.Component {
+  _containerRef;
+
   static defaultProps = {
     message: null,
     previousMessage: null,
@@ -90,13 +92,24 @@ export default class ChatMessage extends React.Component {
 
   _renderEmojiPicker = () => {
     if (this.state.isShowingEmojiPicker) {
+      let orientation = 'above';
+      if (this._containerRef) {
+        const rect = this._containerRef.getBoundingClientRect();
+        if (rect.top < 384) {
+          orientation = 'below';
+        }
+      }
       return (
         <UIBoundary
           enabled={true}
           captureResize={false}
           captureScroll={false}
           onOutsideRectEvent={this._handleToggleEmojiPicker}>
-          <UIEmojiPicker onSelectEmoji={this._handleSelectEmoji} isNarrowWidth={true} />
+          <UIEmojiPicker
+            onSelectEmoji={this._handleSelectEmoji}
+            isNarrowWidth={true}
+            orientation={orientation}
+          />
         </UIBoundary>
       );
     }
@@ -170,7 +183,7 @@ export default class ChatMessage extends React.Component {
     }
 
     return (
-      <div className={containerClass}>
+      <div className={containerClass} ref={(c) => (this._containerRef = c)}>
         {messageElement}
         {actionsElement}
         {this._renderEmojiPicker()}

@@ -9,7 +9,6 @@ import UIEmojiPickerInput from '~/components/reusable/UIEmojiPickerInput';
 
 const STYLES_CONTAINER = css`
   position: absolute;
-  bottom: 56px;
   right: 16px;
 
   padding: 8px 0;
@@ -18,10 +17,10 @@ const STYLES_CONTAINER = css`
   border: 1px solid rgba(219, 219, 219, 1);
   background: #fff;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1;
 `;
 
 const STYLES_SCROLLING_CONTAINER = css`
-  height: 256px;
   overflow-y: scroll;
   padding: 0 8px;
 
@@ -99,6 +98,7 @@ export default class UIEmojiPicker extends React.Component {
 
   static defaultProps = {
     isNarrowWidth: false,
+    orientation: 'above',
     onSelectEmoji: (shortName) => {},
   };
 
@@ -193,8 +193,12 @@ export default class UIEmojiPicker extends React.Component {
   render() {
     const categories = getCategories();
     const { autocompleteQuery } = this.state;
-    const { isNarrowWidth } = this.props;
-    const containerStyles = isNarrowWidth ? { width: 256 } : { width: 384 };
+    const { isNarrowWidth, orientation } = this.props;
+    let containerStyles = {
+      width: isNarrowWidth ? 256 : 384,
+      bottom: orientation == 'above' ? 56 : null,
+      top: orientation == 'below' ? 56 : null,
+    };
     return (
       <div className={STYLES_CONTAINER} style={containerStyles}>
         {this._renderCategoryNavigation(categories)}
@@ -205,7 +209,7 @@ export default class UIEmojiPicker extends React.Component {
           onChange={this._handleInputChange}
           autoFocus={true}
         />
-        <div className={STYLES_SCROLLING_CONTAINER}>
+        <div className={STYLES_SCROLLING_CONTAINER} style={{ height: isNarrowWidth ? 192 : 256 }}>
           {Strings.isEmpty(autocompleteQuery)
             ? this._renderEmojiCategories(categories)
             : this._renderFilteredEmoji(categories, autocompleteQuery)}
