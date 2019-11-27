@@ -860,7 +860,7 @@ export default Tools = ({ eventsReady, visible, game }) => {
   // Render the container
   return (
     <ToolsContext.Provider value={{ transformAssetUri }}>
-      <View style={{ flex: 0.75, backgroundColor: 'white' }}>
+      <View style={{ flex: 0.75, backgroundColor: 'white', borderColor: 'red', borderWidth: 2 }}>
         <ScrollView style={{ flex: 1, paddingBottom: 100 }}>
           {Object.values(root.panes).map((element, i) => (
             <ToolPane key={element.props.name || i} element={element} />

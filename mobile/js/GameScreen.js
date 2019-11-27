@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, Fragment } from 'react';
-import { View, KeyboardAvoidingView } from 'react-native';
+import { View, KeyboardAvoidingView, PixelRatio } from 'react-native';
 import { useLazyQuery, useQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import castleMetadata from 'castle-metadata';
@@ -469,6 +469,17 @@ const GameView = ({ gameId, gameUri, extras, windowed, onPressReload }) => {
     });
   };
 
+  const [keyboardVerticalOffset, setKeyboardVerticalOffset] = useState(0);
+  const keyboardAvoidingContainerRef = useRef(null);
+  const updateKeyboardAvoidingVerticalOffset = () => {
+    if (keyboardAvoidingContainerRef.current) {
+      keyboardAvoidingContainerRef.current.measureInWindow((x, y) => {
+        setKeyboardVerticalOffset(y);
+        console.log('keyboardVerticalOffset', y);
+      });
+    }
+  };
+
   return (
     <View style={{ flex: 1 }}>
       {!windowed && (
@@ -481,33 +492,44 @@ const GameView = ({ gameId, gameUri, extras, windowed, onPressReload }) => {
         />
       )}
 
-      <KeyboardAvoidingView behavior="padding" enabled={Constants.iOS} style={{ flex: 1 }}>
-        {game && eventsReady && initialDataHook.sent ? (
-          <Fragment>
-            <View style={{ flex: 1 }}>
-              <GhostView
-                style={{ flex: 1 }}
-                uri={game.entryPoint}
-                dimensionsSettings={dimensionsSettings}
-              />
-              <GameInputs
-                visible={!windowed}
-                inputsMode={inputsMode}
-                actionKeyCode={actionKeyCode}
-              />
-            </View>
-            <Tools eventsReady={eventsReady} visible={!windowed} game={game} />
-          </Fragment>
-        ) : null}
-
-        {!luaLoadingHook.loaded ? (
-          <GameLoading
-            noGame={!game && !gameUri}
-            fetching={fetchGameHook.fetching}
-            luaNetworkRequests={luaLoadingHook.networkRequests}
-          />
-        ) : null}
-      </KeyboardAvoidingView>
+      <View
+        style={{ flex: 1 }}
+        ref={ref => {
+          keyboardAvoidingContainerRef.current = ref;
+          updateKeyboardAvoidingVerticalOffset();
+        }}
+        onLayout={updateKeyboardAvoidingVerticalOffset}>
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior="padding"
+          enabled={Constants.iOS}
+          keyboardVerticalOffset={keyboardVerticalOffset}>
+          {game && eventsReady && initialDataHook.sent ? (
+            <Fragment>
+              <View style={{ flex: 1 }}>
+                <GhostView
+                  style={{ flex: 1 }}
+                  uri={game.entryPoint}
+                  dimensionsSettings={dimensionsSettings}
+                />
+                <GameInputs
+                  visible={!windowed}
+                  inputsMode={inputsMode}
+                  actionKeyCode={actionKeyCode}
+                />
+              </View>
+              <Tools eventsReady={eventsReady} visible={!windowed} game={game} />
+            </Fragment>
+          ) : null}
+          {!luaLoadingHook.loaded ? (
+            <GameLoading
+              noGame={!game && !gameUri}
+              fetching={fetchGameHook.fetching}
+              luaNetworkRequests={luaLoadingHook.networkRequests}
+            />
+          ) : null}
+        </KeyboardAvoidingView>
+      </View>
     </View>
   );
 };
