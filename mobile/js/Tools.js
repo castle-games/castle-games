@@ -810,7 +810,6 @@ const ToolCodeEditor = ({ element }) => {
         injectedJavaScript={injectedJavaScript}
         onMessage={onMessage}
         incognito
-        scrollEnabled={false}
       />
     </View>
   );
