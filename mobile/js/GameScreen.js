@@ -473,10 +473,7 @@ const GameView = ({ gameId, gameUri, extras, windowed, onPressReload }) => {
   const keyboardAvoidingContainerRef = useRef(null);
   const updateKeyboardAvoidingVerticalOffset = () => {
     if (keyboardAvoidingContainerRef.current) {
-      keyboardAvoidingContainerRef.current.measureInWindow((x, y) => {
-        setKeyboardVerticalOffset(y);
-        console.log('keyboardVerticalOffset', y);
-      });
+      keyboardAvoidingContainerRef.current.measureInWindow((x, y) => setKeyboardVerticalOffset(y));
     }
   };
 
