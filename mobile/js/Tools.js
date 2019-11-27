@@ -17,11 +17,13 @@ import url from 'url';
 import FastImage from 'react-native-fast-image';
 import FitImage from 'react-native-fit-image';
 import WebView from 'react-native-webview';
+import { Base64 } from 'js-base64';
 
 import * as GhostEvents from './ghost/GhostEvents';
 import { ScrollView } from 'react-native-gesture-handler';
 import * as Constants from './Constants';
 import ColorPicker from './ColorPicker';
+import CodeMirrorBase64 from './CodeMirrorBase64';
 
 const ENABLE_TOOLS = true;
 
@@ -726,6 +728,8 @@ const ToolImage = ({ element }) => {
 };
 elementTypes['image'] = ToolImage;
 
+const CODE_MIRROR_HTML = Base64.decode(CodeMirrorBase64);
+
 const ToolCodeEditor = ({ element }) => {
   const webViewRef = useRef(null);
 
@@ -802,7 +806,7 @@ const ToolCodeEditor = ({ element }) => {
       <WebView
         ref={webViewRef}
         style={{ height: 200, borderColor: 'gray', borderWidth: 1, borderRadius: 4 }}
-        source={{ uri: 'http://192.168.1.15:8082/index.html' }}
+        source={{ html: CODE_MIRROR_HTML }}
         injectedJavaScript={injectedJavaScript}
         onMessage={onMessage}
         incognito
