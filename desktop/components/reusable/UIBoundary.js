@@ -13,21 +13,20 @@ export default class UIBoundary extends React.PureComponent {
   _root = undefined;
 
   componentDidMount() {
-    if (!this.props.enabled) {
-      return;
+    if (this.props.enabled) {
+      this._addListeners();
     }
-
-    this._addListeners();
   }
 
   componentWillUnmount() {
     this._removeListeners();
   }
 
-  componentWillReceiveProps(props) {
-    if (props.enabled) {
+  componentDidUpdate(prevProps) {
+    if (this.props.enabled && (!prevProps || !prevProps.enabled)) {
       this._addListeners();
-    } else {
+    }
+    if (!this.props.enabled) {
       this._removeListeners();
     }
   }
