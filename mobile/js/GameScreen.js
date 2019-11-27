@@ -477,6 +477,8 @@ const GameView = ({ gameId, gameUri, extras, windowed, onPressReload }) => {
     }
   };
 
+  const [landscape, setLandscape] = useState(false);
+
   return (
     <View style={{ flex: 1 }}>
       {!windowed && (
@@ -495,9 +497,16 @@ const GameView = ({ gameId, gameUri, extras, windowed, onPressReload }) => {
           keyboardAvoidingContainerRef.current = ref;
           updateKeyboardAvoidingVerticalOffset();
         }}
-        onLayout={updateKeyboardAvoidingVerticalOffset}>
+        onLayout={({
+          nativeEvent: {
+            layout: { width, height },
+          },
+        }) => {
+          updateKeyboardAvoidingVerticalOffset();
+          setLandscape(width > height);
+        }}>
         <KeyboardAvoidingView
-          style={{ flex: 1 }}
+          style={{ flex: 1, flexDirection: landscape ? 'row' : 'column' }}
           behavior="padding"
           enabled={Constants.iOS}
           keyboardVerticalOffset={keyboardVerticalOffset}>
@@ -515,7 +524,12 @@ const GameView = ({ gameId, gameUri, extras, windowed, onPressReload }) => {
                   actionKeyCode={actionKeyCode}
                 />
               </View>
-              <Tools eventsReady={eventsReady} visible={!windowed} game={game} />
+              <Tools
+                eventsReady={eventsReady}
+                visible={!windowed}
+                landscape={landscape}
+                game={game}
+              />
             </Fragment>
           ) : null}
           {!luaLoadingHook.loaded ? (

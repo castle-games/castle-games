@@ -852,7 +852,7 @@ const applyDiff = (t, diff) => {
 };
 
 // Top-level tools container -- watches for Lua <-> JS tool events and renders the tools overlaid in its parent
-export default Tools = ({ eventsReady, visible, game }) => {
+export default Tools = ({ eventsReady, visible, landscape, game }) => {
   // Maintain tools state
   const [root, setRoot] = useState({});
 
@@ -882,7 +882,7 @@ export default Tools = ({ eventsReady, visible, game }) => {
   // Render the container
   return (
     <ToolsContext.Provider value={{ transformAssetUri }}>
-      <View style={{ flex: 0.75, backgroundColor: 'white' }}>
+      <View style={{ flex: 0.75, backgroundColor: 'white', maxWidth: landscape ? 600 : null }}>
         <ScrollView style={{ flex: 1, paddingBottom: 100 }}>
           {Object.values(root.panes).map((element, i) => (
             <ToolPane key={element.props.name || i} element={element} />
