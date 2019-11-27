@@ -760,11 +760,23 @@ const ToolCodeEditor = ({ element }) => {
     // Initial value
     window.editor.getDoc().setValue(${JSON.stringify(value)});
 
-    // Send changes back
+    // Notify changes
     window.editor.on('change', function() {
       window.ReactNativeWebView.postMessage(JSON.stringify({
         type: 'change',
         newValue: window.editor.getDoc().getValue(),
+      }));
+    });
+
+    // Notify focus
+    window.editor.on('focus', function() {
+      window.ReactNativeWebView.postMessage(JSON.stringify({
+        type: 'focus',
+      }));
+    });
+    window.editor.on('blur', function() {
+      window.ReactNativeWebView.postMessage(JSON.stringify({
+        type: 'blur',
       }));
     });
   `;
@@ -774,6 +786,12 @@ const ToolCodeEditor = ({ element }) => {
     switch (data.type) {
       case 'change':
         setValue(data.newValue);
+        break;
+      case 'focus':
+        // console.log('focus');
+        break;
+      case 'blur':
+        // console.log('blur');
         break;
     }
   };
@@ -788,6 +806,7 @@ const ToolCodeEditor = ({ element }) => {
         injectedJavaScript={injectedJavaScript}
         onMessage={onMessage}
         incognito
+        scrollEnabled={false}
       />
     </View>
   );
@@ -860,7 +879,7 @@ export default Tools = ({ eventsReady, visible, game }) => {
   // Render the container
   return (
     <ToolsContext.Provider value={{ transformAssetUri }}>
-      <View style={{ flex: 0.75, backgroundColor: 'white', borderColor: 'red', borderWidth: 2 }}>
+      <View style={{ flex: 0.75, backgroundColor: 'white' }}>
         <ScrollView style={{ flex: 1, paddingBottom: 100 }}>
           {Object.values(root.panes).map((element, i) => (
             <ToolPane key={element.props.name || i} element={element} />
