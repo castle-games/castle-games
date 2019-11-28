@@ -1064,7 +1064,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "games.castle.castle-debug";
+				PRODUCT_BUNDLE_IDENTIFIER = "games.castle.castle-debug-2";
 				PRODUCT_NAME = Castle;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
