@@ -505,31 +505,23 @@ const GameView = ({ gameId, gameUri, extras, windowed, onPressReload }) => {
           setLandscape(width > height);
         }}>
         <KeyboardAvoidingView
-          style={{ flex: 1, flexDirection: landscape ? 'row' : 'column' }}
+          style={{ flex: 1 }}
           behavior="padding"
           enabled={Constants.iOS}
           keyboardVerticalOffset={keyboardVerticalOffset}>
           {game && eventsReady && initialDataHook.sent ? (
-            <Fragment>
-              <View style={{ flex: 1 }}>
-                <GhostView
-                  style={{ flex: 1 }}
-                  uri={game.entryPoint}
-                  dimensionsSettings={dimensionsSettings}
-                />
-                <GameInputs
-                  visible={!windowed}
-                  inputsMode={inputsMode}
-                  actionKeyCode={actionKeyCode}
-                />
-              </View>
-              <Tools
-                eventsReady={eventsReady}
-                visible={!windowed}
-                landscape={landscape}
-                game={game}
+            <Tools eventsReady={eventsReady} visible={!windowed} landscape={landscape} game={game}>
+              <GhostView
+                style={{ flex: 1 }}
+                uri={game.entryPoint}
+                dimensionsSettings={dimensionsSettings}
               />
-            </Fragment>
+              <GameInputs
+                visible={!windowed}
+                inputsMode={inputsMode}
+                actionKeyCode={actionKeyCode}
+              />
+            </Tools>
           ) : null}
           {!luaLoadingHook.loaded ? (
             <GameLoading

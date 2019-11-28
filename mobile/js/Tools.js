@@ -63,7 +63,7 @@ const sendEvent = (pathId, event) => {
 const elementTypes = {};
 
 // Abstract component that reads `element.type` and uses that to instantiate a concrete component
-const Tool = ({ element }) => {
+const Tool = React.memo(({ element }) => {
   const ElemType = elementTypes[element.type];
   if (!ElemType) {
     return (
@@ -73,7 +73,17 @@ const Tool = ({ element }) => {
     );
   }
   return <ElemType element={{ ...element, props: element.props || {} }} />;
-};
+});
+
+// Render a pane with default values for the context. Each pane has its own styling, so also takes
+// a `style` prop.
+const ToolPane = React.memo(({ element, style, context }) =>
+  element && element.props && element.props.visible ? (
+    <ToolsContext.Provider value={{ ...context, paneName: element.props.name }}>
+      <View style={style}>{renderChildren(element)}</View>
+    </ToolsContext.Provider>
+  ) : null
+);
 
 // Get an ordered array of the children of an element
 const orderedChildren = element => {
@@ -230,6 +240,7 @@ const viewStyleProps = p => {
 // Context for common data across all tools
 const ToolsContext = React.createContext({
   transformAssetUri: uri => uri,
+  paneName: 'DEFAULT',
 });
 
 //
@@ -267,9 +278,6 @@ const popoverStyle = {
 
 const boldWeight1 = '700';
 const boldWeight2 = Constants.iOS ? '900' : '700';
-
-const ToolPane = ({ element }) => <View style={{ padding: 6 }}>{renderChildren(element)}</View>;
-elementTypes['pane'] = ToolPane;
 
 const ToolTextInput = ({ element, multiline }) => {
   const [value, setValue] = useValue({ element });
@@ -841,7 +849,7 @@ const applyDiff = (t, diff) => {
 };
 
 // Top-level tools container -- watches for Lua <-> JS tool events and renders the tools overlaid in its parent
-export default Tools = ({ eventsReady, visible, landscape, game }) => {
+export default Tools = ({ eventsReady, visible, landscape, game, children }) => {
   // Maintain tools state
   const [root, setRoot] = useState({});
 
@@ -855,30 +863,23 @@ export default Tools = ({ eventsReady, visible, landscape, game }) => {
     },
   });
 
-  // Asset URI mapper
-  const transformAssetUri = uri => url.resolve(game.entryPoint, uri) || uri;
-
-  // Check prop, feature flag, and that we have at least one non-empty pane
-  visible =
-    visible &&
-    ENABLE_TOOLS &&
-    root.panes &&
-    Object.values(root.panes).find(element => element.children && element.children.count > 0);
-  if (!visible) {
-    return null;
-  }
+  // Construct context
+  const context = {
+    transformAssetUri: uri => url.resolve(game.entryPoint, uri) || uri,
+  };
 
   // Render the container
   return (
-    <ToolsContext.Provider value={{ transformAssetUri }}>
-      <View style={{ flex: 0.75, backgroundColor: 'white', maxWidth: landscape ? 600 : null }}>
-        <ScrollView style={{ flex: 1, paddingBottom: 100 }}>
-          {Object.values(root.panes).map((element, i) => (
-            <ToolPane key={element.props.name || i} element={element} />
-          ))}
-          <View style={{ height: 100 }} />
-        </ScrollView>
-      </View>
-    </ToolsContext.Provider>
+    <View style={{ flex: 1, flexDirection: landscape ? 'row' : 'column' }}>
+      <View style={{ flex: 1 }}>{children}</View>
+
+      {visible && root.panes && root.panes.DEFAULT ? (
+        <View style={{ flex: 0.75, backgroundColor: 'white', maxWidth: landscape ? 600 : null }}>
+          <ScrollView style={{ flex: 1 }}>
+            <ToolPane element={root.panes.DEFAULT} context={context} style={{ padding: 6 }} />
+          </ScrollView>
+        </View>
+      ) : null}
+    </View>
   );
 };
