@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Switch,
+  Easing,
 } from 'react-native';
 import Slider from '@react-native-community/slider';
 import Markdown from 'react-native-markdown-renderer';
@@ -677,6 +678,7 @@ const ToolColorPicker = ({ element }) => {
         fromView={anchorRef.current}
         isVisible={picking}
         popoverStyle={popoverStyle}
+        animationConfig={{ duration: 80, easing: Easing.inOut(Easing.quad) }}
         backgroundStyle={{ backgroundColor: 'transparent' }}
         onRequestClose={() => setPicking(false)}>
         <ColorPicker
