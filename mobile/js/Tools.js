@@ -252,6 +252,18 @@ const buttonStyle = {
   borderRadius: 6,
 };
 
+const popoverStyle = {
+  elevation: 4,
+  shadowColor: '#000',
+  shadowOffset: {
+    width: 0,
+    height: 4,
+  },
+  shadowOpacity: 0.5,
+  shadowRadius: 12,
+  overflow: 'visible',
+};
+
 const boldWeight1 = '700';
 const boldWeight2 = Constants.iOS ? '900' : '700';
 
@@ -664,18 +676,7 @@ const ToolColorPicker = ({ element }) => {
       <Popover
         fromView={anchorRef.current}
         isVisible={picking}
-        popoverStyle={{
-          elevation: 1,
-          shadowColor: '#000',
-          shadowOffset: {
-            width: 0,
-            height: 1,
-          },
-          shadowOpacity: 0.18,
-          shadowRadius: 1.2,
-          overflow: 'visible',
-        }}
-        arrowStyle={{ backgroundColor: 'transparent' }}
+        popoverStyle={popoverStyle}
         backgroundStyle={{ backgroundColor: 'transparent' }}
         onRequestClose={() => setPicking(false)}>
         <ColorPicker
