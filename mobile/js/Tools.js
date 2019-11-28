@@ -462,7 +462,7 @@ const ToolSection = ({ element }) => (
         paddingVertical: 6,
         paddingLeft: 21,
         paddingRight: 14,
-        backgroundColor: element.open ? '#ddd' : '#eee',
+        backgroundColor: element.open ? '#eee' : '#ddd',
       }}
       onPress={() => sendEvent(element.pathId, { type: 'onChange', open: !element.open })}>
       <Text style={{ fontSize: 20, fontWeight: boldWeight1 }}>{element.props.label}</Text>
@@ -541,7 +541,7 @@ const ToolTabs = ({ element }) => {
               justifyContent: 'center',
               alignItems: 'center',
               padding: 6,
-              backgroundColor: selected === i ? '#ddd' : '#eee',
+              backgroundColor: selected === i ? '#eee' : '#ddd',
             }}
             onPress={() => setSelected(i)}>
             <Text style={{ fontSize: 20, fontWeight: boldWeight1 }}>{child.props.label}</Text>
