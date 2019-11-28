@@ -19,9 +19,6 @@ import GameHeader from './GameHeader';
 import GameLoading from './GameLoading';
 import * as Constants from './Constants';
 
-// Lots of APIs need regular 'https://' URIs
-const castleUriToHTTPSUri = uri => uri.replace(/^castle:\/\//, 'https://');
-
 // Whether the given URI is local
 const isLocalUri = uri => {
   const parsed = url.parse(uri);
@@ -31,6 +28,8 @@ const isLocalUri = uri => {
 // Fetch a `Game` GraphQL entity based on `gameId` or `gameUri`
 const useFetchGame = ({ gameId, gameUri }) => {
   const [game, setGame] = useState(null);
+
+  const httpsUri = gameUri && gameUri.replace(/^castle:\/\//, 'https://');
 
   // Direct metadata fetcher for when `gameUri` is a LAN URI.
   const [fetchMetadata, setFetchMetadata] = useState(null);
@@ -72,7 +71,7 @@ const useFetchGame = ({ gameId, gameUri }) => {
     {
       variables: {
         gameId,
-        gameUri: gameUri && castleUriToHTTPSUri(gameUri),
+        gameUri: httpsUri,
       },
     }
   );
@@ -107,8 +106,8 @@ const useFetchGame = ({ gameId, gameUri }) => {
           // Query wasn't successful, assume this is a direct entrypoint URI and use an unregistered `game`
           // without a `gameId`
           setGame({
-            url: gameUri,
-            entryPoint: gameUri,
+            url: httpsUri,
+            entryPoint: httpsUri,
             metadata: {},
           });
         }
