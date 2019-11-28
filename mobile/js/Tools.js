@@ -26,8 +26,6 @@ import * as Constants from './Constants';
 import ColorPicker from './ColorPicker';
 import CodeMirrorBase64 from './CodeMirrorBase64';
 
-const ENABLE_TOOLS = true;
-
 //
 // Infrastructure
 //
@@ -75,15 +73,21 @@ const Tool = React.memo(({ element }) => {
   return <ElemType element={{ ...element, props: element.props || {} }} />;
 });
 
-// Render a pane with default values for the context. Each pane has its own styling, so also takes
+// Whether a pane should be rendered
+const paneVisible = element =>
+  element &&
+  element.props &&
+  element.props.visible &&
+  element.children &&
+  element.children.count > 0;
+
+// Render a pane with default values for the context. Each pane tends to have its own styling, so also takes
 // a `style` prop.
-const ToolPane = React.memo(({ element, style, context }) =>
-  element && element.props && element.props.visible ? (
-    <ToolsContext.Provider value={{ ...context, paneName: element.props.name }}>
-      <View style={style}>{renderChildren(element)}</View>
-    </ToolsContext.Provider>
-  ) : null
-);
+const ToolPane = React.memo(({ element, style, context }) => (
+  <ToolsContext.Provider value={{ ...context, paneName: element.props.name }}>
+    <View style={style}>{renderChildren(element)}</View>
+  </ToolsContext.Provider>
+));
 
 // Get an ordered array of the children of an element
 const orderedChildren = element => {
@@ -873,7 +877,7 @@ export default Tools = ({ eventsReady, visible, landscape, game, children }) => 
     <View style={{ flex: 1, flexDirection: landscape ? 'row' : 'column' }}>
       <View style={{ flex: 1 }}>{children}</View>
 
-      {visible && root.panes && root.panes.DEFAULT ? (
+      {visible && root.panes && paneVisible(root.panes.DEFAULT) ? (
         <View style={{ flex: 0.75, backgroundColor: 'white', maxWidth: landscape ? 600 : null }}>
           <ScrollView style={{ flex: 1 }}>
             <ToolPane element={root.panes.DEFAULT} context={context} style={{ padding: 6 }} />
