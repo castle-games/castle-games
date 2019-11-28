@@ -270,7 +270,6 @@ const ToolTextInput = ({ element, multiline }) => {
         style={{
           ...textInputStyle,
           height: multiline ? 72 : null,
-          ...viewStyleProps(element.props),
         }}
         returnKeyType={multiline ? null : 'done'}
         multiline={multiline}
@@ -307,7 +306,7 @@ const ToolSlider = ({ element }) => {
   const [value, setValue] = useValue({ element });
 
   return (
-    <View style={{ margin: 4, ...viewStyleProps(element.props) }}>
+    <View style={{ margin: 4 }}>
       <Text style={{ fontWeight: boldWeight2, marginBottom: 4 }}>{element.props.label}</Text>
       <Slider
         style={{
@@ -375,10 +374,7 @@ const ToolNumberInput = ({ element }) => {
           <TextInput
             ref={textInputRef}
             keyboardType="numeric"
-            style={{
-              ...textInputStyle,
-              ...viewStyleProps(element.props.textInputStyle),
-            }}
+            style={textInputStyle}
             selectTextOnFocus
             returnKeyType="done"
             value={text}
@@ -427,7 +423,6 @@ const ToolNumberInput = ({ element }) => {
             ...buttonStyle,
             width: 32,
             marginLeft: 4,
-            ...viewStyleProps(element.props.buttonStyle),
           }}
           onPress={() => incrementValue(1)}>
           <Text>+</Text>
@@ -437,7 +432,6 @@ const ToolNumberInput = ({ element }) => {
             ...buttonStyle,
             width: 32,
             marginLeft: 4,
-            ...viewStyleProps(element.props.buttonStyle),
           }}
           onPress={() => incrementValue(-1)}>
           <Text>-</Text>
@@ -459,7 +453,6 @@ const ToolSection = ({ element }) => (
       borderBottomWidth: element.open ? 1 : 0,
       borderColor: '#eee',
       overflow: 'hidden',
-      ...viewStyleProps(element.props),
     }}>
     <TouchableOpacity
       style={{
@@ -470,7 +463,6 @@ const ToolSection = ({ element }) => (
         paddingLeft: 21,
         paddingRight: 14,
         backgroundColor: element.open ? '#ddd' : '#eee',
-        ...viewStyleProps(element.props.headingStyle),
       }}
       onPress={() => sendEvent(element.pathId, { type: 'onChange', open: !element.open })}>
       <Text style={{ fontSize: 20, fontWeight: boldWeight1 }}>{element.props.label}</Text>
@@ -485,7 +477,6 @@ const ToolSection = ({ element }) => (
         style={{
           paddingVertical: 8,
           paddingHorizontal: 2,
-          ...viewStyleProps(element.props.childrenStyle),
         }}>
         {renderChildren(element)}
       </View>
@@ -498,7 +489,7 @@ const ToolMarkdown = ({ element }) => {
   const { transformAssetUri } = useContext(ToolsContext);
 
   return (
-    <View style={{ margin: 4, ...viewStyleProps(element.props) }}>
+    <View style={{ margin: 4 }}>
       <Markdown
         rules={{
           image: (node, children, parent, styles) => {
@@ -537,12 +528,10 @@ const ToolTabs = ({ element }) => {
         borderBottomWidth: 1,
         borderColor: '#eee',
         overflow: 'hidden',
-        ...viewStyleProps(element.props),
       }}>
       <View
         style={{
           flexDirection: 'row',
-          ...viewStyleProps(element.props.barStyle),
         }}>
         {children.map(({ id, child }, i) => (
           <TouchableOpacity
@@ -553,7 +542,6 @@ const ToolTabs = ({ element }) => {
               alignItems: 'center',
               padding: 6,
               backgroundColor: selected === i ? '#ddd' : '#eee',
-              ...viewStyleProps(element.props.buttonStyle),
             }}
             onPress={() => setSelected(i)}>
             <Text style={{ fontSize: 20, fontWeight: boldWeight1 }}>{child.props.label}</Text>
@@ -565,7 +553,6 @@ const ToolTabs = ({ element }) => {
         style={{
           paddingVertical: 8,
           paddingHorizontal: 2,
-          ...viewStyleProps(element.props.childrenStyle),
         }}>
         {renderChildren(children[selected].child)}
       </View>
@@ -623,7 +610,6 @@ const ToolDropdown = ({ element }) => {
           borderRadius: 4,
           paddingVertical: 8,
           paddingHorizontal: 12,
-          ...viewStyleProps(element.props),
         }}
         onPress={() => {
           const itemsArray = objectToArray(element.props.items);
@@ -720,7 +706,7 @@ const ToolImage = ({ element }) => {
 
   return (
     <FastImage
-      style={{ margin: 4, width: 200, height: 200, ...viewStyleProps(element.props) }}
+      style={{ margin: 4, width: 200, height: 200 }}
       source={{ uri }}
       resizeMode={resizeMode}
     />
