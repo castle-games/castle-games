@@ -138,6 +138,13 @@ function portalMeta:setupLove()
         end
     end
 
+    function newLove.filesystem.newFileData(arg1, arg2)
+        if arg2 then
+            return love.filesystem.newFileData(arg1, arg2)
+        end
+        return fetchFileData(arg1)
+    end
+
     function newLove.filesystem.load(path)
         return function()
             return self.globals.require(path, { saveCache = false })
