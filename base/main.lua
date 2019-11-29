@@ -361,14 +361,15 @@ end
 
 do
     -- Wrap this to account for our own dimensions stuff
-    local oldW, oldH
+    local oldW, oldH, oldDPIScale
     function main.resize()
         if home then
             local w, h = home.globals.love.graphics.getDimensions()
-            if w ~= oldW or h ~= oldH then
+            local dpiScale = home.globals.love.graphics.getDPIScale()
+            if w ~= oldW or h ~= oldH or dpiScale ~= oldDPIScale then
                 home:resize(w, h)
             end
-            oldW, oldH = w, h
+            oldW, oldH, oldDPIScale = w, h, dpiScale
         end
     end
 end
