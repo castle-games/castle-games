@@ -242,6 +242,27 @@ function ui.getVisible(name)
     return assert(root.panes[name], "no pane named '" .. name .. "'").props.visible
 end
 
+function ui.pane(...)
+    local name, props, inner
+    local nArgs = select('#', ...)
+    if nArgs == 2 then
+        name, inner = ...
+    elseif nArgs == 3 then
+        name, props, inner = ...
+    else
+        error('`ui.pane` takes 2 or 3 arguments')
+    end
+
+    local c = root.panes[name]
+    if c == nil then
+        root.panes[name] = { type = 'pane' }
+        c = root.panes[name]
+    end
+    c.props = merge({ name = name, visible = true }, props)
+
+    enter(c, name, inner)
+end
+
 
 --
 -- Components
