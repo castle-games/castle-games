@@ -266,6 +266,9 @@ const Labelled = ({ label, style, children }) => {
 // Components
 //
 
+const defaultColor = '#ddd';
+const selectedColor = '#eee';
+
 const textInputStyle = {
   flex: 1,
   borderColor: 'gray',
@@ -275,17 +278,17 @@ const textInputStyle = {
   paddingHorizontal: 12,
 };
 
-const buttonStyle = {
+const buttonStyle = ({ selected = false } = {}) => ({
   padding: 6,
-  backgroundColor: '#ddd',
+  backgroundColor: selected ? selectedColor : defaultColor,
   justifyContent: 'center',
   alignItems: 'center',
   borderRadius: 6,
-};
+});
 
 const popoverStyle = {
   elevation: 4,
-  shadowColor: '#000',
+  shadowColor: 'black',
   shadowOffset: {
     width: 0,
     height: 4,
@@ -326,7 +329,7 @@ elementTypes['textArea'] = ToolTextArea;
 const ToolButton = ({ element }) => (
   <TouchableOpacity
     style={{
-      ...buttonStyle,
+      ...buttonStyle({ selected: element.props.selected }),
       margin: 4,
       ...viewStyleProps(element.props),
     }}
@@ -457,7 +460,7 @@ const ToolNumberInput = ({ element }) => {
         </View>
         <TouchableOpacity
           style={{
-            ...buttonStyle,
+            ...buttonStyle(),
             width: 32,
             marginLeft: 4,
           }}
@@ -466,7 +469,7 @@ const ToolNumberInput = ({ element }) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={{
-            ...buttonStyle,
+            ...buttonStyle(),
             width: 32,
             marginLeft: 4,
           }}
@@ -488,7 +491,7 @@ const ToolSection = ({ element }) => (
       borderBottomLeftRadius: element.open ? 0 : 8,
       borderBottomRightRadius: element.open ? 0 : 8,
       borderBottomWidth: element.open ? 1 : 0,
-      borderColor: '#eee',
+      borderColor: selectedColor,
       overflow: 'hidden',
     }}>
     <TouchableOpacity
@@ -499,7 +502,7 @@ const ToolSection = ({ element }) => (
         paddingVertical: 6,
         paddingLeft: 21,
         paddingRight: 14,
-        backgroundColor: element.open ? '#eee' : '#ddd',
+        backgroundColor: element.open ? selectedColor : defaultColor,
       }}
       onPress={() => sendEvent(element.pathId, { type: 'onChange', open: !element.open })}>
       <Text style={{ fontSize: 20, fontWeight: boldWeight1 }}>{element.props.label}</Text>
@@ -563,7 +566,7 @@ const ToolTabs = ({ element }) => {
         borderTopLeftRadius: 8,
         borderTopRightRadius: 8,
         borderBottomWidth: 1,
-        borderColor: '#eee',
+        borderColor: selectedColor,
         overflow: 'hidden',
       }}>
       <View
@@ -578,7 +581,7 @@ const ToolTabs = ({ element }) => {
               justifyContent: 'center',
               alignItems: 'center',
               padding: 6,
-              backgroundColor: selected === i ? '#eee' : '#ddd',
+              backgroundColor: selected === i ? selectedColor : defaultColor,
             }}
             onPress={() => setSelected(i)}>
             <Text style={{ fontSize: 20, fontWeight: boldWeight1 }}>{child.props.label}</Text>
@@ -689,7 +692,7 @@ const ToolColorPicker = ({ element }) => {
       <TouchableOpacity
         ref={anchorRef}
         style={{
-          ...buttonStyle,
+          ...buttonStyle({ selected: picking }),
           alignSelf: 'flex-start',
         }}
         onPress={() => setPicking(true)}>
@@ -885,7 +888,8 @@ export default Tools = ({ eventsReady, visible, landscape, game, children }) => 
     <View style={{ flex: 1, flexDirection: landscape ? 'row' : 'column' }}>
       <View style={{ flex: 1 }}>
         {visible && root.panes && paneVisible(root.panes.toolbar) ? (
-          <View style={{ backgroundColor: 'white', justifyContent: 'center', alignItems: 'center' }}>
+          <View
+            style={{ backgroundColor: 'white', justifyContent: 'center', alignItems: 'center' }}>
             <ScrollView horizontal={true} alwaysBounceHorizontal={false}>
               <ToolPane
                 element={root.panes.toolbar}
