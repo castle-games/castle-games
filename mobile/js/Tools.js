@@ -245,7 +245,22 @@ const viewStyleProps = p => {
 const ToolsContext = React.createContext({
   transformAssetUri: uri => uri,
   paneName: 'DEFAULT',
+  hideLabels: false,
 });
+
+// Render a label along with a control
+const Labelled = ({ label, style, children }) => {
+  const { hideLabels } = useContext(ToolsContext);
+
+  return (
+    <View style={{ margin: 4, ...style }}>
+      {!hideLabels ? (
+        <Text style={{ fontWeight: boldWeight2, marginBottom: 4 }}>{label}</Text>
+      ) : null}
+      {children}
+    </View>
+  );
+};
 
 //
 // Components
@@ -289,8 +304,7 @@ const ToolTextInput = ({ element, multiline }) => {
   multiline = typeof multiline === 'boolean' ? multiline : element.props.multiline;
 
   return (
-    <View style={{ margin: 4 }}>
-      <Text style={{ fontWeight: boldWeight2, marginBottom: 4 }}>{element.props.label}</Text>
+    <Labelled label={element.props.label}>
       <TextInput
         style={{
           ...textInputStyle,
@@ -301,7 +315,7 @@ const ToolTextInput = ({ element, multiline }) => {
         value={value}
         onChangeText={newText => setValue(newText)}
       />
-    </View>
+    </Labelled>
   );
 };
 elementTypes['textInput'] = ToolTextInput;
@@ -331,8 +345,7 @@ const ToolSlider = ({ element }) => {
   const [value, setValue] = useValue({ element });
 
   return (
-    <View style={{ margin: 4 }}>
-      <Text style={{ fontWeight: boldWeight2, marginBottom: 4 }}>{element.props.label}</Text>
+    <Labelled label={element.props.label}>
       <Slider
         style={{
           flex: 1,
@@ -346,7 +359,7 @@ const ToolSlider = ({ element }) => {
         value={value}
         onValueChange={newValue => setValue(newValue)}
       />
-    </View>
+    </Labelled>
   );
 };
 elementTypes['slider'] = ToolSlider;
@@ -392,8 +405,7 @@ const ToolNumberInput = ({ element }) => {
   const textInputRef = useRef(null);
 
   return (
-    <View style={{ margin: 4 }}>
-      <Text style={{ fontWeight: boldWeight2, marginBottom: 4 }}>{element.props.label}</Text>
+    <Labelled label={element.props.label}>
       <View style={{ flexDirection: 'row' }}>
         <View style={{ flex: 1 }}>
           <TextInput
@@ -462,7 +474,7 @@ const ToolNumberInput = ({ element }) => {
           <Text>-</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </Labelled>
   );
 };
 elementTypes['numberInput'] = ToolNumberInput;
@@ -596,10 +608,9 @@ const ToolCheckbox = ({ element, valueEventName = 'onChange', valuePropName = 'c
   const { label, labelA, labelB } = element.props;
 
   return (
-    <View style={{ margin: 4, alignItems: 'flex-start' }}>
-      <Text style={{ fontWeight: boldWeight2, marginBottom: 4 }}>
-        {typeof label === 'string' ? label : value ? labelB : labelA}
-      </Text>
+    <Labelled
+      label={typeof label === 'string' ? label : value ? labelB : labelA}
+      style={{ alignItems: 'flex-start' }}>
       <Switch
         value={value}
         style={{
@@ -609,7 +620,7 @@ const ToolCheckbox = ({ element, valueEventName = 'onChange', valuePropName = 'c
         }}
         onValueChange={newValue => setValue(newValue)}
       />
-    </View>
+    </Labelled>
   );
 };
 elementTypes['checkbox'] = ToolCheckbox;
@@ -623,8 +634,7 @@ const ToolDropdown = ({ element }) => {
   const [value, setValue] = useValue({ element });
 
   return (
-    <View style={{ margin: 4 }}>
-      <Text style={{ fontWeight: boldWeight2, marginBottom: 4 }}>{element.props.label}</Text>
+    <Labelled label={element.props.label}>
       <TouchableOpacity
         style={{
           flexDirection: 'row',
@@ -650,7 +660,7 @@ const ToolDropdown = ({ element }) => {
         <Text>{value}</Text>
         <Icon name="keyboard-arrow-down" size={16} color="black" />
       </TouchableOpacity>
-    </View>
+    </Labelled>
   );
 };
 elementTypes['dropdown'] = ToolDropdown;
@@ -675,8 +685,7 @@ const ToolColorPicker = ({ element }) => {
   };
 
   return (
-    <View style={{ margin: 4 }}>
-      <Text style={{ fontWeight: boldWeight2, marginBottom: 4 }}>{element.props.label}</Text>
+    <Labelled label={element.props.label}>
       <TouchableOpacity
         ref={anchorRef}
         style={{
@@ -704,7 +713,7 @@ const ToolColorPicker = ({ element }) => {
           onOldColorSelected={() => setPicking(false)}
         />
       </Popover>
-    </View>
+    </Labelled>
   );
 };
 elementTypes['colorPicker'] = ToolColorPicker;
@@ -802,8 +811,7 @@ const ToolCodeEditor = ({ element }) => {
   };
 
   return (
-    <View style={{ margin: 4 }}>
-      <Text style={{ fontWeight: boldWeight2, marginBottom: 4 }}>{element.props.label}</Text>
+    <Labelled label={element.props.label}>
       <WebView
         ref={webViewRef}
         style={{ height: 200, borderColor: 'gray', borderWidth: 1, borderRadius: 4 }}
@@ -812,7 +820,7 @@ const ToolCodeEditor = ({ element }) => {
         onMessage={onMessage}
         incognito
       />
-    </View>
+    </Labelled>
   );
 };
 elementTypes['codeEditor'] = ToolCodeEditor;
@@ -875,11 +883,30 @@ export default Tools = ({ eventsReady, visible, landscape, game, children }) => 
   // Render the container
   return (
     <View style={{ flex: 1, flexDirection: landscape ? 'row' : 'column' }}>
-      <View style={{ flex: 1 }}>{children}</View>
+      <View style={{ flex: 1 }}>
+        {visible && root.panes && paneVisible(root.panes.toolbar) ? (
+          <View style={{ backgroundColor: 'white', justifyContent: 'center', alignItems: 'center' }}>
+            <ScrollView horizontal={true} alwaysBounceHorizontal={false}>
+              <ToolPane
+                element={root.panes.toolbar}
+                context={{ ...context, hideLabels: true }}
+                style={{
+                  paddingHorizontal: 6,
+                  paddingVertical: 4,
+                  maxHeight: 72,
+                  flexDirection: 'row',
+                }}
+              />
+            </ScrollView>
+          </View>
+        ) : null}
+
+        <View style={{ flex: 1 }}>{children}</View>
+      </View>
 
       {visible && root.panes && paneVisible(root.panes.DEFAULT) ? (
-        <View style={{ flex: 0.75, backgroundColor: 'white', maxWidth: landscape ? 600 : null }}>
-          <ScrollView style={{ flex: 1 }}>
+        <View style={{ flex: 0.75, maxWidth: landscape ? 600 : null, backgroundColor: 'white' }}>
+          <ScrollView style={{ flex: 1 }} alwaysBounceVertical={false}>
             <ToolPane element={root.panes.DEFAULT} context={context} style={{ padding: 6 }} />
           </ScrollView>
         </View>
