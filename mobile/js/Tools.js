@@ -306,6 +306,7 @@ const BasePopover = props => {
     <Popover
       placement={popoverPlacement}
       popoverStyle={{
+        borderRadius: 8,
         elevation: 4,
         shadowColor: 'black',
         shadowOffset: {
