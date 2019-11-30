@@ -10,7 +10,21 @@ import {
 } from 'react-native';
 import Slider from '@react-native-community/slider';
 import Markdown from 'react-native-markdown-renderer';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import Entypo from 'react-native-vector-icons/Entypo';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+import Feather from 'react-native-vector-icons/Feather';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import Fontisto from 'react-native-vector-icons/Fontisto';
+import Foundation from 'react-native-vector-icons/Foundation';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Octicons from 'react-native-vector-icons/Octicons';
+import Zocial from 'react-native-vector-icons/Zocial';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import ActionSheet from 'react-native-action-sheet';
 import Popover from 'react-native-popover-view';
 import tinycolor from 'tinycolor2';
@@ -353,11 +367,29 @@ elementTypes['textInput'] = ToolTextInput;
 const ToolTextArea = ({ element }) => <ToolTextInput element={element} multiline />;
 elementTypes['textArea'] = ToolTextArea;
 
+const iconFamilies = {
+  AntDesign: AntDesign,
+  Entypo: Entypo,
+  EvilIcons: EvilIcons,
+  Feather: Feather,
+  FontAwesome: FontAwesome,
+  FontAwesome5: FontAwesome5,
+  Fontisto: Fontisto,
+  Foundation: Foundation,
+  Ionicons: Ionicons,
+  MaterialIcons: MaterialIcons,
+  MaterialCommunityIcons: MaterialCommunityIcons,
+  Octicons: Octicons,
+  Zocial: Zocial,
+  SimpleLineIcons: SimpleLineIcons,
+};
+
 const BaseButton = ({ element, selected, style, onPress }) => (
   <TouchableOpacity
     style={{
       ...buttonStyle({ selected: selected || element.props.selected }),
       margin: 4,
+      flexDirection: 'row',
       ...style,
       ...viewStyleProps(element.props),
     }}
@@ -367,7 +399,15 @@ const BaseButton = ({ element, selected, style, onPress }) => (
         onPress();
       }
     }}>
-    <Text>{element.props.label}</Text>
+    {element.props.iconFamily
+      ? React.createElement(iconFamilies[element.props.iconFamily], {
+          name: element.props.icon,
+          size: 20,
+          color: 'black',
+          marginRight: !element.props.hideLabel ? 6 : 0,
+        })
+      : null}
+    {!element.props.hideLabel ? <Text>{element.props.label}</Text> : null}
   </TouchableOpacity>
 );
 
@@ -585,7 +625,7 @@ const ToolSection = ({ element }) => (
       }}
       onPress={() => sendEvent(element.pathId, { type: 'onChange', open: !element.open })}>
       <Text style={{ fontSize: 20, fontWeight: boldWeight1 }}>{element.props.label}</Text>
-      <Icon
+      <MaterialIcon
         name={element.open ? 'keyboard-arrow-up' : 'keyboard-arrow-down'}
         size={20}
         color="black"
@@ -740,7 +780,7 @@ const ToolDropdown = ({ element }) => {
           );
         }}>
         <Text>{value}</Text>
-        <Icon name="keyboard-arrow-down" size={16} color="black" />
+        <MaterialIcon name="keyboard-arrow-down" size={16} color="black" />
       </TouchableOpacity>
     </Labelled>
   );
