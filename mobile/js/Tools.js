@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext } from 'react';
+import React, { useState, useRef, useContext, Fragment } from 'react';
 import {
   View,
   Text,
@@ -71,6 +71,14 @@ const Tool = React.memo(({ element }) => {
     );
   }
   return <ElemType element={{ ...element, props: element.props || {} }} />;
+});
+
+// Context for common data across all tools
+const ToolsContext = React.createContext({
+  transformAssetUri: uri => uri,
+  paneName: 'DEFAULT',
+  hideLabels: false,
+  popoverPlacement: 'auto',
 });
 
 // Whether a pane should be rendered
@@ -241,13 +249,6 @@ const viewStyleProps = p => {
   return r;
 };
 
-// Context for common data across all tools
-const ToolsContext = React.createContext({
-  transformAssetUri: uri => uri,
-  paneName: 'DEFAULT',
-  hideLabels: false,
-});
-
 // Render a label along with a control
 const Labelled = ({ label, style, children }) => {
   const { hideLabels } = useContext(ToolsContext);
@@ -286,16 +287,28 @@ const buttonStyle = ({ selected = false } = {}) => ({
   borderRadius: 6,
 });
 
-const popoverStyle = {
-  elevation: 4,
-  shadowColor: 'black',
-  shadowOffset: {
-    width: 0,
-    height: 4,
-  },
-  shadowOpacity: 0.5,
-  shadowRadius: 12,
-  overflow: 'visible',
+const BasePopover = props => {
+  const { popoverPlacement } = useContext(ToolsContext);
+
+  return (
+    <Popover
+      placement={popoverPlacement}
+      popoverStyle={{
+        elevation: 4,
+        shadowColor: 'black',
+        shadowOffset: {
+          width: 0,
+          height: 4,
+        },
+        shadowOpacity: 0.5,
+        shadowRadius: 12,
+        overflow: 'visible',
+      }}
+      animationConfig={{ duration: 80, easing: Easing.inOut(Easing.quad) }}
+      backgroundStyle={{ backgroundColor: 'transparent' }}
+      {...props}
+    />
+  );
 };
 
 const boldWeight1 = '700';
@@ -312,6 +325,7 @@ const ToolTextInput = ({ element, multiline }) => {
         style={{
           ...textInputStyle,
           height: multiline ? 72 : null,
+          textAlignVertical: multiline ? 'top' : 'center',
         }}
         returnKeyType={multiline ? null : 'done'}
         multiline={multiline}
@@ -326,17 +340,64 @@ elementTypes['textInput'] = ToolTextInput;
 const ToolTextArea = ({ element }) => <ToolTextInput element={element} multiline />;
 elementTypes['textArea'] = ToolTextArea;
 
-const ToolButton = ({ element }) => (
+const BaseButton = ({ element, selected, onPress }) => (
   <TouchableOpacity
     style={{
-      ...buttonStyle({ selected: element.props.selected }),
+      ...buttonStyle({ selected: selected || element.props.selected }),
       margin: 4,
       ...viewStyleProps(element.props),
     }}
-    onPress={() => sendEvent(element.pathId, { type: 'onClick' })}>
+    onPress={() => {
+      sendEvent(element.pathId, { type: 'onClick' });
+      if (onPress) {
+        onPress();
+      }
+    }}>
     <Text>{element.props.label}</Text>
   </TouchableOpacity>
 );
+
+const PopoverButton = ({ element }) => {
+  const [popoverVisible, setPopoverVisible] = useState(false);
+
+  const anchorRef = useRef(null);
+
+  const context = useContext(ToolsContext);
+
+  return (
+    <Fragment>
+      <View ref={anchorRef} renderToHardwareTextureAndroid>
+        <BaseButton
+          element={element}
+          selected={popoverVisible}
+          onPress={() => {
+            if (element.props.popoverAllowed !== false) {
+              setPopoverVisible(true);
+            }
+          }}
+        />
+      </View>
+      <BasePopover
+        fromView={anchorRef.current}
+        isVisible={popoverVisible}
+        onRequestClose={() => setPopoverVisible(false)}>
+        <ToolsContext.Provider value={{ ...context, hideLabels: false }}>
+          <View style={{ width: 300, padding: 6, ...element.props.popoverStyle }}>
+            {renderChildren(element)}
+          </View>
+        </ToolsContext.Provider>
+      </BasePopover>
+    </Fragment>
+  );
+};
+
+const ToolButton = ({ element }) => {
+  if (element.props.enablePopover) {
+    return <PopoverButton element={element} />;
+  } else {
+    return <BaseButton element={element} />;
+  }
+};
 elementTypes['button'] = ToolButton;
 
 const ToolBox = ({ element }) => (
@@ -352,9 +413,13 @@ const ToolSlider = ({ element }) => {
       <Slider
         style={{
           flex: 1,
+
           // iOS slider has a large margin, make it smaller
           marginTop: Constants.iOS ? -4 : 0,
           marginBottom: Constants.iOS ? -3 : 0,
+
+          // Android slider thumb is sorta small, make it bigger
+          transform: Constants.Android ? [{ scaleX: 1.4 }, { scaleY: 1.4 }] : [],
         }}
         minimumValue={element.props.min}
         maximumValue={element.props.max}
@@ -698,12 +763,9 @@ const ToolColorPicker = ({ element }) => {
         onPress={() => setPicking(true)}>
         <View style={{ width: 20, height: 20, backgroundColor: valueStr }} />
       </TouchableOpacity>
-      <Popover
+      <BasePopover
         fromView={anchorRef.current}
         isVisible={picking}
-        popoverStyle={popoverStyle}
-        animationConfig={{ duration: 80, easing: Easing.inOut(Easing.quad) }}
-        backgroundStyle={{ backgroundColor: 'transparent' }}
         onRequestClose={() => setPicking(false)}>
         <ColorPicker
           style={{ width: 200, height: 200 }}
@@ -715,7 +777,7 @@ const ToolColorPicker = ({ element }) => {
           }}
           onOldColorSelected={() => setPicking(false)}
         />
-      </Popover>
+      </BasePopover>
     </Labelled>
   );
 };
@@ -893,7 +955,7 @@ export default Tools = ({ eventsReady, visible, landscape, game, children }) => 
             <ScrollView horizontal={true} alwaysBounceHorizontal={false}>
               <ToolPane
                 element={root.panes.toolbar}
-                context={{ ...context, hideLabels: true }}
+                context={{ ...context, hideLabels: true, popoverPlacement: 'bottom' }}
                 style={{
                   paddingHorizontal: 6,
                   paddingVertical: 4,

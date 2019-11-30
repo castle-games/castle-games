@@ -285,7 +285,17 @@ end
 function ui.button(label, props)
     assert(type(label) == 'string', '`ui.button` needs a string `label`')
 
-    local c = addChild('button', label, without(merge({ label = label }, props), 'onClick'), true)
+    local newProps = without(merge({ label = label }, props), 'onClick', 'popover')
+
+    if props.popover then
+        newProps.enablePopover = true
+    end
+
+    local c, newId = addChild('button', label, newProps, true)
+
+    if props.popover then
+        enter(c, newId, props.popover)
+    end
 
     local clicked = false
     local es = pendingEvents[c.pathId]
