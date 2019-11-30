@@ -285,6 +285,18 @@ const buttonStyle = ({ selected = false } = {}) => ({
   justifyContent: 'center',
   alignItems: 'center',
   borderRadius: 6,
+  ...(selected
+    ? {
+        elevation: 1,
+        shadowColor: 'black',
+        shadowOffset: {
+          width: 0,
+          height: 0,
+        },
+        shadowOpacity: 0.5,
+        shadowRadius: 2,
+      }
+    : null),
 });
 
 const BasePopover = props => {
@@ -367,11 +379,10 @@ const PopoverButton = ({ element }) => {
 
   return (
     <Fragment>
-      <View ref={anchorRef} renderToHardwareTextureAndroid>
+      <View ref={anchorRef} renderToHardwareTextureAndroid style={{ flexDirection: 'row' }}>
         <BaseButton
           element={element}
           selected={popoverVisible}
-          style={{ flex: 1 }}
           onPress={() => {
             if (element.props.popoverAllowed !== false) {
               setPopoverVisible(true);
