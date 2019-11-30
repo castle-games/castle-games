@@ -287,13 +287,13 @@ function ui.button(label, props)
 
     local newProps = without(merge({ label = label }, props), 'onClick', 'popover')
 
-    if props.popover then
+    if props and props.popover then
         newProps.enablePopover = true
     end
 
     local c, newId = addChild('button', label, newProps, true)
 
-    if props.popover then
+    if props and props.popover then
         enter(c, newId, props.popover)
     end
 
