@@ -10,7 +10,15 @@ import {
 } from 'react-native';
 import Slider from '@react-native-community/slider';
 import Markdown from 'react-native-markdown-renderer';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import ActionSheet from 'react-native-action-sheet';
+import Popover from 'react-native-popover-view';
+import tinycolor from 'tinycolor2';
+import url from 'url';
+import FastImage from 'react-native-fast-image';
+import FitImage from 'react-native-fit-image';
+import WebView from 'react-native-webview';
+import { Base64 } from 'js-base64';
+
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
@@ -25,14 +33,6 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Octicons from 'react-native-vector-icons/Octicons';
 import Zocial from 'react-native-vector-icons/Zocial';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import ActionSheet from 'react-native-action-sheet';
-import Popover from 'react-native-popover-view';
-import tinycolor from 'tinycolor2';
-import url from 'url';
-import FastImage from 'react-native-fast-image';
-import FitImage from 'react-native-fit-image';
-import WebView from 'react-native-webview';
-import { Base64 } from 'js-base64';
 
 import * as GhostEvents from './ghost/GhostEvents';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -625,7 +625,7 @@ const ToolSection = ({ element }) => (
       }}
       onPress={() => sendEvent(element.pathId, { type: 'onChange', open: !element.open })}>
       <Text style={{ fontSize: 20, fontWeight: boldWeight1 }}>{element.props.label}</Text>
-      <MaterialIcon
+      <MaterialIcons
         name={element.open ? 'keyboard-arrow-up' : 'keyboard-arrow-down'}
         size={20}
         color="black"
@@ -780,7 +780,7 @@ const ToolDropdown = ({ element }) => {
           );
         }}>
         <Text>{value}</Text>
-        <MaterialIcon name="keyboard-arrow-down" size={16} color="black" />
+        <MaterialIcons name="keyboard-arrow-down" size={16} color="black" />
       </TouchableOpacity>
     </Labelled>
   );
