@@ -340,11 +340,12 @@ elementTypes['textInput'] = ToolTextInput;
 const ToolTextArea = ({ element }) => <ToolTextInput element={element} multiline />;
 elementTypes['textArea'] = ToolTextArea;
 
-const BaseButton = ({ element, selected, onPress }) => (
+const BaseButton = ({ element, selected, style, onPress }) => (
   <TouchableOpacity
     style={{
       ...buttonStyle({ selected: selected || element.props.selected }),
       margin: 4,
+      ...style,
       ...viewStyleProps(element.props),
     }}
     onPress={() => {
@@ -370,6 +371,7 @@ const PopoverButton = ({ element }) => {
         <BaseButton
           element={element}
           selected={popoverVisible}
+          style={{ flex: 1 }}
           onPress={() => {
             if (element.props.popoverAllowed !== false) {
               setPopoverVisible(true);
