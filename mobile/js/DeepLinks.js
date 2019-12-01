@@ -62,3 +62,13 @@ Linking.addEventListener('url', ({ url }) => addPendingUri(url));
     addPendingUri(initialUri);
   }
 })();
+
+// Game to start with while developing
+
+let DEV_URI = null;
+
+DEV_URI = 'http://192.168.1.15:8080/mobile.lua';
+
+if (__DEV__ && DEV_URI) {
+  addPendingUri(DEV_URI);
+}
