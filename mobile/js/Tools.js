@@ -876,6 +876,61 @@ const ToolColorPicker = ({ element }) => {
 };
 elementTypes['colorPicker'] = ToolColorPicker;
 
+const ToolFilePicker = ({ element }) => {
+  const [value, setValue] = useValue({ element });
+  const [picking, setPicking] = useState(false);
+
+  const anchorRef = useRef(null);
+
+  return (
+    <Labelled label={element.props.label}>
+      <TouchableOpacity
+        ref={anchorRef}
+        style={{
+          ...buttonStyle({ selected: picking }),
+          alignSelf: 'flex-start',
+        }}
+        onPress={() => setPicking(true)}>
+        {value ? (
+          <ToolImage
+            element={element}
+            path={value}
+            style={{
+              margin: 0,
+              width: 20,
+              height: 20,
+            }}
+          />
+        ) : (
+          <Text>no image</Text>
+        )}
+      </TouchableOpacity>
+      <BasePopover
+        fromView={anchorRef.current}
+        isVisible={picking}
+        onRequestClose={() => setPicking(false)}>
+        <View style={{ width: 200, padding: 6 }}>
+          <TouchableOpacity
+            style={{ ...buttonStyle(), margin: 4 }}
+            onPress={() => {
+              setValue(undefined);
+              setPicking(false);
+            }}>
+            <Text>Remove</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={{ ...buttonStyle(), margin: 4 }} onPress={() => {}}>
+            <Text>Select from photos</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={{ ...buttonStyle(), margin: 4 }} onPress={() => {}}>
+            <Text>Take a photo</Text>
+          </TouchableOpacity>
+        </View>
+      </BasePopover>
+    </Labelled>
+  );
+};
+elementTypes['filePicker'] = ToolFilePicker;
+
 const CODE_MIRROR_HTML = Base64.decode(CodeMirrorBase64);
 
 const ToolCodeEditor = ({ element }) => {
