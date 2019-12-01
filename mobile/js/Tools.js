@@ -427,7 +427,13 @@ const BaseButton = ({ element, selected, style, onPress }) => {
           name: element.props.icon,
           size: 18,
           color: 'black',
-          style: { margin: 0, marginRight: !hideLabel ? 5 : 0 },
+          style: {
+            margin: 0,
+            marginRight: !hideLabel ? 5 : 0,
+            width: 18,
+            height: 18,
+            textAlign: 'center',
+          },
         })
       ) : element.props.icon ? (
         <ToolImage
