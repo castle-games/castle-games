@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
   Switch,
   Easing,
+  Alert,
 } from 'react-native';
 import Slider from '@react-native-community/slider';
 import Markdown from 'react-native-markdown-renderer';
@@ -18,6 +19,7 @@ import FastImage from 'react-native-fast-image';
 import FitImage from 'react-native-fit-image';
 import WebView from 'react-native-webview';
 import { Base64 } from 'js-base64';
+import ImagePicker from 'react-native-image-picker';
 
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -361,12 +363,16 @@ elementTypes['textArea'] = ToolTextArea;
 const ToolImage = ({ element, path, style }) => {
   const { transformAssetUri } = useContext(ToolsContext);
 
-  let resizeMode = FastImage.resizeMode.cover;
+  let resizeMode = FastImage.resizeMode.contain;
   if (element.props.resizeMode) {
     resizeMode = FastImage.resizeMode[element.props.resizeMode] || resizeMode;
   }
 
-  const uri = transformAssetUri(path || element.props.path || '');
+  let uri = path || element.props.path || '';
+
+  if (!uri.startsWith('file://')) {
+    uri = transformAssetUri(uri);
+  }
 
   return (
     <FastImage
@@ -882,6 +888,18 @@ const ToolFilePicker = ({ element }) => {
 
   const anchorRef = useRef(null);
 
+  const launchImagePicker = methodName => {
+    ImagePicker[methodName]({}, ({ didCancel, error, uri }) => {
+      if (!didCancel) {
+        if (error) {
+          Alert.alert('Error loading image', error);
+        } else {
+          setValue(uri);
+        }
+      }
+    });
+  };
+
   return (
     <Labelled label={element.props.label}>
       <TouchableOpacity
@@ -918,10 +936,14 @@ const ToolFilePicker = ({ element }) => {
             }}>
             <Text>Remove</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={{ ...buttonStyle(), margin: 4 }} onPress={() => {}}>
+          <TouchableOpacity
+            style={{ ...buttonStyle(), margin: 4 }}
+            onPress={() => launchImagePicker('launchImageLibrary')}>
             <Text>Select from photos</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={{ ...buttonStyle(), margin: 4 }} onPress={() => {}}>
+          <TouchableOpacity
+            style={{ ...buttonStyle(), margin: 4 }}
+            onPress={() => launchImagePicker('launchCamera')}>
             <Text>Take a photo</Text>
           </TouchableOpacity>
         </View>
