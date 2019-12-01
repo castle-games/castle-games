@@ -294,23 +294,14 @@ const textInputStyle = {
 };
 
 const buttonStyle = ({ selected = false } = {}) => ({
-  padding: 6,
+  padding: 4,
+  borderWidth: 2,
   backgroundColor: selected ? selectedColor : defaultColor,
+  borderColor: defaultColor,
   justifyContent: 'center',
   alignItems: 'center',
   borderRadius: 6,
-  ...(selected
-    ? {
-        elevation: 1,
-        shadowColor: 'black',
-        shadowOffset: {
-          width: 0,
-          height: 0,
-        },
-        shadowOpacity: 0.5,
-        shadowRadius: 2,
-      }
-    : null),
+  overflow: 'hidden',
 });
 
 const BasePopover = props => {
@@ -367,6 +358,26 @@ elementTypes['textInput'] = ToolTextInput;
 const ToolTextArea = ({ element }) => <ToolTextInput element={element} multiline />;
 elementTypes['textArea'] = ToolTextArea;
 
+const ToolImage = ({ element, path, style }) => {
+  const { transformAssetUri } = useContext(ToolsContext);
+
+  let resizeMode = FastImage.resizeMode.cover;
+  if (element.props.resizeMode) {
+    resizeMode = FastImage.resizeMode[element.props.resizeMode] || resizeMode;
+  }
+
+  const uri = transformAssetUri(path || element.props.path || '');
+
+  return (
+    <FastImage
+      style={{ margin: 4, width: 200, height: 200, ...style }}
+      source={{ uri }}
+      resizeMode={resizeMode}
+    />
+  );
+};
+elementTypes['image'] = ToolImage;
+
 const iconFamilies = {
   AntDesign: AntDesign,
   Entypo: Entypo,
@@ -384,32 +395,60 @@ const iconFamilies = {
   SimpleLineIcons: SimpleLineIcons,
 };
 
-const BaseButton = ({ element, selected, style, onPress }) => (
-  <TouchableOpacity
-    style={{
-      ...buttonStyle({ selected: selected || element.props.selected }),
-      margin: 4,
-      flexDirection: 'row',
-      ...style,
-      ...viewStyleProps(element.props),
-    }}
-    onPress={() => {
-      sendEvent(element.pathId, { type: 'onClick' });
-      if (onPress) {
-        onPress();
-      }
-    }}>
-    {element.props.iconFamily
-      ? React.createElement(iconFamilies[element.props.iconFamily], {
+const BaseButton = ({ element, selected, style, onPress }) => {
+  const baseStyle = buttonStyle({ selected: selected || element.props.selected });
+
+  const hideLabel = element.props.hideLabel || element.props.iconFill;
+
+  return (
+    <TouchableOpacity
+      style={{
+        ...baseStyle,
+        padding: element.props.iconFill ? 0 : baseStyle.padding,
+        margin: 4,
+        flexDirection: 'row',
+        ...style,
+        ...viewStyleProps(element.props),
+      }}
+      onPress={() => {
+        sendEvent(element.pathId, { type: 'onClick' });
+        if (onPress) {
+          onPress();
+        }
+      }}>
+      {element.props.iconFamily ? (
+        React.createElement(iconFamilies[element.props.iconFamily], {
           name: element.props.icon,
-          size: 20,
+          size: 18,
           color: 'black',
-          marginRight: !element.props.hideLabel ? 6 : 0,
+          style: { margin: 0, marginRight: !hideLabel ? 5 : 0 },
         })
-      : null}
-    {!element.props.hideLabel ? <Text>{element.props.label}</Text> : null}
-  </TouchableOpacity>
-);
+      ) : element.props.icon ? (
+        <ToolImage
+          element={element}
+          path={element.props.icon}
+          style={{
+            margin: 0,
+            ...(element.props.iconFill
+              ? {
+                  aspectRatio: 1,
+                  alignSelf: 'stretch',
+                  width: null,
+                  height: null,
+                }
+              : {
+                  width: 18,
+                  height: 18,
+                }),
+            marginRight: !hideLabel ? 6 : 0,
+            ...element.props.iconStyle,
+          }}
+        />
+      ) : null}
+      {!hideLabel ? <Text>{element.props.label}</Text> : null}
+    </TouchableOpacity>
+  );
+};
 
 const PopoverButton = ({ element }) => {
   const [popoverVisible, setPopoverVisible] = useState(false);
@@ -836,26 +875,6 @@ const ToolColorPicker = ({ element }) => {
   );
 };
 elementTypes['colorPicker'] = ToolColorPicker;
-
-const ToolImage = ({ element }) => {
-  const { transformAssetUri } = useContext(ToolsContext);
-
-  let resizeMode = FastImage.resizeMode.cover;
-  if (element.props.resizeMode) {
-    resizeMode = FastImage.resizeMode[element.props.resizeMode] || resizeMode;
-  }
-
-  const uri = element.props.path && transformAssetUri(element.props.path);
-
-  return (
-    <FastImage
-      style={{ margin: 4, width: 200, height: 200 }}
-      source={{ uri }}
-      resizeMode={resizeMode}
-    />
-  );
-};
-elementTypes['image'] = ToolImage;
 
 const CODE_MIRROR_HTML = Base64.decode(CodeMirrorBase64);
 
