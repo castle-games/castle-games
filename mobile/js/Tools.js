@@ -430,7 +430,6 @@ const BaseButton = ({ element, selected, style, onPress }) => {
           style: {
             margin: 0,
             marginRight: !hideLabel ? 5 : 0,
-            width: 18,
             height: 18,
             textAlign: 'center',
           },
