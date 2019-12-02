@@ -895,7 +895,14 @@ const ToolFilePicker = ({ element }) => {
   const anchorRef = useRef(null);
 
   const launchImagePicker = methodName => {
-    ImagePicker[methodName]({}, ({ didCancel, error, uri }) => {
+    const options = {}
+
+    if (Constants.Android) {
+      // URIs may some times be 'content://', this forces copying to 'file://'
+      options.rotation = 360;
+    }
+
+    ImagePicker[methodName](options, ({ didCancel, error, uri }) => {
       if (!didCancel) {
         if (error) {
           Alert.alert('Error loading image', error);
