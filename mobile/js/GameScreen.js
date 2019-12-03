@@ -214,6 +214,7 @@ const useInitialData = ({ game, dimensionsSettings, extras }) => {
             me: await LuaBridge.jsUserToLuaUser(me),
           },
           game: await LuaBridge.jsGameToLuaGame(game),
+          hostedFiles: game.hostedFiles,
           referrerGame: extras.referrerGame
             ? await LuaBridge.jsGameToLuaGame(extras.referrerGame)
             : undefined,

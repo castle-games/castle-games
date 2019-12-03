@@ -271,67 +271,278 @@ const IOS_GAMES = [
     },
   },
   {
+    seed: true,
     gameId: 'qe71h3',
     title: 'he idle',
     owner: {
       userId: '408',
       username: 'borb',
+      name: 'borb',
+      photo: {
+        fileId: '16314',
+        url: 'https://d1vkcv80qw9qqp.cloudfront.net/ccc8e1c0e50c93d2459d47655f205023',
+      },
     },
     coverImage: {
       fileId: '16398',
       url: 'https://d1vkcv80qw9qqp.cloudfront.net/0ac9ece45f300e7ed646921e220c875e',
     },
-    actionKeyCode: 'z',
+    entryPoint: 'http://api.castle.games/api/hosted/@borb/he-idle/masamainio.lua',
+    metadata: {
+      dimensions: 'full',
+      primaryColor: 191028,
+      main: 'masamainio.lua',
+    },
+    storageId: 'd8cb8abb-2f52-4433-bd08-86835eabe8e8',
+    url: 'https://castle.games/+qe71h3/@borb/he-idle',
+    description:
+      'he run [arrow keys], he jump [Z key], he climb [arrow keys], he pause [enter], he die [backspace], he find secrets...?',
+    hostedFiles: {
+      'plr.lua': 'https://hosted.castle.games/44c251277021f718b8c654a54097769033ac3631',
+      '.castleid': 'https://hosted.castle.games/5053402156f77d039c0e7c29cbade0927011dbc0',
+      'level.lua': 'https://hosted.castle.games/a3956739e6a20a8c20620f9edcd50c9dbf4e4832',
+      'he_idle.png': 'https://hosted.castle.games/03c41c58d8fdd3f42b1ef23d449e93dba74f092e',
+      'libs/utf.lua': 'https://hosted.castle.games/6dae3013b44b212958fd07fef01c89bfe9c69ff1',
+      'collision.lua': 'https://hosted.castle.games/c381ec3f478409ca200331d0538a81136088d46d',
+      'libs/libs.lua': 'https://hosted.castle.games/421e84ce7d0fa529ae342080f18fbe68e81b6881',
+      'libs/utf-8.lua': 'https://hosted.castle.games/64d4c26f07b24a28a8f2a4a214c9f37ec49d4897',
+      'masamainio.lua': 'https://hosted.castle.games/cd17cf006a30be6d17db864237f31d5019aa7b9a',
+      'sugarcoat/gfx.lua': 'https://hosted.castle.games/8a86abfc89ccb960fd24603c49e54322c4a713c6',
+      'sugarcoat/map.lua': 'https://hosted.castle.games/da39a3ee5e6b4b0d3255bfef95601890afd80709',
+      'borbs-space.castle': 'https://hosted.castle.games/8ce95fb0bff4d1af41393d23f544ec2c9e6a1f57',
+      'sugarcoat/core.lua': 'https://hosted.castle.games/f198c4bba764c58b4354a7c89fa123a0ddc0cb25',
+      'sugarcoat/text.lua': 'https://hosted.castle.games/2239899627689a6a8cdd101883a069252a971ecf',
+      'sugarcoat/time.lua': 'https://hosted.castle.games/d0b74ceeaa0ccd41ec4e34e11181b2c5def7dce8',
+      'swag/unscii-16.ttf': 'https://hosted.castle.games/47f73330db42f7380d30f561d63f40aea597ab43',
+      'sugarcoat/audio.lua': 'https://hosted.castle.games/26902f42d075d2a70f3cf27f7a5cc2592c001da6',
+      'sugarcoat/debug.lua': 'https://hosted.castle.games/eb34e39fc3bd09d0ae260b1071736b38139cc6b0',
+      'sugarcoat/input.lua': 'https://hosted.castle.games/48ad826e5104ad3f426fe3cc376fc933f02e46e6',
+      'sugarcoat/maths.lua': 'https://hosted.castle.games/5842fb29b47844c4a442e6c866faaf7594f2822a',
+      'sugarcoat/sprite.lua':
+        'https://hosted.castle.games/b5058e83d634f853319a92537f5ae5dbc99a7640',
+      'sugarcoat/window.lua':
+        'https://hosted.castle.games/d72f2757ac0b993e27c752bacf03e42b4090cd76',
+      'sugarcoat/utility.lua':
+        'https://hosted.castle.games/1f0fc33271a18a98b4e569c55961497bdd7ce5dd',
+      'swag/unscii-8-thin.ttf':
+        'https://hosted.castle.games/2fc5b8a00bf558bbe8435845268e41921278588b',
+      'sugarcoat/TeapotPro.ttf':
+        'https://hosted.castle.games/34a77fc3ecaa595d93b61bbb2d5c45d9f1bc7674',
+      'sugarcoat/gfx_vault.lua':
+        'https://hosted.castle.games/3cc7eea7081c5f6bb24286f9381464774624354b',
+      'sugarcoat/sugarcoat.lua':
+        'https://hosted.castle.games/b4330e1f55580a600bfca6e230bf6819c6722d08',
+      'borbspace.sublime-project':
+        'https://hosted.castle.games/ffc44b7b116b0bf622c1836efc22f2a65bd57f30',
+      'sugarcoat/sugar_events.lua':
+        'https://hosted.castle.games/ef6a81f5d193ef96f64885c97496f03e34f4dea8',
+      'borbspace.sublime-workspace':
+        'https://hosted.castle.games/90ed363a6d555cd0f5846c2474bddcf1e9165238',
+    },
   },
   {
+    seed: true,
     gameId: 'xkzbn6',
     title: '🦷 Infiniteeth 🦷',
     owner: {
       userId: '66',
       username: 'liquidream',
+      name: 'Paul Nicholas',
+      photo: {
+        fileId: '52',
+        url: 'https://d1vkcv80qw9qqp.cloudfront.net/d833dac3ded044c79fc9e22263c5ec7b',
+      },
     },
     coverImage: {
       fileId: '16393',
       url: 'https://d1vkcv80qw9qqp.cloudfront.net/4453764e57731cd7f0128078f27991eb',
     },
+    entryPoint:
+      'https://raw.githubusercontent.com/Liquidream/teeth-dodger/4096d89391443e69a02609df3a9a664cb1722b57/main.lua',
+    metadata: {
+      dimensions: 'full',
+      primaryColor: 'ee2911',
+      main: 'main.lua',
+    },
+    storageId: 'd23c17f3-6975-47fb-bdd1-cdff6e2baf86',
+    url: 'https://castle.games/+xkzbn6/@liquidream/infiniteeth',
+    description:
+      "Escape being eaten by a monster's MANY layers of teeth. Use timing and positioning to avoid being squished!",
+    hostedFiles: null,
   },
   {
+    seed: true,
     gameId: '3pyvc3',
     title: 'Verticube',
     owner: {
       userId: '45',
       username: 'revillo',
+      name: 'Oliver Castaneda',
+      photo: {
+        fileId: '15930',
+        url: 'https://d1vkcv80qw9qqp.cloudfront.net/0605676a3093c7ba1eb8cd2927b55c5d',
+      },
     },
     coverImage: {
       fileId: '15920',
       url: 'https://d1vkcv80qw9qqp.cloudfront.net/7419fe8d974e8ca4533cdadeade8a6ec',
     },
-    actionKeyCode: 'space: ␣',
+    entryPoint: 'http://api.castle.games/api/hosted/@revillo/verticube/main.lua',
+    metadata: {
+      main: 'main.lua',
+    },
+    storageId: '27ef29ba-91b2-428a-931b-035415e96d5d',
+    url: 'https://castle.games/+3pyvc3/@revillo/verticube',
+    description: 'Voxel platformer and level editor.',
+    hostedFiles: {
+      'main.lua': 'https://hosted.castle.games/3ad009f2e05a044c1e17d6a0033923fa7e106c75',
+      '.castleid': 'https://hosted.castle.games/555e2b82ee243bf5c3af5ce61a384906491dea8c',
+      'agent.lua': 'https://hosted.castle.games/683b4cf9e56d742ea031abadd6e8bc9c6d2e8672',
+      'cover.png': 'https://hosted.castle.games/e3b651f9acbf779b9120feaef276efe4c4b0578b',
+      'gfx3D.lua': 'https://hosted.castle.games/7385d24fa98d5b666e94f0a445e415f90c341a89',
+      'items.lua': 'https://hosted.castle.games/da39a3ee5e6b4b0d3255bfef95601890afd80709',
+      'tiles.png': 'https://hosted.castle.games/4201e0d81ffe592065eff6b1ce8c73b5e2406e9e',
+      'voxel.lua': 'https://hosted.castle.games/fe095c38110bb061f0c3a8e88e8b6567fd5bbb30',
+      'agents.png': 'https://hosted.castle.games/d8d66fcd8d4ce092f8b177456841bef43038e5be',
+      'castle.png': 'https://hosted.castle.games/faae50e5eb789f84e0a9a8e1bc47a91735da6b14',
+      'editor.lua': 'https://hosted.castle.games/c4cf03acc2c3206ae6e549f078efaf33d89e6c27',
+      'tiles2.png': 'https://hosted.castle.games/340c50762163c4b4cb690f0cec8782c649646be0',
+      'shaders.lua': 'https://hosted.castle.games/1f3fa9d4a49d8f575260711b1065234844111df9',
+      'lib/list.lua': 'https://hosted.castle.games/4afab12617ed43e81476b6845ae6003bc81abab0',
+      'ImageFont.png': 'https://hosted.castle.games/51dccebed6e781e6874ff41312b3bad666a31514',
+      'audio/win.ogg': 'https://hosted.castle.games/67f783e34cb3ad1d5c23217acd0bb4c40ff5f9b1',
+      'lib/sound.lua': 'https://hosted.castle.games/61eb6308d09395b37bf920c3339e05fc41b5b710',
+      'mesh_util.lua': 'https://hosted.castle.games/75383adad2a90d2f4d6b6ce23607f3551193a616',
+      'audio/jump.ogg': 'https://hosted.castle.games/b99a13ff59cc5155b799a443592d3b0229e030b1',
+      'audio/land.ogg': 'https://hosted.castle.games/bdcc5787e5e49768d37e73c0d47d733945d20900',
+      'audio/lava.ogg': 'https://hosted.castle.games/94394cb26fa41fc8ade06c9fdd746d88c6790627',
+      'audio/swim.ogg': 'https://hosted.castle.games/d1ec11542d8bfa62e9762aa6efdc10bf67b8e288',
+      'builder.castle': 'https://hosted.castle.games/c5ccbfd6284f6c1255a39704d8645dc0c92012a8',
+      'audio/boing.ogg': 'https://hosted.castle.games/02d0893cbde6233a7a7fe93e4d1cb89b4867e50d',
+      'audio/scream.ogg': 'https://hosted.castle.games/2430f99c85baa8b9c5288839fd35735ae277c83a',
+      'audio/spring.ogg': 'https://hosted.castle.games/33cb9598d641f03a9c1a572eefa3f08b6e1c3167',
+      'lib/cpml/init.lua': 'https://hosted.castle.games/74e521cb4d962e0617c2f515e9c0cca22bec59c3',
+      'lib/cpml/README.md': 'https://hosted.castle.games/1c74befa99f48eabed484285d982690d37cd2103',
+      'lib/cpml/LICENSE.md': 'https://hosted.castle.games/fa6c98ae9d667a9f99f965934874d2f300482870',
+      'vsws.code-workspace': 'https://hosted.castle.games/a3d1eaef9261b75b7242a4089c5819110eaa8ba7',
+      'levels/practice0.lua':
+        'https://hosted.castle.games/aba59bb86e61980a3d9c8d0dbd8f6c51294812dc',
+      'levels/practice1.lua':
+        'https://hosted.castle.games/76a80b30910c2efa161bb350f738c7a94c769d05',
+      'levels/practice2.lua':
+        'https://hosted.castle.games/c1a0ae1adf2357acbd177d876f1a130e4ddaef3d',
+      'lib/cpml/.travis.yml':
+        'https://hosted.castle.games/9109a65c1d0fefa57cf03d5df04d03aa532793e8',
+      'levels/intro_edit.lua':
+        'https://hosted.castle.games/fe15aa50cbe5451a779bf0ef5e4606bd8def138f',
+      'levels/intro_lava.lua':
+        'https://hosted.castle.games/a7b0fe2b2711dc6db870ab68272f124ab89d2f3b',
+      'levels/intro_guide.lua':
+        'https://hosted.castle.games/60b8a6b7fc62e52ce95237528ba8238a6ea2fe62',
+      'levels/intro_lava2.lua':
+        'https://hosted.castle.games/80892d24c063e38418f31c3496df753dfbabc27c',
+      'lib/cpml/.editorconfig':
+        'https://hosted.castle.games/2793c7e33b0ba531fabd8c700e4db1ea564bf67a',
+      'lib/cpml/doc/config.ld':
+        'https://hosted.castle.games/9ad4b3eb325cfb044e45c203936d2050ece3f1bf',
+      'levels/intro_castle.lua':
+        'https://hosted.castle.games/70c99c75daded94797f97a570cf20c02f74f4fb2',
+      'levels/intro_spring.lua':
+        'https://hosted.castle.games/90814eb892a5d0059ab17319d1f2da563a98af8d',
+      'lib/cpml/.coveralls.yml':
+        'https://hosted.castle.games/60387f7581d863fd1acd8740a92492c4902926b4',
+      'levels/intro_jumping.lua':
+        'https://hosted.castle.games/69746f129c2d904687319364791eb7ec4975061b',
+      'lib/cpml/modules/bvh.lua':
+        'https://hosted.castle.games/b16d00d620f5a7ffdbf9c62e94609ce07b3a548f',
+      'lib/cpml/modules/mat4.lua':
+        'https://hosted.castle.games/ee6617cba6199b26e25a7b44e44d3e5786bea229',
+      'lib/cpml/modules/mesh.lua':
+        'https://hosted.castle.games/e08d8c9e0870de287ad5e318cc8c7ec7d4c95959',
+      'lib/cpml/modules/quat.lua':
+        'https://hosted.castle.games/7b975e46c9654f6c6456da11d8a31c5fd1524900',
+      'lib/cpml/modules/vec2.lua':
+        'https://hosted.castle.games/1de2074be950cc21d950646ff2b9ae8df1067ba5',
+      'lib/cpml/modules/vec3.lua':
+        'https://hosted.castle.games/01378c87c32c7a7307e8138403ee8f45288f4cb9',
+      'lib/cpml/modules/color.lua':
+        'https://hosted.castle.games/63441e6baae26c421aa912cec99c553c0b8afdba',
+      'lib/cpml/modules/utils.lua':
+        'https://hosted.castle.games/f92352695a8e5e9e72dabdd80ad7ba1d14cf0b68',
+      'levels/practice1_backup.lua':
+        'https://hosted.castle.games/65be982a468b5d50ded12470c71fd2708d01fd3e',
+      'lib/cpml/modules/bound2.lua':
+        'https://hosted.castle.games/b5fe5b88fd00ba0bee305b9e0b9237c4da27bc3d',
+      'lib/cpml/modules/bound3.lua':
+        'https://hosted.castle.games/da69d6ea0540cc7a17e51ea0ece6da4aa9d4507f',
+      'lib/cpml/modules/octree.lua':
+        'https://hosted.castle.games/4df8601e573bbb3046d25032c07bc1fabb7b0318',
+      'lib/cpml/cpml-scm-1.rockspec':
+        'https://hosted.castle.games/835abc806da0022b84ceefaf96d35d0561a3ddf1',
+      'lib/cpml/modules/simplex.lua':
+        'https://hosted.castle.games/461c26870fcf8b625eecd4d7d4a6f715a950a97b',
+      'lib/cpml/modules/constants.lua':
+        'https://hosted.castle.games/660ef03aba475cefa0d63dc04f83744354f87e10',
+      'lib/cpml/modules/intersect.lua':
+        'https://hosted.castle.games/0b876d13cfe9f1bec1ee98864f720f2a781fbba3',
+    },
   },
   {
+    seed: true,
     gameId: '6j1567',
     title: 'Untitled Dungeon',
     owner: {
       userId: '6',
       username: 'ben',
+      name: 'Ben',
+      photo: {
+        fileId: '2',
+        url: 'https://d1vkcv80qw9qqp.cloudfront.net/aad41bcc8b1b2cebeac14d33ab4bb141',
+      },
     },
     coverImage: {
       fileId: '16338',
       url: 'https://d1vkcv80qw9qqp.cloudfront.net/57f21565644ca1296333776498169b8f',
     },
-    actionKeyCode: 'return: ⏎',
+    entryPoint:
+      'https://raw.githubusercontent.com/terribleben/castle-halloween-party/e3166fa833a75970c1d227625a67a0ef33c2558b/main.lua',
+    metadata: {
+      scaling: 'step',
+      dimensions: '256x192',
+      primaryColor: 0,
+      main: 'main.lua',
+    },
+    storageId: '309455a5-e086-460c-bdd5-eb7d6dd1186b',
+    url: 'https://castle.games/+6j1567/@ben/untitled-dungeon',
+    description: 'A dark dungeon, an ancient mystery, and some pumpkins.',
+    hostedFiles: null,
   },
   {
+    seed: true,
     gameId: '40',
     title: 'Cake Cat',
     owner: {
       userId: '101',
       username: 'platformalist',
+      name: 'Andrew Reist',
+      photo: {
+        fileId: '98',
+        url: 'https://d1vkcv80qw9qqp.cloudfront.net/95ce4970ef63e3cfadcaa1067ebd840c',
+      },
     },
     coverImage: {
       fileId: '97',
       url: 'https://d1vkcv80qw9qqp.cloudfront.net/58d7a39c1ce7b837b884b6381d71b207',
     },
+    entryPoint: 'https://raw.githubusercontent.com/platformalist/love/996eed713963dd78de11ccb3839ff82b1e1db1bb/cake_cat/main.lua',
+    metadata: {
+      primaryColor: 'e6b8c1',
+      main: 'main.lua',
+    },
+    storageId: '65f58eeb-d427-4a47-9b14-7f971ece02d4',
+    url: 'https://castle.games/+40/@platformalist/cake-cat',
+    description: 'Be a cat! Eat cake! Avoid donuts!',
+    hostedFiles: null,
   },
 ];
 
