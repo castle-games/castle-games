@@ -118,6 +118,12 @@ end
 love.filesystem.write('dummy', '') -- Create a dummy file to make sure the save directory exists
 local db = sqlite3.open(love.filesystem.getSaveDirectory() .. '/ghost_network.db')
 
+-- Database with an initial cache to look in too -- for game data 'embedded' into the Castle client
+local seedDb
+if GHOST_NETWORK_SEED_PATH then
+    seedDb = sqlite3.open(GHOST_NETWORK_SEED_PATH)
+end
+
 -- Create persistent fetch cache
 db:exec[[
     create table if not exists fetch_cache (
@@ -320,7 +326,8 @@ do
     end
 end
 
--- Find a result in the persistent fetch cache, `nil` if not found; updates the timestamp of the entry
+-- Find a result in the persistent fetch cache, `nil` if not found; updates the timestamp of the entry. Also
+-- checks in the 'seed' database first--if found there just returns that.
 local findPersistedFetchResult
 do
     local updateStmt = db:prepare[[
@@ -331,11 +338,25 @@ do
         select response, httpCode, headers, status from fetch_cache
             where url = ? and method = ?;
     ]]
+    local seedSelectStmt = seedDb and seedDb:prepare[[
+        select response, httpCode, headers, status from fetch_cache
+            where url = ? and method = ?;
+    ]]
     findPersistedFetchResult = function(url, method)
+        local result
+        if seedSelectStmt then
+            seedSelectStmt:bind_values(url, method)
+            for response, httpCode, headers, status in seedSelectStmt:urows() do
+                result = { response, httpCode, load(headers)(), status }
+            end
+            seedSelectStmt:reset()
+            if result then
+                return result
+            end
+        end
         updateStmt:bind_values(url, method)
         updateStmt:step()
         updateStmt:reset()
-        local result
         selectStmt:bind_values(url, method)
         for response, httpCode, headers, status in selectStmt:urows() do
             result = { response, httpCode, load(headers)(), status }
