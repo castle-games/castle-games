@@ -184,6 +184,33 @@ const HomeScreen = () => {
 };
 
 // 'Seeded' data for embedded games on iOS
+//
+// Retrieved with the following query:
+//   {
+//     game(gameId: <GAME_ID>) {
+//       gameId
+//       title
+//       owner {
+//         userId
+//         username
+//         name
+//         photo {
+//           fileId
+//           url
+//         }
+//       }
+//       coverImage {
+//         fileId
+//         url
+//       }
+//       entryPoint
+//       metadata
+//       storageId
+//       url
+//       description
+//       hostedFiles
+//     }
+//   }
 const IOS_GAMES = [
   {
     seed: true,

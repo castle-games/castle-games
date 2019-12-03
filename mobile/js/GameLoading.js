@@ -34,7 +34,7 @@ const GameLoading = ({ noGame, fetching, luaNetworkRequests }) => (
       }}>
       <ActivityIndicator size="large" color="#ffffff" />
     </View>
-    {false && Constants.iOS ? null : fetching ? (
+    {Constants.iOS ? null : fetching ? (
       // Game is being fetched
       <LoaderText>Fetching game...</LoaderText>
     ) : noGame ? (
