@@ -215,6 +215,7 @@ const IOS_GAMES = [
   {
     seed: true,
     gameId: 'bplemk',
+    actionKeyCode: 'return: ⏎',
     title: 'One Room Dungeon',
     owner: {
       userId: '40',
@@ -300,6 +301,7 @@ const IOS_GAMES = [
   {
     seed: true,
     gameId: 'qe71h3',
+    actionKeyCode: 'z',
     title: 'he idle',
     owner: {
       userId: '408',
@@ -400,6 +402,7 @@ const IOS_GAMES = [
   {
     seed: true,
     gameId: '3pyvc3',
+    actionKeyCode: 'space: ␣',
     title: 'Verticube',
     owner: {
       userId: '45',
@@ -517,6 +520,7 @@ const IOS_GAMES = [
   {
     seed: true,
     gameId: '6j1567',
+    actionKeyCode: 'return: ⏎',
     title: 'Untitled Dungeon',
     owner: {
       userId: '6',
@@ -561,7 +565,8 @@ const IOS_GAMES = [
       fileId: '97',
       url: 'https://d1vkcv80qw9qqp.cloudfront.net/58d7a39c1ce7b837b884b6381d71b207',
     },
-    entryPoint: 'https://raw.githubusercontent.com/platformalist/love/996eed713963dd78de11ccb3839ff82b1e1db1bb/cake_cat/main.lua',
+    entryPoint:
+      'https://raw.githubusercontent.com/platformalist/love/996eed713963dd78de11ccb3839ff82b1e1db1bb/cake_cat/main.lua',
     metadata: {
       primaryColor: 'e6b8c1',
       main: 'main.lua',
