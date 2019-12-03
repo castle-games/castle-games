@@ -112,7 +112,9 @@ local function explicitRequire(path, opts)
 
     -- Deal with '.lua' or '/init.lua' appending. If both fail, try with `skipCache`.
     local url
-    if network.exists(absolute .. '.lua') then
+    if path == 'lib/cpml' then -- Don't make 'lib/cpml' cause a network request in iOS-embedded game 'Verticube'
+        url = absolute .. '/init.lua'
+    elseif network.exists(absolute .. '.lua') then
         url = absolute .. '.lua'
     elseif network.exists(absolute .. '/init.lua') then
         url = absolute .. '/init.lua'

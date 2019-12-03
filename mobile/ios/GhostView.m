@@ -121,6 +121,15 @@
     lua_setglobal(L, "GHOST_ROOT_URI");
   }
 
+  // Set the location of the network 'seed' database--contains network data we've 'embedded' into the client
+  {
+    NSString *ghostNetworkSeedPath = [[NSBundle mainBundle] pathForResource:@"ghost_network_seed" ofType:@"db"];
+    if (ghostNetworkSeedPath) {
+      lua_pushstring(L, ghostNetworkSeedPath.UTF8String);
+      lua_setglobal(L, "GHOST_NETWORK_SEED_PATH");
+    }
+  }
+
   // Don't stop audio that's already playing in the background
   {
     AVAudioSession *session = [AVAudioSession sharedInstance];
