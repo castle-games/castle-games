@@ -532,6 +532,7 @@ const GameView = ({ gameId, gameUri, extras, windowed, onPressReload }) => {
               noGame={!game && !gameUri}
               fetching={fetchGameHook.fetching}
               luaNetworkRequests={luaLoadingHook.networkRequests}
+              extras={extras}
             />
           ) : null}
         </KeyboardAvoidingView>

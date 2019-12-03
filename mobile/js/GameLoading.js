@@ -8,7 +8,7 @@ const LoaderText = ({ children }) => (
   <Text style={{ color: 'white', fontSize: 12 }}>{children}</Text>
 );
 
-const GameLoading = ({ noGame, fetching, luaNetworkRequests }) => (
+const GameLoading = ({ noGame, fetching, luaNetworkRequests, extras }) => (
   // Render loader overlay until Lua finishes loading
   <View
     style={{
@@ -22,18 +22,21 @@ const GameLoading = ({ noGame, fetching, luaNetworkRequests }) => (
       alignItems: 'flex-start',
       padding: 8,
     }}>
-    <View
-      style={{
-        position: 'absolute',
-        left: 0,
-        top: 0,
-        right: 0,
-        bottom: 0,
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}>
-      <ActivityIndicator size="large" color="#ffffff" />
-    </View>
+    {!extras.seed ? (
+      // If game is 'embedded', don't show a loading indicator and hope it loads quickly
+      <View
+        style={{
+          position: 'absolute',
+          left: 0,
+          top: 0,
+          right: 0,
+          bottom: 0,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <ActivityIndicator size="large" color="#ffffff" />
+      </View>
+    ) : null}
     {Constants.iOS ? null : fetching ? (
       // Game is being fetched
       <LoaderText>Fetching game...</LoaderText>
