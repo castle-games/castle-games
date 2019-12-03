@@ -25,8 +25,9 @@ const isLocalUri = uri => {
   return parsed.hostname && (parsed.hostname == 'localhost' || !ip.isPublic(parsed.hostname));
 };
 
-// Fetch a `Game` GraphQL entity based on `gameId` or `gameUri`
-const useFetchGame = ({ gameId, gameUri }) => {
+// Fetch a `Game` GraphQL entity based on `gameId` or `gameUri`. Uses the seeded game data from `extras` if
+// present, in case the game is 'embedded'.
+const useFetchGame = ({ gameId, gameUri, extras }) => {
   const [game, setGame] = useState(null);
 
   const httpsUri = gameUri && gameUri.replace(/^castle:\/\//, 'https://');
@@ -77,9 +78,11 @@ const useFetchGame = ({ gameId, gameUri }) => {
   );
 
   // If we don't have `game` yet, we'll need to fetch it. We're ready to do that once either
-  // `gameId` or `gameUri` are given.
+  // `gameId` or `gameUri` are given. Also if we have 'seeded' data in `extras`, we use that directly.
   if (!game && (gameId || gameUri)) {
-    if (gameUri && isLocalUri(gameUri)) {
+    if (extras && extras.seed) {
+      setGame(extras.seed);
+    } else if (gameUri && isLocalUri(gameUri)) {
       // LAN URI -- use a direct fetch
       const httpUri = gameUri.replace(/^castle:\/\//, 'http://');
       if (!fetchCalled && callFetchMetadata.current) {
@@ -430,7 +433,7 @@ const useUserStatus = ({ game }) => {
 // lifetime of the game run -- it must be unmounted when the game is stopped and a new instance mounted
 // if a new game should be run (or even if the same game should be restarted).
 const GameView = ({ gameId, gameUri, extras, windowed, onPressReload }) => {
-  const fetchGameHook = useFetchGame({ gameId, gameUri });
+  const fetchGameHook = useFetchGame({ gameId, gameUri, extras });
   const game = fetchGameHook.fetchedGame;
 
   useUserStatus({ game });
