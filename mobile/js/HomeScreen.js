@@ -298,77 +298,77 @@ const IOS_GAMES = [
         'https://hosted.castle.games/986fcdb85ef374f235f71b462628db631ad50563',
     },
   },
-  {
-    seed: true,
-    gameId: 'qe71h3',
-    actionKeyCode: 'z',
-    title: 'he idle',
-    owner: {
-      userId: '408',
-      username: 'borb',
-      name: 'borb',
-      photo: {
-        fileId: '16314',
-        url: 'https://d1vkcv80qw9qqp.cloudfront.net/ccc8e1c0e50c93d2459d47655f205023',
-      },
-    },
-    coverImage: {
-      fileId: '16398',
-      url: 'https://d1vkcv80qw9qqp.cloudfront.net/0ac9ece45f300e7ed646921e220c875e',
-    },
-    entryPoint: 'http://api.castle.games/api/hosted/@borb/he-idle/masamainio.lua',
-    metadata: {
-      dimensions: 'full',
-      primaryColor: 191028,
-      main: 'masamainio.lua',
-    },
-    storageId: 'd8cb8abb-2f52-4433-bd08-86835eabe8e8',
-    url: 'https://castle.games/+qe71h3/@borb/he-idle',
-    description:
-      'he run [arrow keys], he jump [Z key], he climb [arrow keys], he pause [enter], he die [backspace], he find secrets...?',
-    hostedFiles: {
-      'plr.lua': 'https://hosted.castle.games/44c251277021f718b8c654a54097769033ac3631',
-      '.castleid': 'https://hosted.castle.games/5053402156f77d039c0e7c29cbade0927011dbc0',
-      'level.lua': 'https://hosted.castle.games/a3956739e6a20a8c20620f9edcd50c9dbf4e4832',
-      'he_idle.png': 'https://hosted.castle.games/03c41c58d8fdd3f42b1ef23d449e93dba74f092e',
-      'libs/utf.lua': 'https://hosted.castle.games/6dae3013b44b212958fd07fef01c89bfe9c69ff1',
-      'collision.lua': 'https://hosted.castle.games/c381ec3f478409ca200331d0538a81136088d46d',
-      'libs/libs.lua': 'https://hosted.castle.games/421e84ce7d0fa529ae342080f18fbe68e81b6881',
-      'libs/utf-8.lua': 'https://hosted.castle.games/64d4c26f07b24a28a8f2a4a214c9f37ec49d4897',
-      'masamainio.lua': 'https://hosted.castle.games/cd17cf006a30be6d17db864237f31d5019aa7b9a',
-      'sugarcoat/gfx.lua': 'https://hosted.castle.games/8a86abfc89ccb960fd24603c49e54322c4a713c6',
-      'sugarcoat/map.lua': 'https://hosted.castle.games/da39a3ee5e6b4b0d3255bfef95601890afd80709',
-      'borbs-space.castle': 'https://hosted.castle.games/8ce95fb0bff4d1af41393d23f544ec2c9e6a1f57',
-      'sugarcoat/core.lua': 'https://hosted.castle.games/f198c4bba764c58b4354a7c89fa123a0ddc0cb25',
-      'sugarcoat/text.lua': 'https://hosted.castle.games/2239899627689a6a8cdd101883a069252a971ecf',
-      'sugarcoat/time.lua': 'https://hosted.castle.games/d0b74ceeaa0ccd41ec4e34e11181b2c5def7dce8',
-      'swag/unscii-16.ttf': 'https://hosted.castle.games/47f73330db42f7380d30f561d63f40aea597ab43',
-      'sugarcoat/audio.lua': 'https://hosted.castle.games/26902f42d075d2a70f3cf27f7a5cc2592c001da6',
-      'sugarcoat/debug.lua': 'https://hosted.castle.games/eb34e39fc3bd09d0ae260b1071736b38139cc6b0',
-      'sugarcoat/input.lua': 'https://hosted.castle.games/48ad826e5104ad3f426fe3cc376fc933f02e46e6',
-      'sugarcoat/maths.lua': 'https://hosted.castle.games/5842fb29b47844c4a442e6c866faaf7594f2822a',
-      'sugarcoat/sprite.lua':
-        'https://hosted.castle.games/b5058e83d634f853319a92537f5ae5dbc99a7640',
-      'sugarcoat/window.lua':
-        'https://hosted.castle.games/d72f2757ac0b993e27c752bacf03e42b4090cd76',
-      'sugarcoat/utility.lua':
-        'https://hosted.castle.games/1f0fc33271a18a98b4e569c55961497bdd7ce5dd',
-      'swag/unscii-8-thin.ttf':
-        'https://hosted.castle.games/2fc5b8a00bf558bbe8435845268e41921278588b',
-      'sugarcoat/TeapotPro.ttf':
-        'https://hosted.castle.games/34a77fc3ecaa595d93b61bbb2d5c45d9f1bc7674',
-      'sugarcoat/gfx_vault.lua':
-        'https://hosted.castle.games/3cc7eea7081c5f6bb24286f9381464774624354b',
-      'sugarcoat/sugarcoat.lua':
-        'https://hosted.castle.games/b4330e1f55580a600bfca6e230bf6819c6722d08',
-      'borbspace.sublime-project':
-        'https://hosted.castle.games/ffc44b7b116b0bf622c1836efc22f2a65bd57f30',
-      'sugarcoat/sugar_events.lua':
-        'https://hosted.castle.games/ef6a81f5d193ef96f64885c97496f03e34f4dea8',
-      'borbspace.sublime-workspace':
-        'https://hosted.castle.games/90ed363a6d555cd0f5846c2474bddcf1e9165238',
-    },
-  },
+  // {
+  //   seed: true,
+  //   gameId: 'qe71h3',
+  //   actionKeyCode: 'z',
+  //   title: 'he idle',
+  //   owner: {
+  //     userId: '408',
+  //     username: 'borb',
+  //     name: 'borb',
+  //     photo: {
+  //       fileId: '16314',
+  //       url: 'https://d1vkcv80qw9qqp.cloudfront.net/ccc8e1c0e50c93d2459d47655f205023',
+  //     },
+  //   },
+  //   coverImage: {
+  //     fileId: '16398',
+  //     url: 'https://d1vkcv80qw9qqp.cloudfront.net/0ac9ece45f300e7ed646921e220c875e',
+  //   },
+  //   entryPoint: 'http://api.castle.games/api/hosted/@borb/he-idle/masamainio.lua',
+  //   metadata: {
+  //     dimensions: 'full',
+  //     primaryColor: 191028,
+  //     main: 'masamainio.lua',
+  //   },
+  //   storageId: 'd8cb8abb-2f52-4433-bd08-86835eabe8e8',
+  //   url: 'https://castle.games/+qe71h3/@borb/he-idle',
+  //   description:
+  //     'he run [arrow keys], he jump [Z key], he climb [arrow keys], he pause [enter], he die [backspace], he find secrets...?',
+  //   hostedFiles: {
+  //     'plr.lua': 'https://hosted.castle.games/44c251277021f718b8c654a54097769033ac3631',
+  //     '.castleid': 'https://hosted.castle.games/5053402156f77d039c0e7c29cbade0927011dbc0',
+  //     'level.lua': 'https://hosted.castle.games/a3956739e6a20a8c20620f9edcd50c9dbf4e4832',
+  //     'he_idle.png': 'https://hosted.castle.games/03c41c58d8fdd3f42b1ef23d449e93dba74f092e',
+  //     'libs/utf.lua': 'https://hosted.castle.games/6dae3013b44b212958fd07fef01c89bfe9c69ff1',
+  //     'collision.lua': 'https://hosted.castle.games/c381ec3f478409ca200331d0538a81136088d46d',
+  //     'libs/libs.lua': 'https://hosted.castle.games/421e84ce7d0fa529ae342080f18fbe68e81b6881',
+  //     'libs/utf-8.lua': 'https://hosted.castle.games/64d4c26f07b24a28a8f2a4a214c9f37ec49d4897',
+  //     'masamainio.lua': 'https://hosted.castle.games/cd17cf006a30be6d17db864237f31d5019aa7b9a',
+  //     'sugarcoat/gfx.lua': 'https://hosted.castle.games/8a86abfc89ccb960fd24603c49e54322c4a713c6',
+  //     'sugarcoat/map.lua': 'https://hosted.castle.games/da39a3ee5e6b4b0d3255bfef95601890afd80709',
+  //     'borbs-space.castle': 'https://hosted.castle.games/8ce95fb0bff4d1af41393d23f544ec2c9e6a1f57',
+  //     'sugarcoat/core.lua': 'https://hosted.castle.games/f198c4bba764c58b4354a7c89fa123a0ddc0cb25',
+  //     'sugarcoat/text.lua': 'https://hosted.castle.games/2239899627689a6a8cdd101883a069252a971ecf',
+  //     'sugarcoat/time.lua': 'https://hosted.castle.games/d0b74ceeaa0ccd41ec4e34e11181b2c5def7dce8',
+  //     'swag/unscii-16.ttf': 'https://hosted.castle.games/47f73330db42f7380d30f561d63f40aea597ab43',
+  //     'sugarcoat/audio.lua': 'https://hosted.castle.games/26902f42d075d2a70f3cf27f7a5cc2592c001da6',
+  //     'sugarcoat/debug.lua': 'https://hosted.castle.games/eb34e39fc3bd09d0ae260b1071736b38139cc6b0',
+  //     'sugarcoat/input.lua': 'https://hosted.castle.games/48ad826e5104ad3f426fe3cc376fc933f02e46e6',
+  //     'sugarcoat/maths.lua': 'https://hosted.castle.games/5842fb29b47844c4a442e6c866faaf7594f2822a',
+  //     'sugarcoat/sprite.lua':
+  //       'https://hosted.castle.games/b5058e83d634f853319a92537f5ae5dbc99a7640',
+  //     'sugarcoat/window.lua':
+  //       'https://hosted.castle.games/d72f2757ac0b993e27c752bacf03e42b4090cd76',
+  //     'sugarcoat/utility.lua':
+  //       'https://hosted.castle.games/1f0fc33271a18a98b4e569c55961497bdd7ce5dd',
+  //     'swag/unscii-8-thin.ttf':
+  //       'https://hosted.castle.games/2fc5b8a00bf558bbe8435845268e41921278588b',
+  //     'sugarcoat/TeapotPro.ttf':
+  //       'https://hosted.castle.games/34a77fc3ecaa595d93b61bbb2d5c45d9f1bc7674',
+  //     'sugarcoat/gfx_vault.lua':
+  //       'https://hosted.castle.games/3cc7eea7081c5f6bb24286f9381464774624354b',
+  //     'sugarcoat/sugarcoat.lua':
+  //       'https://hosted.castle.games/b4330e1f55580a600bfca6e230bf6819c6722d08',
+  //     'borbspace.sublime-project':
+  //       'https://hosted.castle.games/ffc44b7b116b0bf622c1836efc22f2a65bd57f30',
+  //     'sugarcoat/sugar_events.lua':
+  //       'https://hosted.castle.games/ef6a81f5d193ef96f64885c97496f03e34f4dea8',
+  //     'borbspace.sublime-workspace':
+  //       'https://hosted.castle.games/90ed363a6d555cd0f5846c2474bddcf1e9165238',
+  //   },
+  // },
   {
     seed: true,
     gameId: 'xkzbn6',
