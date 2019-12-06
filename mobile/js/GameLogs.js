@@ -1,5 +1,6 @@
 import React, { useState, useRef, useMemo } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import debounce from 'lodash.debounce';
 import throttle from 'lodash.throttle';
 
 import * as Constants from './Constants';
@@ -39,37 +40,20 @@ const logs = [];
 export default GameLogs = ({ eventsReady, visible }) => {
   const flatListRef = useRef(null);
 
-  const [atEnd, setAtEnd] = useState(true);
-  const onScroll = ({ nativeEvent: { layoutMeasurement, contentOffset, contentSize } }) => {
-    setAtEnd(layoutMeasurement.height + contentOffset.y >= contentSize.height - 16);
-  };
-
   const [refreshCount, setRefreshCount] = useState(0);
-  const refresh = useMemo(
-    () =>
-      throttle(() => {
-        setRefreshCount(refreshCount => refreshCount + 1);
-        if (atEnd) {
-          setTimeout(
-            () =>
-              flatListRef.current &&
-              logs.length > 0 &&
-              flatListRef.current.scrollToIndex({
-                animated: true,
-                index: 0,
-                viewOffset: 0,
-                viewPosition: 1,
-              }),
-            100
-          );
-        }
-      }, 100),
-    [setRefreshCount, flatListRef]
-  );
+  const refresh = useMemo(() => {
+    const f = () => setRefreshCount(refreshCount => refreshCount + 1);
+    const t = throttle(f, 250);
+    const d = debounce(f, 100);
+    return () => {
+      t();
+      d();
+    };
+  }, []);
 
   const pushLog = log => {
     logs.unshift(log);
-    logs.length = Math.min(logs.length, 400);
+    logs.length = Math.min(logs.length, 100);
     refresh();
   };
 
@@ -119,7 +103,6 @@ export default GameLogs = ({ eventsReady, visible }) => {
       </View>
       <FlatList
         ref={flatListRef}
-        onScroll={onScroll}
         data={logs}
         inverted
         renderItem={({ item }) => <LogItem type={item.type} body={item.body} />}
