@@ -18,6 +18,7 @@ import GameInputs, { NUM_GAME_INPUTS_MODES, GAME_INPUTS_ACTION_KEY_CODES } from 
 import GameHeader from './GameHeader';
 import GameLoading from './GameLoading';
 import * as Constants from './Constants';
+import GameLogs from './GameLogs';
 
 // Whether the given URI is local
 const isLocalUri = uri => {
@@ -433,7 +434,15 @@ const useUserStatus = ({ game }) => {
 // Given a `gameId` or `gameUri`, run and display the game! The lifetime of this component must match the
 // lifetime of the game run -- it must be unmounted when the game is stopped and a new instance mounted
 // if a new game should be run (or even if the same game should be restarted).
-const GameView = ({ gameId, gameUri, extras, windowed, onPressReload }) => {
+const GameView = ({
+  gameId,
+  gameUri,
+  extras,
+  windowed,
+  onPressReload,
+  logsVisible,
+  setLogsVisible,
+}) => {
   const fetchGameHook = useFetchGame({ gameId, gameUri, extras });
   const game = fetchGameHook.fetchedGame;
 
@@ -482,6 +491,10 @@ const GameView = ({ gameId, gameUri, extras, windowed, onPressReload }) => {
 
   const [landscape, setLandscape] = useState(false);
 
+  const onPressToggleLogsVisible = () => {
+    setLogsVisible(!logsVisible);
+  };
+
   return (
     <View style={{ flex: 1 }}>
       {!windowed && (
@@ -491,6 +504,8 @@ const GameView = ({ gameId, gameUri, extras, windowed, onPressReload }) => {
           onPressReload={onPressReload}
           onPressNextInputsMode={onPressNextInputsMode}
           onPressSwitchActionKeyCode={onPressSwitchActionKeyCode}
+          logsVisible={logsVisible}
+          onPressToggleLogsVisible={onPressToggleLogsVisible}
         />
       )}
 
@@ -535,6 +550,7 @@ const GameView = ({ gameId, gameUri, extras, windowed, onPressReload }) => {
               extras={extras}
             />
           ) : null}
+          <GameLogs eventsReady={eventsReady} visible={!windowed && logsVisible} />
         </KeyboardAvoidingView>
       </View>
     </View>
@@ -594,6 +610,8 @@ const GameScreen = ({ windowed = false }) => {
     });
   };
 
+  const [logsVisible, setLogsVisible] = useState(false);
+
   // Use `key` to mount a new instance of `GameView` when the game changes
   const { gameId, gameUri, reloadCount, extras } = state;
   return (
@@ -604,6 +622,8 @@ const GameScreen = ({ windowed = false }) => {
       extras={extras}
       windowed={windowed}
       onPressReload={onPressReload}
+      logsVisible={logsVisible}
+      setLogsVisible={setLogsVisible}
     />
   );
 };

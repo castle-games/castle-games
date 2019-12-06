@@ -9,8 +9,6 @@ import {
   NativeModules,
 } from 'react-native';
 
-import './GhostConsole';
-
 export const GhostInputView = ({ zoneRef, config, style, children }) => {
   const ref = useRef(null);
 

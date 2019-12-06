@@ -52,6 +52,8 @@ const GameHeader = ({
   onPressReload,
   onPressNextInputsMode,
   onPressSwitchActionKeyCode,
+  logsVisible,
+  onPressToggleLogsVisible,
 }) => {
   const [inviting, setInviting] = useState(false);
 
@@ -84,6 +86,14 @@ const GameHeader = ({
           }}
           onPress={onPressReload}>
           <Text style={{ color: '#bbb' }}>Reload</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            paddingBottom: 8,
+            paddingHorizontal: 16,
+          }}
+          onPress={onPressToggleLogsVisible}>
+          <Text style={{ color: '#bbb' }}>{logsVisible ? 'Hide Logs' : 'Show Logs'}</Text>
         </TouchableOpacity>
         {sessionId ? (
           <TouchableOpacity

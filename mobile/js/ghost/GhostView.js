@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { requireNativeComponent, View } from 'react-native';
 
 import * as GhostEvents from './GhostEvents';
-import './GhostConsole';
 
 // Implemented by 'GhostView.m' / 'GhostViewManager.java'.
 const NativeGhostView = requireNativeComponent('GhostView', null);
