@@ -241,34 +241,29 @@ export default class LoginSignupScreen extends React.Component {
 
     this.setState({ signupSubmitEnabled: false });
 
-    const response = await Actions.signup({
-      name: this.state.name,
-      username: this.state.username ? this.state.username.toLowerCase() : '',
-      email: this.state.email ? this.state.email.toLowerCase() : '',
-      password: this.state.password,
-    });
-
-    if (response.errors) {
-      this.setState({
-        signupError: response.errors[0].message,
-        signupSubmitEnabled: true,
+    try {
+      const response = await Actions.signup({
+        name: this.state.name,
+        username: this.state.username ? this.state.username.toLowerCase() : '',
+        email: this.state.email ? this.state.email.toLowerCase() : '',
+        password: this.state.password,
       });
-    } else {
-      let localViewer;
 
+      let localViewer;
       if (response && response.data && response.data.signup) {
         localViewer = response.data.signup;
         Analytics.trackSignUp({ user: localViewer });
         this.setState({ localViewer, signupError: null }, this._goToSuccess);
         return;
       }
-
       if (!localViewer) {
-        this.setState({
-          signupError: "Server didn't respond with an user",
-          signupSubmitEnabled: true,
-        });
+        throw new Error(`Server didn't respond with a user`);
       }
+    } catch (e) {
+      this.setState({
+        signupError: e.message,
+        signupSubmitEnabled: true,
+      });
     }
   };
 

@@ -214,8 +214,8 @@ export const getExistingUser = async ({ who }) =>
     'userForLoginInput'
   );
 
-export async function signup({ name, username, email, password }) {
-  const response = await API.graphqlAsync(
+export const signup = async ({ name, username, email, password }) => {
+  const response = await _graphqlThrow(
     `
       mutation($name: String!, $username: String!, $email: String!, $password: String!) {
         signup(user: { name: $name, username: $username }, email: $email, password: $password) {
@@ -233,21 +233,12 @@ export async function signup({ name, username, email, password }) {
     }
   );
 
-  if (response.error) {
-    return false;
-  }
-
-  if (response.errors) {
-    return response;
-  }
-
   await API.client.setTokenAsync(response.data.signup.token);
-
   return response;
-}
+};
 
-export async function createAnonymousUser() {
-  const response = await API.graphqlAsync(
+export const createAnonymousUser = async () => {
+  const response = await _graphqlThrow(
     `
       mutation {
         createAnonymousUser {
@@ -258,9 +249,6 @@ export async function createAnonymousUser() {
     `
   );
 
-  if (response.errors) {
-    throw new Error(`Couldn't create anon user: ${response.errors[0].message}`);
-  }
   if (
     !response.data ||
     !response.data.createAnonymousUser ||
@@ -270,10 +258,10 @@ export async function createAnonymousUser() {
   }
   await API.client.setTokenAsync(response.data.createAnonymousUser.token);
   return response.data.createAnonymousUser;
-}
+};
 
-export async function login({ userId, password }) {
-  const response = await API.graphqlAsync(
+export const login = async ({ userId, password }) => {
+  const response = await _graphqlDontThrow(
     `
       mutation($userId: ID!, $password: String!) {
         login(userId: $userId, password: $password) {
@@ -289,18 +277,9 @@ export async function login({ userId, password }) {
     }
   );
 
-  // TOOD(jim): Write a global error handler.
-  if (response.error) {
-    return false;
-  }
-
-  if (response.errors) {
-    return response;
-  }
-
   await API.client.setTokenAsync(response.data.login.token);
   return response.data.login;
-}
+};
 
 export const getUser = ({ userId }) =>
   _graphqlDontThrow(
