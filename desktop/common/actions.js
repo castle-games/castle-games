@@ -185,8 +185,30 @@ export const delay = (ms) =>
     window.setTimeout(resolve, ms);
   });
 
-export async function getExistingUser({ who }) {
-  const response = await API.graphqlAsync(
+const _graphqlThrow = async (graphql, params, key) => {
+  const result = await API.graphqlAsync(graphql, params);
+  if (result.errors && result.errors.length) {
+    throw new Error(`Error: ${result.errors[0].message}`);
+  }
+  if (key) {
+    return result.data[key];
+  } else {
+    return result;
+  }
+};
+
+const _graphqlDontThrow = async (graphql, params, key) => {
+  try {
+    const result = await _graphqlThrow(graphql, params, key);
+    return result;
+  } catch (e) {
+    console.warn(`The graphql call resulted in an error, but we're not throwing: ${e}`);
+    return false;
+  }
+};
+
+export const getExistingUser = async ({ who }) =>
+  _graphqlDontThrow(
     `
       query($who: String!) {
         userForLoginInput(who: $who) {
@@ -201,20 +223,9 @@ export async function getExistingUser({ who }) {
         }
       }
     `,
-    { who }
+    { who },
+    'userForLoginInput'
   );
-
-  // TOOD(jim): Write a global error handler.
-  if (response.error) {
-    return false;
-  }
-
-  if (response.errors) {
-    return false;
-  }
-
-  return response.data.userForLoginInput;
-}
 
 export async function signup({ name, username, email, password }) {
   const response = await API.graphqlAsync(
@@ -304,9 +315,8 @@ export async function login({ userId, password }) {
   return response.data.login;
 }
 
-export async function getUser({ userId }) {
-  const variables = { userId };
-  const result = await API(
+export const getUser = ({ userId }) =>
+  _graphqlDontThrow(
     `
     query($userId: ID!) {
       user(userId: $userId) {
@@ -315,24 +325,12 @@ export async function getUser({ userId }) {
       }
     }
   `,
-    variables
+    { userId },
+    'user'
   );
 
-  // TOOD(jim): Write a global error handler.
-  if (result.error) {
-    return false;
-  }
-
-  if (result.errors) {
-    return false;
-  }
-
-  return result.data.user;
-}
-
-export async function getUsers({ userIds }) {
-  const variables = { userIds };
-  const result = await API(
+export const getUsers = ({ userIds }) =>
+  _graphqlDontThrow(
     `
     query($userIds: [ID]!) {
       users(userIds: $userIds) {
@@ -341,29 +339,18 @@ export async function getUsers({ userIds }) {
       }
     }
   `,
-    variables
+    { userIds },
+    'users'
   );
 
-  // TOOD(jim): Write a global error handler.
-  if (result.error) {
-    return false;
-  }
-
-  if (result.errors) {
-    return false;
-  }
-
-  return result.data.users;
-}
-
-export async function getCurrentUser() {
-  const result = await API(`
+export const getCurrentUser = async () => {
+  const result = await _graphqlDontThrow(`
     query {
       ${CURRENT_USER_QUERY}
     }
   `);
-  if (result.error || result.errors) {
-    return result;
+  if (!result) {
+    return false;
   }
   return {
     user: result.data.me,
@@ -372,10 +359,10 @@ export async function getCurrentUser() {
     },
     userStatusHistory: result.data.userStatusHistory,
   };
-}
+};
 
-export async function getAllGames(limit) {
-  const result = await API(
+export const getAllGames = (limit) =>
+  _graphqlDontThrow(
     `
     query($limit: Int) {
       allGames(limit: $limit) {
@@ -383,86 +370,46 @@ export async function getAllGames(limit) {
         ${NESTED_GAME_OWNER}
       }
     }`,
-    { limit }
+    { limit },
+    'allGames'
   );
 
-  if (!result) {
-    return false;
-  }
-
-  // TOOD(jim): Write a global error handler.
-  if (result.error) {
-    return false;
-  }
-
-  return result.data;
-}
-
-export async function getTrendingGames() {
-  const result = await API(`
+export const getTrendingGames = () =>
+  _graphqlDontThrow(
+    `
     query {
       trendingGames {
         ${GAME_FIELDS}
         ${NESTED_GAME_OWNER}
       }
     }
-  `);
+  `,
+    null,
+    'trendingGames'
+  );
 
-  if (!result) {
-    return false;
-  }
-
-  // TOOD(jim): Write a global error handler.
-  if (result.error) {
-    return false;
-  }
-
-  return result.data;
-}
-
-export async function getFeaturedExamples() {
-  const result = await API(`
+export const getFeaturedExamples = () =>
+  _graphqlDontThrow(
+    `
     query {
       featuredExamples {
         ${GAME_FIELDS}
         ${NESTED_GAME_OWNER}
       }
     }
-  `);
+  `,
+    null,
+    'featuredExamples'
+  );
 
-  if (!result) {
-    return false;
-  }
-
-  // TOOD(jim): Write a global error handler.
-  if (result.error) {
-    return false;
-  }
-
-  return result.data;
-}
-
-export async function logout() {
+export const logout = () => {
   API.client.setTokenAsync(null);
-  const result = await API.graphqlAsync({
-    query: `
+  return !!_graphqlDontThrow(`
       mutation {
         logout
       }
-    `,
-  });
-
-  // TOOD(jim): Write a global error handler.
-  if (result.error) {
-    return false;
-  }
-
-  if (result.errors) {
-    return false;
-  }
-
-  return true;
-}
+    `);
+};
 
 export async function getGameByURL(url) {
   const variables = { url };

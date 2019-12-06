@@ -159,9 +159,8 @@ class CurrentUserContextManager extends React.Component {
   };
 
   loadAllGames = async (limit) => {
-    let data = await Actions.getAllGames(limit);
-    if (data) {
-      let allGames = data.allGames;
+    let allGames = await Actions.getAllGames(limit);
+    if (allGames) {
       await this.setState((state) => {
         return {
           ...state,
@@ -175,9 +174,8 @@ class CurrentUserContextManager extends React.Component {
   };
 
   loadFeaturedExamples = async () => {
-    let data = await Actions.getFeaturedExamples();
-    if (data) {
-      let featuredExamples = data.featuredExamples;
+    let featuredExamples = await Actions.getFeaturedExamples();
+    if (featuredExamples) {
       await this.setState((state) => {
         return {
           ...state,
@@ -191,8 +189,6 @@ class CurrentUserContextManager extends React.Component {
   };
 
   reloadTrendingGames = async () => {
-    let data = null;
-
     if (
       this.state.content.trendingGames &&
       Date.now() - this.state.content.trendingGamesLastUpdatedTime <
@@ -201,9 +197,8 @@ class CurrentUserContextManager extends React.Component {
       return;
     }
 
-    data = await Actions.getTrendingGames();
-    if (data) {
-      let trendingGames = data.trendingGames;
+    const trendingGames = await Actions.getTrendingGames();
+    if (trendingGames) {
       await this.setState((state) => {
         return {
           ...state,
