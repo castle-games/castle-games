@@ -513,7 +513,7 @@ export const updateUserAsync = ({ userId, user }) =>
     'updateUser'
   );
 
-function _validatePublishGameResult(result) {
+const _validatePublishGameResult = (result) => {
   if (result.errors && result.errors.length) {
     const error = result.errors[0];
     const code = error.extensions ? error.extensions.code : '';
@@ -534,32 +534,32 @@ function _validatePublishGameResult(result) {
     }
   }
   return true;
-}
+};
 
 // read the game at this source url and try to publish it to my account.
 // optional gameId means we intend to update an existing game.
-export async function publishGame(sourceUrl, gameId = null) {
-  const result = await API.graphqlAsync({
-    query: `
+export const publishGame = async (sourceUrl, gameId = null) => {
+  const result = await _graphqlThrow(
+    `
       mutation($url: String!, $gameId: ID) {
         publishGame(url: $url, gameId: $gameId) {
           ${GAME_FIELDS}
         }
       }
     `,
-    variables: {
+    {
       url: sourceUrl,
       gameId,
-    },
-  });
+    }
+  );
 
   _validatePublishGameResult(result);
   return result.data.publishGame;
-}
+};
 
-export async function previewLocalGame(castleFileContents, gameId = null) {
-  const result = await API.graphqlAsync({
-    query: `
+export const previewLocalGame = async (castleFileContents, gameId = null) => {
+  const result = await _graphqlThrow(
+    `
       query PreviewLocalGame($castleFile: String!, $gameId: ID) {
         previewLocalGame(castleFile: $castleFile, gameId: $gameId) {
           ${GAME_FIELDS}
@@ -567,19 +567,19 @@ export async function previewLocalGame(castleFileContents, gameId = null) {
         }
       }
     `,
-    variables: {
+    {
       castleFile: castleFileContents,
       gameId,
-    },
-  });
+    }
+  );
 
   _validatePublishGameResult(result);
   return result.data.previewLocalGame;
-}
+};
 
-export async function previewGameAtUrl(url, gameId = null) {
-  const result = await API.graphqlAsync({
-    query: `
+export const previewGameAtUrl = async (url, gameId = null) => {
+  const result = await _graphqlThrow(
+    `
       query PreviewGameAtUrl($url: String!, $gameId: ID) {
         previewGameAtUrl(url: $url, gameId: $gameId) {
           ${GAME_FIELDS}
@@ -587,20 +587,20 @@ export async function previewGameAtUrl(url, gameId = null) {
         }
       }
     `,
-    variables: { url, gameId },
-  });
+    { url, gameId }
+  );
 
   _validatePublishGameResult(result);
   return result.data.previewGameAtUrl;
-}
+};
 
-export async function recordUserStatus(status, isNewSession, game) {
+export const recordUserStatus = (status, isNewSession, game) => {
   if (game.gameId) {
     return _recordUserStatusRegisteredGame(status, isNewSession, game.gameId);
   } else {
     return _recordUserStatusUnregisteredGame(status, isNewSession, game);
   }
-}
+};
 
 async function _recordUserStatusUnregisteredGame(status, isNewSession, game) {
   let coverImageUrl;
@@ -668,17 +668,9 @@ async function _recordUserStatusRegisteredGame(status, isNewSession, gameId) {
   return result;
 }
 
-export async function multiplayerJoinAsync(
-  gameId,
-  castleFileUrl,
-  entryPoint,
-  sessionId,
-  isStaging
-) {
-  let result;
-  try {
-    result = await API.graphqlAsync(
-      /* GraphQL */ `
+export const multiplayerJoinAsync = (gameId, castleFileUrl, entryPoint, sessionId, isStaging) =>
+  _graphqlDontThrow(
+    `
         mutation(
           $gameId: ID
           $castleFileUrl: String
@@ -700,78 +692,47 @@ export async function multiplayerJoinAsync(
           }
         }
       `,
-      {
-        gameId,
-        castleFileUrl,
-        entryPoint,
-        sessionId,
-        isStaging,
-      }
-    );
-  } catch (e) {
-    return false;
-  }
+    {
+      gameId,
+      castleFileUrl,
+      entryPoint,
+      sessionId,
+      isStaging,
+    },
+    'joinMultiplayerSession'
+  );
 
-  if (result.error) {
-    return false;
-  }
-
-  if (result.errors) {
-    return false;
-  }
-
-  return result.data.joinMultiplayerSession;
-}
-
-export async function gameServerLogsAsync(gameId, castleFileUrl, entryPoint) {
-  let result;
-  try {
-    result = await API.graphqlAsync(
-      /* GraphQL */ `
+export const gameServerLogsAsync = (gameId, castleFileUrl, entryPoint) =>
+  _graphqlDontThrow(
+    `
         query($gameId: ID, $castleFileUrl: String, $entryPoint: String) {
           gameServerLogs(gameId: $gameId, castleFileUrl: $castleFileUrl, entryPoint: $entryPoint)
         }
       `,
-      {
-        gameId,
-        castleFileUrl,
-        entryPoint,
-      }
-    );
-  } catch (e) {
-    return false;
-  }
+    {
+      gameId,
+      castleFileUrl,
+      entryPoint,
+    },
+    'gameServerLogs'
+  );
 
-  if (result.error) {
-    return false;
-  }
-
-  if (result.errors) {
-    return false;
-  }
-
-  return result.data.gameServerLogs;
-}
-
-export async function getMultiplayerRegions() {
-  const result = await API(
+export const getMultiplayerRegions = () =>
+  _graphqlDontThrow(
     `
     query {
       multiplayerRegions {
         name
         pingAddress
       }
-    }`
+    }`,
+    null,
+    'multiplayerRegions'
   );
-  if (result.error || result.errors) {
-    return false;
-  }
-  return result.data.multiplayerRegions;
-}
 
-export async function updatePings(pings, timeZone) {
-  let result = await API.graphqlAsync(
-    /* GraphQL */ `
+export const updatePings = (pings, timeZone) =>
+  _graphqlDontThrow(
+    `
       mutation($pings: [UserPing]!, $timeZone: String) {
         updatePings(pings: $pings, timeZone: $timeZone)
       }
@@ -781,10 +742,9 @@ export async function updatePings(pings, timeZone) {
       timeZone,
     }
   );
-}
 
-export async function getGameGlobalStorageValueAsync({ storageId, key }) {
-  const result = await API.graphqlAsync(
+export const getGameGlobalStorageValueAsync = ({ storageId, key }) =>
+  _graphqlThrow(
     `
       query($storageId: String!, $key: String!) {
         gameGlobalStorage(storageId: $storageId, key: $key) {
@@ -792,35 +752,23 @@ export async function getGameGlobalStorageValueAsync({ storageId, key }) {
         }
       }
     `,
-    { storageId, key }
+    { storageId, key },
+    'gameGlobalStorage'
   );
 
-  if (result.errors && result.errors.length) {
-    throw new Error(`\`getGameGlobalStorageValueAsync\`: ${result.errors[0].message}`);
-  }
-
-  return result.data.gameGlobalStorage;
-}
-
-export async function setGameGlobalStorageAsync({ storageId, key, value }) {
-  const result = await API.graphqlAsync(
+export const setGameGlobalStorageAsync = ({ storageId, key, value }) =>
+  _graphqlThrow(
     `
       mutation($storageId: String!, $key: String!, $value: String) {
         setGameGlobalStorage(storageId: $storageId, key: $key, value: $value)
       }
     `,
-    { storageId, key, value }
+    { storageId, key, value },
+    'setGameGlobalStorage'
   );
 
-  if (result.errors && result.errors.length) {
-    throw new Error(`\`setGameGlobalStorageAsync\`: ${result.errors[0].message}`);
-  }
-
-  return result.data.setGameGlobalStorage;
-}
-
-export async function getGameUserStorageValueAsync({ storageId, key }) {
-  const result = await API.graphqlAsync(
+export const getGameUserStorageValueAsync = ({ storageId, key }) =>
+  _graphqlThrow(
     `
       query($storageId: String!, $key: String!) {
         gameUserStorage(storageId: $storageId, key: $key) {
@@ -828,32 +776,20 @@ export async function getGameUserStorageValueAsync({ storageId, key }) {
         }
       }
     `,
-    { storageId, key }
+    { storageId, key },
+    'gameUserStorage'
   );
 
-  if (result.errors && result.errors.length) {
-    throw new Error(`\`getGameUserStorageValueAsync\`: ${result.errors[0].message}`);
-  }
-
-  return result.data.gameUserStorage;
-}
-
-export async function setGameUserStorageAsync({ storageId, key, value }) {
-  const result = await API.graphqlAsync(
+export const setGameUserStorageAsync = ({ storageId, key, value }) =>
+  _graphqlThrow(
     `
       mutation($storageId: String!, $key: String!, $value: String) {
         setGameUserStorage(storageId: $storageId, key: $key, value: $value)
       }
     `,
-    { storageId, key, value }
+    { storageId, key, value },
+    'setGameUserStorage'
   );
-
-  if (result.errors && result.errors.length) {
-    throw new Error(`\`setGameUserStorageAsync\`: ${result.errors[0].message}`);
-  }
-
-  return result.data.setGameUserStorage;
-}
 
 export async function createPostAsync({ sourceGameId, message, mediaFileId, data }) {
   const result = await API.graphqlAsync(
