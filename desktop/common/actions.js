@@ -411,11 +411,9 @@ export const logout = () => {
     `);
 };
 
-export async function getGameByURL(url) {
-  const variables = { url };
-
-  let result = await API.graphqlAsync({
-    query: `
+export const getGameByURL = (url) =>
+  _graphqlThrow(
+    `
     query GetGame($url: String!) {
       game(url: $url) {
         ${GAME_FIELDS}
@@ -423,20 +421,13 @@ export async function getGameByURL(url) {
       }
     }
     `,
-    variables,
-  });
+    { url },
+    'game'
+  );
 
-  if (result.errors && result.errors.length) {
-    throw new Error(`Unable to resolve game url: ${result.errors[0].message}`);
-  }
-  return result.data.game;
-}
-
-export async function getGameByGameId(gameId) {
-  const variables = { gameId };
-
-  let result = await API.graphqlAsync({
-    query: `
+export const getGameByGameId = (gameId) =>
+  _graphqlThrow(
+    `
     query GetGame($gameId: ID!) {
       game(gameId: $gameId) {
         ${GAME_FIELDS}
@@ -444,19 +435,13 @@ export async function getGameByGameId(gameId) {
       }
     }
     `,
-    variables,
-  });
+    { gameId },
+    'game'
+  );
 
-  if (result.errors && result.errors.length) {
-    throw new Error(`\`getGameByGameId\`: ${result.errors[0].message}`);
-  }
-  return result.data.game;
-}
-
-export async function uploadImageAsync({ file }) {
-  const variables = { file };
-  const result = await API.graphqlAsync({
-    query: `
+export const uploadImageAsync = ({ file }) =>
+  _graphqlDontThrow(
+    `
       mutation($file: Upload!) {
         uploadFile(file: $file) {
           fileId
@@ -478,24 +463,13 @@ export async function uploadImageAsync({ file }) {
         }
       }
     `,
-    variables,
-  });
+    { file },
+    'uploadFile'
+  );
 
-  // TODO(jim): Write a global error handler.
-  if (result.error || result.errors || !result.data) {
-    return false;
-  }
-
-  return result.data.uploadFile;
-}
-
-export async function setUserPhotoAsync({ userId, fileId }) {
-  const variables = {
-    userId,
-    photoFileId: fileId,
-  };
-  const result = await API.graphqlAsync({
-    query: `
+export const setUserPhotoAsync = ({ userId, fileId }) =>
+  _graphqlDontThrow(
+    `
       mutation ($userId: ID!, $photoFileId: ID!) {
        updateUser(
          userId: $userId
@@ -508,24 +482,16 @@ export async function setUserPhotoAsync({ userId, fileId }) {
        }
       }
     `,
-    variables,
-  });
+    {
+      userId,
+      photoFileId: fileId,
+    },
+    'updateUser'
+  );
 
-  // TODO(jim): Write a global error handler.
-  if (result.error || result.errors || !result.data) {
-    return false;
-  }
-
-  return result.data.updateUser;
-}
-
-export async function updateUserAsync({ userId, user }) {
-  const variables = {
-    userId,
-    ...user,
-  };
-  const result = await API.graphqlAsync({
-    query: `
+export const updateUserAsync = ({ userId, user }) =>
+  _graphqlDontThrow(
+    `
       mutation ($userId: ID!, $name: String, $websiteUrl: String, $itchUsername: String, $twitterUsername: String) {
        updateUser(
          userId: $userId
@@ -540,16 +506,12 @@ export async function updateUserAsync({ userId, user }) {
        }
       }
     `,
-    variables,
-  });
-
-  // TODO(jim): Write a global error handler.
-  if (result.error || result.errors || !result.data) {
-    return false;
-  }
-
-  return result.data.updateUser;
-}
+    {
+      userId,
+      ...user,
+    },
+    'updateUser'
+  );
 
 function _validatePublishGameResult(result) {
   if (result.errors && result.errors.length) {
