@@ -141,49 +141,16 @@ const CURRENT_USER_QUERY = `
   }
 `;
 
-export async function setNotificationPreferences({ preferences }) {
-  const response = await API.graphqlAsync(
-    `
-      mutation($preferences: Json!) {
-        setNotificationPreferencesV2(preferences: $preferences)
-      }
-    `,
-    { preferences }
-  );
+const _getHeadersAsync = () => API.client._getRequestHeadersAsync();
 
-  return response;
-}
-
-export async function resetPassword({ userId }) {
-  const response = await API.graphqlAsync(
-    `
-      mutation($userId: ID!) {
-        sendResetPasswordEmail(userId: $userId)
-      }
-    `,
-    { userId }
-  );
-
-  return response;
-}
-
-async function _getHeadersAsync() {
-  return await API.client._getRequestHeadersAsync();
-}
-
-export async function getAccessTokenAsync() {
+export const getAccessTokenAsync = async () => {
   let headers = await _getHeadersAsync();
   if (!headers) {
     return null;
   }
 
   return headers['X-Auth-Token'];
-}
-
-export const delay = (ms) =>
-  new Promise((resolve) => {
-    window.setTimeout(resolve, ms);
-  });
+};
 
 const _graphqlThrow = async (graphql, params, key) => {
   const result = await API.graphqlAsync(graphql, params);
@@ -206,6 +173,26 @@ const _graphqlDontThrow = async (graphql, params, key) => {
     return false;
   }
 };
+
+export const setNotificationPreferences = ({ preferences }) =>
+  _graphqlDontThrow(
+    `
+      mutation($preferences: Json!) {
+        setNotificationPreferencesV2(preferences: $preferences)
+      }
+    `,
+    { preferences }
+  );
+
+export const sendResetPasswordEmail = ({ userId }) =>
+  _graphqlDontThrow(
+    `
+      mutation($userId: ID!) {
+        sendResetPasswordEmail(userId: $userId)
+      }
+    `,
+    { userId }
+  );
 
 export const getExistingUser = async ({ who }) =>
   _graphqlDontThrow(

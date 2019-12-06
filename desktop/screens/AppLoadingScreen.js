@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as Actions from '~/common/actions';
+import * as Utilities from '~/common/utilities';
 import * as Constants from '~/common/constants';
 
 import { css } from 'react-emotion';
@@ -69,13 +69,13 @@ export default class AppLoadingScreen extends React.Component {
 
   async componentDidMount() {
     this._mounted = true;
-    await Actions.delay(1000);
+    await Utilities.delay(1000);
     this._mounted && this.setState({ cards: Array.from({ length: 12 }) });
     this._waitForTimeout();
   }
 
   _waitForTimeout = async () => {
-    await Actions.delay(20 * 1000);
+    await Utilities.delay(20 * 1000);
     this._mounted && this.setState({ timeout: true });
   };
 

@@ -159,17 +159,12 @@ export default class LoginSignupScreen extends React.Component {
   }
 
   _handlePasswordReset = async (e) => {
-    if (!this.state.suggestedUser) {
-      console.error('No suggested user');
+    if (!this.state.suggestedUser || !this.state.suggestedUser.userId) {
+      console.error('Cannot reset password: No user');
       return;
     }
 
-    if (!this.state.suggestedUser.userId) {
-      console.error('no userId');
-      return;
-    }
-
-    const response = await Actions.resetPassword({
+    Actions.sendResetPasswordEmail({
       userId: this.state.suggestedUser.userId,
     });
   };

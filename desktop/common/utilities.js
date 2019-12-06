@@ -7,6 +7,11 @@ const pathwin32 = require('path-win32');
 
 const LUMINOSITY_THEME_BREAKPOINT = 0.62;
 
+export const delay = (ms) =>
+  new Promise((resolve) => {
+    window.setTimeout(resolve, ms);
+  });
+
 export const shadeHex = (color, percent) => {
   const f = parseInt(color.slice(1), 16),
     t = percent < 0 ? 0 : 255,

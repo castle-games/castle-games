@@ -46,7 +46,7 @@ export default class DevelopmentCodeEditor extends React.Component {
                     this.props.element.lastReportedEventId == this.state.lastSentEventId
                   )
                 ) {
-                  await Actions.delay(40);
+                  await Utilities.delay(40);
                 }
                 return {
                   suggestions: objectToArray(this.state.completions).map(

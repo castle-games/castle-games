@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as Actions from '~/common/actions';
 import * as Analytics from '~/common/analytics';
+import * as Utilities from '~/common/utilities';
 
 import { injectGlobalStyles, injectGlobalScrollOverflowPreventionStyles } from './globalStyles';
 import { injectGlobalLoaderStyles, LOADER_TRANSITION_MS } from '~/components/primitives/loader';
@@ -27,7 +28,7 @@ const mountLoader = () => {
 const unmountLoader = async () => {
   document.getElementById('loader').classList.add('loader--finished');
   document.getElementById('loader-inner').classList.add('loader-inner--finished');
-  await Actions.delay(LOADER_TRANSITION_MS);
+  await Utilities.delay(LOADER_TRANSITION_MS);
   ReactDOM.unmountComponentAtNode(document.getElementById('loader'));
   document.getElementById('loader').outerHTML = '';
 };

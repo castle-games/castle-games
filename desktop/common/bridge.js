@@ -2,6 +2,7 @@ import * as uuid from 'uuid/v4';
 import * as Actions from '~/common/actions';
 import * as NativeUtil from '~/native/nativeutil';
 import * as Urls from '~/common/urls';
+import * as Utilities from '~/common/utilities';
 import * as ExecNode from '~/common/execnode';
 
 import md5 from 'md5';
@@ -80,11 +81,11 @@ export const JS = {
   async sayHello({ name }) {
     if (name !== 'l') {
       Logs.system(`responding 'hello, ${name}' in 2 seconds...`);
-      await Actions.delay(2000);
+      await Utilities.delay(2000);
       return `js: hello, ${name}!`;
     } else {
       Logs.system(`throwing an error in 2 seconds...`);
-      await Actions.delay(2000);
+      await Utilities.delay(2000);
       throw new Error("js: 'l' not allowed!");
     }
   },

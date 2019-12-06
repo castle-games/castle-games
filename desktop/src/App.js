@@ -1,12 +1,13 @@
 import * as React from 'react';
 import * as Actions from '~/common/actions';
+import * as Bridge from '~/common/bridge';
+import * as ExecNode from '~/common/execnode';
 import * as ExperimentalFeatures from '~/common/experimental-features';
 import * as NativeUtil from '~/native/nativeutil';
-import * as Urls from '~/common/urls';
 import * as PingUtils from '~/common/pingutils';
-import * as Bridge from '~/common/bridge';
 import * as ScreenCapture from '~/common/screencapture';
-import * as ExecNode from '~/common/execnode';
+import * as Urls from '~/common/urls';
+import * as Utilities from '~/common/utilities';
 
 import { isKeyHotkey } from 'is-hotkey';
 import { linkify } from 'react-linkify';
@@ -141,7 +142,7 @@ class App extends React.Component {
   };
 
   _handleLuaSystemKeyDownEvent = async (e) => {
-    await Actions.delay(10);
+    await Utilities.delay(10);
     this._handleKeyDownEvent({ ...e.params, preventDefault() {} });
   };
 
@@ -155,7 +156,7 @@ class App extends React.Component {
       await NativeUtil.installUpdate();
     } else {
       await this.setState({ updateAvailable: null });
-      await Actions.delay(3 * 3600 * 1000); // 3 hours
+      await Utilities.delay(3 * 3600 * 1000); // 3 hours
       window.addEventListener('nativeUpdateAvailable', this._handleNativeUpdateAvailableEvent);
     }
   };
@@ -220,7 +221,7 @@ class App extends React.Component {
   };
 
   _handleNativeFocusChat = async () => {
-    await Actions.delay(80);
+    await Utilities.delay(80);
     ChatInput.focus();
   };
 

@@ -163,7 +163,7 @@ class GameScreen extends React.Component {
         loadingPhase: 'loading',
       }));
     } else if (type == 'stop') {
-      await Actions.delay(60);
+      await Utilities.delay(60);
       this.setState(({ luaNetworkRequests }) => ({
         luaNetworkRequests: luaNetworkRequests.filter((req) => req.id !== id),
       }));
