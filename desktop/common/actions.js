@@ -791,8 +791,8 @@ export const setGameUserStorageAsync = ({ storageId, key, value }) =>
     'setGameUserStorage'
   );
 
-export async function createPostAsync({ sourceGameId, message, mediaFileId, data }) {
-  const result = await API.graphqlAsync(
+export const createPostAsync = async ({ sourceGameId, message, mediaFileId, data }) => {
+  const result = await _graphqlThrow(
     `
       mutation($sourceGameId: ID, $message: Json, $mediaFileId: ID, $data: String) {
         createPost(
@@ -807,18 +807,15 @@ export async function createPostAsync({ sourceGameId, message, mediaFileId, data
         }
       }
     `,
-    { sourceGameId, message, mediaFileId, data }
+    { sourceGameId, message, mediaFileId, data },
+    'createPost'
   );
 
-  if (result.errors && result.errors.length) {
-    throw new Error(`\`createPostAsync\`: ${result.errors[0].message}`);
-  }
+  return result.postId;
+};
 
-  return result.data.createPost.postId;
-}
-
-export async function allPostsAsync({ pageSize = 20, pageAfterPostId } = {}) {
-  const result = await API.graphqlAsync(
+export const allPostsAsync = ({ pageSize = 20, pageAfterPostId } = {}) =>
+  _graphqlThrow(
     `
       query($pageSize: Int, $pageAfterPostId: ID) {
         allPosts(pageSize: $pageSize, pageAfterPostId: $pageAfterPostId) {
@@ -829,18 +826,12 @@ export async function allPostsAsync({ pageSize = 20, pageAfterPostId } = {}) {
         }
       }
     `,
-    { pageSize, pageAfterPostId }
+    { pageSize, pageAfterPostId },
+    'allPosts'
   );
 
-  if (result.errors && result.errors.length) {
-    throw new Error(`\`allPostsAsync\`: ${result.errors[0].message}`);
-  }
-
-  return result.data.allPosts;
-}
-
-export async function postsForGameId(gameId, { pageSize = 20, pageAfterPostId } = {}) {
-  const result = await API.graphqlAsync(
+export const postsForGameId = (gameId, { pageSize = 20, pageAfterPostId } = {}) =>
+  _graphqlThrow(
     `
       query($gameId: ID!, $pageSize: Int, $pageAfterPostId: ID) {
         postsForGame(gameId: $gameId, pageSize: $pageSize, pageAfterPostId: $pageAfterPostId) {
@@ -848,18 +839,12 @@ export async function postsForGameId(gameId, { pageSize = 20, pageAfterPostId } 
         }
       }
     `,
-    { gameId, pageSize, pageAfterPostId }
+    { gameId, pageSize, pageAfterPostId },
+    'postsForGame'
   );
 
-  if (result.errors && result.errors.length) {
-    throw new Error(`postsForGame: ${result.errors[0].message}`);
-  }
-
-  return result.data.postsForGame;
-}
-
-export async function postsForUserId(userId, { pageSize = 20, pageAfterPostId } = {}) {
-  const result = await API.graphqlAsync(
+export const postsForUserId = (userId, { pageSize = 20, pageAfterPostId } = {}) =>
+  _graphqlThrow(
     `
       query($userId: ID!, $pageSize: Int, $pageAfterPostId: ID) {
         postsForUser(userId: $userId, pageSize: $pageSize, pageAfterPostId: $pageAfterPostId) {
@@ -870,18 +855,12 @@ export async function postsForUserId(userId, { pageSize = 20, pageAfterPostId } 
         }
       }
     `,
-    { userId, pageSize, pageAfterPostId }
+    { userId, pageSize, pageAfterPostId },
+    'postsForUser'
   );
 
-  if (result.errors && result.errors.length) {
-    throw new Error(`postsForUser: ${result.errors[0].message}`);
-  }
-
-  return result.data.postsForUser;
-}
-
-export async function postDataAsync({ postId }) {
-  const result = await API.graphqlAsync(
+export const postDataAsync = async ({ postId }) => {
+  const post = await _graphqlThrow(
     `
       query($postId: ID!) {
         post(postId: $postId) {
@@ -889,18 +868,15 @@ export async function postDataAsync({ postId }) {
         }
       }
     `,
-    { postId }
+    { postId },
+    'post'
   );
 
-  if (result.errors && result.errors.length) {
-    throw new Error(`\`postDataAsync\`: ${result.errors[0].message}`);
-  }
+  return post.data;
+};
 
-  return result.data.post.data;
-}
-
-export async function getPostById(postId) {
-  const result = await API.graphqlAsync(
+export const getPostById = (postId) =>
+  _graphqlDontThrow(
     `
       query($postId: ID!) {
         post(postId: $postId) {
@@ -911,18 +887,12 @@ export async function getPostById(postId) {
         }
       }
     `,
-    { postId }
+    { postId },
+    'post'
   );
 
-  if (result.errors && result.errors.length) {
-    return false;
-  }
-
-  return result.data.post;
-}
-
-export async function search(query) {
-  const result = await API.graphqlAsync(
+export const search = async (query) => {
+  const result = await _graphqlDontThrow(
     `query($text: String!) {
       search(text: $text) {
         users {
@@ -936,18 +906,20 @@ export async function search(query) {
     }`,
     { text: query }
   );
-  if (result.errors && result.errors.length) {
+
+  if (!result) {
     return false;
   }
+
   return {
     query,
     ...result.data.search,
   };
-}
+};
 
-export async function getMediaServiceAsync(metadata) {
-  // used for voice chat
-  const result = await API.graphqlAsync(
+// used for voice chat
+export const getMediaServiceAsync = (metadata) =>
+  _graphqlThrow(
     `
       query($metadata: Json) {
         mediaService(metadata: $metadata) {
@@ -956,18 +928,12 @@ export async function getMediaServiceAsync(metadata) {
         }
       }
     `,
-    { metadata }
+    { metadata },
+    'mediaService'
   );
 
-  if (result.errors && result.errors.length) {
-    throw new Error(`\`getMediaServiceAsync\`: ${result.errors[0].message}`);
-  }
-
-  return result.data.mediaService;
-}
-
-export async function setAppNotificationsStatusAsync(appNotificationIds, status) {
-  const result = await API.graphqlAsync(
+export const setAppNotificationsStatusAsync = (appNotificationIds, status) =>
+  _graphqlThrow(
     `
       mutation($appNotificationIds: [ID]!, $status: AppNotificationStatus!) {
         setAppNotificationsStatus(
@@ -976,26 +942,19 @@ export async function setAppNotificationsStatusAsync(appNotificationIds, status)
         )
       }
     `,
-    { appNotificationIds, status }
+    { appNotificationIds, status },
+    'setAppNotificationsStatus'
   );
 
-  if (result.errors && result.errors.length) {
-    throw new Error(`setAppNotificationsStatus: ${result.errors[0].message}`);
-  }
-
-  return result.data.setAppNotificationsStatus;
-}
-
-export async function appNotificationsAsync() {
-  const result = await API.graphqlAsync(`
+export const appNotificationsAsync = () =>
+  _graphqlThrow(
+    `
       query {
         appNotifications {
           ${NOTIFICATION_FIELDS}
         }
       }
-    `);
-  if (result.errors && result.errors.length) {
-    throw new Error(`appNotificationsAsync: ${result.errors[0].message}`);
-  }
-  return result.data.appNotifications;
-}
+    `,
+    null,
+    'appNotifications'
+  );
