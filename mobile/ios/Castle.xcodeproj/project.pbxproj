@@ -1058,11 +1058,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CASTLE_DISPLAY_NAME = "Castle Debug";
 				CASTLE_URL_SCHEME = castled;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 6PUB3623F7;
 				INFOPLIST_FILE = Castle/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 4.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1082,10 +1083,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CASTLE_DISPLAY_NAME = Castle;
 				CASTLE_URL_SCHEME = castle;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = 48GFST92BB;
 				INFOPLIST_FILE = Castle/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 4.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
