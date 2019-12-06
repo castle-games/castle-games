@@ -84,8 +84,8 @@ export default GameLogs = ({ eventsReady, visible }) => {
         height: 300,
         maxHeight: '80%',
         backgroundColor: 'rgba(0, 0, 0, 0.8)',
-        paddingTop: 12,
-        borderBottomWidth: 2,
+        paddingTop: 8,
+        borderBottomWidth: 1,
         borderColor: '#444',
       }}>
       <View
@@ -93,12 +93,14 @@ export default GameLogs = ({ eventsReady, visible }) => {
           flexDirection: 'row',
           justifyContent: 'space-between',
           paddingHorizontal: 16,
-          paddingBottom: 12,
+          paddingBottom: 8,
           borderBottomWidth: 1,
-          borderColor: '#444',
+          borderColor: '#222',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
         }}>
         <TouchableOpacity onPress={onPressClear}>
-          <Text style={{ color: '#fff', fontWeight: 'bold' }}>Clear</Text>
+          <Text style={{ color: '#bbb' }}>Clear</Text>
         </TouchableOpacity>
       </View>
       <FlatList

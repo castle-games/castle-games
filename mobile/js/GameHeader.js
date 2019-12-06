@@ -52,7 +52,6 @@ const GameHeader = ({
   onPressReload,
   onPressNextInputsMode,
   onPressSwitchActionKeyCode,
-  logsVisible,
   onPressToggleLogsVisible,
 }) => {
   const [inviting, setInviting] = useState(false);
@@ -93,7 +92,7 @@ const GameHeader = ({
             paddingHorizontal: 16,
           }}
           onPress={onPressToggleLogsVisible}>
-          <Text style={{ color: '#bbb' }}>{logsVisible ? 'Hide Logs' : 'Show Logs'}</Text>
+          <Text style={{ color: '#bbb' }}>Logs</Text>
         </TouchableOpacity>
         {sessionId ? (
           <TouchableOpacity
@@ -117,7 +116,7 @@ const GameHeader = ({
             paddingHorizontal: 16,
           }}
           onPress={onPressNextInputsMode}>
-          <Text style={{ color: '#bbb' }}>Toggle Controls</Text>
+          <Text style={{ color: '#bbb' }}>Controls</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={{
@@ -125,7 +124,7 @@ const GameHeader = ({
             paddingHorizontal: 16,
           }}
           onPress={onPressSwitchActionKeyCode}>
-          <Text style={{ color: '#bbb' }}>Switch Button</Text>
+          <Text style={{ color: '#bbb' }}>Button</Text>
         </TouchableOpacity>
       </View>
       {inviting ? <InviteBar url={game.url + '#' + sessionId} /> : null}

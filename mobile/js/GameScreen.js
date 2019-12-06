@@ -504,7 +504,6 @@ const GameView = ({
           onPressReload={onPressReload}
           onPressNextInputsMode={onPressNextInputsMode}
           onPressSwitchActionKeyCode={onPressSwitchActionKeyCode}
-          logsVisible={logsVisible}
           onPressToggleLogsVisible={onPressToggleLogsVisible}
         />
       )}
