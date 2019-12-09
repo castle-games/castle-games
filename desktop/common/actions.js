@@ -47,6 +47,20 @@ const FULL_USER_FIELDS = `
     height
     width
   }
+  favoritedGames {
+    gameId
+    title
+    url
+    description
+    owner {
+      ${MINIMAL_USER_FIELDS}
+    }
+    coverImage {
+      url
+      width
+      height
+    }
+  }
 `;
 
 const GAME_FIELDS = `
