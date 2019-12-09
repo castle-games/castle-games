@@ -47,13 +47,14 @@ CASTLE_MODIFIER_KEYS = {
     lgui = false,
 }
 
+local originalLoveKeyboardIsDown = love.keyboard.isDown
+
 do
-    local oldKeyboardIsDown = love.keyboard.isDown
     function love.keyboard.isDown(key)
         if CASTLE_MODIFIER_KEYS[key] ~= nil then
             return CASTLE_MODIFIER_KEYS[key]
         else
-            return oldKeyboardIsDown(key)
+            return originalLoveKeyboardIsDown(key)
         end
     end
 end
@@ -135,39 +136,48 @@ do
 end
 
 
+-- Forward declarations...
+
+local home -- Portal to the home experience
+
+
 -- Mobile keyboard event handling
+
+local mobileKeyDownChannel = love.thread.getChannel('GHOST_KEY_DOWN')
+local mobileKeyUpChannel = love.thread.getChannel('GHOST_KEY_UP')
 
 local updateMobileKeyboardEvents
 if isMobile then
     local keyDownCount = {} -- Number of touches on a key -- `nil` if zero
 
-    local downChannel = love.thread.getChannel('GHOST_KEY_DOWN')
-    local upChannel = love.thread.getChannel('GHOST_KEY_UP')
-
-    downChannel:clear()
-    upChannel:clear()
+    mobileKeyDownChannel:clear()
+    mobileKeyUpChannel:clear()
 
     function updateMobileKeyboardEvents()
         -- Handle presses before releases to prevent release + press events for the same key within the same frame
-        while downChannel:getCount() > 0 do
-            local ks = downChannel:pop()
+        while mobileKeyDownChannel:getCount() > 0 do
+            local ks = mobileKeyDownChannel:pop()
             for k in ks:gmatch('[^_]+') do
                 if keyDownCount[k] == nil then
                     -- First touch? Send pressed event.
                     keyDownCount[k] = 1
-                    love.keypressed(k, k, false)
+                    if home then
+                        home:keypressed(k, k, false)
+                    end
                 else
                     keyDownCount[k] = keyDownCount[k] + 1
                 end
             end
         end
-        while upChannel:getCount() > 0 do
-            local ks = upChannel:pop()
+        while mobileKeyUpChannel:getCount() > 0 do
+            local ks = mobileKeyUpChannel:pop()
             for k in ks:gmatch('[^_]+') do
                 if keyDownCount[k] == 1 then
                     -- Last release? Send released event.
                     keyDownCount[k] = nil
-                    love.keyreleased(k, k)
+                    if home then
+                        home:keyreleased(k, k, false)
+                    end
                 elseif keyDownCount[k] ~= nil then
                     keyDownCount[k] = keyDownCount[k] - 1
                 end
@@ -188,8 +198,6 @@ local initialFileDropped -- In case a `love.filedropped` occurred before home ex
 local homeUrl -- Populated later with the final home experience URL
 local remoteHomeVersion = 'e0909a90e9d04a895531cd1013bdb39c9b18cdc4' -- Git specifier of remote home
 local localHomeUrl = 'http://0.0.0.0:8032/main.lua' -- URL to local home to attempt
-
-local home -- Portal to the home experience
 
 local main = {}
 
@@ -329,7 +337,12 @@ function main.keypressed(key, ...)
     end
 
     if home then
-        home:keypressed(key, ...)
+        if isMobile then -- Handle keyboard events through mobile system
+            mobileKeyDownChannel:push(key)
+            updateMobileKeyboardEvents()
+        else
+            home:keypressed(key, ...)
+        end
     end
 end
 
@@ -339,7 +352,12 @@ function main.keyreleased(key, ...)
     end
 
     if home then
-        home:keyreleased(key, ...)
+        if isMobile then -- Handle keyboard events through mobile system
+            mobileKeyUpChannel:push(key)
+            updateMobileKeyboardEvents()
+        else
+            home:keyreleased(key, ...)
+        end
     end
 end
 
