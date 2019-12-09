@@ -7,18 +7,14 @@ import CastleApiClient from 'castle-api-client';
 export const API = CastleApiClient(Constants.API_HOST);
 
 // fetches partial user data to support some owning object
-const NESTED_GAME_OWNER = `
-  owner {
-    userId
-    name
-    username
-    gamesCount
-    gamesSumPlayCount
-    photo {
-      url
-      height
-      width
-    }
+const MINIMAL_USER_FIELDS = `
+  userId
+  name
+  username
+  photo {
+    url
+    height
+    width
   }
 `;
 
@@ -34,8 +30,6 @@ const FULL_USER_FIELDS = `
   twitterUsername
   createdTime
   updatedTime
-  gamesCount
-  gamesSumPlayCount
   lastUserStatus {
     userStatusId
     status
@@ -84,7 +78,9 @@ const GAME_FIELDS = `
 const GAME_ITEMS = `
   gameItems {
     ${GAME_FIELDS}
-    ${NESTED_GAME_OWNER}
+    owner {
+      ${MINIMAL_USER_FIELDS}
+    }
   }
 `;
 
@@ -136,7 +132,9 @@ const CURRENT_USER_QUERY = `
     lastPing
     game {
       ${GAME_FIELDS}
-      ${NESTED_GAME_OWNER}
+      owner {
+        ${MINIMAL_USER_FIELDS}
+      }
     }
   }
 `;
@@ -333,7 +331,9 @@ export const getAllGames = (limit) =>
     query($limit: Int) {
       allGames(limit: $limit) {
         ${GAME_FIELDS}
-        ${NESTED_GAME_OWNER}
+        owner {
+          ${MINIMAL_USER_FIELDS}
+        }
       }
     }`,
     { limit },
@@ -346,7 +346,9 @@ export const getTrendingGames = () =>
     query {
       trendingGames {
         ${GAME_FIELDS}
-        ${NESTED_GAME_OWNER}
+        owner {
+          ${MINIMAL_USER_FIELDS}
+        }
       }
     }
   `,
@@ -360,7 +362,9 @@ export const getFeaturedExamples = () =>
     query {
       featuredExamples {
         ${GAME_FIELDS}
-        ${NESTED_GAME_OWNER}
+        owner {
+          ${MINIMAL_USER_FIELDS}
+        }
       }
     }
   `,
@@ -383,7 +387,9 @@ export const getGameByURL = (url) =>
     query GetGame($url: String!) {
       game(url: $url) {
         ${GAME_FIELDS}
-        ${NESTED_GAME_OWNER}
+        owner {
+          ${MINIMAL_USER_FIELDS}
+        }
       }
     }
     `,
@@ -397,7 +403,9 @@ export const getGameByGameId = (gameId) =>
     query GetGame($gameId: ID!) {
       game(gameId: $gameId) {
         ${GAME_FIELDS}
-        ${NESTED_GAME_OWNER}
+        owner {
+          ${MINIMAL_USER_FIELDS}
+        }
       }
     }
     `,
@@ -529,7 +537,9 @@ export const previewLocalGame = async (castleFileContents, gameId = null) => {
       query PreviewLocalGame($castleFile: String!, $gameId: ID) {
         previewLocalGame(castleFile: $castleFile, gameId: $gameId) {
           ${GAME_FIELDS}
-          ${NESTED_GAME_OWNER}
+          owner {
+            ${MINIMAL_USER_FIELDS}
+          }
         }
       }
     `,
@@ -549,7 +559,9 @@ export const previewGameAtUrl = async (url, gameId = null) => {
       query PreviewGameAtUrl($url: String!, $gameId: ID) {
         previewGameAtUrl(url: $url, gameId: $gameId) {
           ${GAME_FIELDS}
-          ${NESTED_GAME_OWNER}
+          owner {
+            ${MINIMAL_USER_FIELDS}
+          }
         }
       }
     `,
@@ -862,11 +874,13 @@ export const search = async (query) => {
     `query($text: String!) {
       search(text: $text) {
         users {
-          ${FULL_USER_FIELDS}
+          ${MINIMAL_USER_FIELDS}
         }
         games {
           ${GAME_FIELDS}
-          ${NESTED_GAME_OWNER}
+          owner {
+            ${MINIMAL_USER_FIELDS}
+          }
         }
       }
     }`,
