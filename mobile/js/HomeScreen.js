@@ -36,6 +36,7 @@ export const GameCard = ({ game }) => {
         shadowOpacity: 0.18,
         shadowRadius: 1.0,
         elevation: 1,
+        overflow: 'hidden',
       }}>
       <TouchableOpacity
         delayPressIn={50}
