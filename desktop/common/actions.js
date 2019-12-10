@@ -952,3 +952,17 @@ export const appNotificationsAsync = () =>
     null,
     'appNotifications'
   );
+
+export const toggleFavoriteGame = (gameId) =>
+  _graphqlThrow(
+    `
+    mutation($gameId: ID!) {
+      toggleFavoriteGame(gameId: $gameId) {
+        gameId
+        isFavorite
+      }
+    }
+`,
+    { gameId },
+    'toggleFavoriteGame'
+  );
