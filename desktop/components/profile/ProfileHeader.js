@@ -177,10 +177,7 @@ export default class ProfileHeader extends React.Component {
     const avatarSrc =
       this.props.creator && this.props.creator.photo ? this.props.creator.photo.url : null;
 
-    const name =
-      this.props.creator && this.props.creator.name
-        ? this.props.creator.name
-        : this.props.creator.username;
+    const name = this.props.creator.username;
 
     return (
       <div className={STYLES_CONTAINER} onClick={this.props.onClick}>

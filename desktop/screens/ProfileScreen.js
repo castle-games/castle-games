@@ -32,7 +32,12 @@ const STYLES_CONTAINER = css`
 `;
 
 const STYLES_GAME_GRID = css`
-  marigin-left: 24px;
+  p {
+    font-family: ${Constants.font.heading};
+    font-size: ${Constants.typescale.base};
+    margin: 0 24px 16px 24px;
+    user-select: none;
+  }
 `;
 
 class ProfileScreen extends React.Component {
@@ -138,19 +143,36 @@ class ProfileScreen extends React.Component {
   };
 
   _renderGameContent = (isOwnProfile, viewer, creator) => {
+    let content = [];
     if (creator.gameItems && creator.gameItems.length) {
-      return (
-        <div className={STYLES_GAME_GRID}>
+      content.push(
+        <div className={STYLES_GAME_GRID} key="gameItems">
+          <p>Created by {creator.username}</p>
           <UIGameSet
             viewer={this.props.viewer}
             gameItems={creator.gameItems}
             onUserSelect={this.props.navigateToUserProfile}
             onGameSelect={this._navigateToGameMeta}
             onGameUpdate={isOwnProfile ? this._onShowUpdateGame : null}
-            onSignInSelect={this.props.navigateToSignIn}
           />
         </div>
       );
+    }
+    if (creator.favoritedGames && creator.favoritedGames.length) {
+      content.push(
+        <div className={STYLES_GAME_GRID} key="favoritedGames">
+          <p>Favorites</p>
+          <UIGameSet
+            viewer={this.props.viewer}
+            gameItems={creator.favoritedGames}
+            onUserSelect={this.props.navigateToUserProfile}
+            onGameSelect={this._navigateToGameMeta}
+          />
+        </div>
+      );
+    }
+    if (content && content.length) {
+      return content;
     } else {
       let heading, message;
       if (creator.isAnonymous) {
@@ -166,14 +188,14 @@ class ProfileScreen extends React.Component {
         if (isOwnProfile) {
           message = 'You have not added any games to your profile yet.';
         } else {
-          message = 'This user has not added any games to their profile yet.';
+          message = `${creator.username} has not added any games to their profile yet.`;
         }
       }
       if (heading && message) {
         return <UIEmptyState title={heading}>{message}</UIEmptyState>;
       }
-      return null;
     }
+    return null;
   };
 
   _renderPosts = (posts, isOwnProfile, creator) => {
@@ -290,7 +312,6 @@ export default class ProfileScreenWithContext extends React.Component {
         navigateToGameMeta={navigator.navigateToGameMeta}
         navigateToGame={navigator.navigateToGame}
         navigateToUserProfile={navigator.navigateToUserProfile}
-        navigateToSignIn={navigator.navigateToSignIn}
         viewer={currentUser.user}
         creator={navigation.content.userProfileShown}
         onSignOut={currentUser.clearCurrentUser}
