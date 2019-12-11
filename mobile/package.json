@@ -25,6 +25,7 @@
     "js-base64": "^2.5.1",
     "lodash.debounce": "^4.0.8",
     "lodash.throttle": "^4.1.1",
+    "md5": "^2.2.1",
     "node-libs-react-native": "^1.0.3",
     "react": "16.8.6",
     "react-native": "0.60.5",
@@ -43,7 +44,8 @@
     "react-navigation-hooks": "^1.0.3",
     "react-navigation-stack": "^1.9.0",
     "react-navigation-tabs": "^2.5.5",
-    "tinycolor2": "^1.4.1"
+    "tinycolor2": "^1.4.1",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
     "@babel/core": "7.6.0",

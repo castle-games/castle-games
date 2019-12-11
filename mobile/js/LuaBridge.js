@@ -1,4 +1,7 @@
 import gql from 'graphql-tag';
+import AsyncStorage from '@react-native-community/async-storage';
+import uuid from 'uuid';
+import md5 from 'md5';
 
 import * as GhostEvents from './ghost/GhostEvents';
 import * as GameScreen from './GameScreen';
@@ -62,6 +65,26 @@ export const jsGameToLuaGame = async ({ gameId, owner, title, url, description }
 /// Lua -> JS -> Lua calls
 ///
 
+let localStorageKey = '';
+const awaitingLocalStorageKey = (async () => {
+  localStorageKey = await AsyncStorage.getItem('LOCAL_STORAGE_KEY');
+  if (!localStorageKey) {
+    localStorageKey = uuid();
+    await AsyncStorage.setItem('LOCAL_STORAGE_KEY', localStorageKey);
+  }
+})();
+
+const storageIdForGame = async game => {
+  if (game.storageId) {
+    return game.storageId;
+  } else if (game.isLocal) {
+    await awaitingLocalStorageKey;
+    return md5(localStorageKey + game.url);
+  } else {
+    return md5(game.url);
+  }
+};
+
 export const JS = {
   // Test method called by 'ghost-tests'
   async sayHello({ name }) {
@@ -108,7 +131,7 @@ export const JS = {
           }
         }
       `,
-      variables: { storageId: game.storageId, key },
+      variables: { storageId: await storageIdForGame(game), key },
       fetchPolicy: 'no-cache',
     });
     if (result.errors && result.errors.length) {
@@ -128,7 +151,7 @@ export const JS = {
         }
       `,
       variables: {
-        storageId: game.storageId,
+        storageId: await storageIdForGame(game),
         key,
         value: value === undefined ? null : value,
       },
@@ -148,7 +171,7 @@ export const JS = {
           }
         }
       `,
-      variables: { storageId: game.storageId, key },
+      variables: { storageId: await storageIdForGame(game), key },
       fetchPolicy: 'no-cache',
     });
     if (result.errors && result.errors.length) {
@@ -168,7 +191,7 @@ export const JS = {
         }
       `,
       variables: {
-        storageId: game.storageId,
+        storageId: await storageIdForGame(game),
         key,
         value: value === undefined ? null : value,
       },
