@@ -41,6 +41,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import * as Constants from './Constants';
 import ColorPicker from './ColorPicker';
 import CodeMirrorBase64 from './CodeMirrorBase64';
+import * as Session from './Session';
 
 //
 // Infrastructure

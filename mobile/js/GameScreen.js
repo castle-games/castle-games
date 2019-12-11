@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef, Fragment } from 'react';
-import { View, KeyboardAvoidingView, PixelRatio } from 'react-native';
-import { useLazyQuery, useQuery } from '@apollo/react-hooks';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, KeyboardAvoidingView } from 'react-native';
+import { useLazyQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import castleMetadata from 'castle-metadata';
 import url from 'url';
