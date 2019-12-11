@@ -23,7 +23,12 @@ import GameLogs from './GameLogs';
 // Whether the given URI is local
 const isLocalUri = uri => {
   const parsed = url.parse(uri);
-  return parsed.hostname && (parsed.hostname == 'localhost' || !ip.isPublic(parsed.hostname));
+  return (
+    parsed.hostname &&
+    (parsed.hostname == 'localhost' ||
+      (Constants.Android && parsed.hostname.startsWith('100.115') /* Local serve on Chrome OS */) ||
+      !ip.isPublic(parsed.hostname))
+  );
 };
 
 // Fetch a `Game` GraphQL entity based on `gameId` or `gameUri`. Uses the seeded game data from `extras` if
