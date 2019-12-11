@@ -109,6 +109,7 @@ export const JS = {
         }
       `,
       variables: { storageId: game.storageId, key },
+      fetchPolicy: 'no-cache',
     });
     if (result.errors && result.errors.length) {
       throw new Error(result.errors[0].message);
@@ -131,6 +132,7 @@ export const JS = {
         key,
         value: value === undefined ? null : value,
       },
+      fetchPolicy: 'no-cache',
     });
     if (result.errors && result.errors.length) {
       throw new Error(result.errors[0].message);
@@ -147,6 +149,7 @@ export const JS = {
         }
       `,
       variables: { storageId: game.storageId, key },
+      fetchPolicy: 'no-cache',
     });
     if (result.errors && result.errors.length) {
       throw new Error(result.errors[0].message);
@@ -169,6 +172,7 @@ export const JS = {
         key,
         value: value === undefined ? null : value,
       },
+      fetchPolicy: 'no-cache',
     });
     if (result.errors && result.errors.length) {
       throw new Error(result.errors[0].message);
