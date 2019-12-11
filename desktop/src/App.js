@@ -23,6 +23,7 @@ import {
 } from '~/contexts/NavigationContext';
 import { ChatContextProvider } from '~/contexts/ChatContext';
 import { UserPresenceContextProvider } from '~/contexts/UserPresenceContext';
+import { GameDataContextProvider } from '~/contexts/GameDataContext';
 
 import AppContainer from '~/components/AppContainer';
 import ChatInput from '~/components/chat/ChatInput';
@@ -310,15 +311,17 @@ export default class AppWithProvider extends React.Component {
     let { currentUser, navigation } = this.props.state;
     return (
       <UserPresenceContextProvider>
-        <CurrentUserContextProvider value={currentUser}>
-          <DevelopmentContextProvider>
-            <NavigationContextProvider value={{ navigation }}>
-              <ChatContextProvider>
-                <AppWithContext {...this.props} />
-              </ChatContextProvider>
-            </NavigationContextProvider>
-          </DevelopmentContextProvider>
-        </CurrentUserContextProvider>
+        <GameDataContextProvider>
+          <CurrentUserContextProvider value={currentUser}>
+            <DevelopmentContextProvider>
+              <NavigationContextProvider value={{ navigation }}>
+                <ChatContextProvider>
+                  <AppWithContext {...this.props} />
+                </ChatContextProvider>
+              </NavigationContextProvider>
+            </DevelopmentContextProvider>
+          </CurrentUserContextProvider>
+        </GameDataContextProvider>
       </UserPresenceContextProvider>
     );
   }

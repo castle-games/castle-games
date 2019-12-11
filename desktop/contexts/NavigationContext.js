@@ -9,6 +9,7 @@ import * as VoiceChat from '~/common/voicechat';
 
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { DevelopmentContext, DevelopmentSetterContext } from '~/contexts/DevelopmentContext';
+import { GameDataContext } from '~/contexts/GameDataContext';
 import { UserPresenceContext } from '~/contexts/UserPresenceContext';
 
 import GameWindow from '~/native/gamewindow';
@@ -211,6 +212,9 @@ class NavigationContextManager extends React.Component {
     // track game launches
     Analytics.trackGameLaunch({ game, launchSource });
 
+    // cache game
+    this.props.gameData.addGame(game);
+
     // navigate to the game
     this.setState({
       navigation: {
@@ -313,13 +317,40 @@ class NavigationContextManager extends React.Component {
   };
 
   navigateToGameMeta = async (game) => {
-    // TODO: could cache rather than always fetching
-    let fullGame;
-    try {
-      fullGame = await Actions.getGameByGameId(game.gameId);
-    } catch (e) {
-      // fall back to whatever we were given
-      fullGame = game;
+    let fullGame = this.props.gameData.gameIdToGame[game.gameId];
+    if (!fullGame || !fullGame.chatChannelId) {
+      try {
+        fullGame = await Actions.getGameByGameId(game.gameId);
+        this.props.gameData.addGame(fullGame);
+      } catch (e) {
+        // fall back to whatever we were given
+        fullGame = game;
+      }
+    } else {
+      // async refresh this game but don't block
+      (async () => {
+        try {
+          const updatedGame = await Actions.getGameByGameId(game.gameId);
+          this.props.gameData.addGame(updatedGame);
+          this.setState((state) => {
+            if (
+              state.navigation.gameMetaShown &&
+              state.navigation.gameMetaShown.gameId == updatedGame.gameId
+            ) {
+              // we're still viewing this game, so add the refreshed game data to
+              // the navigation state.
+              return {
+                ...state,
+                navigation: {
+                  ...state.navigation,
+                  gameMetaShown: updatedGame,
+                },
+              };
+            }
+            return state;
+          });
+        } catch (_) {}
+      })();
     }
     return this._navigateToContentMode('game-meta', {
       gameMetaShown: fullGame,
@@ -670,25 +701,30 @@ class NavigationContextProvider extends React.Component {
     return (
       <UserPresenceContext.Consumer>
         {(userPresence) => (
-          <CurrentUserContext.Consumer>
-            {(currentUser) => (
-              <DevelopmentContext.Consumer>
-                {(development) => (
-                  <DevelopmentSetterContext.Consumer>
-                    {(developmentSetter) => (
-                      <NavigationContextManager
-                        userPresence={userPresence}
-                        currentUser={currentUser}
-                        development={development}
-                        developmentSetter={developmentSetter}
-                        {...this.props}
-                      />
+          <GameDataContext.Consumer>
+            {(gameData) => (
+              <CurrentUserContext.Consumer>
+                {(currentUser) => (
+                  <DevelopmentContext.Consumer>
+                    {(development) => (
+                      <DevelopmentSetterContext.Consumer>
+                        {(developmentSetter) => (
+                          <NavigationContextManager
+                            userPresence={userPresence}
+                            gameData={gameData}
+                            currentUser={currentUser}
+                            development={development}
+                            developmentSetter={developmentSetter}
+                            {...this.props}
+                          />
+                        )}
+                      </DevelopmentSetterContext.Consumer>
                     )}
-                  </DevelopmentSetterContext.Consumer>
+                  </DevelopmentContext.Consumer>
                 )}
-              </DevelopmentContext.Consumer>
+              </CurrentUserContext.Consumer>
             )}
-          </CurrentUserContext.Consumer>
+          </GameDataContext.Consumer>
         )}
       </UserPresenceContext.Consumer>
     );
