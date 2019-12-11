@@ -52,7 +52,7 @@ export default GameLogs = ({ eventsReady, visible }) => {
   }, []);
 
   const pushLog = log => {
-    logs.unshift(log);
+    logs.unshift({ ...log, id: (nextId++).toString() });
     logs.length = Math.min(logs.length, 100);
     refresh();
   };
@@ -60,13 +60,13 @@ export default GameLogs = ({ eventsReady, visible }) => {
   GhostEvents.useListen({
     eventsReady,
     eventName: 'GHOST_PRINT',
-    handler: params => pushLog({ id: nextId++, type: 'PRINT', body: params.join(' ') }),
+    handler: params => pushLog({ type: 'PRINT', body: params.join(' ') }),
   });
 
   GhostEvents.useListen({
     eventsReady,
     eventName: 'GHOST_ERROR',
-    handler: ({ error, stacktrace }) => pushLog({ id: nextId++, type: 'ERROR', body: error }),
+    handler: ({ error, stacktrace }) => pushLog({ type: 'ERROR', body: error }),
   });
 
   const onPressClear = () => {
