@@ -149,7 +149,7 @@ export default class GameMetaHeader extends React.Component {
       items.push('Work in Progress');
     }
 
-    items.push(<GameFavoriteControl game={game} />);
+    items.push(<GameFavoriteControl gameId={game.gameId} />);
 
     if (items.length) {
       return (

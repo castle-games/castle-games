@@ -87,6 +87,7 @@ const GAME_FIELDS = `
   storageId
   chatChannelId
   hostedFiles
+  isFavorite
 `;
 
 const GAME_ITEMS = `
