@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, StatusBar, Text } from 'react-native';
+import { View, StatusBar } from 'react-native';
 import { ApolloProvider } from '@apollo/react-hooks';
 import BootSplash from 'react-native-bootsplash';
+import DevMenu from '@terrysahaidak/react-native-devmenu';
 
 import * as Session from './Session';
 import MainSwitcher from './MainSwitcher';
@@ -52,10 +53,12 @@ const Main = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <StatusBar backgroundColor="white" barStyle="dark-content" />
-      <ApolloProvider client={Session.apolloClient}>
-        <MainSwitcher />
-      </ApolloProvider>
+      <DevMenu numberOfTouches={4}>
+        <StatusBar backgroundColor="white" barStyle="dark-content" />
+        <ApolloProvider client={Session.apolloClient}>
+          <MainSwitcher />
+        </ApolloProvider>
+      </DevMenu>
     </View>
   );
 };
