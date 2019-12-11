@@ -184,7 +184,8 @@ const useInitialData = ({ game, dimensionsSettings, extras }) => {
   const sending = useRef(false);
 
   // Fetch `me`
-  const { loading: meLoading, data: meData } = useQuery(gql`
+  const isLoggedIn = Session.isSignedIn();
+  const [callMe, { loading: meLoading, called: meCalled, data: meData }] = useLazyQuery(gql`
     query Me {
       me {
         ...LuaUser
@@ -192,7 +193,9 @@ const useInitialData = ({ game, dimensionsSettings, extras }) => {
     }
     ${LuaBridge.LUA_USER_FRAGMENT}
   `);
-  const isLoggedIn = Session.isSignedIn();
+  if (isLoggedIn && !meCalled) {
+    callMe();
+  }
   const me = isLoggedIn && !meLoading && meData && meData.me;
 
   useEffect(() => {
