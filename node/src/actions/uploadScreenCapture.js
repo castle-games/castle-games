@@ -1,5 +1,5 @@
 let fs = require('fs');
-let CastleApiClient = require('castle-api-client');
+let CastleApiClient = require('castle-api-client/node');
 let FormData = require('form-data');
 
 global.FormData = FormData;

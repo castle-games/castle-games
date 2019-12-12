@@ -223,7 +223,9 @@ void ghostExecNode(const char *input, int execId) {
       ghostSendJSEvent(kGhostExecNodeComplete, params.str().c_str());
     };
 
-    const char *pathToBundledFile;
+    const char *pathToBundledNode;
+    const char *pathToBundledJs;
+
 #if defined(WIN32) || defined(_WIN32)
     CHAR buffer[MAX_PATH];
     GetModuleFileNameA(NULL, buffer, MAX_PATH);
@@ -235,9 +237,14 @@ void ghostExecNode(const char *input, int execId) {
 #else
     std::string nodeExe = exeDir + "/castle-desktop-node-win.exe";
 #endif
-    pathToBundledFile = nodeExe.c_str();
+    pathToBundledNode = nodeExe.c_str();
 #else
-    if (!ghostGetPathToFileInAppBundle("castle-desktop-node-macos", &pathToBundledFile)) {
+    if (!ghostGetPathToFileInAppBundle("castle-desktop-node-macos", &pathToBundledNode)) {
+      callback("");
+      return;
+    }
+    
+    if (!ghostGetPathToFileInAppBundle("castle-desktop-node-source.js", &pathToBundledJs)) {
       callback("");
       return;
     }
@@ -247,11 +254,11 @@ void ghostExecNode(const char *input, int execId) {
     std::future<std::string> data;
 
 #if defined(WIN32) || defined(_WIN32)
-    process::child c(std::string(pathToBundledFile), process::args({execNodeInput}),
+    process::child c(std::string(pathToBundledNode), process::args({execNodeInput}),
                      process::std_out > data, process::std_err > process::null, ios,
                      process::windows::hide);
 #else
-    process::child c(std::string(pathToBundledFile), process::args({execNodeInput}),
+    process::child c(std::string(pathToBundledNode), process::args({std::string(pathToBundledJs), execNodeInput}),
                      process::std_out > data, process::std_err > process::null, ios);
 #endif
 

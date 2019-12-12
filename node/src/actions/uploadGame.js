@@ -1,7 +1,7 @@
 let fs = require('fs');
 let path = require('path');
 let crypto = require('crypto');
-let CastleApiClient = require('castle-api-client');
+let CastleApiClient = require('castle-api-client/node');
 let FormData = require('form-data');
 const packlist = require('npm-packlist');
 

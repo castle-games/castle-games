@@ -1,21 +1,29 @@
 import * as React from 'react';
+import * as SVG from '~/components/primitives/svg';
 
 import { CurrentUserContext } from '~/contexts/CurrentUserContext';
 import { css } from 'react-emotion';
 import { GameDataContext } from '~/contexts/GameDataContext';
 
 const STYLES_CONTAINER = css`
-  min-width: 72px;
+  min-width: 80px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
 `;
 
-const STYLES_ACTION = css`
+const STYLES_INTERACTABLE = css`
   cursor: pointer;
   :hover {
-    text-decoration: underline;
+    p {
+      text-decoration: underline;
+    }
   }
 `;
 
-const STYLES_LABEL = css``;
+const STYLES_STAR = css`
+  margin-right: 2px;
+`;
 
 class GameFavoriteControl extends React.Component {
   static defaultProps = {
@@ -40,7 +48,6 @@ class GameFavoriteControl extends React.Component {
 
     if (!game) return null;
 
-    // TODO: star full or star empty
     let label;
     let interactable = true;
     if (!viewer || viewer.isAnonymous) {
@@ -54,15 +61,22 @@ class GameFavoriteControl extends React.Component {
       label = game.isFavorite ? 'Favorited' : 'Add Favorite';
     }
 
-    let labelStyles = interactable ? STYLES_ACTION : STYLES_LABEL;
+    let containerStyles = interactable
+      ? `${STYLES_CONTAINER} ${STYLES_INTERACTABLE}`
+      : STYLES_CONTAINER;
+    let svg = game.isFavorite ? (
+      <SVG.StarFilled height={16} className={STYLES_STAR} />
+    ) : (
+      <SVG.StarEmpty height={16} className={STYLES_STAR} />
+    );
     return (
       <div
-        className={STYLES_CONTAINER}
+        className={containerStyles}
         onMouseOver={() => this.setState({ hovering: true })}
-        onMouseLeave={() => this.setState({ hovering: false, clicked: false })}>
-        <p className={labelStyles} onClick={interactable ? this._onClick : null}>
-          {label}
-        </p>
+        onMouseLeave={() => this.setState({ hovering: false, clicked: false })}
+        onClick={interactable ? this._onClick : null}>
+        {svg}
+        <p>{label}</p>
       </div>
     );
   }
