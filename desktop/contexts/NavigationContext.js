@@ -167,12 +167,15 @@ class NavigationContextManager extends React.Component {
       const viewer = this.props.currentUser.user;
       if (viewer) {
         this.props.userPresence.addUser(viewer);
-        const userProfileShown = this.state.navigation.userProfileShown;
+        const userProfileShown = this.state.navigation.content.userProfileShown;
         if (userProfileShown && viewer.userId === userProfileShown.userId) {
           this.setState({
             navigation: {
               ...this.state.navigation,
-              userProfileShown: viewer,
+              content: {
+                ...this.state.navigation.content,
+                userProfileShown: viewer,
+              },
             },
           });
         }
@@ -489,8 +492,8 @@ class NavigationContextManager extends React.Component {
           this.props.userPresence.addUser(updatedUser);
           this.setState((state) => {
             if (
-              state.navigation.userProfileShown &&
-              state.navigation.userProfileShown.userId == updatedUser.userId
+              state.navigation.content.userProfileShown &&
+              state.navigation.content.userProfileShown.userId == updatedUser.userId
             ) {
               // we're still viewing this profile, so add the refreshed profile data to
               // the navigation state.
@@ -498,7 +501,10 @@ class NavigationContextManager extends React.Component {
                 ...state,
                 navigation: {
                   ...state.navigation,
-                  userProfileShown: updatedUser,
+                  content: {
+                    ...state.navigation.content,
+                    userProfileShown: updatedUser,
+                  },
                 },
               };
             }
