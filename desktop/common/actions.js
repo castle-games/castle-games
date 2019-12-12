@@ -60,6 +60,7 @@ const FULL_USER_FIELDS = `
       width
       height
     }
+    playCount
   }
 `;
 

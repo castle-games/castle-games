@@ -54,11 +54,11 @@ class GameFavoriteControl extends React.Component {
       interactable = false;
       label = 'Sign up to add this game as a favorite';
     } else if (hovering && clicked) {
-      label = game.isFavorite ? 'Favorited' : 'Removed';
+      label = game.isFavorite ? 'Favorited' : 'Unfavorited';
     } else if (hovering) {
-      label = game.isFavorite ? 'Remove Favorite' : 'Add Favorite';
+      label = game.isFavorite ? 'Unfavorite' : 'Favorite';
     } else {
-      label = game.isFavorite ? 'Favorited' : 'Add Favorite';
+      label = game.isFavorite ? 'Favorited' : 'Favorite';
     }
 
     let containerStyles = interactable

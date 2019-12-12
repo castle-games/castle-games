@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as Actions from '~/common/actions';
 import * as Constants from '~/common/constants';
+import * as SVG from '~/components/primitives/svg';
 
 import { css } from 'react-emotion';
 import { ChatContext } from '~/contexts/ChatContext';
@@ -37,6 +38,8 @@ const STYLES_GAME_GRID = css`
     font-size: ${Constants.typescale.base};
     margin: 0 24px 16px 24px;
     user-select: none;
+    display: flex;
+    align-items: center;
   }
 `;
 
@@ -161,7 +164,10 @@ class ProfileScreen extends React.Component {
     if (creator.favoritedGames && creator.favoritedGames.length) {
       content.push(
         <div className={STYLES_GAME_GRID} key="favoritedGames">
-          <p>Favorites</p>
+          <p>
+            Favorites
+            <SVG.StarFilled height={16} style={{ marginLeft: 4 }} />
+          </p>
           <UIGameSet
             viewer={this.props.viewer}
             gameItems={creator.favoritedGames}
