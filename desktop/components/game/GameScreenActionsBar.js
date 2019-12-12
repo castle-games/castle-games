@@ -211,9 +211,3 @@ export default class GameScreenActionsBar extends React.Component {
     );
   }
 }
-
-/*
-  <CTA style={{ marginRight: 24 }}>
-    <GameSVG.Multiplayer height="20px" style={{ marginRight: 8 }} />
-  </CTA>
-*/
