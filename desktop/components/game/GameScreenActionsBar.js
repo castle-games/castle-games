@@ -5,6 +5,7 @@ import { getSessionLink, getShortSessionLink } from '~/common/utilities';
 
 import { css } from 'react-emotion';
 
+import GameFavoriteControl from '~/components/game/GameFavoriteControl';
 import MultiplayerInvite from '~/components/game/MultiplayerInvite';
 
 const STYLES_CONTAINER = css`
@@ -184,8 +185,14 @@ export default class GameScreenActionsBar extends React.Component {
         </div>
         <div className={STYLES_MIDDLE}>
           {this.props.onPostScreenshot && isPostControlsVisible ? (
-            <CTA style={{ marginRight: 24 }} onClick={this.props.onPostScreenshot}>
-              <SVG.Camera height="32px" style={{ marginRight: 8 }} />
+            <CTA style={{ marginRight: 8 }} onClick={this.props.onPostScreenshot}>
+              <SVG.Camera height="32px" />
+            </CTA>
+          ) : null}
+
+          {this.props.game && isPostControlsVisible ? (
+            <CTA>
+              <GameFavoriteControl game={this.props.game} />
             </CTA>
           ) : null}
 

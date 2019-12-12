@@ -5,7 +5,7 @@ import * as Utilities from '~/common/utilities';
 
 import { css } from 'react-emotion';
 
-import GameFavoriteControl from '~/components/gamemeta/GameFavoriteControl';
+import GameMetaFavoriteControl from '~/components/gamemeta/GameMetaFavoriteControl';
 import UIAvatar from '~/components/reusable/UIAvatar';
 import UIHeading from '~/components/reusable/UIHeading';
 import UIPlayIcon from '~/components/reusable/UIPlayIcon';
@@ -149,7 +149,7 @@ export default class GameMetaHeader extends React.Component {
       items.push('Work in Progress');
     }
 
-    items.push(<GameFavoriteControl gameId={game.gameId} />);
+    items.push(<GameMetaFavoriteControl gameId={game.gameId} />);
 
     if (items.length) {
       return (

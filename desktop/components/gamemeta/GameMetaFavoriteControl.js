@@ -25,7 +25,7 @@ const STYLES_STAR = css`
   margin-right: 2px;
 `;
 
-class GameFavoriteControl extends React.Component {
+class GameMetaFavoriteControl extends React.Component {
   static defaultProps = {
     toggleFavorite: async (game) => {},
     game: null,
@@ -82,14 +82,14 @@ class GameFavoriteControl extends React.Component {
   }
 }
 
-export default class GameFavoriteControlWithContext extends React.Component {
+export default class GameMetaFavoriteControlWithContext extends React.Component {
   render() {
     return (
       <CurrentUserContext.Consumer>
         {(currentUser) => (
           <GameDataContext.Consumer>
             {(gameData) => (
-              <GameFavoriteControl
+              <GameMetaFavoriteControl
                 game={gameData.gameIdToGame[this.props.gameId]}
                 toggleFavorite={gameData.toggleFavorite}
                 viewer={currentUser.user}
