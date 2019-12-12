@@ -59,7 +59,7 @@ echo "Codesigning all frameworks..."
 find $APP_PATH/Contents/Frameworks -maxdepth 1 -name "*.framework" -exec codesign --verbose --deep --force --options runtime --keychain $TEMP_KEYCHAIN_PATH -s "${CODESIGN_IDENTITY}" {} \;
 
 echo "Try codesigning Resource binaries..."
-find $APP_PATH/Contents/Resources -perm +111 -type f -exec codesign --verbose --deep --force --keychain $TEMP_KEYCHAIN_PATH -s "${CODESIGN_IDENTITY}" {} \;
+find $APP_PATH/Contents/Resources -perm +111 -type f -exec codesign --verbose --deep --force --options runtime --keychain $TEMP_KEYCHAIN_PATH -s "${CODESIGN_IDENTITY}" {} \;
 
 # TODO: enable the following if we start including obs.
 # find $APP_PATH/Contents/Resources/obs/bin -name "*.dylib" -exec codesign --verbose --deep --force --keychain $TEMP_KEYCHAIN_PATH -s "${CODESIGN_IDENTITY}" {} \;
