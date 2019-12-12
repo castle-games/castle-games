@@ -187,7 +187,7 @@ export default class GameScreenActionsBar extends React.Component {
             : null}
           {this.props.onGameMaximize ? (
             <CTA style={{ marginLeft: 12 }} onClick={this.props.onGameMaximize}>
-              <SVG.Maximize2 height="18px" onClick={this.props.onGameMaximize} />
+              <SVG.Maximize2 height="22px" onClick={this.props.onGameMaximize} />
             </CTA>
           ) : null}
           {this.props.onViewDeveloper ? (
