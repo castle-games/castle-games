@@ -55,7 +55,7 @@ export default class DevelopmentCpuMonitor extends React.Component {
       color = Constants.REFACTOR_COLORS.subdued;
     } else {
       const percent = Math.round(cpuUsage * 100);
-      text = `${percent}%`;
+      text = `${percent}% CPU`;
       if (percent < 35) {
         color = Constants.colors.white;
       } else if (percent < 80) {

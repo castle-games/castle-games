@@ -3,13 +3,14 @@ import * as Window from '~/common/window';
 import * as Constants from '~/common/constants';
 import * as NativeUtil from '~/native/nativeutil';
 import * as Utilities from '~/common/utilities';
-import * as URLS from '~/common/urls';
+import * as Urls from '~/common/urls';
 
 import { css } from 'react-emotion';
 import _ from 'lodash';
 
-import DevelopmentLogs from '~/components/game/DevelopmentLogs';
 import DevelopmentCodeEditor from '~/components/game/DevelopmentCodeEditor';
+import DevelopmentCpuMonitor from '~/components/game/DevelopmentCpuMonitor';
+import DevelopmentLogs from '~/components/game/DevelopmentLogs';
 import GameEditorFileTree from '~/components/game/editor/GameEditorFileTree';
 import GameEditorImagePreview from '~/components/game/editor/GameEditorImagePreview';
 import GameEditorFontPreview from '~/components/game/editor/GameEditorFontPreview';
@@ -82,6 +83,12 @@ const STYLES_INFO_HEADING = css`
 
 const STYLES_INFO_HEADING_ROW = css`
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const STYLES_PROJECT_URL = css`
   font-size: 11px;
   display: flex;
   align-items: flex-start;
@@ -383,11 +390,11 @@ export default class GameScreenDeveloperSidebar extends React.Component {
     this.props.setters.setIsMultiplayerCodeUploadEnabled(!isMultiplayerCodeUploadEnabled);
   };
 
-  _handleOpenGamePath = () => {
+  _handleOpenProjectUrl = () => {
     const { game } = this.props;
-    if (URLS.isPrivateUrl(game.url)) {
-      const gamePath = path.dirname(game.url);
-      NativeUtil.openExternalURL(gamePath);
+    if (Urls.isPrivateUrl(game.url)) {
+      const projectUrl = path.dirname(game.url);
+      NativeUtil.openExternalURL(projectUrl);
     } else {
       NativeUtil.openExternalURL(game.url);
     }
@@ -450,7 +457,7 @@ export default class GameScreenDeveloperSidebar extends React.Component {
     let { isMultiplayerCodeUploadEnabled } = this.props;
 
     let maybeMultiplayerElement;
-    if (URLS.isPrivateUrl(this.props.game.url)) {
+    if (Urls.isPrivateUrl(this.props.game.url)) {
       maybeMultiplayerElement = (
         <span
           className={STYLES_CTA}
@@ -581,9 +588,12 @@ export default class GameScreenDeveloperSidebar extends React.Component {
     return (
       <div className={STYLES_CONTAINER} style={this.props.style}>
         <div className={STYLES_INFO_HEADING}>
-          <div className={STYLES_INFO_HEADING_ROW} onClick={this._handleOpenGamePath}>
-            <span className={STYLES_INFO_TEXT_TITLE}>Project URL</span>{' '}
-            <span className={STYLES_INFO_TEXT_DESCRIPTION}>{this.props.game.url}</span>
+          <div className={STYLES_INFO_HEADING_ROW}>
+            <div className={STYLES_PROJECT_URL} onClick={this._handleOpenProjectUrl}>
+              <span className={STYLES_INFO_TEXT_TITLE}>Project URL</span>{' '}
+              <span className={STYLES_INFO_TEXT_DESCRIPTION}>{this.props.game.url}</span>
+            </div>
+            <DevelopmentCpuMonitor />
           </div>
           {isMultiplayerCodeUploadEnabled ? (
             <div className={STYLES_INFO_TEXT}>

@@ -6,7 +6,6 @@ import { getSessionLink, getShortSessionLink } from '~/common/utilities';
 
 import { css } from 'react-emotion';
 
-import DevelopmentCpuMonitor from '~/components/game/DevelopmentCpuMonitor';
 import MultiplayerInvite from '~/components/game/MultiplayerInvite';
 
 const STYLES_CONTAINER = css`
@@ -196,11 +195,6 @@ export default class GameScreenActionsBar extends React.Component {
             : null}
         </div>
         <div className={STYLES_RIGHT}>
-          <CTA style={{ marginRight: 24, cursor: 'default' }}>
-            <GameSVG.Chip height="20px" style={{ marginRight: 8 }} />
-            <DevelopmentCpuMonitor />
-          </CTA>
-
           {this.props.onViewSource ? (
             <CTA style={{ marginRight: 24 }} onClick={this.props.onViewSource}>
               <GameSVG.Source height="20px" style={{ marginRight: 8 }} />
