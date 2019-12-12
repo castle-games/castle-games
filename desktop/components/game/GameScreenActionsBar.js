@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as GameSVG from '~/components/primitives/game-screen-svg';
 import * as SVG from '~/components/primitives/svg';
 import * as Constants from '~/common/constants';
 import { getSessionLink, getShortSessionLink } from '~/common/utilities';
@@ -122,7 +121,7 @@ export default class GameScreenActionsBar extends React.Component {
     if (recordingStatus.status === 'ready') {
       return (
         <CTA style={{ marginRight: 24 }} onClick={this.props.onPostScreenCapture}>
-          <GameSVG.VideoCamera
+          <SVG.VideoCamera
             height="32px"
             style={{
               marginRight: 8,
@@ -134,7 +133,7 @@ export default class GameScreenActionsBar extends React.Component {
       return (
         <CTA style={{ marginRight: 24 }} active={false}>
           <div className={STYLES_RECORDING_PROCESSING}>
-            <GameSVG.VideoCamera
+            <SVG.VideoCamera
               height="32px"
               style={{
                 marginRight: 8,
@@ -160,9 +159,9 @@ export default class GameScreenActionsBar extends React.Component {
     let sessionLink = getSessionLink(game, sessionId);
     let shortSessionLink = getShortSessionLink(game, sessionId) || sessionLink;
 
-    let volumeElement = <GameSVG.AudioOn height="20px" style={{ marginRight: 8 }} />;
+    let volumeElement = <SVG.AudioOn height="20px" style={{ marginRight: 8 }} />;
     if (this.props.isMuted) {
-      volumeElement = <GameSVG.AudioOff height="20px" style={{ marginRight: 8 }} />;
+      volumeElement = <SVG.AudioOff height="20px" style={{ marginRight: 8 }} />;
     }
 
     const isPostControlsVisible = game && game.gameId && !isAnonymousViewer;
@@ -186,7 +185,7 @@ export default class GameScreenActionsBar extends React.Component {
         <div className={STYLES_MIDDLE}>
           {this.props.onPostScreenshot && isPostControlsVisible ? (
             <CTA style={{ marginRight: 24 }} onClick={this.props.onPostScreenshot}>
-              <GameSVG.Camera height="32px" style={{ marginRight: 8 }} />
+              <SVG.Camera height="32px" style={{ marginRight: 8 }} />
             </CTA>
           ) : null}
 
@@ -197,13 +196,13 @@ export default class GameScreenActionsBar extends React.Component {
         <div className={STYLES_RIGHT}>
           {this.props.onViewSource ? (
             <CTA style={{ marginRight: 24 }} onClick={this.props.onViewSource}>
-              <GameSVG.Source height="20px" style={{ marginRight: 8 }} />
+              <SVG.Source height="20px" style={{ marginRight: 8 }} />
             </CTA>
           ) : null}
 
           {this.props.onViewDeveloper ? (
             <CTA onClick={this.props.onViewDeveloper} active={this.props.developer}>
-              <GameSVG.Tools height="20px" style={{ marginRight: 8 }} />
+              <SVG.Tools height="20px" style={{ marginRight: 8 }} />
             </CTA>
           ) : null}
         </div>

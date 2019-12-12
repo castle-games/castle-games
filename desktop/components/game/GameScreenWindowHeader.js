@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as GameSVG from '~/components/primitives/game-screen-svg';
+import * as SVG from '~/components/primitives/svg';
 import * as Constants from '~/common/constants';
 
 import { css } from 'react-emotion';
@@ -60,7 +60,7 @@ export default class GameScreenWindowHeader extends React.Component {
         <div className={STYLES_RIGHT}>
           {this.props.onGameMinimize ? (
             <CTA style={{ marginRight: 16 }} onClick={this.props.onGameMinimize}>
-              <GameSVG.Minimize
+              <SVG.Minimize
                 height="12px"
                 style={{ marginRight: 8 }}
                 onClick={this.props.onGameMinimize}
@@ -70,7 +70,7 @@ export default class GameScreenWindowHeader extends React.Component {
           ) : null}
           {this.props.onGameMaximize ? (
             <CTA style={{ marginRight: 16 }} onClick={this.props.onGameMaximize}>
-              <GameSVG.Maximize2
+              <SVG.Maximize2
                 height="12px"
                 style={{ marginRight: 8 }}
                 onClick={this.props.onGameMaximize}
@@ -80,7 +80,7 @@ export default class GameScreenWindowHeader extends React.Component {
           ) : null}
           {this.props.onGameDismiss ? (
             <CTA onClick={this.props.onGameDismiss}>
-              <GameSVG.Dismiss
+              <SVG.DismissGame
                 height="12px"
                 style={{ marginRight: 8 }}
                 onClick={this.props.onGameDismiss}
