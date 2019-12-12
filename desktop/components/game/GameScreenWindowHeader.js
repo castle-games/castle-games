@@ -68,16 +68,6 @@ export default class GameScreenWindowHeader extends React.Component {
               Minimize
             </CTA>
           ) : null}
-          {this.props.onGameMaximize ? (
-            <CTA style={{ marginRight: 16 }} onClick={this.props.onGameMaximize}>
-              <SVG.Maximize2
-                height="12px"
-                style={{ marginRight: 8 }}
-                onClick={this.props.onGameMaximize}
-              />{' '}
-              Maximize
-            </CTA>
-          ) : null}
           {this.props.onGameDismiss ? (
             <CTA onClick={this.props.onGameDismiss}>
               <SVG.DismissGame

@@ -92,6 +92,7 @@ class Game extends React.Component {
         onPostScreenshot={this._handlePostScreenshot}
         onPostScreenCapture={this._handlePostScreenCapture}
         onViewSource={isOpenSource ? () => this._handleViewSource(entryPoint) : null}
+        onGameMaximize={this.props.onGameMaximize}
         onViewDeveloper={this._handleToggleDeveloper}
       />
     );
@@ -132,7 +133,6 @@ class Game extends React.Component {
     const elementHeader = (
       <GameScreenWindowHeader
         onGameMinimize={this.props.onGameMinimize}
-        onGameMaximize={this.props.onGameMaximize}
         onGameDismiss={this.props.onGameDismiss}
       />
     );

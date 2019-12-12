@@ -28,9 +28,9 @@ class GameMetaFavoriteControl extends React.Component {
     if (!game) return null;
 
     let svg = game.isFavorite ? (
-      <SVG.StarFilled height={32} className={STYLES_STAR} />
+      <SVG.StarFilled height={28} className={STYLES_STAR} />
     ) : (
-      <SVG.StarEmpty height={32} className={STYLES_STAR} />
+      <SVG.StarEmpty height={28} className={STYLES_STAR} />
     );
     return (
       <div className={STYLES_CONTAINER} onClick={this._onClick}>

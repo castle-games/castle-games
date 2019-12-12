@@ -1,9 +1,10 @@
 import * as React from 'react';
-import * as SVG from '~/components/primitives/svg';
 import * as Constants from '~/common/constants';
-import { getSessionLink, getShortSessionLink } from '~/common/utilities';
+import * as Strings from '~/common/strings';
+import * as SVG from '~/components/primitives/svg';
 
 import { css } from 'react-emotion';
+import { getSessionLink, getShortSessionLink } from '~/common/utilities';
 
 import GameFavoriteControl from '~/components/game/GameFavoriteControl';
 import MultiplayerInvite from '~/components/game/MultiplayerInvite';
@@ -20,37 +21,28 @@ const STYLES_CONTAINER = css`
   font-size: 12px;
 `;
 
-const STYLES_CHAT_FIELD = css`
-  font-size: 14px;
-  line-height: 14px;
-  flex-shrink: 0;
-  width: 188px;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 0 16px 4px 16px;
-  background: rgba(255, 255, 255, 0.8);
-  color: #999;
+const STYLES_TITLE = css`
+  padding-right: 16px;
+  font-family: ${Constants.REFACTOR_FONTS.system};
+  font-weight: 400;
+  font-size: 18px;
+  user-select: none;
 `;
 
 const STYLES_LEFT = css`
+  padding-left: 16px;
   display: inline-flex;
   align-items: center;
   flex-shrink: 0;
   min-width: 200px;
 `;
 
-const STYLES_MIDDLE = css`
-  width: 100%;
-  min-width: 20%;
-  text-align: center;
-`;
-
 const STYLES_RIGHT = css`
+  display: flex;
   flex-shrink: 0;
   min-width: 200px;
-  text-align: right;
+  align-items: center;
+  justify-content: flex-end;
 `;
 
 const STYLES_CTA = css`
@@ -60,7 +52,7 @@ const STYLES_CTA = css`
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
 `;
 
 const STYLES_RECORDING_TEXT = css`
@@ -121,23 +113,17 @@ export default class GameScreenActionsBar extends React.Component {
 
     if (recordingStatus.status === 'ready') {
       return (
-        <CTA style={{ marginRight: 24 }} onClick={this.props.onPostScreenCapture}>
-          <SVG.VideoCamera
-            height="32px"
-            style={{
-              marginRight: 8,
-            }}
-          />
+        <CTA style={{ marginLeft: 12 }} onClick={this.props.onPostScreenCapture}>
+          <SVG.VideoCamera height="24px" />
         </CTA>
       );
     } else if (recordingStatus.status === 'processing') {
       return (
-        <CTA style={{ marginRight: 24 }} active={false}>
+        <CTA style={{ marginLeft: 12 }} active={false}>
           <div className={STYLES_RECORDING_PROCESSING}>
             <SVG.VideoCamera
-              height="32px"
+              height="24px"
               style={{
-                marginRight: 8,
                 fill: '#999',
               }}
             />
@@ -146,8 +132,8 @@ export default class GameScreenActionsBar extends React.Component {
       );
     } else {
       return (
-        <CTA style={{ marginRight: 24, verticalAlign: 'top' }} active={false}>
-          <div width="32px" height="32px" className={STYLES_RECORDING_TEXT}>
+        <CTA style={{ marginLeft: 12, verticalAlign: 'top' }} active={false}>
+          <div width="24px" height="24px" className={STYLES_RECORDING_TEXT}>
             {recordingStatus.secondsRemaining}
           </div>
         </CTA>
@@ -166,50 +152,50 @@ export default class GameScreenActionsBar extends React.Component {
     }
 
     const isPostControlsVisible = game && game.gameId && !isAnonymousViewer;
+    const title = game.title ? Strings.elide(game.title, 21) : 'Untitled';
 
     return (
       <div className={STYLES_CONTAINER} style={this.props.style}>
-        <div className={STYLES_LEFT} style={{ paddingLeft: 16 }}>
+        <div className={STYLES_LEFT}>
+          <div className={STYLES_TITLE}>{title}</div>
+          {this.props.game && isPostControlsVisible ? (
+            <CTA style={{ marginRight: 8 }}>
+              <GameFavoriteControl game={this.props.game} />
+            </CTA>
+          ) : null}
           {sessionLink ? (
             <MultiplayerInvite
-              style={{ marginRight: 18 }}
+              style={{ marginRight: 8 }}
               sessionLink={sessionLink}
               shortSessionLink={shortSessionLink}
             />
           ) : null}
           {this.props.onToggleMute ? (
-            <CTA style={{ marginRight: 24 }} onClick={this.props.onToggleMute}>
+            <CTA style={{ marginRight: 8 }} onClick={this.props.onToggleMute}>
               {volumeElement}
             </CTA>
           ) : null}
         </div>
-        <div className={STYLES_MIDDLE}>
+        <div className={STYLES_RIGHT}>
           {this.props.onPostScreenshot && isPostControlsVisible ? (
-            <CTA style={{ marginRight: 8 }} onClick={this.props.onPostScreenshot}>
-              <SVG.Camera height="32px" />
+            <CTA onClick={this.props.onPostScreenshot}>
+              <SVG.Camera height="24px" />
             </CTA>
           ) : null}
-
-          {this.props.game && isPostControlsVisible ? (
-            <CTA>
-              <GameFavoriteControl game={this.props.game} />
-            </CTA>
-          ) : null}
-
           {this.props.onPostScreenCapture && isPostControlsVisible && false
             ? this._renderRecordingStatus()
             : null}
-        </div>
-        <div className={STYLES_RIGHT}>
-          {this.props.onViewSource ? (
-            <CTA style={{ marginRight: 24 }} onClick={this.props.onViewSource}>
-              <SVG.Source height="20px" style={{ marginRight: 8 }} />
+          {this.props.onGameMaximize ? (
+            <CTA style={{ marginLeft: 12 }} onClick={this.props.onGameMaximize}>
+              <SVG.Maximize2 height="18px" onClick={this.props.onGameMaximize} />
             </CTA>
           ) : null}
-
           {this.props.onViewDeveloper ? (
-            <CTA onClick={this.props.onViewDeveloper} active={this.props.developer}>
-              <SVG.Tools height="20px" style={{ marginRight: 8 }} />
+            <CTA
+              style={{ marginLeft: 12 }}
+              onClick={this.props.onViewDeveloper}
+              active={this.props.developer}>
+              <SVG.Tools height="24px" />
             </CTA>
           ) : null}
         </div>
