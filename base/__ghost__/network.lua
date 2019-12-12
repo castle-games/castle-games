@@ -272,7 +272,7 @@ do
             local filename = url:match('^https?://api%.castle%.games/api/hosted/[^/]*/[^/]*/(.*)')
             if filename then
                 -- See if it redirects to a CDN URL
-                if CASTLE_INITIAL_DATA.hostedFiles and CASTLE_INITIAL_DATA.hostedFiles[filename] then
+                if CASTLE_INITIAL_DATA and CASTLE_INITIAL_DATA.hostedFiles and CASTLE_INITIAL_DATA.hostedFiles[filename] then
                     return CASTLE_INITIAL_DATA.hostedFiles[filename]
                 end
 
