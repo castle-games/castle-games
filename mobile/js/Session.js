@@ -3,9 +3,9 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import { ApolloClient } from 'apollo-client';
 import { InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
-import { HttpLink } from 'apollo-link-http';
 import { onError } from 'apollo-link-error';
 import { ApolloLink, Observable } from 'apollo-link';
+import { createUploadLink } from 'apollo-upload-client';
 import gql from 'graphql-tag';
 
 let authToken = null;
@@ -51,7 +51,7 @@ export const apolloClient = new ApolloClient({
           };
         })
     ),
-    new HttpLink({
+    createUploadLink({
       uri: 'https://api.castle.games/graphql',
     }),
   ]),

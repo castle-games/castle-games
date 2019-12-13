@@ -35,6 +35,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Octicons from 'react-native-vector-icons/Octicons';
 import Zocial from 'react-native-vector-icons/Zocial';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import { ReactNativeFile } from 'apollo-upload-client';
+import gql from 'graphql-tag';
 
 import * as GhostEvents from './ghost/GhostEvents';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -895,19 +897,50 @@ const ToolFilePicker = ({ element }) => {
   const anchorRef = useRef(null);
 
   const launchImagePicker = methodName => {
-    const options = {}
+    const options = { maxWidth: 1024 };
 
     if (Constants.Android) {
       // URIs may some times be 'content://', this forces copying to 'file://'
       options.rotation = 360;
     }
 
-    ImagePicker[methodName](options, ({ didCancel, error, uri }) => {
+    ImagePicker[methodName](options, async ({ didCancel, error, uri }) => {
       if (!didCancel) {
         if (error) {
           Alert.alert('Error loading image', error);
         } else {
           setValue(uri);
+
+          // Seems like we need to upload after a slight delay...
+          setTimeout(async () => {
+            const name = uri.match(/[^/]*$/)[0] || '';
+            const extension = name.match(/[^.]*$/)[0] || '';
+            const result = await Session.apolloClient.mutate({
+              mutation: gql`
+                mutation UploadFile($file: Upload!) {
+                  uploadFile(file: $file) {
+                    url
+                  }
+                }
+              `,
+              variables: {
+                file: new ReactNativeFile({
+                  uri,
+                  name,
+                  type:
+                    extension === 'jpg'
+                      ? 'image/jpeg'
+                      : extension === 'jpg'
+                      ? 'image/jpeg'
+                      : extension === 'png'
+                      ? 'image/png'
+                      : 'application/octet-stream',
+                }),
+              },
+              fetchPolicy: 'no-cache',
+            });
+            setValue(result.data.uploadFile.url);
+          }, 80);
         }
       }
     });
