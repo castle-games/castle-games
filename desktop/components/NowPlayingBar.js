@@ -1,85 +1,80 @@
 import * as React from 'react';
 import * as Constants from '~/common/constants';
 import * as Strings from '~/common/strings';
-import * as Urls from '~/common/urls';
+import * as SVG from '~/components/primitives/svg';
 
 import { css } from 'react-emotion';
 
 import UINavigationLink from '~/components/reusable/UINavigationLink';
 
-const STYLES_GAME_STRIP = css`
-  color: ${Constants.colors.white};
-  height: 32px;
+const STYLES_CONTAINER = css`
+  height: 48px;
+  width: 100%;
+  background: linear-gradient(to top, #cccccc 0%, #d6d6d6 1px, #ebebeb 100%);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px 0 16px;
+  color: #222;
+  font-size: 12px;
+  border-top: 1px solid #f3f3f3;
+`;
+
+const STYLES_LEFT = css`
+  min-width: 10%;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  cursor: pointer;
+  padding-right: 16px;
 `;
 
-const STYLES_GAME_STRIP_LEFT = css`
-  font-family: ${Constants.font.mono};
-  min-width: 25%;
-  width: 100%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: flex-start;
-  font-size: 11px;
-  line-height: 10px;
-  letter-spacing: 0.1px;
-  text-transform: uppercase;
-  white-space: nowrap;
-`;
-
-const STYLES_GAME_STRIP_RIGHT = css`
+const STYLES_RIGHT = css`
   flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: flex-end;
 `;
 
-const STYLES_CONTAINER = css`
-  background: #232323;
-  width: 100%;
-`;
-
-const STYLES_EMPHASIS_CHOICE = css`
-  font-family: ${Constants.font.mono};
-  color: ${Constants.colors.white};
-  background: #313131;
-  flex-shrink: 0;
+const STYLES_ACTION = css`
+  font-family: ${Constants.REFACTOR_FONTS.system};
+  font-weight: 600;
+  font-size: 12px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+`;
+
+const STYLES_NOW_PLAYING = css`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  @keyframes button-color-change {
+    0% {
+      color: #222;
+    }
+    50% {
+      color: ${Constants.colors.brand2};
+    }
+    100% {
+      color: #222;
+    }
+  }
+  animation: button-color-change infinite 800ms;
+`;
+
+const STYLES_COVER = css`
+  width: 50px;
+  height: 28px;
+  border-radius: 4px;
+  cursor: pointer;
+  background-size: cover;
+  background-position: 50% 50%;
+  background-color: ${Constants.colors.black};
+  margin-right: 8px;
 `;
 
 export default class NowPlayingBar extends React.Component {
-  state = {
-    toggleUIColor: false,
-  };
-  _toggleUIColorInterval = null;
-
-  componentDidMount() {
-    this._mounted = true;
-    this._toggleUIColorInterval = setInterval(this._toggleColor, 300);
-  }
-
-  componentWillUnmount() {
-    if (this._toggleUIColorInterval) {
-      clearInterval(this._toggleUIColorInterval);
-      this._toggleUIColorInterval = null;
-    }
-    this._mounted = false;
-  }
-
-  _toggleColor = () => {
-    if (this._mounted) {
-      this.setState((state) => {
-        return { ...state, toggleUIColor: !state.toggleUIColor };
-      });
-    }
-  };
-
   _handleNavigatePlaying = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -89,62 +84,37 @@ export default class NowPlayingBar extends React.Component {
   _handleCloseGame = (e) => {
     e.preventDefault();
     e.stopPropagation();
-
     this.props.navigator.clearCurrentGame();
   };
 
   render() {
     const { game } = this.props;
-
-    let color;
-    let backgroundColor;
-    if (game.metadata && game.metadata.primaryColor) {
-      backgroundColor = `#${game.metadata.primaryColor}`;
-      color = Constants.colors.white;
-    }
-
-    let title = 'Untitled';
-    if (game) {
-      title = game.title ? `${game.title}` : title;
-    }
-
-    let toggleColorStyles;
-    if (this.state.toggleUIColor) {
-      toggleColorStyles = { color: Constants.brand.fuchsia };
-    }
+    const title = game && game.title ? Strings.elide(game.title, 21) : 'Untitled';
 
     return (
       <div className={STYLES_CONTAINER}>
-        <span className={STYLES_GAME_STRIP}>
-          <span className={STYLES_GAME_STRIP_LEFT}>
-            <UINavigationLink
-              onClick={this._handleNavigatePlaying}
+        <div className={STYLES_LEFT} onClick={this._handleNavigatePlaying}>
+          <div className={STYLES_NOW_PLAYING}>
+            <figure
+              className={STYLES_COVER}
               style={{
-                width: '100%',
-                paddingLeft: 24,
-                height: 32,
-                display: 'inline-flex',
-                alignItems: 'center',
-                ...toggleColorStyles,
-              }}>
-              ► Return to {title}
-            </UINavigationLink>
-          </span>
-          <span className={STYLES_GAME_STRIP_RIGHT}>
-            <span className={STYLES_EMPHASIS_CHOICE}>
-              <UINavigationLink
-                onClick={this._handleCloseGame}
-                style={{
-                  padding: '0 24px 0 24px',
-                  height: 32,
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                }}>
-                End game
-              </UINavigationLink>
-            </span>
-          </span>
-        </span>
+                backgroundImage:
+                  game.coverImage && game.coverImage.url ? `url(${game.coverImage.url})` : null,
+              }}
+            />
+            <p className={STYLES_ACTION}>Now playing: {title}</p>
+          </div>
+          <div className={STYLES_ACTION} style={{ flexShrink: 0 }}>
+            <SVG.Play height="10px" style={{ marginRight: 8 }} />
+            Return to Game
+          </div>
+        </div>
+        <div className={STYLES_RIGHT}>
+          <div className={STYLES_ACTION} onClick={this._handleCloseGame}>
+            <SVG.DismissGame height="12px" style={{ marginRight: 8 }} />
+            End game
+          </div>
+        </div>
       </div>
     );
   }
