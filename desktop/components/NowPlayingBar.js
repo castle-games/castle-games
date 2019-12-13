@@ -106,7 +106,7 @@ export default class NowPlayingBar extends React.Component {
           </div>
           <div className={STYLES_ACTION} style={{ flexShrink: 0 }}>
             <SVG.Play height="10px" style={{ marginRight: 8 }} />
-            Return to Game
+            Return to game
           </div>
         </div>
         <div className={STYLES_RIGHT}>
