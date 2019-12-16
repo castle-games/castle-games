@@ -50,7 +50,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		B5331FCD23A81218001EB89F /* modplug.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = modplug.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B5331FCD23A81218001EB89F /* libmodplug.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = libmodplug.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B5331FDC23A812DF001EB89F /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B5331FE023A81322001EB89F /* modplug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = modplug.h; sourceTree = "<group>"; };
 		B5331FE123A81322001EB89F /* load_stm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = load_stm.cpp; sourceTree = "<group>"; };
@@ -119,7 +119,7 @@
 		B5331FCE23A81218001EB89F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B5331FCD23A81218001EB89F /* modplug.framework */,
+				B5331FCD23A81218001EB89F /* libmodplug.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -224,7 +224,7 @@
 			);
 			name = modplug;
 			productName = modplug;
-			productReference = B5331FCD23A81218001EB89F /* modplug.framework */;
+			productReference = B5331FCD23A81218001EB89F /* libmodplug.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -431,9 +431,7 @@
 		B5331FD623A81218001EB89F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -444,6 +442,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-fno-exceptions",
@@ -452,8 +451,8 @@
 					"-fno-common",
 					"-D_REENTRANT",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = games.castle.modplug;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = net.sourceforge.libmodplug;
+				PRODUCT_NAME = libmodplug;
 				SKIP_INSTALL = YES;
 			};
 			name = Debug;
@@ -461,9 +460,7 @@
 		B5331FD723A81218001EB89F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -474,6 +471,7 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-fno-exceptions",
@@ -482,8 +480,8 @@
 					"-fno-common",
 					"-D_REENTRANT",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = games.castle.modplug;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = net.sourceforge.libmodplug;
+				PRODUCT_NAME = libmodplug;
 				SKIP_INSTALL = YES;
 			};
 			name = Release;
