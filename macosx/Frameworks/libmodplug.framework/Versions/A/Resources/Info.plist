@@ -3,36 +3,42 @@
 <plist version="1.0">
 <dict>
 	<key>BuildMachineOSBuild</key>
-	<string>11B26</string>
+	<string>19B88</string>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>English</string>
+	<string>en</string>
 	<key>CFBundleExecutable</key>
 	<string>libmodplug</string>
 	<key>CFBundleIdentifier</key>
 	<string>net.sourceforge.libmodplug</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>libmodplug</string>
 	<key>CFBundlePackageType</key>
 	<string>FMWK</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
-	<key>CFBundleSignature</key>
-	<string>????</string>
+	<key>CFBundleSupportedPlatforms</key>
+	<array>
+		<string>MacOSX</string>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>DTCompiler</key>
 	<string>com.apple.compilers.llvm.clang.1_0</string>
 	<key>DTPlatformBuild</key>
-	<string>4B110</string>
+	<string>11B52</string>
 	<key>DTPlatformVersion</key>
 	<string>GM</string>
 	<key>DTSDKBuild</key>
-	<string>11A511a</string>
+	<string>19B81</string>
 	<key>DTSDKName</key>
-	<string>macosx10.7</string>
+	<string>macosx10.15</string>
 	<key>DTXcode</key>
-	<string>0410</string>
+	<string>1120</string>
 	<key>DTXcodeBuild</key>
-	<string>4B110</string>
+	<string>11B52</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>10.12</string>
 </dict>
 </plist>
