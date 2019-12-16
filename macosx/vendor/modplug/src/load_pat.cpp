@@ -150,7 +150,7 @@ typedef struct _PATHANDLE
 } PATHANDLE;
 
 #ifndef HAVE_SINF
-static inline float sinf(float x) {
+inline float sinf(float x) {
 /* default to double version */
 	return((float)sin((double)x));
 }

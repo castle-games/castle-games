@@ -257,13 +257,14 @@ static uint32_t abc_pattracktime(ABCHANDLE *h, uint32_t tracktime);
 static int abc_patno(ABCHANDLE *h, uint32_t tracktime);
 
 #ifndef HAVE_SETENV
-static void setenv(const char *name, const char *value, int overwrite)
+int setenv(const char *name, const char *value, int overwrite)
 {
 	int len = strlen(name)+1+strlen(value)+1;
 	char *str = (char *)malloc(len);
 	sprintf(str, "%s=%s", name, value);
 	putenv(str);
 	free(str);
+    return 0;
 }
 #endif
 
