@@ -1,32 +1,32 @@
 package org.libsdl.app;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Arrays;
-import java.lang.reflect.Method;
-
 import android.app.*;
 import android.content.*;
+import android.content.pm.ActivityInfo;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.graphics.*;
+import android.graphics.drawable.Drawable;
+import android.hardware.*;
+import android.os.*;
 import android.text.InputType;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.util.SparseArray;
 import android.view.*;
 import android.view.inputmethod.BaseInputConnection;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.RelativeLayout;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.os.*;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.util.SparseArray;
-import android.graphics.*;
-import android.graphics.drawable.Drawable;
-import android.hardware.*;
-import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.ApplicationInfo;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 
 /**
     SDL Activity
