@@ -35,7 +35,6 @@
 		B5256F65211A555500891B27 /* OpenAL-Soft.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = FAAFF04616CB120000CCDE45 /* OpenAL-Soft.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		B5256F66211A555500891B27 /* freetype.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = FAD43ECF1FF3133700831BB8 /* freetype.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B5256F67211A555500891B27 /* mpg123.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = A9F169A6109E824900FC83D1 /* mpg123.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		B5256F68211A555500891B27 /* libmodplug.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = A9F16926109E7BAD00FC83D1 /* libmodplug.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		B5256F69211A555500891B27 /* ogg.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = A9255F51104324D700BA1496 /* ogg.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		B5256F6A211A555500891B27 /* vorbis.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = A9255E021043195A00BA1496 /* vorbis.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		B5256F6B211A555500891B27 /* Lua.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = A93E6E5310420B57007D418B /* Lua.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -245,7 +244,6 @@
 				B5256F66211A555500891B27 /* freetype.framework in Copy Frameworks */,
 				91CF43BD21485694002024DA /* liblibcef_dll_wrapper.a in Copy Frameworks */,
 				B5256F67211A555500891B27 /* mpg123.framework in Copy Frameworks */,
-				B5256F68211A555500891B27 /* libmodplug.framework in Copy Frameworks */,
 				B5256F69211A555500891B27 /* ogg.framework in Copy Frameworks */,
 				B5A0404621483D2C007A6CC1 /* Chromium Embedded Framework.framework in Copy Frameworks */,
 				B5256F6A211A555500891B27 /* vorbis.framework in Copy Frameworks */,
@@ -283,7 +281,6 @@
 		A9255F51104324D700BA1496 /* ogg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ogg.framework; path = Frameworks/ogg.framework; sourceTree = "<group>"; };
 		A93E6E4710420B4A007D418B /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
 		A93E6E5310420B57007D418B /* Lua.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Lua.framework; path = Frameworks/Lua.framework; sourceTree = "<group>"; };
-		A9F16926109E7BAD00FC83D1 /* libmodplug.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libmodplug.framework; path = Frameworks/libmodplug.framework; sourceTree = "<group>"; };
 		A9F169A6109E824900FC83D1 /* mpg123.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = mpg123.framework; path = Frameworks/mpg123.framework; sourceTree = "<group>"; };
 		B5000229215AEB1E00CD2309 /* ghost-env.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ghost-env.plist"; sourceTree = "<group>"; };
 		B5000231215AEBED00CD2309 /* GhostEnv.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GhostEnv.h; sourceTree = "<group>"; };
@@ -622,7 +619,6 @@
 				B5A0404221483BA5007A6CC1 /* Chromium Embedded Framework.framework */,
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
 				FAD43ECF1FF3133700831BB8 /* freetype.framework */,
-				A9F16926109E7BAD00FC83D1 /* libmodplug.framework */,
 				FA08F69116C765A200F007B5 /* love.framework */,
 				A93E6E5310420B57007D418B /* Lua.framework */,
 				A9F169A6109E824900FC83D1 /* mpg123.framework */,

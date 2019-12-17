@@ -46,6 +46,7 @@
 #		define LOVE_IOS 1
 #	elif TARGET_OS_MAC
 #		define LOVE_MACOSX 1
+#       define LOVE_NO_MODPLUG 1
 #	endif
 #endif
 #if defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__)
