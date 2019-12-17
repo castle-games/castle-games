@@ -560,6 +560,16 @@ function network.isAbsolute(url)
     return url:match('^castle://') or url:match('^https?://') or url:match('^file://')
 end
 
+-- Resolve a relative url given a base url
+function network.resolve(baseUrl, url)
+    local result = baseUrl .. '/' .. url
+    local count
+    repeat
+        result, count = result:gsub('[^/]+/%.%./?', '')
+    until count == 0
+    return result
+end
+
 -- Whether a given URL points to something that exists. If `skipCache` is true, skip looking in the
 -- persistent cache (still saves it to the cache after). Also assumes any `network.prefetch`'d URLs
 -- exist.

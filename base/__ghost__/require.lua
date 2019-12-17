@@ -86,6 +86,7 @@ local function explicitRequire(path, opts)
     local saveCache = opts.saveCache
     local noEval = opts.noEval
     local preamble = opts.preamble
+    local root = opts.root
 
     -- Make sure we use `package` from `parentEnv` to handle `package.loaded` correctly
     local package = parentEnv.package
@@ -104,8 +105,10 @@ local function explicitRequire(path, opts)
         isAbsolute = true
         absolute = path
     elseif basePath then
-        path = path:gsub('^%.*', ''):gsub('%.*$', '') -- Remove leading or trailing '.'s
-        absolute = basePath .. '/' .. path:gsub('%.', '/')
+        path = path:gsub('^%.+([^/.])', '%1') -- Remove leading '.'s that aren't part of a '../'
+        path = path:gsub('([^/.])%.+$', '%1') -- Remove trailing '.'s
+        path = path:gsub('([^/.])%.+([^/.])', '%1/%2') -- Convert 'a.b' to 'a/b', keeping '../'
+        absolute = network.resolve(basePath, path)
     else
         error("'" .. origPath .. "' is not absolute but no base path is known")
     end
@@ -144,11 +147,12 @@ local function explicitRequire(path, opts)
 
     -- Update `basePath` for sub-`require`s -- do it here after we've figured out `url` with
     -- potential '/init.lua' on the end etc.
-    if isAbsolute then
+    if root or isAbsolute then
+        -- Override `require` and `CASTLE_PREFETCH` but still read from and write to same env
         local newBasePath = url:gsub('/?init%.lua$', ''):gsub('(.*)/(.*)', '%1')
         local oldChildEnv = childEnv
         local oldChildRequire = childEnv.require
-        childEnv = setmetatable({}, { __index = oldChildEnv, __newIndex = oldChildEnv })
+        childEnv = {}
         childEnv.require = function(path, opts)
             return oldChildRequire(path, defaultOpts(opts, {
                 basePath = newBasePath,
@@ -158,6 +162,10 @@ local function explicitRequire(path, opts)
         childEnv.CASTLE_PREFETCH = function(urls)
             network.prefetch(urls, newBasePath)
         end
+        setmetatable(childEnv, {
+            __index = oldChildEnv,
+            --__newindex = oldChildEnv, -- NOTE(nikki): Skipping due to issues with 'sugarcoat'...
+        })
 
         -- TODO(nikki): In process of using below to fix `portal.newPortal` with relative paths
         if parentEnv ~= oldChildEnv then

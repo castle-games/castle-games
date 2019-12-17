@@ -100,7 +100,7 @@ function portalMeta:setupLove()
 
     -- Fetch asset contents as string
     local function fetchAsset(path)
-        local absolute = network.isAbsolute(path) and path or (self.basePath .. '/' .. path)
+        local absolute = network.isAbsolute(path) and path or network.resolve(self.basePath, path)
         local response = network.fetch(absolute)
         return response
     end
