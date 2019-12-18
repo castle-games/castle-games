@@ -83,6 +83,7 @@ local function explicitRequire(path, opts)
     local basePath = opts.basePath or REQUIRE_BASE_PATH
     local parentEnv = assert(opts.parentEnv, '`explicitRequire` needs `parentEnv`')
     local childEnv = opts.childEnv
+    local childEnvReadonly = opts.childEnvReadonly
     local saveCache = opts.saveCache
     local noEval = opts.noEval
     local preamble = opts.preamble
@@ -164,7 +165,7 @@ local function explicitRequire(path, opts)
         end
         setmetatable(childEnv, {
             __index = oldChildEnv,
-            --__newindex = oldChildEnv, -- NOTE(nikki): Skipping due to issues with 'sugarcoat'...
+            __newindex = not childEnvReadonly and oldChildEnv or nil,
         })
 
         -- TODO(nikki): In process of using below to fix `portal.newPortal` with relative paths

@@ -404,6 +404,7 @@ function portalMeta:newChild(path, args)
         self.globals.require(path, {
             parentEnv = self.globals,
             childEnv = child.globals,
+            childEnvReadonly = true,
             saveCache = false, -- Always reload portals
             -- Add a preamble that loads 'conf.lua' often present alongside 'main.lua':
             -- https://love2d.org/wiki/Config_Files
