@@ -700,6 +700,7 @@
 				B5256F6C211A555500891B27 /* Frameworks */,
 				91CF43332148405B002024DA /* Headers */,
 				91CF43B821484E33002024DA /* ShellScript */,
+				B564543A23AAC07700511716 /* Upload symbols to Bugsnag */,
 			);
 			buildRules = (
 			);
@@ -920,6 +921,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "rm \"${SRCROOT}\"/../package.love";
+		};
+		B564543A23AAC07700511716 /* Upload symbols to Bugsnag */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Upload symbols to Bugsnag";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /usr/bin/ruby;
+			shellScript = "fork do\n  Process.setsid\n  STDIN.reopen(\"/dev/null\")\n  STDOUT.reopen(\"/dev/null\", \"a\")\n  STDERR.reopen(\"/dev/null\", \"a\")\n\n  require 'shellwords'\n\n  Dir[\"#{ENV[\"DWARF_DSYM_FOLDER_PATH\"]}/*/Contents/Resources/DWARF/*\"].each do |dsym|\n    system(\"curl -F apiKey=#{Shellwords.escape(ENV[\"BUGSNAG_MACOS_API_KEY\"])} -F dsym=@#{Shellwords.escape(dsym)} -F projectRoot=#{Shellwords.escape(ENV[\"PROJECT_DIR\"])} https://upload.bugsnag.com/\")\n  end\nend\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
