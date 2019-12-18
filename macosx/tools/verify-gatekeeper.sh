@@ -59,6 +59,7 @@ if spctl -a -t exec -vv $1 2>&1 | grep -qF "accepted"
 then
     echo "  pass"
 else
-    echo "  failed"
+    echo "  failed:"
+    spctl -a -t exec -vv $1
     exit 1
 fi
