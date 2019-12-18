@@ -38,8 +38,6 @@ echo "Begin codesigning..."
 APP_PATH=archive.xcarchive/Products/Applications/Castle.app
 ZIP_PATH=Castle-$MACOS_VERSION.zip
 
-./tools/verify-gatekeeper.sh $APP_PATH
-
 echo "Cleaning up source plists..."
 
 /usr/libexec/PlistBuddy -c "Set GHGitHash GIT_HASH_UNSET" Supporting/ghost-macosx.plist
@@ -49,6 +47,9 @@ echo "Cleaning up source plists..."
 # notarize the archive
 echo "Begin notarization..."
 ./tools/notarize-archive.sh $APP_PATH
+
+# verify gatekeeper, including notarization
+./tools/verify-gatekeeper.sh $APP_PATH
 
 echo "Zipping and cleaning up archive..."
 ditto -c -k --sequesterRsrc --keepParent $APP_PATH $ZIP_PATH
