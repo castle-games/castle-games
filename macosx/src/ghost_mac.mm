@@ -166,9 +166,12 @@ void ghostSetChildWindowFrame(float left, float top, float width, float height) 
   if (ghostMacMainWindow) {
     if (ghostMacChildWindow) {
       ghostGetGameFrame(childLeft, childTop, childWidth, childHeight, &left, &top, &width, &height);
-
-      width = fmin(width, ghostMacMainWindow.contentLayoutRect.size.width - left);
-      height = fmin(height, ghostMacMainWindow.contentLayoutRect.size.height - top);
+      
+      // Add some 1-pixel padding to respect macOS window border decorations better
+      left = fmax(left, 1);
+      top = fmax(top, 1);
+      width = fmin(width, ghostMacMainWindow.contentLayoutRect.size.width - left) - 2;
+      height = fmin(height, ghostMacMainWindow.contentLayoutRect.size.height - top - 2);
 
       CGRect frame;
       frame.origin.x = ghostMacMainWindow.frame.origin.x + left;
