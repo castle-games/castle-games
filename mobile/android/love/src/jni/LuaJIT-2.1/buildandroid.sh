@@ -9,7 +9,8 @@ host_arch=`uname -m`
 
 if [ -f android/armeabi/libluajit.a ] &&
         [ -f android/armeabi-v7a/libluajit.a ] &&
-        [ -f android/x86/libluajit.a ]; then
+        [ -f android/x86/libluajit.a ] &&
+        [ -f android/x86_64/libluajit.a ]; then
     echo "LuaJIT Already built"
     exit 0
 fi
@@ -33,8 +34,9 @@ NDKABI=9
 armeabi=0
 armeabiv7a=1
 x86=2
+x86_64=3
 
-NDKVER[$armeabi]="$NDK/toolchains/arm-linux-androideabi-4.8"
+NDKVER[$armeabi]="$NDK/toolchains/llvm"
 NDKP[$armeabi]="${NDKVER[$armeabi]}/prebuilt/${host_os}-${host_arch}/bin/arm-linux-androideabi-"
 NDKF[$armeabi]="--sysroot \"$NDK/platforms/android-$NDKABI/arch-arm\""
 CFLAGS[$armeabi]=""
@@ -44,10 +46,17 @@ NDKP[$armeabiv7a]="${NDKP[$armeabi]}"
 NDKF[$armeabiv7a]="${NDKF[$armeabi]}"
 CFLAGS[$armeabiv7a]="${CFLAGS[$armeabi]}"
 
-NDKVER[$x86]="$NDK/toolchains/x86-4.8"
-NDKP[$x86]="${NDKVER[$x86]}/prebuilt/${host_os}-${host_arch}/bin/i686-linux-android-"
+NDKVER[$x86]="$NDK/toolchains/llvm"
+NDKP[$x86]="${NDKVER[$x86]}/prebuilt/${host_os}-${host_arch}/bin/i686-linux-android29-"
 NDKF[$x86]="--sysroot \"$NDK/platforms/android-$NDKABI/arch-x86\""
 CFLAGS[$x86]="-DLUAJIT_NO_LOG2"
+
+# NOTE(nikki): x86_64 is the only up-to-date architecture!
+NDKVER[$x86_64]="$NDK/toolchains/llvm"
+NDKP[$x86_64]="${NDKVER[$x86_64]}/prebuilt/${host_os}-${host_arch}/bin/x86_64-linux-android29-"
+NDKAR[$x86_64]="${NDKVER[$x86_64]}/prebuilt/${host_os}-${host_arch}/bin/x86_64-linux-android-ar rcus"
+NDKF[$x86_64]="--sysroot \"$NDK/sysroot\" -isystem \"$NDK/sysroot/usr/include/x86_64-linux-android\""
+CFLAGS[$x86_64]="-DLUAJIT_NO_LOG2"
 
 buildLuaJIT()
 {
@@ -57,8 +66,9 @@ buildLuaJIT()
     DESTDIR=../android/$arch
     mkdir -p $DESTDIR 2>/dev/null
     rm "$DESTDIR"/*.a 2>/dev/null
+    # NOTE(nikki): No `make clean` for now while I figure stuff out
     make clean
-    make HOST_CC="gcc -m32" CROSS="${NDKP[$archkey]}" TARGET_SYS=Linux TARGET_FLAGS="${NDKF[$archkey]} $ndkarch" TARGET_CFLAGS="${CFLAGS[$archkey]}" libluajit.a
+    make -j12 HOST_CC="clang" CROSS="${NDKP[$archkey]}" TARGET_AR="${NDKAR[$archkey]}" TARGET_SYS=Linux TARGET_FLAGS="${NDKF[$archkey]} $ndkarch" TARGET_CFLAGS="${CFLAGS[$archkey]}" libluajit.a
 
     if [ -f libluajit.a ]; then
         mv libluajit.a $DESTDIR/libluajit.a
@@ -67,13 +77,18 @@ buildLuaJIT()
 
 cd src
 
+# NOTE(nikki): Only doing x86_64 for now since we already had the other ones ready
+
 # Android/ARM, armeabi (ARMv5TE soft-float), Android 2.2+ (Froyo)
-buildLuaJIT $armeabi armeabi
+#buildLuaJIT $armeabi armeabi
 
 # Android/ARM, armeabi-v7a (ARMv7 VFP), Android 4.0+ (ICS)
-buildLuaJIT $armeabiv7a armeabi-v7a "-march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -Wl,--fix-cortex-a8"
+#buildLuaJIT $armeabiv7a armeabi-v7a "-march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -Wl,--fix-cortex-a8"
 
 # Android/x86
-buildLuaJIT $x86 x86
+#buildLuaJIT $x86 x86
+
+# Android/x86_64
+buildLuaJIT $x86_64 x86_64
 
 make clean
