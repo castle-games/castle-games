@@ -7,13 +7,14 @@
 host_os=`uname -s | tr "[:upper:]" "[:lower:]"`
 host_arch=`uname -m`
 
-if [ -f android/armeabi/libluajit.a ] &&
-        [ -f android/armeabi-v7a/libluajit.a ] &&
-        [ -f android/x86/libluajit.a ] &&
-        [ -f android/x86_64/libluajit.a ]; then
-    echo "LuaJIT Already built"
-    exit 0
-fi
+# NOTE(nikki): Usually I want to do this on purpose...
+#if [ -f android/armeabi/libluajit.a ] &&
+#        [ -f android/armeabi-v7a/libluajit.a ] &&
+#        [ -f android/x86/libluajit.a ] &&
+#        [ -f android/x86_64/libluajit.a ]; then
+#    echo "LuaJIT Already built"
+#    exit 0
+#fi
 
 NDK_BUILD_LOCATION=${ANDROID_NDK}
 if [[ x$NDK_BUILD_LOCATION = "x" ]]; then
@@ -47,13 +48,13 @@ NDKF[$armeabiv7a]="${NDKF[$armeabi]}"
 CFLAGS[$armeabiv7a]="${CFLAGS[$armeabi]}"
 
 NDKVER[$x86]="$NDK/toolchains/llvm"
-NDKP[$x86]="${NDKVER[$x86]}/prebuilt/${host_os}-${host_arch}/bin/i686-linux-android29-"
+NDKP[$x86]="${NDKVER[$x86]}/prebuilt/${host_os}-${host_arch}/bin/i686-linux-android21-"
 NDKF[$x86]="--sysroot \"$NDK/platforms/android-$NDKABI/arch-x86\""
 CFLAGS[$x86]="-DLUAJIT_NO_LOG2"
 
 # NOTE(nikki): x86_64 is the only up-to-date architecture!
 NDKVER[$x86_64]="$NDK/toolchains/llvm"
-NDKP[$x86_64]="${NDKVER[$x86_64]}/prebuilt/${host_os}-${host_arch}/bin/x86_64-linux-android29-"
+NDKP[$x86_64]="${NDKVER[$x86_64]}/prebuilt/${host_os}-${host_arch}/bin/x86_64-linux-android21-"
 NDKAR[$x86_64]="${NDKVER[$x86_64]}/prebuilt/${host_os}-${host_arch}/bin/x86_64-linux-android-ar rcus"
 NDKF[$x86_64]="--sysroot \"$NDK/sysroot\" -isystem \"$NDK/sysroot/usr/include/x86_64-linux-android\""
 CFLAGS[$x86_64]="-DLUAJIT_NO_LOG2"
@@ -68,7 +69,7 @@ buildLuaJIT()
     rm "$DESTDIR"/*.a 2>/dev/null
     # NOTE(nikki): No `make clean` for now while I figure stuff out
     make clean
-    make -j12 HOST_CC="clang" CROSS="${NDKP[$archkey]}" TARGET_AR="${NDKAR[$archkey]}" TARGET_SYS=Linux TARGET_FLAGS="${NDKF[$archkey]} $ndkarch" TARGET_CFLAGS="${CFLAGS[$archkey]}" libluajit.a
+    make -j12 HOST_CC="gcc" CROSS="${NDKP[$archkey]}" TARGET_AR="${NDKAR[$archkey]}" TARGET_SYS=Linux TARGET_FLAGS="${NDKF[$archkey]} $ndkarch" TARGET_CFLAGS="${CFLAGS[$archkey]}" libluajit.a
 
     if [ -f libluajit.a ]; then
         mv libluajit.a $DESTDIR/libluajit.a

@@ -12,9 +12,14 @@ LOCAL_CFLAGS    := -fexceptions -g -Dlinux -Dunix \
 LOCAL_CPPFLAGS  := ${LOCAL_CFLAGS} 
 
 ifeq ($(TARGET_ARCH_ABI),arm64-v8a)
-	# ARM64 does have socklen_t
+	# arm64 does have socklen_t
 	LOCAL_CFLAGS += -DHAS_SOCKLEN_T=1
 endif
+ifeq ($(TARGET_ARCH_ABI),x86_64)
+	# x86_64 does have socklen_t
+	LOCAL_CFLAGS += -DHAS_SOCKLEN_T=1
+endif
+
 
 LOCAL_C_INCLUDES  :=  \
 	${LOCAL_PATH}/src \
