@@ -23,7 +23,10 @@ MACOS_VERSION=$MACOS_BASE_VERSION.$(git rev-list release-root..HEAD --count)
 rm -rf archive.xcarchive
 xcodebuild -project ghost.xcodeproj -config Release -scheme ghost-macosx -archivePath ./archive archive | xcpretty
 
-TEMP_CERT_PATH=/private/tmp/castle/castle-codesigning-certs
+if [ -z "$TEMP_CERT_PATH" ]; then
+    TEMP_CERT_PATH=/private/tmp/castle/castle-codesigning-certs
+fi
+
 if [ ! -d $TEMP_CERT_PATH ]; then
     git clone https://$CASTLE_GITHUB_TOKEN@github.com/castle-games/castle-codesigning-certs.git $TEMP_CERT_PATH
 fi
