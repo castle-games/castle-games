@@ -64,11 +64,12 @@ find $APP_PATH/Contents/Resources -perm +111 -type f -exec codesign --verbose --
 # TODO: enable the following if we start including obs.
 # find $APP_PATH/Contents/Resources/obs/bin -name "*.dylib" -exec codesign --verbose --deep --force --keychain $TEMP_KEYCHAIN_PATH -s "${CODESIGN_IDENTITY}" {} \;
 
+SCRIPT_DIRECTORY=$(dirname "$0")
 echo "Codesigning Castle Helper.app..."
-codesign --verbose --deep --options runtime --keychain $TEMP_KEYCHAIN_PATH -s "${CODESIGN_IDENTITY}" "${APP_PATH}/Contents/Frameworks/Castle Helper.app"
+codesign --verbose --deep --options runtime --entitlements "${SCRIPT_DIRECTORY}/entitlements-helper.plist" --keychain $TEMP_KEYCHAIN_PATH -s "${CODESIGN_IDENTITY}" "${APP_PATH}/Contents/Frameworks/Castle Helper.app"
 
 echo "Codesigning Castle.app..."
-codesign --verbose --deep --options runtime --keychain $TEMP_KEYCHAIN_PATH -s "${CODESIGN_IDENTITY}" $APP_PATH
+codesign --verbose --deep --options runtime --entitlements "${SCRIPT_DIRECTORY}/entitlements-browser.plist" --keychain $TEMP_KEYCHAIN_PATH -s "${CODESIGN_IDENTITY}" $APP_PATH
 
 echo "Cleaning up keychain..."
 security delete-keychain $TEMP_KEYCHAIN_PATH
