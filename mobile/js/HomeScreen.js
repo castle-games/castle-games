@@ -602,4 +602,5 @@ const iOSHomeScreen = () => (
   </View>
 );
 
-export default Constants.iOS ? iOSHomeScreen : HomeScreen;
+//export default Constants.iOS ? iOSHomeScreen : HomeScreen;
+export default HomeScreen;
