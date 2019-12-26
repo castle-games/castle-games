@@ -100,22 +100,6 @@ const ToolsContext = React.createContext({
   popoverPlacement: 'auto',
 });
 
-// Whether a pane should be rendered
-const paneVisible = element =>
-  element &&
-  element.props &&
-  element.props.visible &&
-  element.children &&
-  element.children.count > 0;
-
-// Render a pane with default values for the context. Each pane tends to have its own styling, so also takes
-// a `style` prop.
-const ToolPane = React.memo(({ element, style, context }) => (
-  <ToolsContext.Provider value={{ ...context, paneName: element.props.name }}>
-    <View style={style}>{renderChildren(element)}</View>
-  </ToolsContext.Provider>
-));
-
 // Get an ordered array of the children of an element
 const orderedChildren = element => {
   if (!element.children) {
@@ -267,6 +251,22 @@ const viewStyleProps = p => {
   });
   return r;
 };
+
+// Whether a pane should be rendered
+const paneVisible = element =>
+  element &&
+  element.props &&
+  element.props.visible &&
+  element.children &&
+  element.children.count > 0;
+
+// Render a pane with default values for the context. Each pane tends to have its own styling, so also takes
+// a `style` prop.
+const ToolPane = React.memo(({ element, style, context }) => (
+  <ToolsContext.Provider value={{ ...context, paneName: element.props.name }}>
+    <View style={[style, viewStyleProps(element.props)]}>{renderChildren(element)}</View>
+  </ToolsContext.Provider>
+));
 
 // Render a label along with a control
 const Labelled = ({ label, style, children }) => {
@@ -741,6 +741,7 @@ const ToolTabs = ({ element }) => {
         borderBottomWidth: 1,
         borderColor: selectedColor,
         overflow: 'hidden',
+        ...viewStyleProps(element.props.containerStyle),
       }}>
       <View
         style={{
@@ -766,6 +767,7 @@ const ToolTabs = ({ element }) => {
         style={{
           paddingVertical: 8,
           paddingHorizontal: 2,
+          ...viewStyleProps(element.props.contentStyle),
         }}>
         {renderChildren(children[selected].child)}
       </View>
@@ -1087,6 +1089,17 @@ const ToolCodeEditor = ({ element }) => {
 };
 elementTypes['codeEditor'] = ToolCodeEditor;
 
+const ToolScrollBox = ({ element }) => (
+  <ScrollView
+    style={viewStyleProps(element.props)}
+    horizontal={element.props.horizontal}
+    alwaysBounceHorizontal={false}
+    alwaysBounceVertical={false}>
+    {renderChildren(element)}
+  </ScrollView>
+);
+elementTypes['scrollBox'] = ToolScrollBox;
+
 //
 // Container
 //
@@ -1149,18 +1162,26 @@ export default Tools = ({ eventsReady, visible, landscape, game, children }) => 
         {visible && root.panes && paneVisible(root.panes.toolbar) ? (
           <View
             style={{ backgroundColor: 'white', justifyContent: 'center', alignItems: 'center' }}>
-            <ScrollView horizontal={true} alwaysBounceHorizontal={false}>
+            {root.panes.toolbar.props.customLayout ? (
               <ToolPane
                 element={root.panes.toolbar}
                 context={{ ...context, hideLabels: true, popoverPlacement: 'bottom' }}
-                style={{
-                  paddingHorizontal: 6,
-                  paddingVertical: 4,
-                  maxHeight: 72,
-                  flexDirection: 'row',
-                }}
+                style={{ alignSelf: 'stretch' }}
               />
-            </ScrollView>
+            ) : (
+              <ScrollView horizontal={true} alwaysBounceHorizontal={false}>
+                <ToolPane
+                  element={root.panes.toolbar}
+                  context={{ ...context, hideLabels: true, popoverPlacement: 'bottom' }}
+                  style={{
+                    paddingHorizontal: 6,
+                    paddingVertical: 4,
+                    maxHeight: 72,
+                    flexDirection: 'row',
+                  }}
+                />
+              </ScrollView>
+            )}
           </View>
         ) : null}
 
@@ -1168,10 +1189,22 @@ export default Tools = ({ eventsReady, visible, landscape, game, children }) => 
       </View>
 
       {visible && root.panes && paneVisible(root.panes.DEFAULT) ? (
-        <View style={{ flex: 0.75, maxWidth: landscape ? 600 : null, backgroundColor: 'white' }}>
-          <ScrollView style={{ flex: 1 }} alwaysBounceVertical={false}>
-            <ToolPane element={root.panes.DEFAULT} context={context} style={{ padding: 6 }} />
-          </ScrollView>
+        <View
+          style={{
+            flex: 0.75,
+            maxWidth: landscape ? 600 : null,
+          }}>
+          {root.panes.DEFAULT.props.customLayout ? (
+            <ToolPane element={root.panes.DEFAULT} context={context} style={{ flex: 1 }} />
+          ) : (
+            <ScrollView style={{ flex: 1 }} alwaysBounceVertical={false}>
+              <ToolPane
+                element={root.panes.DEFAULT}
+                context={context}
+                style={{ padding: 6, backgroundColor: 'white' }}
+              />
+            </ScrollView>
+          )}
         </View>
       ) : null}
     </View>

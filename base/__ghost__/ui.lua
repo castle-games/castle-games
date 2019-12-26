@@ -253,6 +253,10 @@ function ui.pane(...)
         error('`ui.pane` takes 2 or 3 arguments')
     end
 
+    if name == 'default' then -- Canonicalize 'default'
+        name = 'DEFAULT'
+    end
+
     local c = root.panes[name]
     if c == nil then
         root.panes[name] = { type = 'pane' }
@@ -260,7 +264,11 @@ function ui.pane(...)
     end
     c.props = merge({ name = name, visible = true }, props)
 
-    enter(c, name, inner)
+    if name == 'DEFAULT' then -- We're already in 'DEFAULT' to begin with
+        inner()
+    else
+        enter(c, name, inner)
+    end
 end
 
 
