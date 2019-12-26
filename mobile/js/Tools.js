@@ -290,6 +290,7 @@ const defaultColor = '#ddd';
 const selectedColor = '#eee';
 
 const textInputStyle = {
+  color: 'black',
   flex: 1,
   borderColor: 'gray',
   borderWidth: 1,
