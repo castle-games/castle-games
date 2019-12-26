@@ -1193,6 +1193,7 @@ export default Tools = ({ eventsReady, visible, landscape, game, children }) => 
           style={{
             flex: 0.75,
             maxWidth: landscape ? 600 : null,
+            backgroundColor: root.panes.DEFAULT.props.backgroundColor || 'white',
           }}>
           {root.panes.DEFAULT.props.customLayout ? (
             <ToolPane element={root.panes.DEFAULT} context={context} style={{ flex: 1 }} />
