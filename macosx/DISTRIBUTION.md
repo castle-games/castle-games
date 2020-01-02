@@ -33,10 +33,6 @@ Starting with macOS Catalina, Developer ID apps are required to be "notarized", 
 
 No. Since this is a macOS app, developers building Castle from source can run Castle on their machines without any codesigning. So most people on the team never need to get a copy of our certificate or run any of the codesigning scripts.
 
-## Caveats
-
-Right now our app does not conform to Apple's newer concept of "runtime hardening". We will need to implement this change before January 2020.
-
 ## Why not use fastlane?
 
 At some point it will probably make sense to switch over to using fastlane for this. However, at the time of writing, fastlane didn't make sense because:
