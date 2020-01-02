@@ -9,7 +9,7 @@
 	<key>CFBundleExecutable</key>
 	<string>mpg123</string>
 	<key>CFBundleIdentifier</key>
-	<string>de.mpg123</string>
+	<string>mpg123.mpg123</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -27,18 +27,18 @@
 	<key>DTCompiler</key>
 	<string>com.apple.compilers.llvm.clang.1_0</string>
 	<key>DTPlatformBuild</key>
-	<string>11B52</string>
+	<string>11C29</string>
 	<key>DTPlatformVersion</key>
 	<string>GM</string>
 	<key>DTSDKBuild</key>
-	<string>19B81</string>
+	<string>19B90</string>
 	<key>DTSDKName</key>
 	<string>macosx10.15</string>
 	<key>DTXcode</key>
-	<string>1120</string>
+	<string>1130</string>
 	<key>DTXcodeBuild</key>
-	<string>11B52</string>
+	<string>11C29</string>
 	<key>LSMinimumSystemVersion</key>
-	<string>10.9</string>
+	<string>10.7</string>
 </dict>
 </plist>
