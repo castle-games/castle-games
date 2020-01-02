@@ -1,8 +1,0 @@
-synth_stereo_avx_s32.lo: synth_stereo_avx_s32.S mangle.h \
-  ../../src/config.h intsym.h
-
-mangle.h:
-
-../../src/config.h:
-
-intsym.h:

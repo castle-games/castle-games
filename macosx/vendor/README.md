@@ -22,8 +22,8 @@ TODO: Move obs here as well.
 
 ### mpg123
 
-- We built our own mpg123 framework because the one included with Love won't pass macOS notarization.
-- Specifically, Apple requires all executables to be built with the mac 10.9 SDK or newer, but their copy was built with 10.8, so we need to rebuild it on a newer machine.
+- We don't currently vendor this lib
+- Previously, we [built our own mpg123 framework for macOS notarization](https://bitbucket.org/rude/love/issues/1526/apps-built-with-love-and-mpg123-wont-pass)
 - The `mpg123-1.16.0` folder was created by:
   - Downloading the source from mpg123's website
   - Opening `ports/Xcode/mpg123.xcodeproj`
