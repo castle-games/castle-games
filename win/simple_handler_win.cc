@@ -200,7 +200,9 @@ void SimpleHandler::PlatformTitleChange(CefRefPtr<CefBrowser> browser, const Cef
   SendMessage(hwnd, WM_SETICON, ICON_BIG, (LPARAM)hIcon);
 
   // Do first update check 5 seconds after boot, it sets itself for ever hour after the first one
+#ifndef DEBUG
   SetTimer(hwnd, updateCheckTimerId, 5 * 1000, &beginUpdateCheck);
+#endif
 }
 
 void SimpleHandler::SubclassWndProc(CefWindowHandle hwnd) {
