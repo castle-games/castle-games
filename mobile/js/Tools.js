@@ -8,6 +8,7 @@ import {
   Switch,
   Easing,
   Alert,
+  StyleSheet,
 } from 'react-native';
 import Slider from '@react-native-community/slider';
 import Markdown from 'react-native-markdown-renderer';
@@ -44,6 +45,32 @@ import * as Constants from './Constants';
 import ColorPicker from './ColorPicker';
 import CodeMirrorBase64 from './CodeMirrorBase64';
 import * as Session from './Session';
+
+//
+// Colors
+//
+
+const Colors = {
+  background: '#121212',
+  text: 'white',
+
+  button: {
+    text: 'white',
+    default: '#292929',
+    selected: '#3700b3',
+  },
+
+  textInput: {
+    text: 'white',
+    background: 'black',
+    border: 'gray',
+  },
+
+  popover: {
+    background: '#121212',
+    shadow: '#808080',
+  }
+};
 
 //
 // Infrastructure
@@ -275,7 +302,9 @@ const Labelled = ({ label, style, children }) => {
   return (
     <View style={{ margin: 4, ...style }}>
       {!hideLabels ? (
-        <Text style={{ fontWeight: boldWeight2, marginBottom: 4 }}>{label}</Text>
+        <Text style={{ color: Colors.text, fontWeight: boldWeight2, marginBottom: 4 }}>
+          {label}
+        </Text>
       ) : null}
       {children}
     </View>
@@ -286,13 +315,11 @@ const Labelled = ({ label, style, children }) => {
 // Components
 //
 
-const defaultColor = '#ddd';
-const selectedColor = '#eee';
-
 const textInputStyle = {
-  color: 'black',
   flex: 1,
-  borderColor: 'gray',
+  color: Colors.textInput.text,
+  backgroundColor: Colors.textInput.background,
+  borderColor: Colors.textInput.border,
   borderWidth: 1,
   borderRadius: 4,
   paddingVertical: 8,
@@ -302,8 +329,8 @@ const textInputStyle = {
 const buttonStyle = ({ selected = false } = {}) => ({
   padding: 4,
   borderWidth: 2,
-  backgroundColor: selected ? selectedColor : defaultColor,
-  borderColor: defaultColor,
+  backgroundColor: selected ? Colors.button.selected : Colors.button.default,
+  borderColor: Colors.button.default,
   justifyContent: 'center',
   alignItems: 'center',
   borderRadius: 6,
@@ -317,9 +344,10 @@ const BasePopover = props => {
     <Popover
       placement={popoverPlacement}
       popoverStyle={{
+        backgroundColor: Colors.popover.background,
         borderRadius: 8,
         elevation: 4,
-        shadowColor: 'black',
+        shadowColor: Colors.popover.shadow,
         shadowOffset: {
           width: 0,
           height: 4,
@@ -430,7 +458,7 @@ const BaseButton = ({ element, selected, style, onPress }) => {
         React.createElement(iconFamilies[element.props.iconFamily], {
           name: element.props.icon,
           size: 18,
-          color: 'black',
+          color: Colors.text,
           style: {
             margin: 0,
             marginRight: !hideLabel ? 5 : 0,
@@ -460,7 +488,7 @@ const BaseButton = ({ element, selected, style, onPress }) => {
           }}
         />
       ) : null}
-      {!hideLabel ? <Text>{element.props.label}</Text> : null}
+      {!hideLabel ? <Text style={{ color: Colors.button.text }}>{element.props.label}</Text> : null}
     </TouchableOpacity>
   );
 };
@@ -614,7 +642,7 @@ const ToolNumberInput = ({ element }) => {
                 bottom: 0,
                 right: 0,
                 justifyContent: 'center',
-                backgroundColor: 'white',
+                backgroundColor: Colors.background,
               }}>
               <TouchableWithoutFeedback
                 style={{ flex: 1 }}
@@ -624,7 +652,10 @@ const ToolNumberInput = ({ element }) => {
                     setFocused(true);
                   }
                 }}>
-                <Text numberOfLines={1} ellipsizeMode="tail">
+                <Text
+                  style={{ color: Colors.textInput.text }}
+                  numberOfLines={1}
+                  ellipsizeMode="tail">
                   {value}
                 </Text>
               </TouchableWithoutFeedback>
@@ -638,7 +669,7 @@ const ToolNumberInput = ({ element }) => {
             marginLeft: 4,
           }}
           onPress={() => incrementValue(1)}>
-          <Text>+</Text>
+          <Text style={{ color: Colors.button.text }}>+</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={{
@@ -647,7 +678,7 @@ const ToolNumberInput = ({ element }) => {
             marginLeft: 4,
           }}
           onPress={() => incrementValue(-1)}>
-          <Text>-</Text>
+          <Text style={{ color: Colors.button.text }}>-</Text>
         </TouchableOpacity>
       </View>
     </Labelled>
@@ -664,7 +695,7 @@ const ToolSection = ({ element }) => (
       borderBottomLeftRadius: element.open ? 0 : 8,
       borderBottomRightRadius: element.open ? 0 : 8,
       borderBottomWidth: element.open ? 1 : 0,
-      borderColor: selectedColor,
+      borderColor: Colors.button.selected,
       overflow: 'hidden',
     }}>
     <TouchableOpacity
@@ -675,10 +706,12 @@ const ToolSection = ({ element }) => (
         paddingVertical: 6,
         paddingLeft: 21,
         paddingRight: 14,
-        backgroundColor: element.open ? selectedColor : defaultColor,
+        backgroundColor: element.open ? Colors.button.selected : Colors.button.default,
       }}
       onPress={() => sendEvent(element.pathId, { type: 'onChange', open: !element.open })}>
-      <Text style={{ fontSize: 20, fontWeight: boldWeight1 }}>{element.props.label}</Text>
+      <Text style={{ color: Colors.button.text, fontSize: 20, fontWeight: boldWeight1 }}>
+        {element.props.label}
+      </Text>
       <MaterialIcons
         name={element.open ? 'keyboard-arrow-up' : 'keyboard-arrow-down'}
         size={20}
@@ -698,12 +731,26 @@ const ToolSection = ({ element }) => (
 );
 elementTypes['section'] = ToolSection;
 
+const markdownStyles = StyleSheet.create({
+  codeBlock: { borderColor: '#CCCCCC', backgroundColor: '#f5f5f5' },
+  codeInline: { borderColor: '#CCCCCC', backgroundColor: '#f5f5f5' },
+  del: { backgroundColor: '#000000' },
+  hr: { backgroundColor: '#000000' },
+  blockquote: { backgroundColor: '#CCCCCC' },
+  table: { borderColor: '#000000' },
+  tableRow: { borderColor: '#000000' },
+  text: { color: Colors.text },
+  blocklink: { borderColor: '#000000' },
+  u: { borderColor: '#000000' },
+});
+
 const ToolMarkdown = ({ element }) => {
   const { transformAssetUri } = useContext(ToolsContext);
 
   return (
     <View style={{ margin: 4 }}>
       <Markdown
+        style={markdownStyles}
         rules={{
           image: (node, children, parent, styles) => {
             return (
@@ -739,7 +786,7 @@ const ToolTabs = ({ element }) => {
         borderTopLeftRadius: 8,
         borderTopRightRadius: 8,
         borderBottomWidth: 1,
-        borderColor: selectedColor,
+        borderColor: Colors.button.selected,
         overflow: 'hidden',
         ...viewStyleProps(element.props.containerStyle),
       }}>
@@ -755,10 +802,12 @@ const ToolTabs = ({ element }) => {
               justifyContent: 'center',
               alignItems: 'center',
               padding: 6,
-              backgroundColor: selected === i ? selectedColor : defaultColor,
+              backgroundColor: selected === i ? Colors.button.selected : Colors.button.default,
             }}
             onPress={() => setSelected(i)}>
-            <Text style={{ fontSize: 20, fontWeight: boldWeight1 }}>{child.props.label}</Text>
+            <Text style={{ color: Colors.button.text, fontSize: 20, fontWeight: boldWeight1 }}>
+              {child.props.label}
+            </Text>
           </TouchableOpacity>
         ))}
       </View>
@@ -815,6 +864,7 @@ const ToolDropdown = ({ element }) => {
     <Labelled label={element.props.label}>
       <TouchableOpacity
         style={{
+          ...textInputStyle,
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
@@ -835,8 +885,8 @@ const ToolDropdown = ({ element }) => {
             }
           );
         }}>
-        <Text>{value}</Text>
-        <MaterialIcons name="keyboard-arrow-down" size={16} color="black" />
+        <Text style={{ color: Colors.textInput.text }}>{value}</Text>
+        <MaterialIcons name="keyboard-arrow-down" size={16} color={Colors.text} />
       </TouchableOpacity>
     </Labelled>
   );
@@ -969,7 +1019,7 @@ const ToolFilePicker = ({ element }) => {
             }}
           />
         ) : (
-          <Text>no image</Text>
+          <Text style={{ color: Colors.text }}>no image</Text>
         )}
       </TouchableOpacity>
       <BasePopover
@@ -983,17 +1033,17 @@ const ToolFilePicker = ({ element }) => {
               setValue(undefined);
               setPicking(false);
             }}>
-            <Text>Remove</Text>
+            <Text colors={{ colors: Colors.button.text }}>Remove</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={{ ...buttonStyle(), margin: 4 }}
             onPress={() => launchImagePicker('launchImageLibrary')}>
-            <Text>Select from photos</Text>
+            <Text colors={{ colors: Colors.button.text }}>Select from photos</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={{ ...buttonStyle(), margin: 4 }}
             onPress={() => launchImagePicker('launchCamera')}>
-            <Text>Take a photo</Text>
+            <Text colors={{ colors: Colors.button.text }}>Take a photo</Text>
           </TouchableOpacity>
         </View>
       </BasePopover>
@@ -1161,7 +1211,11 @@ export default Tools = ({ eventsReady, visible, landscape, game, children }) => 
       <View style={{ flex: 1 }}>
         {visible && root.panes && paneVisible(root.panes.toolbar) ? (
           <View
-            style={{ backgroundColor: 'white', justifyContent: 'center', alignItems: 'center' }}>
+            style={{
+              backgroundColor: Colors.background,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
             {root.panes.toolbar.props.customLayout ? (
               <ToolPane
                 element={root.panes.toolbar}
@@ -1193,7 +1247,7 @@ export default Tools = ({ eventsReady, visible, landscape, game, children }) => 
           style={{
             flex: 0.75,
             maxWidth: landscape ? 600 : null,
-            backgroundColor: root.panes.DEFAULT.props.backgroundColor || 'white',
+            backgroundColor: root.panes.DEFAULT.props.backgroundColor || Colors.background,
           }}>
           {root.panes.DEFAULT.props.customLayout ? (
             <ToolPane element={root.panes.DEFAULT} context={context} style={{ flex: 1 }} />
@@ -1202,7 +1256,7 @@ export default Tools = ({ eventsReady, visible, landscape, game, children }) => 
               <ToolPane
                 element={root.panes.DEFAULT}
                 context={context}
-                style={{ padding: 6, backgroundColor: 'white' }}
+                style={{ padding: 6, backgroundColor: Colors.background }}
               />
             </ScrollView>
           )}
