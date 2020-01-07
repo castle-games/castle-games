@@ -26,7 +26,7 @@ const isLocalUri = uri => {
   return (
     parsed.hostname &&
     (parsed.hostname == 'localhost' ||
-      (Constants.Android && parsed.hostname.startsWith('100.115') /* Local serve on Chrome OS */) ||
+      (Constants.Android && parsed.hostname.startsWith('100.115')) /* Local serve on Chrome OS */ ||
       !ip.isPublic(parsed.hostname))
   );
 };
@@ -472,7 +472,7 @@ const GameView = ({
   LuaBridge.useLuaBridge({ eventsReady, game });
 
   const [inputsMode, setInputsMode] = useState(
-    extras.inputsMode !== undefined ? extras.inputsMode : 0
+    extras.inputsMode !== undefined ? extras.inputsMode : 1
   );
   const onPressNextInputsMode = () => {
     setInputsMode((inputsMode + 1) % NUM_GAME_INPUTS_MODES);
