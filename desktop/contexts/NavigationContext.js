@@ -537,6 +537,10 @@ class NavigationContextManager extends React.Component {
         ...this.state.navigation,
         playing: {
           ...this.state.navigation.playing,
+          game: {
+            ...this.state.navigation.playing.game,
+            hostedFiles: undefined,
+          },
           timeLoaded: Date.now(),
         },
       },
