@@ -69,7 +69,7 @@ const Colors = {
   popover: {
     background: '#121212',
     shadow: '#808080',
-  }
+  },
 };
 
 //
@@ -715,7 +715,7 @@ const ToolSection = ({ element }) => (
       <MaterialIcons
         name={element.open ? 'keyboard-arrow-up' : 'keyboard-arrow-down'}
         size={20}
-        color="black"
+        color={Colors.text}
       />
     </TouchableOpacity>
     {element.open ? (
