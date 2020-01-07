@@ -408,7 +408,7 @@ const ToolImage = ({ element, path, style }) => {
 
   return (
     <FastImage
-      style={{ margin: 4, width: 200, height: 200, ...style }}
+      style={{ margin: 4, ...style, ...viewStyleProps(element.props) }}
       source={{ uri }}
       resizeMode={resizeMode}
     />
