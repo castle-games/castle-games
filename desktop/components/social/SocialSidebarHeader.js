@@ -260,7 +260,7 @@ export default class SocialSidebarHeader extends React.Component {
 
     return (
       <header className={STYLES_HEADER}>
-        {isExpanded ? (
+        {isExpanded === true ? (
           <div className={STYLES_HEADER_LEFT}>
             {this._renderTitle()}
             <div className={STYLES_SUBLINE}>

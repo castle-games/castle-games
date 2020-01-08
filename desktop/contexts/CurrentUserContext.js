@@ -12,6 +12,7 @@ const EMPTY_CURRENT_USER = {
   user: null,
   settings: {
     notifications: null,
+    isSidebarExpanded: true,
   },
   timeLastLoaded: 0,
   userStatusHistory: [],
@@ -42,6 +43,8 @@ const CurrentUserContextDefaults = {
   loadAppNotifications: async () => {},
   appendAppNotification: (n) => {},
   setAppNotificationsStatus: (notificationIds, status) => {},
+  toggleIsSidebarExpanded: () => {},
+  setIsSidebarExpanded: (isExpanded) => {},
 };
 
 const CurrentUserContext = React.createContext(CurrentUserContextDefaults);
@@ -66,6 +69,8 @@ class CurrentUserContextManager extends React.Component {
       loadAppNotifications: this.loadAppNotifications,
       appendAppNotification: this.appendAppNotification,
       setAppNotificationsStatus: this.setAppNotificationsStatus,
+      toggleIsSidebarExpanded: this.toggleIsSidebarExpanded,
+      setIsSidebarExpanded: this.setIsSidebarExpanded,
     };
 
     if (props.value && props.value.user && !this.state.timeLastLoaded) {
@@ -115,7 +120,10 @@ class CurrentUserContextManager extends React.Component {
       this.setState(
         {
           user,
-          settings,
+          settings: {
+            ...this.state.settings,
+            ...settings,
+          },
           userStatusHistory,
           timeLastLoaded: Date.now(),
         },
@@ -294,6 +302,30 @@ class CurrentUserContextManager extends React.Component {
       },
       () => Actions.setAppNotificationsStatusAsync(notificationIds, status)
     );
+  };
+
+  toggleIsSidebarExpanded = () => {
+    this.setState((state) => {
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          isSidebarExpanded: !state.settings.isSidebarExpanded,
+        },
+      };
+    }, this._cacheCurrentUser);
+  };
+
+  setIsSidebarExpanded = (isExpanded) => {
+    this.setState((state) => {
+      return {
+        ...state,
+        settings: {
+          ...state.settings,
+          isSidebarExpanded: isExpanded,
+        },
+      };
+    }, this._cacheCurrentUser);
   };
 
   _gatherObjectsFromNotification = (userIds, n) => {

@@ -124,7 +124,7 @@ class SocialSidebar extends React.Component {
   _handleShowNotifications = () => {
     const { isChatExpanded } = this.props;
     if (!isChatExpanded) {
-      this.props.navigator.toggleIsChatExpanded();
+      this.props.toggleIsChatExpanded();
     }
     this.setState({ mode: 'notifications' });
   };
@@ -223,7 +223,7 @@ class SocialSidebar extends React.Component {
               chat={chat}
               theme={theme}
               onSelectChannel={this._handleNavigateToChat}
-              onToggleSidebar={this.props.navigator.toggleIsChatExpanded}
+              onToggleSidebar={this.props.toggleIsChatExpanded}
             />
           </div>
         </div>
@@ -253,12 +253,13 @@ export default class SocialSidebarWithContext extends React.Component {
                               userPresence={userPresence}
                               viewer={currentUser.user}
                               appNotifications={currentUser.appNotifications}
-                              isChatExpanded={navigation.isChatExpanded}
+                              isChatExpanded={currentUser.settings.isSidebarExpanded}
                               playing={navigation.playing}
                               contentMode={navigation.content.mode}
                               gameMetaShown={navigation.content.gameMetaShown}
                               chatChannelId={navigation.chatChannelId}
                               voiceChannelId={navigation.voiceChannelId}
+                              toggleIsChatExpanded={currentUser.toggleIsSidebarExpanded}
                               chat={chat}
                               lobbyChannel={lobbyChannel}
                               navigator={navigator}

@@ -45,7 +45,6 @@ const NavigationContextDefaults = {
     stack: [],
     index: 0,
   },
-  isChatExpanded: true,
   chatChannelId: null,
   voiceChannelId: null,
 };
@@ -62,7 +61,6 @@ const NavigatorContextDefaults = {
   openUrl: async (url, options) => {},
   showChatChannel: async (channelId, options) => {},
   connectToVoiceChannel: (channelId) => {},
-  toggleIsChatExpanded: () => {},
   navigateToHome: () => {},
   navigateToGameUrl: async (url, options) => {},
   navigateToGame: async (game, options) => {},
@@ -112,7 +110,6 @@ class NavigationContextManager extends React.Component {
         navigateToContentMode: this.navigateToContentMode,
         showChatChannel: this.showChatChannel,
         connectToVoiceChannel: this.connectToVoiceChannel,
-        toggleIsChatExpanded: this.toggleIsChatExpanded,
         navigateToHome: this.navigateToHome,
         navigateToGameUrl: this.navigateToGameUrl,
         navigateToGame: this.navigateToGame,
@@ -294,11 +291,13 @@ class NavigationContextManager extends React.Component {
   showChatChannel = async (channelId, options = {}) => {
     const autoExpand = options.autoExpand === undefined ? true : options.autoExpand;
     let chatChannelId = channelId || this.state.chatChannelId;
+    if (autoExpand) {
+      this.props.currentUser.setIsSidebarExpanded(true);
+    }
     return this.setState({
       navigation: {
         ...this.state.navigation,
         chatChannelId: channelId,
-        isChatExpanded: autoExpand ? true : this.state.navigation.isChatExpanded,
       },
     });
   };
@@ -357,18 +356,6 @@ class NavigationContextManager extends React.Component {
     }
     return this._navigateToContentMode('game-meta', {
       gameMetaShown: fullGame,
-    });
-  };
-
-  toggleIsChatExpanded = () => {
-    this.setState((state) => {
-      return {
-        ...state,
-        navigation: {
-          ...state.navigation,
-          isChatExpanded: !state.navigation.isChatExpanded,
-        },
-      };
     });
   };
 
