@@ -56,14 +56,14 @@ const Colors = {
 
   button: {
     text: 'white',
-    default: '#292929',
+    default: '#323234',
     selected: '#3700b3',
   },
 
   textInput: {
     text: 'white',
     background: 'black',
-    border: 'gray',
+    border: '#323234',
   },
 
   popover: {
@@ -296,14 +296,14 @@ const ToolPane = React.memo(({ element, style, context }) => (
 ));
 
 // Render a label along with a control
-const Labelled = ({ label, style, children }) => {
+const Labelled = ({ element, label, style, children }) => {
   const { hideLabels } = useContext(ToolsContext);
 
   return (
     <View style={{ margin: 4, ...style }}>
-      {!hideLabels ? (
+      {!(element.props.hideLabel || hideLabels) ? (
         <Text style={{ color: Colors.text, fontWeight: boldWeight2, marginBottom: 4 }}>
-          {label}
+          {label !== undefined && label !== null ? label : element.props.label}
         </Text>
       ) : null}
       {children}
@@ -372,7 +372,7 @@ const ToolTextInput = ({ element, multiline }) => {
   multiline = typeof multiline === 'boolean' ? multiline : element.props.multiline;
 
   return (
-    <Labelled label={element.props.label}>
+    <Labelled element={element}>
       <TextInput
         style={{
           ...textInputStyle,
@@ -545,7 +545,7 @@ const ToolSlider = ({ element }) => {
   const [value, setValue] = useValue({ element });
 
   return (
-    <Labelled label={element.props.label}>
+    <Labelled element={element}>
       <Slider
         style={{
           flex: 1,
@@ -609,7 +609,7 @@ const ToolNumberInput = ({ element }) => {
   const textInputRef = useRef(null);
 
   return (
-    <Labelled label={element.props.label}>
+    <Labelled element={element}>
       <View style={{ flexDirection: 'row' }}>
         <View style={{ flex: 1 }}>
           <TextInput
@@ -836,6 +836,7 @@ const ToolCheckbox = ({ element, valueEventName = 'onChange', valuePropName = 'c
 
   return (
     <Labelled
+      element={element}
       label={typeof label === 'string' ? label : value ? labelB : labelA}
       style={{ alignItems: 'flex-start' }}>
       <Switch
@@ -861,15 +862,13 @@ const ToolDropdown = ({ element }) => {
   const [value, setValue] = useValue({ element });
 
   return (
-    <Labelled label={element.props.label}>
+    <Labelled element={element}>
       <TouchableOpacity
         style={{
           ...textInputStyle,
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
-          borderColor: 'gray',
-          borderWidth: 1,
           borderRadius: 4,
           paddingVertical: 8,
           paddingHorizontal: 12,
@@ -913,7 +912,7 @@ const ToolColorPicker = ({ element }) => {
   };
 
   return (
-    <Labelled label={element.props.label}>
+    <Labelled element={element}>
       <TouchableOpacity
         ref={anchorRef}
         style={{
@@ -1000,7 +999,7 @@ const ToolFilePicker = ({ element }) => {
   };
 
   return (
-    <Labelled label={element.props.label}>
+    <Labelled element={element}>
       <TouchableOpacity
         ref={anchorRef}
         style={{
@@ -1125,7 +1124,7 @@ const ToolCodeEditor = ({ element }) => {
   };
 
   return (
-    <Labelled label={element.props.label}>
+    <Labelled element={element}>
       <WebView
         ref={webViewRef}
         style={{ height: 200, borderColor: 'gray', borderWidth: 1, borderRadius: 4 }}
