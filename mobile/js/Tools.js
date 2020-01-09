@@ -950,7 +950,7 @@ const ToolFilePicker = ({ element }) => {
   const anchorRef = useRef(null);
 
   const launchImagePicker = methodName => {
-    const options = { maxWidth: 1024 };
+    const options = { maxWidth: 1024, maxHeight: 1024, imageFileType: 'png' };
 
     if (Constants.Android) {
       // URIs may some times be 'content://', this forces copying to 'file://'
