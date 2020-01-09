@@ -541,33 +541,6 @@ const ToolBox = ({ element }) => (
 );
 elementTypes['box'] = ToolBox;
 
-const ToolSlider = ({ element }) => {
-  const [value, setValue] = useValue({ element });
-
-  return (
-    <Labelled element={element}>
-      <Slider
-        style={{
-          flex: 1,
-
-          // iOS slider has a large margin, make it smaller
-          marginTop: Constants.iOS ? -4 : 0,
-          marginBottom: Constants.iOS ? -3 : 0,
-
-          // Android slider thumb is sorta small, make it bigger
-          transform: Constants.Android ? [{ scaleX: 1.4 }, { scaleY: 1.4 }] : [],
-        }}
-        minimumValue={element.props.min}
-        maximumValue={element.props.max}
-        step={element.props.step || 1}
-        value={value}
-        onValueChange={newValue => setValue(newValue)}
-      />
-    </Labelled>
-  );
-};
-elementTypes['slider'] = ToolSlider;
-
 const numberToText = number => (typeof number === 'number' ? number.toString() : '0');
 
 const textToNumber = text => {
@@ -575,7 +548,7 @@ const textToNumber = text => {
   return Number.isNaN(parsed) ? 0 : parsed;
 };
 
-const ToolNumberInput = ({ element }) => {
+const ToolNumberInput = ({ isSlider, element }) => {
   // Maintain `text` separately from `value` to allow incomplete text such as '' or '3.'
   const [text, setText] = useState('0');
   const [value, setValue] = useValue({
@@ -610,8 +583,30 @@ const ToolNumberInput = ({ element }) => {
 
   return (
     <Labelled element={element}>
-      <View style={{ flexDirection: 'row' }}>
-        <View style={{ flex: 1 }}>
+      <View style={{ flexDirection: 'row', alignItems: 'stretch' }}>
+        {isSlider ? (
+          <Slider
+            style={{
+              flex: 1,
+
+              // iOS slider has a large margin, make it smaller
+              marginTop: Constants.iOS ? -4 : 0,
+              marginBottom: Constants.iOS ? -3 : 0,
+
+              // Android slider thumb is sorta small, make it bigger
+              transform: Constants.Android ? [{ scaleX: 1.4 }, { scaleY: 1.4 }] : [],
+            }}
+            minimumValue={element.props.min}
+            maximumValue={element.props.max}
+            step={element.props.step || 1}
+            value={value}
+            onValueChange={newValue => {
+              setValue(newValue);
+              setText(numberToText(newValue));
+            }}
+          />
+        ) : null}
+        <View style={isSlider ? { width: 50, marginLeft: 4 } : { flex: 1 }}>
           <TextInput
             ref={textInputRef}
             keyboardType="numeric"
@@ -662,29 +657,36 @@ const ToolNumberInput = ({ element }) => {
             </View>
           ) : null}
         </View>
-        <TouchableOpacity
-          style={{
-            ...buttonStyle(),
-            width: 32,
-            marginLeft: 4,
-          }}
-          onPress={() => incrementValue(1)}>
-          <Text style={{ color: Colors.button.text }}>+</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            ...buttonStyle(),
-            width: 32,
-            marginLeft: 4,
-          }}
-          onPress={() => incrementValue(-1)}>
-          <Text style={{ color: Colors.button.text }}>-</Text>
-        </TouchableOpacity>
+        {!isSlider ? (
+          <Fragment>
+            <TouchableOpacity
+              style={{
+                ...buttonStyle(),
+                width: 32,
+                marginLeft: 4,
+              }}
+              onPress={() => incrementValue(1)}>
+              <Text style={{ color: Colors.button.text }}>+</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                ...buttonStyle(),
+                width: 32,
+                marginLeft: 4,
+              }}
+              onPress={() => incrementValue(-1)}>
+              <Text style={{ color: Colors.button.text }}>-</Text>
+            </TouchableOpacity>
+          </Fragment>
+        ) : null}
       </View>
     </Labelled>
   );
 };
 elementTypes['numberInput'] = ToolNumberInput;
+
+const ToolSlider = ({ element }) => <ToolNumberInput element={element} isSlider />;
+elementTypes['slider'] = ToolSlider;
 
 const ToolSection = ({ element }) => (
   <View
