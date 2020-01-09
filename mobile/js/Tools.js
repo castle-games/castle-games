@@ -1033,17 +1033,17 @@ const ToolFilePicker = ({ element }) => {
               setValue(undefined);
               setPicking(false);
             }}>
-            <Text colors={{ colors: Colors.button.text }}>Remove</Text>
+            <Text style={{ color: Colors.button.text }}>Remove</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={{ ...buttonStyle(), margin: 4 }}
             onPress={() => launchImagePicker('launchImageLibrary')}>
-            <Text colors={{ colors: Colors.button.text }}>Select from photos</Text>
+            <Text style={{ color: Colors.button.text }}>Select from photos</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={{ ...buttonStyle(), margin: 4 }}
             onPress={() => launchImagePicker('launchCamera')}>
-            <Text colors={{ colors: Colors.button.text }}>Take a photo</Text>
+            <Text style={{ color: Colors.button.text }}>Take a photo</Text>
           </TouchableOpacity>
         </View>
       </BasePopover>
