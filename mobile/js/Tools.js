@@ -549,14 +549,16 @@ const textToNumber = text => {
 };
 
 const ToolNumberInput = ({ isSlider, element }) => {
+  const textInputRef = useRef(null);
+
   // Maintain `text` separately from `value` to allow incomplete text such as '' or '3.'
   const [text, setText] = useState('0');
   const [value, setValue] = useValue({
     element,
     onNewValue: newValue => {
-      // Received a new value from Lua -- only update text if it doesn't represent the same
-      // value (to allow the user to keep editing)
-      if (textToNumber(text) !== newValue) {
+      // Received a new value from Lua -- only update if the text input isn't currently focused
+      // so that user interaction is interrupted
+      if (!(textInputRef.current && textInputRef.current.isFocused())) {
         setText(numberToText(newValue));
       }
     },
@@ -576,10 +578,6 @@ const ToolNumberInput = ({ isSlider, element }) => {
 
   const incrementValue = delta =>
     setText(numberToText(checkAndSetValue((value || 0) + delta * (element.props.step || 1))));
-
-  const [focused, setFocused] = useState(false);
-
-  const textInputRef = useRef(null);
 
   return (
     <Labelled element={element}>
@@ -609,7 +607,13 @@ const ToolNumberInput = ({ isSlider, element }) => {
         <View style={isSlider ? { width: 50, marginLeft: 4 } : { flex: 1 }}>
           <TextInput
             ref={textInputRef}
-            keyboardType="numeric"
+            keyboardType={
+              Constants.iOS
+                ? typeof element.props.min === 'number' && element.props.min >= 0
+                  ? 'numeric'
+                  : 'numbers-and-punctuation'
+                : 'numeric'
+            }
             style={textInputStyle}
             selectTextOnFocus
             returnKeyType="done"
@@ -619,14 +623,17 @@ const ToolNumberInput = ({ isSlider, element }) => {
               setText(newText);
               checkAndSetValue(textToNumber(newText));
             }}
+            onSubmitEditing={({ nativeEvent: { text: newText } }) => {
+              // Same as above
+              setText(newText);
+              checkAndSetValue(textToNumber(newText));
+            }}
             onBlur={() => {
-              setFocused(false);
-
               // User unfocused the input -- revert text to reflect the value and discard edits
               setText(numberToText(value));
             }}
           />
-          {Constants.Android && !focused ? (
+          {Constants.Android && !(textInputRef.current && textInputRef.current.isFocused()) ? (
             // Workaround for https://github.com/facebook/react-native/issues/14845... :|
             <View
               style={{
@@ -644,7 +651,6 @@ const ToolNumberInput = ({ isSlider, element }) => {
                 onPress={() => {
                   if (textInputRef.current) {
                     textInputRef.current.focus();
-                    setFocused(true);
                   }
                 }}>
                 <Text
