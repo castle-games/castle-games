@@ -14,6 +14,7 @@ import * as DeepLinks from './DeepLinks';
 import HomeScreen from './HomeScreen';
 import * as Session from './Session';
 import ProfileScreen from './ProfileScreen';
+import CreateScreen from './CreateScreen';
 
 // App UI layout
 
@@ -56,6 +57,13 @@ const HomeNavigator = createStackNavigator(
   }
 );
 
+const CreateNavigator = createStackNavigator({
+  CreateScreen: {
+    screen: CreateScreen,
+    navigationOptions: { title: 'Create' },
+  },
+});
+
 const ProfileNavigator = createSwitchNavigator({
   ProfileScreen: {
     screen: ProfileScreen,
@@ -81,6 +89,10 @@ const TabNavigator = createBottomTabNavigator(
           );
         },
       },
+    },
+    Create: {
+      screen: CreateNavigator,
+      navigationOptions: {},
     },
     Profile: {
       screen: ProfileNavigator,
