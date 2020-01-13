@@ -151,6 +151,10 @@ function portalMeta:setupLove()
         end
     end
 
+    function newLove.filesystem.read(path)
+        return fetchFileData(path):getString()
+    end
+
     function newLove.filesystem.lines(path)
         return fetchAsset(path):gmatch("[^\r\n]+")
     end
