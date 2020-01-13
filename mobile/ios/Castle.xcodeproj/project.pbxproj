@@ -635,11 +635,11 @@
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = 6PUB3623F7;
+						DevelopmentTeam = 48GFST92BB;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = 6PUB3623F7;
+						DevelopmentTeam = 48GFST92BB;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -1103,7 +1103,7 @@
 			baseConfigurationReference = C1DF76557142480ED55F211A /* Pods-CastleTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = 6PUB3623F7;
+				DEVELOPMENT_TEAM = 48GFST92BB;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -1128,7 +1128,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
-				DEVELOPMENT_TEAM = 6PUB3623F7;
+				DEVELOPMENT_TEAM = 48GFST92BB;
 				INFOPLIST_FILE = CastleTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -1152,7 +1152,7 @@
 				CASTLE_URL_SCHEME = castled;
 				CURRENT_PROJECT_VERSION = 4;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = 6PUB3623F7;
+				DEVELOPMENT_TEAM = 48GFST92BB;
 				INFOPLIST_FILE = Castle/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 4.0;
@@ -1161,7 +1161,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "games.castle.castle-debug-2";
+				PRODUCT_BUNDLE_IDENTIFIER = "games.castle.castle-debug";
 				PRODUCT_NAME = Castle;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
