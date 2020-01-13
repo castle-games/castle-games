@@ -33,7 +33,10 @@ RCT_EXPORT_MODULE()
 }
 
 - (void)dealloc {
-  lua_close(self.conversionLuaState);
+  if (self.conversionLuaState) {
+    lua_close(self.conversionLuaState);
+    self.conversionLuaState = nil;
+  }
 }
 
 - (NSString *)stringFromVariant:(love::Variant &)var {
