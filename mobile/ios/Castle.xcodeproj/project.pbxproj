@@ -19,6 +19,27 @@
 		4577F0FF47C73EA9A0ECC7F6 /* libPods-Castle-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BDA1BD867AE232F85BAD0D0B /* libPods-Castle-tvOS.a */; };
 		4917391D17F4BFD16B3A557B /* libPods-CastleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A2BB3156AC1D98E2389E1CF /* libPods-CastleTests.a */; };
 		752DFF0FA2404564937762CE /* RTAliasGrotesk-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0C7DDD807F684FD0A7E4CD7E /* RTAliasGrotesk-Bold.otf */; };
+		A12CFEE723CC30F600D721BC /* references.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A12CFEDF23CC30F600D721BC /* references.cpp */; };
+		A12CFEE823CC30F600D721BC /* warn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A12CFEE023CC30F600D721BC /* warn.cpp */; };
+		A12CFEE923CC30F600D721BC /* subpath.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A12CFEE123CC30F600D721BC /* subpath.cpp */; };
+		A12CFEEA23CC30F600D721BC /* graphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A12CFEE223CC30F600D721BC /* graphics.cpp */; };
+		A12CFEEB23CC30F600D721BC /* paint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A12CFEE323CC30F600D721BC /* paint.cpp */; };
+		A12CFEEC23CC30F600D721BC /* version.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A12CFEE423CC30F600D721BC /* version.cpp */; };
+		A12CFEED23CC30F600D721BC /* nsvg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A12CFEE523CC30F600D721BC /* nsvg.cpp */; };
+		A12CFEEE23CC30F600D721BC /* path.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A12CFEE623CC30F600D721BC /* path.cpp */; };
+		A12CFEF023CC311300D721BC /* api.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A12CFEEF23CC311300D721BC /* api.cpp */; };
+		A12CFEF623CC313100D721BC /* meshifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A12CFEF123CC313100D721BC /* meshifier.cpp */; };
+		A12CFEF723CC313100D721BC /* partition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A12CFEF223CC313100D721BC /* partition.cpp */; };
+		A12CFEF823CC313100D721BC /* triangles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A12CFEF323CC313100D721BC /* triangles.cpp */; };
+		A12CFEF923CC313100D721BC /* flatten.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A12CFEF423CC313100D721BC /* flatten.cpp */; };
+		A12CFEFA23CC313100D721BC /* mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A12CFEF523CC313100D721BC /* mesh.cpp */; };
+		A12CFEFE23CC314E00D721BC /* geometry_data.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A12CFEFB23CC314E00D721BC /* geometry_data.cpp */; };
+		A12CFEFF23CC314E00D721BC /* geometry_feed.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A12CFEFC23CC314E00D721BC /* geometry_feed.cpp */; };
+		A12CFF0023CC314E00D721BC /* curve_data.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A12CFEFD23CC314E00D721BC /* curve_data.cpp */; };
+		A12CFF0223CC316700D721BC /* gen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A12CFF0123CC316700D721BC /* gen.cpp */; };
+		A12CFF0423CC318400D721BC /* clipper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A12CFF0323CC318400D721BC /* clipper.cpp */; };
+		A12CFF0623CC31AB00D721BC /* polypartition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A12CFF0523CC31AB00D721BC /* polypartition.cpp */; };
+		A12CFF0823CC31C100D721BC /* tinyxml2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A12CFF0723CC31C100D721BC /* tinyxml2.cpp */; };
 		A14FE39F2355CB83003B7EA0 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A14FE39E2355CB83003B7EA0 /* AudioToolbox.framework */; };
 		A14FE3A12355CB8B003B7EA0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A14FE3A02355CB8B003B7EA0 /* AVFoundation.framework */; };
 		A14FE3A32355CB93003B7EA0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A14FE3A22355CB93003B7EA0 /* CoreGraphics.framework */; };
@@ -129,6 +150,27 @@
 		7A2BB3156AC1D98E2389E1CF /* libPods-CastleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CastleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8865F844F710B24790E91D03 /* Pods-Castle-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Castle-tvOS.release.xcconfig"; path = "Target Support Files/Pods-Castle-tvOS/Pods-Castle-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		8C185AA70A18F1954FE6686B /* Pods-Castle-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Castle-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-Castle-tvOS/Pods-Castle-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		A12CFEDF23CC30F600D721BC /* references.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = references.cpp; path = "../../ghost-extensions/tove2d/src/cpp/references.cpp"; sourceTree = "<group>"; };
+		A12CFEE023CC30F600D721BC /* warn.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = warn.cpp; path = "../../ghost-extensions/tove2d/src/cpp/warn.cpp"; sourceTree = "<group>"; };
+		A12CFEE123CC30F600D721BC /* subpath.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = subpath.cpp; path = "../../ghost-extensions/tove2d/src/cpp/subpath.cpp"; sourceTree = "<group>"; };
+		A12CFEE223CC30F600D721BC /* graphics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = graphics.cpp; path = "../../ghost-extensions/tove2d/src/cpp/graphics.cpp"; sourceTree = "<group>"; };
+		A12CFEE323CC30F600D721BC /* paint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = paint.cpp; path = "../../ghost-extensions/tove2d/src/cpp/paint.cpp"; sourceTree = "<group>"; };
+		A12CFEE423CC30F600D721BC /* version.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = version.cpp; path = "../../ghost-extensions/tove2d/src/cpp/version.cpp"; sourceTree = "<group>"; };
+		A12CFEE523CC30F600D721BC /* nsvg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = nsvg.cpp; path = "../../ghost-extensions/tove2d/src/cpp/nsvg.cpp"; sourceTree = "<group>"; };
+		A12CFEE623CC30F600D721BC /* path.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = path.cpp; path = "../../ghost-extensions/tove2d/src/cpp/path.cpp"; sourceTree = "<group>"; };
+		A12CFEEF23CC311300D721BC /* api.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = api.cpp; path = "../../ghost-extensions/tove2d/src/cpp/interface/api.cpp"; sourceTree = "<group>"; };
+		A12CFEF123CC313100D721BC /* meshifier.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = meshifier.cpp; path = "../../ghost-extensions/tove2d/src/cpp/mesh/meshifier.cpp"; sourceTree = "<group>"; };
+		A12CFEF223CC313100D721BC /* partition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = partition.cpp; path = "../../ghost-extensions/tove2d/src/cpp/mesh/partition.cpp"; sourceTree = "<group>"; };
+		A12CFEF323CC313100D721BC /* triangles.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = triangles.cpp; path = "../../ghost-extensions/tove2d/src/cpp/mesh/triangles.cpp"; sourceTree = "<group>"; };
+		A12CFEF423CC313100D721BC /* flatten.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = flatten.cpp; path = "../../ghost-extensions/tove2d/src/cpp/mesh/flatten.cpp"; sourceTree = "<group>"; };
+		A12CFEF523CC313100D721BC /* mesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mesh.cpp; path = "../../ghost-extensions/tove2d/src/cpp/mesh/mesh.cpp"; sourceTree = "<group>"; };
+		A12CFEFB23CC314E00D721BC /* geometry_data.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = geometry_data.cpp; path = "../../ghost-extensions/tove2d/src/cpp/gpux/geometry_data.cpp"; sourceTree = "<group>"; };
+		A12CFEFC23CC314E00D721BC /* geometry_feed.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = geometry_feed.cpp; path = "../../ghost-extensions/tove2d/src/cpp/gpux/geometry_feed.cpp"; sourceTree = "<group>"; };
+		A12CFEFD23CC314E00D721BC /* curve_data.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = curve_data.cpp; path = "../../ghost-extensions/tove2d/src/cpp/gpux/curve_data.cpp"; sourceTree = "<group>"; };
+		A12CFF0123CC316700D721BC /* gen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = gen.cpp; path = "../../ghost-extensions/tove2d/src/cpp/shader/gen.cpp"; sourceTree = "<group>"; };
+		A12CFF0323CC318400D721BC /* clipper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = clipper.cpp; path = "../../ghost-extensions/tove2d/src/thirdparty/clipper.cpp"; sourceTree = "<group>"; };
+		A12CFF0523CC31AB00D721BC /* polypartition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = polypartition.cpp; path = "../../ghost-extensions/tove2d/src/thirdparty/polypartition/src/polypartition.cpp"; sourceTree = "<group>"; };
+		A12CFF0723CC31C100D721BC /* tinyxml2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tinyxml2.cpp; path = "../../ghost-extensions/tove2d/src/thirdparty/tinyxml2/tinyxml2.cpp"; sourceTree = "<group>"; };
 		A14FE3892355CA44003B7EA0 /* SDL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL.xcodeproj; path = "../../ghost-extensions/SDL2-2.0.8/Xcode-iOS/SDL/SDL.xcodeproj"; sourceTree = "<group>"; };
 		A14FE3952355CA7B003B7EA0 /* liblove.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = liblove.xcodeproj; path = ../../love/platform/xcode/liblove.xcodeproj; sourceTree = "<group>"; };
 		A14FE39E2355CB83003B7EA0 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -354,6 +396,34 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		A12CFED723CC305400D721BC /* tove2d */ = {
+			isa = PBXGroup;
+			children = (
+				A12CFF0723CC31C100D721BC /* tinyxml2.cpp */,
+				A12CFF0523CC31AB00D721BC /* polypartition.cpp */,
+				A12CFF0323CC318400D721BC /* clipper.cpp */,
+				A12CFF0123CC316700D721BC /* gen.cpp */,
+				A12CFEFD23CC314E00D721BC /* curve_data.cpp */,
+				A12CFEFB23CC314E00D721BC /* geometry_data.cpp */,
+				A12CFEFC23CC314E00D721BC /* geometry_feed.cpp */,
+				A12CFEF423CC313100D721BC /* flatten.cpp */,
+				A12CFEF523CC313100D721BC /* mesh.cpp */,
+				A12CFEF123CC313100D721BC /* meshifier.cpp */,
+				A12CFEF223CC313100D721BC /* partition.cpp */,
+				A12CFEF323CC313100D721BC /* triangles.cpp */,
+				A12CFEEF23CC311300D721BC /* api.cpp */,
+				A12CFEE223CC30F600D721BC /* graphics.cpp */,
+				A12CFEE523CC30F600D721BC /* nsvg.cpp */,
+				A12CFEE323CC30F600D721BC /* paint.cpp */,
+				A12CFEE623CC30F600D721BC /* path.cpp */,
+				A12CFEDF23CC30F600D721BC /* references.cpp */,
+				A12CFEE123CC30F600D721BC /* subpath.cpp */,
+				A12CFEE423CC30F600D721BC /* version.cpp */,
+				A12CFEE023CC30F600D721BC /* warn.cpp */,
+			);
+			name = tove2d;
+			sourceTree = "<group>";
+		};
 		A14FE38A2355CA44003B7EA0 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -375,6 +445,7 @@
 		A14FE3B92355CE21003B7EA0 /* ghost-extensions */ = {
 			isa = PBXGroup;
 			children = (
+				A12CFED723CC305400D721BC /* tove2d */,
 				A14FE3C02355CE5F003B7EA0 /* lpeg */,
 				A14FE3BF2355CE57003B7EA0 /* luacrypto */,
 				A14FE3BE2355CE4E003B7EA0 /* luasec */,
@@ -936,25 +1007,46 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A12CFF0423CC318400D721BC /* clipper.cpp in Sources */,
 				A14FE3DE2355CEF0003B7EA0 /* ssl.c in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				A12CFEFA23CC313100D721BC /* mesh.cpp in Sources */,
+				A12CFEEC23CC30F600D721BC /* version.cpp in Sources */,
 				A14FE3C22355CE74003B7EA0 /* lmarshal.c in Sources */,
 				A1CCBA1623551869009F4DDD /* GhostChannels.mm in Sources */,
 				A14FE3E12355CEF0003B7EA0 /* config.c in Sources */,
+				A12CFF0623CC31AB00D721BC /* polypartition.cpp in Sources */,
 				A14FE3D12355CEC2003B7EA0 /* strbuf.c in Sources */,
+				A12CFEEA23CC30F600D721BC /* graphics.cpp in Sources */,
+				A12CFEF023CC311300D721BC /* api.cpp in Sources */,
+				A12CFEEE23CC30F600D721BC /* path.cpp in Sources */,
 				A14FE3F02355CF2D003B7EA0 /* lpcode.c in Sources */,
 				A1CCBA19235518C7009F4DDD /* GhostView.m in Sources */,
+				A12CFEE923CC30F600D721BC /* subpath.cpp in Sources */,
+				A12CFEF923CC313100D721BC /* flatten.cpp in Sources */,
 				A1FA18C32365168600E2ACFE /* GhostInputZone.mm in Sources */,
 				A14FE3F22355CF2D003B7EA0 /* lpvm.c in Sources */,
 				A14FE3E42355CF02003B7EA0 /* lcrypto.c in Sources */,
 				A14FE3DD2355CEF0003B7EA0 /* x509.c in Sources */,
+				A12CFEFE23CC314E00D721BC /* geometry_data.cpp in Sources */,
 				A14FE3D02355CEC2003B7EA0 /* lua_cjson.c in Sources */,
+				A12CFEE723CC30F600D721BC /* references.cpp in Sources */,
 				A14FE3C62355CE94003B7EA0 /* lsqlite3.c in Sources */,
+				A12CFF0823CC31C100D721BC /* tinyxml2.cpp in Sources */,
 				A14FE3DF2355CEF0003B7EA0 /* ec.c in Sources */,
 				A14FE3CF2355CEC2003B7EA0 /* fpconv.c in Sources */,
+				A12CFEE823CC30F600D721BC /* warn.cpp in Sources */,
+				A12CFF0223CC316700D721BC /* gen.cpp in Sources */,
+				A12CFF0023CC314E00D721BC /* curve_data.cpp in Sources */,
 				A14FE3E02355CEF0003B7EA0 /* context.c in Sources */,
+				A12CFEED23CC30F600D721BC /* nsvg.cpp in Sources */,
 				A14FE3C72355CE94003B7EA0 /* sqlite3.c in Sources */,
+				A12CFEF723CC313100D721BC /* partition.cpp in Sources */,
+				A12CFEF823CC313100D721BC /* triangles.cpp in Sources */,
+				A12CFEFF23CC314E00D721BC /* geometry_feed.cpp in Sources */,
+				A12CFEF623CC313100D721BC /* meshifier.cpp in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				A12CFEEB23CC30F600D721BC /* paint.cpp in Sources */,
 				A14FE3F42355CF2D003B7EA0 /* lpcap.c in Sources */,
 				A14FE3F12355CF2D003B7EA0 /* lptree.c in Sources */,
 				A14FE3F32355CF2D003B7EA0 /* lpprint.c in Sources */,
@@ -1084,6 +1176,7 @@
 				CASTLE_DISPLAY_NAME = Castle;
 				CASTLE_URL_SCHEME = castle;
 				CURRENT_PROJECT_VERSION = 4;
+				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 48GFST92BB;
 				INFOPLIST_FILE = Castle/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1262,6 +1355,7 @@
 					"../../ghost-extensions/SDL2-2.0.8/include",
 					../../openssl/include,
 					../../love/platform/xcode/ios/include/luajit,
+					"../../ghost-extensions/tove2d/src/thirdparty/fp16/include",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LIBRARY_SEARCH_PATHS = ../../openssl/lib/iOS;
@@ -1316,6 +1410,7 @@
 					"../../ghost-extensions/SDL2-2.0.8/include",
 					../../openssl/include,
 					../../love/platform/xcode/ios/include/luajit,
+					"../../ghost-extensions/tove2d/src/thirdparty/fp16/include",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LIBRARY_SEARCH_PATHS = ../../openssl/lib/iOS;
