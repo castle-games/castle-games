@@ -10,11 +10,12 @@ import { Text, View, Image } from 'react-native';
 import FastImage from 'react-native-fast-image';
 
 import { LoginScreen, CreateAccountScreen, ForgotPasswordScreen } from './AuthScreens';
+import CreateScreen from './CreateScreen';
+import CreateCardScreen from './CreateCardScreen';
 import * as DeepLinks from './DeepLinks';
 import HomeScreen from './HomeScreen';
 import * as Session from './Session';
 import ProfileScreen from './ProfileScreen';
-import CreateScreen from './CreateScreen';
 
 // App UI layout
 
@@ -58,9 +59,12 @@ const HomeNavigator = createStackNavigator(
 );
 
 const CreateNavigator = createStackNavigator({
-  CreateScreen: {
+  Create: {
     screen: CreateScreen,
     navigationOptions: { title: 'Create' },
+  },
+  CreateCard: {
+    screen: CreateCardScreen,
   },
 });
 

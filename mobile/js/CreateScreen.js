@@ -1,7 +1,9 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { useNavigation } from 'react-navigation-hooks';
 
 const CreateScreen = () => {
+  const navigation = useNavigation();
   return (
     <View
       style={{
@@ -10,7 +12,12 @@ const CreateScreen = () => {
         alignItems: 'center',
         justifyContent: 'center',
       }}>
-      <Text>New Card</Text>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.push('CreateCard');
+        }}>
+        <Text>Create New Card</Text>
+      </TouchableOpacity>
     </View>
   );
 };
