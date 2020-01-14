@@ -1,0 +1,17 @@
+site_name: TÖVE
+nav:
+  - Overview:
+    - Getting Started: tutorials/Getting_Started.md
+    - The Demos: tutorials/Demos.md
+    - Features: features.md
+  - Tutorials:
+    - Choosing Renderers: tutorials/Renderers.md
+    - Animating Things: tutorials/Animation.md
+  - API Documentation: https://poke1024.github.io/tove2d-api/
+  - Release Notes: release-notes.md
+theme: readthedocs
+markdown_extensions:
+  - admonition
+  - fenced_code
+  - footnotes
+  - tables
