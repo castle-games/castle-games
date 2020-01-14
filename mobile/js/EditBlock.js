@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
   editDescriptionField: {
     width: '100%',
     flexShrink: 1,
-    color: '#999',
+    color: '#000',
     paddingTop: 0,
     paddingBottom: 8,
   },
@@ -57,6 +57,7 @@ const EditBlock = props => {
           numberOfLines={2}
           placeholder="Once upon a time..."
           placeholderTextColor="#999"
+          onFocus={props.onTextInputFocus}
         />
         <TouchableOpacity style={styles.dismiss} onPress={props.onDismiss}>
           <FastImage

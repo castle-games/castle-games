@@ -55,17 +55,32 @@ class CreateCardScreen extends React.Component {
 
   _handleDismissEditing = () => this.setState({ isEditingBlock: false });
 
+  _handleBlockTextInputFocus = () => {
+    // we want to scroll to the very bottom of the block editor
+    // when the main text input focuses
+    if (this._scrollViewRef) {
+      this._scrollViewRef.props.scrollToEnd();
+    }
+  };
+
   render() {
     const { isEditingBlock } = this.state;
     return (
-      <KeyboardAwareScrollView style={styles.container} contentContainerStyle={{ flex: 1 }}>
+      <KeyboardAwareScrollView
+        style={styles.container}
+        enableAutomaticScroll={false}
+        contentContainerStyle={{ flex: 1 }}
+        innerRef={ref => (this._scrollViewRef = ref)}>
         <View style={styles.scene}>
           <ActionButton>Edit Scene</ActionButton>
         </View>
         <View style={styles.description}>
           {/* TODO: list all the existing blocks for the card. */}
           {isEditingBlock ? (
-            <EditBlock onDismiss={this._handleDismissEditing} />
+            <EditBlock
+              onDismiss={this._handleDismissEditing}
+              onTextInputFocus={this._handleBlockTextInputFocus}
+            />
           ) : (
             <AddBlockPlaceholder onPress={this._handleEditBlock} />
           )}
