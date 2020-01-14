@@ -1,5 +1,7 @@
 import React from 'react';
-import { TouchableWithoutFeedback, StyleSheet, Text, TextInput, View } from 'react-native';
+import { TouchableOpacity, StyleSheet, Text, TextInput, View } from 'react-native';
+
+import FastImage from 'react-native-fast-image';
 
 const styles = StyleSheet.create({
   editDescriptionContainer: {
@@ -14,13 +16,18 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 1,
   },
+  editDescriptionRow: {
+    flex: 1,
+    flexDirection: 'row',
+    borderBottomColor: '#ccc',
+    borderBottomWidth: 1,
+  },
   editDescriptionField: {
     width: '100%',
+    flexShrink: 1,
     color: '#999',
     paddingTop: 0,
     paddingBottom: 8,
-    borderBottomColor: '#ccc',
-    borderBottomWidth: 1,
   },
   label: {
     fontSize: 12,
@@ -33,22 +40,46 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderWidth: 1,
     padding: 8,
+    flexDirection: 'row',
   },
+  select: { marginLeft: 4, flexShrink: 0 },
+  dismiss: { marginLeft: 4, flexShrink: 0 },
 });
 
 const EditBlock = props => {
   return (
     <View style={styles.editDescriptionContainer}>
-      <TextInput
-        style={styles.editDescriptionField}
-        multiline
-        numberOfLines={2}
-        placeholder="Once upon a time..."
-        placeholderTextColor="#999"
-      />
+      <View style={styles.editDescriptionRow}>
+        <TextInput
+          style={styles.editDescriptionField}
+          multiline
+          autoFocus
+          numberOfLines={2}
+          placeholder="Once upon a time..."
+          placeholderTextColor="#999"
+        />
+        <TouchableOpacity style={styles.dismiss} onPress={props.onDismiss}>
+          <FastImage
+            style={{
+              width: 16,
+              aspectRatio: 1,
+            }}
+            source={require('../assets/images/dismiss.png')}
+          />
+        </TouchableOpacity>
+      </View>
       <Text style={styles.label}>Block Type</Text>
       <View style={styles.selectContainer}>
-        <Text>Text</Text>
+        <Text style={{ width: '100%', flexShrink: 1 }}>Text</Text>
+        <View style={styles.select}>
+          <FastImage
+            style={{
+              width: 16,
+              aspectRatio: 1,
+            }}
+            source={require('../assets/images/arrow-button-down.png')}
+          />
+        </View>
       </View>
     </View>
   );

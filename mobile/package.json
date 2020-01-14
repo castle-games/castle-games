@@ -34,6 +34,7 @@
     "react-native-fast-image": "^7.0.2",
     "react-native-gesture-handler": "^1.4.1",
     "react-native-image-picker": "^1.1.0",
+    "react-native-keyboard-aware-scroll-view": "^0.9.1",
     "react-native-markdown-renderer": "^3.2.8",
     "react-native-popover-view": "^2.0.5",
     "react-native-reanimated": "^1.3.0",

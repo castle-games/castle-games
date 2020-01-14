@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import AddBlockPlaceholder from './AddBlockPlaceholder';
 import EditBlock from './EditBlock';
@@ -52,21 +53,27 @@ class CreateCardScreen extends React.Component {
 
   _handleEditBlock = () => this.setState({ isEditingBlock: true });
 
+  _handleDismissEditing = () => this.setState({ isEditingBlock: false });
+
   render() {
     const { isEditingBlock } = this.state;
     return (
-      <View style={styles.container}>
+      <KeyboardAwareScrollView style={styles.container} contentContainerStyle={{ flex: 1 }}>
         <View style={styles.scene}>
           <ActionButton>Edit Scene</ActionButton>
         </View>
         <View style={styles.description}>
           {/* TODO: list all the existing blocks for the card. */}
-          {isEditingBlock ? <EditBlock /> : <AddBlockPlaceholder onPress={this._handleEditBlock} />}
+          {isEditingBlock ? (
+            <EditBlock onDismiss={this._handleDismissEditing} />
+          ) : (
+            <AddBlockPlaceholder onPress={this._handleEditBlock} />
+          )}
         </View>
         <View style={styles.actions}>
           <ActionButton onPress={this._handleEditBlock}>Add Block</ActionButton>
         </View>
-      </View>
+      </KeyboardAwareScrollView>
     );
   }
 }
