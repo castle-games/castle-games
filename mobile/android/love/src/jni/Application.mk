@@ -3,7 +3,7 @@
 # APP_STL := stlport_static 
 APP_STL := c++_shared
 APP_ABI := armeabi-v7a
-APP_CPPFLAGS := -frtti
+APP_CPPFLAGS := -frtti -fexceptions
 APP_LDFLAGS := -llog -landroid -lz
 APP_PLATFORM := 10
 NDK_TOOLCHAIN_VERSION := clang

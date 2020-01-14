@@ -121,7 +121,8 @@ LOCAL_SRC_FILES := \
 
 LOCAL_SHARED_LIBRARIES := libopenal libmpg123
 
-LOCAL_STATIC_LIBRARIES := libvorbis libogg libtheora libmodplug libfreetype libluajit SDL2_static libghostextensions
+LOCAL_STATIC_LIBRARIES := libvorbis libogg libtheora libmodplug libfreetype libluajit SDL2_static
+LOCAL_WHOLE_STATIC_LIBRARIES := libghostextensions
 
 # $(info liblove: include dirs $(LOCAL_C_INCLUDES))
 # $(info liblove: src files $(LOCAL_SRC_FILES))
