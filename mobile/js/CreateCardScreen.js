@@ -1,5 +1,8 @@
 import React from 'react';
-import { View, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+
+import AddBlockPlaceholder from './AddBlockPlaceholder';
+import EditBlock from './EditBlock';
 
 const styles = StyleSheet.create({
   container: {
@@ -27,22 +30,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 12,
   },
-  editDescriptionContainer: {
-    backgroundColor: '#fff',
-    borderRadius: 6,
-    width: '100%',
-    height: '100%',
-    padding: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 2,
-    elevation: 1,
-  },
-  editDescriptionField: {
-    width: '100%',
-    height: '100%',
-  },
   actions: {
     paddingHorizontal: 12,
     paddingBottom: 8,
@@ -58,28 +45,30 @@ const ActionButton = props => {
   );
 };
 
-const CreateCardScreen = () => {
-  return (
-    <View style={styles.container}>
-      <View style={styles.scene}>
-        <ActionButton>Edit Scene</ActionButton>
-      </View>
-      <View style={styles.description}>
-        <View style={styles.editDescriptionContainer}>
-          <TextInput
-            multiline
-            numberOfLines={6}
-            placeholder="Once upon a time..."
-            placeholderTextColor="#999999"
-            style={styles.editDescriptionField}
-          />
+class CreateCardScreen extends React.Component {
+  state = {
+    isEditingBlock: false,
+  };
+
+  _handleEditBlock = () => this.setState({ isEditingBlock: true });
+
+  render() {
+    const { isEditingBlock } = this.state;
+    return (
+      <View style={styles.container}>
+        <View style={styles.scene}>
+          <ActionButton>Edit Scene</ActionButton>
+        </View>
+        <View style={styles.description}>
+          {/* TODO: list all the existing blocks for the card. */}
+          {isEditingBlock ? <EditBlock /> : <AddBlockPlaceholder onPress={this._handleEditBlock} />}
+        </View>
+        <View style={styles.actions}>
+          <ActionButton onPress={this._handleEditBlock}>Add Block</ActionButton>
         </View>
       </View>
-      <View style={styles.actions}>
-        <ActionButton>Add Label</ActionButton>
-      </View>
-    </View>
-  );
-};
+    );
+  }
+}
 
 export default CreateCardScreen;
