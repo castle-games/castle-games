@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, StatusBar } from 'react-native';
+import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import { ApolloProvider } from '@apollo/react-hooks';
 import BootSplash from 'react-native-bootsplash';
 import DevMenu from '@terrysahaidak/react-native-devmenu';
@@ -56,7 +57,9 @@ const Main = () => {
       <DevMenu numberOfTouches={4}>
         <StatusBar backgroundColor="white" barStyle="dark-content" />
         <ApolloProvider client={Session.apolloClient}>
-          <MainSwitcher />
+          <ActionSheetProvider>
+            <MainSwitcher />
+          </ActionSheetProvider>
         </ApolloProvider>
       </DevMenu>
     </View>
