@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-import AddBlockPlaceholder from './AddBlockPlaceholder';
+import CardBlocks from './CardBlocks';
 import EditBlock from './EditBlock';
 
 const styles = StyleSheet.create({
@@ -82,7 +82,7 @@ class CreateCardScreen extends React.Component {
               onTextInputFocus={this._handleBlockTextInputFocus}
             />
           ) : (
-            <AddBlockPlaceholder onPress={this._handleEditBlock} />
+            <CardBlocks onSelectBlock={this._handleEditBlock} />
           )}
         </View>
         <View style={styles.actions}>
