@@ -11,9 +11,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#f2f2f2',
   },
   scene: {
-    flex: 2,
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    flexShrink: 1,
   },
   button: {
     borderRadius: 6,
@@ -26,7 +27,6 @@ const styles = StyleSheet.create({
     color: '#888',
   },
   description: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     padding: 12,

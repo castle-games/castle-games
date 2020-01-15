@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 6,
     width: '100%',
-    height: '100%',
+    minHeight: 72,
     padding: 12,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
   editDescriptionRow: {
-    flex: 1,
+    minHeight: 20,
     flexDirection: 'row',
     borderBottomColor: '#ccc',
     borderBottomWidth: 1,

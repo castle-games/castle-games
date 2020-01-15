@@ -1,12 +1,15 @@
 import React from 'react';
 import { TouchableWithoutFeedback, StyleSheet, Text, View } from 'react-native';
 
+import Viewport from './viewport';
+
+const { vw, vh } = Viewport;
+
 const styles = StyleSheet.create({
   editDescriptionContainer: {
+    width: '100%',
     backgroundColor: '#fff',
     borderRadius: 6,
-    width: '100%',
-    height: '100%',
     padding: 12,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -16,7 +19,7 @@ const styles = StyleSheet.create({
   },
   editDescriptionField: {
     width: '100%',
-    height: '100%',
+    minHeight: 20 * vh,
     color: '#999',
   },
 });
