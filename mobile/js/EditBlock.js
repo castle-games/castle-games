@@ -33,19 +33,58 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 12,
     textTransform: 'uppercase',
-    color: '#666',
     marginVertical: 8,
   },
   selectContainer: {
     borderRadius: 3,
-    borderColor: '#ccc',
     borderWidth: 1,
     padding: 8,
     flexDirection: 'row',
     alignItems: 'center',
   },
+  selection: { width: '100%', flexShrink: 1 },
   select: { marginLeft: 4, flexShrink: 0 },
   dismiss: { marginLeft: 4, flexShrink: 0 },
+});
+
+const textTypeStyles = StyleSheet.create({
+  editDescriptionContainer: {
+    backgroundColor: '#fff',
+  },
+  editDescriptionRow: {},
+  editDescriptionField: {
+    color: '#000',
+  },
+  selectContainer: {
+    borderColor: '#ccc',
+  },
+  selection: {
+    color: '#000',
+  },
+  label: {
+    color: '#666',
+  },
+});
+
+const choiceTypeStyles = StyleSheet.create({
+  editDescriptionContainer: {
+    backgroundColor: '#000',
+  },
+  editDescriptionRow: {},
+  editDescriptionField: {
+    color: '#fff',
+    fontWeight: '700',
+    marginLeft: 6,
+  },
+  selectContainer: {
+    borderColor: '#2b2b2b',
+  },
+  selection: {
+    color: '#fff',
+  },
+  label: {
+    color: '#888',
+  },
 });
 
 const BLOCK_TYPES = [
@@ -83,11 +122,25 @@ class EditBlock extends React.Component {
   render() {
     const { selectedType } = this.state;
     const blockType = selectedType.charAt(0).toUpperCase() + selectedType.slice(1);
+    const typeStyles = selectedType === 'choice' ? choiceTypeStyles : textTypeStyles;
+    const maybeBlockIcon =
+      selectedType === 'choice' ? (
+        <FastImage
+          style={{
+            width: 12,
+            aspectRatio: 1,
+            marginTop: 2,
+            marginLeft: 2,
+          }}
+          source={require('../assets/images/add.png')}
+        />
+      ) : null;
     return (
-      <View style={styles.editDescriptionContainer}>
+      <View style={[styles.editDescriptionContainer, typeStyles.editDescriptionContainer]}>
         <View style={styles.editDescriptionRow}>
+          {maybeBlockIcon}
           <TextInput
-            style={styles.editDescriptionField}
+            style={[styles.editDescriptionField, typeStyles.editDescriptionField]}
             multiline
             autoFocus
             numberOfLines={2}
@@ -105,9 +158,11 @@ class EditBlock extends React.Component {
             />
           </TouchableOpacity>
         </View>
-        <Text style={styles.label}>Block Type</Text>
-        <TouchableOpacity style={styles.selectContainer} onPress={this._selectBlockType}>
-          <Text style={{ width: '100%', flexShrink: 1 }}>{blockType}</Text>
+        <Text style={[styles.label, typeStyles.label]}>Block Type</Text>
+        <TouchableOpacity
+          style={[styles.selectContainer, typeStyles.selectContainer]}
+          onPress={this._selectBlockType}>
+          <Text style={[styles.selection, typeStyles.selection]}>{blockType}</Text>
           <View style={styles.select}>
             <FastImage
               style={{
