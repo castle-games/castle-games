@@ -720,9 +720,9 @@ const ToolSection = ({ element }) => {
         paddingLeft: 21,
         paddingRight: 14,
         borderTopLeftRadius: 8,
-        borderTopRightRadius: 8,
+        borderTopRightRadius: headerChild ? 6 : 8,
         borderBottomLeftRadius: element.open ? 0 : 8,
-        borderBottomRightRadius: element.open ? 0 : 8,
+        borderBottomRightRadius: element.open ? 0 : headerChild ? 6 : 8,
         backgroundColor: element.open ? Colors.button.selected : Colors.button.default,
         flex: headerChild ? 1 : null,
       }}
@@ -747,7 +747,7 @@ const ToolSection = ({ element }) => {
         overflow: 'hidden',
       }}>
       {headerChild ? (
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{ flexDirection: 'row', alignItems: 'stretch' }}>
           {headerButton}
           {renderChildren(headerChild)}
         </View>
