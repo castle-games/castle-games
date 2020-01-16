@@ -1150,8 +1150,8 @@ const ToolScrollBox = ({ element }) => (
   <ScrollView
     style={viewStyleProps(element.props)}
     horizontal={element.props.horizontal}
-    alwaysBounceHorizontal={false}
-    alwaysBounceVertical={false}>
+    alwaysBounceHorizontal={element.props.alwaysBounceHorizontal}
+    alwaysBounceVertical={element.props.alwaysBounceVertical}>
     {renderChildren(element)}
   </ScrollView>
 );
