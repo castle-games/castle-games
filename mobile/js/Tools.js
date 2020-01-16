@@ -1290,7 +1290,7 @@ export default Tools = ({ eventsReady, visible, landscape, game, children }) => 
           {root.panes.DEFAULT.props.customLayout ? (
             <ToolPane element={root.panes.DEFAULT} context={context} style={{ flex: 1 }} />
           ) : (
-            <ScrollView style={{ flex: 1 }} alwaysBounceVertical={false}>
+            <ScrollView style={{ flex: 1 }}>
               <ToolPane
                 element={root.panes.DEFAULT}
                 context={context}
