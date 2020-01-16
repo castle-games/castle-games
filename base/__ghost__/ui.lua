@@ -539,7 +539,7 @@ function ui.section(...)
     end
     assert(type(label) == 'string', '`ui.section` needs a string `label`')
 
-    local c, newId = addChild('section', label, merge({ label = label }, props), true)
+    local c, newId = addChild('section', label, without(merge({ label = label }, props), 'header'), true)
 
     local open = store[c].open
     if c.props.open ~= nil then
@@ -550,7 +550,15 @@ function ui.section(...)
     end
 
     c.open = open
-    if open then
+    if props and props.header then
+        enter(c, newId, function()
+            local headerC, headerNewId = addChild('sectionHeader', 'sectionHeader', {}, true)
+            enter(headerC, headerNewId, props.header)
+            if open then
+                inner()
+            end
+        end)
+    elseif open then
         enter(c, newId, inner)
     end
 
@@ -564,11 +572,6 @@ function ui.section(...)
     end
     store[c].open = open
     return open
-end
-
-function ui.sectionHeader(inner)
-    local c, newId = addChild('sectionHeader', 'sectionHeader', {}, true)
-    enter(c, newId, inner)
 end
 
 function ui.scrollBox(...)
