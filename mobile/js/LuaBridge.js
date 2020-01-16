@@ -2,6 +2,7 @@ import gql from 'graphql-tag';
 import AsyncStorage from '@react-native-community/async-storage';
 import uuid from 'uuid';
 import md5 from 'md5';
+import { Alert } from 'react-native';
 
 import * as GhostEvents from './ghost/GhostEvents';
 import * as GameScreen from './GameScreen';
@@ -99,7 +100,25 @@ export const JS = {
     }
   },
 
+  // System
+
+  async alert({ title, message, okLabel, cancelLabel }, { game }) {
+    return await new Promise(resolve => {
+      const cancelButton = {
+        text: cancelLabel,
+        style: 'cancel',
+        onPress: () => resolve('cancel'),
+      };
+      const okButton = {
+        text: okLabel || 'OK',
+        onPress: () => resolve('ok'),
+      };
+      Alert.alert(title, message, cancelLabel ? [cancelButton, okButton] : [okButton]);
+    });
+  },
+
   // Game
+
   async gameLoad({ gameIdOrUrl, params }, { game }) {
     // Decide whether it's a `gameId` or a `gameUri`
     let gameId = null;

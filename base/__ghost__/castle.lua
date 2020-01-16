@@ -93,6 +93,36 @@ function castle.system.setScalingModes(up, down)
     end
 end
 
+function castle.system.alert(...)
+    local opts = {}
+    local nArgs = select('#', ...)
+    if nArgs == 1 then
+        opts = ...
+    elseif nArgs == 2 then
+        opts.title, opts.message = ...
+    elseif nArgs == 3 then
+        opts.title, opts.message, opts.okLabel = ...
+    end
+
+    network.async(function()
+        local result = bridge.js.alert {
+            title = opts.title,
+            message = opts.message,
+            okLabel = opts.okLabel,
+            cancelLabel = opts.cancelLabel,
+        }
+        if result == 'ok' then
+            if opts.onOk then
+                opts.onOk()
+            end
+        elseif result == 'cancel' then
+            if opts.onCancel then
+                opts.onCancel()
+            end
+        end
+    end)
+end
+
 
 -- game
 
