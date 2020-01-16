@@ -33,7 +33,8 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 12,
     textTransform: 'uppercase',
-    marginVertical: 8,
+    marginBottom: 8,
+    marginTop: 12,
   },
   selectContainer: {
     borderRadius: 3,
@@ -98,10 +99,32 @@ const BLOCK_TYPES = [
   },
 ];
 
+const Dropdown = props => {
+  const { onPress, styleSheet, value } = props;
+  const valueToDisplay = value !== null ? value : '';
+  return (
+    <TouchableOpacity
+      style={[styles.selectContainer, styleSheet.selectContainer]}
+      onPress={onPress}>
+      <Text style={[styles.selection, styleSheet.selection]}>{valueToDisplay}</Text>
+      <View style={styles.select}>
+        <FastImage
+          style={{
+            width: 16,
+            aspectRatio: 1,
+          }}
+          source={require('../assets/images/arrow-button-down.png')}
+        />
+      </View>
+    </TouchableOpacity>
+  );
+};
+
 class EditBlock extends React.Component {
   state = {
     // TODO: actually modify some block object somewhere
     selectedType: 'text',
+    selectedDestination: null,
   };
 
   _selectBlockType = () => {
@@ -119,8 +142,26 @@ class EditBlock extends React.Component {
     );
   };
 
+  _selectDestination = () => {
+    const { deck } = this.props;
+    if (!deck || !deck.cards || !deck.cards.length) return false;
+
+    this.props.showActionSheetWithOptions(
+      {
+        title: 'Destination',
+        options: deck.cards.map(card => card.name).concat(['Cancel']),
+        cancelButtonIndex: deck.cards.length,
+      },
+      buttonIndex => {
+        if (buttonIndex < deck.cards.length) {
+          this.setState({ selectedDestination: deck.cards[buttonIndex].name });
+        }
+      }
+    );
+  };
+
   render() {
-    const { selectedType } = this.state;
+    const { selectedType, selectedDestination } = this.state;
     const blockType = selectedType.charAt(0).toUpperCase() + selectedType.slice(1);
     const typeStyles = selectedType === 'choice' ? choiceTypeStyles : textTypeStyles;
     const maybeBlockIcon =
@@ -159,20 +200,17 @@ class EditBlock extends React.Component {
           </TouchableOpacity>
         </View>
         <Text style={[styles.label, typeStyles.label]}>Block Type</Text>
-        <TouchableOpacity
-          style={[styles.selectContainer, typeStyles.selectContainer]}
-          onPress={this._selectBlockType}>
-          <Text style={[styles.selection, typeStyles.selection]}>{blockType}</Text>
-          <View style={styles.select}>
-            <FastImage
-              style={{
-                width: 16,
-                aspectRatio: 1,
-              }}
-              source={require('../assets/images/arrow-button-down.png')}
+        <Dropdown onPress={this._selectBlockType} value={blockType} styleSheet={typeStyles} />
+        {selectedType == 'choice' ? (
+          <React.Fragment>
+            <Text style={[styles.label, typeStyles.label]}>Destination</Text>
+            <Dropdown
+              onPress={this._selectDestination}
+              value={selectedDestination}
+              styleSheet={typeStyles}
             />
-          </View>
-        </TouchableOpacity>
+          </React.Fragment>
+        ) : null}
       </View>
     );
   }

@@ -37,6 +37,21 @@ const styles = StyleSheet.create({
   },
 });
 
+// TODO: get from server
+const DUMMY_DECK = {
+  cards: [
+    {
+      name: '@irondavy/trail/ferry',
+    },
+    {
+      name: '@irondavy/trail/ford',
+    },
+    {
+      name: '@irondavy/trail/green-river',
+    },
+  ],
+};
+
 const ActionButton = props => {
   const buttonProps = { ...props, children: undefined };
   return (
@@ -78,6 +93,7 @@ class CreateCardScreen extends React.Component {
           {/* TODO: list all the existing blocks for the card. */}
           {isEditingBlock ? (
             <EditBlock
+              deck={DUMMY_DECK}
               onDismiss={this._handleDismissEditing}
               onTextInputFocus={this._handleBlockTextInputFocus}
             />
