@@ -698,18 +698,19 @@ elementTypes['numberInput'] = ToolNumberInput;
 const ToolSlider = ({ element }) => <ToolNumberInput element={element} isSlider />;
 elementTypes['slider'] = ToolSlider;
 
-const ToolSection = ({ element }) => (
-  <View
-    style={{
-      margin: 4,
-      borderTopLeftRadius: 8,
-      borderTopRightRadius: 8,
-      borderBottomLeftRadius: element.open ? 0 : 8,
-      borderBottomRightRadius: element.open ? 0 : 8,
-      borderBottomWidth: element.open ? 1 : 0,
-      borderColor: Colors.button.selected,
-      overflow: 'hidden',
-    }}>
+const ToolSection = ({ element }) => {
+  let headerChild = null;
+  const children = [];
+
+  orderedChildren(element).forEach(({ id, child }) => {
+    if (child.type == 'sectionHeader') {
+      headerChild = child;
+    } else {
+      children.push({ id, child });
+    }
+  });
+
+  const headerButton = (
     <TouchableOpacity
       style={{
         flexDirection: 'row',
@@ -718,7 +719,12 @@ const ToolSection = ({ element }) => (
         paddingVertical: 6,
         paddingLeft: 21,
         paddingRight: 14,
+        borderTopLeftRadius: 8,
+        borderTopRightRadius: 8,
+        borderBottomLeftRadius: element.open ? 0 : 8,
+        borderBottomRightRadius: element.open ? 0 : 8,
         backgroundColor: element.open ? Colors.button.selected : Colors.button.default,
+        flex: headerChild ? 1 : null,
       }}
       onPress={() => sendEvent(element.pathId, { type: 'onChange', open: !element.open })}>
       <Text style={{ color: Colors.button.text, fontSize: 20, fontWeight: boldWeight1 }}>
@@ -730,17 +736,38 @@ const ToolSection = ({ element }) => (
         color={Colors.text}
       />
     </TouchableOpacity>
-    {element.open ? (
-      <View
-        style={{
-          paddingVertical: 8,
-          paddingHorizontal: 2,
-        }}>
-        {renderChildren(element)}
-      </View>
-    ) : null}
-  </View>
-);
+  );
+
+  return (
+    <View
+      style={{
+        margin: 4,
+        borderBottomWidth: element.open ? 1 : 0,
+        borderColor: Colors.button.selected,
+        overflow: 'hidden',
+      }}>
+      {headerChild ? (
+        <View style={{ flexDirection: 'row' }}>
+          {headerButton}
+          {renderChildren(headerChild)}
+        </View>
+      ) : (
+        headerButton
+      )}
+      {element.open ? (
+        <View
+          style={{
+            paddingVertical: 8,
+            paddingHorizontal: 2,
+          }}>
+          {children.map(({ id, child }) => (
+            <Tool key={id} element={child} />
+          ))}
+        </View>
+      ) : null}
+    </View>
+  );
+};
 elementTypes['section'] = ToolSection;
 
 const markdownStyles = StyleSheet.create({

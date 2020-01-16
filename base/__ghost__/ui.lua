@@ -566,6 +566,11 @@ function ui.section(...)
     return open
 end
 
+function ui.sectionHeader(inner)
+    local c, newId = addChild('sectionHeader', 'sectionHeader', {}, true)
+    enter(c, newId, inner)
+end
+
 function ui.scrollBox(...)
     local id, props, inner
     local nArgs = select('#', ...)
