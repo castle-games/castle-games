@@ -496,6 +496,10 @@ const BaseButton = ({ element, selected, style, onPress }) => {
 const PopoverButton = ({ element }) => {
   const [popoverVisible, setPopoverVisible] = useState(false);
 
+  if (popoverVisible && element.closePopover) {
+    setPopoverVisible(false);
+  }
+
   const anchorRef = useRef(null);
 
   const context = useContext(ToolsContext);

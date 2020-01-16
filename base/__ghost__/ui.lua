@@ -135,11 +135,11 @@ end
 
 -- Run `inner` 'inside' `element` by pushing `element` before and popping it after. This is
 -- error-tolerant -- if `inner` throws an error, the pop still occurs then the error is resurfaced
--- after.
-local function enter(element, id, inner)
+-- after. Passes `...` to `inner`.
+local function enter(element, id, inner, ...)
     assert(type(inner) == 'function', '`inner` should be a function')
     push(element, id)
-    local succeeded, err = pcall(inner)
+    local succeeded, err = pcall(inner, ...)
     pop()
     if not succeeded then
         error(err, 0)
@@ -302,7 +302,10 @@ function ui.button(label, props)
     local c, newId = addChild('button', label, newProps, true)
 
     if props and props.popover then
-        enter(c, newId, props.popover)
+        c.closePopover = false
+        enter(c, newId, props.popover, function()
+            c.closePopover = true
+        end)
     end
 
     local clicked = false
