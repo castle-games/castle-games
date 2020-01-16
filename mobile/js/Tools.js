@@ -702,13 +702,15 @@ const ToolSection = ({ element }) => {
   let headerChild = null;
   const children = [];
 
-  orderedChildren(element).forEach(({ id, child }) => {
-    if (child.type == 'sectionHeader') {
-      headerChild = child;
-    } else {
-      children.push({ id, child });
-    }
-  });
+  if (element.open) {
+    orderedChildren(element).forEach(({ id, child }) => {
+      if (child.type == 'sectionHeader') {
+        headerChild = child;
+      } else {
+        children.push({ id, child });
+      }
+    });
+  }
 
   const headerButton = (
     <TouchableOpacity
@@ -722,7 +724,7 @@ const ToolSection = ({ element }) => {
         borderTopLeftRadius: 8,
         borderTopRightRadius: headerChild ? 6 : 8,
         borderBottomLeftRadius: element.open ? 0 : 8,
-        borderBottomRightRadius: element.open ? 0 : headerChild ? 6 : 8,
+        borderBottomRightRadius: element.open ? 0 : 8,
         backgroundColor: element.open ? Colors.button.selected : Colors.button.default,
         flex: headerChild ? 1 : null,
       }}

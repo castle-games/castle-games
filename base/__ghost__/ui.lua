@@ -550,16 +550,16 @@ function ui.section(...)
     end
 
     c.open = open
-    if props and props.header then
-        enter(c, newId, function()
-            local headerC, headerNewId = addChild('sectionHeader', 'sectionHeader', {}, true)
-            enter(headerC, headerNewId, props.header)
-            if open then
+    if open then
+        if props and props.header then
+            enter(c, newId, function()
+                local headerC, headerNewId = addChild('sectionHeader', 'sectionHeader', {}, true)
+                enter(headerC, headerNewId, props.header)
                 inner()
-            end
-        end)
-    elseif open then
-        enter(c, newId, inner)
+            end)
+        else
+            enter(c, newId, inner)
+        end
     end
 
     local es = pendingEvents[c.pathId]
