@@ -69,10 +69,56 @@ const ActionButton = props => {
   );
 };
 
+const EMPTY_CARD = {
+  title: '',
+  blocks: [],
+};
+
 class CreateCardScreen extends React.Component {
+  static defaultProps = {
+    saveCard: card => {},
+  };
+
   state = {
+    card: EMPTY_CARD,
     isEditingBlock: false,
     isHeaderExpanded: false,
+  };
+
+  componentDidMount() {
+    this._update(null, this.props);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    this._update(prevProps, this.props);
+  }
+
+  _update = (prevProps, props) => {
+    const prevDeckIdToEdit =
+      prevProps && prevProps.navigation.state.params
+        ? prevProps.navigation.state.params.deckIdToEdit
+        : undefined;
+    const prevCardIdToEdit =
+      prevProps && prevProps.navigation.state.params
+        ? prevProps.navigation.state.params.cardIdToEdit
+        : undefined;
+    const params = props.navigation.state.params || {};
+    if (
+      !prevProps ||
+      prevDeckIdToEdit !== params.deckIdToEdit ||
+      prevCardIdToEdit !== params.cardIdToEdit
+    ) {
+      let card;
+      if (params.deckIdToEdit) {
+        // TODO: fetch deck from api
+        let deckToEdit = { cards: [] };
+        card = deckToEdit.cards.find(card => card.cardId == params.cardIdToEdit);
+      }
+      if (!card) {
+        card = EMPTY_CARD;
+      }
+      this.setState({ card });
+    }
   };
 
   _handleEditBlock = () => this.setState({ isEditingBlock: true });

@@ -81,6 +81,9 @@ const CreateScreen = () => {
         decks {
           deckId
           title
+          initialCard {
+            cardId
+          }
         }
       }
     }
@@ -103,7 +106,18 @@ const CreateScreen = () => {
             }}
           />
           {decks &&
-            decks.map(deck => <EditDeckCell key={deck.deckId} deck={deck} onPress={() => {}} />)}
+            decks.map(deck => (
+              <EditDeckCell
+                key={deck.deckId}
+                deck={deck}
+                onPress={() => {
+                  navigation.push('CreateCard', {
+                    deckIdToEdit: deck.deckId,
+                    cardIdToEdit: deck.initialCard.cardId,
+                  });
+                }}
+              />
+            ))}
         </View>
       </ScrollView>
     </SafeAreaView>
