@@ -11,11 +11,12 @@ import EditBlock from './EditBlock';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f2f2f2',
+    backgroundColor: '#000',
   },
   scrollView: {
     flex: 1,
     flexShrink: 1,
+    backgroundColor: '#f2f2f2',
   },
   scene: {
     flex: 1,
