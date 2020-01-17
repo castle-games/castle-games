@@ -72,6 +72,7 @@ const ActionButton = props => {
 class CreateCardScreen extends React.Component {
   state = {
     isEditingBlock: false,
+    isHeaderExpanded: false,
   };
 
   _handleEditBlock = () => this.setState({ isEditingBlock: true });
@@ -86,11 +87,20 @@ class CreateCardScreen extends React.Component {
     }
   };
 
+  _toggleHeaderExpanded = () =>
+    this.setState(state => {
+      return { ...state, isHeaderExpanded: !state.isHeaderExpanded };
+    });
+
   render() {
-    const { isEditingBlock } = this.state;
+    const { isEditingBlock, isHeaderExpanded } = this.state;
     return (
       <SafeAreaView style={styles.container}>
-        <CardHeader onPressBack={() => this.props.navigation.goBack()} />
+        <CardHeader
+          expanded={isHeaderExpanded}
+          onPressBack={() => this.props.navigation.goBack()}
+          onPressTitle={this._toggleHeaderExpanded}
+        />
         <KeyboardAwareScrollView
           style={styles.scrollView}
           enableAutomaticScroll={false}

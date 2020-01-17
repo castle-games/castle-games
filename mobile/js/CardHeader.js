@@ -4,18 +4,19 @@ import FastImage from 'react-native-fast-image';
 
 const styles = StyleSheet.create({
   container: {},
+  drawer: {},
   cardTop: {
-    width: '100%',
-    height: 54,
     borderTopLeftRadius: 6,
     borderTopRightRadius: 6,
     backgroundColor: '#f2f2f2',
+    flexShrink: 0,
+  },
+  fixedHeader: {
+    width: '100%',
+    height: 54,
     position: 'absolute',
     top: 0,
-  },
-  header: {
     height: 54,
-    flexShrink: 0,
     flexDirection: 'row',
   },
   back: {
@@ -24,7 +25,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  nameContainer: {
+  titleContainer: {
     width: '100%',
     flexShrink: 1,
     alignItems: 'center',
@@ -37,11 +38,20 @@ const styles = StyleSheet.create({
   },
 });
 
+const ConfigureCard = props => {
+  // TODO: this is the menu for changing a card's name, etc.
+  return <View style={{ height: 128 }} />;
+};
+
 const CardHeader = props => {
+  const { expanded } = props;
   return (
     <View style={styles.container}>
-      <View style={styles.cardTop} />
-      <View style={styles.header}>
+      <View style={styles.drawer}>
+        {expanded ? <ConfigureCard /> : null}
+        <View style={[styles.cardTop, { height: expanded ? 12 : 54 }]} />
+      </View>
+      <View style={styles.fixedHeader}>
         <TouchableOpacity style={styles.back} onPress={props.onPressBack}>
           <FastImage
             style={{
@@ -51,9 +61,9 @@ const CardHeader = props => {
             source={require('../assets/images/arrow-left.png')}
           />
         </TouchableOpacity>
-        <View style={styles.nameContainer}>
+        <TouchableOpacity style={styles.titleContainer} onPress={props.onPressTitle}>
           <Text style={styles.name}>@irondavy/green-river</Text>
-        </View>
+        </TouchableOpacity>
       </View>
     </View>
   );
