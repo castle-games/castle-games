@@ -58,15 +58,22 @@ const HomeNavigator = createStackNavigator(
   }
 );
 
-const CreateNavigator = createStackNavigator({
-  Create: {
-    screen: CreateScreen,
-    navigationOptions: { title: 'Create' },
+const CreateNavigator = createStackNavigator(
+  {
+    Create: {
+      screen: CreateScreen,
+      navigationOptions: {
+        title: 'Create',
+      },
+    },
+    CreateCard: {
+      screen: CreateCardScreen,
+    },
   },
-  CreateCard: {
-    screen: CreateCardScreen,
-  },
-});
+  {
+    headerMode: 'none',
+  }
+);
 
 const ProfileNavigator = createSwitchNavigator({
   ProfileScreen: {

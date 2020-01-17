@@ -1,14 +1,21 @@
 import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import SafeAreaView from 'react-native-safe-area-view';
+import { withNavigation } from 'react-navigation';
 
 import CardBlocks from './CardBlocks';
+import CardHeader from './CardHeader';
 import EditBlock from './EditBlock';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f2f2f2',
+  },
+  scrollView: {
+    flex: 1,
+    flexShrink: 1,
   },
   scene: {
     flex: 1,
@@ -81,32 +88,35 @@ class CreateCardScreen extends React.Component {
   render() {
     const { isEditingBlock } = this.state;
     return (
-      <KeyboardAwareScrollView
-        style={styles.container}
-        enableAutomaticScroll={false}
-        contentContainerStyle={{ flex: 1 }}
-        innerRef={ref => (this._scrollViewRef = ref)}>
-        <View style={styles.scene}>
-          <ActionButton>Edit Scene</ActionButton>
-        </View>
-        <View style={styles.description}>
-          {/* TODO: list all the existing blocks for the card. */}
-          {isEditingBlock ? (
-            <EditBlock
-              deck={DUMMY_DECK}
-              onDismiss={this._handleDismissEditing}
-              onTextInputFocus={this._handleBlockTextInputFocus}
-            />
-          ) : (
-            <CardBlocks onSelectBlock={this._handleEditBlock} />
-          )}
-        </View>
-        <View style={styles.actions}>
-          <ActionButton onPress={this._handleEditBlock}>Add Block</ActionButton>
-        </View>
-      </KeyboardAwareScrollView>
+      <SafeAreaView style={styles.container}>
+        <CardHeader onPressBack={() => this.props.navigation.goBack()} />
+        <KeyboardAwareScrollView
+          style={styles.scrollView}
+          enableAutomaticScroll={false}
+          contentContainerStyle={{ flex: 1 }}
+          innerRef={ref => (this._scrollViewRef = ref)}>
+          <View style={styles.scene}>
+            <ActionButton>Edit Scene</ActionButton>
+          </View>
+          <View style={styles.description}>
+            {/* TODO: list all the existing blocks for the card. */}
+            {isEditingBlock ? (
+              <EditBlock
+                deck={DUMMY_DECK}
+                onDismiss={this._handleDismissEditing}
+                onTextInputFocus={this._handleBlockTextInputFocus}
+              />
+            ) : (
+              <CardBlocks onSelectBlock={this._handleEditBlock} />
+            )}
+          </View>
+          <View style={styles.actions}>
+            <ActionButton onPress={this._handleEditBlock}>Add Block</ActionButton>
+          </View>
+        </KeyboardAwareScrollView>
+      </SafeAreaView>
     );
   }
 }
 
-export default CreateCardScreen;
+export default withNavigation(CreateCardScreen);
