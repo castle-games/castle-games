@@ -1,7 +1,9 @@
 import React from 'react';
 import { View, ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import FastImage from 'react-native-fast-image';
+import gql from 'graphql-tag';
 import SafeAreaView from 'react-native-safe-area-view';
+import { useQuery } from '@apollo/react-hooks';
 import { useNavigation } from 'react-navigation-hooks';
 
 const styles = StyleSheet.create({
@@ -42,38 +44,12 @@ const styles = StyleSheet.create({
   },
 });
 
-const DUMMY_DECKS = [
-  {
-    deckId: 1,
-    title: 'Existing deck 1',
-  },
-  {
-    deckId: 2,
-    title: 'Existing deck 2',
-  },
-  {
-    deckId: 3,
-    title: 'Existing deck 3',
-  },
-  {
-    deckId: 4,
-    title: 'Existing deck 4',
-  },
-  {
-    deckId: 5,
-    title: 'Existing deck 5',
-  },
-  {
-    deckId: 6,
-    title: 'Existing deck 6',
-  },
-];
-
 const EditDeckCell = props => {
   const { deck, onPress } = props;
+  const title = deck && deck.title ? deck.title : 'Untitled Deck';
   return (
     <TouchableOpacity style={styles.cell} onPress={onPress}>
-      <Text style={styles.cellTitle}>{deck.title}</Text>
+      <Text style={styles.cellTitle}>{title}</Text>
     </TouchableOpacity>
   );
 };
@@ -98,6 +74,23 @@ const CreateDeckCell = props => {
 
 const CreateScreen = () => {
   const navigation = useNavigation();
+  const query = useQuery(gql`
+    query Me {
+      me {
+        userId
+        decks {
+          deckId
+          title
+        }
+      }
+    }
+  `);
+
+  let decks;
+  if (!query.loading && !query.error && query.data) {
+    decks = query.data.me.decks;
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollView}>
@@ -109,9 +102,8 @@ const CreateScreen = () => {
               navigation.push('CreateCard');
             }}
           />
-          {DUMMY_DECKS.map(deck => (
-            <EditDeckCell key={deck.deckId} deck={deck} onPress={() => {}} />
-          ))}
+          {decks &&
+            decks.map(deck => <EditDeckCell key={deck.deckId} deck={deck} onPress={() => {}} />)}
         </View>
       </ScrollView>
     </SafeAreaView>
