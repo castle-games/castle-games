@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 
 const styles = StyleSheet.create({
@@ -36,19 +36,52 @@ const styles = StyleSheet.create({
   name: {
     color: '#888',
   },
+  inputLabel: {
+    fontSize: 12,
+    textTransform: 'uppercase',
+    marginBottom: 8,
+    marginTop: 8,
+    color: '#888',
+  },
+  input: {
+    borderRadius: 3,
+    borderWidth: 1,
+    borderColor: '#888',
+    padding: 8,
+    color: '#fff',
+  },
 });
 
+const CardInput = props => {
+  const { label } = props;
+  return (
+    <View>
+      <Text style={styles.inputLabel}>{label}</Text>
+      <TextInput style={styles.input} placeholderTextColor="#666" {...props} />
+    </View>
+  );
+};
+
 const ConfigureCard = props => {
-  // TODO: this is the menu for changing a card's name, etc.
-  return <View style={{ height: 128 }} />;
+  return (
+    <View style={{ minHeight: 48, padding: 16, marginTop: 42, marginBottom: 16 }}>
+      <CardInput
+        label="Short Name"
+        placeholder="Choose a name for this card"
+        value={props.card.title}
+        onChangeText={title => props.onChange({ title })}
+      />
+    </View>
+  );
 };
 
 const CardHeader = props => {
   const { card, expanded } = props;
+  const title = card.title ? card.title : 'Untitled Card';
   return (
     <View style={styles.container}>
       <View style={styles.drawer}>
-        {expanded ? <ConfigureCard /> : null}
+        {expanded ? <ConfigureCard card={card} onChange={props.onChange} /> : null}
         <View style={[styles.cardTop, { height: expanded ? 12 : 54 }]} />
       </View>
       <View style={styles.fixedHeader}>
@@ -62,7 +95,7 @@ const CardHeader = props => {
           />
         </TouchableOpacity>
         <TouchableOpacity style={styles.titleContainer} onPress={props.onPressTitle}>
-          <Text style={styles.name}>{card.title}</Text>
+          <Text style={styles.name}>{title}</Text>
         </TouchableOpacity>
       </View>
     </View>

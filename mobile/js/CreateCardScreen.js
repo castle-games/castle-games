@@ -151,6 +151,18 @@ class CreateCardScreen extends React.Component {
     }
   };
 
+  _handleCardChange = changes => {
+    this.setState(state => {
+      return {
+        ...state,
+        card: {
+          ...state.card,
+          ...changes,
+        },
+      };
+    });
+  };
+
   _toggleHeaderExpanded = () =>
     this.setState(state => {
       return { ...state, isHeaderExpanded: !state.isHeaderExpanded };
@@ -165,6 +177,7 @@ class CreateCardScreen extends React.Component {
           expanded={isHeaderExpanded}
           onPressBack={() => this.props.navigation.goBack()}
           onPressTitle={this._toggleHeaderExpanded}
+          onChange={this._handleCardChange}
         />
         <KeyboardAwareScrollView
           style={styles.scrollView}
