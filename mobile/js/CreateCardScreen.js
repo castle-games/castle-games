@@ -43,10 +43,67 @@ const styles = StyleSheet.create({
     padding: 12,
   },
   actions: {
+    width: '100%',
     paddingHorizontal: 12,
     paddingBottom: 8,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });
+
+const CARD_FRAGMENT = `
+  cardId
+  title
+  blocks {
+    cardBlockId
+    type
+    title
+    destinationCardId
+  }
+`;
+
+const saveDeck = async (card, deck) => {
+  const cardUpdateFragment = {
+    title: card.title,
+    blocks: card.blocks.map(block => {
+      return {
+        type: block.type,
+        destinationCardId: block.destinationCardId,
+        title: block.title,
+      };
+    }),
+  };
+  if (deck.deckId && card.cardId) {
+    // update existing card in deck
+    const result = await Session.apolloClient.mutate({
+      mutation: gql`
+        mutation UpdateCard($cardId: ID!, $card: CardInput!) {
+          updateCard(
+            cardId: $cardId,
+            card: $card
+          ) {
+            ${CARD_FRAGMENT}
+          }
+        }
+      `,
+      variables: { cardId: card.cardId, card: cardUpdateFragment },
+    });
+    return {
+      card: result.data.updateCard,
+      deck: {
+        ...deck,
+        cards: deck.cards.map(oldCard => {
+          if (oldCard.cardId == card.cardId) return result.data.updateCard;
+          return oldCard;
+        }),
+      },
+    };
+  } else if (deck.deckId) {
+    // TODO: add a card to an existing deck
+  } else {
+    // TODO: create a deck with an initial card
+  }
+};
 
 const getDeckById = async deckId => {
   const result = await Session.apolloClient.query({
@@ -56,14 +113,7 @@ const getDeckById = async deckId => {
           deckId
           title
           cards {
-            cardId
-            title
-            blocks {
-              cardBlockId
-              type
-              title
-              destinationCardId
-            }
+            ${CARD_FRAGMENT}
           }
         }
       }
@@ -93,10 +143,6 @@ const EMPTY_CARD = {
 };
 
 class CreateCardScreen extends React.Component {
-  static defaultProps = {
-    saveCard: card => {},
-  };
-
   state = {
     deck: EMPTY_DECK,
     card: EMPTY_CARD,
@@ -105,11 +151,16 @@ class CreateCardScreen extends React.Component {
   };
 
   componentDidMount() {
+    this._mounted = true;
     this._update(null, this.props);
   }
 
   componentDidUpdate(prevProps, prevState) {
     this._update(prevProps, this.props);
+  }
+
+  componentWillUnmount() {
+    this._mounted = false;
   }
 
   _update = async (prevProps, props) => {
@@ -135,8 +186,13 @@ class CreateCardScreen extends React.Component {
           card = deck.cards.find(card => card.cardId == params.cardIdToEdit);
         } catch (_) {}
       }
-      this.setState({ deck, card });
+      this._mounted && this.setState({ deck, card });
     }
+  };
+
+  _handlePublish = async () => {
+    const { card, deck } = await saveDeck(this.state.card, this.state.deck);
+    this.setState({ card, deck });
   };
 
   _handleEditBlock = () => this.setState({ isEditingBlock: true });
@@ -200,6 +256,7 @@ class CreateCardScreen extends React.Component {
           </View>
           <View style={styles.actions}>
             <ActionButton onPress={this._handleEditBlock}>Add Block</ActionButton>
+            <ActionButton onPress={this._handlePublish}>Publish</ActionButton>
           </View>
         </KeyboardAwareScrollView>
       </SafeAreaView>
