@@ -63,6 +63,9 @@ const CARD_FRAGMENT = `
 `;
 
 const saveDeck = async (card, deck) => {
+  const deckUpdateFragment = {
+    title: deck.title,
+  };
   const cardUpdateFragment = {
     title: card.title,
     blocks: card.blocks.map(block => {
@@ -101,7 +104,30 @@ const saveDeck = async (card, deck) => {
   } else if (deck.deckId) {
     // TODO: add a card to an existing deck
   } else {
-    // TODO: create a deck with an initial card
+    // no existing deckId or cardId, so create a new deck
+    // and add the card to it.
+    console.log(`ben: create`);
+    const result = await Session.apolloClient.mutate({
+      mutation: gql`
+        mutation CreateDeck($deck: DeckInput!, $card: CardInput!) {
+          createDeck(
+            deck: $deck,
+            card: $card
+          ) {
+            deckId
+            title
+            cards {
+              ${CARD_FRAGMENT}
+            }
+          }
+        }
+      `,
+      variables: { deck: deckUpdateFragment, card: cardUpdateFragment },
+    });
+    return {
+      card: result.data.createDeck.cards[0],
+      deck: result.data.createDeck,
+    };
   }
 };
 
