@@ -1,8 +1,11 @@
 import React from 'react';
+import gql from 'graphql-tag';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import SafeAreaView from 'react-native-safe-area-view';
 import { withNavigation } from 'react-navigation';
+
+import * as Session from './Session';
 
 import CardBlocks from './CardBlocks';
 import CardHeader from './CardHeader';
@@ -45,19 +48,29 @@ const styles = StyleSheet.create({
   },
 });
 
-// TODO: get from server
-const DUMMY_DECK = {
-  cards: [
-    {
-      name: '@irondavy/trail/ferry',
-    },
-    {
-      name: '@irondavy/trail/ford',
-    },
-    {
-      name: '@irondavy/trail/green-river',
-    },
-  ],
+const getDeckById = async deckId => {
+  const result = await Session.apolloClient.query({
+    query: gql`
+      query GetDeckById($deckId: ID!) {
+        deck(deckId: $deckId) {
+          deckId
+          title
+          cards {
+            cardId
+            title
+            blocks {
+              cardBlockId
+              type
+              title
+              destinationCardId
+            }
+          }
+        }
+      }
+    `,
+    variables: { deckId },
+  });
+  return result.data.deck;
 };
 
 const ActionButton = props => {
@@ -67,6 +80,11 @@ const ActionButton = props => {
       <Text style={styles.buttonLabel}>{props.children}</Text>
     </TouchableOpacity>
   );
+};
+
+const EMPTY_DECK = {
+  title: '',
+  cards: [],
 };
 
 const EMPTY_CARD = {
@@ -80,6 +98,7 @@ class CreateCardScreen extends React.Component {
   };
 
   state = {
+    deck: EMPTY_DECK,
     card: EMPTY_CARD,
     isEditingBlock: false,
     isHeaderExpanded: false,
@@ -93,7 +112,7 @@ class CreateCardScreen extends React.Component {
     this._update(prevProps, this.props);
   }
 
-  _update = (prevProps, props) => {
+  _update = async (prevProps, props) => {
     const prevDeckIdToEdit =
       prevProps && prevProps.navigation.state.params
         ? prevProps.navigation.state.params.deckIdToEdit
@@ -108,16 +127,15 @@ class CreateCardScreen extends React.Component {
       prevDeckIdToEdit !== params.deckIdToEdit ||
       prevCardIdToEdit !== params.cardIdToEdit
     ) {
-      let card;
-      if (params.deckIdToEdit) {
-        // TODO: fetch deck from api
-        let deckToEdit = { cards: [] };
-        card = deckToEdit.cards.find(card => card.cardId == params.cardIdToEdit);
-      }
-      if (!card) {
+      let deck = EMPTY_DECK,
         card = EMPTY_CARD;
+      if (params.deckIdToEdit) {
+        try {
+          deck = await getDeckById(params.deckIdToEdit);
+          card = deck.cards.find(card => card.cardId == params.cardIdToEdit);
+        } catch (_) {}
       }
-      this.setState({ card });
+      this.setState({ deck, card });
     }
   };
 
@@ -139,10 +157,11 @@ class CreateCardScreen extends React.Component {
     });
 
   render() {
-    const { isEditingBlock, isHeaderExpanded } = this.state;
+    const { deck, card, isEditingBlock, isHeaderExpanded } = this.state;
     return (
       <SafeAreaView style={styles.container}>
         <CardHeader
+          card={card}
           expanded={isHeaderExpanded}
           onPressBack={() => this.props.navigation.goBack()}
           onPressTitle={this._toggleHeaderExpanded}
@@ -156,15 +175,14 @@ class CreateCardScreen extends React.Component {
             <ActionButton>Edit Scene</ActionButton>
           </View>
           <View style={styles.description}>
-            {/* TODO: list all the existing blocks for the card. */}
             {isEditingBlock ? (
               <EditBlock
-                deck={DUMMY_DECK}
+                deck={deck}
                 onDismiss={this._handleDismissEditing}
                 onTextInputFocus={this._handleBlockTextInputFocus}
               />
             ) : (
-              <CardBlocks onSelectBlock={this._handleEditBlock} />
+              <CardBlocks card={card} onSelectBlock={this._handleEditBlock} />
             )}
           </View>
           <View style={styles.actions}>

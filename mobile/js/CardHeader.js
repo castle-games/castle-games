@@ -44,7 +44,7 @@ const ConfigureCard = props => {
 };
 
 const CardHeader = props => {
-  const { expanded } = props;
+  const { card, expanded } = props;
   return (
     <View style={styles.container}>
       <View style={styles.drawer}>
@@ -62,7 +62,7 @@ const CardHeader = props => {
           />
         </TouchableOpacity>
         <TouchableOpacity style={styles.titleContainer} onPress={props.onPressTitle}>
-          <Text style={styles.name}>@irondavy/green-river</Text>
+          <Text style={styles.name}>{card.title}</Text>
         </TouchableOpacity>
       </View>
     </View>
