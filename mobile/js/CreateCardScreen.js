@@ -1,8 +1,9 @@
 import React from 'react';
 import gql from 'graphql-tag';
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import SafeAreaView from 'react-native-safe-area-view';
+import uuid from 'uuid/v4';
 import { withNavigation } from 'react-navigation';
 
 import * as Session from './Session';
@@ -106,7 +107,6 @@ const saveDeck = async (card, deck) => {
   } else {
     // no existing deckId or cardId, so create a new deck
     // and add the card to it.
-    console.log(`ben: create`);
     const result = await Session.apolloClient.mutate({
       mutation: gql`
         mutation CreateDeck($deck: DeckInput!, $card: CardInput!) {
@@ -168,11 +168,18 @@ const EMPTY_CARD = {
   blocks: [],
 };
 
+const EMPTY_BLOCK = {
+  title: null,
+  type: 'text',
+  destination: null,
+};
+
 class CreateCardScreen extends React.Component {
   state = {
     deck: EMPTY_DECK,
     card: EMPTY_CARD,
     isEditingBlock: false,
+    blockIdToEdit: null,
     isHeaderExpanded: false,
   };
 
@@ -221,7 +228,7 @@ class CreateCardScreen extends React.Component {
     this.setState({ card, deck });
   };
 
-  _handleEditBlock = () => this.setState({ isEditingBlock: true });
+  _handleEditBlock = blockIdToEdit => this.setState({ isEditingBlock: true, blockIdToEdit });
 
   _handleDismissEditing = () => this.setState({ isEditingBlock: false });
 
@@ -245,13 +252,50 @@ class CreateCardScreen extends React.Component {
     });
   };
 
+  _handleBlockChange = block => {
+    this.setState(state => {
+      const blocks = [...state.card.blocks];
+      let existingIndex = -1;
+      let blockIdToEdit = state.blockIdToEdit;
+      if (block.cardBlockId) {
+        existingIndex = blocks.findIndex(existing => existing.cardBlockId === block.cardBlockId);
+      }
+      if (existingIndex >= 0) {
+        blocks[existingIndex] = block;
+      } else {
+        blockIdToEdit = String(uuid());
+        blocks.push({ ...block, cardBlockId: blockIdToEdit });
+      }
+      return {
+        ...state,
+        blockIdToEdit,
+        card: {
+          ...state.card,
+          blocks,
+        },
+      };
+    });
+  };
+
+  _handlePressBackground = () => {
+    if (this.state.isEditingBlock) {
+      this.setState({ isEditingBlock: false, blockIdToEdit: null });
+    } else if (this.state.isHeaderExpanded) {
+      this.setState({ isHeaderExpanded: false });
+    }
+  };
+
   _toggleHeaderExpanded = () =>
     this.setState(state => {
       return { ...state, isHeaderExpanded: !state.isHeaderExpanded };
     });
 
   render() {
-    const { deck, card, isEditingBlock, isHeaderExpanded } = this.state;
+    const { deck, card, isEditingBlock, blockIdToEdit, isHeaderExpanded } = this.state;
+    const blockToEdit =
+      isEditingBlock && blockIdToEdit
+        ? card.blocks.find(block => block.cardBlockId === blockIdToEdit)
+        : EMPTY_BLOCK;
     return (
       <SafeAreaView style={styles.container}>
         <CardHeader
@@ -266,22 +310,26 @@ class CreateCardScreen extends React.Component {
           enableAutomaticScroll={false}
           contentContainerStyle={{ flex: 1 }}
           innerRef={ref => (this._scrollViewRef = ref)}>
-          <View style={styles.scene}>
-            <ActionButton>Edit Scene</ActionButton>
-          </View>
+          <TouchableWithoutFeedback onPress={this._handlePressBackground}>
+            <View style={styles.scene}>
+              <ActionButton>Edit Scene</ActionButton>
+            </View>
+          </TouchableWithoutFeedback>
           <View style={styles.description}>
             {isEditingBlock ? (
               <EditBlock
                 deck={deck}
+                block={blockToEdit}
                 onDismiss={this._handleDismissEditing}
                 onTextInputFocus={this._handleBlockTextInputFocus}
+                onChangeBlock={this._handleBlockChange}
               />
             ) : (
               <CardBlocks card={card} onSelectBlock={this._handleEditBlock} />
             )}
           </View>
           <View style={styles.actions}>
-            <ActionButton onPress={this._handleEditBlock}>Add Block</ActionButton>
+            <ActionButton onPress={() => this._handleEditBlock(null)}>Add Block</ActionButton>
             <ActionButton onPress={this._handlePublish}>Publish</ActionButton>
           </View>
         </KeyboardAwareScrollView>

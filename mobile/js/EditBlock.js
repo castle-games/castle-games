@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TouchableOpacity, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 
@@ -121,8 +121,7 @@ const Dropdown = props => {
 };
 
 const EditBlock = props => {
-  const [selectedType, setSelectedType] = useState('text');
-  const [selectedDestination, setSelectedDestination] = useState(null);
+  const { block, onChangeBlock } = props;
   const { showActionSheetWithOptions } = useActionSheet();
 
   const selectBlockType = () =>
@@ -134,7 +133,7 @@ const EditBlock = props => {
       },
       buttonIndex => {
         if (buttonIndex < BLOCK_TYPES.length) {
-          setSelectedType(BLOCK_TYPES[buttonIndex].type);
+          onChangeBlock({ ...block, type: BLOCK_TYPES[buttonIndex].type });
         }
       }
     );
@@ -151,16 +150,16 @@ const EditBlock = props => {
       },
       buttonIndex => {
         if (buttonIndex < deck.cards.length) {
-          setSelectedDestination(deck.cards[buttonIndex].name);
+          onChangeBlock({ ...block, destination: deck.cards[buttonIndex].name });
         }
       }
     );
   };
 
-  const blockType = selectedType.charAt(0).toUpperCase() + selectedType.slice(1);
-  const typeStyles = selectedType === 'choice' ? choiceTypeStyles : textTypeStyles;
+  const blockType = block.type.charAt(0).toUpperCase() + block.type.slice(1);
+  const typeStyles = block.type === 'choice' ? choiceTypeStyles : textTypeStyles;
   const maybeBlockIcon =
-    selectedType === 'choice' ? (
+    block.type === 'choice' ? (
       <FastImage
         style={{
           width: 12,
@@ -183,6 +182,8 @@ const EditBlock = props => {
           placeholder="Once upon a time..."
           placeholderTextColor="#999"
           onFocus={props.onTextInputFocus}
+          value={block.title}
+          onChangeText={text => onChangeBlock({ ...block, title: text })}
         />
         <TouchableOpacity style={styles.dismiss} onPress={props.onDismiss}>
           <FastImage
@@ -196,14 +197,10 @@ const EditBlock = props => {
       </View>
       <Text style={[styles.label, typeStyles.label]}>Block Type</Text>
       <Dropdown onPress={selectBlockType} value={blockType} styleSheet={typeStyles} />
-      {selectedType == 'choice' ? (
+      {block.type == 'choice' ? (
         <React.Fragment>
           <Text style={[styles.label, typeStyles.label]}>Destination</Text>
-          <Dropdown
-            onPress={selectDestination}
-            value={selectedDestination}
-            styleSheet={typeStyles}
-          />
+          <Dropdown onPress={selectDestination} value={block.destination} styleSheet={typeStyles} />
         </React.Fragment>
       ) : null}
     </View>

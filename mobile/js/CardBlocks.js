@@ -41,26 +41,6 @@ const styles = StyleSheet.create({
   },
 });
 
-// TODO: get from server
-const DUMMY_BLOCKS = [
-  {
-    type: 'text',
-    description: 'Your wagon is stopped by a river with a width of 628 ft and a depth of 4.8 ft.',
-  },
-  {
-    type: 'choice',
-    description: 'Take a ferry across',
-  },
-  {
-    type: 'choice',
-    description: 'Attempt to ford the river',
-  },
-  {
-    type: 'choice',
-    description: 'Caulk wagon and float it across',
-  },
-];
-
 const CardBlock = props => {
   const { block } = props;
   let blockStyles, textStyles;
@@ -75,7 +55,7 @@ const CardBlock = props => {
             }}
             source={require('../assets/images/add.png')}
           />
-          <Text style={styles.choiceBlockDescription}>{block.description}</Text>
+          <Text style={styles.choiceBlockDescription}>{block.title}</Text>
         </View>
       );
     }
@@ -83,7 +63,7 @@ const CardBlock = props => {
     default: {
       return (
         <View style={[styles.textBlock, props.style]}>
-          <Text style={styles.textBlockDescription}>{block.description}</Text>
+          <Text style={styles.textBlockDescription}>{block.title}</Text>
         </View>
       );
       break;
@@ -106,7 +86,7 @@ const CardBlocks = props => {
       </React.Fragment>
     );
   } else {
-    return <AddBlockPlaceholder onPress={props.onSelectBlock} />;
+    return <AddBlockPlaceholder onPress={() => props.onSelectBlock(null)} />;
   }
 };
 
