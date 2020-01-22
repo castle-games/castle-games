@@ -92,13 +92,15 @@ const saveDeck = async (card, deck) => {
       `,
       variables: { cardId: card.cardId, card: cardUpdateFragment },
     });
+    const updatedCard = result.data.updateCard.find(updated => updated.cardId === card.cardId);
     return {
-      card: result.data.updateCard,
+      card: updatedCard,
       deck: {
         ...deck,
-        cards: deck.cards.map(oldCard => {
-          if (oldCard.cardId == card.cardId) return result.data.updateCard;
-          return oldCard;
+        cards: deck.cards.map(old => {
+          let replacement = result.data.updateCard.find(updated => updated.cardId === old.cardId);
+          if (replacement) return replacement;
+          return old;
         }),
       },
     };
@@ -124,8 +126,16 @@ const saveDeck = async (card, deck) => {
       `,
       variables: { deck: deckUpdateFragment, card: cardUpdateFragment },
     });
+    let newCard;
+    if (result.data.createDeck.cards.length > 1) {
+      // if the initial card contained references to other cards,
+      // we can get many cards back here. we care about the non-empty one
+      newCard = result.data.createDeck.cards.find(card => card.blocks && card.blocks.length > 0);
+    } else {
+      newCard = result.data.createDeck.cards[0];
+    }
     return {
-      card: result.data.createDeck.cards[0],
+      card: newCard,
       deck: result.data.createDeck,
     };
   }
@@ -291,6 +301,16 @@ class CreateCardScreen extends React.Component {
     });
   };
 
+  _handleAddCardFromBlock = block => {
+    // TODO:
+    // if this current card isn't saved, save it
+    // and update the block id reference we care about.
+    //
+    // then, run graphql to add another blank card,
+    // insert result into local deck,
+    // assign result to destination of block.
+  };
+
   _handlePressBackground = () => {
     if (this.state.isEditingBlock) {
       this._handleDismissEditing();
@@ -337,6 +357,7 @@ class CreateCardScreen extends React.Component {
                 onDismiss={this._handleDismissEditing}
                 onTextInputFocus={this._handleBlockTextInputFocus}
                 onChangeBlock={this._handleBlockChange}
+                onAddCard={this._handleAddCardFromBlock}
               />
             ) : (
               <CardBlocks card={card} onSelectBlock={this._handleEditBlock} />

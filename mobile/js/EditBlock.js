@@ -140,17 +140,25 @@ const EditBlock = props => {
 
   const selectDestination = () => {
     const { deck } = props;
-    if (!deck || !deck.cards || !deck.cards.length) return false;
+    if (!deck || !deck.cards) return false;
 
     showActionSheetWithOptions(
       {
         title: 'Destination',
-        options: deck.cards.map(card => card.name).concat(['Cancel']),
-        cancelButtonIndex: deck.cards.length,
+        options: deck.cards
+          .map(card => card.name)
+          .concat(['New Card'])
+          .concat(['Cancel']),
+        cancelButtonIndex: deck.cards.length + 1,
       },
       buttonIndex => {
         if (buttonIndex < deck.cards.length) {
           onChangeBlock({ ...block, destination: deck.cards[buttonIndex].name });
+        } else if (buttonIndex == deck.cards.length) {
+          // add a new card.
+          // expect this method to update our deck, block props
+          // with destination pointing to the new card.
+          props.onAddCard(block);
         }
       }
     );
