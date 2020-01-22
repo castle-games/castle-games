@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, TouchableOpacity, View, StyleSheet } from 'react-native';
 
 import AddBlockPlaceholder from './AddBlockPlaceholder';
 import FastImage from 'react-native-fast-image';
@@ -47,7 +47,7 @@ const CardBlock = props => {
   switch (block.type) {
     case 'choice': {
       return (
-        <View style={[styles.choiceBlock, props.style]}>
+        <TouchableOpacity style={[styles.choiceBlock, props.style]} onPress={props.onSelect}>
           <FastImage
             style={{
               width: 12,
@@ -56,15 +56,15 @@ const CardBlock = props => {
             source={require('../assets/images/add.png')}
           />
           <Text style={styles.choiceBlockDescription}>{block.title}</Text>
-        </View>
+        </TouchableOpacity>
       );
     }
     case 'text':
     default: {
       return (
-        <View style={[styles.textBlock, props.style]}>
+        <TouchableOpacity style={[styles.textBlock, props.style]} onPress={props.onSelect}>
           <Text style={styles.textBlockDescription}>{block.title}</Text>
-        </View>
+        </TouchableOpacity>
       );
       break;
     }
@@ -81,7 +81,14 @@ const CardBlocks = props => {
         {orderedBlocks.map((block, ii) => {
           const prevBlockType = ii > 0 ? orderedBlocks[ii - 1].type : block.type;
           const styles = block.type !== prevBlockType ? { marginTop: 8 } : null;
-          return <CardBlock key={ii} block={block} style={styles} />;
+          return (
+            <CardBlock
+              key={ii}
+              block={block}
+              style={styles}
+              onSelect={() => props.onSelectBlock(block.cardBlockId)}
+            />
+          );
         })}
       </React.Fragment>
     );

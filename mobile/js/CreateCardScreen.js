@@ -230,7 +230,21 @@ class CreateCardScreen extends React.Component {
 
   _handleEditBlock = blockIdToEdit => this.setState({ isEditingBlock: true, blockIdToEdit });
 
-  _handleDismissEditing = () => this.setState({ isEditingBlock: false });
+  _handleDismissEditing = () => {
+    this.setState(state => {
+      // making a block empty is the same as deleting it
+      const blocks = state.card.blocks.filter(block => block.title && block.title.length > 0);
+      return {
+        ...state,
+        isEditingBlock: false,
+        blockToEdit: null,
+        card: {
+          ...state.card,
+          blocks,
+        },
+      };
+    });
+  };
 
   _handleBlockTextInputFocus = () => {
     // we want to scroll to the very bottom of the block editor
@@ -279,7 +293,7 @@ class CreateCardScreen extends React.Component {
 
   _handlePressBackground = () => {
     if (this.state.isEditingBlock) {
-      this.setState({ isEditingBlock: false, blockIdToEdit: null });
+      this._handleDismissEditing();
     } else if (this.state.isHeaderExpanded) {
       this.setState({ isHeaderExpanded: false });
     }
