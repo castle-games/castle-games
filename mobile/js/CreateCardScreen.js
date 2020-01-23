@@ -4,7 +4,7 @@ import { View, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback } fr
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import SafeAreaView from 'react-native-safe-area-view';
 import uuid from 'uuid/v4';
-import { withNavigation } from 'react-navigation';
+import { withNavigation, withNavigationFocus } from 'react-navigation';
 
 import * as Session from './Session';
 
@@ -231,7 +231,8 @@ class CreateCardScreen extends React.Component {
     if (
       !prevProps ||
       prevDeckIdToEdit !== params.deckIdToEdit ||
-      prevCardIdToEdit !== params.cardIdToEdit
+      prevCardIdToEdit !== params.cardIdToEdit ||
+      (props.isFocused && !prevProps.isFocused)
     ) {
       let deck = EMPTY_DECK,
         card = EMPTY_CARD;
@@ -399,4 +400,4 @@ class CreateCardScreen extends React.Component {
   }
 }
 
-export default withNavigation(CreateCardScreen);
+export default withNavigationFocus(withNavigation(CreateCardScreen));
