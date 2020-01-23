@@ -4,7 +4,7 @@ import FastImage from 'react-native-fast-image';
 import gql from 'graphql-tag';
 import SafeAreaView from 'react-native-safe-area-view';
 import { useQuery } from '@apollo/react-hooks';
-import { useNavigation } from 'react-navigation-hooks';
+import { useNavigation, useNavigationEvents } from 'react-navigation-hooks';
 
 const styles = StyleSheet.create({
   container: {
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const EditDeckCell = props => {
+const EditDeckCell = (props) => {
   const { deck, onPress } = props;
   const title = deck && deck.title ? deck.title : 'Untitled Deck';
   return (
@@ -54,7 +54,7 @@ const EditDeckCell = props => {
   );
 };
 
-const CreateDeckCell = props => {
+const CreateDeckCell = (props) => {
   return (
     <TouchableOpacity style={[styles.cell, styles.createCell]} onPress={props.onPress}>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -73,6 +73,7 @@ const CreateDeckCell = props => {
 };
 
 const CreateScreen = () => {
+  let lastFocusedTime;
   const navigation = useNavigation();
   const query = useQuery(gql`
     query Me {
@@ -88,6 +89,14 @@ const CreateScreen = () => {
       }
     }
   `);
+  useNavigationEvents((event) => {
+    if (event.type == 'didFocus') {
+      if (lastFocusedTime) {
+        query.refetch();
+      }
+      lastFocusedTime = Date.now();
+    }
+  });
 
   let decks;
   if (!query.loading && !query.error && query.data) {
@@ -106,7 +115,7 @@ const CreateScreen = () => {
             }}
           />
           {decks &&
-            decks.map(deck => (
+            decks.map((deck) => (
               <EditDeckCell
                 key={deck.deckId}
                 deck={deck}
