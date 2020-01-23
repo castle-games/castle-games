@@ -545,8 +545,6 @@ const ToolBox = ({ element }) => (
 );
 elementTypes['box'] = ToolBox;
 
-const numberToText = number => (typeof number === 'number' ? number.toString() : '0');
-
 const textToNumber = text => {
   const parsed = parseFloat(text);
   return Number.isNaN(parsed) ? 0 : parsed;
@@ -554,6 +552,14 @@ const textToNumber = text => {
 
 const ToolNumberInput = ({ isSlider, element }) => {
   const textInputRef = useRef(null);
+
+  const numberToText = number => {
+    if (typeof number !== 'number') {
+      return '0';
+    }
+    const decimalDigits = typeof element.props.decimalDigits == 'number' ? element.props.decimalDigits : 3;
+    return parseFloat(number.toFixed(decimalDigits)).toString();
+  };
 
   // Maintain `text` separately from `value` to allow incomplete text such as '' or '3.'
   const [text, setText] = useState('0');
