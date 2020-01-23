@@ -72,6 +72,11 @@ const CreateNavigator = createStackNavigator(
   },
   {
     headerMode: 'none',
+    navigationOptions: ({ navigation }) => {
+      return {
+        tabBarVisible: navigation.state.index == 0,
+      };
+    },
   }
 );
 

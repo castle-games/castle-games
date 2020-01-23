@@ -21,6 +21,8 @@ const styles = StyleSheet.create({
     flex: 1,
     flexShrink: 1,
     backgroundColor: '#f2f2f2',
+    borderBottomLeftRadius: 6,
+    borderBottomRightRadius: 6,
   },
   scene: {
     flex: 1,
@@ -46,7 +48,7 @@ const styles = StyleSheet.create({
   actions: {
     width: '100%',
     paddingHorizontal: 12,
-    paddingBottom: 8,
+    paddingBottom: 12,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
