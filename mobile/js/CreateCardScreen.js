@@ -70,7 +70,7 @@ const saveDeck = async (card, deck) => {
   };
   const cardUpdateFragment = {
     title: card.title,
-    blocks: card.blocks.map(block => {
+    blocks: card.blocks.map((block) => {
       return {
         type: block.type,
         destinationCardId: block.destinationCardId,
@@ -97,8 +97,8 @@ const saveDeck = async (card, deck) => {
     });
     let updatedCard,
       newCards = [...deck.cards];
-    result.data.updateCard.forEach(updated => {
-      let existingIndex = deck.cards.findIndex(old => old.cardId === updated.cardId);
+    result.data.updateCard.forEach((updated) => {
+      let existingIndex = deck.cards.findIndex((old) => old.cardId === updated.cardId);
       if (existingIndex > 0) {
         newCards[existingIndex] = updated;
       } else {
@@ -141,7 +141,7 @@ const saveDeck = async (card, deck) => {
     if (result.data.createDeck.cards.length > 1) {
       // if the initial card contained references to other cards,
       // we can get many cards back here. we care about the non-empty one
-      newCard = result.data.createDeck.cards.find(card => card.blocks && card.blocks.length > 0);
+      newCard = result.data.createDeck.cards.find((card) => card.blocks && card.blocks.length > 0);
     } else {
       newCard = result.data.createDeck.cards[0];
     }
@@ -152,7 +152,7 @@ const saveDeck = async (card, deck) => {
   }
 };
 
-const getDeckById = async deckId => {
+const getDeckById = async (deckId) => {
   const result = await Session.apolloClient.query({
     query: gql`
       query GetDeckById($deckId: ID!) {
@@ -166,11 +166,12 @@ const getDeckById = async deckId => {
       }
     `,
     variables: { deckId },
+    fetchPolicy: 'no-cache',
   });
   return result.data.deck;
 };
 
-const ActionButton = props => {
+const ActionButton = (props) => {
   const buttonProps = { ...props, children: undefined };
   return (
     <TouchableOpacity style={styles.button} {...buttonProps}>
@@ -237,7 +238,7 @@ class CreateCardScreen extends React.Component {
       if (params.deckIdToEdit) {
         try {
           deck = await getDeckById(params.deckIdToEdit);
-          card = deck.cards.find(card => card.cardId == params.cardIdToEdit);
+          card = deck.cards.find((card) => card.cardId == params.cardIdToEdit);
         } catch (_) {}
       }
       this._mounted && this.setState({ deck, card });
@@ -251,7 +252,7 @@ class CreateCardScreen extends React.Component {
     return this.setState({ card, deck });
   };
 
-  _handlePublishAndGoToDestination = async blockToFollow => {
+  _handlePublishAndGoToDestination = async (blockToFollow) => {
     // flag this block so we can follow it after saving
     const cardBlockUpdateId = uuid();
     await this._handleBlockChange({
@@ -261,22 +262,24 @@ class CreateCardScreen extends React.Component {
     await this._handlePublish();
     if (!this._mounted) return;
     const updatedBlock = this.state.card.blocks.find(
-      block => block.cardBlockUpdateId === cardBlockUpdateId
+      (block) => block.cardBlockUpdateId === cardBlockUpdateId
     );
     if (updatedBlock && updatedBlock.destinationCardId) {
-      this.props.navigation.push('CreateCard', {
-        deckIdToEdit: this.state.deck.deckId,
-        cardIdToEdit: updatedBlock.destinationCardId,
-      });
+      setTimeout(() => {
+        this.props.navigation.push('CreateCard', {
+          deckIdToEdit: this.state.deck.deckId,
+          cardIdToEdit: updatedBlock.destinationCardId,
+        });
+      }, 100);
     }
   };
 
-  _handleEditBlock = blockIdToEdit => this.setState({ isEditingBlock: true, blockIdToEdit });
+  _handleEditBlock = (blockIdToEdit) => this.setState({ isEditingBlock: true, blockIdToEdit });
 
   _handleDismissEditing = () => {
-    return this.setState(state => {
+    return this.setState((state) => {
       // making a block empty is the same as deleting it
-      const blocks = state.card.blocks.filter(block => block.title && block.title.length > 0);
+      const blocks = state.card.blocks.filter((block) => block.title && block.title.length > 0);
       return {
         ...state,
         isEditingBlock: false,
@@ -297,8 +300,8 @@ class CreateCardScreen extends React.Component {
     }
   };
 
-  _handleCardChange = changes => {
-    this.setState(state => {
+  _handleCardChange = (changes) => {
+    this.setState((state) => {
       return {
         ...state,
         card: {
@@ -309,13 +312,13 @@ class CreateCardScreen extends React.Component {
     });
   };
 
-  _handleBlockChange = block => {
-    return this.setState(state => {
+  _handleBlockChange = (block) => {
+    return this.setState((state) => {
       const blocks = [...state.card.blocks];
       let existingIndex = -1;
       let blockIdToEdit = state.blockIdToEdit;
       if (block.cardBlockId) {
-        existingIndex = blocks.findIndex(existing => existing.cardBlockId === block.cardBlockId);
+        existingIndex = blocks.findIndex((existing) => existing.cardBlockId === block.cardBlockId);
       }
       if (existingIndex >= 0) {
         blocks[existingIndex] = block;
@@ -343,7 +346,7 @@ class CreateCardScreen extends React.Component {
   };
 
   _toggleHeaderExpanded = () =>
-    this.setState(state => {
+    this.setState((state) => {
       return { ...state, isHeaderExpanded: !state.isHeaderExpanded };
     });
 
@@ -351,7 +354,7 @@ class CreateCardScreen extends React.Component {
     const { deck, card, isEditingBlock, blockIdToEdit, isHeaderExpanded } = this.state;
     const blockToEdit =
       isEditingBlock && blockIdToEdit
-        ? card.blocks.find(block => block.cardBlockId === blockIdToEdit)
+        ? card.blocks.find((block) => block.cardBlockId === blockIdToEdit)
         : EMPTY_BLOCK;
     return (
       <SafeAreaView style={styles.container}>
@@ -366,7 +369,7 @@ class CreateCardScreen extends React.Component {
           style={styles.scrollView}
           enableAutomaticScroll={false}
           contentContainerStyle={{ flex: 1 }}
-          innerRef={ref => (this._scrollViewRef = ref)}>
+          innerRef={(ref) => (this._scrollViewRef = ref)}>
           <TouchableWithoutFeedback onPress={this._handlePressBackground}>
             <View style={styles.scene}>
               <ActionButton>Edit Scene</ActionButton>
