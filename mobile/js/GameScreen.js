@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, KeyboardAvoidingView } from 'react-native';
+import { View } from 'react-native';
 import { useLazyQuery } from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import castleMetadata from 'castle-metadata';
@@ -21,12 +21,12 @@ import * as Constants from './Constants';
 import GameLogs from './GameLogs';
 
 // Whether the given URI is local
-const isLocalUri = uri => {
+const isLocalUri = (uri) => {
   const parsed = url.parse(uri);
   return (
     parsed.hostname &&
     (parsed.hostname == 'localhost' ||
-      (Constants.Android && parsed.hostname.startsWith('100.115')) /* Local serve on Chrome OS */ ||
+    (Constants.Android && parsed.hostname.startsWith('100.115')) /* Local serve on Chrome OS */ ||
       !ip.isPublic(parsed.hostname))
   );
 };
@@ -45,7 +45,7 @@ const useFetchGame = ({ gameId, gameUri, extras }) => {
   useEffect(() => {
     cancelled = false;
 
-    callFetchMetadata.current = async httpUri => {
+    callFetchMetadata.current = async (httpUri) => {
       let newMetadata = {};
       if (httpUri.endsWith('.castle')) {
         const result = await castleMetadata.fetchMetadataForUrlAsync(httpUri);
@@ -251,16 +251,16 @@ const useLuaLoading = ({ eventsReady }) => {
     handler: async ({ type, id, url, method }) => {
       if (type === 'start') {
         // Add to `networkRequests` if `url` is new
-        setNetworkRequests(networkRequests =>
-          !networkRequests.find(req => req.url == url)
+        setNetworkRequests((networkRequests) =>
+          !networkRequests.find((req) => req.url == url)
             ? [...networkRequests, { id, url, method }]
             : networkRequests
         );
       }
       if (type === 'stop') {
         // Wait for a slight bit then remove from `networkRequests`
-        await new Promise(resolve => setTimeout(resolve, 60));
-        setNetworkRequests(networkRequests => networkRequests.filter(req => req.id !== id));
+        await new Promise((resolve) => setTimeout(resolve, 60));
+        setNetworkRequests((networkRequests) => networkRequests.filter((req) => req.id !== id));
       }
     },
   });
@@ -358,7 +358,7 @@ const useUserStatus = ({ game }) => {
         clearInterval(interval);
       };
 
-      const recordUserStatus = async isNewSession => {
+      const recordUserStatus = async (isNewSession) => {
         if (mounted) {
           const title = game.title || game.metadata.title || game.name || game.metadata.name;
           const status = game.isLocal ? 'make' : 'play';
@@ -482,19 +482,11 @@ const GameView = ({
     extras.actionKeyCode !== undefined ? extras.actionKeyCode : GAME_INPUTS_ACTION_KEY_CODES[0]
   );
   const onPressSwitchActionKeyCode = () => {
-    ActionSheet.showActionSheetWithOptions({ options: GAME_INPUTS_ACTION_KEY_CODES }, i => {
+    ActionSheet.showActionSheetWithOptions({ options: GAME_INPUTS_ACTION_KEY_CODES }, (i) => {
       if (typeof i === 'number') {
         setActionKeyCode(GAME_INPUTS_ACTION_KEY_CODES[i]);
       }
     });
-  };
-
-  const [keyboardVerticalOffset, setKeyboardVerticalOffset] = useState(0);
-  const keyboardAvoidingContainerRef = useRef(null);
-  const updateKeyboardAvoidingVerticalOffset = () => {
-    if (keyboardAvoidingContainerRef.current) {
-      keyboardAvoidingContainerRef.current.measureInWindow((x, y) => setKeyboardVerticalOffset(y));
-    }
   };
 
   const [landscape, setLandscape] = useState(false);
@@ -518,47 +510,30 @@ const GameView = ({
 
       <View
         style={{ flex: 1 }}
-        ref={ref => {
-          keyboardAvoidingContainerRef.current = ref;
-          updateKeyboardAvoidingVerticalOffset();
-        }}
         onLayout={({
           nativeEvent: {
             layout: { width, height },
           },
-        }) => {
-          updateKeyboardAvoidingVerticalOffset();
-          setLandscape(width > height);
-        }}>
-        <KeyboardAvoidingView
-          style={{ flex: 1 }}
-          behavior="padding"
-          enabled={Constants.iOS}
-          keyboardVerticalOffset={keyboardVerticalOffset}>
-          {game && eventsReady && initialDataHook.sent ? (
-            <Tools eventsReady={eventsReady} visible={!windowed} landscape={landscape} game={game}>
-              <GhostView
-                style={{ flex: 1 }}
-                uri={game.entryPoint}
-                dimensionsSettings={dimensionsSettings}
-              />
-              <GameInputs
-                visible={!windowed}
-                inputsMode={inputsMode}
-                actionKeyCode={actionKeyCode}
-              />
-            </Tools>
-          ) : null}
-          {!luaLoadingHook.loaded ? (
-            <GameLoading
-              noGame={!game && !gameUri}
-              fetching={fetchGameHook.fetching}
-              luaNetworkRequests={luaLoadingHook.networkRequests}
-              extras={extras}
+        }) => setLandscape(width > height)}>
+        {game && eventsReady && initialDataHook.sent ? (
+          <Tools eventsReady={eventsReady} visible={!windowed} landscape={landscape} game={game}>
+            <GhostView
+              style={{ flex: 1 }}
+              uri={game.entryPoint}
+              dimensionsSettings={dimensionsSettings}
             />
-          ) : null}
-          <GameLogs eventsReady={eventsReady} visible={!windowed && logsVisible} />
-        </KeyboardAvoidingView>
+            <GameInputs visible={!windowed} inputsMode={inputsMode} actionKeyCode={actionKeyCode} />
+          </Tools>
+        ) : null}
+        {!luaLoadingHook.loaded ? (
+          <GameLoading
+            noGame={!game && !gameUri}
+            fetching={fetchGameHook.fetching}
+            luaNetworkRequests={luaLoadingHook.networkRequests}
+            extras={extras}
+          />
+        ) : null}
+        <GameLogs eventsReady={eventsReady} visible={!windowed && logsVisible} />
       </View>
     </View>
   );
@@ -587,7 +562,7 @@ const GameScreen = ({ windowed = false }) => {
 
   goToGame = async ({ gameId: newGameId, gameUri: newGameUri, focus = true, extras = {} }) => {
     // Use a bit of a delay so we don't set state within `GameView` handlers
-    await new Promise(resolve => setTimeout(resolve, 40));
+    await new Promise((resolve) => setTimeout(resolve, 40));
 
     if (newGameId || newGameUri) {
       MainSwitcher.setGameRunning(true);
@@ -609,7 +584,7 @@ const GameScreen = ({ windowed = false }) => {
 
   const onPressReload = async () => {
     // Use a bit of a delay so we don't set state within `GameView` handlers
-    await new Promise(resolve => setTimeout(resolve, 40));
+    await new Promise((resolve) => setTimeout(resolve, 40));
 
     setState({
       ...state,

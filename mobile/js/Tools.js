@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext, Fragment } from 'react';
+import React, { useState, useRef, useContext, Fragment, useEffect } from 'react';
 import {
   View,
   Text,
@@ -9,6 +9,9 @@ import {
   Easing,
   Alert,
   StyleSheet,
+  Keyboard,
+  KeyboardAvoidingView,
+  LayoutAnimation,
 } from 'react-native';
 import Slider from '@react-native-community/slider';
 import Markdown from 'react-native-markdown-renderer';
@@ -21,6 +24,8 @@ import FitImage from 'react-native-fit-image';
 import WebView from 'react-native-webview';
 import { Base64 } from 'js-base64';
 import ImagePicker from 'react-native-image-picker';
+import { ReactNativeFile } from 'apollo-upload-client';
+import gql from 'graphql-tag';
 
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -36,8 +41,6 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Octicons from 'react-native-vector-icons/Octicons';
 import Zocial from 'react-native-vector-icons/Zocial';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import { ReactNativeFile } from 'apollo-upload-client';
-import gql from 'graphql-tag';
 
 import * as GhostEvents from './ghost/GhostEvents';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -77,7 +80,7 @@ const Colors = {
 //
 
 // Lua CJSON encodes sparse arrays as objects with stringified keys, use this to convert back
-const objectToArray = input => {
+const objectToArray = (input) => {
   if (Array.isArray(input)) {
     return input;
   }
@@ -121,14 +124,14 @@ const Tool = React.memo(({ element }) => {
 
 // Context for common data across all tools
 const ToolsContext = React.createContext({
-  transformAssetUri: uri => uri,
+  transformAssetUri: (uri) => uri,
   paneName: 'DEFAULT',
   hideLabels: false,
   popoverPlacement: 'auto',
 });
 
 // Get an ordered array of the children of an element
-const orderedChildren = element => {
+const orderedChildren = (element) => {
   if (!element.children) {
     return [];
   }
@@ -149,7 +152,7 @@ const orderedChildren = element => {
 };
 
 // Render the children of an element
-const renderChildren = element =>
+const renderChildren = (element) =>
   orderedChildren(element).map(({ id, child }) => <Tool key={id} element={child} />);
 
 // Maintain state for a `value` / `onChange` combination. Returns the current value and a setter for the new value
@@ -172,7 +175,7 @@ const useValue = ({ element, propName = 'value', eventName = 'onChange', onNewVa
     }
   }
 
-  const setValueAndSendEvent = newValue => {
+  const setValueAndSendEvent = (newValue) => {
     setValue(newValue);
     setLastSentEventId(
       sendEvent(element.pathId, {
@@ -266,12 +269,12 @@ const VIEW_STYLE_PROPS = {
   borderWidth: true,
   opacity: true,
 };
-const viewStyleProps = p => {
+const viewStyleProps = (p) => {
   if (!p) {
     return {};
   }
   const r = {};
-  Object.keys(p).forEach(k => {
+  Object.keys(p).forEach((k) => {
     if (VIEW_STYLE_PROPS[k]) {
       r[k] = p[k];
     }
@@ -280,7 +283,7 @@ const viewStyleProps = p => {
 };
 
 // Whether a pane should be rendered
-const paneVisible = element =>
+const paneVisible = (element) =>
   element &&
   element.props &&
   element.props.visible &&
@@ -337,7 +340,7 @@ const buttonStyle = ({ selected = false } = {}) => ({
   overflow: 'hidden',
 });
 
-const BasePopover = props => {
+const BasePopover = (props) => {
   const { popoverPlacement } = useContext(ToolsContext);
 
   return (
@@ -382,7 +385,7 @@ const ToolTextInput = ({ element, multiline }) => {
         returnKeyType={multiline ? null : 'done'}
         multiline={multiline}
         value={value}
-        onChangeText={newText => setValue(newText)}
+        onChangeText={(newText) => setValue(newText)}
       />
     </Labelled>
   );
@@ -545,7 +548,7 @@ const ToolBox = ({ element }) => (
 );
 elementTypes['box'] = ToolBox;
 
-const textToNumber = text => {
+const textToNumber = (text) => {
   const parsed = parseFloat(text);
   return Number.isNaN(parsed) ? 0 : parsed;
 };
@@ -553,11 +556,12 @@ const textToNumber = text => {
 const ToolNumberInput = ({ isSlider, element }) => {
   const textInputRef = useRef(null);
 
-  const numberToText = number => {
+  const numberToText = (number) => {
     if (typeof number !== 'number') {
       return '0';
     }
-    const decimalDigits = typeof element.props.decimalDigits == 'number' ? element.props.decimalDigits : 3;
+    const decimalDigits =
+      typeof element.props.decimalDigits == 'number' ? element.props.decimalDigits : 3;
     return parseFloat(number.toFixed(decimalDigits)).toString();
   };
 
@@ -565,7 +569,7 @@ const ToolNumberInput = ({ isSlider, element }) => {
   const [text, setText] = useState('0');
   const [value, setValue] = useValue({
     element,
-    onNewValue: newValue => {
+    onNewValue: (newValue) => {
       // Received a new value from Lua -- only update if the text input isn't currently focused
       // so that user interaction is interrupted
       if (!(textInputRef.current && textInputRef.current.isFocused())) {
@@ -574,7 +578,7 @@ const ToolNumberInput = ({ isSlider, element }) => {
     },
   });
 
-  const checkAndSetValue = newValue => {
+  const checkAndSetValue = (newValue) => {
     const { min, max } = element.props;
     if (typeof min === 'number' && newValue < min) {
       newValue = min;
@@ -586,7 +590,7 @@ const ToolNumberInput = ({ isSlider, element }) => {
     return newValue;
   };
 
-  const incrementValue = delta =>
+  const incrementValue = (delta) =>
     setText(numberToText(checkAndSetValue((value || 0) + delta * (element.props.step || 1))));
 
   return (
@@ -608,7 +612,7 @@ const ToolNumberInput = ({ isSlider, element }) => {
             maximumValue={element.props.max}
             step={element.props.step || 1}
             value={value}
-            onValueChange={newValue => {
+            onValueChange={(newValue) => {
               setValue(newValue);
               setText(numberToText(newValue));
             }}
@@ -628,7 +632,7 @@ const ToolNumberInput = ({ isSlider, element }) => {
             selectTextOnFocus
             returnKeyType="done"
             value={text}
-            onChangeText={newText => {
+            onChangeText={(newText) => {
               // User edited the text -- save the changes and also send updated value to Lua
               setText(newText);
               checkAndSetValue(textToNumber(newText));
@@ -893,7 +897,7 @@ const ToolCheckbox = ({ element, valueEventName = 'onChange', valuePropName = 'c
           margin: Constants.iOS ? -1 : 0,
           transform: Constants.iOS ? [{ scaleX: 0.9 }, { scaleY: 0.9 }] : [],
         }}
-        onValueChange={newValue => setValue(newValue)}
+        onValueChange={(newValue) => setValue(newValue)}
       />
     </Labelled>
   );
@@ -924,7 +928,7 @@ const ToolDropdown = ({ element }) => {
           const itemsArray = objectToArray(element.props.items);
           ActionSheet.showActionSheetWithOptions(
             { options: itemsArray.concat(['cancel']), cancelButtonIndex: itemsArray.length },
-            i => {
+            (i) => {
               if (typeof i === 'number' && i >= 0 && i < itemsArray.length) {
                 setValue(itemsArray[i]);
               }
@@ -953,7 +957,7 @@ const ToolColorPicker = ({ element }) => {
     valueStr = `rgb(${r255}, ${g255}, ${b255})`;
   }
 
-  const setValueFromStr = newValueStr => {
+  const setValueFromStr = (newValueStr) => {
     const rgba = tinycolor(newValueStr).toRgb();
     setValue({ r: rgba.r / 255.0, g: rgba.g / 255.0, b: rgba.b / 255.0, a: rgba.a });
   };
@@ -977,7 +981,7 @@ const ToolColorPicker = ({ element }) => {
           style={{ width: 200, height: 200 }}
           oldColor={valueStr}
           onColorChange={setValueFromStr}
-          onColorSelected={newValueStr => {
+          onColorSelected={(newValueStr) => {
             setValueFromStr(newValueStr);
             setPicking(false);
           }}
@@ -995,7 +999,7 @@ const ToolFilePicker = ({ element }) => {
 
   const anchorRef = useRef(null);
 
-  const launchImagePicker = methodName => {
+  const launchImagePicker = (methodName) => {
     const options = { maxWidth: 1024, maxHeight: 1024, imageFileType: 'png' };
 
     if (Constants.Android) {
@@ -1105,7 +1109,7 @@ const ToolCodeEditor = ({ element }) => {
 
   const [value, setValue] = useValue({
     element,
-    onNewValue: newValue => {
+    onNewValue: (newValue) => {
       if (webViewRef.current) {
         webViewRef.current.injectJavascript(`
           window.editor.getDoc().setValue(${JSON.stringify(newValue)});
@@ -1155,7 +1159,7 @@ const ToolCodeEditor = ({ element }) => {
     });
   `;
 
-  const onMessage = event => {
+  const onMessage = (event) => {
     const data = JSON.parse(event.nativeEvent.data);
     switch (data.type) {
       case 'change':
@@ -1231,6 +1235,89 @@ const applyDiff = (t, diff) => {
   return u;
 };
 
+const KeyboardAwareWrapper = ({ landscape, backgroundColor, children }) => {
+  const [keyboardVerticalOffset, setKeyboardVerticalOffset] = useState(0);
+  const keyboardAvoidingContainerRef = useRef(null);
+  const updateKeyboardAvoidingVerticalOffset = () => {
+    if (keyboardAvoidingContainerRef.current) {
+      keyboardAvoidingContainerRef.current.measureInWindow((x, y) => setKeyboardVerticalOffset(y));
+    }
+  };
+
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+  useEffect(() => {
+    if (!landscape) {
+      const onKeyboardDidShow = (e) => {
+        const { duration, easing, endCoordinates } = e;
+        if (duration && easing) {
+          LayoutAnimation.configureNext({
+            duration: duration > 10 ? duration : 10,
+            update: {
+              duration: duration > 10 ? duration : 10,
+              type: LayoutAnimation.Types[easing] || 'keyboard',
+            },
+          });
+        }
+        setKeyboardHeight(endCoordinates.height);
+      };
+      const onKeyboardDidHide = () => {
+        LayoutAnimation.configureNext({
+          duration: 100,
+          update: {
+            duration: 100,
+            type: 'keyboard',
+          },
+        });
+        setKeyboardHeight(0);
+      };
+      if (Constants.iOS) {
+        Keyboard.addListener('keyboardWillChangeFrame', onKeyboardDidShow);
+      }
+      Keyboard.addListener('keyboardDidShow', onKeyboardDidShow);
+      Keyboard.addListener('keyboardWillHide', onKeyboardDidHide);
+      return () => {
+        if (Constants.iOS) {
+          Keyboard.removeListener('keyboardWillChangeFrame', onKeyboardDidShow);
+        }
+        Keyboard.removeListener('keyboardDidShow', onKeyboardDidShow);
+        Keyboard.removeListener('keyboardWillHide', onKeyboardDidHide);
+      };
+    }
+  }, [landscape]);
+
+  return (
+    <View
+      style={{ flex: 1 }}
+      ref={(ref) => {
+        keyboardAvoidingContainerRef.current = ref;
+        updateKeyboardAvoidingVerticalOffset();
+      }}
+      onLayout={({
+        nativeEvent: {
+          layout: { width, height },
+        },
+      }) => updateKeyboardAvoidingVerticalOffset()}>
+      <View
+        style={{
+          position: 'absolute',
+          top: !landscape ? -0.5 * keyboardHeight : 0,
+          left: 0,
+          bottom: 0,
+          right: 0,
+          backgroundColor,
+        }}>
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior="padding"
+          enabled={Constants.iOS && (landscape || keyboardHeight > 0)}
+          keyboardVerticalOffset={keyboardVerticalOffset}>
+          {children}
+        </KeyboardAvoidingView>
+      </View>
+    </View>
+  );
+};
+
 // Top-level tools container -- watches for Lua <-> JS tool events and renders the tools overlaid in its parent
 export default Tools = ({ eventsReady, visible, landscape, game, children }) => {
   // Maintain tools state
@@ -1240,15 +1327,15 @@ export default Tools = ({ eventsReady, visible, landscape, game, children }) => 
   GhostEvents.useListen({
     eventsReady,
     eventName: 'CASTLE_TOOLS_UPDATE',
-    handler: diffJson => {
+    handler: (diffJson) => {
       const diff = JSON.parse(diffJson);
-      setRoot(oldRoot => applyDiff(oldRoot, diff));
+      setRoot((oldRoot) => applyDiff(oldRoot, diff));
     },
   });
 
   // Construct context
   const context = {
-    transformAssetUri: uri => url.resolve(game.entryPoint, uri) || uri,
+    transformAssetUri: (uri) => url.resolve(game.entryPoint, uri) || uri,
   };
 
   // Render the container
@@ -1295,17 +1382,21 @@ export default Tools = ({ eventsReady, visible, landscape, game, children }) => 
             maxWidth: landscape ? 600 : null,
             backgroundColor: root.panes.DEFAULT.props.backgroundColor || Colors.background,
           }}>
-          {root.panes.DEFAULT.props.customLayout ? (
-            <ToolPane element={root.panes.DEFAULT} context={context} style={{ flex: 1 }} />
-          ) : (
-            <ScrollView style={{ flex: 1 }}>
-              <ToolPane
-                element={root.panes.DEFAULT}
-                context={context}
-                style={{ padding: 6, backgroundColor: Colors.background }}
-              />
-            </ScrollView>
-          )}
+          <KeyboardAwareWrapper
+            landscape={landscape}
+            backgroundColor={root.panes.DEFAULT.props.backgroundColor || Colors.background}>
+            {root.panes.DEFAULT.props.customLayout ? (
+              <ToolPane element={root.panes.DEFAULT} context={context} style={{ flex: 1 }} />
+            ) : (
+              <ScrollView style={{ flex: 1 }}>
+                <ToolPane
+                  element={root.panes.DEFAULT}
+                  context={context}
+                  style={{ padding: 6, backgroundColor: Colors.background }}
+                />
+              </ScrollView>
+            )}
+          </KeyboardAwareWrapper>
         </View>
       ) : null}
     </View>
