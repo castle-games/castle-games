@@ -120,6 +120,28 @@ const Dropdown = props => {
   );
 };
 
+const DestinationPicker = props => {
+  const { onPress, onPressArrow, styleSheet, value } = props;
+  const valueToDisplay = value !== null ? value : '';
+  return (
+    <TouchableOpacity
+      style={[styles.selectContainer, styleSheet.selectContainer]}
+      onPress={onPress}>
+      <Text style={[styles.selection, styleSheet.selection]}>{valueToDisplay}</Text>
+      <TouchableOpacity style={styles.select} onPress={onPressArrow}>
+        <FastImage
+          style={{
+            width: 16,
+            aspectRatio: 1,
+            transform: [{ scaleX: -1 }],
+          }}
+          source={require('../assets/images/arrow-left.png')}
+        />
+      </TouchableOpacity>
+    </TouchableOpacity>
+  );
+};
+
 const EditBlock = props => {
   const { deck, block, onChangeBlock } = props;
   const { showActionSheetWithOptions } = useActionSheet();
@@ -154,10 +176,7 @@ const EditBlock = props => {
         if (buttonIndex < deck.cards.length) {
           onChangeBlock({ ...block, destinationCardId: deck.cards[buttonIndex].cardId });
         } else if (buttonIndex == deck.cards.length) {
-          // add a new card.
-          // expect this method to update our deck, block props
-          // with destination pointing to the new card.
-          props.onAddCard(block);
+          onChangeBlock({ ...block, createDestinationCard: true });
         }
       }
     );
@@ -212,7 +231,12 @@ const EditBlock = props => {
       {block.type == 'choice' ? (
         <React.Fragment>
           <Text style={[styles.label, typeStyles.label]}>Destination</Text>
-          <Dropdown onPress={selectDestination} value={destination} styleSheet={typeStyles} />
+          <DestinationPicker
+            onPress={selectDestination}
+            onPressArrow={props.onGoToDestination}
+            value={destination}
+            styleSheet={typeStyles}
+          />
         </React.Fragment>
       ) : null}
     </View>

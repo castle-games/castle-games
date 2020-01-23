@@ -57,6 +57,7 @@ const CARD_FRAGMENT = `
   title
   blocks {
     cardBlockId
+    cardBlockUpdateId
     type
     title
     destinationCardId
@@ -75,6 +76,7 @@ const saveDeck = async (card, deck) => {
         destinationCardId: block.destinationCardId,
         title: block.title,
         createDestinationCard: block.createDestinationCard,
+        cardBlockUpdateId: block.cardBlockUpdateId,
       };
     }),
   };
@@ -243,8 +245,30 @@ class CreateCardScreen extends React.Component {
   };
 
   _handlePublish = async () => {
+    await this._handleDismissEditing();
     const { card, deck } = await saveDeck(this.state.card, this.state.deck);
+    if (!this._mounted) return;
     return this.setState({ card, deck });
+  };
+
+  _handlePublishAndGoToDestination = async blockToFollow => {
+    // flag this block so we can follow it after saving
+    const cardBlockUpdateId = uuid();
+    await this._handleBlockChange({
+      ...blockToFollow,
+      cardBlockUpdateId,
+    });
+    await this._handlePublish();
+    if (!this._mounted) return;
+    const updatedBlock = this.state.card.blocks.find(
+      block => block.cardBlockUpdateId === cardBlockUpdateId
+    );
+    if (updatedBlock && updatedBlock.destinationCardId) {
+      this.props.navigation.push('CreateCard', {
+        deckIdToEdit: this.state.deck.deckId,
+        cardIdToEdit: updatedBlock.destinationCardId,
+      });
+    }
   };
 
   _handleEditBlock = blockIdToEdit => this.setState({ isEditingBlock: true, blockIdToEdit });
@@ -310,16 +334,6 @@ class CreateCardScreen extends React.Component {
     });
   };
 
-  _handleAddCardFromBlock = async block => {
-    await this._handleBlockChange({
-      ...block,
-      createDestinationCard: true,
-    });
-    // await this._handleDismissEditing();
-    // await this._handlePublish();
-    // TODO: go to new card
-  };
-
   _handlePressBackground = () => {
     if (this.state.isEditingBlock) {
       this._handleDismissEditing();
@@ -366,7 +380,7 @@ class CreateCardScreen extends React.Component {
                 onDismiss={this._handleDismissEditing}
                 onTextInputFocus={this._handleBlockTextInputFocus}
                 onChangeBlock={this._handleBlockChange}
-                onAddCard={this._handleAddCardFromBlock}
+                onGoToDestination={() => this._handlePublishAndGoToDestination(blockToEdit)}
               />
             ) : (
               <CardBlocks card={card} onSelectBlock={this._handleEditBlock} />
