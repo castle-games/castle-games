@@ -74,6 +74,7 @@ const saveDeck = async (card, deck) => {
         type: block.type,
         destinationCardId: block.destinationCardId,
         title: block.title,
+        createDestinationCard: block.createDestinationCard,
       };
     }),
   };
@@ -92,16 +93,24 @@ const saveDeck = async (card, deck) => {
       `,
       variables: { cardId: card.cardId, card: cardUpdateFragment },
     });
-    const updatedCard = result.data.updateCard.find(updated => updated.cardId === card.cardId);
+    let updatedCard,
+      newCards = [...deck.cards];
+    result.data.updateCard.forEach(updated => {
+      let existingIndex = deck.cards.findIndex(old => old.cardId === updated.cardId);
+      if (existingIndex > 0) {
+        newCards[existingIndex] = updated;
+      } else {
+        newCards.push(updated);
+      }
+      if (updated.cardId === card.cardId) {
+        updatedCard = updated;
+      }
+    });
     return {
       card: updatedCard,
       deck: {
         ...deck,
-        cards: deck.cards.map(old => {
-          let replacement = result.data.updateCard.find(updated => updated.cardId === old.cardId);
-          if (replacement) return replacement;
-          return old;
-        }),
+        cards: newCards,
       },
     };
   } else if (deck.deckId) {
@@ -235,13 +244,13 @@ class CreateCardScreen extends React.Component {
 
   _handlePublish = async () => {
     const { card, deck } = await saveDeck(this.state.card, this.state.deck);
-    this.setState({ card, deck });
+    return this.setState({ card, deck });
   };
 
   _handleEditBlock = blockIdToEdit => this.setState({ isEditingBlock: true, blockIdToEdit });
 
   _handleDismissEditing = () => {
-    this.setState(state => {
+    return this.setState(state => {
       // making a block empty is the same as deleting it
       const blocks = state.card.blocks.filter(block => block.title && block.title.length > 0);
       return {
@@ -277,7 +286,7 @@ class CreateCardScreen extends React.Component {
   };
 
   _handleBlockChange = block => {
-    this.setState(state => {
+    return this.setState(state => {
       const blocks = [...state.card.blocks];
       let existingIndex = -1;
       let blockIdToEdit = state.blockIdToEdit;
@@ -301,14 +310,14 @@ class CreateCardScreen extends React.Component {
     });
   };
 
-  _handleAddCardFromBlock = block => {
-    // TODO:
-    // if this current card isn't saved, save it
-    // and update the block id reference we care about.
-    //
-    // then, run graphql to add another blank card,
-    // insert result into local deck,
-    // assign result to destination of block.
+  _handleAddCardFromBlock = async block => {
+    await this._handleBlockChange({
+      ...block,
+      createDestinationCard: true,
+    });
+    // await this._handleDismissEditing();
+    // await this._handlePublish();
+    // TODO: go to new card
   };
 
   _handlePressBackground = () => {

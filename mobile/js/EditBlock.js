@@ -121,7 +121,7 @@ const Dropdown = props => {
 };
 
 const EditBlock = props => {
-  const { block, onChangeBlock } = props;
+  const { deck, block, onChangeBlock } = props;
   const { showActionSheetWithOptions } = useActionSheet();
 
   const selectBlockType = () =>
@@ -139,21 +139,20 @@ const EditBlock = props => {
     );
 
   const selectDestination = () => {
-    const { deck } = props;
     if (!deck || !deck.cards) return false;
 
     showActionSheetWithOptions(
       {
         title: 'Destination',
         options: deck.cards
-          .map(card => card.name)
+          .map(card => card.title)
           .concat(['New Card'])
           .concat(['Cancel']),
         cancelButtonIndex: deck.cards.length + 1,
       },
       buttonIndex => {
         if (buttonIndex < deck.cards.length) {
-          onChangeBlock({ ...block, destination: deck.cards[buttonIndex].name });
+          onChangeBlock({ ...block, destinationCardId: deck.cards[buttonIndex].cardId });
         } else if (buttonIndex == deck.cards.length) {
           // add a new card.
           // expect this method to update our deck, block props
@@ -165,6 +164,11 @@ const EditBlock = props => {
   };
 
   const blockType = block.type.charAt(0).toUpperCase() + block.type.slice(1);
+  const destination = block.createDestinationCard
+    ? 'New Card'
+    : block.destinationCardId
+    ? deck.cards.find(card => card.cardId === block.destinationCardId).title
+    : null;
   const typeStyles = block.type === 'choice' ? choiceTypeStyles : textTypeStyles;
   const maybeBlockIcon =
     block.type === 'choice' ? (
@@ -208,7 +212,7 @@ const EditBlock = props => {
       {block.type == 'choice' ? (
         <React.Fragment>
           <Text style={[styles.label, typeStyles.label]}>Destination</Text>
-          <Dropdown onPress={selectDestination} value={block.destination} styleSheet={typeStyles} />
+          <Dropdown onPress={selectDestination} value={destination} styleSheet={typeStyles} />
         </React.Fragment>
       ) : null}
     </View>
