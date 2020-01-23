@@ -1236,11 +1236,12 @@ const applyDiff = (t, diff) => {
 };
 
 const KeyboardAwareWrapper = ({ landscape, backgroundColor, children }) => {
+  const containerRef = useRef(null);
+
   const [keyboardVerticalOffset, setKeyboardVerticalOffset] = useState(0);
-  const keyboardAvoidingContainerRef = useRef(null);
-  const updateKeyboardAvoidingVerticalOffset = () => {
-    if (keyboardAvoidingContainerRef.current) {
-      keyboardAvoidingContainerRef.current.measureInWindow((x, y) => setKeyboardVerticalOffset(y));
+  const updateKeyboardVerticalOffset = () => {
+    if (containerRef.current) {
+      containerRef.current.measureInWindow((x, y) => setKeyboardVerticalOffset(y));
     }
   };
 
@@ -1249,16 +1250,18 @@ const KeyboardAwareWrapper = ({ landscape, backgroundColor, children }) => {
     if (!landscape) {
       const onKeyboardDidShow = (e) => {
         const { duration, easing, endCoordinates } = e;
-        if (duration && easing) {
-          LayoutAnimation.configureNext({
-            duration: duration > 10 ? duration : 10,
-            update: {
+        if (keyboardHeight !== endCoordinates.height) {
+          if (duration && easing) {
+            LayoutAnimation.configureNext({
               duration: duration > 10 ? duration : 10,
-              type: LayoutAnimation.Types[easing] || 'keyboard',
-            },
-          });
+              update: {
+                duration: duration > 10 ? duration : 10,
+                type: LayoutAnimation.Types[easing] || 'keyboard',
+              },
+            });
+          }
+          setKeyboardHeight(endCoordinates.height);
         }
-        setKeyboardHeight(endCoordinates.height);
       };
       const onKeyboardDidHide = () => {
         LayoutAnimation.configureNext({
@@ -1286,17 +1289,7 @@ const KeyboardAwareWrapper = ({ landscape, backgroundColor, children }) => {
   }, [landscape]);
 
   return (
-    <View
-      style={{ flex: 1 }}
-      ref={(ref) => {
-        keyboardAvoidingContainerRef.current = ref;
-        updateKeyboardAvoidingVerticalOffset();
-      }}
-      onLayout={({
-        nativeEvent: {
-          layout: { width, height },
-        },
-      }) => updateKeyboardAvoidingVerticalOffset()}>
+    <View style={{ flex: 1 }}>
       <View
         style={{
           position: 'absolute',
@@ -1305,7 +1298,16 @@ const KeyboardAwareWrapper = ({ landscape, backgroundColor, children }) => {
           bottom: 0,
           right: 0,
           backgroundColor,
-        }}>
+        }}
+        ref={(ref) => {
+          containerRef.current = ref;
+          updateKeyboardVerticalOffset();
+        }}
+        onLayout={({
+          nativeEvent: {
+            layout: { width, height },
+          },
+        }) => updateKeyboardVerticalOffset()}>
         <KeyboardAvoidingView
           style={{ flex: 1 }}
           behavior="padding"
