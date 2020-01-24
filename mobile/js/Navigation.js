@@ -10,6 +10,7 @@ import { Text, View, Image } from 'react-native';
 import FastImage from 'react-native-fast-image';
 
 import { LoginScreen, CreateAccountScreen, ForgotPasswordScreen } from './AuthScreens';
+import * as Constants from './Constants';
 import CreateScreen from './CreateScreen';
 import CreateCardScreen from './CreateCardScreen';
 import * as DeepLinks from './DeepLinks';
@@ -87,60 +88,66 @@ const ProfileNavigator = createSwitchNavigator({
   },
 });
 
-const TabNavigator = createBottomTabNavigator(
-  {
-    Play: {
-      screen: HomeNavigator,
-      navigationOptions: {
-        tabBarIcon: ({ focused, tintColor }) => {
-          return (
-            <Image
-              style={{
-                width: 28,
-                height: 28,
-                tintColor: tintColor,
-              }}
-              source={require('../assets/images/chess-figures.png')}
-            />
-          );
-        },
-      },
-    },
-    Create: {
-      screen: CreateNavigator,
-      navigationOptions: {},
-    },
-    Profile: {
-      screen: ProfileNavigator,
-      navigationOptions: {
-        tabBarIcon: ({ focused, tintColor }) => {
-          return (
-            <Image
-              style={{
-                width: 28,
-                height: 28,
-                tintColor: tintColor,
-              }}
-              source={require('../assets/images/single-neutral-shield.png')}
-            />
-          );
-        },
+const AllTabs = {
+  Play: {
+    screen: HomeNavigator,
+    navigationOptions: {
+      tabBarIcon: ({ focused, tintColor }) => {
+        return (
+          <Image
+            style={{
+              width: 28,
+              height: 28,
+              tintColor: tintColor,
+            }}
+            source={require('../assets/images/chess-figures.png')}
+          />
+        );
       },
     },
   },
-  {
-    tabBarOptions: {
-      activeTintColor: '#9955c8',
-      inactiveTintColor: '#aaa',
-      style: {
-        height: 60,
-      },
-      tabStyle: {
-        padding: 6,
+  Profile: {
+    screen: ProfileNavigator,
+    navigationOptions: {
+      tabBarIcon: ({ focused, tintColor }) => {
+        return (
+          <Image
+            style={{
+              width: 28,
+              height: 28,
+              tintColor: tintColor,
+            }}
+            source={require('../assets/images/single-neutral-shield.png')}
+          />
+        );
       },
     },
-  }
-);
+  },
+};
+
+let TabOrder = ['Play', 'Profile'];
+
+if (Constants.USE_CARDS_PROTOTYPE) {
+  AllTabs.Create = {
+    screen: CreateNavigator,
+    navigationOptions: {},
+  };
+  TabOrder = ['Play', 'Create', 'Profile'];
+}
+
+const TabNavigator = createBottomTabNavigator(AllTabs, {
+  order: TabOrder,
+  tabBarOptions: {
+    activeTintColor: '#9955c8',
+    inactiveTintColor: '#aaa',
+    style: {
+      height: 60,
+    },
+    tabStyle: {
+      padding: 6,
+    },
+  },
+});
 
 const AuthNavigator = createStackNavigator(
   {
