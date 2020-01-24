@@ -13,6 +13,7 @@ import { LoginScreen, CreateAccountScreen, ForgotPasswordScreen } from './AuthSc
 import * as Constants from './Constants';
 import CreateScreen from './CreateScreen';
 import CreateCardScreen from './CreateCardScreen';
+import DecksScreen from './DecksScreen';
 import * as DeepLinks from './DeepLinks';
 import HomeScreen from './HomeScreen';
 import * as Session from './Session';
@@ -23,7 +24,7 @@ import ProfileScreen from './ProfileScreen';
 const HomeNavigator = createStackNavigator(
   {
     HomeScreen: {
-      screen: HomeScreen,
+      screen: Constants.USE_CARDS_PROTOTYPE ? DecksScreen : HomeScreen,
       navigationOptions: {
         headerTitle: (
           <View style={{ paddingHorizontal: 16, flexDirection: 'row', alignItems: 'flex-end' }}>

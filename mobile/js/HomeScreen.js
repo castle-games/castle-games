@@ -5,6 +5,7 @@ import gql from 'graphql-tag';
 import FastImage from 'react-native-fast-image';
 
 import * as GameScreen from './GameScreen';
+import GameUrlInput from './GameUrlInput';
 import * as Constants from './Constants';
 
 export const GAME_CARD_FRAGMENT = gql`
@@ -148,32 +149,16 @@ const HomeScreen = () => {
             justifyContent: 'space-between',
           }}>
           <View style={{ width: '100%', padding: 8 }}>
-            <TextInput
-              style={{
-                width: '100%',
-                borderRadius: 4,
-                backgroundColor: '#00000010',
-                borderColor: '#ccc',
-                borderWidth: 0,
-                paddingVertical: 8,
-                paddingHorizontal: 12,
-                fontSize: 16,
-                marginBottom: -16,
-              }}
-              placeholder="Paste a Castle game URL"
-              returnKeyType="go"
-              clearButtonMode="while-editing"
-              onSubmitEditing={e => GameScreen.goToGame({ gameUri: e.nativeEvent.text })}
-            />
+            <GameUrlInput />
           </View>
           <SectionHeaderText>Trending</SectionHeaderText>
-          {queryData.trendingGames.map(game => (
+          {queryData.trendingGames.map((game) => (
             <View style={{ width: '50%', padding: 8 }} key={game.gameId}>
               <GameCard game={game} />
             </View>
           ))}
           <SectionHeaderText>What's New</SectionHeaderText>
-          {queryData.allGames.map(game => (
+          {queryData.allGames.map((game) => (
             <View style={{ width: '50%', padding: 8 }} key={game.gameId}>
               <GameCard game={game} />
             </View>
@@ -593,7 +578,7 @@ const iOSHomeScreen = () => (
         flexWrap: 'wrap',
         justifyContent: 'space-between',
       }}>
-      {IOS_GAMES.map(game => (
+      {IOS_GAMES.map((game) => (
         <View style={{ width: '50%', padding: 8 }} key={game.gameId}>
           <GameCard game={game} />
         </View>
