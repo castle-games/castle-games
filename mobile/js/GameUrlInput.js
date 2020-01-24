@@ -15,7 +15,6 @@ const GameUrlInput = (props) => {
         paddingVertical: 8,
         paddingHorizontal: 12,
         fontSize: 16,
-        marginBottom: -16,
       }}
       placeholder="Paste a Castle game URL"
       returnKeyType="go"
