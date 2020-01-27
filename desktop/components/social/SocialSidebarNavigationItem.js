@@ -43,74 +43,68 @@ const STYLES_ITEM = css`
   width: ${Constants.sidebar.collapsedWidth};
 `;
 
-export default class SocialSidebarNavigationItem extends React.Component {
-  static defaultProps = {
-    showOnlineIndicator: true,
-    isVoiceChatActive: false,
-    theme: {},
-  };
-
-  render() {
-    const {
-      isUnread,
-      notificationCount,
-      isSelected,
-      onClick,
-      theme,
-      isVoiceChatActive,
-    } = this.props;
-    const { isOnline, showOnlineIndicator } = this.props;
-    const { avatarUrl, avatarElement } = this.props;
-
-    let backgroundColor,
-      unreadCount,
-      indicatorStyles = {};
-    if (isSelected) {
-      backgroundColor = theme.navigatorSelectedBackground || '#d3d3d3';
+const SocialSidebarNavigationItem = ({
+  avatarUrl,
+  avatarElement,
+  isUnread,
+  notificationCount,
+  isOnline,
+  isSelected,
+  onClick,
+  theme = {},
+  showOnlineIndicator = true,
+  isVoiceChatActive = false,
+}) => {
+  let backgroundColor,
+    unreadCount,
+    indicatorStyles = {};
+  if (isSelected) {
+    backgroundColor = theme.navigatorSelectedBackground || '#d3d3d3';
+  }
+  if (isUnread && !isSelected) {
+    unreadCount = notificationCount;
+    if (unreadCount > 0) {
+      indicatorStyles = {
+        backgroundColor: 'rgb(255, 0, 235)',
+        height: '14px',
+        padding: '0 6px 0 6px',
+      };
+    } else {
+      indicatorStyles = {
+        backgroundColor: theme.navigatorBackground ? 'white' : 'black',
+      };
     }
-    if (isUnread && !isSelected) {
-      unreadCount = notificationCount;
-      if (unreadCount > 0) {
-        indicatorStyles = {
-          backgroundColor: 'rgb(255, 0, 235)',
-          height: '14px',
-          padding: '0 6px 0 6px',
-        };
-      } else {
-        indicatorStyles = {
-          backgroundColor: theme.navigatorBackground ? 'white' : 'black',
-        };
-      }
-    }
-    if (theme.navigatorBackground) {
-      indicatorStyles = { ...indicatorStyles, borderColor: theme.navigatorBackground };
-    }
+  }
+  if (theme.navigatorBackground) {
+    indicatorStyles = { ...indicatorStyles, borderColor: theme.navigatorBackground };
+  }
 
-    let avatar;
-    if (avatarElement) {
-      avatar = avatarElement;
-    } else if (avatarUrl) {
-      avatar = (
-        <UIAvatar
-          src={avatarUrl}
-          showIndicator={showOnlineIndicator}
-          isOnline={isOnline}
-          style={{ width: 24, height: 24 }}
-          indicatorStyle={indicatorStyles}
-          indicatorCount={unreadCount}
-        />
-      );
-    }
-
-    let itemStyles = isVoiceChatActive ? `${STYLES_ITEM} ${STYLES_VOICE_CHAT_ACTIVE}` : STYLES_ITEM;
-
-    return (
-      <div
-        className={STYLES_CONTAINER}
-        onClick={!isSelected ? onClick : null}
-        style={{ backgroundColor }}>
-        <div className={itemStyles}>{avatar}</div>
-      </div>
+  let avatar;
+  if (avatarElement) {
+    avatar = avatarElement;
+  } else if (avatarUrl) {
+    avatar = (
+      <UIAvatar
+        src={avatarUrl}
+        showIndicator={showOnlineIndicator}
+        isOnline={isOnline}
+        style={{ width: 24, height: 24 }}
+        indicatorStyle={indicatorStyles}
+        indicatorCount={unreadCount}
+      />
     );
   }
+
+  let itemStyles = isVoiceChatActive ? `${STYLES_ITEM} ${STYLES_VOICE_CHAT_ACTIVE}` : STYLES_ITEM;
+
+  return (
+    <div
+      className={STYLES_CONTAINER}
+      onClick={!isSelected ? onClick : null}
+      style={{ backgroundColor }}>
+      <div className={itemStyles}>{avatar}</div>
+    </div>
+  );
 }
+
+export default SocialSidebarNavigationItem;

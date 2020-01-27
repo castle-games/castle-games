@@ -32,44 +32,32 @@ const STYLES_AVATAR = css`
   border-radius: 4px;
 `;
 
-export default class UIAvatar extends React.Component {
-  static defaultProps = {
-    isOnline: false,
-    isAnonymous: false,
-    showIndicator: true,
-    style: null,
-    indicatorStyle: null,
-    indicatorCount: 0,
+const Indicator = ({ isOnline, isAnonymous, showIndicator, indicatorStyle, indicatorCount }) => {
+  if (!showIndicator) return null;
+
+  let backgroundColor;
+  if (isOnline) {
+    backgroundColor = isAnonymous
+      ? Constants.colors.userStatus.guest
+      : Constants.REFACTOR_COLORS.online;
+  } else {
+    backgroundColor = '#ACACAC';
+  }
+  const styles = {
+    backgroundColor,
+    ...indicatorStyle,
   };
+  return (
+    <div className={STYLES_INDICATOR} style={styles}>
+      {indicatorCount > 0 ? indicatorCount : ''}
+    </div>
+  );
+}
 
-  _renderIndicator = (isOnline, isAnonymous, showIndicator) => {
-    if (!showIndicator) return null;
-
-    let backgroundColor;
-    if (isOnline) {
-      backgroundColor = isAnonymous
-        ? Constants.colors.userStatus.guest
-        : Constants.REFACTOR_COLORS.online;
-    } else {
-      backgroundColor = '#ACACAC';
-    }
-    const styles = {
-      backgroundColor,
-      ...this.props.indicatorStyle,
-    };
-    return (
-      <div className={STYLES_INDICATOR} style={styles}>
-        {this.props.indicatorCount > 0 ? this.props.indicatorCount : ''}
-      </div>
-    );
-  };
-
-  render() {
-    const { src, isOnline, isAnonymous, showIndicator, onClick } = this.props;
-
+const UIAvatar = ({ src, style = null, isOnline = false, isAnonymous = false, showIndicator = true, onClick, indicatorStyle = null, indicatorCount = 0 }) => {
     const avatarContextStyles = {
       backgroundImage: `url('${src}')`,
-      cursor: this.props.onClick ? 'pointer' : null,
+      cursor: onClick ? 'pointer' : null,
     };
 
     let maybeEmptyStyles = {};
@@ -83,9 +71,16 @@ export default class UIAvatar extends React.Component {
       <figure
         onClick={onClick}
         className={STYLES_AVATAR}
-        style={{ ...avatarContextStyles, ...maybeEmptyStyles, ...this.props.style }}>
-        {this._renderIndicator(isOnline, isAnonymous, showIndicator)}
+        style={{ ...avatarContextStyles, ...maybeEmptyStyles, ...style }}>
+        <Indicator
+          isOnline={isOnline}
+          isAnonymous={isAnonymous}
+          showIndicator={showIndicator}
+          indicatorStyle={indicatorStyle}
+          indicatorCount={indicatorCount}
+        />
       </figure>
     );
   }
-}
+
+export default UIAvatar;
