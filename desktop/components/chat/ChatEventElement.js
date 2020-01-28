@@ -62,92 +62,74 @@ const STYLES_SUBDUED_MESSAGE = css`
   color: ${Constants.REFACTOR_COLORS.subdued};
 `;
 
-class NoticeMessage extends React.Component {
-  static defaultProps = {
-    theme: {},
-  };
-
-  render() {
-    const { message } = this.props;
-
-    return (
-      <div className={STYLES_CONTAINER}>
-        <div className={STYLES_NOTICE}>
-          <span className={STYLES_LEFT}>🏰</span>
-          <span className={STYLES_RIGHT}>
-            <ChatMessageHeader
-              author="Castle"
-              timestamp={this.props.message.timestamp}
-              theme={this.props.theme}
-            />
-            <div
-              className={STYLES_NOTICE_MESSAGE}
-              style={{
-                color: this.props.theme.textColor,
-              }}>
-              <UIMessageBody
-                body={message.body}
-                reactions={message.reactions}
-                theme={this.props.theme}
-                expandAttachments={false}
-                onSelectReaction={this.props.onSelectReaction}
-              />
-            </div>
-          </span>
-        </div>
-      </div>
-    );
-  }
-}
-
-class SubduedMessage extends React.Component {
-  static defaultProps = {
-    theme: {},
-  };
-
-  render() {
-    const { message, theme } = this.props;
-
-    return (
-      <div className={STYLES_CONTAINER}>
-        <div className={STYLES_SUBDUED}>
+const NoticeMessage = ({ message, theme = {}, onSelectReaction }) => {
+  return (
+    <div className={STYLES_CONTAINER}>
+      <div className={STYLES_NOTICE}>
+        <span className={STYLES_LEFT}>🏰</span>
+        <span className={STYLES_RIGHT}>
+          <ChatMessageHeader
+            author="Castle"
+            timestamp={message.timestamp}
+            theme={theme}
+          />
           <div
-            className={STYLES_SUBDUED_MESSAGE}
-            style={{ fontSize: theme.subduedFontSize, lineHeight: theme.subduedLineHeight }}>
+            className={STYLES_NOTICE_MESSAGE}
+            style={{
+              color: theme.textColor,
+            }}>
             <UIMessageBody
               body={message.body}
               reactions={message.reactions}
-              theme={this.props.theme}
+              theme={theme}
               expandAttachments={false}
-              onSelectReaction={this.props.onSelectReaction}
+              onSelectReaction={onSelectReaction}
             />
           </div>
+        </span>
+      </div>
+    </div>
+  );
+}
+
+const SubduedMessage = ({ message, theme = {}, onSelectReaction }) => {
+  return (
+    <div className={STYLES_CONTAINER}>
+      <div className={STYLES_SUBDUED}>
+        <div
+          className={STYLES_SUBDUED_MESSAGE}
+          style={{ fontSize: theme.subduedFontSize, lineHeight: theme.subduedLineHeight }}>
+          <UIMessageBody
+            body={message.body}
+            reactions={message.reactions}
+            theme={theme}
+            expandAttachments={false}
+            onSelectReaction={onSelectReaction}
+          />
         </div>
       </div>
-    );
+    </div>
+  );
+}
+
+const EMPTY_USER = {
+  name: 'Castle',
+  photo: {
+    url: null,
+  },
+};
+
+const ChatEventElement = (props) => {
+  const { message, theme, user = EMPTY_USER } = props;
+  let type = message && message.body ? message.body.notificationType : null;
+  switch (type) {
+    case 'game-session':
+      return <NoticeMessage {...props} />;
+    case 'joined-castle':
+    case 'closed-game-session':
+    default:
+      return <SubduedMessage {...props} />;
   }
 }
 
-export default class ChatEventElement extends React.Component {
-  static defaultProps = {
-    user: {
-      name: 'Castle',
-      photo: {
-        url: null,
-      },
-    },
-  };
-
-  render() {
-    const { message, theme } = this.props;
-    let type = message && message.body ? message.body.notificationType : null;
-    switch (type) {
-      case 'game-session':
-        return <NoticeMessage {...this.props} />;
-      case 'joined-castle':
-      case 'closed-game-session':
-      default:
-        return <SubduedMessage {...this.props} />;
-    }
-  }
-}
+export default ChatEventElement;

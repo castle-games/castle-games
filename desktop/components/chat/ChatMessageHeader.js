@@ -25,24 +25,22 @@ const STYLES_TIMESTAMP = css`
   cursor: default;
 `;
 
-export default class ChatMessageHeader extends React.Component {
-  static defaultProps = {
-    author: null,
-    timestamp: null,
-    theme: {},
-    onClick: null,
-  };
-
-  render() {
-    return (
-      <div
-        className={STYLES_AUTHOR_TIMESTAMP}
-        style={{ color: this.props.theme.textColor, fontSize: this.props.theme.bylineSize }}>
-        <span className={STYLES_AUTHOR} onClick={this.props.onClick}>
-          {this.props.author}
-        </span>
-        <span className={STYLES_TIMESTAMP}>{Strings.toChatTime(this.props.timestamp)}</span>
-      </div>
-    );
-  }
+const ChatMessageHeader = ({
+  author = null,
+  timestamp = null,
+  theme = {},
+  onClick = null,
+}) => {
+  return (
+    <div
+      className={STYLES_AUTHOR_TIMESTAMP}
+      style={{ color: theme.textColor, fontSize: theme.bylineSize }}>
+      <span className={STYLES_AUTHOR} onClick={onClick}>
+        {author}
+      </span>
+      <span className={STYLES_TIMESTAMP}>{Strings.toChatTime(timestamp)}</span>
+    </div>
+  );
 }
+
+export default ChatMessageHeader;

@@ -51,39 +51,39 @@ const STYLES_AUTHOR_MESSAGE = css`
   display: flex;
 `;
 
-export default class ChatMessageElement extends React.Component {
-  static defaultProps = {
-    user: {
-      name: 'Anonymous',
-      photo: {
-        url: null,
-      },
-    },
-    theme: {
-      textColor: null,
-    },
-  };
+const EMPTY_USER = {
+  name: 'Anonymous',
+  photo: {
+    url: null,
+  },
+};
 
-  render() {
-    const { message } = this.props;
-    const size = this.props.size ? this.props.size : 40;
-
-    return (
-      <div className={STYLES_CONTAINER}>
-        <span className={STYLES_LEFT} />
-        <span className={STYLES_RIGHT}>
-          <div className={STYLES_AUTHOR_MESSAGE} style={{ color: this.props.theme.textColor }}>
-            <span>{this.props.user.username} </span>
-            <UIMessageBody
-              body={message.body}
-              reactions={message.reactions}
-              theme={this.props.theme}
-              isEdited={message.isEdited}
-              onSelectReaction={this.props.onSelectReaction}
-            />
-          </div>
-        </span>
-      </div>
-    );
-  }
+const ChatRolePlayElement = ({
+  user = EMPTY_USER,
+  theme = {
+    textColor: null,
+  },
+  message,
+  size = 40,
+  onSelectReaction,
+}) => {
+  return (
+    <div className={STYLES_CONTAINER}>
+      <span className={STYLES_LEFT} />
+      <span className={STYLES_RIGHT}>
+        <div className={STYLES_AUTHOR_MESSAGE} style={{ color: theme.textColor }}>
+          <span>{user.username} </span>
+          <UIMessageBody
+            body={message.body}
+            reactions={message.reactions}
+            theme={theme}
+            isEdited={message.isEdited}
+            onSelectReaction={onSelectReaction}
+          />
+        </div>
+      </span>
+    </div>
+  );
 }
+
+export default ChatRolePlayElement;

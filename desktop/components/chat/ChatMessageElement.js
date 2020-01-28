@@ -36,63 +36,67 @@ const STYLES_AUTHOR_MESSAGE = css`
   color: ${Constants.REFACTOR_COLORS.text};
 `;
 
-export default class ChatMessageElement extends React.Component {
-  static defaultProps = {
-    showAuthor: true,
-    theme: {},
+const ChatMessageElement = ({
+  showAuthor = true,
+  theme = {},
+  message,
+  isEmojiMessage,
+  size = 40,
+  onNavigateToUserProfile,
+  user,
+  style,
+  expandAttachments,
+  onSelectReaction,
+}) => {
+  const styles = {
+    paddingTop: showAuthor ? '8px' : null,
   };
-
-  render() {
-    const { message, isEmojiMessage, showAuthor } = this.props;
-    const size = this.props.size ? this.props.size : 40;
-    const styles = {
-      paddingTop: showAuthor ? '8px' : null,
-    };
-    let leftElement;
-    if (showAuthor) {
-      leftElement = (
-        <UIAvatar
-          onClick={() => this.props.onNavigateToUserProfile(this.props.user)}
-          style={{ width: size, height: size }}
-          showIndicator={false}
-          src={this.props.user.photo ? this.props.user.photo.url : null}
-        />
-      );
-    } else {
-      leftElement = <span className={STYLES_LEFT} style={{ width: size }} />;
-    }
-
-    return (
-      <div className={STYLES_CONTAINER} style={{ ...styles, ...this.props.style }}>
-        {leftElement}
-        <span className={STYLES_RIGHT}>
-          {showAuthor ? (
-            <ChatMessageHeader
-              author={this.props.user.username}
-              timestamp={this.props.message.timestamp}
-              theme={this.props.theme}
-              onClick={() => this.props.onNavigateToUserProfile(this.props.user)}
-            />
-          ) : null}
-          <div
-            className={STYLES_AUTHOR_MESSAGE}
-            style={{
-              color: this.props.theme.textColor,
-              fontSize: isEmojiMessage ? '40px' : this.props.theme.bodySize,
-              lineHeight: isEmojiMessage ? '48px' : this.props.theme.bodyLineHeight,
-              marginTop: showAuthor ? '2px' : null,
-            }}>
-            <UIMessageBody
-              body={message.body}
-              reactions={message.reactions}
-              theme={this.props.theme}
-              expandAttachments={this.props.expandAttachments}
-              isEdited={message.isEdited}
-              onSelectReaction={this.props.onSelectReaction}
-            />
-          </div>
-        </span>
-      </div>
+  let leftElement;
+  if (showAuthor) {
+    leftElement = (
+      <UIAvatar
+        onClick={() => onNavigateToUserProfile(user)}
+        style={{ width: size, height: size }}
+        showIndicator={false}
+        src={user.photo ? user.photo.url : null}
+      />
     );
+  } else {
+    leftElement = <span className={STYLES_LEFT} style={{ width: size }} />;
   }
+
+  return (
+    <div className={STYLES_CONTAINER} style={{ ...styles, ...style }}>
+      {leftElement}
+      <span className={STYLES_RIGHT}>
+        {showAuthor ? (
+          <ChatMessageHeader
+            author={user.username}
+            timestamp={message.timestamp}
+            theme={theme}
+            onClick={() => onNavigateToUserProfile(user)}
+          />
+        ) : null}
+        <div
+          className={STYLES_AUTHOR_MESSAGE}
+          style={{
+            color: theme.textColor,
+            fontSize: isEmojiMessage ? '40px' : theme.bodySize,
+            lineHeight: isEmojiMessage ? '48px' : theme.bodyLineHeight,
+            marginTop: showAuthor ? '2px' : null,
+          }}>
+          <UIMessageBody
+            body={message.body}
+            reactions={message.reactions}
+            theme={theme}
+            expandAttachments={expandAttachments}
+            isEdited={message.isEdited}
+            onSelectReaction={onSelectReaction}
+          />
+        </div>
+      </span>
+    </div>
+  );
 }
+
+export default ChatMessageElement;
