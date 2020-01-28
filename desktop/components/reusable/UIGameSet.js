@@ -16,20 +16,24 @@ const STYLES_CELL_ITEM = css`
   margin: 0 16px 16px 0;
 `;
 
-export default class UIGameSet extends React.Component {
-  _container;
+const UIGameSet = (props) => {
+  const _container = React.useRef(null);
 
-  static defaultProps = {
-    numRowsToElide: -1,
-  };
+  const {
+    numRowsToElide = -1,
+    gameItems,
+    onGameSelect,
+    onGameSessionSelect,
+    onGameUpdate,
+    onUserSelect,
+  } = props;
 
-  _numGamesToRender = () => {
-    const { numRowsToElide, gameItems } = this.props;
+  const _numGamesToRender = () => {
     if (numRowsToElide > 0) {
       let numGamesPerRow = 0;
-      if (this._container) {
+      if (_container.current) {
         numGamesPerRow = Math.floor(
-          this._container.offsetWidth / (parseInt(Constants.card.width, 10) + 16)
+          _container.current.offsetWidth / (parseInt(Constants.card.width, 10) + 16)
         );
       }
       return Math.max(1, numGamesPerRow * numRowsToElide);
@@ -37,31 +41,31 @@ export default class UIGameSet extends React.Component {
     return gameItems && gameItems.length;
   };
 
-  render() {
-    if (!this.props.gameItems) return null;
+  if (!gameItems) return null;
 
-    let itemsToRender = this.props.gameItems;
-    if (this.props.numRowsToElide > 0) {
-      itemsToRender = this.props.gameItems.slice(0, this._numGamesToRender());
-    }
-    return (
-      <div className={STYLES_CONTAINER} ref={(c) => (this._container = c)}>
-        {itemsToRender.map((m, i) => {
-          const key = m.key ? m.key : m.gameId ? m.gameId : m.url;
-          return (
-            <div className={STYLES_CELL_ITEM} key={`${key}-${i}`}>
-              <UIGameCell
-                onGameSelect={this.props.onGameSelect}
-                onGameSessionSelect={this.props.onGameSessionSelect}
-                onGameUpdate={this.props.onGameUpdate}
-                onUserSelect={this.props.onUserSelect}
-                src={m.coverImage && m.coverImage.url}
-                game={m}
-              />
-            </div>
-          );
-        })}
-      </div>
-    );
+  let itemsToRender = gameItems;
+  if (numRowsToElide > 0) {
+    itemsToRender = gameItems.slice(0, _numGamesToRender());
   }
+  return (
+    <div className={STYLES_CONTAINER} ref={_container}>
+      {itemsToRender.map((m, i) => {
+        const key = m.key ? m.key : m.gameId ? m.gameId : m.url;
+        return (
+          <div className={STYLES_CELL_ITEM} key={`${key}-${i}`}>
+            <UIGameCell
+              onGameSelect={onGameSelect}
+              onGameSessionSelect={onGameSessionSelect}
+              onGameUpdate={onGameUpdate}
+              onUserSelect={onUserSelect}
+              src={m.coverImage && m.coverImage.url}
+              game={m}
+            />
+          </div>
+        );
+      })}
+    </div>
+  );
 }
+
+export default UIGameSet;

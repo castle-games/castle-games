@@ -56,46 +56,43 @@ const TOOLTIP_PROPS = {
   hideOnClick: false,
 };
 
-export default class UIGameCellActionsBar extends React.Component {
-  static defaultProps = {
-    isLocalFile: false,
-    didCopyToClipboard: false,
-    onCopyUrl: () => {},
-    onGameUpdate: () => {},
-    onHover: (action, isHovering) => {},
-  };
-
-  render() {
-    const { isLocalFile, didCopyToClipboard, onGameUpdate, onHover } = this.props;
-    return (
-      <div
-        className={STYLES_OPTIONS_BAR}
-        onMouseEnter={() => onHover('update', true)}
-        onMouseLeave={() => onHover('update', false)}>
-        {onGameUpdate ? (
-          <Tooltip title={'Update'} {...TOOLTIP_PROPS}>
-            <div className={STYLES_OPTIONS_BAR_ICON} onClick={onGameUpdate}>
-              U
-            </div>
-          </Tooltip>
-        ) : null}
-        <Tooltip title={didCopyToClipboard ? 'Link copied!' : 'Copy Link'} {...TOOLTIP_PROPS}>
-          <div
-            className={STYLES_OPTIONS_BAR_ICON}
-            style={{ borderLeft: isLocalFile ? null : '1px solid #333' }}
-            onClick={this.props.onCopyUrl}>
-            {didCopyToClipboard ? (
-              <div className={STYLES_COPY_LINK_CONTENTS}>
-                <SVG.Check size="18px" />
-              </div>
-            ) : (
-              <div className={STYLES_COPY_LINK_CONTENTS}>
-                <SVG.Link size="18px" />
-              </div>
-            )}
+const UIGameCellActionsBar = ({
+  isLocalFile = false,
+  didCopyToClipboard = false,
+  onCopyUrl = () => {},
+  onGameUpdate = () => {},
+  onHover = (action, isHovering) => {},
+}) => {
+  return (
+    <div
+      className={STYLES_OPTIONS_BAR}
+      onMouseEnter={() => onHover('update', true)}
+      onMouseLeave={() => onHover('update', false)}>
+      {onGameUpdate ? (
+        <Tooltip title={'Update'} {...TOOLTIP_PROPS}>
+          <div className={STYLES_OPTIONS_BAR_ICON} onClick={onGameUpdate}>
+            U
           </div>
         </Tooltip>
-      </div>
-    );
-  }
+      ) : null}
+      <Tooltip title={didCopyToClipboard ? 'Link copied!' : 'Copy Link'} {...TOOLTIP_PROPS}>
+        <div
+          className={STYLES_OPTIONS_BAR_ICON}
+          style={{ borderLeft: isLocalFile ? null : '1px solid #333' }}
+          onClick={onCopyUrl}>
+          {didCopyToClipboard ? (
+            <div className={STYLES_COPY_LINK_CONTENTS}>
+              <SVG.Check size="18px" />
+            </div>
+          ) : (
+            <div className={STYLES_COPY_LINK_CONTENTS}>
+              <SVG.Link size="18px" />
+            </div>
+          )}
+        </div>
+      </Tooltip>
+    </div>
+  );
 }
+
+export default UIGameCellActionsBar;
