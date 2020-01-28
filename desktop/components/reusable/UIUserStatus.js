@@ -17,50 +17,48 @@ const STYLES_STATUS_UNREGISTERED_TITLE = css`
   color: ${Constants.colors.text2};
 `;
 
-export default class UIUserStatus extends React.Component {
-  static defaultProps = {
-    user: null,
-  };
-
-  render() {
-    const { user } = this.props;
-    let statusElement = null;
-    if (user.lastUserStatus && user.lastUserStatus.game) {
-      // show last status if it exists and is relevant
-      let status = UserStatus.renderStatusText(user.lastUserStatus);
-      if (status.status) {
-        if (user.lastUserStatus.game.gameId && this.props.navigateToGame) {
-          // link to game if it's registered
-          statusElement = (
-            <React.Fragment>
-              {status.verb}{' '}
-              <span
-                className={STYLES_STATUS_LINK}
-                onClick={() =>
-                  this.props.navigateToGame(user.lastUserStatus.game, {
-                    launchSource: 'user-status',
-                  })
-                }>
-                {status.title}
-              </span>
-            </React.Fragment>
-          );
-        } else {
-          statusElement = (
-            <React.Fragment>
-              {status.verb} <span className={STYLES_STATUS_UNREGISTERED_TITLE}>{status.title}</span>
-            </React.Fragment>
-          );
-        }
+const UIUserStatus = ({
+  user = null,
+  navigateToGame,
+}) => {
+  let statusElement = null;
+  if (user.lastUserStatus && user.lastUserStatus.game) {
+    // show last status if it exists and is relevant
+    let status = UserStatus.renderStatusText(user.lastUserStatus);
+    if (status.status) {
+      if (user.lastUserStatus.game.gameId && navigateToGame) {
+        // link to game if it's registered
+        statusElement = (
+          <React.Fragment>
+            {status.verb}{' '}
+            <span
+              className={STYLES_STATUS_LINK}
+              onClick={() =>
+                navigateToGame(user.lastUserStatus.game, {
+                  launchSource: 'user-status',
+                })
+              }>
+              {status.title}
+            </span>
+          </React.Fragment>
+        );
+      } else {
+        statusElement = (
+          <React.Fragment>
+            {status.verb} <span className={STYLES_STATUS_UNREGISTERED_TITLE}>{status.title}</span>
+          </React.Fragment>
+        );
       }
     }
-    if (!statusElement && user.isAnonymous) {
-      statusElement = 'Browsing as a guest';
-    }
-    if (!statusElement && user.createdTime) {
-      // if no relevant or recent status, just show signed up date
-      statusElement = `Joined on ${Strings.toDate(user.createdTime)}`;
-    }
-    return <React.Fragment>{statusElement}</React.Fragment>;
   }
+  if (!statusElement && user.isAnonymous) {
+    statusElement = 'Browsing as a guest';
+  }
+  if (!statusElement && user.createdTime) {
+    // if no relevant or recent status, just show signed up date
+    statusElement = `Joined on ${Strings.toDate(user.createdTime)}`;
+  }
+  return <React.Fragment>{statusElement}</React.Fragment>;
 }
+
+export default UIUserStatus;

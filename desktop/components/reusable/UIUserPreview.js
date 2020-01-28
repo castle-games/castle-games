@@ -24,19 +24,18 @@ const STYLES_USERNAME = css`
   font-size: 12px;
 `;
 
-export default class UIUserPreview extends React.Component {
-  render() {
-    const { user } = this.props;
-    const avatarSrc = user && user.photo ? user.photo.url : null;
-    const name = user.name ? user.name : user.username;
-    return (
-      <div className={STYLES_CONTAINER}>
-        <UIAvatar src={avatarSrc} style={{ width: 48, height: 48 }} showIndicator={false} />
-        <div className={STYLES_INFO}>
-          <p className={STYLES_NAME}>{name}</p>
-          <p className={STYLES_USERNAME}>{'@' + user.username}</p>
-        </div>
+const UIUserPreview = ({ user }) => {
+  const avatarSrc = user && user.photo ? user.photo.url : null;
+  const name = user.name ? user.name : user.username;
+  return (
+    <div className={STYLES_CONTAINER}>
+      <UIAvatar src={avatarSrc} style={{ width: 48, height: 48 }} showIndicator={false} />
+      <div className={STYLES_INFO}>
+        <p className={STYLES_NAME}>{name}</p>
+        <p className={STYLES_USERNAME}>{'@' + user.username}</p>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
+
+export default UIUserPreview;

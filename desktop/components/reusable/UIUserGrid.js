@@ -46,31 +46,32 @@ const STYLES_USER_USERNAME = css`
   cursor: pointer;
 `;
 
-export default class UIUserGrid extends React.Component {
-  render() {
-    const { users } = this.props;
-    return (
-      <div className={STYLES_CONTAINER}>
-        {users.map((u) => {
-          return (
-            <div key={u.userId} className={STYLES_ITEM}>
-              <div
-                className={STYLES_AVATAR}
-                onClick={() => this.props.onUserSelect(u)}
-                style={{
-                  backgroundImage: u.photo && u.photo.url ? `url(${u.photo.url})` : null,
-                }}
-              />
-              <div className={STYLES_USER_NAME} onClick={() => this.props.onUserSelect(u)}>
-                {u.name}
-              </div>
-              <div className={STYLES_USER_USERNAME} onClick={() => this.props.onUserSelect(u)}>
-                @{u.username}
-              </div>
+const UIUserGrid = (props) => {
+  const { users, onUserSelect } = props;
+  return (
+    <div className={STYLES_CONTAINER}>
+      {users.map((u) => {
+        const selectUser = () => onUserSelect(u);
+        return (
+          <div key={u.userId} className={STYLES_ITEM}>
+            <div
+              className={STYLES_AVATAR}
+              onClick={selectUser}
+              style={{
+                backgroundImage: u.photo && u.photo.url ? `url(${u.photo.url})` : null,
+              }}
+            />
+            <div className={STYLES_USER_NAME} onClick={selectUser}>
+              {u.name}
             </div>
-          );
-        })}
-      </div>
-    );
-  }
+            <div className={STYLES_USER_USERNAME} onClick={selectUser}>
+              @{u.username}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
 }
+
+export default UIUserGrid;
