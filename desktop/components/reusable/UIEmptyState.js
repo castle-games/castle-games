@@ -22,13 +22,11 @@ const STYLES_PARAGRAPH = css`
   margin-top: 16px;
 `;
 
-export default class UIEmptyState extends React.Component {
-  render() {
-    return (
-      <div className={STYLES_CONTAINER} style={this.props.style} onClick={this.props.onClick}>
-        <div className={STYLES_HEADER}>{this.props.title}</div>
-        {this.props.children ? <div className={STYLES_PARAGRAPH}>{this.props.children}</div> : null}
-      </div>
-    );
-  }
-}
+const UIEmptyState = ({ style, onClick, title, children }) => (
+  <div className={STYLES_CONTAINER} style={style} onClick={onClick}>
+    <div className={STYLES_HEADER}>{title}</div>
+    {children ? <div className={STYLES_PARAGRAPH}>{children}</div> : null}
+  </div>
+);
+
+export default UIEmptyState;

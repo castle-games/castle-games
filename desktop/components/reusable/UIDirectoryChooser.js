@@ -41,48 +41,44 @@ const STYLES_ACTION = css`
   cursor: pointer;
 `;
 
-export default class UIDirectoryChooser extends React.Component {
-  static defaultProps = {
-    value: null,
-    placeholder: '',
-    title: 'Choose a folder',
-    message: 'Choose a folder',
-    action: 'Select Folder',
-    onChange: (directory) => {},
-  };
-
-  _handleChangeDirectory = async () => {
-    let { title, message, action } = this.props;
+const UIDirectoryChooser = ({
+  value = null,
+  placeholder = '',
+  title = 'Choose a folder',
+  message = 'Choose a folder',
+  action = 'Select Folder',
+  onChange =  (directory) => {},
+}) => {
+  const _handleChangeDirectory = async () => {
     const directory = await NativeUtil.chooseDirectoryWithDialogAsync({
       title,
       message,
       action,
     });
-    this.props.onChange(directory);
+    onChange(directory);
   };
 
-  render() {
-    const { value, placeholder } = this.props;
-    let action, valueToDisplay, valueStyle;
-    if (value) {
-      action = 'Change Folder';
-      valueToDisplay = value;
-    } else {
-      action = 'Choose Folder';
-      valueToDisplay = placeholder;
-      valueStyle = { color: '#8e8e8e' };
-    }
-    return (
-      <div className={STYLES_CONTAINER}>
-        <div className={STYLES_PROJECT_PATH_PREVIEW}>
-          <span className={STYLES_PROJECT_DIRECTORY} style={valueStyle}>
-            {valueToDisplay}
-          </span>
-        </div>
-        <div className={STYLES_ACTION} onClick={this._handleChangeDirectory}>
-          {action}
-        </div>
-      </div>
-    );
+  let changeAction, valueToDisplay, valueStyle;
+  if (value) {
+    changeAction = 'Change Folder';
+    valueToDisplay = value;
+  } else {
+    changeAction = 'Choose Folder';
+    valueToDisplay = placeholder;
+    valueStyle = { color: '#8e8e8e' };
   }
+  return (
+    <div className={STYLES_CONTAINER}>
+      <div className={STYLES_PROJECT_PATH_PREVIEW}>
+        <span className={STYLES_PROJECT_DIRECTORY} style={valueStyle}>
+          {valueToDisplay}
+        </span>
+      </div>
+      <div className={STYLES_ACTION} onClick={_handleChangeDirectory}>
+        {changeAction}
+      </div>
+    </div>
+  );
 }
+
+export default UIDirectoryChooser;

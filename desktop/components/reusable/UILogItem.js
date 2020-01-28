@@ -24,34 +24,28 @@ const STYLES_EXPAND = css`
   text-transform: uppercase;
 `;
 
-export default class UILogItem extends React.Component {
-  state = {
-    expanded: false,
-  };
+const UILogItem = ({ log }) => {
+  const [expanded, setExpanded] = React.useState(false);
+  const _onClick = () => setExpanded(!expanded);
 
-  _onClick = () => {
-    this.setState({ expanded: !this.state.expanded });
-  };
-
-  render() {
-    const { log } = this.props;
-    let maybeDetailsElement;
-    if (log.details) {
-      if (this.state.expanded) {
-        maybeDetailsElement = <div className={STYLES_DETAIL}>{log.details}</div>;
-      } else {
-        maybeDetailsElement = (
-          <div className={STYLES_EXPAND}>
-            <span>...</span>
-          </div>
-        );
-      }
+  let maybeDetailsElement;
+  if (log.details) {
+    if (expanded) {
+      maybeDetailsElement = <div className={STYLES_DETAIL}>{log.details}</div>;
+    } else {
+      maybeDetailsElement = (
+        <div className={STYLES_EXPAND}>
+          <span>...</span>
+        </div>
+      );
     }
-    return (
-      <div className={STYLES_LOG} onClick={this._onClick}>
-        <div>{log.text}</div>
-        {maybeDetailsElement}
-      </div>
-    );
   }
+  return (
+    <div className={STYLES_LOG} onClick={_onClick}>
+      <div>{log.text}</div>
+      {maybeDetailsElement}
+    </div>
+  );
 }
+
+export default UILogItem;
