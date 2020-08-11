@@ -1,5 +1,7 @@
 # Castle
 
+This is *Castle Games*, an environment for creating and distributing lua games for Mac, Windows, iOS, Android, and maybe Linux. The Castle team worked on this in 2018-2019. It is currently in stasis while we work on [castle.xyz](http://castle.xyz); however, it might still boot up and run games.
+
 ## Project Structure
 
 ```
